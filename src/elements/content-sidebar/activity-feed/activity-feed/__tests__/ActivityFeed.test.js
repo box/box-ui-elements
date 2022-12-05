@@ -480,16 +480,21 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     describe('isFeedItemActive()', () => {
         test.each`
-            id       | type            | expected
-            ${'123'} | ${'comment'}    | ${true}
-            ${'456'} | ${'annotation'} | ${false}
-            ${'456'} | ${'comment'}    | ${false}
-        `('should return $expected given id=$id and type=$type', ({ id, type, expected }) => {
+            id       | type            | selectedItemId | expected
+            ${'123'} | ${'comment'}    | ${null}        | ${true}
+            ${'456'} | ${'annotation'} | ${null}        | ${false}
+            ${'456'} | ${'comment'}    | ${null}        | ${false}
+            ${'123'} | ${'comment'}    | ${'456'}       | ${false}
+            ${'456'} | ${'annotation'} | ${'456'}       | ${true}
+            ${'456'} | ${'comment'}    | ${'456'}       | ${true}
+        `('should return $expected given id=$id and type=$type', ({ id, type, selectedItemId, expected }) => {
             const wrapper = getWrapper({
                 activeFeedEntryId: '123',
                 activeFeedEntryType: 'comment',
             });
             const instance = wrapper.instance();
+            instance.state.selectedItemId = selectedItemId;
+
             expect(instance.isFeedItemActive({ id, type })).toBe(expected);
         });
     });

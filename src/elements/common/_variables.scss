@@ -8,6 +8,9 @@ $sidebarHeaderHeight: 60px;
 $sidebarContentWidth: 340px;
 $sidebarActivityFeedSpacingHorizontal: 20px;
 $sidebarActivityFeedSpacingVertical: 20px;
+$sidebarActivityFeedSelectedItemBorderWidth: 2px;
+$sidebarActivityFeedSelectedItemSpacingHorizontal: $bdl-grid-unit * 2;
+$sidebarActivityFeedSelectedItemInnerSpacingHorizontal: $sidebarActivityFeedSpacingHorizontal - $sidebarActivityFeedSelectedItemSpacingHorizontal - $sidebarActivityFeedSelectedItemBorderWidth;
 $sidebarTabResponsiveSize: 48px;
 
 @mixin rendering {

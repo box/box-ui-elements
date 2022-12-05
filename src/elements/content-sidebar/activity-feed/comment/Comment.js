@@ -51,6 +51,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onSelect: (isSelected: boolean) => void,
     permissions: BoxCommentPermission,
     status?: FeedItemStatus,
     tagged_message: string,
@@ -76,28 +77,58 @@ class Comment extends React.Component<Props, State> {
         isInputOpen: false,
     };
 
+    selectComment = (isSelected: boolean = true) => {
+        this.props.onSelect(isSelected);
+    };
+
     handleDeleteConfirm = (): void => {
         const { id, onDelete, permissions } = this.props;
         onDelete({ id, permissions });
+        this.selectComment(false);
     };
 
     handleDeleteCancel = (): void => {
         this.setState({ isConfirmingDelete: false });
+        this.selectComment(false);
     };
 
     handleDeleteClick = () => {
         this.setState({ isConfirmingDelete: true });
+        this.selectComment();
     };
 
     handleEditClick = (): void => {
         this.setState({ isEditing: true, isInputOpen: true });
+        this.selectComment();
     };
 
-    commentFormFocusHandler = (): void => this.setState({ isInputOpen: true });
+    handleMenuClose = (): void => {
+        const { isConfirmingDelete, isEditing, isInputOpen } = this.state;
 
-    commentFormCancelHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+        if (isConfirmingDelete || isEditing || isInputOpen) {
+            return;
+        }
+        this.selectComment(false);
+    };
 
-    commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false, isEditing: false });
+    handleMenuOpen = (): void => {
+        this.selectComment();
+    };
+
+    commentFormFocusHandler = (): void => {
+        this.setState({ isInputOpen: true });
+        this.selectComment();
+    };
+
+    commentFormCancelHandler = (): void => {
+        this.setState({ isInputOpen: false, isEditing: false });
+        this.selectComment(false);
+    };
+
+    commentFormSubmitHandler = (): void => {
+        this.setState({ isInputOpen: false, isEditing: false });
+        this.selectComment(false);
+    };
 
     handleMessageUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
         const { onEdit, permissions } = this.props;
@@ -162,6 +193,10 @@ class Comment extends React.Component<Props, State> {
                                 <Media.Menu
                                     isDisabled={isConfirmingDelete}
                                     data-testid="comment-actions-menu"
+                                    dropdownProps={{
+                                        onMenuOpen: this.handleMenuOpen,
+                                        onMenuClose: this.handleMenuClose,
+                                    }}
                                     menuProps={{
                                         'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
                                     }}

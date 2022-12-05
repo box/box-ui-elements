@@ -35,6 +35,12 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       >
         <MediaMenu
           data-testid="comment-actions-menu"
+          dropdownProps={
+            Object {
+              "onMenuClose": [Function],
+              "onMenuOpen": [Function],
+            }
+          }
           isDisabled={false}
           menuProps={
             Object {

@@ -3,6 +3,7 @@
 .bcs-ActivityThreadReplies {
     position: relative;
     padding-left: $sidebarActivityFeedSpacingHorizontal;
+    margin-bottom: $sidebarActivityFeedSpacingVertical;
 
     &::before {
         position: absolute;
@@ -13,6 +14,15 @@
         background: $bdl-gray-10;
         border-radius: $bdl-border-radius-size;
         content: '';
+    }
+
+    .bcs-ActivityCard {
+        &:first-child {
+            padding-top: 0;
+        }
+        &:last-child {
+            padding-bottom: 0;
+        }
     }
 }
 
