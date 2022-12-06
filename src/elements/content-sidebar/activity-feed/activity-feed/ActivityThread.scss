@@ -1,7 +1,20 @@
 @import '../../../common/variables';
 
+$sidebarActivityFeedSelectedItemBorderWidth: 2px;
+$sidebarActivityFeedSelectedItemSpacingHorizontal: $bdl-grid-unit * 2;
+$sidebarActivityFeedSelectedItemInnerSpacingHorizontal: $sidebarActivityFeedSpacingHorizontal - $sidebarActivityFeedSelectedItemSpacingHorizontal - $sidebarActivityFeedSelectedItemBorderWidth;
+
 .bcs-ActivityThread {
+    padding-bottom: $sidebarActivityFeedSpacingVertical;
     box-shadow: 0 1px 0 0 $bdl-gray-10;
+
+    &:hover {
+        background-color: $bdl-light-blue-05;
+    }
+
+    .bcs-ActivityCard {
+        padding: 10px $sidebarActivityFeedSpacingHorizontal $sidebarActivityFeedSpacingVertical;
+    }
 
     .bcs-ActivityThread-toggle {
         color: $bdl-box-blue;
@@ -9,19 +22,22 @@
         &,
         &:hover,
         &:active {
-            margin-top: -$bdl-grid-unit * 2; // to decreased spacing with parent comment
+            margin-bottom: $sidebarActivityFeedSpacingVertical;
             margin-left: $sidebarActivityFeedSpacingHorizontal;
             font-weight: bold;
         }
     }
 
-    .bcs-ActivityCard {
-        margin: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
-        padding: 0;
+    .bcs-SelectableActivityCard[aria-disabled=false] {
+        &:hover,
+        &:focus {
+            background-color: transparent;
+            box-shadow: none;
+        }
     }
 
     .bcs-AnnotationActivity-menu {
-        top: 0;
+        top: 10px;
     }
 
     .bcs-Comment-timestamp {
@@ -35,4 +51,51 @@
     .btn-plain:focus-visible {
         outline: auto;
     }
+}
+
+.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread {
+    padding-bottom: 0;
+    box-shadow: none;
+
+    &,
+    &:hover {
+        background-color: $white;
+    }
+
+    .bcs-ActivityThread-selectWrapper {
+        margin: 0 $sidebarActivityFeedSelectedItemSpacingHorizontal;
+        padding-bottom: $sidebarActivityFeedSpacingVertical - $sidebarActivityFeedSelectedItemBorderWidth;
+        background-color: $bdl-light-blue-05;
+        border: $sidebarActivityFeedSelectedItemBorderWidth $bdl-box-blue solid;
+        border-radius: $bdl-border-radius-size-med;
+    }
+
+    .bcs-ActivityThread-content > .bcs-ActivityCard {
+        padding-top: 10px - $sidebarActivityFeedSelectedItemBorderWidth;
+        padding-left: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
+    }
+
+    .bcs-ActivityThreadReplies {
+        padding-left: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
+
+        &::before {
+            left: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
+        }
+    }
+
+    .bcs-ActivityThread-toggle,
+    .bcs-ActivityThreadReplyForm-toggle {
+        margin-left: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
+    }
+}
+
+.be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-ActivityCard {
+    padding-right: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
+    box-shadow: none;
+    animation: none;
+}
+
+// Disable legacy annotation select indicator (orange bar)
+.be .bcs-activity-feed-annotation-activity.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-ActivityCard::before {
+    content: none;
 }

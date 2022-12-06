@@ -239,6 +239,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             permissions: { can_edit: true, can_delete: true },
         };
         const mockOnEdit = jest.fn();
+        const mockOnSelect = jest.fn();
         const wrapper = mount(
             <Comment
                 id="123"
@@ -248,6 +249,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 handlers={allHandlers}
                 mentionSelectorContacts={mentionSelectorContacts}
                 onEdit={mockOnEdit}
+                onSelect={mockOnSelect}
             />,
         );
 
@@ -298,6 +300,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 type: FEED_ITEM_TYPE_TASK,
             };
             const onEdit = jest.fn();
+            const onSelect = jest.fn();
             const wrapper = mount(
                 <Comment
                     {...comment}
@@ -306,6 +309,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                     handlers={allHandlers}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onEdit={onEdit}
+                    onSelect={onSelect}
                     status={status}
                 />,
             );

@@ -5,11 +5,6 @@
     align-items: center;
     color: $bdl-gray-62;
 
-    &,
-    &:hover {
-        padding: $bdl-grid-unit $sidebarActivityFeedSpacingHorizontal ($bdl-grid-unit * 5);
-    }
-
     .bcs-ActivityThreadReplyForm-arrow {
         margin-right: $bdl-grid-unit;
         // in design arrow is turning left, but we only have ArrowArcRight, so will transfrom it to left one
@@ -19,7 +14,9 @@
 
 .btn-plain.bcs-ActivityThreadReplyForm-toggle {
     &,
-    &:hover {
+    &:hover,
+    &:active {
+        margin-left: $sidebarActivityFeedSpacingHorizontal;
         font-weight: bold;
     }
 }
