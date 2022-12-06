@@ -1,18 +1,22 @@
-<!--
-Please add the `ready-to-merge` label when you have received both approvals
-Using the `ready-to-merge` label adds your approved pull request to the merge queue and when master is in a green state from a previous merge.
-Mergify will merge your PR based on the queue assuming your pull request is still in the green state after the previous merge.
+Please add the `ready-to-merge` label when the pull request has received the appropriate approvals.
+Using the `ready-to-merge` label adds your approved pull request to the merge queue where it waits to be merged.
+Mergify will merge your pull request based on the queue assuming your pull request is still in a green state after the previous merge.
 
-In case the `ready-to-merge` label not working?
-1. Do you have two approvals?
-   2. We require two approvals in order to merge to master.
-2. Did you remove the unnecessary reviewers?
-   3. e.g. three reviewers were added but you already have two necessary approvals. Remove the other reviewer or have them approve the pull request.
-3. Are there any other pull requests in the merge queue before?
-   4. Mergify handles the queueing, your pull request will eventually get merged.
+What to do when the `ready-to-merge` label not working:
+
+- Do you have two approvals?
+  - At least two approvals are required in order to merge to the master branch.
+- Are there any reviewers that are still requetsed for review?
+  - If the pull request has received the necessary approvals, remove any additional reviewer requests that are pending.
+    - e.g.
+      - Three reviewers were added comments but you already have two necessary approvals and the third reviewer's comments are no longer applicable. You can remove the third person as a reviewer or have them approve the pull request.
+      - A team was added as a reviewer because of a change to a file but the file change has been undone. At this point, it should be safe to remove the team as a reviewer.
+- Are there any other pull requests in the merge queue before?
+  - Mergify handles the queueing, your pull request will eventually get merged.
 
 When to contact someone for assistance when trying to merge via `ready-to-merge` label?
-1. There are no other pull requests in the merge queue and your pull request has been sitting there with the `ready-to-merge` label for longer than a couple of hours.
-2. If you are unable to remove unnecessary reviewers from the pull request.
-3. If you are unable to add the `ready-to-merge` label.
--->
+
+- There are no other pull requests in the merge queue and your pull request has been sitting there with the `ready-to-merge` label for longer than a couple of hours.
+- If you are unable to remove unnecessary reviewers from the pull request.
+- If you are unable to add the `ready-to-merge` label.
+  -->
