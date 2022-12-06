@@ -78,7 +78,8 @@ class Comment extends React.Component<Props, State> {
     };
 
     selectComment = (isSelected: boolean = true) => {
-        this.props.onSelect(isSelected);
+        const { onSelect } = this.props;
+        onSelect(isSelected);
     };
 
     handleDeleteConfirm = (): void => {

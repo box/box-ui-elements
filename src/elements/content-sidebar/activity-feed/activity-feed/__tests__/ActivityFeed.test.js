@@ -478,6 +478,36 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         });
     });
 
+    describe('setSelectedItem()', () => {
+        test('should call setState if hasReplies = true', () => {
+            const wrapper = getWrapper({
+                hasReplies: true,
+            });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+
+            instance.setSelectedItem('123');
+
+            expect(instance.setState).toBeCalledWith({ selectedItemId: '123' });
+        });
+
+        test.each`
+            hasReplies
+            ${false}
+            ${undefined}
+        `('should not call setState if hasReplies = $hasRepplies', ({ hasReplies }) => {
+            const wrapper = getWrapper({
+                hasReplies,
+            });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+
+            instance.setSelectedItem('123');
+
+            expect(instance.setState).not.toBeCalled();
+        });
+    });
+
     describe('isFeedItemActive()', () => {
         test.each`
             id       | type            | selectedItemId | expected

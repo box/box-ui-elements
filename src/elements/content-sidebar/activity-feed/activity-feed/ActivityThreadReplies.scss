@@ -2,8 +2,8 @@
 
 .bcs-ActivityThreadReplies {
     position: relative;
-    padding-left: $sidebarActivityFeedSpacingHorizontal;
     margin-bottom: $sidebarActivityFeedSpacingVertical;
+    padding-left: $sidebarActivityFeedSpacingHorizontal;
 
     &::before {
         position: absolute;
@@ -20,6 +20,7 @@
         &:first-child {
             padding-top: 0;
         }
+
         &:last-child {
             padding-bottom: 0;
         }

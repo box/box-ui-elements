@@ -1,5 +1,5 @@
 @import '../../common/variables';
 
 .bcs-ActivityCard {
-    padding: 10px $sidebarActivityFeedSpacingHorizontal $sidebarActivityFeedSpacingVertical;
+    padding: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
 }

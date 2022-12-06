@@ -247,7 +247,8 @@ class ActivityFeed extends React.Component<Props, State> {
     };
 
     setSelectedItem = (itemId: string | null) => {
-        if (!this.props.hasReplies) {
+        const { hasReplies } = this.props;
+        if (!hasReplies) {
             return;
         }
         this.setState({ selectedItemId: itemId });

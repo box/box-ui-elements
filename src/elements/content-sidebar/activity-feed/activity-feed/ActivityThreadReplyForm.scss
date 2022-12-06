@@ -14,7 +14,8 @@
 
 .btn-plain.bcs-ActivityThreadReplyForm-toggle {
     &,
-    &:hover {
+    &:hover,
+    &:active {
         margin-left: $sidebarActivityFeedSpacingHorizontal;
         font-weight: bold;
     }

@@ -143,7 +143,7 @@ const ActivityThread = ({
                     )}
                 </div>
 
-                {onReplyCreate ? (
+                {onReplyCreate && (
                     <ActivityThreadReplyForm
                         getMentionWithQuery={getMentionWithQuery}
                         mentionSelectorContacts={mentionSelectorContacts}
@@ -152,7 +152,7 @@ const ActivityThread = ({
                         onShow={handleFormFocusOrShow}
                         onReplyCreate={onReplyCreate}
                     />
-                ) : null}
+                )}
             </div>
         </div>
     );

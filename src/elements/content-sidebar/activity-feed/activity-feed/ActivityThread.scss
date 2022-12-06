@@ -1,11 +1,19 @@
 @import '../../../common/variables';
 
+$sidebarActivityFeedSelectedItemBorderWidth: 2px;
+$sidebarActivityFeedSelectedItemSpacingHorizontal: $bdl-grid-unit * 2;
+$sidebarActivityFeedSelectedItemInnerSpacingHorizontal: $sidebarActivityFeedSpacingHorizontal - $sidebarActivityFeedSelectedItemSpacingHorizontal - $sidebarActivityFeedSelectedItemBorderWidth;
+
 .bcs-ActivityThread {
-    box-shadow: 0 1px 0 0 $bdl-gray-10;
     padding-bottom: $sidebarActivityFeedSpacingVertical;
+    box-shadow: 0 1px 0 0 $bdl-gray-10;
 
     &:hover {
         background-color: $bdl-light-blue-05;
+    }
+
+    .bcs-ActivityCard {
+        padding: 10px $sidebarActivityFeedSpacingHorizontal $sidebarActivityFeedSpacingVertical;
     }
 
     .bcs-ActivityThread-toggle {
@@ -45,9 +53,9 @@
     }
 }
 
-.be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread {
+.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread {
     padding-bottom: 0;
-    box-shadow: 0 1px $white;
+    box-shadow: none;
 
     &,
     &:hover {
@@ -55,17 +63,11 @@
     }
 
     .bcs-ActivityThread-selectWrapper {
-        background-color: $bdl-light-blue-05;
-        border: $sidebarActivityFeedSelectedItemBorderWidth $bdl-box-blue solid;
-        border-radius: 6px;
         margin: 0 $sidebarActivityFeedSelectedItemSpacingHorizontal;
         padding-bottom: $sidebarActivityFeedSpacingVertical - $sidebarActivityFeedSelectedItemBorderWidth;
-    }
-
-    .bcs-ActivityCard {
-        box-shadow: none;
-        animation: none;
-        padding-right: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
+        background-color: $bdl-light-blue-05;
+        border: $sidebarActivityFeedSelectedItemBorderWidth $bdl-box-blue solid;
+        border-radius: $bdl-border-radius-size-med;
     }
 
     .bcs-ActivityThread-content > .bcs-ActivityCard {
@@ -85,6 +87,12 @@
     .bcs-ActivityThreadReplyForm-toggle {
         margin-left: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
     }
+}
+
+.be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-ActivityCard {
+    padding-right: $sidebarActivityFeedSelectedItemInnerSpacingHorizontal;
+    box-shadow: none;
+    animation: none;
 }
 
 // Disable legacy annotation select indicator (orange bar)
