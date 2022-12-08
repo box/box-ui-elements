@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as constants from './constants';
 import type { BoxItemPermission, ItemType } from '../../common/types/core';
 import type { TargetingApi } from '../targeting/types';
-import type { AdvancedContentInsightsUSProps } from '../advanced-content-insights/flowTypes';
+import type { AdvancedContentInsightsType } from '../advanced-content-insights/flowTypes';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
 const accessLevelValues = {
@@ -318,6 +318,12 @@ type EmailFormTypes = {
     sendSharedLink: (params: Object) => Promise<Object>,
     /** Message indicating an error occurred while sending the shared link. */
     sendSharedLinkError: React.Node,
+};
+
+type AdvancedContentInsightsUSProps = {
+    advancedContentInsightsConfig?: AdvancedContentInsightsType,
+    /** Handler function that gets called whenever the Advanced Content Insights toggle changes */
+    onAdvancedContentInsightsToggle?: Function,
 };
 
 export type USMConfig = {

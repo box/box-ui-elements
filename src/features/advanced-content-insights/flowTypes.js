@@ -7,8 +7,3 @@ export type AdvancedContentInsightsType = {
     ownerEId?: number,
     userId?: number,
 };
-
-export type AdvancedContentInsightsUSProps = {
-    advancedContentInsightsConfig?: AdvancedContentInsightsType,
-    onAdvancedContentInsightsToggle?: Function,
-};

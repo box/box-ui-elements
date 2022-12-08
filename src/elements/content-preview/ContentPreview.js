@@ -221,7 +221,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
     static defaultProps = {
         advancedContentInsights: {
             enabled: false,
-            config: {},
+            isActive: false,
         },
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
@@ -1236,9 +1236,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
     /**
      * Fetches a thumbnail for the page given
      *
-     * @return {void}
+     * @return {Promise|null} - promise resolves with the image HTMLElement or null if generation is in progress
      */
-    getThumbnail = (pageNumber: ?number) => {
+    getThumbnail = (pageNumber: ?number): Promise<HTMLElement> | null => {
         const preview = this.getPreview();
         if (preview && preview.viewer) {
             return preview.viewer.getThumbnail(pageNumber);

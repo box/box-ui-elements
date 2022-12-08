@@ -714,8 +714,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             !isEmailLinkSectionExpanded &&
             !isInviteSectionExpanded &&
             !showCollaboratorList &&
-            item &&
-            item.type === ITEM_TYPE_FILE;
+            item?.type === ITEM_TYPE_FILE;
 
         return (
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
@@ -757,8 +756,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
                     {showContentInsightsToggle && (
                         <>
-                            <div className="bdl-SharedLinkSection-separator" />
-                            <div className="shared-link-toggle-row">
+                            <div className="bdl-UnifiedShareForm-separator" />
+                            <div className="bdl-UnifiedShareForm-row">
                                 <AdvancedContentInsightsToggle
                                     isActive={advancedContentInsightsConfig.isActive}
                                     isDisabled={submitting || isFetching}

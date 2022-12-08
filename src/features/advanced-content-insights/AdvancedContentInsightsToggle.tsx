@@ -1,27 +1,24 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
-import messages from './messages';
 import InfoBadge16 from '../../icon/fill/InfoBadge16';
 // @ts-ignore flow import
 import Toggle from '../../components/toggle';
 import Tooltip from '../../components/tooltip';
+
+import messages from './messages';
+
 import './AdvancedContentInsightsToggle.scss';
 
 interface Props {
-    hasDescriptionInTooltip?: boolean;
-    isActive: boolean;
+    hasTooltip?: boolean;
+    isActive?: boolean;
     isDisabled: boolean;
     onChange?: (isEnabled: boolean) => void;
 }
 
-const AdvancedContentInsightsToggle = ({
-    hasDescriptionInTooltip = true,
-    isActive = false,
-    isDisabled,
-    onChange = noop,
-}: Props) => {
-    const helpLink = !hasDescriptionInTooltip && (
+const AdvancedContentInsightsToggle = ({ hasTooltip = true, isActive = false, isDisabled, onChange = noop }: Props) => {
+    const helpLink = !hasTooltip && (
         <a href="https://support.box.com" rel="noopener noreferrer" target="_blank">
             <FormattedMessage {...messages.learnMore} />
         </a>
@@ -31,7 +28,7 @@ const AdvancedContentInsightsToggle = ({
     const label = (
         <>
             <FormattedMessage {...messages.advancedContentInsightsTitle} />
-            {hasDescriptionInTooltip && (
+            {hasTooltip && (
                 <Tooltip text={description}>
                     <div className="AdvancedContentInsightsToggle-icon">
                         <InfoBadge16 height={14} width={14} />
@@ -45,7 +42,7 @@ const AdvancedContentInsightsToggle = ({
         <div className="AdvancedContentInsightsToggle">
             <Toggle
                 data-testid="insights-toggle"
-                description={!hasDescriptionInTooltip && description}
+                description={!hasTooltip && description}
                 isDisabled={isDisabled}
                 isOn={isActive}
                 label={label}

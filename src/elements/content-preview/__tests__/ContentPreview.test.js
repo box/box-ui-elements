@@ -110,10 +110,8 @@ describe('elements/content-preview/ContentPreview', () => {
 
             props = {
                 advancedContentInsights: {
-                    config: {
-                        isActive: false,
-                    },
                     enabled: true,
+                    isActive: false,
                 },
             };
 
@@ -124,7 +122,7 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.destroyPreview = jest.fn();
             instance.fetchFile = jest.fn();
 
-            const updatedContentInsightsOptions = { config: { isActive: true }, enabled: true };
+            const updatedContentInsightsOptions = { enabled: true, isActive: true };
 
             wrapper.setProps({ advancedContentInsights: updatedContentInsightsOptions });
 
