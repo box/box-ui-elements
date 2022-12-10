@@ -87,18 +87,12 @@ describe('features/content-insights/charts/bar/Bar', () => {
 
         test('should return the bar offset onMouseEnter', () => {
             const elementOffset = {
-                bottom: 0,
-                height: 50,
                 left: 50,
-                right: 0,
                 top: 20,
-                toJSON: jest.fn(),
                 width: 20,
-                x: 0,
-                y: 0,
             };
 
-            jest.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation((): DOMRect => elementOffset);
+            jest.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(elementOffset as DOMRect);
             const onMouseEnter = jest.fn();
             const wrapper = getWrapper({ onMouseEnter });
             const element = getFirstChild(wrapper);

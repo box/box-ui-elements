@@ -11,7 +11,7 @@ const DEFAULT_SIZE = 50;
 interface Props {
     color?: string;
     direction?: Direction;
-    label?: string | boolean;
+    label?: string;
     onMouseEnter?: (arg1: { left: number; top: number }) => void;
     onMouseLeave?: () => void;
     size: number;
@@ -22,7 +22,7 @@ function Bar({
     direction = 'vertical',
     onMouseEnter = noop,
     onMouseLeave = noop,
-    label = false,
+    label,
     size = DEFAULT_SIZE,
 }: Props) {
     const isHorizontal = direction === 'horizontal';

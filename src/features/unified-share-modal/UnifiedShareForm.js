@@ -756,7 +756,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
                     {showContentInsightsToggle && (
                         <>
-                            <div className="bdl-UnifiedShareForm-separator" />
+                            <hr className="bdl-UnifiedShareForm-separator" />
                             <div className="bdl-UnifiedShareForm-row">
                                 <AdvancedContentInsightsToggle
                                     isActive={advancedContentInsightsConfig.isActive}

@@ -72,7 +72,7 @@ function BarChart({
                 <Bar
                     key={datum[labelAccessor]}
                     direction={direction}
-                    label={hasAxisLabel && datum[labelAccessor]}
+                    label={hasAxisLabel ? datum[labelAccessor] : ''}
                     onMouseEnter={(position: OffsetPosition) => handleBarMouseEnter({ datum }, position)}
                     onMouseLeave={() => handleBarMouseLeave({ datum })}
                     size={getSize(datum)}
