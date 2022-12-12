@@ -15,12 +15,13 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     };
 
     const renderComponent = props =>
-        render(<ActivityThreadReplyForm onReplyCreate={noop} {...props} />, {
+        render(<ActivityThreadReplyForm onReplyCreate={noop} onHide={jest.fn()} onShow={jest.fn()} {...props} />, {
             wrapper: Wrapper,
         });
 
-    test('should show reply form when clicked on Reply button', () => {
-        renderComponent();
+    test('should show reply form and should call onShow prop when clicked on Reply button', () => {
+        const onShow = jest.fn();
+        renderComponent({ onShow });
 
         const replyButton = screen.getByRole('button', { name: localize(messages.reply.id) });
         expect(screen.queryByTestId('bcs-CommentForm-body')).not.toBeInTheDocument();
@@ -29,10 +30,12 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
 
         expect(screen.getByTestId('bcs-CommentForm-body')).toBeInTheDocument();
         expect(screen.getByText(localize(messages.replyInThread.id))).toBeInTheDocument();
+        expect(onShow).toBeCalled();
     });
 
-    test('should hide opened reply form when clicked on Cancel button', () => {
-        renderComponent();
+    test('should hide opened reply form and should call onHide prop when clicked on Cancel button', () => {
+        const onHide = jest.fn();
+        renderComponent({ onHide });
 
         const replyButton = screen.getByRole('button', { name: localize(messages.reply.id) });
         fireEvent.click(replyButton);
@@ -43,5 +46,6 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         fireEvent.click(cancel);
 
         expect(screen.queryByTestId('bcs-CommentForm-body')).not.toBeInTheDocument();
+        expect(onHide).toBeCalled();
     });
 });
