@@ -240,6 +240,22 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 expect(wrapper.find('ContentExplorerActionButtons').prop('areButtonsDisabled')).toBe(true);
             });
         });
+
+        test('should render with action buttons enabled in MULTI_SELECT mode if there is no selection made when isNoSelectionAllowed is true', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
+
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                items,
+                isNoSelectionAllowed: true,
+            });
+
+            expect(wrapper.find('ContentExplorerActionButtons').prop('areButtonsDisabled')).toBe(false);
+        });
     });
 
     describe('onEnterFolder', () => {

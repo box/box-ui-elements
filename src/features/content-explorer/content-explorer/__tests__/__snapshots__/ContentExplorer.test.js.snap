@@ -50,6 +50,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
         "name": "folder",
       }
     }
+    isNoSelectionAllowed={false}
     isResponsive={false}
     selectedItems={Object {}}
   />

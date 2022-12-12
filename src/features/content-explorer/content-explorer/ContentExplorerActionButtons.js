@@ -38,6 +38,7 @@ const ContentExplorerActionButtons = ({
     onMoveClick,
     onSelectedClick,
     selectedItems,
+    isNoSelectionAllowed,
 }) => {
     const handleChooseClick = () => {
         let chosenItems = getChosenItemsFromSelectedItems(selectedItems);
@@ -46,7 +47,7 @@ const ContentExplorerActionButtons = ({
             chosenItems = [currentFolder];
         }
 
-        if (onChooseClick && chosenItems.length > 0) {
+        if (onChooseClick && (chosenItems.length > 0 || isNoSelectionAllowed)) {
             onChooseClick(chosenItems);
         }
     };
@@ -164,6 +165,7 @@ ContentExplorerActionButtons.propTypes = {
     onMoveClick: PropTypes.func,
     onSelectedClick: PropTypes.func,
     selectedItems: ItemsMapPropType.isRequired,
+    isNoSelectionAllowed: PropTypes.bool,
 };
 
 export default ContentExplorerActionButtons;
