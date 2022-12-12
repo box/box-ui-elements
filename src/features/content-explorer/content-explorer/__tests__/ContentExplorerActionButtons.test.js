@@ -230,6 +230,31 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
 
             expect(onChooseClickSpy.withArgs([currentFolder]).calledOnce).toBe(true);
         });
+
+        test('should not call onChooseClick in MULTI_SELECT mode if selection is empty', () => {
+            const onChooseClickSpy = sandbox.spy();
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                onChooseClick: onChooseClickSpy,
+                selectedItems: {},
+            });
+            wrapper.find('.content-explorer-choose-button').simulate('click');
+
+            expect(onChooseClickSpy.calledOnce).toBe(false);
+        });
+
+        test('should call onChooseClick in MULTI_SELECT mode if selection is empty and isNoSelectionAllowed is true', () => {
+            const onChooseClickSpy = sandbox.spy();
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                onChooseClick: onChooseClickSpy,
+                selectedItems: {},
+                isNoSelectionAllowed: true,
+            });
+            wrapper.find('.content-explorer-choose-button').simulate('click');
+
+            expect(onChooseClickSpy.withArgs([]).calledOnce).toBe(true);
+        });
     });
 
     describe('onMoveClick', () => {

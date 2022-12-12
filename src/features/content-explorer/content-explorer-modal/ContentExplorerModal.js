@@ -16,6 +16,7 @@ type Props = {
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
+    isNoSelectionAllowed?: boolean,
     isOpen?: boolean,
     isResponsive?: boolean,
     itemRowHeight?: number,
