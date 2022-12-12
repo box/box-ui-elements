@@ -19,7 +19,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
     onEdit?: Function,
-    onSelect: (isSelected: boolean) => void,
+    onSelect?: (isSelected: boolean) => void,
     replies: Array<CommentType>,
     translations?: Translations,
 };
