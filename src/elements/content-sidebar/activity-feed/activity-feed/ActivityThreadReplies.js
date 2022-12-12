@@ -19,6 +19,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
     onEdit?: Function,
+    onSelect?: (isSelected: boolean) => void,
     replies: Array<CommentType>,
     translations?: Translations,
 };
@@ -32,6 +33,7 @@ const ActivityThreadReplies = ({
     mentionSelectorContacts,
     onDelete,
     onEdit,
+    onSelect,
     replies,
     translations,
 }: Props) => {
@@ -62,6 +64,7 @@ const ActivityThreadReplies = ({
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onDelete}
                     onEdit={onEdit}
+                    onSelect={onSelect}
                     permissions={getReplyPermissions(reply)}
                     translations={translations}
                 />

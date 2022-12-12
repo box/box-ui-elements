@@ -62,6 +62,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       onReplyCreate={[Function]}
       onReplyDelete={[Function]}
       onReplyEdit={[Function]}
+      onReplySelect={[Function]}
       onShowReplies={[Function]}
     >
       <AnnotationActivity
@@ -117,6 +118,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       onReplyCreate={[Function]}
       onReplyDelete={[Function]}
       onReplyEdit={[Function]}
+      onReplySelect={[Function]}
       onShowReplies={[Function]}
     >
       <Comment
@@ -136,6 +138,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         id="c_123"
         onDelete={[Function]}
         onEdit={[Function]}
+        onSelect={[Function]}
         permissions={
           Object {
             "can_delete": false,
