@@ -6,13 +6,21 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
+
 import Button from '../../../components/button';
 import IconSort from '../../../icons/general/IconSort';
-import messages from '../messages';
 import Tooltip from '../Tooltip';
+
+import messages from '../messages';
+
 import './SortButton.scss';
 
-const SortButton = ({ intl, ...rest }: ?Object) => {
+type Props = {
+    intl: IntlShape,
+};
+
+const SortButton = ({ intl, ...rest }: Props) => {
     const sortMessage = intl.formatMessage(messages.sort);
     return (
         <Tooltip text={sortMessage}>
