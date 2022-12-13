@@ -5,8 +5,9 @@
  */
 
 import React from 'react';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import type { Node } from 'react';
-import { FormattedMessage } from 'react-intl';
+
 import type { Collection, BoxItem } from '../../common/types/core';
 import Button from '../../components/button';
 import ButtonGroup from '../../components/button-group';
@@ -24,6 +25,7 @@ type Props = {
     chooseButtonLabel?: string,
     currentCollection: Collection,
     hasHitSelectionLimit: boolean,
+    intl: any,
     isSingleSelect: boolean,
     onCancel: Function,
     onChoose: Function,
@@ -45,6 +47,7 @@ const Footer = ({
     selectedItems,
     onSelectedClick,
     hasHitSelectionLimit,
+    intl,
     isSingleSelect,
     onCancel,
     onChoose,
@@ -86,7 +89,7 @@ const Footer = ({
             ) : (
                 <ButtonGroup className="bcp-footer-actions">
                     <Tooltip text={cancelButtonLabel || <FormattedMessage {...messages.cancel} />}>
-                        <Button onClick={onCancel} type="button">
+                        <Button aria-label={intl.formatMessage(messages.cancel)} onClick={onCancel} type="button">
                             <IconClose height={16} width={16} />
                         </Button>
                     </Tooltip>
@@ -94,7 +97,12 @@ const Footer = ({
                         isDisabled={!selectedCount}
                         text={chooseButtonLabel || <FormattedMessage {...messages.choose} />}
                     >
-                        <PrimaryButton isDisabled={!selectedCount} onClick={onChoose} type="button">
+                        <PrimaryButton
+                            aria-label={intl.formatMessage(messages.choose)}
+                            isDisabled={!selectedCount}
+                            onClick={onChoose}
+                            type="button"
+                        >
                             <IconCheck color="#fff" height={16} width={16} />
                         </PrimaryButton>
                     </Tooltip>
@@ -104,4 +112,4 @@ const Footer = ({
     </footer>
 );
 
-export default Footer;
+export default injectIntl(Footer);
