@@ -23,6 +23,8 @@ import type { Annotation, AnnotationPermission, FeedItemStatus } from '../../../
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 
+import IconAnnotation from '../../../../icons/two-toned/IconAnnotation';
+
 import './AnnotationActivity.scss';
 
 type Props = {
@@ -138,8 +140,9 @@ const AnnotationActivity = ({
                         'bcs-is-pending': isPending || error,
                     })}
                 >
-                    <Media.Figure>
+                    <Media.Figure className="bcs-AnnotationActivity-avatar">
                         <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
+                        <IconAnnotation width={20} height={20} className="bcs-AnnotationActivity-avatarBadge" />
                     </Media.Figure>
                     <Media.Body>
                         <div className="bcs-AnnotationActivity-headline">

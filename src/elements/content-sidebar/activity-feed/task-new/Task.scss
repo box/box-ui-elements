@@ -1,5 +1,5 @@
 @import '../../../common/variables';
-@import './mixins';
+@import '../../mixins';
 
 $bcs-task-left-offset: 10 * $bdl-grid-unit + 2px;
 
@@ -22,7 +22,7 @@ $bcs-task-left-offset: 10 * $bdl-grid-unit + 2px;
 }
 
 .bcs-Task-avatarBadge {
-    @include avatar-badge-icon;
+    @include bcs-AvatarBadgeIcon;
 
     right: -4px;
     border-width: 2px;

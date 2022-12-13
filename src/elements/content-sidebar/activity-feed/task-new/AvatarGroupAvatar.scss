@@ -1,5 +1,5 @@
 @import '../../../common/variables';
-@import './mixins';
+@import '../../mixins';
 
 $bcs-AvatarGroupAvatar-avatar-size: 32px;
 
@@ -18,5 +18,5 @@ $bcs-AvatarGroupAvatar-avatar-size: 32px;
 }
 
 .bcs-AvatarGroupAvatar-statusIcon {
-    @include avatar-badge-icon;
+    @include bcs-AvatarBadgeIcon;
 }
