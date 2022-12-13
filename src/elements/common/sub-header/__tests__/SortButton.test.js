@@ -1,14 +1,13 @@
 import React from 'react';
-import { shallow } from 'enzyme';
-import { SortButtonBase } from '../SortButton';
 import Button from '../../../../components/button';
 import IconSort from '../../../../icons/general/IconSort';
+import { SortButtonBase } from '../SortButton';
 
 const intlMock = {
     formatMessage: jest.fn().mockReturnValue('Sort'),
 };
 
-describe('Elements/SubHeader/SortButton', () => {
+describe('elements/common/sub-header/SortButton', () => {
     const getWrapper = () => shallow(<SortButtonBase intl={intlMock} />);
 
     test('should render IconSort', () => {
@@ -16,10 +15,10 @@ describe('Elements/SubHeader/SortButton', () => {
         expect(wrapper.exists(IconSort)).toBe(true);
     });
 
-    test('should have aria-label "sort"', () => {
+    test('should have aria-label "Sort"', () => {
         const wrapper = getWrapper();
         const button = wrapper.find(Button);
         expect(button.prop('aria-label')).toBe('Sort');
-        expect(button.prop('aria-describedBy')).toBeFalsy();
+        expect(button.prop('aria-describedby')).toBeFalsy();
     });
 });
