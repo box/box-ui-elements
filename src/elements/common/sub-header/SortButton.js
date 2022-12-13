@@ -31,4 +31,5 @@ const SortButton = ({ intl, ...rest }: Props) => {
     );
 };
 
+export { SortButton as SortButtonBase };
 export default injectIntl(SortButton);
