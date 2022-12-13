@@ -29,6 +29,7 @@ const ExpirationSection = ({
     const datepicker = (
         <div>
             <DatePicker
+                dateFormat="utcTime"
                 displayFormat={displayFormat}
                 error={error}
                 hideLabel

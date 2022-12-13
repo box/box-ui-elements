@@ -212,8 +212,8 @@ class SharedLinkSettingsModal extends Component {
         this.setState({ isPasswordEnabled: event.target.checked });
     };
 
-    onExpirationDateChange = date => {
-        this.setState({ expirationDate: date, expirationError: undefined });
+    onExpirationDateChange = (date, formattedDate) => {
+        this.setState({ expirationDate: new Date(formattedDate), expirationError: undefined });
     };
 
     onExpirationCheckboxChange = event => {
