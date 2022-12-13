@@ -152,13 +152,13 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
 
     describe('onExpirationDateChange()', () => {
         test('should set state.expirationDate', () => {
-            const newDate = new Date();
+            const newDate = 1671202800000;
 
             const wrapper = getWrapper({ expirationError: 'hi' });
 
-            wrapper.instance().onExpirationDateChange(newDate);
+            wrapper.instance().onExpirationDateChange(null, newDate);
 
-            expect(wrapper.state('expirationDate')).toEqual(newDate);
+            expect(wrapper.state('expirationDate')).toEqual(new Date(newDate));
             expect(wrapper.state('expirationError')).toBeFalsy();
         });
     });
