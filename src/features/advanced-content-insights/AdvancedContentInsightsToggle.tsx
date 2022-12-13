@@ -39,16 +39,15 @@ const AdvancedContentInsightsToggle = ({ hasTooltip = true, isActive = false, is
     );
 
     return (
-        <div className="AdvancedContentInsightsToggle">
-            <Toggle
-                data-testid="insights-toggle"
-                description={!hasTooltip && description}
-                isDisabled={isDisabled}
-                isOn={isActive}
-                label={label}
-                onChange={() => onChange(!isActive)}
-            />
-        </div>
+        <Toggle
+            className="AdvancedContentInsightsToggle"
+            data-testid="insights-toggle"
+            description={!hasTooltip && description}
+            isDisabled={isDisabled}
+            isOn={isActive}
+            label={label}
+            onChange={() => onChange(!isActive)}
+        />
     );
 };
 
