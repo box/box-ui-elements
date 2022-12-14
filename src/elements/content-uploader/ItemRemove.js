@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import IconClose from '../../icons/general/IconClose';
@@ -15,9 +16,9 @@ import type { UploadItem, UploadStatus } from '../../common/types/upload';
 type Props = {
     onClick: (item: UploadItem) => void,
     status: UploadStatus,
-};
+} & InjectIntlProvidedProps;
 
-const ItemRemove = ({ onClick, status }: Props) => {
+const ItemRemove = ({ onClick, status, intl }: Props) => {
     const resin = {};
     let target = null;
 
@@ -33,8 +34,14 @@ const ItemRemove = ({ onClick, status }: Props) => {
 
     return (
         <div className="bcu-item-action">
-            <Tooltip position="top-left" text={<FormattedMessage {...messages.remove} />}>
-                <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED} {...resin}>
+            <Tooltip position="top-left" text={intl.formatMessage(messages.remove)}>
+                <PlainButton
+                    aria-label={intl.formatMessage(messages.remove)}
+                    isDisabled={status === STATUS_STAGED}
+                    onClick={onClick}
+                    type="button"
+                    {...resin}
+                >
                     <IconClose />
                 </PlainButton>
             </Tooltip>
@@ -42,4 +49,4 @@ const ItemRemove = ({ onClick, status }: Props) => {
     );
 };
 
-export default ItemRemove;
+export default injectIntl(ItemRemove);
