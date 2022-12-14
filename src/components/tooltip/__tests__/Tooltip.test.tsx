@@ -5,16 +5,21 @@ import sinon from 'sinon';
 import { shallow } from 'enzyme';
 import noop from 'lodash/noop';
 
-import Tooltip, { TooltipPosition, TooltipTheme } from '../Tooltip';
+import { TooltipBase as Tooltip, TooltipPosition, TooltipTheme } from '../Tooltip';
 import TetherPosition from '../../../common/tether-positions';
 
 const sandbox = sinon.sandbox.create();
 
 describe('components/tooltip/Tooltip', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mockIntl: any = {
+        formatMessage: jest.fn().mockReturnValue('Close'),
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getWrapper = (props: Record<string, any>) =>
         shallow<Tooltip>(
-            <Tooltip text="hi" {...props}>
+            <Tooltip intl={mockIntl} text="hi" {...props}>
                 <div>Hello</div>
             </Tooltip>,
         );
@@ -71,7 +76,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render default component', () => {
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -98,7 +103,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should not add tabindex if isTabbable is false', () => {
             const wrapper = shallow(
-                <Tooltip isShown isTabbable={false} text="hi">
+                <Tooltip intl={mockIntl} isShown isTabbable={false} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -109,7 +114,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should show tooltip when isShown state is true', () => {
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -126,7 +131,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render tooltip class when specified', () => {
             const wrapper = shallow(
-                <Tooltip className="testing" isShown text="hi">
+                <Tooltip intl={mockIntl} className="testing" isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -136,7 +141,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should constrain to scroll parent when specified', () => {
             const wrapper = shallow(
-                <Tooltip constrainToScrollParent text="hi">
+                <Tooltip intl={mockIntl} constrainToScrollParent text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -155,7 +160,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render correct attachments when position is specified', () => {
             const wrapper = shallow(
-                <Tooltip position={TooltipPosition.MIDDLE_RIGHT} text="hi">
+                <Tooltip intl={mockIntl} position={TooltipPosition.MIDDLE_RIGHT} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -170,7 +175,7 @@ describe('components/tooltip/Tooltip', () => {
                 targetAttachment: TetherPosition.BOTTOM_RIGHT,
             };
             const wrapper = shallow(
-                <Tooltip position={customPosition} text="hi">
+                <Tooltip intl={mockIntl} position={customPosition} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -183,7 +188,7 @@ describe('components/tooltip/Tooltip', () => {
             const bodyEl = document.createElement('div');
 
             const wrapper = shallow(
-                <Tooltip bodyElement={bodyEl} text="hi">
+                <Tooltip intl={mockIntl} bodyElement={bodyEl} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -194,7 +199,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should render TetherComponent in the body if invalid body element is specified', () => {
             const wrapper = shallow(
                 // @ts-ignore testing a wrong value for the bodyElement prop
-                <Tooltip bodyElement="foo" text="hi">
+                <Tooltip intl={mockIntl} bodyElement="foo" text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -204,7 +209,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should show tooltip when isShown prop is true', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi">
+                <Tooltip intl={mockIntl} isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -227,7 +232,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should set aria-describedBy when aria-label exists and tooltipText is different than it', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi">
+                <Tooltip intl={mockIntl} isShown text="hi">
                     <button aria-label="test" />
                 </Tooltip>,
             );
@@ -239,7 +244,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should not set aria-describedBy when aria-label exists but tooltipText is equal to it', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi">
+                <Tooltip intl={mockIntl} isShown text="hi">
                     <button aria-label="hi" />
                 </Tooltip>,
             );
@@ -250,7 +255,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should set aria-hidden as true if aria-label and tooltipText are equal', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="test">
+                <Tooltip intl={mockIntl} isShown text="test">
                     <button aria-label="test" />
                 </Tooltip>,
             );
@@ -260,7 +265,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should set aria-hidden as true if ariaHidden is true', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="test" ariaHidden>
+                <Tooltip intl={mockIntl} isShown text="test" ariaHidden>
                     <button aria-label="test" />
                 </Tooltip>,
             );
@@ -270,7 +275,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should set aria-hidden as false if aria-label does not exist', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi">
+                <Tooltip intl={mockIntl} isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -281,7 +286,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should set aria-hidden as false if aria-label is different than tooltipText', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="Im a long tooltip description">
+                <Tooltip intl={mockIntl} isShown text="Im a long tooltip description">
                     <button aria-label="launch" />
                 </Tooltip>,
             );
@@ -292,7 +297,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should render error class when theme is error', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" theme={TooltipTheme.ERROR}>
+                <Tooltip intl={mockIntl} isShown text="hi" theme={TooltipTheme.ERROR}>
                     <button aria-label="test" />
                 </Tooltip>,
             );
@@ -322,7 +327,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should match snapshot when stopBubble is set', () => {
             const wrapper = shallow(
-                <Tooltip isShown stopBubble text="hi">
+                <Tooltip intl={mockIntl} isShown stopBubble text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -331,7 +336,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('event capture div is not present when stopBubble is not set', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi">
+                <Tooltip intl={mockIntl} isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -341,7 +346,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should render with custom offset when provided', () => {
             const offset = '0 10px';
             const wrapper = shallow(
-                <Tooltip offset={offset} text="hi">
+                <Tooltip intl={mockIntl} offset={offset} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -361,7 +366,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('should stop event propagation when stopBubble is set', () => {
         test.each([['onClick', 'onContextMenu', 'onKeyPress']])('when %o', onEvent => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" stopBubble>
+                <Tooltip intl={mockIntl} isShown text="hi" stopBubble>
                     <button />
                 </Tooltip>,
             );
@@ -383,7 +388,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('componentDidUpdate', () => {
         test('should reset wasClosedByUser to false if isShown prop is transitioned from false to true', () => {
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi" isShown>
+                <Tooltip intl={mockIntl} text="hi" isShown>
                     <button />
                 </Tooltip>,
             );
@@ -401,7 +406,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('closeTooltip()', () => {
         test('should update the wasClosedByUser state', () => {
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -414,7 +419,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should call onDismiss if provided', () => {
             const onDismissMock = jest.fn();
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi" onDismiss={onDismissMock}>
+                <Tooltip intl={mockIntl} text="hi" onDismiss={onDismissMock}>
                     <button />
                 </Tooltip>,
             );
@@ -428,7 +433,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle mouseenter events', () => {
             const onMouseEnter = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button onMouseEnter={onMouseEnter} />
                 </Tooltip>,
             );
@@ -443,7 +448,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle mouseleave events', () => {
             const onMouseLeave = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button onMouseLeave={onMouseLeave} />
                 </Tooltip>,
             );
@@ -459,7 +464,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle focus events', () => {
             const onFocus = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button onFocus={onFocus} />
                 </Tooltip>,
             );
@@ -474,7 +479,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should correctly handle blur events', () => {
             const onBlur = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button onBlur={onBlur} />
                 </Tooltip>,
             );
@@ -493,7 +498,7 @@ describe('components/tooltip/Tooltip', () => {
                 map[event] = cb;
             });
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -512,7 +517,7 @@ describe('components/tooltip/Tooltip', () => {
                 map[event] = cb;
             });
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -526,7 +531,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should call keydown handler of component when specified', () => {
             const onKeyDown = sinon.spy();
             const wrapper = shallow(
-                <Tooltip text="hi">
+                <Tooltip intl={mockIntl} text="hi">
                     <button onKeyDown={onKeyDown} />
                 </Tooltip>,
             );

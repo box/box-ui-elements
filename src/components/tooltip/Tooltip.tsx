@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { injectIntl, IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
@@ -7,7 +8,8 @@ import TetherComponent from 'react-tether';
 import TetherPosition from '../../common/tether-positions';
 import IconClose from '../../icon/fill/X16';
 import PlainButton from '../plain-button';
-
+// @ts-ignore flow import
+import messages from '../../common/messages';
 import './Tooltip.scss';
 
 export enum TooltipTheme {
@@ -105,6 +107,7 @@ export type TooltipProps = {
     tetherElementClassName?: string;
     /** Text to show in the tooltip */
     text?: React.ReactNode;
+    intl: IntlShape;
 } & Partial<DefaultTooltipProps>;
 
 type State = {
@@ -249,6 +252,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             tetherElementClassName,
             text,
             theme,
+            intl,
         } = this.props;
 
         const childAriaLabel = getProp(children, 'props.aria-label');
@@ -343,7 +347,11 @@ class Tooltip extends React.Component<TooltipProps, State> {
             <>
                 {text}
                 {withCloseButton && (
-                    <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
+                    <PlainButton
+                        aria-label={intl.formatMessage(messages.close)}
+                        className="tooltip-close-button"
+                        onClick={this.closeTooltip}
+                    >
                         <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
                     </PlainButton>
                 )}
@@ -394,4 +402,5 @@ class Tooltip extends React.Component<TooltipProps, State> {
     }
 }
 
-export default Tooltip;
+export { Tooltip as TooltipBase };
+export default injectIntl(Tooltip);

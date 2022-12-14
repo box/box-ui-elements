@@ -248,6 +248,7 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
   >
     hi
     <PlainButton
+      aria-label="Close"
       className="tooltip-close-button"
       onClick={[Function]}
     >
