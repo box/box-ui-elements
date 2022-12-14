@@ -7,14 +7,15 @@
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import classNames from 'classnames';
-import uniqueid from 'lodash/uniqueId';
-import throttle from 'lodash/throttle';
 import cloneDeep from 'lodash/cloneDeep';
-import omit from 'lodash/omit';
-import getProp from 'lodash/get';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
+import omit from 'lodash/omit';
 import setProp from 'lodash/set';
+import throttle from 'lodash/throttle';
+import uniqueid from 'lodash/uniqueId';
 import Measure from 'react-measure';
 import { withRouter } from 'react-router-dom';
 import type { ContextRouter } from 'react-router-dom';
@@ -55,7 +56,6 @@ import {
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
-import type { AdvancedContentInsightsType } from '../../features/advanced-content-insights/flowTypes';
 import type { Annotation } from '../../common/types/feed';
 import type { TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
@@ -76,7 +76,11 @@ type StartAt = {
 };
 
 type Props = {
-    advancedContentInsights: AdvancedContentInsightsType,
+    advancedContentInsights: {
+        isActive: boolean,
+        ownerEId: number,
+        userId: number,
+    },
     apiHost: string,
     appHost: string,
     autoFocus: boolean,
@@ -391,8 +395,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         if (advancedContentInsights) {
             const { advancedContentInsights: prevContentInsightsOptions } = prevProps;
-            const haveContentInsightsChanged = prevContentInsightsOptions !== advancedContentInsights;
-
+            const haveContentInsightsChanged = !isEqual(prevContentInsightsOptions, advancedContentInsights);
             if (haveContentInsightsChanged && this.preview && this.preview.updateContentInsightsOptions) {
                 this.preview.updateContentInsightsOptions(advancedContentInsights);
             }

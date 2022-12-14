@@ -460,16 +460,16 @@ describe('elements/content-preview/ContentPreview', () => {
         );
 
         test.each`
-            called   | enableAdvancedContentInsights
-            ${true}  | ${true}
-            ${false} | ${false}
+            called   | advancedContentInsights
+            ${true}  | ${{}}
+            ${false} | ${undefined}
         `(
-            'should call onContentInsightsEventReport $called if enableAdvancedContentInsights is $enableAdvancedContentInsights',
-            async ({ called, enableAdvancedContentInsights }) => {
+            'should call onContentInsightsEventReport $called if advancedContentInsights is $advancedContentInsights',
+            async ({ called, advancedContentInsights }) => {
                 const onContentInsightsEventReport = jest.fn();
                 const wrapper = getWrapper({
                     ...props,
-                    advancedContentInsights: enableAdvancedContentInsights ? {} : undefined,
+                    advancedContentInsights,
                     onContentInsightsEventReport,
                 });
 
