@@ -12,12 +12,17 @@ import './AdvancedContentInsightsToggle.scss';
 
 interface Props {
     hasTooltip?: boolean;
-    isActive?: boolean;
+    isAdvancedContentInsightsChecked?: boolean;
     isDisabled: boolean;
     onChange?: (isEnabled: boolean) => void;
 }
 
-const AdvancedContentInsightsToggle = ({ hasTooltip = true, isActive = false, isDisabled, onChange = noop }: Props) => {
+const AdvancedContentInsightsToggle = ({
+    hasTooltip = true,
+    isAdvancedContentInsightsChecked = false,
+    isDisabled,
+    onChange = noop,
+}: Props) => {
     const helpLink = !hasTooltip && (
         <a href="https://support.box.com" rel="noopener noreferrer" target="_blank">
             <FormattedMessage {...messages.learnMore} />
@@ -44,9 +49,9 @@ const AdvancedContentInsightsToggle = ({ hasTooltip = true, isActive = false, is
             data-testid="insights-toggle"
             description={!hasTooltip && description}
             isDisabled={isDisabled}
-            isOn={isActive}
+            isOn={isAdvancedContentInsightsChecked}
             label={label}
-            onChange={() => onChange(!isActive)}
+            onChange={() => onChange(!isAdvancedContentInsightsChecked)}
         />
     );
 };

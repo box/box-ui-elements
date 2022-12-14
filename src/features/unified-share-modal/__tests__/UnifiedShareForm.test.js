@@ -278,7 +278,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
         });
 
         test('should render a default component with ACI toggle if enabled ', () => {
-            const wrapper = getWrapper({ advancedContentInsightsConfig: { enabled: true } });
+            const wrapper = getWrapper({ onAdvancedContentInsightsToggle: jest.fn() });
             expect(wrapper.exists('AdvancedContentInsightsToggle')).toBe(true);
         });
 

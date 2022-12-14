@@ -666,7 +666,6 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     render() {
         // Shared link section props
         const {
-            advancedContentInsightsConfig = {},
             allShareRestrictionWarning,
             changeSharedLinkAccessLevel,
             changeSharedLinkPermissionLevel,
@@ -677,6 +676,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             getSharedLinkContacts,
             getContactAvatarUrl,
             intl,
+            isAdvancedContentInsightsChecked,
             isAllowEditSharedLinkForFileEnabled,
             isFetching,
             item,
@@ -710,7 +710,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             allShareRestrictionWarning;
 
         const showContentInsightsToggle =
-            advancedContentInsightsConfig.enabled &&
+            onAdvancedContentInsightsToggle &&
             !isEmailLinkSectionExpanded &&
             !isInviteSectionExpanded &&
             !showCollaboratorList &&
@@ -759,7 +759,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             <hr className="bdl-UnifiedShareForm-separator" />
                             <div className="bdl-UnifiedShareForm-row">
                                 <AdvancedContentInsightsToggle
-                                    isActive={advancedContentInsightsConfig.isActive}
+                                    isAdvancedContentInsightsChecked={isAdvancedContentInsightsChecked}
                                     isDisabled={submitting || isFetching}
                                     onChange={onAdvancedContentInsightsToggle}
                                 />

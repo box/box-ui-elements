@@ -4,7 +4,7 @@ import AdvancedContentInsightsToggle from '../AdvancedContentInsightsToggle';
 
 describe('features/advanced-content-insights/AdvancedContentInsightsToggle', () => {
     const getWrapper = (props = {}) =>
-        shallow(<AdvancedContentInsightsToggle isActive isDisabled={false} {...props} />);
+        shallow(<AdvancedContentInsightsToggle isAdvancedContentInsightsChecked isDisabled={false} {...props} />);
 
     test('should render default component', () => {
         expect(getWrapper()).toMatchSnapshot();

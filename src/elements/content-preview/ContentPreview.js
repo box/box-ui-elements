@@ -219,10 +219,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
     };
 
     static defaultProps = {
-        advancedContentInsights: {
-            enabled: false,
-            isActive: false,
-        },
         apiHost: DEFAULT_HOSTNAME_API,
         appHost: DEFAULT_HOSTNAME_APP,
         autoFocus: false,
@@ -393,7 +389,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.updateExperiences(previewExperiences);
         }
 
-        if (advancedContentInsights.enabled) {
+        if (advancedContentInsights) {
             const { advancedContentInsights: prevContentInsightsOptions } = prevProps;
             const haveContentInsightsChanged = prevContentInsightsOptions !== advancedContentInsights;
 
@@ -840,7 +836,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions)),
         });
-        if (advancedContentInsights && advancedContentInsights.enabled) {
+        if (advancedContentInsights) {
             this.preview.addListener('advanced_insights_report', onContentInsightsEventReport);
         }
     };

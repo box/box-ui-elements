@@ -469,7 +469,7 @@ describe('elements/content-preview/ContentPreview', () => {
                 const onContentInsightsEventReport = jest.fn();
                 const wrapper = getWrapper({
                     ...props,
-                    advancedContentInsights: { enabled: enableAdvancedContentInsights },
+                    advancedContentInsights: enableAdvancedContentInsights ? {} : undefined,
                     onContentInsightsEventReport,
                 });
 

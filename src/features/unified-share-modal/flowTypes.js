@@ -3,7 +3,6 @@ import * as React from 'react';
 import * as constants from './constants';
 import type { BoxItemPermission, ItemType } from '../../common/types/core';
 import type { TargetingApi } from '../targeting/types';
-import type { AdvancedContentInsightsType } from '../advanced-content-insights/flowTypes';
 
 // DRY: Invert the constants so that we can construct the appropriate enum types
 const accessLevelValues = {
@@ -321,7 +320,7 @@ type EmailFormTypes = {
 };
 
 type AdvancedContentInsightsUSProps = {
-    advancedContentInsightsConfig?: AdvancedContentInsightsType,
+    isAdvancedContentInsightsChecked?: boolean,
     /** Handler function that gets called whenever the Advanced Content Insights toggle changes */
     onAdvancedContentInsightsToggle?: Function,
 };
