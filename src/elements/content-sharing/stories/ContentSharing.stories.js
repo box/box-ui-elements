@@ -16,8 +16,8 @@ export const withModal = () => {
         <>
             <p>
                 Update the values in the Knobs section below to view the ContentSharing UI Element. The internal
-                SharingModal will appear when valid values have been entered. Make sure to add the current origin to to
-                to your app&apos;s list of CORS domains in the developer console.
+                SharingModal will appear when valid values have been entered. Make sure to add the current origin to 
+                your app&apos;s list of CORS domains in the developer console.
             </p>
             <IntlProvider locale="en">
                 <ContentSharing
