@@ -49,6 +49,8 @@ function getAccessNoticeMessageId(accessLevel, canDownload) {
 
 class SharedLinkSettingsModal extends Component {
     static propTypes = {
+        /** The format of the expiration date value for form submit */
+        dateFormat: PropTypes.string,
         hideVanityNameSection: PropTypes.bool,
         isOpen: PropTypes.bool,
         onRequestClose: PropTypes.func,
@@ -288,12 +290,13 @@ class SharedLinkSettingsModal extends Component {
     }
 
     renderExpirationSection() {
-        const { canChangeExpiration, expirationCheckboxProps, expirationInputProps } = this.props;
+        const { canChangeExpiration, dateFormat, expirationCheckboxProps, expirationInputProps } = this.props;
         const { expirationDate, isExpirationEnabled, expirationError } = this.state;
 
         return (
             <ExpirationSection
                 canChangeExpiration={canChangeExpiration}
+                dateFormat={dateFormat}
                 error={expirationError}
                 expirationCheckboxProps={expirationCheckboxProps}
                 expirationDate={expirationDate}
