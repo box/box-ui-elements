@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Item action component
+ * @file Item action component displayed on the upload toast, e.g. cancel/resume
  */
 
 import React from 'react';
@@ -50,6 +50,7 @@ const ItemAction = ({
     let icon = <IconClose />;
     let tooltip;
     const { code } = error;
+    const { formatMessage } = intl;
 
     if (isFolder && status !== STATUS_PENDING) {
         return null;
@@ -96,12 +97,14 @@ const ItemAction = ({
             </PrimaryButton>
         );
     }
+    const isDisabled = status === STATUS_STAGED;
+    const tooltipText = tooltip && formatMessage(tooltip);
 
     return (
         <div className="bcu-item-action">
             {tooltip ? (
-                <Tooltip position="top-left" text={intl.formatMessage(tooltip)}>
-                    <PlainButton onClick={onClick} type="button" isDisabled={status === STATUS_STAGED}>
+                <Tooltip position="top-left" text={tooltipText}>
+                    <PlainButton aria-label={tooltipText} isDisabled={isDisabled} onClick={onClick} type="button">
                         {icon}
                     </PlainButton>
                 </Tooltip>
