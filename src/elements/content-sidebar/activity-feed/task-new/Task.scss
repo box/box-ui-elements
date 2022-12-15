@@ -21,13 +21,6 @@ $bcs-task-left-offset: 10 * $bdl-grid-unit + 2px;
     height: 100%;
 }
 
-.bcs-Task-avatarBadge {
-    @include bcs-AvatarBadgeIcon;
-
-    right: -4px;
-    border-width: 2px;
-}
-
 .bcs-Task-headline {
     // target only Edge because this breaks other browsers
     // but fixes Edge

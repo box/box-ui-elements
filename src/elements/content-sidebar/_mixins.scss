@@ -34,12 +34,3 @@
         margin: 0;
     }
 }
-
-@mixin bcs-AvatarBadgeIcon {
-    position: absolute;
-    right: -2px;
-    bottom: -2px;
-    background: $white;
-    border: 1px solid $white;
-    border-radius: 50%;
-}

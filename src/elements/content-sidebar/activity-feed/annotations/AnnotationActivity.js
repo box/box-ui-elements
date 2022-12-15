@@ -141,8 +141,11 @@ const AnnotationActivity = ({
                     })}
                 >
                     <Media.Figure className="bcs-AnnotationActivity-avatar">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
-                        <IconAnnotation width={20} height={20} className="bcs-AnnotationActivity-avatarBadge" />
+                        <Avatar
+                            getAvatarUrl={getAvatarUrl}
+                            user={createdByUser}
+                            badgeIcon={<IconAnnotation width={20} height={20} />}
+                        />
                     </Media.Figure>
                     <Media.Body>
                         <div className="bcs-AnnotationActivity-headline">

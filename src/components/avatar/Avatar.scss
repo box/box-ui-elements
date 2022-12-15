@@ -55,6 +55,17 @@
         }
     }
 
+    &.avatar--iconBadge {
+        .bdl-Avatar-iconBadge {
+            border-width: 2px;
+        }
+
+        @include Badgeable-bottomRightBadge {
+            bottom: -8px;
+            left: calc(100% - 14px);
+        }
+    }
+
     @for $i from 1 through length($avatar-colors) {
         .avatar-initials[data-bg-idx='#{$i - 1}'] {
             background-color: nth($avatar-colors, $i);
@@ -81,6 +92,13 @@
                 left: calc(100% - 10px);
             }
         }
+
+        &.avatar--iconBadge {
+            @include Badgeable-bottomRightBadge {
+                bottom: -8px;
+                left: calc(100% - 10px);
+            }
+        }
     }
 
     &.avatar--large {
@@ -90,10 +108,17 @@
         .avatar-initials {
             font-size: 14px;
         }
+
+        &.avatar--iconBadge {
+            @include Badgeable-bottomRightBadge {
+                bottom: -4px;
+                left: calc(100% - 14px);
+            }
+        }
     }
 }
 
-.bdl-Avatar-externalBadge {
+.bdl-Avatar-badge {
     background-color: $white;
     border-color: $white;
     border-style: solid;

@@ -21,13 +21,6 @@
     position: relative;
 }
 
-.bcs-AnnotationActivity-avatarBadge {
-    @include bcs-AvatarBadgeIcon;
-
-    right: -4px;
-    border-width: 2px;
-}
-
 .bcs-AnnotationActivity-headline {
     // Because the annotation menu is absolutely positioned,
     // this padding reserves that space so long headlines won't overlap with the menu
