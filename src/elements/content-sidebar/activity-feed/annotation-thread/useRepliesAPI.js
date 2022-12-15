@@ -9,7 +9,7 @@ import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../
 import type { ElementsXhrError } from '../../../../common/types/api';
 
 type Props = {
-    annotationId: string,
+    annotationId?: string,
     api: APIFactory,
     currentUser: User,
     fileId: string,
@@ -61,6 +61,10 @@ const useRepliesAPI = ({
     };
 
     const handleReplyCreate = (message: string) => {
+        if (!annotationId) {
+            return;
+        }
+
         const uuid = uniqueId('reply_');
         const replyData = {
             id: uuid,

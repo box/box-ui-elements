@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import classNames from 'classnames';
+import uniqueId from 'lodash/uniqueId';
 import API from '../../../../api/APIFactory';
 import CommentForm from '../comment-form';
 import { getBadUserError } from '../../../../utils/error';
@@ -19,19 +20,21 @@ type Props = {
     getMentionWithQuery: (searchStr: string) => void,
     handleCancel: () => void,
     mentionSelectorContacts: SelectorItems<>,
-    onAnnotationCreate: (annotation: Annotation) => void,
+    onAnnotationCreateEnd: (annotation: Object, requestId: string) => void,
+    onAnnotationCreateStart: (annotation: Object, requestId: string) => void,
     target: Target,
 } & ErrorContextProps;
 
 const AnnotationThreadCreate = ({
     api,
     currentUser,
+    file,
     getAvatarUrl,
     getMentionWithQuery,
-    file,
     handleCancel,
     mentionSelectorContacts,
-    onAnnotationCreate,
+    onAnnotationCreateEnd,
+    onAnnotationCreateStart,
     onError,
     target,
 }: Props) => {
@@ -44,14 +47,18 @@ const AnnotationThreadCreate = ({
             throw getBadUserError();
         }
 
+        const requestId = uniqueId('annotation_');
+
         const successCallback = (annotation: Annotation) => {
-            onAnnotationCreate(annotation);
+            onAnnotationCreateEnd(annotation, requestId);
         };
 
         const payload = {
             description: { message: text },
             target,
         };
+
+        onAnnotationCreateStart(payload, requestId);
 
         api.getAnnotationsAPI(false).createAnnotation(
             id,

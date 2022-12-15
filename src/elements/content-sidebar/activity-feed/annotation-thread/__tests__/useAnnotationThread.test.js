@@ -15,6 +15,8 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
     const annotation = annotations[0];
 
     const mockUseAnnotatorEventsResult = {
+        emitAddAnnotationEndEvent: jest.fn(),
+        emitAddAnnotationStartEvent: jest.fn(),
         emitDeleteAnnotationEndEvent: jest.fn(),
         emitDeleteAnnotationStartEvent: jest.fn(),
         emitUpdateAnnotationEndEvent: jest.fn(),
@@ -234,6 +236,38 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
             });
 
             expect(result.current.annotation).toEqual({ ...updatedAnnotation, isPending: false });
+        });
+
+        test('should call emitAddAnnotationStartEvent', () => {
+            const mockAnnotation = { description: { message: 'foo' } };
+            const mockRequestId = '123';
+
+            const { result } = getHook();
+
+            act(() => {
+                result.current.annotationEvents.handleAnnotationCreateStart(mockAnnotation, mockRequestId);
+            });
+
+            expect(mockUseAnnotatorEventsResult.emitAddAnnotationStartEvent).toBeCalledWith(
+                mockAnnotation,
+                mockRequestId,
+            );
+        });
+
+        test('should call emitAddAnnotationEndEvent', () => {
+            const mockAnnotation = { description: { message: 'foo' } };
+            const mockRequestId = '123';
+
+            const { result } = getHook();
+
+            act(() => {
+                result.current.annotationEvents.handleAnnotationCreateEnd(mockAnnotation, mockRequestId);
+            });
+
+            expect(mockUseAnnotatorEventsResult.emitAddAnnotationEndEvent).toBeCalledWith(
+                mockAnnotation,
+                mockRequestId,
+            );
         });
     });
 });

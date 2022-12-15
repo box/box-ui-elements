@@ -11,7 +11,7 @@ import { useAnnotatorEvents } from '../../../common/annotator-context';
 import useAnnotationAPI from './useAnnotationAPI';
 import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
 import type { BoxItemPermission, User } from '../../../../common/types/core';
-import type { FeedItemStatus, Comment, BoxCommentPermission } from '../../../../common/types/feed';
+import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 
 const normalizeReplies = (repliesArray?: Array<Comment>): { [string]: Comment } => {
@@ -31,7 +31,7 @@ const denormalizeReplies = (repliesMap: { [string]: Comment }): Array<Comment> =
 };
 
 type Props = {
-    annotationId: string,
+    annotationId?: string,
     api: API,
     currentUser: User,
     errorCallback: (
@@ -52,9 +52,13 @@ type UseAnnotationThread = {
         handleAnnotationEdit: (id: string, text: string, permissions: AnnotationPermission) => void,
         handleAnnotationStatusChange: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     },
+    annotationEvents: {
+        handleAnnotationCreateEnd: (annotation: Object, requestId: string) => void,
+        handleAnnotationCreateStart: (annotation: Object, requestId: string) => void,
+    },
     error?: {
-        message?: MessageDescriptor,
-        title?: MessageDescriptor,
+        message: MessageDescriptor,
+        title: MessageDescriptor,
     },
     isLoading: boolean,
     replies: Array<Comment>,
@@ -82,26 +86,31 @@ const useAnnotationThread = ({
 }: Props): UseAnnotationThread => {
     const [annotation, setAnnotation] = React.useState<Annotation | typeof undefined>();
     const [replies, setReplies] = React.useState<{ [string]: Comment }>({});
-    const [error, setError] = React.useState();
-    const [isLoading, setIsLoading] = React.useState<boolean>(true);
+    const [error, setError] = React.useState<
+        | {
+              message: MessageDescriptor,
+              title: MessageDescriptor,
+          }
+        | typeof undefined,
+    >();
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-    // handling events from Sidebar
-    const setAnnotationPending = (id: string) => {
-        if (annotation !== undefined && id === annotationId) {
+    const setAnnotationPending = () => {
+        if (annotation) {
             setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
         }
     };
 
-    const onAnnotationUpdateEnd = (updatedAnnotation: Annotation) => {
-        if (annotation !== undefined && updatedAnnotation.id === annotationId) {
+    const handleAnnotationUpdateEnd = (updatedAnnotation: Annotation) => {
+        if (annotation && updatedAnnotation.id === annotationId) {
             setAnnotation(prevAnnotation => ({ ...prevAnnotation, ...updatedAnnotation, isPending: false }));
         }
     };
 
-    useAnnotatorEvents({
+    const { emitAddAnnotationEndEvent, emitAddAnnotationStartEvent } = useAnnotatorEvents({
         eventEmitter,
         onAnnotationDeleteStart: setAnnotationPending,
-        onAnnotationUpdateEnd,
+        onAnnotationUpdateEnd: handleAnnotationUpdateEnd,
         onAnnotationUpdateStart: setAnnotationPending,
     });
 
@@ -157,9 +166,10 @@ const useAnnotationThread = ({
     });
 
     React.useEffect(() => {
-        if (annotation && annotation.id === annotationId) {
+        if (!annotationId || (annotation && annotation.id === annotationId)) {
             return;
         }
+        setIsLoading(true);
         handleFetch({ annotationId, successCallback: handleFetchAnnotationSuccess });
     }, [annotation, annotationId, handleFetch]);
 
@@ -228,6 +238,10 @@ const useAnnotationThread = ({
             handleAnnotationDelete,
             handleAnnotationEdit,
             handleAnnotationStatusChange,
+        },
+        annotationEvents: {
+            handleAnnotationCreateStart: emitAddAnnotationStartEvent,
+            handleAnnotationCreateEnd: emitAddAnnotationEndEvent,
         },
         repliesActions: {
             handleReplyCreate,
