@@ -371,10 +371,15 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
         const { advancedContentInsights, previewExperiences, token } = this.props;
-        const { previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
+        const {
+            advancedContentInsights: prevContentInsightsOptions,
+            previewExperiences: prevPreviewExperiences,
+            token: prevToken,
+        } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevToken !== token;
+        const haveContentInsightsChanged = !isEqual(prevContentInsightsOptions, advancedContentInsights);
         const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
 
         if (hasFileIdChanged) {
@@ -393,12 +398,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.updateExperiences(previewExperiences);
         }
 
-        if (advancedContentInsights) {
-            const { advancedContentInsights: prevContentInsightsOptions } = prevProps;
-            const haveContentInsightsChanged = !isEqual(prevContentInsightsOptions, advancedContentInsights);
-            if (haveContentInsightsChanged && this.preview && this.preview.updateContentInsightsOptions) {
-                this.preview.updateContentInsightsOptions(advancedContentInsights);
-            }
+        if (advancedContentInsights && haveContentInsightsChanged && this.preview?.updateContentInsightsOptions) {
+            this.preview.updateContentInsightsOptions(advancedContentInsights);
         }
     }
 
