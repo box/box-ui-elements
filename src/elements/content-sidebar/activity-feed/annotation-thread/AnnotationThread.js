@@ -131,7 +131,6 @@ const AnnotationThread = ({
                 ) : (
                     <AnnotationThreadContent
                         annotation={annotation}
-                        annotationId={annotationId}
                         currentUser={currentUser}
                         error={error}
                         getAvatarUrl={getAvatarUrl}
