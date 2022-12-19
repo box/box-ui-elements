@@ -44,10 +44,8 @@ const AvatarGroupAvatar = React.memo<Props>(({ user, status, getAvatarUrl, class
             badgeIcon={
                 <StatusIcon
                     className={`${camelCase(status)}`}
-                    height={12}
                     status={status}
                     title={<FormattedMessage {...messages.taskAssignmentCompleted} />}
-                    width={12}
                 />
             }
             className="bcs-AvatarGroupAvatar-avatar"

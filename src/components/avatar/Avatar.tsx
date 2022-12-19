@@ -88,11 +88,9 @@ function Avatar({
 
     let badge = null;
     if (shouldShowExternal && isExternal) {
-        badge = <GlobeBadge16 className="bdl-Avatar-badge bdl-Avatar-externalBadge" />;
+        badge = <GlobeBadge16 className="bdl-Avatar-externalBadge" />;
     } else if (badgeIcon) {
-        badge = React.cloneElement(badgeIcon, {
-            className: classNames(badgeIcon.props.className, 'bdl-Avatar-badge', 'bdl-Avatar-iconBadge'),
-        });
+        badge = <div className="bdl-Avatar-badge bdl-Avatar-iconBadge">{badgeIcon}</div>;
     }
 
     return (

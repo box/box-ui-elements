@@ -16,12 +16,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       className="bcs-Task-avatar"
     >
       <Avatar
-        badgeIcon={
-          <IconTaskGeneral
-            height={20}
-            width={20}
-          />
-        }
+        badgeIcon={<IconTaskGeneral />}
         user={
           Object {
             "id": "5",
