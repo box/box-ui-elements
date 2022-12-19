@@ -99,4 +99,10 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
 
         expect(screen.getByRole('button', { name: localize(messages.reply.id) })).toBeInTheDocument();
     });
+
+    test('should disable reply button when ietm is in pending state', () => {
+        getWrapper({ isPending: true, onReplyCreate: jest.fn() });
+        const replyButton = screen.getByRole('button', { name: localize(messages.reply.id) });
+        expect(replyButton).toHaveAttribute('aria-disabled', 'true');
+    });
 });
