@@ -135,6 +135,15 @@ describe('components/select-field/BaseSelectField', () => {
             const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
             expect(buttonWrapper).toMatchSnapshot();
         });
+
+        test('should send error tooltip positon to select button when errorTooltipPosition prop has some value', () => {
+            const wrapper = shallowRenderSelectField({
+                error: 'error',
+                errorTooltipPosition: 'middle-left',
+            });
+            const buttonWrapper = wrapper.find('PopperComponent').childAt(0);
+            expect(buttonWrapper.prop('errorTooltipPosition')).toBe('middle-left');
+        });
     });
 
     describe('renderSearchInput', () => {
