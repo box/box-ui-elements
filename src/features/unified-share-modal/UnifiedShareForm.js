@@ -759,7 +759,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             <hr className="bdl-UnifiedShareForm-separator" />
                             <div className="bdl-UnifiedShareForm-row">
                                 <AdvancedContentInsightsToggle
-                                    isAdvancedContentInsightsChecked={isAdvancedContentInsightsChecked}
+                                    isChecked={isAdvancedContentInsightsChecked}
                                     isDisabled={submitting || isFetching}
                                     onChange={onAdvancedContentInsightsToggle}
                                 />

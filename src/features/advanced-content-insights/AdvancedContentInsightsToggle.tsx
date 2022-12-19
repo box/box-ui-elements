@@ -12,14 +12,14 @@ import './AdvancedContentInsightsToggle.scss';
 
 interface Props {
     hasTooltip?: boolean;
-    isAdvancedContentInsightsChecked?: boolean;
+    isChecked?: boolean;
     isDisabled: boolean;
     onChange?: (isEnabled: boolean) => void;
 }
 
 const AdvancedContentInsightsToggle = ({
     hasTooltip = true,
-    isAdvancedContentInsightsChecked = false,
+    isChecked = false,
     isDisabled,
     onChange = noop,
 }: Props) => {
@@ -49,9 +49,9 @@ const AdvancedContentInsightsToggle = ({
             data-testid="insights-toggle"
             description={!hasTooltip && description}
             isDisabled={isDisabled}
-            isOn={isAdvancedContentInsightsChecked}
+            isOn={isChecked}
             label={label}
-            onChange={() => onChange(!isAdvancedContentInsightsChecked)}
+            onChange={() => onChange(!isChecked)}
         />
     );
 };
