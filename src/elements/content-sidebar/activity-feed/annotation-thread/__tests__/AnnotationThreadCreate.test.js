@@ -3,8 +3,9 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import AnnotationThreadCreate from '../AnnotationThreadCreate';
-import { annotation } from '../../../../../__mocks__/annotations';
+import { annotation as mockAnnotation } from '../../../../../__mocks__/annotations';
 
+jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
 jest.mock('../../comment-form', () => props => {
     return (
@@ -24,26 +25,20 @@ jest.mock('../../comment-form', () => props => {
 });
 
 describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThreadCreate', () => {
-    const mockHandleCancel = jest.fn();
-    const mockOnAnnotationCreate = jest.fn();
-    const mockOnError = jest.fn();
-    let mockCreateAnnotation = jest.fn();
+    const getApiProp = annotationsAPIProps => ({
+        getAnnotationsAPI: () => ({
+            createAnnotation: jest.fn(),
+            ...annotationsAPIProps,
+        }),
+    });
 
     const getDefaultProps = () => ({
-        api: {
-            getAnnotationsAPI: () => ({
-                createAnnotation: mockCreateAnnotation,
-            }),
-        },
         currentUser: { id: 'user_id' },
         file: {
             id: 'file_id',
             file_version: { id: 'file_version' },
             permissions: { can_annotate: true },
         },
-        handleCancel: mockHandleCancel,
-        onAnnotationCreate: mockOnAnnotationCreate,
-        onError: mockOnError,
         target: {
             location: { type: 'page', value: 1 },
             type: 'point',
@@ -55,7 +50,10 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
     const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
-    const getWrapper = () => render(<AnnotationThreadCreate {...getDefaultProps()} />, { wrapper: IntlWrapper });
+    const getWrapper = (props, annotationsAPIProps = {}) =>
+        render(<AnnotationThreadCreate api={getApiProp(annotationsAPIProps)} {...getDefaultProps()} {...props} />, {
+            wrapper: IntlWrapper,
+        });
 
     test('Should render correctly', () => {
         const { container, getByText } = getWrapper();
@@ -65,39 +63,50 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
     });
 
     test('Should handle create', () => {
-        mockCreateAnnotation = jest.fn((fileId, fileVersionId, payload, filePermissions, successCallback) => {
-            successCallback(annotation);
+        const createAnnotation = jest.fn((fileId, fileVersionId, payload, filePermissions, successCallback) => {
+            successCallback(mockAnnotation);
         });
-        const { getByText, getByTestId } = getWrapper();
+        const onAnnotationCreateStart = jest.fn();
+        const onAnnotationCreateEnd = jest.fn();
+        const onError = jest.fn();
+        const target = { x: 1, y: 1 };
+
+        const { getByText, getByTestId } = getWrapper(
+            { onAnnotationCreateEnd, onAnnotationCreateStart, onError, target },
+            { createAnnotation },
+        );
 
         fireEvent.click(getByText('Post'));
 
-        expect(mockOnAnnotationCreate).toBeCalledWith(annotation);
-        expect(mockCreateAnnotation).toBeCalledWith(
+        expect(onAnnotationCreateStart).toBeCalledWith(
+            {
+                description: { message: 'example message' },
+                target,
+            },
+            'uniqueId',
+        );
+        expect(createAnnotation).toBeCalledWith(
             'file_id',
             'file_version',
             {
                 description: { message: 'example message' },
-                target: {
-                    location: { type: 'page', value: 1 },
-                    type: 'point',
-                    x: 12,
-                    y: 10,
-                },
+                target,
             },
             { can_annotate: true },
             expect.any(Function),
-            mockOnError,
+            onError,
         );
-
+        expect(onAnnotationCreateEnd).toBeCalledWith(mockAnnotation, 'uniqueId');
         expect(getByTestId('annotation-create')).toHaveClass('is-pending');
     });
 
     test('Should call handleCancel on cancel', () => {
-        const { getByText } = getWrapper();
+        const handleCancel = jest.fn();
+
+        const { getByText } = getWrapper({ handleCancel });
 
         fireEvent.click(getByText('Cancel'));
 
-        expect(mockHandleCancel).toBeCalled();
+        expect(handleCancel).toBeCalled();
     });
 });

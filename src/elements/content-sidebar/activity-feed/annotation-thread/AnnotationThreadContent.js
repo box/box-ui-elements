@@ -1,62 +1,69 @@
 // @flow
 import React from 'react';
-import type EventEmitter from 'events';
-import useAnnotationThread from './useAnnotationThread';
+import type { MessageDescriptor } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
 import AnnotationActivity from '../annotations';
-import API from '../../../../api/APIFactory';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 
-import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
-import type { ErrorContextProps } from '../../../../common/types/api';
+import type {
+    Annotation,
+    AnnotationPermission,
+    BoxCommentPermission,
+    Comment,
+    FeedItemStatus,
+} from '../../../../common/types/feed';
+import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetProfileUrlCallback } from '../../../common/flowTypes';
 
 import './AnnotationThreadContent.scss';
 
 type Props = {
-    annotationId: string,
-    api: API,
+    annotation?: Annotation,
     currentUser: User,
-    eventEmitter: EventEmitter,
-    file: BoxItem,
+    error?: {
+        message: MessageDescriptor,
+        title: MessageDescriptor,
+    },
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
+    isLoading: boolean,
     mentionSelectorContacts: SelectorItems<>,
-} & ErrorContextProps;
+    onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
+    onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
+    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
+    onReplyCreate?: (text: string) => void,
+    onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
+    onReplyEdit?: (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention?: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    replies?: Array<Comment>,
+};
 
 const AnnotationThreadContent = ({
-    annotationId,
-    api,
+    annotation,
     currentUser,
-    eventEmitter,
-    file,
+    error,
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    isLoading,
     mentionSelectorContacts,
-    onError,
+    onAnnotationDelete,
+    onAnnotationEdit,
+    onAnnotationStatusChange,
+    onReplyCreate,
+    onReplyDelete,
+    onReplyEdit,
+    replies = [],
 }: Props) => {
-    const { id: fileId, permissions = {} } = file;
-
-    const {
-        annotation,
-        replies,
-        isLoading,
-        error,
-        annotationActions: { handleAnnotationStatusChange, handleAnnotationDelete, handleAnnotationEdit },
-        repliesActions: { handleReplyEdit, handleReplyCreate, handleReplyDelete },
-    } = useAnnotationThread({
-        api,
-        annotationId,
-        currentUser,
-        eventEmitter,
-        fileId,
-        filePermissions: permissions,
-        errorCallback: onError,
-    });
-
     return (
         <>
             {error && <ActivityError {...error} />}
@@ -67,30 +74,30 @@ const AnnotationThreadContent = ({
             )}
             {annotation && (
                 <ActivityThread
-                    hasReplies
                     getAvatarUrl={getAvatarUrl}
                     getMentionWithQuery={getMentionWithQuery}
                     getUserProfileUrl={getUserProfileUrl}
+                    hasReplies
                     isAlwaysExpanded
                     isRepliesLoading={isLoading}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    onReplyCreate={handleReplyCreate}
-                    onReplyDelete={handleReplyDelete}
-                    onReplyEdit={handleReplyEdit}
+                    onReplyCreate={onReplyCreate}
+                    onReplyDelete={onReplyDelete}
+                    onReplyEdit={onReplyEdit}
                     replies={replies}
                     repliesTotalCount={replies.length}
                 >
                     <AnnotationActivity
-                        getAvatarUrl={getAvatarUrl}
                         currentUser={currentUser}
-                        isCurrentVersion
-                        item={annotation}
+                        getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
                         getUserProfileUrl={getUserProfileUrl}
+                        isCurrentVersion
+                        item={annotation}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        onEdit={handleAnnotationEdit}
-                        onDelete={handleAnnotationDelete}
-                        onStatusChange={handleAnnotationStatusChange}
+                        onDelete={onAnnotationDelete}
+                        onEdit={onAnnotationEdit}
+                        onStatusChange={onAnnotationStatusChange}
                     />
                 </ActivityThread>
             )}
