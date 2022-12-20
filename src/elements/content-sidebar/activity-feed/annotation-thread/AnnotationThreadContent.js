@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import type { MessageDescriptor } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityThread from '../activity-feed/ActivityThread';
 import AnnotationActivity from '../annotations';
@@ -15,16 +14,14 @@ import type {
 } from '../../../../common/types/feed';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { AnnotationThreadError } from './types';
 
 import './AnnotationThreadContent.scss';
 
 type Props = {
     annotation?: Annotation,
     currentUser: User,
-    error?: {
-        message: MessageDescriptor,
-        title: MessageDescriptor,
-    },
+    error?: AnnotationThreadError,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,

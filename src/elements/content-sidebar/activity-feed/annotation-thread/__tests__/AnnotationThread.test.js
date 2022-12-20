@@ -35,6 +35,7 @@ jest.mock('../useAnnotationThread', () => {
 describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThread', () => {
     const file = {
         id: 'fileId',
+        file_version: { id: '123' },
         permissions: {
             can_view_annotations: true,
             can_annotate: true,

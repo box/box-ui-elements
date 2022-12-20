@@ -70,24 +70,27 @@ const AnnotationThread = ({
         token,
     });
 
-    const { id: fileId, permissions = {} } = file;
-
     const {
         annotation,
         replies,
         isLoading,
         error,
-        annotationActions: { handleAnnotationDelete, handleAnnotationEdit, handleAnnotationStatusChange },
-        annotationEvents: { handleAnnotationCreateEnd: handleAnnotationCreateEndEvent, handleAnnotationCreateStart },
+        annotationActions: {
+            handleAnnotationCreate,
+            handleAnnotationDelete,
+            handleAnnotationEdit,
+            handleAnnotationStatusChange,
+        },
         repliesActions: { handleReplyEdit, handleReplyCreate, handleReplyDelete },
     } = useAnnotationThread({
         api,
         annotationId,
         currentUser,
-        fileId,
-        filePermissions: permissions,
         errorCallback: onError,
         eventEmitter,
+        file,
+        onAnnotationCreate,
+        target,
     });
 
     const getAvatarUrl = async (userId: string): Promise<?string> =>
@@ -106,27 +109,18 @@ const AnnotationThread = ({
         );
     }, DEFAULT_COLLAB_DEBOUNCE);
 
-    const handleAnnotationCreateEnd = (newAnnotation: Object, requestId: string) => {
-        handleAnnotationCreateEndEvent(newAnnotation, requestId);
-        onAnnotationCreate(newAnnotation);
-    };
-
     return (
         <div className={classNames('AnnotationThread', className)} data-testid="annotation-thread">
             <IntlProvider locale={language} messages={messages}>
                 {!annotationId ? (
                     <AnnotationThreadCreate
-                        api={api}
                         currentUser={currentUser}
-                        file={file}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
-                        handleCancel={handleCancel}
+                        isPending={isLoading}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        onAnnotationCreateEnd={handleAnnotationCreateEnd}
-                        onAnnotationCreateStart={handleAnnotationCreateStart}
-                        onError={onError}
-                        target={target}
+                        onFormCancel={handleCancel}
+                        onFormSubmit={handleAnnotationCreate}
                     />
                 ) : (
                     <AnnotationThreadContent
