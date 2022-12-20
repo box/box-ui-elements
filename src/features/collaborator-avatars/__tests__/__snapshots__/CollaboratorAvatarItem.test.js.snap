@@ -75,7 +75,10 @@ exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should re
       }
       theme="default"
     >
-      <div>
+      <div
+        aria-label="Expires"
+        role="img"
+      >
         <IconExpirationBadge
           className="themed"
           height={14}

@@ -11,6 +11,11 @@ const messages = defineMessages({
         description: 'Tooltip text for collaborator expiration badge',
         id: 'boxui.collaboratorAvatars.collaborators.expirationTooltipText',
     },
+    expirationText: {
+        defaultMessage: 'Expires',
+        description: 'Text for collaborator expiration badge',
+        id: 'boxui.collaboratorAvatars.collaborators.expirationText',
+    },
     externalCollabTooltipText: {
         defaultMessage: '{email} is from outside of your company',
         description: 'This tooltip indicates that a collaborator is not in the same enterprise of the current user',

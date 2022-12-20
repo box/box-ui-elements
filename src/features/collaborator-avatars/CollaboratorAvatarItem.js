@@ -1,6 +1,7 @@
 /* @flow */
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 
 import Badgeable from '../../components/badgeable/Badgeable';
 import Tooltip from '../../components/tooltip/Tooltip';
@@ -19,12 +20,13 @@ type Props = {
     id: number,
     isExternalCollab?: boolean,
     name: string,
-};
+} & InjectIntlProvidedProps;
 
 const CollaboratorAvatarItem = (props: Props) => {
     const {
         allowBadging = false,
         expiration,
+        intl,
         isExternalCollab = false,
         hasCustomAvatar,
         avatarUrl,
@@ -44,14 +46,14 @@ const CollaboratorAvatarItem = (props: Props) => {
         ) : (
             <Avatar name={name || '-'} {...rest} isExternal={isExternalCollab} shouldShowExternal={allowBadging} />
         );
-
+    const expirationMessage = intl.formatMessage(messages.expirationText);
     const expirationBadge =
         allowBadging && expiration && expiration.executeAt ? (
             <Tooltip
                 position="middle-right"
                 text={<FormattedMessage {...messages.expirationTooltipText} values={{ date: expiration.executeAt }} />}
             >
-                <div>
+                <div aria-label={expirationMessage} role="img">
                     <IconExpirationBadge className="themed" height={14} width={14} />
                 </div>
             </Tooltip>
@@ -60,4 +62,5 @@ const CollaboratorAvatarItem = (props: Props) => {
     return <Badgeable topLeft={expirationBadge}>{avatarInstance}</Badgeable>;
 };
 
-export default CollaboratorAvatarItem;
+export { CollaboratorAvatarItem as CollaboratorAvatarItemBase };
+export default injectIntl(CollaboratorAvatarItem);
