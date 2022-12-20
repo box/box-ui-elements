@@ -9,7 +9,7 @@ import API from '../../../../api/APIFactory';
 import useRepliesAPI from './useRepliesAPI';
 import { useAnnotatorEvents } from '../../../common/annotator-context';
 import useAnnotationAPI from './useAnnotationAPI';
-import type { Annotation, AnnotationPermission, Target } from '../../../../common/types/annotations';
+import type { Annotation, AnnotationPermission, NewAnnotation, Target } from '../../../../common/types/annotations';
 import type { BoxItem, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
@@ -151,7 +151,7 @@ const useAnnotationThread = ({
         [errorCallback],
     );
 
-    const { handleCreate, handleDelete, handleEdit, handleStatusChange, handleFetch } = useAnnotationAPI({
+    const { handleCreate, handleDelete, handleEdit, handleFetch, handleStatusChange } = useAnnotationAPI({
         api,
         file,
         errorCallback: annotationErrorCallback,

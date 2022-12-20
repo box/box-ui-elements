@@ -26,7 +26,7 @@ type UseAnnotationAPI = {
         successCallback: (annotation: Annotation) => void,
         text: string,
     }) => void,
-    handleFetch: ({ annotationId: string, successCallback: (annotation: Annotation) => void }) => void,
+    handleFetch: ({ id: string, successCallback: (annotation: Annotation) => void }) => void,
     handleStatusChange: ({
         id: string,
         permissions: AnnotationPermission,
@@ -38,11 +38,7 @@ type UseAnnotationAPI = {
 const useAnnotationAPI = ({
     api,
     errorCallback,
-    file: {
-        id: fileId,
-        file_version: { id: fileVersionId },
-        permissions: filePermissions = {},
-    },
+    file: { id: fileId, file_version: { id: fileVersionId } = {}, permissions: filePermissions = {} },
 }: Props): UseAnnotationAPI => {
     const handleCreate = ({
         payload,
