@@ -90,6 +90,8 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
             this.getInitialData();
         }
 
+        // this ensures that we obtain shared link information the first time data is returned
+        // so we can pass the corresponding permissions in the callback
         if (!prevSharedLink.permissionLevel && sharedLink.permissionLevel && onLoadSharedLink) {
             onLoadSharedLink(sharedLink.permissionLevel);
         }
