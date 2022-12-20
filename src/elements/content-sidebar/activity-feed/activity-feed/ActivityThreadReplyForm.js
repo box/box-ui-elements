@@ -72,7 +72,6 @@ function ActivityThreadReplyForm({
         <PlainButton
             className="bcs-ActivityThreadReplyForm-toggle"
             onClick={showForm}
-            role="button"
             type="button"
             isDisabled={isDisabled}
         >

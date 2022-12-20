@@ -19,7 +19,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
             wrapper: Wrapper,
         });
 
-    test('should disable Reply button if isDisavled property is true', () => {
+    test('should disable Reply button if isDisabled property is true', () => {
         const onShow = jest.fn();
         renderComponent({ isDisabled: true, onShow });
         const replyButton = screen.getByRole('button', { name: localize(messages.reply.id) });
