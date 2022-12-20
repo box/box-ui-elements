@@ -40,6 +40,7 @@ const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, intl, max
                     <IconMinusThin color={bdlGray50} width={14} height={14} />
                 </PlainButton>
                 <input
+                    aria-label={intl.formatMessage(messages.gridViewColumnSize)}
                     className="bdl-GridViewSlider-range"
                     max={RANGE_MAX}
                     min={RANGE_MIN}
