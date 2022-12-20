@@ -59,7 +59,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
                 trackingProps: { modalTracking: { onLoadSharedLink: onLoadSharedLinkMock } },
             });
             wrapper.setProps({ sharedLink: { url: 'http://go', permissionLevel: 'canEdit' } });
-            expect(onLoadSharedLinkMock).toHaveBeenCalled();
+            expect(onLoadSharedLinkMock).toHaveBeenCalledWith('canEdit');
         });
 
         test('should render an allShareRestrictionWarning message when it is available', () => {
