@@ -16,6 +16,7 @@ import './ActivityThreadReplyForm.scss';
 
 type ActivityThreadReplyFromProps = {
     getMentionWithQuery?: (searchStr: string) => void,
+    isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onFocus: () => void,
     onHide: () => void,
@@ -28,6 +29,7 @@ type Props = ActivityThreadReplyFromProps & InjectIntlProvidedProps;
 function ActivityThreadReplyForm({
     mentionSelectorContacts,
     getMentionWithQuery,
+    isDisabled,
     onFocus,
     onHide,
     onReplyCreate,
@@ -67,7 +69,12 @@ function ActivityThreadReplyForm({
             placeholder={placeholder}
         />
     ) : (
-        <PlainButton className="bcs-ActivityThreadReplyForm-toggle" onClick={showForm} role="button" type="button">
+        <PlainButton
+            className="bcs-ActivityThreadReplyForm-toggle"
+            onClick={showForm}
+            type="button"
+            isDisabled={isDisabled}
+        >
             <ArrowArcRight className="bcs-ActivityThreadReplyForm-arrow" />
             <FormattedMessage {...messages.reply} />
         </PlainButton>

@@ -40,13 +40,17 @@ const AvatarGroupAvatar = React.memo<Props>(({ user, status, getAvatarUrl, class
         data-testid="avatar-group-avatar-container"
         {...rest}
     >
-        <Avatar className="bcs-AvatarGroupAvatar-avatar" user={user} getAvatarUrl={getAvatarUrl} />
-        <StatusIcon
-            status={status}
-            className={`bcs-AvatarGroupAvatar-statusIcon ${camelCase(status)}`}
-            height={12}
-            width={12}
-            title={<FormattedMessage {...messages.taskAssignmentCompleted} />}
+        <Avatar
+            badgeIcon={
+                <StatusIcon
+                    className={`${camelCase(status)}`}
+                    status={status}
+                    title={<FormattedMessage {...messages.taskAssignmentCompleted} />}
+                />
+            }
+            className="bcs-AvatarGroupAvatar-avatar"
+            getAvatarUrl={getAvatarUrl}
+            user={user}
         />
     </div>
 ));

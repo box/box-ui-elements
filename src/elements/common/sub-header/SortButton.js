@@ -5,19 +5,31 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
+
 import Button from '../../../components/button';
 import IconSort from '../../../icons/general/IconSort';
-import messages from '../messages';
 import Tooltip from '../Tooltip';
+
+import messages from '../messages';
+
 import './SortButton.scss';
 
-const SortButton = (props: ?Object) => (
-    <Tooltip text={<FormattedMessage {...messages.sort} />}>
-        <Button className="be-btn-sort" type="button" {...props}>
-            <IconSort />
-        </Button>
-    </Tooltip>
-);
+type Props = {
+    intl: IntlShape,
+};
 
-export default SortButton;
+const SortButton = ({ intl, ...rest }: Props) => {
+    const sortMessage = intl.formatMessage(messages.sort);
+    return (
+        <Tooltip text={sortMessage}>
+            <Button aria-label={sortMessage} className="be-btn-sort" type="button" {...rest}>
+                <IconSort />
+            </Button>
+        </Tooltip>
+    );
+};
+
+export { SortButton as SortButtonBase };
+export default injectIntl(SortButton);

@@ -18,6 +18,12 @@ type Props = {
      * Required if "name" is not specified.
      */
     avatarUrl?: ?string,
+    /**
+     * Icon React Element that will be shown as a badge in bottom right corner of Avatar.
+     *
+     * Will not be used if `shouldShowExternal` and `isExternal` is true, then GlobalBadge will be shown.
+     */
+    badgeIcon?: React.Element<any>,
     /** classname to add to the container element. */
     className?: string,
     /** Users id */
@@ -36,7 +42,16 @@ type Props = {
     size?: $Keys<typeof SIZES>,
 };
 
-function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal = false, size = '' }: Props) {
+function Avatar({
+    avatarUrl,
+    badgeIcon,
+    className,
+    name,
+    id,
+    isExternal,
+    shouldShowExternal = false,
+    size = '',
+}: Props) {
     const [hasImageErrored, setHasImageErrored] = React.useState<boolean>(false);
     const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<$PropertyType<Props, 'avatarUrl'>>(null);
 
@@ -68,13 +83,15 @@ function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal
         avatar = <UnknownUserAvatar className="avatar-icon" />;
     }
 
+    let badge = null;
+    if (shouldShowExternal && isExternal) {
+        badge = <GlobeBadge16 className="bdl-Avatar-externalBadge" />;
+    } else if (badgeIcon) {
+        badge = <div className="bdl-Avatar-badge bdl-Avatar-iconBadge">{badgeIcon}</div>;
+    }
+
     return (
-        <Badgeable
-            className={classes}
-            bottomRight={
-                shouldShowExternal && isExternal ? <GlobeBadge16 className="bdl-Avatar-externalBadge" /> : undefined
-            }
-        >
+        <Badgeable className={classes} bottomRight={badge}>
             <span role="presentation">{avatar}</span>
         </Badgeable>
     );

@@ -279,8 +279,7 @@ class Task extends React.Component<Props, State> {
                     data-testid="task-card"
                 >
                     <Media.Figure className="bcs-Task-avatar">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
-                        <TaskTypeIcon width={20} height={20} className="bcs-Task-avatarBadge" />
+                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} badgeIcon={<TaskTypeIcon />} />
                     </Media.Figure>
                     <Media.Body>
                         {isMenuVisible && (

@@ -9,6 +9,7 @@ import type { GetAvatarUrlCallback } from '../../common/flowTypes';
 import type { User } from '../../../common/types/core';
 
 type Props = {
+    badgeIcon?: React.Element<any>,
     className?: string,
     getAvatarUrl?: GetAvatarUrlCallback,
     user: User,
@@ -61,11 +62,13 @@ class Avatar extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { user, className }: Props = this.props;
+        const { badgeIcon, className, user }: Props = this.props;
         const { avatarUrl }: State = this.state;
         const { id, name } = user;
 
-        return <AvatarComponent avatarUrl={avatarUrl} className={className} id={id} name={name} />;
+        return (
+            <AvatarComponent avatarUrl={avatarUrl} badgeIcon={badgeIcon} className={className} id={id} name={name} />
+        );
     }
 }
 
