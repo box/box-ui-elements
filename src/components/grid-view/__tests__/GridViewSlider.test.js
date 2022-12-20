@@ -1,25 +1,32 @@
 import React from 'react';
 
-import GridViewSlider from '../GridViewSlider';
+import { GridViewSliderBase as GridViewSlider } from '../GridViewSlider';
 
 const intl = {
-    formatMessage: jest.fn(),
+    formatMessage: message => message.defaultMessage,
 };
+
+const getWrapper = () =>
+    shallow(
+        <GridViewSlider
+            columnCount={4}
+            maxColumnCountcolumnCount={4}
+            gridMaxColumns={7}
+            gridMinColumns={2}
+            intl={intl}
+            maxColumnCount={7}
+            onChange={() => {}}
+        />,
+    );
 
 describe('components/grid-view/GridViewSlider', () => {
     test('should render()', () => {
-        const wrapper = mount(
-            <GridViewSlider
-                columnCount={4}
-                maxColumnCountcolumnCount={4}
-                gridMaxColumns={7}
-                gridMinColumns={2}
-                intl={intl}
-                maxColumnCount={7}
-                onChange={() => {}}
-            />,
-        );
+        const wrapper = getWrapper();
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should use aria-label prop', () => {
+        const wrapper = getWrapper();
         expect(wrapper.find('input').prop('aria-label')).toBe('Column size');
         expect(
             wrapper
