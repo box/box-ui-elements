@@ -10,11 +10,10 @@ const getWrapper = () =>
     shallow(
         <GridViewSlider
             columnCount={4}
-            maxColumnCountcolumnCount={4}
             gridMaxColumns={7}
             gridMinColumns={2}
             intl={intl}
-            maxColumnCount={7}
+            maxColumnCount={4}
             onChange={() => {}}
         />,
     );
