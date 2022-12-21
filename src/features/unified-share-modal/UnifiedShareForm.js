@@ -702,29 +702,21 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { sharedLinkTracking, sharedLinkEmailTracking } = trackingProps;
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
 
-        // Only show the restriction warning on the main page of the USM where the email and share link option is available
-        const showShareRestrictionWarning =
-            !isEmailLinkSectionExpanded &&
-            !isInviteSectionExpanded &&
-            !showCollaboratorList &&
-            allShareRestrictionWarning;
+        const isMainUSMSectionShown = !isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList;
 
         const showContentInsightsToggle =
-            onAdvancedContentInsightsToggle &&
-            !isEmailLinkSectionExpanded &&
-            !isInviteSectionExpanded &&
-            !showCollaboratorList &&
-            item?.type === ITEM_TYPE_FILE;
+            onAdvancedContentInsightsToggle && isMainUSMSectionShown && item?.type === ITEM_TYPE_FILE;
 
         return (
+            // Only show the restriction warning on the main page of the USM where the email and share link option is available
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
-                    {showShareRestrictionWarning && allShareRestrictionWarning}
+                    {isMainUSMSectionShown && allShareRestrictionWarning}
                     {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 
-                    {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (
+                    {isMainUSMSectionShown && (
                         <SharedLinkSection
                             addSharedLink={onAddLink}
                             autofocusSharedLink={this.shouldAutoFocusSharedLink()}

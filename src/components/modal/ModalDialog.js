@@ -73,12 +73,8 @@ class ModalDialog extends React.Component<Props> {
      * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
      */
     renderBackButton() {
-        const { onRequestBack, intl } = this.props;
+        const { intl } = this.props;
         const { formatMessage } = intl;
-        if (!onRequestBack) {
-            return null;
-        }
-
         return (
             <button
                 aria-label={formatMessage(messages.backModalText)}
@@ -140,6 +136,7 @@ class ModalDialog extends React.Component<Props> {
         const {
             className,
             modalRef,
+            onRequestBack,
             title,
             type,
             ...rest // Useful for resin tagging, and other misc tags such as a11y
@@ -157,7 +154,7 @@ class ModalDialog extends React.Component<Props> {
             <div ref={modalRef} className={classNames('modal-dialog', className)} {...divProps}>
                 <div className="modal-header-container">
                     <div className="modal-header">
-                        {this.renderBackButton()}
+                        {onRequestBack && this.renderBackButton()}
                         <h2 className="modal-title" id={`${this.modalID}-label`}>
                             {title}
                         </h2>
