@@ -47,12 +47,13 @@ const CollaboratorAvatarItem = (props: Props) => {
             <Avatar name={name || '-'} {...rest} isExternal={isExternalCollab} shouldShowExternal={allowBadging} />
         );
 
-    const expirationToolTipMessageValue = expiration && expiration.executeAt ? { date: expiration.executeAt } : null;
-    const expirationToolTipMessage = intl.formatMessage(messages.expirationTooltipText, expirationToolTipMessageValue);
+    const expirationTooltipMessage = intl.formatMessage(messages.expirationTooltipText, {
+        date: expiration?.executeAt,
+    });
     const expirationBadge =
         allowBadging && expiration && expiration.executeAt ? (
-            <Tooltip position="middle-right" text={expirationToolTipMessage}>
-                <div aria-label={expirationToolTipMessage} role="img">
+            <Tooltip position="middle-right" text={expirationTooltipMessage}>
+                <div aria-label={expirationTooltipMessage} role="img">
                     <IconExpirationBadge className="themed" height={14} width={14} />
                 </div>
             </Tooltip>

@@ -2,10 +2,11 @@ import * as React from 'react';
 
 import { CollaboratorAvatarItemBase as CollaboratorAvatarItem } from '../CollaboratorAvatarItem';
 
+const intl = {
+    formatMessage: message => message.defaultMessage,
+};
+
 describe('features/collaborator-avatars/CollaboratorAvatarItem', () => {
-    const intl = {
-        formatMessage: message => message.defaultMessage,
-    };
     const getWrapper = (props = {}) => shallow(<CollaboratorAvatarItem id={1} intl={intl} name="foo bar" {...props} />);
 
     describe('render()', () => {
