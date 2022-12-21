@@ -5,6 +5,7 @@ import useAnnotationThread from '../useAnnotationThread';
 import useAnnotationAPI from '../useAnnotationAPI';
 import useRepliesAPI from '../useRepliesAPI';
 
+jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 jest.mock('../../../../common/annotator-context', () => ({
     useAnnotatorEvents: jest.fn(),
 }));
@@ -23,6 +24,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
         emitUpdateAnnotationStartEvent: jest.fn(),
     };
     const mockUseAnnotationAPIResult = {
+        handleCreate: jest.fn(),
         handleFetch: jest.fn(),
         handleDelete: jest.fn(),
         handleEdit: jest.fn(),
@@ -43,11 +45,15 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
             useAnnotationThread({
                 api: {},
                 currentUser: {},
-                fileId: 'fileId',
-                filePermissions,
+                file: {
+                    id: 'fileId',
+                    file_version: { id: '123' },
+                    permissions: filePermissions,
+                },
                 annotationId: annotation.id,
                 errorCallback,
                 eventEmitter: {},
+                onAnnotationCreate: jest.fn(),
                 ...props,
             }),
         );
@@ -98,9 +104,43 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
             getHook();
 
             expect(mockHandleFetch).toBeCalledWith({
-                annotationId: annotation.id,
+                id: annotation.id,
                 successCallback: expect.any(Function),
             });
+        });
+
+        test('should call handleAnnotationCreate with correct params', () => {
+            const mockOnAnnotationCreate = jest.fn();
+            const createdAnnotation = {
+                description: { message: 'new annotation' },
+                target: {},
+            };
+            const mockHandleCreate = jest
+                .fn()
+                .mockImplementation(({ successCallback }) => successCallback(createdAnnotation));
+            useAnnotationAPI.mockImplementation(() => ({
+                ...mockUseAnnotationAPIResult,
+                handleCreate: mockHandleCreate,
+            }));
+
+            const target = {};
+            const text = 'foo';
+
+            const { result } = getHook({ target, onAnnotationCreate: mockOnAnnotationCreate });
+            act(() => {
+                result.current.annotationActions.handleAnnotationCreate(text);
+            });
+
+            const expectedPayload = {
+                description: { message: text },
+                target,
+            };
+
+            expect(mockHandleCreate).toBeCalledWith({
+                payload: expectedPayload,
+                successCallback: expect.any(Function),
+            });
+            expect(mockOnAnnotationCreate).toBeCalledWith(createdAnnotation);
         });
 
         test('should call handleAnnotationEdit with correct params', () => {
@@ -238,35 +278,40 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
             expect(result.current.annotation).toEqual({ ...updatedAnnotation, isPending: false });
         });
 
-        test('should call emitAddAnnotationStartEvent', () => {
-            const mockAnnotation = { description: { message: 'foo' } };
-            const mockRequestId = '123';
+        test('should call emitAddAnnotationStartEvent and emitAddAnnotationEndEvent', () => {
+            const target = {};
+            const text = 'foo';
 
-            const { result } = getHook();
+            const createdAnnotation = {
+                description: { message: 'new annotation' },
+                target,
+            };
+            const mockHandleCreate = jest
+                .fn()
+                .mockImplementation(({ successCallback }) => successCallback(createdAnnotation));
+            useAnnotationAPI.mockImplementation(() => ({
+                ...mockUseAnnotationAPIResult,
+                handleCreate: mockHandleCreate,
+            }));
+
+            const { result } = getHook({ target });
 
             act(() => {
-                result.current.annotationEvents.handleAnnotationCreateStart(mockAnnotation, mockRequestId);
+                result.current.annotationActions.handleAnnotationCreate(text);
             });
+
+            const expectedPayload = {
+                description: { message: text },
+                target,
+            };
 
             expect(mockUseAnnotatorEventsResult.emitAddAnnotationStartEvent).toBeCalledWith(
-                mockAnnotation,
-                mockRequestId,
+                expectedPayload,
+                'uniqueId',
             );
-        });
-
-        test('should call emitAddAnnotationEndEvent', () => {
-            const mockAnnotation = { description: { message: 'foo' } };
-            const mockRequestId = '123';
-
-            const { result } = getHook();
-
-            act(() => {
-                result.current.annotationEvents.handleAnnotationCreateEnd(mockAnnotation, mockRequestId);
-            });
-
             expect(mockUseAnnotatorEventsResult.emitAddAnnotationEndEvent).toBeCalledWith(
-                mockAnnotation,
-                mockRequestId,
+                createdAnnotation,
+                'uniqueId',
             );
         });
     });
