@@ -140,6 +140,7 @@ export type trackingPropsType = {
         ftuxConfirmButtonProps?: Object,
         modalProps?: Object,
         onLoad?: Function,
+        onLoadSharedLink?: Function,
     },
     removeLinkConfirmModalTracking: {
         cancelButtonProps?: Object,
