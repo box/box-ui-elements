@@ -11,7 +11,10 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -25,7 +28,10 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
         isOn={true}
         label={
           <span>
-            Shared link is created
+            <FormattedMessage
+              defaultMessage="Shared link is created"
+              id="boxui.unifiedShare.linkShareOn"
+            />
             <Tooltip
               constrainToScrollParent={false}
               constrainToWindow={true}
@@ -168,7 +174,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -189,7 +198,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         <Toggle
           isDisabled={true}
           isOn={true}
-          label="Shared link is created"
+          label={
+            <FormattedMessage
+              defaultMessage="Shared link is created"
+              id="boxui.unifiedShare.linkShareOn"
+            />
+          }
           name="toggle"
         />
       </div>
@@ -310,7 +324,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -330,7 +347,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         <Toggle
           isDisabled={false}
           isOn={false}
-          label="Create shared link"
+          label={
+            <FormattedMessage
+              defaultMessage="Create shared link"
+              id="boxui.unifiedShare.linkShareOff"
+            />
+          }
           name="toggle"
         />
       </div>
@@ -350,7 +372,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -362,7 +387,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       <Toggle
         isDisabled={false}
         isOn={true}
-        label="Shared link is created"
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
         name="toggle"
       />
     </div>
@@ -486,7 +516,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -498,7 +531,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       <Toggle
         isDisabled={true}
         isOn={false}
-        label="Create shared link"
+        label={
+          <FormattedMessage
+            defaultMessage="Create shared link"
+            id="boxui.unifiedShare.linkShareOff"
+          />
+        }
         name="toggle"
       />
     </div>
@@ -522,7 +560,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
     <Toggle
       isDisabled={true}
       isOn={false}
-      label="Create shared link"
+      label={
+        <FormattedMessage
+          defaultMessage="Create shared link"
+          id="boxui.unifiedShare.linkShareOff"
+        />
+      }
       name="toggle"
     />
   </div>
@@ -545,7 +588,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
     <Toggle
       isDisabled={true}
       isOn={true}
-      label="Shared link is created"
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is created"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
       name="toggle"
     />
   </div>
@@ -563,7 +611,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -584,7 +635,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         <Toggle
           isDisabled={true}
           isOn={true}
-          label="Shared link is created"
+          label={
+            <FormattedMessage
+              defaultMessage="Shared link is created"
+              id="boxui.unifiedShare.linkShareOn"
+            />
+          }
           name="toggle"
         />
       </div>
@@ -680,7 +736,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         className="can-edit-btn"
         isDisabled={true}
       >
-        Can edit
+        <FormattedMessage
+          defaultMessage="Can edit"
+          id="boxui.unifiedShare.sharedLinkPermissionsEdit"
+        />
       </PlainButton>
     </Tooltip>
   </div>
@@ -698,7 +757,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -710,7 +772,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Toggle
         isDisabled={false}
         isOn={true}
-        label="Shared link is created"
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
         name="toggle"
       />
     </div>
@@ -835,7 +902,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -847,7 +917,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Toggle
         isDisabled={false}
         isOn={true}
-        label="Shared link is created"
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
         name="toggle"
       />
     </div>
@@ -971,7 +1046,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -983,7 +1061,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Toggle
         isDisabled={false}
         isOn={true}
-        label="Shared link is created"
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
         name="toggle"
       />
     </div>
@@ -1107,7 +1190,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -1119,7 +1205,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Toggle
         isDisabled={false}
         isOn={true}
-        label="Shared link is created"
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
         name="toggle"
       />
     </div>
@@ -1252,7 +1343,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render settings l
   }
   type="button"
 >
-  Link Settings
+  <FormattedMessage
+    defaultMessage="Link Settings"
+    id="boxui.unifiedShare.sharedLinkSettings"
+  />
 </PlainButton>
 `;
 
@@ -1267,7 +1361,10 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
     <span
       className="label bdl-Label"
     >
-      Share Link
+      <FormattedMessage
+        defaultMessage="Share Link"
+        id="boxui.unifiedShare.sharedLinkSectionLabel"
+      />
     </span>
   </label>
   <div
@@ -1279,7 +1376,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       <Toggle
         isDisabled={false}
         isOn={true}
-        label="Shared link is created"
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
         name="toggle"
       />
     </div>

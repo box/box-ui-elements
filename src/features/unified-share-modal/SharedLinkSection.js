@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../components/plain-button';
 import Button from '../../components/button';
@@ -51,7 +52,7 @@ type Props = {
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     config?: USMConfig,
-    intl: any,
+    intl: IntlShape,
     isAllowEditSharedLinkForFileEnabled: boolean,
     item: itemtype,
     itemType: ItemType,
@@ -373,7 +374,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                     {isEditableBoxNote && (
                         <Tooltip text={intl.formatMessage(messages.sharedLinkPermissionsEditTooltip)}>
                             <PlainButton isDisabled className="can-edit-btn">
-                                {intl.formatMessage(messages.sharedLinkPermissionsEdit)}
+                                <FormattedMessage {...messages.sharedLinkPermissionsEdit} />
                             </PlainButton>
                         </Tooltip>
                     )}
@@ -384,13 +385,15 @@ class SharedLinkSection extends React.Component<Props, State> {
                             <IconGlobe height={12} width={12} />
                         </span>
                         {permissionLevel === CAN_EDIT ? (
-                            <span data-testid="shared-link-editable-publicly-available-message">
-                                {intl.formatMessage(messages.sharedLinkEditablePubliclyAvailable)}
-                            </span>
+                            <FormattedMessage
+                                data-testid="shared-link-editable-publicly-available-message"
+                                {...messages.sharedLinkEditablePubliclyAvailable}
+                            />
                         ) : (
-                            <span data-testid="shared-link-publicly-available-message">
-                                {intl.formatMessage(messages.sharedLinkPubliclyAvailable)}
-                            </span>
+                            <FormattedMessage
+                                data-testid="shared-link-publicly-available-message"
+                                {...messages.sharedLinkPubliclyAvailable}
+                            />
                         )}
                     </div>
                 )}
@@ -399,9 +402,10 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        <span data-testid="shared-link-elevated-editable-company-available-message">
-                            {intl.formatMessage(messages.sharedLinkElevatedEditableCompanyAvailable)}
-                        </span>
+                        <FormattedMessage
+                            data-testid="shared-link-elevated-editable-company-available-message"
+                            {...messages.sharedLinkElevatedEditableCompanyAvailable}
+                        />
                     </div>
                 )}
             </>
@@ -439,7 +443,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         onClick={onSettingsClick}
                         type="button"
                     >
-                        {intl.formatMessage(messages.sharedLinkSettings)}
+                        <FormattedMessage {...messages.sharedLinkSettings} />
                     </PlainButton>
                 </Tooltip>
             </div>
@@ -457,11 +461,11 @@ class SharedLinkSection extends React.Component<Props, State> {
         let linkText;
 
         if (isSharedLinkEnabled) {
-            linkText = intl.formatMessage(messages.linkShareOn);
+            linkText = <FormattedMessage {...messages.linkShareOn} />;
             if (expirationTimestamp && expirationTimestamp !== 0) {
                 linkText = (
                     <span>
-                        {intl.formatMessage(messages.linkShareOn)}
+                        <FormattedMessage {...messages.linkShareOn} />
                         <Tooltip
                             position="top-center"
                             text={intl.formatMessage(messages.sharedLinkExpirationTooltip, {
@@ -476,7 +480,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                 );
             }
         } else {
-            linkText = intl.formatMessage(messages.linkShareOff);
+            linkText = <FormattedMessage {...messages.linkShareOff} />;
         }
 
         const toggleComponent = (
@@ -540,7 +544,7 @@ class SharedLinkSection extends React.Component<Props, State> {
     }
 
     render() {
-        const { intl, sharedLink, onSettingsClick } = this.props;
+        const { sharedLink, onSettingsClick } = this.props;
         const isSharedLinkEnabled = !!sharedLink.url;
 
         return (
@@ -548,7 +552,9 @@ class SharedLinkSection extends React.Component<Props, State> {
                 <hr className="bdl-SharedLinkSection-separator" />
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label>
-                    <span className="label bdl-Label">{intl.formatMessage(messages.sharedLinkSectionLabel)}</span>
+                    <span className="label bdl-Label">
+                        <FormattedMessage {...messages.sharedLinkSectionLabel} />
+                    </span>
                 </label>
                 <div className="shared-link-toggle-row">
                     {this.renderToggle()}
