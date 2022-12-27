@@ -50,7 +50,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         expect(getByTestId('annotation-create')).toHaveClass('is-pending');
     });
 
-    test('Should handle create', () => {
+    test('Should call onFormSubmit on create', () => {
         const onFormSubmit = jest.fn();
 
         const { getByText } = getWrapper({ onFormSubmit });
@@ -60,7 +60,7 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         expect(onFormSubmit).toBeCalledWith('example message');
     });
 
-    test('Should call handleCancel on cancel', () => {
+    test('Should call onFormCancel on cancel', () => {
         const onFormCancel = jest.fn();
 
         const { getByText } = getWrapper({ onFormCancel });
