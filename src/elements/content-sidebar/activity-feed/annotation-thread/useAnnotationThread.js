@@ -137,14 +137,6 @@ const useAnnotationThread = ({
         setAnnotation(prevAnnotation => ({ ...prevAnnotation, ...updatedValues }));
     };
 
-    const handleFetchAnnotationSuccess = ({ replies: fetchedReplies, ...normalizedAnnotation }: Annotation) => {
-        setAnnotation({ ...normalizedAnnotation });
-        setReplies(normalizeReplies(fetchedReplies));
-        setError(undefined);
-        setIsLoading(false);
-        emitAnnotationActiveChangeEvent(normalizedAnnotation.id, fileVersionId);
-    };
-
     const annotationErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string): void => {
             setIsLoading(false);
@@ -167,12 +159,21 @@ const useAnnotationThread = ({
     });
 
     React.useEffect(() => {
-        if (!annotationId || (annotation && annotation.id === annotationId)) {
+        if (!annotationId || isLoading || (annotation && annotation.id === annotationId)) {
             return;
         }
         setIsLoading(true);
-        handleFetch({ id: annotationId, successCallback: handleFetchAnnotationSuccess });
-    }, [annotation, annotationId, handleFetch]);
+        handleFetch({
+            id: annotationId,
+            successCallback: ({ replies: fetchedReplies, ...normalizedAnnotation }: Annotation) => {
+                setAnnotation({ ...normalizedAnnotation });
+                setReplies(normalizeReplies(fetchedReplies));
+                setError(undefined);
+                setIsLoading(false);
+                emitAnnotationActiveChangeEvent(normalizedAnnotation.id, fileVersionId);
+            },
+        });
+    }, [annotation, annotationId, emitAnnotationActiveChangeEvent, fileVersionId, handleFetch, isLoading]);
 
     const { handleReplyCreate, handleReplyEdit, handleReplyDelete } = useRepliesAPI({
         annotationId,
