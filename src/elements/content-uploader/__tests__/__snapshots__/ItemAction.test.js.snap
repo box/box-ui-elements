@@ -20,6 +20,12 @@ exports[`elements/content-uploader/ItemAction should render correctly with compl
     theme="default"
   >
     <PlainButton
+      aria-label={
+        <span
+          defaultMessage="Remove"
+          id="be.remove"
+        />
+      }
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -60,6 +66,12 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
     theme="default"
   >
     <PlainButton
+      aria-label={
+        <span
+          defaultMessage="Retry"
+          id="be.retry"
+        />
+      }
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -91,6 +103,12 @@ exports[`elements/content-uploader/ItemAction should render correctly with error
     theme="default"
   >
     <PlainButton
+      aria-label={
+        <span
+          defaultMessage="Resume"
+          id="be.resume"
+        />
+      }
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -122,6 +140,12 @@ exports[`elements/content-uploader/ItemAction should render correctly with inpro
     theme="default"
   >
     <PlainButton
+      aria-label={
+        <span
+          defaultMessage="Cancel this upload"
+          id="be.uploadsCancelButtonTooltip"
+        />
+      }
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -158,6 +182,12 @@ exports[`elements/content-uploader/ItemAction should render correctly with pendi
     theme="default"
   >
     <PlainButton
+      aria-label={
+        <span
+          defaultMessage="Cancel this upload"
+          id="be.uploadsCancelButtonTooltip"
+        />
+      }
       isDisabled={false}
       onClick={[Function]}
       type="button"
@@ -194,6 +224,12 @@ exports[`elements/content-uploader/ItemAction should render correctly with stage
     theme="default"
   >
     <PlainButton
+      aria-label={
+        <span
+          defaultMessage="Cancel this upload"
+          id="be.uploadsCancelButtonTooltip"
+        />
+      }
       isDisabled={true}
       onClick={[Function]}
       type="button"

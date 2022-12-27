@@ -25,6 +25,13 @@ describe('elements/content-picker/Footer', () => {
             expect(wrapper.find('.footer-child').length).toBe(1);
         });
 
+        test('should render Footer buttons with aria-label', () => {
+            const buttons = getWrapper().find('Button');
+
+            expect(buttons.at(0).prop('aria-label')).toBe('Cancel');
+            expect(buttons.at(1).prop('aria-label')).toBe('Choose');
+        });
+
         test('should render Footer with custom action button', () => {
             const renderCustomActionButtons = jest.fn();
 

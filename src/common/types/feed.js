@@ -63,6 +63,7 @@ type Tasks = {
 
 type Comment = {
     ...BaseFeedItem,
+    isPending?: boolean,
     isRepliesLoading?: boolean,
     is_reply_comment?: boolean,
     message?: string,

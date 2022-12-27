@@ -6,6 +6,10 @@
 
     .bcs-ActivityThread {
         box-shadow: none;
+
+        &:hover {
+            background: none;
+        }
     }
 
     .bcs-ActivityThread-content {

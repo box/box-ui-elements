@@ -9,12 +9,15 @@ describe('components/checkbox/Checkbox', () => {
 
     beforeEach(() => {
         onChange = jest.fn();
-        wrapper = shallow(<Checkbox id="1" label="Check things" name="name" onChange={onChange} />);
+        wrapper = shallow(
+            <Checkbox id="1" inputClassName="inputClassName" label="Check things" name="name" onChange={onChange} />,
+        );
     });
 
     test('should correctly render default component', () => {
         expect(wrapper.find('.checkbox-container').length).toBeTruthy();
         expect(wrapper.find('input').prop('id')).toEqual('1');
+        expect(wrapper.find('input').prop('className')).toEqual('inputClassName');
         expect(wrapper.find('input').prop('name')).toEqual('name');
         expect(wrapper.find('input').prop('type')).toEqual('checkbox');
         expect(wrapper.find('.checkbox-pointer-target').length).toBe(1);

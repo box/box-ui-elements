@@ -11,6 +11,7 @@ import { IntlProvider } from 'react-intl';
 import type EventEmitter from 'events';
 import AnnotationThreadContent from './AnnotationThreadContent';
 import AnnotationThreadCreate from './AnnotationThreadCreate';
+import useAnnotationThread from './useAnnotationThread';
 import API from '../../../../api/APIFactory';
 import { DEFAULT_COLLAB_DEBOUNCE, DEFAULT_HOSTNAME_API } from '../../../../constants';
 
@@ -59,6 +60,8 @@ const AnnotationThread = ({
     target,
     token,
 }: Props) => {
+    const [mentionSelectorContacts, setMentionSelectorContacts] = React.useState<SelectorItems<>>([]);
+
     const api = new API({
         apiHost,
         cache,
@@ -67,7 +70,28 @@ const AnnotationThread = ({
         token,
     });
 
-    const [mentionSelectorContacts, setMentionSelectorContacts] = React.useState([]);
+    const {
+        annotation,
+        replies,
+        isLoading,
+        error,
+        annotationActions: {
+            handleAnnotationCreate,
+            handleAnnotationDelete,
+            handleAnnotationEdit,
+            handleAnnotationStatusChange,
+        },
+        repliesActions: { handleReplyEdit, handleReplyCreate, handleReplyDelete },
+    } = useAnnotationThread({
+        api,
+        annotationId,
+        currentUser,
+        errorCallback: onError,
+        eventEmitter,
+        file,
+        onAnnotationCreate,
+        target,
+    });
 
     const getAvatarUrl = async (userId: string): Promise<?string> =>
         api.getUsersAPI(false).getAvatarUrlWithAccessToken(userId, file.id);
@@ -90,29 +114,31 @@ const AnnotationThread = ({
             <IntlProvider locale={language} messages={messages}>
                 {!annotationId ? (
                     <AnnotationThreadCreate
-                        api={api}
                         currentUser={currentUser}
-                        file={file}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
-                        handleCancel={handleCancel}
+                        isPending={isLoading}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        onAnnotationCreate={onAnnotationCreate}
-                        onError={onError}
-                        target={target}
+                        onFormCancel={handleCancel}
+                        onFormSubmit={handleAnnotationCreate}
                     />
                 ) : (
                     <AnnotationThreadContent
-                        api={api}
-                        annotationId={annotationId}
+                        annotation={annotation}
                         currentUser={currentUser}
-                        eventEmitter={eventEmitter}
-                        file={file}
+                        error={error}
                         getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
                         getUserProfileUrl={getUserProfileUrl}
+                        isLoading={isLoading}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        onError={onError}
+                        onAnnotationDelete={handleAnnotationDelete}
+                        onAnnotationEdit={handleAnnotationEdit}
+                        onAnnotationStatusChange={handleAnnotationStatusChange}
+                        onReplyCreate={handleReplyCreate}
+                        onReplyDelete={handleReplyDelete}
+                        onReplyEdit={handleReplyEdit}
+                        replies={replies}
                     />
                 )}
             </IntlProvider>

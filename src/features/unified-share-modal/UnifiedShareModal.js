@@ -77,8 +77,10 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     }
 
     componentDidUpdate(prevProps: USMProps) {
-        const { item, sharedLink } = this.props;
+        const { item, sharedLink, trackingProps } = this.props;
         const { type, typedID } = item;
+        const { modalTracking } = trackingProps;
+        const { onLoadSharedLink } = modalTracking;
         const prevSharedLink = prevProps.sharedLink;
         const { getInitialDataCalled } = this.state;
 
@@ -86,6 +88,12 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         // hydrated before we fetch data
         if (!getInitialDataCalled && type && typedID) {
             this.getInitialData();
+        }
+
+        // this ensures that we obtain shared link information the first time data is returned
+        // so we can pass the corresponding permissions in the callback
+        if (!prevSharedLink.permissionLevel && sharedLink.permissionLevel && onLoadSharedLink) {
+            onLoadSharedLink(sharedLink.permissionLevel);
         }
 
         // we use state to override the default auto copy prop when a URL comes into view

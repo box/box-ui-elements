@@ -24,6 +24,7 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies: boolean,
     isAlwaysExpanded?: boolean,
+    isPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onHideReplies?: (lastReply: CommentType) => void,
@@ -53,6 +54,7 @@ const ActivityThread = ({
     getUserProfileUrl,
     hasReplies,
     isAlwaysExpanded = false,
+    isPending,
     isRepliesLoading,
     mentionSelectorContacts,
     onHideReplies = noop,
@@ -146,6 +148,7 @@ const ActivityThread = ({
                 {onReplyCreate && (
                     <ActivityThreadReplyForm
                         getMentionWithQuery={getMentionWithQuery}
+                        isDisabled={isPending}
                         mentionSelectorContacts={mentionSelectorContacts}
                         onFocus={handleFormFocusOrShow}
                         onHide={handleFormHide}

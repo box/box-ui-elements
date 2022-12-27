@@ -1,8 +1,8 @@
 // @flow
 import API from '../../../../api/APIFactory';
 
-import type { Annotation, AnnotationPermission } from '../../../../common/types/annotations';
-import type { BoxItemPermission } from '../../../../common/types/core';
+import type { Annotation, AnnotationPermission, NewAnnotation } from '../../../../common/types/annotations';
+import type { BoxItem } from '../../../../common/types/core';
 import type { FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 
@@ -14,19 +14,19 @@ type Props = {
         contextInfo?: Object,
         origin?: ElementOrigin,
     ) => void,
-    fileId: string,
-    filePermissions: BoxItemPermission,
+    file: BoxItem,
 };
 
 type UseAnnotationAPI = {
-    handleDelete: ({ id: string, permissions: AnnotationPermission, successCallback: () => void }) => any,
+    handleCreate: ({ payload: NewAnnotation, successCallback: (annotation: Annotation) => void }) => void,
+    handleDelete: ({ id: string, permissions: AnnotationPermission, successCallback: () => void }) => void,
     handleEdit: ({
         id: string,
         permissions: AnnotationPermission,
         successCallback: (annotation: Annotation) => void,
         text: string,
     }) => void,
-    handleFetch: ({ annotationId: string, successCallback: (annotation: Annotation) => void }) => void,
+    handleFetch: ({ id: string, successCallback: (annotation: Annotation) => void }) => void,
     handleStatusChange: ({
         id: string,
         permissions: AnnotationPermission,
@@ -35,17 +35,38 @@ type UseAnnotationAPI = {
     }) => void,
 };
 
-const useAnnotationAPI = ({ api, fileId, filePermissions, errorCallback }: Props): UseAnnotationAPI => {
-    const handleFetch = ({
-        annotationId,
+const useAnnotationAPI = ({
+    api,
+    errorCallback,
+    file: { id: fileId, file_version: { id: fileVersionId } = {}, permissions: filePermissions = {} },
+}: Props): UseAnnotationAPI => {
+    const handleCreate = ({
+        payload,
         successCallback,
     }: {
-        annotationId: string,
+        payload: NewAnnotation,
+        successCallback: (annotation: Annotation) => void,
+    }): void => {
+        api.getAnnotationsAPI(false).createAnnotation(
+            fileId,
+            fileVersionId,
+            payload,
+            filePermissions,
+            successCallback,
+            errorCallback,
+        );
+    };
+
+    const handleFetch = ({
+        id,
+        successCallback,
+    }: {
+        id: string,
         successCallback: (annotation: Annotation) => void,
     }): void => {
         api.getAnnotationsAPI(false).getAnnotation(
             fileId,
-            annotationId,
+            id,
             filePermissions,
             successCallback,
             errorCallback,
@@ -108,6 +129,7 @@ const useAnnotationAPI = ({ api, fileId, filePermissions, errorCallback }: Props
     };
 
     return {
+        handleCreate,
         handleFetch,
         handleDelete,
         handleEdit,

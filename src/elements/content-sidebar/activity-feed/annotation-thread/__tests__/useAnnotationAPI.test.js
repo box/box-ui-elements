@@ -6,12 +6,14 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
     const annotation = annotations[0];
 
     const getApi = ({
+        createAnnotation = jest.fn(),
         getAnnotation = jest.fn(),
         updateAnnotation = jest.fn(),
         deleteAnnotation = jest.fn(),
         createAnnotationReply = jest.fn,
     }) => {
         const getAnnotationsAPI = () => ({
+            createAnnotation,
             createAnnotationReply,
             getAnnotation,
             updateAnnotation,
@@ -30,13 +32,48 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
         renderHook(() =>
             useAnnotationAPI({
                 api: getApi({}),
-                fileId: 'fileId',
-                filePermissions,
+                file: {
+                    id: 'fileId',
+                    file_version: { id: '123' },
+                    permissions: filePermissions,
+                },
                 annotationId: annotation.id,
                 errorCallback,
                 ...props,
             }),
         );
+
+    test('should call api function on handleCreate with correct arguments', () => {
+        const mockSuccessCallback = jest.fn();
+        const mockErrorCallback = jest.fn();
+        const mockCreateAnnotation = jest.fn();
+        const api = getApi({ createAnnotation: mockCreateAnnotation });
+        const mockFile = {
+            id: 'fileId',
+            file_version: { id: '123' },
+            permissions: { can_annotate: true, can_view_annotations: true },
+        };
+
+        const { result } = getHook({ api, file: mockFile, errorCallback: mockErrorCallback });
+
+        const mockPayload = {
+            description: { message: 'foo' },
+            target: {},
+        };
+
+        act(() => {
+            result.current.handleCreate({ payload: mockPayload, successCallback: mockSuccessCallback });
+        });
+
+        expect(mockCreateAnnotation).toBeCalledWith(
+            mockFile.id,
+            mockFile.file_version.id,
+            mockPayload,
+            mockFile.permissions,
+            mockSuccessCallback,
+            mockErrorCallback,
+        );
+    });
 
     test('should call api function on handleFetch with correct arguments', () => {
         const mockSuccessCallback = jest.fn();
@@ -46,7 +83,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotattionAPI', () => {
         const { result } = getHook({ api });
 
         act(() => {
-            result.current.handleFetch({ annotationId: annotation.id, successCallback: mockSuccessCallback });
+            result.current.handleFetch({ id: annotation.id, successCallback: mockSuccessCallback });
         });
 
         expect(mockGetAnnotation).toBeCalledWith(
