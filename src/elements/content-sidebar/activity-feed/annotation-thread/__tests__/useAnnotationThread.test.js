@@ -18,6 +18,7 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
     const mockUseAnnotatorEventsResult = {
         emitAddAnnotationEndEvent: jest.fn(),
         emitAddAnnotationStartEvent: jest.fn(),
+        emitAnnotationActiveChangeEvent: jest.fn(),
         emitDeleteAnnotationEndEvent: jest.fn(),
         emitDeleteAnnotationStartEvent: jest.fn(),
         emitUpdateAnnotationEndEvent: jest.fn(),
@@ -40,16 +41,19 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
     const filePermissions = { can_annotate: true, can_view_annotations: true };
     const errorCallback = jest.fn();
 
+    const getFileProps = props => ({
+        id: 'fileId',
+        file_version: { id: '123' },
+        permissions: filePermissions,
+        ...props,
+    });
+
     const getHook = props =>
         renderHook(() =>
             useAnnotationThread({
                 api: {},
                 currentUser: {},
-                file: {
-                    id: 'fileId',
-                    file_version: { id: '123' },
-                    permissions: filePermissions,
-                },
+                file: getFileProps(),
                 annotationId: annotation.id,
                 errorCallback,
                 eventEmitter: {},
@@ -77,20 +81,85 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
         expect(result.current.replies).toEqual([]);
     });
 
-    test('should return correct values after fetch', () => {
+    test('should return correct values after fetch and call emitAnnotationActiveChangeEvent', () => {
         const { replies, ...normalizedAnnotation } = annotation;
         const mockHandleFetch = jest.fn().mockImplementation(({ successCallback }) => successCallback(annotation));
         useAnnotationAPI.mockImplementation(() => ({
             ...mockUseAnnotationAPIResult,
             handleFetch: mockHandleFetch,
         }));
+        const fileVersionId = '456';
+        const file = getFileProps({ file_version: { id: fileVersionId } });
 
-        const { result } = getHook();
+        const { result } = getHook({ file });
 
         expect(result.current.annotation).toEqual(normalizedAnnotation);
         expect(result.current.isLoading).toEqual(false);
         expect(result.current.error).toEqual(undefined);
         expect(result.current.replies).toEqual(replies);
+        expect(mockUseAnnotatorEventsResult.emitAnnotationActiveChangeEvent).toBeCalledWith(
+            annotation.id,
+            fileVersionId,
+        );
+    });
+
+    describe('handleAnnotationEdit', () => {
+        test('should call handleEdit from useAnnotationAPI and call emitUpdateAnnotationStartEvent + emitUpdateAnnotationEndEvent', () => {
+            const updatedText = 'new text';
+            const updatedAnnotation = {
+                id: annotation.id,
+                description: { message: updatedText },
+            };
+            const mockHandleEdit = jest.fn().mockImplementation(({ successCallback }) => {
+                successCallback(updatedAnnotation);
+            });
+            useAnnotationAPI.mockImplementation(() => ({
+                ...mockUseAnnotationAPIResult,
+                handleEdit: mockHandleEdit,
+            }));
+
+            const { result } = getHook();
+            act(() => {
+                result.current.annotationActions.handleAnnotationEdit(annotation.id, updatedText, { can_edit: true });
+            });
+
+            expect(mockHandleEdit).toBeCalledWith({
+                id: annotation.id,
+                permissions: { can_edit: true },
+                text: updatedText,
+                successCallback: expect.any(Function),
+            });
+            expect(mockUseAnnotatorEventsResult.emitUpdateAnnotationStartEvent).toBeCalledWith(updatedAnnotation);
+            expect(mockUseAnnotatorEventsResult.emitUpdateAnnotationEndEvent).toBeCalledWith(updatedAnnotation);
+        });
+    });
+
+    describe('handleAnnotationDelete', () => {
+        test('should call handleDelete from useAnnotationAPI and call emitDeleteAnnotationStartEvent + emitDeleteAnnotationEndEvent', () => {
+            const mockHandleDelete = jest.fn().mockImplementation(({ successCallback }) => {
+                successCallback();
+            });
+            useAnnotationAPI.mockImplementation(() => ({
+                ...mockUseAnnotationAPIResult,
+                handleDelete: mockHandleDelete,
+            }));
+
+            const { result } = getHook();
+            act(() => {
+                result.current.annotationActions.handleAnnotationDelete({
+                    id: annotation.id,
+                    permissions: { can_delete: true },
+                });
+            });
+
+            expect(mockHandleDelete).toBeCalledWith({
+                id: annotation.id,
+                permissions: { can_delete: true },
+                successCallback: expect.any(Function),
+            });
+            expect(mockUseAnnotatorEventsResult.emitDeleteAnnotationStartEvent).toBeCalledWith(annotation.id);
+            expect(mockUseAnnotatorEventsResult.emitDeleteAnnotationEndEvent).toBeCalledWith(annotation.id);
+        });
     });
 
     describe('useAnnotationAPI', () => {
@@ -141,48 +210,6 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
                 successCallback: expect.any(Function),
             });
             expect(mockOnAnnotationCreate).toBeCalledWith(createdAnnotation);
-        });
-
-        test('should call handleAnnotationEdit with correct params', () => {
-            const mockHandleEdit = jest.fn();
-            useAnnotationAPI.mockImplementation(() => ({
-                ...mockUseAnnotationAPIResult,
-                handleEdit: mockHandleEdit,
-            }));
-
-            const { result } = getHook();
-            act(() => {
-                result.current.annotationActions.handleAnnotationEdit(annotation.id, 'new text', { can_edit: true });
-            });
-
-            expect(mockHandleEdit).toBeCalledWith({
-                id: annotation.id,
-                permissions: { can_edit: true },
-                text: 'new text',
-                successCallback: expect.any(Function),
-            });
-        });
-
-        test('should call handleAnnotationDelete with correct params', () => {
-            const mockHandleDelete = jest.fn();
-            useAnnotationAPI.mockImplementation(() => ({
-                ...mockUseAnnotationAPIResult,
-                handleDelete: mockHandleDelete,
-            }));
-
-            const { result } = getHook();
-            act(() => {
-                result.current.annotationActions.handleAnnotationDelete({
-                    id: annotation.id,
-                    permissions: { can_delete: true },
-                });
-            });
-
-            expect(mockHandleDelete).toBeCalledWith({
-                id: annotation.id,
-                permissions: { can_delete: true },
-                successCallback: expect.any(Function),
-            });
         });
 
         test('should call handleAnnotationStatusChange with correct params and set annotation state to pending', () => {

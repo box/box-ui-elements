@@ -3,13 +3,10 @@ import { annotation as mockAnnotation } from '../../../../../__mocks__/annotatio
 export default () => ({
     annotation: mockAnnotation,
     annotationActions: {
+        handleCreate: jest.fn(),
         handleDelete: jest.fn(),
         handleEdit: jest.fn(),
         handleResolve: jest.fn(),
-    },
-    annotationEvents: {
-        handleAnnotationCreateStart: jest.fn(),
-        handleAnnotationCreateEnd: jest.fn(),
     },
     error: {},
     isLoading: false,
