@@ -970,6 +970,11 @@ const messages = defineMessages({
             'If a user has been deleted, we call the user "a prior collaborator" - meaning someone who used to be able to collaborate on the content.',
         defaultMessage: 'A Prior Collaborator',
     },
+    moreOptions: {
+        id: 'be.moreOptions',
+        description: 'Label for a button that displays more options',
+        defaultMessage: 'More options',
+    },
 });
 
 export default messages;
