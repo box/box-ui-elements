@@ -2,12 +2,12 @@ import React from 'react';
 import sinon from 'sinon';
 import { ANYONE_IN_COMPANY, ANYONE_WITH_LINK, CAN_EDIT, CAN_VIEW_DOWNLOAD } from '../constants';
 
-import SharedLinkSection from '../SharedLinkSection';
+import { SharedLinkSectionBase as SharedLinkSection } from '../SharedLinkSection';
 
 const sandbox = sinon.sandbox.create();
 
 describe('features/unified-share-modal/SharedLinkSection', () => {
-    const intl = { formatMessage: sandbox.spy() };
+    const intl = { formatMessage: jest.fn().mockImplementation(message => message.defaultMessage) };
     const defaultItem = {
         grantedPermissions: {
             itemShare: true,
