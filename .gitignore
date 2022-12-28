@@ -3,6 +3,7 @@
 *~~bak
 .DS_Store
 .idea
+.history
 _site
 __diff_output__
 dist
