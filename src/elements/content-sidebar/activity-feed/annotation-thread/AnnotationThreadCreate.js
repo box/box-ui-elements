@@ -1,90 +1,48 @@
 // @flow
 import React from 'react';
 import classNames from 'classnames';
-import uniqueId from 'lodash/uniqueId';
-import API from '../../../../api/APIFactory';
 import CommentForm from '../comment-form';
-import { getBadUserError } from '../../../../utils/error';
-
-import type { Annotation, Target } from '../../../../common/types/annotations';
-import type { BoxItem, SelectorItems, User } from '../../../../common/types/core';
-import type { ErrorContextProps } from '../../../../common/types/api';
+import type { SelectorItems, User } from '../../../../common/types/core';
 
 import './AnnotationThreadCreate.scss';
 
 type Props = {
-    api: API,
     currentUser: User,
-    file: BoxItem,
     getAvatarUrl: string => Promise<?string>,
     getMentionWithQuery: (searchStr: string) => void,
-    handleCancel: () => void,
+    isPending: boolean,
     mentionSelectorContacts: SelectorItems<>,
-    onAnnotationCreateEnd: (annotation: Object, requestId: string) => void,
-    onAnnotationCreateStart: (annotation: Object, requestId: string) => void,
-    target: Target,
-} & ErrorContextProps;
+    onFormCancel: () => void,
+    onFormSubmit: (text: string) => void,
+};
 
 const AnnotationThreadCreate = ({
-    api,
     currentUser,
-    file,
     getAvatarUrl,
     getMentionWithQuery,
-    handleCancel,
+    isPending,
     mentionSelectorContacts,
-    onAnnotationCreateEnd,
-    onAnnotationCreateStart,
-    onError,
-    target,
+    onFormCancel,
+    onFormSubmit,
 }: Props) => {
-    const [isPending, setIsPending] = React.useState(false);
-
-    const handleCreate = (text: string): void => {
-        const { id, permissions = {}, file_version = {} } = file;
-        setIsPending(true);
-        if (!currentUser) {
-            throw getBadUserError();
-        }
-
-        const requestId = uniqueId('annotation_');
-
-        const successCallback = (annotation: Annotation) => {
-            onAnnotationCreateEnd(annotation, requestId);
-        };
-
-        const payload = {
-            description: { message: text },
-            target,
-        };
-
-        onAnnotationCreateStart(payload, requestId);
-
-        api.getAnnotationsAPI(false).createAnnotation(
-            id,
-            file_version.id,
-            payload,
-            permissions,
-            successCallback,
-            onError,
-        );
+    const handleSubmit = ({ text }) => {
+        onFormSubmit(text);
     };
 
     return (
         <div
-            data-testid="annotation-create"
             className={classNames('AnnotationThreadCreate', { 'is-pending': isPending })}
+            data-testid="annotation-create"
         >
             <CommentForm
                 className="AnnotationThreadCreate-editor"
-                user={currentUser}
-                entityId={file.id}
-                onSubmit={handleCreate}
-                getMentionWithQuery={getMentionWithQuery}
-                mentionSelectorContacts={mentionSelectorContacts}
+                createComment={handleSubmit}
                 getAvatarUrl={getAvatarUrl}
+                getMentionWithQuery={getMentionWithQuery}
                 isOpen
-                onCancel={handleCancel}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onCancel={onFormCancel}
+                user={currentUser}
             />
         </div>
     );
