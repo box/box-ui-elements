@@ -9,7 +9,7 @@ import TargetedClickThroughGuideTooltip from '../../features/targeting/TargetedC
 import Tooltip, { TooltipPosition } from '../../components/tooltip';
 // @ts-ignore Module is written in Flow
 import messages from './messages';
-import './SidebarNavSign.scss';
+import './SidebarNavSignButton.scss';
 
 export type Props = PlainButtonProps & {
     blockedReason?: string;
@@ -25,12 +25,12 @@ export type Props = PlainButtonProps & {
 
 export const PlaceholderTooltip = ({ children }: { children: React.ReactNode }) => children;
 
-export function SidebarNavSign({ blockedReason, intl, status, targetingApi, ...rest }: Props) {
+export function SidebarNavSignButton({ blockedReason, intl, status, targetingApi, ...rest }: Props) {
     const isSignDisabled = !!blockedReason;
     const isTargeted = targetingApi && targetingApi.canShow;
     const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
     const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
-    const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isSignDisabled });
+    const buttonClassName = classnames('bcs-SidebarNavSignButton', { 'bdl-is-disabled': isSignDisabled });
 
     let tooltipMessage = label;
 
@@ -56,12 +56,12 @@ export function SidebarNavSign({ blockedReason, intl, status, targetingApi, ...r
         >
             <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
                 <PlainButton aria-label={label} className={buttonClassName} isDisabled={isSignDisabled} {...rest}>
-                    <BoxSign28 className="bcs-SidebarNavSign-icon" />
-                    <Sign16 width={20} height={20} className="bcs-SidebarNavSign-icon--grayscale" />
+                    <BoxSign28 className="bcs-SidebarNavSignButton-icon" />
+                    <Sign16 width={20} height={20} className="bcs-SidebarNavSignButton-icon--grayscale" />
                 </PlainButton>
             </Tooltip>
         </FtuxTooltip>
     );
 }
 
-export default injectIntl(SidebarNavSign);
+export default injectIntl(SidebarNavSignButton);
