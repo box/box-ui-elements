@@ -3,8 +3,6 @@ import { annotation } from '../../../../../__mocks__/annotations';
 import { threadedCommentsFormatted as replies } from '../../../../../api/fixtures';
 import useRepliesAPI from '../useRepliesAPI';
 
-jest.mock('lodash/uniqueId', () => () => 'uniqueId');
-
 describe('src/elements/content-sidebar/activity-feed/annotation-thread/useRepliesAPI', () => {
     const getApi = ({ createAnnotationReply = jest.fn, deleteComment = jest.fn(), updateComment = jest.fn() }) => {
         const getAnnotationsAPI = () => ({
