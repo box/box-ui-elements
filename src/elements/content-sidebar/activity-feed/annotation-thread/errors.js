@@ -6,8 +6,9 @@ import {
     ERROR_CODE_FETCH_ANNOTATION,
     ERROR_CODE_UPDATE_COMMENT,
 } from '../../../../constants';
-import messages from './messages';
+import apiMessages from '../../../../api/messages';
 import commonMessages from '../../../common/messages';
+import messages from './messages';
 
 const annotationErrors = {
     [ERROR_CODE_FETCH_ANNOTATION]: messages.errorFetchAnnotation,
@@ -17,9 +18,9 @@ const annotationErrors = {
 };
 
 const commentsErrors = {
-    [ERROR_CODE_UPDATE_COMMENT]: messages.commentUpdateErrorMessage,
-    [ERROR_CODE_CREATE_REPLY]: messages.commentCreateErrorMessage,
-    [ERROR_CODE_DELETE_COMMENT]: messages.commentDeleteErrorMessage,
+    [ERROR_CODE_UPDATE_COMMENT]: apiMessages.commentUpdateErrorMessage,
+    [ERROR_CODE_CREATE_REPLY]: apiMessages.commentCreateErrorMessage,
+    [ERROR_CODE_DELETE_COMMENT]: apiMessages.commentDeleteErrorMessage,
     default: commonMessages.error,
 };
 

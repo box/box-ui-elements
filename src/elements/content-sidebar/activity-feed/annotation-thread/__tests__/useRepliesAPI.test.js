@@ -1,7 +1,9 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import { annotation, user } from '../../../../../__mocks__/annotations';
+import { annotation } from '../../../../../__mocks__/annotations';
 import { threadedCommentsFormatted as replies } from '../../../../../api/fixtures';
 import useRepliesAPI from '../useRepliesAPI';
+
+jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 describe('src/elements/content-sidebar/activity-feed/annotation-thread/useRepliesAPI', () => {
     const getApi = ({ createAnnotationReply = jest.fn, deleteComment = jest.fn(), updateComment = jest.fn() }) => {
@@ -25,45 +27,45 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
             useRepliesAPI({
                 annotationId: annotation.id,
                 api: getApi(mockedApiFunctions),
-                currentUser: user,
+                errorCallback: jest.fn(),
                 fileId: 'fileId',
                 filePermissions: { can_comment: true },
-                handleUpdateOrCreateReplyItem: jest.fn(),
-                handleRemoveReplyItem: jest.fn(),
                 ...props,
             }),
         );
 
-    test('should call api function on handleDeleteReply with correct arguments', () => {
+    test('should call api function on deleteReply with correct arguments', () => {
         const mockDeleteComment = jest.fn();
         const api = getApi({ deleteComment: mockDeleteComment });
 
         const { result } = getHook({ api });
         const { id, permissions } = replies[0];
+        const successCallback = jest.fn();
 
         act(() => {
-            result.current.handleReplyDelete({ id, permissions });
+            result.current.deleteReply({ id, permissions, successCallback });
         });
 
         expect(mockDeleteComment).toBeCalledWith({
             fileId: 'fileId',
             commentId: id,
             permissions,
-            successCallback: expect.any(Function),
+            successCallback,
             errorCallback: expect.any(Function),
         });
     });
 
-    test('should call api function on handleEditReply with correct arguments', () => {
+    test('should call api function on editReply with correct arguments', () => {
         const mockUpdateComment = jest.fn();
         const api = getApi({ updateComment: mockUpdateComment });
         const { id, permissions } = replies[0];
         const message = 'Text';
+        const successCallback = jest.fn();
 
         const { result } = getHook({ api });
 
         act(() => {
-            result.current.handleReplyEdit(id, message, false, undefined, permissions);
+            result.current.editReply({ id, message, permissions, successCallback });
         });
 
         expect(mockUpdateComment).toBeCalledWith({
@@ -71,20 +73,22 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
             commentId: id,
             message,
             permissions,
-            successCallback: expect.any(Function),
+            successCallback,
             errorCallback: expect.any(Function),
         });
     });
 
-    test('should call api function on handleCreateReply with correct arguments', () => {
+    test('should call api function on createReply with correct arguments', () => {
         const mockCreateAnnotationReply = jest.fn();
         const api = getApi({ createAnnotationReply: mockCreateAnnotationReply });
         const message = 'Text';
+        const requestId = 'reply_123';
+        const successCallback = jest.fn();
 
         const { result } = getHook({ api });
 
         act(() => {
-            result.current.handleReplyCreate(message);
+            result.current.createReply({ message, requestId, successCallback });
         });
 
         expect(mockCreateAnnotationReply).toBeCalledWith(
@@ -92,7 +96,7 @@ describe('src/elements/content-sidebar/activity-feed/annotation-thread/useReplie
             annotation.id,
             { can_comment: true },
             message,
-            expect.any(Function),
+            successCallback,
             expect.any(Function),
         );
     });

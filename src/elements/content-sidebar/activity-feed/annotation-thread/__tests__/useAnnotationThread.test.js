@@ -17,11 +17,17 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
 
     const mockUseAnnotatorEventsResult = {
         emitAddAnnotationEndEvent: jest.fn(),
+        emitAddAnnotationReplyEndEvent: jest.fn(),
+        emitAddAnnotationReplyStartEvent: jest.fn(),
         emitAddAnnotationStartEvent: jest.fn(),
         emitAnnotationActiveChangeEvent: jest.fn(),
         emitDeleteAnnotationEndEvent: jest.fn(),
+        emitDeleteAnnotationReplyEndEvent: jest.fn(),
+        emitDeleteAnnotationReplyStartEvent: jest.fn(),
         emitDeleteAnnotationStartEvent: jest.fn(),
         emitUpdateAnnotationEndEvent: jest.fn(),
+        emitUpdateAnnotationReplyEndEvent: jest.fn(),
+        emitUpdateAnnotationReplyStartEvent: jest.fn(),
         emitUpdateAnnotationStartEvent: jest.fn(),
     };
     const mockUseAnnotationAPIResult = {
@@ -33,9 +39,9 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
     };
 
     const mockUseRepliesAPIResult = {
-        handleReplyDelete: jest.fn(),
-        handleReplyEdit: jest.fn(),
-        handleReplyCreate: jest.fn(),
+        createReply: jest.fn(),
+        deleteReply: jest.fn(),
+        editReply: jest.fn(),
     };
 
     const filePermissions = { can_annotate: true, can_view_annotations: true };
@@ -103,6 +109,50 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
         );
     });
 
+    describe('handleAnnotationCreate', () => {
+        test('should call handleCreate from useAnnotationAPI and call emitAddAnnotationStartEvent + emitAddAnnotationEndEvent', () => {
+            const mockOnAnnotationCreate = jest.fn();
+            const createdAnnotation = {
+                description: { message: 'new annotation' },
+                target: {},
+            };
+            const mockHandleCreate = jest
+                .fn()
+                .mockImplementation(({ successCallback }) => successCallback(createdAnnotation));
+            useAnnotationAPI.mockImplementation(() => ({
+                ...mockUseAnnotationAPIResult,
+                handleCreate: mockHandleCreate,
+            }));
+
+            const target = {};
+            const text = 'foo';
+
+            const { result } = getHook({ target, onAnnotationCreate: mockOnAnnotationCreate });
+            act(() => {
+                result.current.annotationActions.handleAnnotationCreate(text);
+            });
+
+            const expectedPayload = {
+                description: { message: text },
+                target,
+            };
+
+            expect(mockHandleCreate).toBeCalledWith({
+                payload: expectedPayload,
+                successCallback: expect.any(Function),
+            });
+            expect(mockOnAnnotationCreate).toBeCalledWith(createdAnnotation);
+            expect(mockUseAnnotatorEventsResult.emitAddAnnotationStartEvent).toBeCalledWith(
+                expectedPayload,
+                'uniqueId',
+            );
+            expect(mockUseAnnotatorEventsResult.emitAddAnnotationEndEvent).toBeCalledWith(
+                createdAnnotation,
+                'uniqueId',
+            );
+        });
+    });
+
     describe('handleAnnotationEdit', () => {
         test('should call handleEdit from useAnnotationAPI and call emitUpdateAnnotationStartEvent + emitUpdateAnnotationEndEvent', () => {
             const updatedText = 'new text';
@@ -162,6 +212,116 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
         });
     });
 
+    describe('handleReplyCreate', () => {
+        test('should call createReply from useRepliesAPI and call emitAddAnnotationReplyStartEvent + emitAddAnnotationReplyEndEvent', () => {
+            const message = 'new comment';
+            const createdReply = {
+                id: '123',
+                tagged_message: message,
+            };
+            const mockCreateReply = jest
+                .fn()
+                .mockImplementation(({ successCallback }) => successCallback(createdReply));
+            useRepliesAPI.mockImplementation(() => ({
+                ...mockUseRepliesAPIResult,
+                createReply: mockCreateReply,
+            }));
+
+            const { result } = getHook();
+            act(() => {
+                result.current.repliesActions.handleReplyCreate(message);
+            });
+
+            const expectedPayload = {
+                tagged_message: message,
+                type: 'comment',
+            };
+
+            expect(mockCreateReply).toBeCalledWith({
+                message,
+                requestId: 'uniqueId',
+                successCallback: expect.any(Function),
+            });
+            expect(mockUseAnnotatorEventsResult.emitAddAnnotationReplyStartEvent).toBeCalledWith(
+                expectedPayload,
+                annotation.id,
+                'uniqueId',
+            );
+            expect(mockUseAnnotatorEventsResult.emitAddAnnotationReplyEndEvent).toBeCalledWith(
+                createdReply,
+                annotation.id,
+                'uniqueId',
+            );
+        });
+    });
+
+    describe('handleReplyEdit', () => {
+        test('should call editReply from useRepliesAPI and call emitUpdateAnnotationReplyStartEvent + emitUpdateAnnotationReplyEndEvent', () => {
+            const id = '123';
+            const message = 'updated comment';
+            const permissions = { can_edit: true };
+            const updatedReply = {
+                id,
+                tagged_message: message,
+            };
+            const mockEditReply = jest.fn().mockImplementation(({ successCallback }) => successCallback(updatedReply));
+            useRepliesAPI.mockImplementation(() => ({
+                ...mockUseRepliesAPIResult,
+                editReply: mockEditReply,
+            }));
+
+            const { result } = getHook();
+            act(() => {
+                result.current.repliesActions.handleReplyEdit(id, message, false, undefined, permissions);
+            });
+
+            const expectedPayload = {
+                id,
+                tagged_message: message,
+            };
+
+            expect(mockEditReply).toBeCalledWith({
+                id,
+                message,
+                permissions,
+                successCallback: expect.any(Function),
+            });
+            expect(mockUseAnnotatorEventsResult.emitUpdateAnnotationReplyStartEvent).toBeCalledWith(
+                expectedPayload,
+                annotation.id,
+            );
+            expect(mockUseAnnotatorEventsResult.emitUpdateAnnotationReplyEndEvent).toBeCalledWith(
+                updatedReply,
+                annotation.id,
+            );
+        });
+    });
+
+    describe('handleReplyDelete', () => {
+        test('should call deleteReply from useRepliesAPI and call emitDeleteAnnotationReplyStartEvent + emitDeleteAnnotationReplyEndEvent', () => {
+            const id = '123';
+            const permissions = { can_edit: true };
+            const mockDeleteReply = jest.fn().mockImplementation(({ successCallback }) => successCallback());
+            useRepliesAPI.mockImplementation(() => ({
+                ...mockUseRepliesAPIResult,
+                deleteReply: mockDeleteReply,
+            }));
+
+            const { result } = getHook();
+            act(() => {
+                result.current.repliesActions.handleReplyDelete({ id, permissions });
+            });
+
+            expect(mockDeleteReply).toBeCalledWith({
+                id,
+                permissions,
+                successCallback: expect.any(Function),
+            });
+            expect(mockUseAnnotatorEventsResult.emitDeleteAnnotationReplyStartEvent).toBeCalledWith(id, annotation.id);
+            expect(mockUseAnnotatorEventsResult.emitDeleteAnnotationReplyEndEvent).toBeCalledWith(id, annotation.id);
+        });
+    });
+
     describe('useAnnotationAPI', () => {
         test('shoud call handleFetchAnnotation on mount', () => {
             const mockHandleFetch = jest.fn();
@@ -176,40 +336,6 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
                 id: annotation.id,
                 successCallback: expect.any(Function),
             });
-        });
-
-        test('should call handleAnnotationCreate with correct params', () => {
-            const mockOnAnnotationCreate = jest.fn();
-            const createdAnnotation = {
-                description: { message: 'new annotation' },
-                target: {},
-            };
-            const mockHandleCreate = jest
-                .fn()
-                .mockImplementation(({ successCallback }) => successCallback(createdAnnotation));
-            useAnnotationAPI.mockImplementation(() => ({
-                ...mockUseAnnotationAPIResult,
-                handleCreate: mockHandleCreate,
-            }));
-
-            const target = {};
-            const text = 'foo';
-
-            const { result } = getHook({ target, onAnnotationCreate: mockOnAnnotationCreate });
-            act(() => {
-                result.current.annotationActions.handleAnnotationCreate(text);
-            });
-
-            const expectedPayload = {
-                description: { message: text },
-                target,
-            };
-
-            expect(mockHandleCreate).toBeCalledWith({
-                payload: expectedPayload,
-                successCallback: expect.any(Function),
-            });
-            expect(mockOnAnnotationCreate).toBeCalledWith(createdAnnotation);
         });
 
         test('should call handleAnnotationStatusChange with correct params and set annotation state to pending', () => {
@@ -237,8 +363,10 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
     });
 
     describe('useAnnotatorEvents', () => {
-        const mockFetchAnnotation = () => {
-            const mockHandleFetch = jest.fn().mockImplementation(({ successCallback }) => successCallback(annotation));
+        const mockFetchAnnotation = (replies = annotation.replies) => {
+            const mockHandleFetch = jest
+                .fn()
+                .mockImplementation(({ successCallback }) => successCallback({ ...annotation, replies }));
             useAnnotationAPI.mockImplementation(() => ({
                 ...mockUseAnnotationAPIResult,
                 handleFetch: mockHandleFetch,
@@ -266,11 +394,15 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
 
         test('should handle onUpdateAnnotationStart and update annotation state to pending', () => {
             jest.useFakeTimers();
+            const updatedAnnotation = {
+                ...annotation,
+                description: { message: 'new message' },
+            };
             mockFetchAnnotation();
 
             useAnnotatorEvents.mockImplementation(({ onAnnotationUpdateStart }) => {
                 setTimeout(() => {
-                    onAnnotationUpdateStart(annotation.id);
+                    onAnnotationUpdateStart(updatedAnnotation);
                 }, 100);
                 return mockUseAnnotatorEventsResult;
             });
@@ -280,14 +412,14 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
                 jest.advanceTimersByTime(100);
             });
 
-            expect(result.current.annotation.isPending).toEqual(true);
+            expect(result.current.annotation).toEqual({ ...updatedAnnotation, isPending: true });
         });
 
         test('should handle onUpdateAnnotationEnd and update annotation values accordingly', () => {
             jest.useFakeTimers();
             const updatedAnnotation = {
                 ...annotation,
-                message: 'new message',
+                description: { message: 'new message' },
             };
             mockFetchAnnotation();
             useAnnotatorEvents.mockImplementation(({ onAnnotationUpdateEnd }) => {
@@ -305,41 +437,207 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
             expect(result.current.annotation).toEqual({ ...updatedAnnotation, isPending: false });
         });
 
-        test('should call emitAddAnnotationStartEvent and emitAddAnnotationEndEvent', () => {
-            const target = {};
-            const text = 'foo';
-
-            const createdAnnotation = {
-                description: { message: 'new annotation' },
-                target,
+        test('should handle onAnnotationReplyAddStart and update reply values accordingly', () => {
+            jest.useFakeTimers();
+            const isoString = 'isoDateString';
+            global.Date.prototype.toISOString = jest.fn().mockImplementation(() => isoString);
+            const message = 'new message';
+            const newReply = {
+                tagged_message: message,
             };
-            const mockHandleCreate = jest
-                .fn()
-                .mockImplementation(({ successCallback }) => successCallback(createdAnnotation));
-            useAnnotationAPI.mockImplementation(() => ({
-                ...mockUseAnnotationAPIResult,
-                handleCreate: mockHandleCreate,
-            }));
+            const requestId = 'reply_123';
+            useAnnotatorEvents.mockImplementation(({ onAnnotationReplyAddStart }) => {
+                setTimeout(() => {
+                    onAnnotationReplyAddStart({ annotationId: annotation.id, reply: newReply, requestId });
+                }, 100);
+                return mockUseAnnotatorEventsResult;
+            });
+            const currentUser = {
+                id: '1234567',
+            };
 
-            const { result } = getHook({ target });
+            const { result } = getHook({ currentUser });
 
             act(() => {
-                result.current.annotationActions.handleAnnotationCreate(text);
+                jest.advanceTimersByTime(100);
             });
 
-            const expectedPayload = {
-                description: { message: text },
-                target,
+            const expectedReplies = [
+                {
+                    created_at: isoString,
+                    created_by: currentUser,
+                    id: requestId,
+                    isPending: true,
+                    modified_at: isoString,
+                    tagged_message: message,
+                },
+            ];
+
+            expect(result.current.replies).toEqual(expectedReplies);
+        });
+
+        test('should handle onAnnotationReplyAddEnd and update reply values accordingly', () => {
+            jest.useFakeTimers();
+
+            const message = 'new message';
+            const newReply = {
+                id: '123',
+                tagged_message: message,
+            };
+            const requestId = 'reply_123';
+
+            const initialReplies = [
+                {
+                    id: requestId,
+                    isPending: true,
+                    tagged_message: message,
+                },
+            ];
+            mockFetchAnnotation(initialReplies);
+
+            useAnnotatorEvents.mockImplementation(({ onAnnotationReplyAddEnd }) => {
+                setTimeout(() => {
+                    onAnnotationReplyAddEnd({ annotationId: annotation.id, reply: newReply, requestId });
+                }, 100);
+                return mockUseAnnotatorEventsResult;
+            });
+
+            const { result } = getHook();
+
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            const expectedReplies = [{ ...newReply, isPending: false }];
+
+            expect(result.current.replies).toEqual(expectedReplies);
+        });
+
+        test('should handle onAnnotationReplyUpdateStart and update reply values accordingly', () => {
+            jest.useFakeTimers();
+            const message = 'updated message';
+            const id = '123';
+            const updatedReply = {
+                id,
+                tagged_message: message,
             };
 
-            expect(mockUseAnnotatorEventsResult.emitAddAnnotationStartEvent).toBeCalledWith(
-                expectedPayload,
-                'uniqueId',
-            );
-            expect(mockUseAnnotatorEventsResult.emitAddAnnotationEndEvent).toBeCalledWith(
-                createdAnnotation,
-                'uniqueId',
-            );
+            const initialReplies = [
+                {
+                    id,
+                    tagged_message: 'old message',
+                },
+            ];
+            mockFetchAnnotation(initialReplies);
+
+            useAnnotatorEvents.mockImplementation(({ onAnnotationReplyUpdateStart }) => {
+                setTimeout(() => {
+                    onAnnotationReplyUpdateStart({ annotationId: annotation.id, reply: updatedReply });
+                }, 100);
+                return mockUseAnnotatorEventsResult;
+            });
+
+            const { result } = getHook();
+
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            const expectedReplies = [{ ...updatedReply, isPending: true }];
+
+            expect(result.current.replies).toEqual(expectedReplies);
+        });
+
+        test('should handle onAnnotationReplyUpdateEnd and update reply values accordingly', () => {
+            jest.useFakeTimers();
+            const message = 'updated message';
+            const id = '123';
+            const updatedReply = {
+                id,
+                tagged_message: message,
+            };
+
+            const initialReplies = [
+                {
+                    id,
+                    isPending: true,
+                    tagged_message: message,
+                },
+            ];
+            mockFetchAnnotation(initialReplies);
+
+            useAnnotatorEvents.mockImplementation(({ onAnnotationReplyUpdateEnd }) => {
+                setTimeout(() => {
+                    onAnnotationReplyUpdateEnd({ annotationId: annotation.id, reply: updatedReply });
+                }, 100);
+                return mockUseAnnotatorEventsResult;
+            });
+
+            const { result } = getHook();
+
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            const expectedReplies = [{ ...updatedReply, isPending: false }];
+
+            expect(result.current.replies).toEqual(expectedReplies);
+        });
+
+        test('should handle onAnnotationReplyDeleteStart and update reply values accordingly', () => {
+            jest.useFakeTimers();
+            const id = '123';
+
+            const initialReply = {
+                id,
+                tagged_message: 'message',
+            };
+            mockFetchAnnotation([initialReply]);
+
+            useAnnotatorEvents.mockImplementation(({ onAnnotationReplyDeleteStart }) => {
+                setTimeout(() => {
+                    onAnnotationReplyDeleteStart({ annotationId: annotation.id, id });
+                }, 100);
+                return mockUseAnnotatorEventsResult;
+            });
+
+            const { result } = getHook();
+
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            const expectedReplies = [{ ...initialReply, isPending: true }];
+
+            expect(result.current.replies).toEqual(expectedReplies);
+        });
+
+        test('should handle onAnnotationReplyDeleteEnd and update reply values accordingly', () => {
+            jest.useFakeTimers();
+            const id = '123';
+
+            const initialReply = {
+                id,
+                tagged_message: 'message',
+            };
+            mockFetchAnnotation([initialReply]);
+
+            useAnnotatorEvents.mockImplementation(({ onAnnotationReplyDeleteEnd }) => {
+                setTimeout(() => {
+                    onAnnotationReplyDeleteEnd({ annotationId: annotation.id, id });
+                }, 100);
+                return mockUseAnnotatorEventsResult;
+            });
+
+            const { result } = getHook();
+
+            act(() => {
+                jest.advanceTimersByTime(100);
+            });
+
+            const expectedReplies = [];
+
+            expect(result.current.replies).toEqual(expectedReplies);
         });
     });
 });
