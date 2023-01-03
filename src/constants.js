@@ -394,6 +394,9 @@ export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 export const SIDEBAR_VIEW_VERSIONS: 'versions' = 'versions';
 
+/* ------------------ Sidebar Path ---------------------- */
+export const SIDEBAR_PATH_VERSIONS = '/:sidebar(activity|details)/versions/:versionId?';
+
 /* ------------------ HTTP Requests ---------------------- */
 export const HTTP_GET: 'GET' = 'GET';
 export const HTTP_POST: 'POST' = 'POST';

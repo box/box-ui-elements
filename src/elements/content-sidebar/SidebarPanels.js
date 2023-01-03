@@ -18,6 +18,7 @@ import {
     ORIGIN_METADATA_SIDEBAR,
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_VERSIONS_SIDEBAR,
+    SIDEBAR_PATH_VERSIONS,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
@@ -250,7 +251,7 @@ class SidebarPanels extends React.Component<Props, State> {
                 )}
                 {hasVersions && (
                     <Route
-                        path="/:sidebar(activity|details)/versions/:versionId?"
+                        path={SIDEBAR_PATH_VERSIONS}
                         render={({ match }) => (
                             <LoadableVersionsSidebar
                                 fileId={fileId}

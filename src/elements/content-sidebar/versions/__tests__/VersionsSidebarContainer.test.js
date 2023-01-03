@@ -58,17 +58,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         });
     });
 
-    describe('componentWillUnmount', () => {
-        test('should forward verison id reset to the parent component', () => {
-            const onVersionChange = jest.fn();
-            const wrapper = getWrapper({ onVersionChange });
-
-            wrapper.instance().componentWillUnmount();
-
-            expect(onVersionChange).toBeCalledWith(null);
-        });
-    });
-
     describe('componentDidMount', () => {
         test('should call onLoad after a successful fetchData() call', async () => {
             const onLoad = jest.fn();

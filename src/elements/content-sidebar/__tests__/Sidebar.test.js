@@ -74,6 +74,23 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
             expect(instance.isForced).toHaveBeenCalledWith(false);
         });
+
+        test('should reset the current version if the versions route is no longer active', () => {
+            const onVersionChange = jest.fn();
+            const wrapper = getWrapper({ location: { pathname: '/activity' }, onVersionChange });
+
+            wrapper.setProps({ location: { pathname: '/activity/versions/123', state: { open: true } } });
+            expect(onVersionChange).not.toBeCalled();
+
+            wrapper.setProps({ location: { pathname: '/activity/versions/123', state: { open: false } } });
+            expect(onVersionChange).not.toBeCalled();
+
+            wrapper.setProps({ location: { pathname: '/activity/versions/456', state: { open: true } } });
+            expect(onVersionChange).not.toBeCalled();
+
+            wrapper.setProps({ location: { pathname: '/details' } });
+            expect(onVersionChange).lastCalledWith(null);
+        });
     });
 
     describe('handleVersionHistoryClick', () => {
