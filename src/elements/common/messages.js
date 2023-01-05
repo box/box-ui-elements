@@ -147,6 +147,11 @@ const messages = defineMessages({
         description: 'Label for switching to grid view',
         defaultMessage: 'Switch to Grid View',
     },
+    gridViewColumnSize: {
+        id: 'be.gridView.columnSize',
+        description: 'Label for the size of columns in grid view',
+        defaultMessage: 'Column size',
+    },
     gridViewIncreaseColumnSize: {
         id: 'be.gridView.increaseColumnSize',
         description: 'Label for increasing the size of columns in grid view',
@@ -969,6 +974,11 @@ const messages = defineMessages({
         description:
             'If a user has been deleted, we call the user "a prior collaborator" - meaning someone who used to be able to collaborate on the content.',
         defaultMessage: 'A Prior Collaborator',
+    },
+    moreOptions: {
+        id: 'be.moreOptions',
+        description: 'Label for a button that displays more options',
+        defaultMessage: 'More options',
     },
 });
 

@@ -62,20 +62,13 @@ exports[`features/collaborator-avatars/CollaboratorAvatarItem render() should re
       constrainToWindow={true}
       isDisabled={false}
       position="middle-right"
-      text={
-        <FormattedMessage
-          defaultMessage="Access expires on {date}"
-          id="boxui.collaboratorAvatars.collaborators.expirationTooltipText"
-          values={
-            Object {
-              "date": "January 1, 2009",
-            }
-          }
-        />
-      }
+      text="Access expires on {date}"
       theme="default"
     >
-      <div>
+      <div
+        aria-label="Access expires on {date}"
+        role="img"
+      >
         <IconExpirationBadge
           className="themed"
           height={14}
