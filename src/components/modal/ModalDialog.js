@@ -93,11 +93,8 @@ class ModalDialog extends React.Component<Props> {
      * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
      */
     renderCloseButton() {
-        const { closeButtonProps, onRequestClose, intl } = this.props;
+        const { closeButtonProps, intl } = this.props;
         const { formatMessage } = intl;
-        if (!onRequestClose) {
-            return null;
-        }
 
         return (
             // eslint-disable-next-line react/button-has-type
@@ -137,6 +134,7 @@ class ModalDialog extends React.Component<Props> {
             className,
             modalRef,
             onRequestBack,
+            onRequestClose,
             title,
             type,
             ...rest // Useful for resin tagging, and other misc tags such as a11y
@@ -159,7 +157,7 @@ class ModalDialog extends React.Component<Props> {
                             {title}
                         </h2>
                     </div>
-                    {this.renderCloseButton()}
+                    {onRequestClose && this.renderCloseButton()}
                 </div>
                 {this.renderContent()}
             </div>

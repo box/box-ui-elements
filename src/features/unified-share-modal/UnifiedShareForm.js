@@ -702,21 +702,20 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { sharedLinkTracking, sharedLinkEmailTracking } = trackingProps;
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
 
-        const isMainUSMSectionShown = !isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList;
+        const hasExpandedSections = isEmailLinkSectionExpanded || isInviteSectionExpanded || showCollaboratorList;
 
         const showContentInsightsToggle =
-            onAdvancedContentInsightsToggle && isMainUSMSectionShown && item?.type === ITEM_TYPE_FILE;
+            onAdvancedContentInsightsToggle && !hasExpandedSections && item?.type === ITEM_TYPE_FILE;
 
         return (
-            // Only show the restriction warning on the main page of the USM where the email and share link option is available
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
-                    {isMainUSMSectionShown && allShareRestrictionWarning}
+                    {!hasExpandedSections && allShareRestrictionWarning}
                     {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 
-                    {isMainUSMSectionShown && (
+                    {!hasExpandedSections && (
                         <SharedLinkSection
                             addSharedLink={onAddLink}
                             autofocusSharedLink={this.shouldAutoFocusSharedLink()}
