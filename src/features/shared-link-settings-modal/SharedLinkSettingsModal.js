@@ -147,6 +147,7 @@ class SharedLinkSettingsModal extends Component {
         this.state = {
             expirationDate: props.expirationTimestamp ? new Date(props.expirationTimestamp) : null,
             expirationError: props.expirationError,
+            expirationFormattedDate: props.expirationTimestamp ? new Date(props.expirationTimestamp) : null,
             isVanityEnabled: !!props.vanityName,
             isDownloadEnabled: props.isDownloadEnabled,
             isExpirationEnabled: !!props.expirationTimestamp,
@@ -178,7 +179,7 @@ class SharedLinkSettingsModal extends Component {
         event.preventDefault();
 
         const {
-            expirationDate,
+            expirationFormattedDate,
             isDownloadEnabled,
             isExpirationEnabled,
             isPasswordEnabled,
@@ -187,7 +188,7 @@ class SharedLinkSettingsModal extends Component {
         } = this.state;
 
         this.props.onSubmit({
-            expirationTimestamp: expirationDate ? expirationDate.getTime() : undefined,
+            expirationTimestamp: expirationFormattedDate || undefined,
             isDownloadEnabled,
             isExpirationEnabled,
             isPasswordEnabled,
@@ -215,7 +216,7 @@ class SharedLinkSettingsModal extends Component {
     };
 
     onExpirationDateChange = (date, formattedDate) => {
-        this.setState({ expirationDate: new Date(formattedDate), expirationError: undefined });
+        this.setState({ expirationDate: date, expirationFormattedDate: formattedDate, expirationError: undefined });
     };
 
     onExpirationCheckboxChange = event => {
