@@ -11,7 +11,7 @@ import IconMagicWand from '../../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import SidebarNav from '../SidebarNav';
 import SidebarNavButton from '../SidebarNavButton';
-import SidebarNavSign from '../SidebarNavSign';
+import SidebarNavSignButton from '../SidebarNavSignButton';
 
 describe('elements/content-sidebar/SidebarNav', () => {
     const getWrapper = (props = {}, active = '', features = {}) =>
@@ -102,11 +102,11 @@ describe('elements/content-sidebar/SidebarNav', () => {
             },
         };
         const wrapper = getWrapper({}, 'activity', features);
-        expect(wrapper.exists(SidebarNavSign)).toBe(true);
+        expect(wrapper.exists(SidebarNavSignButton)).toBe(true);
     });
 
     test('should not render the Box Sign entry point if its feature is not enabled', () => {
         const wrapper = getWrapper();
-        expect(wrapper.exists(SidebarNavSign)).toBe(false);
+        expect(wrapper.exists(SidebarNavSignButton)).toBe(false);
     });
 });
