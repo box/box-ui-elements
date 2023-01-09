@@ -3136,10 +3136,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.0.0.tgz#e59b259b34b1b4c399778682732c3d0038864284"
   integrity sha512-VdrUJK8tICkE4KrgN9FcRmqI+I72vPiDeRnlzX0Ua06etEzNPUa5E3tBnuZleWfZiBshhSScXfEbZdNCWkDHtQ==
 
-"@box/react-virtualized@^9.22.3-rc-box.3":
-  version "9.22.3-rc-box.3"
-  resolved "https://registry.yarnpkg.com/@box/react-virtualized/-/react-virtualized-9.22.3-rc-box.3.tgz#ca2e3ff8121bda5e43c181fdbf2631993428580c"
-  integrity sha512-vsgDWf2LEKJP/1R2F8dD3cDVaIGwX/2ymLKeUtewTaE0dHrfUEayKSgoLRPGHWdCJEVOaJWDNcJoSTBZt2P2oA==
+"@box/react-virtualized@9.22.3-rc-box.5":
+  version "9.22.3-rc-box.5"
+  resolved "https://registry.yarnpkg.com/@box/react-virtualized/-/react-virtualized-9.22.3-rc-box.5.tgz#05b39952f718bcd4fae276cfa4badf9b8dc0e528"
+  integrity sha512-rW0RnxhGSLBPO3t7DAeqXfebBm2AHlaya3aiRdUV4xe5PkV4H4w0cwe8HagxNGZg+WTU3b//iNJVzbzHQkjXhg==
   dependencies:
     "@babel/runtime" "^7.7.2"
     clsx "^1.0.4"
