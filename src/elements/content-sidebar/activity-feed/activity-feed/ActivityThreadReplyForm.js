@@ -16,15 +16,38 @@ import './ActivityThreadReplyForm.scss';
 
 type ActivityThreadReplyFromProps = {
     getMentionWithQuery?: (searchStr: string) => void,
+    isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onFocus: () => void,
+    onHide: () => void,
     onReplyCreate: (text: string) => void,
+    onShow: () => void,
 };
 
 type Props = ActivityThreadReplyFromProps & InjectIntlProvidedProps;
 
-function ActivityThreadReplyForm({ mentionSelectorContacts, getMentionWithQuery, onReplyCreate, intl }: Props) {
+function ActivityThreadReplyForm({
+    mentionSelectorContacts,
+    getMentionWithQuery,
+    isDisabled,
+    onFocus,
+    onHide,
+    onReplyCreate,
+    onShow,
+    intl,
+}: Props) {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
     const placeholder = intl.formatMessage(messages.replyInThread);
+
+    const showForm = () => {
+        setShowReplyForm(true);
+        onShow();
+    };
+
+    const hideForm = () => {
+        setShowReplyForm(false);
+        onHide();
+    };
 
     return showReplyForm ? (
         <CommentForm
@@ -35,10 +58,11 @@ function ActivityThreadReplyForm({ mentionSelectorContacts, getMentionWithQuery,
             // $FlowFixMe user is needed for showing an avatar, we don't need that here
             user={{}}
             getAvatarUrl={() => Promise.resolve()}
-            onCancel={() => setShowReplyForm(false)}
+            onCancel={hideForm}
+            onFocus={onFocus}
             createComment={({ text }) => {
                 onReplyCreate(text);
-                setShowReplyForm(false);
+                hideForm();
             }}
             mentionSelectorContacts={mentionSelectorContacts}
             getMentionWithQuery={getMentionWithQuery}
@@ -46,9 +70,10 @@ function ActivityThreadReplyForm({ mentionSelectorContacts, getMentionWithQuery,
         />
     ) : (
         <PlainButton
-            role="button"
             className="bcs-ActivityThreadReplyForm-toggle"
-            onClick={() => setShowReplyForm(true)}
+            onClick={showForm}
+            type="button"
+            isDisabled={isDisabled}
         >
             <ArrowArcRight className="bcs-ActivityThreadReplyForm-arrow" />
             <FormattedMessage {...messages.reply} />

@@ -24,6 +24,8 @@ class ContentExplorer extends Component {
          * Each column has to be a Column element
          */
         additionalColumns: PropTypes.arrayOf(PropTypes.element),
+        /**  Allow users to choose no selections in MULTI_SELECT mode, defaults to false  */
+        isNoSelectionAllowed: PropTypes.bool,
         /** Props for breadcrumbs */
         breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
@@ -401,6 +403,7 @@ class ContentExplorer extends Component {
         const {
             actionButtonsProps,
             additionalColumns,
+            isNoSelectionAllowed = false,
             breadcrumbProps,
             cancelButtonProps,
             chooseButtonProps,
@@ -459,7 +462,7 @@ class ContentExplorer extends Component {
             // NOTE: only expecting to have 1 (choose) button so as long as something
             // is selected and that item's isActionDisabled is false, we enable the action button
             areActionButtonsDisabled =
-                selectedItemsIds.length === 0 ||
+                (selectedItemsIds.length === 0 && !isNoSelectionAllowed) ||
                 (selectedItemsIds.length === 1 && selectedItems[selectedItemsIds[0]].isActionDisabled);
         } else if (isViewingSearchResults || contentExplorerMode === ContentExplorerModes.SELECT_FILE) {
             // Buttons are only enabled when an item is selected
@@ -552,6 +555,7 @@ class ContentExplorer extends Component {
                     onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
                     selectedItems={selectedItems}
+                    isNoSelectionAllowed={isNoSelectionAllowed}
                 />
             </div>
         );

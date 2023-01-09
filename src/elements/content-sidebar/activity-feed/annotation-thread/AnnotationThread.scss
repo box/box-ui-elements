@@ -6,6 +6,10 @@
 
     .bcs-ActivityThread {
         box-shadow: none;
+
+        &:hover {
+            background: none;
+        }
     }
 
     .bcs-ActivityThread-content {
@@ -15,7 +19,7 @@
         overflow: auto;
 
         .bcs-AnnotationActivity-menu {
-            top: $sidebarActivityFeedSpacingVertical;
+            right: $sidebarActivityFeedSpacingHorizontal - $sidebarActivityFeedSelectedItemSpacing;
         }
     }
 

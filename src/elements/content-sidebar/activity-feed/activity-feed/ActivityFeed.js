@@ -97,12 +97,14 @@ type Props = {
 type State = {
     isInputOpen: boolean,
     isScrolled: boolean,
+    selectedItemId: string | null,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
         isScrolled: false,
         isInputOpen: false,
+        selectedItemId: null,
     };
 
     activeFeedItemRef = React.createRef<null | HTMLElement>();
@@ -244,10 +246,21 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
+    setSelectedItem = (itemId: string | null) => {
+        const { hasReplies } = this.props;
+        if (!hasReplies) {
+            return;
+        }
+        this.setState({ selectedItemId: itemId });
+    };
+
     isFeedItemActive = <T, U: { id: string, type: T }>({ id, type }: U): boolean => {
         const { activeFeedEntryId, activeFeedEntryType } = this.props;
+        const { selectedItemId } = this.state;
 
-        return id === activeFeedEntryId && type === activeFeedEntryType;
+        const isSelected = selectedItemId === id;
+
+        return selectedItemId ? isSelected : id === activeFeedEntryId && type === activeFeedEntryType;
     };
 
     isCommentFeedItemActive = <T, U: { id: string, replies?: Array<Comment>, type: T }>(item: U): boolean => {
@@ -382,6 +395,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onCommentSelect={this.setSelectedItem}
                             onHideReplies={onHideReplies}
                             onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
                             onReplyDelete={hasCommentPermission ? onReplyDelete : noop}

@@ -17,6 +17,7 @@ export interface CheckboxProps {
     hideLabel?: boolean;
     /** id - Unique `id` for the input */
     id?: string;
+    inputClassName?: string;
     /** isChecked - whether the checkbox is checked or not */
     isChecked?: boolean; // @TODO: eventually call this `checked`
     /** isDisabled - whether the checkbox is disabled or not */
@@ -47,6 +48,7 @@ const Checkbox = ({
     fieldLabel,
     hideLabel,
     id,
+    inputClassName,
     isChecked,
     isDisabled,
     label,
@@ -65,6 +67,7 @@ const Checkbox = ({
             <input
                 aria-describedby={description ? `description_${inputID}` : ''}
                 checked={isChecked}
+                className={inputClassName}
                 disabled={isDisabled}
                 id={inputID}
                 name={name}

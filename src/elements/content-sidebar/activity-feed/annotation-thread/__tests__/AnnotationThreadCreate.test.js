@@ -3,7 +3,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import AnnotationThreadCreate from '../AnnotationThreadCreate';
-import { annotation } from '../../../../../__mocks__/annotations';
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
 jest.mock('../../comment-form', () => props => {
@@ -14,7 +13,7 @@ jest.mock('../../comment-form', () => props => {
                     <button type="button" onClick={props.onCancel}>
                         Cancel
                     </button>
-                    <button type="button" onClick={() => props.onSubmit('example message')}>
+                    <button type="button" onClick={() => props.createComment({ text: 'example message' })}>
                         Post
                     </button>
                 </div>
@@ -24,38 +23,19 @@ jest.mock('../../comment-form', () => props => {
 });
 
 describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThreadCreate', () => {
-    const mockHandleCancel = jest.fn();
-    const mockOnAnnotationCreate = jest.fn();
-    const mockOnError = jest.fn();
-    let mockCreateAnnotation = jest.fn();
-
     const getDefaultProps = () => ({
-        api: {
-            getAnnotationsAPI: () => ({
-                createAnnotation: mockCreateAnnotation,
-            }),
-        },
         currentUser: { id: 'user_id' },
-        file: {
-            id: 'file_id',
-            file_version: { id: 'file_version' },
-            permissions: { can_annotate: true },
-        },
-        handleCancel: mockHandleCancel,
-        onAnnotationCreate: mockOnAnnotationCreate,
-        onError: mockOnError,
-        target: {
-            location: { type: 'page', value: 1 },
-            type: 'point',
-            x: 12,
-            y: 10,
-        },
+        onFormCancel: jest.fn(),
+        onFormSubmit: jest.fn(),
     });
 
     const IntlWrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
-    const getWrapper = () => render(<AnnotationThreadCreate {...getDefaultProps()} />, { wrapper: IntlWrapper });
+    const getWrapper = props =>
+        render(<AnnotationThreadCreate {...getDefaultProps()} {...props} />, {
+            wrapper: IntlWrapper,
+        });
 
     test('Should render correctly', () => {
         const { container, getByText } = getWrapper();
@@ -64,40 +44,29 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         expect(container.getElementsByClassName('AnnotationThreadCreate-is-pending')).toHaveLength(0);
     });
 
-    test('Should handle create', () => {
-        mockCreateAnnotation = jest.fn((fileId, fileVersionId, payload, filePermissions, successCallback) => {
-            successCallback(annotation);
-        });
-        const { getByText, getByTestId } = getWrapper();
-
-        fireEvent.click(getByText('Post'));
-
-        expect(mockOnAnnotationCreate).toBeCalledWith(annotation);
-        expect(mockCreateAnnotation).toBeCalledWith(
-            'file_id',
-            'file_version',
-            {
-                description: { message: 'example message' },
-                target: {
-                    location: { type: 'page', value: 1 },
-                    type: 'point',
-                    x: 12,
-                    y: 10,
-                },
-            },
-            { can_annotate: true },
-            expect.any(Function),
-            mockOnError,
-        );
+    test('Should render correctly with pending state', () => {
+        const { getByTestId } = getWrapper({ isPending: true });
 
         expect(getByTestId('annotation-create')).toHaveClass('is-pending');
     });
 
-    test('Should call handleCancel on cancel', () => {
-        const { getByText } = getWrapper();
+    test('Should call onFormSubmit on create', () => {
+        const onFormSubmit = jest.fn();
+
+        const { getByText } = getWrapper({ onFormSubmit });
+
+        fireEvent.click(getByText('Post'));
+
+        expect(onFormSubmit).toBeCalledWith('example message');
+    });
+
+    test('Should call onFormCancel on cancel', () => {
+        const onFormCancel = jest.fn();
+
+        const { getByText } = getWrapper({ onFormCancel });
 
         fireEvent.click(getByText('Cancel'));
 
-        expect(mockHandleCancel).toBeCalled();
+        expect(onFormCancel).toBeCalled();
     });
 });

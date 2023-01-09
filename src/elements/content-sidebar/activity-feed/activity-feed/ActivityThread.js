@@ -24,6 +24,7 @@ type Props = {
     getUserProfileUrl?: GetProfileUrlCallback,
     hasReplies: boolean,
     isAlwaysExpanded?: boolean,
+    isPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onHideReplies?: (lastReply: CommentType) => void,
@@ -38,6 +39,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onReplySelect?: (isSelected: boolean) => void,
     onShowReplies?: () => void,
     replies?: Array<CommentType>,
     repliesTotalCount?: number,
@@ -52,12 +54,14 @@ const ActivityThread = ({
     getUserProfileUrl,
     hasReplies,
     isAlwaysExpanded = false,
+    isPending,
     isRepliesLoading,
     mentionSelectorContacts,
     onHideReplies = noop,
     onReplyCreate,
     onReplyDelete = noop,
     onReplyEdit = noop,
+    onReplySelect = noop,
     onShowReplies = noop,
     replies = [],
     repliesTotalCount = 0,
@@ -70,6 +74,14 @@ const ActivityThread = ({
         if (repliesLength) {
             onHideReplies(replies[repliesLength - 1]);
         }
+    };
+
+    const handleFormFocusOrShow = () => {
+        onReplySelect(true);
+    };
+
+    const handleFormHide = () => {
+        onReplySelect(false);
     };
 
     const renderButton = () => {
@@ -110,34 +122,41 @@ const ActivityThread = ({
     }
     return (
         <div className="bcs-ActivityThread" data-testid="activity-thread">
-            <div className="bcs-ActivityThread-content">
-                {children}
+            <div className="bcs-ActivityThread-selectWrapper">
+                <div className="bcs-ActivityThread-content">
+                    {children}
 
-                {renderButton()}
+                    {renderButton()}
 
-                {repliesTotalCount > 0 && repliesLength > 0 && (
-                    <ActivityThreadReplies
-                        currentUser={currentUser}
-                        getAvatarUrl={getAvatarUrl}
+                    {repliesTotalCount > 0 && repliesLength > 0 && (
+                        <ActivityThreadReplies
+                            currentUser={currentUser}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
+                            getUserProfileUrl={getUserProfileUrl}
+                            isRepliesLoading={isRepliesLoading}
+                            mentionSelectorContacts={mentionSelectorContacts}
+                            onDelete={onReplyDelete}
+                            onEdit={onReplyEdit}
+                            onSelect={onReplySelect}
+                            replies={replies}
+                            translations={translations}
+                        />
+                    )}
+                </div>
+
+                {onReplyCreate && (
+                    <ActivityThreadReplyForm
                         getMentionWithQuery={getMentionWithQuery}
-                        getUserProfileUrl={getUserProfileUrl}
-                        isRepliesLoading={isRepliesLoading}
+                        isDisabled={isPending}
                         mentionSelectorContacts={mentionSelectorContacts}
-                        onDelete={onReplyDelete}
-                        onEdit={onReplyEdit}
-                        replies={replies}
-                        translations={translations}
+                        onFocus={handleFormFocusOrShow}
+                        onHide={handleFormHide}
+                        onShow={handleFormFocusOrShow}
+                        onReplyCreate={onReplyCreate}
                     />
                 )}
             </div>
-
-            {onReplyCreate ? (
-                <ActivityThreadReplyForm
-                    getMentionWithQuery={getMentionWithQuery}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    onReplyCreate={onReplyCreate}
-                />
-            ) : null}
         </div>
     );
 };

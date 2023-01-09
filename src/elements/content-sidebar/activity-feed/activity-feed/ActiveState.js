@@ -63,6 +63,7 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onCommentSelect?: (id: string | null) => void,
     onHideReplies?: (id: string, replies: Array<CommentType>) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
     onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
@@ -105,6 +106,7 @@ const ActiveState = ({
     onAppActivityDelete,
     onCommentDelete,
     onCommentEdit,
+    onCommentSelect = noop,
     onHideReplies = noop,
     onReplyCreate = noop,
     onReplyDelete = noop,
@@ -118,6 +120,9 @@ const ActiveState = ({
     onVersionInfo,
     translations,
 }: Props): React.Node => {
+    const onCommentSelectHandler = (itemId: string) => (isSelected: boolean) => {
+        onCommentSelect(isSelected ? itemId : null);
+    };
     const onHideRepliesHandler = (parentId: string) => (lastReply: CommentType) => {
         onHideReplies(parentId, [lastReply]);
     };
@@ -165,12 +170,14 @@ const ActiveState = ({
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
+                                    isPending={item.isPending}
                                     isRepliesLoading={item.isRepliesLoading}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onHideReplies={onHideRepliesHandler(item.id)}
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
                                     onReplyEdit={onReplyUpdateHandler(item.id)}
+                                    onReplySelect={onCommentSelectHandler(item.id)}
                                     onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                     repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}
@@ -185,6 +192,7 @@ const ActiveState = ({
                                         mentionSelectorContacts={mentionSelectorContacts}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
+                                        onSelect={onCommentSelectHandler(item.id)}
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),
                                             can_edit: getProp(item.permissions, 'can_edit', false),
@@ -259,12 +267,14 @@ const ActiveState = ({
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
                                     hasReplies={hasReplies}
+                                    isPending={item.isPending}
                                     isRepliesLoading={item.isRepliesLoading}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onHideReplies={onHideRepliesHandler(item.id)}
                                     onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                     onReplyDelete={onReplyDeleteHandler(item.id)}
                                     onReplyEdit={onReplyUpdateHandler(item.id)}
+                                    onReplySelect={onCommentSelectHandler(item.id)}
                                     onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                     repliesTotalCount={item.total_reply_count}
                                     replies={item.replies}

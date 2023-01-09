@@ -7,7 +7,7 @@ import SortButton from '../SortButton';
 import messages from '../../messages';
 import { SORT_ASC, SORT_DESC } from '../../../../constants';
 
-describe('elements/SubHeader/Sort', () => {
+describe('elements/common/sub-header/Sort', () => {
     test('should render a button and menu with 4 menu items', () => {
         const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="name" sortDirection={SORT_ASC} />);
 

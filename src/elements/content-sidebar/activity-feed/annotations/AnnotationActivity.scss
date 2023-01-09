@@ -1,4 +1,5 @@
 @import '../../../common/variables';
+@import '../../mixins';
 
 .bcs-AnnotationActivity {
     position: relative;
@@ -14,6 +15,10 @@
         opacity: .4;
         pointer-events: none;
     }
+}
+
+.bcs-AnnotationActivity-avatar {
+    position: relative;
 }
 
 .bcs-AnnotationActivity-headline {
