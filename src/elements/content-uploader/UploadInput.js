@@ -21,11 +21,13 @@ const UploadInput = ({
     isFolderUpload = false,
     isMultiple = true,
 }: Props) => {
-    const hiddenInputRef = React.useRef(null);
+    const inputRef = React.useRef(null);
 
     const onKeyDown = e => {
         if (e.key === 'Enter' || e.key === ' ') {
-            hiddenInputRef.current?.click();
+            if (inputRef.current) {
+                inputRef.current.click();
+            }
         }
     };
 
@@ -33,7 +35,7 @@ const UploadInput = ({
         <label className={inputLabelClass} onKeyDown={onKeyDown} tabIndex={0}>
             {inputLabel}
             <input
-                ref={hiddenInputRef}
+                ref={inputRef}
                 directory={isFolderUpload ? '' : undefined}
                 multiple={isMultiple}
                 onChange={handleChange}
