@@ -15,11 +15,11 @@ type Props = {
 };
 
 const UploadInput = ({
-    isMultiple = true,
-    isFolderUpload = false,
-    inputLabelClass = '',
-    inputLabel,
     handleChange,
+    inputLabel,
+    inputLabelClass = '',
+    isFolderUpload = false,
+    isMultiple = true,
 }: Props) => {
     const hiddenInputRef = React.useRef(null);
 
@@ -30,19 +30,17 @@ const UploadInput = ({
     };
 
     return inputLabel ? (
-        <>
-            <label className={inputLabelClass} tabIndex={0} onKeyDown={onKeyDown}>
-                {inputLabel}
-                <input
-                    ref={hiddenInputRef}
-                    directory={isFolderUpload ? '' : undefined}
-                    multiple={isMultiple}
-                    onChange={handleChange}
-                    type="file"
-                    webkitdirectory={isFolderUpload ? '' : undefined}
-                />
-            </label>
-        </>
+        <label className={inputLabelClass} onKeyDown={onKeyDown} tabIndex={0}>
+            {inputLabel}
+            <input
+                ref={hiddenInputRef}
+                directory={isFolderUpload ? '' : undefined}
+                multiple={isMultiple}
+                onChange={handleChange}
+                type="file"
+                webkitdirectory={isFolderUpload ? '' : undefined}
+            />
+        </label>
     ) : null;
 };
 export default UploadInput;
