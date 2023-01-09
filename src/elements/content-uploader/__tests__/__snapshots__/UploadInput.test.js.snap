@@ -1,31 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-uploader/UploadInput should render correctly when inputLabel is available 1`] = `
-<label
-  className="inputLabelClass"
->
-  yo
-  <input
-    multiple={true}
-    onChange={[Function]}
-    type="file"
-  />
-</label>
+<Fragment>
+  <label
+    className="inputLabelClass"
+    onKeyDown={[Function]}
+    tabIndex={0}
+  >
+    yo
+    <input
+      multiple={true}
+      onChange={[Function]}
+      type="file"
+    />
+  </label>
+</Fragment>
 `;
 
 exports[`elements/content-uploader/UploadInput should render correctly when inputLabel is not available 1`] = `""`;
 
 exports[`elements/content-uploader/UploadInput should render correctly when isFolderUpload is true 1`] = `
-<label
-  className=""
->
-  yo
-  <input
-    directory=""
-    multiple={true}
-    onChange={[Function]}
-    type="file"
-    webkitdirectory=""
-  />
-</label>
+<Fragment>
+  <label
+    className=""
+    onKeyDown={[Function]}
+    tabIndex={0}
+  >
+    yo
+    <input
+      directory=""
+      multiple={true}
+      onChange={[Function]}
+      type="file"
+      webkitdirectory=""
+    />
+  </label>
+</Fragment>
 `;

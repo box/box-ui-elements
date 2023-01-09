@@ -20,19 +20,29 @@ const UploadInput = ({
     inputLabelClass = '',
     inputLabel,
     handleChange,
-}: Props) =>
-    inputLabel ? (
-        // eslint-disable-next-line jsx-a11y/label-has-for
-        <label className={inputLabelClass}>
-            {inputLabel}
-            <input
-                directory={isFolderUpload ? '' : undefined}
-                multiple={isMultiple}
-                onChange={handleChange}
-                type="file"
-                webkitdirectory={isFolderUpload ? '' : undefined}
-            />
-        </label>
-    ) : null;
+}: Props) => {
+    const hiddenInputRef = React.useRef(null);
 
+    const onKeyDown = e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            hiddenInputRef.current?.click();
+        }
+    };
+
+    return inputLabel ? (
+        <>
+            <label className={inputLabelClass} tabIndex={0} onKeyDown={onKeyDown}>
+                {inputLabel}
+                <input
+                    ref={hiddenInputRef}
+                    directory={isFolderUpload ? '' : undefined}
+                    multiple={isMultiple}
+                    onChange={handleChange}
+                    type="file"
+                    webkitdirectory={isFolderUpload ? '' : undefined}
+                />
+            </label>
+        </>
+    ) : null;
+};
 export default UploadInput;
