@@ -20,11 +20,9 @@ var ContentExplorer = require('./ContentExplorer').default;
                 hasVersions: true,
             },
         }}
-        canSetShareAccess
-        canShare
-        // features={FEATURES}
-        rootFolderId={174135881903}
-        token={'7Ewt7R231VfmIRDr7yviKCsw9ybO7oQn'}
+        features={FEATURES}
+        rootFolderId={FOLDER_ID}
+        token={TOKEN}
     />
 </IntlProvider>
 ```

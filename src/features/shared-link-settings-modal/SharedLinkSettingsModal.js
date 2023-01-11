@@ -49,6 +49,8 @@ function getAccessNoticeMessageId(accessLevel, canDownload) {
 
 class SharedLinkSettingsModal extends Component {
     static propTypes = {
+        /** The format of the expiration date value for form submit */
+        dateFormat: PropTypes.string,
         hideVanityNameSection: PropTypes.bool,
         isOpen: PropTypes.bool,
         onRequestClose: PropTypes.func,
@@ -145,6 +147,7 @@ class SharedLinkSettingsModal extends Component {
         this.state = {
             expirationDate: props.expirationTimestamp ? new Date(props.expirationTimestamp) : null,
             expirationError: props.expirationError,
+            expirationFormattedDate: props.expirationTimestamp ? new Date(props.expirationTimestamp) : null,
             isVanityEnabled: !!props.vanityName,
             isDownloadEnabled: props.isDownloadEnabled,
             isExpirationEnabled: !!props.expirationTimestamp,
@@ -176,7 +179,7 @@ class SharedLinkSettingsModal extends Component {
         event.preventDefault();
 
         const {
-            expirationDate,
+            expirationFormattedDate,
             isDownloadEnabled,
             isExpirationEnabled,
             isPasswordEnabled,
@@ -185,7 +188,7 @@ class SharedLinkSettingsModal extends Component {
         } = this.state;
 
         this.props.onSubmit({
-            expirationTimestamp: expirationDate ? expirationDate.getTime() : undefined,
+            expirationTimestamp: expirationFormattedDate || undefined,
             isDownloadEnabled,
             isExpirationEnabled,
             isPasswordEnabled,
@@ -212,8 +215,8 @@ class SharedLinkSettingsModal extends Component {
         this.setState({ isPasswordEnabled: event.target.checked });
     };
 
-    onExpirationDateChange = date => {
-        this.setState({ expirationDate: date, expirationError: undefined });
+    onExpirationDateChange = (date, formattedDate) => {
+        this.setState({ expirationDate: date, expirationFormattedDate: formattedDate, expirationError: undefined });
     };
 
     onExpirationCheckboxChange = event => {
@@ -288,12 +291,13 @@ class SharedLinkSettingsModal extends Component {
     }
 
     renderExpirationSection() {
-        const { canChangeExpiration, expirationCheckboxProps, expirationInputProps } = this.props;
+        const { canChangeExpiration, dateFormat, expirationCheckboxProps, expirationInputProps } = this.props;
         const { expirationDate, isExpirationEnabled, expirationError } = this.state;
 
         return (
             <ExpirationSection
                 canChangeExpiration={canChangeExpiration}
+                dateFormat={dateFormat}
                 error={expirationError}
                 expirationCheckboxProps={expirationCheckboxProps}
                 expirationDate={expirationDate}

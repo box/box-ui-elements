@@ -2,13 +2,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import BoxSign28 from '../../../icon/logo/BoxSign28';
 import PlainButton from '../../../components/plain-button';
-import SidebarNavSign from '../SidebarNavSign';
+import SidebarNavSignButton from '../SidebarNavSignButton';
 // @ts-ignore Module is written in Flow
 import TargetedClickThroughGuideTooltip from '../../../features/targeting/TargetedClickThroughGuideTooltip';
 import Tooltip from '../../../components/tooltip';
 
-describe('elements/content-sidebar/SidebarNavSign', () => {
-    const getWrapper = (props = {}) => shallow(<SidebarNavSign {...props} />).dive();
+describe('elements/content-sidebar/SidebarNavSignButton', () => {
+    const getWrapper = (props = {}) => shallow(<SidebarNavSignButton {...props} />).dive();
 
     test.each`
         status       | label

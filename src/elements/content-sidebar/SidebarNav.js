@@ -13,7 +13,7 @@ import IconDocInfo from '../../icons/general/IconDocInfo';
 import IconMagicWand from '../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../icons/general/IconMetadataThick';
 import SidebarNavButton from './SidebarNavButton';
-import SidebarNavSign from './SidebarNavSign';
+import SidebarNavSignButton from './SidebarNavSignButton';
 import SidebarNavTablist from './SidebarNavTablist';
 import SidebarToggle from './SidebarToggle';
 import messages from '../common/messages';
@@ -110,7 +110,7 @@ const SidebarNav = ({
 
                 {hasBoxSign && onBoxSignClick && (
                     <div className="bcs-SidebarNav-secondary">
-                        <SidebarNavSign
+                        <SidebarNavSignButton
                             blockedReason={boxSignBlockedReason}
                             data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
                             onClick={() => onBoxSignClick({ fileId })}
