@@ -1277,8 +1277,26 @@ class ContentExplorer extends Component<Props, State> {
     handleSharedLinkSuccess = (newItem: BoxItem) => {
         const { currentCollection } = this.state;
 
-        // Update item in collection
-        this.updateCollection(currentCollection, newItem, () => this.setState({ isShareModalOpen: true }));
+        if (!newItem?.shared_link) {
+            const { canSetShareAccess }: Props = this.props;
+            if (!newItem || !canSetShareAccess) {
+                return;
+            }
+
+            const { permissions, type } = newItem;
+            if (!permissions || !type) {
+                return;
+            }
+
+            // create a shared link with default access, and update the collection
+            const access = undefined;
+            this.api.getAPI(type).share(newItem, access, (updatedItem: BoxItem) => {
+                this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
+            });
+        } else {
+            // update collection with existing shared link
+            this.updateCollection(currentCollection, newItem, () => this.setState({ isShareModalOpen: true }));
+        }
     };
 
     /**
