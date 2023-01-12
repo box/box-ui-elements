@@ -18,4 +18,5 @@ const CloseButton = ({ intl, onClick }: Props) => (
     </PlainButton>
 );
 
+export { CloseButton as CloseButtonBase };
 export default injectIntl(CloseButton);
