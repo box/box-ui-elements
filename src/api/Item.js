@@ -290,11 +290,11 @@ class Item extends Base {
      *
      * @param {string|void} itemID - ID of item to share
      * @param {BoxItemPermission|void} itemPermissions - Permissions for item
-     * @param {Boolean|void} skipCanSetShareAccess - skip the check for can_set_share_access when creating a new shared link
+     * @param {boolean|void} skipCanSetShareAccess - skip the check for can_set_share_access when creating a new shared link
      * @throws {Error}
      * @return {void}
      */
-    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission, skipCanSetShareAccess: Boolean = false) {
+    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission, skipCanSetShareAccess: boolean = false) {
         if (!itemID || !itemPermissions) {
             this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadItemError();
