@@ -13,6 +13,8 @@ export interface CheckboxProps {
     description?: React.ReactNode;
     /** fieldLabel - label for the field shown on top of the checkbox */
     fieldLabel?: React.ReactNode;
+    /** hideFocusStyles - whether the focus styles are hidden or not */
+    hideFocusStyles?: boolean;
     /** hideLabel - whether the checkbox label is hidden or not */
     hideLabel?: boolean;
     /** id - Unique `id` for the input */
@@ -32,6 +34,8 @@ export interface CheckboxProps {
         | {
               (e: React.FocusEvent<HTMLInputElement>): void;
           };
+    /** onFocus - focus callback function that takes the event as the argument  */
+    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
     /** onChange - change callback function that takes the event as the argument */
     onChange?: (e: React.SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
     /** Subsection below the checkbox */
@@ -46,6 +50,7 @@ const Checkbox = ({
     className = '',
     description,
     fieldLabel,
+    hideFocusStyles,
     hideLabel,
     id,
     inputClassName,
@@ -53,6 +58,7 @@ const Checkbox = ({
     isDisabled,
     label,
     name,
+    onFocus,
     onChange,
     subsection,
     tooltip,
@@ -67,10 +73,11 @@ const Checkbox = ({
             <input
                 aria-describedby={description ? `description_${inputID}` : ''}
                 checked={isChecked}
-                className={inputClassName}
+                className={classNames(inputClassName, { 'Checkbox--isFocused': !hideFocusStyles })}
                 disabled={isDisabled}
                 id={inputID}
                 name={name}
+                onFocus={onFocus}
                 onChange={onChange}
                 type="checkbox"
                 {...rest}
