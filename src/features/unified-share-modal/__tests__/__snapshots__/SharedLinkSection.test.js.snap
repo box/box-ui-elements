@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/SharedLinkSection should account for shared link expirations being set 1`] = `
+exports[`features/unified-share-modal/SharedLinkSection should match snapshot when shared link expiration is set 1`] = `
 <div
   className="be"
 >
@@ -41,6 +41,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
               theme="default"
             >
               <span
+                aria-label="Expires"
                 className="shared-link-expiration-badge"
                 role="img"
               >
