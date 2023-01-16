@@ -32,6 +32,16 @@ const messages = defineMessages({
         defaultMessage: 'Request Signature',
         description: 'label for button that opens a Box Sign signature request experience',
     },
+    boxSignRequestSignature: {
+        id: 'be.contentSidebar.boxSignRequestSignature',
+        defaultMessage: 'Request Signature',
+        description: 'One of the dropdown options that opens a Box Sign request signature experience',
+    },
+    boxSignSignMyself: {
+        id: 'be.contentSidebar.boxSignSignMyself',
+        defaultMessage: 'Sign Myself',
+        description: 'One of the dropdown options that opens a Box Sign sign myself experience',
+    },
     boxSignSignature: {
         id: 'be.contentSidebar.boxSignSignature',
         defaultMessage: 'Sign',

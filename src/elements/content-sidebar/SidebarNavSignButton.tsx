@@ -55,7 +55,13 @@ export function SidebarNavSignButton({ blockedReason, intl, status, targetingApi
             useTargetingApi={() => targetingApi}
         >
             <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
-                <PlainButton aria-label={label} className={buttonClassName} isDisabled={isSignDisabled} {...rest}>
+                <PlainButton
+                    aria-label={label}
+                    className={buttonClassName}
+                    data-testid="sign-button"
+                    isDisabled={isSignDisabled}
+                    {...rest}
+                >
                     <BoxSign28 className="bcs-SidebarNavSignButton-icon" />
                     <Sign16 width={20} height={20} className="bcs-SidebarNavSignButton-icon--grayscale" />
                 </PlainButton>
