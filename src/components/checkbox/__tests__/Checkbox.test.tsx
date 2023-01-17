@@ -17,7 +17,7 @@ describe('components/checkbox/Checkbox', () => {
     test('should correctly render default component', () => {
         expect(wrapper.find('.checkbox-container').length).toBeTruthy();
         expect(wrapper.find('input').prop('id')).toEqual('1');
-        expect(wrapper.find('input').prop('className')).toEqual('inputClassName');
+        expect(wrapper.find('input').prop('className')).toEqual('inputClassName Checkbox--isFocused');
         expect(wrapper.find('input').prop('name')).toEqual('name');
         expect(wrapper.find('input').prop('type')).toEqual('checkbox');
         expect(wrapper.find('.checkbox-pointer-target').length).toBe(1);
