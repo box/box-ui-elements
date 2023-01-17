@@ -1,16 +1,25 @@
 import React, { SyntheticEvent } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
-import Checkbox from '..';
+import Checkbox from '../Checkbox';
 
 describe('components/checkbox/Checkbox', () => {
     let wrapper: ShallowWrapper;
     let onChange: (e: SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
+    let onFocus: (e: SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
 
     beforeEach(() => {
         onChange = jest.fn();
+        onFocus = jest.fn();
         wrapper = shallow(
-            <Checkbox id="1" inputClassName="inputClassName" label="Check things" name="name" onChange={onChange} />,
+            <Checkbox
+                id="1"
+                inputClassName="inputClassName"
+                label="Check things"
+                name="name"
+                onChange={onChange}
+                onFocus={onFocus}
+            />,
         );
     });
 
@@ -71,6 +80,11 @@ describe('components/checkbox/Checkbox', () => {
         };
         wrapper.find('input').simulate('change', event);
         expect(onChange).toBeCalledWith(event);
+    });
+
+    test('should call onFocus callback when onFocus triggers', () => {
+        wrapper.find('input').simulate('focus');
+        expect(onFocus).toBeCalledTimes(1);
     });
 
     test('should render a hidden label when hideLabel is specified', () => {
