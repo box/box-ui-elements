@@ -13,8 +13,6 @@ type Props = {
     description?: React.Node,
     /** Label for the field shown on top of the checkbox */
     fieldLabel?: React.Node,
-    /** hideFocusStyles - whether the focus styles are hidden or not */
-    hideFocusStyles?: boolean,
     /** Hides the checkbox label when true */
     hideLabel?: boolean,
     /** Unique `id` for the input */
@@ -46,7 +44,6 @@ const Checkbox = ({
     className = '',
     description,
     fieldLabel,
-    hideFocusStyles,
     hideLabel,
     id,
     inputClassName,
@@ -68,7 +65,7 @@ const Checkbox = ({
         <span className="checkbox-label">
             <input
                 checked={isChecked}
-                className={classNames(inputClassName, { 'Checkbox--isFocused': !hideFocusStyles })}
+                className={classNames(inputClassName)}
                 disabled={isDisabled}
                 id={inputID}
                 name={name}
