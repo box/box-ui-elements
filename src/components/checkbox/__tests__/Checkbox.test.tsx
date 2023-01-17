@@ -72,6 +72,33 @@ describe('components/checkbox/Checkbox', () => {
         expect(wrapper.find('input').prop('checked')).toBeTruthy();
     });
 
+    test('should not apply Checkbox--isFocused class when hideFocusStyle is true', () => {
+        // wrapper.setProps({ hideFocusStyle: true }) did not work here
+        wrapper = shallow(
+            <Checkbox
+                hideFocusStyles
+                id="1"
+                inputClassName="inputClassName"
+                label="Check things"
+                name="name"
+                onChange={onChange}
+                onFocus={onFocus}
+            />,
+        );
+        expect(wrapper.find('input').hasClass('Checkbox--isFocused')).toBe(false);
+    });
+
+    test('should apply Checkbox--isFocused class when hideFocusStyle is false', () => {
+        wrapper.debug();
+        wrapper.setProps({ hideFocusStyle: false });
+        expect(wrapper.find('input').hasClass('Checkbox--isFocused')).toBe(true);
+    });
+
+    test('should apply Checkbox--isFocused class when hideFocusStyle is undefined', () => {
+        wrapper.setProps({ hideFocusStyle: undefined });
+        expect(wrapper.find('input').hasClass('Checkbox--isFocused')).toBe(true);
+    });
+
     test('should call onChange callback when onchange triggers', () => {
         const event = {
             target: {
