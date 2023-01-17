@@ -33,7 +33,7 @@ type Props = {
     /** change callback function called with event as the argument */
     onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
     /** onFocus - focus callback function that takes the event as the argument  */
-    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void,
+    onFocus?: (e: SyntheticFocusEvent<HTMLInputElement>) => void,
     /** Subsection below the checkbox */
     subsection?: React.Node,
     /** Info tooltip text next to the checkbox label */
