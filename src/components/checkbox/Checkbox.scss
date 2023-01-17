@@ -4,12 +4,6 @@
  * Checkbox
  **************************************/
 
-.Checkbox--isFocused {
-    &:focus + span::before {
-        border: 2px solid $primary-color;
-    }
-}
-
 .checkbox-label {
     position: relative;
     display: inline-flex;
@@ -58,7 +52,7 @@
         }
 
         &:focus + span::before {
-            border: none;
+            border: 2px solid $primary-color;
         }
 
         &:disabled {

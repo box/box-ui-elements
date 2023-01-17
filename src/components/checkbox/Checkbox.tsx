@@ -13,8 +13,6 @@ export interface CheckboxProps {
     description?: React.ReactNode;
     /** fieldLabel - label for the field shown on top of the checkbox */
     fieldLabel?: React.ReactNode;
-    /** hideFocusStyles - whether the focus styles are hidden or not */
-    hideFocusStyles?: boolean;
     /** hideLabel - whether the checkbox label is hidden or not */
     hideLabel?: boolean;
     /** id - Unique `id` for the input */
@@ -50,7 +48,6 @@ const Checkbox = ({
     className = '',
     description,
     fieldLabel,
-    hideFocusStyles,
     hideLabel,
     id,
     inputClassName,
@@ -73,7 +70,7 @@ const Checkbox = ({
             <input
                 aria-describedby={description ? `description_${inputID}` : ''}
                 checked={isChecked}
-                className={classNames(inputClassName, { 'Checkbox--isFocused': !hideFocusStyles })}
+                className={classNames(inputClassName)}
                 disabled={isDisabled}
                 id={inputID}
                 name={name}
