@@ -70,7 +70,7 @@ const Checkbox = ({
             <input
                 aria-describedby={description ? `description_${inputID}` : ''}
                 checked={isChecked}
-                className={classNames(inputClassName)}
+                className={inputClassName}
                 disabled={isDisabled}
                 id={inputID}
                 name={name}
