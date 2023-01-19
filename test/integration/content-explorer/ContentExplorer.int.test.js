@@ -101,6 +101,13 @@ describe('ContentExplorer', () => {
             allowed_shared_link_access_levels: ['collaborators', 'open', 'company'],
             shared_link: null,
         });
+        cy.route('PUT', '**/files/319004423111', {
+            type: 'file',
+            id: '319004423111',
+            etag: '4',
+            allowed_shared_link_access_levels: ['collaborators', 'open', 'company'],
+            shared_link: 'www.example.com',
+        });
     });
 
     describe('Selection', () => {
