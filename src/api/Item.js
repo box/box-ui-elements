@@ -294,14 +294,14 @@ class Item extends Base {
      * @throws {Error}
      * @return {void}
      */
-    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission, skipCanSetShareAccess: boolean = false) {
+    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission, canSkipSetShareAccess: boolean = false) {
         if (!itemID || !itemPermissions) {
             this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadItemError();
         }
 
         const { can_share, can_set_share_access }: BoxItemPermission = itemPermissions;
-        if (!can_share || (!skipCanSetShareAccess && !can_set_share_access)) {
+        if (!can_share || (!canSkipSetShareAccess && !can_set_share_access)) {
             this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadPermissionsError();
         }
@@ -335,8 +335,8 @@ class Item extends Base {
             this.errorCallback = errorCallback;
 
             // if we use the default access level, we don't need permission to set the access level
-            const skipCanSetShareAccess = access === undefined;
-            this.validateRequest(id, permissions, skipCanSetShareAccess);
+            const canSkipSetShareAccess = access === undefined;
+            this.validateRequest(id, permissions, canSkipSetShareAccess);
 
             const { fields } = options;
             const requestData: RequestData = {

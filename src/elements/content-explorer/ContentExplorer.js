@@ -43,6 +43,7 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
+    FIELD_SHARED_LINK,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
@@ -788,7 +789,6 @@ class ContentExplorer extends Component<Props, State> {
      * Changes the share access of an item
      *
      * @private
-     * @param {Object} item file or folder object
      * @param {string} access share access
      * @return {void}
      */
@@ -1277,7 +1277,7 @@ class ContentExplorer extends Component<Props, State> {
     handleSharedLinkSuccess = (newItem: BoxItem) => {
         const { currentCollection } = this.state;
 
-        if (!newItem?.shared_link) {
+        if (!newItem[FIELD_SHARED_LINK]) {
             const { canSetShareAccess }: Props = this.props;
             if (!newItem || !canSetShareAccess) {
                 return;
