@@ -69,16 +69,6 @@
         @include bdl-GridViewSlider-thumb;
     }
 
-    /* hide the outline behind the border */
-    &:-moz-focusring {
-        outline: 1px solid $white;
-        outline-offset: -1px;
-    }
-
-    &:focus {
-        outline: none;
-    }
-
     &:focus::-ms-fill-lower {
         background: $bdl-gray-50;
     }

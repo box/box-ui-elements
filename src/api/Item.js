@@ -290,24 +290,25 @@ class Item extends Base {
      *
      * @param {string|void} itemID - ID of item to share
      * @param {BoxItemPermission|void} itemPermissions - Permissions for item
+     * @param {boolean|void} canSkipSetShareAccess - skip the check for can_set_share_access when creating a new shared link
      * @throws {Error}
      * @return {void}
      */
-    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission) {
+    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission, canSkipSetShareAccess: boolean = false) {
         if (!itemID || !itemPermissions) {
             this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadItemError();
         }
 
         const { can_share, can_set_share_access }: BoxItemPermission = itemPermissions;
-        if (!can_share || !can_set_share_access) {
+        if (!can_share || (!canSkipSetShareAccess && !can_set_share_access)) {
             this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadPermissionsError();
         }
     }
 
     /**
-     * API to create or remove a shared link
+     * API to create, modify (change access) or remove a shared link
      *
      * @param {Object} item - Item to share
      * @param {string} access - Shared access level
@@ -333,7 +334,9 @@ class Item extends Base {
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
 
-            this.validateRequest(id, permissions);
+            // if we use the default access level, we don't need permission to set the access level
+            const canSkipSetShareAccess = access === undefined;
+            this.validateRequest(id, permissions, canSkipSetShareAccess);
 
             const { fields } = options;
             const requestData: RequestData = {

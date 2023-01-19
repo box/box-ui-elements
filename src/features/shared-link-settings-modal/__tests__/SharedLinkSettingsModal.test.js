@@ -85,9 +85,9 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
 
     describe('onSubmit()', () => {
         test('should preventDefault and call props.onSubmit', () => {
-            const expirationDate = new Date();
+            const expirationFormattedDate = new Date().getTime();
             const formState = {
-                expirationDate,
+                expirationFormattedDate,
                 isDownloadEnabled: true,
                 isExpirationEnabled: true,
                 isPasswordEnabled: true,
@@ -96,7 +96,7 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
             };
             const wrapper = getWrapper({
                 onSubmit: sandbox.mock().withArgs({
-                    expirationTimestamp: expirationDate.getTime(),
+                    expirationTimestamp: expirationFormattedDate,
                     isDownloadEnabled: true,
                     isExpirationEnabled: true,
                     isPasswordEnabled: true,
@@ -153,12 +153,14 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
     describe('onExpirationDateChange()', () => {
         test('should set state.expirationDate', () => {
             const newDate = new Date();
+            const newFormattedDate = 1671202800000;
 
             const wrapper = getWrapper({ expirationError: 'hi' });
 
-            wrapper.instance().onExpirationDateChange(newDate);
+            wrapper.instance().onExpirationDateChange(newDate, newFormattedDate);
 
             expect(wrapper.state('expirationDate')).toEqual(newDate);
+            expect(wrapper.state('expirationFormattedDate')).toEqual(newFormattedDate);
             expect(wrapper.state('expirationError')).toBeFalsy();
         });
     });
@@ -240,9 +242,11 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
 
     describe('renderExpirationSection()', () => {
         test('should render an ExpirationSection', () => {
+            const dateFormat = 'utcTime';
             const expirationDate = new Date('11/7/17');
 
             const wrapper = getWrapper({
+                dateFormat,
                 expirationTimestamp: 123,
             });
 
@@ -255,6 +259,7 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
             const section = wrapper.find('ExpirationSection');
             expect(section.length).toBe(1);
             expect(section.prop('canChangeExpiration')).toEqual(canChangeExpiration);
+            expect(section.prop('dateFormat')).toEqual(dateFormat);
             expect(section.prop('expirationDate')).toEqual(expirationDate);
             expect(section.prop('isExpirationEnabled')).toBe(true);
             expect(section.prop('onCheckboxChange')).toEqual(wrapper.instance().onExpirationCheckboxChange);

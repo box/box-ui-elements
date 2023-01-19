@@ -95,5 +95,14 @@ describe('features/shared-link-settings-modal/ExpirationSection', () => {
 
             expect(wrapper.prop('inputProps')['data-prop']).toEqual('input');
         });
+
+        test('should pass dateFormat to DatePicker', () => {
+            const dateFormat = 'utcTime';
+            const wrapper = getSubsection({
+                dateFormat,
+            });
+
+            expect(wrapper.prop('dateFormat')).toEqual(dateFormat);
+        });
     });
 });
