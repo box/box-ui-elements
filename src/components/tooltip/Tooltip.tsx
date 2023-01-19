@@ -5,8 +5,7 @@ import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
-import IconClose from '../../icon/fill/X16';
-import PlainButton from '../plain-button';
+import CloseButton from './CloseButton';
 
 import './Tooltip.scss';
 
@@ -342,11 +341,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         const tooltipInner = (
             <>
                 {text}
-                {withCloseButton && (
-                    <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
-                        <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
-                    </PlainButton>
-                )}
+                {withCloseButton && <CloseButton onClick={this.closeTooltip} />}
             </>
         );
 

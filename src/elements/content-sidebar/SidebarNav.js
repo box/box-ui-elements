@@ -13,7 +13,7 @@ import IconDocInfo from '../../icons/general/IconDocInfo';
 import IconMagicWand from '../../icons/general/IconMagicWand';
 import IconMetadataThick from '../../icons/general/IconMetadataThick';
 import SidebarNavButton from './SidebarNavButton';
-import SidebarNavSignButton from './SidebarNavSignButton';
+import SidebarNavSign from './SidebarNavSign';
 import SidebarNavTablist from './SidebarNavTablist';
 import SidebarToggle from './SidebarToggle';
 import messages from '../common/messages';
@@ -54,13 +54,7 @@ const SidebarNav = ({
     isOpen,
     onNavigate,
 }: Props) => {
-    const {
-        blockedReason: boxSignBlockedReason,
-        enabled: hasBoxSign,
-        onClick: onBoxSignClick,
-        status: boxSignStatus,
-        targetingApi: boxSignTargetingApi,
-    } = useFeatureConfig('boxSign');
+    const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
 
     return (
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
@@ -108,15 +102,9 @@ const SidebarNav = ({
                     )}
                 </SidebarNavTablist>
 
-                {hasBoxSign && onBoxSignClick && (
+                {hasBoxSign && (
                     <div className="bcs-SidebarNav-secondary">
-                        <SidebarNavSignButton
-                            blockedReason={boxSignBlockedReason}
-                            data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
-                            onClick={() => onBoxSignClick({ fileId })}
-                            status={boxSignStatus}
-                            targetingApi={boxSignTargetingApi}
-                        />
+                        <SidebarNavSign />
                     </div>
                 )}
 
