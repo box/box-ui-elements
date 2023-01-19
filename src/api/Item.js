@@ -290,7 +290,7 @@ class Item extends Base {
      *
      * @param {string|void} itemID - ID of item to share
      * @param {BoxItemPermission|void} itemPermissions - Permissions for item
-     * @param {boolean|void} skipCanSetShareAccess - skip the check for can_set_share_access when creating a new shared link
+     * @param {boolean|void} canSkipSetShareAccess - skip the check for can_set_share_access when creating a new shared link
      * @throws {Error}
      * @return {void}
      */

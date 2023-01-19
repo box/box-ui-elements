@@ -338,13 +338,13 @@ describe('api/Item', () => {
             expect(item.errorCode).toBeUndefined();
         });
 
-        test('should skip `can_set_share_access` check when skipCanSetShareAccess is true', () => {
+        test('should skip `can_set_share_access` check when canSkipSetShareAccess is true', () => {
             const itemPermissions = { can_share: true, can_set_share_access: false };
             expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions, true)).not.toThrow();
             expect(item.errorCode).toBeUndefined();
         });
 
-        test('should not skip `can_set_share_access` check when skipCanSetShareAccess is false', () => {
+        test('should not skip `can_set_share_access` check when canSkipSetShareAccess is false', () => {
             const itemPermissions = { can_share: true, can_set_share_access: false };
             expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions, false)).toThrowError(
                 MOCK_PERMISSIONS_ERROR,
