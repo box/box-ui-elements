@@ -82,6 +82,21 @@
     margin-top: 20px;
 }
 
+.modal-back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: 0;
+    transform: rotate(180deg);
+    cursor: pointer;
+}
+
+.modal-back-button + .modal-title {
+    margin-left: 12px;
+}
+
 .modal-close-button {
     position: absolute;
     top: 20px;

@@ -319,6 +319,12 @@ type EmailFormTypes = {
     sendSharedLinkError: React.Node,
 };
 
+type AdvancedContentInsightsUSProps = {
+    isAdvancedContentInsightsChecked?: boolean,
+    /** Handler function that gets called whenever the Advanced Content Insights toggle changes */
+    onAdvancedContentInsightsToggle?: Function,
+};
+
 export type USMConfig = {
     /** Whether the "Email Shared Link" button and form should be rendered in the USM/USF */
     showEmailSharedLinkForm: boolean,
@@ -328,6 +334,7 @@ export type USMConfig = {
 
 // Prop types shared by both the Unified Share Modal and the Unified Share Form
 type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
+    AdvancedContentInsightsUSProps &
     EmailFormTypes &
     CollabRestrictionsTypes &
     InviteSectionTypes &
