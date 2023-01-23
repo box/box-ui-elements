@@ -142,7 +142,7 @@
         "@box/cldr-data": "^34.2.0",
         "@box/frontend": "8.0.0",
         "@box/languages": "^1.0.0",
-        "@box/react-virtualized": "9.22.3-rc-box.5",
+        "@box/react-virtualized": "9.22.3-rc-box.6",
         "@commitlint/cli": "^8.3.5",
         "@commitlint/config-conventional": "^8.3.4",
         "@formatjs/intl-pluralrules": "^1.5.2",
@@ -328,7 +328,7 @@
     },
     "peerDependencies": {
         "@box/cldr-data": "^34.2.0",
-        "@box/react-virtualized": "9.22.3-rc-box.5",
+        "@box/react-virtualized": "9.22.3-rc-box.6",
         "@hapi/address": ">=2.0.0 <2.1.2",
         "axios": "^0.25.0",
         "classnames": "^2.2.5",
