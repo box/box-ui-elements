@@ -482,7 +482,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             className: 'usm-ftux-tooltip',
             // don't want ftux tooltip to show if the recommended sharing tooltip callout is showing
             isShown: !recommendedSharingTooltipCalloutName && shouldRenderFTUXTooltip && showCalloutForUser,
-            position: 'middle-left',
+            position: 'bottom-center',
             showCloseButton: true,
             text: ftuxTooltipText,
             theme: 'callout',

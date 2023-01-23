@@ -106,6 +106,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 shouldRenderFTUXTooltip: true,
                 showCalloutForUser: true,
             });
+            expect(wrapper.find('.usm-ftux-tooltip').prop('position')).toBe('bottom-center');
             expect(wrapper).toMatchSnapshot();
         });
 
