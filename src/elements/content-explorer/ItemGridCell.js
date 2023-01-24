@@ -12,12 +12,19 @@ type Props = {
     ...$Exact<ItemGridProps>,
 };
 
-const ItemGridCell = (
-    { canPreview, isSmall, isTouch, item, onItemClick, onItemSelect, rootId, view, setRef, ...rest }: Props,
-    ref,
-) => {
+const ItemGridCell = ({
+    canPreview,
+    isSmall,
+    isTouch,
+    item,
+    onItemClick,
+    onItemSelect,
+    rootId,
+    view,
+    ...rest
+}: Props) => {
     return (
-        <figure ref={ref} className="bce-ItemGridCell">
+        <figure className="bce-ItemGridCell">
             <ItemGridThumbnail item={item} />
             <figcaption className="bce-ItemGridCell-figcaption">
                 <Name
@@ -27,7 +34,6 @@ const ItemGridCell = (
                     onItemClick={onItemClick}
                     onItemSelect={onItemSelect}
                     rootId={rootId}
-                    setRef={setRef}
                     showDetails
                     view={view}
                 />
@@ -36,4 +42,4 @@ const ItemGridCell = (
         </figure>
     );
 };
-export default React.forwardRef(ItemGridCell);
+export default ItemGridCell;
