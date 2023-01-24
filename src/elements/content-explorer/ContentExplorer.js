@@ -11,6 +11,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
+import intersection from 'lodash/intersection';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import CreateFolderDialog from '../common/create-folder-dialog';
@@ -1349,6 +1350,17 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Returns whether the currently focused element is an item
+     *
+     * @returns {bool}
+     */
+    isFocusedOnItem = () => {
+        const focusedClassList = document.activeElement.classList;
+        const itemClassList = ['btn-plain', 'be-item-label'];
+        return intersection(focusedClassList, itemClassList).length === 2;
+    };
+
+    /**
      * Keyboard events
      *
      * @private
@@ -1360,17 +1372,8 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         const { rootFolderId }: Props = this.props;
-        // const viewMode = this.getViewMode();
+        const viewMode = this.getViewMode();
         const key = event.key.toLowerCase();
-
-        // if (viewMode === VIEW_MODE_GRID && ['arrowdown', 'arrowup', 'arrowleft', 'arrowright'].includes(key)) {
-        //     this.navigateGrid(key);
-        //     // event.preventDefault();
-        //     this.globalModifier = false;
-        //     return;
-        // }
-
-        // console.log('what');
 
         switch (key) {
             case '/':
@@ -1378,9 +1381,16 @@ class ContentExplorer extends Component<Props, State> {
                 event.preventDefault();
                 break;
             case 'arrowdown':
-                focus(this.rootElement, '.bce-item-row', false);
-                this.setState({ focusedRow: 0 });
-                event.preventDefault();
+                if (viewMode === VIEW_MODE_GRID) {
+                    if (!this.isFocusedOnItem()) {
+                        focus(this.rootElement, '.btn-plain.be-item-label', false);
+                        event.preventDefault();
+                    }
+                } else {
+                    focus(this.rootElement, '.bce-item-row', false);
+                    this.setState({ focusedRow: 0 });
+                    event.preventDefault();
+                }
                 break;
             case 'g':
                 break;
@@ -1419,7 +1429,6 @@ class ContentExplorer extends Component<Props, State> {
                 }
 
                 break;
-            case 'ignore':
             default:
                 this.globalModifier = false;
                 return;
@@ -1695,6 +1704,7 @@ class ContentExplorer extends Component<Props, State> {
                             onSortChange={this.sort}
                             rootElement={this.rootElement}
                             rootId={rootFolderId}
+                            selected={selected}
                             tableRef={this.tableRef}
                             view={view}
                             viewMode={viewMode}

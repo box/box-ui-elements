@@ -74,7 +74,7 @@ class GridView extends React.Component<Props, State> {
                     key={id}
                     selected={selected}
                     slotIndex={slotIndex}
-                    slotRenderer={index => slotRenderer(index, selected)}
+                    slotRenderer={slotRenderer}
                     slotWidth={`${(100 / columnCount).toFixed(4)}%`}
                 />,
             );
@@ -105,38 +105,36 @@ class GridView extends React.Component<Props, State> {
         const rowCount = Math.ceil(count / columnCount);
 
         return (
-            <>
-                <ArrowKeyStepper
-                    columnCount={columnCount}
-                    mode="cells"
-                    isControlled
-                    scrollToRow={selectedRowIndex}
-                    scrollToColumn={selectedColumnIndex}
-                    onScrollToChange={({ scrollToRow, scrollToColumn }) => {
-                        onCellSelect(scrollToRow, scrollToColumn);
-                    }}
-                    rowCount={rowCount}
-                >
-                    {({ scrollToRow }) => (
-                        <Table
-                            className="bdl-GridView"
-                            disableHeader
-                            height={height}
-                            rowCount={rowCount}
-                            rowGetter={this.rowGetter}
-                            rowHeight={this.cache.rowHeight}
-                            width={width}
-                            gridClassName="bdl-GridView-body"
-                            rowClassName="bdl-GridView-tableRow"
-                            scrollToIndex={scrollToRow}
-                            focused
-                            sortDirection="ASC"
-                        >
-                            <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
-                        </Table>
-                    )}
-                </ArrowKeyStepper>
-            </>
+            <ArrowKeyStepper
+                columnCount={columnCount}
+                mode="cells"
+                isControlled
+                scrollToRow={selectedRowIndex}
+                scrollToColumn={selectedColumnIndex}
+                onScrollToChange={({ scrollToRow, scrollToColumn }) => {
+                    onCellSelect(scrollToRow, scrollToColumn);
+                }}
+                rowCount={rowCount}
+            >
+                {({ scrollToRow }) => (
+                    <Table
+                        className="bdl-GridView"
+                        disableHeader
+                        height={height}
+                        rowCount={rowCount}
+                        rowGetter={this.rowGetter}
+                        rowHeight={this.cache.rowHeight}
+                        width={width}
+                        gridClassName="bdl-GridView-body"
+                        rowClassName="bdl-GridView-tableRow"
+                        scrollToIndex={scrollToRow}
+                        focused
+                        sortDirection="ASC"
+                    >
+                        <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
+                    </Table>
+                )}
+            </ArrowKeyStepper>
         );
     }
 }

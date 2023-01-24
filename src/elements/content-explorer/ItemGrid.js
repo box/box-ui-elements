@@ -16,43 +16,41 @@ type Props = {
     ...$Exact<ItemGridProps>,
 };
 
-const ItemGrid = ({ currentCollection, gridColumnCount, onItemSelect, rootId, ...rest }: Props) => {
+const ItemGrid = ({ currentCollection, gridColumnCount, onItemSelect, rootId, selected, ...rest }: Props) => {
     const selectedItemRef = React.useRef(null);
-    const setSelectedItemRef = x => {
-        selectedItemRef.current = x;
+    const setSelectedItemRef = (selectedItemNode: HTMLElement) => {
+        selectedItemRef.current = selectedItemNode?.querySelector('.btn-plain.be-item-label');
     };
 
-    const [selectedRowIndex, setSelectedRowIndex] = React.useState(0);
-    const [selectedColumnIndex, setSelectedColumnIndex] = React.useState(0);
+    // get the index of the item, and calculate its row and column using the number of columns per row
+    const linearIndex = getProp(currentCollection, 'items', []).findIndex(item => item?.id === selected?.id);
+    const selectedRowIndex = Math.floor(linearIndex / gridColumnCount);
+    const selectedColumnIndex = linearIndex % gridColumnCount;
 
     /**
      * Renderer used for cards in grid view
      *
      * @param {number} slotIndex - index of item in currentCollection.items
-     * @param {boolean} selected - whether or not the item is currently selected
      * @return {React.Element} - Element to display in card
      */
-    const slotRenderer = (slotIndex: number, selected: boolean): ?React.Element<any> => {
+    const slotRenderer = (slotIndex: number): ?React.Element<any> => {
         const item: ?BoxItem = getProp(currentCollection, `items[${slotIndex}]`);
-        const row = Math.floor(slotIndex / gridColumnCount);
-        const column = slotIndex % gridColumnCount;
-
+        const isSelected = selected?.id === item?.id;
         return item ? (
             <ItemGridCell
-                setRef={selected ? setSelectedItemRef : noop}
+                ref={isSelected ? setSelectedItemRef : noop}
                 item={item}
-                onItemSelect={() => {
-                    onItemSelect(item, () => {
-                        setSelectedRowIndex(row);
-                        setSelectedColumnIndex(column);
-                    });
-                }}
+                onItemSelect={onItemSelect}
                 rootId={rootId}
+                selected={isSelected}
                 {...rest}
             />
         ) : null;
     };
 
+    /**
+     * Update the currently selected item when navigating with keyboard and mouse
+     */
     const onCellSelect = (row, column) => {
         const index = row * gridColumnCount + column;
         const item: ?BoxItem = getProp(currentCollection, `items[${index}]`);

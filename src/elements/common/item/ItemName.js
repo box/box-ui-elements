@@ -17,17 +17,15 @@ type Props = {
     item: BoxItem,
     onClick: Function,
     onFocus?: Function,
-    setRef?: Function,
 };
 
-const ItemName = ({ item, onClick, onFocus, canPreview, isTouch, setRef }: Props) => {
+const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
     const { name, type }: BoxItem = item;
     const onItemFocus = onFocus ? () => onFocus(item) : null;
     const onItemClick: Function = (): void => onClick(item);
 
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
         <PlainButton
-            getDOMRef={setRef}
             className="be-item-label"
             data-testid="be-item-name"
             onClick={onItemClick}
