@@ -1,16 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/grid-view/GridView should render() 1`] = `
-<ArrowKeyStepper
-  columnCount={5}
-  disabled={false}
-  isControlled={true}
-  mode="cells"
-  onScrollToChange={[Function]}
+<Table
+  className="bdl-GridView"
+  disableHeader={true}
+  estimatedRowSize={30}
+  gridClassName="bdl-GridView-body"
+  gridContainerRole=""
+  headerHeight={0}
+  headerRowRenderer={[Function]}
+  headerStyle={Object {}}
+  height={600}
+  noRowsRenderer={[Function]}
+  onRowsRendered={[Function]}
+  onScroll={[Function]}
+  overscanIndicesGetter={[Function]}
+  overscanRowCount={10}
+  role="grid"
+  rowClassName="bdl-GridView-tableRow"
   rowCount={1}
-  scrollToColumn={0}
-  scrollToRow={0}
+  rowGetter={[Function]}
+  rowHeight={[Function]}
+  rowRenderer={[Function]}
+  rowStyle={Object {}}
+  scrollToAlignment="auto"
+  scrollToIndex={0}
+  sortDirection="ASC"
+  style={Object {}}
+  width={400}
 >
-  <Component />
-</ArrowKeyStepper>
+  <Column
+    cellDataGetter={[Function]}
+    cellRenderer={[Function]}
+    dataKey=""
+    defaultSortDirection="ASC"
+    flexGrow={1}
+    flexShrink={1}
+    headerRenderer={[Function]}
+    role="gridcell"
+    style={Object {}}
+    width={400}
+  />
+</Table>
 `;

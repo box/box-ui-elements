@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import ArrowKeyStepper from '@box/react-virtualized/dist/es/ArrowKeyStepper';
 import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
@@ -23,7 +24,11 @@ const ItemGrid = ({ currentCollection, gridColumnCount, onItemSelect, rootId, se
     };
 
     // get the index of the item, and calculate its row and column using the number of columns per row
-    const linearIndex = getProp(currentCollection, 'items', []).findIndex(item => item?.id === selected?.id);
+    const items = getProp(currentCollection, 'items', []);
+
+    const gridRowCount = Math.ceil(items.length / gridColumnCount);
+
+    const linearIndex = items.findIndex(item => item?.id === selected?.id);
     const selectedRowIndex = Math.floor(linearIndex / gridColumnCount);
     const selectedColumnIndex = linearIndex % gridColumnCount;
 
@@ -65,16 +70,28 @@ const ItemGrid = ({ currentCollection, gridColumnCount, onItemSelect, rootId, se
     return (
         <AutoSizer>
             {({ height, width }) => (
-                <GridView
+                <ArrowKeyStepper
                     columnCount={gridColumnCount}
-                    currentCollection={currentCollection}
-                    height={height}
-                    onCellSelect={onCellSelect}
-                    selectedColumnIndex={selectedColumnIndex}
-                    selectedRowIndex={selectedRowIndex}
-                    slotRenderer={slotRenderer}
-                    width={width}
-                />
+                    mode="cells"
+                    isControlled
+                    scrollToRow={selectedRowIndex}
+                    scrollToColumn={selectedColumnIndex}
+                    onScrollToChange={({ scrollToRow, scrollToColumn }) => {
+                        onCellSelect(scrollToRow, scrollToColumn);
+                    }}
+                    rowCount={gridRowCount}
+                >
+                    {({ scrollToRow }) => (
+                        <GridView
+                            columnCount={gridColumnCount}
+                            currentCollection={currentCollection}
+                            height={height}
+                            scrollToRow={scrollToRow}
+                            slotRenderer={slotRenderer}
+                            width={width}
+                        />
+                    )}
+                </ArrowKeyStepper>
             )}
         </AutoSizer>
     );

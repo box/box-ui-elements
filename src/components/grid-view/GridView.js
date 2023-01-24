@@ -1,12 +1,9 @@
 // @flow
 import * as React from 'react';
 import { CellMeasurer, CellMeasurerCache } from '@box/react-virtualized/dist/es/CellMeasurer';
-import ArrowKeyStepper from '@box/react-virtualized/dist/es/ArrowKeyStepper';
 import Table, { Column } from '@box/react-virtualized/dist/es/Table';
 import getProp from 'lodash/get';
-
 import GridViewSlot from './GridViewSlot';
-
 import type { Collection } from '../../common/types/core';
 
 import '@box/react-virtualized/styles.css';
@@ -25,10 +22,8 @@ type Props = {
     columnCount: number,
     currentCollection: Collection,
     height: number,
-    onCellSelect: (row: number, column: number) => void,
-    selectedColumnIndex: number,
-    selectedRowIndex: number,
-    slotRenderer: (slotIndex: number, selected: boolean) => ?React.Element<any>,
+    scrollToRow?: number,
+    slotRenderer: (slotIndex: number) => ?React.Element<any>,
     width: number,
 };
 
@@ -36,7 +31,7 @@ type RowGetterParams = {
     index: number,
 };
 
-class GridView extends React.Component<Props, State> {
+class GridView extends React.Component<Props> {
     cache = new CellMeasurerCache({
         defaultHeight: 300,
         defaultWidth: 400,
@@ -92,49 +87,26 @@ class GridView extends React.Component<Props, State> {
     };
 
     render() {
-        const {
-            columnCount,
-            currentCollection,
-            height,
-            onCellSelect,
-            selectedColumnIndex,
-            selectedRowIndex,
-            width,
-        } = this.props;
+        const { columnCount, currentCollection, height, scrollToRow, width } = this.props;
         const count = getProp(currentCollection, 'items.length', 0);
         const rowCount = Math.ceil(count / columnCount);
 
         return (
-            <ArrowKeyStepper
-                columnCount={columnCount}
-                mode="cells"
-                isControlled
-                scrollToRow={selectedRowIndex}
-                scrollToColumn={selectedColumnIndex}
-                onScrollToChange={({ scrollToRow, scrollToColumn }) => {
-                    onCellSelect(scrollToRow, scrollToColumn);
-                }}
+            <Table
+                className="bdl-GridView"
+                disableHeader
+                height={height}
                 rowCount={rowCount}
+                rowGetter={this.rowGetter}
+                rowHeight={this.cache.rowHeight}
+                width={width}
+                gridClassName="bdl-GridView-body"
+                rowClassName="bdl-GridView-tableRow"
+                scrollToIndex={scrollToRow || 0}
+                sortDirection="ASC"
             >
-                {({ scrollToRow }) => (
-                    <Table
-                        className="bdl-GridView"
-                        disableHeader
-                        height={height}
-                        rowCount={rowCount}
-                        rowGetter={this.rowGetter}
-                        rowHeight={this.cache.rowHeight}
-                        width={width}
-                        gridClassName="bdl-GridView-body"
-                        rowClassName="bdl-GridView-tableRow"
-                        scrollToIndex={scrollToRow}
-                        focused
-                        sortDirection="ASC"
-                    >
-                        <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
-                    </Table>
-                )}
-            </ArrowKeyStepper>
+                <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
+            </Table>
         );
     }
 }
