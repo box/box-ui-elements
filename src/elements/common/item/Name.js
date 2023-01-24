@@ -14,6 +14,7 @@ type Props = {
     onItemClick: (item: BoxItem | string) => void,
     onItemSelect?: (item: BoxItem, callback: Function) => void,
     rootId: string,
+    setRef?: Function,
     showDetails: boolean,
     view: View,
 };
@@ -26,10 +27,18 @@ const Name = ({
     onItemSelect,
     showDetails = true,
     rootId,
+    setRef,
     view,
 }: Props) => (
     <div className="be-item-name">
-        <ItemName canPreview={canPreview} isTouch={isTouch} item={item} onClick={onItemClick} onFocus={onItemSelect} />
+        <ItemName
+            setRef={setRef}
+            canPreview={canPreview}
+            isTouch={isTouch}
+            item={item}
+            onClick={onItemClick}
+            onFocus={onItemSelect}
+        />
         {view === VIEW_SEARCH || showDetails ? (
             <ItemDetails item={item} onItemClick={onItemClick} rootId={rootId} view={view} />
         ) : null}

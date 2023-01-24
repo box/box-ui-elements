@@ -62,6 +62,7 @@ import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
+    VIEW_MODE_GRID,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
@@ -1359,7 +1360,17 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         const { rootFolderId }: Props = this.props;
+        // const viewMode = this.getViewMode();
         const key = event.key.toLowerCase();
+
+        // if (viewMode === VIEW_MODE_GRID && ['arrowdown', 'arrowup', 'arrowleft', 'arrowright'].includes(key)) {
+        //     this.navigateGrid(key);
+        //     // event.preventDefault();
+        //     this.globalModifier = false;
+        //     return;
+        // }
+
+        // console.log('what');
 
         switch (key) {
             case '/':
@@ -1408,6 +1419,7 @@ class ContentExplorer extends Component<Props, State> {
                 }
 
                 break;
+            case 'ignore':
             default:
                 this.globalModifier = false;
                 return;

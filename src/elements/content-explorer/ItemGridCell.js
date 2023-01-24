@@ -21,6 +21,7 @@ const ItemGridCell = ({
     onItemSelect,
     rootId,
     view,
+    setRef,
     ...rest
 }: Props) => {
     return (
@@ -34,6 +35,7 @@ const ItemGridCell = ({
                     onItemClick={onItemClick}
                     onItemSelect={onItemSelect}
                     rootId={rootId}
+                    setRef={setRef}
                     showDetails
                     view={view}
                 />
