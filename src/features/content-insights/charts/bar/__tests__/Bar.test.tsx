@@ -48,6 +48,20 @@ describe('features/content-insights/charts/bar/Bar', () => {
             expect(element).toHaveClass('is-horizontal');
             expect(element.querySelector('.ca-Bar-value')).toHaveStyle(`width: 80%`);
         });
+
+        test('should render the label if provided', () => {
+            const wrapper = getWrapper({ label: 'label' });
+            const element = getFirstChild(wrapper);
+            expect(element.querySelectorAll('.ca-Bar-label').length).toBe(1);
+            expect(wrapper.queryByText('label')).toBeInTheDocument();
+        });
+
+        test('should not render the label if not provided', () => {
+            const wrapper = getWrapper();
+            const element = getFirstChild(wrapper);
+            expect(element.querySelectorAll('.ca-Bar-label').length).toBe(0);
+            expect(wrapper.queryByText('label')).not.toBeInTheDocument();
+        });
     });
 
     describe('callbacks', () => {
@@ -69,6 +83,43 @@ describe('features/content-insights/charts/bar/Bar', () => {
             fireEvent.mouseLeave(element);
 
             expect(onMouseLeave).toBeCalled();
+        });
+
+        test('should return the bar offset onMouseEnter', () => {
+            const elementOffset = {
+                left: 50,
+                top: 20,
+                width: 20,
+            };
+
+            jest.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(elementOffset as DOMRect);
+            const onMouseEnter = jest.fn();
+            const wrapper = getWrapper({ onMouseEnter });
+            const element = getFirstChild(wrapper);
+
+            fireEvent.mouseEnter(element);
+
+            expect(onMouseEnter).toBeCalledWith({
+                left: elementOffset.left + elementOffset.width / 2,
+                top: elementOffset.top,
+            });
+        });
+
+        test('should return default offset if ref is undefined', () => {
+            jest.spyOn(React, 'useRef').mockImplementation(() => {
+                return { current: null };
+            });
+            const elementOffset = {
+                left: 0,
+                top: 0,
+            };
+            const onMouseEnter = jest.fn();
+            const wrapper = getWrapper({ onMouseEnter });
+            const element = getFirstChild(wrapper);
+
+            fireEvent.mouseEnter(element);
+
+            expect(onMouseEnter).toBeCalledWith(elementOffset);
         });
     });
 });

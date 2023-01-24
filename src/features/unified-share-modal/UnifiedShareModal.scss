@@ -386,8 +386,22 @@
     padding: 2em;
 }
 
-.bdl-SharedLinkSection-separator {
+.bdl-SharedLinkSection-separator,
+.bdl-UnifiedShareForm-separator {
     margin: ($bdl-grid-unit * 5) 0;
     border: none;
     border-top: 1px solid $bdl-gray-20;
+}
+
+.bdl-UnifiedShareForm-row {
+    margin-top: 10px;
+
+    .AdvancedContentInsightsToggle {
+        flex: 0 1 80%;
+        overflow-y: hidden;
+
+        .toggle-simple-label {
+            cursor: pointer;
+        }
+    }
 }

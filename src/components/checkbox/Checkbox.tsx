@@ -32,6 +32,8 @@ export interface CheckboxProps {
         | {
               (e: React.FocusEvent<HTMLInputElement>): void;
           };
+    /** onFocus - focus callback function that takes the event as the argument  */
+    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
     /** onChange - change callback function that takes the event as the argument */
     onChange?: (e: React.SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
     /** Subsection below the checkbox */
@@ -53,6 +55,7 @@ const Checkbox = ({
     isDisabled,
     label,
     name,
+    onFocus,
     onChange,
     subsection,
     tooltip,
@@ -71,6 +74,7 @@ const Checkbox = ({
                 disabled={isDisabled}
                 id={inputID}
                 name={name}
+                onFocus={onFocus}
                 onChange={onChange}
                 type="checkbox"
                 {...rest}

@@ -459,7 +459,6 @@ class SharedLinkSection extends React.Component<Props, State> {
         const isToggleEnabled = (canAddSharedLink || canRemoveSharedLink) && !submitting;
 
         let linkText;
-
         if (isSharedLinkEnabled) {
             linkText = <FormattedMessage {...messages.linkShareOn} />;
             if (expirationTimestamp && expirationTimestamp !== 0) {
@@ -472,7 +471,11 @@ class SharedLinkSection extends React.Component<Props, State> {
                                 expiration: convertToMs(expirationTimestamp),
                             })}
                         >
-                            <span className="shared-link-expiration-badge" role="img">
+                            <span
+                                aria-label={intl.formatMessage(messages.expiresMessage)}
+                                className="shared-link-expiration-badge"
+                                role="img"
+                            >
                                 <IconClock color={bdlWatermelonRed} />
                             </span>
                         </Tooltip>

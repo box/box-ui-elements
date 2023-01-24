@@ -6,6 +6,7 @@ import { ModalDialogBase } from '../ModalDialog';
 const sandbox = sinon.sandbox.create();
 
 describe('components/modal/ModalDialog', () => {
+    let onRequestBack;
     let onRequestClose;
     let wrapper;
     let instance;
@@ -16,8 +17,14 @@ describe('components/modal/ModalDialog', () => {
             formatMessage: message => message.id,
         };
         onRequestClose = sinon.spy();
+        onRequestBack = sinon.spy();
         wrapper = shallow(
-            <ModalDialogBase intl={intlShape} onRequestClose={onRequestClose} title={title}>
+            <ModalDialogBase
+                intl={intlShape}
+                onRequestBack={onRequestBack}
+                onRequestClose={onRequestClose}
+                title={title}
+            >
                 children
             </ModalDialogBase>,
         );
@@ -67,5 +74,19 @@ describe('components/modal/ModalDialog', () => {
     test('should not render close button when onRequestClose is falsey', () => {
         wrapper.setProps({ onRequestClose: undefined });
         expect(wrapper.find('.modal-close-button').length).toBeFalsy();
+    });
+
+    test('render back button when onRequestBack is defined', () => {
+        expect(wrapper.find('.modal-back-button').length).toBeTruthy();
+    });
+
+    test('should not render back button if onRequestBack is null', () => {
+        wrapper.setProps({ onRequestBack: null });
+        expect(wrapper.find('.modal-back-button').length).toBeFalsy();
+    });
+
+    test('should call onRequestBack when back button is clicked on', () => {
+        wrapper.find('.modal-back-button').simulate('click');
+        sinon.assert.calledOnce(onRequestBack);
     });
 });

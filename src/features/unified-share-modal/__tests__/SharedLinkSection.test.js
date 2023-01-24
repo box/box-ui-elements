@@ -148,7 +148,7 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should account for shared link expirations being set', () => {
+    test('should match snapshot when shared link expiration is set', () => {
         const wrapper = getWrapper({
             sharedLink: {
                 accessLevel: 'peopleInYourCompany',
@@ -308,6 +308,22 @@ describe('features/unified-share-modal/SharedLinkSection', () => {
         const sharedLink = { url: 'https://example.com/shared-link' };
         const wrapper = getWrapper({ config, sharedLink });
         expect(wrapper.exists('.email-shared-link-btn')).toBe(emailButtonExists);
+    });
+
+    test('should have aria-label and role on shared link expiration badge when expiration timestamp exists', () => {
+        // Set an expiration timestamp so that Toggle is rendered with expiration icon
+        const sharedLink = {
+            expirationTimestamp: 1,
+            url: 'https://example.com/shared-link',
+        };
+        const wrapper = getWrapper({ sharedLink });
+        const toggle = wrapper.find('Toggle');
+
+        // The aria-label attr is on a span, which is contained within the label of the Toggle component
+        const spanLabel = toggle.dive().find('.shared-link-expiration-badge');
+
+        expect(spanLabel.prop('aria-label')).toBe('Expires');
+        expect(spanLabel.prop('role')).toBe('img');
     });
 
     describe('componentDidMount()', () => {

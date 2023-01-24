@@ -44,6 +44,7 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
+    FIELD_SHARED_LINK,
     DEFAULT_ROOT,
     VIEW_SEARCH,
     VIEW_FOLDER,
@@ -790,7 +791,6 @@ class ContentExplorer extends Component<Props, State> {
      * Changes the share access of an item
      *
      * @private
-     * @param {Object} item file or folder object
      * @param {string} access share access
      * @return {void}
      */
@@ -1279,8 +1279,26 @@ class ContentExplorer extends Component<Props, State> {
     handleSharedLinkSuccess = (newItem: BoxItem) => {
         const { currentCollection } = this.state;
 
-        // Update item in collection
-        this.updateCollection(currentCollection, newItem, () => this.setState({ isShareModalOpen: true }));
+        if (!newItem[FIELD_SHARED_LINK]) {
+            const { canSetShareAccess }: Props = this.props;
+            if (!newItem || !canSetShareAccess) {
+                return;
+            }
+
+            const { permissions, type } = newItem;
+            if (!permissions || !type) {
+                return;
+            }
+
+            // create a shared link with default access, and update the collection
+            const access = undefined;
+            this.api.getAPI(type).share(newItem, access, (updatedItem: BoxItem) => {
+                this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
+            });
+        } else {
+            // update collection with existing shared link
+            this.updateCollection(currentCollection, newItem, () => this.setState({ isShareModalOpen: true }));
+        }
     };
 
     /**

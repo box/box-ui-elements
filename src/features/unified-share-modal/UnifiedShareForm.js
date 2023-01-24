@@ -12,10 +12,11 @@ import Button from '../../components/button';
 import { UpgradeBadge } from '../../components/badge';
 import InlineNotice from '../../components/inline-notice';
 import PlainButton from '../../components/plain-button';
-import { ITEM_TYPE_WEBLINK } from '../../common/constants';
+import { ITEM_TYPE_FILE, ITEM_TYPE_WEBLINK } from '../../common/constants';
 import Tooltip from '../../components/tooltip';
 import { CollaboratorAvatars, CollaboratorList } from '../collaborator-avatars';
 
+import AdvancedContentInsightsToggle from '../advanced-content-insights/AdvancedContentInsightsToggle';
 import InviteePermissionsMenu from './InviteePermissionsMenu';
 import messages from './messages';
 import SharedLinkSection from './SharedLinkSection';
@@ -667,18 +668,20 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const {
             allShareRestrictionWarning,
             changeSharedLinkAccessLevel,
-            createSharedLinkOnLoad,
             changeSharedLinkPermissionLevel,
             config,
+            createSharedLinkOnLoad,
             displayInModal,
             focusSharedLinkOnLoad,
             getSharedLinkContacts,
             getContactAvatarUrl,
             intl,
+            isAdvancedContentInsightsChecked,
             isAllowEditSharedLinkForFileEnabled,
             isFetching,
             item,
             onAddLink,
+            onAdvancedContentInsightsToggle,
             onCopyError,
             onCopyInit,
             onCopySuccess,
@@ -699,22 +702,20 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { sharedLinkTracking, sharedLinkEmailTracking } = trackingProps;
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
 
-        // Only show the restriction warning on the main page of the USM where the email and share link option is available
-        const showShareRestrictionWarning =
-            !isEmailLinkSectionExpanded &&
-            !isInviteSectionExpanded &&
-            !showCollaboratorList &&
-            allShareRestrictionWarning;
+        const hasExpandedSections = isEmailLinkSectionExpanded || isInviteSectionExpanded || showCollaboratorList;
+
+        const showContentInsightsToggle =
+            onAdvancedContentInsightsToggle && !hasExpandedSections && item?.type === ITEM_TYPE_FILE;
 
         return (
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
-                    {showShareRestrictionWarning && allShareRestrictionWarning}
+                    {!hasExpandedSections && allShareRestrictionWarning}
                     {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
 
-                    {!isEmailLinkSectionExpanded && !isInviteSectionExpanded && !showCollaboratorList && (
+                    {!hasExpandedSections && (
                         <SharedLinkSection
                             addSharedLink={onAddLink}
                             autofocusSharedLink={this.shouldAutoFocusSharedLink()}
@@ -742,6 +743,19 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             trackingProps={sharedLinkTracking}
                             tooltips={tooltips}
                         />
+                    )}
+
+                    {showContentInsightsToggle && (
+                        <>
+                            <hr className="bdl-UnifiedShareForm-separator" />
+                            <div className="bdl-UnifiedShareForm-row">
+                                <AdvancedContentInsightsToggle
+                                    isChecked={isAdvancedContentInsightsChecked}
+                                    isDisabled={submitting || isFetching}
+                                    onChange={onAdvancedContentInsightsToggle}
+                                />
+                            </div>
+                        </>
                     )}
 
                     {isEmailLinkSectionExpanded && !showCollaboratorList && (
