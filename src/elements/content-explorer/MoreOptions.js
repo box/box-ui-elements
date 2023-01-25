@@ -9,7 +9,7 @@ import Menu from '../../components/menu/Menu';
 import MenuItem from '../../components/menu/MenuItem';
 import Browser from '../../utils/Browser';
 import IconEllipsis from '../../icons/general/IconEllipsis';
-import { bdlGray50 } from '../../styles/variables';
+import { bdlGray80 } from '../../styles/variables';
 
 import messages from '../common/messages';
 import {
@@ -90,7 +90,7 @@ const MoreOptions = ({
                     onFocus={onFocus}
                     type="button"
                 >
-                    <IconEllipsis color={bdlGray50} height={10} width={16} />
+                    <IconEllipsis color={bdlGray80} height={10} width={16} />
                 </Button>
                 <Menu>
                     {allowPreview && (

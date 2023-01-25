@@ -23,7 +23,7 @@
 
         .btn {
             margin-left: 8px;
-            background-color: transparent;
+            background-color: $white;
         }
 
         .be-is-touch & {
@@ -97,8 +97,7 @@
         &:active,
         &:hover,
         &:focus {
-            color: $dark-cerulean;
-            outline: none;
+            color: $bdl-gray;
         }
     }
 }
