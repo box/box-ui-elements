@@ -15,6 +15,7 @@ type Props = {
     currentCollection: Collection,
     gridColumnCount: number,
     rootElement: HTMLElement,
+    selected: BoxItem,
     ...$Exact<ItemGridProps>,
 };
 

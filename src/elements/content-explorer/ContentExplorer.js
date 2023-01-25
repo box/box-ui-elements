@@ -1373,7 +1373,7 @@ class ContentExplorer extends Component<Props, State> {
      * @returns {bool}
      */
     isFocusedOnItem = () => {
-        const focusedClassList = [...document.activeElement?.classList];
+        const focusedClassList = [...(document.activeElement?.classList || [])];
         const itemClassList = ['btn-plain', 'be-item-label'];
         return intersection(focusedClassList, itemClassList).length === 2;
     };
