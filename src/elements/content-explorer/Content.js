@@ -53,7 +53,7 @@ type Props = {
     onSortChange: Function,
     rootElement?: HTMLElement,
     rootId: string,
-    selected: BoxItem,
+    selected?: BoxItem,
     tableRef: Function,
     view: View,
     viewMode?: ViewMode,

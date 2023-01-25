@@ -15,7 +15,7 @@ type Props = {
     currentCollection: Collection,
     gridColumnCount: number,
     rootElement: HTMLElement,
-    selected: BoxItem,
+    selected?: BoxItem,
     ...$Exact<ItemGridProps>,
 };
 
@@ -30,7 +30,7 @@ const ItemGrid = ({
 }: Props) => {
     const items = getProp(currentCollection, 'items', []);
     const gridRowCount = Math.ceil(items.length / gridColumnCount);
-    const linearIndex = items.findIndex(item => item?.id === selected?.id);
+    const linearIndex = selected ? items.findIndex(item => item?.id === selected?.id) : 0;
     const selectedRowIndex = Math.floor(linearIndex / gridColumnCount);
     const selectedColumnIndex = linearIndex % gridColumnCount;
 
