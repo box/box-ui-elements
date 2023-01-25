@@ -14,6 +14,8 @@ import type { BoxItem, Collection } from '../../common/types/core';
 type Props = {
     currentCollection: Collection,
     gridColumnCount: number,
+    rootElement: HTMLElement,
+    selected?: BoxItem,
     ...$Exact<ItemGridProps>,
 };
 
