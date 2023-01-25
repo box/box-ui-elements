@@ -14,8 +14,6 @@ import type { BoxItem, Collection } from '../../common/types/core';
 type Props = {
     currentCollection: Collection,
     gridColumnCount: number,
-    rootElement: HTMLElement,
-    selected?: BoxItem,
     ...$Exact<ItemGridProps>,
 };
 
@@ -57,7 +55,7 @@ const ItemGrid = ({
 
         if (item) {
             onItemSelect(item, () => {
-                focus(rootElement, '.bdl-GridViewSlot-content--selected .btn-plain.be-item-label', false);
+                focus(rootElement, '.bdl-GridViewSlot-content--selected .be-item-name .be-item-label', false);
             });
         }
     };

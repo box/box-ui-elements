@@ -18,7 +18,9 @@ export type ItemGridProps = {
     isSmall: boolean,
     isTouch: boolean,
     onItemClick: (item: BoxItem | string) => void,
+    rootElement: HTMLElement,
     rootId: string,
+    selected?: BoxItem,
     view: View,
     ...$Exact<CommonGridViewFunctions>,
 };

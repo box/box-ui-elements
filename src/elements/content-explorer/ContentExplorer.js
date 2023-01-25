@@ -11,7 +11,6 @@ import cloneDeep from 'lodash/cloneDeep';
 import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
-import intersection from 'lodash/intersection';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import CreateFolderDialog from '../common/create-folder-dialog';
@@ -1374,8 +1373,8 @@ class ContentExplorer extends Component<Props, State> {
      */
     isFocusedOnItem = () => {
         const focusedClassList = [...(document.activeElement?.classList || [])];
-        const itemClassList = ['btn-plain', 'be-item-label'];
-        return intersection(focusedClassList, itemClassList).length === 2;
+        const itemClassList = ['be-item-label'];
+        return itemClassList.every(itemClass => focusedClassList.includes(itemClass));
     };
 
     /**
@@ -1390,7 +1389,6 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         const { rootFolderId }: Props = this.props;
-        const viewMode = this.getViewMode();
         const key = event.key.toLowerCase();
 
         switch (key) {
@@ -1399,9 +1397,9 @@ class ContentExplorer extends Component<Props, State> {
                 event.preventDefault();
                 break;
             case 'arrowdown':
-                if (viewMode === VIEW_MODE_GRID) {
+                if (this.getViewMode() === VIEW_MODE_GRID) {
                     if (!this.isFocusedOnItem()) {
-                        focus(this.rootElement, '.btn-plain.be-item-label', false);
+                        focus(this.rootElement, '.be-item-name .be-item-label', false);
                         event.preventDefault();
                     }
                 } else {
