@@ -210,6 +210,15 @@ const ItemList = ({
         };
     }
 
+    const rowCount = items.length;
+    const headerProps =
+        rowCount > 0
+            ? {
+                  headerHeight,
+                  headerRowRenderer: headerRenderer,
+              }
+            : {};
+
     return (
         <div
             className={classNames('content-explorer-item-list table', className, {
@@ -221,8 +230,6 @@ const ItemList = ({
                 headerClassName="table-header-item"
                 width={width}
                 height={height}
-                headerHeight={headerHeight}
-                headerRowRenderer={headerRenderer}
                 rowHeight={rowHeight}
                 rowCount={items.length}
                 onRowClick={onItemClick}
@@ -231,6 +238,7 @@ const ItemList = ({
                 rowRenderer={renderRow}
                 noRowsRenderer={noItemsRenderer}
                 {...tableProps}
+                {...headerProps}
             >
                 <Column
                     className="item-list-icon-col"

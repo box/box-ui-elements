@@ -293,24 +293,46 @@ describe('features/content-explorer/item-list/ItemList', () => {
     });
 
     describe('headerHeight', () => {
-        test('should display header row with specified height', () => {
+        const items = [{ id: '1', name: 'item1' }];
+        test('should display header row with specified height when item list is not empty', () => {
+            const headerHeight = 30;
+            const wrapper = renderComponent({
+                headerHeight,
+                items,
+            });
+
+            const header = wrapper.find('.ReactVirtualized__Table__headerRow');
+            expect(header.props().style.height).toBe(headerHeight);
+        });
+
+        test('should not display header row with specified height when item list is empty', () => {
             const headerHeight = 30;
             const wrapper = renderComponent({
                 headerHeight,
             });
 
             const header = wrapper.find('.ReactVirtualized__Table__headerRow');
-            expect(header.props().style.height).toBe(headerHeight);
+            expect(header.props().style.height).not.toBe(headerHeight);
         });
     });
 
     describe('headerRenderer', () => {
-        test('should use headerRenderer when specified', () => {
+        const items = [{ id: '1', name: 'item1' }];
+        test('should use headerRenderer when specified if item list is not empty', () => {
+            const wrapper = renderComponent({
+                headerRenderer: () => <div data-testid="customHeader">Custom Header</div>,
+                items,
+            });
+            const headerRow = wrapper.find("[data-testid='customHeader']");
+            expect(headerRow.length).toBe(1);
+        });
+
+        test('should not use headerRenderer when specified if item list is empty', () => {
             const wrapper = renderComponent({
                 headerRenderer: () => <div data-testid="customHeader">Custom Header</div>,
             });
             const headerRow = wrapper.find("[data-testid='customHeader']");
-            expect(headerRow.length).toBe(1);
+            expect(headerRow.length).not.toBe(1);
         });
     });
 });
