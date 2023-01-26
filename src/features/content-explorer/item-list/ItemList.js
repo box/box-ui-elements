@@ -234,7 +234,6 @@ const ItemList = ({
                 rowRenderer={renderRow}
                 noRowsRenderer={noItemsRenderer}
                 {...tableProps}
-                {...headerProps}
             >
                 <Column
                     className="item-list-icon-col"
