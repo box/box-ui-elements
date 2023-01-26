@@ -296,14 +296,14 @@ describe('components/table/makeSelectable', () => {
             wrapper.instance().handleShiftKeyDown(0, 0);
         });
 
-        test('should select target when it is not already selected', () => {
+        test('should select target when it is not already selected and source is selected', () => {
             const wrapper = getWrapper({
-                selectedItems: [],
+                selectedItems: ['b'],
             });
             wrapper.setState({ focusedIndex: 1 });
             const instance = wrapper.instance();
             instance.onSelect = (selectedItems, focusedIndex) => {
-                expect(selectedItems.equals(new Set(['a']))).toBe(true);
+                expect(selectedItems.equals(new Set(['a', 'b']))).toBe(true);
                 expect(focusedIndex).toEqual(0);
             };
 
@@ -336,6 +336,20 @@ describe('components/table/makeSelectable', () => {
             };
 
             instance.handleShiftKeyDown(1, 0);
+        });
+
+        test('should select both source and target when neither are selected', () => {
+            const wrapper = getWrapper({
+                selectedItems: [],
+            });
+            wrapper.setState({ focusedIndex: 0 });
+            const instance = wrapper.instance();
+            instance.onSelect = (selectedItems, focusedIndex) => {
+                expect(selectedItems.equals(new Set(['a', 'b']))).toBe(true);
+                expect(focusedIndex).toEqual(1);
+            };
+
+            instance.handleShiftKeyDown(1, 4);
         });
     });
 
