@@ -847,9 +847,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
-        const { items = [] } = collection;
+        const newCollection: Collection = cloneDeep(collection);
+        const { items = [] } = newCollection;
         const fileAPI = this.api.getFileAPI(false);
-        const newCollection: Collection = { ...collection };
         const selectedId = selectedItem ? selectedItem.id : null;
         let newSelectedItem: ?BoxItem;
 
@@ -1372,9 +1372,7 @@ class ContentExplorer extends Component<Props, State> {
      * @returns {bool}
      */
     isFocusedOnItem = () => {
-        const focusedClassList = [...(document.activeElement?.classList || [])];
-        const itemClassList = ['be-item-label'];
-        return itemClassList.every(itemClass => focusedClassList.includes(itemClass));
+        return !!document.activeElement?.classList?.contains('be-item-label');
     };
 
     /**
@@ -1809,7 +1807,7 @@ class ContentExplorer extends Component<Props, State> {
                             isTouch={isTouch}
                             onCancel={this.closeModals}
                             item={selected}
-                            currentCollection={currentCollection}
+                            currentCollection={cloneDeep(currentCollection)}
                             token={token}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
