@@ -1372,7 +1372,8 @@ class ContentExplorer extends Component<Props, State> {
      * @returns {bool}
      */
     isFocusedOnItem = () => {
-        return !!document.activeElement?.classList?.contains('be-item-label');
+        const focusedElementClassList = document.activeElement?.classList;
+        return focusedElementClassList && focusedElementClassList.contains('be-item-label');
     };
 
     /**
