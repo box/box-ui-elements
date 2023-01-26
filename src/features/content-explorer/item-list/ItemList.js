@@ -210,14 +210,10 @@ const ItemList = ({
         };
     }
 
-    const rowCount = items.length;
-    const headerProps =
-        rowCount > 0
-            ? {
-                  headerHeight,
-                  headerRowRenderer: headerRenderer,
-              }
-            : {};
+    if (items.length > 0) {
+        tableProps.headerHeight = headerHeight;
+        tableProps.headerRowRenderer = headerRenderer;
+    }
 
     return (
         <div
