@@ -487,18 +487,16 @@ class SharedLinkSection extends React.Component<Props, State> {
         }
 
         const toggleComponent = (
-            <div className="share-toggle-container">
-                <Toggle
-                    isDisabled={!isToggleEnabled}
-                    isOn={isSharedLinkEnabled}
-                    label={linkText}
-                    name="toggle"
-                    onChange={onToggleSharedLink}
-                    ref={ref => {
-                        this.toggleRef = ref;
-                    }}
-                />
-            </div>
+            <Toggle
+                isDisabled={!isToggleEnabled}
+                isOn={isSharedLinkEnabled}
+                label={linkText}
+                name="toggle"
+                onChange={onToggleSharedLink}
+                ref={ref => {
+                    this.toggleRef = ref;
+                }}
+            />
         );
 
         if (!submitting) {

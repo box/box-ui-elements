@@ -21,6 +21,12 @@ type Props = {
     onBlur?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
     /** change callback function called with event as the argument */
     onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
+    /** focus callback function called with event as the argument */
+    onFocus?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
+    /** mouse enter callback function called with event as the argument */
+    onMouseEnter?: (e: SyntheticInputEvent<HTMLDivElement>) => any,
+    /** mouse leave callback function called with event as the argument */
+    onMouseLeave?: (e: SyntheticInputEvent<HTMLDivElement>) => any,
     /** optional value for the toggles checkbox */
     value?: any,
 };
@@ -37,6 +43,9 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
             name,
             onBlur,
             onChange,
+            onFocus,
+            onMouseEnter,
+            onMouseLeave,
             ...rest
         }: Props,
         ref,
@@ -56,7 +65,7 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
         }
 
         return (
-            <div className={classes}>
+            <div className={classes} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label className="toggle-simple">
                     <input
@@ -67,6 +76,7 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
                         name={name}
                         onBlur={onBlur}
                         onChange={onChange}
+                        onFocus={onFocus}
                         type="checkbox"
                         {...rest}
                     />
