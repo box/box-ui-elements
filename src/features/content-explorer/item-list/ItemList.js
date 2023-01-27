@@ -210,7 +210,7 @@ const ItemList = ({
         };
     }
 
-    if (items.length > 0) {
+    if (!noItemsRenderer || items.length > 0) {
         tableProps.headerHeight = headerHeight;
         tableProps.headerRowRenderer = headerRenderer;
     }

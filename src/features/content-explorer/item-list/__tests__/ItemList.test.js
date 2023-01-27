@@ -305,10 +305,12 @@ describe('features/content-explorer/item-list/ItemList', () => {
             expect(header.props().style.height).toBe(headerHeight);
         });
 
-        test('should not display header row with specified height when item list is empty', () => {
+        test('should not display header row with specified height when item list is empty and noItemsRenderer is present', () => {
             const headerHeight = 30;
+            const noItemsRenderer = () => <></>;
             const wrapper = renderComponent({
                 headerHeight,
+                noItemsRenderer,
             });
 
             const header = wrapper.find('.ReactVirtualized__Table__headerRow');
@@ -327,9 +329,11 @@ describe('features/content-explorer/item-list/ItemList', () => {
             expect(headerRow.length).toBe(1);
         });
 
-        test('should not use headerRenderer when specified if item list is empty', () => {
+        test('should not use headerRenderer when specified if item list is empty and noItemsRenderer is present', () => {
+            const noItemsRenderer = () => <></>;
             const wrapper = renderComponent({
                 headerRenderer: () => <div data-testid="customHeader">Custom Header</div>,
+                noItemsRenderer,
             });
             const headerRow = wrapper.find("[data-testid='customHeader']");
             expect(headerRow.length).not.toBe(1);
