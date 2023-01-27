@@ -255,14 +255,10 @@
         justify-content: space-between;
         margin-top: 10px;
 
-        .share-toggle-container {
+        .toggle-container {
             flex: 0 1 80%;
             margin-bottom: 0;
             overflow-y: hidden;
-
-            .toggle-container {
-                margin-bottom: 0;
-            }
 
             .toggle-simple-label {
                 color: $bdl-gray;
