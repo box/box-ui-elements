@@ -451,25 +451,34 @@ function makeSelectable(BaseTable) {
             const { data, selectedItems } = this.getProcessedProps();
             const { focusedIndex } = this.state;
 
+            const focusedIndexData = data[focusedIndex];
+            const newFocusedIndexData = data[newFocusedIndex];
+
             // if we're at a boundary of the table and the row is selected, no-op
-            if (focusedIndex === boundary && selectedItems.has(data[focusedIndex])) {
+            if (focusedIndex === boundary && selectedItems.has(focusedIndexData)) {
+                return;
+            }
+
+            // if both the target and source are not selected, select them both
+            if (!selectedItems.has(focusedIndexData) && !selectedItems.has(newFocusedIndexData)) {
+                this.onSelect(selectedItems.union([focusedIndexData, newFocusedIndexData]), newFocusedIndex);
                 return;
             }
 
             // if target is not selected, select it
-            if (!selectedItems.has(data[newFocusedIndex])) {
-                this.onSelect(selectedItems.add(data[newFocusedIndex]), newFocusedIndex);
+            if (!selectedItems.has(newFocusedIndexData)) {
+                this.onSelect(selectedItems.add(newFocusedIndexData), newFocusedIndex);
                 return;
             }
 
             // if both source and target are selected, deselect source
-            if (selectedItems.has(data[newFocusedIndex]) && selectedItems.has(data[focusedIndex])) {
-                this.onSelect(selectedItems.delete(data[focusedIndex]), newFocusedIndex);
+            if (selectedItems.has(newFocusedIndexData) && selectedItems.has(focusedIndexData)) {
+                this.onSelect(selectedItems.delete(focusedIndexData), newFocusedIndex);
                 return;
             }
 
             // if target is selected and source is not, select source
-            this.onSelect(selectedItems.add(data[focusedIndex]), newFocusedIndex);
+            this.onSelect(selectedItems.add(focusedIndexData), newFocusedIndex);
         };
 
         isContiguousSelection = (selectedItemIndecies, sourceIndex, targetIndex) => {
