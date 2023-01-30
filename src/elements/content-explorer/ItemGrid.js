@@ -46,7 +46,7 @@ const ItemGrid = ({
     };
 
     /**
-     * Update the currently selected item when navigating with keyboard and mouse
+     * Update the currently selected item when navigating with keyboard
      * @param {number} row - row index of selected item
      * @param {number} column - column index of selected item
      * @return {void}

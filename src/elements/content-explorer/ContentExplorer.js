@@ -1371,7 +1371,7 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @returns {bool}
      */
-    isFocusedOnItem = () => {
+    isFocusOnItem = () => {
         const focusedElementClassList = document.activeElement?.classList;
         return focusedElementClassList && focusedElementClassList.contains('be-item-label');
     };
@@ -1397,7 +1397,7 @@ class ContentExplorer extends Component<Props, State> {
                 break;
             case 'arrowdown':
                 if (this.getViewMode() === VIEW_MODE_GRID) {
-                    if (!this.isFocusedOnItem()) {
+                    if (!this.isFocusOnItem()) {
                         focus(this.rootElement, '.be-item-name .be-item-label', false);
                         event.preventDefault();
                     }
