@@ -63,6 +63,7 @@ import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
+    VIEW_MODE_GRID,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
@@ -846,9 +847,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
-        const { items = [] } = collection;
+        const newCollection: Collection = cloneDeep(collection);
+        const { items = [] } = newCollection;
         const fileAPI = this.api.getFileAPI(false);
-        const newCollection: Collection = { ...collection };
         const selectedId = selectedItem ? selectedItem.id : null;
         let newSelectedItem: ?BoxItem;
 
@@ -1366,6 +1367,16 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
+     * Returns whether the currently focused element is an item
+     *
+     * @returns {bool}
+     */
+    isFocusOnItem = () => {
+        const focusedElementClassList = document.activeElement?.classList;
+        return focusedElementClassList && focusedElementClassList.contains('be-item-label');
+    };
+
+    /**
      * Keyboard events
      *
      * @private
@@ -1385,9 +1396,16 @@ class ContentExplorer extends Component<Props, State> {
                 event.preventDefault();
                 break;
             case 'arrowdown':
-                focus(this.rootElement, '.bce-item-row', false);
-                this.setState({ focusedRow: 0 });
-                event.preventDefault();
+                if (this.getViewMode() === VIEW_MODE_GRID) {
+                    if (!this.isFocusOnItem()) {
+                        focus(this.rootElement, '.be-item-name .be-item-label', false);
+                        event.preventDefault();
+                    }
+                } else {
+                    focus(this.rootElement, '.bce-item-row', false);
+                    this.setState({ focusedRow: 0 });
+                    event.preventDefault();
+                }
                 break;
             case 'g':
                 break;
@@ -1701,6 +1719,7 @@ class ContentExplorer extends Component<Props, State> {
                             onSortChange={this.sort}
                             rootElement={this.rootElement}
                             rootId={rootFolderId}
+                            selected={selected}
                             tableRef={this.tableRef}
                             view={view}
                             viewMode={viewMode}
@@ -1789,7 +1808,7 @@ class ContentExplorer extends Component<Props, State> {
                             isTouch={isTouch}
                             onCancel={this.closeModals}
                             item={selected}
-                            currentCollection={currentCollection}
+                            currentCollection={cloneDeep(currentCollection)}
                             token={token}
                             parentElement={this.rootElement}
                             appElement={this.appElement}
