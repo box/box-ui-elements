@@ -12,6 +12,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -211,6 +212,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       isShown={false}
       position="middle-left"
       showCloseButton={true}
@@ -376,6 +378,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -540,6 +543,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -708,6 +712,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       isShown={true}
       position="middle-left"
       showCloseButton={true}
@@ -874,6 +879,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1040,6 +1046,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1175,6 +1182,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1341,6 +1349,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1507,6 +1516,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1674,6 +1684,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -1851,6 +1862,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2016,6 +2028,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2185,6 +2198,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2351,6 +2365,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
@@ -2516,6 +2531,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={

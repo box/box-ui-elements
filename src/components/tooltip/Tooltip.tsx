@@ -5,6 +5,8 @@ import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
+// @ts-ignore flow import
+import FocusTrap from '../focus-trap';
 import CloseButton from './CloseButton';
 
 import './Tooltip.scss';
@@ -88,6 +90,8 @@ export type TooltipProps = {
     children: React.ReactChild;
     /** A CSS class for the tooltip */
     className?: string;
+    /** Allow the component to maintain focus until escaped */
+    isFocusTrapped?: boolean;
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean;
     /** Whether to add tabindex=0.  Defaults to `true` */
@@ -132,12 +136,14 @@ class Tooltip extends React.Component<TooltipProps, State> {
     }
 
     componentDidUpdate(prevProps: TooltipProps, prevState: State) {
-        const isControlled = this.isControlled();
-
-        // Reset wasClosedByUser state when isShown transitions from false to true
-        if (isControlled) {
+        if (this.isControlled()) {
             if (!prevProps.isShown && this.props.isShown) {
+                // Reset wasClosedByUser state when isShown transitions from false to true
                 this.setState({ wasClosedByUser: false });
+                document.addEventListener('keydown', this.handleKeyDown, true);
+            }
+            if (!prevState.wasClosedByUser && this.state.wasClosedByUser) {
+                document.removeEventListener('keydown', this.handleKeyDown, true);
             }
         } else {
             if (!prevState.isShown && this.state.isShown) {
@@ -215,7 +221,11 @@ class Tooltip extends React.Component<TooltipProps, State> {
     handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             event.stopPropagation();
-            this.setState({ isShown: false });
+            if (this.isControlled()) {
+                this.setState({ isShown: false, wasClosedByUser: true });
+            } else {
+                this.setState({ isShown: false });
+            }
         }
         this.fireChildEvent('onKeyDown', event);
     };
@@ -240,6 +250,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             constrainToScrollParent,
             constrainToWindow,
             isDisabled,
+            isFocusTrapped,
             isTabbable = true,
             offset,
             position = TooltipPosition.TOP_CENTER,
@@ -344,6 +355,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 {withCloseButton && <CloseButton onClick={this.closeTooltip} />}
             </>
         );
+        let role;
+        if (isFocusTrapped) {
+            role = 'dialog';
+        } else if (theme !== TooltipTheme.ERROR) {
+            role = 'tooltip';
+        }
 
         const tooltip = stopBubble ? (
             <div
@@ -357,7 +374,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 role="presentation"
             >
                 <div
-                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                    role={role}
                     aria-live="polite"
                     aria-hidden={ariaHidden || isLabelMatchingTooltipText}
                     data-testid="bdl-Tooltip"
@@ -374,7 +391,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 id={this.tooltipID}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
-                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
+                role={role}
             >
                 {tooltipInner}
             </div>
@@ -383,7 +400,14 @@ class Tooltip extends React.Component<TooltipProps, State> {
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip && tooltip}
+                {showTooltip &&
+                    (isFocusTrapped ? (
+                        <FocusTrap aria-modal shouldDefaultFocus>
+                            {tooltip}
+                        </FocusTrap>
+                    ) : (
+                        tooltip
+                    ))}
             </TetherComponent>
         );
     }
