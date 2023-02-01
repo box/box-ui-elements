@@ -10,7 +10,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             const wrapper = renderComponent();
 
             expect(wrapper.find('FileIcon').length).toBe(1);
-            expect(wrapper.prop('extension')).toEqual('');
+            expect(wrapper.prop('extension')).toEqual(undefined);
             expect(wrapper.prop('title')).toBeTruthy();
         });
 

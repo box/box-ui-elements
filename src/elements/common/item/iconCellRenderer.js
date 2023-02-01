@@ -19,6 +19,9 @@ export function getIcon(rowData: BoxItem, dimension?: number) {
     const { type, extension, has_collaborations, is_externally_owned }: BoxItem = rowData;
     let title;
     switch (type) {
+        case TYPE_FILE:
+            title = <FormattedMessage {...messages.file} />;
+            return <FileIcon dimension={dimension} extension={extension} title={title} />;
         case TYPE_FOLDER:
             if (has_collaborations) {
                 title = <FormattedMessage {...messages.collaboratedFolder} />;
@@ -38,10 +41,9 @@ export function getIcon(rowData: BoxItem, dimension?: number) {
         case TYPE_WEBLINK:
             title = <FormattedMessage {...messages.bookmark} />;
             return <BookmarkIcon height={dimension} width={dimension} title={title} />;
-        case TYPE_FILE:
         default:
             title = <FormattedMessage {...messages.file} />;
-            return <FileIcon dimension={dimension} extension={extension} title={title} />;
+            return <FileIcon dimension={dimension} title={title} />;
     }
 }
 
