@@ -10,12 +10,13 @@ import Button from '../../../components/button';
 import IconAddThin from '../../../icons/general/IconAddThin';
 import messages from '../messages';
 import Tooltip from '../Tooltip';
+import { bdlGray62 } from '../../../styles/variables';
 import './AddButton.scss';
 
 const AddButton = (props: ?Object) => (
     <Tooltip text={<FormattedMessage {...messages.add} />}>
         <Button className="be-btn-add" aria-label={messages.add.defaultMessage} type="button" {...props}>
-            <IconAddThin />
+            <IconAddThin color={bdlGray62} />
         </Button>
     </Tooltip>
 );
