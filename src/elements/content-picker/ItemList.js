@@ -6,6 +6,8 @@
 
 import React from 'react';
 import classNames from 'classnames';
+import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import { Table, Column } from '@box/react-virtualized/dist/es/Table';
 import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';
@@ -26,6 +28,7 @@ type Props = {
     extensionsWhitelist: string[],
     focusedRow: number,
     hasHitSelectionLimit: boolean,
+    intl: IntlShape,
     isSingleSelect: boolean,
     isSmall: boolean,
     onFocusChange: Function,
@@ -56,8 +59,9 @@ const ItemList = ({
     onFocusChange,
     currentCollection,
     tableRef,
+    intl,
 }: Props) => {
-    const iconCell = iconCellRenderer();
+    const iconCell = iconCellRenderer(intl);
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
     const selectionCell = selectionCellRenderer(
         onItemSelect,
@@ -175,4 +179,4 @@ const ItemList = ({
     );
 };
 
-export default ItemList;
+export default injectIntl(ItemList);

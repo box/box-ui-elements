@@ -5,7 +5,6 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
   className="bdl-VirtualizedTable className"
   disableHeader={false}
   estimatedRowSize={30}
-  gridContainerRole=""
   headerHeight={39}
   headerRowRenderer={[Function]}
   headerStyle={Object {}}

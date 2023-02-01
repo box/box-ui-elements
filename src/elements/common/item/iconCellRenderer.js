@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
@@ -15,20 +15,20 @@ import messages from '../messages';
 
 import './IconCell.scss';
 
-export function getIcon(rowData: BoxItem, dimension?: number) {
+export function getIcon(intl: IntlShape, rowData: BoxItem, dimension?: number) {
     const { type, extension, has_collaborations, is_externally_owned }: BoxItem = rowData;
     let title;
     switch (type) {
         case TYPE_FILE:
-            title = <FormattedMessage {...messages.file} />;
+            title = intl.formatMessage(messages.file);
             return <FileIcon dimension={dimension} extension={extension} title={title} />;
         case TYPE_FOLDER:
             if (has_collaborations) {
-                title = <FormattedMessage {...messages.collaboratedFolder} />;
+                title = intl.formatMessage(messages.collaboratedFolder);
             } else if (is_externally_owned) {
-                title = <FormattedMessage {...messages.externalFolder} />;
+                title = intl.formatMessage(messages.externalFolder);
             } else {
-                title = <FormattedMessage {...messages.personalFolder} />;
+                title = intl.formatMessage(messages.personalFolder);
             }
             return (
                 <FolderIcon
@@ -39,14 +39,14 @@ export function getIcon(rowData: BoxItem, dimension?: number) {
                 />
             );
         case TYPE_WEBLINK:
-            title = <FormattedMessage {...messages.bookmark} />;
+            title = intl.formatMessage(messages.bookmark);
             return <BookmarkIcon height={dimension} width={dimension} title={title} />;
         default:
-            title = <FormattedMessage {...messages.file} />;
+            title = intl.formatMessage(messages.file);
             return <FileIcon dimension={dimension} title={title} />;
     }
 }
 
-export default (dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) => (
-    <div className="be-item-icon">{getIcon(rowData, dimension)}</div>
+export default (intl: IntlShape, dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) => (
+    <div className="be-item-icon">{getIcon(intl, rowData, dimension)}</div>
 );

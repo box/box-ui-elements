@@ -1,5 +1,7 @@
 // @flow
 import * as React from 'react';
+import { injectIntl } from 'react-intl';
+import type { InjectIntlProvidedProps } from 'react-intl';
 import isThumbnailReady from './utils';
 import { getIcon } from '../common/item/iconCellRenderer';
 import type { BoxItem } from '../../common/types/core';
@@ -7,9 +9,9 @@ import './ItemGridThumbnail.scss';
 
 type Props = {
     item: BoxItem,
-};
+} & InjectIntlProvidedProps;
 
-const ItemGridThumbnail = ({ item }: Props) => {
+const ItemGridThumbnail = ({ intl, item }: Props) => {
     const { thumbnailUrl } = item;
 
     return (
@@ -17,9 +19,10 @@ const ItemGridThumbnail = ({ item }: Props) => {
             {thumbnailUrl && isThumbnailReady(item) ? (
                 <div className="bce-ItemGridThumbnail-item" style={{ backgroundImage: `url("${thumbnailUrl}")` }} />
             ) : (
-                <div className="bce-ItemGridThumbnail-item">{getIcon(item, 128)}</div>
+                <div className="bce-ItemGridThumbnail-item">{getIcon(intl, item, 128)}</div>
             )}
         </div>
     );
 };
-export default ItemGridThumbnail;
+
+export default injectIntl(ItemGridThumbnail);

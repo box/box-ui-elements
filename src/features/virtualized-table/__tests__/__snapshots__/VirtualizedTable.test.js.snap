@@ -86,7 +86,6 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   className="bdl-VirtualizedTable"
   disableHeader={false}
   estimatedRowSize={30}
-  gridContainerRole=""
   headerHeight={39}
   headerRowRenderer={[Function]}
   headerStyle={Object {}}
@@ -157,7 +156,6 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   className="bdl-VirtualizedTable"
   disableHeader={false}
   estimatedRowSize={30}
-  gridContainerRole=""
   headerHeight={39}
   headerRowRenderer={[Function]}
   headerStyle={Object {}}
