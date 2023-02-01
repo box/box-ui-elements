@@ -17,7 +17,7 @@ const ItemGridThumbnail = ({ item }: Props) => {
             {thumbnailUrl && isThumbnailReady(item) ? (
                 <div className="bce-ItemGridThumbnail-item" style={{ backgroundImage: `url("${thumbnailUrl}")` }} />
             ) : (
-                <div className="bce-ItemGridThumbnail-item">{getIcon(128, item)}</div>
+                <div className="bce-ItemGridThumbnail-item">{getIcon(item, 128)}</div>
             )}
         </div>
     );

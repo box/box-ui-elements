@@ -2,15 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import PlainButton from '../../../components/plain-button';
+import { TYPE_FOLDER } from '../../../constants';
 import IconChevron from '../../../icons/general/IconChevron';
 
-import ItemTypes from '../item-types';
 import { ItemTypePropType } from '../prop-types';
 
 const ITEM_LIST_NAME_CLASS = 'item-list-name';
 
 const ItemListName = ({ itemId = '', type, name, label = '', isSelected = false, onClick, linkRenderer }) => {
-    const isFolder = type === ItemTypes.FOLDER;
+    const isFolder = type === TYPE_FOLDER;
 
     const linkProps = {
         className: `lnk ${ITEM_LIST_NAME_CLASS}`,

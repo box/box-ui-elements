@@ -11,9 +11,9 @@ import ContentExplorerSelectAll from './ContentExplorerSelectAll';
 import ItemList from '../item-list';
 import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
-import ItemTypes from '../item-types';
 
 import './ContentExplorer.scss';
+import { TYPE_FOLDER } from '../../../constants';
 
 class ContentExplorer extends Component {
     static propTypes = {
@@ -316,7 +316,7 @@ class ContentExplorer extends Component {
             return;
         }
 
-        if (item.type === ItemTypes.FOLDER) {
+        if (item.type === TYPE_FOLDER) {
             this.enterFolder(item);
         } else {
             onChooseItems([item]);
@@ -332,7 +332,7 @@ class ContentExplorer extends Component {
             return;
         }
 
-        if (item.type !== ItemTypes.FOLDER) {
+        if (item.type !== TYPE_FOLDER) {
             return;
         }
 

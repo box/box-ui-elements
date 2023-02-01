@@ -7,7 +7,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
   title={
     <FormattedMessage
       defaultMessage="Personal Folder"
-      id="boxui.contentExplorer.personalFolder"
+      id="be.personalFolder"
     />
   }
 />
@@ -20,7 +20,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
   title={
     <FormattedMessage
       defaultMessage="Collaborated Folder"
-      id="boxui.contentExplorer.collaboratedFolder"
+      id="be.collaboratedFolder"
     />
   }
 />
@@ -33,7 +33,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
   title={
     <FormattedMessage
       defaultMessage="Collaborated Folder"
-      id="boxui.contentExplorer.collaboratedFolder"
+      id="be.collaboratedFolder"
     />
   }
 />

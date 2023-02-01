@@ -1,11 +1,6 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    bookmark: {
-        defaultMessage: 'Bookmark',
-        description: 'Icon title for a Box item of type bookmark or web-link',
-        id: 'boxui.contentExplorer.bookmark',
-    },
     breadcrumb: {
         defaultMessage: 'Breadcrumb',
         description: 'Aria label for the folder breadcrumb',
@@ -15,26 +10,6 @@ const messages = defineMessages({
         defaultMessage: 'Click to go back',
         description: 'Aria label for button to navigate back to the previous folder',
         id: 'boxui.contentExplorer.clickToGoBack',
-    },
-    collaboratedFolder: {
-        defaultMessage: 'Collaborated Folder',
-        description: 'Icon title for a Box item of type folder that has collaborators',
-        id: 'boxui.contentExplorer.collaboratedFolder',
-    },
-    externalFolder: {
-        defaultMessage: 'External Folder',
-        description: "Icon title for a Box item of type folder that has collaborators outside of the user's enterprise",
-        id: 'boxui.contentExplorer.externalFolder',
-    },
-    file: {
-        defaultMessage: 'File',
-        description: 'Icon title for a Box item of type file',
-        id: 'boxui.contentExplorer.file',
-    },
-    personalFolder: {
-        defaultMessage: 'Personal Folder',
-        description: 'Icon title for a Box item of type folder that is private and has no collaborators',
-        id: 'boxui.contentExplorer.personalFolder',
     },
     selectItem: {
         defaultMessage: 'Select {name}',
