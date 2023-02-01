@@ -1,15 +1,16 @@
 // @flow
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import isThumbnailReady from './utils';
 import { getIcon } from '../common/item/iconCellRenderer';
 import type { BoxItem } from '../../common/types/core';
 import './ItemGridThumbnail.scss';
 
 type Props = {
+    intl: IntlShape,
     item: BoxItem,
-} & InjectIntlProvidedProps;
+};
 
 const ItemGridThumbnail = ({ intl, item }: Props) => {
     const { thumbnailUrl } = item;
