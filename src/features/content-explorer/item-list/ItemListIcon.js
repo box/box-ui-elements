@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { ItemTypePropType } from '../prop-types';
 import { getIcon } from '../../../elements/common/item/iconCellRenderer';
@@ -8,7 +8,7 @@ const ItemListIcon = ({ intl, type, extension = '', hasCollaborations = false, i
     getIcon(intl, { type, extension, has_collaborations: hasCollaborations, is_externally_owned: isExternallyOwned });
 
 ItemListIcon.propTypes = {
-    intl: intlShape.isRequired,
+    intl: PropTypes.any,
     type: ItemTypePropType,
     extension: PropTypes.string,
     hasCollaborations: PropTypes.bool,
