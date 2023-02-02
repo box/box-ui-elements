@@ -1,9 +1,7 @@
 // @flow
-import { TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK } from '../constants';
-
-const ITEM_TYPE_FILE = TYPE_FILE;
-const ITEM_TYPE_FOLDER = TYPE_FOLDER;
-const ITEM_TYPE_WEBLINK = TYPE_WEBLINK;
+const ITEM_TYPE_FILE: 'file' = 'file';
+const ITEM_TYPE_FOLDER: 'folder' = 'folder';
+const ITEM_TYPE_WEBLINK: 'web_link' = 'web_link';
 
 const JSON_PATCH_OP_ADD: 'add' = 'add';
 const JSON_PATCH_OP_REMOVE: 'remove' = 'remove';
