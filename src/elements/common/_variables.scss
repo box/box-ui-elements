@@ -45,7 +45,8 @@ $sidebarTabResponsiveSize: 48px;
 }
 
 @mixin placeholder {
+    color: $bdl-gray-62;
     font-weight: normal;
     font-family: $font;
-    opacity: .6;
+    opacity: 1; // https://developer.mozilla.org/en-US/docs/Web/CSS/::placeholder#opaque_text
 }
