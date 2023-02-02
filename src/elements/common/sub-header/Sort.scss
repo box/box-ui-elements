@@ -1,8 +1,10 @@
+@import '../../../styles/variables';
+
 .be-sort-selected {
     display: flex;
-    flex: 0 0 26px;
-}
+    flex: 0 0 $bdl-grid-unit * 6;
 
-.be-menu-sort.aria-menu .menu-item {
-    padding-right: 45px;
+    .menu-item & svg {
+        margin-right: 0;
+    }
 }
