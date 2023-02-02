@@ -2,10 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import PlainButton from '../../../components/plain-button';
-import { TYPE_FOLDER } from '../../../constants';
 import IconChevron from '../../../icons/general/IconChevron';
 
 import { ItemTypePropType } from '../prop-types';
+
+import { TYPE_FOLDER } from '../../../constants';
 
 const ITEM_LIST_NAME_CLASS = 'item-list-name';
 

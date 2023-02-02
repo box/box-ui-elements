@@ -5,12 +5,15 @@
  */
 
 import React from 'react';
+import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
-import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../../constants';
 import type { BoxItem } from '../../../common/types/core';
+
+import { TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../../../constants';
 import messages from '../messages';
 
 import './IconCell.scss';
@@ -47,6 +50,7 @@ export function getIcon(intl: IntlShape, rowData: BoxItem, dimension?: number) {
     }
 }
 
-export default (intl: IntlShape, dimension: number = 32): Function => ({ rowData }: { rowData: BoxItem }) => (
-    <div className="be-item-icon">{getIcon(intl, rowData, dimension)}</div>
-);
+export default (dimension: number = 32) =>
+    injectIntl(({ intl, rowData }: { intl: IntlShape, rowData: BoxItem }) => (
+        <div className="be-item-icon">{getIcon(intl, rowData, dimension)}</div>
+    ));

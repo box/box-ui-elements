@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { ItemListIconCore as ItemListIcon } from '../ItemListIcon';
 
 const intl = { formatMessage: jest.fn().mockImplementation(message => message.defaultMessage) };

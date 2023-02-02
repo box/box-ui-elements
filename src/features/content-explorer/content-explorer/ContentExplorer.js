@@ -12,8 +12,9 @@ import ItemList from '../item-list';
 import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
 
-import './ContentExplorer.scss';
 import { TYPE_FOLDER } from '../../../constants';
+
+import './ContentExplorer.scss';
 
 class ContentExplorer extends Component {
     static propTypes = {

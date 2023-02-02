@@ -83,7 +83,7 @@ const ItemList = ({
         isSmall, // shows details if false
         isTouch,
     );
-    const iconCell = iconCellRenderer(intl);
+    const iconCell = iconCellRenderer();
     const dateCell = dateCellRenderer();
     const sizeAccessCell = sizeCellRenderer();
     const moreOptionsCell = moreOptionsCellRenderer(

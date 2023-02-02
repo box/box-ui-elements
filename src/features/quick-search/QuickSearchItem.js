@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { RecordOf } from 'immutable';
 
-import { TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK } from '../../constants';
 import type { ItemType } from '../../common/types/core';
 import { convertToMs, isToday, isYesterday } from '../../utils/datetime';
 import DatalistItem from '../../components/datalist-item';
@@ -12,6 +11,7 @@ import Folder16 from '../../icon/fill/Folder16';
 import ItemIcon from '../../icons/item-icon';
 import { Link } from '../../components/link';
 
+import { TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK } from '../../constants';
 import messages from './messages';
 
 import './QuickSearchItem.scss';
