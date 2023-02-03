@@ -36,6 +36,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
     flexGrow={0}
     flexShrink={1}
     headerRenderer={[Function]}
+    headerRole="columnheader"
     label="Name"
     role="gridcell"
     style={Object {}}
@@ -49,6 +50,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
     flexGrow={0}
     flexShrink={1}
     headerRenderer={[Function]}
+    headerRole="columnheader"
     label="Description"
     role="gridcell"
     style={Object {}}

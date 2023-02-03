@@ -166,6 +166,7 @@ const ItemList = ({
                                 disableSort
                                 dataKey={FIELD_ID}
                                 cellRenderer={iconCell}
+                                headerRole="gridcell"
                                 width={isSmall ? 30 : 50}
                                 flexShrink={0}
                             />
@@ -210,6 +211,7 @@ const ItemList = ({
                                 disableSort
                                 dataKey={FIELD_ID}
                                 cellRenderer={moreOptionsCell}
+                                headerRole="gridcell"
                                 width={isSmall || !canShare ? 58 : 140}
                                 flexShrink={0}
                             />
