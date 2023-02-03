@@ -53,17 +53,20 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
         });
 
         test('should render correct file icon', () => {
-            const extension = 'boxnote';
-            const wrapper = renderComponent({ type: 'file', extension });
+            const rowData = { type: 'file', extension: 'boxnote' };
+            const wrapper = renderComponent(rowData);
 
             expect(wrapper.find('IconCell').length).toBe(1);
+            expect(wrapper.prop('rowData')).toEqual(expect.objectContaining(rowData));
             expect(wrapper).toMatchSnapshot();
         });
 
         test('should render correct bookmark icon', () => {
-            const wrapper = renderComponent({ type: 'web_link' });
+            const rowData = { type: 'web_link' };
+            const wrapper = renderComponent(rowData);
 
             expect(wrapper.find('IconCell').length).toBe(1);
+            expect(wrapper.prop('rowData')).toEqual(expect.objectContaining(rowData));
             expect(wrapper).toMatchSnapshot();
         });
     });
