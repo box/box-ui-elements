@@ -1,19 +1,21 @@
 import React from 'react';
 
-import { ItemListIconCore as ItemListIcon } from '../ItemListIcon';
-
-const intl = { formatMessage: jest.fn().mockImplementation(message => message.defaultMessage) };
+import ItemListIcon from '../ItemListIcon';
 
 describe('features/content-explorer/item-list/ItemListIcon', () => {
-    const renderComponent = props => shallow(<ItemListIcon intl={intl} {...props} />);
+    const renderComponent = props => shallow(<ItemListIcon {...props} />);
 
     describe('render()', () => {
         test('should render default component', () => {
             const wrapper = renderComponent();
 
-            expect(wrapper.find('FileIcon').length).toBe(1);
-            expect(wrapper.prop('extension')).toEqual(undefined);
-            expect(wrapper.prop('title')).toEqual('File');
+            expect(wrapper.find('IconCell').length).toBe(1);
+            expect(wrapper.prop('rowData')).toEqual({
+                type: undefined,
+                extension: undefined,
+                has_collaborations: false,
+                is_externally_owned: false,
+            });
         });
 
         [
@@ -22,38 +24,30 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
                 type: 'folder',
                 hasCollaborations: false,
                 isExternallyOwned: false,
-                title: 'Personal Folder',
             },
             // collabFolder
             {
                 type: 'folder',
                 hasCollaborations: true,
                 isExternallyOwned: false,
-                title: 'Collaborated Folder',
             },
             // externalCollabFolder
             {
                 type: 'folder',
                 hasCollaborations: true,
                 isExternallyOwned: true,
-                title: 'Collaborated Folder',
             },
             // externalFolder
             {
                 type: 'folder',
                 hasCollaborations: false,
                 isExternallyOwned: true,
-                title: 'External Folder',
             },
-        ].forEach(({ title, ...props }) => {
+        ].forEach(rowData => {
             test('should render correct folder icon', () => {
-                const wrapper = renderComponent(props);
+                const wrapper = renderComponent(rowData);
 
-                expect(wrapper.find('FolderIcon').length).toBe(1);
-                expect(wrapper.prop('isCollab')).toEqual(props.hasCollaborations);
-                expect(wrapper.prop('isExternal')).toEqual(props.isExternallyOwned);
-                expect(wrapper.prop('title')).toEqual(title);
-
+                expect(wrapper.find('IconCell').length).toBe(1);
                 expect(wrapper).toMatchSnapshot();
             });
         });
@@ -62,19 +56,14 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             const extension = 'boxnote';
             const wrapper = renderComponent({ type: 'file', extension });
 
-            expect(wrapper.find('FileIcon').length).toBe(1);
-            expect(wrapper.prop('extension')).toEqual(extension);
-            expect(wrapper.prop('title')).toEqual('File');
-
+            expect(wrapper.find('IconCell').length).toBe(1);
             expect(wrapper).toMatchSnapshot();
         });
 
         test('should render correct bookmark icon', () => {
             const wrapper = renderComponent({ type: 'web_link' });
 
-            expect(wrapper.find('BookmarkIcon').length).toBe(1);
-            expect(wrapper.prop('title')).toEqual('Bookmark');
-
+            expect(wrapper.find('IconCell').length).toBe(1);
             expect(wrapper).toMatchSnapshot();
         });
     });

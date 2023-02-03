@@ -1,46 +1,79 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct bookmark icon 1`] = `
-<BookmarkIcon
-  title="Bookmark"
+<IconCell
+  rowData={
+    Object {
+      "extension": undefined,
+      "has_collaborations": false,
+      "is_externally_owned": false,
+      "type": "web_link",
+    }
+  }
 />
 `;
 
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct file icon 1`] = `
-<FileIcon
-  extension="boxnote"
-  title="File"
+<IconCell
+  rowData={
+    Object {
+      "extension": "boxnote",
+      "has_collaborations": false,
+      "is_externally_owned": false,
+      "type": "file",
+    }
+  }
 />
 `;
 
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 1`] = `
-<FolderIcon
-  isCollab={false}
-  isExternal={false}
-  title="Personal Folder"
+<IconCell
+  rowData={
+    Object {
+      "extension": undefined,
+      "has_collaborations": false,
+      "is_externally_owned": false,
+      "type": "folder",
+    }
+  }
 />
 `;
 
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 2`] = `
-<FolderIcon
-  isCollab={true}
-  isExternal={false}
-  title="Collaborated Folder"
+<IconCell
+  rowData={
+    Object {
+      "extension": undefined,
+      "has_collaborations": true,
+      "is_externally_owned": false,
+      "type": "folder",
+    }
+  }
 />
 `;
 
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 3`] = `
-<FolderIcon
-  isCollab={true}
-  isExternal={true}
-  title="Collaborated Folder"
+<IconCell
+  rowData={
+    Object {
+      "extension": undefined,
+      "has_collaborations": true,
+      "is_externally_owned": true,
+      "type": "folder",
+    }
+  }
 />
 `;
 
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 4`] = `
-<FolderIcon
-  isCollab={false}
-  isExternal={true}
-  title="External Folder"
+<IconCell
+  rowData={
+    Object {
+      "extension": undefined,
+      "has_collaborations": false,
+      "is_externally_owned": true,
+      "type": "folder",
+    }
+  }
 />
 `;
