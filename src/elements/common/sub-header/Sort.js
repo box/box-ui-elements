@@ -42,7 +42,12 @@ const Sort = ({ sortBy, sortDirection, onSortChange }: Props) => (
                 const sortItemKey = `${sortByValue}${sortDirectionValue}`;
 
                 return (
-                    <MenuItem key={sortItemKey} onClick={() => onSortChange(sortByValue, sortDirectionValue)}>
+                    <MenuItem
+                        key={sortItemKey}
+                        isSelected={isSelected}
+                        isSelectItem
+                        onClick={() => onSortChange(sortByValue, sortDirectionValue)}
+                    >
                         <div className="be-sort-selected">{isSelected && <IconCheck height={16} width={16} />}</div>
                         <FormattedMessage {...messages[sortItemKey]} />
                     </MenuItem>
