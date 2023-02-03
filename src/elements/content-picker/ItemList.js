@@ -6,7 +6,6 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { injectIntl } from 'react-intl';
 import { Table, Column } from '@box/react-virtualized/dist/es/Table';
 import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';
@@ -176,4 +175,4 @@ const ItemList = ({
     );
 };
 
-export default injectIntl(ItemList);
+export default ItemList;
