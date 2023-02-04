@@ -52,6 +52,29 @@
         }
     }
 
+    .content-explorer-folder-tree-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: 30px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .content-explorer-folder-tree-button {
+            margin: 0 10px 0 0;
+            padding: 5px;
+        }
+
+        .icon-breadcrumb-main {
+            margin-right: 10px;
+        }
+
+        .folder-title-breadcrumb-text {
+            color: #767676;
+            font-size: 13px;
+        }
+    }
+
     .content-explorer-select-all-container {
         display: block;
         height: 8 * $bdl-grid-unit;
@@ -68,6 +91,31 @@
         .content-explorer-select-all-checkbox {
             float: right;
             margin-right: -21 * $bdl-grid-unit;
+        }
+    }
+
+    .content-explorer-include-subfolders-container {
+        display: inline-block;
+        width: 100%;
+        height: 8 * $bdl-grid-unit;
+        vertical-align: middle;
+
+        .include-subfolders-toggle {
+            display: block;
+            float: left;
+        }
+
+        .include-subfolders-info-icon-container {
+            display: inline-block;
+            margin-left: 118px;
+            padding: 3;
+            vertical-align: middle;
+        }
+
+        .content-explorer-include-subfolders-select-all-checkbox {
+            float: right;
+            margin-right: 4.45 * $bdl-grid-unit;
+            vertical-align: middle;
         }
     }
 

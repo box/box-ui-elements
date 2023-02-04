@@ -86,20 +86,34 @@ const itemNameCellRenderer = rendererParams => {
     );
 };
 
-const renderItemListButton = (contentExplorerMode, id, isActionDisabled, isDisabled, name, selectedItems) =>
-    name && (
-        <ItemListButton
-            contentExplorerMode={contentExplorerMode}
-            id={id}
-            isDisabled={isActionDisabled}
-            isSelected={isItemSelected(id, selectedItems)}
-            name={name}
-        />
+const renderItemListButton = (
+    contentExplorerMode,
+    id,
+    isActionDisabled,
+    isDisabled,
+    itemsAreSelectedAndActionDisabled,
+    name,
+    selectedItems,
+) => {
+    return (
+        name &&
+        (itemsAreSelectedAndActionDisabled ? (
+            <ItemListButton contentExplorerMode={contentExplorerMode} id={id} isChecked isDisabled name={name} />
+        ) : (
+            <ItemListButton
+                contentExplorerMode={contentExplorerMode}
+                id={id}
+                isDisabled={isActionDisabled}
+                isSelected={isItemSelected(id, selectedItems)}
+                name={name}
+            />
+        ))
     );
+};
 
 const itemButtonCellRenderer = rendererParams => {
     const {
-        columnData: { contentExplorerMode, itemButtonRenderer, selectedItems },
+        columnData: { contentExplorerMode, itemsAreSelectedAndActionDisabled, itemButtonRenderer, selectedItems },
         rowData: { id, isActionDisabled, isDisabled, name },
     } = rendererParams;
     return (
@@ -107,7 +121,15 @@ const itemButtonCellRenderer = rendererParams => {
             <div className={TABLE_CELL_CLASS}>
                 {itemButtonRenderer
                     ? itemButtonRenderer(rendererParams)
-                    : renderItemListButton(contentExplorerMode, id, isActionDisabled, isDisabled, name, selectedItems)}
+                    : renderItemListButton(
+                          contentExplorerMode,
+                          id,
+                          isActionDisabled,
+                          isDisabled,
+                          itemsAreSelectedAndActionDisabled,
+                          name,
+                          selectedItems,
+                      )}
             </div>
         )
     );
@@ -144,6 +166,7 @@ const ItemList = ({
     itemButtonRenderer,
     itemRowRenderer = defaultTableRowRenderer,
     noItemsRenderer,
+    itemsAreSelectedAndActionDisabled,
     width,
     height,
     rowHeight = DEFAULT_ROW_HEIGHT,
@@ -263,6 +286,7 @@ const ItemList = ({
                     cellRenderer={itemButtonCellRenderer}
                     columnData={{
                         contentExplorerMode,
+                        itemsAreSelectedAndActionDisabled,
                         itemButtonRenderer,
                         selectedItems,
                     }}
@@ -282,6 +306,7 @@ ItemList.propTypes = {
     contentExplorerMode: ContentExplorerModePropType.isRequired,
     isResponsive: PropTypes.bool,
     items: ItemsPropType.isRequired,
+    itemsAreSelectedAndActionDisabled: PropTypes.bool,
     numItemsPerPage: PropTypes.number,
     numTotalItems: PropTypes.number,
     selectedItems: ItemsMapPropType.isRequired,

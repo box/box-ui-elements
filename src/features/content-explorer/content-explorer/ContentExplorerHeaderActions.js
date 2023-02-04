@@ -8,6 +8,7 @@ import ContentExplorerBreadcrumbs from './ContentExplorerBreadcrumbs';
 
 import { BreadcrumbPropType, ContentExplorerModePropType, FoldersPathPropType } from '../prop-types';
 import messages from '../messages';
+import ContentExplorerFolderTreeBreadcrumbs from './ContentExplorerFolderTreeBreadcrumbs';
 
 const SEARCH_RESULTS_FOLDER_ID = 'search_results_id';
 
@@ -26,6 +27,8 @@ class ContentExplorerHeaderActions extends Component {
         onCreateNewFolderButtonClick: PropTypes.func,
         showCreateNewFolderButton: PropTypes.bool,
         isCreateNewFolderAllowed: PropTypes.bool,
+        isIncludeSubfoldersAllowed: PropTypes.bool,
+        numTotalItems: PropTypes.number,
         onSearchSubmit: PropTypes.func.isRequired,
         onExitSearch: PropTypes.func.isRequired,
         searchInputProps: PropTypes.object,
@@ -156,6 +159,8 @@ class ContentExplorerHeaderActions extends Component {
             onCreateNewFolderButtonClick,
             showCreateNewFolderButton,
             isCreateNewFolderAllowed,
+            isIncludeSubfoldersAllowed,
+            numTotalItems,
             searchInputProps,
         } = this.props;
         const { searchInput } = this.state;
@@ -185,13 +190,22 @@ class ContentExplorerHeaderActions extends Component {
                     )}
                     {children}
                 </div>
-                <ContentExplorerBreadcrumbs
-                    breadcrumbProps={breadcrumbProps}
-                    foldersPath={foldersPath}
-                    isUpButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
-                    onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
-                    onBreadcrumbClick={this.handleBreadcrumbClick}
-                />
+                {isIncludeSubfoldersAllowed ? (
+                    <ContentExplorerFolderTreeBreadcrumbs
+                        foldersPath={foldersPath}
+                        isUpButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
+                        numTotalItems={numTotalItems}
+                        onBreadcrumbClick={this.handleBreadcrumbClick}
+                    />
+                ) : (
+                    <ContentExplorerBreadcrumbs
+                        breadcrumbProps={breadcrumbProps}
+                        foldersPath={foldersPath}
+                        isUpButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
+                        onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
+                        onBreadcrumbClick={this.handleBreadcrumbClick}
+                    />
+                )}
             </div>
         );
     }

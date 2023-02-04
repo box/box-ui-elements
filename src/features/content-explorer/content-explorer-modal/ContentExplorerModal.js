@@ -16,6 +16,7 @@ type Props = {
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
+    isIncludeSubfoldersAllowed: boolean,
     isNoSelectionAllowed?: boolean,
     isOpen?: boolean,
     isResponsive?: boolean,
@@ -35,6 +36,7 @@ const ContentExplorerModal = ({
     customInput,
     title = '',
     description = '',
+    isIncludeSubfoldersAllowed,
     isOpen = false,
     isResponsive = false,
     onRequestClose,
@@ -54,6 +56,7 @@ const ContentExplorerModal = ({
         <ContentExplorer
             breadcrumbProps={breadcrumbProps}
             customInput={customInput}
+            isIncludeSubfoldersAllowed={isIncludeSubfoldersAllowed}
             isResponsive={isResponsive}
             onCancelButtonClick={onRequestClose}
             onSelectedClick={onSelectedClick}

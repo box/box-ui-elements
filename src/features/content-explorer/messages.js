@@ -118,6 +118,26 @@ const messages = defineMessages({
         description: "Results label for number of items on list when it's just 1",
         id: 'boxui.contentExplorer.result',
     },
+    includeSubfolders: {
+        defaultMessage: 'When enabled, report is run on a single selected folder and all its subfolders.',
+        description: 'Tooltip text shown when user hovers over info icon next to Include Subfolders toggle',
+        id: 'boxui.contentExplorer.includeSubfolders',
+    },
+    includeSubfodlersNoFoldersToSelect: {
+        defaultMessage: 'This option cannot be enabled when there are no folders to select.',
+        description: 'Tooltip text for info icon next to Include Subfolders toggle when there are no folders to select',
+        id: 'boxui.contentExplorer.includeSubfodlersNoFoldersToSelect',
+    },
+    includeSubfodlersNoFoldersSelected: {
+        defaultMessage: 'This option cannot be enabled while there are no folders selected.',
+        description: 'Tooltip text for info icon next to Include Subfolders toggle while there are no folders selected',
+        id: 'boxui.contentExplorer.includeSubfodlersNoFoldersSelected',
+    },
+    includeSubfodlersMultipleFoldersSelected: {
+        defaultMessage: 'This option cannot be enabled when multiple folders are selected.',
+        description: 'Tooltip text for info icon next to Include Subfolders toggle when multiple folders are selected',
+        id: 'boxui.contentExplorer.includeSubfodlersMultipleFoldersSelected',
+    },
 });
 
 export default messages;
