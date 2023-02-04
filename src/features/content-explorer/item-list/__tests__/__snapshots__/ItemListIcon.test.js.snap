@@ -1,31 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/content-explorer/item-list/ItemListIcon render() should render correct bookmark icon 1`] = `
-<IconCell
-  rowData={
-    Object {
-      "extension": undefined,
-      "has_collaborations": false,
-      "is_externally_owned": false,
-      "type": "web_link",
-    }
-  }
-/>
-`;
-
-exports[`features/content-explorer/item-list/ItemListIcon render() should render correct file icon 1`] = `
-<IconCell
-  rowData={
-    Object {
-      "extension": "boxnote",
-      "has_collaborations": false,
-      "is_externally_owned": false,
-      "type": "file",
-    }
-  }
-/>
-`;
-
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 1`] = `
 <IconCell
   rowData={

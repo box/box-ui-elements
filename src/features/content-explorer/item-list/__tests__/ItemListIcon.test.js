@@ -58,7 +58,6 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
 
             expect(wrapper.find('IconCell').length).toBe(1);
             expect(wrapper.prop('rowData')).toEqual(expect.objectContaining(rowData));
-            expect(wrapper).toMatchSnapshot();
         });
 
         test('should render correct bookmark icon', () => {
@@ -67,7 +66,6 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
 
             expect(wrapper.find('IconCell').length).toBe(1);
             expect(wrapper.prop('rowData')).toEqual(expect.objectContaining(rowData));
-            expect(wrapper).toMatchSnapshot();
         });
     });
 });

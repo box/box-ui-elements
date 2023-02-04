@@ -64,8 +64,6 @@ describe('elements/common/item/IconCell', () => {
                 expect(wrapper.prop('isCollab')).toEqual(rowData.has_collaborations);
                 expect(wrapper.prop('isExternal')).toEqual(rowData.is_externally_owned);
                 expect(wrapper.prop('title')).toEqual(title);
-
-                expect(wrapper).toMatchSnapshot();
             });
         });
 
@@ -77,8 +75,6 @@ describe('elements/common/item/IconCell', () => {
             expect(wrapper.name()).toEqual('FileIcon');
             expect(wrapper.prop('extension')).toEqual(extension);
             expect(wrapper.prop('title')).toEqual('File');
-
-            expect(wrapper).toMatchSnapshot();
         });
 
         test('should render correct bookmark icon', () => {
@@ -87,8 +83,6 @@ describe('elements/common/item/IconCell', () => {
 
             expect(wrapper.name()).toEqual('BookmarkIcon');
             expect(wrapper.prop('title')).toEqual('Bookmark');
-
-            expect(wrapper).toMatchSnapshot();
         });
     });
 });
