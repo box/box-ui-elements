@@ -14,9 +14,9 @@ describe('elements/common/item/IconCell', () => {
             const rowData = { type: undefined };
             const wrapper = getWrapper({ rowData });
 
-            expect(wrapper.name()).toEqual('FileIcon');
-            expect(wrapper.prop('extension')).toEqual(undefined);
-            expect(wrapper.prop('title')).toEqual('File');
+            expect(wrapper.name()).toBe('FileIcon');
+            expect(wrapper.prop('extension')).toBe(undefined);
+            expect(wrapper.prop('title')).toBe('File');
         });
 
         [
@@ -60,10 +60,10 @@ describe('elements/common/item/IconCell', () => {
             test('should render correct folder icon', () => {
                 const wrapper = getWrapper({ rowData });
 
-                expect(wrapper.name()).toEqual('FolderIcon');
-                expect(wrapper.prop('isCollab')).toEqual(rowData.has_collaborations);
-                expect(wrapper.prop('isExternal')).toEqual(rowData.is_externally_owned);
-                expect(wrapper.prop('title')).toEqual(title);
+                expect(wrapper.name()).toBe('FolderIcon');
+                expect(wrapper.prop('isCollab')).toBe(rowData.has_collaborations);
+                expect(wrapper.prop('isExternal')).toBe(rowData.is_externally_owned);
+                expect(wrapper.prop('title')).toBe(title);
             });
         });
 
@@ -72,17 +72,17 @@ describe('elements/common/item/IconCell', () => {
             const rowData = { type: 'file', extension };
             const wrapper = getWrapper({ rowData });
 
-            expect(wrapper.name()).toEqual('FileIcon');
-            expect(wrapper.prop('extension')).toEqual(extension);
-            expect(wrapper.prop('title')).toEqual('File');
+            expect(wrapper.name()).toBe('FileIcon');
+            expect(wrapper.prop('extension')).toBe(extension);
+            expect(wrapper.prop('title')).toBe('File');
         });
 
         test('should render correct bookmark icon', () => {
             const rowData = { type: 'web_link' };
             const wrapper = getWrapper({ rowData });
 
-            expect(wrapper.name()).toEqual('BookmarkIcon');
-            expect(wrapper.prop('title')).toEqual('Bookmark');
+            expect(wrapper.name()).toBe('BookmarkIcon');
+            expect(wrapper.prop('title')).toBe('Bookmark');
         });
     });
 });
