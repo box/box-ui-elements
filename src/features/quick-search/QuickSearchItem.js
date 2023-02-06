@@ -11,6 +11,7 @@ import Folder16 from '../../icon/fill/Folder16';
 import ItemIcon from '../../icons/item-icon';
 import { Link } from '../../components/link';
 
+import { TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK } from '../../constants';
 import messages from './messages';
 
 import './QuickSearchItem.scss';
@@ -75,13 +76,13 @@ const QuickSearchItem = ({
 
     let itemIconTitle;
     switch (type) {
-        case 'web_link':
+        case TYPE_WEBLINK:
             itemIconTitle = <FormattedMessage {...messages.bookmark} />;
             break;
-        case 'file':
+        case TYPE_FILE:
             itemIconTitle = <FormattedMessage {...messages.file} />;
             break;
-        case 'folder':
+        case TYPE_FOLDER:
             if (iconType === 'folder-collab') {
                 itemIconTitle = <FormattedMessage {...messages.collaboratedFolder} />;
             } else if (iconType === 'folder-external') {
