@@ -48,5 +48,5 @@ $sidebarTabResponsiveSize: 48px;
     color: $bdl-gray-62;
     font-weight: normal;
     font-family: $font;
-    opacity: 1; // https://developer.mozilla.org/en-US/docs/Web/CSS/::placeholder#opaque_text
+    opacity: 1; // Firefox sets opacity for placeholder to less than 100%
 }
