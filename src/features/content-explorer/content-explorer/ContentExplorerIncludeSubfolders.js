@@ -14,7 +14,6 @@ const ContentExplorerIncludeSubfolders = ({
     handleSelectAllClick,
     hideSelectAllCheckbox,
     isSelectAllChecked,
-    isVerticalScrollBarPresent,
     noFoldersSelected,
     numOfSelectedItems = 0,
     toggleIsDisabled,
@@ -51,11 +50,7 @@ const ContentExplorerIncludeSubfolders = ({
                 <Tooltip text={<FormattedMessage {...messages.selectAll} />}>
                     <Checkbox
                         hideLabel
-                        className={
-                            isVerticalScrollBarPresent
-                                ? 'content-explorer-include-subfolders-select-all-scrollbar-padded-checkbox'
-                                : 'content-explorer-include-subfolders-select-all-checkbox'
-                        }
+                        className="content-explorer-include-subfolders-select-all-checkbox"
                         onChange={handleSelectAllClick}
                         isChecked={isSelectAllChecked}
                     />
@@ -71,7 +66,6 @@ ContentExplorerIncludeSubfolders.propTypes = {
     handleSelectAllClick: PropTypes.func,
     hideSelectAllCheckbox: PropTypes.bool,
     isSelectAllChecked: PropTypes.bool,
-    isVerticalScrollBarPresent: PropTypes.bool,
     noFoldersSelected: PropTypes.bool,
     numOfSelectedItems: PropTypes.number,
     toggleIsDisabled: PropTypes.bool,

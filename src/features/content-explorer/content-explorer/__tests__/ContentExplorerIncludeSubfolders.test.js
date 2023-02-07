@@ -56,32 +56,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             expect(checkboxTooltipTextId).toEqual('boxui.contentExplorer.selectAll');
         });
 
-        test('should render checkbox with extra padding if the vertical scrollbar is present', () => {
-            const isVerticalScrollBarPresent = true;
-            const wrapper = renderComponent();
-            wrapper.setProps({ isVerticalScrollBarPresent });
-
-            const checkbox = wrapper.find('Checkbox');
-
-            const checkboxClassname = checkbox.prop('className');
-
-            expect(checkboxClassname).toEqual(
-                'content-explorer-include-subfolders-select-all-scrollbar-padded-checkbox',
-            );
-        });
-
-        test('should render checkbox without extra padding if the vertical scrollbar is not present', () => {
-            const isVerticalScrollBarPresent = false;
-            const wrapper = renderComponent();
-            wrapper.setProps({ isVerticalScrollBarPresent });
-
-            const checkbox = wrapper.find('Checkbox');
-
-            const checkboxClassname = checkbox.prop('className');
-
-            expect(checkboxClassname).toEqual('content-explorer-include-subfolders-select-all-checkbox');
-        });
-
         test('should render the correct info icon Tooltip when there are more than 1 item selected', () => {
             const wrapper = renderComponent();
             const numOfSelectedItems = 2;
