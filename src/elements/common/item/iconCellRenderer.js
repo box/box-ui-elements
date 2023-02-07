@@ -1,5 +1,6 @@
 /**
  * @flow
+ * @file Function to render the icon table cell
  * @author Box
  */
 
