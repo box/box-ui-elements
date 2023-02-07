@@ -211,6 +211,7 @@ class Search extends Base {
                 params: {
                     offset: this.offset,
                     query: this.query,
+                    created_at_range: this.createdAtRange,
                     ancestor_folder_ids: this.id,
                     limit: this.limit,
                     fields: requestFields.toString(),
@@ -240,6 +241,7 @@ class Search extends Base {
     search(
         id: string,
         query: string,
+        createdAtRange: string[],
         limit: number,
         offset: number,
         successCallback: Function,
@@ -254,6 +256,7 @@ class Search extends Base {
         this.limit = limit;
         this.offset = offset;
         this.query = query;
+        this.createdAtRange = createdAtRange;
         this.id = id;
         this.key = this.getCacheKey(id, this.getEncodedQuery(this.query));
         this.successCallback = successCallback;

@@ -50,7 +50,7 @@ import {
     VIEW_ERROR,
     VIEW_RECENTS,
     VIEW_METADATA,
-    VIEW_MODE_LIST,
+    VIEW_MODE_GRID,
     TYPE_FILE,
     TYPE_WEBLINK,
     TYPE_FOLDER,
@@ -149,6 +149,7 @@ type State = {
     currentPageSize: number,
     errorCode: string,
     focusedRow: number,
+    fromDateQuery: string,
     gridColumnCount: number,
     isCreateFolderModalOpen: boolean,
     isDeleteModalOpen: boolean,
@@ -163,6 +164,7 @@ type State = {
     selected?: BoxItem,
     sortBy: SortBy,
     sortDirection: SortDirection,
+    toDateQuery: string,
     view: View,
 };
 
@@ -287,6 +289,8 @@ class ContentExplorer extends Component<Props, State> {
             sortBy,
             sortDirection,
             view: VIEW_FOLDER,
+            fromDateQuery: '',
+            toDateQuery: '',
         };
     }
 
@@ -412,6 +416,8 @@ class ContentExplorer extends Component<Props, State> {
             searchQuery: '',
             currentCollection: this.currentUnloadedCollection(),
             view: VIEW_METADATA,
+            fromDateQuery: '',
+            toDateQuery: '',
         });
         this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
         this.metadataQueryAPIHelper.fetchMetadataQueryResults(
@@ -489,13 +495,15 @@ class ContentExplorer extends Component<Props, State> {
             currentCollection: { id },
             view,
             searchQuery,
+            fromDateQuery,
+            toDateQuery,
         }: State = this.state;
         if (view === VIEW_FOLDER && id) {
             this.fetchFolder(id, false);
         } else if (view === VIEW_RECENTS) {
             this.showRecents(false);
         } else if (view === VIEW_SEARCH && searchQuery) {
-            this.search(searchQuery);
+            this.search(searchQuery, fromDateQuery, toDateQuery);
         } else if (view === VIEW_METADATA) {
             this.showMetadataQueryResults();
         } else {
@@ -570,6 +578,8 @@ class ContentExplorer extends Component<Props, State> {
             view: VIEW_FOLDER,
             currentCollection: this.currentUnloadedCollection(),
             currentOffset: offset,
+            fromDateQuery: '',
+            toDateQuery: '',
         });
 
         // Fetch the folder using folder API
@@ -640,15 +650,26 @@ class ContentExplorer extends Component<Props, State> {
      * @param {string} query search string
      * @return {void}
      */
-    debouncedSearch = debounce((id: string, query: string) => {
+    debouncedSearch = debounce((id: string, query: string, fromDate: string, toDate: string) => {
         const { currentOffset, currentPageSize }: State = this.state;
-
+        const searchFromDate = fromDate ? `${fromDate.toISOString().slice(0, 10)}T00:00:00+00:00` : '';
+        const searchToDate = toDate ? `${toDate.toISOString().slice(0, 10)}T23:00:00+00:00` : '';
+        const createdAtRange = [searchFromDate, searchToDate];
         this.api
             .getSearchAPI()
-            .search(id, query, currentPageSize, currentOffset, this.searchSuccessCallback, this.errorCallback, {
-                fields: CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH,
-                forceFetch: true,
-            });
+            .search(
+                id,
+                query,
+                createdAtRange.toString(),
+                currentPageSize,
+                currentOffset,
+                this.searchSuccessCallback,
+                this.errorCallback,
+                {
+                    fields: CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH,
+                    forceFetch: true,
+                },
+            );
     }, DEFAULT_SEARCH_DEBOUNCE);
 
     /**
@@ -658,7 +679,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {string} query search string
      * @return {void}
      */
-    search = (query: string) => {
+    search = (query: string, fromDate: string, toDate: string) => {
         const { rootFolderId }: Props = this.props;
         const {
             currentCollection: { id },
@@ -686,6 +707,8 @@ class ContentExplorer extends Component<Props, State> {
             // do nothing and but update prior state
             this.setState({
                 searchQuery: query,
+                fromDateQuery: fromDate,
+                toDateQuery: toDate,
             });
             return;
         }
@@ -696,9 +719,11 @@ class ContentExplorer extends Component<Props, State> {
             searchQuery: query,
             selected: undefined,
             view: VIEW_SEARCH,
+            fromDateQuery: fromDate,
+            toDateQuery: toDate,
         });
 
-        this.debouncedSearch(folderId, query);
+        this.debouncedSearch(folderId, query, fromDate, toDate);
     };
 
     /**
@@ -733,6 +758,8 @@ class ContentExplorer extends Component<Props, State> {
             view: VIEW_RECENTS,
             currentCollection: this.currentUnloadedCollection(),
             currentOffset: 0,
+            fromDateQuery: '',
+            toDateQuery: '',
         });
 
         // Fetch the folder using folder API
@@ -1480,7 +1507,7 @@ class ContentExplorer extends Component<Props, State> {
      *
      * @return {ViewMode}
      */
-    getViewMode = (): ViewMode => this.store.getItem(localStoreViewMode) || VIEW_MODE_LIST;
+    getViewMode = (): ViewMode => this.store.getItem(localStoreViewMode) || VIEW_MODE_GRID;
 
     /**
      * Get the maximum number of grid view columns based on the current width of the
