@@ -33,7 +33,11 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
 
             <Menu>
                 {foldersPath.map((folder, i) => (
-                    <MenuItem key={folder.name} onClick={event => onBreadcrumbClick(i, event)}>
+                    <MenuItem
+                        data-testid="breadcrumb-lnk"
+                        key={folder.name}
+                        onClick={event => onBreadcrumbClick(i, event)}
+                    >
                         {folder.name}
                     </MenuItem>
                 ))}
@@ -44,7 +48,6 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
             <IconBreadcrumbArrow className="icon-breadcrumb-main" height={7.5} width={5} color="#909090" />
             <PlainButton
                 className="folder-title-breadcrumb"
-                data-testid="breadcrumb-lnk"
                 isDisabled
                 title={foldersPath[foldersPath.length - 1].name}
             >

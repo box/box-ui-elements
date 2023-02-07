@@ -9,35 +9,35 @@ import messages from '../messages';
 import IconInfo from '../../../icons/general/IconInfo';
 
 const ContentExplorerIncludeSubfolders = ({
-    numOfSelectedItems = 0,
-    isSelectAllChecked,
     foldersPresent,
     handleIncludeSubfoldersToggle,
     handleSelectAllClick,
     hideSelectAllCheckbox,
+    isSelectAllChecked,
     noFoldersSelected,
+    numOfSelectedItems = 0,
     toggleIsDisabled,
 }) => {
     const getTooltipMessage = () => {
         if (numOfSelectedItems > 1) {
-            return <FormattedMessage {...messages.includeSubfodlersMultipleFoldersSelected} />;
+            return <FormattedMessage {...messages.includeSubfoldersMultipleFoldersSelected} />;
         }
         if (numOfSelectedItems === 1 && noFoldersSelected) {
-            return <FormattedMessage {...messages.includeSubfodlersNoFoldersSelected} />;
+            return <FormattedMessage {...messages.includeSubfoldersNoFoldersSelected} />;
         }
         if (numOfSelectedItems === 0 && !foldersPresent) {
-            return <FormattedMessage {...messages.includeSubfodlersNoFoldersToSelect} />;
+            return <FormattedMessage {...messages.includeSubfoldersNoFoldersToSelect} />;
         }
-        return <FormattedMessage {...messages.includeSubfolders} />;
+        return <FormattedMessage {...messages.includeSubfoldersDefaultInformation} />;
     };
 
     return (
         <div className="content-explorer-include-subfolders-container">
             <Toggle
                 className="include-subfolders-toggle"
-                label="Include Subfolders"
+                label={<FormattedMessage {...messages.includeSubfolders} />}
                 isDisabled={toggleIsDisabled}
-                onChange={() => handleIncludeSubfoldersToggle()}
+                onChange={handleIncludeSubfoldersToggle}
             />
 
             <Tooltip className="info-icon-tooltip" text={getTooltipMessage()}>
@@ -63,11 +63,11 @@ const ContentExplorerIncludeSubfolders = ({
 ContentExplorerIncludeSubfolders.propTypes = {
     foldersPresent: PropTypes.bool,
     handleIncludeSubfoldersToggle: PropTypes.func,
-    numOfSelectedItems: PropTypes.number,
-    isSelectAllChecked: PropTypes.bool,
     handleSelectAllClick: PropTypes.func,
     hideSelectAllCheckbox: PropTypes.bool,
+    isSelectAllChecked: PropTypes.bool,
     noFoldersSelected: PropTypes.bool,
+    numOfSelectedItems: PropTypes.number,
     toggleIsDisabled: PropTypes.bool,
 };
 export { ContentExplorerIncludeSubfolders as ContentExplorerIncludeSubfoldersBase };

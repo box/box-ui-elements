@@ -339,14 +339,10 @@ class ContentExplorer extends Component {
             newSelectedItems[item.id] = item;
         }
 
-        // this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false });
-
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false }, () => {
-            // Check to see if the number of selected items is 1 and the Include Subfolders toggle is on
             if (this.shouldDisableAllOtherButtons()) {
                 const newSelectedItem = Object.values(newSelectedItems)[0];
                 this.setState({ folderToDeepScan: newSelectedItem });
-                // const newSelectedItemId = newSelectedItem.id;
                 this.disableAllOtherItemButtons(newSelectedItem.id);
             } else if (!allItemsEnabled) {
                 this.setState({ folderToDeepScan: {}, itemsAreSelectedAndActionDisabled: false });
@@ -706,13 +702,13 @@ class ContentExplorer extends Component {
                 </ContentExplorerHeaderActions>
                 {isSelectAllAllowed && isIncludeSubfoldersAllowed ? (
                     <ContentExplorerIncludeSubfolders
-                        numOfSelectedItems={this.numOfSelectedItems()}
-                        isSelectAllChecked={isSelectAllChecked}
-                        hideSelectAllCheckbox={includeSubfolders}
                         foldersPresent={this.foldersPresent()}
                         handleIncludeSubfoldersToggle={this.handleIncludeSubfoldersToggle}
                         handleSelectAllClick={this.handleSelectAllClick}
+                        hideSelectAllCheckbox={includeSubfolders}
+                        isSelectAllChecked={isSelectAllChecked}
                         noFoldersSelected={this.noFoldersSelected()}
+                        numOfSelectedItems={this.numOfSelectedItems()}
                         toggleIsDisabled={this.includeSubfolderToggleDisabled()}
                     />
                 ) : (
