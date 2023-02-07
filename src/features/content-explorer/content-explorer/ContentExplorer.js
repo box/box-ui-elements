@@ -14,6 +14,8 @@ import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from 
 import ContentExplorerModes from '../modes';
 
 import { TYPE_FOLDER } from '../../../constants';
+import ItemTypes from '../item-types';
+import { DEFAULT_ROW_HEIGHT } from '../item-list/ItemList';
 
 import './ContentExplorer.scss';
 
@@ -567,6 +569,16 @@ class ContentExplorer extends Component {
         );
     };
 
+    isVerticalScrollBarPresent = () => {
+        // We can assume the itemRowHeight is DEFAULT_ROW_HEIGHT if none is given as it is defined in ItemList.js
+        // listHeight is required, but itemRowHeight is an optional prop
+        const { listHeight, itemRowHeight, numTotalItems } = this.props;
+        const currentItemRowHeight = itemRowHeight || DEFAULT_ROW_HEIGHT;
+        const numItemsThatFitWithoutBar = listHeight / currentItemRowHeight;
+
+        return numTotalItems > numItemsThatFitWithoutBar;
+    };
+
     renderItemListEmptyState = () => {
         const { foldersPath, isInSearchMode } = this.state;
         const { isIncludeSubfoldersAllowed } = this.props;
@@ -707,6 +719,7 @@ class ContentExplorer extends Component {
                         handleSelectAllClick={this.handleSelectAllClick}
                         hideSelectAllCheckbox={includeSubfolders}
                         isSelectAllChecked={isSelectAllChecked}
+                        isVerticalScrollBarPresent={this.isVerticalScrollBarPresent()}
                         noFoldersSelected={this.noFoldersSelected()}
                         numOfSelectedItems={this.numOfSelectedItems()}
                         toggleIsDisabled={this.includeSubfolderToggleDisabled()}

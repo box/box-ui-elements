@@ -23,7 +23,7 @@ const TABLE_CELL_CLASS = 'table-cell';
 
 const InfiniteLoaderTable = withInfiniteLoader(Table);
 
-const DEFAULT_ROW_HEIGHT = 40;
+export const DEFAULT_ROW_HEIGHT = 40;
 
 const withAutoSizer = WrappedComponent => {
     return props => {

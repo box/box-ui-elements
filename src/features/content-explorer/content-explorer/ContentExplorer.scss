@@ -70,7 +70,7 @@
         }
 
         .folder-title-breadcrumb-text {
-            color: #767676;
+            color: $bdl-gray-62;
             font-size: 13px;
         }
     }
@@ -115,6 +115,12 @@
         .content-explorer-include-subfolders-select-all-checkbox {
             float: right;
             margin-right: 4.45 * $bdl-grid-unit;
+            vertical-align: middle;
+        }
+
+        .content-explorer-include-subfolders-select-all-scrollbar-padded-checkbox {
+            float: right;
+            margin-right: 8.2 * $bdl-grid-unit;
             vertical-align: middle;
         }
     }

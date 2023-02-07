@@ -7,10 +7,10 @@ import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
 import IconBreadcrumbArrow from '../../../icons/general/IconBreadcrumbArrow';
 import IconFolderTree from '../../../icons/general/IconFolderTree';
 import { Menu, MenuItem } from '../../../components/menu';
-import PlainButton from '../../../components/plain-button';
 
 import { FoldersPathPropType } from '../prop-types';
 import messages from '../messages';
+import { bdlGray50 } from '../../../styles/variables';
 
 const ContentExplorerFolderTreeBreadcrumbs = ({
     foldersPath,
@@ -44,18 +44,11 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
             </Menu>
         </DropdownMenu>
 
-        <div>
-            <IconBreadcrumbArrow className="icon-breadcrumb-main" height={7.5} width={5} color="#909090" />
-            <PlainButton
-                className="folder-title-breadcrumb"
-                isDisabled
-                title={foldersPath[foldersPath.length - 1].name}
-            >
-                <span className="folder-title-breadcrumb-text">{`${
-                    foldersPath[foldersPath.length - 1].name
-                } (${numTotalItems})`}</span>
-            </PlainButton>
-        </div>
+        <IconBreadcrumbArrow className="icon-breadcrumb-main" height={7.5} width={5} color={bdlGray50} />
+
+        <span className="folder-title-breadcrumb-text" title={foldersPath[foldersPath.length - 1].name}>
+            {`${foldersPath[foldersPath.length - 1].name} (${numTotalItems})`}
+        </span>
     </div>
 );
 

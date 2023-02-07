@@ -34,18 +34,15 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
 
             expect(wrapper.find('.content-explorer-folder-tree-container').length).toBe(1);
             expect(wrapper.find('.content-explorer-folder-tree-button').length).toBe(1);
+            expect(wrapper.find('IconBreadcrumbArrow').length).toBe(1);
             expect(wrapper.find('IconFolderTree').length).toBe(1);
             expect(wrapper.find('DropdownMenu').length).toBe(1);
 
-            const lastBreadcrumb = wrapper.find('.folder-title-breadcrumb');
+            const lastBreadcrumb = wrapper.find('.folder-title-breadcrumb-text');
 
             expect(lastBreadcrumb.length).toBe(1);
-
             expect(lastBreadcrumb.prop('title')).toEqual(foldersPath[foldersPath.length - 1].name);
-
-            expect(lastBreadcrumb.find('span').text()).toEqual(
-                `${foldersPath[foldersPath.length - 1].name} (${numTotalItems})`,
-            );
+            expect(lastBreadcrumb.text()).toEqual(`${foldersPath[foldersPath.length - 1].name} (${numTotalItems})`);
         });
 
         test('should render disabled up button when isUpButtonDisabled is true', () => {

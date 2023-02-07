@@ -174,6 +174,15 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             );
         });
 
+        test('should pass isVerticalScrollBarPresent to ContentExplorerIncludeSubfolders', () => {
+            const isVerticalScrollBarPresent = true;
+            const wrapper = renderComponent({ isIncludeSubfoldersAllowed: true, isSelectAllAllowed: true });
+            wrapper.setState({ isVerticalScrollBarPresent });
+            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('isVerticalScrollBarPresent')).toEqual(
+                isVerticalScrollBarPresent,
+            );
+        });
+
         test('should pass noFoldersSelected to ContentExplorerIncludeSubfolders', () => {
             const selectedItems = {
                 item1: { id: 'item1', name: 'name1', type: 'file' },
