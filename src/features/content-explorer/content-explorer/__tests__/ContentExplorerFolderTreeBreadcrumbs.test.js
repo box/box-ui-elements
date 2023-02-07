@@ -45,9 +45,9 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
             expect(lastBreadcrumb.text()).toEqual(`${foldersPath[foldersPath.length - 1].name} (${numTotalItems})`);
         });
 
-        test('should render disabled up button when isUpButtonDisabled is true', () => {
+        test('should render disabled folder tree button when isFolderTreeButtonDisabled is true', () => {
             const foldersPath = [{ id: '0', name: 'folder1' }];
-            const wrapper = renderComponent({ isUpButtonDisabled: true, foldersPath });
+            const wrapper = renderComponent({ isFolderTreeButtonDisabled: true, foldersPath });
 
             expect(wrapper.find('.content-explorer-folder-tree-button').prop('isDisabled')).toBe(true);
         });

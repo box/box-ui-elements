@@ -113,11 +113,13 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('foldersPath')).toEqual(foldersPath);
         });
 
-        test('should pass isUpButtonDisabled to ContentExplorerFolderTreeBreadcrumbs', () => {
+        test('should pass isFolderTreeButtonDisabled to ContentExplorerFolderTreeBreadcrumbs', () => {
             const wrapper = renderComponent({
                 isIncludeSubfoldersAllowed: true,
             });
-            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('isUpButtonDisabled')).toEqual(true);
+            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('isFolderTreeButtonDisabled')).toEqual(
+                true,
+            );
         });
 
         test('should pass numTotalItems to ContentExplorerFolderTreeBreadcrumbs', () => {

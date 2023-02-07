@@ -15,7 +15,7 @@ import { bdlGray50 } from '../../../styles/variables';
 const ContentExplorerFolderTreeBreadcrumbs = ({
     foldersPath,
     intl: { formatMessage },
-    isUpButtonDisabled = false,
+    isFolderTreeButtonDisabled = false,
     numTotalItems,
     onBreadcrumbClick,
 }) => (
@@ -26,7 +26,7 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
                 className="content-explorer-folder-tree-button"
                 type="button"
                 title="file path"
-                isDisabled={isUpButtonDisabled}
+                isDisabled={isFolderTreeButtonDisabled}
             >
                 <IconFolderTree height={18} width={18} />
             </Button>
@@ -55,7 +55,7 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
 ContentExplorerFolderTreeBreadcrumbs.propTypes = {
     foldersPath: FoldersPathPropType.isRequired,
     intl: PropTypes.any,
-    isUpButtonDisabled: PropTypes.bool,
+    isFolderTreeButtonDisabled: PropTypes.bool,
     onBreadcrumbClick: PropTypes.func,
     numTotalItems: PropTypes.number,
 };

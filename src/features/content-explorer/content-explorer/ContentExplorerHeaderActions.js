@@ -193,7 +193,7 @@ class ContentExplorerHeaderActions extends Component {
                 {isIncludeSubfoldersAllowed ? (
                     <ContentExplorerFolderTreeBreadcrumbs
                         foldersPath={foldersPath}
-                        isUpButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
+                        isFolderTreeButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
                         numTotalItems={numTotalItems}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
                     />
