@@ -143,5 +143,6 @@ describe('elements/common/sub-header/Sort', () => {
                 .prop('id'),
         ).toBe(messages.dateDESC.id);
         expect(options.at(3).prop('isSelected')).toBe(true);
+        expect(options.at(2).prop('isSelected')).toBe(false);
     });
 });
