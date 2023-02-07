@@ -268,7 +268,7 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.prop('aria-hidden')).toBe(true);
         });
 
-        test('should set aria-describedby as undefined if ariaHidden is true', () => {
+        test('should not set aria-describedby when ariaHidden is true', () => {
             const wrapper = shallow(
                 <Tooltip isShown text="hi" ariaHidden>
                     <button aria-label="test" />
@@ -276,7 +276,7 @@ describe('components/tooltip/Tooltip', () => {
             );
             const component = wrapper.childAt(0);
 
-            expect(component.prop('aria-describedby')).toEqual(undefined);
+            expect(component.prop('aria-describedby')).toBe(undefined);
         });
 
         test('should set aria-hidden as false if aria-label does not exist', () => {
