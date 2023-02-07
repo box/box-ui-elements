@@ -142,7 +142,15 @@ describe('elements/common/sub-header/Sort', () => {
                 .childAt(1)
                 .prop('id'),
         ).toBe(messages.dateDESC.id);
+    });
+
+    test('should only have one option selected', () => {
+        const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="date" sortDirection={SORT_DESC} />);
+        const options = wrapper.find(SelectMenuItem);
+
         expect(options.at(3).prop('isSelected')).toBe(true);
-        expect(options.at(2).prop('isSelected')).toBe(false);
+        options.forEach((option, i) => {
+            if (i !== 3) expect(option.prop('isSelected')).toBe(false);
+        });
     });
 });
