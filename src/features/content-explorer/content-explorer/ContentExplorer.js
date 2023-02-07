@@ -14,7 +14,6 @@ import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from 
 import ContentExplorerModes from '../modes';
 
 import { TYPE_FOLDER } from '../../../constants';
-import ItemTypes from '../item-types';
 import { DEFAULT_ROW_HEIGHT } from '../item-list/ItemList';
 
 import './ContentExplorer.scss';
@@ -319,7 +318,7 @@ class ContentExplorer extends Component {
         if (this.itemsAreLoading()) {
             return items;
         }
-        return items.filter(item => item.type === ItemTypes.FOLDER);
+        return items.filter(item => item.type === TYPE_FOLDER);
     };
 
     handleItemClick = ({ event, index }) => {
@@ -531,7 +530,7 @@ class ContentExplorer extends Component {
     foldersPresent = () => {
         const { items } = this.props;
         for (let i = 0; i < items.length; i += 1) {
-            if (items[i].type === ItemTypes.FOLDER) {
+            if (items[i].type === TYPE_FOLDER) {
                 return true;
             }
         }
@@ -546,7 +545,7 @@ class ContentExplorer extends Component {
     noFoldersSelected = () => {
         const { selectedItems } = this.state;
         const result = Object.values(selectedItems).every(item => {
-            if (item.type === ItemTypes.FOLDER) {
+            if (item.type === TYPE_FOLDER) {
                 return false;
             }
             return true;

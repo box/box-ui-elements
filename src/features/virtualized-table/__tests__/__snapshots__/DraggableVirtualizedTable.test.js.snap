@@ -34,7 +34,6 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
       flexShrink={1}
       headerClassName="bdl-DraggableVirtualizedTable-dragHandleColumn"
       headerRenderer={[Function]}
-      headerRole="columnheader"
       role="gridcell"
       style={Object {}}
       width={24}
@@ -47,7 +46,6 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
       flexGrow={0}
       flexShrink={1}
       headerRenderer={[Function]}
-      headerRole="columnheader"
       label="Name"
       role="gridcell"
       style={Object {}}
@@ -61,7 +59,6 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
       flexGrow={0}
       flexShrink={1}
       headerRenderer={[Function]}
-      headerRole="columnheader"
       label="Description"
       role="gridcell"
       style={Object {}}
