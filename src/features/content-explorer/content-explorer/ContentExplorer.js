@@ -16,6 +16,12 @@ import { TYPE_FOLDER } from '../../../constants';
 
 import './ContentExplorer.scss';
 
+const INITIAL_FOLDERS_PATH = [
+    {
+        id: '0',
+        name: 'All Files',
+    },
+];
 class ContentExplorer extends Component {
     static propTypes = {
         /** Props for the action buttons container */
@@ -399,8 +405,10 @@ class ContentExplorer extends Component {
         const { foldersPath, isInSearchMode } = this.state;
         const { isIncludeSubfoldersAllowed } = this.props;
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
-        const isOnInitialModalPage = foldersPath.length === 1 && foldersPath[0].id === '0';
-        console.log(foldersPath);
+        const isOnInitialModalPage =
+            foldersPath.length === 1 &&
+            foldersPath[0].id === INITIAL_FOLDERS_PATH[0].id &&
+            foldersPath[0].name === INITIAL_FOLDERS_PATH[0].name;
 
         return (
             <ContentExplorerEmptyState
