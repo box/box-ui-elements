@@ -91,6 +91,37 @@
         }
     }
 
+    .content-explorer-include-subfolders-container {
+        display: inline-block;
+        width: 100%;
+        height: 8 * $bdl-grid-unit;
+        vertical-align: middle;
+
+        .include-subfolders-toggle {
+            display: block;
+            float: left;
+        }
+
+        .include-subfolders-info-icon-container {
+            display: inline-block;
+            margin-left: 118px;
+            padding: 3;
+            vertical-align: middle;
+        }
+
+        .content-explorer-include-subfolders-select-all-checkbox {
+            float: right;
+            margin-right: 4.45 * $bdl-grid-unit;
+            vertical-align: middle;
+        }
+
+        .content-explorer-include-subfolders-select-all-scrollbar-padded-checkbox {
+            float: right;
+            margin-right: 8.2 * $bdl-grid-unit;
+            vertical-align: middle;
+        }
+    }
+
     .content-explorer-empty-state {
         display: flex;
         flex-direction: column;

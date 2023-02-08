@@ -29,6 +29,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     height={500}
     isResponsive={false}
     items={Array []}
+    itemsAreSelectedAndActionDisabled={false}
     noItemsRenderer={[Function]}
     numItemsPerPage={100}
     numTotalItems={100}

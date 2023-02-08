@@ -17,6 +17,7 @@ type Props = {
     customInput?: React.ComponentType<any>,
     description?: string,
     hasFolderTreeBreadcrumbs: boolean,
+    isIncludeSubfoldersAllowed: boolean,
     isNoSelectionAllowed?: boolean,
     isOpen?: boolean,
     isResponsive?: boolean,
