@@ -16,6 +16,7 @@ type Props = {
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
+    isIncludeSubfoldersAllowed: boolean,
     isNoSelectionAllowed?: boolean,
     isOpen?: boolean,
     isResponsive?: boolean,

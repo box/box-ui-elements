@@ -43,6 +43,8 @@ class ContentExplorer extends Component {
         customInput: PropTypes.func,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
+        /** Whether the user can see the Include Subfolders toggle with breadcrumb updated design */
+        isIncludeSubfoldersAllowed: PropTypes.bool,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
@@ -395,9 +397,18 @@ class ContentExplorer extends Component {
 
     renderItemListEmptyState = () => {
         const { foldersPath, isInSearchMode } = this.state;
+        const { isIncludeSubfoldersAllowed } = this.props;
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
+        const isOnInitialModalPage = foldersPath.length === 1 && foldersPath[0].id === '0';
+        console.log(foldersPath);
 
-        return <ContentExplorerEmptyState isSearch={isViewingSearchResults} />;
+        return (
+            <ContentExplorerEmptyState
+                isIncludeSubfoldersAllowed={isIncludeSubfoldersAllowed}
+                isOnInitialModalPage={isOnInitialModalPage}
+                isSearch={isViewingSearchResults}
+            />
+        );
     };
 
     render() {

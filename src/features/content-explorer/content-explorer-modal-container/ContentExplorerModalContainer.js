@@ -54,6 +54,8 @@ class ContentExplorerModalContainer extends Component {
         onSelectItem: PropTypes.func,
         /** Folder is in the process of being created. */
         isCreatingFolder: PropTypes.bool,
+        /** Whether the user can see the Include Subfolders toggle with updated design */
+        isIncludeSubfoldersAllowed: PropTypes.bool,
         /** Whether the user can see select all checkbox */
         isSelectAllAllowed: PropTypes.bool,
         /** Message that will be shown when there was an error creating the folder. */

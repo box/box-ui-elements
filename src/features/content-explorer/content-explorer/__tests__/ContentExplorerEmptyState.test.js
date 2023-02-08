@@ -19,5 +19,17 @@ describe('features/content-explorer/content-explorer/ContentExplorerEmptyState',
 
             expect(wrapper.find('SearchEmptyState').length).toBe(1);
         });
+
+        test('should not render any text when isSearch is false, isIncludeSubfolders is true, and isOnInitialModalPage is true', () => {
+            const wrapper = renderComponent({
+                isSearch: false,
+                isIncludeSubfoldersAllowed: true,
+                isOnInitialModalPage: true,
+            });
+
+            expect(wrapper.find('.content-explorer-empty-state').length).toBe(1);
+            expect(wrapper.find('FolderEmptyState').length).toBe(1);
+            expect(wrapper.find('.content-explorer-empty-state-text')).toEqual({});
+        });
     });
 });

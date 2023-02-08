@@ -7,16 +7,26 @@ import SearchEmptyState from '../../../icons/states/SearchEmptyState';
 
 import messages from '../messages';
 
-const ContentExplorerEmptyState = ({ isSearch = false }) => (
+const ContentExplorerEmptyState = ({
+    isSearch = false,
+    isIncludeSubfoldersAllowed = false,
+    isOnInitialModalPage = false,
+}) => (
     <div className="content-explorer-empty-state themed">
         {isSearch ? <SearchEmptyState /> : <FolderEmptyState />}
         <span className="content-explorer-empty-state-text">
-            {isSearch ? <FormattedMessage {...messages.emptySearch} /> : <FormattedMessage {...messages.emptyFolder} />}
+            {isSearch ? (
+                <FormattedMessage {...messages.emptySearch} />
+            ) : (
+                (!isIncludeSubfoldersAllowed || !isOnInitialModalPage) && <FormattedMessage {...messages.emptyFolder} />
+            )}
         </span>
     </div>
 );
 
 ContentExplorerEmptyState.propTypes = {
+    isIncludeSubfoldersAllowed: PropTypes.bool,
+    isOnInitialModalPage: PropTypes.bool,
     isSearch: PropTypes.bool,
 };
 
