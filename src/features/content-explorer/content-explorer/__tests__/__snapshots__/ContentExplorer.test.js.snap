@@ -17,6 +17,8 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
         },
       ]
     }
+    isIncludeSubfoldersAllowed={true}
+    numTotalItems={100}
     onEnterFolder={[Function]}
     onExitSearch={[Function]}
     onFoldersPathUpdated={[Function]}

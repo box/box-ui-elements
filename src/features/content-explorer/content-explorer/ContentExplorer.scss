@@ -52,6 +52,29 @@
         }
     }
 
+    .content-explorer-folder-tree-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: 30px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .content-explorer-folder-tree-button {
+            margin: 0 10px 0 0;
+            padding: 5px;
+        }
+
+        .icon-breadcrumb-main {
+            margin-right: 10px;
+        }
+
+        .folder-title-breadcrumb-text {
+            color: $bdl-gray-62;
+            font-size: 13px;
+        }
+    }
+
     .content-explorer-select-all-container {
         display: block;
         height: 8 * $bdl-grid-unit;

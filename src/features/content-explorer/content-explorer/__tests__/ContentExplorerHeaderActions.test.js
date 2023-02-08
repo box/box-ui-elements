@@ -40,6 +40,17 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             expect(wrapper.find('ContentExplorerBreadcrumbs').length).toBe(1);
         });
 
+        test('should render ContentExplorerFolderTreeBreadcrumbs when isIncludeSubfoldersAllowed is true', () => {
+            const wrapper = renderComponent();
+            wrapper.setProps({ isIncludeSubfoldersAllowed: true });
+
+            expect(wrapper.hasClass('content-explorer-header-actions')).toBe(true);
+            expect(wrapper.find('ContentExplorerSearch').length).toBe(1);
+            expect(wrapper.find('ContentExplorerNewFolderButton').length).toBe(1);
+            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').length).toBe(1);
+            expect(wrapper.find('ContentExplorerBreadcrumbs').length).toBe(0);
+        });
+
         test('should not render new folder button if showCreateNewFolderButton is false', () => {
             const wrapper = renderComponent({
                 showCreateNewFolderButton: false,
@@ -91,6 +102,40 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             const wrapper = renderComponent({ customInput });
             expect(wrapper.instance().props.customInput).toEqual(customInput);
             expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should pass foldersPath to ContentExplorerFolderTreeBreadcrumbs', () => {
+            const foldersPath = [{ id: '0', name: 'item1', type: 'folder' }];
+            const wrapper = renderComponent({
+                foldersPath,
+                isIncludeSubfoldersAllowed: true,
+            });
+            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('foldersPath')).toEqual(foldersPath);
+        });
+
+        test('should pass isFolderTreeButtonDisabled to ContentExplorerFolderTreeBreadcrumbs', () => {
+            const wrapper = renderComponent({
+                isIncludeSubfoldersAllowed: true,
+            });
+            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('isFolderTreeButtonDisabled')).toEqual(
+                true,
+            );
+        });
+
+        test('should pass numTotalItems to ContentExplorerFolderTreeBreadcrumbs', () => {
+            const numTotalItems = 123;
+            const wrapper = renderComponent({
+                numTotalItems,
+                isIncludeSubfoldersAllowed: true,
+            });
+            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('numTotalItems')).toEqual(numTotalItems);
+        });
+
+        test('should pass onBreadcrumbClick to ContentExplorerFolderTreeBreadcrumbs', () => {
+            const wrapper = renderComponent({
+                isIncludeSubfoldersAllowed: true,
+            });
+            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('onBreadcrumbClick')).toBeTruthy();
         });
     });
 
