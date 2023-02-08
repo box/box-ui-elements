@@ -8,7 +8,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../../components/menu/Menu';
-import MenuItem from '../../../components/menu/MenuItem';
+import SelectMenuItem from '../../../components/menu/SelectMenuItem';
 import IconCheck from '../../../icons/general/IconCheck';
 import SortButton from './SortButton';
 import messages from '../messages';
@@ -42,15 +42,14 @@ const Sort = ({ sortBy, sortDirection, onSortChange }: Props) => (
                 const sortItemKey = `${sortByValue}${sortDirectionValue}`;
 
                 return (
-                    <MenuItem
+                    <SelectMenuItem
                         key={sortItemKey}
                         isSelected={isSelected}
-                        isSelectItem
                         onClick={() => onSortChange(sortByValue, sortDirectionValue)}
                     >
                         <div className="be-sort-selected">{isSelected && <IconCheck height={16} width={16} />}</div>
                         <FormattedMessage {...messages[sortItemKey]} />
-                    </MenuItem>
+                    </SelectMenuItem>
                 );
             })}
         </Menu>
