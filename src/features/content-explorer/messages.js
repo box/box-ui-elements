@@ -11,6 +11,11 @@ const messages = defineMessages({
         description: 'Aria label for button to navigate back to the previous folder',
         id: 'boxui.contentExplorer.clickToGoBack',
     },
+    clickToViewPath: {
+        defaultMessage: 'Click to view path',
+        description: 'Aria label for folder tree button to navigate back to previous folders',
+        id: 'boxui.contentExplorer.clickToViewPath',
+    },
     selectItem: {
         defaultMessage: 'Select {name}',
         description: 'Label for radio input to select an item from the item list, {name} is the item name',

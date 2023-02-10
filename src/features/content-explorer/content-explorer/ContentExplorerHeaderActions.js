@@ -27,7 +27,7 @@ class ContentExplorerHeaderActions extends Component {
         onCreateNewFolderButtonClick: PropTypes.func,
         showCreateNewFolderButton: PropTypes.bool,
         isCreateNewFolderAllowed: PropTypes.bool,
-        isIncludeSubfoldersAllowed: PropTypes.bool,
+        hasFolderTreeBreadcrumbs: PropTypes.bool,
         onSearchSubmit: PropTypes.func.isRequired,
         onExitSearch: PropTypes.func.isRequired,
         numTotalItems: PropTypes.number,
@@ -159,12 +159,13 @@ class ContentExplorerHeaderActions extends Component {
             onCreateNewFolderButtonClick,
             showCreateNewFolderButton,
             isCreateNewFolderAllowed,
-            isIncludeSubfoldersAllowed,
+            hasFolderTreeBreadcrumbs,
             numTotalItems,
             searchInputProps,
         } = this.props;
         const { searchInput } = this.state;
         const isInSearchMode = this.isInSearchMode();
+        const shouldDisableBreadcrumbButton = foldersPath.length <= 1 && !isInSearchMode;
 
         return (
             <div className="content-explorer-header-actions">
@@ -190,10 +191,10 @@ class ContentExplorerHeaderActions extends Component {
                     )}
                     {children}
                 </div>
-                {isIncludeSubfoldersAllowed ? (
+                {hasFolderTreeBreadcrumbs ? (
                     <ContentExplorerFolderTreeBreadcrumbs
                         foldersPath={foldersPath}
-                        isFolderTreeButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
+                        isFolderTreeButtonDisabled={shouldDisableBreadcrumbButton}
                         numTotalItems={numTotalItems}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
                     />
@@ -201,7 +202,7 @@ class ContentExplorerHeaderActions extends Component {
                     <ContentExplorerBreadcrumbs
                         breadcrumbProps={breadcrumbProps}
                         foldersPath={foldersPath}
-                        isUpButtonDisabled={foldersPath.length <= 1 && !isInSearchMode}
+                        isUpButtonDisabled={shouldDisableBreadcrumbButton}
                         onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
                     />

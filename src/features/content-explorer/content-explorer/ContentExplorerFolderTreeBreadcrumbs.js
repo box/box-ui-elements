@@ -1,16 +1,22 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
+import Arrow16 from '../../../icon/fill/Arrow16';
 import Button from '../../../components/button';
 import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
-import IconBreadcrumbArrow from '../../../icons/general/IconBreadcrumbArrow';
 import IconFolderTree from '../../../icons/general/IconFolderTree';
 import { Menu, MenuItem } from '../../../components/menu';
 
 import { FoldersPathPropType } from '../prop-types';
 import messages from '../messages';
-import { bdlGray50 } from '../../../styles/variables';
+import {
+    FOLDER_TREE_ICON_HEIGHT,
+    FOLDER_TREE_ICON_WIDTH,
+    BREADCRUMB_ARROW_ICON_HEIGHT,
+    BREADCRUMB_ARROW_ICON_WIDTH,
+    BREADCRUMB_ARROW_ICON_VIEWBOX,
+} from './constants';
 
 const ContentExplorerFolderTreeBreadcrumbs = ({
     foldersPath,
@@ -19,23 +25,22 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
     numTotalItems,
     onBreadcrumbClick,
 }) => (
-    <div className="content-explorer-folder-tree-container">
+    <div className="bdl-ContentExplorerFolderTreeBreadcrumbs">
         <DropdownMenu>
             <Button
-                aria-label={formatMessage(messages.clickToGoBack)}
-                className="content-explorer-folder-tree-button"
-                type="button"
-                title="file path"
+                aria-label={formatMessage(messages.clickToViewPath)}
+                className="bdl-ContentExplorerFolderTreeBreadcrumbs-button"
                 isDisabled={isFolderTreeButtonDisabled}
+                title="file path"
+                type="button"
             >
-                <IconFolderTree height={18} width={18} />
+                <IconFolderTree height={FOLDER_TREE_ICON_HEIGHT} width={FOLDER_TREE_ICON_WIDTH} />
             </Button>
-
             <Menu>
                 {foldersPath.map((folder, i) => (
                     <MenuItem
-                        data-testid="breadcrumb-lnk"
-                        key={folder.name}
+                        data-testid="folder-tree-item"
+                        key={folder.id}
                         onClick={event => onBreadcrumbClick(i, event)}
                     >
                         {folder.name}
@@ -43,10 +48,16 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
                 ))}
             </Menu>
         </DropdownMenu>
-
-        <IconBreadcrumbArrow className="icon-breadcrumb-main" height={7.5} width={5} color={bdlGray50} />
-
-        <span className="folder-title-breadcrumb-text" title={foldersPath[foldersPath.length - 1].name}>
+        <Arrow16
+            className="bdl-ContentExplorerFolderTreeBreadcrumbs-iconArrow16"
+            height={BREADCRUMB_ARROW_ICON_HEIGHT}
+            width={BREADCRUMB_ARROW_ICON_WIDTH}
+            viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
+        />
+        <span
+            className="bdl-ContentExplorerFolderTreeBreadcrumbs-text"
+            title={foldersPath[foldersPath.length - 1].name}
+        >
             {`${foldersPath[foldersPath.length - 1].name} (${numTotalItems})`}
         </span>
     </div>
@@ -56,8 +67,8 @@ ContentExplorerFolderTreeBreadcrumbs.propTypes = {
     foldersPath: FoldersPathPropType.isRequired,
     intl: PropTypes.any,
     isFolderTreeButtonDisabled: PropTypes.bool,
+    numTotalItems: PropTypes.number.isRequired,
     onBreadcrumbClick: PropTypes.func,
-    numTotalItems: PropTypes.number,
 };
 
 export { ContentExplorerFolderTreeBreadcrumbs as ContentExplorerFolderTreeBreadcrumbsBase };

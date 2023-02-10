@@ -427,6 +427,7 @@ class ContentExplorer extends Component {
             isCreateNewFolderAllowed,
             isMoveButtonLoading,
             isResponsive = false,
+            isIncludeSubfoldersAllowed,
             isSelectAllAllowed,
             items,
             numItemsPerPage,
@@ -499,8 +500,8 @@ class ContentExplorer extends Component {
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
                     foldersPath={foldersPath}
+                    hasFolderTreeBreadcrumbs={isIncludeSubfoldersAllowed}
                     isCreateNewFolderAllowed={isCreateNewFolderAllowed}
-                    isIncludeSubfoldersAllowed
                     onCreateNewFolderButtonClick={onCreateNewFolderButtonClick}
                     onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onEnterFolder={this.enterFolder}

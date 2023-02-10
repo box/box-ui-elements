@@ -40,9 +40,9 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             expect(wrapper.find('ContentExplorerBreadcrumbs').length).toBe(1);
         });
 
-        test('should render ContentExplorerFolderTreeBreadcrumbs when isIncludeSubfoldersAllowed is true', () => {
+        test('should render ContentExplorerFolderTreeBreadcrumbs when hasFolderTreeBreadcrumbs is true', () => {
             const wrapper = renderComponent();
-            wrapper.setProps({ isIncludeSubfoldersAllowed: true });
+            wrapper.setProps({ hasFolderTreeBreadcrumbs: true });
 
             expect(wrapper.hasClass('content-explorer-header-actions')).toBe(true);
             expect(wrapper.find('ContentExplorerSearch').length).toBe(1);
@@ -108,14 +108,14 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             const foldersPath = [{ id: '0', name: 'item1', type: 'folder' }];
             const wrapper = renderComponent({
                 foldersPath,
-                isIncludeSubfoldersAllowed: true,
+                hasFolderTreeBreadcrumbs: true,
             });
             expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('foldersPath')).toEqual(foldersPath);
         });
 
         test('should pass isFolderTreeButtonDisabled to ContentExplorerFolderTreeBreadcrumbs', () => {
             const wrapper = renderComponent({
-                isIncludeSubfoldersAllowed: true,
+                hasFolderTreeBreadcrumbs: true,
             });
             expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('isFolderTreeButtonDisabled')).toEqual(
                 true,
@@ -126,14 +126,14 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             const numTotalItems = 123;
             const wrapper = renderComponent({
                 numTotalItems,
-                isIncludeSubfoldersAllowed: true,
+                hasFolderTreeBreadcrumbs: true,
             });
             expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('numTotalItems')).toEqual(numTotalItems);
         });
 
         test('should pass onBreadcrumbClick to ContentExplorerFolderTreeBreadcrumbs', () => {
             const wrapper = renderComponent({
-                isIncludeSubfoldersAllowed: true,
+                hasFolderTreeBreadcrumbs: true,
             });
             expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').prop('onBreadcrumbClick')).toBeTruthy();
         });
