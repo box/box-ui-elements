@@ -84,5 +84,5 @@ const Breadcrumb = ({
     );
 };
 
-export { Breadcrumb as BreadcrumbCore };
+export { Breadcrumb as BreadcrumbBase };
 export default injectIntl(Breadcrumb);

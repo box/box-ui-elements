@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Link } from '../../link';
 
-import { BreadcrumbCore as Breadcrumb } from '../Breadcrumb';
+import { BreadcrumbBase as Breadcrumb } from '../Breadcrumb';
 
 let wrapper;
 const intl = {

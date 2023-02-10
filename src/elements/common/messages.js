@@ -980,6 +980,31 @@ const messages = defineMessages({
         description: 'Label for a button that displays more options',
         defaultMessage: 'More options',
     },
+    bookmark: {
+        id: 'be.bookmark',
+        description: 'Icon title for a Box item of type bookmark or web-link',
+        defaultMessage: 'Bookmark',
+    },
+    collaboratedFolder: {
+        id: 'be.collaboratedFolder',
+        description: 'Icon title for a Box item of type folder that has collaborators',
+        defaultMessage: 'Collaborated Folder',
+    },
+    externalFolder: {
+        id: 'be.externalFolder',
+        description: "Icon title for a Box item of type folder that has collaborators outside of the user's enterprise",
+        defaultMessage: 'External Folder',
+    },
+    file: {
+        id: 'be.file',
+        description: 'Icon title for a Box item of type file',
+        defaultMessage: 'File',
+    },
+    personalFolder: {
+        id: 'be.personalFolder',
+        description: 'Icon title for a Box item of type folder that is private and has no collaborators',
+        defaultMessage: 'Personal Folder',
+    },
 });
 
 export default messages;
