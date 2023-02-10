@@ -26,77 +26,36 @@ describe('elements/common/sub-header/Sort', () => {
             options
                 .at(0)
                 .childAt(0)
-                .text(),
-        ).toBe('<IconCheck />');
-        expect(
-            options
-                .at(0)
-                .childAt(1)
                 .prop('id'),
         ).toBe(messages.nameASC.id);
-
         expect(
             options
                 .at(1)
                 .childAt(0)
-                .text(),
-        ).toBe('');
-        expect(
-            options
-                .at(1)
-                .childAt(1)
                 .prop('id'),
         ).toBe(messages.nameDESC.id);
-
         expect(
             options
                 .at(2)
                 .childAt(0)
-                .text(),
-        ).toBe('');
-        expect(
-            options
-                .at(2)
-                .childAt(1)
                 .prop('id'),
         ).toBe(messages.dateASC.id);
-
         expect(
             options
                 .at(3)
                 .childAt(0)
-                .text(),
-        ).toBe('');
-        expect(
-            options
-                .at(3)
-                .childAt(1)
                 .prop('id'),
         ).toBe(messages.dateDESC.id);
-
         expect(
             options
                 .at(4)
                 .childAt(0)
-                .text(),
-        ).toBe('');
-        expect(
-            options
-                .at(4)
-                .childAt(1)
                 .prop('id'),
         ).toBe(messages.sizeASC.id);
-
         expect(
             options
                 .at(5)
                 .childAt(0)
-                .text(),
-        ).toBe('');
-        expect(
-            options
-                .at(5)
-                .childAt(1)
                 .prop('id'),
         ).toBe(messages.sizeDESC.id);
     });
@@ -123,25 +82,6 @@ describe('elements/common/sub-header/Sort', () => {
 
         options.at(5).simulate('click');
         expect(sort).toHaveBeenCalledWith('size', SORT_DESC);
-    });
-
-    test('should render a select with correct option selected', () => {
-        const wrapper = shallow(<Sort onSortChange={jest.fn()} sortBy="date" sortDirection={SORT_DESC} />);
-        const options = wrapper.find(SelectMenuItem);
-
-        expect(options).toHaveLength(6);
-        expect(
-            options
-                .at(3)
-                .childAt(0)
-                .text(),
-        ).toBe('<IconCheck />');
-        expect(
-            options
-                .at(3)
-                .childAt(1)
-                .prop('id'),
-        ).toBe(messages.dateDESC.id);
     });
 
     test('should only have one option selected', () => {
