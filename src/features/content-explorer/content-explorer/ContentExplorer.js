@@ -44,7 +44,7 @@ class ContentExplorer extends Component {
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Whether the user can see the Include Subfolders toggle with breadcrumb updated design */
-        isIncludeSubfoldersAllowed: PropTypes.bool,
+        canIncludeSubfolders: PropTypes.bool,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
@@ -427,7 +427,7 @@ class ContentExplorer extends Component {
             isCreateNewFolderAllowed,
             isMoveButtonLoading,
             isResponsive = false,
-            isIncludeSubfoldersAllowed,
+            canIncludeSubfolders,
             isSelectAllAllowed,
             items,
             numItemsPerPage,
@@ -500,7 +500,7 @@ class ContentExplorer extends Component {
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
                     foldersPath={foldersPath}
-                    hasFolderTreeBreadcrumbs={isIncludeSubfoldersAllowed}
+                    hasFolderTreeBreadcrumbs={canIncludeSubfolders}
                     isCreateNewFolderAllowed={isCreateNewFolderAllowed}
                     onCreateNewFolderButtonClick={onCreateNewFolderButtonClick}
                     onFoldersPathUpdated={this.handleFoldersPathUpdated}

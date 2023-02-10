@@ -6,6 +6,11 @@ const messages = defineMessages({
         description: 'Aria label for the folder breadcrumb',
         id: 'boxui.contentExplorer.breadcrumb',
     },
+    filePath: {
+        defaultMessage: 'File path',
+        description: 'Tooltip message for the folder tree breadcrumb button',
+        id: 'boxui.contentExplorer.filepath',
+    },
     clickToGoBack: {
         defaultMessage: 'Click to go back',
         description: 'Aria label for button to navigate back to the previous folder',

@@ -6,7 +6,7 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
         shallow(
             <ContentExplorerFolderTreeBreadcrumbs
                 foldersPath={[]}
-                intl={{ formatMessage: () => 'message' }}
+                intl={{ formatMessage: () => 'message', formatNumber: x => x }}
                 {...props}
             />,
         );
@@ -47,6 +47,33 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
             const wrapper = renderComponent({ isFolderTreeButtonDisabled: true, foldersPath, numTotalItems });
 
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').prop('isDisabled')).toBe(true);
+        });
+    });
+
+    describe('onBreadcrumbClick', () => {
+        test('should call onBreadcrumbClick when breadcrumb in folder tree is clicked', () => {
+            const breadcrumbIndex = 1;
+            const event = {};
+            const numTotalItems = 12;
+            const onBreadcrumbClick = jest.fn();
+            const foldersPath = [
+                { id: '0', name: 'folder1' },
+                { id: '1', name: 'folder2' },
+                { id: '2', name: 'folder3' },
+            ];
+            const wrapper = renderComponent({
+                foldersPath,
+                onBreadcrumbClick,
+                numTotalItems,
+            });
+
+            wrapper
+                .find('[data-testid="folder-tree-item"]')
+                .at(breadcrumbIndex)
+                .simulate('click', event);
+
+            expect(onBreadcrumbClick).toHaveBeenCalledTimes(1);
+            expect(onBreadcrumbClick).toHaveBeenCalledWith(breadcrumbIndex, event);
         });
     });
 });
