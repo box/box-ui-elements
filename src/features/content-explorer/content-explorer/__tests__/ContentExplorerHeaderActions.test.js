@@ -44,9 +44,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             const wrapper = renderComponent();
             wrapper.setProps({ hasFolderTreeBreadcrumbs: true });
 
-            expect(wrapper.hasClass('content-explorer-header-actions')).toBe(true);
-            expect(wrapper.find('ContentExplorerSearch').length).toBe(1);
-            expect(wrapper.find('ContentExplorerNewFolderButton').length).toBe(1);
             expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').length).toBe(1);
             expect(wrapper.find('ContentExplorerBreadcrumbs').length).toBe(0);
         });

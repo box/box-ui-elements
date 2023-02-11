@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 
 import Arrow16 from '../../../icon/fill/Arrow16';
 import Button from '../../../components/button';
@@ -51,13 +51,16 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
                 </Menu>
             </DropdownMenu>
             <Arrow16
-                className="bdl-ContentExplorerFolderTreeBreadcrumbs-iconArrow16"
+                className="bdl-ContentExplorerFolderTreeBreadcrumbs-icon"
                 height={BREADCRUMB_ARROW_ICON_HEIGHT}
                 width={BREADCRUMB_ARROW_ICON_WIDTH}
                 viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
             />
             <span className="bdl-ContentExplorerFolderTreeBreadcrumbs-text" title={currentFolderName}>
-                {`${currentFolderName} (${formatNumber(numTotalItems)})`}
+                <FormattedMessage
+                    {...messages.folderTreeBreadcrumbsText}
+                    values={{ folderName: currentFolderName, totalItems: formatNumber(numTotalItems) }}
+                />
             </span>
         </div>
     );

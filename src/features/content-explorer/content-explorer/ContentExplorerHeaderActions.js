@@ -165,7 +165,7 @@ class ContentExplorerHeaderActions extends Component {
         } = this.props;
         const { searchInput } = this.state;
         const isInSearchMode = this.isInSearchMode();
-        const shouldDisableBreadcrumbButton = foldersPath.length <= 1 && !isInSearchMode;
+        const isBreadcrumbButtonDisabled = foldersPath.length <= 1 && !isInSearchMode;
 
         return (
             <div className="content-explorer-header-actions">
@@ -194,7 +194,7 @@ class ContentExplorerHeaderActions extends Component {
                 {hasFolderTreeBreadcrumbs ? (
                     <ContentExplorerFolderTreeBreadcrumbs
                         foldersPath={foldersPath}
-                        isFolderTreeButtonDisabled={shouldDisableBreadcrumbButton}
+                        isFolderTreeButtonDisabled={isBreadcrumbButtonDisabled}
                         numTotalItems={numTotalItems}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
                     />
@@ -202,7 +202,7 @@ class ContentExplorerHeaderActions extends Component {
                     <ContentExplorerBreadcrumbs
                         breadcrumbProps={breadcrumbProps}
                         foldersPath={foldersPath}
-                        isUpButtonDisabled={shouldDisableBreadcrumbButton}
+                        isUpButtonDisabled={isBreadcrumbButtonDisabled}
                         onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
                     />

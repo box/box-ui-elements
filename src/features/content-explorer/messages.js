@@ -6,6 +6,11 @@ const messages = defineMessages({
         description: 'Aria label for the folder breadcrumb',
         id: 'boxui.contentExplorer.breadcrumb',
     },
+    folderTreeBreadcrumbsText: {
+        defaultMessage: '{folderName} ({totalItems})',
+        description: 'Text shown for the current folder and its number of items next to the folder tree breadcrumbs',
+        id: 'boxui.contentExplorer.folderTreeBreadcrumbsText',
+    },
     filePath: {
         defaultMessage: 'File path',
         description: 'Tooltip message for the folder tree breadcrumb button',

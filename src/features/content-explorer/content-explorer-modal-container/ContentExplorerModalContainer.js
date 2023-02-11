@@ -17,8 +17,12 @@ class ContentExplorerModalContainer extends Component {
         isNoSelectionAllowed: PropTypes.bool,
         /** Breadcrumb component options */
         breadcrumbProps: BreadcrumbPropType,
+        /** Whether the user can see the Include Subfolders toggle with updated design */
+        canIncludeSubfolders: PropTypes.bool,
         /** Adds class name. */
         className: PropTypes.string,
+        /** Whether the user can see the breadcrumbs represented with the folder tree button */
+        hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Title shown in the ContentExplorerModal. */
@@ -54,8 +58,6 @@ class ContentExplorerModalContainer extends Component {
         onSelectItem: PropTypes.func,
         /** Folder is in the process of being created. */
         isCreatingFolder: PropTypes.bool,
-        /** Whether the user can see the Include Subfolders toggle with updated design */
-        canIncludeSubfolders: PropTypes.bool,
         /** Whether the user can see select all checkbox */
         isSelectAllAllowed: PropTypes.bool,
         /** Message that will be shown when there was an error creating the folder. */

@@ -41,6 +41,8 @@ class ContentExplorer extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         /** Props that contains the custom search input. Is rendered in header actions */
         customInput: PropTypes.func,
+        /** Whether the user can see the breadcrumbs represented with the folder tree button */
+        hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Whether the user can see the Include Subfolders toggle with breadcrumb updated design */
@@ -409,11 +411,13 @@ class ContentExplorer extends Component {
             isNoSelectionAllowed = false,
             breadcrumbProps,
             cancelButtonProps,
+            canIncludeSubfolders,
             chooseButtonProps,
             chooseButtonText,
             className,
             contentExplorerMode,
             customInput,
+            hasFolderTreeBreadcrumbs,
             headerActionsAccessory,
             onChooseItems,
             onMoveItem,
@@ -427,7 +431,6 @@ class ContentExplorer extends Component {
             isCreateNewFolderAllowed,
             isMoveButtonLoading,
             isResponsive = false,
-            canIncludeSubfolders,
             isSelectAllAllowed,
             items,
             numItemsPerPage,
@@ -500,7 +503,7 @@ class ContentExplorer extends Component {
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
                     foldersPath={foldersPath}
-                    hasFolderTreeBreadcrumbs={canIncludeSubfolders}
+                    hasFolderTreeBreadcrumbs={hasFolderTreeBreadcrumbs}
                     isCreateNewFolderAllowed={isCreateNewFolderAllowed}
                     onCreateNewFolderButtonClick={onCreateNewFolderButtonClick}
                     onFoldersPathUpdated={this.handleFoldersPathUpdated}

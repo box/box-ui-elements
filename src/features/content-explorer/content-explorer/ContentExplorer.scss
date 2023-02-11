@@ -55,7 +55,6 @@
     .bdl-ContentExplorerFolderTreeBreadcrumbs {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
         height: 30px;
         margin-top: 15px;
         margin-bottom: 15px;
@@ -65,13 +64,12 @@
             padding: 5px;
         }
 
-        .bdl-ContentExplorerFolderTreeBreadcrumbs-iconArrow16 {
+        .bdl-ContentExplorerFolderTreeBreadcrumbs-icon {
             margin-right: 10px;
         }
 
         .bdl-ContentExplorerFolderTreeBreadcrumbs-text {
             color: $bdl-gray-62;
-            font-size: 13px;
         }
     }
 
