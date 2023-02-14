@@ -1,5 +1,5 @@
-import { mount } from 'enzyme';
 import React from 'react';
+import { mount } from 'enzyme';
 import { ContentAnswersComponent as ContentAnswers } from '../ContentAnswers';
 
 describe('elements/content-answers/ContentAnswers', () => {
@@ -19,7 +19,7 @@ describe('elements/content-answers/ContentAnswers', () => {
     describe('render()', () => {
         test('should render test id for e2e testing', () => {
             const wrapper = getWrapper();
-            expect(wrapper.find('[data-testid="content-answers"]')).toHaveLength(1);
+            expect(wrapper.find('[data-testid="content-answers"]').length).toBe(1);
         });
     });
 });

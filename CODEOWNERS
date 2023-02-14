@@ -14,6 +14,7 @@
 /src/api/Feed.js                            @box/preview
 /src/api/uploads/                           @box/create-communicate
 /src/elements/                              @box/preview @box/ui-elements
+/src/elements/content-answers/              @box/ui-elements
 /src/elements/content-explorer/             @box/ui-elements
 /src/elements/content-open-with/            @box/partners
 /src/elements/content-picker/               @box/ui-elements
@@ -21,7 +22,6 @@
 /src/elements/content-sharing/              @box/partners
 /src/elements/content-sidebar/              @box/preview
 /src/elements/content-uploader/             @box/create-communicate
-/src/elements/content-answers/              @box/ui-elements
 /src/elements/wrappers/                     @box/ui-elements
 /src/features/                              @box/webapp
 /src/features/access-stats/                 @box/preview
@@ -33,10 +33,10 @@
 # Tests
 /test/                                      @box/webapp
 /test/integration/                          @box/webapp
+/test/integration/content-answers/          @box/ui-elements
 /test/integration/content-explorer/         @box/ui-elements
 /test/integration/content-open-with/        @box/partners
 /test/integration/content-picker/           @box/ui-elements
 /test/integration/content-preview/          @box/preview
 /test/integration/content-sidebar/          @box/preview
 /test/integration/content-uploader/         @box/create-communicate
-/test/integration/content-answers/          @box/ui-elements
