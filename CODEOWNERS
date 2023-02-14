@@ -21,6 +21,7 @@
 /src/elements/content-sharing/              @box/partners
 /src/elements/content-sidebar/              @box/preview
 /src/elements/content-uploader/             @box/create-communicate
+/src/elements/content-answers/              @box/ui-elements
 /src/elements/wrappers/                     @box/ui-elements
 /src/features/                              @box/webapp
 /src/features/access-stats/                 @box/preview
@@ -38,3 +39,4 @@
 /test/integration/content-preview/          @box/preview
 /test/integration/content-sidebar/          @box/preview
 /test/integration/content-uploader/         @box/create-communicate
+/test/integration/content-answers/          @box/ui-elements
