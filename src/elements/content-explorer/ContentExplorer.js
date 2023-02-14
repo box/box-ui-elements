@@ -1142,7 +1142,7 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ isLoading: true });
         this.api.getAPI(type).rename(
             selected,
-            name,
+            name.trim(),
             (updatedItem: BoxItem) => {
                 this.setState({ isRenameModalOpen: false });
                 this.refreshCollection();
@@ -1194,7 +1194,7 @@ class ContentExplorer extends Component<Props, State> {
             return;
         }
 
-        if (!name) {
+        if (!name.trim()) {
             this.setState({
                 errorCode: ERROR_CODE_ITEM_NAME_INVALID,
                 isLoading: false,
