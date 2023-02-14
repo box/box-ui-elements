@@ -25,6 +25,7 @@ type Props = {
 
 // eslint-disable-next-line react/prop-types
 const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
+    const { formatMessage } = intl;
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
@@ -33,10 +34,11 @@ const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSear
             {isHeaderLogoVisible && <Logo isSmall={isSmall} url={logoUrl} />}
             <div className="be-search">
                 <input
-                    aria-label="search"
+                    aria-label={formatMessage(messages.searchPlaceholder)}
+                    data-testid="be-search-input"
                     disabled={!isFolder && !isSearch}
                     onChange={search}
-                    placeholder={intl.formatMessage(messages.searchPlaceholder)}
+                    placeholder={formatMessage(messages.searchPlaceholder)}
                     type="search"
                     value={searchQuery}
                 />
@@ -45,4 +47,5 @@ const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSear
     );
 };
 
+export { Header as HeaderBase };
 export default injectIntl(Header);
