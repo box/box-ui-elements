@@ -1213,7 +1213,7 @@ class ContentExplorer extends Component<Props, State> {
         this.setState({ isLoading: true });
         this.api.getFolderAPI().create(
             id,
-            name,
+            name.trim(),
             (item: BoxItem) => {
                 this.refreshCollection();
                 this.select(item);
