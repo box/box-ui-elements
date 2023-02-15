@@ -44,4 +44,16 @@ describe('elements/content-uploader/Footer', () => {
         expect(uploadButton.prop('disabled')).toBe(isDisabled);
         expect(uploadButton.prop('isDisabled')).toBe(isDisabled);
     });
+
+    test.each`
+        hasFiles | isDisabled
+        ${true}  | ${false}
+        ${false} | ${true}
+    `('onClose button disabled props should be $isDisabled when hasFiles is $hasFiles', ({ hasFiles, isDisabled }) => {
+        const wrapper = getWrapper({ hasFiles, onClose: noop });
+        const uploadButton = wrapper.find(PrimaryButton).at(0);
+
+        expect(uploadButton.prop('disabled')).toBe(isDisabled);
+        expect(uploadButton.prop('isDisabled')).toBe(isDisabled);
+    });
 });
