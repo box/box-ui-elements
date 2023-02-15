@@ -14,6 +14,7 @@ import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from 
 import ContentExplorerModes from '../modes';
 
 import { TYPE_FOLDER } from '../../../constants';
+import { areAllItemsActionDisabled, isFolderPresent, itemsAreLoading } from './constants';
 
 import './ContentExplorer.scss';
 
@@ -32,6 +33,8 @@ class ContentExplorer extends Component {
         breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
         cancelButtonProps: PropTypes.object,
+        /** Whether the user can see the Include Subfolders toggle */
+        canIncludeSubfolders: PropTypes.bool,
         /** Props for the choose button */
         chooseButtonProps: PropTypes.object,
         /** Custom text for the choose button */
@@ -50,8 +53,6 @@ class ContentExplorer extends Component {
         headerActionsAccessory: PropTypes.node,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
-        /** Whether the user can see the Include Subfolders toggle with breadcrumb updated design */
-        isIncludeSubfoldersAllowed: PropTypes.bool,
         /** Initial items that will show up as selected */
         initialSelectedItems: PropTypes.object,
         /** Whether to use the responsive version */
@@ -63,6 +64,10 @@ class ContentExplorer extends Component {
          * @param {Array} newFoldersPath
          */
         onEnterFolder: PropTypes.func.isRequired,
+        /** Called when the folders path is updated */
+        onFoldersPath: PropTypes.func,
+        /** Called when the include subfolders toggle is changed */
+        onIncludeSubfoldersToggle: PropTypes.func,
         /**
          * Called when an item is selected
          *
@@ -70,6 +75,11 @@ class ContentExplorer extends Component {
          * @param {number} selectedItemIndex
          */
         onSelectItem: PropTypes.func,
+        /** Called when an item is selected
+         *
+         * @param {Object} selectedItem
+         */
+        onSelectedItems: PropTypes.func,
         /**
          * Called when an item is chosen
          *
@@ -164,9 +174,6 @@ class ContentExplorer extends Component {
             isInSearchMode: false,
             isSelectAllChecked: false,
             includeSubfolders: false,
-            allItemsEnabled: true,
-            folderToDeepScan: {},
-            itemsAreSelectedAndActionDisabled: false,
         };
     }
 
@@ -175,31 +182,15 @@ class ContentExplorer extends Component {
     }
 
     componentDidUpdate({ initialFoldersPath: prevInitialFoldersPath }) {
-        const { allItemsEnabled, folderToDeepScan, includeSubfolders, itemsAreSelectedAndActionDisabled } = this.state;
-        const { initialFoldersPath } = this.props;
+        const { initialFoldersPath, onFoldersPath } = this.props;
 
         if (prevInitialFoldersPath !== initialFoldersPath) {
             this.setState({
                 foldersPath: initialFoldersPath,
             });
-        }
-
-        // If we are inside a selected folder while the include subfolders toggle is on
-        if (includeSubfolders && !itemsAreSelectedAndActionDisabled && this.shouldSelectAndActionDisableItems()) {
-            this.setState({ itemsAreSelectedAndActionDisabled: true, allItemsEnabled: false });
-        }
-        // If we turn include subfolders toggle off while inside a folder that was chosen to include subfolders
-        else if (itemsAreSelectedAndActionDisabled && !this.shouldSelectAndActionDisableItems()) {
-            this.setState({ itemsAreSelectedAndActionDisabled: false });
-        }
-        // If we return back to the folder that our folder chosen for including subfolders is in
-        else if (
-            includeSubfolders &&
-            !allItemsEnabled &&
-            !this.shouldSelectAndActionDisableItems() &&
-            !this.areOtherItemsDisabled(folderToDeepScan.id)
-        ) {
-            this.disableAllOtherItemButtons(folderToDeepScan.id);
+            if (onFoldersPath) {
+                onFoldersPath(initialFoldersPath);
+            }
         }
     }
 
@@ -259,13 +250,17 @@ class ContentExplorer extends Component {
     };
 
     deselectItems() {
+        const { onSelectedItems } = this.props;
         this.setState({
             selectedItems: {},
         });
+        if (onSelectedItems) {
+            onSelectedItems({});
+        }
     }
 
     enterFolder = enteredFolder => {
-        const { contentExplorerMode, onEnterFolder } = this.props;
+        const { contentExplorerMode, onFoldersPath, onEnterFolder } = this.props;
         const { foldersPath } = this.state;
 
         const folderIndex = foldersPath.findIndex(folder => folder.id === enteredFolder.id);
@@ -289,14 +284,21 @@ class ContentExplorer extends Component {
         }
 
         this.setState(newState);
+        if (onFoldersPath) {
+            onFoldersPath(newState.foldersPath);
+        }
 
         onEnterFolder(enteredFolder, newFoldersPath);
     };
 
     handleFoldersPathUpdated = newFoldersPath => {
+        const { onFoldersPath } = this.props;
         this.setState({
             foldersPath: newFoldersPath,
         });
+        if (onFoldersPath) {
+            onFoldersPath(newFoldersPath);
+        }
     };
 
     handleSearchSubmit = searchQuery => {
@@ -313,21 +315,12 @@ class ContentExplorer extends Component {
         onExitSearch(folderBeforeSearch);
     };
 
-    getFoldersOnly = () => {
-        const { items } = this.props;
-
-        if (this.itemsAreLoading()) {
-            return items;
-        }
-        return items.filter(item => item.type === TYPE_FOLDER);
-    };
-
     handleItemClick = ({ event, index }) => {
-        const { contentExplorerMode, items, onSelectItem } = this.props;
-        const { allItemsEnabled, includeSubfolders, itemsAreSelectedAndActionDisabled, selectedItems } = this.state;
-        const item = includeSubfolders ? this.getFoldersOnly()[index] : items[index];
+        const { contentExplorerMode, onSelectedItems, items, onSelectItem } = this.props;
+        const { selectedItems } = this.state;
+        const item = items[index];
 
-        if (item.isDisabled || item.isLoading || itemsAreSelectedAndActionDisabled) {
+        if (item.isDisabled || item.isLoading || item.isActionDisabled) {
             return;
         }
 
@@ -341,16 +334,11 @@ class ContentExplorer extends Component {
             newSelectedItems[item.id] = item;
         }
 
-        this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false }, () => {
-            if (this.shouldDisableAllOtherButtons()) {
-                const newSelectedItem = Object.values(newSelectedItems)[0];
-                this.setState({ folderToDeepScan: newSelectedItem });
-                this.disableAllOtherItemButtons(newSelectedItem.id);
-            } else if (!allItemsEnabled) {
-                this.setState({ folderToDeepScan: {}, itemsAreSelectedAndActionDisabled: false });
-                this.enableAllItemButtons();
-            }
-        });
+        if (onSelectedItems) {
+            onSelectedItems(newSelectedItems);
+        }
+
+        this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false });
 
         if (onSelectItem) {
             onSelectItem(item, index);
@@ -358,9 +346,8 @@ class ContentExplorer extends Component {
     };
 
     handleItemDoubleClick = ({ index }) => {
-        const { includeSubfolders, itemsAreSelectedAndActionDisabled } = this.state;
         const { items, onChooseItems } = this.props;
-        const item = includeSubfolders ? this.getFoldersOnly()[index] : items[index];
+        const item = items[index];
 
         if (item.isDisabled || item.isLoading) {
             return;
@@ -368,16 +355,15 @@ class ContentExplorer extends Component {
 
         if (item.type === TYPE_FOLDER) {
             this.enterFolder(item);
-        } else if (!itemsAreSelectedAndActionDisabled) {
+        } else if (!item.isActionDisabled) {
             onChooseItems([item]);
         }
         this.setState({ isSelectAllChecked: false });
     };
 
     handleItemNameClick = (event, index) => {
-        const { includeSubfolders } = this.state;
         const { items } = this.props;
-        const item = includeSubfolders ? this.getFoldersOnly()[index] : items[index];
+        const item = items[index];
 
         if (item.isDisabled || item.isLoading) {
             return;
@@ -432,112 +418,17 @@ class ContentExplorer extends Component {
         return result;
     };
 
-    itemsAreLoading = () => {
-        const { items } = this.props;
-        return items && items[0] && items[0].isLoading;
-    };
-
     handleSelectAllClick = async () => {
-        if (this.itemsAreLoading()) {
+        const { items, onSelectedItems } = this.props;
+        if (itemsAreLoading(items)) {
             return;
         }
         const { isSelectAllChecked } = this.state;
         const newSelectedItems = isSelectAllChecked ? this.unselectAll() : this.selectAll();
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: !isSelectAllChecked });
-    };
-
-    shouldSelectAndActionDisableItems = () => {
-        const { folderToDeepScan, foldersPath } = this.state;
-        let result = false;
-
-        if (this.itemsAreLoading()) {
-            return result;
+        if (onSelectedItems) {
+            onSelectedItems(newSelectedItems);
         }
-
-        // Check to see if the folder that was selected for include subfolders is in our current folder path
-        foldersPath.forEach(folder => {
-            if (folder.id === folderToDeepScan.id) {
-                result = true;
-            }
-        });
-
-        return result;
-    };
-
-    shouldDisableAllOtherButtons = () => {
-        const { includeSubfolders } = this.state;
-        return this.numOfSelectedItems() === 1 && includeSubfolders;
-    };
-
-    disableAllOtherItemButtons = itemToKeepId => {
-        const { handleSelectAllTree, items } = this.props;
-
-        if (this.itemsAreLoading()) {
-            return;
-        }
-
-        items.forEach(item => {
-            item.id === itemToKeepId ? (item.isDisabled = false) : (item.isDisabled = true);
-        });
-        this.setState({ allItemsEnabled: false });
-        handleSelectAllTree(itemToKeepId);
-    };
-
-    enableAllItemButtons = () => {
-        const { handleSelectAllTree, items } = this.props;
-        items.forEach(item => {
-            item.isDisabled = false;
-        });
-        this.setState({ allItemsEnabled: true });
-        handleSelectAllTree(null);
-    };
-
-    handleIncludeSubfoldersToggle = () => {
-        const { allItemsEnabled, includeSubfolders, selectedItems } = this.state;
-        const { handleSelectAllTree } = this.props;
-
-        this.setState({ includeSubfolders: !includeSubfolders }, () => {
-            if (this.shouldDisableAllOtherButtons()) {
-                const selectedItem = Object.values(selectedItems)[0];
-                this.setState({ folderToDeepScan: selectedItem }, () => {
-                    if (this.shouldSelectAndActionDisableItems()) {
-                        this.setState({ itemsAreSelectedAndActionDisabled: true });
-                        handleSelectAllTree(selectedItem.id);
-                    } else {
-                        this.disableAllOtherItemButtons(selectedItem.id);
-                    }
-                });
-            } else if (!allItemsEnabled) {
-                this.setState({ folderToDeepScan: {}, itemsAreSelectedAndActionDisabled: false });
-                this.enableAllItemButtons();
-            }
-        });
-    };
-
-    areOtherItemsDisabled = enabledItemId => {
-        const { items } = this.props;
-
-        const result = items.every(item => {
-            if (
-                (item.id !== enabledItemId && !item.isDisabled) ||
-                (item.id === enabledItemId && item.isDisabled) ||
-                item.isLoading
-            ) {
-                return false;
-            }
-            return true;
-        });
-        return result;
-    };
-
-    foldersPresent = () => {
-        const { items } = this.props;
-        for (let i = 0; i < items.length; i += 1) {
-            if (items[i].type === TYPE_FOLDER) {
-                return true;
-            }
-        }
-        return false;
     };
 
     numOfSelectedItems = () => {
@@ -545,27 +436,25 @@ class ContentExplorer extends Component {
         return Object.keys(selectedItems).length;
     };
 
-    noFoldersSelected = () => {
-        const { selectedItems } = this.state;
-        const result = Object.values(selectedItems).every(item => {
-            if (item.type === TYPE_FOLDER) {
-                return false;
-            }
-            return true;
-        });
-        return result;
+    handleIncludeSubfoldersToggle = () => {
+        const { includeSubfolders } = this.state;
+        const { onIncludeSubfoldersToggle } = this.props;
+        this.setState({ includeSubfolders: !includeSubfolders });
+        onIncludeSubfoldersToggle();
     };
 
     includeSubfolderToggleDisabled = () => {
-        const { itemsAreSelectedAndActionDisabled, includeSubfolders } = this.state;
-        const selectedItemIsFolder = this.numOfSelectedItems() === 1 && !this.noFoldersSelected();
-        const selectedItemIsNotFolder = this.numOfSelectedItems() === 1 && this.noFoldersSelected();
+        const { includeSubfolders, selectedItems } = this.state;
+        const { items } = this.props;
+        const selectedItemIsFolder = this.numOfSelectedItems() === 1 && isFolderPresent(Object.values(selectedItems));
+        const selectedItemIsNotFolder =
+            this.numOfSelectedItems() === 1 && !isFolderPresent(Object.values(selectedItems));
 
         return (
-            this.itemsAreLoading() ||
+            itemsAreLoading(items) ||
             (!includeSubfolders &&
-                !(selectedItemIsFolder && !this.foldersPresent()) &&
-                ((!itemsAreSelectedAndActionDisabled && !this.foldersPresent()) ||
+                !(selectedItemIsFolder && !isFolderPresent(items)) &&
+                ((!areAllItemsActionDisabled(items) && !isFolderPresent(items)) ||
                     selectedItemIsNotFolder ||
                     this.numOfSelectedItems() > 1))
         );
@@ -602,7 +491,7 @@ class ContentExplorer extends Component {
             isChooseButtonLoading,
             isCopyButtonLoading,
             isCreateNewFolderAllowed,
-            isIncludeSubfoldersAllowed,
+            canIncludeSubfolders,
             isMoveButtonLoading,
             isResponsive = false,
             isSelectAllAllowed,
@@ -622,14 +511,7 @@ class ContentExplorer extends Component {
             searchInputProps,
             ...rest
         } = this.props;
-        const {
-            isInSearchMode,
-            foldersPath,
-            selectedItems,
-            isSelectAllChecked,
-            includeSubfolders,
-            itemsAreSelectedAndActionDisabled,
-        } = this.state;
+        const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked, includeSubfolders } = this.state;
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
         const currentFolder = this.getCurrentFolder();
         const contentExplorerProps = omit(rest, [
@@ -697,16 +579,16 @@ class ContentExplorer extends Component {
                 >
                     {headerActionsAccessory}
                 </ContentExplorerHeaderActions>
-                {isSelectAllAllowed && isIncludeSubfoldersAllowed ? (
+                {isSelectAllAllowed && canIncludeSubfolders ? (
                     <ContentExplorerIncludeSubfolders
-                        foldersPresent={this.foldersPresent()}
+                        isFolderPresent={isFolderPresent(items)}
                         handleIncludeSubfoldersToggle={this.handleIncludeSubfoldersToggle}
                         handleSelectAllClick={this.handleSelectAllClick}
                         hideSelectAllCheckbox={includeSubfolders}
                         isSelectAllChecked={isSelectAllChecked}
-                        noFoldersSelected={this.noFoldersSelected()}
+                        noFoldersSelected={!isFolderPresent(Object.values(selectedItems))}
                         numOfSelectedItems={this.numOfSelectedItems()}
-                        toggleIsDisabled={this.includeSubfolderToggleDisabled()}
+                        isToggleDisabled={this.includeSubfolderToggleDisabled()}
                     />
                 ) : (
                     isSelectAllAllowed && (
@@ -727,16 +609,11 @@ class ContentExplorer extends Component {
                     itemButtonRenderer={itemButtonRenderer}
                     itemIconRenderer={itemIconRenderer}
                     itemNameLinkRenderer={itemNameLinkRenderer}
-                    items={includeSubfolders && !itemsAreSelectedAndActionDisabled ? this.getFoldersOnly() : items}
-                    itemsAreSelectedAndActionDisabled={itemsAreSelectedAndActionDisabled}
+                    items={items}
                     itemRowRenderer={itemRowRenderer}
                     noItemsRenderer={this.renderItemListEmptyState}
                     numItemsPerPage={numItemsPerPage}
-                    numTotalItems={
-                        includeSubfolders && !itemsAreSelectedAndActionDisabled
-                            ? this.getFoldersOnly().length
-                            : numTotalItems
-                    }
+                    numTotalItems={numTotalItems}
                     onItemClick={this.handleItemClick}
                     onItemDoubleClick={this.handleItemDoubleClick}
                     onItemNameClick={this.handleItemNameClick}

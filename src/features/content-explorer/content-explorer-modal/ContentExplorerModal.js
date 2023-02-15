@@ -13,6 +13,7 @@ import './ContentExplorerModal.scss';
 type Props = {
     additionalColumns?: Array<React.ComponentType<Column>>,
     breadcrumbProps?: BreadcrumbProps,
+    canIncludeSubfolders?: boolean,
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
@@ -21,13 +22,17 @@ type Props = {
     isNoSelectionAllowed?: boolean,
     isOpen?: boolean,
     isResponsive?: boolean,
+    itemButtonRenderer: Function,
     itemRowHeight?: number,
     itemRowRenderer?: Function,
     listHeaderHeight?: number,
     listHeaderRenderer?: Function,
+    onFoldersPath: Function,
+    onIncludeSubfoldersToggle: Function,
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
+    onSelectedItems: Function,
     title?: string,
 };
 

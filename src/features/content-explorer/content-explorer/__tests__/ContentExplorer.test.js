@@ -106,59 +106,59 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.find('ContentExplorerSelectAll').prop('isSelectAllChecked')).toEqual(isSelectAllChecked);
         });
 
-        test('should render ContentExplorerIncludeSubfolders with isIncludeSubfoldersAllowed = true and isSelectAllAllowed = true', () => {
+        test('should render ContentExplorerIncludeSubfolders with canIncludeSubfolders = true and isSelectAllAllowed = true', () => {
             const isSelectAllAllowed = true;
-            const isIncludeSubfoldersAllowed = true;
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed, isSelectAllAllowed });
+            const canIncludeSubfolders = true;
+            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
 
             expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBeTruthy();
         });
 
-        test('should not render ContentExplorerIncludeSubfolders with isIncludeSubfoldersAllowed = false and isSelectAllAllowed = true', () => {
+        test('should not render ContentExplorerIncludeSubfolders with canIncludeSubfolders = false and isSelectAllAllowed = true', () => {
             const isSelectAllAllowed = true;
-            const isIncludeSubfoldersAllowed = false;
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed, isSelectAllAllowed });
+            const canIncludeSubfolders = false;
+            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
 
             expect(wrapper.exists('ContentExplorerSelectAll')).toBeTruthy();
             expect(wrapper.find('ContentExplorerIncludeSubfolders').length).toBe(0);
         });
 
-        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with isIncludeSubfoldersAllowed = true and isSelectAllAllowed = false', () => {
+        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with canIncludeSubfolders = true and isSelectAllAllowed = false', () => {
             const isSelectAllAllowed = false;
-            const isIncludeSubfoldersAllowed = true;
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed, isSelectAllAllowed });
+            const canIncludeSubfolders = true;
+            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
 
             expect(wrapper.find('ContentExplorerSelectAll').length).toBe(0);
             expect(wrapper.find('ContentExplorerIncludeSubfolders').length).toBe(0);
         });
 
-        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with isIncludeSubfoldersAllowed = false and isSelectAllAllowed = false', () => {
+        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with canIncludeSubfolders = false and isSelectAllAllowed = false', () => {
             const isSelectAllAllowed = false;
-            const isIncludeSubfoldersAllowed = false;
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed, isSelectAllAllowed });
+            const canIncludeSubfolders = false;
+            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
 
             expect(wrapper.find('ContentExplorerSelectAll').length).toBe(0);
             expect(wrapper.find('ContentExplorerIncludeSubfolders').length).toBe(0);
         });
 
-        test('should pass foldersPresent to ContentExplorerIncludeSubfolders', () => {
+        test('should pass isFolderPresent to ContentExplorerIncludeSubfolders', () => {
             const items = [
                 { id: 'item1', name: 'name1', type: 'folder' },
                 { id: 'item2', name: 'name2' },
             ];
-            const foldersPresent = true;
+            const isFolderPresent = true;
 
             const wrapper = renderComponent({
-                isIncludeSubfoldersAllowed: true,
+                canIncludeSubfolders: true,
                 isSelectAllAllowed: true,
                 items,
             });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('foldersPresent')).toEqual(foldersPresent);
+            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('isFolderPresent')).toEqual(isFolderPresent);
         });
 
         test('should pass includeSubfolders to ContentExplorerIncludeSubfolders', () => {
             const includeSubfolders = true;
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed: true, isSelectAllAllowed: true });
+            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
             wrapper.setState({ includeSubfolders });
             expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('hideSelectAllCheckbox')).toEqual(
                 includeSubfolders,
@@ -167,7 +167,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
         test('should pass isSelectAllChecked to ContentExplorerIncludeSubfolders', () => {
             const isSelectAllChecked = true;
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed: true, isSelectAllAllowed: true });
+            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
             wrapper.setState({ isSelectAllChecked });
             expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('isSelectAllChecked')).toEqual(
                 isSelectAllChecked,
@@ -181,7 +181,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             };
             const noFoldersSelected = true;
 
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed: true, isSelectAllAllowed: true });
+            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
             wrapper.setState({ selectedItems });
             expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('noFoldersSelected')).toEqual(
                 noFoldersSelected,
@@ -192,7 +192,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const selectedItems = { item1: { id: 'item1', name: 'name1' }, item2: { id: 'item2', name: 'name2' } };
             const numOfSelectedItems = 2;
 
-            const wrapper = renderComponent({ isIncludeSubfoldersAllowed: true, isSelectAllAllowed: true });
+            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
             wrapper.setState({ selectedItems });
             expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('numOfSelectedItems')).toEqual(
                 numOfSelectedItems,
@@ -204,11 +204,11 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const includeSubfolderToggleDisabled = true;
 
             const wrapper = renderComponent({
-                isIncludeSubfoldersAllowed: true,
+                canIncludeSubfolders: true,
                 isSelectAllAllowed: true,
                 items,
             });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('toggleIsDisabled')).toEqual(
+            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('isToggleDisabled')).toEqual(
                 includeSubfolderToggleDisabled,
             );
         });
@@ -825,380 +825,24 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         const item1 = { id: 'item1', name: 'name1', type: 'folder' };
         const selectedItems = { item1 };
 
-        test('should call to disable all other buttons and set folder to deep scan if toggle turned on when in same folder as selected item', () => {
-            const wrapper = renderComponent({ items });
-            const instance = wrapper.instance();
-
-            wrapper.setState({
-                folderToDeepScan: {},
-                includeSubfolders: false,
-                selectedItems,
-            });
-
-            instance.componentDidUpdate = jest.fn();
-            instance.shouldDisableAllOtherButtons = jest.fn().mockReturnValue(true);
-            instance.shouldSelectAndActionDisableItems = jest.fn().mockReturnValueOnce(false);
-            instance.disableAllOtherItemButtons = jest.fn();
-            instance.handleIncludeSubfoldersToggle();
-
-            const { folderToDeepScan } = instance.state;
-            const { includeSubfolders } = instance.state;
-
-            expect(folderToDeepScan).toEqual(item1);
-            expect(includeSubfolders).toEqual(true);
-
-            expect(instance.shouldDisableAllOtherButtons).toHaveBeenCalledTimes(1);
-            expect(instance.shouldSelectAndActionDisableItems).toHaveBeenCalledTimes(1);
-            expect(instance.disableAllOtherItemButtons).toHaveBeenCalledTimes(1);
-        });
-
-        test('should select and action disable all buttons if toggle turned on when inside folder selected for deep scan', () => {
-            const handleSelectAllTree = jest.fn();
-            const wrapper = renderComponent({ items, handleSelectAllTree });
-            const instance = wrapper.instance();
-
-            wrapper.setState({
-                folderToDeepScan: item1,
-                includeSubfolders: false,
-                itemsAreSelectedAndActionDisabled: false,
-                selectedItems,
-            });
-
-            instance.componentDidUpdate = jest.fn();
-            instance.shouldDisableAllOtherButtons = jest.fn().mockReturnValue(true);
-            instance.shouldSelectAndActionDisableItems = jest.fn().mockReturnValue(true);
-            instance.handleSelectAllTree = handleSelectAllTree;
-            instance.handleIncludeSubfoldersToggle();
-
-            const { folderToDeepScan } = instance.state;
-            const { includeSubfolders } = instance.state;
-            const { itemsAreSelectedAndActionDisabled } = instance.state;
-
-            expect(folderToDeepScan).toEqual(item1);
-            expect(includeSubfolders).toEqual(true);
-            expect(itemsAreSelectedAndActionDisabled).toEqual(true);
-
-            expect(instance.shouldDisableAllOtherButtons).toHaveBeenCalledTimes(1);
-            expect(instance.shouldSelectAndActionDisableItems).toHaveBeenCalledTimes(1);
-            expect(instance.handleSelectAllTree).toHaveBeenCalledTimes(1);
-        });
-
         test('should only change includeSubfolders value in state if toggle changed and no items should be affected', () => {
-            const wrapper = renderComponent({ items });
+            const onIncludeSubfoldersToggle = jest.fn();
+            const wrapper = renderComponent({ items, onIncludeSubfoldersToggle });
             const instance = wrapper.instance();
 
             wrapper.setState({
-                allItemsEnabled: false,
-                folderToDeepScan: {},
                 includeSubfolders: false,
-                itemsAreSelectedAndActionDisabled: false,
                 selectedItems,
             });
 
-            instance.componentDidUpdate = jest.fn();
-            instance.shouldDisableAllOtherButtons = jest.fn().mockReturnValue(false);
-            instance.enableAllItemButtons = jest.fn();
+            instance.onIncludeSubfoldersToggle = onIncludeSubfoldersToggle;
             instance.handleIncludeSubfoldersToggle();
 
-            const { folderToDeepScan } = instance.state;
             const { includeSubfolders } = instance.state;
-            const { itemsAreSelectedAndActionDisabled } = instance.state;
-            const { allItemsEnabled } = instance.state;
 
-            expect(folderToDeepScan).toEqual({});
             expect(includeSubfolders).toEqual(true);
-            expect(itemsAreSelectedAndActionDisabled).toEqual(false);
-            expect(allItemsEnabled).toEqual(false);
 
-            expect(instance.shouldDisableAllOtherButtons).toHaveBeenCalledTimes(1);
-            expect(instance.enableAllItemButtons).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    describe('itemsAreLoading()', () => {
-        test('should return true if there are items with the isLoading tag', () => {
-            const wrapper = renderComponent({ items: [{ isLoading: true }] });
-
-            const isLoading = wrapper.instance().itemsAreLoading();
-
-            expect(isLoading).toBe(true);
-        });
-
-        test('should return false if there are no items with the isLoading tag', () => {
-            const wrapper = renderComponent({ items: [{ id: 'item1', name: 'name1' }] });
-
-            const isLoading = wrapper.instance().itemsAreLoading();
-
-            expect(isLoading).toBeFalsy();
-        });
-    });
-
-    describe('getFoldersOnly()', () => {
-        test('should return same items if they have the isLoading tag', () => {
-            const loadingItems = [{ isLoading: true }, { isLoading: true }];
-            const wrapper = renderComponent({ items: loadingItems });
-
-            const resultItems = wrapper.instance().getFoldersOnly();
-
-            expect(resultItems).toBe(loadingItems);
-        });
-
-        test('should return only folder items if they exist', () => {
-            const items = [
-                { id: 'item1', name: 'name1', type: 'folder' },
-                { id: 'item2', name: 'name2', type: 'file' },
-                { id: 'item3', name: 'name3', type: 'folder' },
-            ];
-
-            const wrapper = renderComponent({ items });
-
-            const expectedItems = [
-                { id: 'item1', name: 'name1', type: 'folder' },
-                { id: 'item3', name: 'name3', type: 'folder' },
-            ];
-
-            const resultItems = wrapper.instance().getFoldersOnly();
-
-            expect(resultItems).toStrictEqual(expectedItems);
-            expect(resultItems.length).toBe(2);
-        });
-
-        test('should return empty array if no folder items exist', () => {
-            const items = [
-                { id: 'item1', name: 'name1', type: 'file' },
-                { id: 'item2', name: 'name2', type: 'file' },
-                { id: 'item3', name: 'name3', type: 'file' },
-            ];
-
-            const wrapper = renderComponent({ items });
-
-            const expectedItems = [];
-
-            const resultItems = wrapper.instance().getFoldersOnly();
-
-            expect(resultItems).toStrictEqual(expectedItems);
-            expect(resultItems.length).toBe(0);
-        });
-    });
-
-    describe('shouldSelectAndActionDisableItems()', () => {
-        test('should return false if there are items with the isLoading tag', () => {
-            const wrapper = renderComponent({ items: [{ isLoading: true }] });
-
-            const result = wrapper.instance().shouldSelectAndActionDisableItems();
-
-            expect(result).toBe(false);
-        });
-
-        test('should return false if the folderToDeepScan is not in the foldersPath', () => {
-            const folderToDeepScan = { id: 'item3', name: 'name3', type: 'folder' };
-            const foldersPath = [{ id: 'item1', name: 'name1', type: 'folder' }];
-            const wrapper = renderComponent({ items: [{ id: 'item2', name: 'name2', type: 'folder' }] });
-
-            wrapper.setState({ folderToDeepScan, foldersPath });
-
-            const result = wrapper.instance().shouldSelectAndActionDisableItems();
-
-            expect(result).toBe(false);
-        });
-
-        test('should return true if the folderToDeepScan is in the foldersPath', () => {
-            const folderToDeepScan = { id: 'item3', name: 'name3', type: 'folder' };
-            const foldersPath = [
-                { id: 'item1', name: 'name1', type: 'folder' },
-                { id: 'item3', name: 'name3', type: 'folder' },
-            ];
-            const wrapper = renderComponent({ items: [{ id: 'item2', name: 'name2', type: 'folder' }] });
-
-            wrapper.setState({ folderToDeepScan, foldersPath });
-
-            const result = wrapper.instance().shouldSelectAndActionDisableItems();
-
-            expect(result).toBe(true);
-        });
-    });
-
-    describe('shouldDisableAllOtherButtons()', () => {
-        test('should return true if there is one folder selected and the includeSubfolders tag is true', () => {
-            const wrapper = renderComponent({});
-
-            wrapper.setState({
-                includeSubfolders: true,
-                selectedItems: { item3: { id: 'item3', name: 'name3', type: 'folder' } },
-            });
-
-            const result = wrapper.instance().shouldDisableAllOtherButtons();
-
-            expect(result).toBe(true);
-        });
-
-        test('should return false if there are no items selected', () => {
-            const wrapper = renderComponent({ items: [{ id: 'item1', name: 'name1' }] });
-
-            wrapper.setState({
-                includeSubfolders: true,
-                selectedItems: {},
-            });
-
-            const result = wrapper.instance().shouldDisableAllOtherButtons();
-
-            expect(result).toBe(false);
-        });
-
-        test('should return false if includeSubfolders tag is false', () => {
-            const wrapper = renderComponent({ items: [{ id: 'item1', name: 'name1' }] });
-
-            wrapper.setState({
-                includeSubfolders: false,
-                selectedItems: { item3: { id: 'item3', name: 'name3', type: 'folder' } },
-            });
-
-            const result = wrapper.instance().shouldDisableAllOtherButtons();
-
-            expect(result).toBe(false);
-        });
-    });
-
-    describe('disableAllOtherItemButtons()', () => {
-        test('should set items to disabled and set allItemsEnabled to false', () => {
-            const handleSelectAllTree = jest.fn();
-            const wrapper = renderComponent({
-                items: [{ id: 'item3', name: 'name3', type: 'folder' }],
-                handleSelectAllTree,
-            });
-
-            wrapper.setState({
-                allItemsEnabled: true,
-            });
-
-            const instance = wrapper.instance();
-
-            instance.disableAllOtherItemButtons('item3');
-
-            const { allItemsEnabled } = instance.state;
-
-            const areOtherItemsDisabled = instance.areOtherItemsDisabled('item3');
-
-            expect(allItemsEnabled).toBe(false);
-            expect(areOtherItemsDisabled).toBe(true);
-            expect(handleSelectAllTree).toHaveBeenCalledTimes(1);
-        });
-
-        test('should do nothing if the items are still loading', () => {
-            const wrapper = renderComponent({
-                items: [{ isLoading: true }],
-            });
-
-            wrapper.setState({
-                allItemsEnabled: true,
-            });
-
-            const instance = wrapper.instance();
-
-            instance.disableAllOtherItemButtons('item3');
-
-            const { allItemsEnabled } = instance.state;
-
-            const areOtherItemsDisabled = instance.areOtherItemsDisabled('item3');
-
-            expect(allItemsEnabled).toBe(true);
-            expect(areOtherItemsDisabled).toBe(false);
-        });
-    });
-
-    describe('enableAllItemButtons()', () => {
-        test('should set items to disabled=false and set allItemsEnabled to true', () => {
-            const handleSelectAllTree = jest.fn();
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'folder' },
-                    { id: 'item2', name: 'name2', type: 'folder' },
-                ],
-                handleSelectAllTree,
-            });
-
-            wrapper.setState({
-                allItemsEnabled: false,
-            });
-
-            const instance = wrapper.instance();
-
-            instance.enableAllItemButtons();
-
-            const { allItemsEnabled } = instance.state;
-
-            const areOtherItemsDisabled = instance.areOtherItemsDisabled('item3');
-
-            expect(allItemsEnabled).toBe(true);
-            expect(areOtherItemsDisabled).toBe(false);
-            expect(handleSelectAllTree).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    describe('areOtherItemsDisabled()', () => {
-        test('should return false if all items enabled', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'folder', isDisabled: false },
-                    { id: 'item2', name: 'name2', type: 'folder' },
-                ],
-            });
-
-            const areOtherItemsDisabled = wrapper.instance().areOtherItemsDisabled('item2');
-
-            expect(areOtherItemsDisabled).toBe(false);
-        });
-
-        test('should return true if all other items are disabled', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item1', name: 'name1', type: 'folder', isDisabled: true },
-                    { id: 'item2', name: 'name2', type: 'folder', isDisabled: true },
-                    { id: 'item3', name: 'name3', type: 'folder', isDisabled: false },
-                ],
-            });
-
-            const areOtherItemsDisabled = wrapper.instance().areOtherItemsDisabled('item3');
-
-            expect(areOtherItemsDisabled).toBe(true);
-        });
-
-        test('should return false if items are loading', () => {
-            const wrapper = renderComponent({
-                items: [{ isLoading: true }, { isLoading: true }],
-            });
-
-            const areOtherItemsDisabled = wrapper.instance().areOtherItemsDisabled('item1');
-
-            expect(areOtherItemsDisabled).toBe(false);
-        });
-    });
-
-    describe('foldersPresent()', () => {
-        test('should return false if there are no folder items', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'file' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            const foldersPresent = wrapper.instance().foldersPresent();
-
-            expect(foldersPresent).toBe(false);
-        });
-
-        test('should return true if there are folder items', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'folder' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            const foldersPresent = wrapper.instance().foldersPresent();
-
-            expect(foldersPresent).toBe(true);
+            expect(instance.onIncludeSubfoldersToggle).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -1218,48 +862,6 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const numOfSelectedItems = wrapper.instance().numOfSelectedItems();
 
             expect(numOfSelectedItems).toBe(2);
-        });
-    });
-
-    describe('noFoldersSelected()', () => {
-        test('should return true if none of the selected items are folders', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'file' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: {
-                    item2: { id: 'item2', name: 'name2', type: 'file' },
-                    item3: { id: 'item3', name: 'name3', type: 'file' },
-                },
-            });
-
-            const noFoldersSelected = wrapper.instance().noFoldersSelected();
-
-            expect(noFoldersSelected).toBe(true);
-        });
-
-        test('should return false if there is at least one folder that is selected', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'folder' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: {
-                    item2: { id: 'item2', name: 'name2', type: 'folder' },
-                    item3: { id: 'item3', name: 'name3', type: 'file' },
-                },
-            });
-
-            const noFoldersSelected = wrapper.instance().noFoldersSelected();
-
-            expect(noFoldersSelected).toBe(false);
         });
     });
 
@@ -1327,7 +929,6 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 selectedItems: {
                     item2: { id: 'item1', name: 'name1', type: 'folder' },
                 },
-                itemsAreSelectedAndActionDisabled: true,
             });
 
             const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();

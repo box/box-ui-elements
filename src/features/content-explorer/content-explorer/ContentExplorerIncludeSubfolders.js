@@ -9,14 +9,14 @@ import messages from '../messages';
 import IconInfo from '../../../icons/general/IconInfo';
 
 const ContentExplorerIncludeSubfolders = ({
-    foldersPresent,
+    isFolderPresent,
     handleIncludeSubfoldersToggle,
     handleSelectAllClick,
     hideSelectAllCheckbox,
     isSelectAllChecked,
     noFoldersSelected,
     numOfSelectedItems = 0,
-    toggleIsDisabled,
+    isToggleDisabled,
 }) => {
     const getTooltipMessage = () => {
         if (numOfSelectedItems > 1) {
@@ -25,24 +25,24 @@ const ContentExplorerIncludeSubfolders = ({
         if (numOfSelectedItems === 1 && noFoldersSelected) {
             return <FormattedMessage {...messages.includeSubfoldersNoFoldersSelected} />;
         }
-        if (numOfSelectedItems === 0 && !foldersPresent) {
+        if (numOfSelectedItems === 0 && !isFolderPresent) {
             return <FormattedMessage {...messages.includeSubfoldersNoFoldersToSelect} />;
         }
         return <FormattedMessage {...messages.includeSubfoldersDefaultInformation} />;
     };
 
     return (
-        <div className="content-explorer-include-subfolders-container">
+        <div className="bdl-ContentExplorerIncludeSubfolders">
             <Toggle
-                className="include-subfolders-toggle"
+                className="bdl-ContentExplorerIncludeSubfolders-toggle"
                 label={<FormattedMessage {...messages.includeSubfolders} />}
-                isDisabled={toggleIsDisabled}
+                isDisabled={isToggleDisabled}
                 onChange={handleIncludeSubfoldersToggle}
             />
 
-            <Tooltip className="info-icon-tooltip" text={getTooltipMessage()}>
-                <div className="include-subfolders-info-icon-container">
-                    <IconInfo className="include-subfolders-info-icon" height={20} width={20} />
+            <Tooltip className="bdl-ContentExplorerIncludeSubfolders-info-tooltip" text={getTooltipMessage()}>
+                <div className="bdl-ContentExplorerIncludeSubfolders-icon-container">
+                    <IconInfo className="bdl-ContentExplorerIncludeSubfolders-icon" height={20} width={20} />
                 </div>
             </Tooltip>
 
@@ -50,7 +50,7 @@ const ContentExplorerIncludeSubfolders = ({
                 <Tooltip text={<FormattedMessage {...messages.selectAll} />}>
                     <Checkbox
                         hideLabel
-                        className="content-explorer-include-subfolders-select-all-checkbox"
+                        className="bdl-ContentExplorerIncludeSubfolders-checkbox"
                         onChange={handleSelectAllClick}
                         isChecked={isSelectAllChecked}
                     />
@@ -61,14 +61,14 @@ const ContentExplorerIncludeSubfolders = ({
 };
 
 ContentExplorerIncludeSubfolders.propTypes = {
-    foldersPresent: PropTypes.bool,
+    isFolderPresent: PropTypes.bool,
     handleIncludeSubfoldersToggle: PropTypes.func,
     handleSelectAllClick: PropTypes.func,
     hideSelectAllCheckbox: PropTypes.bool,
     isSelectAllChecked: PropTypes.bool,
     noFoldersSelected: PropTypes.bool,
     numOfSelectedItems: PropTypes.number,
-    toggleIsDisabled: PropTypes.bool,
+    isToggleDisabled: PropTypes.bool,
 };
 export { ContentExplorerIncludeSubfolders as ContentExplorerIncludeSubfoldersBase };
 export default injectIntl(ContentExplorerIncludeSubfolders);

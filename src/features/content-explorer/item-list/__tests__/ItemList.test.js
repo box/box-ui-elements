@@ -78,23 +78,6 @@ describe('features/content-explorer/item-list/ItemList', () => {
             });
         });
 
-        test('should render component with disabled and checked items if itemsAreSelectedAndActionDisabled is true', () => {
-            const items = [
-                { id: '1', name: 'item1' },
-                { id: '2', name: 'item2' },
-                { id: '3', name: 'item3' },
-                { id: '4', name: 'item4' },
-            ];
-            const wrapper = renderComponent({ items, itemsAreSelectedAndActionDisabled: true });
-
-            const rows = wrapper.find('.table-row');
-            rows.forEach((row, i) => {
-                const itemButton = wrapper.find('ItemListButton').at(i);
-                expect(itemButton.prop('isDisabled')).toBeTruthy();
-                expect(itemButton.prop('isChecked')).toBeTruthy();
-            });
-        });
-
         test('should render component with loading items when specified (loading item does not have id or name)', () => {
             const items = [{ isLoading: false, id: '1', name: 'item1' }, { isLoading: true }];
             const wrapper = renderComponent({ items });

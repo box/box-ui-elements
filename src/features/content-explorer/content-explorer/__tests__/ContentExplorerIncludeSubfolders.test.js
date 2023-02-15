@@ -19,12 +19,12 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             const handleIncludeSubfoldersToggle = jest.fn();
             const handleSelectAllClick = jest.fn();
             const isSelectAllChecked = false;
-            const toggleIsDisabled = true;
+            const isToggleDisabled = true;
             wrapper.setProps({
                 handleIncludeSubfoldersToggle,
                 handleSelectAllClick,
                 isSelectAllChecked,
-                toggleIsDisabled,
+                isToggleDisabled,
             });
             const checkbox = wrapper.find('Checkbox');
             const toggle = wrapper.find('Toggle');
@@ -33,7 +33,7 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             expect(checkbox.prop('onChange')).toEqual(handleSelectAllClick);
             expect(toggle.prop('onChange')).toEqual(handleIncludeSubfoldersToggle);
             expect(checkbox.prop('isChecked')).toEqual(isSelectAllChecked);
-            expect(toggle.prop('isDisabled')).toEqual(toggleIsDisabled);
+            expect(toggle.prop('isDisabled')).toEqual(isToggleDisabled);
         });
 
         test('should render toggle label correctly', () => {
@@ -83,9 +83,9 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
 
         test('should render the correct info icon Tooltip when there are no folders present and we have not selected anything yet', () => {
             const wrapper = renderComponent();
-            const foldersPresent = false;
+            const isFolderPresent = false;
             const numOfSelectedItems = 0;
-            wrapper.setProps({ foldersPresent, numOfSelectedItems });
+            wrapper.setProps({ isFolderPresent, numOfSelectedItems });
 
             const toggleTooltip = wrapper.find('Tooltip').at(0);
 

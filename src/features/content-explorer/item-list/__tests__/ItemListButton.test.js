@@ -45,7 +45,7 @@ describe('features/content-explorer/item-list/ItemListButton', () => {
             });
 
             test('should render component with isChecked when specified', () => {
-                const wrapper = renderComponent({ isSelected: true });
+                const wrapper = renderComponent({ isChecked: true });
 
                 if (contentExplorerMode === ContentExplorerMode.MULTI_SELECT) {
                     expect(wrapper.find(buttonType).prop('isChecked')).toBe(true);
