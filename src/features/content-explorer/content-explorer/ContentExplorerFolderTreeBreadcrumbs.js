@@ -20,7 +20,7 @@ import {
 
 const ContentExplorerFolderTreeBreadcrumbs = ({
     foldersPath,
-    hideFolderTreeButton,
+    isFolderTreeButtonHidden,
     intl: { formatMessage, formatNumber },
     isFolderTreeButtonDisabled = false,
     numTotalItems,
@@ -30,38 +30,37 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
     const foldersPathWithoutLast = foldersPath.slice(0, -1);
     return (
         <div className="bdl-ContentExplorerFolderTreeBreadcrumbs">
-            {!hideFolderTreeButton && (
-                <div className="bdl-ContentExplorerFolderTreeBreadcrumbs-dropdown-icon-container">
-                    <DropdownMenu>
-                        <Button
-                            aria-label={formatMessage(messages.clickToViewPath)}
-                            className="bdl-ContentExplorerFolderTreeBreadcrumbs-button"
-                            isDisabled={isFolderTreeButtonDisabled}
-                            title={formatMessage(messages.filePath)}
-                            type="button"
-                        >
-                            <IconFolderTree height={FOLDER_TREE_ICON_HEIGHT} width={FOLDER_TREE_ICON_WIDTH} />
-                        </Button>
-                        <Menu>
-                            {foldersPathWithoutLast.map((folder, i) => (
-                                <MenuItem
-                                    data-testid="folder-tree-item"
-                                    key={folder.id}
-                                    onClick={event => onBreadcrumbClick(i, event)}
-                                >
-                                    {folder.name}
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </DropdownMenu>
-
-                    <Arrow16
-                        className="bdl-ContentExplorerFolderTreeBreadcrumbs-icon"
-                        height={BREADCRUMB_ARROW_ICON_HEIGHT}
-                        width={BREADCRUMB_ARROW_ICON_WIDTH}
-                        viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
-                    />
-                </div>
+            {!isFolderTreeButtonHidden && (
+                <DropdownMenu>
+                    <Button
+                        aria-label={formatMessage(messages.clickToViewPath)}
+                        className="bdl-ContentExplorerFolderTreeBreadcrumbs-button"
+                        isDisabled={isFolderTreeButtonDisabled}
+                        title={formatMessage(messages.filePath)}
+                        type="button"
+                    >
+                        <IconFolderTree height={FOLDER_TREE_ICON_HEIGHT} width={FOLDER_TREE_ICON_WIDTH} />
+                    </Button>
+                    <Menu>
+                        {foldersPathWithoutLast.map((folder, i) => (
+                            <MenuItem
+                                data-testid="folder-tree-item"
+                                key={folder.id}
+                                onClick={event => onBreadcrumbClick(i, event)}
+                            >
+                                {folder.name}
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                </DropdownMenu>
+            )}
+            {!isFolderTreeButtonHidden && (
+                <Arrow16
+                    className="bdl-ContentExplorerFolderTreeBreadcrumbs-icon"
+                    height={BREADCRUMB_ARROW_ICON_HEIGHT}
+                    width={BREADCRUMB_ARROW_ICON_WIDTH}
+                    viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
+                />
             )}
             <span className="bdl-ContentExplorerFolderTreeBreadcrumbs-text" title={currentFolderName}>
                 <FormattedMessage
@@ -75,7 +74,7 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
 
 ContentExplorerFolderTreeBreadcrumbs.propTypes = {
     foldersPath: FoldersPathPropType.isRequired,
-    hideFolderTreeButton: PropTypes.bool,
+    isFolderTreeButtonHidden: PropTypes.bool,
     intl: PropTypes.any,
     isFolderTreeButtonDisabled: PropTypes.bool,
     numTotalItems: PropTypes.number.isRequired,

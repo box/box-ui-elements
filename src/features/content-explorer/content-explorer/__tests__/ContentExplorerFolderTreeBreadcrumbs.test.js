@@ -24,7 +24,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
             const wrapper = renderComponent({ foldersPath });
 
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs').length).toBe(1);
-            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-dropdown-icon-container').length).toBe(1);
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').length).toBe(1);
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-icon').length).toBe(1);
             expect(wrapper.find('IconFolderTree').length).toBe(1);
@@ -47,16 +46,15 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').prop('isDisabled')).toBe(true);
         });
 
-        test('should not render button nor icon when hideFolderTreeButton is true', () => {
+        test('should not render button nor icon when isFolderTreeButtonHidden is true', () => {
             const foldersPath = [
                 { id: '0', name: 'folder1' },
                 { id: '1', name: 'folder2' },
                 { id: '2', name: 'folder3' },
             ];
-            const wrapper = renderComponent({ foldersPath, hideFolderTreeButton: true });
+            const wrapper = renderComponent({ foldersPath, isFolderTreeButtonHidden: true });
 
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs').length).toBe(1);
-            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-dropdown-icon-container').length).toBe(0);
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').length).toBe(0);
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-icon').length).toBe(0);
             expect(wrapper.find('IconFolderTree').length).toBe(0);

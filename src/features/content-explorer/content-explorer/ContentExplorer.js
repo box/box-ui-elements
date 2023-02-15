@@ -31,6 +31,8 @@ class ContentExplorer extends Component {
         breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
         cancelButtonProps: PropTypes.object,
+        /** Whether the user can see the Include Subfolders toggle */
+        canIncludeSubfolders: PropTypes.bool,
         /** Props for the choose button */
         chooseButtonProps: PropTypes.object,
         /** Custom text for the choose button */
@@ -45,8 +47,6 @@ class ContentExplorer extends Component {
         hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
-        /** Whether the user can see the Include Subfolders toggle */
-        canIncludeSubfolders: PropTypes.bool,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
