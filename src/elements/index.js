@@ -1,5 +1,6 @@
 // @flow
 
+export { default as ContentAnswers } from './content-answers';
 export { default as ContentExplorer } from './content-explorer';
 export { default as ContentPreview } from './content-preview';
 export { default as ContentPicker, ContentPickerPopup } from './content-picker';
