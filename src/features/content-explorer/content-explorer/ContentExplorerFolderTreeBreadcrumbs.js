@@ -20,42 +20,49 @@ import {
 
 const ContentExplorerFolderTreeBreadcrumbs = ({
     foldersPath,
+    hideFolderTreeButton,
     intl: { formatMessage, formatNumber },
     isFolderTreeButtonDisabled = false,
     numTotalItems,
     onBreadcrumbClick,
 }) => {
     const currentFolderName = foldersPath[foldersPath.length - 1].name;
+    const foldersPathWithoutLast = foldersPath.slice(0, -1);
     return (
         <div className="bdl-ContentExplorerFolderTreeBreadcrumbs">
-            <DropdownMenu>
-                <Button
-                    aria-label={formatMessage(messages.clickToViewPath)}
-                    className="bdl-ContentExplorerFolderTreeBreadcrumbs-button"
-                    isDisabled={isFolderTreeButtonDisabled}
-                    title={formatMessage(messages.filePath)}
-                    type="button"
-                >
-                    <IconFolderTree height={FOLDER_TREE_ICON_HEIGHT} width={FOLDER_TREE_ICON_WIDTH} />
-                </Button>
-                <Menu>
-                    {foldersPath.map((folder, i) => (
-                        <MenuItem
-                            data-testid="folder-tree-item"
-                            key={folder.id}
-                            onClick={event => onBreadcrumbClick(i, event)}
+            {!hideFolderTreeButton && (
+                <div className="bdl-ContentExplorerFolderTreeBreadcrumbs-dropdown-icon-container">
+                    <DropdownMenu>
+                        <Button
+                            aria-label={formatMessage(messages.clickToViewPath)}
+                            className="bdl-ContentExplorerFolderTreeBreadcrumbs-button"
+                            isDisabled={isFolderTreeButtonDisabled}
+                            title={formatMessage(messages.filePath)}
+                            type="button"
                         >
-                            {folder.name}
-                        </MenuItem>
-                    ))}
-                </Menu>
-            </DropdownMenu>
-            <Arrow16
-                className="bdl-ContentExplorerFolderTreeBreadcrumbs-icon"
-                height={BREADCRUMB_ARROW_ICON_HEIGHT}
-                width={BREADCRUMB_ARROW_ICON_WIDTH}
-                viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
-            />
+                            <IconFolderTree height={FOLDER_TREE_ICON_HEIGHT} width={FOLDER_TREE_ICON_WIDTH} />
+                        </Button>
+                        <Menu>
+                            {foldersPathWithoutLast.map((folder, i) => (
+                                <MenuItem
+                                    data-testid="folder-tree-item"
+                                    key={folder.id}
+                                    onClick={event => onBreadcrumbClick(i, event)}
+                                >
+                                    {folder.name}
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    </DropdownMenu>
+
+                    <Arrow16
+                        className="bdl-ContentExplorerFolderTreeBreadcrumbs-icon"
+                        height={BREADCRUMB_ARROW_ICON_HEIGHT}
+                        width={BREADCRUMB_ARROW_ICON_WIDTH}
+                        viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
+                    />
+                </div>
+            )}
             <span className="bdl-ContentExplorerFolderTreeBreadcrumbs-text" title={currentFolderName}>
                 <FormattedMessage
                     {...messages.folderTreeBreadcrumbsText}
@@ -68,6 +75,7 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
 
 ContentExplorerFolderTreeBreadcrumbs.propTypes = {
     foldersPath: FoldersPathPropType.isRequired,
+    hideFolderTreeButton: PropTypes.bool,
     intl: PropTypes.any,
     isFolderTreeButtonDisabled: PropTypes.bool,
     numTotalItems: PropTypes.number.isRequired,

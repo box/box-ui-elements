@@ -24,10 +24,43 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
             const wrapper = renderComponent({ foldersPath });
 
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs').length).toBe(1);
+            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-dropdown-icon-container').length).toBe(1);
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').length).toBe(1);
             expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-icon').length).toBe(1);
             expect(wrapper.find('IconFolderTree').length).toBe(1);
             expect(wrapper.find('DropdownMenu').length).toBe(1);
+
+            const lastBreadcrumb = wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-text');
+
+            expect(lastBreadcrumb.length).toBe(1);
+            expect(lastBreadcrumb.prop('title')).toBe(foldersPath[foldersPath.length - 1].name);
+
+            const breadcrumbTextId = lastBreadcrumb.find('FormattedMessage').prop('id');
+
+            expect(breadcrumbTextId).toBe('boxui.contentExplorer.folderTreeBreadcrumbsText');
+        });
+
+        test('should render disabled folder tree button when isFolderTreeButtonDisabled is true', () => {
+            const foldersPath = [{ id: '0', name: 'folder1' }];
+            const wrapper = renderComponent({ isFolderTreeButtonDisabled: true, foldersPath });
+
+            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').prop('isDisabled')).toBe(true);
+        });
+
+        test('should not render button nor icon when hideFolderTreeButton is true', () => {
+            const foldersPath = [
+                { id: '0', name: 'folder1' },
+                { id: '1', name: 'folder2' },
+                { id: '2', name: 'folder3' },
+            ];
+            const wrapper = renderComponent({ foldersPath, hideFolderTreeButton: true });
+
+            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs').length).toBe(1);
+            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-dropdown-icon-container').length).toBe(0);
+            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').length).toBe(0);
+            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-icon').length).toBe(0);
+            expect(wrapper.find('IconFolderTree').length).toBe(0);
+            expect(wrapper.find('DropdownMenu').length).toBe(0);
 
             const lastBreadcrumb = wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-text');
 

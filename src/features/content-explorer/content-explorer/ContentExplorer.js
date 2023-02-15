@@ -45,7 +45,7 @@ class ContentExplorer extends Component {
         hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
-        /** Whether the user can see the Include Subfolders toggle with breadcrumb updated design */
+        /** Whether the user can see the Include Subfolders toggle */
         canIncludeSubfolders: PropTypes.bool,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
