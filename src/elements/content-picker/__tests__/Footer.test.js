@@ -25,6 +25,16 @@ describe('elements/content-picker/Footer', () => {
             expect(wrapper.find('.footer-child').length).toBe(1);
         });
 
+        test('should render footer with disabled button', () => {
+            const buttons = getWrapper().find('Button');
+            const chooseButton = buttons.at(1);
+
+            // https://www.w3.org/WAI/ARIA/apg/patterns/button/
+            // When the action associated with a button is unavailable, the button has aria-disabled set to true.
+            expect(chooseButton.html().includes('aria-disabled')).toBe(true);
+            expect(chooseButton.prop('disabled')).toBe(true);
+        });
+
         test('should render Footer buttons with aria-label', () => {
             const buttons = getWrapper().find('Button');
 
