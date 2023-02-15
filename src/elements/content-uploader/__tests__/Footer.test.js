@@ -47,13 +47,13 @@ describe('elements/content-uploader/Footer', () => {
 
     test.each`
         hasFiles | isDisabled
-        ${true}  | ${false}
-        ${false} | ${true}
+        ${true}  | ${true}
+        ${false} | ${false}
     `('close button disabled props should be $isDisabled when hasFiles is $hasFiles', ({ hasFiles, isDisabled }) => {
         const wrapper = getWrapper({ hasFiles, onClose: noop });
-        const uploadButton = wrapper.find(PrimaryButton).at(0);
+        const closeButton = wrapper.find(Button).at(0);
 
-        expect(uploadButton.prop('disabled')).toBe(isDisabled);
-        expect(uploadButton.prop('isDisabled')).toBe(isDisabled);
+        expect(closeButton.prop('disabled')).toBe(isDisabled);
+        expect(closeButton.prop('isDisabled')).toBe(isDisabled);
     });
 });
