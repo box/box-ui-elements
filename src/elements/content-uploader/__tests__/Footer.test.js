@@ -1,9 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import noop from 'lodash/noop';
+import Footer from '../Footer';
 import Button from '../../../components/button/Button';
 import PrimaryButton from '../../../components/primary-button/PrimaryButton';
-import Footer from '../Footer';
 
 describe('elements/content-uploader/Footer', () => {
     const defaultProps = {
