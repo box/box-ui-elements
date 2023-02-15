@@ -20,8 +20,8 @@ import {
 
 const ContentExplorerFolderTreeBreadcrumbs = ({
     foldersPath,
-    isFolderTreeButtonHidden,
     intl: { formatMessage, formatNumber },
+    isFolderTreeButtonHidden,
     isFolderTreeButtonDisabled = false,
     numTotalItems,
     onBreadcrumbClick,
@@ -74,8 +74,8 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
 
 ContentExplorerFolderTreeBreadcrumbs.propTypes = {
     foldersPath: FoldersPathPropType.isRequired,
-    isFolderTreeButtonHidden: PropTypes.bool,
     intl: PropTypes.any,
+    isFolderTreeButtonHidden: PropTypes.bool,
     isFolderTreeButtonDisabled: PropTypes.bool,
     numTotalItems: PropTypes.number.isRequired,
     onBreadcrumbClick: PropTypes.func,
