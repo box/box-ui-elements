@@ -49,7 +49,7 @@ describe('elements/content-uploader/Footer', () => {
         hasFiles | isDisabled
         ${true}  | ${false}
         ${false} | ${true}
-    `('onClose button disabled props should be $isDisabled when hasFiles is $hasFiles', ({ hasFiles, isDisabled }) => {
+    `('close button disabled props should be $isDisabled when hasFiles is $hasFiles', ({ hasFiles, isDisabled }) => {
         const wrapper = getWrapper({ hasFiles, onClose: noop });
         const uploadButton = wrapper.find(PrimaryButton).at(0);
 
