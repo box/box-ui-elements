@@ -17,6 +17,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
         },
       ]
     }
+    numTotalItems={100}
     onEnterFolder={[Function]}
     onExitSearch={[Function]}
     onFoldersPathUpdated={[Function]}
