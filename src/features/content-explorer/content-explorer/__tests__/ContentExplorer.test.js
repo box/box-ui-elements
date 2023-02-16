@@ -106,111 +106,31 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.find('ContentExplorerSelectAll').prop('isSelectAllChecked')).toEqual(isSelectAllChecked);
         });
 
-        test('should render ContentExplorerIncludeSubfolders with canIncludeSubfolders = true and isSelectAllAllowed = true', () => {
-            const isSelectAllAllowed = true;
-            const canIncludeSubfolders = true;
-            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
+        test('should render ContentExplorerIncludeSubfolders with onIncludeSubfoldersToggle = true and isSelectAllAllowed = true', () => {
+            const wrapper = renderComponent({ onIncludeSubfoldersToggle: jest.fn(), isSelectAllAllowed: true });
 
-            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBeTruthy();
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(true);
         });
 
-        test('should not render ContentExplorerIncludeSubfolders with canIncludeSubfolders = false and isSelectAllAllowed = true', () => {
-            const isSelectAllAllowed = true;
-            const canIncludeSubfolders = false;
-            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
+        test('should not render ContentExplorerIncludeSubfolders without onIncludeSubfoldersToggle and isSelectAllAllowed = true', () => {
+            const wrapper = renderComponent({ isSelectAllAllowed: true });
 
-            expect(wrapper.exists('ContentExplorerSelectAll')).toBeTruthy();
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').length).toBe(0);
+            expect(wrapper.exists('ContentExplorerSelectAll')).toBe(true);
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
         });
 
-        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with canIncludeSubfolders = true and isSelectAllAllowed = false', () => {
-            const isSelectAllAllowed = false;
-            const canIncludeSubfolders = true;
-            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
+        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with onIncludeSubfoldersToggle and isSelectAllAllowed = false', () => {
+            const wrapper = renderComponent({ onIncludeSubfoldersToggle: jest.fn(), isSelectAllAllowed: false });
 
-            expect(wrapper.find('ContentExplorerSelectAll').length).toBe(0);
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').length).toBe(0);
+            expect(wrapper.exists('ContentExplorerSelectAll')).toBe(false);
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
         });
 
-        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with canIncludeSubfolders = false and isSelectAllAllowed = false', () => {
-            const isSelectAllAllowed = false;
-            const canIncludeSubfolders = false;
-            const wrapper = renderComponent({ canIncludeSubfolders, isSelectAllAllowed });
+        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll without onIncludeSubfoldersToggle and isSelectAllAllowed = false', () => {
+            const wrapper = renderComponent({ isSelectAllAllowed: false });
 
-            expect(wrapper.find('ContentExplorerSelectAll').length).toBe(0);
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').length).toBe(0);
-        });
-
-        test('should pass isFolderPresent to ContentExplorerIncludeSubfolders', () => {
-            const items = [
-                { id: 'item1', name: 'name1', type: 'folder' },
-                { id: 'item2', name: 'name2' },
-            ];
-            const isFolderPresent = true;
-
-            const wrapper = renderComponent({
-                canIncludeSubfolders: true,
-                isSelectAllAllowed: true,
-                items,
-            });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('isFolderPresent')).toEqual(isFolderPresent);
-        });
-
-        test('should pass includeSubfolders to ContentExplorerIncludeSubfolders', () => {
-            const includeSubfolders = true;
-            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
-            wrapper.setState({ includeSubfolders });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('hideSelectAllCheckbox')).toEqual(
-                includeSubfolders,
-            );
-        });
-
-        test('should pass isSelectAllChecked to ContentExplorerIncludeSubfolders', () => {
-            const isSelectAllChecked = true;
-            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
-            wrapper.setState({ isSelectAllChecked });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('isSelectAllChecked')).toEqual(
-                isSelectAllChecked,
-            );
-        });
-
-        test('should pass noFoldersSelected to ContentExplorerIncludeSubfolders', () => {
-            const selectedItems = {
-                item1: { id: 'item1', name: 'name1', type: 'file' },
-                item2: { id: 'item2', name: 'name2' },
-            };
-            const noFoldersSelected = true;
-
-            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
-            wrapper.setState({ selectedItems });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('noFoldersSelected')).toEqual(
-                noFoldersSelected,
-            );
-        });
-
-        test('should pass numOfSelectedItems to ContentExplorerIncludeSubfolders', () => {
-            const selectedItems = { item1: { id: 'item1', name: 'name1' }, item2: { id: 'item2', name: 'name2' } };
-            const numOfSelectedItems = 2;
-
-            const wrapper = renderComponent({ canIncludeSubfolders: true, isSelectAllAllowed: true });
-            wrapper.setState({ selectedItems });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('numOfSelectedItems')).toEqual(
-                numOfSelectedItems,
-            );
-        });
-
-        test('should pass includeSubfolderToggleDisabled to ContentExplorerIncludeSubfolders', () => {
-            const items = [{ isLoading: true }, { isLoading: true }];
-            const includeSubfolderToggleDisabled = true;
-
-            const wrapper = renderComponent({
-                canIncludeSubfolders: true,
-                isSelectAllAllowed: true,
-                items,
-            });
-            expect(wrapper.find('ContentExplorerIncludeSubfolders').prop('isToggleDisabled')).toEqual(
-                includeSubfolderToggleDisabled,
-            );
+            expect(wrapper.exists('ContentExplorerSelectAll')).toBe(false);
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
         });
 
         test("customInput should be false if the props isn't passed down", () => {
@@ -825,22 +745,22 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         const item1 = { id: 'item1', name: 'name1', type: 'folder' };
         const selectedItems = { item1 };
 
-        test('should only change includeSubfolders value in state if toggle changed and no items should be affected', () => {
+        test('should only change isIncludeSubfoldersEnabled value in state if toggle changed and no items should be affected', () => {
             const onIncludeSubfoldersToggle = jest.fn();
             const wrapper = renderComponent({ items, onIncludeSubfoldersToggle });
             const instance = wrapper.instance();
 
             wrapper.setState({
-                includeSubfolders: false,
+                isIncludeSubfoldersEnabled: false,
                 selectedItems,
             });
 
             instance.onIncludeSubfoldersToggle = onIncludeSubfoldersToggle;
             instance.handleIncludeSubfoldersToggle();
 
-            const { includeSubfolders } = instance.state;
+            const { isIncludeSubfoldersEnabled } = instance.state;
 
-            expect(includeSubfolders).toEqual(true);
+            expect(isIncludeSubfoldersEnabled).toEqual(true);
 
             expect(instance.onIncludeSubfoldersToggle).toHaveBeenCalledTimes(1);
         });
@@ -889,7 +809,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                     item2: { id: 'item2', name: 'name2', type: 'folder' },
                     item3: { id: 'item3', name: 'name3', type: 'file' },
                 },
-                includeSubfolders: true,
+                isIncludeSubfoldersEnabled: true,
             });
 
             const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
@@ -909,7 +829,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 selectedItems: {
                     item2: { id: 'item1', name: 'name1', type: 'folder' },
                 },
-                includeSubfolders: false,
+                isIncludeSubfoldersEnabled: false,
             });
 
             const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
@@ -948,7 +868,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 selectedItems: {
                     item2: { id: 'item2', name: 'name2', type: 'file' },
                 },
-                includeSubfolders: false,
+                isIncludeSubfoldersEnabled: false,
             });
 
             const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
@@ -969,7 +889,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                     item2: { id: 'item2', name: 'name2', type: 'file' },
                     item1: { id: 'item1', name: 'name1', type: 'folder' },
                 },
-                includeSubfolders: false,
+                isIncludeSubfoldersEnabled: false,
             });
 
             const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();

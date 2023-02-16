@@ -92,27 +92,29 @@
     }
 
     .bdl-ContentExplorerIncludeSubfolders {
-        display: inline-block;
-        width: 100%;
-        height: 8 * $bdl-grid-unit;
-        vertical-align: middle;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 10 * $bdl-grid-unit;
+        margin-top: 20px;
+        margin-bottom: -10px;
 
-        .bdl-ContentExplorerIncludeSubfolders-toggle {
-            display: block;
-            float: left;
+        .bdl-ContentExplorerIncludeSubfolders-toggleIconContainer {
+            display: flex;
+            align-items: center;
         }
 
-        .bdl-ContentExplorerIncludeSubfolders-icon-container {
-            display: inline-block;
-            margin-left: 118px;
-            padding: 3;
-            vertical-align: middle;
+        .bdl-ContentExplorerIncludeSubfolders-icon {
+            margin-bottom: 20px;
+            margin-left: 120px;
+        }
+
+        .bdl-ContentExplorerIncludeSubfolders-icon path {
+            fill: $bdl-box-blue;
         }
 
         .bdl-ContentExplorerIncludeSubfolders-checkbox {
-            float: right;
             margin-right: 4.45 * $bdl-grid-unit;
-            vertical-align: middle;
         }
     }
 

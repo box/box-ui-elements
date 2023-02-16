@@ -86,19 +86,16 @@ const itemNameCellRenderer = rendererParams => {
     );
 };
 
-const renderItemListButton = (contentExplorerMode, id, isActionDisabled, isDisabled, name, selectedItems) => {
-    return (
-        name && (
-            <ItemListButton
-                contentExplorerMode={contentExplorerMode}
-                id={id}
-                isDisabled={isActionDisabled}
-                isSelected={isItemSelected(id, selectedItems)}
-                name={name}
-            />
-        )
+const renderItemListButton = (contentExplorerMode, id, isActionDisabled, isDisabled, name, selectedItems) =>
+    name && (
+        <ItemListButton
+            contentExplorerMode={contentExplorerMode}
+            id={id}
+            isDisabled={isActionDisabled}
+            isSelected={isItemSelected(id, selectedItems)}
+            name={name}
+        />
     );
-};
 
 const itemButtonCellRenderer = rendererParams => {
     const {

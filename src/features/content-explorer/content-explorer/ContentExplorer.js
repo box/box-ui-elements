@@ -14,7 +14,7 @@ import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from 
 import ContentExplorerModes from '../modes';
 
 import { TYPE_FOLDER } from '../../../constants';
-import { areAllItemsActionDisabled, isFolderPresent, itemsAreLoading } from './constants';
+import { areAllItemsActionDisabled, isFolderPresent, isLoadingItems } from './utils';
 
 import './ContentExplorer.scss';
 
@@ -33,8 +33,6 @@ class ContentExplorer extends Component {
         breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
         cancelButtonProps: PropTypes.object,
-        /** Whether the user can see the Include Subfolders toggle */
-        canIncludeSubfolders: PropTypes.bool,
         /** Props for the choose button */
         chooseButtonProps: PropTypes.object,
         /** Custom text for the choose button */
@@ -47,8 +45,6 @@ class ContentExplorer extends Component {
         customInput: PropTypes.func,
         /** Whether the user can see the breadcrumbs represented with the folder tree button */
         hasFolderTreeBreadcrumbs: PropTypes.bool,
-        /** Called when a user selects a folder to include subfolders for */
-        handleSelectAllTree: PropTypes.func,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Initial path of folders. The last folder in the array is the current folder. */
@@ -156,6 +152,8 @@ class ContentExplorer extends Component {
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
+        /** Message to show for the tooltip for the include subfolders toggle */
+        tooltipMessageForToggle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -173,7 +171,7 @@ class ContentExplorer extends Component {
             foldersPath: props.initialFoldersPath,
             isInSearchMode: false,
             isSelectAllChecked: false,
-            includeSubfolders: false,
+            isIncludeSubfoldersEnabled: false,
         };
     }
 
@@ -420,7 +418,7 @@ class ContentExplorer extends Component {
 
     handleSelectAllClick = async () => {
         const { items, onSelectedItems } = this.props;
-        if (itemsAreLoading(items)) {
+        if (isLoadingItems(items)) {
             return;
         }
         const { isSelectAllChecked } = this.state;
@@ -437,22 +435,21 @@ class ContentExplorer extends Component {
     };
 
     handleIncludeSubfoldersToggle = () => {
-        const { includeSubfolders } = this.state;
+        const { isIncludeSubfoldersEnabled } = this.state;
         const { onIncludeSubfoldersToggle } = this.props;
-        this.setState({ includeSubfolders: !includeSubfolders });
+        this.setState({ isIncludeSubfoldersEnabled: !isIncludeSubfoldersEnabled });
         onIncludeSubfoldersToggle();
     };
 
     includeSubfolderToggleDisabled = () => {
-        const { includeSubfolders, selectedItems } = this.state;
+        const { isIncludeSubfoldersEnabled, selectedItems } = this.state;
         const { items } = this.props;
         const selectedItemIsFolder = this.numOfSelectedItems() === 1 && isFolderPresent(Object.values(selectedItems));
         const selectedItemIsNotFolder =
             this.numOfSelectedItems() === 1 && !isFolderPresent(Object.values(selectedItems));
-
         return (
-            itemsAreLoading(items) ||
-            (!includeSubfolders &&
+            isLoadingItems(items) ||
+            (!isIncludeSubfoldersEnabled &&
                 !(selectedItemIsFolder && !isFolderPresent(items)) &&
                 ((!areAllItemsActionDisabled(items) && !isFolderPresent(items)) ||
                     selectedItemIsNotFolder ||
@@ -491,7 +488,6 @@ class ContentExplorer extends Component {
             isChooseButtonLoading,
             isCopyButtonLoading,
             isCreateNewFolderAllowed,
-            canIncludeSubfolders,
             isMoveButtonLoading,
             isResponsive = false,
             isSelectAllAllowed,
@@ -499,6 +495,7 @@ class ContentExplorer extends Component {
             numItemsPerPage,
             numTotalItems,
             onLoadMoreItems,
+            onIncludeSubfoldersToggle,
             itemIconRenderer,
             itemNameLinkRenderer,
             itemButtonRenderer,
@@ -509,9 +506,16 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
+            tooltipMessageForToggle,
             ...rest
         } = this.props;
-        const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked, includeSubfolders } = this.state;
+        const {
+            isInSearchMode,
+            foldersPath,
+            selectedItems,
+            isSelectAllChecked,
+            isIncludeSubfoldersEnabled,
+        } = this.state;
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
         const currentFolder = this.getCurrentFolder();
         const contentExplorerProps = omit(rest, [
@@ -579,16 +583,14 @@ class ContentExplorer extends Component {
                 >
                     {headerActionsAccessory}
                 </ContentExplorerHeaderActions>
-                {isSelectAllAllowed && canIncludeSubfolders ? (
+                {onIncludeSubfoldersToggle && isSelectAllAllowed ? (
                     <ContentExplorerIncludeSubfolders
-                        isFolderPresent={isFolderPresent(items)}
-                        handleIncludeSubfoldersToggle={this.handleIncludeSubfoldersToggle}
-                        handleSelectAllClick={this.handleSelectAllClick}
-                        hideSelectAllCheckbox={includeSubfolders}
+                        hideSelectAllCheckbox={isIncludeSubfoldersEnabled}
                         isSelectAllChecked={isSelectAllChecked}
-                        noFoldersSelected={!isFolderPresent(Object.values(selectedItems))}
-                        numOfSelectedItems={this.numOfSelectedItems()}
+                        onIncludeSubfoldersToggle={this.handleIncludeSubfoldersToggle}
+                        onSelectAllClick={this.handleSelectAllClick}
                         isToggleDisabled={this.includeSubfolderToggleDisabled()}
+                        tooltipMessageForToggle={tooltipMessageForToggle}
                     />
                 ) : (
                     isSelectAllAllowed && (

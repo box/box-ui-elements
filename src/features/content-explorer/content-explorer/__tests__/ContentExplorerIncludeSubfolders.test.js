@@ -16,13 +16,13 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
     describe('render()', () => {
         test('should render the default component', () => {
             const wrapper = renderComponent();
-            const handleIncludeSubfoldersToggle = jest.fn();
-            const handleSelectAllClick = jest.fn();
+            const onIncludeSubfoldersToggle = jest.fn();
+            const onSelectAllClick = jest.fn();
             const isSelectAllChecked = false;
             const isToggleDisabled = true;
             wrapper.setProps({
-                handleIncludeSubfoldersToggle,
-                handleSelectAllClick,
+                onIncludeSubfoldersToggle,
+                onSelectAllClick,
                 isSelectAllChecked,
                 isToggleDisabled,
             });
@@ -30,8 +30,8 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             const toggle = wrapper.find('Toggle');
 
             expect(wrapper.is('div')).toBe(true);
-            expect(checkbox.prop('onChange')).toEqual(handleSelectAllClick);
-            expect(toggle.prop('onChange')).toEqual(handleIncludeSubfoldersToggle);
+            expect(checkbox.prop('onChange')).toEqual(onSelectAllClick);
+            expect(toggle.prop('onChange')).toEqual(onIncludeSubfoldersToggle);
             expect(checkbox.prop('isChecked')).toEqual(isSelectAllChecked);
             expect(toggle.prop('isDisabled')).toEqual(isToggleDisabled);
         });
@@ -56,55 +56,15 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             expect(checkboxTooltipTextId).toEqual('boxui.contentExplorer.selectAll');
         });
 
-        test('should render the correct info icon Tooltip when there are more than 1 item selected', () => {
+        test('should render the info icon Tooltip based on value from tooltipMessageForToggle', () => {
+            const tooltipMessageForToggle = { test: 'test' };
             const wrapper = renderComponent();
             const numOfSelectedItems = 2;
-            wrapper.setProps({ numOfSelectedItems });
+            wrapper.setProps({ numOfSelectedItems, tooltipMessageForToggle });
 
             const toggleTooltip = wrapper.find('Tooltip').at(0);
 
-            const toggleTooltipTextId = toggleTooltip.prop('text').props.id;
-
-            expect(toggleTooltipTextId).toEqual('boxui.contentExplorer.includeSubfoldersMultipleFoldersSelected');
-        });
-
-        test('should render the correct info icon Tooltip when the selected item is not a folder', () => {
-            const wrapper = renderComponent();
-            const noFoldersSelected = true;
-            const numOfSelectedItems = 1;
-            wrapper.setProps({ noFoldersSelected, numOfSelectedItems });
-
-            const toggleTooltip = wrapper.find('Tooltip').at(0);
-
-            const toggleTooltipTextId = toggleTooltip.prop('text').props.id;
-
-            expect(toggleTooltipTextId).toEqual('boxui.contentExplorer.includeSubfoldersNoFoldersSelected');
-        });
-
-        test('should render the correct info icon Tooltip when there are no folders present and we have not selected anything yet', () => {
-            const wrapper = renderComponent();
-            const isFolderPresent = false;
-            const numOfSelectedItems = 0;
-            wrapper.setProps({ isFolderPresent, numOfSelectedItems });
-
-            const toggleTooltip = wrapper.find('Tooltip').at(0);
-
-            const toggleTooltipTextId = toggleTooltip.prop('text').props.id;
-
-            expect(toggleTooltipTextId).toEqual('boxui.contentExplorer.includeSubfoldersNoFoldersToSelect');
-        });
-
-        test('should render the correct info icon Tooltip when the tooltip should be enabled and working', () => {
-            const wrapper = renderComponent();
-            const noFoldersSelected = false;
-            const numOfSelectedItems = 1;
-            wrapper.setProps({ noFoldersSelected, numOfSelectedItems });
-
-            const toggleTooltip = wrapper.find('Tooltip').at(0);
-
-            const toggleTooltipTextId = toggleTooltip.prop('text').props.id;
-
-            expect(toggleTooltipTextId).toEqual('boxui.contentExplorer.includeSubfoldersDefaultInformation');
+            expect(toggleTooltip.prop('text').props).toEqual(tooltipMessageForToggle);
         });
     });
 });

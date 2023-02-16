@@ -138,26 +138,6 @@ const messages = defineMessages({
         description: 'Label text shown next to the Include Subfolders toggle',
         id: 'boxui.contentExplorer.includeSubfolders',
     },
-    includeSubfoldersDefaultInformation: {
-        defaultMessage: 'When enabled, report is run on a single selected folder and all its subfolders.',
-        description: 'Tooltip text shown when user hovers over info icon next to Include Subfolders toggle',
-        id: 'boxui.contentExplorer.includeSubfoldersDefaultInformation',
-    },
-    includeSubfoldersNoFoldersToSelect: {
-        defaultMessage: 'This option cannot be enabled when there are no folders to select.',
-        description: 'Tooltip text for info icon next to Include Subfolders toggle when there are no folders to select',
-        id: 'boxui.contentExplorer.includeSubfoldersNoFoldersToSelect',
-    },
-    includeSubfoldersNoFoldersSelected: {
-        defaultMessage: 'This option cannot be enabled while there are no folders selected.',
-        description: 'Tooltip text for info icon next to Include Subfolders toggle while there are no folders selected',
-        id: 'boxui.contentExplorer.includeSubfoldersNoFoldersSelected',
-    },
-    includeSubfoldersMultipleFoldersSelected: {
-        defaultMessage: 'This option cannot be enabled when multiple folders are selected.',
-        description: 'Tooltip text for info icon next to Include Subfolders toggle when multiple folders are selected',
-        id: 'boxui.contentExplorer.includeSubfoldersMultipleFoldersSelected',
-    },
 });
 
 export default messages;
