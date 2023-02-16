@@ -27,18 +27,20 @@ type Props = {
 const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
     const { formatMessage } = intl;
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
+    const searchMessage = formatMessage(messages.searchPlaceholder);
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
+
     return (
         <div className="be-header">
             {isHeaderLogoVisible && <Logo isSmall={isSmall} url={logoUrl} />}
             <div className="be-search">
                 <input
-                    aria-label={formatMessage(messages.searchPlaceholder)}
+                    aria-label={searchMessage}
                     data-testid="be-search-input"
                     disabled={!isFolder && !isSearch}
                     onChange={search}
-                    placeholder={formatMessage(messages.searchPlaceholder)}
+                    placeholder={searchMessage}
                     type="search"
                     value={searchQuery}
                 />

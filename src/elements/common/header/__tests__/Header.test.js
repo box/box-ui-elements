@@ -16,8 +16,8 @@ describe('elements/common/header/Header', () => {
 
     test('renders matching values for aria-label and placeholder attributes', () => {
         const wrapper = getWrapper();
-        const inputProps = wrapper.find('[data-testid="be-search-input"]').props();
-        expect(inputProps['aria-label']).toBe(inputProps.placeholder);
+        const { 'aria-label': ariaLabel, placeholder } = wrapper.find('[data-testid="be-search-input"]').props();
+        expect(ariaLabel).toBe(placeholder);
     });
 
     test('disables search input when view is not `folder` and not `search`', () => {
