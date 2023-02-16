@@ -37,7 +37,7 @@ const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSear
             <div className="be-search">
                 <input
                     aria-label={searchMessage}
-                    data-testid="be-search-input"
+                    data-testid="be-Header-searchInput"
                     disabled={!isFolder && !isSearch}
                     onChange={search}
                     placeholder={searchMessage}

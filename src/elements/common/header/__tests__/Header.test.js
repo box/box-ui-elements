@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { HeaderBase as Header } from '../Header';
 
 describe('elements/common/header/Header', () => {
@@ -7,26 +7,34 @@ describe('elements/common/header/Header', () => {
         formatMessage: jest.fn().mockImplementation(message => message.defaultMessage),
     };
 
-    const getWrapper = props => shallow(<Header intl={intl} {...props} />);
+    const renderComponent = props => render(<Header intl={intl} {...props} />);
 
-    test('renders Logo component when isHeaderLogoVisible is passed', () => {
-        const wrapper = getWrapper({ isHeaderLogoVisible: true });
-        expect(wrapper.find('Logo').exists()).toBe(true);
+    test('renders Logo component when isHeaderLogoVisible is `true`', () => {
+        renderComponent({ isHeaderLogoVisible: true });
+        expect(screen.getByTestId('be-Logo')).toBeInTheDocument();
+    });
+
+    test('does not render Logo component when isHeaderLogoVisible is `false`', () => {
+        renderComponent({ isHeaderLogoVisible: false });
+        expect(screen.queryByTestId('be-Logo')).not.toBeInTheDocument();
     });
 
     test('renders matching values for aria-label and placeholder attributes', () => {
-        const wrapper = getWrapper();
-        const { 'aria-label': ariaLabel, placeholder } = wrapper.find('[data-testid="be-search-input"]').props();
-        expect(ariaLabel).toBe(placeholder);
+        renderComponent();
+        const searchInput = screen.getByTestId('be-Header-searchInput');
+        const searchMessage = 'Search files and folders';
+
+        expect(searchInput.getAttribute('aria-label')).toBe(searchMessage);
+        expect(searchInput.getAttribute('placeholder')).toBe(searchMessage);
     });
 
     test('disables search input when view is not `folder` and not `search`', () => {
-        const wrapper = getWrapper({ view: 'recents' });
-        expect(wrapper.find('[data-testid="be-search-input"]').prop('disabled')).toBe(true);
+        renderComponent({ view: 'recents' });
+        expect(screen.getByTestId('be-Header-searchInput')).toBeDisabled();
     });
 
     test.each(['folder', 'search'])('does not disable search input when view is %s', view => {
-        const wrapper = getWrapper({ view });
-        expect(wrapper.find('[data-testid="be-search-input"]').prop('disabled')).toBe(false);
+        renderComponent({ view });
+        expect(screen.getByTestId('be-Header-searchInput')).not.toBeDisabled();
     });
 });
