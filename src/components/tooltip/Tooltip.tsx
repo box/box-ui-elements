@@ -298,7 +298,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             });
         }
 
-        if (showTooltip) {
+        if (showTooltip && !ariaHidden) {
             if (!isLabelMatchingTooltipText || childAriaLabel === undefined) {
                 componentProps['aria-describedby'] = this.tooltipID;
             }

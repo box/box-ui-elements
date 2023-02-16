@@ -59,6 +59,7 @@ const Footer = ({
 }: Props) => {
     const cancelMessage = intl.formatMessage(messages.cancel);
     const chooseMessage = intl.formatMessage(messages.choose);
+    const isChooseButtonDisabled = !selectedCount;
     return (
         <footer className="bcp-footer">
             <div className="bcp-footer-left">
@@ -96,10 +97,11 @@ const Footer = ({
                                 <IconClose height={16} width={16} />
                             </Button>
                         </Tooltip>
-                        <Tooltip isDisabled={!selectedCount} text={chooseButtonLabel || chooseMessage}>
+                        <Tooltip isDisabled={isChooseButtonDisabled} text={chooseButtonLabel || chooseMessage}>
                             <PrimaryButton
                                 aria-label={chooseMessage}
-                                isDisabled={!selectedCount}
+                                disabled={isChooseButtonDisabled} // sets disabled attribute
+                                isDisabled={isChooseButtonDisabled} // used in Button component
                                 onClick={onChoose}
                                 type="button"
                             >
