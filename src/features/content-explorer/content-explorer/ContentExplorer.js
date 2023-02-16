@@ -31,8 +31,6 @@ class ContentExplorer extends Component {
         breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
         cancelButtonProps: PropTypes.object,
-        /** Whether the user can see the Include Subfolders toggle */
-        canIncludeSubfolders: PropTypes.bool,
         /** Props for the choose button */
         chooseButtonProps: PropTypes.object,
         /** Custom text for the choose button */
@@ -411,7 +409,6 @@ class ContentExplorer extends Component {
             isNoSelectionAllowed = false,
             breadcrumbProps,
             cancelButtonProps,
-            canIncludeSubfolders,
             chooseButtonProps,
             chooseButtonText,
             className,

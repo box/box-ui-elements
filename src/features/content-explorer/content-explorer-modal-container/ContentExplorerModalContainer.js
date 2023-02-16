@@ -17,8 +17,6 @@ class ContentExplorerModalContainer extends Component {
         isNoSelectionAllowed: PropTypes.bool,
         /** Breadcrumb component options */
         breadcrumbProps: BreadcrumbPropType,
-        /** Whether the user can see the Include Subfolders toggle */
-        canIncludeSubfolders: PropTypes.bool,
         /** Adds class name. */
         className: PropTypes.string,
         /** Whether the user can see the breadcrumbs represented with the folder tree button */
