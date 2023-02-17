@@ -29,6 +29,10 @@ function getLogo(url?: string) {
     );
 }
 
-const Logo = ({ url }: Props) => <div className="be-logo">{getLogo(url)}</div>;
+const Logo = ({ url }: Props) => (
+    <div className="be-logo" data-testid="be-Logo">
+        {getLogo(url)}
+    </div>
+);
 
 export default Logo;
