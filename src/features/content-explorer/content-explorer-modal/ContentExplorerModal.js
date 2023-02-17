@@ -17,7 +17,7 @@ type Props = {
     customInput?: React.ComponentType<any>,
     description?: string,
     hasFolderTreeBreadcrumbs: boolean,
-    isIncludeSubfoldersAllowed: boolean,
+    includeSubfoldersProps?: Object,
     isNoSelectionAllowed?: boolean,
     isOpen?: boolean,
     isResponsive?: boolean,
@@ -26,14 +26,10 @@ type Props = {
     itemRowRenderer?: Function,
     listHeaderHeight?: number,
     listHeaderRenderer?: Function,
-    onFoldersPath: Function,
-    onIncludeSubfoldersToggle: Function,
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
-    onSelectedItems: Function,
     title?: string,
-    tooltipMessageForToggle?: Object,
 };
 
 const ContentExplorerModal = ({
@@ -42,6 +38,7 @@ const ContentExplorerModal = ({
     customInput,
     title = '',
     description = '',
+    includeSubfoldersProps,
     isOpen = false,
     isResponsive = false,
     onRequestClose,
@@ -61,6 +58,7 @@ const ContentExplorerModal = ({
         <ContentExplorer
             breadcrumbProps={breadcrumbProps}
             customInput={customInput}
+            {...includeSubfoldersProps}
             isResponsive={isResponsive}
             onCancelButtonClick={onRequestClose}
             onSelectedClick={onSelectedClick}

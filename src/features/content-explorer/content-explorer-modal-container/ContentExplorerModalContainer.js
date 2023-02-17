@@ -56,20 +56,14 @@ class ContentExplorerModalContainer extends Component {
         onSelectItem: PropTypes.func,
         /** Folder is in the process of being created. */
         isCreatingFolder: PropTypes.bool,
-        /** Called when the folders path is updated */
-        onFoldersPath: PropTypes.func,
-        /** Called when the include subfolders toggle is changed */
-        onIncludeSubfoldersToggle: PropTypes.func,
-        /** Called when an item is selected */
-        onSelectedItems: PropTypes.func,
-        /** Message to show for the tooltip for the include subfolders toggle */
-        tooltipMessageForToggle: PropTypes.object,
         /** Whether the user can see select all checkbox */
         isSelectAllAllowed: PropTypes.bool,
         /** Message that will be shown when there was an error creating the folder. */
         createFolderError: PropTypes.string,
         /** Configures the content explorer based on the user's intended action (ex. select file or move/copy) */
         contentExplorerMode: ContentExplorerModePropType.isRequired,
+        /** Props for the include subfolders toggle */
+        includeSubfoldersProps: PropTypes.object,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */

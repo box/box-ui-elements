@@ -69,6 +69,18 @@
 
         .bdl-ContentExplorerFolderTreeBreadcrumbs-text {
             color: $bdl-gray-62;
+    .bdl-ContentExplorer-subheader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .checkbox-container,
+        .toggle-container {
+            margin: 0;
+        }
+
+        .bdl-ContentExplorerSelectAll-checkbox {
+            margin-right: 4.45 * $bdl-grid-unit;
         }
     }
 
@@ -94,10 +106,7 @@
     .bdl-ContentExplorerIncludeSubfolders {
         display: flex;
         align-items: center;
-        justify-content: space-between;
         height: 10 * $bdl-grid-unit;
-        margin-top: 20px;
-        margin-bottom: -10px;
 
         .bdl-ContentExplorerIncludeSubfolders-toggleIconContainer {
             display: flex;
@@ -105,16 +114,11 @@
         }
 
         .bdl-ContentExplorerIncludeSubfolders-icon {
-            margin-bottom: 20px;
             margin-left: 120px;
         }
 
         .bdl-ContentExplorerIncludeSubfolders-icon path {
             fill: $bdl-box-blue;
-        }
-
-        .bdl-ContentExplorerIncludeSubfolders-checkbox {
-            margin-right: 4.45 * $bdl-grid-unit;
         }
     }
 

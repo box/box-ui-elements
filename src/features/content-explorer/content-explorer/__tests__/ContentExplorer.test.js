@@ -119,11 +119,11 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
         });
 
-        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll with onIncludeSubfoldersToggle and isSelectAllAllowed = false', () => {
+        test('should render ContentExplorerIncludeSubfolders but not ContentExplorerSelectAll with onIncludeSubfoldersToggle and isSelectAllAllowed = false', () => {
             const wrapper = renderComponent({ onIncludeSubfoldersToggle: jest.fn(), isSelectAllAllowed: false });
 
             expect(wrapper.exists('ContentExplorerSelectAll')).toBe(false);
-            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(true);
         });
 
         test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll without onIncludeSubfoldersToggle and isSelectAllAllowed = false', () => {
@@ -763,138 +763,6 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(isIncludeSubfoldersEnabled).toEqual(true);
 
             expect(instance.onIncludeSubfoldersToggle).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    describe('numOfSelectedItems()', () => {
-        test('should return number of selected items', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'file' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: { item2: { id: 'item2', name: 'name2' }, item3: { id: 'item3', name: 'name3' } },
-            });
-
-            const numOfSelectedItems = wrapper.instance().numOfSelectedItems();
-
-            expect(numOfSelectedItems).toBe(2);
-        });
-    });
-
-    describe('includeSubfolderToggleDisabled()', () => {
-        test('should return true if items are loading', () => {
-            const wrapper = renderComponent({
-                items: [{ isLoading: true }, { isLoading: true }],
-            });
-
-            const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
-
-            expect(includeSubfolderToggleDisabled).toBe(true);
-        });
-
-        test('should return false if the toggle is currently on', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'folder' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: {
-                    item2: { id: 'item2', name: 'name2', type: 'folder' },
-                    item3: { id: 'item3', name: 'name3', type: 'file' },
-                },
-                isIncludeSubfoldersEnabled: true,
-            });
-
-            const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
-
-            expect(includeSubfolderToggleDisabled).toBe(false);
-        });
-
-        test('should return false if there is a selected folder but the current directory we are in has no folders present', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'file' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: {
-                    item2: { id: 'item1', name: 'name1', type: 'folder' },
-                },
-                isIncludeSubfoldersEnabled: false,
-            });
-
-            const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
-
-            expect(includeSubfolderToggleDisabled).toBe(false);
-        });
-
-        test('should return false if all current items are selected and action disabled', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'file' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: {
-                    item2: { id: 'item1', name: 'name1', type: 'folder' },
-                },
-            });
-
-            const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
-
-            expect(includeSubfolderToggleDisabled).toBe(false);
-        });
-
-        test('should return true if toggle is off and selected item is not a folder', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'file' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: {
-                    item2: { id: 'item2', name: 'name2', type: 'file' },
-                },
-                isIncludeSubfoldersEnabled: false,
-            });
-
-            const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
-
-            expect(includeSubfolderToggleDisabled).toBe(true);
-        });
-
-        test('should return true if toggle is off and the number of selected items is more than 1', () => {
-            const wrapper = renderComponent({
-                items: [
-                    { id: 'item3', name: 'name3', type: 'file' },
-                    { id: 'item2', name: 'name2', type: 'file' },
-                ],
-            });
-
-            wrapper.setState({
-                selectedItems: {
-                    item2: { id: 'item2', name: 'name2', type: 'file' },
-                    item1: { id: 'item1', name: 'name1', type: 'folder' },
-                },
-                isIncludeSubfoldersEnabled: false,
-            });
-
-            const includeSubfolderToggleDisabled = wrapper.instance().includeSubfolderToggleDisabled();
-
-            expect(includeSubfolderToggleDisabled).toBe(true);
         });
     });
 });

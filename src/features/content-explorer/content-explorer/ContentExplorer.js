@@ -14,7 +14,6 @@ import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from 
 import ContentExplorerModes from '../modes';
 
 import { TYPE_FOLDER } from '../../../constants';
-import { areAllItemsActionDisabled, isFolderPresent, isLoadingItems } from './utils';
 
 import './ContentExplorer.scss';
 
@@ -60,8 +59,11 @@ class ContentExplorer extends Component {
          * @param {Array} newFoldersPath
          */
         onEnterFolder: PropTypes.func.isRequired,
-        /** Called when the folders path is updated */
-        onFoldersPath: PropTypes.func,
+        /** Called when the folders path is updated
+         *
+         * @param {Array} newFoldersPath
+         */
+        onFoldersPathUpdate: PropTypes.func,
         /** Called when the include subfolders toggle is changed */
         onIncludeSubfoldersToggle: PropTypes.func,
         /**
@@ -71,11 +73,11 @@ class ContentExplorer extends Component {
          * @param {number} selectedItemIndex
          */
         onSelectItem: PropTypes.func,
-        /** Called when an item is selected
+        /** Called whenever the selected items list changes
          *
-         * @param {Object} selectedItem
+         * @param {Object} selectedItems
          */
-        onSelectedItems: PropTypes.func,
+        onSelectedItemsUpdate: PropTypes.func,
         /**
          * Called when an item is chosen
          *
@@ -108,6 +110,8 @@ class ContentExplorer extends Component {
         isCopyButtonLoading: PropTypes.bool,
         /** Whether the user has permission to create a new folder */
         isCreateNewFolderAllowed: PropTypes.bool,
+        /** Whether the toggle for include subfolders is disabled */
+        isIncludeSubfolderToggleDisabled: PropTypes.bool,
         /** Whether the user can see select all checkbox */
         isSelectAllAllowed: PropTypes.bool,
         /** Whether the move button should be shown with a loading indicator */
@@ -152,7 +156,7 @@ class ContentExplorer extends Component {
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
-        /** Message to show for the tooltip for the include subfolders toggle */
+        /** Message shown in the tooltip for the toggle */
         tooltipMessageForToggle: PropTypes.object,
     };
 
@@ -180,15 +184,10 @@ class ContentExplorer extends Component {
     }
 
     componentDidUpdate({ initialFoldersPath: prevInitialFoldersPath }) {
-        const { initialFoldersPath, onFoldersPath } = this.props;
+        const { initialFoldersPath } = this.props;
 
         if (prevInitialFoldersPath !== initialFoldersPath) {
-            this.setState({
-                foldersPath: initialFoldersPath,
-            });
-            if (onFoldersPath) {
-                onFoldersPath(initialFoldersPath);
-            }
+            this.handleFoldersPathUpdated(initialFoldersPath);
         }
     }
 
@@ -248,17 +247,17 @@ class ContentExplorer extends Component {
     };
 
     deselectItems() {
-        const { onSelectedItems } = this.props;
+        const { onSelectedItemsUpdate } = this.props;
         this.setState({
             selectedItems: {},
         });
-        if (onSelectedItems) {
-            onSelectedItems({});
+        if (onSelectedItemsUpdate) {
+            onSelectedItemsUpdate({});
         }
     }
 
     enterFolder = enteredFolder => {
-        const { contentExplorerMode, onFoldersPath, onEnterFolder } = this.props;
+        const { contentExplorerMode, onEnterFolder, onFoldersPathUpdate } = this.props;
         const { foldersPath } = this.state;
 
         const folderIndex = foldersPath.findIndex(folder => folder.id === enteredFolder.id);
@@ -282,20 +281,21 @@ class ContentExplorer extends Component {
         }
 
         this.setState(newState);
-        if (onFoldersPath) {
-            onFoldersPath(newState.foldersPath);
+        if (onFoldersPathUpdate) {
+            onFoldersPathUpdate(newState.foldersPath);
         }
 
         onEnterFolder(enteredFolder, newFoldersPath);
     };
 
     handleFoldersPathUpdated = newFoldersPath => {
-        const { onFoldersPath } = this.props;
+        const { onFoldersPathUpdate } = this.props;
+
         this.setState({
             foldersPath: newFoldersPath,
         });
-        if (onFoldersPath) {
-            onFoldersPath(newFoldersPath);
+        if (onFoldersPathUpdate) {
+            onFoldersPathUpdate(newFoldersPath);
         }
     };
 
@@ -314,7 +314,7 @@ class ContentExplorer extends Component {
     };
 
     handleItemClick = ({ event, index }) => {
-        const { contentExplorerMode, onSelectedItems, items, onSelectItem } = this.props;
+        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate } = this.props;
         const { selectedItems } = this.state;
         const item = items[index];
 
@@ -332,8 +332,8 @@ class ContentExplorer extends Component {
             newSelectedItems[item.id] = item;
         }
 
-        if (onSelectedItems) {
-            onSelectedItems(newSelectedItems);
+        if (onSelectedItemsUpdate) {
+            onSelectedItemsUpdate(newSelectedItems);
         }
 
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false });
@@ -417,21 +417,16 @@ class ContentExplorer extends Component {
     };
 
     handleSelectAllClick = async () => {
-        const { items, onSelectedItems } = this.props;
-        if (isLoadingItems(items)) {
+        const { items, onSelectedItemsUpdate } = this.props;
+        if (items && items[0] && items[0].isLoading) {
             return;
         }
         const { isSelectAllChecked } = this.state;
         const newSelectedItems = isSelectAllChecked ? this.unselectAll() : this.selectAll();
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: !isSelectAllChecked });
-        if (onSelectedItems) {
-            onSelectedItems(newSelectedItems);
+        if (onSelectedItemsUpdate) {
+            onSelectedItemsUpdate(newSelectedItems);
         }
-    };
-
-    numOfSelectedItems = () => {
-        const { selectedItems } = this.state;
-        return Object.keys(selectedItems).length;
     };
 
     handleIncludeSubfoldersToggle = () => {
@@ -439,22 +434,6 @@ class ContentExplorer extends Component {
         const { onIncludeSubfoldersToggle } = this.props;
         this.setState({ isIncludeSubfoldersEnabled: !isIncludeSubfoldersEnabled });
         onIncludeSubfoldersToggle();
-    };
-
-    includeSubfolderToggleDisabled = () => {
-        const { isIncludeSubfoldersEnabled, selectedItems } = this.state;
-        const { items } = this.props;
-        const selectedItemIsFolder = this.numOfSelectedItems() === 1 && isFolderPresent(Object.values(selectedItems));
-        const selectedItemIsNotFolder =
-            this.numOfSelectedItems() === 1 && !isFolderPresent(Object.values(selectedItems));
-        return (
-            isLoadingItems(items) ||
-            (!isIncludeSubfoldersEnabled &&
-                !(selectedItemIsFolder && !isFolderPresent(items)) &&
-                ((!areAllItemsActionDisabled(items) && !isFolderPresent(items)) ||
-                    selectedItemIsNotFolder ||
-                    this.numOfSelectedItems() > 1))
-        );
     };
 
     renderItemListEmptyState = () => {
@@ -495,7 +474,6 @@ class ContentExplorer extends Component {
             numItemsPerPage,
             numTotalItems,
             onLoadMoreItems,
-            onIncludeSubfoldersToggle,
             itemIconRenderer,
             itemNameLinkRenderer,
             itemButtonRenderer,
@@ -506,7 +484,9 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
+            isIncludeSubfolderToggleDisabled,
             tooltipMessageForToggle,
+            onIncludeSubfoldersToggle,
             ...rest
         } = this.props;
         const {
@@ -583,24 +563,26 @@ class ContentExplorer extends Component {
                 >
                     {headerActionsAccessory}
                 </ContentExplorerHeaderActions>
-                {onIncludeSubfoldersToggle && isSelectAllAllowed ? (
-                    <ContentExplorerIncludeSubfolders
-                        hideSelectAllCheckbox={isIncludeSubfoldersEnabled}
-                        isSelectAllChecked={isSelectAllChecked}
-                        onIncludeSubfoldersToggle={this.handleIncludeSubfoldersToggle}
-                        onSelectAllClick={this.handleSelectAllClick}
-                        isToggleDisabled={this.includeSubfolderToggleDisabled()}
-                        tooltipMessageForToggle={tooltipMessageForToggle}
-                    />
-                ) : (
-                    isSelectAllAllowed && (
-                        <ContentExplorerSelectAll
-                            numTotalItems={numTotalItems}
+                <div className="bdl-ContentExplorer-subheader">
+                    {onIncludeSubfoldersToggle && (
+                        <ContentExplorerIncludeSubfolders
+                            hideSelectAllCheckbox={isIncludeSubfoldersEnabled}
                             isSelectAllChecked={isSelectAllChecked}
-                            handleSelectAllClick={this.handleSelectAllClick}
+                            onIncludeSubfoldersToggle={this.handleIncludeSubfoldersToggle}
+                            onSelectAllClick={this.handleSelectAllClick}
+                            isToggleDisabled={isIncludeSubfolderToggleDisabled}
+                            tooltipMessageForToggle={tooltipMessageForToggle}
                         />
-                    )
-                )}
+                    )}
+                    {isSelectAllAllowed && (
+                        <ContentExplorerSelectAll
+                            handleSelectAllClick={this.handleSelectAllClick}
+                            isLabelHidden={onIncludeSubfoldersToggle}
+                            isSelectAllChecked={isSelectAllChecked}
+                            numTotalItems={numTotalItems}
+                        />
+                    )}
+                </div>
                 <ItemList
                     additionalColumns={additionalColumns}
                     contentExplorerMode={contentExplorerMode}
