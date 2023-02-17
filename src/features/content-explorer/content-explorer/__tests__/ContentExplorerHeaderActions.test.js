@@ -40,6 +40,14 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             expect(wrapper.find('ContentExplorerBreadcrumbs').length).toBe(1);
         });
 
+        test('should render ContentExplorerFolderTreeBreadcrumbs when hasFolderTreeBreadcrumbs is true', () => {
+            const wrapper = renderComponent();
+            wrapper.setProps({ hasFolderTreeBreadcrumbs: true });
+
+            expect(wrapper.find('ContentExplorerFolderTreeBreadcrumbs').length).toBe(1);
+            expect(wrapper.find('ContentExplorerBreadcrumbs').length).toBe(0);
+        });
+
         test('should not render new folder button if showCreateNewFolderButton is false', () => {
             const wrapper = renderComponent({
                 showCreateNewFolderButton: false,

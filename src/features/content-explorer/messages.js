@@ -6,10 +6,25 @@ const messages = defineMessages({
         description: 'Aria label for the folder breadcrumb',
         id: 'boxui.contentExplorer.breadcrumb',
     },
+    folderTreeBreadcrumbsText: {
+        defaultMessage: '{folderName} ({totalItems})',
+        description: 'Text shown for the current folder and its number of items next to the folder tree breadcrumbs',
+        id: 'boxui.contentExplorer.folderTreeBreadcrumbsText',
+    },
+    filePath: {
+        defaultMessage: 'File path',
+        description: 'Tooltip message for the folder tree breadcrumb button',
+        id: 'boxui.contentExplorer.filepath',
+    },
     clickToGoBack: {
         defaultMessage: 'Click to go back',
         description: 'Aria label for button to navigate back to the previous folder',
         id: 'boxui.contentExplorer.clickToGoBack',
+    },
+    clickToViewPath: {
+        defaultMessage: 'Click to view path',
+        description: 'Aria label for folder tree button to navigate back to previous folders',
+        id: 'boxui.contentExplorer.clickToViewPath',
     },
     selectItem: {
         defaultMessage: 'Select {name}',

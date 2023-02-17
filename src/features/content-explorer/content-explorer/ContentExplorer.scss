@@ -51,6 +51,27 @@
         }
     }
 
+    .bdl-ContentExplorerFolderTreeBreadcrumbs {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        .bdl-ContentExplorerFolderTreeBreadcrumbs-button {
+            margin: 0 10px 0 0;
+            padding: 5px;
+        }
+
+        .bdl-ContentExplorerFolderTreeBreadcrumbs-icon {
+            margin-right: 10px;
+        }
+
+        .bdl-ContentExplorerFolderTreeBreadcrumbs-text {
+            color: $bdl-gray-62;
+        }
+    }
+
     .content-explorer-select-all-container {
         display: block;
         height: 8 * $bdl-grid-unit;

@@ -19,6 +19,8 @@ class ContentExplorerModalContainer extends Component {
         breadcrumbProps: BreadcrumbPropType,
         /** Adds class name. */
         className: PropTypes.string,
+        /** Whether the user can see the breadcrumbs represented with the folder tree button */
+        hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Title shown in the ContentExplorerModal. */
