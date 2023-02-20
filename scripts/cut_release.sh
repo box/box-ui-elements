@@ -198,6 +198,10 @@ check_npm_login() {
     fi
 }
 
+remove_package_json_engines() {
+    ./scripts/utils/removeEnginesFromPackageJson || return 1
+}
+
 push_new_release() {
     # Check branch being dirty
     check_branch_dirty || return 1
@@ -258,6 +262,9 @@ push_new_release() {
 
     # Check untracked files
     check_untracked_files || return 1
+
+    # Remove engines object from package.json as it is needed only for development
+    remove_package_json_engines || return 1
 
     # Publish to npm
     if ! push_to_npm; then
