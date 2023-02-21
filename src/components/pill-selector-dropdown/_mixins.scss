@@ -5,7 +5,7 @@
     align-items: center;
     max-width: 100%;
     height: 28px;
-    margin: $bdl-grid-unit - 1px $bdl-grid-unit / 2;
+    margin: $bdl-grid-unit - 1px $bdl-grid-unit * .5;
     padding-top: 2px;
     padding-left: 2px;
     overflow: hidden;
