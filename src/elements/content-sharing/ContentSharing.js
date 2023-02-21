@@ -75,10 +75,10 @@ function ContentSharing({
 
     // Reset the API if necessary
     React.useEffect(() => {
-        if (!api && apiHost && itemID && itemType && token) {
+        if (apiHost && itemID && itemType && token) {
             setAPI(createAPI(apiHost, itemID, itemType, token));
         }
-    }, [api, apiHost, itemID, itemType, token]);
+    }, [apiHost, itemID, itemType, token]);
 
     // Reset state if the API has changed
     React.useEffect(() => {
