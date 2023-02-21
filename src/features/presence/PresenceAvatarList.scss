@@ -18,7 +18,7 @@
     text-align: center;
     vertical-align: top;
     background-color: $bdl-gray-20;
-    border-radius: $bdl-Presence-avatar-size / 2;
+    border-radius: $bdl-Presence-avatar-size * .5;
 
     &:hover {
         cursor: pointer;

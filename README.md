@@ -54,6 +54,9 @@ Box UI Elements use [SCSS stylesheets](https://sass-lang.com/guide). Each of the
 * Limited support for Internet Explorer 11 (requires ES2015 polyfill)
 * Mobile Chrome and Safari
 
+### Supported Packages
+* React 17: Box UI Elements currently supports usage in React 17 environments. Developers implementing UI Elements in React 18 may experience unexpected issues.
+
 # Contributing
 Our contributing guidelines can be found in [CONTRIBUTING.md](CONTRIBUTING.md). The development setup instructions can be found in [DEVELOPING.md](DEVELOPING.md).
 

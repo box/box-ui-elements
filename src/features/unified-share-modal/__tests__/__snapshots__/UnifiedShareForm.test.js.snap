@@ -8,16 +8,19 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
     hideContent={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label56"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label56"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -207,10 +210,12 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
     hideContent={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label7"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       isShown={false}
       position="middle-left"
       showCloseButton={true}
@@ -218,6 +223,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label7"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -372,16 +378,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
     hideContent={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label8"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label8"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -536,16 +545,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     hideContent={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label24"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label24"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -704,10 +716,12 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     hideContent={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label6"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       isShown={true}
       position="middle-left"
       showCloseButton={true}
@@ -715,6 +729,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label6"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -870,16 +885,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label3"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label3"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -1036,16 +1054,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label5"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label5"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -1171,16 +1192,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label11"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label11"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -1337,16 +1361,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     hideContent={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label10"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label10"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -1503,16 +1530,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label17"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label17"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -1670,16 +1700,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label15"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label15"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -1847,16 +1880,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label9"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label9"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -2012,16 +2048,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     hideContent={true}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label22"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label22"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -2181,16 +2220,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label1"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label1"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -2347,16 +2389,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label18"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label18"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"
@@ -2512,16 +2557,19 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
     isLoading={false}
   >
     <Tooltip
+      ariaLabel="usm-ftux-dialog-label13"
       className="usm-ftux-tooltip"
       constrainToScrollParent={false}
       constrainToWindow={true}
       isDisabled={false}
+      isFocusTrapped={true}
       position="middle-left"
       showCloseButton={true}
       text={
         <div>
           <h4
             className="ftux-tooltip-title"
+            id="usm-ftux-dialog-label13"
           >
             <FormattedMessage
               defaultMessage="Simplified sharing for files and folders"

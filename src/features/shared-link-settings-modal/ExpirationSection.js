@@ -17,6 +17,7 @@ const displayFormat = {
 
 const ExpirationSection = ({
     canChangeExpiration,
+    dateFormat,
     error,
     expirationCheckboxProps = {},
     expirationDate,
@@ -29,6 +30,7 @@ const ExpirationSection = ({
     const datepicker = (
         <div>
             <DatePicker
+                dateFormat={dateFormat}
                 displayFormat={displayFormat}
                 error={error}
                 hideLabel
@@ -63,6 +65,8 @@ const ExpirationSection = ({
 
 ExpirationSection.propTypes = {
     canChangeExpiration: PropTypes.bool.isRequired,
+    /** The format of the date value for form submit */
+    dateFormat: PropTypes.string,
     error: PropTypes.string,
     expirationCheckboxProps: PropTypes.object,
     expirationDate: PropTypes.instanceOf(Date),

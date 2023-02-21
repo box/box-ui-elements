@@ -540,6 +540,11 @@ const messages = defineMessages({
             'Text to show when the number of contact email addresses displayed on a tooltip exceeds the maximum amount that can be displayed',
         id: 'boxui.unifiedShare.contactEmailsTooltipText',
     },
+    expiresMessage: {
+        defaultMessage: 'Expires',
+        description: 'Label for tooltips or other components that display expiration icons',
+        id: 'boxui.unifiedShare.expiresMessage',
+    },
 });
 
 export default messages;

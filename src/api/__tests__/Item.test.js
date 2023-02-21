@@ -337,6 +337,20 @@ describe('api/Item', () => {
             expect(() => item.validateRequest(MOCK_ITEM_ID, MOCK_SUFFICIENT_PERMISSIONS)).not.toThrow();
             expect(item.errorCode).toBeUndefined();
         });
+
+        test('should skip `can_set_share_access` check when canSkipSetShareAccess is true', () => {
+            const itemPermissions = { can_share: true, can_set_share_access: false };
+            expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions, true)).not.toThrow();
+            expect(item.errorCode).toBeUndefined();
+        });
+
+        test('should not skip `can_set_share_access` check when canSkipSetShareAccess is false', () => {
+            const itemPermissions = { can_share: true, can_set_share_access: false };
+            expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions, false)).toThrowError(
+                MOCK_PERMISSIONS_ERROR,
+            );
+            expect(item.errorCode).toBe(ERROR_CODE_SHARE_ITEM);
+        });
     });
 
     describe('share()', () => {

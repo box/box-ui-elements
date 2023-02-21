@@ -276,6 +276,16 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             wrapper.setState({ showCollaboratorList: true });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should render a default component with ACI toggle if enabled ', () => {
+            const wrapper = getWrapper({ onAdvancedContentInsightsToggle: jest.fn() });
+            expect(wrapper.exists('AdvancedContentInsightsToggle')).toBe(true);
+        });
+
+        test('should not render a default component with ACI toggle if disabled ', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.exists('AdvancedContentInsightsToggle')).toBe(false);
+        });
     });
 
     describe('renderCollaboratorAvatars()', () => {

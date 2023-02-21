@@ -23,7 +23,8 @@
 
         .btn {
             margin-left: 8px;
-            background-color: transparent;
+            background-color: $white;
+            border-color: $bdl-gray-10;
         }
 
         .be-is-touch & {
@@ -54,6 +55,10 @@
 
         .bce-more-options {
             opacity: 1;
+        }
+
+        .bce-btn-more-options {
+            border-color: $grey-blue;
         }
 
         .bce-item-coloumn,
@@ -97,8 +102,7 @@
         &:active,
         &:hover,
         &:focus {
-            color: $dark-cerulean;
-            outline: none;
+            color: $bdl-gray;
         }
     }
 }

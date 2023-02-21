@@ -216,7 +216,7 @@
         }
 
         .text-area-container textarea::placeholder {
-            color: $bdl-gray-50;
+            color: $bdl-gray-62;
         }
 
         .bdl-PillSelector {
@@ -226,10 +226,10 @@
 
     .bdl-PillSelectorDropdown .bdl-PillSelector {
         margin-top: 10px;
-        border: 1px solid $bdl-gray-20;
+        border: 1px solid $bdl-gray-50;
 
         .bdl-PillSelector-input::placeholder {
-            color: $bdl-gray-50;
+            color: $bdl-gray-62;
         }
 
         &.bdl-is-disabled,
@@ -239,7 +239,7 @@
             box-shadow: none;
 
             .bdl-PillSelector-input::placeholder {
-                color: $bdl-gray-50;
+                color: $bdl-gray-62;
             }
 
             &:hover {
@@ -255,14 +255,10 @@
         justify-content: space-between;
         margin-top: 10px;
 
-        .share-toggle-container {
+        .toggle-container {
             flex: 0 1 80%;
             margin-bottom: 0;
             overflow-y: hidden;
-
-            .toggle-container {
-                margin-bottom: 0;
-            }
 
             .toggle-simple-label {
                 color: $bdl-gray;
@@ -386,8 +382,22 @@
     padding: 2em;
 }
 
-.bdl-SharedLinkSection-separator {
+.bdl-SharedLinkSection-separator,
+.bdl-UnifiedShareForm-separator {
     margin: ($bdl-grid-unit * 5) 0;
     border: none;
     border-top: 1px solid $bdl-gray-20;
+}
+
+.bdl-UnifiedShareForm-row {
+    margin-top: 10px;
+
+    .AdvancedContentInsightsToggle {
+        flex: 0 1 80%;
+        overflow-y: hidden;
+
+        .toggle-simple-label {
+            cursor: pointer;
+        }
+    }
 }

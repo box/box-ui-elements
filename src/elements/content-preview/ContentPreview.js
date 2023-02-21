@@ -7,14 +7,15 @@
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import classNames from 'classnames';
-import uniqueid from 'lodash/uniqueId';
-import throttle from 'lodash/throttle';
 import cloneDeep from 'lodash/cloneDeep';
-import omit from 'lodash/omit';
-import getProp from 'lodash/get';
 import flow from 'lodash/flow';
+import getProp from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import noop from 'lodash/noop';
+import omit from 'lodash/omit';
 import setProp from 'lodash/set';
+import throttle from 'lodash/throttle';
+import uniqueid from 'lodash/uniqueId';
 import Measure from 'react-measure';
 import { withRouter } from 'react-router-dom';
 import type { ContextRouter } from 'react-router-dom';
@@ -75,6 +76,11 @@ type StartAt = {
 };
 
 type Props = {
+    advancedContentInsights: {
+        isActive: boolean,
+        ownerEId: number,
+        userId: number,
+    },
     apiHost: string,
     appHost: string,
     autoFocus: boolean,
@@ -100,6 +106,7 @@ type Props = {
     onAnnotator: Function,
     onAnnotatorEvent: Function,
     onClose?: Function,
+    onContentInsightsEventReport: Function,
     onDownload: Function,
     onLoad: Function,
     onNavigate: Function,
@@ -229,6 +236,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         language: DEFAULT_LOCALE,
         onAnnotator: noop,
         onAnnotatorEvent: noop,
+        onContentInsightsEventReport: noop,
         onDownload: noop,
         onError: noop,
         onLoad: noop,
@@ -362,11 +370,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { previewExperiences, token } = this.props;
-        const { previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
+        const { advancedContentInsights, previewExperiences, token } = this.props;
+        const {
+            advancedContentInsights: prevContentInsightsOptions,
+            previewExperiences: prevPreviewExperiences,
+            token: prevToken,
+        } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevToken !== token;
+        const haveContentInsightsChanged = !isEqual(prevContentInsightsOptions, advancedContentInsights);
         const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
 
         if (hasFileIdChanged) {
@@ -383,6 +396,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
 
         if (haveExperiencesChanged && this.preview && this.preview.updateExperiences) {
             this.preview.updateExperiences(previewExperiences);
+        }
+
+        if (advancedContentInsights && haveContentInsightsChanged && this.preview?.updateContentInsightsOptions) {
+            this.preview.updateContentInsightsOptions(advancedContentInsights);
         }
     }
 
@@ -750,11 +767,13 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
+            advancedContentInsights,
             annotatorState: { activeAnnotationId } = {},
             enableThumbnailsSidebar,
             fileOptions,
             onAnnotatorEvent,
             onAnnotator,
+            onContentInsightsEventReport,
             previewExperiences,
             showAnnotationsControls,
             token: tokenOrTokenFunction,
@@ -789,6 +808,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const previewOptions = {
+            advancedContentInsights,
             container: `#${this.id} .bcpr-content`,
             enableThumbnailsSidebar,
             fileOptions: fileOpts,
@@ -820,6 +840,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions)),
         });
+        if (advancedContentInsights) {
+            this.preview.addListener('advanced_insights_report', onContentInsightsEventReport);
+        }
     };
 
     /**
@@ -1209,6 +1232,20 @@ class ContentPreview extends React.PureComponent<Props, State> {
             contentSidebar.refresh();
         }
     }
+
+    /**
+     * Fetches a thumbnail for the page given
+     *
+     * @return {Promise|null} - promise resolves with the image HTMLElement or null if generation is in progress
+     */
+    getThumbnail = (pageNumber: ?number): Promise<HTMLElement> | null => {
+        const preview = this.getPreview();
+        if (preview && preview.viewer) {
+            return preview.viewer.getThumbnail(pageNumber);
+        }
+
+        return null;
+    };
 
     /**
      * Renders the file preview

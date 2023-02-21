@@ -19,7 +19,7 @@
         overflow: auto;
 
         .bcs-AnnotationActivity-menu {
-            top: $sidebarActivityFeedSpacingVertical;
+            right: $sidebarActivityFeedSpacingHorizontal - $sidebarActivityFeedSelectedItemSpacing;
         }
     }
 

@@ -559,6 +559,50 @@ describe('elements/content-explorer/ContentExplorer', () => {
         });
     });
 
+    describe('handleSharedLinkSuccess()', () => {
+        const getApiShareMock = jest.fn().mockImplementation((newItem, access, callback) => callback());
+        const getApiMock = jest.fn().mockReturnValue({ share: getApiShareMock });
+        const updateCollectionMock = jest.fn();
+
+        const boxItem = {
+            shared_link: 'not null',
+            permissions: 'not null',
+            type: 'not null',
+        };
+
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper({ canShare: true, canSetShareAccess: true });
+            instance = wrapper.instance();
+            instance.api = { getAPI: getApiMock };
+            instance.updateCollection = updateCollectionMock;
+        });
+
+        afterEach(() => {
+            getApiShareMock.mockClear();
+            getApiMock.mockClear();
+            updateCollectionMock.mockClear();
+        });
+
+        test('should create shared link when it doesnt exist yet', () => {
+            instance.handleSharedLinkSuccess({ ...boxItem, shared_link: null });
+
+            expect(getApiMock).toBeCalledTimes(1);
+            expect(getApiShareMock).toBeCalledTimes(1);
+            expect(updateCollectionMock).toBeCalledTimes(1);
+        });
+
+        test('should not create shared link when one already exists', () => {
+            instance.handleSharedLinkSuccess(boxItem);
+
+            expect(getApiMock).not.toBeCalled();
+            expect(getApiShareMock).not.toBeCalled();
+            expect(updateCollectionMock).toBeCalledTimes(1);
+        });
+    });
+
     describe('render()', () => {
         test('should render UploadDialog with contentUploaderProps', () => {
             const contentUploaderProps = {

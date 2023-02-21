@@ -11,7 +11,8 @@ import ContentExplorerSelectAll from './ContentExplorerSelectAll';
 import ItemList from '../item-list';
 import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
-import ItemTypes from '../item-types';
+
+import { TYPE_FOLDER } from '../../../constants';
 
 import './ContentExplorer.scss';
 
@@ -40,6 +41,8 @@ class ContentExplorer extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         /** Props that contains the custom search input. Is rendered in header actions */
         customInput: PropTypes.func,
+        /** Whether the user can see the breadcrumbs represented with the folder tree button */
+        hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Initial path of folders. The last folder in the array is the current folder. */
@@ -316,7 +319,7 @@ class ContentExplorer extends Component {
             return;
         }
 
-        if (item.type === ItemTypes.FOLDER) {
+        if (item.type === TYPE_FOLDER) {
             this.enterFolder(item);
         } else {
             onChooseItems([item]);
@@ -332,7 +335,7 @@ class ContentExplorer extends Component {
             return;
         }
 
-        if (item.type !== ItemTypes.FOLDER) {
+        if (item.type !== TYPE_FOLDER) {
             return;
         }
 
@@ -411,6 +414,7 @@ class ContentExplorer extends Component {
             className,
             contentExplorerMode,
             customInput,
+            hasFolderTreeBreadcrumbs,
             headerActionsAccessory,
             onChooseItems,
             onMoveItem,
@@ -496,12 +500,14 @@ class ContentExplorer extends Component {
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
                     foldersPath={foldersPath}
+                    hasFolderTreeBreadcrumbs={hasFolderTreeBreadcrumbs}
                     isCreateNewFolderAllowed={isCreateNewFolderAllowed}
                     onCreateNewFolderButtonClick={onCreateNewFolderButtonClick}
                     onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onEnterFolder={this.enterFolder}
                     onExitSearch={this.handleExitSearch}
                     onSearchSubmit={this.handleSearchSubmit}
+                    numTotalItems={numTotalItems}
                     searchInputProps={searchInputProps}
                     showCreateNewFolderButton={showCreateNewFolderButton}
                 >

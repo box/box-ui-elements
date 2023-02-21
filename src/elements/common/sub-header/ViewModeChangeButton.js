@@ -13,7 +13,7 @@ import messages from '../messages';
 import Tooltip from '../Tooltip';
 import type { ViewMode } from '../flowTypes';
 import { VIEW_MODE_GRID, VIEW_MODE_LIST } from '../../../constants';
-import { bdlGray50 } from '../../../styles/variables';
+import { bdlGray62 } from '../../../styles/variables';
 import './ViewModeChangeButton.scss';
 
 type Props = {
@@ -40,9 +40,9 @@ const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, intl, v
                 {...rest}
             >
                 {isGridView ? (
-                    <IconListView color={bdlGray50} width={17} height={17} />
+                    <IconListView color={bdlGray62} width={17} height={17} />
                 ) : (
-                    <IconGridViewInverted color={bdlGray50} width={17} height={17} />
+                    <IconGridViewInverted color={bdlGray62} width={17} height={17} />
                 )}
             </Button>
         </Tooltip>
