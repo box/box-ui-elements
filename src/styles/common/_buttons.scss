@@ -56,7 +56,7 @@
 
         .bdl-btn-icon {
             // Icon without text:
-            margin: ($bdl-btn-height - $bdl-btn-icon-size) / 2 - $bdl-btn-border-width;
+            margin: ($bdl-btn-height - $bdl-btn-icon-size) * .5 - $bdl-btn-border-width;
 
             // Icon with text:
             & + .btn-content {
@@ -71,7 +71,7 @@
             height: $bdl-btn-height-large;
 
             .bdl-btn-icon {
-                margin: ($bdl-btn-height-large - $bdl-btn-icon-size) / 2 - $bdl-btn-border-width;
+                margin: ($bdl-btn-height-large - $bdl-btn-icon-size) * .5 - $bdl-btn-border-width;
             }
         }
     }
