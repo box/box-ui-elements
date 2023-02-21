@@ -1,31 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import Tooltip from '../../../components/tooltip';
-import Toggle from '../../../components/toggle';
-import messages from '../messages';
 import InfoBadge16 from '../../../icon/fill/InfoBadge16';
+import Toggle from '../../../components/toggle';
+import Tooltip from '../../../components/tooltip';
+import messages from '../messages';
 
-const ContentExplorerIncludeSubfolders = ({ isToggleDisabled, onIncludeSubfoldersToggle, tooltipMessageForToggle }) => (
+const ContentExplorerIncludeSubfolders = ({ isDisabled, onChange, tooltipMessage }) => (
     <div className="bdl-ContentExplorerIncludeSubfolders">
-        <div className="bdl-ContentExplorerIncludeSubfolders-toggleIconContainer">
-            <Toggle
-                className="bdl-ContentExplorerIncludeSubfolders-toggle"
-                label={<FormattedMessage {...messages.includeSubfolders} />}
-                isDisabled={isToggleDisabled}
-                onChange={onIncludeSubfoldersToggle}
-            />
-            <Tooltip text={<FormattedMessage {...tooltipMessageForToggle} />}>
-                <InfoBadge16 className="bdl-ContentExplorerIncludeSubfolders-icon" fill="blue" />
-            </Tooltip>
-        </div>
+        <Toggle
+            className="bdl-ContentExplorerIncludeSubfolders-toggle"
+            label={<FormattedMessage {...messages.includeSubfolders} />}
+            isDisabled={isDisabled}
+            onChange={onChange}
+        />
+        <Tooltip text={<FormattedMessage {...tooltipMessage} />}>
+            <InfoBadge16 className="bdl-ContentExplorerIncludeSubfolders-icon" fill="blue" />
+        </Tooltip>
     </div>
 );
 
 ContentExplorerIncludeSubfolders.propTypes = {
-    isToggleDisabled: PropTypes.bool,
-    onIncludeSubfoldersToggle: PropTypes.func,
-    tooltipMessageForToggle: PropTypes.object,
+    isDisabled: PropTypes.bool,
+    onChange: PropTypes.func,
+    tooltipMessage: PropTypes.object,
 };
 
 export { ContentExplorerIncludeSubfolders as ContentExplorerIncludeSubfoldersBase };

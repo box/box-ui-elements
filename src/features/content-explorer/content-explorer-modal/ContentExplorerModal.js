@@ -26,9 +26,11 @@ type Props = {
     itemRowRenderer?: Function,
     listHeaderHeight?: number,
     listHeaderRenderer?: Function,
+    onFoldersPathUpdate?: Function,
     onRequestClose?: Function,
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
+    onSelectedItemsUpdate?: Function,
     title?: string,
 };
 
@@ -58,7 +60,7 @@ const ContentExplorerModal = ({
         <ContentExplorer
             breadcrumbProps={breadcrumbProps}
             customInput={customInput}
-            {...includeSubfoldersProps}
+            includeSubfoldersProps={includeSubfoldersProps}
             isResponsive={isResponsive}
             onCancelButtonClick={onRequestClose}
             onSelectedClick={onSelectedClick}

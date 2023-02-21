@@ -75,6 +75,16 @@ class ContentExplorerModalContainer extends Component {
          * @param {Array} newFoldersPath
          */
         onEnterFolder: PropTypes.func.isRequired,
+        /** Called when the folders path is updated
+         *
+         * @param {Array} newFoldersPath
+         */
+        onFoldersPathUpdate: PropTypes.func,
+        /** Called whenever the selected items list changes
+         *
+         * @param {Object} selectedItems
+         */
+        onSelectedItemsUpdate: PropTypes.func,
         /**
          * Called when items are chosen.
          *

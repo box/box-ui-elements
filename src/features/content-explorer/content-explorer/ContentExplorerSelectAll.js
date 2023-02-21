@@ -12,7 +12,7 @@ const ContentExplorerSelectAll = ({
     isSelectAllChecked,
     numTotalItems = 0,
 }) => (
-    <div className={!isLabelHidden && 'content-explorer-select-all-container'}>
+    <div className="content-explorer-select-all-container">
         {!isLabelHidden && (
             <label className="content-explorer-select-all-items-counter">
                 {numTotalItems === 1 ? (
@@ -30,7 +30,7 @@ const ContentExplorerSelectAll = ({
         <Tooltip isShown={isLabelHidden ? undefined : false} text={<FormattedMessage {...messages.selectAll} />}>
             <Checkbox
                 hideLabel
-                className="bdl-ContentExplorerSelectAll-checkbox"
+                className="content-explorer-select-all-checkbox"
                 onChange={handleSelectAllClick}
                 isChecked={isSelectAllChecked}
             />
@@ -42,7 +42,7 @@ ContentExplorerSelectAll.propTypes = {
     handleSelectAllClick: PropTypes.func,
     intl: PropTypes.any,
     isSelectAllChecked: PropTypes.bool,
-    isLabelHidden: PropTypes.bool,
+    isLabelHidden: PropTypes.object,
     numTotalItems: PropTypes.number,
 };
 
