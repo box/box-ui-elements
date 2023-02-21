@@ -203,6 +203,24 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             expect(wrapper.prop('enabled')).toBe(false);
         });
 
+        test('should render TetherComponent with attachment and targetAttachment props passed in as tetherAttachment and tetherTargetAttachment', () => {
+            const tetherAttachment = 'middle left';
+            const tetherTargetAttachment = 'middle right';
+            const wrapper = shallow(
+                <DropdownMenu
+                    isRightAligned
+                    tetherAttachment={tetherAttachment}
+                    tetherTargetAttachment={tetherTargetAttachment}
+                >
+                    <FakeButton />
+                    <FakeMenu />
+                </DropdownMenu>,
+            );
+
+            expect(wrapper.prop('attachment')).toEqual(tetherAttachment);
+            expect(wrapper.prop('targetAttachment')).toEqual(tetherTargetAttachment);
+        });
+
         test('should render TetherComponent with enabled prop when menu is open', () => {
             const wrapper = shallow(
                 <DropdownMenu>
