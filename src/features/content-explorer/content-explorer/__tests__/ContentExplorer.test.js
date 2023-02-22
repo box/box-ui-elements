@@ -106,6 +106,18 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.find('ContentExplorerSelectAll').prop('isSelectAllChecked')).toEqual(isSelectAllChecked);
         });
 
+        test('should render ContentExplorerIncludeSubfolders when passed includeSubfoldersProps', () => {
+            const wrapper = renderComponent({ includeSubfoldersProps: {} });
+
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(true);
+        });
+
+        test('should not render ContentExplorerIncludeSubfolders without includeSubfoldersProps', () => {
+            const wrapper = renderComponent();
+
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
+        });
+
         test("customInput should be false if the props isn't passed down", () => {
             const wrapper = renderComponent();
             expect(wrapper.find('ContentExplorerHeaderActions').prop('customInput')).toBe(undefined);

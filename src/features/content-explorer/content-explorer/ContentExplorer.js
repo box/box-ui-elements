@@ -7,6 +7,7 @@ import ContentExplorerHeaderActions from './ContentExplorerHeaderActions';
 import ContentExplorerEmptyState from './ContentExplorerEmptyState';
 import ContentExplorerActionButtons from './ContentExplorerActionButtons';
 import ContentExplorerSelectAll from './ContentExplorerSelectAll';
+import ContentExplorerIncludeSubfolders from './ContentExplorerIncludeSubfolders';
 
 import ItemList from '../item-list';
 import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
@@ -45,6 +46,8 @@ class ContentExplorer extends Component {
         hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
+        /** Props for the include subfolders toggle */
+        includeSubfoldersProps: PropTypes.object,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
@@ -58,6 +61,16 @@ class ContentExplorer extends Component {
          * @param {Array} newFoldersPath
          */
         onEnterFolder: PropTypes.func.isRequired,
+        /** Called when the folders path is updated
+         *
+         * @param {Array} newFoldersPath
+         */
+        onFoldersPathUpdate: PropTypes.func,
+        /** Called whenever the selected items list changes
+         *
+         * @param {Object} selectedItems
+         */
+        onSelectedItemsUpdate: PropTypes.func,
         /**
          * Called when an item is selected
          *
@@ -169,9 +182,7 @@ class ContentExplorer extends Component {
         const { initialFoldersPath } = this.props;
 
         if (prevInitialFoldersPath !== initialFoldersPath) {
-            this.setState({
-                foldersPath: initialFoldersPath,
-            });
+            this.handleFoldersPathUpdated(initialFoldersPath);
         }
     }
 
@@ -231,13 +242,17 @@ class ContentExplorer extends Component {
     };
 
     deselectItems() {
+        const { onSelectedItemsUpdate } = this.props;
         this.setState({
             selectedItems: {},
         });
+        if (onSelectedItemsUpdate) {
+            onSelectedItemsUpdate({});
+        }
     }
 
     enterFolder = enteredFolder => {
-        const { contentExplorerMode, onEnterFolder } = this.props;
+        const { contentExplorerMode, onEnterFolder, onFoldersPathUpdate } = this.props;
         const { foldersPath } = this.state;
 
         const folderIndex = foldersPath.findIndex(folder => folder.id === enteredFolder.id);
@@ -261,14 +276,22 @@ class ContentExplorer extends Component {
         }
 
         this.setState(newState);
+        if (onFoldersPathUpdate) {
+            onFoldersPathUpdate(newFoldersPath);
+        }
 
         onEnterFolder(enteredFolder, newFoldersPath);
     };
 
     handleFoldersPathUpdated = newFoldersPath => {
+        const { onFoldersPathUpdate } = this.props;
+
         this.setState({
             foldersPath: newFoldersPath,
         });
+        if (onFoldersPathUpdate) {
+            onFoldersPathUpdate(newFoldersPath);
+        }
     };
 
     handleSearchSubmit = searchQuery => {
@@ -286,11 +309,11 @@ class ContentExplorer extends Component {
     };
 
     handleItemClick = ({ event, index }) => {
-        const { contentExplorerMode, items, onSelectItem } = this.props;
+        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate } = this.props;
         const { selectedItems } = this.state;
         const item = items[index];
 
-        if (item.isDisabled || item.isLoading) {
+        if (item.isDisabled || item.isLoading || item.isActionDisabled) {
             return;
         }
 
@@ -305,6 +328,10 @@ class ContentExplorer extends Component {
         }
 
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false });
+
+        if (onSelectedItemsUpdate) {
+            onSelectedItemsUpdate(newSelectedItems);
+        }
 
         if (onSelectItem) {
             onSelectItem(item, index);
@@ -321,7 +348,7 @@ class ContentExplorer extends Component {
 
         if (item.type === TYPE_FOLDER) {
             this.enterFolder(item);
-        } else {
+        } else if (!item.isActionDisabled) {
             onChooseItems([item]);
         }
         this.setState({ isSelectAllChecked: false });
@@ -385,14 +412,16 @@ class ContentExplorer extends Component {
     };
 
     handleSelectAllClick = async () => {
-        // check if the items list is still loading
-        const { items } = this.props;
+        const { items, onSelectedItemsUpdate } = this.props;
         if (items && items[0] && items[0].isLoading) {
             return;
         }
         const { isSelectAllChecked } = this.state;
         const newSelectedItems = isSelectAllChecked ? this.unselectAll() : this.selectAll();
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: !isSelectAllChecked });
+        if (onSelectedItemsUpdate) {
+            onSelectedItemsUpdate(newSelectedItems);
+        }
     };
 
     renderItemListEmptyState = () => {
@@ -433,6 +462,7 @@ class ContentExplorer extends Component {
             numItemsPerPage,
             numTotalItems,
             onLoadMoreItems,
+            includeSubfoldersProps,
             itemIconRenderer,
             itemNameLinkRenderer,
             itemButtonRenderer,
@@ -513,13 +543,17 @@ class ContentExplorer extends Component {
                 >
                     {headerActionsAccessory}
                 </ContentExplorerHeaderActions>
-                {isSelectAllAllowed && (
-                    <ContentExplorerSelectAll
-                        numTotalItems={numTotalItems}
-                        isSelectAllChecked={isSelectAllChecked}
-                        handleSelectAllClick={this.handleSelectAllClick}
-                    />
-                )}
+                <div className="bdl-ContentExplorer-subheader">
+                    {includeSubfoldersProps && <ContentExplorerIncludeSubfolders {...includeSubfoldersProps} />}
+                    {isSelectAllAllowed && (
+                        <ContentExplorerSelectAll
+                            handleSelectAllClick={this.handleSelectAllClick}
+                            isLabelHidden={!!includeSubfoldersProps}
+                            isSelectAllChecked={isSelectAllChecked}
+                            numTotalItems={numTotalItems}
+                        />
+                    )}
+                </div>
                 <ItemList
                     additionalColumns={additionalColumns}
                     contentExplorerMode={contentExplorerMode}
