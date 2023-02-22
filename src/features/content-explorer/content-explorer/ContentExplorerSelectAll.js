@@ -42,7 +42,7 @@ ContentExplorerSelectAll.propTypes = {
     handleSelectAllClick: PropTypes.func,
     intl: PropTypes.any,
     isSelectAllChecked: PropTypes.bool,
-    isLabelHidden: PropTypes.object,
+    isLabelHidden: PropTypes.bool,
     numTotalItems: PropTypes.number,
 };
 

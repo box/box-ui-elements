@@ -548,7 +548,7 @@ class ContentExplorer extends Component {
                     {isSelectAllAllowed && (
                         <ContentExplorerSelectAll
                             handleSelectAllClick={this.handleSelectAllClick}
-                            isLabelHidden={includeSubfoldersProps}
+                            isLabelHidden={!!includeSubfoldersProps}
                             isSelectAllChecked={isSelectAllChecked}
                             numTotalItems={numTotalItems}
                         />

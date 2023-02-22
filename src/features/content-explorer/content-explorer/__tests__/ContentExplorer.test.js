@@ -106,30 +106,15 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.find('ContentExplorerSelectAll').prop('isSelectAllChecked')).toEqual(isSelectAllChecked);
         });
 
-        test('should render ContentExplorerIncludeSubfolders with oincludeSubfoldersProps and isSelectAllAllowed = true', () => {
-            const wrapper = renderComponent({ includeSubfoldersProps: {}, isSelectAllAllowed: true });
+        test('should render ContentExplorerIncludeSubfolders when passed includeSubfoldersProps', () => {
+            const wrapper = renderComponent({ includeSubfoldersProps: {} });
 
             expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(true);
         });
 
-        test('should not render ContentExplorerIncludeSubfolders without includeSubfoldersProps and isSelectAllAllowed = true', () => {
-            const wrapper = renderComponent({ isSelectAllAllowed: true });
+        test('should not render ContentExplorerIncludeSubfolders without includeSubfoldersProps', () => {
+            const wrapper = renderComponent();
 
-            expect(wrapper.exists('ContentExplorerSelectAll')).toBe(true);
-            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
-        });
-
-        test('should render ContentExplorerIncludeSubfolders but not ContentExplorerSelectAll with includeSubfoldersProps and isSelectAllAllowed = false', () => {
-            const wrapper = renderComponent({ includeSubfoldersProps: {}, isSelectAllAllowed: false });
-
-            expect(wrapper.exists('ContentExplorerSelectAll')).toBe(false);
-            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(true);
-        });
-
-        test('should not render ContentExplorerIncludeSubfolders nor ContentExplorerSelectAll without includeSubfoldersProps and isSelectAllAllowed = false', () => {
-            const wrapper = renderComponent({ isSelectAllAllowed: false });
-
-            expect(wrapper.exists('ContentExplorerSelectAll')).toBe(false);
             expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
         });
 

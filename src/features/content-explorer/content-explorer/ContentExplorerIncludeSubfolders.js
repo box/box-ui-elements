@@ -14,9 +14,11 @@ const ContentExplorerIncludeSubfolders = ({ isDisabled, onChange, tooltipMessage
             isDisabled={isDisabled}
             onChange={onChange}
         />
-        <Tooltip text={<FormattedMessage {...tooltipMessage} />}>
-            <InfoBadge16 className="bdl-ContentExplorerIncludeSubfolders-icon" fill="blue" />
-        </Tooltip>
+        {tooltipMessage && (
+            <Tooltip text={<FormattedMessage {...tooltipMessage} />}>
+                <InfoBadge16 className="bdl-ContentExplorerIncludeSubfolders-icon" fill="blue" />
+            </Tooltip>
+        )}
     </div>
 );
 
