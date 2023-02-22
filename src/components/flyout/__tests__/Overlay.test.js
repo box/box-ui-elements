@@ -29,7 +29,7 @@ describe('components/flyout/Overlay', () => {
             expect(wrapper.childAt(0).is('FocusTrap')).toBe(true);
             expect(wrapper.find('div.overlay').length).toBe(1);
 
-            expect(wrapper.childAt(0).prop('className')).toEqual('hey');
+            expect(wrapper.childAt(0).prop('className')).toEqual('bdl-Overlay hey');
             expect(wrapper.childAt(0).prop('id')).toEqual('overlay');
             expect(wrapper.childAt(0).prop('tabIndex')).toEqual(0);
         });
