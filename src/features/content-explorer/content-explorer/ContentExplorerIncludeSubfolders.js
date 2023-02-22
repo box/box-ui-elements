@@ -6,21 +6,19 @@ import Toggle from '../../../components/toggle';
 import Tooltip from '../../../components/tooltip';
 import messages from '../messages';
 
-const ContentExplorerIncludeSubfolders = ({ isDisabled, onChange, tooltipMessage }) => (
-    <div className="bdl-ContentExplorerIncludeSubfolders">
-        <Toggle
-            className="bdl-ContentExplorerIncludeSubfolders-toggle"
-            label={<FormattedMessage {...messages.includeSubfolders} />}
-            isDisabled={isDisabled}
-            onChange={onChange}
-        />
-        {tooltipMessage && (
-            <Tooltip text={<FormattedMessage {...tooltipMessage} />}>
-                <InfoBadge16 className="bdl-ContentExplorerIncludeSubfolders-icon" fill="blue" />
-            </Tooltip>
-        )}
-    </div>
-);
+const ContentExplorerIncludeSubfolders = ({ isDisabled, onChange, tooltipMessage }) => {
+    const label = (
+        <>
+            <FormattedMessage {...messages.includeSubfolders} />
+            {tooltipMessage && (
+                <Tooltip text={<FormattedMessage {...tooltipMessage} />}>
+                    <InfoBadge16 className="bdl-ContentExplorerIncludeSubfolders-icon" fill="blue" />
+                </Tooltip>
+            )}
+        </>
+    );
+    return <Toggle label={label} isDisabled={isDisabled} onChange={onChange} />;
+};
 
 ContentExplorerIncludeSubfolders.propTypes = {
     isDisabled: PropTypes.bool,

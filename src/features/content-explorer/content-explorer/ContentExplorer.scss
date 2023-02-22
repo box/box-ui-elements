@@ -82,15 +82,18 @@
         }
 
         .content-explorer-select-all-checkbox {
-            margin-right: 4.45 * $bdl-grid-unit;
-            margin-left: auto;
+            margin-right: 18px;
+
+            &:first-child {
+                margin-left: auto;
+            }
         }
     }
 
     .content-explorer-select-all-container {
         display: flex;
+        flex-grow: 1;
         align-items: center;
-        width: 100%;
         height: 10 * $bdl-grid-unit;
 
         .content-explorer-select-all-items-counter {
@@ -98,24 +101,14 @@
         }
 
         .content-explorer-select-all-checkbox-label {
-            display: flex;
-            flex: 1;
-            justify-content: flex-end;
             margin-right: 10px;
+            margin-left: auto;
         }
     }
 
-    .bdl-ContentExplorerIncludeSubfolders {
-        display: flex;
-        align-items: center;
-        height: 10 * $bdl-grid-unit;
-
-        .bdl-ContentExplorerIncludeSubfolders-icon {
-            margin-left: 120px;
-
-            path {
-                fill: $bdl-box-blue;
-            }
+    .bdl-ContentExplorerIncludeSubfolders-icon {
+        path {
+            fill: $bdl-box-blue;
         }
     }
 

@@ -20,9 +20,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             const wrapper = renderComponent({ isDisabled, onChange });
             const toggle = wrapper.find('Toggle');
 
-            expect(wrapper.is('Toggle')).toBe(true);
-            expect(wrapper.is('Tooltip')).toBe(true);
-
             expect(toggle.prop('onChange')).toBe(onChange);
             expect(toggle.prop('isDisabled')).toBe(isDisabled);
         });
