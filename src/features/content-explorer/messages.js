@@ -133,6 +133,11 @@ const messages = defineMessages({
         description: "Results label for number of items on list when it's just 1",
         id: 'boxui.contentExplorer.result',
     },
+    includeSubfolders: {
+        defaultMessage: 'Include Subfolders',
+        description: 'Label text shown next to the Include Subfolders toggle',
+        id: 'boxui.contentExplorer.includeSubfolders',
+    },
 });
 
 export default messages;

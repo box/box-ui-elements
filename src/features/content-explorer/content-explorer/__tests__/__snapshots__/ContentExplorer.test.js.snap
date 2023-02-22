@@ -24,6 +24,9 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     onSearchSubmit={[Function]}
     searchInputProps={Object {}}
   />
+  <div
+    className="bdl-ContentExplorer-subheader"
+  />
   <ItemList
     contentExplorerMode="selectFile"
     height={500}
