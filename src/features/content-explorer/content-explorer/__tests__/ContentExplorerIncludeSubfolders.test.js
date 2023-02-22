@@ -16,17 +16,17 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
     describe('render()', () => {
         test('should render the default component', () => {
             const wrapper = renderComponent();
-            const onIncludeSubfoldersToggle = jest.fn();
-            const isToggleDisabled = true;
+            const onChange = jest.fn();
+            const isDisabled = true;
             wrapper.setProps({
-                onIncludeSubfoldersToggle,
-                isToggleDisabled,
+                onChange,
+                isDisabled,
             });
             const toggle = wrapper.find('Toggle');
 
             expect(wrapper.is('div')).toBe(true);
-            expect(toggle.prop('onChange')).toEqual(onIncludeSubfoldersToggle);
-            expect(toggle.prop('isDisabled')).toEqual(isToggleDisabled);
+            expect(toggle.prop('onChange')).toEqual(onChange);
+            expect(toggle.prop('isDisabled')).toEqual(isDisabled);
         });
 
         test('should render toggle label correctly', () => {
@@ -39,15 +39,15 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             expect(toggleLabelId).toEqual('boxui.contentExplorer.includeSubfolders');
         });
 
-        test('should render the info icon Tooltip based on value from tooltipMessageForToggle', () => {
-            const tooltipMessageForToggle = { test: 'test' };
+        test('should render the info icon Tooltip based on value from tooltipMessage', () => {
+            const tooltipMessage = { test: 'test' };
             const wrapper = renderComponent();
             const numOfSelectedItems = 2;
-            wrapper.setProps({ numOfSelectedItems, tooltipMessageForToggle });
+            wrapper.setProps({ numOfSelectedItems, tooltipMessage });
 
             const toggleTooltip = wrapper.find('Tooltip').at(0);
 
-            expect(toggleTooltip.prop('text').props).toEqual(tooltipMessageForToggle);
+            expect(toggleTooltip.prop('text').props).toEqual(tooltipMessage);
         });
     });
 });
