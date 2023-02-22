@@ -69,4 +69,13 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         const componentProp = sidebar.find('CollapsibleSidebarItem');
         expect(componentProp.find('LinkBase').prop('someprop')).toBe(someValue);
     });
+
+    test.each([true, false])('render Box logo when hideBoxLogo=%s', hideBoxLogo => {
+        const sidebar = getWrapper({
+            expanded: true,
+            hideBoxLogo,
+        });
+
+        expect(sidebar).toMatchSnapshot();
+    });
 });
