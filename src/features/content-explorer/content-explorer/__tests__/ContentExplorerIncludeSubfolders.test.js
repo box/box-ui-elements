@@ -24,18 +24,28 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
             expect(toggle.prop('isDisabled')).toBe(isDisabled);
         });
 
-        // test('should render toggle label correctly', () => {
-        //     const wrapper = renderComponent();
-        //     const toggleLabelId = wrapper.find('Toggle').prop('label').props.id;
-        //     console.log(wrapper.find('Toggle').prop('label'));
-        //     expect(toggleLabelId).toBe('boxui.contentExplorer.includeSubfolders');
-        // });
+        test('should render toggle label correctly', () => {
+            const wrapper = renderComponent();
+            const toggleLabelId = wrapper
+                .find('Toggle')
+                .dive()
+                .find('FormattedMessage')
+                .prop('id');
 
-        // test('should render the info icon Tooltip based on value from tooltipMessage', () => {
-        //     const tooltipMessage = { test: 'test' };
-        //     const wrapper = renderComponent({ tooltipMessage });
+            expect(toggleLabelId).toBe('boxui.contentExplorer.includeSubfolders');
+        });
 
-        //     expect(wrapper.find('Tooltip').prop('text').props).toEqual(tooltipMessage);
-        // });
+        test('should render the info icon Tooltip based on value from tooltipMessage', () => {
+            const tooltipMessage = { test: 'test' };
+            const wrapper = renderComponent({ tooltipMessage });
+            const expectedMessage = wrapper
+                .find('Toggle')
+                .dive()
+                .find('Tooltip')
+                .prop('text').props;
+            console.log(expectedMessage);
+
+            expect(expectedMessage).toEqual(tooltipMessage);
+        });
     });
 });

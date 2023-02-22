@@ -75,10 +75,17 @@
     .bdl-ContentExplorer-subheader {
         display: flex;
         align-items: center;
+        height: 10 * $bdl-grid-unit;
 
         .checkbox-container,
         .toggle-container {
             margin: 0;
+        }
+
+        .toggle-simple-label {
+            display: flex;
+            align-items: center;
+            min-width: auto;
         }
 
         .content-explorer-select-all-checkbox {
@@ -107,6 +114,8 @@
     }
 
     .bdl-ContentExplorerIncludeSubfolders-icon {
+        margin-left: 4px;
+
         path {
             fill: $bdl-box-blue;
         }
