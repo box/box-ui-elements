@@ -43,7 +43,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerIncludeSubfo
                 .dive()
                 .find('Tooltip')
                 .prop('text').props;
-            console.log(expectedMessage);
 
             expect(expectedMessage).toEqual(tooltipMessage);
         });

@@ -40,7 +40,6 @@ const ContentExplorerModal = ({
     customInput,
     title = '',
     description = '',
-    includeSubfoldersProps,
     isOpen = false,
     isResponsive = false,
     onRequestClose,
@@ -60,7 +59,6 @@ const ContentExplorerModal = ({
         <ContentExplorer
             breadcrumbProps={breadcrumbProps}
             customInput={customInput}
-            includeSubfoldersProps={includeSubfoldersProps}
             isResponsive={isResponsive}
             onCancelButtonClick={onRequestClose}
             onSelectedClick={onSelectedClick}
