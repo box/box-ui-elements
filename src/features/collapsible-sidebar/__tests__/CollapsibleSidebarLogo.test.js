@@ -70,12 +70,17 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
         expect(componentProp.find('LinkBase').prop('someprop')).toBe(someValue);
     });
 
-    test.each([true, false])('render Box logo when hideBoxLogo=%s', hideBoxLogo => {
+    test.each([
+        [true, true],
+        [false, false],
+        [undefined, true],
+    ])('render Box logo when isLogoVisible=%s', (isLogoVisible, result) => {
         const sidebar = getWrapper({
             expanded: true,
-            hideBoxLogo,
+            isLogoVisible,
         });
 
-        expect(sidebar).toMatchSnapshot();
+        const componentProp = sidebar.find('CollapsibleSidebarItem');
+        expect(componentProp.exists('.bdl-CollapsibleSidebar-logoLink')).toBe(result);
     });
 });
