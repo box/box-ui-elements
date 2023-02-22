@@ -31,7 +31,6 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
             href="/profile/undefined"
             rel="noopener"
             target="_blank"
-            title="test c"
           >
             test c
           </Link>
@@ -42,7 +41,6 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
           <Link
             className=""
             href="mailto:testc@example.com"
-            title="testc@example.com"
           >
             testc@example.com
           </Link>
@@ -124,7 +122,6 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
             href="/profile/undefined"
             rel="noopener"
             target="_blank"
-            title="test c"
           >
             test c
           </Link>
@@ -135,7 +132,6 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
           <Link
             className=""
             href="mailto:testc@example.com"
-            title="testc@example.com"
           >
             testc@example.com
           </Link>
