@@ -62,6 +62,8 @@ class ContentExplorerModalContainer extends Component {
         createFolderError: PropTypes.string,
         /** Configures the content explorer based on the user's intended action (ex. select file or move/copy) */
         contentExplorerMode: ContentExplorerModePropType.isRequired,
+        /** Props for the include subfolders toggle */
+        includeSubfoldersProps: PropTypes.object,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
@@ -73,6 +75,16 @@ class ContentExplorerModalContainer extends Component {
          * @param {Array} newFoldersPath
          */
         onEnterFolder: PropTypes.func.isRequired,
+        /** Called when the folders path is updated
+         *
+         * @param {Array} newFoldersPath
+         */
+        onFoldersPathUpdate: PropTypes.func,
+        /** Called whenever the selected items list changes
+         *
+         * @param {Object} selectedItems
+         */
+        onSelectedItemsUpdate: PropTypes.func,
         /**
          * Called when items are chosen.
          *
