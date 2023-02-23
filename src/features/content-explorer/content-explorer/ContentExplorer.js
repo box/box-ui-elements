@@ -486,6 +486,8 @@ class ContentExplorer extends Component {
             'onExitSearch',
             'initialSelectedItems',
         ]);
+        const canIncludeSubfolders = !!includeSubfoldersProps;
+        const hasSubheader = canIncludeSubfolders || isSelectAllAllowed;
 
         const selectedItemsIds = Object.keys(selectedItems);
         let areActionButtonsDisabled;
@@ -543,17 +545,19 @@ class ContentExplorer extends Component {
                 >
                     {headerActionsAccessory}
                 </ContentExplorerHeaderActions>
-                <div className="bdl-ContentExplorer-subheader">
-                    {includeSubfoldersProps && <ContentExplorerIncludeSubfolders {...includeSubfoldersProps} />}
-                    {isSelectAllAllowed && (
-                        <ContentExplorerSelectAll
-                            handleSelectAllClick={this.handleSelectAllClick}
-                            isLabelHidden={!!includeSubfoldersProps}
-                            isSelectAllChecked={isSelectAllChecked}
-                            numTotalItems={numTotalItems}
-                        />
-                    )}
-                </div>
+                {hasSubheader && (
+                    <div className="bdl-ContentExplorer-subheader">
+                        {canIncludeSubfolders && <ContentExplorerIncludeSubfolders {...includeSubfoldersProps} />}
+                        {isSelectAllAllowed && (
+                            <ContentExplorerSelectAll
+                                handleSelectAllClick={this.handleSelectAllClick}
+                                isLabelHidden={canIncludeSubfolders}
+                                isSelectAllChecked={isSelectAllChecked}
+                                numTotalItems={numTotalItems}
+                            />
+                        )}
+                    </div>
+                )}
                 <ItemList
                     additionalColumns={additionalColumns}
                     contentExplorerMode={contentExplorerMode}
