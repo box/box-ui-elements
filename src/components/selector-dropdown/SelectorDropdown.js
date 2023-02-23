@@ -4,8 +4,9 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 
 import { scrollIntoView } from '../../utils/dom';
+import PopperComponent from '../popper';
+import { PLACEMENT_BOTTOM_START } from '../popper/constants';
 import ScrollWrapper from '../scroll-wrapper';
-import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
 import './SelectorDropdown.scss';
 
@@ -311,13 +312,13 @@ class SelectorDropdown extends React.Component<Props, State> {
                 onPaste={this.handleInput}
                 ref={this.selectorDropdownRef}
             >
-                {React.cloneElement(selector, { inputProps })}
-                {isOpen && (
-                    <div className={`${OVERLAY_WRAPPER_CLASS} is-visible`}>
+                <PopperComponent placement={PLACEMENT_BOTTOM_START} isOpen={isOpen}>
+                    {React.cloneElement(selector, { inputProps })}
+                    <div className="SelectorDropdown-overlay-wrapper">
                         {title}
                         {shouldScroll ? <ScrollWrapper>{list}</ScrollWrapper> : list}
                     </div>
-                )}
+                </PopperComponent>
             </div>
         );
     }

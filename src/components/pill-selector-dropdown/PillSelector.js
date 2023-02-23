@@ -26,12 +26,13 @@ type Props = {
     getPillClassName?: (option: Option) => string,
     /** Function to retrieve the image URL associated with a pill */
     getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
+    innerRef?: React.Ref<any>,
     inputProps: Object,
     onInput: Function,
     onRemove: Function,
     onSuggestedPillAdd?: Function,
     placeholder: string,
-    selectedOptions: Array<Object> | List<Object>,
+    selectedOptions: List<Object>,
     /** Whether to show avatars in pills (if rounded style is enabled) */
     showAvatars?: boolean,
     /** Whether to use rounded style for pills */
@@ -47,8 +48,20 @@ type State = {
     selectedIndex: number,
 };
 
-class PillSelector extends React.Component<Props, State> {
-    static defaultProps = {
+type DefaultProps = {
+    allowInvalidPills: boolean,
+    disabled: boolean,
+    error: string,
+    inputProps: Object,
+    placeholder: string,
+    selectedOptions: List<Object>,
+    validator: () => boolean,
+};
+
+type Config = React.Config<Props, DefaultProps>;
+
+class PillSelectorBase extends React.Component<Props, State> {
+    static defaultProps: DefaultProps = {
         allowInvalidPills: false,
         disabled: false,
         error: '',
@@ -179,6 +192,7 @@ class PillSelector extends React.Component<Props, State> {
             onRemove,
             onSuggestedPillAdd,
             placeholder,
+            innerRef,
             selectedOptions,
             showAvatars,
             showRoundedPills,
@@ -213,6 +227,7 @@ class PillSelector extends React.Component<Props, State> {
                     onClick={this.handleClick}
                     onFocus={this.handleFocus}
                     onKeyDown={this.handleKeyDown}
+                    ref={innerRef}
                 >
                     {showRoundedPills
                         ? selectedOptions.map((option: RoundOption, index: number) => {
@@ -288,5 +303,12 @@ class PillSelector extends React.Component<Props, State> {
         );
     }
 }
+
+export { PillSelectorBase };
+
+const PillSelector = React.forwardRef<Config, PillSelectorBase>((props: Config, ref: React.Ref<any>) => (
+    <PillSelectorBase {...props} innerRef={ref} />
+));
+PillSelector.displayName = 'PillSelector';
 
 export default PillSelector;
