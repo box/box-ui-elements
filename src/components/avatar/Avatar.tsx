@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { injectIntl, IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import Badgeable from '../badgeable';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
 import UnknownUserAvatar from './UnknownUserAvatar';
 import GlobeBadge16 from '../../icon/fill/GlobeBadge16';
+
+import messages from './messages';
 
 import './Avatar.scss';
 
@@ -27,6 +30,8 @@ export interface AvatarProps {
     className?: string;
     /** Users id */
     id?: string | number | null;
+    /** Intl object */
+    intl: IntlShape;
     /** Whether this avatar should be labeled as external in the current context */
     isExternal?: boolean;
     /**
@@ -47,10 +52,13 @@ function Avatar({
     className,
     name,
     id,
+    intl,
     isExternal,
     shouldShowExternal = false,
     size = '',
 }: AvatarProps) {
+    const { formatMessage } = intl;
+
     const [hasImageErrored, setHasImageErrored] = React.useState<boolean>(false);
     const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<AvatarProps['avatarUrl']>(null);
 
@@ -88,7 +96,7 @@ function Avatar({
 
     let badge = null;
     if (shouldShowExternal && isExternal) {
-        badge = <GlobeBadge16 className="bdl-Avatar-externalBadge" />;
+        badge = <GlobeBadge16 className="bdl-Avatar-externalBadge" title={formatMessage(messages.externalUser)} />;
     } else if (badgeIcon) {
         badge = <div className="bdl-Avatar-badge bdl-Avatar-iconBadge">{badgeIcon}</div>;
     }
@@ -100,4 +108,5 @@ function Avatar({
     );
 }
 
-export default Avatar;
+export { Avatar as AvatarBase };
+export default injectIntl(Avatar);
