@@ -324,9 +324,15 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
     });
 
     describe('renderStatus', () => {
+        let item;
+        let selectedItems;
+
+        beforeEach(() => {
+            item = { id: '0', name: 'item1' };
+            selectedItems = { '0': item };
+        });
+
         test('should show default status message for multi select', () => {
-            const item = { id: '0', name: 'item1' };
-            const selectedItems = { '0': item };
             const wrapper = renderComponent({
                 contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
                 selectedItems,
@@ -340,8 +346,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
         });
 
         test('should show status message for multi select when items are selected and we can include subfolders and can select all', () => {
-            const item = { id: '0', name: 'item1' };
-            const selectedItems = { '0': item };
             const canIncludeSubfolders = true;
             const isSelectAllAllowed = true;
             const wrapper = renderComponent({
@@ -359,8 +363,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
         });
 
         test('should show status message for multi select when items are selected and we can include subfolders and cannot select all', () => {
-            const item = { id: '0', name: 'item1' };
-            const selectedItems = { '0': item };
             const canIncludeSubfolders = true;
             const isSelectAllAllowed = false;
             const wrapper = renderComponent({
@@ -392,8 +394,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
             },
         ].forEach(({ contentExplorerMode }) => {
             test('should not show status message', () => {
-                const item = { id: '0', name: 'item1' };
-                const selectedItems = { '0': item };
                 const wrapper = renderComponent({
                     contentExplorerMode,
                     selectedItems,
@@ -404,8 +404,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
         });
 
         test('should render statusElement as button when onSelectedClick provided for multi select', () => {
-            const item = { id: '0', name: 'item1' };
-            const selectedItems = { '0': item };
             const onSelectedClick = () => {};
 
             const wrapper = renderComponent({
