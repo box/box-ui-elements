@@ -24,6 +24,7 @@ const ContentExplorerActionButtons = ({
     actionButtonsProps = {},
     areButtonsDisabled = false,
     cancelButtonProps = {},
+    canIncludeSubfolders,
     chooseButtonProps = {},
     chooseButtonText,
     contentExplorerMode,
@@ -32,6 +33,7 @@ const ContentExplorerActionButtons = ({
     isCopyButtonLoading = false,
     isMoveButtonLoading = false,
     isResponsive = false,
+    isSelectAllAllowed,
     onCancelClick,
     onChooseClick,
     onCopyClick,
@@ -73,10 +75,20 @@ const ContentExplorerActionButtons = ({
     };
 
     const renderStatus = () => {
-        const chosenItems = getChosenItemsFromSelectedItems(selectedItems);
-        const statusMessage = (
-            <FormattedMessage {...messages.numSelected} values={{ numSelected: chosenItems.length }} />
-        );
+        const numChosenItems = getChosenItemsFromSelectedItems(selectedItems).length;
+
+        let statusMessage = <FormattedMessage {...messages.numSelected} values={{ numSelected: numChosenItems }} />;
+
+        if (canIncludeSubfolders && numChosenItems > 0) {
+            statusMessage = isSelectAllAllowed ? (
+                <FormattedMessage {...messages.filesAndFoldersSelected} values={{ numSelected: numChosenItems }} />
+            ) : (
+                <FormattedMessage
+                    {...messages.fileSelectedToIncludeSubfolders}
+                    values={{ numSelected: numChosenItems }}
+                />
+            );
+        }
 
         const statusElement = onSelectedClick ? (
             <Button className="status-message" onClick={onSelectedClick}>
@@ -151,6 +163,7 @@ ContentExplorerActionButtons.propTypes = {
     actionButtonsProps: PropTypes.object,
     areButtonsDisabled: PropTypes.bool,
     cancelButtonProps: PropTypes.object,
+    canIncludeSubfolders: PropTypes.bool,
     chooseButtonProps: PropTypes.object,
     chooseButtonText: PropTypes.node,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
@@ -159,6 +172,7 @@ ContentExplorerActionButtons.propTypes = {
     isCopyButtonLoading: PropTypes.bool,
     isMoveButtonLoading: PropTypes.bool,
     isResponsive: PropTypes.bool,
+    isSelectAllAllowed: PropTypes.bool,
     onCancelClick: PropTypes.func,
     onChooseClick: PropTypes.func,
     onCopyClick: PropTypes.func,

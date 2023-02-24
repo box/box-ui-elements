@@ -585,6 +585,7 @@ class ContentExplorer extends Component {
                     actionButtonsProps={actionButtonsProps}
                     areButtonsDisabled={areActionButtonsDisabled}
                     cancelButtonProps={cancelButtonProps}
+                    canIncludeSubfolders={canIncludeSubfolders}
                     chooseButtonProps={chooseButtonProps}
                     chooseButtonText={chooseButtonText}
                     contentExplorerMode={contentExplorerMode}
@@ -593,6 +594,7 @@ class ContentExplorer extends Component {
                     isCopyButtonLoading={isCopyButtonLoading}
                     isMoveButtonLoading={isMoveButtonLoading}
                     isResponsive={isResponsive}
+                    isSelectAllAllowed={isSelectAllAllowed}
                     onCancelClick={onCancelButtonClick}
                     onChooseClick={onChooseItems}
                     onCopyClick={onCopyItem}

@@ -82,6 +82,17 @@ const messages = defineMessages({
         description: 'Text shown to indicate the number of items selected',
         id: 'boxui.contentExplorer.numSelected',
     },
+    filesAndFoldersSelected: {
+        defaultMessage: '{numSelected} of folder and files selected',
+        description: 'Text shown to indicate the number of items selected with Include Subfolders feature',
+        id: 'boxui.contentExplorer.filesAndFoldersSelected',
+    },
+    fileSelectedToIncludeSubfolders: {
+        defaultMessage: '{numSelected} folder and all subfolders within is selected',
+        description:
+            'Text shown to indicate the number of folders selected where there subfolders are selected as well',
+        id: 'boxui.contentExplorer.fileSelectedToIncludeSubfolders',
+    },
     emptySearch: {
         defaultMessage: "Sorry, we couldn't find what you're looking for.",
         description: 'Text shown in the list when there are no search results',
