@@ -75,18 +75,15 @@ const ContentExplorerActionButtons = ({
     };
 
     const renderStatus = () => {
-        const numChosenItems = getChosenItemsFromSelectedItems(selectedItems).length;
+        const numSelected = getChosenItemsFromSelectedItems(selectedItems).length;
 
-        let statusMessage = <FormattedMessage {...messages.numSelected} values={{ numSelected: numChosenItems }} />;
+        let statusMessage = <FormattedMessage {...messages.numSelected} values={{ numSelected }} />;
 
-        if (canIncludeSubfolders && numChosenItems > 0) {
+        if (canIncludeSubfolders) {
             statusMessage = isSelectAllAllowed ? (
-                <FormattedMessage {...messages.filesAndFoldersSelected} values={{ numSelected: numChosenItems }} />
+                <FormattedMessage {...messages.numItemsSelected} values={{ numSelected }} />
             ) : (
-                <FormattedMessage
-                    {...messages.fileSelectedToIncludeSubfolders}
-                    values={{ numSelected: numChosenItems }}
-                />
+                <FormattedMessage {...messages.numFoldersSelected} values={{ numSelected }} />
             );
         }
 
