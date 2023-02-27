@@ -194,8 +194,7 @@ class ContentExplorerHeaderActions extends Component {
                 {hasFolderTreeBreadcrumbs ? (
                     <ContentExplorerFolderTreeBreadcrumbs
                         foldersPath={foldersPath}
-                        isFolderTreeButtonHidden={this.isViewingSearchResults()}
-                        isFolderTreeButtonDisabled={isBreadcrumbButtonDisabled}
+                        isFolderTreeButtonHidden={isBreadcrumbButtonDisabled || this.isViewingSearchResults()}
                         numTotalItems={numTotalItems}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
                     />

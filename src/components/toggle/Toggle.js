@@ -53,15 +53,15 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
         const classes = classNames('toggle-container', className, {
             'is-toggle-right-aligned': isToggleRightAligned,
         });
-        let toggleElements = [
+
+        const toggleElements = [
             <div key="toggle-simple-switch" className="toggle-simple-switch" />,
             <div key="toggle-simple-label" className="toggle-simple-label">
                 {label}
             </div>,
         ];
-
         if (isToggleRightAligned) {
-            toggleElements = toggleElements.reverse();
+            toggleElements.reverse();
         }
 
         return (
@@ -72,11 +72,12 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
                         checked={isOn}
                         className="toggle-simple-input"
                         disabled={isDisabled}
-                        ref={ref}
                         name={name}
                         onBlur={onBlur}
                         onChange={onChange}
                         onFocus={onFocus}
+                        ref={ref}
+                        role="switch"
                         type="checkbox"
                         {...rest}
                     />

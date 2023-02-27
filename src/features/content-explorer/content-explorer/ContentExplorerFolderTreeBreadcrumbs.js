@@ -22,7 +22,6 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
     foldersPath,
     intl: { formatMessage, formatNumber },
     isFolderTreeButtonHidden,
-    isFolderTreeButtonDisabled = false,
     numTotalItems,
     onBreadcrumbClick,
 }) => {
@@ -35,7 +34,6 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
                     <Button
                         aria-label={formatMessage(messages.clickToViewPath)}
                         className="bdl-ContentExplorerFolderTreeBreadcrumbs-button"
-                        isDisabled={isFolderTreeButtonDisabled}
                         title={formatMessage(messages.filePath)}
                         type="button"
                     >
@@ -76,7 +74,6 @@ ContentExplorerFolderTreeBreadcrumbs.propTypes = {
     foldersPath: FoldersPathPropType.isRequired,
     intl: PropTypes.any,
     isFolderTreeButtonHidden: PropTypes.bool,
-    isFolderTreeButtonDisabled: PropTypes.bool,
     numTotalItems: PropTypes.number.isRequired,
     onBreadcrumbClick: PropTypes.func,
 };

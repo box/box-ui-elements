@@ -39,13 +39,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
             expect(breadcrumbTextId).toBe('boxui.contentExplorer.folderTreeBreadcrumbsText');
         });
 
-        test('should render disabled folder tree button when isFolderTreeButtonDisabled is true', () => {
-            const foldersPath = [{ id: '0', name: 'folder1' }];
-            const wrapper = renderComponent({ isFolderTreeButtonDisabled: true, foldersPath });
-
-            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').prop('isDisabled')).toBe(true);
-        });
-
         test('should not render button nor icon when isFolderTreeButtonHidden is true', () => {
             const foldersPath = [
                 { id: '0', name: 'folder1' },
@@ -68,13 +61,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBr
             const breadcrumbTextId = lastBreadcrumb.find('FormattedMessage').prop('id');
 
             expect(breadcrumbTextId).toBe('boxui.contentExplorer.folderTreeBreadcrumbsText');
-        });
-
-        test('should render disabled folder tree button when isFolderTreeButtonDisabled is true', () => {
-            const foldersPath = [{ id: '0', name: 'folder1' }];
-            const wrapper = renderComponent({ isFolderTreeButtonDisabled: true, foldersPath });
-
-            expect(wrapper.find('.bdl-ContentExplorerFolderTreeBreadcrumbs-button').prop('isDisabled')).toBe(true);
         });
     });
 

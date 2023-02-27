@@ -324,16 +324,52 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
     });
 
     describe('renderStatus', () => {
-        test('should show status message for multi select', () => {
-            const item = { id: '0', name: 'item1' };
-            const selectedItems = { '0': item };
+        const item = { id: '0', name: 'item1' };
+        const selectedItems = { '0': item };
+
+        test('should show default status message for multi select', () => {
             const wrapper = renderComponent({
                 contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
                 selectedItems,
             });
+            const statusMessageId = wrapper
+                .find('.status-message')
+                .find('FormattedMessage')
+                .prop('id');
 
-            expect(wrapper.find('.status-message').length).toEqual(1);
+            expect(statusMessageId).toBe('boxui.contentExplorer.numSelected');
         });
+
+        test('should show status message for multi select when items are selected and we can include subfolders and can select all', () => {
+            const wrapper = renderComponent({
+                canIncludeSubfolders: true,
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                isSelectAllAllowed: true,
+                selectedItems,
+            });
+            const statusMessageId = wrapper
+                .find('.status-message')
+                .find('FormattedMessage')
+                .prop('id');
+
+            expect(statusMessageId).toBe('boxui.contentExplorer.numItemsSelected');
+        });
+
+        test('should show status message for multi select when items are selected and we can include subfolders and cannot select all', () => {
+            const wrapper = renderComponent({
+                canIncludeSubfolders: true,
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                isSelectAllAllowed: false,
+                selectedItems,
+            });
+            const statusMessageId = wrapper
+                .find('.status-message')
+                .find('FormattedMessage')
+                .prop('id');
+
+            expect(statusMessageId).toBe('boxui.contentExplorer.numFoldersSelected');
+        });
+
         [
             {
                 contentExplorerMode: ContentExplorerModes.SELECT_FILE,
@@ -349,8 +385,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
             },
         ].forEach(({ contentExplorerMode }) => {
             test('should not show status message', () => {
-                const item = { id: '0', name: 'item1' };
-                const selectedItems = { '0': item };
                 const wrapper = renderComponent({
                     contentExplorerMode,
                     selectedItems,
@@ -361,8 +395,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
         });
 
         test('should render statusElement as button when onSelectedClick provided for multi select', () => {
-            const item = { id: '0', name: 'item1' };
-            const selectedItems = { '0': item };
             const onSelectedClick = () => {};
 
             const wrapper = renderComponent({

@@ -35,13 +35,7 @@ const CollaboratorListItem = (props: Props) => {
     const userOrGroupNameContent =
         type !== COLLAB_GROUP_TYPE ? (
             <div className={classnames('name', type)}>
-                <Link
-                    href={profileURL || `/profile/${userID}`}
-                    rel="noopener"
-                    target="_blank"
-                    title={name}
-                    {...usernameProps}
-                >
+                <Link href={profileURL || `/profile/${userID}`} rel="noopener" target="_blank" {...usernameProps}>
                     {name}
                 </Link>
             </div>
@@ -52,7 +46,7 @@ const CollaboratorListItem = (props: Props) => {
     const emailContent =
         type !== COLLAB_GROUP_TYPE && email ? (
             <div className="email">
-                <Link href={`mailto:${email}`} title={email} {...emailProps}>
+                <Link href={`mailto:${email}`} {...emailProps}>
                     {email}
                 </Link>
             </div>

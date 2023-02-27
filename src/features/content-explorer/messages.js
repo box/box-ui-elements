@@ -82,6 +82,28 @@ const messages = defineMessages({
         description: 'Text shown to indicate the number of items selected',
         id: 'boxui.contentExplorer.numSelected',
     },
+    numItemsSelected: {
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 items selected}
+                one {1 item selected}
+                other {# items selected}
+            }
+        `,
+        description: 'Text shown to indicate the number of items selected with Include Subfolders feature',
+        id: 'boxui.contentExplorer.numItemsSelected',
+    },
+    numFoldersSelected: {
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 folders selected}
+                one {1 folder selected}
+                other {# folders selected}
+            }
+        `,
+        description: 'Text shown to indicate the number of folders selected',
+        id: 'boxui.contentExplorer.numFoldersSelected',
+    },
     emptySearch: {
         defaultMessage: "Sorry, we couldn't find what you're looking for.",
         description: 'Text shown in the list when there are no search results',
@@ -132,6 +154,11 @@ const messages = defineMessages({
         defaultMessage: '{itemsCount} result',
         description: "Results label for number of items on list when it's just 1",
         id: 'boxui.contentExplorer.result',
+    },
+    includeSubfolders: {
+        defaultMessage: 'Include Subfolders',
+        description: 'Label text shown next to the Include Subfolders toggle',
+        id: 'boxui.contentExplorer.includeSubfolders',
     },
 });
 
