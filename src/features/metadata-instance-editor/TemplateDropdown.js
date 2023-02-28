@@ -265,6 +265,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
                 className={flyoutClassName}
                 closeOnClick
                 closeOnClickOutside
+                constrainToWindowWithPin
                 onClose={this.onClose}
                 onOpen={this.onOpen}
                 position="bottom-left"

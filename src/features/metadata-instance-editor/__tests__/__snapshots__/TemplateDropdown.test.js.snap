@@ -8,6 +8,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render butto
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  constrainToWindowWithPin={true}
   isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
@@ -68,6 +69,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  constrainToWindowWithPin={true}
   isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
@@ -134,6 +136,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  constrainToWindowWithPin={true}
   isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
@@ -200,6 +203,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render empty
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  constrainToWindowWithPin={true}
   isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
@@ -258,6 +262,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render error
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  constrainToWindowWithPin={true}
   isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
@@ -316,6 +321,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render loadi
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  constrainToWindowWithPin={true}
   isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}
@@ -369,6 +375,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render plain
   closeOnWindowBlur={false}
   constrainToScrollParent={true}
   constrainToWindow={false}
+  constrainToWindowWithPin={true}
   isResponsive={false}
   isVisibleByDefault={false}
   onClose={[Function]}

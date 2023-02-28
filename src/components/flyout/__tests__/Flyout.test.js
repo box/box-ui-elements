@@ -206,7 +206,7 @@ describe('components/flyout/Flyout', () => {
             expect(wrapper.prop('constraints')).toEqual([]);
         });
 
-        test('should render TetherComponent with window constraint when constrainToScrollParent=true', () => {
+        test('should render TetherComponent with window constraint when constrainToWindow=true', () => {
             const wrapper = shallow(
                 <Flyout constrainToWindow>
                     <FakeButton />
@@ -222,6 +222,27 @@ describe('components/flyout/Flyout', () => {
                 {
                     to: 'window',
                     attachment: 'together',
+                },
+            ]);
+        });
+
+        test('should render TetherComponent with window constraint when constrainToWindowWithPin=true', () => {
+            const wrapper = shallow(
+                <Flyout constrainToWindowWithPin>
+                    <FakeButton />
+                    <FakeOverlay />
+                </Flyout>,
+            );
+
+            expect(wrapper.prop('constraints')).toEqual([
+                {
+                    to: 'scrollParent',
+                    attachment: 'together',
+                },
+                {
+                    to: 'window',
+                    attachment: 'together',
+                    pin: true,
                 },
             ]);
         });
