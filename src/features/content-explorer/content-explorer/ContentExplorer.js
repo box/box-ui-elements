@@ -488,6 +488,12 @@ class ContentExplorer extends Component {
         ]);
         const canIncludeSubfolders = !!includeSubfoldersProps;
         const hasSubheader = canIncludeSubfolders || isSelectAllAllowed;
+        const foldersPathWithIncludeSubfolders = canIncludeSubfolders
+            ? includeSubfoldersProps.foldersPathWithIncludeSubfolders
+            : undefined;
+        const isIncludeSubfoldersStatusMessageClickable = canIncludeSubfolders
+            ? includeSubfoldersProps.isIncludeSubfoldersStatusMessageClickable
+            : false;
 
         const selectedItemsIds = Object.keys(selectedItems);
         let areActionButtonsDisabled;
@@ -590,14 +596,17 @@ class ContentExplorer extends Component {
                     chooseButtonText={chooseButtonText}
                     contentExplorerMode={contentExplorerMode}
                     currentFolder={currentFolder}
+                    foldersPathWithIncludeSubfolders={foldersPathWithIncludeSubfolders}
                     isChooseButtonLoading={isChooseButtonLoading}
                     isCopyButtonLoading={isCopyButtonLoading}
+                    isIncludeSubfoldersStatusMessageClickable={isIncludeSubfoldersStatusMessageClickable}
                     isMoveButtonLoading={isMoveButtonLoading}
                     isResponsive={isResponsive}
                     isSelectAllAllowed={isSelectAllAllowed}
                     onCancelClick={onCancelButtonClick}
                     onChooseClick={onChooseItems}
                     onCopyClick={onCopyItem}
+                    onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
                     selectedItems={selectedItems}

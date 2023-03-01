@@ -52,8 +52,10 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
         "name": "folder",
       }
     }
+    isIncludeSubfoldersStatusMessageClickable={false}
     isNoSelectionAllowed={false}
     isResponsive={false}
+    onFoldersPathUpdated={[Function]}
     selectedItems={Object {}}
   />
 </div>
