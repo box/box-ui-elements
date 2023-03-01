@@ -28,6 +28,8 @@ type Props = {
     /** Label displayed for the text input */
     // TODO: Make label required
     label?: React.Node,
+    /** Node for settings button */
+    nodeForButton?: React.Node,
     /** onFocus handler for the input el */
     onCopySuccess?: Function,
     /** Function called when link is copied by keyboard or button */
@@ -216,6 +218,7 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
         return (
             <div className={wrapperClasses} {...copyEvent}>
                 <TextInput {...inputProps} onFocus={this.handleFocus} />
+                {rest.nodeForButton}
                 {this.renderCopyButton()}
             </div>
         );
