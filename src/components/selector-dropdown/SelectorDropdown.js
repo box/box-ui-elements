@@ -7,6 +7,7 @@ import { scrollIntoView } from '../../utils/dom';
 import PopperComponent from '../popper';
 import { PLACEMENT_BOTTOM_START } from '../popper/constants';
 import ScrollWrapper from '../scroll-wrapper';
+import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
 import './SelectorDropdown.scss';
 
@@ -314,7 +315,7 @@ class SelectorDropdown extends React.Component<Props, State> {
             >
                 <PopperComponent placement={PLACEMENT_BOTTOM_START} isOpen={isOpen}>
                     {React.cloneElement(selector, { inputProps })}
-                    <div className="SelectorDropdown-overlay-wrapper">
+                    <div className={`SelectorDropdown-overlay ${OVERLAY_WRAPPER_CLASS} is-visible`}>
                         {title}
                         {shouldScroll ? <ScrollWrapper>{list}</ScrollWrapper> : list}
                     </div>

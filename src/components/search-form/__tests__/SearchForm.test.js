@@ -2,7 +2,7 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import SearchForm from '..';
+import { SearchFormBaseIntl as SearchForm } from '../SearchForm';
 
 let clock;
 const sandbox = sinon.sandbox.create();
