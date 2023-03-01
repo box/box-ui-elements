@@ -1,0 +1,302 @@
+// @flow
+import * as React from 'react';
+import classNames from 'classnames';
+import noop from 'lodash/noop';
+import { FormattedMessage } from 'react-intl';
+import TetherComponent from 'react-tether';
+import Checkmark16 from '../../../../icon/line/Checkmark16';
+import Trash16 from '../../../../icon/line/Trash16';
+import Pencil16 from '../../../../icon/line/Pencil16';
+import X16 from '../../../../icon/fill/X16';
+import Avatar from '../Avatar';
+import Media from '../../../../components/media';
+import { MenuItem } from '../../../../components/menu';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import DeleteConfirmation from '../common/delete-confirmation';
+import ActivityTimestamp from '../common/activity-timestamp';
+import UserLink from '../common/user-link';
+import ActivityCard from '../ActivityCard';
+import ActivityError from '../common/activity-error';
+import ActivityMessage from '../common/activity-message';
+import ActivityStatus from '../common/activity-status';
+import CommentForm from '../comment-form';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
+import messages from './messages';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
+import './Comment.scss';
+
+type Props = {
+    created_at: string | number,
+    created_by: User,
+    currentUser?: User,
+    error?: ActionItemError,
+    getAvatarUrl: GetAvatarUrlCallback,
+    getMentionWithQuery?: Function,
+    getUserProfileUrl?: GetProfileUrlCallback,
+    id: string,
+    isDisabled?: boolean,
+    isPending?: boolean,
+    mentionSelectorContacts?: SelectorItems<>,
+    modified_at?: string | number,
+    onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
+    onEdit: (
+        id: string,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onSelect: (isSelected: boolean) => void,
+    permissions: BoxCommentPermission,
+    status?: FeedItemStatus,
+    tagged_message: string,
+    translatedTaggedMessage?: string,
+    translations?: Translations,
+};
+
+// TODO: Replace and rename to Comment component once threaded replies refactor is fully implemented
+const BaseComment = (props: Props) => {
+    const {
+        created_by,
+        created_at,
+        permissions = {},
+        id,
+        isPending,
+        error,
+        tagged_message = '',
+        translatedTaggedMessage,
+        translations,
+        currentUser,
+        isDisabled,
+        getAvatarUrl,
+        getUserProfileUrl,
+        getMentionWithQuery,
+        mentionSelectorContacts,
+        modified_at,
+        onDelete,
+        onEdit,
+        onSelect,
+        status,
+    } = props;
+
+    const [isConfirmingDelete, setIsConfirmingDelete] = React.useState<boolean>(false);
+    const [isEditing, setIsEditing] = React.useState<boolean>(false);
+    const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
+
+    const selectComment = (isSelected: boolean = true) => {
+        onSelect(isSelected);
+    };
+
+    const handleDeleteConfirm = (): void => {
+        onDelete({ id, permissions });
+        selectComment(false);
+    };
+
+    const handleDeleteCancel = (): void => {
+        setIsConfirmingDelete(false);
+        selectComment(false);
+    };
+
+    const handleDeleteClick = () => {
+        setIsConfirmingDelete(true);
+        selectComment();
+    };
+
+    const handleEditClick = (): void => {
+        setIsEditing(true);
+        setIsInputOpen(true);
+        selectComment();
+    };
+
+    const handleMenuClose = (): void => {
+        if (isConfirmingDelete || isEditing || isInputOpen) {
+            return;
+        }
+        selectComment(false);
+    };
+
+    const handleMenuOpen = (): void => {
+        selectComment();
+    };
+
+    const commentFormFocusHandler = (): void => {
+        setIsInputOpen(true);
+        selectComment();
+    };
+
+    const commentFormCancelHandler = (): void => {
+        setIsInputOpen(false);
+        setIsEditing(false);
+        selectComment(false);
+    };
+
+    const commentFormSubmitHandler = (): void => {
+        setIsInputOpen(false);
+        setIsEditing(false);
+        selectComment(false);
+    };
+
+    const handleMessageUpdate = ({
+        id: messageID,
+        text,
+        hasMention,
+    }: {
+        hasMention: boolean,
+        id: string,
+        text: string,
+    }): void => {
+        onEdit(messageID, text, undefined, hasMention, permissions);
+        commentFormSubmitHandler();
+    };
+
+    const handleStatusUpdate = (selectedStatus: FeedItemStatus): void => {
+        onEdit(id, undefined, selectedStatus, false, permissions);
+    };
+
+    const canDelete = permissions.can_delete;
+    const canEdit = onEdit !== noop && permissions.can_edit;
+    const canResolve = onEdit !== noop && permissions.can_resolve;
+    const createdAtTimestamp = new Date(created_at).getTime();
+    const createdByUser = created_by || PLACEHOLDER_USER;
+    const isEdited = modified_at !== undefined && modified_at !== created_at;
+    const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
+    const isResolved = status === COMMENT_STATUS_RESOLVED;
+
+    return (
+        <ActivityCard className="bcs-Comment">
+            <Media
+                className={classNames('bcs-Comment-media', {
+                    'bcs-is-pending': isPending || error,
+                })}
+            >
+                <Media.Figure>
+                    <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
+                </Media.Figure>
+                <Media.Body>
+                    {isMenuVisible && (
+                        <TetherComponent
+                            attachment="top right"
+                            className="bcs-Comment-deleteConfirmationModal"
+                            constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                            targetAttachment="bottom right"
+                        >
+                            <Media.Menu
+                                isDisabled={isConfirmingDelete}
+                                data-testid="comment-actions-menu"
+                                dropdownProps={{
+                                    onMenuOpen: handleMenuOpen,
+                                    onMenuClose: handleMenuClose,
+                                }}
+                                menuProps={{
+                                    'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
+                                }}
+                            >
+                                {canResolve && isResolved && (
+                                    <MenuItem
+                                        className="bcs-Comment-unresolveComment"
+                                        data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                        data-testid="unresolve-comment"
+                                        onClick={() => handleStatusUpdate(COMMENT_STATUS_OPEN)}
+                                    >
+                                        <X16 />
+                                        <FormattedMessage {...messages.commentUnresolveMenuItem} />
+                                    </MenuItem>
+                                )}
+                                {canResolve && !isResolved && (
+                                    <MenuItem
+                                        data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                        data-testid="resolve-comment"
+                                        onClick={() => handleStatusUpdate(COMMENT_STATUS_RESOLVED)}
+                                    >
+                                        <Checkmark16 />
+                                        <FormattedMessage {...messages.commentResolveMenuItem} />
+                                    </MenuItem>
+                                )}
+                                {canEdit && (
+                                    <MenuItem
+                                        data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
+                                        data-testid="edit-comment"
+                                        onClick={handleEditClick}
+                                    >
+                                        <Pencil16 />
+                                        <FormattedMessage {...messages.commentEditMenuItem} />
+                                    </MenuItem>
+                                )}
+                                {canDelete && (
+                                    <MenuItem
+                                        data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
+                                        data-testid="delete-comment"
+                                        onClick={handleDeleteClick}
+                                    >
+                                        <Trash16 />
+                                        <FormattedMessage {...messages.commentDeleteMenuItem} />
+                                    </MenuItem>
+                                )}
+                            </Media.Menu>
+                            {isConfirmingDelete && (
+                                <DeleteConfirmation
+                                    data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
+                                    isOpen={isConfirmingDelete}
+                                    message={messages.commentDeletePrompt}
+                                    onDeleteCancel={handleDeleteCancel}
+                                    onDeleteConfirm={handleDeleteConfirm}
+                                />
+                            )}
+                        </TetherComponent>
+                    )}
+                    <div className="bcs-Comment-headline">
+                        <UserLink
+                            data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                            id={createdByUser.id}
+                            name={createdByUser.name}
+                            getUserProfileUrl={getUserProfileUrl}
+                        />
+                    </div>
+                    <div className="bcs-Comment-timestamp">
+                        <ActivityTimestamp date={createdAtTimestamp} />
+                    </div>
+                    <ActivityStatus status={status} />
+                    {isEditing ? (
+                        <CommentForm
+                            isDisabled={isDisabled}
+                            className={classNames('bcs-Comment-editor', {
+                                'bcs-is-disabled': isDisabled,
+                            })}
+                            updateComment={handleMessageUpdate}
+                            isOpen={isInputOpen}
+                            // $FlowFixMe
+                            user={currentUser}
+                            onCancel={commentFormCancelHandler}
+                            onFocus={commentFormFocusHandler}
+                            isEditing={isEditing}
+                            entityId={id}
+                            tagged_message={tagged_message}
+                            getAvatarUrl={getAvatarUrl}
+                            mentionSelectorContacts={mentionSelectorContacts}
+                            getMentionWithQuery={getMentionWithQuery}
+                        />
+                    ) : (
+                        <ActivityMessage
+                            id={id}
+                            isEdited={isEdited && !isResolved}
+                            tagged_message={tagged_message}
+                            translatedTaggedMessage={translatedTaggedMessage}
+                            {...translations}
+                            translationFailed={error ? true : null}
+                            getUserProfileUrl={getUserProfileUrl}
+                        />
+                    )}
+                </Media.Body>
+            </Media>
+            {/* $FlowFixMe */}
+            {error ? <ActivityError {...error} /> : null}
+        </ActivityCard>
+    );
+};
+
+export default BaseComment;

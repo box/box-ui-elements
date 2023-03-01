@@ -139,6 +139,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         emitAnnotationUpdateEvent: noop,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
+        hasNewThreadedReplies: false,
         hasReplies: false,
         hasTasks: true,
         hasVersions: true,
@@ -1184,6 +1185,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             currentUser,
             currentUserError,
             elementId,
+            features,
             file,
             hasReplies,
             hasVersions,
@@ -1193,6 +1195,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onTaskView,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
+        const newThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
 
         return (
             <SidebarContent
@@ -1215,6 +1218,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getAvatarUrl={this.getAvatarUrl}
                     getMentionWithQuery={this.getMention}
                     getUserProfileUrl={getUserProfileUrl}
+                    hasNewThreadedReplies={newThreadedRepliesEnabled}
                     hasReplies={hasReplies}
                     hasVersions={hasVersions}
                     isDisabled={isDisabled}

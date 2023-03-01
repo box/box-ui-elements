@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import BaseComment from '../comment/BaseComment';
 import Comment from '../comment';
 import LoadingIndicator from '../../../../components/loading-indicator';
 
@@ -15,6 +16,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
@@ -29,6 +31,7 @@ const ActivityThreadReplies = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    hasNewThreadedReplies = false,
     isRepliesLoading,
     mentionSelectorContacts,
     onDelete,
@@ -53,22 +56,41 @@ const ActivityThreadReplies = ({
                     <LoadingIndicator />
                 </div>
             )}
-            {replies.map((reply: CommentType) => (
-                <Comment
-                    key={`${reply.type}${reply.id}`}
-                    {...reply}
-                    currentUser={currentUser}
-                    getAvatarUrl={getAvatarUrl}
-                    getMentionWithQuery={getMentionWithQuery}
-                    getUserProfileUrl={getUserProfileUrl}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    onDelete={onDelete}
-                    onEdit={onEdit}
-                    onSelect={onSelect}
-                    permissions={getReplyPermissions(reply)}
-                    translations={translations}
-                />
-            ))}
+            {replies.map((reply: CommentType) =>
+                hasNewThreadedReplies ? (
+                    <BaseComment
+                        key={`${reply.type}${reply.id}`}
+                        {...reply}
+                        currentUser={currentUser}
+                        getAvatarUrl={getAvatarUrl}
+                        getMentionWithQuery={getMentionWithQuery}
+                        getUserProfileUrl={getUserProfileUrl}
+                        hasNewThreadedReplies={hasNewThreadedReplies}
+                        mentionSelectorContacts={mentionSelectorContacts}
+                        onDelete={onDelete}
+                        onEdit={onEdit}
+                        onSelect={onSelect}
+                        permissions={getReplyPermissions(reply)}
+                        translations={translations}
+                    />
+                ) : (
+                    <Comment
+                        key={`${reply.type}${reply.id}`}
+                        {...reply}
+                        currentUser={currentUser}
+                        getAvatarUrl={getAvatarUrl}
+                        getMentionWithQuery={getMentionWithQuery}
+                        getUserProfileUrl={getUserProfileUrl}
+                        hasNewThreadedReplies={hasNewThreadedReplies}
+                        mentionSelectorContacts={mentionSelectorContacts}
+                        onDelete={onDelete}
+                        onEdit={onEdit}
+                        onSelect={onSelect}
+                        permissions={getReplyPermissions(reply)}
+                        translations={translations}
+                    />
+                ),
+            )}
         </div>
     );
 };

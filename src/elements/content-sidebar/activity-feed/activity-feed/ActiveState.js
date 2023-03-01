@@ -10,6 +10,7 @@ import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
 import AnnotationActivity from '../annotations';
 import Comment from '../comment';
+import BaseComment from '../comment/BaseComment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
@@ -44,6 +45,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
     hasReplies?: boolean,
     hasVersions?: boolean,
     items: FeedItems,
@@ -95,6 +97,7 @@ const ActiveState = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    hasNewThreadedReplies = false,
     hasReplies = false,
     hasVersions,
     items,
@@ -153,6 +156,7 @@ const ActiveState = ({
                 const isFocused = item === activeFeedItem;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
+                console.log({ item });
 
                 switch (item.type) {
                     case FEED_ITEM_TYPE_COMMENT:
@@ -169,6 +173,7 @@ const ActiveState = ({
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
+                                    hasNewThreadedReplies={hasNewThreadedReplies}
                                     hasReplies={hasReplies}
                                     isPending={item.isPending}
                                     isRepliesLoading={item.isRepliesLoading}
@@ -183,24 +188,47 @@ const ActiveState = ({
                                     replies={item.replies}
                                     translations={translations}
                                 >
-                                    <Comment
-                                        {...item}
-                                        currentUser={currentUser}
-                                        getAvatarUrl={getAvatarUrl}
-                                        getMentionWithQuery={getMentionWithQuery}
-                                        getUserProfileUrl={getUserProfileUrl}
-                                        mentionSelectorContacts={mentionSelectorContacts}
-                                        onDelete={onCommentDelete}
-                                        onEdit={onCommentEdit}
-                                        onSelect={onCommentSelectHandler(item.id)}
-                                        permissions={{
-                                            can_delete: getProp(item.permissions, 'can_delete', false),
-                                            can_edit: getProp(item.permissions, 'can_edit', false),
-                                            can_reply: getProp(item.permissions, 'can_reply', false),
-                                            can_resolve: getProp(item.permissions, 'can_resolve', false),
-                                        }}
-                                        translations={translations}
-                                    />
+                                    {hasNewThreadedReplies ? (
+                                        <BaseComment
+                                            {...item}
+                                            currentUser={currentUser}
+                                            getAvatarUrl={getAvatarUrl}
+                                            getMentionWithQuery={getMentionWithQuery}
+                                            getUserProfileUrl={getUserProfileUrl}
+                                            hasNewThreadedReplies={hasNewThreadedReplies}
+                                            mentionSelectorContacts={mentionSelectorContacts}
+                                            onDelete={onCommentDelete}
+                                            onEdit={onCommentEdit}
+                                            onSelect={onCommentSelectHandler(item.id)}
+                                            permissions={{
+                                                can_delete: getProp(item.permissions, 'can_delete', false),
+                                                can_edit: getProp(item.permissions, 'can_edit', false),
+                                                can_reply: getProp(item.permissions, 'can_reply', false),
+                                                can_resolve: getProp(item.permissions, 'can_resolve', false),
+                                            }}
+                                            translations={translations}
+                                        />
+                                    ) : (
+                                        <Comment
+                                            {...item}
+                                            currentUser={currentUser}
+                                            getAvatarUrl={getAvatarUrl}
+                                            getMentionWithQuery={getMentionWithQuery}
+                                            getUserProfileUrl={getUserProfileUrl}
+                                            hasNewThreadedReplies={hasNewThreadedReplies}
+                                            mentionSelectorContacts={mentionSelectorContacts}
+                                            onDelete={onCommentDelete}
+                                            onEdit={onCommentEdit}
+                                            onSelect={onCommentSelectHandler(item.id)}
+                                            permissions={{
+                                                can_delete: getProp(item.permissions, 'can_delete', false),
+                                                can_edit: getProp(item.permissions, 'can_edit', false),
+                                                can_reply: getProp(item.permissions, 'can_reply', false),
+                                                can_resolve: getProp(item.permissions, 'can_resolve', false),
+                                            }}
+                                            translations={translations}
+                                        />
+                                    )}
                                 </ActivityThread>
                             </ActivityItem>
                         );
@@ -266,6 +294,7 @@ const ActiveState = ({
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
+                                    hasNewThreadedReplies={hasNewThreadedReplies}
                                     hasReplies={hasReplies}
                                     isPending={item.isPending}
                                     isRepliesLoading={item.isRepliesLoading}
