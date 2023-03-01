@@ -1,6 +1,5 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import './ActivityItem.scss';
 
 type Props = {
     children: React.ReactNode;
