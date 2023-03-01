@@ -86,6 +86,8 @@ class ContentExplorer extends Component {
         onChooseItems: PropTypes.func,
         /** Called when selected button is clicked */
         onSelectedClick: PropTypes.func,
+        /** Called when the number of items selected text is clicked */
+        onViewSelectedClick: PropTypes.func,
         /**
          * Called when a destination folder has been selected for moving an item to
          *
@@ -451,6 +453,7 @@ class ContentExplorer extends Component {
             onCancelButtonClick,
             onCreateNewFolderButtonClick,
             onSelectedClick,
+            onViewSelectedClick,
             showCreateNewFolderButton,
             isChooseButtonLoading,
             isCopyButtonLoading,
@@ -488,12 +491,6 @@ class ContentExplorer extends Component {
         ]);
         const canIncludeSubfolders = !!includeSubfoldersProps;
         const hasSubheader = canIncludeSubfolders || isSelectAllAllowed;
-        const foldersPathWithIncludeSubfolders = canIncludeSubfolders
-            ? includeSubfoldersProps.foldersPathWithIncludeSubfolders
-            : undefined;
-        const isIncludeSubfoldersStatusMessageClickable = canIncludeSubfolders
-            ? includeSubfoldersProps.isIncludeSubfoldersStatusMessageClickable
-            : false;
 
         const selectedItemsIds = Object.keys(selectedItems);
         let areActionButtonsDisabled;
@@ -596,10 +593,8 @@ class ContentExplorer extends Component {
                     chooseButtonText={chooseButtonText}
                     contentExplorerMode={contentExplorerMode}
                     currentFolder={currentFolder}
-                    foldersPathWithIncludeSubfolders={foldersPathWithIncludeSubfolders}
                     isChooseButtonLoading={isChooseButtonLoading}
                     isCopyButtonLoading={isCopyButtonLoading}
-                    isIncludeSubfoldersStatusMessageClickable={isIncludeSubfoldersStatusMessageClickable}
                     isMoveButtonLoading={isMoveButtonLoading}
                     isResponsive={isResponsive}
                     isSelectAllAllowed={isSelectAllAllowed}
@@ -609,6 +604,7 @@ class ContentExplorer extends Component {
                     onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
+                    onViewSelectedClick={onViewSelectedClick}
                     selectedItems={selectedItems}
                     isNoSelectionAllowed={isNoSelectionAllowed}
                 />

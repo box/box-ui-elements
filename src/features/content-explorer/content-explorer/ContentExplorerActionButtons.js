@@ -30,10 +30,8 @@ const ContentExplorerActionButtons = ({
     chooseButtonText,
     contentExplorerMode,
     currentFolder,
-    foldersPathWithIncludeSubfolders,
     isChooseButtonLoading = false,
     isCopyButtonLoading = false,
-    isIncludeSubfoldersStatusMessageClickable = false,
     isMoveButtonLoading = false,
     isResponsive = false,
     isSelectAllAllowed,
@@ -43,6 +41,7 @@ const ContentExplorerActionButtons = ({
     onFoldersPathUpdated,
     onMoveClick,
     onSelectedClick,
+    onViewSelectedClick,
     selectedItems,
     isNoSelectionAllowed,
 }) => {
@@ -81,19 +80,21 @@ const ContentExplorerActionButtons = ({
     const getStatusElement = statusMessage => {
         let statusElement = <span className="status-message">{statusMessage}</span>;
 
-        if (isIncludeSubfoldersStatusMessageClickable && onSelectedClick) {
+        if (onViewSelectedClick) {
             statusElement = (
                 <PlainButton
                     className="status-message-include-subfolders"
                     onClick={() => {
-                        onSelectedClick();
-                        onFoldersPathUpdated(foldersPathWithIncludeSubfolders);
+                        const foldersPath = onViewSelectedClick();
+                        if (foldersPath && onFoldersPathUpdated) {
+                            onFoldersPathUpdated(foldersPath);
+                        }
                     }}
                 >
                     {statusMessage}
                 </PlainButton>
             );
-        } else if (onSelectedClick && !foldersPathWithIncludeSubfolders) {
+        } else if (onSelectedClick) {
             statusElement = (
                 <Button className="status-message" onClick={onSelectedClick}>
                     {statusMessage}
@@ -186,12 +187,10 @@ ContentExplorerActionButtons.propTypes = {
     canIncludeSubfolders: PropTypes.bool,
     chooseButtonProps: PropTypes.object,
     chooseButtonText: PropTypes.node,
-    foldersPathWithIncludeSubfolders: PropTypes.array,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
     currentFolder: FolderPropType,
     isChooseButtonLoading: PropTypes.bool,
     isCopyButtonLoading: PropTypes.bool,
-    isIncludeSubfoldersStatusMessageClickable: PropTypes.bool,
     isMoveButtonLoading: PropTypes.bool,
     isResponsive: PropTypes.bool,
     isSelectAllAllowed: PropTypes.bool,
@@ -201,6 +200,7 @@ ContentExplorerActionButtons.propTypes = {
     onFoldersPathUpdated: PropTypes.func,
     onMoveClick: PropTypes.func,
     onSelectedClick: PropTypes.func,
+    onViewSelectedClick: PropTypes.func,
     selectedItems: ItemsMapPropType.isRequired,
     isNoSelectionAllowed: PropTypes.bool,
 };
