@@ -16,6 +16,8 @@ const defaultCopyText = <FormattedMessage {...messages.copy} />;
 const defaultCopiedText = <FormattedMessage {...messages.copied} />;
 
 type Props = {
+    /** Node for settings button */
+    additionalButtons?: Array<React.Node>,
     /** Set the focus to input when component loads */
     autofocus?: boolean,
     /** Default copy button text */
@@ -28,8 +30,6 @@ type Props = {
     /** Label displayed for the text input */
     // TODO: Make label required
     label?: React.Node,
-    /** Node for settings button */
-    nodeForButton?: React.Node,
     /** onFocus handler for the input el */
     onCopySuccess?: Function,
     /** Function called when link is copied by keyboard or button */
@@ -188,7 +188,7 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
         ) : null;
 
     render() {
-        const { className, ...rest } = this.props;
+        const { className, additionalButtons, ...rest } = this.props;
         const { copySuccess } = this.state;
         const { isCopyCommandSupported } = this;
 
@@ -218,7 +218,7 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
         return (
             <div className={wrapperClasses} {...copyEvent}>
                 <TextInput {...inputProps} onFocus={this.handleFocus} />
-                {rest.nodeForButton}
+                {additionalButtons}
                 {this.renderCopyButton()}
             </div>
         );

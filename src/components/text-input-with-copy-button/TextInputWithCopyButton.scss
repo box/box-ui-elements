@@ -17,29 +17,27 @@
         }
     }
 
-    .bdl-Button:last-child,
-    .btn:last-child {
-        min-width: 80px;
-        margin: 0;
-        border-left: 0;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        transition: background-color .5s ease, border-color .5s ease;
-    }
-
-    .bdl-Button:not(:last-child),
-    .btn:not(:last-child) {
+    .bdl-Button,
+    .btn {
         margin: 0;
         border-left: 0;
         border-radius: 0;
         transition: background-color .5s ease, border-color .5s ease;
     }
 
+    .bdl-Button:last-child,
+    .btn:last-child {
+        min-width: 80px;
+        margin: 0;
+        border-left: 0;
+        border-radius: 0 6px 6px 0;
+        transition: background-color .5s ease, border-color .5s ease;
+    }
+
     &.copy-success {
         .btn:last-child,
         .btn:last-child:hover,
-        .btn:last-child:active,
-        .btn:active:last-child:hover {
+        .btn:last-child:active {
             color: $white;
             background-color: $bdl-green-light;
             border-color: $bdl-green-light;
