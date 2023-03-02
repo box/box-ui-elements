@@ -370,6 +370,37 @@ describe('features/content-explorer/content-explorer/ContentExplorerActionButton
             expect(statusMessageId).toBe('boxui.contentExplorer.numFoldersSelected');
         });
 
+        test('should show status element as PlainButton for multi select when onViewSelectedClick is provided', () => {
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                selectedItems,
+                onViewSelectedClick: jest.fn(),
+            });
+            expect(wrapper.find('PlainButton').prop('className')).toBe('status-message-link');
+        });
+
+        test('should show status element as Button when onSelectedClick is provided but onViewSelectedClick is not', () => {
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                onSelectedClick: jest.fn(),
+                selectedItems,
+            });
+            expect(
+                wrapper
+                    .find('Button')
+                    .at(0)
+                    .prop('className'),
+            ).toBe('status-message');
+        });
+
+        test('should show status element as span when onSelectedClick is not provided nor is onViewSelectedClick', () => {
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                selectedItems,
+            });
+            expect(wrapper.find('span').prop('className')).toBe('status-message');
+        });
+
         [
             {
                 contentExplorerMode: ContentExplorerModes.SELECT_FILE,

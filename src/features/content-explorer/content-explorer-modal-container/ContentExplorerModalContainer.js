@@ -54,6 +54,8 @@ class ContentExplorerModalContainer extends Component {
          * @param {number} selectedItemIndex
          */
         onSelectItem: PropTypes.func,
+        /** Called when the number of items selected text is clicked */
+        onViewSelectedClick: PropTypes.func,
         /** Folder is in the process of being created. */
         isCreatingFolder: PropTypes.bool,
         /** Whether the user can see select all checkbox */
