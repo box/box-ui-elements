@@ -188,7 +188,7 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
         ) : null;
 
     render() {
-        const { className, additionalButtons, ...rest } = this.props;
+        const { additionalButtons, className, ...rest } = this.props;
         const { copySuccess } = this.state;
         const { isCopyCommandSupported } = this;
 
