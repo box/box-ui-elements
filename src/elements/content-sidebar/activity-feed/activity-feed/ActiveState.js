@@ -156,7 +156,6 @@ const ActiveState = ({
                 const isFocused = item === activeFeedItem;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
-                console.log({ item });
 
                 switch (item.type) {
                     case FEED_ITEM_TYPE_COMMENT:
@@ -195,7 +194,6 @@ const ActiveState = ({
                                             getAvatarUrl={getAvatarUrl}
                                             getMentionWithQuery={getMentionWithQuery}
                                             getUserProfileUrl={getUserProfileUrl}
-                                            hasNewThreadedReplies={hasNewThreadedReplies}
                                             mentionSelectorContacts={mentionSelectorContacts}
                                             onDelete={onCommentDelete}
                                             onEdit={onCommentEdit}
@@ -215,7 +213,6 @@ const ActiveState = ({
                                             getAvatarUrl={getAvatarUrl}
                                             getMentionWithQuery={getMentionWithQuery}
                                             getUserProfileUrl={getUserProfileUrl}
-                                            hasNewThreadedReplies={hasNewThreadedReplies}
                                             mentionSelectorContacts={mentionSelectorContacts}
                                             onDelete={onCommentDelete}
                                             onEdit={onCommentEdit}

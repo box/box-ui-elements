@@ -36,7 +36,6 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
-    hasNewThreadedReplies?: boolean,
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
@@ -159,7 +158,6 @@ class Comment extends React.Component<Props, State> {
             getAvatarUrl,
             getUserProfileUrl,
             getMentionWithQuery,
-            hasNewThreadedReplies,
             mentionSelectorContacts,
             modified_at,
             onEdit,
@@ -174,139 +172,6 @@ class Comment extends React.Component<Props, State> {
         const isEdited = modified_at !== undefined && modified_at !== created_at;
         const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
         const isResolved = status === COMMENT_STATUS_RESOLVED;
-
-        if (hasNewThreadedReplies) {
-            return (
-                <div className="bcs-Comment">
-                    <Media
-                        className={classNames('bcs-Comment-media', {
-                            'bcs-is-pending': isPending || error,
-                        })}
-                    >
-                        <Media.Figure>
-                            <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
-                        </Media.Figure>
-                        <Media.Body>
-                            {isMenuVisible && (
-                                <TetherComponent
-                                    attachment="top right"
-                                    className="bcs-Comment-deleteConfirmationModal"
-                                    constraints={[{ to: 'scrollParent', attachment: 'together' }]}
-                                    targetAttachment="bottom right"
-                                >
-                                    <Media.Menu
-                                        isDisabled={isConfirmingDelete}
-                                        data-testid="comment-actions-menu"
-                                        dropdownProps={{
-                                            onMenuOpen: this.handleMenuOpen,
-                                            onMenuClose: this.handleMenuClose,
-                                        }}
-                                        menuProps={{
-                                            'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
-                                        }}
-                                    >
-                                        {canResolve && isResolved && (
-                                            <MenuItem
-                                                className="bcs-Comment-unresolveComment"
-                                                data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
-                                                data-testid="unresolve-comment"
-                                                onClick={() => this.handleStatusUpdate(COMMENT_STATUS_OPEN)}
-                                            >
-                                                <X16 />
-                                                <FormattedMessage {...messages.commentUnresolveMenuItem} />
-                                            </MenuItem>
-                                        )}
-                                        {canResolve && !isResolved && (
-                                            <MenuItem
-                                                data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
-                                                data-testid="resolve-comment"
-                                                onClick={() => this.handleStatusUpdate(COMMENT_STATUS_RESOLVED)}
-                                            >
-                                                <Checkmark16 />
-                                                <FormattedMessage {...messages.commentResolveMenuItem} />
-                                            </MenuItem>
-                                        )}
-                                        {canEdit && (
-                                            <MenuItem
-                                                data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
-                                                data-testid="edit-comment"
-                                                onClick={this.handleEditClick}
-                                            >
-                                                <Pencil16 />
-                                                <FormattedMessage {...messages.commentEditMenuItem} />
-                                            </MenuItem>
-                                        )}
-                                        {canDelete && (
-                                            <MenuItem
-                                                data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
-                                                data-testid="delete-comment"
-                                                onClick={this.handleDeleteClick}
-                                            >
-                                                <Trash16 />
-                                                <FormattedMessage {...messages.commentDeleteMenuItem} />
-                                            </MenuItem>
-                                        )}
-                                    </Media.Menu>
-                                    {isConfirmingDelete && (
-                                        <DeleteConfirmation
-                                            data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
-                                            isOpen={isConfirmingDelete}
-                                            message={messages.commentDeletePrompt}
-                                            onDeleteCancel={this.handleDeleteCancel}
-                                            onDeleteConfirm={this.handleDeleteConfirm}
-                                        />
-                                    )}
-                                </TetherComponent>
-                            )}
-                            <div className="bcs-Comment-headline">
-                                <UserLink
-                                    data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                    id={createdByUser.id}
-                                    name={createdByUser.name}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                />
-                            </div>
-                            <div className="bcs-Comment-timestamp">
-                                <ActivityTimestamp date={createdAtTimestamp} />
-                            </div>
-                            <ActivityStatus status={status} />
-                            {isEditing ? (
-                                <CommentForm
-                                    isDisabled={isDisabled}
-                                    className={classNames('bcs-Comment-editor', {
-                                        'bcs-is-disabled': isDisabled,
-                                    })}
-                                    updateComment={this.handleMessageUpdate}
-                                    isOpen={isInputOpen}
-                                    // $FlowFixMe
-                                    user={currentUser}
-                                    onCancel={this.commentFormCancelHandler}
-                                    onFocus={this.commentFormFocusHandler}
-                                    isEditing={isEditing}
-                                    entityId={id}
-                                    tagged_message={tagged_message}
-                                    getAvatarUrl={getAvatarUrl}
-                                    mentionSelectorContacts={mentionSelectorContacts}
-                                    getMentionWithQuery={getMentionWithQuery}
-                                />
-                            ) : (
-                                <ActivityMessage
-                                    id={id}
-                                    isEdited={isEdited && !isResolved}
-                                    tagged_message={tagged_message}
-                                    translatedTaggedMessage={translatedTaggedMessage}
-                                    {...translations}
-                                    translationFailed={error ? true : null}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                />
-                            )}
-                        </Media.Body>
-                    </Media>
-                    {/* $FlowFixMe */}
-                    {error ? <ActivityError {...error} /> : null}
-                </div>
-            );
-        }
 
         return (
             <ActivityCard className="bcs-Comment">
