@@ -8,7 +8,7 @@ import useMediaQuery from '../useMediaQuery';
 import withMediaQuery from '../withMediaQuery';
 
 export const CustomHook = () => {
-    const { hover, pointer, size, viewWidth, viewHeight } = useMediaQuery();
+    const { hover, isTouchDevice, pointer, size, viewWidth, viewHeight } = useMediaQuery();
 
     return (
         <div>
@@ -19,6 +19,10 @@ export const CustomHook = () => {
             <p>
                 <b>Pointer:</b>
                 <span>{` ${pointer}`}</span>
+            </p>
+            <p>
+                <b>Is Touch Device:</b>
+                <span>{` ${String(isTouchDevice)}`}</span>
             </p>
             <p>
                 <b>View Dimensions:</b>
@@ -35,6 +39,7 @@ export const CustomHook = () => {
 type Props = {
     children?: any,
     hover: string,
+    isTouchDevice: boolean,
     pointer: string,
     size: string,
     viewHeight: number,
@@ -42,7 +47,7 @@ type Props = {
 };
 
 const DemoComponent = (props: Props) => {
-    const { hover, pointer, size, viewWidth, viewHeight } = props;
+    const { hover, isTouchDevice, pointer, size, viewWidth, viewHeight } = props;
 
     return (
         <div>
@@ -53,6 +58,10 @@ const DemoComponent = (props: Props) => {
             <p>
                 <b>Pointer:</b>
                 <span>{` ${pointer}`}</span>
+            </p>
+            <p>
+                <b>Is Touch Device:</b>
+                <span>{` ${String(isTouchDevice)}`}</span>
             </p>
             <p>
                 <b>View Dimensions:</b>
