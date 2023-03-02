@@ -31,6 +31,7 @@ type Props = {
     onSelectItem?: (item: Object, index: number) => void,
     onSelectedClick?: () => void,
     onSelectedItemsUpdate?: Function,
+    onViewSelectedClick?: Function,
     title?: string,
 };
 

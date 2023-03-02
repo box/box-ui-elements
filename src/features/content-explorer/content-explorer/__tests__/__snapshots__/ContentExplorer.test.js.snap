@@ -54,6 +54,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     }
     isNoSelectionAllowed={false}
     isResponsive={false}
+    onFoldersPathUpdated={[Function]}
     selectedItems={Object {}}
   />
 </div>

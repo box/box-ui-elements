@@ -68,7 +68,7 @@
         }
 
         .bdl-ContentExplorerFolderTreeBreadcrumbs-text {
-            color: $bdl-gray-62;
+            color: $bdl-gray;
         }
     }
 
@@ -145,6 +145,15 @@
             position: absolute;
             left: 0;
             margin-top: 5px;
+        }
+
+        .status-message-link {
+            position: absolute;
+            left: 0;
+            margin-top: 5px;
+            color: $bdl-box-blue;
+            font-size: $bdl-fontSize--dejaBlue;
+            line-height: $bdl-line-height;
         }
 
         .content-explorer-copy-button {
