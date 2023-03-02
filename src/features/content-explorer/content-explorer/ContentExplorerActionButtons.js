@@ -83,20 +83,21 @@ const ContentExplorerActionButtons = ({
         if (onViewSelectedClick) {
             statusElement = (
                 <PlainButton
-                    className="status-message-include-subfolders"
+                    className="status-message-link"
                     onClick={() => {
                         const foldersPath = onViewSelectedClick();
-                        if (foldersPath && onFoldersPathUpdated) {
+                        if (foldersPath) {
                             onFoldersPathUpdated(foldersPath);
                         }
                     }}
+                    type="button"
                 >
                     {statusMessage}
                 </PlainButton>
             );
         } else if (onSelectedClick) {
             statusElement = (
-                <Button className="status-message" onClick={onSelectedClick}>
+                <Button className="status-message" onClick={onSelectedClick} type="button">
                     {statusMessage}
                 </Button>
             );
