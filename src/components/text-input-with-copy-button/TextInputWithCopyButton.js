@@ -16,7 +16,7 @@ const defaultCopyText = <FormattedMessage {...messages.copy} />;
 const defaultCopiedText = <FormattedMessage {...messages.copied} />;
 
 type Props = {
-    /** Node for settings button */
+    /** Array of nodes for additional buttons */
     additionalButtons?: Array<React.Node>,
     /** Set the focus to input when component loads */
     autofocus?: boolean,
