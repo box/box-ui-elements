@@ -137,7 +137,6 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
             "name": "Rihanna",
           }
         }
-        hasNewThreadedReplies={false}
         id="c_123"
         onDelete={[Function]}
         onEdit={[Function]}
