@@ -22,7 +22,7 @@ export const CustomHook = () => {
             </p>
             <p>
                 <b>Is Touch Device:</b>
-                <span>{` ${isTouchDevice}`}</span>
+                <span>{` ${String(isTouchDevice)}`}</span>
             </p>
             <p>
                 <b>View Dimensions:</b>
@@ -61,7 +61,7 @@ const DemoComponent = (props: Props) => {
             </p>
             <p>
                 <b>Is Touch Device:</b>
-                <span>{` ${isTouchDevice}`}</span>
+                <span>{` ${String(isTouchDevice)}`}</span>
             </p>
             <p>
                 <b>View Dimensions:</b>
