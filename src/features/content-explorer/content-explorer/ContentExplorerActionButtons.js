@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '../../../components/button';
+import PlainButton from '../../../components/plain-button';
 import PrimaryButton from '../../../components/primary-button';
 
 import { ContentExplorerModePropType, FolderPropType, ItemsMapPropType } from '../prop-types';
@@ -37,8 +38,10 @@ const ContentExplorerActionButtons = ({
     onCancelClick,
     onChooseClick,
     onCopyClick,
+    onFoldersPathUpdated,
     onMoveClick,
     onSelectedClick,
+    onViewSelectedClick,
     selectedItems,
     isNoSelectionAllowed,
 }) => {
@@ -74,6 +77,34 @@ const ContentExplorerActionButtons = ({
         }
     };
 
+    const getStatusElement = statusMessage => {
+        let statusElement = <span className="status-message">{statusMessage}</span>;
+
+        if (onViewSelectedClick) {
+            statusElement = (
+                <PlainButton
+                    className="status-message-link"
+                    onClick={() => {
+                        const foldersPath = onViewSelectedClick();
+                        if (foldersPath) {
+                            onFoldersPathUpdated(foldersPath);
+                        }
+                    }}
+                    type="button"
+                >
+                    {statusMessage}
+                </PlainButton>
+            );
+        } else if (onSelectedClick) {
+            statusElement = (
+                <Button className="status-message" onClick={onSelectedClick} type="button">
+                    {statusMessage}
+                </Button>
+            );
+        }
+        return statusElement;
+    };
+
     const renderStatus = () => {
         const numSelected = getChosenItemsFromSelectedItems(selectedItems).length;
 
@@ -87,13 +118,7 @@ const ContentExplorerActionButtons = ({
             );
         }
 
-        const statusElement = onSelectedClick ? (
-            <Button className="status-message" onClick={onSelectedClick}>
-                {statusMessage}
-            </Button>
-        ) : (
-            <span className="status-message">{statusMessage}</span>
-        );
+        const statusElement = getStatusElement(statusMessage);
 
         return contentExplorerMode === ContentExplorerModes.MULTI_SELECT && statusElement;
     };
@@ -173,8 +198,10 @@ ContentExplorerActionButtons.propTypes = {
     onCancelClick: PropTypes.func,
     onChooseClick: PropTypes.func,
     onCopyClick: PropTypes.func,
+    onFoldersPathUpdated: PropTypes.func,
     onMoveClick: PropTypes.func,
     onSelectedClick: PropTypes.func,
+    onViewSelectedClick: PropTypes.func,
     selectedItems: ItemsMapPropType.isRequired,
     isNoSelectionAllowed: PropTypes.bool,
 };

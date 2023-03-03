@@ -5,15 +5,16 @@ These properties can be used to implement custom component rendering or behavior
 
 ## Return props
 
-| Property     | Description                            |
-| ------------ | -------------------------------------- |
-| `anyHover`   | `hover`, `none`                        |
-| `anyPointer` | `none`, `coarse`, `fine`               |
-| `hover`      | `hover`, `none`                        |
-| `pointer`    | `none`, `coarse`, `fine`               |
-| `size`       | `small`, `medium`, `large`, `x-large`  |
-| `viewHeight` | view height in px of last query change |
-| `viewWidth`  | view width in px of last query change  |
+| Property        | Description                                           |
+| --------------- | ----------------------------------------------------- |
+| `anyHover`      | `hover`, `none`                                       |
+| `anyPointer`    | `none`, `coarse`, `fine`                              |
+| `hover`         | `hover`, `none`                                       |
+| `pointer`       | `none`, `coarse`, `fine`                              |
+| `isTouchDevice` | `true` if `hover` is `none` and `pointer` is `coarse` |
+| `size`          | `small`, `medium`, `large`, `x-large`                 |
+| `viewHeight`    | view height in px of last query change                |
+| `viewWidth`     | view width in px of last query change                 |
 
 ## `size` properties
 

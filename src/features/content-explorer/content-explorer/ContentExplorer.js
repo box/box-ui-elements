@@ -86,6 +86,8 @@ class ContentExplorer extends Component {
         onChooseItems: PropTypes.func,
         /** Called when selected button is clicked */
         onSelectedClick: PropTypes.func,
+        /** Called when the number of items selected text is clicked */
+        onViewSelectedClick: PropTypes.func,
         /**
          * Called when a destination folder has been selected for moving an item to
          *
@@ -451,6 +453,7 @@ class ContentExplorer extends Component {
             onCancelButtonClick,
             onCreateNewFolderButtonClick,
             onSelectedClick,
+            onViewSelectedClick,
             showCreateNewFolderButton,
             isChooseButtonLoading,
             isCopyButtonLoading,
@@ -598,8 +601,10 @@ class ContentExplorer extends Component {
                     onCancelClick={onCancelButtonClick}
                     onChooseClick={onChooseItems}
                     onCopyClick={onCopyItem}
+                    onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
+                    onViewSelectedClick={onViewSelectedClick}
                     selectedItems={selectedItems}
                     isNoSelectionAllowed={isNoSelectionAllowed}
                 />

@@ -59,11 +59,14 @@ function useDeviceCapabilities() {
     const pointer = getPointerCapabilities(useQuery(POINTER_FINE), useQuery(POINTER_COARSE));
     const anyPointer = getPointerCapabilities(useQuery(ANY_POINTER_FINE), useQuery(ANY_POINTER_COARSE));
 
+    const isTouchDevice = hover === HOVER_TYPE.none && pointer === POINTER_TYPE.coarse;
+
     return {
         anyHover,
         hover,
         anyPointer,
         pointer,
+        isTouchDevice,
     };
 }
 
