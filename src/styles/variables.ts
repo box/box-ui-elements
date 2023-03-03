@@ -13,6 +13,7 @@ export const bdlBoxBlue05 = '#f2f7fd'; // bdl-box-blue-05
 export const bdlBoxBlue02 = '#fafcfe'; // bdl-box-blue-02
 export const bdlGray = '#222'; // bdl-gray
 export const bdlGray80 = '#4e4e4e'; // bdl-gray-80
+export const bdlGray65 = '#6f6f6f'; // bdl-gray-65
 export const bdlGray62 = '#767676'; // bdl-gray-62
 export const bdlGray50 = '#909090'; // bdl-gray-50
 export const bdlGray40 = '#a7a7a7'; // bdl-gray-40
