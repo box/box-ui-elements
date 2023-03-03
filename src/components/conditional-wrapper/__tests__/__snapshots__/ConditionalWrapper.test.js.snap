@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/in-app-messenger/core/components/ConditionalWrapper false renders correctly 1`] = `
+<div>
+  <div />
+</div>
+`;
+
+exports[`components/in-app-messenger/core/components/ConditionalWrapper true renders correctly 1`] = `<div />`;
+
+exports[`components/in-app-messenger/core/components/ConditionalWrapper undefined renders correctly 1`] = `
+<div>
+  <div />
+</div>
+`;
