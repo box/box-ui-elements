@@ -22,15 +22,13 @@
         margin: 0;
         border-left: 0;
         border-radius: 0;
-        transition: background-color .5s ease, border-color .5s ease;
     }
 
     .bdl-Button:last-child,
     .btn:last-child {
         min-width: 80px;
-        margin: 0;
-        border-left: 0;
-        border-radius: 0 6px 6px 0;
+        border-top-right-radius: $bdl-border-radius-size-med;
+        border-bottom-right-radius: $bdl-border-radius-size-med;
         transition: background-color .5s ease, border-color .5s ease;
     }
 
