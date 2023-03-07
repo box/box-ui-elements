@@ -49,6 +49,44 @@ const ActivityThreadReplies = ({
         };
     };
 
+    const renderComment = (reply: CommentType) => {
+        if (hasNewThreadedReplies) {
+            return (
+                <BaseComment
+                    key={`${reply.type}${reply.id}`}
+                    {...reply}
+                    currentUser={currentUser}
+                    getAvatarUrl={getAvatarUrl}
+                    getMentionWithQuery={getMentionWithQuery}
+                    getUserProfileUrl={getUserProfileUrl}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onDelete={onDelete}
+                    onEdit={onEdit}
+                    onSelect={onSelect}
+                    permissions={getReplyPermissions(reply)}
+                    translations={translations}
+                />
+            );
+        }
+
+        return (
+            <Comment
+                key={`${reply.type}${reply.id}`}
+                {...reply}
+                currentUser={currentUser}
+                getAvatarUrl={getAvatarUrl}
+                getMentionWithQuery={getMentionWithQuery}
+                getUserProfileUrl={getUserProfileUrl}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onDelete={onDelete}
+                onEdit={onEdit}
+                onSelect={onSelect}
+                permissions={getReplyPermissions(reply)}
+                translations={translations}
+            />
+        );
+    };
+
     return (
         <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
             {isRepliesLoading && (
@@ -56,39 +94,7 @@ const ActivityThreadReplies = ({
                     <LoadingIndicator />
                 </div>
             )}
-            {replies.map((reply: CommentType) =>
-                hasNewThreadedReplies ? (
-                    <BaseComment
-                        key={`${reply.type}${reply.id}`}
-                        {...reply}
-                        currentUser={currentUser}
-                        getAvatarUrl={getAvatarUrl}
-                        getMentionWithQuery={getMentionWithQuery}
-                        getUserProfileUrl={getUserProfileUrl}
-                        mentionSelectorContacts={mentionSelectorContacts}
-                        onDelete={onDelete}
-                        onEdit={onEdit}
-                        onSelect={onSelect}
-                        permissions={getReplyPermissions(reply)}
-                        translations={translations}
-                    />
-                ) : (
-                    <Comment
-                        key={`${reply.type}${reply.id}`}
-                        {...reply}
-                        currentUser={currentUser}
-                        getAvatarUrl={getAvatarUrl}
-                        getMentionWithQuery={getMentionWithQuery}
-                        getUserProfileUrl={getUserProfileUrl}
-                        mentionSelectorContacts={mentionSelectorContacts}
-                        onDelete={onDelete}
-                        onEdit={onEdit}
-                        onSelect={onSelect}
-                        permissions={getReplyPermissions(reply)}
-                        translations={translations}
-                    />
-                ),
-            )}
+            {replies.map((reply: CommentType) => renderComment(reply))}
         </div>
     );
 };

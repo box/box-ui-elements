@@ -1195,7 +1195,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onTaskView,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
-        const newThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
+        const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
 
         return (
             <SidebarContent
@@ -1218,7 +1218,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getAvatarUrl={this.getAvatarUrl}
                     getMentionWithQuery={this.getMention}
                     getUserProfileUrl={getUserProfileUrl}
-                    hasNewThreadedReplies={newThreadedRepliesEnabled}
+                    hasNewThreadedReplies={isNewThreadedRepliesEnabled}
                     hasReplies={hasReplies}
                     hasVersions={hasVersions}
                     isDisabled={isDisabled}
