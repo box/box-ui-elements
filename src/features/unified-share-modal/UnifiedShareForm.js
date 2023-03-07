@@ -5,7 +5,6 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import FormattedCompMessage from '../../components/i18n/FormattedCompMessage';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { Link } from '../../components/link';
 import Button from '../../components/button';
@@ -559,20 +558,20 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { openUpgradePlanModal = () => {} } = this.props;
         return (
             <>
-                <FormattedCompMessage
-                    id="boxui.unifiedShare.upgradeCollaboratorAccessDescription"
-                    description="Description for cta to upgrade to get collaborator access controls"
-                >
-                    Set the level of{' '}
-                    <Link
-                        className="upgrade-link"
-                        href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
-                        target="_blank"
-                    >
-                        collaborator access
-                    </Link>{' '}
-                    and increase security through one of our paid plans.{' '}
-                </FormattedCompMessage>
+                <FormattedMessage
+                    values={{
+                        collaboratorAccess: (
+                            <Link
+                                className="upgrade-link"
+                                href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                                target="_blank"
+                            >
+                                <FormattedMessage {...messages.collabAccess} />
+                            </Link>
+                        ),
+                    }}
+                    {...messages.setLevelOfCollabAccess}
+                />
                 <PlainButton
                     className="upgrade-link"
                     data-resin-target={resinTarget}
