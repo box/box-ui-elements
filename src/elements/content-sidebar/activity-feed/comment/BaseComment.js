@@ -2,30 +2,29 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
-import Checkmark16 from '../../../../icon/line/Checkmark16';
-import Trash16 from '../../../../icon/line/Trash16';
-import Pencil16 from '../../../../icon/line/Pencil16';
-import X16 from '../../../../icon/fill/X16';
-import Avatar from '../Avatar';
-import Media from '../../../../components/media';
-import { MenuItem } from '../../../../components/menu';
-import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
-import DeleteConfirmation from '../common/delete-confirmation';
-import ActivityTimestamp from '../common/activity-timestamp';
-import UserLink from '../common/user-link';
-import ActivityCard from '../ActivityCard';
+import { FormattedMessage } from 'react-intl';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityStatus from '../common/activity-status';
+import ActivityTimestamp from '../common/activity-timestamp';
+import Avatar from '../Avatar';
+import Checkmark16 from '../../../../icon/line/Checkmark16';
 import CommentForm from '../comment-form';
-import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
+import DeleteConfirmation from '../common/delete-confirmation';
+import Media from '../../../../components/media';
 import messages from './messages';
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations } from '../../flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
+import Pencil16 from '../../../../icon/line/Pencil16';
+import Trash16 from '../../../../icon/line/Trash16';
+import UserLink from '../common/user-link';
+import X16 from '../../../../icon/fill/X16';
+import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
+import { MenuItem } from '../../../../components/menu';
 import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { Translations } from '../../flowTypes';
 import './Comment.scss';
 
 type Props = {
@@ -88,7 +87,7 @@ const BaseComment = (props: Props) => {
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
 
-    const selectComment = (isSelected: boolean = true) => {
+    const selectComment = (isSelected: boolean = true): void => {
         onSelect(isSelected);
     };
 
@@ -102,7 +101,7 @@ const BaseComment = (props: Props) => {
         selectComment(false);
     };
 
-    const handleDeleteClick = () => {
+    const handleDeleteClick = (): void => {
         setIsConfirmingDelete(true);
         selectComment();
     };
@@ -168,7 +167,7 @@ const BaseComment = (props: Props) => {
     const isResolved = status === COMMENT_STATUS_RESOLVED;
 
     return (
-        <ActivityCard className="bcs-Comment">
+        <div className="bcs-Comment">
             <Media
                 className={classNames('bcs-Comment-media', {
                     'bcs-is-pending': isPending || error,
@@ -295,7 +294,7 @@ const BaseComment = (props: Props) => {
             </Media>
             {/* $FlowFixMe */}
             {error ? <ActivityError {...error} /> : null}
-        </ActivityCard>
+        </div>
     );
 };
 
