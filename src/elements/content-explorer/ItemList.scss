@@ -55,10 +55,10 @@
 
         .bce-more-options {
             opacity: 1;
-        }
 
-        .bce-btn-more-options {
-            border-color: $grey-blue;
+            .btn {
+                border-color: $grey-blue;
+            }
         }
 
         .bce-item-column,

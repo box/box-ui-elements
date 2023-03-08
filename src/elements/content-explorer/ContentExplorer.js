@@ -837,7 +837,7 @@ class ContentExplorer extends Component<Props, State> {
     /**
      * Sets state with currentCollection updated to have items.selected properties
      * set according to the given selected param. Also updates the selected item in the
-     * currentcollection. selectedItem will be set to the selected state
+     * currentCollection. selectedItem will be set to the selected state
      * item if it is in currentCollection, otherwise it will be set to undefined.
      *
      * @private
