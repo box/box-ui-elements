@@ -52,6 +52,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
     hasReplies?: boolean,
     hasVersions?: boolean,
     isDisabled?: boolean,
@@ -283,6 +284,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getAvatarUrl,
             getMentionWithQuery,
             getUserProfileUrl,
+            hasNewThreadedReplies,
             hasReplies,
             hasVersions,
             isDisabled,
@@ -383,6 +385,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
                             getUserProfileUrl={getUserProfileUrl}
+                            hasNewThreadedReplies={hasNewThreadedReplies}
                             hasReplies={hasReplies}
                             hasVersions={hasVersions}
                             isDisabled={isDisabled}
