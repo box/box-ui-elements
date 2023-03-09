@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage } from 'react-intl';
+import ActivityCard from '../ActivityCard';
 import ActivityError from '../common/activity-error';
 import ActivityMessage from '../common/activity-message';
 import ActivityStatus from '../common/activity-status';
@@ -167,7 +168,7 @@ const BaseComment = (props: Props) => {
     const isResolved = status === COMMENT_STATUS_RESOLVED;
 
     return (
-        <div className="bcs-Comment">
+        <ActivityCard className="bcs-Comment">
             <Media
                 className={classNames('bcs-Comment-media', {
                     'bcs-is-pending': isPending || error,
@@ -294,7 +295,7 @@ const BaseComment = (props: Props) => {
             </Media>
             {/* $FlowFixMe */}
             {error ? <ActivityError {...error} /> : null}
-        </div>
+        </ActivityCard>
     );
 };
 

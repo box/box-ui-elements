@@ -11,15 +11,6 @@ jest.mock('react-intl', () => ({
     FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
 }));
 
-const getUserProfileUrl = jest.fn().mockResolvedValue('https://www.test.com/');
-
-const currentUser = {
-    name: 'testuser',
-    id: 11,
-};
-
-const approverSelectorContacts = [];
-const mentionSelectorContacts = [];
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
 const TIME_STRING_SEPT_28_2017 = '2017-09-28T10:40:41-07:00';
 const comment = {
@@ -28,27 +19,20 @@ const comment = {
     created_by: { name: '50 Cent', id: 10 },
     permissions: { can_delete: true, can_edit: true, can_resolve: true },
 };
-
-const allHandlers = {
-    tasks: {
-        edit: jest.fn(),
-    },
-    contacts: {
-        getApproverWithQuery: jest.fn(),
-        getMentionWithQuery: jest.fn(),
-    },
+const currentUser = {
+    name: 'testuser',
+    id: 11,
 };
+
 const getWrapper = props =>
     render(
         <IntlProvider locale="en">
             <BaseComment
                 id="123"
                 {...comment}
-                approverSelectorContacts={approverSelectorContacts}
+                approverSelectorContacts={[]}
                 currentUser={currentUser}
-                handlers={allHandlers}
-                mentionSelectorContacts={mentionSelectorContacts}
-                getUserProfileUrl={getUserProfileUrl}
+                mentionSelectorContacts={[]}
                 onSelect={jest.fn()}
                 {...props}
             />
@@ -78,7 +62,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
     });
 
     test('should render commenter as a link', async () => {
-        getWrapper();
+        const getUserProfileUrl = jest.fn().mockResolvedValue('https://www.test.com/');
+
+        getWrapper({ getUserProfileUrl });
 
         await expect(screen.getByText(comment.created_by.name)).toBeInTheDocument();
         await expect(screen.getByRole('link')).toHaveAttribute('href', 'https://www.test.com/');
