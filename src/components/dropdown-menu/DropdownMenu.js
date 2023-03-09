@@ -27,6 +27,10 @@ type Props = {
     onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
     /** Handler for dropdown menu open events */
     onMenuOpen?: () => void,
+    /** "attachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
+    tetherAttachment?: string,
+    /** "targetAttachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
+    tetherTargetAttachment?: string,
     /** Set true to close dropdown menu on event bubble instead of event capture */
     useBubble?: boolean,
 };
@@ -187,6 +191,8 @@ class DropdownMenu extends React.Component<Props, State> {
             constrainToWindowWithPin,
             isResponsive,
             isRightAligned,
+            tetherAttachment,
+            tetherTargetAttachment,
         } = this.props;
 
         const { isOpen, initialFocusIndex } = this.state;
@@ -261,13 +267,13 @@ class DropdownMenu extends React.Component<Props, State> {
 
         return (
             <TetherComponent
-                attachment={attachment}
+                attachment={tetherAttachment || attachment}
                 bodyElement={bodyEl}
                 className={classNames({ 'bdl-DropdownMenu--responsive': isResponsive }, className)}
                 classPrefix="dropdown-menu"
                 constraints={constraints}
                 enabled={isOpen}
-                targetAttachment={targetAttachment}
+                targetAttachment={tetherTargetAttachment || targetAttachment}
             >
                 {React.cloneElement(menuButton, menuButtonProps)}
                 {isOpen && React.cloneElement(menu, menuProps)}

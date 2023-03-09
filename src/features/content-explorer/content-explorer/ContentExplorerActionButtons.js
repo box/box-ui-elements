@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '../../../components/button';
+import PlainButton from '../../../components/plain-button';
 import PrimaryButton from '../../../components/primary-button';
 
 import { ContentExplorerModePropType, FolderPropType, ItemsMapPropType } from '../prop-types';
@@ -24,6 +25,7 @@ const ContentExplorerActionButtons = ({
     actionButtonsProps = {},
     areButtonsDisabled = false,
     cancelButtonProps = {},
+    canIncludeSubfolders,
     chooseButtonProps = {},
     chooseButtonText,
     contentExplorerMode,
@@ -32,11 +34,14 @@ const ContentExplorerActionButtons = ({
     isCopyButtonLoading = false,
     isMoveButtonLoading = false,
     isResponsive = false,
+    isSelectAllAllowed,
     onCancelClick,
     onChooseClick,
     onCopyClick,
+    onFoldersPathUpdated,
     onMoveClick,
     onSelectedClick,
+    onViewSelectedClick,
     selectedItems,
     isNoSelectionAllowed,
 }) => {
@@ -72,19 +77,48 @@ const ContentExplorerActionButtons = ({
         }
     };
 
-    const renderStatus = () => {
-        const chosenItems = getChosenItemsFromSelectedItems(selectedItems);
-        const statusMessage = (
-            <FormattedMessage {...messages.numSelected} values={{ numSelected: chosenItems.length }} />
-        );
+    const getStatusElement = statusMessage => {
+        let statusElement = <span className="status-message">{statusMessage}</span>;
 
-        const statusElement = onSelectedClick ? (
-            <Button className="status-message" onClick={onSelectedClick}>
-                {statusMessage}
-            </Button>
-        ) : (
-            <span className="status-message">{statusMessage}</span>
-        );
+        if (onViewSelectedClick) {
+            statusElement = (
+                <PlainButton
+                    className="status-message-link"
+                    onClick={() => {
+                        const foldersPath = onViewSelectedClick();
+                        if (foldersPath) {
+                            onFoldersPathUpdated(foldersPath);
+                        }
+                    }}
+                    type="button"
+                >
+                    {statusMessage}
+                </PlainButton>
+            );
+        } else if (onSelectedClick) {
+            statusElement = (
+                <Button className="status-message" onClick={onSelectedClick} type="button">
+                    {statusMessage}
+                </Button>
+            );
+        }
+        return statusElement;
+    };
+
+    const renderStatus = () => {
+        const numSelected = getChosenItemsFromSelectedItems(selectedItems).length;
+
+        let statusMessage = <FormattedMessage {...messages.numSelected} values={{ numSelected }} />;
+
+        if (canIncludeSubfolders) {
+            statusMessage = isSelectAllAllowed ? (
+                <FormattedMessage {...messages.numItemsSelected} values={{ numSelected }} />
+            ) : (
+                <FormattedMessage {...messages.numFoldersSelected} values={{ numSelected }} />
+            );
+        }
+
+        const statusElement = getStatusElement(statusMessage);
 
         return contentExplorerMode === ContentExplorerModes.MULTI_SELECT && statusElement;
     };
@@ -151,6 +185,7 @@ ContentExplorerActionButtons.propTypes = {
     actionButtonsProps: PropTypes.object,
     areButtonsDisabled: PropTypes.bool,
     cancelButtonProps: PropTypes.object,
+    canIncludeSubfolders: PropTypes.bool,
     chooseButtonProps: PropTypes.object,
     chooseButtonText: PropTypes.node,
     contentExplorerMode: ContentExplorerModePropType.isRequired,
@@ -159,11 +194,14 @@ ContentExplorerActionButtons.propTypes = {
     isCopyButtonLoading: PropTypes.bool,
     isMoveButtonLoading: PropTypes.bool,
     isResponsive: PropTypes.bool,
+    isSelectAllAllowed: PropTypes.bool,
     onCancelClick: PropTypes.func,
     onChooseClick: PropTypes.func,
     onCopyClick: PropTypes.func,
+    onFoldersPathUpdated: PropTypes.func,
     onMoveClick: PropTypes.func,
     onSelectedClick: PropTypes.func,
+    onViewSelectedClick: PropTypes.func,
     selectedItems: ItemsMapPropType.isRequired,
     isNoSelectionAllowed: PropTypes.bool,
 };

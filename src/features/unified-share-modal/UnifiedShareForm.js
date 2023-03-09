@@ -3,7 +3,6 @@
 import * as React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import FormattedCompMessage from '../../components/i18n/FormattedCompMessage';
@@ -461,10 +460,9 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
               };
         const avatars = this.renderCollaboratorAvatars();
         const { ftuxConfirmButtonProps } = modalTracking;
-        const dialogLabelId = uniqueId('usm-ftux-dialog-label');
         const ftuxTooltipText = (
             <div>
-                <h4 id={dialogLabelId} className="ftux-tooltip-title">
+                <h4 className="ftux-tooltip-title">
                     <FormattedMessage {...messages.ftuxNewUSMUserTitle} />
                 </h4>
                 <p className="ftux-tooltip-body">
@@ -481,9 +479,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             </div>
         );
         const ftuxTooltipProps = {
-            ariaLabel: dialogLabelId,
             className: 'usm-ftux-tooltip',
-            isFocusTrapped: true,
             // don't want ftux tooltip to show if the recommended sharing tooltip callout is showing
             isShown: !recommendedSharingTooltipCalloutName && shouldRenderFTUXTooltip && showCalloutForUser,
             position: 'middle-left',

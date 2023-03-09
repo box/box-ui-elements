@@ -20,6 +20,7 @@ export type MediaShape = {
     anyHover: MediaHoverType,
     anyPointer: MediaPointerType,
     hover: MediaHoverType,
+    isTouchDevice: boolean,
     pointer: MediaPointerType,
     size: string,
     viewHeight: number,

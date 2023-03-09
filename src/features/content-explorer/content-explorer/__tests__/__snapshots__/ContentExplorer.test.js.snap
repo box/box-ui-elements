@@ -17,6 +17,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
         },
       ]
     }
+    numTotalItems={100}
     onEnterFolder={[Function]}
     onExitSearch={[Function]}
     onFoldersPathUpdated={[Function]}
@@ -41,6 +42,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
   <ContentExplorerActionButtons
     actionButtonsProps={Object {}}
     areButtonsDisabled={true}
+    canIncludeSubfolders={false}
     cancelButtonProps={Object {}}
     chooseButtonProps={Object {}}
     contentExplorerMode="selectFile"
@@ -52,6 +54,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     }
     isNoSelectionAllowed={false}
     isResponsive={false}
+    onFoldersPathUpdated={[Function]}
     selectedItems={Object {}}
   />
 </div>

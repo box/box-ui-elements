@@ -19,6 +19,8 @@ class ContentExplorerModalContainer extends Component {
         breadcrumbProps: BreadcrumbPropType,
         /** Adds class name. */
         className: PropTypes.string,
+        /** Whether the user can see the breadcrumbs represented with the folder tree button */
+        hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Title shown in the ContentExplorerModal. */
@@ -52,6 +54,8 @@ class ContentExplorerModalContainer extends Component {
          * @param {number} selectedItemIndex
          */
         onSelectItem: PropTypes.func,
+        /** Called when the number of items selected text is clicked */
+        onViewSelectedClick: PropTypes.func,
         /** Folder is in the process of being created. */
         isCreatingFolder: PropTypes.bool,
         /** Whether the user can see select all checkbox */
@@ -60,6 +64,8 @@ class ContentExplorerModalContainer extends Component {
         createFolderError: PropTypes.string,
         /** Configures the content explorer based on the user's intended action (ex. select file or move/copy) */
         contentExplorerMode: ContentExplorerModePropType.isRequired,
+        /** Props for the include subfolders toggle */
+        includeSubfoldersProps: PropTypes.object,
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
@@ -71,6 +77,16 @@ class ContentExplorerModalContainer extends Component {
          * @param {Array} newFoldersPath
          */
         onEnterFolder: PropTypes.func.isRequired,
+        /** Called when the folders path is updated
+         *
+         * @param {Array} newFoldersPath
+         */
+        onFoldersPathUpdate: PropTypes.func,
+        /** Called whenever the selected items list changes
+         *
+         * @param {Object} selectedItems
+         */
+        onSelectedItemsUpdate: PropTypes.func,
         /**
          * Called when items are chosen.
          *

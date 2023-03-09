@@ -51,22 +51,73 @@
         }
     }
 
+    .bdl-ContentExplorerFolderTreeBreadcrumbs {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        margin-top: 15px;
+        margin-bottom: 5px;
+
+        .bdl-ContentExplorerFolderTreeBreadcrumbs-button {
+            margin: 0 10px 0 0;
+            padding: 5px;
+        }
+
+        .bdl-ContentExplorerFolderTreeBreadcrumbs-icon {
+            margin-right: 10px;
+        }
+
+        .bdl-ContentExplorerFolderTreeBreadcrumbs-text {
+            color: $bdl-gray;
+        }
+    }
+
+    .bdl-ContentExplorer-subheader {
+        display: flex;
+        align-items: center;
+        height: 10 * $bdl-grid-unit;
+
+        .checkbox-container,
+        .toggle-container {
+            margin: 0;
+        }
+
+        .toggle-simple-label {
+            display: flex;
+            align-items: center;
+            min-width: auto;
+        }
+
+        .content-explorer-select-all-checkbox {
+            margin-right: 18px;
+
+            &:first-child {
+                margin-left: auto;
+            }
+        }
+    }
+
     .content-explorer-select-all-container {
-        display: block;
-        height: 8 * $bdl-grid-unit;
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        height: 10 * $bdl-grid-unit;
 
         .content-explorer-select-all-items-counter {
             margin-left: 2px;
         }
 
         .content-explorer-select-all-checkbox-label {
-            float: right;
-            margin-right: 42px;
+            margin-right: 10px;
+            margin-left: auto;
         }
+    }
 
-        .content-explorer-select-all-checkbox {
-            float: right;
-            margin-right: -21 * $bdl-grid-unit;
+    .bdl-ContentExplorerIncludeSubfolders-icon {
+        margin-left: 4px;
+
+        path {
+            fill: $bdl-box-blue;
         }
     }
 
@@ -94,6 +145,15 @@
             position: absolute;
             left: 0;
             margin-top: 5px;
+        }
+
+        .status-message-link {
+            position: absolute;
+            left: 0;
+            margin-top: 5px;
+            color: $bdl-box-blue;
+            font-size: $bdl-fontSize--dejaBlue;
+            line-height: $bdl-line-height;
         }
 
         .content-explorer-copy-button {
