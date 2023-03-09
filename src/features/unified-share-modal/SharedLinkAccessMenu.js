@@ -138,6 +138,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                         })}
                         data-testid="usm-share-access-toggle"
                         disabled={submitting}
+                        type="button"
                         {...sharedLinkAccessMenuButtonProps}
                     >
                         <MenuToggle>
