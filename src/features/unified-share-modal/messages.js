@@ -545,6 +545,18 @@ const messages = defineMessages({
         description: 'Label for tooltips or other components that display expiration icons',
         id: 'boxui.unifiedShare.expiresMessage',
     },
+    setLevelOfCollabAccess: {
+        defaultMessage: 'Set the level of {collaboratorAccess} and increase security through one of our paid plans.',
+        description:
+            'Used in a dialog box that urges the user to upgrade. The collaboratorAccess variable is replaced with the words "collaborator access" from the string with the id boxui.unifiedShare.collabAccess',
+        id: 'boxui.unifiedShare.levelOfCollabAccess',
+    },
+    collabAccess: {
+        defaultMessage: 'collaborator access',
+        description:
+            'Used in a dialog box that urges the user to upgrade. This is substituted into the middle of the sentence in the string with id boxui.unifiedShare.levelOfCollabAccess',
+        id: 'boxui.unifiedShare.collabAccess',
+    },
 });
 
 export default messages;
