@@ -136,7 +136,6 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
                     className="metadata-instance-editor-template-dropdown-menu"
                     title={title}
                     isAlwaysOpen
-                    isPopperDisabled
                     onSelect={(index: number) => {
                         onAdd(templates[index]);
                     }}

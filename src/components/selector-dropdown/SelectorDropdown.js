@@ -3,7 +3,6 @@ import * as React from 'react';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 
-import ConditionalWrapper from '../conditional-wrapper';
 import { scrollIntoView } from '../../utils/dom';
 import PopperComponent from '../popper';
 import { PLACEMENT_BOTTOM_START } from '../popper/constants';
@@ -24,10 +23,10 @@ type Props = {
     className?: string,
     /** Index at which to insert the divider */
     dividerIndex?: number,
+    /** Option to enable dynamic positioning with popper */
+    hasDynamicPosition?: boolean,
     /** Options to keep the results always open */
     isAlwaysOpen?: boolean,
-    /** Option to disable dynamic positioning with popper */
-    isPopperDisabled?: boolean,
     /** Function called on keyboard "Enter" event only if enter does not trigger selection */
     onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
     /** Function called with the index of the selected option and the event (selected by keyboard or click) */
@@ -253,7 +252,7 @@ class SelectorDropdown extends React.Component<Props, State> {
             overlayTitle,
             children,
             className,
-            isPopperDisabled,
+            hasDynamicPosition = false,
             title,
             selector,
             shouldScroll,
@@ -325,17 +324,17 @@ class SelectorDropdown extends React.Component<Props, State> {
                 onPaste={this.handleInput}
                 ref={this.selectorDropdownRef}
             >
-                <ConditionalWrapper
-                    isDisabled={isPopperDisabled}
-                    wrapper={PopperComponent}
-                    wrapperProps={{ placement: PLACEMENT_BOTTOM_START, isOpen }}
+                <PopperComponent
+                    hasDynamicPosition={hasDynamicPosition}
+                    isOpen={isOpen}
+                    placement={PLACEMENT_BOTTOM_START}
                 >
                     {React.cloneElement(selector, { inputProps })}
                     <div className={`SelectorDropdown-overlay ${OVERLAY_WRAPPER_CLASS} is-visible`}>
                         {title}
                         {shouldScroll ? <ScrollWrapper>{list}</ScrollWrapper> : list}
                     </div>
-                </ConditionalWrapper>
+                </PopperComponent>
             </div>
         );
     }

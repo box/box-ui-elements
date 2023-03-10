@@ -4,8 +4,8 @@ import sinon from 'sinon';
 
 import * as domUtils from '../../../utils/dom';
 
-import ConditionalWrapper from '../../conditional-wrapper/ConditionalWrapper';
 import SelectorDropdown from '..';
+import PopperComponent from '../../popper/PopperComponent';
 
 const sandbox = sinon.sandbox.create();
 
@@ -60,7 +60,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
             const inputProps = wrapper.find('Selector').prop('inputProps');
             expect(inputProps['aria-owns']).toBeFalsy();
-            expect(wrapper.find(ConditionalWrapper).prop('wrapperProps').isOpen).toBe(false);
+            expect(wrapper.find(PopperComponent).prop('isOpen')).toBe(false);
         });
 
         test('should render listbox with children when dropdown is open', () => {
@@ -124,15 +124,6 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
             expect(wrapper.find('.SelectorDropdown-divider')).toHaveLength(0);
         });
-
-        test.each([[true], [false]])(
-            'should wrap the dropdown with popper when isPopperDisabled is %s',
-            isPopperDisabled => {
-                const wrapper = renderDropdownWithChildren(['Testing', 'Hello'], { isPopperDisabled });
-
-                expect(wrapper.find(ConditionalWrapper).prop('isDisabled')).toBe(isPopperDisabled);
-            },
-        );
     });
 
     describe('onFocus', () => {

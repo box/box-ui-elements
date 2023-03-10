@@ -29,7 +29,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render butto
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"
       isAlwaysOpen={true}
-      isPopperDisabled={true}
       onSelect={[Function]}
       selector={
         <SearchForm
@@ -99,7 +98,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"
       isAlwaysOpen={true}
-      isPopperDisabled={true}
       onSelect={[Function]}
       selector={
         <SearchForm
@@ -169,7 +167,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"
       isAlwaysOpen={true}
-      isPopperDisabled={true}
       onSelect={[Function]}
       selector={
         <SearchForm
@@ -239,7 +236,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render empty
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"
       isAlwaysOpen={true}
-      isPopperDisabled={true}
       onSelect={[Function]}
       selector={
         <SearchForm
@@ -301,7 +297,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render error
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"
       isAlwaysOpen={true}
-      isPopperDisabled={true}
       onSelect={[Function]}
       selector={
         <SearchForm
@@ -363,7 +358,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render loadi
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"
       isAlwaysOpen={true}
-      isPopperDisabled={true}
       onSelect={[Function]}
       selector={
         <SearchForm
@@ -420,7 +414,6 @@ exports[`features/metadata-instance-editor/fields/ should correctly render plain
     <SelectorDropdown
       className="metadata-instance-editor-template-dropdown-menu"
       isAlwaysOpen={true}
-      isPopperDisabled={true}
       onSelect={[Function]}
       selector={
         <SearchForm
