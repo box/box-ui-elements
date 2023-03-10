@@ -57,6 +57,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
       data-testid="activity-thread"
+      hasNewThreadedReplies={false}
       hasReplies={false}
       onHideReplies={[Function]}
       onReplyCreate={[Function]}
@@ -113,6 +114,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
       data-testid="activity-thread"
+      hasNewThreadedReplies={false}
       hasReplies={false}
       onHideReplies={[Function]}
       onReplyCreate={[Function]}

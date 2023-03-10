@@ -180,4 +180,15 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
             ).toBe(isCurrentVersion);
         },
     );
+
+    test.each`
+        hasNewThreadedReplies | component
+        ${true}               | ${'BaseComment'}
+        ${false}              | ${'Comment'}
+    `('should show $component when hasNewThreadedReplies is $hasNewThreadedReplies', ({ hasNewThreadedReplies }) => {
+        const wrapper = getShallowWrapper({ hasNewThreadedReplies }).dive();
+
+        expect(wrapper.find('BaseComment')).toHaveLength(hasNewThreadedReplies ? 1 : 0);
+        expect(wrapper.find('Comment')).toHaveLength(hasNewThreadedReplies ? 0 : 1);
+    });
 });

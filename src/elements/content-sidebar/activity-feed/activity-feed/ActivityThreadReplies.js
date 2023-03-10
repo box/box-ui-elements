@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import BaseComment from '../comment/BaseComment';
 import Comment from '../comment';
 import LoadingIndicator from '../../../../components/loading-indicator';
 
@@ -15,6 +16,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
@@ -29,6 +31,7 @@ const ActivityThreadReplies = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    hasNewThreadedReplies = false,
     isRepliesLoading,
     mentionSelectorContacts,
     onDelete,
@@ -46,15 +49,10 @@ const ActivityThreadReplies = ({
         };
     };
 
-    return (
-        <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
-            {isRepliesLoading && (
-                <div className="bcs-ActivityThreadReplies-loading" data-testid="activity-thread-replies-loading">
-                    <LoadingIndicator />
-                </div>
-            )}
-            {replies.map((reply: CommentType) => (
-                <Comment
+    const renderComment = (reply: CommentType) => {
+        if (hasNewThreadedReplies) {
+            return (
+                <BaseComment
                     key={`${reply.type}${reply.id}`}
                     {...reply}
                     currentUser={currentUser}
@@ -68,7 +66,35 @@ const ActivityThreadReplies = ({
                     permissions={getReplyPermissions(reply)}
                     translations={translations}
                 />
-            ))}
+            );
+        }
+
+        return (
+            <Comment
+                key={`${reply.type}${reply.id}`}
+                {...reply}
+                currentUser={currentUser}
+                getAvatarUrl={getAvatarUrl}
+                getMentionWithQuery={getMentionWithQuery}
+                getUserProfileUrl={getUserProfileUrl}
+                mentionSelectorContacts={mentionSelectorContacts}
+                onDelete={onDelete}
+                onEdit={onEdit}
+                onSelect={onSelect}
+                permissions={getReplyPermissions(reply)}
+                translations={translations}
+            />
+        );
+    };
+
+    return (
+        <div className="bcs-ActivityThreadReplies" data-testid="activity-thread-replies">
+            {isRepliesLoading && (
+                <div className="bcs-ActivityThreadReplies-loading" data-testid="activity-thread-replies-loading">
+                    <LoadingIndicator />
+                </div>
+            )}
+            {replies.map((reply: CommentType) => renderComment(reply))}
         </div>
     );
 };

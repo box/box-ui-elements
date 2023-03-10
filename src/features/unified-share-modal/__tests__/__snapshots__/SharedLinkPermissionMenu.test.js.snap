@@ -13,6 +13,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
     className="lnk is-disabled bdl-is-disabled"
     data-testid="usm-share-permissions-toggle"
     disabled={true}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -92,6 +93,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
     className="lnk"
     data-testid="usm-share-permissions-toggle"
     disabled={false}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -171,6 +173,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
     className="lnk is-disabled bdl-is-disabled"
     data-testid="usm-share-permissions-toggle"
     disabled={true}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -250,6 +253,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
     className="lnk"
     data-testid="usm-share-permissions-toggle"
     disabled={false}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -329,6 +333,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
     className="lnk is-disabled bdl-is-disabled"
     data-testid="usm-share-permissions-toggle"
     disabled={true}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -408,6 +413,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
     className="lnk"
     data-testid="usm-share-permissions-toggle"
     disabled={false}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
