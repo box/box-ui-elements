@@ -9,29 +9,51 @@ import { FormattedMessage } from 'react-intl';
 import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
 import PlainButton from '../../components/plain-button';
 import messages from './messages';
-import { COMMENT_STATUS_OPEN } from '../../constants';
+import {
+    ACTIVITY_FEED_ITEM_ALL,
+    ACTIVITY_FEED_ITEM_OPEN,
+    ACTIVITY_FEED_ITEM_RESOLVED,
+    ACTIVITY_FEED_ITEM_TASKS,
+    ACTIVITY_FILTER_TITLE_ALL_COMMENTS,
+    COMMENT_STATUS_OPEN,
+    COMMENT_STATUS_RESOLVED,
+} from '../../constants';
 import { Menu, SelectMenuItem } from '../../components/menu';
-import type { FeedItemStatus } from '../../common/types/feed';
+import type { ActivityFilterAllTitle, ActivityFilterStatus } from '../../common/types/feed';
 import './ActivitySidebarFilter.scss';
 
 type ActivitySidebarFilterProps = {
-    feedItemStatus?: FeedItemStatus,
-    onFeedItemStatusClick: (status?: FeedItemStatus) => void,
-};
-
-const ACTIVITY_FEED_ITEM_ALL = 'all';
-const ACTIVITY_FEED_ITEM_OPEN = COMMENT_STATUS_OPEN;
-
-const statuses = [ACTIVITY_FEED_ITEM_ALL, ACTIVITY_FEED_ITEM_OPEN];
-const statusMap = {
-    [ACTIVITY_FEED_ITEM_ALL]: { msg: messages.activitySidebarFilterOptionAll, val: undefined },
-    [ACTIVITY_FEED_ITEM_OPEN]: { msg: messages.activitySidebarFilterOptionOpen, val: COMMENT_STATUS_OPEN },
+    activityFilterAllTitle?: ActivityFilterAllTitle,
+    activityFilterOptions?: ActivityFilterStatus[],
+    feedItemStatus?: ActivityFilterStatus,
+    onFeedItemStatusClick: (status?: ActivityFilterStatus) => void,
 };
 
 function ActivitySidebarFilter({
+    activityFilterOptions = [ACTIVITY_FEED_ITEM_ALL, ACTIVITY_FEED_ITEM_OPEN],
+    activityFilterAllTitle = ACTIVITY_FILTER_TITLE_ALL_COMMENTS,
     feedItemStatus = ACTIVITY_FEED_ITEM_ALL,
     onFeedItemStatusClick,
 }: ActivitySidebarFilterProps) {
+    const statusMap = {
+        [ACTIVITY_FEED_ITEM_ALL]: {
+            msg:
+                activityFilterAllTitle === ACTIVITY_FILTER_TITLE_ALL_COMMENTS
+                    ? messages.activitySidebarFilterOptionAll
+                    : messages.activitySidebarFilterOptionAllActivity,
+            val: undefined,
+        },
+        [ACTIVITY_FEED_ITEM_OPEN]: { msg: messages.activitySidebarFilterOptionOpen, val: COMMENT_STATUS_OPEN },
+        [ACTIVITY_FEED_ITEM_RESOLVED]: {
+            msg: messages.activitySidebarFilterOptionResolved,
+            val: COMMENT_STATUS_RESOLVED,
+        },
+        [ACTIVITY_FEED_ITEM_TASKS]: {
+            msg: messages.activitySidebarFilterOptionTasks,
+            val: ACTIVITY_FEED_ITEM_TASKS,
+        },
+    };
+
     return (
         <div className="bcs-ActivitySidebarFilter">
             <DropdownMenu className="bcs-ActivitySidebarFilter-dropdownMenu" constrainToWindow>
@@ -41,7 +63,7 @@ function ActivitySidebarFilter({
                     </MenuToggle>
                 </PlainButton>
                 <Menu>
-                    {statuses.map(status => (
+                    {activityFilterOptions.map(status => (
                         <SelectMenuItem
                             key={status}
                             isSelected={status === feedItemStatus}

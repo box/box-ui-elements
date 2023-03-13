@@ -49,6 +49,8 @@ import type {
 import type {
     Annotation,
     AnnotationPermission,
+    ActivityFilterAllTitle,
+    ActivityFilterStatus,
     BoxCommentPermission,
     Comment,
     CommentFeedItemType,
@@ -70,6 +72,8 @@ import './ActivitySidebar.scss';
 type ExternalProps = {
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
+    activityFilterAllTitle?: ActivityFilterAllTitle,
+    activityFilterOptions?: ActivityFilterStatus[],
     currentUser?: User,
     currentUserError?: Errors,
     getUserProfileUrl?: GetProfileUrlCallback,
@@ -93,7 +97,7 @@ type PropsWithoutContext = {
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
-    onFilterChange: (status?: FeedItemStatus) => void,
+    onFilterChange: (status?: ActivityFilterStatus) => void,
     onVersionChange: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
@@ -111,7 +115,7 @@ type State = {
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     contactsLoaded?: boolean,
     feedItems?: FeedItems,
-    feedItemsStatusFilter?: FeedItemStatus,
+    feedItemsStatusFilter?: ActivityFilterStatus,
     mentionSelectorContacts?: SelectorItems<UserMini>,
 };
 
@@ -1090,7 +1094,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onAnnotationSelect(annotation);
     };
 
-    handleItemsFiltered = (status?: FeedItemStatus) => {
+    handleItemsFiltered = (status?: ActivityFilterStatus) => {
         const { onFilterChange } = this.props;
 
         this.setState({ feedItemsStatusFilter: status });
@@ -1103,7 +1107,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             return feedItems;
         }
         return feedItems.filter(item => {
-            return item.status === feedItemsStatusFilter || item.type === FEED_ITEM_TYPE_VERSION;
+            return (
+                item.status === feedItemsStatusFilter ||
+                item.type === FEED_ITEM_TYPE_VERSION ||
+                item.type === feedItemsStatusFilter
+            );
         });
     };
 
@@ -1145,15 +1153,20 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     renderActivitySidebarFilter = () => {
-        const { features } = this.props;
+        const { activityFilterAllTitle, activityFilterOptions, features } = this.props;
         const { feedItemsStatusFilter } = this.state;
-        const shouldShowActivityFeedFilter = isFeatureEnabled(features, 'activityFeed.filter.enabled');
+        const activityFeedFilterEnabled = isFeatureEnabled(features, 'activityFeed.filter.enabled');
+        const newThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
+        const shouldShowActivityFeedFilter =
+            activityFeedFilterEnabled || (newThreadedRepliesEnabled && activityFilterOptions);
 
         if (!shouldShowActivityFeedFilter) {
             return null;
         }
         return (
             <ActivitySidebarFilter
+                activityFilterAllTitle={activityFilterAllTitle}
+                activityFilterOptions={activityFilterOptions}
                 feedItemStatus={feedItemsStatusFilter}
                 onFeedItemStatusClick={selectedStatus => {
                     this.handleItemsFiltered(selectedStatus);
@@ -1170,9 +1183,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     );
 
     renderTitle = () => {
-        const { features } = this.props;
-        if (isFeatureEnabled(features, 'activityFeed.filter.enabled')) {
-            return undefined;
+        const { activityFilterOptions, features } = this.props;
+        const activityFeedFilterEnabled = isFeatureEnabled(features, 'activityFeed.filter.enabled');
+        const newThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
+        const shouldHideTitle = activityFeedFilterEnabled || (newThreadedRepliesEnabled && activityFilterOptions);
+
+        if (shouldHideTitle) {
+            return null;
         }
         return <FormattedMessage {...messages.sidebarActivityTitle} />;
     };

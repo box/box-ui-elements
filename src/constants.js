@@ -463,6 +463,16 @@ export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
 export const COMMENT_STATUS_OPEN: 'open' = 'open';
 export const COMMENT_STATUS_RESOLVED: 'resolved' = 'resolved';
 
+/* ------------------ Activity Filter Statuses ------------------ */
+export const ACTIVITY_FEED_ITEM_ALL: 'all' = 'all';
+export const ACTIVITY_FEED_ITEM_OPEN: 'open' = 'open';
+export const ACTIVITY_FEED_ITEM_RESOLVED: 'resolved' = 'resolved';
+export const ACTIVITY_FEED_ITEM_TASKS: 'task' = 'task';
+
+/* ------------------ Activity Filter All Title Options ------------------ */
+export const ACTIVITY_FILTER_TITLE_ALL_ACTIVITY: 'all_activity' = 'all_activity';
+export const ACTIVITY_FILTER_TITLE_ALL_COMMENTS: 'all_comments' = 'all_comments';
+
 /* ----------------- Theme ---------------------------*/
 export const THEME_VERY_DARK = 'vDark';
 export const THEME_DARK = 'dark';
