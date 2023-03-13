@@ -16,7 +16,8 @@
         content: '';
     }
 
-    .bcs-ActivityCard {
+    .bcs-ActivityCard,
+    .bcs-Comment {
         &:first-child {
             padding-top: 0;
         }
