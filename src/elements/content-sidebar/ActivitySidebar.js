@@ -1189,7 +1189,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const shouldHideTitle = activityFeedFilterEnabled || (newThreadedRepliesEnabled && activityFilterOptions);
 
         if (shouldHideTitle) {
-            return null;
+            return undefined;
         }
         return <FormattedMessage {...messages.sidebarActivityTitle} />;
     };
