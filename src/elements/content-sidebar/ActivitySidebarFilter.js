@@ -30,8 +30,8 @@ type ActivitySidebarFilterProps = {
 };
 
 function ActivitySidebarFilter({
-    activityFilterOptions = [ACTIVITY_FEED_ITEM_ALL, ACTIVITY_FEED_ITEM_OPEN],
     activityFilterAllTitle = ACTIVITY_FILTER_TITLE_ALL_COMMENTS,
+    activityFilterOptions = [ACTIVITY_FEED_ITEM_ALL, ACTIVITY_FEED_ITEM_OPEN],
     feedItemStatus = ACTIVITY_FEED_ITEM_ALL,
     onFeedItemStatusClick,
 }: ActivitySidebarFilterProps) {
