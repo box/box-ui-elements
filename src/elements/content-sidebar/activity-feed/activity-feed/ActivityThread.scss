@@ -25,11 +25,11 @@ $sidebarActivityFeedSelectedItemBorderWidth: 2px;
     }
 
     // Styling duplicated for Comment refactor
-    .bcs-Comment {
+    .bcs-BaseComment {
         padding: $sidebarThreadedActivityCardSpacingTop $sidebarThreadedActivityCardSpacingHorizontal $sidebarActivityFeedSpacingVertical;
     }
 
-    .bcs-ActivityThread-content > .bcs-Comment {
+    .bcs-ActivityThread-content > .bcs-BaseComment {
         padding-top: $sidebarThreadedActivityCardSpacingTop - $sidebarActivityFeedSelectedItemBorderWidth;
     }
 
@@ -100,12 +100,12 @@ $sidebarActivityFeedSelectedItemBorderWidth: 2px;
 }
 
 // Styling duplicated for Comment refactor
-.be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-Comment {
+.be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-BaseComment {
     box-shadow: none;
     animation: none;
 }
 
 // Disable legacy annotation select indicator (orange bar)
-.be .bcs-activity-feed-annotation-activity.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-Comment::before {
+.be .bcs-activity-feed-annotation-activity.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-BaseComment::before {
     content: none;
 }

@@ -16,8 +16,17 @@
         content: '';
     }
 
-    .bcs-ActivityCard,
-    .bcs-Comment {
+    .bcs-ActivityCard {
+        &:first-child {
+            padding-top: 0;
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+
+    .bcs-BaseComment {
         &:first-child {
             padding-top: 0;
         }

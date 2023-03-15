@@ -167,7 +167,8 @@ const BaseComment = (props: Props) => {
     const isResolved = status === COMMENT_STATUS_RESOLVED;
 
     return (
-        <div className="bcs-Comment">
+        // TODO: Change className to bcs-Comment once FF is removed
+        <div className="bcs-BaseComment">
             <Media
                 className={classNames('bcs-Comment-media', {
                     'bcs-is-pending': isPending || error,

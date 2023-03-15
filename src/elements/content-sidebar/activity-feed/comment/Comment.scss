@@ -6,6 +6,12 @@
     z-index: 1;
 }
 
+// TODO: Remove when newThreadedReplies FF is removed
+.bcs-BaseComment {
+    position: relative;
+    z-index: 1;
+}
+
 // the comment activity item
 .bcs-Comment-media {
     opacity: 1;
