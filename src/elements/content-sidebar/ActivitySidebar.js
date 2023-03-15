@@ -49,7 +49,7 @@ import type {
 import type {
     Annotation,
     AnnotationPermission,
-    ActivityFilterAllTitle,
+    ActivityFilterOption,
     ActivityFilterStatus,
     BoxCommentPermission,
     Comment,
@@ -72,8 +72,7 @@ import './ActivitySidebar.scss';
 type ExternalProps = {
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
-    activityFilterAllTitle?: ActivityFilterAllTitle,
-    activityFilterOptions?: ActivityFilterStatus[],
+    activityFilterOptions?: ActivityFilterOption[],
     currentUser?: User,
     currentUserError?: Errors,
     getUserProfileUrl?: GetProfileUrlCallback,

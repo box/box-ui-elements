@@ -14,43 +14,49 @@ import {
     ACTIVITY_FEED_ITEM_OPEN,
     ACTIVITY_FEED_ITEM_RESOLVED,
     ACTIVITY_FEED_ITEM_TASKS,
-    ACTIVITY_FILTER_TITLE_ALL_COMMENTS,
     COMMENT_STATUS_OPEN,
     COMMENT_STATUS_RESOLVED,
+    FEED_ITEM_TYPE_TASK,
 } from '../../constants';
 import { Menu, SelectMenuItem } from '../../components/menu';
-import type { ActivityFilterAllTitle, ActivityFilterStatus } from '../../common/types/feed';
+import type { ActivityFilterOption, ActivityFilterStatus } from '../../common/types/feed';
 import './ActivitySidebarFilter.scss';
 
 type ActivitySidebarFilterProps = {
-    activityFilterAllTitle?: ActivityFilterAllTitle,
-    activityFilterOptions?: ActivityFilterStatus[],
+    activityFilterOptions?: ActivityFilterOption[],
     feedItemStatus?: ActivityFilterStatus,
     onFeedItemStatusClick: (status?: ActivityFilterStatus) => void,
 };
 
+const filterOptionToStatus = {
+    [ACTIVITY_FEED_ITEM_ALL]: ACTIVITY_FEED_ITEM_ALL,
+    [ACTIVITY_FEED_ITEM_OPEN]: COMMENT_STATUS_OPEN,
+    [ACTIVITY_FEED_ITEM_RESOLVED]: COMMENT_STATUS_RESOLVED,
+    [ACTIVITY_FEED_ITEM_TASKS]: FEED_ITEM_TYPE_TASK,
+};
+
 function ActivitySidebarFilter({
-    activityFilterAllTitle = ACTIVITY_FILTER_TITLE_ALL_COMMENTS,
     activityFilterOptions = [ACTIVITY_FEED_ITEM_ALL, ACTIVITY_FEED_ITEM_OPEN],
     feedItemStatus = ACTIVITY_FEED_ITEM_ALL,
     onFeedItemStatusClick,
 }: ActivitySidebarFilterProps) {
+    const isCommentsOnlyFilter = !activityFilterOptions.includes(ACTIVITY_FEED_ITEM_TASKS);
+
     const statusMap = {
         [ACTIVITY_FEED_ITEM_ALL]: {
-            msg:
-                activityFilterAllTitle === ACTIVITY_FILTER_TITLE_ALL_COMMENTS
-                    ? messages.activitySidebarFilterOptionAll
-                    : messages.activitySidebarFilterOptionAllActivity,
+            msg: isCommentsOnlyFilter
+                ? messages.activitySidebarFilterOptionAllComments
+                : messages.activitySidebarFilterOptionAllActivity,
             val: undefined,
         },
-        [ACTIVITY_FEED_ITEM_OPEN]: { msg: messages.activitySidebarFilterOptionOpen, val: COMMENT_STATUS_OPEN },
-        [ACTIVITY_FEED_ITEM_RESOLVED]: {
+        [COMMENT_STATUS_OPEN]: { msg: messages.activitySidebarFilterOptionOpen, val: COMMENT_STATUS_OPEN },
+        [COMMENT_STATUS_RESOLVED]: {
             msg: messages.activitySidebarFilterOptionResolved,
             val: COMMENT_STATUS_RESOLVED,
         },
-        [ACTIVITY_FEED_ITEM_TASKS]: {
+        [FEED_ITEM_TYPE_TASK]: {
             msg: messages.activitySidebarFilterOptionTasks,
-            val: ACTIVITY_FEED_ITEM_TASKS,
+            val: FEED_ITEM_TYPE_TASK,
         },
     };
 
@@ -63,15 +69,18 @@ function ActivitySidebarFilter({
                     </MenuToggle>
                 </PlainButton>
                 <Menu>
-                    {activityFilterOptions.map(status => (
-                        <SelectMenuItem
-                            key={status}
-                            isSelected={status === feedItemStatus}
-                            onClick={() => onFeedItemStatusClick(statusMap[status].val)}
-                        >
-                            <FormattedMessage {...statusMap[status].msg} />
-                        </SelectMenuItem>
-                    ))}
+                    {activityFilterOptions.map(filterOption => {
+                        const status = filterOptionToStatus[filterOption];
+                        return (
+                            <SelectMenuItem
+                                key={status}
+                                isSelected={status === feedItemStatus}
+                                onClick={() => onFeedItemStatusClick(statusMap[status].val)}
+                            >
+                                <FormattedMessage {...statusMap[status].msg} />
+                            </SelectMenuItem>
+                        );
+                    })}
                 </Menu>
             </DropdownMenu>
         </div>

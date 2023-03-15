@@ -5,8 +5,6 @@ import {
     ACTIVITY_FEED_ITEM_OPEN,
     ACTIVITY_FEED_ITEM_RESOLVED,
     ACTIVITY_FEED_ITEM_TASKS,
-    ACTIVITY_FILTER_TITLE_ALL_ACTIVITY,
-    ACTIVITY_FILTER_TITLE_ALL_COMMENTS,
     COMMENT_STATUS_OPEN,
     COMMENT_STATUS_RESOLVED,
     FEED_ITEM_TYPE_ANNOTATION,
@@ -156,17 +154,17 @@ type ActionItemError = {
     title: MessageDescriptor,
 };
 
-type ActivityFilterAllTitle = typeof ACTIVITY_FILTER_TITLE_ALL_ACTIVITY | typeof ACTIVITY_FILTER_TITLE_ALL_COMMENTS;
-
-type ActivityFilterStatus =
+type ActivityFilterOption =
     | typeof ACTIVITY_FEED_ITEM_ALL
     | typeof ACTIVITY_FEED_ITEM_OPEN
     | typeof ACTIVITY_FEED_ITEM_RESOLVED
     | typeof ACTIVITY_FEED_ITEM_TASKS;
 
+type ActivityFilterStatus = typeof COMMENT_STATUS_OPEN | typeof COMMENT_STATUS_RESOLVED | typeof FEED_ITEM_TYPE_TASK;
+
 export type {
     ActionItemError,
-    ActivityFilterAllTitle,
+    ActivityFilterOption,
     ActivityFilterStatus,
     ActivityTemplateItem,
     Annotation,
