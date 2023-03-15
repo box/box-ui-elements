@@ -16,12 +16,19 @@ $sidebarActivityFeedSelectedItemBorderWidth: 2px;
         padding-bottom: $sidebarActivityFeedSpacingVertical - $sidebarActivityFeedSelectedItemBorderWidth;
     }
 
-    .bcs-ActivityCard,
+    .bcs-ActivityCard {
+        padding: $sidebarThreadedActivityCardSpacingTop $sidebarThreadedActivityCardSpacingHorizontal $sidebarActivityFeedSpacingVertical;
+    }
+
+    .bcs-ActivityThread-content > .bcs-ActivityCard {
+        padding-top: $sidebarThreadedActivityCardSpacingTop - $sidebarActivityFeedSelectedItemBorderWidth;
+    }
+
+    // Styling duplicated for Comment refactor
     .bcs-Comment {
         padding: $sidebarThreadedActivityCardSpacingTop $sidebarThreadedActivityCardSpacingHorizontal $sidebarActivityFeedSpacingVertical;
     }
 
-    .bcs-ActivityThread-content > .bcs-ActivityCard,
     .bcs-ActivityThread-content > .bcs-Comment {
         padding-top: $sidebarThreadedActivityCardSpacingTop - $sidebarActivityFeedSelectedItemBorderWidth;
     }
@@ -82,14 +89,23 @@ $sidebarActivityFeedSelectedItemBorderWidth: 2px;
     }
 }
 
-.be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-ActivityCard,
+.be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-ActivityCard {
+    box-shadow: none;
+    animation: none;
+}
+
+// Disable legacy annotation select indicator (orange bar)
+.be .bcs-activity-feed-annotation-activity.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-ActivityCard::before {
+    content: none;
+}
+
+// Styling duplicated for Comment refactor
 .be .bcs-activity-feed .bcs-activity-feed-items-container .bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-Comment {
     box-shadow: none;
     animation: none;
 }
 
 // Disable legacy annotation select indicator (orange bar)
-.be .bcs-activity-feed-annotation-activity.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-ActivityCard::before,
 .be .bcs-activity-feed-annotation-activity.bcs-ActivityItem.bcs-is-focused .bcs-ActivityThread .bcs-Comment::before {
     content: none;
 }
