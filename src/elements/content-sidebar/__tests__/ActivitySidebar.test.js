@@ -1501,6 +1501,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
             ${'open'}     | ${[expectedAnnotationOpen, expectedCommentOpen, expectedVersionItem]}
             ${'resolved'} | ${[expectedAnnotationResolved, expectedCommentResolved, expectedVersionItem]}
+            ${'task'}     | ${[expectedTaskItem, expectedVersionItem]}
         `(
             'should filter feed items of type "comment" or "annotation" based on status equal to $status',
             ({ status, expected }) => {
@@ -1534,9 +1535,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('handleItemsFiltered()', () => {
         test.each`
-            status       | expected
-            ${undefined} | ${undefined}
-            ${'open'}    | ${'open'}
+            status        | expected
+            ${undefined}  | ${undefined}
+            ${'open'}     | ${'open'}
+            ${'resolved'} | ${'resolved'}
+            ${'task'}     | ${'task'}
         `(
             'given $status should update feedItemsStatusFilter state with $expected and call filter change event callback',
             ({ status, expected }) => {
@@ -1578,19 +1581,68 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const instance = wrapper.instance();
                 expect(instance.renderActivitySidebarFilter()).toBe(null);
             });
+
+            test('when activityFeed.newThreadedReplies is disabled and no filter options list is provided', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+
+            test('when activityFeed.newThreadedReplies is disabled and filter options list is provided', () => {
+                const wrapper = getWrapper({
+                    activityFilterOptions: ['all', 'open', 'resolved', 'tasks'],
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
+
+            test('when activityFeed.newThreadedReplies is enabled and no filter options list is provided', () => {
+                const wrapper = getWrapper({
+                    activityFilterOptions: undefined,
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: true },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
         });
 
-        test('should return ActivitySidebarFilter when activityFeed.filter feature is enabled', () => {
-            const wrapper = getWrapper({
-                features: {
-                    activityFeed: {
-                        filter: { enabled: true },
+        describe('should return ActivitySidebarFilter', () => {
+            test('when activityFeed.filter feature is enabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: true },
+                        },
                     },
-                },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderActivitySidebarFilter());
+                expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
             });
-            const instance = wrapper.instance();
-            const resultWrapper = mount(instance.renderActivitySidebarFilter());
-            expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+
+            test('when activityFeed.newThreadedReplies is enabled and filter options list is provieded', () => {
+                const wrapper = getWrapper({
+                    activityFilterOptions: ['all', 'open', 'resolved', 'tasks'],
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: true },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderActivitySidebarFilter());
+                expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+            });
         });
     });
 
@@ -1615,12 +1667,63 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const resultWrapper = mount(instance.renderTitle());
                 expect(resultWrapper.name()).toBe('FormattedMessage');
             });
+
+            test('when activityFeed.newThreadedReplies is disabled and no filter options list is provided', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: false },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+
+            test('when activityFeed.newThreadedReplies is disabled and filter options list is provided', () => {
+                const wrapper = getWrapper({
+                    activityFilterOptions: ['all', 'open', 'resolved', 'tasks'],
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
+
+            test('when activityFeed.newThreadedReplies is enabled and no filter options list is provided', () => {
+                const wrapper = getWrapper({
+                    activityFilterOptions: undefined,
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: true },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
         });
 
-        test('should return undefined when activityFeed.filter feature is enabled', () => {
-            const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
-            const instance = wrapper.instance();
-            expect(instance.renderTitle()).toBe(undefined);
+        describe('should return undefined', () => {
+            test('when activityFeed.filter feature is enabled', () => {
+                const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
+                const instance = wrapper.instance();
+                expect(instance.renderTitle()).toBe(undefined);
+            });
+
+            test('when activityFeed.newThreadedReplies is enabled and filter options list is provided', () => {
+                const wrapper = getWrapper({
+                    activityFilterOptions: ['all', 'open', 'resolved', 'tasks'],
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: true },
+                        },
+                    },
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderTitle()).toBe(undefined);
+            });
         });
     });
 });

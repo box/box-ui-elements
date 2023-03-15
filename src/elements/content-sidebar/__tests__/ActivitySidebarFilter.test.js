@@ -3,7 +3,7 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ActivitySidebarFilter from '../ActivitySidebarFilter';
-import type { FeedItemStatus } from '../../../common/types/feed';
+import type { ActivityFilterOption, ActivityFilterStatus } from '../../../common/types/feed';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -12,36 +12,49 @@ jest.mock('react-intl', () => ({
 
 const onFeedItemStatusClick = jest.fn();
 
+const availableActivityFilterOptions: ActivityFilterOption[] = ['all', 'open', 'resolved', 'tasks'];
+
 const Wrapper = ({ children }: { children?: React.ReactNode }) => {
     return <IntlProvider locale="en">{children}</IntlProvider>;
 };
 
-const renderWithWrapper = (feedItemStatus?: FeedItemStatus) =>
-    render(<ActivitySidebarFilter feedItemStatus={feedItemStatus} onFeedItemStatusClick={onFeedItemStatusClick} />, {
-        wrapper: Wrapper,
-    });
+const renderWithWrapper = (activityFilterOptions?: ActivityFilterStatus[], feedItemStatus?: ActivityFilterStatus) =>
+    render(
+        <ActivitySidebarFilter
+            activityFilterOptions={activityFilterOptions}
+            feedItemStatus={feedItemStatus}
+            onFeedItemStatusClick={onFeedItemStatusClick}
+        />,
+        {
+            wrapper: Wrapper,
+        },
+    );
 
 describe('elements/content-sidebar/ActivitySidebarFilter', () => {
     test.each`
         feedItemStatus | option
-        ${undefined}   | ${'All Comments'}
+        ${undefined}   | ${'All Activity'}
         ${'open'}      | ${'Unresolved Comments'}
+        ${'resolved'}  | ${'Resolved Comments'}
+        ${'task'}      | ${'Tasks'}
     `(
         'should render "$option" as the selected status when feedItemStatus prop is equal to $feedItemStatus',
         ({ feedItemStatus, option }) => {
-            renderWithWrapper(feedItemStatus);
+            renderWithWrapper(availableActivityFilterOptions, feedItemStatus);
             expect(screen.getByText(option)).toBeVisible();
         },
     );
 
     test.each`
-        expected     | option                   | initialOption            | initialStatus
-        ${undefined} | ${'All Comments'}        | ${'Unresolved Comments'} | ${'open'}
-        ${'open'}    | ${'Unresolved Comments'} | ${'All Comments'}        | ${undefined}
+        expected      | option                   | initialOption            | initialStatus
+        ${undefined}  | ${'All Activity'}        | ${'Unresolved Comments'} | ${'open'}
+        ${'open'}     | ${'Unresolved Comments'} | ${'All Activity'}        | ${undefined}
+        ${'resolved'} | ${'Resolved Comments'}   | ${'All Activity'}        | ${undefined}
+        ${'task'}     | ${'Tasks'}               | ${'All Activity'}        | ${undefined}
     `(
         'onFeedItemStatusClick should be called with $expected when clicked on $option',
         async ({ initialOption, option, initialStatus, expected }) => {
-            renderWithWrapper(initialStatus);
+            renderWithWrapper(availableActivityFilterOptions, initialStatus);
 
             const dropdownBtn = screen.getByText(initialOption);
 
@@ -51,4 +64,46 @@ describe('elements/content-sidebar/ActivitySidebarFilter', () => {
             expect(onFeedItemStatusClick).toBeCalledWith(expected);
         },
     );
+
+    test.each`
+        filterOptions                           | title
+        ${undefined}                            | ${'All Comments'}
+        ${['all']}                              | ${'All Comments'}
+        ${['all', 'open']}                      | ${'All Comments'}
+        ${['all', 'resolved']}                  | ${'All Comments'}
+        ${['all', 'open', 'resolved']}          | ${'All Comments'}
+        ${['all', 'open', 'resolved', 'tasks']} | ${'All Activity'}
+        ${['all', 'tasks']}                     | ${'All Activity'}
+    `(
+        'should render $title as the title for the all selection when $filterOptions is passed as the activityFilterOptions prop',
+        async ({ filterOptions, title }) => {
+            renderWithWrapper(filterOptions, undefined);
+            expect(screen.getByText(title)).toBeVisible();
+        },
+    );
+
+    test.each`
+        feedItemStatus | option
+        ${undefined}   | ${'All Comments'}
+        ${'open'}      | ${'Unresolved Comments'}
+    `(
+        'should maintain default statuses and functionality when activityFilterOptions prop is not specified',
+        ({ feedItemStatus, option }) => {
+            renderWithWrapper(undefined, feedItemStatus);
+            expect(screen.getByText(option)).toBeVisible();
+        },
+    );
+
+    test('should maintain default functionality when activityFilterOptions prop is not specified', () => {
+        renderWithWrapper(undefined, undefined);
+        const dropdownBtn = screen.getByText('All Comments');
+        fireEvent.click(dropdownBtn);
+        const allCommentsElements = screen.getAllByText('All Comments');
+        expect(allCommentsElements).toHaveLength(2);
+        expect(allCommentsElements[0]).toBeVisible();
+        expect(allCommentsElements[1]).toBeVisible();
+        expect(screen.getByText('Unresolved Comments')).toBeVisible();
+        expect(screen.queryByText('Resolved Comments')).toBeNull();
+        expect(screen.queryByText('Tasks')).toBeNull();
+    });
 });
