@@ -10,31 +10,27 @@ const messages = defineMessages({
     activitySidebarFilterOptionAllActivity: {
         id: 'be.activitySidebarFilter.status.allActivity',
         defaultMessage: 'All Activity',
-        description:
-            'One of the dropdown options to select for filtering activity list in order to filter all activity',
+        description: 'Dropdown option for filtering all activity from activity list',
     },
     activitySidebarFilterOptionAllComments: {
         id: 'be.activitySidebarFilter.status.allComments',
         defaultMessage: 'All Comments',
-        description:
-            'One of the dropdown options to select for filtering comments list in order to filter all comments',
+        description: 'Dropdown option for filtering all comments from comments list',
     },
     activitySidebarFilterOptionOpen: {
         id: 'be.activitySidebarFilter.status.open',
         defaultMessage: 'Unresolved Comments',
-        description:
-            'One of the dropdown options to select for filtering activity or comments list in order to filter unresolved comments',
+        description: 'Dropdown option for filtering unresolved comments from activity or comments list',
     },
     activitySidebarFilterOptionResolved: {
         id: 'be.activitySidebarFilter.status.resolved',
         defaultMessage: 'Resolved Comments',
-        description:
-            'One of the dropdown options to select for filtering activity or comments list in order to filter resolved comments',
+        description: 'Dropdown option for filtering resolved comments from activity or comments list',
     },
     activitySidebarFilterOptionTasks: {
         id: 'be.activitySidebarFilter.status.tasks',
         defaultMessage: 'Tasks',
-        description: 'One of the dropdown options to select for filtering activity in order to filter tasks',
+        description: 'Dropdown option for filtering tasks from activity list',
     },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
