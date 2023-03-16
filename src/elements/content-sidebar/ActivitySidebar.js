@@ -1152,7 +1152,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     renderActivitySidebarFilter = () => {
-        const { activityFilterAllTitle, activityFilterOptions, features } = this.props;
+        const { activityFilterOptions, features } = this.props;
         const { feedItemsStatusFilter } = this.state;
         const activityFeedFilterEnabled = isFeatureEnabled(features, 'activityFeed.filter.enabled');
         const newThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
@@ -1164,7 +1164,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
         return (
             <ActivitySidebarFilter
-                activityFilterAllTitle={activityFilterAllTitle}
                 activityFilterOptions={activityFilterOptions}
                 feedItemStatus={feedItemsStatusFilter}
                 onFeedItemStatusClick={selectedStatus => {
