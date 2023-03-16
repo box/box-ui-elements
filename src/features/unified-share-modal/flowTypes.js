@@ -287,11 +287,11 @@ type SharedLinkSectionTypes = {
     onCopySuccess?: () => void,
     /** Handler function that gets called whenever the user dismisses a tooltip on the given component identifier */
     onDismissTooltip?: (componentIdentifier: tooltipComponentIdentifierType) => void,
-    /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
+    /** Handler function for clicks on the settings button. If not provided, the settings button won't be rendered. */
     onSettingsClick?: Function,
     /** Shared link data */
     sharedLink: sharedLinkType,
-    /** Shows a callout tooltip next gear icon with info about what can be customized */
+    /** Shows a callout tooltip next to settings button with info about what can be customized */
     showSharedLinkSettingsCallout?: boolean,
     /** Mapping of components to the content that should be rendered in their tooltips */
     tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
