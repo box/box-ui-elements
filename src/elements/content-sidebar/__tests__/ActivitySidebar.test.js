@@ -1582,38 +1582,26 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect(instance.renderActivitySidebarFilter()).toBe(null);
             });
 
-            test('when activityFeed.newThreadedReplies is disabled and no filter options list is provided', () => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            newThreadedReplies: { enabled: false },
+            test.each`
+                featureEnabled | optionsList
+                ${false}       | ${undefined}
+                ${false}       | ${['all', 'open', 'resolved', 'tasks']}
+                ${true}        | ${undefined}
+            `(
+                'when activityFeed.newThreadedReplies enabled equals $featureEnabled and options list provided is $optionsList',
+                ({ featureEnabled, optionsList }) => {
+                    const wrapper = getWrapper({
+                        activityFilterOptions: optionsList,
+                        features: {
+                            activityFeed: {
+                                newThreadedReplies: { enabled: featureEnabled },
+                            },
                         },
-                    },
-                });
-                const instance = wrapper.instance();
-                expect(instance.renderActivitySidebarFilter()).toBe(null);
-            });
-
-            test('when activityFeed.newThreadedReplies is disabled and filter options list is provided', () => {
-                const wrapper = getWrapper({
-                    activityFilterOptions: ['all', 'open', 'resolved', 'tasks'],
-                });
-                const instance = wrapper.instance();
-                expect(instance.renderActivitySidebarFilter()).toBe(null);
-            });
-
-            test('when activityFeed.newThreadedReplies is enabled and no filter options list is provided', () => {
-                const wrapper = getWrapper({
-                    activityFilterOptions: undefined,
-                    features: {
-                        activityFeed: {
-                            newThreadedReplies: { enabled: true },
-                        },
-                    },
-                });
-                const instance = wrapper.instance();
-                expect(instance.renderActivitySidebarFilter()).toBe(null);
-            });
+                    });
+                    const instance = wrapper.instance();
+                    expect(instance.renderActivitySidebarFilter()).toBe(null);
+                },
+            );
         });
 
         describe('should return ActivitySidebarFilter', () => {
@@ -1668,41 +1656,27 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 expect(resultWrapper.name()).toBe('FormattedMessage');
             });
 
-            test('when activityFeed.newThreadedReplies is disabled and no filter options list is provided', () => {
-                const wrapper = getWrapper({
-                    features: {
-                        activityFeed: {
-                            newThreadedReplies: { enabled: false },
+            test.each`
+                featureEnabled | optionsList
+                ${false}       | ${undefined}
+                ${false}       | ${['all', 'open', 'resolved', 'tasks']}
+                ${true}        | ${undefined}
+            `(
+                'when activityFeed.newThreadedReplies enabled equals $featureEnabled and options list is $optionsList',
+                ({ featureEnabled, optionsList }) => {
+                    const wrapper = getWrapper({
+                        activityFilterOptions: optionsList,
+                        features: {
+                            activityFeed: {
+                                newThreadedReplies: { enabled: featureEnabled },
+                            },
                         },
-                    },
-                });
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderTitle());
-                expect(resultWrapper.name()).toBe('FormattedMessage');
-            });
-
-            test('when activityFeed.newThreadedReplies is disabled and filter options list is provided', () => {
-                const wrapper = getWrapper({
-                    activityFilterOptions: ['all', 'open', 'resolved', 'tasks'],
-                });
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderTitle());
-                expect(resultWrapper.name()).toBe('FormattedMessage');
-            });
-
-            test('when activityFeed.newThreadedReplies is enabled and no filter options list is provided', () => {
-                const wrapper = getWrapper({
-                    activityFilterOptions: undefined,
-                    features: {
-                        activityFeed: {
-                            newThreadedReplies: { enabled: true },
-                        },
-                    },
-                });
-                const instance = wrapper.instance();
-                const resultWrapper = mount(instance.renderTitle());
-                expect(resultWrapper.name()).toBe('FormattedMessage');
-            });
+                    });
+                    const instance = wrapper.instance();
+                    const resultWrapper = mount(instance.renderTitle());
+                    expect(resultWrapper.name()).toBe('FormattedMessage');
+                },
+            );
         });
 
         describe('should return undefined', () => {
