@@ -438,7 +438,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                 >
                     <PlainButton
                         {...sharedLinkSettingsButtonProps}
-                        aria-label={intl.formatMessage(messages.settingsButtonLabel)}
+                        aria-haspopup="dialog"
                         className="shared-link-settings-btn"
                         onClick={onSettingsClick}
                         type="button"
