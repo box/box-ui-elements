@@ -147,4 +147,33 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
             expect(CollapsibleSidebarWrapper).toHaveAttribute('aria-hidden', 'true');
         });
     });
+
+    describe('show narrow version of sidebar', () => {
+        const wrapper = params =>
+            render(
+                <ThemeProvider theme={dummyTheme}>
+                    <CollapsibleSidebar isHidden={params.isHidden} {...params} />
+                </ThemeProvider>,
+            );
+
+        test.each`
+            narrowItems
+            ${false}
+            ${undefined}
+        `('should NOT show narrow version when narrowItems prop is $narrowItems', ({ narrowItems }) => {
+            wrapper({ narrowItems });
+            const CollapsibleSidebarWrapper = screen.getByTestId('CollapsibleSidebar-wrapper');
+            const CollapsibleSidebarNav = CollapsibleSidebarWrapper.querySelector('nav');
+            expect(CollapsibleSidebarWrapper).not.toHaveClass('is-narrow');
+            expect(CollapsibleSidebarNav).not.toHaveClass('is-narrow');
+        });
+
+        test('should show narrow version when narrowItems prop is true', () => {
+            wrapper({ narrowItems: true });
+            const CollapsibleSidebarWrapper = screen.getByTestId('CollapsibleSidebar-wrapper');
+            const CollapsibleSidebarNav = CollapsibleSidebarWrapper.querySelector('nav');
+            expect(CollapsibleSidebarWrapper).toHaveClass('is-narrow');
+            expect(CollapsibleSidebarNav).toHaveClass('is-narrow');
+        });
+    });
 });

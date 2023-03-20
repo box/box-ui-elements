@@ -39,6 +39,9 @@ type Props = {
 
     /** Optionally apply "aria-hidden": "true" to CollapsibleSidebar wrapper */
     isHidden?: boolean,
+
+    /** Whether to show the collapsed version with only icons */
+    narrowItems?: boolean,
 };
 
 class CollapsibleSidebar extends React.Component<Props> {
@@ -84,10 +87,11 @@ class CollapsibleSidebar extends React.Component<Props> {
     };
 
     render() {
-        const { children, className, expanded, isHidden, htmlAttributes } = this.props;
+        const { children, className, expanded, isHidden, htmlAttributes, narrowItems } = this.props;
         const navClasses = classNames(
             {
                 'is-expanded': expanded,
+                'is-narrow': narrowItems,
             },
             'bdl-CollapsibleSidebar',
             className,
@@ -95,7 +99,7 @@ class CollapsibleSidebar extends React.Component<Props> {
         const ariaAttributes = { 'aria-hidden': isHidden ? 'true' : undefined };
         return (
             <div
-                className="bdl-CollapsibleSidebar-wrapper"
+                className={classNames('bdl-CollapsibleSidebar-wrapper', { 'is-narrow': narrowItems })}
                 {...htmlAttributes}
                 {...ariaAttributes}
                 data-testid="CollapsibleSidebar-wrapper"
