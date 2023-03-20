@@ -28,6 +28,7 @@ import type { Translations } from '../../flowTypes';
 import './Comment.scss';
 
 type Props = {
+    children?: React.Node,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
@@ -51,6 +52,7 @@ type Props = {
         onError: ?Function,
     ) => void,
     onSelect: (isSelected: boolean) => void,
+    parentID?: string,
     permissions: BoxCommentPermission,
     status?: FeedItemStatus,
     tagged_message: string,
@@ -61,6 +63,7 @@ type Props = {
 // TODO: Replace and rename to Comment component once threaded replies refactor is fully implemented
 const BaseComment = (props: Props) => {
     const {
+        children,
         created_by,
         created_at,
         permissions = {},
@@ -80,6 +83,7 @@ const BaseComment = (props: Props) => {
         onDelete,
         onEdit,
         onSelect,
+        parentID,
         status,
     } = props;
 
@@ -168,7 +172,7 @@ const BaseComment = (props: Props) => {
 
     return (
         // TODO: Change className to bcs-Comment once FF is removed
-        <div className="bcs-BaseComment">
+        <div className={classNames('bcs-BaseComment', { 'bcs-Reply': !!parentID })}>
             <Media
                 className={classNames('bcs-Comment-media', {
                     'bcs-is-pending': isPending || error,
@@ -295,6 +299,19 @@ const BaseComment = (props: Props) => {
             </Media>
             {/* $FlowFixMe */}
             {error ? <ActivityError {...error} /> : null}
+            {!!children && (
+                <div className="bcs-Comment-replies">
+                    {React.cloneElement(children, {
+                        currentUser,
+                        getAvatarUrl,
+                        getMentionWithQuery,
+                        getUserProfileUrl,
+                        mentionSelectorContacts,
+                        parentID: id,
+                        translations,
+                    })}
+                </div>
+            )}
         </div>
     );
 };
