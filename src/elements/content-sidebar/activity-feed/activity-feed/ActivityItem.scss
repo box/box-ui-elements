@@ -1,0 +1,7 @@
+@import '../../../common/variables';
+
+.bcs-ActivityItem {
+    .bcs-BaseComment {
+        padding: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
+    }
+}
