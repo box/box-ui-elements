@@ -136,6 +136,31 @@ $left-sidebar-z-index: 40 !default;
     }
 }
 
+.narrowItems {
+    .bdl-CollapsibleSidebar-logo {
+        margin-left: $collapsible-side-bar-h-padding - 1px;
+
+        .bdl-CollapsibleSidebar-toggleButton {
+            display: block;
+        }
+    }
+
+    .bdl-CollapsibleSidebar-nav ul {
+        width: $collapsible-side-bar-collapsed-width - (2 * $collapsible-side-bar-h-padding);
+    }
+}
+
+//if the hamburger icon is clicked and expands the left nav, need to update ul width
+.bdl-CollapsibleSidebar.is-expanded.narrowItems {
+    .bdl-CollapsibleSidebar-nav ul {
+        width: $collapsible-side-bar-width - (2 * $collapsible-side-bar-h-padding);
+    }
+}
+
+.bdl-CollapsibleSidebar-wrapper.narrowItems {
+    width: $collapsible-side-bar-collapsed-width;
+}
+
 @include breakpoint($medium-screen) {
     .Body.is-responsive-web {
         .bdl-CollapsibleSidebar-wrapper {
