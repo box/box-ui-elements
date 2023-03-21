@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import * as domUtils from '../../../utils/dom';
 
 import SelectorDropdown from '..';
+import PopperComponent from '../../popper/PopperComponent';
 
 const sandbox = sinon.sandbox.create();
 
@@ -59,7 +60,7 @@ describe('components/selector-dropdown/SelectorDropdown', () => {
 
             const inputProps = wrapper.find('Selector').prop('inputProps');
             expect(inputProps['aria-owns']).toBeFalsy();
-            expect(wrapper.find('.overlay-wrapper').length).toBe(0);
+            expect(wrapper.find(PopperComponent).prop('isOpen')).toBe(false);
         });
 
         test('should render listbox with children when dropdown is open', () => {

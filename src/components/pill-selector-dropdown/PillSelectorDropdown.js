@@ -258,6 +258,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             <SelectorDropdown
                 className={classNames('bdl-PillSelectorDropdown', 'pill-selector-wrapper', className)}
                 dividerIndex={dividerIndex}
+                isPositionDynamic
                 onEnter={this.handleEnter}
                 onSelect={this.handleSelect}
                 overlayTitle={overlayTitle}

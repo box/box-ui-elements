@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 import { List, Record } from 'immutable';
 import sinon from 'sinon';
 
-import PillSelector from '../PillSelector';
+import { PillSelectorBase as PillSelector } from '../PillSelector';
 
 const sandbox = sinon.sandbox.create();
 
