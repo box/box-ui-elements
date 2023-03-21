@@ -306,7 +306,7 @@ class PillSelectorBase extends React.Component<Props, State> {
 
 export { PillSelectorBase };
 
-const PillSelector = React.forwardRef<Config, PillSelectorBase>((props: Config, ref: React.Ref<any>) => (
+const PillSelector = React.forwardRef<Config, HTMLSpanElement>((props: Config, ref: React.Ref<any>) => (
     <PillSelectorBase {...props} innerRef={ref} />
 ));
 PillSelector.displayName = 'PillSelector';

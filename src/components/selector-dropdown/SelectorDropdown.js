@@ -23,10 +23,10 @@ type Props = {
     className?: string,
     /** Index at which to insert the divider */
     dividerIndex?: number,
-    /** Option to enable dynamic positioning with popper */
-    hasDynamicPosition?: boolean,
     /** Options to keep the results always open */
     isAlwaysOpen?: boolean,
+    /** Option to enable dynamic positioning with popper */
+    isPositionDynamic?: boolean,
     /** Function called on keyboard "Enter" event only if enter does not trigger selection */
     onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
     /** Function called with the index of the selected option and the event (selected by keyboard or click) */
@@ -252,7 +252,7 @@ class SelectorDropdown extends React.Component<Props, State> {
             overlayTitle,
             children,
             className,
-            hasDynamicPosition = false,
+            isPositionDynamic = false,
             title,
             selector,
             shouldScroll,
@@ -325,7 +325,7 @@ class SelectorDropdown extends React.Component<Props, State> {
                 ref={this.selectorDropdownRef}
             >
                 <PopperComponent
-                    hasDynamicPosition={hasDynamicPosition}
+                    isPositionDynamic={isPositionDynamic}
                     isOpen={isOpen}
                     placement={PLACEMENT_BOTTOM_START}
                 >

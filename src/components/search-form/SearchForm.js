@@ -46,7 +46,7 @@ type Props = {
     /** On submit handler for the search input */
     onSubmit?: Function,
     /** Extra query parameters in addition to the form data */
-    queryParams: Object,
+    queryParams: { [arg: string]: string },
     /** Boolean to prevent propogation of search clear action */
     shouldPreventClearEventPropagation?: boolean,
     /** If the clear button is shown when input field is not empty */
@@ -59,7 +59,7 @@ type DefaultProps = {
     action: string,
     method: 'get' | 'post',
     name: string,
-    queryParams: Object,
+    queryParams: { [arg: string]: string },
     useClearButton: boolean,
 };
 
@@ -245,7 +245,7 @@ class SearchFormBase extends React.Component<Props, State> {
 const SearchFormBaseIntl = injectIntl(SearchFormBase);
 export { SearchFormBaseIntl };
 
-const SearchForm = React.forwardRef<Config, SearchFormBase>((props: Config, ref: React.Ref<any>) => (
+const SearchForm = React.forwardRef<Config, HTMLDivElement>((props: Config, ref: React.Ref<any>) => (
     <SearchFormBaseIntl {...props} innerRef={ref} />
 ));
 SearchForm.displayName = 'SearchForm';

@@ -6,14 +6,14 @@ import { PLACEMENT_AUTO } from './constants';
 
 type Props = {
     children: React.Node,
-    hasDynamicPosition?: boolean,
     isOpen?: boolean,
+    isPositionDynamic?: boolean,
     modifiers?: Modifiers,
     placement: Placement,
 };
 
 const PopperComponent = (props: Props) => {
-    const { children, hasDynamicPosition = true, isOpen, modifiers, placement: popperPlacement } = props;
+    const { children, isPositionDynamic = true, isOpen, modifiers, placement: popperPlacement } = props;
     const elements = React.Children.toArray(children);
 
     if (elements.length !== 2) {
@@ -29,10 +29,9 @@ const PopperComponent = (props: Props) => {
                 <Popper placement={popperPlacement} modifiers={modifiers}>
                     {({ ref, style, placement, scheduleUpdate }) => {
                         const { style: contentStyles } = popperContent.props;
-                        const popperStyle = hasDynamicPosition ? style : {};
                         return React.cloneElement(popperContent, {
                             ref,
-                            style: { ...contentStyles, ...popperStyle },
+                            style: { ...contentStyles, ...(isPositionDynamic && style) },
                             placement,
                             scheduleUpdate,
                         });
