@@ -1,6 +1,6 @@
 <p align="center">
   <img width="50%" alt="Box Elements" src="https://repository-images.githubusercontent.com/95743138/c161b500-021b-11ea-8bf9-3aa8776acdec" />
-  <img width="50%" src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" alt= “box-dev-logo”>
+  <img width="50%" alt=“box-dev-logo” src="https://github.com/box/sdks/blob/master/images/box-dev-logo.png" />
 </p>
 
 
