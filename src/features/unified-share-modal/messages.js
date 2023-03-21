@@ -118,11 +118,6 @@ const messages = defineMessages({
         description: 'Accessible label for shared link input field',
         id: 'boxui.share.sharedLinkURLLabel',
     },
-    settingsButtonLabel: {
-        defaultMessage: 'Open shared link settings popup',
-        description: 'Accessible label for button that loads share settings popup',
-        id: 'boxui.unifiedShare.settingsButtonLabel',
-    },
     linkShareOff: {
         defaultMessage: 'Create shared link',
         description: 'Call to action text for allowing the user to create a new shared link',
