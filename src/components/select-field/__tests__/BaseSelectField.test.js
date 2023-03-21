@@ -339,6 +339,13 @@ describe('components/select-field/BaseSelectField', () => {
             const props = wrapper.find('PopperComponent').props();
             expect(props.modifiers.preventOverflow).toBeUndefined();
         });
+
+        test('should apply positionFixed when set', () => {
+            const wrapper = shallowRenderSelectField({ isPositionFixed: true });
+
+            const props = wrapper.find('PopperComponent').props();
+            expect(props.positionFixed).toBe(true);
+        });
     });
 
     describe('onBlur', () => {
@@ -826,6 +833,21 @@ describe('components/select-field/BaseSelectField', () => {
                 .simulate('click');
         });
 
+        test('should call openDropdown with event', () => {
+            const event = {
+                target: document.createElement('button'),
+            };
+            const wrapper = shallowRenderSelectField();
+            const instance = wrapper.instance();
+
+            sandbox
+                .mock(instance)
+                .expects('openDropdown')
+                .withArgs(event);
+
+            instance.handleButtonClick(event);
+        });
+
         test('should close dropdown when it is open', () => {
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
@@ -1009,25 +1031,60 @@ describe('components/select-field/BaseSelectField', () => {
 
     describe('openDropdown()', () => {
         test('should set isOpen state to true when called', () => {
+            const event = {};
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
-            instance.openDropdown();
+            instance.openDropdown(event);
 
             expect(wrapper.state('isOpen')).toBe(true);
         });
 
+        test.each([
+            [
+                { target: document.createElement('div') },
+                {
+                    top: 'unset',
+                    left: 'unset',
+                    minWidth: 'unset',
+                    transform: 'none',
+                    willTransform: 'unset',
+                    width: 120,
+                },
+            ],
+            [{}, {}],
+        ])('%o should set dropdownStyle state when position is fixed', (event, expected) => {
+            Element.prototype.getBoundingClientRect = jest.fn(() => {
+                return {
+                    width: 120,
+                    height: 120,
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                };
+            });
+            const wrapper = shallowRenderSelectField({ isPositionFixed: true });
+            const instance = wrapper.instance();
+
+            instance.openDropdown(event);
+
+            expect(wrapper.state('dropdownStyle')).toStrictEqual(expected);
+        });
+
         test('should add document click listener', () => {
+            const event = {};
             document.addEventListener = jest.fn();
             const wrapper = shallowRenderSelectField();
             const instance = wrapper.instance();
 
-            instance.openDropdown();
+            instance.openDropdown(event);
 
             expect(document.addEventListener).toHaveBeenCalled();
         });
 
         test('should call this.searchInputRef.focus() if shouldShowSearchInput is true', () => {
+            const event = {};
             const wrapper = shallowRenderSelectField({
                 shouldShowSearchInput: true,
             });
@@ -1037,7 +1094,7 @@ describe('components/select-field/BaseSelectField', () => {
             const instance = wrapper.instance();
             instance.searchInputRef = mockSearchInputRef;
 
-            instance.openDropdown();
+            instance.openDropdown(event);
 
             expect(mockSearchInputRef.focus).toHaveBeenCalled();
         });

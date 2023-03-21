@@ -9,10 +9,11 @@ type Props = {
     isOpen?: boolean,
     modifiers?: Modifiers,
     placement: Placement,
+    positionFixed?: boolean,
 };
 
 const PopperComponent = (props: Props) => {
-    const { children, isOpen, modifiers, placement: popperPlacement } = props;
+    const { children, isOpen, modifiers, placement: popperPlacement, positionFixed } = props;
     const elements = React.Children.toArray(children);
 
     if (elements.length !== 2) {
@@ -25,12 +26,12 @@ const PopperComponent = (props: Props) => {
         <Manager>
             <Reference>{({ ref }) => React.cloneElement(reference, { ref })}</Reference>
             {isOpen && (
-                <Popper placement={popperPlacement} modifiers={modifiers}>
+                <Popper placement={popperPlacement} modifiers={modifiers} positionFixed={positionFixed}>
                     {({ ref, style, placement, scheduleUpdate }) => {
                         const { style: contentStyles } = popperContent.props;
                         return React.cloneElement(popperContent, {
                             ref,
-                            style: { ...contentStyles, ...style },
+                            style: { ...style, ...contentStyles },
                             placement,
                             scheduleUpdate,
                         });
