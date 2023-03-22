@@ -67,7 +67,6 @@ describe('elements/content-sidebar/ActivitySidebarFilter', () => {
 
     test.each`
         filterOptions                           | title
-        ${undefined}                            | ${'All Comments'}
         ${['all']}                              | ${'All Comments'}
         ${['all', 'open']}                      | ${'All Comments'}
         ${['all', 'resolved']}                  | ${'All Comments'}
@@ -81,29 +80,4 @@ describe('elements/content-sidebar/ActivitySidebarFilter', () => {
             expect(screen.getByText(title)).toBeVisible();
         },
     );
-
-    test.each`
-        feedItemStatus | option
-        ${undefined}   | ${'All Comments'}
-        ${'open'}      | ${'Unresolved Comments'}
-    `(
-        'should maintain default statuses and functionality when activityFilterOptions prop is not specified',
-        ({ feedItemStatus, option }) => {
-            renderWithWrapper(undefined, feedItemStatus);
-            expect(screen.getByText(option)).toBeVisible();
-        },
-    );
-
-    test('should maintain default functionality when activityFilterOptions prop is not specified', () => {
-        renderWithWrapper(undefined, undefined);
-        const dropdownBtn = screen.getByText('All Comments');
-        fireEvent.click(dropdownBtn);
-        const allCommentsElements = screen.getAllByText('All Comments');
-        expect(allCommentsElements).toHaveLength(2);
-        expect(allCommentsElements[0]).toBeVisible();
-        expect(allCommentsElements[1]).toBeVisible();
-        expect(screen.getByText('Unresolved Comments')).toBeVisible();
-        expect(screen.queryByText('Resolved Comments')).toBeNull();
-        expect(screen.queryByText('Tasks')).toBeNull();
-    });
 });

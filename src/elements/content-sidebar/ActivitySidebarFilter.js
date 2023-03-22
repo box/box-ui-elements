@@ -23,7 +23,7 @@ import type { ActivityFilterOption, ActivityFilterStatus } from '../../common/ty
 import './ActivitySidebarFilter.scss';
 
 type ActivitySidebarFilterProps = {
-    activityFilterOptions?: ActivityFilterOption[],
+    activityFilterOptions: ActivityFilterOption[],
     feedItemStatus?: ActivityFilterStatus,
     onFeedItemStatusClick: (status?: ActivityFilterStatus) => void,
 };
@@ -36,7 +36,7 @@ const filterOptionToStatus = {
 };
 
 function ActivitySidebarFilter({
-    activityFilterOptions = [ACTIVITY_FILTER_OPTION_ALL, ACTIVITY_FILTER_OPTION_OPEN],
+    activityFilterOptions,
     feedItemStatus = ACTIVITY_FILTER_OPTION_ALL,
     onFeedItemStatusClick,
 }: ActivitySidebarFilterProps) {
