@@ -173,12 +173,15 @@ const ActiveState = ({
                     translations={translations}
                 >
                     <Replies
+                        hasReplies={hasReplies}
+                        isRepliesLoading={item.isRepliesLoading}
                         onHideReplies={onHideRepliesHandler(item.id)}
                         onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                         onReplyDelete={onReplyDeleteHandler(item.id)}
                         onReplyEdit={onReplyUpdateHandler(item.id)}
                         onReplySelect={onCommentSelectHandler(item.id)}
                         onShowReplies={onShowRepliesHandler(item.id, item.type)}
+                        parentID={item.id}
                         replies={item.replies}
                         repliesTotalCount={item.total_reply_count}
                     />

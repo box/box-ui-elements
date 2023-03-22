@@ -1,0 +1,28 @@
+@import '../../../common/variables';
+
+.bcs-BaseComment.parent {
+    &:hover {
+        background-color: $bdl-light-blue-05;
+    }
+
+    .bcs-BaseComment-selectWrapper {
+        padding: $bdl-grid-unit * 2;
+        padding-right: $bdl-grid-unit * 4;
+    }
+
+    .bcs-Comment-timestamp {
+        margin-bottom: 16px;
+
+        .bcs-ActivityTimestamp {
+            color: $bdl-gray;
+        }
+    }
+
+    .bcs-CommentForm-input {
+        background-color: $white;
+    }
+
+    .btn-plain:focus-visible {
+        outline: auto;
+    }
+}

@@ -1,7 +1,21 @@
 @import '../../../common/variables';
 
 .bcs-ActivityItem {
-    .bcs-BaseComment {
-        padding: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
+    .bcs-BaseComment.parent {
+        padding: 2px $bdl-grid-unit * 2;
+        box-shadow: 0 1px 0 0 $bdl-gray-10;
+    }
+}
+
+.bcs-ActivityItem.bcs-is-focused .bcs-BaseComment.parent {
+    background-color: $white;
+
+    .bcs-BaseComment-selectWrapper {
+        background-color: $bdl-light-blue-05;
+
+        &.parent {
+            border-radius: $bdl-border-radius-size-med;
+            box-shadow: 0 0 0 2px $bdl-box-blue;
+        }
     }
 }
