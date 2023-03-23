@@ -82,7 +82,7 @@
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
     display: block;
-    color: $bdl-gray-62;
+    color: $bdl-gray-65;
     font-size: 12px;
 }
 
@@ -216,7 +216,7 @@
         }
 
         .text-area-container textarea::placeholder {
-            color: $bdl-gray-62;
+            color: $bdl-gray-65;
         }
 
         .bdl-PillSelector {
@@ -229,7 +229,7 @@
         border: 1px solid $bdl-gray-50;
 
         .bdl-PillSelector-input::placeholder {
-            color: $bdl-gray-62;
+            color: $bdl-gray-65;
         }
 
         &.bdl-is-disabled,
@@ -239,7 +239,7 @@
             box-shadow: none;
 
             .bdl-PillSelector-input::placeholder {
-                color: $bdl-gray-62;
+                color: $bdl-gray-65;
             }
 
             &:hover {
@@ -313,14 +313,14 @@
             margin-right: 10px;
 
             &.can-edit-btn {
-                color: $bdl-gray-62;
+                color: $bdl-gray-65;
             }
         }
     }
 
     .security-indicator-note {
         margin-top: 10px;
-        color: $bdl-gray-62;
+        color: $bdl-gray-65;
 
         .security-indicator-icon-globe {
             padding-right: 5px;

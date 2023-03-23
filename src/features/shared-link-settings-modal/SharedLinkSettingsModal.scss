@@ -26,11 +26,11 @@
     .password-section {
         .password-section-information {
             display: flex;
-            color: $bdl-gray-62;
+            color: $bdl-gray-65;
         }
 
         .password-section-information-icon path {
-            fill: $bdl-gray-62;
+            fill: $bdl-gray-65;
         }
 
         .password-section-information-text {
@@ -67,7 +67,7 @@
 
     .link-settings-modal-notice {
         margin: 0 0 ($bdl-grid-unit * 5);
-        color: $bdl-gray-62;
+        color: $bdl-gray-65;
     }
 }
 
