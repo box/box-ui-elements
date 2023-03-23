@@ -488,6 +488,8 @@ class ContentExplorer extends Component {
             'onSearchSubmit',
             'onExitSearch',
             'initialSelectedItems',
+            'onFoldersPathUpdate',
+            'onSelectedItemsUpdate',
         ]);
         const canIncludeSubfolders = !!includeSubfoldersProps;
         const hasSubheader = canIncludeSubfolders || isSelectAllAllowed;

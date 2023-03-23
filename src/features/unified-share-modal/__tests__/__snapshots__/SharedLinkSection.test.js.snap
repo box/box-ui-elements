@@ -1278,7 +1278,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
 
 exports[`features/unified-share-modal/SharedLinkSection should render settings link when handler is provided and shared link is enabled 1`] = `
 <PlainButton
-  aria-label="Open shared link settings popup"
+  aria-haspopup="dialog"
   className="shared-link-settings-btn"
   data-resin-target="settings"
   onClick={

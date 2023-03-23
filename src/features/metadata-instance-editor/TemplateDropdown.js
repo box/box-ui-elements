@@ -38,15 +38,6 @@ type State = {
     templates: Array<MetadataTemplate>,
 };
 
-const InputContainer = ({ inputProps = {}, ...rest }: { inputProps?: Object }) => (
-    <SearchForm
-        {...inputProps}
-        {...rest}
-        shouldPreventClearEventPropagation
-        data-resin-target="metadata-templatesearch"
-    />
-);
-
 const getAvailableTemplates = (allTemplates: Array<MetadataTemplate>, usedTemplates: Array<MetadataTemplate>) =>
     allTemplates.filter(
         (template: MetadataTemplate) =>
@@ -167,10 +158,12 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
         const { intl }: Props = this.props;
         const { filterText }: State = this.state;
         return (
-            <InputContainer
+            <SearchForm
+                data-resin-target="metadata-templatesearch"
                 label=""
                 onChange={this.handleUserInput}
                 placeholder={intl.formatMessage(messages.metadataTemplateSearchPlaceholder)}
+                shouldPreventClearEventPropagation
                 type="text"
                 useClearButton
                 value={filterText}

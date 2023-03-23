@@ -31,9 +31,11 @@ exports[`features/metadata-instance-editor/fields/ should correctly render butto
       isAlwaysOpen={true}
       onSelect={[Function]}
       selector={
-        <InputContainer
+        <SearchForm
+          data-resin-target="metadata-templatesearch"
           label=""
           onChange={[Function]}
+          shouldPreventClearEventPropagation={true}
           type="text"
           useClearButton={true}
           value=""
@@ -98,9 +100,11 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
       isAlwaysOpen={true}
       onSelect={[Function]}
       selector={
-        <InputContainer
+        <SearchForm
+          data-resin-target="metadata-templatesearch"
           label=""
           onChange={[Function]}
+          shouldPreventClearEventPropagation={true}
           type="text"
           useClearButton={true}
           value=""
@@ -165,9 +169,11 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
       isAlwaysOpen={true}
       onSelect={[Function]}
       selector={
-        <InputContainer
+        <SearchForm
+          data-resin-target="metadata-templatesearch"
           label=""
           onChange={[Function]}
+          shouldPreventClearEventPropagation={true}
           type="text"
           useClearButton={true}
           value=""
@@ -232,9 +238,11 @@ exports[`features/metadata-instance-editor/fields/ should correctly render empty
       isAlwaysOpen={true}
       onSelect={[Function]}
       selector={
-        <InputContainer
+        <SearchForm
+          data-resin-target="metadata-templatesearch"
           label=""
           onChange={[Function]}
+          shouldPreventClearEventPropagation={true}
           type="text"
           useClearButton={true}
           value=""
@@ -291,9 +299,11 @@ exports[`features/metadata-instance-editor/fields/ should correctly render error
       isAlwaysOpen={true}
       onSelect={[Function]}
       selector={
-        <InputContainer
+        <SearchForm
+          data-resin-target="metadata-templatesearch"
           label=""
           onChange={[Function]}
+          shouldPreventClearEventPropagation={true}
           type="text"
           useClearButton={true}
           value=""
@@ -350,9 +360,11 @@ exports[`features/metadata-instance-editor/fields/ should correctly render loadi
       isAlwaysOpen={true}
       onSelect={[Function]}
       selector={
-        <InputContainer
+        <SearchForm
+          data-resin-target="metadata-templatesearch"
           label=""
           onChange={[Function]}
+          shouldPreventClearEventPropagation={true}
           type="text"
           useClearButton={true}
           value=""
@@ -404,9 +416,11 @@ exports[`features/metadata-instance-editor/fields/ should correctly render plain
       isAlwaysOpen={true}
       onSelect={[Function]}
       selector={
-        <InputContainer
+        <SearchForm
+          data-resin-target="metadata-templatesearch"
           label=""
           onChange={[Function]}
+          shouldPreventClearEventPropagation={true}
           type="text"
           useClearButton={true}
           value=""
