@@ -11,9 +11,9 @@ import PlainButton from '../../components/plain-button';
 import messages from './messages';
 import {
     ACTIVITY_FILTER_OPTION_ALL,
-    ACTIVITY_FILTER_OPTION_OPEN,
     ACTIVITY_FILTER_OPTION_RESOLVED,
     ACTIVITY_FILTER_OPTION_TASKS,
+    ACTIVITY_FILTER_OPTION_UNRESOLVED,
     COMMENT_STATUS_OPEN,
     COMMENT_STATUS_RESOLVED,
     FEED_ITEM_TYPE_TASK,
@@ -30,7 +30,7 @@ type ActivitySidebarFilterProps = {
 
 const filterOptionToStatus = {
     [ACTIVITY_FILTER_OPTION_ALL]: ACTIVITY_FILTER_OPTION_ALL,
-    [ACTIVITY_FILTER_OPTION_OPEN]: COMMENT_STATUS_OPEN,
+    [ACTIVITY_FILTER_OPTION_UNRESOLVED]: COMMENT_STATUS_OPEN,
     [ACTIVITY_FILTER_OPTION_RESOLVED]: COMMENT_STATUS_RESOLVED,
     [ACTIVITY_FILTER_OPTION_TASKS]: FEED_ITEM_TYPE_TASK,
 };
@@ -40,14 +40,15 @@ function ActivitySidebarFilter({
     feedItemStatus = ACTIVITY_FILTER_OPTION_ALL,
     onFeedItemStatusClick,
 }: ActivitySidebarFilterProps) {
-    const isCommentsOnlyFilter = !activityFilterOptions.includes(ACTIVITY_FILTER_OPTION_TASKS);
+    // The message for all activty is based on whether only comments are in the activityFilterOptions prop
+    const allActivityMessage = !activityFilterOptions.includes(ACTIVITY_FILTER_OPTION_TASKS)
+        ? messages.activitySidebarFilterOptionAllComments
+        : messages.activitySidebarFilterOptionAllActivity;
 
     const statusMap = {
         [ACTIVITY_FILTER_OPTION_ALL]: {
-            msg: isCommentsOnlyFilter
-                ? messages.activitySidebarFilterOptionAllComments
-                : messages.activitySidebarFilterOptionAllActivity,
-            val: undefined,
+            msg: allActivityMessage,
+            val: ACTIVITY_FILTER_OPTION_ALL,
         },
         [COMMENT_STATUS_OPEN]: { msg: messages.activitySidebarFilterOptionOpen, val: COMMENT_STATUS_OPEN },
         [COMMENT_STATUS_RESOLVED]: {

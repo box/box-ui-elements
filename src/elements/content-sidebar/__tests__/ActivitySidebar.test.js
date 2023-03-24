@@ -1584,21 +1584,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             });
 
             test.each`
-                featureEnabled | hasReplies | hasTasks
-                ${false}       | ${false}   | ${false}
-                ${false}       | ${true}    | ${false}
-                ${false}       | ${false}   | ${true}
-                ${true}        | ${false}   | ${false}
+                hasTasks
+                ${false}
+                ${true}
             `(
-                'when activityFeed.newThreadedReplies enabled equals $featureEnabled, hasReplies is $hasReplies, and hasTasks is $hasTasks',
-                ({ featureEnabled, hasReplies, hasTasks }) => {
+                'when activityFeed.newThreadedReplies enabled equals $featureEnabled and hasTasks is $hasTasks',
+                ({ hasTasks }) => {
                     const wrapper = getWrapper({
                         features: {
                             activityFeed: {
-                                newThreadedReplies: { enabled: featureEnabled },
+                                newThreadedReplies: { enabled: false },
                             },
                         },
-                        hasReplies,
                         hasTasks,
                     });
                     const instance = wrapper.instance();
@@ -1628,7 +1625,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                             filter: { enabled: true },
                         },
                     },
-                    hasReplies: true,
                     hasTasks: true,
                 });
                 const instance = wrapper.instance();
@@ -1639,20 +1635,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             });
 
             test.each`
-                expectedOptions                         | hasReplies | hasTasks
-                ${['all', 'open', 'resolved']}          | ${true}    | ${false}
-                ${['all', 'open', 'resolved', 'tasks']} | ${true}    | ${true}
-                ${['all', 'tasks']}                     | ${false}   | ${true}
+                expectedOptions                         | hasTasks
+                ${['all', 'open', 'resolved']}          | ${false}
+                ${['all', 'open', 'resolved', 'tasks']} | ${true}
             `(
-                'with $expectedOptions filter options when activityFeed.newThreadedReplies is enabled, hasReplies is $hasReplies, and hasTasks is $hasTasks',
-                ({ expectedOptions, hasReplies, hasTasks }) => {
+                'with $expectedOptions filter options when activityFeed.newThreadedReplies is enabled and hasTasks is $hasTasks',
+                ({ expectedOptions, hasTasks }) => {
                     const wrapper = getWrapper({
                         features: {
                             activityFeed: {
                                 newThreadedReplies: { enabled: true },
                             },
                         },
-                        hasReplies,
                         hasTasks,
                     });
                     const instance = wrapper.instance();
@@ -1688,21 +1682,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             });
 
             test.each`
-                featureEnabled | hasReplies | hasTasks
-                ${false}       | ${false}   | ${false}
-                ${false}       | ${true}    | ${false}
-                ${false}       | ${false}   | ${true}
-                ${true}        | ${false}   | ${false}
+                hasTasks
+                ${false}
+                ${true}
             `(
-                'when activityFeed.newThreadedReplies enabled equals $featureEnabled, hasReplies is $hasReplies, and hasTasks is $hasTasks',
-                ({ featureEnabled, hasReplies, hasTasks }) => {
+                'when activityFeed.newThreadedReplies enabled equals $featureEnabled and hasTasks is $hasTasks',
+                ({ hasTasks }) => {
                     const wrapper = getWrapper({
                         features: {
                             activityFeed: {
-                                newThreadedReplies: { enabled: featureEnabled },
+                                newThreadedReplies: { enabled: false },
                             },
                         },
-                        hasReplies,
                         hasTasks,
                     });
                     const instance = wrapper.instance();
@@ -1712,34 +1703,29 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             );
         });
 
-        describe('should return undefined', () => {
+        describe('should return null', () => {
             test('when activityFeed.filter feature is enabled', () => {
                 const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
                 const instance = wrapper.instance();
-                expect(instance.renderTitle()).toBe(undefined);
+                expect(instance.renderTitle()).toBe(null);
             });
 
             test.each`
-                hasReplies | hasTasks
-                ${true}    | ${false}
-                ${false}   | ${true}
-                ${true}    | ${true}
-            `(
-                'when activityFeed.newThreadedReplies is enabled, hasReplies is $hasReplies, and hasTasks is $hasTasks',
-                ({ hasReplies, hasTasks }) => {
-                    const wrapper = getWrapper({
-                        features: {
-                            activityFeed: {
-                                newThreadedReplies: { enabled: true },
-                            },
+                hasTasks
+                ${false}
+                ${true}
+            `('when activityFeed.newThreadedReplies is enabled and hasTasks is $hasTasks', ({ hasTasks }) => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: true },
                         },
-                        hasReplies,
-                        hasTasks,
-                    });
-                    const instance = wrapper.instance();
-                    expect(instance.renderTitle()).toBe(undefined);
-                },
-            );
+                    },
+                    hasTasks,
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderTitle()).toBe(null);
+            });
         });
     });
 });

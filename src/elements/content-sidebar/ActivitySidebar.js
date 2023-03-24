@@ -30,9 +30,9 @@ import { withRouterAndRef } from '../common/routing';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     ACTIVITY_FILTER_OPTION_ALL,
-    ACTIVITY_FILTER_OPTION_OPEN,
     ACTIVITY_FILTER_OPTION_RESOLVED,
     ACTIVITY_FILTER_OPTION_TASKS,
+    ACTIVITY_FILTER_OPTION_UNRESOLVED,
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
     FEED_ITEM_TYPE_ANNOTATION,
@@ -1105,7 +1105,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     getFilteredFeedItems = (): FeedItems | typeof undefined => {
         const { feedItems, feedItemsStatusFilter } = this.state;
-        if (!feedItems || !feedItemsStatusFilter) {
+        if (!feedItems || !feedItemsStatusFilter || feedItemsStatusFilter === ACTIVITY_FILTER_OPTION_ALL) {
             return feedItems;
         }
         return feedItems.filter(item => {
@@ -1155,29 +1155,26 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     renderActivitySidebarFilter = () => {
-        const { features, hasReplies, hasTasks } = this.props;
+        const { features, hasTasks } = this.props;
         const { feedItemsStatusFilter } = this.state;
         const activityFeedFilterEnabled = isFeatureEnabled(features, 'activityFeed.filter.enabled');
         const newThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
-        const shouldShowActivityFeedFilter =
-            activityFeedFilterEnabled || (newThreadedRepliesEnabled && (hasReplies || hasTasks));
+        const shouldShowActivityFeedFilter = activityFeedFilterEnabled || newThreadedRepliesEnabled;
 
         if (!shouldShowActivityFeedFilter) {
             return null;
         }
 
-        const activityFilterOptions: ActivityFilterOption[] = [ACTIVITY_FILTER_OPTION_ALL];
+        const activityFilterOptions: ActivityFilterOption[] = [
+            ACTIVITY_FILTER_OPTION_ALL,
+            ACTIVITY_FILTER_OPTION_UNRESOLVED,
+        ];
         if (newThreadedRepliesEnabled) {
             // Determine which filter options to show based on what activity types are available in current context
-            if (hasReplies) {
-                activityFilterOptions.push(ACTIVITY_FILTER_OPTION_OPEN, ACTIVITY_FILTER_OPTION_RESOLVED);
-            }
+            activityFilterOptions.push(ACTIVITY_FILTER_OPTION_RESOLVED);
             if (hasTasks) {
                 activityFilterOptions.push(ACTIVITY_FILTER_OPTION_TASKS);
             }
-        } else if (activityFeedFilterEnabled) {
-            // Maintain default current filter options
-            activityFilterOptions.push(ACTIVITY_FILTER_OPTION_OPEN);
         }
 
         return (
@@ -1199,13 +1196,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     );
 
     renderTitle = () => {
-        const { features, hasReplies, hasTasks } = this.props;
+        const { features } = this.props;
         const activityFeedFilterEnabled = isFeatureEnabled(features, 'activityFeed.filter.enabled');
         const newThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
-        const shouldHideTitle = activityFeedFilterEnabled || (newThreadedRepliesEnabled && (hasReplies || hasTasks));
+        const shouldHideTitle = activityFeedFilterEnabled || newThreadedRepliesEnabled;
 
         if (shouldHideTitle) {
-            return undefined;
+            return null;
         }
         return <FormattedMessage {...messages.sidebarActivityTitle} />;
     };

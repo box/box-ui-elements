@@ -465,9 +465,9 @@ export const COMMENT_STATUS_RESOLVED: 'resolved' = 'resolved';
 
 /* ------------------ Activity Filter Options ------------------ */
 export const ACTIVITY_FILTER_OPTION_ALL: 'all' = 'all';
-export const ACTIVITY_FILTER_OPTION_OPEN: 'open' = 'open';
 export const ACTIVITY_FILTER_OPTION_RESOLVED: 'resolved' = 'resolved';
 export const ACTIVITY_FILTER_OPTION_TASKS: 'tasks' = 'tasks';
+export const ACTIVITY_FILTER_OPTION_UNRESOLVED: 'open' = 'open';
 
 /* ----------------- Theme ---------------------------*/
 export const THEME_VERY_DARK = 'vDark';

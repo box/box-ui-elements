@@ -33,7 +33,7 @@ const renderWithWrapper = (activityFilterOptions?: ActivityFilterStatus[], feedI
 describe('elements/content-sidebar/ActivitySidebarFilter', () => {
     test.each`
         feedItemStatus | option
-        ${undefined}   | ${'All Activity'}
+        ${'all'}       | ${'All Activity'}
         ${'open'}      | ${'Unresolved Comments'}
         ${'resolved'}  | ${'Resolved Comments'}
         ${'task'}      | ${'Tasks'}
@@ -47,7 +47,7 @@ describe('elements/content-sidebar/ActivitySidebarFilter', () => {
 
     test.each`
         expected      | option                   | initialOption            | initialStatus
-        ${undefined}  | ${'All Activity'}        | ${'Unresolved Comments'} | ${'open'}
+        ${'all'}      | ${'All Activity'}        | ${'Unresolved Comments'} | ${'open'}
         ${'open'}     | ${'Unresolved Comments'} | ${'All Activity'}        | ${undefined}
         ${'resolved'} | ${'Resolved Comments'}   | ${'All Activity'}        | ${undefined}
         ${'task'}     | ${'Tasks'}               | ${'All Activity'}        | ${undefined}
