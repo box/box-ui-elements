@@ -14,6 +14,7 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
             children: [<span key="1">abc</span>, <span key="2">def</span>],
             expanded: true,
             className: 'foo',
+            wrapperClass: 'bar',
         });
 
         expect(sidebar).toMatchSnapshot();

@@ -1,0 +1,10 @@
+@import '../../styles/sizes.media';
+@import '../../styles/variables';
+
+$collapsible-side-bar-width: 240px;
+$collapsible-side-bar-collapsed-width: 68px;
+$collapsible-side-bar-h-padding: $bdl-grid-unit * 3;
+$collapsible-side-bar-v-padding: $bdl-grid-unit * 3;
+$collaspsible-side-bar-logo-v-margin: $collapsible-side-bar-v-padding + $bdl-grid-unit;
+$collaspsible-side-bar-logo-h-margin-left: $collapsible-side-bar-h-padding + $bdl-grid-unit * 2 - 1px;
+$left-sidebar-z-index: 40 !default;
