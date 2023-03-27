@@ -1,12 +1,13 @@
 .AdvancedContentInsightsToggle {
     margin-bottom: 0;
+
+    .toggle-simple-label {
+        display: flex;
+    }
 }
 
 .AdvancedContentInsightsToggle-icon {
-    display: inline-block;
+    display: flex;
+    align-items: center;
     margin-left: 5px;
-
-    > svg {
-        vertical-align: middle;
-    }
 }
