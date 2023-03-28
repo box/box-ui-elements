@@ -2,9 +2,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ButtonType } from 'types';
 import messages from './messages';
 import PlainButton from '../../../../components/plain-button';
+import { ButtonType } from '../../../../components/button';
 
 type Props = {
     isAlwaysExpanded?: boolean,
