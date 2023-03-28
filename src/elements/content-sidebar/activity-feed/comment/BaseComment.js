@@ -174,7 +174,7 @@ const BaseComment = (props: Props) => {
     return (
         // TODO: Change className to bcs-Comment once FF is removed
         <div className={classNames('bcs-BaseComment', { reply: !!parentID, parent: !parentID })}>
-            <div className={classNames('bcs-BaseComment-selectWrapper', { reply: !!parentID, parent: !parentID })}>
+            <div className={classNames('bcs-BaseComment-content', { reply: !!parentID, parent: !parentID })}>
                 <Media
                     className={classNames('bcs-Comment-media', {
                         'bcs-is-pending': isPending || error,

@@ -10,7 +10,7 @@
 .bcs-ActivityItem.bcs-is-focused .bcs-BaseComment.parent {
     background-color: $white;
 
-    .bcs-BaseComment-selectWrapper {
+    .bcs-BaseComment-content {
         background-color: $bdl-light-blue-05;
 
         &.parent {
