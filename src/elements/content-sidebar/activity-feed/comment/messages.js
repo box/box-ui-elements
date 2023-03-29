@@ -47,6 +47,16 @@ const messages = defineMessages({
         defaultMessage: 'Reply in thread',
         description: 'Text to show on reply form input placeholder',
     },
+    hideReplies: {
+        id: 'be.contentSidebar.activityFeed.comment.hideReplies',
+        defaultMessage: 'Hide replies',
+        description: 'Text to show to hide more replies of comment or annotation',
+    },
+    showReplies: {
+        id: 'be.contentSidebar.activityFeed.comment.showReplies',
+        defaultMessage: 'See {repliesToLoadCount, plural, one {# reply} other {# replies}}',
+        description: 'Text to show to get more replies of comment or annotation',
+    },
 });
 
 export default messages;
