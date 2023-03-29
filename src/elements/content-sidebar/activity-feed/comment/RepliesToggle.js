@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import messages from './messages';
 import PlainButton from '../../../../components/plain-button';
-import { ButtonType } from '../../../../components/button';
 
 type Props = {
     isAlwaysExpanded?: boolean,
@@ -40,7 +39,7 @@ const RepliesToggle = ({
     };
 
     return (
-        <PlainButton className="bcs-Replies-toggle" onClick={handleToggle} type={ButtonType.BUTTON}>
+        <PlainButton className="bcs-Replies-toggle" onClick={handleToggle} type="button">
             <FormattedMessage values={{ repliesToLoadCount }} {...toggleMessage} />
         </PlainButton>
     );

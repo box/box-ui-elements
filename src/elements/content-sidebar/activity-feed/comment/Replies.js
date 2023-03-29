@@ -9,7 +9,7 @@ import LoadingIndicator from '../../../../components/loading-indicator';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
-import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
+import type { BoxCommentPermission, Comment as CommentType } from '../../../../common/types/feed';
 
 import './Replies.scss';
 
@@ -17,20 +17,9 @@ type ReplyProps = {
     hasReplies?: boolean,
     isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
-    onHideReplies?: (lastReply: CommentType) => void,
-    onReplyCreate?: (text: string) => void,
-    onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
-    onReplyEdit?: (
-        id: string,
-        text: string,
-        status?: FeedItemStatus,
-        hasMention?: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
-    onReplySelect?: (isSelected: boolean) => void,
-    onShowReplies?: () => void,
+    onHideReplies: (lastReply: CommentType) => void,
+    onReplySelect: (isSelected: boolean) => void,
+    onShowReplies: () => void,
     parentID: string,
     replies?: CommentType[],
     repliesTotalCount?: number,
@@ -54,11 +43,9 @@ const Replies = ({
     isAlwaysExpanded = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
-    onHideReplies = noop,
-    onReplyDelete = noop,
-    onReplyEdit = noop,
-    onReplySelect = noop,
-    onShowReplies = noop,
+    onHideReplies,
+    onReplySelect,
+    onShowReplies,
     parentID,
     replies = [],
     repliesTotalCount = 0,
@@ -95,7 +82,7 @@ const Replies = ({
                 )}
                 <ol className="bcs-Replies-list">
                     {replies.map(reply => {
-                        const { id, type, isPending } = reply;
+                        const { id, type } = reply;
 
                         return (
                             <li key={`${type}${id}`}>
@@ -105,12 +92,10 @@ const Replies = ({
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
-                                    id={id}
-                                    isPending={isPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    onDelete={onReplyDelete}
-                                    onEdit={onReplyEdit}
                                     onSelect={onReplySelect}
+                                    onDelete={noop}
+                                    onEdit={noop}
                                     parentID={parentID}
                                     permissions={getReplyPermissions(reply)}
                                     translations={translations}

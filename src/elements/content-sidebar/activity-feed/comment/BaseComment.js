@@ -301,18 +301,7 @@ const BaseComment = (props: Props) => {
                 </Media>
                 {/* $FlowFixMe */}
                 {error ? <ActivityError {...error} /> : null}
-                {!!children && (
-                    <div className="bcs-Comment-replies">
-                        {React.cloneElement(children, {
-                            currentUser,
-                            getAvatarUrl,
-                            getMentionWithQuery,
-                            getUserProfileUrl,
-                            mentionSelectorContacts,
-                            translations,
-                        })}
-                    </div>
-                )}
+                {!!children && <div className="bcs-Comment-replies">{children}</div>}
             </div>
         </div>
     );
