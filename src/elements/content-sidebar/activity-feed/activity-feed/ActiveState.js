@@ -193,12 +193,9 @@ const ActiveState = ({
                                             {...commentProps}
                                             hasReplies={hasReplies}
                                             isRepliesLoading={item.isRepliesLoading}
-                                            onHideReplies={onHideRepliesHandler(item.id)}
                                             onReplySelect={onCommentSelectHandler(item.id)}
-                                            onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                             parentID={item.id}
                                             replies={item.replies}
-                                            repliesTotalCount={item.total_reply_count}
                                         />
                                     </BaseComment>
                                 ) : (

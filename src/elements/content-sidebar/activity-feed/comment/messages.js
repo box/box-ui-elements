@@ -37,16 +37,6 @@ const messages = defineMessages({
         defaultMessage: 'Unresolve',
         description: 'Text to show on menu item to unresolve the comment',
     },
-    showReplies: {
-        id: 'be.contentSidebar.activityFeed.comment.showReplies',
-        defaultMessage: 'See {repliesToLoadCount, plural, one {# reply} other {# replies}}',
-        description: 'Text to show to get more replies of comment or annotation',
-    },
-    hideReplies: {
-        id: 'be.contentSidebar.activityFeed.comment.hideReplies',
-        defaultMessage: 'Hide replies',
-        description: 'Text to show to hide more replies of comment or annotation',
-    },
     reply: {
         id: 'be.contentSidebar.activityFeed.comment.reply',
         defaultMessage: 'Reply',

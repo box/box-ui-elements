@@ -3,7 +3,6 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 
 import BaseComment from './BaseComment';
-import RepliesToggle from './RepliesToggle';
 import LoadingIndicator from '../../../../components/loading-indicator';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
@@ -15,14 +14,10 @@ import './Replies.scss';
 
 type ReplyProps = {
     hasReplies?: boolean,
-    isAlwaysExpanded?: boolean,
     isRepliesLoading?: boolean,
-    onHideReplies: (lastReply: CommentType) => void,
     onReplySelect: (isSelected: boolean) => void,
-    onShowReplies: () => void,
     parentID: string,
     replies?: CommentType[],
-    repliesTotalCount?: number,
 };
 
 type Props = ReplyProps & {
@@ -40,15 +35,11 @@ const Replies = ({
     getMentionWithQuery,
     getUserProfileUrl,
     hasReplies = false,
-    isAlwaysExpanded = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
-    onHideReplies,
     onReplySelect,
-    onShowReplies,
     parentID,
     replies = [],
-    repliesTotalCount = 0,
     translations,
 }: Props) => {
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
@@ -66,14 +57,6 @@ const Replies = ({
 
     return (
         <div className="bcs-Replies">
-            <RepliesToggle
-                isAlwaysExpanded={isAlwaysExpanded}
-                isRepliesLoading={isRepliesLoading}
-                onShowReplies={onShowReplies}
-                onHideReplies={index => onHideReplies(replies[index])}
-                repliesShownCount={replies.length}
-                repliesTotalCount={repliesTotalCount}
-            />
             <div className="bcs-Replies-content">
                 {isRepliesLoading && (
                     <div className="bcs-Replies-loading" data-testid="replies-loading">
