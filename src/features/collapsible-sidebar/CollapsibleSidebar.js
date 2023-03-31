@@ -39,6 +39,9 @@ type Props = {
 
     /** Optionally apply "aria-hidden": "true" to CollapsibleSidebar wrapper */
     isHidden?: boolean,
+
+    /** Optionally apply CSS to the CollapsibleSidebar wrapper */
+    wrapperClassName?: string,
 };
 
 class CollapsibleSidebar extends React.Component<Props> {
@@ -84,7 +87,7 @@ class CollapsibleSidebar extends React.Component<Props> {
     };
 
     render() {
-        const { children, className, expanded, isHidden, htmlAttributes } = this.props;
+        const { children, className, expanded, isHidden, htmlAttributes, wrapperClassName } = this.props;
         const navClasses = classNames(
             {
                 'is-expanded': expanded,
@@ -95,7 +98,7 @@ class CollapsibleSidebar extends React.Component<Props> {
         const ariaAttributes = { 'aria-hidden': isHidden ? 'true' : undefined };
         return (
             <div
-                className="bdl-CollapsibleSidebar-wrapper"
+                className={classNames('bdl-CollapsibleSidebar-wrapper', wrapperClassName)}
                 {...htmlAttributes}
                 {...ariaAttributes}
                 data-testid="CollapsibleSidebar-wrapper"
