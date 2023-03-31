@@ -1,21 +1,14 @@
 @import '../../../common/variables';
 
-.bcs-BaseComment.parent {
-    &:hover {
-        background-color: $bdl-light-blue-05;
-    }
+$repliesPaddingLeft: 40px;
 
-    .bcs-BaseComment-content {
-        padding: $bdl-grid-unit * 2;
-        padding-right: $bdl-grid-unit * 4;
-    }
-
+.bcs-BaseComment {
     .bcs-Comment-timestamp {
         margin-bottom: 16px;
+    }
 
-        .bcs-ActivityTimestamp {
-            color: $bdl-gray;
-        }
+    .bcs-ActivityTimestamp {
+        color: $bdl-gray;
     }
 
     .bcs-CommentForm-input {
@@ -24,5 +17,10 @@
 
     .btn-plain:focus-visible {
         outline: auto;
+    }
+
+    .bcs-Replies {
+        margin: $bdl-grid-unit * 4 0;
+        padding-left: $repliesPaddingLeft;
     }
 }

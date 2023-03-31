@@ -1,41 +1,28 @@
 @import '../../../common/variables';
 
-$repliesPaddingLeft: 40px;
+.bcs-Replies-content {
+    position: relative;
+    padding-left: $bdl-grid-unit * 5;
 
-.bcs-Replies {
-    margin: $bdl-grid-unit * 4 0;
-    padding-left: $repliesPaddingLeft;
-
-    .bcs-Replies-content {
-        position: relative;
-        padding-left: $bdl-grid-unit * 2;
-
-        .bcs-Replies-list {
-            // Override default ol margins
-            margin: 0;
-        }
-
-        li:not(:last-child) {
-            margin-bottom: $bdl-grid-unit * 3;
-        }
+    .bcs-Replies-list {
+        // Override default ol margins
+        margin: 0;
     }
 
-    .bcs-Replies-content::before {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: $bdl-grid-unit;
-        background: $bdl-gray-10;
-        border-radius: $bdl-border-radius-size;
-        content: '';
+    li:not(:last-child) {
+        margin-bottom: $bdl-grid-unit * 3;
     }
+}
 
-    .bcs-BaseComment.reply {
-        .bcs-BaseComment-content.reply {
-            padding-right: 0;
-        }
-    }
+.bcs-Replies-content::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: $bdl-grid-unit;
+    background: $bdl-gray-10;
+    border-radius: $bdl-border-radius-size;
+    content: '';
 }
 
 .bcs-Replies-loading {

@@ -1,19 +1,26 @@
 @import '../../../common/variables';
 
 .bcs-ActivityItem {
-    .bcs-BaseComment.parent {
+    &.hasNewThreadedReplies {
         padding: 2px $bdl-grid-unit * 2;
-        box-shadow: 0 1px 0 0 $bdl-gray-10;
+
+        & > div {
+            padding: $bdl-grid-unit * 2;
+            padding-right: $bdl-grid-unit * 4;
+        }
+
+        &.bcs-is-hoverable:hover {
+            background-color: $bdl-light-blue-05;
+        }
     }
 }
 
-.bcs-ActivityItem.bcs-is-focused .bcs-BaseComment.parent {
-    background-color: $white;
+.bcs-ActivityItem.bcs-is-focused {
+    &.hasNewThreadedReplies {
+        background-color: $white;
 
-    .bcs-BaseComment-content {
-        background-color: $bdl-light-blue-05;
-
-        &.parent {
+        & > div {
+            background-color: $bdl-light-blue-05;
             border-radius: $bdl-border-radius-size-med;
             box-shadow: 0 0 0 2px $bdl-box-blue;
         }

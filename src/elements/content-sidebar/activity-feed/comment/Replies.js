@@ -16,14 +16,13 @@ type ReplyProps = {
     hasReplies?: boolean,
     isRepliesLoading?: boolean,
     onReplySelect: (isSelected: boolean) => void,
-    parentID: string,
     replies?: CommentType[],
 };
 
 type Props = ReplyProps & {
     currentUser?: User,
     getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
+    getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
     mentionSelectorContacts?: SelectorItems<>,
     translations?: Translations,
@@ -38,7 +37,6 @@ const Replies = ({
     isRepliesLoading = false,
     mentionSelectorContacts,
     onReplySelect,
-    parentID,
     replies = [],
     translations,
 }: Props) => {
@@ -51,7 +49,7 @@ const Replies = ({
         };
     };
 
-    if (!hasReplies || !parentID) {
+    if (!hasReplies) {
         return null;
     }
 
@@ -79,7 +77,6 @@ const Replies = ({
                                     onSelect={onReplySelect}
                                     onDelete={noop}
                                     onEdit={noop}
-                                    parentID={parentID}
                                     permissions={getReplyPermissions(reply)}
                                     translations={translations}
                                 />
