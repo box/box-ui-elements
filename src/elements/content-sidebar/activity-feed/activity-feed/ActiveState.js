@@ -173,7 +173,7 @@ const ActiveState = ({
                                 key={item.type + item.id}
                                 data-testid="comment"
                                 isFocused={isFocused}
-                                isHoverable={hasNewThreadedReplies}
+                                isHoverable
                                 hasNewThreadedReplies={hasNewThreadedReplies}
                                 ref={refValue}
                             >

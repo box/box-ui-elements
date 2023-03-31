@@ -103,7 +103,9 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
   </ForwardRef(ActivityItem)>
   <ForwardRef(ActivityItem)
     data-testid="comment"
+    hasNewThreadedReplies={false}
     isFocused={false}
+    isHoverable={true}
     key="commentc_123"
   >
     <ActivityThread
