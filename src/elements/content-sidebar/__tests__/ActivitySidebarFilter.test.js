@@ -3,14 +3,14 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ActivitySidebarFilter from '../ActivitySidebarFilter';
-import type { ActivityFilterOption, ActivityFilterStatus } from '../../../common/types/feed';
+import type { ActivityFilterItemType, ActivityFilterOption } from '../../../common/types/feed';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
     FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
 }));
 
-const onFeedItemStatusClick = jest.fn();
+const onFeedItemTypeClick = jest.fn();
 
 const availableActivityFilterOptions: ActivityFilterOption[] = ['all', 'open', 'resolved', 'tasks'];
 
@@ -18,12 +18,12 @@ const Wrapper = ({ children }: { children?: React.ReactNode }) => {
     return <IntlProvider locale="en">{children}</IntlProvider>;
 };
 
-const renderWithWrapper = (activityFilterOptions?: ActivityFilterStatus[], feedItemStatus?: ActivityFilterStatus) =>
+const renderWithWrapper = (activityFilterOptions?: ActivityFilterOption[], feedItemType?: ActivityFilterItemType) =>
     render(
         <ActivitySidebarFilter
             activityFilterOptions={activityFilterOptions}
-            feedItemStatus={feedItemStatus}
-            onFeedItemStatusClick={onFeedItemStatusClick}
+            feedItemType={feedItemType}
+            onFeedItemTypeClick={onFeedItemTypeClick}
         />,
         {
             wrapper: Wrapper,
@@ -32,36 +32,36 @@ const renderWithWrapper = (activityFilterOptions?: ActivityFilterStatus[], feedI
 
 describe('elements/content-sidebar/ActivitySidebarFilter', () => {
     test.each`
-        feedItemStatus | option
-        ${'all'}       | ${'All Activity'}
-        ${'open'}      | ${'Unresolved Comments'}
-        ${'resolved'}  | ${'Resolved Comments'}
-        ${'task'}      | ${'Tasks'}
+        feedItemType  | option
+        ${'all'}      | ${'All Activity'}
+        ${'open'}     | ${'Unresolved Comments'}
+        ${'resolved'} | ${'Resolved Comments'}
+        ${'task'}     | ${'Tasks'}
     `(
-        'should render "$option" as the selected status when feedItemStatus prop is equal to $feedItemStatus',
-        ({ feedItemStatus, option }) => {
-            renderWithWrapper(availableActivityFilterOptions, feedItemStatus);
+        'should render "$option" as the selected status when feedItemType prop is equal to $feedItemType',
+        ({ feedItemType, option }) => {
+            renderWithWrapper(availableActivityFilterOptions, feedItemType);
             expect(screen.getByText(option)).toBeVisible();
         },
     );
 
     test.each`
-        expected      | option                   | initialOption            | initialStatus
+        expected      | option                   | initialOption            | initialType
         ${'all'}      | ${'All Activity'}        | ${'Unresolved Comments'} | ${'open'}
         ${'open'}     | ${'Unresolved Comments'} | ${'All Activity'}        | ${undefined}
         ${'resolved'} | ${'Resolved Comments'}   | ${'All Activity'}        | ${undefined}
         ${'task'}     | ${'Tasks'}               | ${'All Activity'}        | ${undefined}
     `(
         'onFeedItemStatusClick should be called with $expected when clicked on $option',
-        async ({ initialOption, option, initialStatus, expected }) => {
-            renderWithWrapper(availableActivityFilterOptions, initialStatus);
+        async ({ initialOption, option, initialType, expected }) => {
+            renderWithWrapper(availableActivityFilterOptions, initialType);
 
             const dropdownBtn = screen.getByText(initialOption);
 
             fireEvent.click(dropdownBtn);
             fireEvent.click(await screen.findByText(option));
 
-            expect(onFeedItemStatusClick).toBeCalledWith(expected);
+            expect(onFeedItemTypeClick).toBeCalledWith(expected);
         },
     );
 

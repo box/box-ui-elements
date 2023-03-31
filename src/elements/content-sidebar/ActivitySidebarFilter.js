@@ -19,13 +19,13 @@ import {
     FEED_ITEM_TYPE_TASK,
 } from '../../constants';
 import { Menu, SelectMenuItem } from '../../components/menu';
-import type { ActivityFilterOption, ActivityFilterStatus } from '../../common/types/feed';
+import type { ActivityFilterItemType, ActivityFilterOption } from '../../common/types/feed';
 import './ActivitySidebarFilter.scss';
 
 type ActivitySidebarFilterProps = {
     activityFilterOptions: ActivityFilterOption[],
-    feedItemStatus?: ActivityFilterStatus,
-    onFeedItemStatusClick: (status?: ActivityFilterStatus) => void,
+    feedItemType?: ActivityFilterItemType,
+    onFeedItemTypeClick: (status?: ActivityFilterItemType) => void,
 };
 
 const filterOptionToStatus = {
@@ -37,17 +37,21 @@ const filterOptionToStatus = {
 
 function ActivitySidebarFilter({
     activityFilterOptions,
-    feedItemStatus = ACTIVITY_FILTER_OPTION_ALL,
-    onFeedItemStatusClick,
+    feedItemType = ACTIVITY_FILTER_OPTION_ALL,
+    onFeedItemTypeClick,
 }: ActivitySidebarFilterProps) {
     // The message for all activty is based on whether only comments are in the activityFilterOptions prop
-    const allActivityMessage = !activityFilterOptions.includes(ACTIVITY_FILTER_OPTION_TASKS)
+    const allFilterMessage = activityFilterOptions.every(option =>
+        [ACTIVITY_FILTER_OPTION_ALL, ACTIVITY_FILTER_OPTION_RESOLVED, ACTIVITY_FILTER_OPTION_UNRESOLVED].includes(
+            option,
+        ),
+    )
         ? messages.activitySidebarFilterOptionAllComments
         : messages.activitySidebarFilterOptionAllActivity;
 
     const statusMap = {
         [ACTIVITY_FILTER_OPTION_ALL]: {
-            msg: allActivityMessage,
+            msg: allFilterMessage,
             val: ACTIVITY_FILTER_OPTION_ALL,
         },
         [COMMENT_STATUS_OPEN]: { msg: messages.activitySidebarFilterOptionOpen, val: COMMENT_STATUS_OPEN },
@@ -66,7 +70,7 @@ function ActivitySidebarFilter({
             <DropdownMenu className="bcs-ActivitySidebarFilter-dropdownMenu" constrainToWindow>
                 <PlainButton type="button">
                     <MenuToggle>
-                        <FormattedMessage {...statusMap[feedItemStatus].msg} />
+                        <FormattedMessage {...statusMap[feedItemType].msg} />
                     </MenuToggle>
                 </PlainButton>
                 <Menu>
@@ -75,8 +79,8 @@ function ActivitySidebarFilter({
                         return (
                             <SelectMenuItem
                                 key={status}
-                                isSelected={status === feedItemStatus}
-                                onClick={() => onFeedItemStatusClick(statusMap[status].val)}
+                                isSelected={status === feedItemType}
+                                onClick={() => onFeedItemTypeClick(statusMap[status].val)}
                             >
                                 <FormattedMessage {...statusMap[status].msg} />
                             </SelectMenuItem>

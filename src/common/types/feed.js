@@ -160,7 +160,7 @@ type ActivityFilterOption =
     | typeof ACTIVITY_FILTER_OPTION_RESOLVED
     | typeof ACTIVITY_FILTER_OPTION_TASKS;
 
-type ActivityFilterStatus =
+type ActivityFilterItemType =
     | typeof ACTIVITY_FILTER_OPTION_ALL
     | typeof COMMENT_STATUS_OPEN
     | typeof COMMENT_STATUS_RESOLVED
@@ -168,8 +168,8 @@ type ActivityFilterStatus =
 
 export type {
     ActionItemError,
+    ActivityFilterItemType,
     ActivityFilterOption,
-    ActivityFilterStatus,
     ActivityTemplateItem,
     Annotation,
     AnnotationPermission,
