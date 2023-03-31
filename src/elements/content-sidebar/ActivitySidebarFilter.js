@@ -40,12 +40,15 @@ function ActivitySidebarFilter({
     feedItemType = ACTIVITY_FILTER_OPTION_ALL,
     onFeedItemTypeClick,
 }: ActivitySidebarFilterProps) {
+    const hasOnlyCommentActivity = (options: ActivityFilterOption[]): boolean =>
+        options.every(option =>
+            [ACTIVITY_FILTER_OPTION_ALL, ACTIVITY_FILTER_OPTION_RESOLVED, ACTIVITY_FILTER_OPTION_UNRESOLVED].includes(
+                option,
+            ),
+        );
+
     // The message for all activty is based on whether only comments are in the activityFilterOptions prop
-    const allFilterMessage = activityFilterOptions.every(option =>
-        [ACTIVITY_FILTER_OPTION_ALL, ACTIVITY_FILTER_OPTION_RESOLVED, ACTIVITY_FILTER_OPTION_UNRESOLVED].includes(
-            option,
-        ),
-    )
+    const allFilterMessage = hasOnlyCommentActivity(activityFilterOptions)
         ? messages.activitySidebarFilterOptionAllComments
         : messages.activitySidebarFilterOptionAllActivity;
 
