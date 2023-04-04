@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import BaseComment from '../comment/BaseComment';
 import Comment from '../comment';
 import LoadingIndicator from '../../../../components/loading-indicator';
+import { BaseComment } from '../comment/BaseComment';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';

@@ -10,11 +10,10 @@ import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
 import AnnotationActivity from '../annotations';
 import Comment from '../comment';
-import BaseComment from '../comment/BaseComment';
-import Replies from '../comment/Replies';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
+import { BaseComment } from '../comment/BaseComment';
 import {
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_APP_ACTIVITY,
@@ -157,13 +156,9 @@ const ActiveState = ({
                 const isFocused = item === activeFeedItem;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
-                const commentProps = {
-                    currentUser,
-                    getAvatarUrl,
-                    getMentionWithQuery,
-                    getUserProfileUrl,
-                    mentionSelectorContacts,
-                    translations,
+                const replyProps = {
+                    hasReplies,
+                    onReplySelect: onCommentSelectHandler(item.id),
                 };
 
                 switch (item.type) {
@@ -180,7 +175,12 @@ const ActiveState = ({
                                 {hasNewThreadedReplies ? (
                                     <BaseComment
                                         {...item}
-                                        {...commentProps}
+                                        {...replyProps}
+                                        currentUser={currentUser}
+                                        getAvatarUrl={getAvatarUrl}
+                                        getMentionWithQuery={getMentionWithQuery}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        mentionSelectorContacts={mentionSelectorContacts}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
                                         onSelect={onCommentSelectHandler(item.id)}
@@ -190,16 +190,8 @@ const ActiveState = ({
                                             can_reply: getProp(item.permissions, 'can_reply', false),
                                             can_resolve: getProp(item.permissions, 'can_resolve', false),
                                         }}
-                                    >
-                                        <Replies
-                                            {...commentProps}
-                                            hasReplies={hasReplies}
-                                            isRepliesLoading={item.isRepliesLoading}
-                                            onReplySelect={onCommentSelectHandler(item.id)}
-                                            parentID={item.id}
-                                            replies={item.replies}
-                                        />
-                                    </BaseComment>
+                                        translations={translations}
+                                    />
                                 ) : (
                                     <ActivityThread
                                         data-testid="activity-thread"

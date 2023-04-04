@@ -7,6 +7,10 @@
     .bcs-Replies-list {
         // Override default ol margins
         margin: 0;
+
+        ol {
+            list-style: none;
+        }
     }
 
     li:not(:last-child) {

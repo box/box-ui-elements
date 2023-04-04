@@ -3,7 +3,7 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { fireEvent, render, screen } from '@testing-library/react';
-import BaseComment from '../BaseComment';
+import { BaseComment } from '../BaseComment';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('react-intl', () => ({

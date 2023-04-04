@@ -37,16 +37,6 @@ const messages = defineMessages({
         defaultMessage: 'Unresolve',
         description: 'Text to show on menu item to unresolve the comment',
     },
-    reply: {
-        id: 'be.contentSidebar.activityFeed.comment.reply',
-        defaultMessage: 'Reply',
-        description: 'Text to show on button to start replying to comment',
-    },
-    replyInThread: {
-        id: 'be.contentSidebar.activityFeed.comment.replyInThread',
-        defaultMessage: 'Reply in thread',
-        description: 'Text to show on reply form input placeholder',
-    },
 });
 
 export default messages;

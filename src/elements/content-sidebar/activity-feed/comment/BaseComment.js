@@ -12,6 +12,7 @@ import Avatar from '../Avatar';
 import Checkmark16 from '../../../../icon/line/Checkmark16';
 import CommentForm from '../comment-form';
 import DeleteConfirmation from '../common/delete-confirmation';
+import LoadingIndicator from '../../../../components/loading-indicator';
 import Media from '../../../../components/media';
 import messages from './messages';
 import Pencil16 from '../../../../icon/line/Pencil16';
@@ -21,15 +22,21 @@ import X16 from '../../../../icon/fill/X16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
 import { MenuItem } from '../../../../components/menu';
-import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
+import type {
+    ActionItemError,
+    BoxCommentPermission,
+    FeedItemStatus,
+    Comment as CommentType,
+} from '../../../../common/types/feed';
+
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { Translations } from '../../flowTypes';
 import './BaseComment.scss';
+import './Replies.scss';
 import './Comment.scss';
 
-type Props = {
-    children?: React.Node,
+type BaseCommentProps = {
     created_at: string | number,
     created_by: User,
     currentUser?: User,
@@ -37,9 +44,11 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasReplies?: boolean,
     id: string,
     isDisabled?: boolean,
     isPending?: boolean,
+    isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
@@ -52,8 +61,10 @@ type Props = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onReplySelect?: (id: number) => void,
     onSelect: (isSelected: boolean) => void,
     permissions: BoxCommentPermission,
+    replies?: CommentType[],
     status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -61,14 +72,14 @@ type Props = {
 };
 
 // TODO: Replace and rename to Comment component once threaded replies refactor is fully implemented
-const BaseComment = (props: Props) => {
+const BaseComment = (props: BaseCommentProps) => {
     const {
-        children,
         created_by,
         created_at,
         permissions = {},
         id,
         isPending,
+        isRepliesLoading = false,
         error,
         tagged_message = '',
         translatedTaggedMessage,
@@ -78,11 +89,14 @@ const BaseComment = (props: Props) => {
         getAvatarUrl,
         getUserProfileUrl,
         getMentionWithQuery,
+        hasReplies = false,
         mentionSelectorContacts,
         modified_at,
         onDelete,
         onEdit,
         onSelect,
+        onReplySelect = noop,
+        replies = [],
         status,
     } = props;
 
@@ -168,6 +182,14 @@ const BaseComment = (props: Props) => {
     const isEdited = modified_at !== undefined && modified_at !== created_at;
     const isMenuVisible = (canDelete || canEdit || canResolve) && !isPending;
     const isResolved = status === COMMENT_STATUS_RESOLVED;
+    const commentProps = {
+        currentUser,
+        getUserProfileUrl,
+        getAvatarUrl,
+        getMentionWithQuery,
+        mentionSelectorContacts,
+        translations,
+    };
 
     return (
         // TODO: Change className to bcs-Comment once FF is removed
@@ -298,9 +320,85 @@ const BaseComment = (props: Props) => {
             </Media>
             {/* $FlowFixMe */}
             {error ? <ActivityError {...error} /> : null}
-            {!!children && <div className="bcs-Comment-replies">{children}</div>}
+            {hasReplies && (
+                <Replies
+                    {...commentProps}
+                    isRepliesLoading={isRepliesLoading}
+                    onReplySelect={onReplySelect}
+                    replies={replies}
+                />
+            )}
         </div>
     );
 };
 
-export default BaseComment;
+// Added Replies to Comment file to avoid circular dependency warning
+type RepliesProps = {
+    currentUser?: User,
+    getAvatarUrl: GetAvatarUrlCallback,
+    getMentionWithQuery?: (searchStr: string) => void,
+    getUserProfileUrl?: GetProfileUrlCallback,
+    isRepliesLoading?: boolean,
+    mentionSelectorContacts?: SelectorItems<>,
+    onReplySelect?: (id: number) => void,
+    replies: CommentType[],
+    translations?: Translations,
+};
+
+const Replies = ({
+    currentUser,
+    getAvatarUrl,
+    getMentionWithQuery,
+    getUserProfileUrl,
+    isRepliesLoading = false,
+    mentionSelectorContacts,
+    onReplySelect = noop,
+    replies,
+    translations,
+}: RepliesProps) => {
+    const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
+        const { permissions: { can_delete = false, can_edit = false, can_resolve = false } = {} } = reply;
+        return {
+            can_delete,
+            can_edit,
+            can_resolve,
+        };
+    };
+
+    return (
+        <div className="bcs-Replies">
+            <div className="bcs-Replies-content">
+                {isRepliesLoading && (
+                    <div className="bcs-Replies-loading" data-testid="replies-loading">
+                        <LoadingIndicator />
+                    </div>
+                )}
+                <ol className="bcs-Replies-list">
+                    {replies.map(reply => {
+                        const { id, type } = reply;
+
+                        return (
+                            <li key={`${type}${id}`}>
+                                <BaseComment
+                                    {...reply}
+                                    currentUser={currentUser}
+                                    getAvatarUrl={getAvatarUrl}
+                                    getMentionWithQuery={getMentionWithQuery}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                    mentionSelectorContacts={mentionSelectorContacts}
+                                    onSelect={onReplySelect}
+                                    onDelete={noop}
+                                    onEdit={noop}
+                                    permissions={getReplyPermissions(reply)}
+                                    translations={translations}
+                                />
+                            </li>
+                        );
+                    })}
+                </ol>
+            </div>
+        </div>
+    );
+};
+
+export { BaseComment, Replies };

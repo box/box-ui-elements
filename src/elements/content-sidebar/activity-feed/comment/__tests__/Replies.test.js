@@ -3,7 +3,7 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { fireEvent, render, screen } from '@testing-library/react';
-import Replies from '../Replies';
+import { Replies } from '../BaseComment';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('react-intl', () => ({
@@ -88,14 +88,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
         expect(screen.getAllByText('Sep 27, 2017').length).toBe(2);
         expect(screen.getByText('Sep 28, 2017')).toBeVisible();
         expect(screen.queryByTestId('replies-loading')).not.toBeInTheDocument();
-    });
-
-    test('should not render replies', () => {
-        getWrapper({ hasReplies: false });
-
-        expect(screen.queryByText(comment.tagged_message)).not.toBeInTheDocument();
-        expect(screen.queryByText(comment2.tagged_message)).not.toBeInTheDocument();
-        expect(screen.queryByText(comment3.tagged_message)).not.toBeInTheDocument();
     });
 
     test('should render loading spinner with replies', () => {
