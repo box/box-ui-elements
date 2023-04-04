@@ -1,0 +1,25 @@
+@import '../../../common/variables';
+
+.bcs-CreateReply-toggle {
+    display: flex;
+    align-items: center;
+    color: $bdl-gray-62;
+
+    &,
+    &:hover,
+    &:active {
+        margin-left: $sidebarActivityFeedSpacingHorizontal;
+        font-weight: bold;
+    }
+
+    .bcs-ActivityThreadReplyForm-arrow {
+        margin-right: $bdl-grid-unit;
+        // in design arrow is turning left, but we only have ArrowArcRight, so will transfrom it to left one
+        transform: matrix(-1, 0, 0, 1, 0, 0);
+    }
+}
+
+.bcs-CreateReply-form {
+    padding-top: 0;
+    border-top: none;
+}
