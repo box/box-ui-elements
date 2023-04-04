@@ -1,8 +1,14 @@
+@import '../../styles/variables';
+
 .AdvancedContentInsightsToggle {
     margin-bottom: 0;
 
     .toggle-simple-label {
         display: flex;
+    }
+
+    .toggle-simple-description {
+        color: $bdl-gray;
     }
 }
 
