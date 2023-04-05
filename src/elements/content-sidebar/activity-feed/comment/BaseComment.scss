@@ -1,0 +1,26 @@
+@import '../../../common/variables';
+
+$repliesPaddingLeft: 40px;
+
+.bcs-BaseComment {
+    .bcs-Comment-timestamp {
+        margin-bottom: 16px;
+    }
+
+    .bcs-ActivityTimestamp {
+        color: $bdl-gray;
+    }
+
+    .bcs-CommentForm-input {
+        background-color: $white;
+    }
+
+    .btn-plain:focus-visible {
+        outline: auto;
+    }
+
+    .bcs-Replies {
+        margin: $bdl-grid-unit * 4 0;
+        padding-left: $repliesPaddingLeft;
+    }
+}

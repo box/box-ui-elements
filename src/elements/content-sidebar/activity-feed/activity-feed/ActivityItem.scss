@@ -1,7 +1,28 @@
 @import '../../../common/variables';
 
 .bcs-ActivityItem {
-    .bcs-BaseComment {
-        padding: $sidebarActivityFeedSpacingVertical $sidebarActivityFeedSpacingHorizontal;
+    &.hasNewThreadedReplies {
+        padding: 2px $bdl-grid-unit * 2;
+
+        & > div {
+            padding: $bdl-grid-unit * 2;
+            padding-right: $bdl-grid-unit * 4;
+        }
+
+        &.bcs-is-hoverable:hover {
+            background-color: $bdl-light-blue-05;
+        }
+    }
+}
+
+.bcs-ActivityItem.bcs-is-focused {
+    &.hasNewThreadedReplies {
+        background-color: $white;
+
+        & > div {
+            background-color: $bdl-light-blue-05;
+            border-radius: $bdl-border-radius-size-med;
+            box-shadow: 0 0 0 2px $bdl-box-blue;
+        }
     }
 }
