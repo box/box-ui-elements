@@ -61,7 +61,7 @@ type BaseCommentProps = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
-    onReplySelect?: (id: number) => void,
+    onReplySelect?: (isSelected: boolean) => void,
     onSelect: (isSelected: boolean) => void,
     permissions: BoxCommentPermission,
     replies?: CommentType[],
@@ -340,7 +340,7 @@ type RepliesProps = {
     getUserProfileUrl?: GetProfileUrlCallback,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onReplySelect?: (id: number) => void,
+    onReplySelect?: (isSelected: boolean) => void,
     replies: CommentType[],
     translations?: Translations,
 };
