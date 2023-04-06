@@ -1,7 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
 
 import PlainButton from '../../../../components/plain-button';

@@ -126,11 +126,10 @@ class CommentForm extends React.Component<Props, State> {
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
             'bcs-is-open': isOpen,
         });
-        const showAvatar = !isEditing && !!user && !!getAvatarUrl;
 
         return (
             <Media className={inputContainerClassNames}>
-                {showAvatar && (
+                {!isEditing && !!user && !!getAvatarUrl && (
                     <Media.Figure className="bcs-CommentForm-avatar">
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </Media.Figure>
