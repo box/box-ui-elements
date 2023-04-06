@@ -602,7 +602,7 @@ function makeSelectable(BaseTable) {
             }
         };
 
-        isTargetSlider = event => event.target.role === 'slider';
+        isTargetSlider = event => event.target?.role === 'slider';
 
         render() {
             const { className, data } = this.props;
