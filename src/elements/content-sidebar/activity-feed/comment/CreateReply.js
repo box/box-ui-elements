@@ -1,7 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { FormattedMessage, intl } from 'react-intl';
+import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
+import noop from 'lodash/noop';
 
 import PlainButton from '../../../../components/plain-button';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
@@ -15,60 +16,57 @@ import './CreateReply.scss';
 
 type Props = {
     getMentionWithQuery?: (searchStr: string) => void,
+    intl: IntlShape,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onCancel: () => void,
-    onFocus: () => void,
-    onReplyCreate: (text: string) => void,
-    onShowForm: () => void,
+    onClick: () => void,
+    onFocus?: () => void,
+    onSubmit: (reply: string) => void,
+    showReplyForm: boolean,
 };
 
 const CreateReply = ({
     mentionSelectorContacts,
     getMentionWithQuery,
     isDisabled = false,
-    onFocus,
+    intl,
+    onFocus = noop,
     onCancel,
-    onReplyCreate,
-    onShowForm,
+    onSubmit,
+    onClick,
+    showReplyForm,
 }: Props) => {
-    const [showReplyForm, setShowReplyForm] = React.useState(false);
     const placeholder = intl.formatMessage(messages.replyInThread);
 
-    const showForm = () => {
-        setShowReplyForm(true);
-        onShowForm();
-    };
-
-    const hideForm = () => {
-        setShowReplyForm(false);
-        onCancel();
-    };
-
     const handleSubmit = ({ text }: { text: string }) => {
-        onReplyCreate(text);
-        hideForm();
+        onSubmit(text);
     };
 
-    return showReplyForm ? (
-        <CommentForm
-            className="bcs-CreateReply-form"
-            isOpen
-            isEditing
-            showTip={false}
-            onCancel={hideForm}
-            onFocus={onFocus}
-            createComment={handleSubmit}
-            mentionSelectorContacts={mentionSelectorContacts}
-            getMentionWithQuery={getMentionWithQuery}
-            placeholder={placeholder}
-        />
-    ) : (
-        <PlainButton className="bcs-CreateReply-toggle" onClick={showForm} type="button" isDisabled={isDisabled}>
-            <ArrowArcRight className="bcs-CreateReply-arrow" />
-            <FormattedMessage {...messages.reply} />
-        </PlainButton>
+    return (
+        <div className="bcs-CreateReply">
+            {showReplyForm ? (
+                <CommentForm
+                    className="bcs-CreateReply-form"
+                    isOpen
+                    isDisabled={isDisabled}
+                    isEditing
+                    showTip={false}
+                    onCancel={onCancel}
+                    onFocus={onFocus}
+                    createComment={handleSubmit}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    getMentionWithQuery={getMentionWithQuery}
+                    placeholder={placeholder}
+                />
+            ) : (
+                <PlainButton className="bcs-CreateReply-toggle" onClick={onClick} type="button" isDisabled={isDisabled}>
+                    <ArrowArcRight className="bcs-CreateReply-arrow" />
+                    <FormattedMessage {...messages.reply} />
+                </PlainButton>
+            )}
+        </div>
     );
 };
 
-export default CreateReply;
+export default injectIntl(CreateReply);
