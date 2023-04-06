@@ -5,8 +5,8 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
 
-import PlainButton from '../../../../components/plain-button';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
+import PlainButton from '../../../../components/plain-button';
 
 import type { SelectorItems } from '../../../../common/types/core';
 
