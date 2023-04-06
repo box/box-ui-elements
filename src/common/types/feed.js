@@ -1,6 +1,10 @@
 // @flow strict
 import type { MessageDescriptor } from 'react-intl';
 import {
+    ACTIVITY_FILTER_OPTION_ALL,
+    ACTIVITY_FILTER_OPTION_RESOLVED,
+    ACTIVITY_FILTER_OPTION_TASKS,
+    ACTIVITY_FILTER_OPTION_UNRESOLVED,
     COMMENT_STATUS_OPEN,
     COMMENT_STATUS_RESOLVED,
     FEED_ITEM_TYPE_ANNOTATION,
@@ -150,8 +154,22 @@ type ActionItemError = {
     title: MessageDescriptor,
 };
 
+type ActivityFilterOption =
+    | typeof ACTIVITY_FILTER_OPTION_ALL
+    | typeof ACTIVITY_FILTER_OPTION_UNRESOLVED
+    | typeof ACTIVITY_FILTER_OPTION_RESOLVED
+    | typeof ACTIVITY_FILTER_OPTION_TASKS;
+
+type ActivityFilterItemType =
+    | typeof ACTIVITY_FILTER_OPTION_ALL
+    | typeof COMMENT_STATUS_OPEN
+    | typeof COMMENT_STATUS_RESOLVED
+    | typeof FEED_ITEM_TYPE_TASK;
+
 export type {
     ActionItemError,
+    ActivityFilterItemType,
+    ActivityFilterOption,
     ActivityTemplateItem,
     Annotation,
     AnnotationPermission,

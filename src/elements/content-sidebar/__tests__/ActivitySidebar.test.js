@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
+import ActivitySidebarFilter from '../ActivitySidebarFilter';
 import { filterableActivityFeedItems, formattedReplies } from '../fixtures';
 import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
@@ -1501,6 +1502,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
             ${'open'}     | ${[expectedAnnotationOpen, expectedCommentOpen, expectedVersionItem]}
             ${'resolved'} | ${[expectedAnnotationResolved, expectedCommentResolved, expectedVersionItem]}
+            ${'task'}     | ${[expectedTaskItem, expectedVersionItem]}
         `(
             'should filter feed items of type "comment" or "annotation" based on status equal to $status',
             ({ status, expected }) => {
@@ -1534,9 +1536,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('handleItemsFiltered()', () => {
         test.each`
-            status       | expected
-            ${undefined} | ${undefined}
-            ${'open'}    | ${'open'}
+            status        | expected
+            ${undefined}  | ${undefined}
+            ${'open'}     | ${'open'}
+            ${'resolved'} | ${'resolved'}
+            ${'task'}     | ${'task'}
         `(
             'given $status should update feedItemsStatusFilter state with $expected and call filter change event callback',
             ({ status, expected }) => {
@@ -1578,19 +1582,78 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const instance = wrapper.instance();
                 expect(instance.renderActivitySidebarFilter()).toBe(null);
             });
+
+            test.each`
+                hasTasks
+                ${false}
+                ${true}
+            `('when activityFeed.newThreadedReplies is not enabled and hasTasks is $hasTasks', ({ hasTasks }) => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: false },
+                        },
+                    },
+                    hasTasks,
+                });
+                const instance = wrapper.instance();
+                expect(instance.renderActivitySidebarFilter()).toBe(null);
+            });
         });
 
-        test('should return ActivitySidebarFilter when activityFeed.filter feature is enabled', () => {
-            const wrapper = getWrapper({
-                features: {
-                    activityFeed: {
-                        filter: { enabled: true },
+        describe('should return ActivitySidebarFilter', () => {
+            test('when activityFeed.filter feature is enabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: true },
+                        },
                     },
-                },
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderActivitySidebarFilter());
+                expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
             });
-            const instance = wrapper.instance();
-            const resultWrapper = mount(instance.renderActivitySidebarFilter());
-            expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+
+            test('with default filter options when activityFeed.filter is enabled', () => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            filter: { enabled: true },
+                        },
+                    },
+                    hasTasks: true,
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderActivitySidebarFilter());
+                const sidebarFilter = resultWrapper.find(ActivitySidebarFilter).first();
+                expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+                expect(sidebarFilter.props().activityFilterOptions).toEqual(['all', 'open']);
+            });
+
+            test.each`
+                expectedOptions                         | hasTasks
+                ${['all', 'open', 'resolved']}          | ${false}
+                ${['all', 'open', 'resolved', 'tasks']} | ${true}
+            `(
+                'with $expectedOptions filter options when activityFeed.newThreadedReplies is enabled, activityFeed.filter is enabled, and hasTasks is $hasTasks',
+                ({ expectedOptions, hasTasks }) => {
+                    const wrapper = getWrapper({
+                        features: {
+                            activityFeed: {
+                                filter: { enabled: true },
+                                newThreadedReplies: { enabled: true },
+                            },
+                        },
+                        hasTasks,
+                    });
+                    const instance = wrapper.instance();
+                    const resultWrapper = mount(instance.renderActivitySidebarFilter());
+                    const sidebarFilter = resultWrapper.find(ActivitySidebarFilter).first();
+                    expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
+                    expect(sidebarFilter.props().activityFilterOptions).toEqual(expectedOptions);
+                },
+            );
         });
     });
 
@@ -1615,12 +1678,53 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const resultWrapper = mount(instance.renderTitle());
                 expect(resultWrapper.name()).toBe('FormattedMessage');
             });
+
+            test.each`
+                hasTasks
+                ${false}
+                ${true}
+            `('when activityFeed.newThreadedReplies is disabled and hasTasks is $hasTasks', ({ hasTasks }) => {
+                const wrapper = getWrapper({
+                    features: {
+                        activityFeed: {
+                            newThreadedReplies: { enabled: false },
+                        },
+                    },
+                    hasTasks,
+                });
+                const instance = wrapper.instance();
+                const resultWrapper = mount(instance.renderTitle());
+                expect(resultWrapper.name()).toBe('FormattedMessage');
+            });
         });
 
-        test('should return undefined when activityFeed.filter feature is enabled', () => {
-            const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
-            const instance = wrapper.instance();
-            expect(instance.renderTitle()).toBe(undefined);
+        describe('should return null', () => {
+            test('when activityFeed.filter feature is enabled', () => {
+                const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
+                const instance = wrapper.instance();
+                expect(instance.renderTitle()).toBe(null);
+            });
+
+            test.each`
+                hasTasks
+                ${false}
+                ${true}
+            `(
+                'when activityFeed.newThreadedReplies is enabled, activityFeed.filter is enabled, and hasTasks is $hasTasks',
+                ({ hasTasks }) => {
+                    const wrapper = getWrapper({
+                        features: {
+                            activityFeed: {
+                                filter: { enabled: true },
+                                newThreadedReplies: { enabled: true },
+                            },
+                        },
+                        hasTasks,
+                    });
+                    const instance = wrapper.instance();
+                    expect(instance.renderTitle()).toBe(null);
+                },
+            );
         });
     });
 });
