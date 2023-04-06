@@ -45,11 +45,10 @@ const CreateReply = ({
 
     return (
         <div className="bcs-CreateReply">
-            {showReplyForm ? (
+            {showReplyForm && !isDisabled ? (
                 <CommentForm
                     className="bcs-CreateReply-form"
                     isOpen
-                    isDisabled={isDisabled}
                     isEditing
                     showTip={false}
                     onCancel={onCancel}
