@@ -9,7 +9,6 @@ import './RepliesToggle.scss';
 
 type Props = {
     isAlwaysExpanded?: boolean,
-    isRepliesLoading: boolean,
     onHideReplies: (index: number) => void,
     onShowReplies: () => void,
     repliesShownCount: number,
@@ -18,13 +17,12 @@ type Props = {
 
 const RepliesToggle = ({
     isAlwaysExpanded = false,
-    isRepliesLoading,
     onShowReplies,
     onHideReplies,
     repliesShownCount,
     repliesTotalCount,
 }: Props) => {
-    if (isAlwaysExpanded || isRepliesLoading || repliesTotalCount <= 1) {
+    if (isAlwaysExpanded || repliesTotalCount <= 1) {
         return null;
     }
 

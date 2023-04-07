@@ -44,6 +44,15 @@ describe('elements/content-sidebar/ActivityFeed/comment/RepliesToggle', () => {
         expect(hideReplies).not.toBeCalled();
     });
 
+    test('should not render toggle', () => {
+        const countDifference = totalCount - 1;
+
+        getWrapper({ isAlwaysExpanded: true });
+
+        expect(screen.queryByText(`See ${countDifference} replies`)).not.toBeInTheDocument();
+        expect(screen.queryByText('Hide replies')).not.toBeInTheDocument();
+    });
+
     test.each`
         repliesShownCount | repliesTotalCount
         ${3}              | ${3}
