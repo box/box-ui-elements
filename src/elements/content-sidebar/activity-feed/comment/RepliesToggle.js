@@ -8,21 +8,14 @@ import PlainButton from '../../../../components/plain-button';
 import './RepliesToggle.scss';
 
 type Props = {
-    isAlwaysExpanded?: boolean,
     onHideReplies: (index: number) => void,
     onShowReplies: () => void,
     repliesShownCount: number,
     repliesTotalCount: number,
 };
 
-const RepliesToggle = ({
-    isAlwaysExpanded = false,
-    onShowReplies,
-    onHideReplies,
-    repliesShownCount,
-    repliesTotalCount,
-}: Props) => {
-    if (isAlwaysExpanded || repliesTotalCount <= 1) {
+const RepliesToggle = ({ onShowReplies, onHideReplies, repliesShownCount, repliesTotalCount }: Props) => {
+    if (repliesTotalCount <= 1) {
         return null;
     }
 
