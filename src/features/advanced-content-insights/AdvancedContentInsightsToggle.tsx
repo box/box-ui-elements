@@ -28,8 +28,8 @@ const AdvancedContentInsightsToggle = ({
         <>
             <FormattedMessage
                 {...(isChecked
-                    ? { ...messages.advancedContentInsightsTitleEnabled }
-                    : { ...messages.advancedContentInsightsTitleDisabled })}
+                    ? messages.advancedContentInsightsTitleEnabled
+                    : messages.advancedContentInsightsTitleDisabled)}
             />
             {hasTooltip && (
                 <Tooltip text={description}>
