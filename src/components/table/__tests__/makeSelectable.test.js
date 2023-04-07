@@ -836,7 +836,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
-                test('should not set focus to first row target has role of slider', () => {
+                test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
@@ -875,7 +875,7 @@ describe('components/table/makeSelectable', () => {
             });
             describe('left', () => {
                 const hotKey = 'left';
-                test('should not set focus to first row target has role of slider', () => {
+                test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
@@ -938,7 +938,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
-                test('should not set focus to first row target has role of slider', () => {
+                test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
@@ -977,7 +977,7 @@ describe('components/table/makeSelectable', () => {
             });
             describe('up', () => {
                 const hotKey = 'up';
-                test('should not set focus to first row target has role of slider', () => {
+                test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
                         isGridView: true,
