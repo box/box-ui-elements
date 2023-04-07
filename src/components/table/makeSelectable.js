@@ -213,6 +213,10 @@ function makeSelectable(BaseTable) {
                     key: 'right',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
+                        if (this.isTargetSlider(event)) {
+                            return;
+                        }
+
                         const { data } = this.props;
                         const { focusedIndex } = this.state;
 
@@ -228,6 +232,10 @@ function makeSelectable(BaseTable) {
                     key: 'left',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
+                        if (this.isTargetSlider(event)) {
+                            return;
+                        }
+
                         const { focusedIndex = 0 } = this.state;
 
                         event.preventDefault();
@@ -241,6 +249,10 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
+                        if (this.isTargetSlider(event)) {
+                            return;
+                        }
+
                         const { data, gridColumnCount } = this.props;
                         const { focusedIndex } = this.state;
 
@@ -256,6 +268,10 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
+                        if (this.isTargetSlider(event)) {
+                            return;
+                        }
+
                         const { gridColumnCount } = this.props;
                         const { focusedIndex = 0 } = this.state;
 
@@ -585,6 +601,8 @@ function makeSelectable(BaseTable) {
                 this.selectToggle(index);
             }
         };
+
+        isTargetSlider = event => event.target?.role === 'slider';
 
         render() {
             const { className, data } = this.props;
