@@ -75,7 +75,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/CreateReply', () => {
         expect(onCancel).not.toBeCalled();
     });
 
-    test('should not show form when isDisabled', () => {
+    test('should not show form when isDisabled property is true', () => {
         getWrapper({ showReplyForm: true, isDisabled: true });
 
         const replyButton = screen.getByRole('button', { name: replyMessage });
