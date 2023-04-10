@@ -27,7 +27,7 @@ type Props = {
     contactsLoaded?: boolean,
     createComment?: Function,
     entityId?: string,
-    getAvatarUrl: GetAvatarUrlCallback,
+    getAvatarUrl?: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     isDisabled?: boolean,
     isEditing?: boolean,
@@ -40,7 +40,7 @@ type Props = {
     showTip?: boolean,
     tagged_message?: string,
     updateComment?: Function,
-    user: User,
+    user?: User,
 } & InjectIntlProvidedProps;
 
 type State = {
@@ -129,7 +129,7 @@ class CommentForm extends React.Component<Props, State> {
 
         return (
             <Media className={inputContainerClassNames}>
-                {!isEditing && (
+                {!isEditing && !!user && (
                     <Media.Figure className="bcs-CommentForm-avatar">
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </Media.Figure>
