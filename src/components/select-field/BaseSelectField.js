@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import * as PopperJS from 'popper.js';
 import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import findIndex from 'lodash/findIndex';
@@ -46,6 +47,8 @@ type Props = {
     className?: string,
     /** The fallback option value when other options are all unselected. Default option cannot be selected at the same time as other options. `selectedValues` must not be empty when this option is used. */
     defaultValue?: SelectOptionValueProp,
+    /** An optional prop to determine where dropdown should be placed */
+    dropdownPlacement?: PopperJS.Placement,
     /** An optional error to show within a tooltip. */
     error?: React.Node,
     /** Position of error message tooltip */
@@ -550,6 +553,7 @@ class BaseSelectField extends React.Component<Props, State> {
     render() {
         const {
             className,
+            dropdownPlacement,
             multiple,
             isEscapedWithReference,
             isRightAligned,
@@ -566,7 +570,7 @@ class BaseSelectField extends React.Component<Props, State> {
         // 4) defaultValue, if defined, should mean selectedValues is never empty
         // 5) defaultValue, if defined, cannot be selected in addition to other options (must be exclusive)
 
-        const dropdownPlacement = isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START;
+        const placement = dropdownPlacement || (isRightAligned ? PLACEMENT_BOTTOM_END : PLACEMENT_BOTTOM_START);
         // popper.js modifier to allow dropdown to overflow its boundaries and remain attached to its reference
         const dropdownModifiers = isEscapedWithReference ? { preventOverflow: { escapeWithReference: true } } : {};
 
@@ -578,7 +582,7 @@ class BaseSelectField extends React.Component<Props, State> {
                 onKeyDown={this.handleKeyDown}
                 ref={this.selectFieldContainerRef}
             >
-                <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
+                <PopperComponent placement={placement} isOpen={isOpen} modifiers={dropdownModifiers}>
                     {this.renderSelectButton()}
                     <SelectFieldDropdown
                         isScrollable={isScrollable}
