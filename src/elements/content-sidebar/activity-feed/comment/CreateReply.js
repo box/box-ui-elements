@@ -24,6 +24,7 @@ type Props = {
     onClick: () => void,
     onFocus?: () => void,
     onSubmit: (reply: string) => void,
+    placeholder?: string,
     showReplyForm: boolean,
 };
 
@@ -36,10 +37,9 @@ const CreateReply = ({
     onCancel,
     onSubmit,
     onClick,
+    placeholder = intl.formatMessage(messages.replyInThread),
     showReplyForm,
 }: Props) => {
-    const placeholder = intl.formatMessage(messages.replyInThread);
-
     const handleSubmit = ({ text }: { text: string }) => {
         onSubmit(text);
     };

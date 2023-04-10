@@ -18,6 +18,9 @@ const onFocus = jest.fn();
 const onSubmit = jest.fn();
 const onClick = jest.fn();
 
+const replyInThreadMessage = localize(messages.replyInThread.id);
+const replyMessage = localize(messages.reply.id);
+
 const getWrapper = props =>
     render(
         <IntlProvider locale="en">
@@ -38,9 +41,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/CreateReply', () => {
         jest.restoreAllMocks();
     });
 
-    const replyMessage = localize(messages.reply.id);
-    const replyInThreadMessage = localize(messages.replyInThread.id);
-
     test('should correctly render CreateReply button', () => {
         getWrapper();
 
@@ -48,10 +48,18 @@ describe('elements/content-sidebar/ActivityFeed/comment/CreateReply', () => {
         expect(screen.queryByText(replyInThreadMessage)).not.toBeInTheDocument();
     });
 
-    test('should correctly render CreateReply form', () => {
+    test('should correctly render CreateReply form with default placeholder', () => {
         getWrapper({ showReplyForm: true });
 
         expect(screen.getByText(replyInThreadMessage)).toBeVisible();
+        expect(screen.queryByText(replyMessage)).not.toBeInTheDocument();
+    });
+
+    test('should correctly render CreateReply form with a passed in placeholder', () => {
+        getWrapper({ showReplyForm: true, placeholder: 'Reply to Task' });
+
+        expect(screen.getByText('Reply to Task')).toBeVisible();
+        expect(screen.queryByText(replyInThreadMessage)).not.toBeInTheDocument();
         expect(screen.queryByText(replyMessage)).not.toBeInTheDocument();
     });
 
