@@ -9,7 +9,6 @@ import { Replies } from '../BaseComment';
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
-    FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
 }));
 
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
@@ -38,13 +37,17 @@ const comment3 = {
     created_by: { name: 'Snoop Dogg', id: 12 },
     permissions: { can_delete: true, can_edit: true, can_resolve: true },
 };
-
+const replies = [comment, comment2, comment3];
 const currentUser = {
     name: 'testuser',
     id: 9,
 };
 
 const mockUserProfileUrl = jest.fn();
+const replySelect = jest.fn();
+const replyCreate = jest.fn();
+const showReplies = jest.fn();
+const hideReplies = jest.fn();
 
 const commentProps = {
     currentUser,
@@ -55,9 +58,6 @@ const commentProps = {
     translations: jest.fn(),
 };
 
-const replySelect = jest.fn();
-const replyCreate = jest.fn();
-
 const getWrapper = props =>
     render(
         <IntlProvider locale="en">
@@ -67,9 +67,11 @@ const getWrapper = props =>
                 hasReplies
                 isRepliesLoading={false}
                 isParentPending={false}
-                replies={[comment, comment2, comment3]}
+                replies={replies}
                 onReplySelect={replySelect}
                 onReplyCreate={replyCreate}
+                onShowReplies={showReplies}
+                onHideReplies={hideReplies}
                 {...props}
             />
         </IntlProvider>,
@@ -95,6 +97,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
         expect(screen.getByText(comment3.created_by.name)).toBeVisible();
         expect(screen.getAllByText('Sep 27, 2017').length).toBe(2);
         expect(screen.getByText('Sep 28, 2017')).toBeVisible();
+        expect(screen.getByRole('button', { name: 'Reply' })).toBeVisible();
         expect(screen.queryByTestId('replies-loading')).not.toBeInTheDocument();
     });
 
@@ -127,7 +130,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
     });
 
     test('should not be able to click reply if parent is pending', () => {
-        // Mock DraftJS editor and intercept onChange since DraftJS doesn't have a value setter
         getWrapper({ isParentPending: true });
 
         const replyButton = screen.getByRole('button', { name: 'Reply' });
@@ -166,5 +168,30 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
         fireEvent.click(screen.getByText('Post'));
         expect(replyCreate).toBeCalledTimes(1);
         expect(replyCreate).toBeCalledWith('Batman');
+    });
+
+    test('should show Hide Replies and call onHideReplies when clicked', () => {
+        getWrapper({ repliesTotalCount: 3 });
+
+        expect(screen.getByText('Hide replies')).toBeVisible();
+        fireEvent.click(screen.getByText('Hide replies'));
+
+        expect(hideReplies).toBeCalledTimes(1);
+        expect(hideReplies).toBeCalledWith([comment3]);
+        expect(showReplies).not.toBeCalled();
+    });
+
+    test('should show Show Replies and call onShowReplies when clicked', () => {
+        const totalCount = 5;
+        const countDifference = totalCount - replies.length;
+
+        getWrapper({ repliesTotalCount: totalCount });
+
+        expect(screen.getByText(`See ${countDifference} replies`)).toBeVisible();
+        expect(screen.queryByText('Hide replies')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByText(`See ${countDifference} replies`));
+
+        expect(showReplies).toBeCalledTimes(1);
+        expect(hideReplies).not.toBeCalled();
     });
 });

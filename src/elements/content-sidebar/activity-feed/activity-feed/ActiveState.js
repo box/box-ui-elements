@@ -185,12 +185,15 @@ const ActiveState = ({
                                         onEdit={onCommentEdit}
                                         onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                         onSelect={onCommentSelectHandler(item.id)}
+                                        onShowReplies={() => onShowReplies(item.id, item.type)}
+                                        onHideReplies={shownReplies => onHideReplies(item.id, shownReplies)}
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),
                                             can_edit: getProp(item.permissions, 'can_edit', false),
                                             can_reply: getProp(item.permissions, 'can_reply', false),
                                             can_resolve: getProp(item.permissions, 'can_resolve', false),
                                         }}
+                                        repliesTotalCount={item.total_reply_count}
                                         translations={translations}
                                     />
                                 ) : (

@@ -4,11 +4,11 @@ $repliesPaddingLeft: 40px;
 
 .bcs-BaseComment {
     .bcs-Comment-timestamp {
-        margin-bottom: 16px;
+        margin-bottom: $bdl-grid-unit * 4;
     }
 
     .bcs-ActivityTimestamp {
-        color: $bdl-gray;
+        color: $bdl-gray-65;
     }
 
     .bcs-CommentForm-input {

@@ -17,6 +17,7 @@ import LoadingIndicator from '../../../../components/loading-indicator';
 import Media from '../../../../components/media';
 import messages from './messages';
 import Pencil16 from '../../../../icon/line/Pencil16';
+import RepliesToggle from './RepliesToggle';
 import Trash16 from '../../../../icon/line/Trash16';
 import UserLink from '../common/user-link';
 import X16 from '../../../../icon/fill/X16';
@@ -62,10 +63,13 @@ type BaseCommentProps = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
+    onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
     onSelect: (isSelected: boolean) => void,
+    onShowReplies?: () => void,
     permissions: BoxCommentPermission,
     replies?: CommentType[],
+    repliesTotalCount?: number,
     status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -97,7 +101,10 @@ const BaseComment = (props: BaseCommentProps) => {
         onEdit,
         onSelect,
         onReplyCreate = noop,
+        onShowReplies = noop,
+        onHideReplies = noop,
         replies = [],
+        repliesTotalCount = 0,
         status,
     } = props;
 
@@ -320,7 +327,10 @@ const BaseComment = (props: BaseCommentProps) => {
                     isParentPending={isPending}
                     onReplySelect={onSelect}
                     onReplyCreate={onReplyCreate}
+                    onShowReplies={onShowReplies}
+                    onHideReplies={onHideReplies}
                     replies={replies}
+                    repliesTotalCount={repliesTotalCount}
                 />
             )}
         </div>
@@ -336,9 +346,12 @@ type RepliesProps = {
     isParentPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
     onReplySelect?: (isSelected: boolean) => void,
+    onShowReplies?: () => void,
     replies: CommentType[],
+    repliesTotalCount?: number,
     translations?: Translations,
 };
 
@@ -350,9 +363,12 @@ const Replies = ({
     isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
-    onReplyCreate = noop,
+    onReplyCreate,
     onReplySelect = noop,
+    onShowReplies,
+    onHideReplies,
     replies,
+    repliesTotalCount = 0,
     translations,
 }: RepliesProps) => {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
@@ -380,8 +396,18 @@ const Replies = ({
         onReplyCreate(reply);
     };
 
+    const showRepliesToggle = !!onShowReplies && !!onHideReplies;
+
     return (
         <div className="bcs-Replies">
+            {showRepliesToggle && (
+                <RepliesToggle
+                    onShowReplies={onShowReplies}
+                    onHideReplies={index => onHideReplies([replies[index]])}
+                    repliesShownCount={replies.length}
+                    repliesTotalCount={repliesTotalCount}
+                />
+            )}
             <div className="bcs-Replies-content">
                 {isRepliesLoading && (
                     <div className="bcs-Replies-loading" data-testid="replies-loading">
@@ -413,16 +439,18 @@ const Replies = ({
                     })}
                 </ol>
             </div>
-            <CreateReply
-                mentionSelectorContacts={mentionSelectorContacts}
-                getMentionWithQuery={getMentionWithQuery}
-                isDisabled={isParentPending}
-                onFocus={() => onReplySelect(true)}
-                onCancel={handleCancelNewReply}
-                onSubmit={handleSubmitNewReply}
-                onClick={handleNewReplyButton}
-                showReplyForm={showReplyForm}
-            />
+            {!!onReplyCreate && (
+                <CreateReply
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    getMentionWithQuery={getMentionWithQuery}
+                    isDisabled={isParentPending}
+                    onFocus={() => onReplySelect(true)}
+                    onCancel={handleCancelNewReply}
+                    onSubmit={handleSubmitNewReply}
+                    onClick={handleNewReplyButton}
+                    showReplyForm={showReplyForm}
+                />
+            )}
         </div>
     );
 };

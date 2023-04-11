@@ -46,11 +46,16 @@ const currentUser = {
 
 const replyCreate = jest.fn();
 const onSelect = jest.fn();
+const hideReplies = jest.fn();
+const showReplies = jest.fn();
 
+const replies = [reply1, reply2];
 const repliesProps = {
     hasReplies: true,
     onReplyCreate: replyCreate,
-    replies: [reply1, reply2],
+    replies,
+    onHideReplies: hideReplies,
+    onShowReplies: showReplies,
 };
 
 const getWrapper = props =>
@@ -339,5 +344,30 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
         fireEvent.click(screen.getByText('Post'));
         expect(replyCreate).toBeCalledTimes(1);
         expect(replyCreate).toBeCalledWith('Batman');
+    });
+
+    test('should show Hide Replies and call onHideReplies when clicked', () => {
+        getWrapper({ ...repliesProps, repliesTotalCount: 2 });
+
+        expect(screen.getByText('Hide replies')).toBeVisible();
+        fireEvent.click(screen.getByText('Hide replies'));
+
+        expect(hideReplies).toBeCalledTimes(1);
+        expect(hideReplies).toBeCalledWith([reply2]);
+        expect(showReplies).not.toBeCalled();
+    });
+
+    test('should show Show Replies and call onShowReplies when clicked', () => {
+        const totalCount = 5;
+
+        getWrapper({ ...repliesProps, repliesTotalCount: totalCount });
+
+        // react-intl mocking problem with variables
+        expect(screen.getByText(/See/i)).toBeVisible();
+        expect(screen.queryByText('Hide replies')).not.toBeInTheDocument();
+        fireEvent.click(screen.getByText(/See/i));
+
+        expect(showReplies).toBeCalledTimes(1);
+        expect(hideReplies).not.toBeCalled();
     });
 });
