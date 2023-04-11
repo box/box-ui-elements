@@ -3,6 +3,7 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { ContentState, EditorState } from 'draft-js';
 import { BaseComment } from '../BaseComment';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -13,15 +14,43 @@ jest.mock('react-intl', () => ({
 
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
 const TIME_STRING_SEPT_28_2017 = '2017-09-28T10:40:41-07:00';
+const TIME_STRING_SEPT_29_2017 = '2017-09-29T10:40:41-07:00';
 const comment = {
     created_at: TIME_STRING_SEPT_27_2017,
     tagged_message: 'test',
     created_by: { name: '50 Cent', id: 10 },
     permissions: { can_delete: true, can_edit: true, can_resolve: true },
 };
+
+const reply1 = {
+    id: 2,
+    type: 'comment',
+    created_at: TIME_STRING_SEPT_28_2017,
+    tagged_message: 'test reply 1',
+    created_by: { name: 'Eminem', id: 11 },
+    permissions: { can_delete: true, can_edit: true, can_resolve: true },
+};
+const reply2 = {
+    id: 3,
+    type: 'comment',
+    created_at: TIME_STRING_SEPT_29_2017,
+    tagged_message: 'test reply 2',
+    created_by: { name: 'Snoop Dogg', id: 12 },
+    permissions: { can_delete: true, can_edit: true, can_resolve: true },
+};
+
 const currentUser = {
     name: 'testuser',
     id: 11,
+};
+
+const replyCreate = jest.fn();
+const onSelect = jest.fn();
+
+const repliesProps = {
+    hasReplies: true,
+    onReplyCreate: replyCreate,
+    replies: [reply1, reply2],
 };
 
 const getWrapper = props =>
@@ -33,19 +62,27 @@ const getWrapper = props =>
                 approverSelectorContacts={[]}
                 currentUser={currentUser}
                 mentionSelectorContacts={[]}
-                onSelect={jest.fn()}
+                onSelect={onSelect}
                 {...props}
             />
         </IntlProvider>,
     );
 
 describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
-    test('should correctly render comment', () => {
-        getWrapper();
+    test('should correctly render comment with replies', () => {
+        getWrapper({ ...repliesProps });
         // validating that the Tooltip and the comment posted time are properly set
         expect(screen.getByText(comment.tagged_message)).toBeInTheDocument();
         expect(screen.getByText(comment.created_by.name)).toBeInTheDocument();
         expect(screen.getByText('Sep 27, 2017')).toBeInTheDocument();
+        // reply 1
+        expect(screen.getByText(reply1.tagged_message)).toBeInTheDocument();
+        expect(screen.getByText(reply1.created_by.name)).toBeInTheDocument();
+        expect(screen.getByText('Sep 28, 2017')).toBeInTheDocument();
+        // reply 2
+        expect(screen.getByText(reply2.tagged_message)).toBeInTheDocument();
+        expect(screen.getByText(reply2.created_by.name)).toBeInTheDocument();
+        expect(screen.getByText('Sep 29, 2017')).toBeInTheDocument();
     });
 
     test('should correctly render comment when translation is enabled', () => {
@@ -256,4 +293,51 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
             expect(screen.queryByText('\\ (edited)')).not.toBeInTheDocument();
         },
     );
+
+    test.each`
+        index
+        ${0}
+        ${1}
+        ${2}
+    `(`should call onSelect when More Options is clicked for comment/reply #$index`, ({ index }) => {
+        getWrapper({ ...repliesProps });
+
+        expect(screen.getByText(comment.tagged_message)).toBeInTheDocument();
+        fireEvent.click(screen.getByText(comment.tagged_message));
+        expect(onSelect).not.toBeCalled();
+
+        expect(screen.getAllByTestId('comment-actions-menu').length).toBe(3);
+        fireEvent.click(screen.getAllByTestId('comment-actions-menu')[index]);
+        expect(onSelect).toBeCalledTimes(1);
+        expect(onSelect).toBeCalledWith(true);
+    });
+
+    test('should call onReplyCreate when reply is created', () => {
+        // Mock DraftJS editor and intercept onChange since DraftJS doesn't have a value setter
+        const draftjs = require('draft-js');
+        draftjs.Editor = jest.fn(props => {
+            const modifiedOnchange = e => {
+                const text = e.target.value;
+                const content = ContentState.createFromText(text);
+                props.onChange(EditorState.createWithContent(content));
+            };
+            return <input className="editor" onChange={e => modifiedOnchange(e)} />;
+        });
+
+        getWrapper({ ...repliesProps });
+
+        const replyButton = screen.getByRole('button', { name: 'Reply' });
+
+        expect(replyButton).toBeVisible();
+        fireEvent.click(replyButton);
+
+        expect(onSelect).toBeCalledTimes(1);
+        expect(onSelect).toBeCalledWith(true);
+
+        fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Batman' } });
+
+        fireEvent.click(screen.getByText('Post'));
+        expect(replyCreate).toBeCalledTimes(1);
+        expect(replyCreate).toBeCalledWith('Batman');
+    });
 });

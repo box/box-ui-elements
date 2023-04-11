@@ -183,6 +183,7 @@ const ActiveState = ({
                                         mentionSelectorContacts={mentionSelectorContacts}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
+                                        onReplyCreate={onReplyCreateHandler(item.id, item.type)}
                                         onSelect={onCommentSelectHandler(item.id)}
                                         permissions={{
                                             can_delete: getProp(item.permissions, 'can_delete', false),

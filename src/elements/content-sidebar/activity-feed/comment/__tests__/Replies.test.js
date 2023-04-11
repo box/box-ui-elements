@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { ContentState, EditorState } from 'draft-js';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Replies } from '../BaseComment';
 
@@ -55,6 +56,7 @@ const commentProps = {
 };
 
 const replySelect = jest.fn();
+const replyCreate = jest.fn();
 
 const getWrapper = props =>
     render(
@@ -64,8 +66,10 @@ const getWrapper = props =>
                 parentID="123"
                 hasReplies
                 isRepliesLoading={false}
+                isParentPending={false}
                 replies={[comment, comment2, comment3]}
                 onReplySelect={replySelect}
+                onReplyCreate={replyCreate}
                 {...props}
             />
         </IntlProvider>,
@@ -74,6 +78,10 @@ const getWrapper = props =>
 describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
     beforeAll(() => {
         mockUserProfileUrl.mockResolvedValue('https://www.test.com/');
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     test('should correctly render replies', () => {
@@ -116,5 +124,47 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
 
         expect(replySelect).toBeCalledTimes(1);
         expect(replySelect).toBeCalledWith(true);
+    });
+
+    test('should not be able to click reply if parent is pending', () => {
+        // Mock DraftJS editor and intercept onChange since DraftJS doesn't have a value setter
+        getWrapper({ isParentPending: true });
+
+        const replyButton = screen.getByRole('button', { name: 'Reply' });
+
+        expect(replyButton).toHaveAttribute('aria-disabled', 'true');
+        expect(replyButton).toBeVisible();
+        fireEvent.click(replyButton);
+
+        expect(replySelect).not.toBeCalled();
+    });
+
+    test('should call onReplyCreate when reply is created', () => {
+        // Mock DraftJS editor and intercept onChange since DraftJS doesn't have a value setter
+        const draftjs = require('draft-js');
+        draftjs.Editor = jest.fn(props => {
+            const modifiedOnchange = e => {
+                const text = e.target.value;
+                const content = ContentState.createFromText(text);
+                props.onChange(EditorState.createWithContent(content));
+            };
+            return <input className="editor" onChange={e => modifiedOnchange(e)} />;
+        });
+
+        getWrapper();
+
+        const replyButton = screen.getByRole('button', { name: 'Reply' });
+
+        expect(replyButton).toBeVisible();
+        fireEvent.click(replyButton);
+
+        expect(replySelect).toBeCalledTimes(1);
+        expect(replySelect).toBeCalledWith(true);
+
+        fireEvent.change(screen.getByRole('textbox'), { target: { value: 'Batman' } });
+
+        fireEvent.click(screen.getByText('Post'));
+        expect(replyCreate).toBeCalledTimes(1);
+        expect(replyCreate).toBeCalledWith('Batman');
     });
 });

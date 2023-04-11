@@ -11,6 +11,7 @@ import ActivityTimestamp from '../common/activity-timestamp';
 import Avatar from '../Avatar';
 import Checkmark16 from '../../../../icon/line/Checkmark16';
 import CommentForm from '../comment-form';
+import CreateReply from './CreateReply';
 import DeleteConfirmation from '../common/delete-confirmation';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import Media from '../../../../components/media';
@@ -61,7 +62,7 @@ type BaseCommentProps = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
-    onReplySelect?: (isSelected: boolean) => void,
+    onReplyCreate?: (reply: string) => void,
     onSelect: (isSelected: boolean) => void,
     permissions: BoxCommentPermission,
     replies?: CommentType[],
@@ -78,7 +79,7 @@ const BaseComment = (props: BaseCommentProps) => {
         created_at,
         permissions = {},
         id,
-        isPending,
+        isPending = false,
         isRepliesLoading = false,
         error,
         tagged_message = '',
@@ -95,7 +96,7 @@ const BaseComment = (props: BaseCommentProps) => {
         onDelete,
         onEdit,
         onSelect,
-        onReplySelect = noop,
+        onReplyCreate = noop,
         replies = [],
         status,
     } = props;
@@ -104,57 +105,49 @@ const BaseComment = (props: BaseCommentProps) => {
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
 
-    const selectComment = (isSelected: boolean = true): void => {
-        onSelect(isSelected);
-    };
-
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
-        selectComment(false);
+        onSelect(false);
     };
 
     const handleDeleteCancel = (): void => {
         setIsConfirmingDelete(false);
-        selectComment(false);
+        onSelect(false);
     };
 
     const handleDeleteClick = (): void => {
         setIsConfirmingDelete(true);
-        selectComment();
+        onSelect(true);
     };
 
     const handleEditClick = (): void => {
         setIsEditing(true);
         setIsInputOpen(true);
-        selectComment();
+        onSelect(true);
     };
 
     const handleMenuClose = (): void => {
         if (isConfirmingDelete || isEditing || isInputOpen) {
             return;
         }
-        selectComment(false);
-    };
-
-    const handleMenuOpen = (): void => {
-        selectComment();
+        onSelect(false);
     };
 
     const commentFormFocusHandler = (): void => {
         setIsInputOpen(true);
-        selectComment();
+        onSelect(true);
     };
 
     const commentFormCancelHandler = (): void => {
         setIsInputOpen(false);
         setIsEditing(false);
-        selectComment(false);
+        onSelect(false);
     };
 
     const commentFormSubmitHandler = (): void => {
         setIsInputOpen(false);
         setIsEditing(false);
-        selectComment(false);
+        onSelect(false);
     };
 
     const handleMessageUpdate = ({
@@ -214,7 +207,7 @@ const BaseComment = (props: BaseCommentProps) => {
                                 isDisabled={isConfirmingDelete}
                                 data-testid="comment-actions-menu"
                                 dropdownProps={{
-                                    onMenuOpen: handleMenuOpen,
+                                    onMenuOpen: () => onSelect(true),
                                     onMenuClose: handleMenuClose,
                                 }}
                                 menuProps={{
@@ -324,7 +317,9 @@ const BaseComment = (props: BaseCommentProps) => {
                 <Replies
                     {...commentProps}
                     isRepliesLoading={isRepliesLoading}
-                    onReplySelect={onReplySelect}
+                    isParentPending={isPending}
+                    onReplySelect={onSelect}
+                    onReplyCreate={onReplyCreate}
                     replies={replies}
                 />
             )}
@@ -338,8 +333,10 @@ type RepliesProps = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
+    isParentPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onReplyCreate?: (reply: string) => void,
     onReplySelect?: (isSelected: boolean) => void,
     replies: CommentType[],
     translations?: Translations,
@@ -350,12 +347,15 @@ const Replies = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
+    onReplyCreate = noop,
     onReplySelect = noop,
     replies,
     translations,
 }: RepliesProps) => {
+    const [showReplyForm, setShowReplyForm] = React.useState(false);
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
         const { permissions: { can_delete = false, can_edit = false, can_resolve = false } = {} } = reply;
         return {
@@ -363,6 +363,21 @@ const Replies = ({
             can_edit,
             can_resolve,
         };
+    };
+
+    const handleNewReplyButton = () => {
+        setShowReplyForm(true);
+        onReplySelect(true);
+    };
+
+    const handleCancelNewReply = () => {
+        setShowReplyForm(false);
+        onReplySelect(false);
+    };
+
+    const handleSubmitNewReply = (reply: string) => {
+        setShowReplyForm(false);
+        onReplyCreate(reply);
     };
 
     return (
@@ -385,6 +400,7 @@ const Replies = ({
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
+                                    isPending={isParentPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onSelect={onReplySelect}
                                     onDelete={noop}
@@ -397,6 +413,16 @@ const Replies = ({
                     })}
                 </ol>
             </div>
+            <CreateReply
+                mentionSelectorContacts={mentionSelectorContacts}
+                getMentionWithQuery={getMentionWithQuery}
+                isDisabled={isParentPending}
+                onFocus={() => onReplySelect(true)}
+                onCancel={handleCancelNewReply}
+                onSubmit={handleSubmitNewReply}
+                onClick={handleNewReplyButton}
+                showReplyForm={showReplyForm}
+            />
         </div>
     );
 };
