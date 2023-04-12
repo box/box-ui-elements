@@ -23,16 +23,14 @@ const AdvancedContentInsightsToggle = ({
     isDisabled,
     onChange = noop,
 }: Props) => {
-    const helpLink = !hasTooltip && (
-        <a href="https://support.box.com" rel="noopener noreferrer" target="_blank">
-            <FormattedMessage {...messages.learnMore} />
-        </a>
-    );
-
-    const description = <FormattedMessage {...messages.advancedContentInsightsDescription} values={{ helpLink }} />;
+    const description = <FormattedMessage {...messages.advancedContentInsightsDescription} />;
     const label = (
         <>
-            <FormattedMessage {...messages.advancedContentInsightsTitle} />
+            <FormattedMessage
+                {...(isChecked
+                    ? messages.advancedContentInsightsTitleEnabled
+                    : messages.advancedContentInsightsTitleDisabled)}
+            />
             {hasTooltip && (
                 <Tooltip text={description}>
                     <div className="AdvancedContentInsightsToggle-icon">
@@ -47,7 +45,7 @@ const AdvancedContentInsightsToggle = ({
         <Toggle
             className="AdvancedContentInsightsToggle"
             data-testid="insights-toggle"
-            description={!hasTooltip && description}
+            description={!hasTooltip && !isChecked && description}
             isDisabled={isDisabled}
             isOn={isChecked}
             label={label}

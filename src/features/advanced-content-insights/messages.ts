@@ -1,22 +1,21 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    advancedContentInsightsTitle: {
-        defaultMessage: 'Advanced Insights',
+    advancedContentInsightsTitleEnabled: {
+        defaultMessage: 'Engagement Insights is activated',
         description: 'Advanced Content Insights toggle title',
-        id: 'boxui.advancedContentInsights.advancedContentInsightsTitle',
+        id: 'boxui.advancedContentInsights.advancedContentInsightsTitleEnabled',
+    },
+    advancedContentInsightsTitleDisabled: {
+        defaultMessage: 'Activate Engagement Insights',
+        description: 'Advanced Content Insights toggle title',
+        id: 'boxui.advancedContentInsights.advancedContentInsightsTitleDisabled',
     },
     advancedContentInsightsDescription: {
         defaultMessage:
-            'Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}',
+            'Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details.',
         description: 'Description text about advanced content insights.',
         id: 'boxui.advancedContentInsights.advancedContentInsightsDescription',
-    },
-    learnMore: {
-        defaultMessage: 'Learn more.',
-        description:
-            'Text for a link that goes to an external page with more information about Advanced Content Insights',
-        id: 'boxui.advancedContentInsights.learnMore',
     },
 });
 
