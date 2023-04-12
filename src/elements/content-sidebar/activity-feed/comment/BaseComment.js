@@ -363,10 +363,10 @@ const Replies = ({
     isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
-    onReplyCreate,
+    onReplyCreate = noop,
     onReplySelect = noop,
-    onShowReplies,
-    onHideReplies,
+    onShowReplies = noop,
+    onHideReplies = noop,
     replies,
     repliesTotalCount = 0,
     translations,
@@ -396,18 +396,14 @@ const Replies = ({
         onReplyCreate(reply);
     };
 
-    const showRepliesToggle = !!onShowReplies && !!onHideReplies;
-
     return (
         <div className="bcs-Replies">
-            {showRepliesToggle && (
-                <RepliesToggle
-                    onShowReplies={onShowReplies}
-                    onHideReplies={index => onHideReplies([replies[index]])}
-                    repliesShownCount={replies.length}
-                    repliesTotalCount={repliesTotalCount}
-                />
-            )}
+            <RepliesToggle
+                onShowReplies={onShowReplies}
+                onHideReplies={index => onHideReplies([replies[index]])}
+                repliesShownCount={replies.length}
+                repliesTotalCount={repliesTotalCount}
+            />
             <div className="bcs-Replies-content">
                 {isRepliesLoading && (
                     <div className="bcs-Replies-loading" data-testid="replies-loading">
@@ -439,18 +435,16 @@ const Replies = ({
                     })}
                 </ol>
             </div>
-            {!!onReplyCreate && (
-                <CreateReply
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    getMentionWithQuery={getMentionWithQuery}
-                    isDisabled={isParentPending}
-                    onFocus={() => onReplySelect(true)}
-                    onCancel={handleCancelNewReply}
-                    onSubmit={handleSubmitNewReply}
-                    onClick={handleNewReplyButton}
-                    showReplyForm={showReplyForm}
-                />
-            )}
+            <CreateReply
+                mentionSelectorContacts={mentionSelectorContacts}
+                getMentionWithQuery={getMentionWithQuery}
+                isDisabled={isParentPending}
+                onFocus={() => onReplySelect(true)}
+                onCancel={handleCancelNewReply}
+                onSubmit={handleSubmitNewReply}
+                onClick={handleNewReplyButton}
+                showReplyForm={showReplyForm}
+            />
         </div>
     );
 };
