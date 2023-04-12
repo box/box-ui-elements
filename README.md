@@ -1,6 +1,6 @@
 <p align="center">
   <img width="50%" alt="Box Elements logo" src="https://repository-images.githubusercontent.com/95743138/c161b500-021b-11ea-8bf9-3aa8776acdec" />
-  <img width="50%" alt="Box Developer logo" src="https://raw.githubusercontent.com/box/sdks/f55569c6f023a5dfddad96729b87a259c9bf4113/images/box-dev-logo.png" />
+  <img width="50%" alt="Box Developer logo" src="https://raw.githubusercontent.com/box/sdks/ded98439b27c2e635c45607131c54e1b6075e252/images/box-dev-logo.png" />
 </p>
 
 [![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)](http://opensource.box.com/badges)
