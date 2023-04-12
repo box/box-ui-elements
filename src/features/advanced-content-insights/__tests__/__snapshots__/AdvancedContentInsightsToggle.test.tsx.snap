@@ -10,8 +10,8 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
   label={
     <React.Fragment>
       <FormattedMessage
-        defaultMessage="Advanced Insights"
-        id="boxui.advancedContentInsights.advancedContentInsightsTitle"
+        defaultMessage="Engagement Insights is activated"
+        id="boxui.advancedContentInsights.advancedContentInsightsTitleEnabled"
       />
       <Tooltip
         constrainToScrollParent={false}
@@ -20,13 +20,8 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
         position="top-center"
         text={
           <FormattedMessage
-            defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details. {helpLink}"
+            defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details."
             id="boxui.advancedContentInsights.advancedContentInsightsDescription"
-            values={
-              Object {
-                "helpLink": false,
-              }
-            }
           />
         }
         theme="default"
