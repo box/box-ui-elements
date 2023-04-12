@@ -20,7 +20,11 @@ $repliesPaddingLeft: 40px;
     }
 
     .bcs-Replies {
-        margin: $bdl-grid-unit * 4 0;
+        margin: $bdl-grid-unit * 3 0;
         padding-left: $repliesPaddingLeft;
+    }
+
+    .bcs-Comment-media {
+        margin-bottom: $bdl-grid-unit * 3;
     }
 }
