@@ -32,7 +32,7 @@ const RepliesToggle = ({ onShowReplies, onHideReplies, repliesShownCount, replie
     };
 
     return (
-        <PlainButton className="bcs-RepliesToggle" onClick={handleToggle} type="button">
+        <PlainButton className="bcs-RepliesToggle" onClick={handleToggle} type="button" data-testid="replies-toggle">
             <FormattedMessage values={{ repliesToLoadCount }} {...toggleMessage} />
         </PlainButton>
     );

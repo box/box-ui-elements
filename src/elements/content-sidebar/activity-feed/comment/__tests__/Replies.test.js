@@ -173,6 +173,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
     test('should show Hide Replies and call onHideReplies when clicked', () => {
         getWrapper({ repliesTotalCount: 3 });
 
+        expect(screen.getByTestId('replies-toggle')).toBeVisible();
         expect(screen.getByText('Hide replies')).toBeVisible();
         fireEvent.click(screen.getByText('Hide replies'));
 
@@ -187,11 +188,32 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
 
         getWrapper({ repliesTotalCount: totalCount });
 
+        expect(screen.getByTestId('replies-toggle')).toBeVisible();
         expect(screen.getByText(`See ${countDifference} replies`)).toBeVisible();
         expect(screen.queryByText('Hide replies')).not.toBeInTheDocument();
         fireEvent.click(screen.getByText(`See ${countDifference} replies`));
 
         expect(showReplies).toBeCalledTimes(1);
         expect(hideReplies).not.toBeCalled();
+    });
+
+    test.each`
+        onShowReplies  | onHideReplies
+        ${showReplies} | ${undefined}
+        ${undefined}   | ${undefined}
+        ${undefined}   | ${hideReplies}
+    `(
+        `should not show replies toggle when onShowReplies is $onShowReplies and onHideReplies is $onHideReplies`,
+        ({ onShowReplies, onHideReplies }) => {
+            getWrapper({ onShowReplies, onHideReplies });
+
+            expect(screen.queryByTestId('replies-toggle')).not.toBeInTheDocument();
+        },
+    );
+
+    test('should not be able to see reply button when onReplyCreate is undefined', () => {
+        getWrapper({ onReplyCreate: undefined });
+
+        expect(screen.queryByRole('button', { name: 'Reply' })).not.toBeInTheDocument();
     });
 });

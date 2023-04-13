@@ -100,9 +100,9 @@ const BaseComment = (props: BaseCommentProps) => {
         onDelete,
         onEdit,
         onSelect,
-        onReplyCreate = noop,
-        onShowReplies = noop,
-        onHideReplies = noop,
+        onReplyCreate,
+        onShowReplies,
+        onHideReplies,
         replies = [],
         repliesTotalCount = 0,
         status,
@@ -363,10 +363,10 @@ const Replies = ({
     isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
-    onReplyCreate = noop,
+    onReplyCreate,
     onReplySelect = noop,
-    onShowReplies = noop,
-    onHideReplies = noop,
+    onShowReplies,
+    onHideReplies,
     replies,
     repliesTotalCount = 0,
     translations,
@@ -391,19 +391,21 @@ const Replies = ({
         onReplySelect(false);
     };
 
-    const handleSubmitNewReply = (reply: string) => {
+    const handleSubmitNewReply = (reply: string, replyCreate: (reply: string) => void) => {
         setShowReplyForm(false);
-        onReplyCreate(reply);
+        replyCreate(reply);
     };
 
     return (
         <div className="bcs-Replies">
-            <RepliesToggle
-                onHideReplies={index => onHideReplies([replies[index]])}
-                onShowReplies={onShowReplies}
-                repliesShownCount={replies.length}
-                repliesTotalCount={repliesTotalCount}
-            />
+            {!!onShowReplies && !!onHideReplies && (
+                <RepliesToggle
+                    onHideReplies={index => onHideReplies([replies[index]])}
+                    onShowReplies={onShowReplies}
+                    repliesShownCount={replies.length}
+                    repliesTotalCount={repliesTotalCount}
+                />
+            )}
             <div className="bcs-Replies-content">
                 {isRepliesLoading && (
                     <div className="bcs-Replies-loading" data-testid="replies-loading">
@@ -435,16 +437,18 @@ const Replies = ({
                     })}
                 </ol>
             </div>
-            <CreateReply
-                getMentionWithQuery={getMentionWithQuery}
-                isDisabled={isParentPending}
-                mentionSelectorContacts={mentionSelectorContacts}
-                onCancel={handleCancelNewReply}
-                onClick={handleNewReplyButton}
-                onFocus={() => onReplySelect(true)}
-                onSubmit={handleSubmitNewReply}
-                showReplyForm={showReplyForm}
-            />
+            {!!onReplyCreate && (
+                <CreateReply
+                    getMentionWithQuery={getMentionWithQuery}
+                    isDisabled={isParentPending}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onCancel={handleCancelNewReply}
+                    onClick={handleNewReplyButton}
+                    onFocus={() => onReplySelect(true)}
+                    onSubmit={reply => handleSubmitNewReply(reply, onReplyCreate)}
+                    showReplyForm={showReplyForm}
+                />
+            )}
         </div>
     );
 };
