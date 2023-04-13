@@ -323,12 +323,12 @@ const BaseComment = (props: BaseCommentProps) => {
             {hasReplies && (
                 <Replies
                     {...commentProps}
-                    isRepliesLoading={isRepliesLoading}
                     isParentPending={isPending}
-                    onReplySelect={onSelect}
-                    onReplyCreate={onReplyCreate}
-                    onShowReplies={onShowReplies}
+                    isRepliesLoading={isRepliesLoading}
                     onHideReplies={onHideReplies}
+                    onReplyCreate={onReplyCreate}
+                    onReplySelect={onSelect}
+                    onShowReplies={onShowReplies}
                     replies={replies}
                     repliesTotalCount={repliesTotalCount}
                 />
@@ -399,8 +399,8 @@ const Replies = ({
     return (
         <div className="bcs-Replies">
             <RepliesToggle
-                onShowReplies={onShowReplies}
                 onHideReplies={index => onHideReplies([replies[index]])}
+                onShowReplies={onShowReplies}
                 repliesShownCount={replies.length}
                 repliesTotalCount={repliesTotalCount}
             />
@@ -436,13 +436,13 @@ const Replies = ({
                 </ol>
             </div>
             <CreateReply
-                mentionSelectorContacts={mentionSelectorContacts}
                 getMentionWithQuery={getMentionWithQuery}
                 isDisabled={isParentPending}
-                onFocus={() => onReplySelect(true)}
+                mentionSelectorContacts={mentionSelectorContacts}
                 onCancel={handleCancelNewReply}
-                onSubmit={handleSubmitNewReply}
                 onClick={handleNewReplyButton}
+                onFocus={() => onReplySelect(true)}
+                onSubmit={handleSubmitNewReply}
                 showReplyForm={showReplyForm}
             />
         </div>

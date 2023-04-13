@@ -153,19 +153,20 @@ const ActiveState = ({
     return (
         <ul className="bcs-activity-feed-active-state">
             {items.map((item: FeedItem) => {
+                const { id, type, permissions, total_reply_count } = item;
                 const isFocused = item === activeFeedItem;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
                 const itemFileVersionId = getProp(item, 'file_version.id');
                 const replyProps = {
                     hasReplies,
-                    onReplySelect: onCommentSelectHandler(item.id),
+                    onReplySelect: onCommentSelectHandler(id),
                 };
 
-                switch (item.type) {
+                switch (type) {
                     case FEED_ITEM_TYPE_COMMENT:
                         return (
                             <ActivityItem
-                                key={item.type + item.id}
+                                key={type + id}
                                 data-testid="comment"
                                 isFocused={isFocused}
                                 isHoverable
@@ -183,17 +184,17 @@ const ActiveState = ({
                                         mentionSelectorContacts={mentionSelectorContacts}
                                         onDelete={onCommentDelete}
                                         onEdit={onCommentEdit}
-                                        onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
-                                        onSelect={onCommentSelectHandler(item.id)}
-                                        onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_COMMENT)}
-                                        onHideReplies={shownReplies => onHideReplies(item.id, shownReplies)}
+                                        onReplyCreate={reply => onReplyCreate(id, FEED_ITEM_TYPE_COMMENT, reply)}
+                                        onSelect={onCommentSelectHandler(id)}
+                                        onShowReplies={() => onShowReplies(id, FEED_ITEM_TYPE_COMMENT)}
+                                        onHideReplies={shownReplies => onHideReplies(id, shownReplies)}
                                         permissions={{
-                                            can_delete: getProp(item.permissions, 'can_delete', false),
-                                            can_edit: getProp(item.permissions, 'can_edit', false),
-                                            can_reply: getProp(item.permissions, 'can_reply', false),
-                                            can_resolve: getProp(item.permissions, 'can_resolve', false),
+                                            can_delete: getProp(permissions, 'can_delete', false),
+                                            can_edit: getProp(permissions, 'can_edit', false),
+                                            can_reply: getProp(permissions, 'can_reply', false),
+                                            can_resolve: getProp(permissions, 'can_resolve', false),
                                         }}
-                                        repliesTotalCount={item.total_reply_count}
+                                        repliesTotalCount={total_reply_count}
                                         translations={translations}
                                     />
                                 ) : (
