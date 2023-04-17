@@ -3,6 +3,7 @@
 exports[`features/collaborator-avatars/CollaboratorAvatars render() should render component if collaborators.length > maxDisplayedUserAvatars 1`] = `
 <PlainButton
   aria-hidden="false"
+  autoFocus={true}
   className="collaborator-avatar-container"
   type="button"
 >
@@ -46,6 +47,7 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
 exports[`features/collaborator-avatars/CollaboratorAvatars render() should render component if collaborators.length - maxDisplayedUserAvatars > maxAdditionalCollaboratorsNum 1`] = `
 <PlainButton
   aria-hidden="false"
+  autoFocus={true}
   className="collaborator-avatar-container"
   type="button"
 >
@@ -83,6 +85,7 @@ exports[`features/collaborator-avatars/CollaboratorAvatars render() should rende
 exports[`features/collaborator-avatars/CollaboratorAvatars render() should render default component 1`] = `
 <PlainButton
   aria-hidden="false"
+  autoFocus={true}
   className="collaborator-avatar-container"
   type="button"
 >

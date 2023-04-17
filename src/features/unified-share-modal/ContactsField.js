@@ -196,7 +196,6 @@ class ContactsField extends React.Component<Props, State> {
                 getPillClassName={getPillClassName}
                 getPillImageUrl={getContactAvatarUrl}
                 inputProps={{
-                    autoFocus: true,
                     onChange: noop,
                 }}
                 label={label}

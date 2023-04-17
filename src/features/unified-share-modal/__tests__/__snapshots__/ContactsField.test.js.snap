@@ -46,7 +46,6 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   error=""
   inputProps={
     Object {
-      "autoFocus": true,
       "onChange": [Function],
     }
   }
@@ -239,7 +238,6 @@ exports[`features/unified-share-modal/ContactsField render should render default
   error=""
   inputProps={
     Object {
-      "autoFocus": true,
       "onChange": [Function],
     }
   }

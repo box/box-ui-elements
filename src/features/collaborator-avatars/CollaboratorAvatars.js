@@ -61,12 +61,13 @@ class CollaboratorAvatars extends Component<Props> {
 
         return (
             <PlainButton
+                aria-hidden={this.isVisible() ? 'false' : 'true'}
+                autoFocus
                 className={classNames('collaborator-avatar-container', {
                     'are-avatars-hidden': !this.isVisible(),
                 })}
                 onClick={onClick}
                 {...containerAttributes}
-                aria-hidden={this.isVisible() ? 'false' : 'true'}
                 type="button"
             >
                 <div className="avatars-label">
