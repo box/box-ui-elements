@@ -11,11 +11,13 @@ import ActivityTimestamp from '../common/activity-timestamp';
 import Avatar from '../Avatar';
 import Checkmark16 from '../../../../icon/line/Checkmark16';
 import CommentForm from '../comment-form';
+import CreateReply from './CreateReply';
 import DeleteConfirmation from '../common/delete-confirmation';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import Media from '../../../../components/media';
 import messages from './messages';
 import Pencil16 from '../../../../icon/line/Pencil16';
+import RepliesToggle from './RepliesToggle';
 import Trash16 from '../../../../icon/line/Trash16';
 import UserLink from '../common/user-link';
 import X16 from '../../../../icon/fill/X16';
@@ -61,10 +63,13 @@ type BaseCommentProps = {
         onSuccess: ?Function,
         onError: ?Function,
     ) => void,
-    onReplySelect?: (isSelected: boolean) => void,
+    onHideReplies?: (shownReplies: CommentType[]) => void,
+    onReplyCreate?: (reply: string) => void,
     onSelect: (isSelected: boolean) => void,
+    onShowReplies?: () => void,
     permissions: BoxCommentPermission,
     replies?: CommentType[],
+    repliesTotalCount?: number,
     status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -78,7 +83,7 @@ const BaseComment = (props: BaseCommentProps) => {
         created_at,
         permissions = {},
         id,
-        isPending,
+        isPending = false,
         isRepliesLoading = false,
         error,
         tagged_message = '',
@@ -95,8 +100,11 @@ const BaseComment = (props: BaseCommentProps) => {
         onDelete,
         onEdit,
         onSelect,
-        onReplySelect = noop,
+        onReplyCreate,
+        onShowReplies,
+        onHideReplies,
         replies = [],
+        repliesTotalCount = 0,
         status,
     } = props;
 
@@ -104,57 +112,49 @@ const BaseComment = (props: BaseCommentProps) => {
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
 
-    const selectComment = (isSelected: boolean = true): void => {
-        onSelect(isSelected);
-    };
-
     const handleDeleteConfirm = (): void => {
         onDelete({ id, permissions });
-        selectComment(false);
+        onSelect(false);
     };
 
     const handleDeleteCancel = (): void => {
         setIsConfirmingDelete(false);
-        selectComment(false);
+        onSelect(false);
     };
 
     const handleDeleteClick = (): void => {
         setIsConfirmingDelete(true);
-        selectComment();
+        onSelect(true);
     };
 
     const handleEditClick = (): void => {
         setIsEditing(true);
         setIsInputOpen(true);
-        selectComment();
+        onSelect(true);
     };
 
     const handleMenuClose = (): void => {
         if (isConfirmingDelete || isEditing || isInputOpen) {
             return;
         }
-        selectComment(false);
-    };
-
-    const handleMenuOpen = (): void => {
-        selectComment();
+        onSelect(false);
     };
 
     const commentFormFocusHandler = (): void => {
         setIsInputOpen(true);
-        selectComment();
+        onSelect(true);
     };
 
     const commentFormCancelHandler = (): void => {
         setIsInputOpen(false);
         setIsEditing(false);
-        selectComment(false);
+        onSelect(false);
     };
 
     const commentFormSubmitHandler = (): void => {
         setIsInputOpen(false);
         setIsEditing(false);
-        selectComment(false);
+        onSelect(false);
     };
 
     const handleMessageUpdate = ({
@@ -214,7 +214,7 @@ const BaseComment = (props: BaseCommentProps) => {
                                 isDisabled={isConfirmingDelete}
                                 data-testid="comment-actions-menu"
                                 dropdownProps={{
-                                    onMenuOpen: handleMenuOpen,
+                                    onMenuOpen: () => onSelect(true),
                                     onMenuClose: handleMenuClose,
                                 }}
                                 menuProps={{
@@ -323,9 +323,14 @@ const BaseComment = (props: BaseCommentProps) => {
             {hasReplies && (
                 <Replies
                     {...commentProps}
+                    isParentPending={isPending}
                     isRepliesLoading={isRepliesLoading}
-                    onReplySelect={onReplySelect}
+                    onHideReplies={onHideReplies}
+                    onReplyCreate={onReplyCreate}
+                    onReplySelect={onSelect}
+                    onShowReplies={onShowReplies}
                     replies={replies}
+                    repliesTotalCount={repliesTotalCount}
                 />
             )}
         </div>
@@ -338,10 +343,15 @@ type RepliesProps = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: (searchStr: string) => void,
     getUserProfileUrl?: GetProfileUrlCallback,
+    isParentPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onHideReplies?: (shownReplies: CommentType[]) => void,
+    onReplyCreate?: (reply: string) => void,
     onReplySelect?: (isSelected: boolean) => void,
+    onShowReplies?: () => void,
     replies: CommentType[],
+    repliesTotalCount?: number,
     translations?: Translations,
 };
 
@@ -350,12 +360,18 @@ const Replies = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
+    onReplyCreate,
     onReplySelect = noop,
+    onShowReplies,
+    onHideReplies,
     replies,
+    repliesTotalCount = 0,
     translations,
 }: RepliesProps) => {
+    const [showReplyForm, setShowReplyForm] = React.useState(false);
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
         const { permissions: { can_delete = false, can_edit = false, can_resolve = false } = {} } = reply;
         return {
@@ -365,8 +381,31 @@ const Replies = ({
         };
     };
 
+    const handleNewReplyButton = () => {
+        setShowReplyForm(true);
+        onReplySelect(true);
+    };
+
+    const handleCancelNewReply = () => {
+        setShowReplyForm(false);
+        onReplySelect(false);
+    };
+
+    const handleSubmitNewReply = (reply: string, replyCreate: (reply: string) => void) => {
+        setShowReplyForm(false);
+        replyCreate(reply);
+    };
+
     return (
         <div className="bcs-Replies">
+            {!!onShowReplies && !!onHideReplies && (
+                <RepliesToggle
+                    onHideReplies={index => onHideReplies([replies[index]])}
+                    onShowReplies={onShowReplies}
+                    repliesShownCount={replies.length}
+                    repliesTotalCount={repliesTotalCount}
+                />
+            )}
             <div className="bcs-Replies-content">
                 {isRepliesLoading && (
                     <div className="bcs-Replies-loading" data-testid="replies-loading">
@@ -385,6 +424,7 @@ const Replies = ({
                                     getAvatarUrl={getAvatarUrl}
                                     getMentionWithQuery={getMentionWithQuery}
                                     getUserProfileUrl={getUserProfileUrl}
+                                    isPending={isParentPending || reply.isPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onSelect={onReplySelect}
                                     onDelete={noop}
@@ -397,6 +437,18 @@ const Replies = ({
                     })}
                 </ol>
             </div>
+            {!!onReplyCreate && (
+                <CreateReply
+                    getMentionWithQuery={getMentionWithQuery}
+                    isDisabled={isParentPending}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onCancel={handleCancelNewReply}
+                    onClick={handleNewReplyButton}
+                    onFocus={() => onReplySelect(true)}
+                    onSubmit={reply => handleSubmitNewReply(reply, onReplyCreate)}
+                    showReplyForm={showReplyForm}
+                />
+            )}
         </div>
     );
 };
