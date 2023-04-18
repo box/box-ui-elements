@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import Button from '../button';
 import IconClose from '../../icons/general/IconClose';
-import { bdlGray62 } from '../../styles/variables';
+import { bdlGray65 } from '../../styles/variables';
 
 import './CloseButton.scss';
 
@@ -18,7 +18,7 @@ type Props = {
 const CloseButton = ({ className, onClick }: Props) => {
     return (
         <Button className={classNames('bdl-CloseButton', className)} onClick={onClick} type="button">
-            <IconClose color={bdlGray62} height={18} width={18} />
+            <IconClose color={bdlGray65} height={18} width={18} />
         </Button>
     );
 };

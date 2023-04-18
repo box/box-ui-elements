@@ -174,10 +174,10 @@ function createTheme(colorKey: string) {
         buttonForeground: exceedsLightThreshold ? vars.white : foreground,
         buttonBackground: exceedsLightThreshold ? vars.bdlGray : colorKeyHex,
         buttonBackgroundHover: exceedsLightThreshold ? vars.bdlGray80 : hoverHex,
-        buttonBackgroundActive: exceedsLightThreshold ? vars.bdlGray62 : activeHex,
+        buttonBackgroundActive: exceedsLightThreshold ? vars.bdlGray65 : activeHex,
         buttonBorder: exceedsLightThreshold ? vars.bdlGray : colorKeyHex,
         buttonBorderHover: exceedsLightThreshold ? vars.bdlGray80 : hoverHex,
-        buttonBorderActive: exceedsLightThreshold ? vars.bdlGray62 : activeHex,
+        buttonBorderActive: exceedsLightThreshold ? vars.bdlGray65 : activeHex,
 
         // ProgressBar overrides
         progressBarBackground: exceedsLightThreshold ? vars.bdlGray50 : hoverHex,

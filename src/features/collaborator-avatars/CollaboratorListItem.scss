@@ -33,7 +33,7 @@
         }
 
         .email .link {
-            color: $bdl-gray-62;
+            color: $bdl-gray-65;
         }
 
         .name .link:hover,
@@ -48,14 +48,14 @@
         .email {
             max-width: 200px;
             overflow: hidden;
-            color: $bdl-gray-62;
+            color: $bdl-gray-65;
             font-size: 12px;
             line-height: 16px;
             text-overflow: ellipsis;
         }
 
         .role {
-            color: $bdl-gray-62;
+            color: $bdl-gray-65;
             line-height: 32px;
         }
     }
