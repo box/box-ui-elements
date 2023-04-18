@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import AccessibleSVG from '../accessible-svg';
+import { bdlGray65 } from '../../styles/variables';
 
 import { Icon } from '../iconTypes';
 
-const IconEdit = ({ className = '', color = '#767676', height = 14, title, width = 14 }: Icon) => (
+const IconEdit = ({ className = '', color = bdlGray65, height = 14, title, width = 14 }: Icon) => (
     <AccessibleSVG className={`icon-edit ${className}`} height={height} title={title} viewBox="0 0 14 14" width={width}>
         <path
             className="fill-color"
