@@ -17,12 +17,6 @@ const messages = defineMessages({
         description: 'Description text about advanced content insights.',
         id: 'boxui.advancedContentInsights.advancedContentInsightsDescription',
     },
-    advancedContentInsightsTooltipText: {
-        defaultMessage:
-            'Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details.',
-        description: 'Tooltip text about advanced content insights.',
-        id: 'boxui.advancedContentInsights.advancedContentInsightsTooltipText',
-    },
 });
 
 export default messages;

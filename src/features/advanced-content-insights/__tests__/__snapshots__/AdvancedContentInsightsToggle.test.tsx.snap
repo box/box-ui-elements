@@ -4,6 +4,7 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
 <Toggle
   className="AdvancedContentInsightsToggle"
   data-testid="insights-toggle"
+  description={false}
   isDisabled={false}
   isOn={true}
   label={
@@ -20,7 +21,7 @@ exports[`features/advanced-content-insights/AdvancedContentInsightsToggle should
         text={
           <FormattedMessage
             defaultMessage="Get actionable insights into how viewers are engaging with this content. Measure average time spent, page-by-page engagement, per person and per visit details."
-            id="boxui.advancedContentInsights.advancedContentInsightsTooltipText"
+            id="boxui.advancedContentInsights.advancedContentInsightsDescription"
           />
         }
         theme="default"

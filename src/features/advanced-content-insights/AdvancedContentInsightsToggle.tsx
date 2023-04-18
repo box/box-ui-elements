@@ -25,12 +25,7 @@ const AdvancedContentInsightsToggle = ({
     isDisabled,
     onChange = noop,
 }: Props) => {
-    const description = hasDescription ? (
-        <FormattedMessage {...messages.advancedContentInsightsDescription} />
-    ) : (
-        undefined
-    );
-    const tooltipText = <FormattedMessage {...messages.advancedContentInsightsTooltipText} />;
+    const description = <FormattedMessage {...messages.advancedContentInsightsDescription} />;
     const label = (
         <>
             <FormattedMessage
@@ -39,7 +34,7 @@ const AdvancedContentInsightsToggle = ({
                     : messages.advancedContentInsightsTitleDisabled)}
             />
             {hasTooltip && (
-                <Tooltip text={tooltipText}>
+                <Tooltip text={description}>
                     <div className="AdvancedContentInsightsToggle-icon">
                         <InfoBadge16 height={14} width={14} />
                     </div>
@@ -52,7 +47,7 @@ const AdvancedContentInsightsToggle = ({
         <Toggle
             className="AdvancedContentInsightsToggle"
             data-testid="insights-toggle"
-            description={description}
+            description={!hasTooltip && hasDescription && description}
             isDisabled={isDisabled}
             isOn={isChecked}
             label={label}
