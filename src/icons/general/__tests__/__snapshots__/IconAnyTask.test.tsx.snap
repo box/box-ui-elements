@@ -8,7 +8,7 @@ exports[`icons/general/IconAnyTask should correctly render default icon 1`] = `
   width={32}
 >
   <g
-    fill="#767676"
+    fill="#6f6f6f"
     fillRule="nonzero"
   >
     <path

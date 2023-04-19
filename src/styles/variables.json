@@ -80,7 +80,7 @@
     "bdl-fontSize": "13px",
     "bdl-fontSize-minimum": "11px",
     "bdl-fontSize--dejaBlue": "14px",
-    "avatar-colors": ["#0061d5", "#003c84", "#767676", "#222", "#4826c2", "#9f3fed"],
+    "avatar-colors": ["#0061d5", "#003c84", "#6f6f6f", "#222", "#4826c2", "#9f3fed"],
     "modal-dialog-z-index": "160",
     "menu-z-index": "170",
     "submenu-z-index": "171",
