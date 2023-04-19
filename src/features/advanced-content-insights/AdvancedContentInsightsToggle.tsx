@@ -11,6 +11,7 @@ import messages from './messages';
 import './AdvancedContentInsightsToggle.scss';
 
 interface Props {
+    hasDescription?: boolean;
     hasTooltip?: boolean;
     isChecked?: boolean;
     isDisabled: boolean;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const AdvancedContentInsightsToggle = ({
+    hasDescription,
     hasTooltip = true,
     isChecked = false,
     isDisabled,
@@ -45,7 +47,7 @@ const AdvancedContentInsightsToggle = ({
         <Toggle
             className="AdvancedContentInsightsToggle"
             data-testid="insights-toggle"
-            description={!hasTooltip && !isChecked && description}
+            description={!hasTooltip && hasDescription && description}
             isDisabled={isDisabled}
             isOn={isChecked}
             label={label}

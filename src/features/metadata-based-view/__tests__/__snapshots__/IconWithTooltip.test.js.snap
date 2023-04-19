@@ -20,7 +20,7 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconClose with 
     type="button"
   >
     <IconClose
-      color="#767676"
+      color="#6f6f6f"
       height={16}
       width={16}
     />
@@ -47,7 +47,7 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconPencil with
     type="button"
   >
     <IconPencil
-      color="#767676"
+      color="#6f6f6f"
     />
   </PlainButton>
 </Tooltip>
@@ -75,7 +75,7 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconSave with T
     type="button"
   >
     <IconCheck
-      color="#767676"
+      color="#6f6f6f"
       height={16}
       width={16}
     />
