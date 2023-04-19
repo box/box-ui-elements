@@ -55,7 +55,11 @@ const CollaboratorListItem = (props: Props) => {
     return (
         <li>
             <div className="collaborator-list-item">
-                <div className="user">
+                <div className="bdl-CollaboratorListItem-user user">
+                    <div className="info">
+                        {userOrGroupNameContent}
+                        {emailContent}
+                    </div>
                     <CollaboratorAvatarItem
                         allowBadging
                         avatarUrl={imageURL}
@@ -66,10 +70,6 @@ const CollaboratorListItem = (props: Props) => {
                         isExternalCollab={isExternalCollab}
                         name={name}
                     />
-                    <div className="info">
-                        {userOrGroupNameContent}
-                        {emailContent}
-                    </div>
                 </div>
                 <div className="role">
                     {type === COLLAB_PENDING_TYPE ? (
