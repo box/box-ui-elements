@@ -1,40 +1,30 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    bookmark: {
-        defaultMessage: 'Bookmark',
-        description: 'Icon title for a Box item of type bookmark or web-link',
-        id: 'boxui.contentExplorer.bookmark',
-    },
     breadcrumb: {
         defaultMessage: 'Breadcrumb',
         description: 'Aria label for the folder breadcrumb',
         id: 'boxui.contentExplorer.breadcrumb',
+    },
+    folderTreeBreadcrumbsText: {
+        defaultMessage: '{folderName} ({totalItems})',
+        description: 'Text shown for the current folder and its number of items next to the folder tree breadcrumbs',
+        id: 'boxui.contentExplorer.folderTreeBreadcrumbsText',
+    },
+    filePath: {
+        defaultMessage: 'File path',
+        description: 'Tooltip message for the folder tree breadcrumb button',
+        id: 'boxui.contentExplorer.filepath',
     },
     clickToGoBack: {
         defaultMessage: 'Click to go back',
         description: 'Aria label for button to navigate back to the previous folder',
         id: 'boxui.contentExplorer.clickToGoBack',
     },
-    collaboratedFolder: {
-        defaultMessage: 'Collaborated Folder',
-        description: 'Icon title for a Box item of type folder that has collaborators',
-        id: 'boxui.contentExplorer.collaboratedFolder',
-    },
-    externalFolder: {
-        defaultMessage: 'External Folder',
-        description: "Icon title for a Box item of type folder that has collaborators outside of the user's enterprise",
-        id: 'boxui.contentExplorer.externalFolder',
-    },
-    file: {
-        defaultMessage: 'File',
-        description: 'Icon title for a Box item of type file',
-        id: 'boxui.contentExplorer.file',
-    },
-    personalFolder: {
-        defaultMessage: 'Personal Folder',
-        description: 'Icon title for a Box item of type folder that is private and has no collaborators',
-        id: 'boxui.contentExplorer.personalFolder',
+    clickToViewPath: {
+        defaultMessage: 'Click to view path',
+        description: 'Aria label for folder tree button to navigate back to previous folders',
+        id: 'boxui.contentExplorer.clickToViewPath',
     },
     selectItem: {
         defaultMessage: 'Select {name}',
@@ -92,6 +82,28 @@ const messages = defineMessages({
         description: 'Text shown to indicate the number of items selected',
         id: 'boxui.contentExplorer.numSelected',
     },
+    numItemsSelected: {
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 items selected}
+                one {1 item selected}
+                other {# items selected}
+            }
+        `,
+        description: 'Text shown to indicate the number of items selected with Include Subfolders feature',
+        id: 'boxui.contentExplorer.numItemsSelected',
+    },
+    numFoldersSelected: {
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 folders selected}
+                one {1 folder selected}
+                other {# folders selected}
+            }
+        `,
+        description: 'Text shown to indicate the number of folders selected',
+        id: 'boxui.contentExplorer.numFoldersSelected',
+    },
     emptySearch: {
         defaultMessage: "Sorry, we couldn't find what you're looking for.",
         description: 'Text shown in the list when there are no search results',
@@ -142,6 +154,11 @@ const messages = defineMessages({
         defaultMessage: '{itemsCount} result',
         description: "Results label for number of items on list when it's just 1",
         id: 'boxui.contentExplorer.result',
+    },
+    includeSubfolders: {
+        defaultMessage: 'Include Subfolders',
+        description: 'Label text shown next to the Include Subfolders toggle',
+        id: 'boxui.contentExplorer.includeSubfolders',
     },
 });
 

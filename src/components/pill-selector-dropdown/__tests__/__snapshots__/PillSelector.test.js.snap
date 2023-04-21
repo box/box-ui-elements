@@ -6,7 +6,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
   constrainToWindow={true}
   isDisabled={false}
   isShown={false}
-  position="middle-right"
+  position="bottom-left"
   text=""
   theme="error"
 >

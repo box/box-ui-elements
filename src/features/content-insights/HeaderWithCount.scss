@@ -1,0 +1,10 @@
+@import './mixins';
+
+.HeaderWithCount {
+    @include ContentInsightsHeaderText;
+}
+
+.HeaderWithCount-titleCount::before {
+    margin: 0 $bdl-grid-unit;
+    content: '•';
+}

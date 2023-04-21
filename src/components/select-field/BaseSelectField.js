@@ -11,6 +11,7 @@ import SelectButton from '../select-button';
 import DatalistItem from '../datalist-item';
 import PopperComponent from '../popper';
 import SelectFieldDropdown from './SelectFieldDropdown';
+import type { Position } from '../tooltip';
 import type { SelectOptionValueProp, SelectOptionProp } from './props';
 import { PLACEMENT_BOTTOM_END, PLACEMENT_BOTTOM_START } from '../popper/constants';
 import SearchForm from '../search-form/SearchForm';
@@ -47,6 +48,8 @@ type Props = {
     defaultValue?: SelectOptionValueProp,
     /** An optional error to show within a tooltip. */
     error?: React.Node,
+    /** Position of error message tooltip */
+    errorTooltipPosition?: Position,
     /* Intl object */
     intl: Object,
     /** The select button is disabled if true */
@@ -78,6 +81,8 @@ type Props = {
     shouldShowSearchInput?: boolean,
     /** The select button text (by default, component will use comma separated list of all selected option displayText) */
     title?: string | React.Element<any>,
+    /** A CSS class for the tooltip's tether element component */
+    tooltipTetherClassName?: string,
 };
 
 type State = {
@@ -453,7 +458,14 @@ class BaseSelectField extends React.Component<Props, State> {
 
     renderSelectButton = () => {
         const { activeItemID, isOpen } = this.state;
-        const { buttonProps: buttonElProps, isDisabled, className, error } = this.props;
+        const {
+            buttonProps: buttonElProps,
+            isDisabled,
+            className,
+            error,
+            errorTooltipPosition,
+            tooltipTetherClassName,
+        } = this.props;
         const buttonText = this.renderButtonText();
         const buttonProps = {
             ...buttonElProps,
@@ -473,7 +485,12 @@ class BaseSelectField extends React.Component<Props, State> {
         return (
             // Need to store the select button reference so we can calculate the button width
             // in order to set it as the min width of the dropdown list
-            <SelectButton {...buttonProps} error={error}>
+            <SelectButton
+                {...buttonProps}
+                error={error}
+                errorTooltipPosition={errorTooltipPosition}
+                tooltipTetherClassName={tooltipTetherClassName}
+            >
                 {buttonText}
             </SelectButton>
         );

@@ -3,10 +3,86 @@
 @import '../../styles/mixins/overlay';
 @import '../../components/pill-selector-dropdown/mixins';
 
+.is-responsive-web {
+    .collaborator-list {
+        min-width: 0;
+    }
+
+    @include breakpoint($small-screen) {
+        .shared-link-access-row {
+            display: flex;
+            justify-content: space-between;
+
+            .btn-plain {
+                margin-right: 0;
+            }
+        }
+    }
+
+    @include breakpoint($medium-screen) {
+        .usm-menu-description {
+            white-space: normal;
+        }
+
+        .usm-share-access-menu {
+            //can't use just 'min' b/c SASS compiler error
+            width: #{'min(400px, 90%)'};
+        }
+    }
+
+    @include breakpoint($small-medium-screen) {
+        .collaborator-list {
+            height: auto;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .shared-link-field-container {
+            height: $bdl-btn-height;
+
+            .btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 60px;
+                min-width: 0;
+                height: $bdl-btn-height;
+            }
+        }
+
+        .email-shared-link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: $bdl-btn-height;
+            height: $bdl-btn-height;
+        }
+
+        .unified-share-modal {
+            .modal-content {
+                padding-top: $bdl-grid-unit * 3;
+            }
+
+            .shared-link-field-row .email-shared-link-btn {
+                margin-left: $bdl-grid-unit * 4;
+            }
+        }
+
+        .text-input-container {
+            height: $bdl-btn-height;
+
+            input {
+                height: 100%;
+            }
+        }
+    }
+}
+
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
     display: block;
-    color: $bdl-gray-62;
+    color: $bdl-gray-65;
     font-size: 12px;
 }
 
@@ -140,7 +216,7 @@
         }
 
         .text-area-container textarea::placeholder {
-            color: $bdl-gray-50;
+            color: $bdl-gray-65;
         }
 
         .bdl-PillSelector {
@@ -150,10 +226,10 @@
 
     .bdl-PillSelectorDropdown .bdl-PillSelector {
         margin-top: 10px;
-        border: 1px solid $bdl-gray-20;
+        border: 1px solid $bdl-gray-50;
 
         .bdl-PillSelector-input::placeholder {
-            color: $bdl-gray-50;
+            color: $bdl-gray-65;
         }
 
         &.bdl-is-disabled,
@@ -163,7 +239,7 @@
             box-shadow: none;
 
             .bdl-PillSelector-input::placeholder {
-                color: $bdl-gray-50;
+                color: $bdl-gray-65;
             }
 
             &:hover {
@@ -179,14 +255,10 @@
         justify-content: space-between;
         margin-top: 10px;
 
-        .share-toggle-container {
+        .toggle-container {
             flex: 0 1 80%;
             margin-bottom: 0;
             overflow-y: hidden;
-
-            .toggle-container {
-                margin-bottom: 0;
-            }
 
             .toggle-simple-label {
                 color: $bdl-gray;
@@ -241,14 +313,14 @@
             margin-right: 10px;
 
             &.can-edit-btn {
-                color: $bdl-gray-62;
+                color: $bdl-gray-65;
             }
         }
     }
 
     .security-indicator-note {
         margin-top: 10px;
-        color: $bdl-gray-62;
+        color: $bdl-gray-65;
 
         .security-indicator-icon-globe {
             padding-right: 5px;
@@ -294,6 +366,7 @@
 
         float: right;
         color: $bdl-box-blue;
+        letter-spacing: normal;
     }
 }
 
@@ -310,8 +383,22 @@
     padding: 2em;
 }
 
-.bdl-SharedLinkSection-separator {
+.bdl-SharedLinkSection-separator,
+.bdl-UnifiedShareForm-separator {
     margin: ($bdl-grid-unit * 5) 0;
     border: none;
     border-top: 1px solid $bdl-gray-20;
+}
+
+.bdl-UnifiedShareForm-row {
+    margin-top: 10px;
+
+    .AdvancedContentInsightsToggle {
+        flex: 0 1 80%;
+        overflow-y: hidden;
+
+        .toggle-simple-label {
+            cursor: pointer;
+        }
+    }
 }

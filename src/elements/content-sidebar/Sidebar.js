@@ -17,6 +17,7 @@ import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
+import { withCurrentUser } from '../common/current-user';
 import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -26,12 +27,14 @@ import type { VersionsSidebarProps } from './versions';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
+import type { Errors } from '../common/flowTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
     className: string,
     currentUser?: User,
+    currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
     features: FeatureConfig,
     file: BoxItem,
@@ -41,6 +44,7 @@ type Props = {
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
+    hasNav: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     history: RouterHistory,
@@ -209,12 +213,14 @@ class Sidebar extends React.Component<Props, State> {
             additionalTabs,
             className,
             currentUser,
+            currentUserError,
             detailsSidebarProps,
             file,
             fileId,
             getPreview,
             getViewer,
             hasAdditionalTabs,
+            hasNav,
             hasVersions,
             isDefaultOpen,
             isLoading,
@@ -242,20 +248,23 @@ class Sidebar extends React.Component<Props, State> {
                     </div>
                 ) : (
                     <>
-                        <SidebarNav
-                            additionalTabs={additionalTabs}
-                            elementId={this.id}
-                            fileId={fileId}
-                            hasActivity={hasActivity}
-                            hasAdditionalTabs={hasAdditionalTabs}
-                            hasDetails={hasDetails}
-                            hasMetadata={hasMetadata}
-                            hasSkills={hasSkills}
-                            isOpen={isOpen}
-                        />
+                        {hasNav && (
+                            <SidebarNav
+                                additionalTabs={additionalTabs}
+                                elementId={this.id}
+                                fileId={fileId}
+                                hasActivity={hasActivity}
+                                hasAdditionalTabs={hasAdditionalTabs}
+                                hasDetails={hasDetails}
+                                hasMetadata={hasMetadata}
+                                hasSkills={hasSkills}
+                                isOpen={isOpen}
+                            />
+                        )}
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
                             currentUser={currentUser}
+                            currentUserError={currentUserError}
                             elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
                             file={file}
@@ -284,4 +293,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withFeatureConsumer, withRouter])(Sidebar);
+export default flow([withCurrentUser, withFeatureConsumer, withRouter])(Sidebar);

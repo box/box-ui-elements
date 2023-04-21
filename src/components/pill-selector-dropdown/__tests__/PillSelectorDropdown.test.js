@@ -50,10 +50,10 @@ describe('components/pill-selector-dropdown/PillSelectorDropdown', () => {
             const wrapper = getWrapper({ inputProps });
             wrapper.setState({ inputValue: 'value' });
             const pillSelector = shallow(wrapper.find('SelectorDropdown').prop('selector'));
-            const instance = pillSelector.instance();
-            expect(pillSelector.prop('onInput')).toEqual(instance.handleInput);
-            expect(pillSelector.prop('onPaste')).toEqual(instance.handlePaste);
-            expect(pillSelector.instance().props.value).toEqual('value');
+            const wrapperInstance = wrapper.instance();
+            expect(pillSelector.prop('onInput')).toEqual(wrapperInstance.handleInput);
+            expect(pillSelector.prop('onPaste')).toEqual(wrapperInstance.handlePaste);
+            expect(pillSelector.dive().instance().props.value).toEqual('value');
         });
 
         test('should render disabled pill selector', () => {

@@ -20,4 +20,12 @@ describe('components/select-button/SelectButton', () => {
         const wrapper = shallow(<SelectButton error="error">Button Text</SelectButton>);
         expect(wrapper).toMatchSnapshot();
     });
+    test('should align error tooltip on button when errorTooltipPosition has some value', () => {
+        const wrapper = shallow(
+            <SelectButton error="error" errorTooltipPosition="middle-left">
+                Button Text
+            </SelectButton>,
+        );
+        expect(wrapper.find('Tooltip').prop('position')).toBe('middle-left');
+    });
 });

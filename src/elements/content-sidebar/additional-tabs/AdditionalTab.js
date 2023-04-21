@@ -10,9 +10,9 @@ import { FormattedMessage } from 'react-intl';
 
 import { bdlGray50 } from '../../../styles/variables';
 import PlainButton from '../../../components/plain-button/PlainButton';
-import IconEllipsis from '../../../icons/general/IconEllipsis';
 import AdditionalTabTooltip from './AdditionalTabTooltip';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
+import Apps16 from '../../../icon/fill/Apps16';
 import messages from './messages';
 import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
 
@@ -78,7 +78,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                 />
             );
         } else {
-            TabIcon = <IconEllipsis color={bdlGray50} />;
+            TabIcon = <Apps16 color={bdlGray50} width={20} height={20} />;
         }
 
         return TabIcon;
@@ -101,6 +101,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         const className = classNames('bdl-AdditionalTab', {
             'bdl-is-hidden': isLoading,
             'bdl-is-disabled': isDisabled,
+            'bdl-is-overflow': id && id < 0,
         });
 
         const tooltipText = isDisabled ? this.getDisabledReason() : title;

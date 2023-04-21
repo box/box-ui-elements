@@ -3,7 +3,7 @@
 exports[`components/tooltip/Tooltip render() should match snapshot when stopBubble is set 1`] = `
 <div
   className="tooltip bdl-Tooltip"
-  id="tooltip24"
+  id="tooltip27"
   onClick={[Function]}
   onContextMenu={[Function]}
   onKeyPress={[Function]}
@@ -247,16 +247,9 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
     role="tooltip"
   >
     hi
-    <PlainButton
-      className="tooltip-close-button"
+    <CloseButton
       onClick={[Function]}
-    >
-      <X16
-        className="bdl-Tooltip-iconClose"
-        height={14}
-        width={14}
-      />
-    </PlainButton>
+    />
   </div>
 </TetherComponent>
 `;

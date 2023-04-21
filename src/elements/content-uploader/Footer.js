@@ -23,6 +23,10 @@ type Props = {
 };
 
 const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, fileLimit, isDone }: Props) => {
+    const isCloseButtonDisabled = hasFiles;
+    const isCancelButtonDisabled = !hasFiles || isDone;
+    const isUploadButtonDisabled = !hasFiles;
+
     let message;
     switch (errorCode) {
         case ERROR_CODE_UPLOAD_FILE_LIMIT:
@@ -36,17 +40,33 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
         <div className="bcu-footer">
             <div className="bcu-footer-left">
                 {onClose ? (
-                    <Button isDisabled={hasFiles} onClick={onClose} type="button">
+                    <Button
+                        disabled={isCloseButtonDisabled}
+                        isDisabled={isCloseButtonDisabled}
+                        onClick={onClose}
+                        type="button"
+                    >
                         <FormattedMessage {...messages.close} />
                     </Button>
                 ) : null}
             </div>
             {message && <div className="bcu-footer-message">{message}</div>}
             <div className="bcu-footer-right">
-                <Button isDisabled={!hasFiles || isDone} onClick={onCancel} type="button">
+                <Button
+                    disabled={isCancelButtonDisabled}
+                    isDisabled={isCancelButtonDisabled}
+                    onClick={onCancel}
+                    type="button"
+                >
                     <FormattedMessage {...messages.cancel} />
                 </Button>
-                <PrimaryButton isDisabled={!hasFiles} isLoading={isLoading} onClick={onUpload} type="button">
+                <PrimaryButton
+                    disabled={isUploadButtonDisabled}
+                    isDisabled={isUploadButtonDisabled}
+                    isLoading={isLoading}
+                    onClick={onUpload}
+                    type="button"
+                >
                     <FormattedMessage {...messages.upload} />
                 </PrimaryButton>
             </div>

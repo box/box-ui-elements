@@ -3,6 +3,8 @@
 exports[`elements/content-uploader/UploadInput should render correctly when inputLabel is available 1`] = `
 <label
   className="inputLabelClass"
+  onKeyDown={[Function]}
+  tabIndex={0}
 >
   yo
   <input
@@ -18,6 +20,8 @@ exports[`elements/content-uploader/UploadInput should render correctly when inpu
 exports[`elements/content-uploader/UploadInput should render correctly when isFolderUpload is true 1`] = `
 <label
   className=""
+  onKeyDown={[Function]}
+  tabIndex={0}
 >
   yo
   <input

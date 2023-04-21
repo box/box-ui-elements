@@ -8,7 +8,7 @@ import { VIEW_FOLDER, VIEW_MODE_GRID } from '../../../../constants';
 
 const getWrapper = props => shallow(<SubHeaderRight {...props} />);
 
-describe('Elements/SubHeader/SubHeaderRight', () => {
+describe('elements/common/sub-header/SubHeaderRight', () => {
     const currentCollection = {
         sortBy: '',
         sortDirection: '',

@@ -106,6 +106,18 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.find('ContentExplorerSelectAll').prop('isSelectAllChecked')).toEqual(isSelectAllChecked);
         });
 
+        test('should render ContentExplorerIncludeSubfolders when passed includeSubfoldersProps', () => {
+            const wrapper = renderComponent({ includeSubfoldersProps: {} });
+
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(true);
+        });
+
+        test('should not render ContentExplorerIncludeSubfolders without includeSubfoldersProps', () => {
+            const wrapper = renderComponent();
+
+            expect(wrapper.exists('ContentExplorerIncludeSubfolders')).toBe(false);
+        });
+
         test("customInput should be false if the props isn't passed down", () => {
             const wrapper = renderComponent();
             expect(wrapper.find('ContentExplorerHeaderActions').prop('customInput')).toBe(undefined);
@@ -239,6 +251,22 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
                 expect(wrapper.find('ContentExplorerActionButtons').prop('areButtonsDisabled')).toBe(true);
             });
+        });
+
+        test('should render with action buttons enabled in MULTI_SELECT mode if there is no selection made when isNoSelectionAllowed is true', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
+
+            const wrapper = renderComponent({
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+                items,
+                isNoSelectionAllowed: true,
+            });
+
+            expect(wrapper.find('ContentExplorerActionButtons').prop('areButtonsDisabled')).toBe(false);
         });
     });
 

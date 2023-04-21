@@ -50,7 +50,6 @@ const allSections = [
             '../src/components/hotkeys/HotkeyFriendlyModal.js',
             '../src/components/hotkeys/HotkeyLayer.js',
             '../src/components/hotkeys/Hotkeys.js',
-            '../src/components/i18n/FormattedCompMessage.js',
             '../src/components/infinite-scroll/InfiniteScroll.js',
             '../src/components/inline-error/InlineError.js',
             '../src/components/inline-notice/InlineNotice.js',
@@ -361,7 +360,7 @@ module.exports = {
         buttonTextTransform: 'capitalize',
         color: {
             base: vars['bdl-gray'],
-            link: vars['bdl-gray-62'],
+            link: vars['bdl-gray-65'],
             linkHover: vars['bdl-box-blue'],
             error: vars['bdl-watermelon-red'],
             type: vars['bdl-gray-80'],

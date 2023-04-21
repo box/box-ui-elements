@@ -3,7 +3,7 @@
 .be-inline-breadcrumbs {
     display: flex;
     min-width: 0;
-    color: $bdl-gray-62;
+    color: $bdl-gray-65;
     font-size: 11px;
 
     .be-breadcrumbs {
@@ -12,7 +12,7 @@
 
     .be-breadcrumb {
         &:first-child {
-            min-width: 43px;
+            min-width: auto;
         }
 
         .be & .btn-plain {

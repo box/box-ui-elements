@@ -147,6 +147,11 @@ const messages = defineMessages({
         description: 'Label for switching to grid view',
         defaultMessage: 'Switch to Grid View',
     },
+    gridViewColumnSize: {
+        id: 'be.gridView.columnSize',
+        description: 'Label for the size of columns in grid view',
+        defaultMessage: 'Column size',
+    },
     gridViewIncreaseColumnSize: {
         id: 'be.gridView.increaseColumnSize',
         description: 'Label for increasing the size of columns in grid view',
@@ -361,6 +366,11 @@ const messages = defineMessages({
         id: 'be.sidebarAccessStats',
         description: 'Title for the sidebar access stats.',
         defaultMessage: 'Access Stats',
+    },
+    sidebarContentInsights: {
+        id: 'be.sidebarContentInsights',
+        description: 'Title for the sidebar content insights.',
+        defaultMessage: 'Content Insights',
     },
     sidebarShow: {
         id: 'be.sidebarShow',
@@ -964,6 +974,36 @@ const messages = defineMessages({
         description:
             'If a user has been deleted, we call the user "a prior collaborator" - meaning someone who used to be able to collaborate on the content.',
         defaultMessage: 'A Prior Collaborator',
+    },
+    moreOptions: {
+        id: 'be.moreOptions',
+        description: 'Label for a button that displays more options',
+        defaultMessage: 'More options',
+    },
+    bookmark: {
+        id: 'be.bookmark',
+        description: 'Icon title for a Box item of type bookmark or web-link',
+        defaultMessage: 'Bookmark',
+    },
+    collaboratedFolder: {
+        id: 'be.collaboratedFolder',
+        description: 'Icon title for a Box item of type folder that has collaborators',
+        defaultMessage: 'Collaborated Folder',
+    },
+    externalFolder: {
+        id: 'be.externalFolder',
+        description: "Icon title for a Box item of type folder that has collaborators outside of the user's enterprise",
+        defaultMessage: 'External Folder',
+    },
+    file: {
+        id: 'be.file',
+        description: 'Icon title for a Box item of type file',
+        defaultMessage: 'File',
+    },
+    personalFolder: {
+        id: 'be.personalFolder',
+        description: 'Icon title for a Box item of type folder that is private and has no collaborators',
+        defaultMessage: 'Personal Folder',
     },
 });
 

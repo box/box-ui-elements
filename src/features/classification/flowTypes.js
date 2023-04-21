@@ -30,6 +30,10 @@ type ApplicationRestriction = {
     apps: Array<App>,
 };
 
+type BoxSignRequestRestriction = {
+    enabled?: boolean,
+};
+
 type DownloadRestriction = {
     restrictExternalUsers?: boolean,
     restrictManagedUsers?: DownloadManagedUserAccessLevel,
@@ -45,16 +49,17 @@ type SharedLinkRestrictions = {
     accessLevel: SharedLinkAccessLevel,
 };
 
-type watermarkApplied = {
+type WatermarkControl = {
     enabled?: boolean,
 };
 
 type Controls = {
     app?: ApplicationRestriction,
+    boxSignRequest?: BoxSignRequestRestriction,
     download?: DownloadRestrictions,
     externalCollab?: ExternalCollabRestriction,
     sharedLink?: SharedLinkRestrictions,
-    watermark?: watermarkApplied,
+    watermark?: WatermarkControl,
 };
 
 type ControlsFormat = $Values<typeof SECURITY_CONTROLS_FORMAT>;

@@ -4,13 +4,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
+    data-testid="usm-share-permissions-toggle"
     disabled={true}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -21,6 +24,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -80,13 +84,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
     className="lnk"
+    data-testid="usm-share-permissions-toggle"
     disabled={false}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -97,6 +104,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -156,13 +164,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
+    data-testid="usm-share-permissions-toggle"
     disabled={true}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -173,6 +184,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -232,13 +244,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
     className="lnk"
+    data-testid="usm-share-permissions-toggle"
     disabled={false}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -249,6 +264,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -308,13 +324,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
     className="lnk is-disabled bdl-is-disabled"
+    data-testid="usm-share-permissions-toggle"
     disabled={true}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -325,6 +344,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >
@@ -384,13 +404,16 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
+  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
 >
   <PlainButton
     className="lnk"
+    data-testid="usm-share-permissions-toggle"
     disabled={false}
+    type="button"
   >
     <MenuToggle>
       <FormattedMessage
@@ -401,6 +424,7 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
   </PlainButton>
   <Menu
     className="ums-share-permissions-menu"
+    data-testid="usm-share-permissions-menu"
     isHidden={false}
     isSubmenu={false}
   >

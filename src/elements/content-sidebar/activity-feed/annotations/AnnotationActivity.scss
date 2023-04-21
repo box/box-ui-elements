@@ -1,4 +1,5 @@
 @import '../../../common/variables';
+@import '../../mixins';
 
 .bcs-AnnotationActivity {
     position: relative;
@@ -14,6 +15,10 @@
         opacity: .4;
         pointer-events: none;
     }
+}
+
+.bcs-AnnotationActivity-avatar {
+    position: relative;
 }
 
 .bcs-AnnotationActivity-headline {
@@ -42,15 +47,13 @@
 .bcs-AnnotationActivity-timestamp {
     display: flex;
     white-space: nowrap;
+}
 
-    .bcs-ActivityTimestamp {
-        &::after {
-            margin-right: 8px;
-            margin-left: 8px;
-            color: $bdl-gray-50;
-            content: '\2022';
-        }
-    }
+.bcs-AnnotationActivity-link::before {
+    margin-right: 2 * $bdl-grid-unit;
+    margin-left: 2 * $bdl-grid-unit;
+    color: $bdl-gray-50;
+    content: '\2022';
 }
 
 // override for activity feed defaults

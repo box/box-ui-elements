@@ -108,14 +108,24 @@ describe('components/menu/SubmenuItem', () => {
     });
 
     describe('handleMenuItemClick()', () => {
-        test('should call onClick() when isDisable is false', () => {
+        test('should call onClick() and should not call stop propagation and prevent default when isDisable is false', () => {
             const onClickSpy = jest.fn();
+            const stopPropagationSpy = jest.fn();
+            const preventDefaultSpy = jest.fn();
+
             const wrapper = getWrapper({
                 isDisabled: false,
                 onClick: onClickSpy,
             });
-            wrapper.find('li').simulate('click', {});
+
+            wrapper.find('li').simulate('click', {
+                stopPropagation: jest.fn(),
+                preventDefault: jest.fn(),
+            });
+
             expect(onClickSpy).toHaveBeenCalled();
+            expect(stopPropagationSpy).not.toHaveBeenCalled();
+            expect(preventDefaultSpy).not.toHaveBeenCalled();
         });
 
         test('should not call onClick() and stop propagation and prevent default when isDisable is true', () => {
@@ -133,6 +143,32 @@ describe('components/menu/SubmenuItem', () => {
             expect(onClickSpy).not.toHaveBeenCalled();
             expect(stopPropagationSpy).toHaveBeenCalled();
             expect(preventDefaultSpy).toHaveBeenCalled();
+        });
+
+        test('should call onClick() and stop propagation and prevent default when isDisable is false and target is submenu target element', () => {
+            const onClickSpy = jest.fn();
+            const stopPropagationSpy = jest.fn();
+            const preventDefaultSpy = jest.fn();
+
+            const wrapper = getWrapper({
+                isDisabled: false,
+                onClick: onClickSpy,
+            });
+            const menuItemEl = wrapper.find('li');
+            const submenuTarget = document.createElement('div');
+
+            const instance = wrapper.instance();
+            instance.submenuEl = document.createElement('div');
+
+            menuItemEl.simulate('click', {
+                stopPropagation: stopPropagationSpy,
+                preventDefault: preventDefaultSpy,
+                target: submenuTarget,
+            });
+
+            expect(onClickSpy).toHaveBeenCalled();
+            expect(preventDefaultSpy).toHaveBeenCalled();
+            expect(stopPropagationSpy).toHaveBeenCalled();
         });
     });
 

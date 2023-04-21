@@ -5,10 +5,6 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
   className="bdl-EditableKeywords"
 >
   <PillSelector
-    allowInvalidPills={false}
-    disabled={false}
-    error=""
-    inputProps={Object {}}
     onBlur={[Function]}
     onCompositionEnd={[Function]}
     onCompositionStart={[Function]}
@@ -16,7 +12,6 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
     onKeyDown={[Function]}
     onPaste={[Function]}
     onRemove={[Function]}
-    placeholder=""
     selectedOptions={
       Array [
         Object {
@@ -29,7 +24,6 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
         },
       ]
     }
-    validator={[Function]}
     value=""
   />
   <div

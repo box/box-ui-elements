@@ -140,6 +140,7 @@ export type trackingPropsType = {
         ftuxConfirmButtonProps?: Object,
         modalProps?: Object,
         onLoad?: Function,
+        onLoadSharedLink?: Function,
     },
     removeLinkConfirmModalTracking: {
         cancelButtonProps?: Object,
@@ -240,9 +241,15 @@ type InviteSectionTypes = {
     suggestedCollaborators?: SuggestedCollabLookup,
 };
 
-// Additional invite section types that related with external collab r
+// Additional invite section types that related with information barrier, external collab
 // restrictions and business justifications.
-type ExternalCollabRestrictionsTypes = {
+export type CollabRestrictionType =
+    | typeof constants.COLLAB_RESTRICTION_TYPE_ACCESS_POLICY
+    | typeof constants.COLLAB_RESTRICTION_TYPE_INFORMATION_BARRIER;
+
+type CollabRestrictionsTypes = {
+    /** The type of restriction that applies to restrictedCollabEmails */
+    collabRestrictionType?: CollabRestrictionType,
     /** Function that fetches the array of justification reason options to display on the justification select field */
     getJustificationReasons?: (
         itemTypedID: string,
@@ -250,10 +257,12 @@ type ExternalCollabRestrictionsTypes = {
     ) => Promise<getJustificationReasonsResponseType>,
     /** Determines whether or not a business justification can be provided to bypass external collab restrictions */
     isCollabRestrictionJustificationAllowed?: boolean,
-    /** Function that is called when all restricted external collaborators are removed from the email form */
-    onRemoveAllRestrictedExternalCollabs?: () => void,
-    /** An array of all the external collab email addresses that have been determined to be restriced by an access policy. */
-    restrictedExternalCollabEmails: Array<string>,
+    /** Function that is called when all restricted collaborators are removed from the email form */
+    onRemoveAllRestrictedCollabs?: () => void,
+    /** An array of all the collab email addresses that have been determined to be restricted by a security policy. */
+    restrictedCollabEmails: Array<string>,
+    /** An array of all the group ids that have been determined to be restricted by a security policy. */
+    restrictedGroups: Array<number>,
 };
 
 // Prop types used in the shared link section of the Unified Share Form
@@ -278,11 +287,11 @@ type SharedLinkSectionTypes = {
     onCopySuccess?: () => void,
     /** Handler function that gets called whenever the user dismisses a tooltip on the given component identifier */
     onDismissTooltip?: (componentIdentifier: tooltipComponentIdentifierType) => void,
-    /** Handler function for clicks on the settings icon. If not provided, the settings icon won't be rendered. */
+    /** Handler function for clicks on the settings button. If not provided, the settings button won't be rendered. */
     onSettingsClick?: Function,
     /** Shared link data */
     sharedLink: sharedLinkType,
-    /** Shows a callout tooltip next gear icon with info about what can be customized */
+    /** Shows a callout tooltip next to settings button with info about what can be customized */
     showSharedLinkSettingsCallout?: boolean,
     /** Mapping of components to the content that should be rendered in their tooltips */
     tooltips?: { [componentIdentifier: tooltipComponentIdentifierType]: React.Node },
@@ -310,6 +319,12 @@ type EmailFormTypes = {
     sendSharedLinkError: React.Node,
 };
 
+type AdvancedContentInsightsUSProps = {
+    isAdvancedContentInsightsChecked?: boolean,
+    /** Handler function that gets called whenever the Advanced Content Insights toggle changes */
+    onAdvancedContentInsightsToggle?: Function,
+};
+
 export type USMConfig = {
     /** Whether the "Email Shared Link" button and form should be rendered in the USM/USF */
     showEmailSharedLinkForm: boolean,
@@ -319,8 +334,9 @@ export type USMConfig = {
 
 // Prop types shared by both the Unified Share Modal and the Unified Share Form
 type BaseUnifiedShareProps = CollaboratorAvatarsTypes &
+    AdvancedContentInsightsUSProps &
     EmailFormTypes &
-    ExternalCollabRestrictionsTypes &
+    CollabRestrictionsTypes &
     InviteSectionTypes &
     SharedLinkSectionTypes & {
         /** Inline message */
@@ -393,8 +409,6 @@ export type USFProps = BaseUnifiedShareProps & {
     sharedLinkLoaded: boolean,
     /** Whether the FTUX tooltip should be rendered */
     shouldRenderFTUXTooltip: boolean,
-    /** Whether the new upgrade text should be rendered */
-    showNewUpgradeText?: boolean,
     /** Whether the upgrade inline notice should be rendered */
     showUpgradeInlineNotice?: boolean,
 };

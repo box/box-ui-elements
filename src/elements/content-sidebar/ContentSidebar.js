@@ -57,6 +57,7 @@ type Props = {
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
+    hasNav: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     history?: RouterHistory,
@@ -65,6 +66,7 @@ type Props = {
     messages?: StringMap,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onFetchFileSuccess?: () => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     requestInterceptor?: Function,
@@ -107,6 +109,7 @@ class ContentSidebar extends React.Component<Props, State> {
         hasActivityFeed: false,
         hasAdditionalTabs: false,
         hasMetadata: false,
+        hasNav: true,
         hasSkills: false,
         isDefaultOpen: true,
         metadataSidebarProps: {},
@@ -268,6 +271,8 @@ class ContentSidebar extends React.Component<Props, State> {
      * @return {void}
      */
     fetchFileSuccessCallback = (file: BoxItem): void => {
+        const { onFetchFileSuccess }: Props = this.props;
+        !!onFetchFileSuccess && onFetchFileSuccess();
         this.setState(
             {
                 file,
@@ -326,6 +331,7 @@ class ContentSidebar extends React.Component<Props, State> {
             hasAdditionalTabs,
             hasActivityFeed,
             hasMetadata,
+            hasNav,
             hasSkills,
             hasVersions,
             history,
@@ -361,6 +367,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             getViewer={getViewer}
                             hasActivityFeed={hasActivityFeed}
                             hasAdditionalTabs={hasAdditionalTabs}
+                            hasNav={hasNav}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}

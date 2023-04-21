@@ -1,9 +1,5 @@
-@import './mixins';
+@import '../../styles/variables';
 
-.bcs-SidebarNavSign {
-    @include bdl-SidebarNavButton;
-}
-
-.bcs-SidebarNavSign-icon {
-    @include bdl-SidebarNavIcon;
+.bcs-SidebarNavSign-icon path {
+    fill: $bdl-gray;
 }

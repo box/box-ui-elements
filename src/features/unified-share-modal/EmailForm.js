@@ -20,14 +20,16 @@ import IconGlobe from '../../icons/general/IconGlobe';
 
 import ContactRestrictionNotice from './ContactRestrictionNotice';
 import ContactsField from './ContactsField';
-import hasRestrictedExternalContacts from './utils/hasRestrictedExternalContacts';
+import hasRestrictedContacts from './utils/hasRestrictedContacts';
+import isRestrictedContact from './utils/isRestrictedContact';
 import messages from './messages';
-import type { SuggestedCollabLookup, contactType as Contact, USMConfig } from './flowTypes';
+import type { CollabRestrictionType, SuggestedCollabLookup, contactType as Contact, USMConfig } from './flowTypes';
 import type { SelectOptionProp } from '../../components/select-field/props';
 
 type Props = {
     cancelButtonProps?: Object,
     children?: React.Node,
+    collabRestrictionType?: CollabRestrictionType,
     config?: USMConfig,
     contactLimit?: number,
     contactsFieldAvatars?: React.Node,
@@ -55,7 +57,8 @@ type Props = {
     onSubmit: Function,
     openInviteCollaboratorsSection?: Function,
     recommendedSharingTooltipCalloutName?: ?string,
-    restrictedExternalEmails: Array<string>,
+    restrictedEmails: Array<string>,
+    restrictedGroups: Array<number>,
     selectedContacts: Array<Contact>,
     sendButtonProps?: Object,
     showEnterEmailsCallout: boolean,
@@ -77,7 +80,8 @@ class EmailForm extends React.Component<Props, State> {
         contactsFieldDisabledTooltip: null,
         isRestrictionJustificationEnabled: false,
         justificationReasons: [],
-        restrictedExternalEmails: [],
+        restrictedEmails: [],
+        restrictedGroups: [],
     };
 
     constructor(props: Props) {
@@ -148,11 +152,11 @@ class EmailForm extends React.Component<Props, State> {
         }
     };
 
-    handleRemoveRestrictedExternalContacts = () => {
+    handleRemoveRestrictedContacts = () => {
         const { onContactRemove, selectedContacts, updateSelectedContacts } = this.props;
 
-        const [removedContacts, remainingContacts] = partition(selectedContacts, ({ value }) =>
-            this.isRestrictedExternalEmail(value),
+        const [removedContacts, remainingContacts] = partition(selectedContacts, (contact: Contact) =>
+            this.isRestrictedContact(contact),
         );
 
         updateSelectedContacts(remainingContacts);
@@ -185,14 +189,20 @@ class EmailForm extends React.Component<Props, State> {
     validateContactsRestrictions = () => {
         let contactsRestrictionError = '';
         const { selectedJustificationReason } = this.state;
-        const { intl, isRestrictionJustificationEnabled, selectedContacts, restrictedExternalEmails } = this.props;
+        const {
+            intl,
+            isRestrictionJustificationEnabled,
+            selectedContacts,
+            restrictedEmails,
+            restrictedGroups,
+        } = this.props;
 
-        const hasRestrictedContacts = hasRestrictedExternalContacts(selectedContacts, restrictedExternalEmails);
+        const hasRestrictedCollabs = hasRestrictedContacts(selectedContacts, restrictedEmails, restrictedGroups);
         const isMissingRequiredJustification = isRestrictionJustificationEnabled && !selectedJustificationReason;
 
         if (isMissingRequiredJustification) {
             contactsRestrictionError = intl.formatMessage(messages.justificationRequiredError);
-        } else if (hasRestrictedContacts && !isRestrictionJustificationEnabled) {
+        } else if (hasRestrictedCollabs && !isRestrictionJustificationEnabled) {
             contactsRestrictionError = intl.formatMessage(messages.restrictedContactsError);
         }
 
@@ -262,14 +272,21 @@ class EmailForm extends React.Component<Props, State> {
 
         const emails = [];
         const groupIDs = [];
-        const restrictedExternalEmails = [];
+        const restrictedGroups = [];
+        const restrictedEmails = [];
 
-        selectedContacts.forEach(({ type, value }) => {
+        selectedContacts.forEach(contact => {
+            const { id, type, value } = contact;
+
             if (type === 'group') {
                 groupIDs.push(value);
+
+                if (this.isRestrictedContact(contact)) {
+                    restrictedGroups.push(id);
+                }
             } else {
-                if (this.isRestrictedExternalEmail(value)) {
-                    restrictedExternalEmails.push(value);
+                if (this.isRestrictedContact(contact)) {
+                    restrictedEmails.push(value);
                 }
                 emails.push(value);
             }
@@ -280,7 +297,8 @@ class EmailForm extends React.Component<Props, State> {
             groupIDs,
             justificationReason: selectedJustificationReason,
             message,
-            restrictedExternalEmails,
+            restrictedEmails,
+            restrictedGroups,
         }).catch(error => {
             // Remove sent emails from selected pills
             const invitedEmails = error.invitedEmails || [];
@@ -317,8 +335,8 @@ class EmailForm extends React.Component<Props, State> {
             const hasRequiredJustification = !!selectedJustificationReason && isRestrictionJustificationEnabled;
             // Invalid emails are filtered out by ContactsField when parsing
             // new pills, so parsed pills can currently only be invalid
-            // when user is external and external collab is restricted
-            isValid = !this.isRestrictedExternalEmail(contactPill.value) || hasRequiredJustification;
+            // when user is restricted by a security policy
+            isValid = !this.isRestrictedContact(contactPill) || hasRequiredJustification;
         }
         return isValid;
     };
@@ -327,17 +345,16 @@ class EmailForm extends React.Component<Props, State> {
         const { selectedJustificationReason } = this.state;
         const { isRestrictionJustificationEnabled } = this.props;
 
-        const pillId = String(contactPill.value);
         const hasRequiredJustification = !!selectedJustificationReason && isRestrictionJustificationEnabled;
-        const isWaivedPill = this.isRestrictedExternalEmail(pillId) && hasRequiredJustification;
+        const isWaivedPill = this.isRestrictedContact(contactPill) && hasRequiredJustification;
 
         return isWaivedPill ? 'is-waived' : '';
     };
 
-    isRestrictedExternalEmail = (email?: string) => {
-        const { restrictedExternalEmails } = this.props;
+    isRestrictedContact = (contact: Contact | SelectOptionProp) => {
+        const { restrictedEmails, restrictedGroups } = this.props;
 
-        return restrictedExternalEmails.includes(email);
+        return isRestrictedContact(contact, restrictedEmails, restrictedGroups);
     };
 
     render() {
@@ -346,6 +363,7 @@ class EmailForm extends React.Component<Props, State> {
         const {
             cancelButtonProps,
             children,
+            collabRestrictionType,
             config,
             contactsFieldAvatars,
             contactsFieldDisabledTooltip,
@@ -363,7 +381,8 @@ class EmailForm extends React.Component<Props, State> {
             messageProps,
             onPillCreate,
             recommendedSharingTooltipCalloutName,
-            restrictedExternalEmails,
+            restrictedEmails,
+            restrictedGroups,
             selectedContacts,
             sendButtonProps,
             showEnterEmailsCallout,
@@ -434,7 +453,7 @@ class EmailForm extends React.Component<Props, State> {
 
         const hideMessageSection = config && config.showInviteCollaboratorMessageSection === false;
         const shouldRenderContactRestrictionNotice =
-            isExpanded && hasRestrictedExternalContacts(selectedContacts, restrictedExternalEmails);
+            isExpanded && hasRestrictedContacts(selectedContacts, restrictedEmails, restrictedGroups);
 
         return (
             <form
@@ -448,12 +467,14 @@ class EmailForm extends React.Component<Props, State> {
                 )}
                 {shouldRenderContactRestrictionNotice && (
                     <ContactRestrictionNotice
+                        collabRestrictionType={collabRestrictionType}
                         error={contactsRestrictionError}
                         isFetchingJustificationReasons={isFetchingJustificationReasons}
                         isRestrictionJustificationEnabled={isRestrictionJustificationEnabled}
                         justificationReasons={justificationReasons}
-                        onRemoveRestrictedExternalContacts={this.handleRemoveRestrictedExternalContacts}
-                        restrictedExternalEmails={restrictedExternalEmails}
+                        onRemoveRestrictedContacts={this.handleRemoveRestrictedContacts}
+                        restrictedEmails={restrictedEmails}
+                        restrictedGroups={restrictedGroups}
                         selectedContacts={selectedContacts}
                         selectedJustificationReason={selectedJustificationReason}
                         onSelectJustificationReason={this.handleSelectJustificationReason}

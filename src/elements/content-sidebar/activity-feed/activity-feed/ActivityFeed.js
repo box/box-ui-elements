@@ -6,6 +6,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import throttle from 'lodash/throttle';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
 import ActiveState from './ActiveState';
@@ -15,12 +16,27 @@ import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
 import messages from './messages';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
-import { PERMISSION_CAN_CREATE_ANNOTATIONS } from '../../../../constants';
+import {
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
+    PERMISSION_CAN_CREATE_ANNOTATIONS,
+} from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
-import type { Annotation, AnnotationPermission, FocusableFeedItemType, FeedItems } from '../../../../common/types/feed';
+import type {
+    Annotation,
+    AnnotationPermission,
+    BoxCommentPermission,
+    Comment,
+    CommentFeedItemType,
+    FeedItemStatus,
+    FeedItems,
+    FocusableFeedItemType,
+    Task,
+} from '../../../../common/types/feed';
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations, Errors } from '../../flowTypes';
+import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
 import './ActivityFeed.scss';
 
 type Props = {
@@ -36,15 +52,39 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
+    hasReplies?: boolean,
+    hasVersions?: boolean,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
     onAnnotationSelect?: (annotation: Annotation) => void,
+    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
-    onCommentUpdate?: Function,
+    onCommentUpdate?: (
+        id: string,
+        text?: string,
+        status?: FeedItemStatus,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onHideReplies?: (id: string, replies: Array<Comment>) => void,
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
+    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+    onReplyUpdate?: (
+        id: string,
+        parentId: string,
+        text: string,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
     onTaskAssignmentUpdate?: Function,
     onTaskCreate?: Function,
     onTaskDelete?: Function,
@@ -57,11 +97,15 @@ type Props = {
 
 type State = {
     isInputOpen: boolean,
+    isScrolled: boolean,
+    selectedItemId: string | null,
 };
 
 class ActivityFeed extends React.Component<Props, State> {
     state = {
+        isScrolled: false,
         isInputOpen: false,
+        selectedItemId: null,
     };
 
     activeFeedItemRef = React.createRef<null | HTMLElement>();
@@ -148,6 +192,16 @@ class ActivityFeed extends React.Component<Props, State> {
         }
     };
 
+    handleFeedScroll = (event: UIEvent): void => {
+        const { target } = event;
+        if (target instanceof Element) {
+            const { scrollTop } = target;
+            this.setState({ isScrolled: scrollTop > 0 });
+        }
+    };
+
+    throttledFeedScroll = throttle(this.handleFeedScroll, 100);
+
     onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
@@ -193,9 +247,33 @@ class ActivityFeed extends React.Component<Props, State> {
         versionInfoHandler(data);
     };
 
+    setSelectedItem = (itemId: string | null) => {
+        const { hasReplies } = this.props;
+        if (!hasReplies) {
+            return;
+        }
+        this.setState({ selectedItemId: itemId });
+    };
+
+    isFeedItemActive = <T, U: { id: string, type: T }>({ id, type }: U): boolean => {
+        const { activeFeedEntryId, activeFeedEntryType } = this.props;
+        const { selectedItemId } = this.state;
+
+        const isSelected = selectedItemId === id;
+
+        return selectedItemId ? isSelected : id === activeFeedEntryId && type === activeFeedEntryType;
+    };
+
+    isCommentFeedItemActive = <T, U: { id: string, replies?: Array<Comment>, type: T }>(item: U): boolean => {
+        const { activeFeedEntryId } = this.props;
+        const { replies } = item;
+
+        const isActive = this.isFeedItemActive<T, U>(item);
+        return isActive || (!!replies && replies.some(reply => reply.id === activeFeedEntryId));
+    };
+
     render(): React.Node {
         const {
-            activeFeedEntryId,
             activeFeedEntryType,
             activityFeedError,
             approverSelectorContacts,
@@ -206,16 +284,25 @@ class ActivityFeed extends React.Component<Props, State> {
             getAvatarUrl,
             getMentionWithQuery,
             getUserProfileUrl,
+            hasNewThreadedReplies,
+            hasReplies,
+            hasVersions,
             isDisabled,
             mentionSelectorContacts,
             contactsLoaded,
             onAnnotationDelete,
             onAnnotationEdit,
             onAnnotationSelect,
+            onAnnotationStatusChange,
             onAppActivityDelete,
             onCommentCreate,
             onCommentDelete,
             onCommentUpdate,
+            onHideReplies,
+            onReplyCreate,
+            onReplyDelete,
+            onReplyUpdate,
+            onShowReplies,
             onTaskAssignmentUpdate,
             onTaskDelete,
             onTaskModalClose,
@@ -224,7 +311,8 @@ class ActivityFeed extends React.Component<Props, State> {
             onVersionHistoryClick,
             translations,
         } = this.props;
-        const { isInputOpen } = this.state;
+        const { isInputOpen, isScrolled } = this.state;
+        const currentFileVersionId = getProp(file, 'file_version.id');
         const hasAnnotationCreatePermission = getProp(file, ['permissions', PERMISSION_CAN_CREATE_ANNOTATIONS], false);
         const hasCommentPermission = getProp(file, 'permissions.can_comment', false);
         const showCommentForm = !!(currentUser && hasCommentPermission && onCommentCreate && feedItems);
@@ -232,9 +320,20 @@ class ActivityFeed extends React.Component<Props, State> {
         const isEmpty = this.isEmpty(this.props);
         const isLoading = !this.hasLoaded();
 
-        const activeEntry =
+        const activeFeedItem =
             Array.isArray(feedItems) &&
-            feedItems.find(({ id, type }) => id === activeFeedEntryId && type === activeFeedEntryType);
+            feedItems.find(item => {
+                switch (item.type) {
+                    case FEED_ITEM_TYPE_ANNOTATION:
+                        return this.isCommentFeedItemActive<typeof FEED_ITEM_TYPE_ANNOTATION, Annotation>(item);
+                    case FEED_ITEM_TYPE_COMMENT:
+                        return this.isCommentFeedItemActive<typeof FEED_ITEM_TYPE_COMMENT, Comment>(item);
+                    case FEED_ITEM_TYPE_TASK:
+                        return this.isFeedItemActive<typeof FEED_ITEM_TYPE_TASK, Task>(item);
+                    default:
+                        return false;
+                }
+            });
 
         const errorMessageByEntryType = {
             annotation: messages.annotationMissingError,
@@ -246,17 +345,21 @@ class ActivityFeed extends React.Component<Props, State> {
             ? errorMessageByEntryType[activeFeedEntryType]
             : undefined;
 
-        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeEntry;
-        const currentFileVersionId = getProp(file, 'file_version.id');
+        const isInlineFeedItemErrorVisible = !isLoading && activeFeedEntryType && !activeFeedItem;
 
         return (
-            // eslint-disable-next-line
-            <div className="bcs-activity-feed" data-testid="activityfeed" onKeyDown={this.onKeyDown}>
+            // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+            <div
+                className={classNames('bcs-activity-feed', { 'bcs-is-scrolled': isScrolled })}
+                data-testid="activityfeed"
+                onKeyDown={this.onKeyDown}
+            >
                 <div
                     ref={ref => {
                         this.feedContainer = ref;
                     }}
                     className="bcs-activity-feed-items-container"
+                    onScroll={this.throttledFeedScroll}
                 >
                     {isLoading && (
                         <div className="bcs-activity-feed-loading-state">
@@ -273,32 +376,41 @@ class ActivityFeed extends React.Component<Props, State> {
                     {!isEmpty && !isLoading && (
                         <ActiveState
                             {...activityFeedError}
-                            items={collapseFeedState(feedItems)}
-                            isDisabled={isDisabled}
-                            currentUser={currentUser}
+                            activeFeedItem={activeFeedItem}
+                            activeFeedItemRef={this.activeFeedItemRef}
+                            approverSelectorContacts={approverSelectorContacts}
                             currentFileVersionId={currentFileVersionId}
-                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
+                            currentUser={currentUser}
+                            getApproverWithQuery={getApproverWithQuery}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
+                            getUserProfileUrl={getUserProfileUrl}
+                            hasNewThreadedReplies={hasNewThreadedReplies}
+                            hasReplies={hasReplies}
+                            hasVersions={hasVersions}
+                            isDisabled={isDisabled}
+                            items={collapseFeedState(feedItems)}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             onAnnotationDelete={onAnnotationDelete}
                             onAnnotationEdit={onAnnotationEdit}
                             onAnnotationSelect={onAnnotationSelect}
+                            onAnnotationStatusChange={onAnnotationStatusChange}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
                             onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onCommentSelect={this.setSelectedItem}
+                            onHideReplies={onHideReplies}
+                            onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
+                            onReplyDelete={hasCommentPermission ? onReplyDelete : noop}
+                            onReplyUpdate={hasCommentPermission ? onReplyUpdate : noop}
+                            onShowReplies={onShowReplies}
+                            onTaskAssignmentUpdate={onTaskAssignmentUpdate}
                             onTaskDelete={onTaskDelete}
                             onTaskEdit={onTaskUpdate}
-                            onTaskView={onTaskView}
                             onTaskModalClose={onTaskModalClose}
+                            onTaskView={onTaskView}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
                             translations={translations}
-                            getAvatarUrl={getAvatarUrl}
-                            getUserProfileUrl={getUserProfileUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
-                            approverSelectorContacts={approverSelectorContacts}
-                            getApproverWithQuery={getApproverWithQuery}
-                            activeFeedEntryId={activeFeedEntryId}
-                            activeFeedEntryType={activeFeedEntryType}
-                            activeFeedItemRef={this.activeFeedItemRef}
                         />
                     )}
                     {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (

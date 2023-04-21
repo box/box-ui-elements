@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import Button, { ButtonType } from '../button';
 import IconClose from '../../icons/general/IconClose';
-import { bdlGray62 } from '../../styles/variables';
+import { bdlGray65 } from '../../styles/variables';
 
 import './CloseButton.scss';
 
@@ -22,7 +22,7 @@ const CloseButton = ({ className, onClick }: CloseButtonProps) => {
             onClick={onClick}
             type={ButtonType.BUTTON}
         >
-            <IconClose color={bdlGray62} height={18} width={18} />
+            <IconClose color={bdlGray65} height={18} width={18} />
         </Button>
     );
 };

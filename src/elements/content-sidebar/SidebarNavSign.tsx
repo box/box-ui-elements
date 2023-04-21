@@ -1,64 +1,65 @@
 import React from 'react';
-import classnames from 'classnames';
-import { injectIntl, IntlShape } from 'react-intl';
-import BoxSign28 from '../../icon/logo/BoxSign28';
-import PlainButton, { PlainButtonProps } from '../../components/plain-button';
+import { FormattedMessage } from 'react-intl';
+
 // @ts-ignore Module is written in Flow
-import TargetedClickThroughGuideTooltip from '../../features/targeting/TargetedClickThroughGuideTooltip';
-import Tooltip, { TooltipPosition } from '../../components/tooltip';
+import { useFeatureConfig } from '../common/feature-checking';
+// @ts-ignore Module is written in Flow
+import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
+
+// @ts-ignore Module is written in Flow
+import DropdownMenu from '../../components/dropdown-menu';
+import SidebarNavSignButton from './SidebarNavSignButton';
+import SignMe32 from '../../icon/fill/SignMe32';
+import SignMeOthers32 from '../../icon/fill/SignMeOthers32';
+import { Menu, MenuItem } from '../../components/menu';
+
 // @ts-ignore Module is written in Flow
 import messages from './messages';
+
 import './SidebarNavSign.scss';
 
-export type Props = PlainButtonProps & {
-    blockedReason?: string;
-    intl: IntlShape;
-    status?: string;
-    targetingApi?: {
-        canShow: boolean;
-        onClose: () => void;
-        onComplete: () => void;
-        onShow: () => void;
-    };
-};
-
-export const PlaceholderTooltip = ({ children }: { children: React.ReactNode }) => children;
-
-export function SidebarNavSign({ blockedReason, intl, status, targetingApi, ...rest }: Props) {
-    const isSignDisabled = !!blockedReason;
-    const isTargeted = targetingApi && targetingApi.canShow;
-    const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
-    const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
-    const buttonClassName = classnames('bcs-SidebarNavSign', { 'bdl-is-disabled': isSignDisabled });
-
-    let tooltipMessage = label;
-
-    switch (blockedReason) {
-        case 'shield-download':
-        case 'shared-link':
-            tooltipMessage = intl.formatMessage(messages.boxSignSecurityBlockedTooltip);
-            break;
-        case 'watermark':
-            tooltipMessage = intl.formatMessage(messages.boxSignWatermarkBlockedTooltip);
-            break;
-        default:
-    }
+export function SidebarNavSign() {
+    const {
+        blockedReason: boxSignBlockedReason,
+        onClick: onBoxClickRequestSignature,
+        onClickSignMyself: onBoxClickSignMyself,
+        status: boxSignStatus,
+        targetingApi: boxSignTargetingApi,
+        isSignRemoveInterstitialEnabled,
+    } = useFeatureConfig('boxSign');
 
     return (
-        <FtuxTooltip
-            body={intl.formatMessage(messages.boxSignFtuxBody)}
-            position={TooltipPosition.MIDDLE_LEFT}
-            shouldTarget={isTargeted}
-            title={intl.formatMessage(messages.boxSignFtuxTitle)}
-            useTargetingApi={() => targetingApi}
-        >
-            <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
-                <PlainButton aria-label={label} className={buttonClassName} isDisabled={isSignDisabled} {...rest}>
-                    <BoxSign28 className="bcs-SidebarNavSign-icon" />
-                </PlainButton>
-            </Tooltip>
-        </FtuxTooltip>
+        <>
+            {isSignRemoveInterstitialEnabled ? (
+                <DropdownMenu isResponsive constrainToWindow isRightAligned>
+                    <SidebarNavSignButton
+                        blockedReason={boxSignBlockedReason}
+                        status={boxSignStatus}
+                        targetingApi={boxSignTargetingApi}
+                        data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
+                    />
+                    <Menu>
+                        <MenuItem data-testid="sign-request-signature-button" onClick={onBoxClickRequestSignature}>
+                            <SignMeOthers32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
+                            <FormattedMessage {...messages.boxSignRequestSignature} />
+                        </MenuItem>
+                        <MenuItem data-testid="sign-sign-myself-button" onClick={onBoxClickSignMyself}>
+                            <SignMe32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
+                            <FormattedMessage {...messages.boxSignSignMyself} />
+                        </MenuItem>
+                    </Menu>
+                </DropdownMenu>
+            ) : (
+                <SidebarNavSignButton
+                    blockedReason={boxSignBlockedReason}
+                    data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
+                    onClick={onBoxClickRequestSignature}
+                    status={boxSignStatus}
+                    targetingApi={boxSignTargetingApi}
+                />
+            )}
+        </>
     );
 }
 
-export default injectIntl(SidebarNavSign);
+export default SidebarNavSign;

@@ -1,7 +1,18 @@
 // @flow
-const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
-expect.extend({ toMatchImageSnapshot });
+// const kebabCase = require('lodash/kebabCase');
+const { configureToMatchImageSnapshot } = require('jest-image-snapshot');
+
+expect.extend({
+    toMatchImageSnapshot: configureToMatchImageSnapshot({
+        // eslint-disable-next-line no-unused-vars
+        customSnapshotIdentifier: ({ testPath, counter, currentTestName, defaultIdentifier }) => {
+            // TODO shorten image snapshot names in different PR
+            // return kebabCase({currentTestName);
+            return defaultIdentifier;
+        },
+    }),
+});
 
 // testing utility functions
 
@@ -34,11 +45,13 @@ const BoxVisualTestUtils = {
     },
 
     // Takes image screenshots after user input, e.g., clicking or entering text
-    takeScreenshotAfterInput: async (id, selector, action = 'click', userInput) => {
+    takeScreenshotAfterInput: async (id, selector, action = 'click', userInput, afterInputSelector) => {
         await BoxVisualTestUtils.gotoStory(id);
-        await global.page.waitForSelector(selector);
+        await global.page.waitForSelector(selector, { visible: true });
         await global.page[action](selector, userInput);
-        await global.page.waitFor(100);
+        afterInputSelector
+            ? await global.page.waitForSelector(afterInputSelector, { visible: true })
+            : await global.page.waitFor(125);
         return global.page.screenshot();
     },
 

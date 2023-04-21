@@ -47,6 +47,8 @@ textarea:focus {
     @include box-inputs-focus;
 }
 
+// NOTE: This does not work because vendor prefixes cannot be combined. Need
+// to work with the design team to update the color or remove this ruleset.
 input::-webkit-input-placeholder,
 input::-moz-placeholder,
 input:-ms-input-placeholder {

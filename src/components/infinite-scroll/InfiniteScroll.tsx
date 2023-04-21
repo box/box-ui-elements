@@ -23,7 +23,7 @@ export interface InfiniteScrollProps {
     threshold?: number;
     /** Throttle rate */
     throttle?: number;
-    /** Set useWindow to true to use the window as scroll container. If set to true, will ignore scrollContainerRef. */
+    /** Set useWindow to true to use the window as scroll container. If set to true, will ignore scrollContainerNode. */
     useWindow?: boolean;
 }
 
@@ -70,7 +70,7 @@ function InfiniteScroll({
     throttle = 64,
     useWindow = false,
 }: InfiniteScrollProps) {
-    const sentinelRef = React.createRef<HTMLDivElement>();
+    const sentinelRef = React.useRef<HTMLDivElement | null>(null);
 
     React.useEffect(() => {
         const params = {
@@ -92,6 +92,9 @@ function InfiniteScroll({
             container.addEventListener('scroll', scrollHandler);
             container.addEventListener('resize', resizeHandler);
         }
+
+        // loads more content until page becomes scrollable, or until there is no more data to fetch
+        onContainerScroll(params);
 
         return function removeEventListeners() {
             if (container) {

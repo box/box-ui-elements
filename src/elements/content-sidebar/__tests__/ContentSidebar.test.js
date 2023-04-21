@@ -160,15 +160,13 @@ describe('elements/content-sidebar/ContentSidebar', () => {
         let wrapper;
         let instance;
 
-        beforeEach(() => {
+        test('should set the state with the file and view and then call fetchMetadata', () => {
             setState = jest.fn();
             wrapper = getWrapper();
             instance = wrapper.instance();
             instance.setState = setState;
-        });
-
-        test('should set the state with the file and view and then call fetchMetadata', () => {
             instance.fetchMetadata = jest.fn();
+
             instance.fetchFileSuccessCallback(file);
 
             expect(instance.setState).toBeCalledWith(
@@ -178,6 +176,25 @@ describe('elements/content-sidebar/ContentSidebar', () => {
                 },
                 instance.fetchMetadata,
             );
+        });
+
+        test(`should call onFetchFileSuccess when it's provided`, () => {
+            const onFetchFileSuccess = jest.fn();
+            wrapper = getWrapper({ onFetchFileSuccess });
+            instance = wrapper.instance();
+            instance.setState = setState;
+            instance.fetchMetadata = jest.fn();
+
+            instance.fetchFileSuccessCallback(file);
+
+            expect(instance.setState).toBeCalledWith(
+                {
+                    file,
+                    isLoading: false,
+                },
+                instance.fetchMetadata,
+            );
+            expect(onFetchFileSuccess).toBeCalled();
         });
     });
 

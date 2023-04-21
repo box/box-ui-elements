@@ -75,7 +75,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={true}
@@ -170,7 +171,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -265,7 +267,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={
         Object {
           "url": "https://foo.com",
@@ -363,7 +366,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={true}
@@ -458,7 +462,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -552,7 +557,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -647,7 +653,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -742,7 +749,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -837,7 +845,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -932,7 +941,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -1035,7 +1045,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -1130,7 +1141,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -1229,7 +1241,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={
         Object {
           "url": "https://foo.com",
@@ -1327,7 +1340,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -1419,7 +1433,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}
@@ -1515,7 +1530,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sendInvitesError={
         <span>
           Some Error
@@ -1615,7 +1631,8 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
         }
       }
       openConfirmModal={[Function]}
-      restrictedExternalCollabEmails={Array []}
+      restrictedCollabEmails={Array []}
+      restrictedGroups={Array []}
       sharedLink={Object {}}
       sharedLinkLoaded={false}
       shouldRenderFTUXTooltip={false}

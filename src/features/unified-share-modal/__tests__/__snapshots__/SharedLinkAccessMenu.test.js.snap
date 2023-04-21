@@ -16,11 +16,14 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <SharedLinkAccessLabel
@@ -33,6 +36,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     />
@@ -56,11 +60,14 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk is-disabled bdl-is-disabled"
+      data-testid="usm-share-access-toggle"
       disabled={true}
+      type="button"
     >
       <MenuToggle>
         <SharedLinkAccessLabel
@@ -73,6 +80,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     />
@@ -96,11 +104,14 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <SharedLinkAccessLabel
@@ -113,6 +124,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     >
@@ -165,11 +177,14 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <SharedLinkAccessLabel
@@ -182,6 +197,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     />
@@ -205,11 +221,14 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <SharedLinkAccessLabel
@@ -222,6 +241,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     >
@@ -330,11 +350,14 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={true}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
+      data-testid="usm-share-access-toggle"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <SharedLinkAccessLabel
@@ -347,6 +370,7 @@ exports[`features/unified-share-modal/SharedLinkAccessMenu render() should rende
     </PlainButton>
     <Menu
       className="usm-share-access-menu"
+      data-testid="usm-share-access-menu"
       isHidden={false}
       isSubmenu={false}
     >

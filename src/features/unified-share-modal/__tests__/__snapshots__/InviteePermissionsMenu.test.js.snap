@@ -7,6 +7,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -28,6 +29,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
           disabled={true}
+          type="button"
         >
           <MenuToggle>
             <InviteePermissionsLabel
@@ -132,11 +134,13 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -239,6 +243,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -260,6 +265,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
           disabled={true}
+          type="button"
         >
           <MenuToggle>
             <InviteePermissionsLabel
@@ -364,11 +370,13 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -471,6 +479,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -492,6 +501,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
           disabled={true}
+          type="button"
         >
           <MenuToggle>
             <InviteePermissionsLabel
@@ -596,11 +606,13 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -703,6 +715,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -724,6 +737,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
           disabled={true}
+          type="button"
         >
           <MenuToggle>
             <InviteePermissionsLabel
@@ -828,11 +842,13 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -935,6 +951,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -956,6 +973,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
           disabled={true}
+          type="button"
         >
           <MenuToggle>
             <InviteePermissionsLabel
@@ -1060,11 +1078,13 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -1167,6 +1187,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -1188,6 +1209,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
           disabled={true}
+          type="button"
         >
           <MenuToggle>
             <InviteePermissionsLabel
@@ -1292,11 +1314,13 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -1399,11 +1423,13 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <PlainButton
       className="lnk"
       disabled={false}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -1506,6 +1532,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   <DropdownMenu
     constrainToScrollParent={false}
     constrainToWindow={false}
+    isResponsive={false}
     isRightAligned={false}
   >
     <Tooltip
@@ -1527,6 +1554,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
           disabled={true}
+          type="button"
         >
           <MenuToggle>
             <InviteePermissionsLabel
@@ -1644,6 +1672,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
     <PlainButton
       className="lnk is-disabled bdl-is-disabled"
       disabled={true}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel
@@ -1677,6 +1706,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
     <PlainButton
       className="lnk is-disabled bdl-is-disabled"
       disabled={true}
+      type="button"
     >
       <MenuToggle>
         <InviteePermissionsLabel

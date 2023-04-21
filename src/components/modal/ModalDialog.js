@@ -5,12 +5,18 @@ import omit from 'lodash/omit';
 import uniqueId from 'lodash/uniqueId';
 import { defineMessages, injectIntl } from 'react-intl';
 
+import IconBack from '../../icon/fill/Arrow16';
 import IconClose from '../../icon/fill/X16';
 
 const ALERT_TYPE = 'alert';
 const DIALOG_TYPE = 'dialog';
 
 const messages = defineMessages({
+    backModalText: {
+        defaultMessage: 'Back',
+        description: 'Button to get back inside modal',
+        id: 'boxui.modalDialog.backModalText',
+    },
     closeModalText: {
         defaultMessage: 'Close Modal',
         description: 'Button to close modal',
@@ -24,6 +30,7 @@ type Props = {
     closeButtonProps: Object,
     intl: Object,
     modalRef?: Function,
+    onRequestBack?: Function,
     onRequestClose?: Function,
     title?: React.Node,
     type?: 'alert' | 'dialog',
@@ -33,6 +40,18 @@ class ModalDialog extends React.Component<Props> {
     static defaultProps = {
         type: DIALOG_TYPE,
         closeButtonProps: {},
+    };
+
+    /**
+     * Handles clicking on the back button
+     * @param {SyntheticMouseEvent} event
+     * @return {void}
+     */
+    onBackButtonClick = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
+        const { onRequestBack } = this.props;
+        if (onRequestBack) {
+            onRequestBack(event);
+        }
     };
 
     /**
@@ -50,15 +69,32 @@ class ModalDialog extends React.Component<Props> {
     modalID: string = uniqueId('modal');
 
     /**
+     * Renders a button if onRequestBack is passed in
+     * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
+     */
+    renderBackButton() {
+        const { intl } = this.props;
+        const { formatMessage } = intl;
+        return (
+            <button
+                aria-label={formatMessage(messages.backModalText)}
+                className="modal-back-button"
+                data-testid="modal-back-button"
+                onClick={this.onBackButtonClick}
+                type="button"
+            >
+                <IconBack height={18} width={18} />
+            </button>
+        );
+    }
+
+    /**
      * Renders a button if onRequestClose is passed in
      * @return {ReactElement|null} - Returns the button, or null if the button shouldn't be rendered
      */
     renderCloseButton() {
-        const { closeButtonProps, onRequestClose, intl } = this.props;
+        const { closeButtonProps, intl } = this.props;
         const { formatMessage } = intl;
-        if (!onRequestClose) {
-            return null;
-        }
 
         return (
             // eslint-disable-next-line react/button-has-type
@@ -97,6 +133,8 @@ class ModalDialog extends React.Component<Props> {
         const {
             className,
             modalRef,
+            onRequestBack,
+            onRequestClose,
             title,
             type,
             ...rest // Useful for resin tagging, and other misc tags such as a11y
@@ -112,12 +150,15 @@ class ModalDialog extends React.Component<Props> {
 
         return (
             <div ref={modalRef} className={classNames('modal-dialog', className)} {...divProps}>
-                <div className="modal-header">
-                    <h2 className="modal-title" id={`${this.modalID}-label`}>
-                        {title}
-                    </h2>
+                <div className="modal-header-container">
+                    <div className="modal-header">
+                        {onRequestBack && this.renderBackButton()}
+                        <h2 className="modal-title" id={`${this.modalID}-label`}>
+                            {title}
+                        </h2>
+                    </div>
+                    {onRequestClose && this.renderCloseButton()}
                 </div>
-                {this.renderCloseButton()}
                 {this.renderContent()}
             </div>
         );

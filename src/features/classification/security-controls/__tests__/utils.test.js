@@ -18,77 +18,54 @@ const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVE
 
 describe('features/classification/security-controls/utils', () => {
     let accessPolicy;
+    const allSecurityControls = {
+        sharedLink: {},
+        download: {},
+        externalCollab: {},
+        app: {},
+        watermark: {},
+        boxSignRequest: {},
+    };
 
     beforeEach(() => {
         accessPolicy = {};
     });
 
     describe('getShortSecurityControlsMessage()', () => {
-        test('should return null when there are no restrictions', () => {
-            expect(getShortSecurityControlsMessage({})).toEqual([]);
-        });
+        test.each`
+            securityControls                                            | expectedMessages                                                      | description
+            ${{}}                                                       | ${[]}                                                                 | ${'there are no restrictions'}
+            ${allSecurityControls}                                      | ${[messages.shortSharingDownloadAppSign, messages.shortWatermarking]} | ${'all restrictions are present'}
+            ${{ sharedLink: { accessLevel: PUBLIC } }}                  | ${[]}                                                                 | ${'shared link restriction has a "public" access level'}
+            ${{ sharedLink: {}, download: {}, app: {} }}                | ${[messages.shortSharingDownloadApp]}                                 | ${'download, app and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {}, app: {} }}            | ${[messages.shortSharingDownloadApp]}                                 | ${'download, app and external collab restrictions are present'}
+            ${{ download: {}, app: {}, boxSignRequest: {} }}            | ${[messages.shortDownloadAppSign]}                                    | ${'download, app and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, sharedLink: {} }}          | ${[messages.shortSharingAppSign]}                                     | ${'app, sign and shared link restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, externalCollab: {} }}      | ${[messages.shortSharingAppSign]}                                     | ${'app, sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, sharedLink: {} }}     | ${[messages.shortSharingDownloadSign]}                                | ${'download, sign and shared link restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, externalCollab: {} }} | ${[messages.shortSharingDownloadSign]}                                | ${'download, sign and external collab restrictions are present'}
+            ${{ sharedLink: {}, boxSignRequest: {} }}                   | ${[messages.shortSharingSign]}                                        | ${'sign and shared link restrictions are present'}
+            ${{ externalCollab: {}, boxSignRequest: {} }}               | ${[messages.shortSharingSign]}                                        | ${'sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {} }}                     | ${[messages.shortDownloadSign]}                                       | ${'download and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {} }}                          | ${[messages.shortAppSign]}                                            | ${'app and sign restrictions are present'}
+            ${{ sharedLink: {}, download: {} }}                         | ${[messages.shortSharingDownload]}                                    | ${'download and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {} }}                     | ${[messages.shortSharingDownload]}                                    | ${'download and external collab restrictions are present'}
+            ${{ sharedLink: {}, app: {} }}                              | ${[messages.shortSharingApp]}                                         | ${'app and shared link restrictions are present'}
+            ${{ externalCollab: {}, app: {} }}                          | ${[messages.shortSharingApp]}                                         | ${'app and external collab restrictions are present'}
+            ${{ download: {}, app: {} }}                                | ${[messages.shortDownloadApp]}                                        | ${'app and download restrictions are present'}
+            ${{ sharedLink: {}, externalCollab: {} }}                   | ${[messages.shortSharing]}                                            | ${'shared link and external collab restrictions are present'}
+            ${{ sharedLink: {} }}                                       | ${[messages.shortSharing]}                                            | ${'shared link restrictions are present'}
+            ${{ externalCollab: {} }}                                   | ${[messages.shortSharing]}                                            | ${'external collab restrictions are present'}
+            ${{ download: {} }}                                         | ${[messages.shortDownload]}                                           | ${'download restrictions are present'}
+            ${{ app: {} }}                                              | ${[messages.shortApp]}                                                | ${'app restrictions are present'}
+            ${{ watermark: {} }}                                        | ${[messages.shortWatermarking]}                                       | ${'watermark restrictions are present'}
+            ${{ boxSignRequest: {} }}                                   | ${[messages.shortSign]}                                               | ${'sign restrictions are present'}
+        `('should return correct messages when $description', ({ securityControls, expectedMessages }) => {
+            const expectedResult = expectedMessages.map(message => ({ message }));
 
-        test('should not return messages when shared link restriction has a "public" access level', () => {
-            accessPolicy = { sharedLink: { accessLevel: PUBLIC } };
-            expect(getShortSecurityControlsMessage(accessPolicy)).toEqual([]);
-        });
+            const result = getShortSecurityControlsMessage(securityControls);
 
-        test('should return correct message when all restrictions are present', () => {
-            accessPolicy = { sharedLink: {}, download: {}, externalCollab: {}, app: {}, watermark: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortAllRestrictions);
-            expect(getShortSecurityControlsMessage(accessPolicy)[1].message).toBe(messages.shortWatermarking);
-        });
-
-        test('should return all restrictions message when download, app and either shared link, or external collab restrictions are present', () => {
-            accessPolicy = { sharedLink: {}, download: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortAllRestrictions);
-            accessPolicy = { externalCollab: {}, download: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortAllRestrictions);
-        });
-
-        test('should return correct message when download and either shared link, or external collab restrictions are present', () => {
-            accessPolicy = { sharedLink: {}, download: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingDownload);
-            accessPolicy = { externalCollab: {}, download: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingDownload);
-        });
-
-        test('should return correct message when app and either shared link, or external collab restrictions are present', () => {
-            accessPolicy = { sharedLink: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingApp);
-            accessPolicy = { externalCollab: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharingApp);
-        });
-
-        test('should return correct message when app and download restrictions are present', () => {
-            accessPolicy = { download: {}, app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortDownloadApp);
-        });
-
-        test('should return correct message when there are shared link or external collab restrictions', () => {
-            accessPolicy = { sharedLink: {}, externalCollab: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharing);
-
-            accessPolicy = { sharedLink: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharing);
-
-            accessPolicy = { externalCollab: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortSharing);
-        });
-
-        test('should return correct message when there is a download restriction', () => {
-            accessPolicy = { download: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortDownload);
-        });
-
-        test('should return correct message when there is a download restriction', () => {
-            accessPolicy = { app: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortApp);
-        });
-
-        test('should return correct message when there is a watermark restriction', () => {
-            accessPolicy = { watermark: {} };
-            expect(getShortSecurityControlsMessage(accessPolicy)[0].message).toBe(messages.shortWatermarking);
+            expect(result).toEqual(expectedResult);
         });
 
         test('should not return tooltipMessage', () => {
@@ -124,12 +101,20 @@ describe('features/classification/security-controls/utils', () => {
                     enabled: true,
                 },
             };
-            const { message: formattedCompMessage } = getFullSecurityControlsMessages(accessPolicy)[0];
-            const { props: formattedCompMessageProps = {} } = formattedCompMessage;
-            const expectedMessageId = 'boxui.securityControls.watermarkingAppliedWithLink';
+            const { message: watermarkFormattedMessages } = getFullSecurityControlsMessages(accessPolicy)[0];
+            const { props: formattedMessageProps = {} } = watermarkFormattedMessages;
+            const { children: objArr = [] } = formattedMessageProps;
+            const { props: firstMessageObj = {} } = objArr[0];
+            const { props: linkObj = {} } = objArr[1];
+            const { props: secondMessageObj = {} } = linkObj.children;
 
-            expect(formattedCompMessageProps.id).toEqual(expectedMessageId);
-            expect(formattedCompMessage).toMatchSnapshot();
+            const expectedFirstMessageId = 'boxui.securityControls.watermarkingApplied';
+            const expectedSecondMessageId = 'boxui.securityControls.linkForMoreDetails';
+
+            expect(objArr.length).toEqual(2);
+            expect(firstMessageObj.id).toEqual(expectedFirstMessageId);
+            expect(secondMessageObj.id).toEqual(expectedSecondMessageId);
+            expect(formattedMessageProps).toMatchSnapshot();
         });
 
         test('should include correct message when external collab is blocked', () => {
@@ -244,6 +229,18 @@ describe('features/classification/security-controls/utils', () => {
                 ]);
             },
         );
+
+        test('should include correct message when Box Sign requests are restricted', () => {
+            accessPolicy = {
+                boxSignRequest: {
+                    enabled: true,
+                },
+            };
+
+            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([
+                { message: messages.boxSignRequestRestricted },
+            ]);
+        });
 
         describe.each([DESKTOP, MOBILE, WEB])('%s download restriction', platform => {
             test.each([OWNERS_AND_COOWNERS, OWNERS_COOWNERS_AND_EDITORS])(

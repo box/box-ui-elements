@@ -22,6 +22,7 @@ type Props = {
     columnCount: number,
     currentCollection: Collection,
     height: number,
+    scrollToRow?: number,
     slotRenderer: (slotIndex: number) => ?React.Element<any>,
     width: number,
 };
@@ -86,7 +87,7 @@ class GridView extends React.Component<Props> {
     };
 
     render() {
-        const { columnCount, currentCollection, height, width } = this.props;
+        const { columnCount, currentCollection, height, scrollToRow = 0, width } = this.props;
         const count = getProp(currentCollection, 'items.length', 0);
         const rowCount = Math.ceil(count / columnCount);
 
@@ -101,7 +102,7 @@ class GridView extends React.Component<Props> {
                 width={width}
                 gridClassName="bdl-GridView-body"
                 rowClassName="bdl-GridView-tableRow"
-                scrollToIndex={0}
+                scrollToIndex={scrollToRow}
                 sortDirection="ASC"
             >
                 <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />

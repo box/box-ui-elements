@@ -22,13 +22,13 @@
     }
 }
 
-.box-ui-security-cloud-game {
+.bdl-SecurityCloudGame {
     position: relative;
     display: flex;
     flex-flow: column;
-    background-color: $bdl-dark-blue;
+    background-color: $bdl-box-blue;
 
-    .box-ui-security-cloud-game-message {
+    .bdl-SecurityCloudGame-message {
         flex: none;
         padding: 10px;
         color: $white;
@@ -37,20 +37,29 @@
         background-color: rgba(0, 0, 0, .1);
     }
 
-    .box-ui-security-cloud-game-board {
+    .bdl-SecurityCloudGame-board {
         position: relative;
         display: flex;
         flex: 1;
     }
 }
 
-.drag-cloud {
+.bdl-SecurityCloudGame-liveText {
+    position: absolute;
+    left: -9999px;
+}
+
+.bdl-DragCloud {
     position: absolute;
     cursor: move;
     fill: $white;
+
+    &.is-moving {
+        fill: $bdl-gray-20;
+    }
 }
 
-.drop-cloud {
+.bdl-DropCloud {
     position: absolute;
     display: inline-block;
     fill: darken($bdl-dark-blue, 20%);

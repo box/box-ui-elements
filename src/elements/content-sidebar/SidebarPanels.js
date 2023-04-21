@@ -29,10 +29,12 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { User, BoxItem } from '../../common/types/core';
+import type { Errors } from '../common/flowTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     currentUser?: User,
+    currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
     elementId: string,
     file: BoxItem,
@@ -131,6 +133,7 @@ class SidebarPanels extends React.Component<Props, State> {
         const {
             activitySidebarProps,
             currentUser,
+            currentUserError,
             detailsSidebarProps,
             elementId,
             file,
@@ -194,6 +197,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                 <LoadableActivitySidebar
                                     elementId={elementId}
                                     currentUser={currentUser}
+                                    currentUserError={currentUserError}
                                     file={file}
                                     hasSidebarInitialized={isInitialized}
                                     onAnnotationSelect={onAnnotationSelect}

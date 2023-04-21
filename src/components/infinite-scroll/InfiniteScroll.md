@@ -58,7 +58,7 @@ const hasMore = true;
       isLoading={isLoading}
       onLoadMore={onLoadMore}
       useWindow={false}
-      scrollContainerRef={scrollRef}
+      scrollContainerNode={scrollRef}
     >
       <React.Fragment>
         {items.map((item, i) => (

@@ -258,6 +258,37 @@ describe('components/tooltip/Tooltip', () => {
             expect(tooltip.prop('aria-hidden')).toBe(true);
         });
 
+        test('should set aria-hidden as true if ariaHidden is true', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="test" ariaHidden>
+                    <button aria-label="test" />
+                </Tooltip>,
+            );
+            const tooltip = wrapper.childAt(1);
+            expect(tooltip.prop('aria-hidden')).toBe(true);
+        });
+
+        test('should not set aria-describedby when ariaHidden is true', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi" ariaHidden>
+                    <button aria-label="test" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+
+            expect(component.prop('aria-describedby')).toBe(undefined);
+        });
+        test('should not set aria-errormessage when ariaHidden is true', () => {
+            const wrapper = shallow(
+                <Tooltip isShown text="hi" ariaHidden>
+                    <button aria-label="test" />
+                </Tooltip>,
+            );
+            const component = wrapper.childAt(0);
+
+            expect(component.prop('aria-errormessage')).toBe(undefined);
+        });
+
         test('should set aria-hidden as false if aria-label does not exist', () => {
             const wrapper = shallow(
                 <Tooltip isShown text="hi">

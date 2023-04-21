@@ -152,4 +152,15 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
 
         expect(wrapper.find('.bcs-CommentForm-tip').length).toEqual(0);
     });
+
+    test('should show custom placeholder when provided', () => {
+        const wrapper = render({ placeholder: 'Your comment goes here' });
+
+        expect(
+            wrapper
+                .find('DraftJSMentionSelector')
+                .at(0)
+                .prop('placeholder'),
+        ).toEqual('Your comment goes here');
+    });
 });

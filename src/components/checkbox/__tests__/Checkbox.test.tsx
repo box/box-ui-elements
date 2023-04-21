@@ -1,20 +1,32 @@
 import React, { SyntheticEvent } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 
-import Checkbox from '..';
+import Checkbox from '../Checkbox';
 
 describe('components/checkbox/Checkbox', () => {
     let wrapper: ShallowWrapper;
     let onChange: (e: SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
+    let onFocus: (e: SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
 
     beforeEach(() => {
         onChange = jest.fn();
-        wrapper = shallow(<Checkbox id="1" label="Check things" name="name" onChange={onChange} />);
+        onFocus = jest.fn();
+        wrapper = shallow(
+            <Checkbox
+                id="1"
+                inputClassName="inputClassName"
+                label="Check things"
+                name="name"
+                onChange={onChange}
+                onFocus={onFocus}
+            />,
+        );
     });
 
     test('should correctly render default component', () => {
         expect(wrapper.find('.checkbox-container').length).toBeTruthy();
         expect(wrapper.find('input').prop('id')).toEqual('1');
+        expect(wrapper.find('input').prop('className')).toEqual('inputClassName');
         expect(wrapper.find('input').prop('name')).toEqual('name');
         expect(wrapper.find('input').prop('type')).toEqual('checkbox');
         expect(wrapper.find('.checkbox-pointer-target').length).toBe(1);
@@ -68,6 +80,11 @@ describe('components/checkbox/Checkbox', () => {
         };
         wrapper.find('input').simulate('change', event);
         expect(onChange).toBeCalledWith(event);
+    });
+
+    test('should call onFocus callback when onFocus triggers', () => {
+        wrapper.find('input').simulate('focus');
+        expect(onFocus).toBeCalledTimes(1);
     });
 
     test('should render a hidden label when hideLabel is specified', () => {
