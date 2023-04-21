@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classNames from 'classnames';
 import omit from 'lodash/omit';
 
 import FocusTrap from '../focus-trap';
@@ -35,7 +36,7 @@ class Overlay extends React.Component<Props> {
     render() {
         const { children, className, ...rest } = this.props;
         const overlayProps = omit(rest, ['onClose']);
-        overlayProps.className = className;
+        overlayProps.className = classNames('bdl-Overlay', className);
         overlayProps.handleOverlayKeyDown = this.handleOverlayKeyDown;
         overlayProps.tabIndex = 0;
 

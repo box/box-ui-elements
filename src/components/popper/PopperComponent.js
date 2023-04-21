@@ -7,12 +7,13 @@ import { PLACEMENT_AUTO } from './constants';
 type Props = {
     children: React.Node,
     isOpen?: boolean,
+    isPositionDynamic?: boolean,
     modifiers?: Modifiers,
     placement: Placement,
 };
 
 const PopperComponent = (props: Props) => {
-    const { children, isOpen, modifiers, placement: popperPlacement } = props;
+    const { children, isPositionDynamic = true, isOpen, modifiers, placement: popperPlacement } = props;
     const elements = React.Children.toArray(children);
 
     if (elements.length !== 2) {
@@ -30,7 +31,7 @@ const PopperComponent = (props: Props) => {
                         const { style: contentStyles } = popperContent.props;
                         return React.cloneElement(popperContent, {
                             ref,
-                            style: { ...contentStyles, ...style },
+                            style: { ...contentStyles, ...(isPositionDynamic && style) },
                             placement,
                             scheduleUpdate,
                         });

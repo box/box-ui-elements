@@ -1,5 +1,12 @@
 import React from 'react';
+import classNames from 'classnames';
 
-const MenuSeparator = () => <li role="separator" />;
+export interface MenuSeparatorProps {
+    className?: string;
+}
+
+const MenuSeparator = ({ className }: MenuSeparatorProps) => (
+    <li className={classNames('bdl-MenuSeparator', className)} role="separator" />
+);
 
 export default MenuSeparator;

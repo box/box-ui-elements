@@ -34,6 +34,7 @@ type Props = {
     action?: string,
     className?: string,
     getSearchInput?: Function,
+    innerRef?: React.Ref<any>,
     intl: Object,
     isLoading?: boolean,
     /** The way to send the form data, get or post */
@@ -45,7 +46,7 @@ type Props = {
     /** On submit handler for the search input */
     onSubmit?: Function,
     /** Extra query parameters in addition to the form data */
-    queryParams: Object,
+    queryParams: { [arg: string]: string },
     /** Boolean to prevent propogation of search clear action */
     shouldPreventClearEventPropagation?: boolean,
     /** If the clear button is shown when input field is not empty */
@@ -54,13 +55,27 @@ type Props = {
     value?: string,
 };
 
+type DefaultProps = {
+    action: string,
+    method: 'get' | 'post',
+    name: string,
+    queryParams: { [arg: string]: string },
+    useClearButton: boolean,
+};
+
+type IntlProps = {
+    intl: Object,
+};
+
 type State = {
     isEmpty: boolean,
 };
 
-class SearchForm extends React.Component<Props, State> {
-    static defaultProps = {
-        action: undefined,
+type Config = React.Config<Props, DefaultProps & IntlProps>;
+
+class SearchFormBase extends React.Component<Props, State> {
+    static defaultProps: DefaultProps = {
+        action: '',
         method: 'get',
         name: 'search',
         queryParams: {},
@@ -132,6 +147,7 @@ class SearchForm extends React.Component<Props, State> {
         const {
             action,
             className,
+            innerRef,
             intl,
             isLoading,
             method,
@@ -165,7 +181,7 @@ class SearchForm extends React.Component<Props, State> {
             <div className="action-buttons">
                 {onSubmit ? (
                     <button
-                        type="button"
+                        type="submit"
                         className="action-button search-button"
                         title={formatMessage(messages.searchButtonTitle)}
                     >
@@ -194,7 +210,7 @@ class SearchForm extends React.Component<Props, State> {
         const onChangeStub = () => {};
 
         return (
-            <div className={classes}>
+            <div ref={innerRef} className={classes}>
                 <form
                     action={action}
                     className={formClassNames}
@@ -226,4 +242,12 @@ class SearchForm extends React.Component<Props, State> {
     }
 }
 
-export default injectIntl(SearchForm);
+const SearchFormBaseIntl = injectIntl(SearchFormBase);
+export { SearchFormBaseIntl };
+
+const SearchForm = React.forwardRef<Config, HTMLDivElement>((props: Config, ref: React.Ref<any>) => (
+    <SearchFormBaseIntl {...props} innerRef={ref} />
+));
+SearchForm.displayName = 'SearchForm';
+
+export default SearchForm;

@@ -9,14 +9,17 @@ exports[`elements/content-sidebar/ActivityFeed/Avatar should render the avatar w
 `;
 
 exports[`elements/content-sidebar/ActivityFeed/Avatar should set the avatarUrl state from user prop 1`] = `
-<Badgeable
-  className="avatar"
->
-  <span>
-    <AvatarInitials
-      id="foo"
-      name="foo bar"
-    />
-  </span>
-</Badgeable>
+<Avatar
+  avatarUrl={null}
+  id="foo"
+  intl={
+    Object {
+      "formatDate": [Function],
+      "formatMessage": [Function],
+      "formatNumber": [Function],
+      "formatRelativeTime": [Function],
+    }
+  }
+  name="foo bar"
+/>
 `;

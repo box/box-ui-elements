@@ -62,7 +62,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
     renderMenu() {
         const { accessLevel, accessLevelsDisabledReason, allowedAccessLevels, enterpriseName, itemType } = this.props;
         return (
-            <Menu className="usm-share-access-menu">
+            <Menu className="usm-share-access-menu" data-testid="usm-share-access-menu">
                 {accessLevels.map(level => {
                     const isDisabled = !allowedAccessLevels[level];
                     const isDisabledByAccessPolicy =
@@ -136,7 +136,9 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                             'is-disabled': submitting,
                             'bdl-is-disabled': submitting,
                         })}
+                        data-testid="usm-share-access-toggle"
                         disabled={submitting}
+                        type="button"
                         {...sharedLinkAccessMenuButtonProps}
                     >
                         <MenuToggle>

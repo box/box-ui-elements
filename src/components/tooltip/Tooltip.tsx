@@ -5,8 +5,7 @@ import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
-import IconClose from '../../icon/fill/X16';
-import PlainButton from '../plain-button';
+import CloseButton from './CloseButton';
 
 import './Tooltip.scss';
 
@@ -81,6 +80,8 @@ export type DefaultTooltipProps = {
 };
 
 export type TooltipProps = {
+    /** Sets aria-hidden attribute on tooltip */
+    ariaHidden?: boolean;
     /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
@@ -232,6 +233,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
     render() {
         const {
+            ariaHidden,
             bodyElement,
             children,
             className,
@@ -282,7 +284,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             });
         }
 
-        if (showTooltip) {
+        if (showTooltip && !ariaHidden) {
             if (!isLabelMatchingTooltipText || childAriaLabel === undefined) {
                 componentProps['aria-describedby'] = this.tooltipID;
             }
@@ -339,11 +341,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         const tooltipInner = (
             <>
                 {text}
-                {withCloseButton && (
-                    <PlainButton className="tooltip-close-button" onClick={this.closeTooltip}>
-                        <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
-                    </PlainButton>
-                )}
+                {withCloseButton && <CloseButton onClick={this.closeTooltip} />}
             </>
         );
 
@@ -361,7 +359,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 <div
                     role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
                     aria-live="polite"
-                    aria-hidden={isLabelMatchingTooltipText}
+                    aria-hidden={ariaHidden || isLabelMatchingTooltipText}
                     data-testid="bdl-Tooltip"
                 >
                     {tooltipInner}
@@ -370,7 +368,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         ) : (
             <div
                 aria-live="polite"
-                aria-hidden={isLabelMatchingTooltipText}
+                aria-hidden={ariaHidden || isLabelMatchingTooltipText}
                 className={classes}
                 data-testid="bdl-Tooltip"
                 id={this.tooltipID}

@@ -16,4 +16,14 @@ describe('elements/content-sidebar/SidebarContent', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render sidebar content component without title header element if title prop is not provided', () => {
+        const wrapper = getWrapper({
+            children: 'children',
+            elementId: 'bcs_5',
+            sidebarView: SIDEBAR_VIEW_ACTIVITY,
+        });
+
+        expect(wrapper.find('.bcs-title')).toHaveLength(0);
+    });
 });

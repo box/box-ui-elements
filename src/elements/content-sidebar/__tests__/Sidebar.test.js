@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import LocalStore from '../../../utils/LocalStore';
 import {
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
     SIDEBAR_FORCE_VALUE_OPEN,
     SidebarComponent as Sidebar,
 } from '../Sidebar';
+import LocalStore from '../../../utils/LocalStore';
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
@@ -205,6 +205,12 @@ describe('elements/content-sidebar/Sidebar', () => {
                 expect(wrapper.hasClass('bcs-is-open')).toBe(expected);
             },
         );
+
+        test('should not render SidebarNav when hasNav is false', () => {
+            const wrapper = getWrapper({ hasNav: false });
+
+            expect(wrapper.exists('SidebarNav')).toBe(false);
+        });
     });
 
     describe('refresh()', () => {

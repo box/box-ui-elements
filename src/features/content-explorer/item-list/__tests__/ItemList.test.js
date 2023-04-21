@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 
+import { Column } from '@box/react-virtualized';
 import { ItemListBase as ItemList } from '../ItemList';
 import ContentExplorerMode from '../../modes';
 
@@ -227,6 +228,34 @@ describe('features/content-explorer/item-list/ItemList', () => {
         });
     });
 
+    describe('itemRowRenderer', () => {
+        test('should use defaultTableRowRenderer when itemRowRenderer is not provided', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+            ];
+            const wrapper = renderComponent({
+                items,
+            });
+
+            expect(wrapper.find('Grid [role="row"].ReactVirtualized__Table__row').length).toBe(items.length);
+        });
+
+        test('should use itemRowRenderer when specified', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+            ];
+            const itemRowRenderer = params => <div key={params.index} className="row-test" />;
+            const wrapper = renderComponent({
+                items,
+                itemRowRenderer,
+            });
+
+            expect(wrapper.find('Grid .row-test').length).toBe(items.length);
+        });
+    });
+
     describe('noItemsRenderer', () => {
         test('should use noItemsRenderer when no items are specified', () => {
             const emptyText = 'Empty';
@@ -237,6 +266,77 @@ describe('features/content-explorer/item-list/ItemList', () => {
             });
 
             expect(wrapper.find('h1').text()).toEqual(emptyText);
+        });
+    });
+
+    describe('additionalColumns', () => {
+        test('should render extra column', () => {
+            const items = [
+                { id: '1', name: 'item1' },
+                { id: '2', name: 'item2' },
+                { id: '3', name: 'item3' },
+            ];
+
+            const additionalColumns = [
+                <Column
+                    key="accessLevel"
+                    className="item-list-accessLevel-col"
+                    dataKey="accessLevel"
+                    flexGrow={1}
+                    flexShrink={0}
+                    width={0}
+                />,
+            ];
+            const wrapper = renderComponent({ items, additionalColumns });
+            expect(wrapper.find('.item-list-accessLevel-col').length).toBe(3);
+        });
+    });
+
+    describe('headerHeight', () => {
+        const items = [{ id: '1', name: 'item1' }];
+        test('should display header row with specified height when item list is not empty', () => {
+            const headerHeight = 30;
+            const wrapper = renderComponent({
+                headerHeight,
+                items,
+            });
+
+            const header = wrapper.find('.ReactVirtualized__Table__headerRow');
+            expect(header.props().style.height).toBe(headerHeight);
+        });
+
+        test('should not display header row with specified height when item list is empty and noItemsRenderer is present', () => {
+            const headerHeight = 30;
+            const noItemsRenderer = () => <></>;
+            const wrapper = renderComponent({
+                headerHeight,
+                noItemsRenderer,
+            });
+
+            const header = wrapper.find('.ReactVirtualized__Table__headerRow');
+            expect(header.props().style.height).not.toBe(headerHeight);
+        });
+    });
+
+    describe('headerRenderer', () => {
+        const items = [{ id: '1', name: 'item1' }];
+        test('should use headerRenderer when specified if item list is not empty', () => {
+            const wrapper = renderComponent({
+                headerRenderer: () => <div data-testid="customHeader">Custom Header</div>,
+                items,
+            });
+            const headerRow = wrapper.find("[data-testid='customHeader']");
+            expect(headerRow.length).toBe(1);
+        });
+
+        test('should not use headerRenderer when specified if item list is empty and noItemsRenderer is present', () => {
+            const noItemsRenderer = () => <></>;
+            const wrapper = renderComponent({
+                headerRenderer: () => <div data-testid="customHeader">Custom Header</div>,
+                noItemsRenderer,
+            });
+            const headerRow = wrapper.find("[data-testid='customHeader']");
+            expect(headerRow.length).not.toBe(1);
         });
     });
 });

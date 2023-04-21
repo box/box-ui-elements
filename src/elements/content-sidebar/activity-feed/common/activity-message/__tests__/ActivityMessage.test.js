@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 
-import ActivityMessage from '../ActivityMessage';
+import { ActivityMessage } from '../ActivityMessage';
 
 describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => {
     test('should properly format tagged comment', () => {
@@ -135,5 +135,52 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
         expect(wrapper.find('PlainButton.bcs-ActivityMessage-translate').length).toEqual(1);
         expect(wrapper.state('isTranslation')).toBe(false);
         expect(wrapper.state('isLoading')).toBe(false);
+    });
+
+    test('should not have CollapsableMessage when `collapsableMessages` is not enabled in features', () => {
+        const commentText = {
+            features: {
+                activityFeed: {
+                    collapsableMessages: { enabled: false },
+                },
+            },
+            id: '123',
+            tagged_message: 'How u doing @[2030326577:Young Jeezy]?',
+        };
+
+        const wrapper = shallow(<ActivityMessage {...commentText} />);
+
+        expect(wrapper.exists('CollapsableMessage')).toBe(false);
+    });
+
+    test('should have CollapsableMessage when `collapsableMessages` is enabled in features', () => {
+        const commentText = {
+            features: {
+                activityFeed: {
+                    collapsableMessages: { enabled: true },
+                },
+            },
+            id: '123',
+            tagged_message: 'How u doing @[2030326577:Young Jeezy]?',
+        };
+
+        const wrapper = shallow(<ActivityMessage {...commentText} />);
+
+        expect(wrapper.exists('CollapsableMessage')).toBe(true);
+    });
+
+    test.each`
+        isEdited | expected
+        ${false} | ${false}
+        ${true}  | ${true}
+    `(`given isEdited = $isEdited prop message should text "(edited)" be $expected`, ({ isEdited, expected }) => {
+        const comment = {
+            tagged_message: 'Hi ﹫[123:Half] ＠[222:Full] @[432:Latin]',
+            isEdited,
+        };
+
+        const wrapper = shallow(<ActivityMessage id="123" {...comment} />);
+
+        expect(wrapper.exists({ id: 'be.contentSidebar.activityFeed.common.editedMessage' })).toBe(expected);
     });
 });

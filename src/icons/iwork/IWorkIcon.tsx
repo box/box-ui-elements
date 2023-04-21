@@ -1,21 +1,22 @@
 import * as React from 'react';
 
-import IconIWorkKeynote from './IconIWorkKeynote';
-import IconIWorkNumbers from './IconIWorkNumbers';
-import IconIWorkPages from './IconIWorkPages';
+import KeynoteForMac32 from '../../icon/logo/KeynoteForMac32';
+import NumbersForMac32 from '../../icon/logo/NumbersForMac32';
+import PagesForMac32 from '../../icon/logo/PagesForMac32';
+
 import { FileIcon } from '../iconTypes';
 
-const IWorkIcon = ({ className, dimension = 30, extension, title }: FileIcon) => {
+const IWorkIcon = ({ className, dimension = 32, extension, title }: FileIcon) => {
     let Component = null;
     switch (extension) {
         case 'pages':
-            Component = IconIWorkPages;
+            Component = PagesForMac32;
             break;
         case 'numbers':
-            Component = IconIWorkNumbers;
+            Component = NumbersForMac32;
             break;
         case 'key':
-            Component = IconIWorkKeynote;
+            Component = KeynoteForMac32;
             break;
         // no default
     }

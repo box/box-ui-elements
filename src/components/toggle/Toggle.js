@@ -21,6 +21,12 @@ type Props = {
     onBlur?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
     /** change callback function called with event as the argument */
     onChange?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
+    /** focus callback function called with event as the argument */
+    onFocus?: (e: SyntheticInputEvent<HTMLInputElement>) => any,
+    /** mouse enter callback function called with event as the argument */
+    onMouseEnter?: (e: SyntheticInputEvent<HTMLDivElement>) => any,
+    /** mouse leave callback function called with event as the argument */
+    onMouseLeave?: (e: SyntheticInputEvent<HTMLDivElement>) => any,
     /** optional value for the toggles checkbox */
     value?: any,
 };
@@ -37,6 +43,9 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
             name,
             onBlur,
             onChange,
+            onFocus,
+            onMouseEnter,
+            onMouseLeave,
             ...rest
         }: Props,
         ref,
@@ -44,29 +53,31 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
         const classes = classNames('toggle-container', className, {
             'is-toggle-right-aligned': isToggleRightAligned,
         });
-        let toggleElements = [
+
+        const toggleElements = [
             <div key="toggle-simple-switch" className="toggle-simple-switch" />,
             <div key="toggle-simple-label" className="toggle-simple-label">
                 {label}
             </div>,
         ];
-
         if (isToggleRightAligned) {
-            toggleElements = toggleElements.reverse();
+            toggleElements.reverse();
         }
 
         return (
-            <div className={classes}>
+            <div className={classes} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label className="toggle-simple">
                     <input
                         checked={isOn}
                         className="toggle-simple-input"
                         disabled={isDisabled}
-                        ref={ref}
                         name={name}
                         onBlur={onBlur}
                         onChange={onChange}
+                        onFocus={onFocus}
+                        ref={ref}
+                        role="switch"
                         type="checkbox"
                         {...rest}
                     />

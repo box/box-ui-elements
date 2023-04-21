@@ -78,7 +78,7 @@
             z-index: 2; /* place on top of siblings */
             color: $bdl-gray-80;
             background-color: $bdl-gray-10;
-            border-color: $bdl-gray-62;
+            border-color: $bdl-gray-65;
             box-shadow: none;
         }
 
@@ -93,7 +93,7 @@
         & > .bdl-targeted-click-through {
             > .btn,
             > .bdl-Button {
-                color: $bdl-gray-62;
+                color: $bdl-gray-65;
                 background-color: $bdl-gray-02;
                 border: 1px solid $bdl-gray-30;
                 box-shadow: none;

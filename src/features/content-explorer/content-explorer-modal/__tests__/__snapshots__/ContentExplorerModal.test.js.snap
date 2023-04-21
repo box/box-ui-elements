@@ -14,6 +14,7 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
 >
   <ContentExplorer
     actionButtonsProps={Object {}}
+    breadcrumbProps={Object {}}
     cancelButtonProps={Object {}}
     chooseButtonProps={Object {}}
     className=""
@@ -21,6 +22,7 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
     customInput={[Function]}
     formatMessage={[Function]}
     initialFoldersPath={Array []}
+    isResponsive={false}
     items={Array []}
     listHeight={285}
     listWidth={560}

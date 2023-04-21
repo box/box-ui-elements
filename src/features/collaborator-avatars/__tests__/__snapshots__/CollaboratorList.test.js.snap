@@ -13,15 +13,14 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
       rel="noopener"
       target="_blank"
     >
-      <PlainButton
+      <span
         className="manage-all-btn"
-        type="button"
       >
         <FormattedMessage
           defaultMessage="Manage All"
           id="boxui.collaboratorAvatars.manageAllLinkText"
         />
-      </PlainButton>
+      </span>
     </Link>
   </div>
   <ul
@@ -94,7 +93,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
       className="btn-done"
       isLoading={false}
       showRadar={false}
-      type="submit"
+      type="button"
     >
       <FormattedMessage
         defaultMessage="Done"
@@ -118,15 +117,14 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
       rel="noopener"
       target="_blank"
     >
-      <PlainButton
+      <span
         className="manage-all-btn"
-        type="button"
       >
         <FormattedMessage
           defaultMessage="Manage All"
           id="boxui.collaboratorAvatars.manageAllLinkText"
         />
-      </PlainButton>
+      </span>
     </Link>
   </div>
   <ul
@@ -200,7 +198,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
       className="btn-done"
       isLoading={false}
       showRadar={false}
-      type="submit"
+      type="button"
     >
       <FormattedMessage
         defaultMessage="Done"

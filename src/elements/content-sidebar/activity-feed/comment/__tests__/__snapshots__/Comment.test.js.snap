@@ -35,6 +35,12 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
       >
         <MediaMenu
           data-testid="comment-actions-menu"
+          dropdownProps={
+            Object {
+              "onMenuClose": [Function],
+              "onMenuOpen": [Function],
+            }
+          }
           isDisabled={false}
           menuProps={
             Object {
@@ -64,15 +70,18 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-timestamp"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={null}
       />
     </MediaBody>
@@ -107,13 +116,17 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-timestamp"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         onTranslate={[MockFunction]}
         tagged_message="test"
         translationEnabled={true}
@@ -151,15 +164,18 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-timestamp"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={true}
       />
     </MediaBody>
@@ -198,15 +214,18 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
           name="50 Cent"
         />
       </div>
-      <div>
+      <div
+        className="bcs-Comment-timestamp"
+      >
         <ActivityTimestamp
           date={1506534041000}
         />
       </div>
-      <ActivityMessage
+      <ActivityStatus />
+      <ForwardRef(withFeatureConsumer(ActivityMessage))
         id="123"
+        isEdited={false}
         tagged_message="test"
-        translationEnabled={false}
         translationFailed={null}
       />
     </MediaBody>

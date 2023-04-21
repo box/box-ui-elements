@@ -27,7 +27,7 @@ type Props = {
     contactsLoaded?: boolean,
     createComment?: Function,
     entityId?: string,
-    getAvatarUrl: GetAvatarUrlCallback,
+    getAvatarUrl?: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     isDisabled?: boolean,
     isEditing?: boolean,
@@ -36,10 +36,11 @@ type Props = {
     onCancel: Function,
     onFocus?: Function,
     onSubmit?: Function,
+    placeholder?: string,
     showTip?: boolean,
     tagged_message?: string,
     updateComment?: Function,
-    user: User,
+    user?: User,
 } & InjectIntlProvidedProps;
 
 type State = {
@@ -119,6 +120,7 @@ class CommentForm extends React.Component<Props, State> {
             tagged_message,
             getAvatarUrl,
             showTip = true,
+            placeholder = formatMessage(messages.commentWrite),
         } = this.props;
         const { commentEditorState } = this.state;
         const inputContainerClassNames = classNames('bcs-CommentForm', className, {
@@ -127,7 +129,7 @@ class CommentForm extends React.Component<Props, State> {
 
         return (
             <Media className={inputContainerClassNames}>
-                {!isEditing && (
+                {!isEditing && !!user && (
                     <Media.Figure className="bcs-CommentForm-avatar">
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </Media.Figure>
@@ -149,7 +151,7 @@ class CommentForm extends React.Component<Props, State> {
                             onChange={this.onMentionSelectorChangeHandler}
                             onFocus={onFocus}
                             onMention={getMentionWithQuery}
-                            placeholder={tagged_message ? undefined : formatMessage(messages.commentWrite)}
+                            placeholder={tagged_message ? undefined : placeholder}
                             validateOnBlur={false}
                         />
                         {showTip && (

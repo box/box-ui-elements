@@ -11,7 +11,7 @@ import InlineError from '../../components/inline-error/InlineError';
 
 import SidebarSection from './SidebarSection';
 
-import type { Errors } from './flowTypes';
+import type { Errors } from '../common/flowTypes';
 
 type Props = {
     errorCode?: string,

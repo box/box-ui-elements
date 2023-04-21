@@ -40,6 +40,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
       Object {
         "formatDate": [Function],
         "formatMessage": [Function],
+        "formatNumber": [Function],
         "formatRelativeTime": [Function],
       }
     }
@@ -201,6 +202,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
       Object {
         "formatDate": [Function],
         "formatMessage": [Function],
+        "formatNumber": [Function],
         "formatRelativeTime": [Function],
       }
     }

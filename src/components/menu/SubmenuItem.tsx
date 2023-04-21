@@ -8,6 +8,7 @@ import Arrow16 from '../../icon/fill/Arrow16';
 
 const SUBMENU_LEFT_ALIGNED_CLASS = 'is-left-aligned';
 const SUBMENU_BOTTOM_ALIGNED_CLASS = 'is-bottom-aligned';
+const SUBMENU_RIGHT_BOTTOM_ALIGNED_CLASS = 'is-right-bottom-aligned';
 
 export interface SubmenuItemProps {
     /** 'aria-disabled' - ARIA attribute describing whether the submenu item is disabled */
@@ -82,10 +83,12 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
             submenuTriggerElBounding.right + submenuElBounding.width > rightBoundaryElementBounding.right;
         const isBottomAligned =
             submenuTriggerElBounding.top + submenuElBounding.height > bottomBoundaryElementBounding.bottom;
-
+        const isRightBottomAligned =
+            submenuTriggerElBounding.bottom + submenuElBounding.height > bottomBoundaryElementBounding.bottom;
         return {
             [SUBMENU_LEFT_ALIGNED_CLASS]: isLeftAligned,
             [SUBMENU_BOTTOM_ALIGNED_CLASS]: isBottomAligned,
+            [SUBMENU_RIGHT_BOTTOM_ALIGNED_CLASS]: isRightBottomAligned, // Used only in medium-screen viewport sizes
         };
     };
 
@@ -102,6 +105,12 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
 
         if (onClick) {
             onClick(event);
+        }
+
+        // If event target is triggering submenu element, do not propagate to close menu
+        if (this.submenuEl && !this.submenuEl.contains(event.target as Node)) {
+            event.stopPropagation();
+            event.preventDefault();
         }
     };
 

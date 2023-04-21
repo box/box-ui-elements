@@ -17,6 +17,7 @@ const currentUser = {
 };
 const mentionSelectorContacts = [];
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
+const TIME_STRING_SEPT_28_2017 = '2017-09-28T10:40:41-07:00';
 
 const allHandlers = {
     contacts: {
@@ -39,6 +40,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     const mockActivity = {
         currentUser,
         handlers: allHandlers,
+        hasVersions: true,
         isCurrentVersion: true,
         item: mockAnnotation,
         mentionSelectorContacts,
@@ -50,10 +52,10 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
         CommentForm.default = jest.fn().mockReturnValue(<div />);
     });
 
-    test('should not render annotation activity menu when both can_delete is false and can_edit is false', () => {
+    test('should not render annotation activity menu when can_delete is false and can_edit is false and can_resolve is false', () => {
         const item = {
             ...mockAnnotation,
-            permissions: { can_delete: false, can_edit: false },
+            permissions: { can_delete: false, can_edit: false, can_resolve: false },
         };
 
         const wrapper = getWrapper({ item });
@@ -62,17 +64,21 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
     });
 
     test.each`
-        canDelete | canEdit
-        ${false}  | ${true}
-        ${true}   | ${false}
-        ${true}   | ${true}
+        canDelete | canEdit  | canResolve
+        ${false}  | ${false} | ${true}
+        ${true}   | ${false} | ${false}
+        ${false}  | ${true}  | ${false}
+        ${false}  | ${true}  | ${true}
+        ${true}   | ${true}  | ${false}
+        ${true}   | ${false} | ${true}
+        ${true}   | ${true}  | ${true}
     `(
-        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit',
-        ({ canDelete, canEdit }) => {
+        'should correctly render annotation activity when canDelete: $canDelete and canEdit: $canEdit and canResolve: $canResolve',
+        ({ canDelete, canEdit, canResolve }) => {
             const unixTime = new Date(TIME_STRING_SEPT_27_2017).getTime();
             const item = {
                 ...mockAnnotation,
-                permissions: { can_delete: canDelete, can_edit: canEdit },
+                permissions: { can_delete: canDelete, can_edit: canEdit, can_resolve: canResolve },
             };
 
             const wrapper = getWrapper({ item });
@@ -86,7 +92,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
                 },
             });
             expect(wrapper.exists(AnnotationActivityMenu)).toBe(true);
-            expect(wrapper.find('ActivityMessage').prop('tagged_message')).toEqual(
+            expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('tagged_message')).toEqual(
                 mockActivity.item.description.message,
             );
         },
@@ -140,6 +146,11 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
             ...messages.annotationActivityVersionUnavailable,
         });
         expect(activityLink.prop('isDisabled')).toBe(true);
+    });
+
+    test('should not render file version link if hasVersions is false', () => {
+        const wrapper = getWrapper({ hasVersions: false });
+        expect(wrapper.exists('AnnotationActivityLink')).toBe(false);
     });
 
     test('should render commenter as a link', () => {
@@ -204,6 +215,25 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivity',
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
+
+    test.each`
+        created_at                  | modified_at                 | status        | expectedIsEdited
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'open'}     | ${true}
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'resolved'} | ${false}
+    `(
+        `given created_at = $created_at, modified_at = $modified_at and status = $status, isEdited prop on ActivityMessage should be: $expectedIsEdited`,
+        ({ created_at, modified_at, status, expectedIsEdited }) => {
+            const wrapper = getWrapper({ item: { ...mockAnnotation, created_at, modified_at, status } });
+
+            expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('isEdited')).toEqual(
+                expectedIsEdited,
+            );
+        },
+    );
 
     describe('delete confirmation behavior', () => {
         test('should render the DeleteConfirmation when delete menu item is selected', () => {

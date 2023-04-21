@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme/build';
 import { MemoryRouter } from 'react-router-dom';
 
+import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK } from '../../../constants';
 import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
 
 // mock lazy imports
@@ -70,7 +71,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             test('should render with tasks deeplink', () => {
                 const wrapper = getWrapper({ path: '/activity/tasks/12345' });
                 expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedEntryType: 'task',
+                    activeFeedEntryType: FEED_ITEM_TYPE_TASK,
                     activeFeedEntryId: '12345',
                 });
             });
@@ -78,7 +79,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             test('should render with comments deeplink', () => {
                 const wrapper = getWrapper({ path: '/activity/comments/12345' });
                 expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedEntryType: 'comment',
+                    activeFeedEntryType: FEED_ITEM_TYPE_COMMENT,
                     activeFeedEntryId: '12345',
                 });
             });
@@ -93,7 +94,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             test('should render with annotations deeplink', () => {
                 const wrapper = getWrapper({ path: '/activity/annotations/12345/67890' });
                 expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedEntryType: 'annotation',
+                    activeFeedEntryType: FEED_ITEM_TYPE_ANNOTATION,
                     activeFeedEntryId: '67890',
                 });
             });

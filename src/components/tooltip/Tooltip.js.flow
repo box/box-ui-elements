@@ -20,7 +20,7 @@ export type Position =
     | 'top-left'
     | 'top-right';
 
-type Props = {
+export type Props = {
     /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement,
     /** A React element to put the tooltip on */

@@ -18,6 +18,7 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
         'import/no-unresolved': 'off', // fixme
+        "no-unused-expressions": 'off', // disabled in favor for typescript version of error
     },
     overrides: [
         {
@@ -62,6 +63,7 @@ module.exports = {
                 'camelcase': 'error',
                 'no-shadow': 'off',
                 '@typescript-eslint/no-shadow': ['error'],
+                "@typescript-eslint/no-unused-expressions": 'error', // moves eslint no-unused-expressions to a typescript error
             },
         },
     ],

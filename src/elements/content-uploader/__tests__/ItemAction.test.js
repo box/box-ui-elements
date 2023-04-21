@@ -1,6 +1,7 @@
 import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
+import PlainButton from '../../../components/plain-button';
 import { ItemActionForTesting as ItemAction } from '../ItemAction';
 import {
     ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
@@ -15,7 +16,7 @@ describe('elements/content-uploader/ItemAction', () => {
     const getWrapper = props =>
         shallow(
             <ItemAction
-                intl={{ formatMessage: data => <span {...data} /> }}
+                intl={{ formatMessage: data => data.defaultMessage }}
                 onClick={noop}
                 status={STATUS_PENDING}
                 {...props}
@@ -75,5 +76,14 @@ describe('elements/content-uploader/ItemAction', () => {
 
         expect(wrapper.exists('PrimaryButton')).toBe(true);
         expect(wrapper.exists('PlainButton')).toBe(false);
+    });
+
+    test('should have aria-label "Cancel this upload" when status is pending', () => {
+        const wrapper = getWrapper({
+            status: STATUS_PENDING,
+        });
+        const plainButton = wrapper.find(PlainButton);
+        expect(plainButton.prop('aria-label')).toBe('Cancel this upload');
+        expect(plainButton.prop('aria-describedby')).toBeFalsy();
     });
 });

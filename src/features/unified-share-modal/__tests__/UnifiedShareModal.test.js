@@ -53,6 +53,15 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should render a component with onLoadSharedLink callback called when shared link data returns', () => {
+            const onLoadSharedLinkMock = jest.fn();
+            const wrapper = getWrapper({
+                trackingProps: { modalTracking: { onLoadSharedLink: onLoadSharedLinkMock } },
+            });
+            wrapper.setProps({ sharedLink: { url: 'http://go', permissionLevel: 'canEdit' } });
+            expect(onLoadSharedLinkMock).toHaveBeenCalledWith('canEdit');
+        });
+
         test('should render an allShareRestrictionWarning message when it is available', () => {
             const SharingRestrictionWarning = <div className="test-class">Sharing is prohibited</div>;
             const wrapper = getWrapper({ allShareRestrictionWarning: SharingRestrictionWarning });

@@ -2,6 +2,12 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import ActivityFeed from '../ActivityFeed';
 import { scrollIntoView } from '../../../../../utils/dom';
+import {
+    FEED_ITEM_TYPE_ANNOTATION,
+    FEED_ITEM_TYPE_COMMENT,
+    FEED_ITEM_TYPE_TASK,
+    FEED_ITEM_TYPE_VERSION,
+} from '../../../../../constants';
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 jest.mock('../../../../../utils/dom');
@@ -22,7 +28,7 @@ const annotations = {
                 can_delete: true,
                 can_edit: true,
             },
-            type: 'annotation',
+            type: FEED_ITEM_TYPE_ANNOTATION,
         },
     ],
 };
@@ -31,7 +37,7 @@ const comments = {
     total_count: 1,
     entries: [
         {
-            type: 'comment',
+            type: FEED_ITEM_TYPE_COMMENT,
             id: '123',
             created_at: 'Thu Sep 26 33658 19:46:39 GMT-0600 (CST)',
             tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
@@ -42,7 +48,7 @@ const comments = {
 
 const first_version = {
     action: 'upload',
-    type: 'file_version',
+    type: FEED_ITEM_TYPE_VERSION,
     id: 123,
     created_at: 'Thu Sep 20 33658 19:45:39 GMT-0600 (CST)',
     trashed_at: 1234567891,
@@ -59,7 +65,7 @@ const file = {
     modified_at: 2234567891,
     file_version: {
         id: 987,
-        type: 'file_version',
+        type: FEED_ITEM_TYPE_VERSION,
     },
     restored_from: {
         id: first_version.id,
@@ -69,7 +75,7 @@ const file = {
 };
 
 const taskWithAssignment = {
-    type: 'task',
+    type: FEED_ITEM_TYPE_TASK,
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: otherUser,
@@ -195,7 +201,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     describe('componentDidUpdate()', () => {
         test('should set scrollTop to be the scrollHeight if feedContainer exists and prevProps feedItems is undefined and this.props.feedItems is defined', () => {
             const wrapper = getWrapper({
-                feedItems: [{ type: 'comment' }],
+                feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
             });
             const instance = wrapper.instance();
             instance.feedContainer = {
@@ -216,7 +222,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         test('should set scrollTop to be the scrollHeight if more feedItems are added', () => {
             const wrapper = getWrapper({
-                feedItems: [{ type: 'comment' }, { type: 'comment' }],
+                feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }, { type: FEED_ITEM_TYPE_COMMENT }],
             });
 
             const instance = wrapper.instance();
@@ -227,7 +233,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
             instance.componentDidUpdate(
                 {
-                    feedItems: [{ type: 'comment' }],
+                    feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
                     currentUser,
                 },
                 { isInputOpen: false },
@@ -238,7 +244,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         test('should set scrollTop to be the scrollHeight if the user becomes defined', () => {
             const wrapper = getWrapper({
-                feedItems: [{ type: 'comment' }],
+                feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
             });
             const instance = wrapper.instance();
             instance.feedContainer = {
@@ -248,7 +254,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
             instance.componentDidUpdate(
                 {
-                    feedItems: [{ type: 'comment' }],
+                    feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
                     currentUser: undefined,
                 },
                 { isInputOpen: false },
@@ -259,7 +265,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         test('should set scrollTop to be the scrollHeight if input opens', () => {
             const wrapper = getWrapper({
-                feedItems: [{ type: 'comment' }],
+                feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
             });
             wrapper.setState({
                 isInputOpen: true,
@@ -272,7 +278,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
             instance.componentDidUpdate(
                 {
-                    feedItems: [{ type: 'comment' }],
+                    feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
                     currentUser,
                 },
                 { isInputOpen: false },
@@ -282,7 +288,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         });
 
         test('should call scrollToActiveFeedItemOrErrorMessage if feed items loaded', () => {
-            const wrapper = getWrapper({ feedItems: [{ type: 'comment' }] });
+            const wrapper = getWrapper({ feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }] });
             const instance = wrapper.instance();
             instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
 
@@ -333,7 +339,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         });
         const instance = wrapper.instance();
         wrapper.setProps({
-            feedItems: [{ type: 'comment' }],
+            feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
         });
 
         expect(wrapper.find('ActiveState').prop('activeFeedItemRef')).toEqual(instance.activeFeedItemRef);
@@ -347,7 +353,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const li = document.createElement('li');
         instance.activeFeedItemRef.current = li;
         wrapper.setProps({
-            feedItems: [{ type: 'comment' }],
+            feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
         });
         expect(scrollIntoView).toHaveBeenCalledWith(li);
     });
@@ -360,7 +366,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         instance.activeFeedItemRef.current = null;
         wrapper.setProps({
-            feedItems: [{ type: 'comment' }],
+            feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
         });
         expect(scrollIntoView).not.toHaveBeenCalled();
     });
@@ -470,5 +476,79 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             const instance = wrapper.instance();
             expect(instance.hasLoaded(prevCurrentUser, prevFeedItems)).toBe(expected);
         });
+    });
+
+    describe('setSelectedItem()', () => {
+        test('should call setState if hasReplies = true', () => {
+            const wrapper = getWrapper({
+                hasReplies: true,
+            });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+
+            instance.setSelectedItem('123');
+
+            expect(instance.setState).toBeCalledWith({ selectedItemId: '123' });
+        });
+
+        test.each`
+            hasReplies
+            ${false}
+            ${undefined}
+        `('should not call setState if hasReplies = $hasRepplies', ({ hasReplies }) => {
+            const wrapper = getWrapper({
+                hasReplies,
+            });
+            const instance = wrapper.instance();
+            instance.setState = jest.fn();
+
+            instance.setSelectedItem('123');
+
+            expect(instance.setState).not.toBeCalled();
+        });
+    });
+
+    describe('isFeedItemActive()', () => {
+        test.each`
+            id       | type            | selectedItemId | expected
+            ${'123'} | ${'comment'}    | ${null}        | ${true}
+            ${'456'} | ${'annotation'} | ${null}        | ${false}
+            ${'456'} | ${'comment'}    | ${null}        | ${false}
+            ${'123'} | ${'comment'}    | ${'456'}       | ${false}
+            ${'456'} | ${'annotation'} | ${'456'}       | ${true}
+            ${'456'} | ${'comment'}    | ${'456'}       | ${true}
+        `('should return $expected given id=$id and type=$type', ({ id, type, selectedItemId, expected }) => {
+            const wrapper = getWrapper({
+                activeFeedEntryId: '123',
+                activeFeedEntryType: 'comment',
+            });
+            const instance = wrapper.instance();
+            instance.state.selectedItemId = selectedItemId;
+
+            expect(instance.isFeedItemActive({ id, type })).toBe(expected);
+        });
+    });
+
+    describe('isCommentFeedItemActive()', () => {
+        test.each`
+            replies            | isFeedItemActiveResult | expected
+            ${[{ id: '123' }]} | ${false}               | ${true}
+            ${[{ id: '456' }]} | ${false}               | ${false}
+            ${[{ id: '456' }]} | ${true}                | ${true}
+            ${[]}              | ${false}               | ${false}
+            ${[]}              | ${true}                | ${true}
+            ${undefined}       | ${false}               | ${false}
+            ${undefined}       | ${true}                | ${true}
+        `(
+            'should return $expected when replies=replies and isFeedItemActive results with $isFeedItemActiveResult',
+            ({ replies, isFeedItemActiveResult, expected }) => {
+                const wrapper = getWrapper({
+                    activeFeedEntryId: '123',
+                });
+                const instance = wrapper.instance();
+                instance.isFeedItemActive = jest.fn().mockImplementation(() => isFeedItemActiveResult);
+                expect(instance.isCommentFeedItemActive({ id: 'foo', replies, type: 'bar' })).toBe(expected);
+            },
+        );
     });
 });

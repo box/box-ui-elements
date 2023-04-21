@@ -32,6 +32,8 @@ export const DETAILS_TARGETS = {
 export const ACTIVITY_TARGETS = {
     ANNOTATION_OPTIONS_DELETE: 'activityfeed-annotation-delete',
     ANNOTATION_OPTIONS_EDIT: 'activityfeed-annotation-edit',
+    ANNOTATION_OPTIONS_RESOLVE: 'activityfeed-annotation-resolve',
+    ANNOTATION_OPTIONS_UNRESOLVE: 'activityfeed-annotation-unresolve',
     ANNOTATION_OPTIONS: 'activityfeedannotation', // component
     APPROVAL_FORM_ADD_TASK: 'activityfeed-apporvalformaddtask',
     APPROVAL_FORM_CANCEL: 'activityfeed-approvalformcancel',

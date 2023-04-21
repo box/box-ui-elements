@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/SharedLinkSection should account for shared link expirations being set 1`] = `
+exports[`features/unified-share-modal/SharedLinkSection should match snapshot when shared link expiration is set 1`] = `
 <div
   className="be"
 >
@@ -20,49 +20,37 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={false}
-        isOn={true}
-        label={
-          <span>
-            <FormattedMessage
-              defaultMessage="Shared link is created"
-              id="boxui.unifiedShare.linkShareOn"
-            />
-            <Tooltip
-              constrainToScrollParent={false}
-              constrainToWindow={true}
-              isDisabled={false}
-              position="top-center"
-              text={
-                <FormattedMessage
-                  defaultMessage="This link will expire and be inaccessible on {expiration, date, long}."
-                  id="boxui.unifiedShare.sharedLinkExpirationTooltip"
-                  values={
-                    Object {
-                      "expiration": 1519404618000000,
-                    }
-                  }
-                />
-              }
-              theme="default"
+    <Toggle
+      isDisabled={false}
+      isOn={true}
+      label={
+        <span>
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+          <Tooltip
+            constrainToScrollParent={false}
+            constrainToWindow={true}
+            isDisabled={false}
+            position="top-center"
+            text="This link will expire and be inaccessible on {expiration, date, long}."
+            theme="default"
+          >
+            <span
+              aria-label="Expires"
+              className="shared-link-expiration-badge"
+              role="img"
             >
-              <span
-                className="shared-link-expiration-badge"
-              >
-                <IconClock
-                  color="#ed3757"
-                />
-              </span>
-            </Tooltip>
-          </span>
-        }
-        name="toggle"
-      />
-    </div>
+              <IconClock
+                color="#ed3757"
+              />
+            </span>
+          </Tooltip>
+        </span>
+      }
+      name="toggle"
+    />
   </div>
   <div
     className="shared-link-field-row"
@@ -79,6 +67,7 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -109,15 +98,11 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -148,9 +133,11 @@ exports[`features/unified-share-modal/SharedLinkSection should account for share
       }
     />
     <GuideTooltip
+      body="Select the new edit option to easily share your file with people or groups."
       isShown={false}
       onDismiss={[Function]}
       position="bottom-center"
+      title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -199,29 +186,20 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       constrainToWindow={true}
       isDisabled={false}
       position="top-right"
-      text={
-        <FormattedMessage
-          defaultMessage="You do not have permission to remove the link."
-          id="boxui.unifiedShare.removeLinkTooltip"
-        />
-      }
+      text="You do not have permission to remove the link."
       theme="default"
     >
-      <div
-        className="share-toggle-container"
-      >
-        <Toggle
-          isDisabled={true}
-          isOn={true}
-          label={
-            <FormattedMessage
-              defaultMessage="Shared link is created"
-              id="boxui.unifiedShare.linkShareOn"
-            />
-          }
-          name="toggle"
-        />
-      </div>
+      <Toggle
+        isDisabled={true}
+        isOn={true}
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
+        name="toggle"
+      />
     </Tooltip>
   </div>
   <div
@@ -239,6 +217,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -269,15 +248,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -308,9 +283,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       }
     />
     <GuideTooltip
+      body="Select the new edit option to easily share your file with people or groups."
       isShown={false}
       onDismiss={[Function]}
       position="bottom-center"
+      title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={Array []}
@@ -354,29 +331,20 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToWindow={true}
       isDisabled={false}
       position="top-right"
-      text={
-        <FormattedMessage
-          defaultMessage="Create and copy link for sharing"
-          id="boxui.unifiedShare.sharedLinkDisabledTooltipCopy"
-        />
-      }
+      text="Create and copy link for sharing"
       theme="default"
     >
-      <div
-        className="share-toggle-container"
-      >
-        <Toggle
-          isDisabled={false}
-          isOn={false}
-          label={
-            <FormattedMessage
-              defaultMessage="Create shared link"
-              id="boxui.unifiedShare.linkShareOff"
-            />
-          }
-          name="toggle"
-        />
-      </div>
+      <Toggle
+        isDisabled={false}
+        isOn={false}
+        label={
+          <FormattedMessage
+            defaultMessage="Create shared link"
+            id="boxui.unifiedShare.linkShareOff"
+          />
+        }
+        name="toggle"
+      />
     </Tooltip>
   </div>
 </div>
@@ -402,21 +370,17 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={false}
-        isOn={true}
-        label={
-          <FormattedMessage
-            defaultMessage="Shared link is created"
-            id="boxui.unifiedShare.linkShareOn"
-          />
-        }
-        name="toggle"
-      />
-    </div>
+    <Toggle
+      isDisabled={false}
+      isOn={true}
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is created"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
+      name="toggle"
+    />
   </div>
   <div
     className="shared-link-field-row"
@@ -433,6 +397,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -463,15 +428,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -502,9 +463,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       }
     />
     <GuideTooltip
+      body="Select the new edit option to easily share your file with people or groups."
       isShown={false}
       onDismiss={[Function]}
       position="bottom-center"
+      title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -547,43 +510,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={true}
-        isOn={false}
-        label={
-          <FormattedMessage
-            defaultMessage="Create shared link"
-            id="boxui.unifiedShare.linkShareOff"
-          />
-        }
-        name="toggle"
-      />
-    </div>
-  </div>
-</div>
-`;
-
-exports[`features/unified-share-modal/SharedLinkSection should render disabled create shared link message when item share is false and url is empty 1`] = `
-<Tooltip
-  className="usm-disabled-message-tooltip"
-  constrainToScrollParent={false}
-  constrainToWindow={true}
-  isDisabled={false}
-  position="top-right"
-  text={
-    <FormattedMessage
-      defaultMessage="You do not have permission to create the link."
-      id="boxui.unifiedShare.disabledCreateLinkTooltip"
-    />
-  }
-  theme="default"
->
-  <div
-    className="share-toggle-container"
-  >
     <Toggle
       isDisabled={true}
       isOn={false}
@@ -596,6 +522,30 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
       name="toggle"
     />
   </div>
+</div>
+`;
+
+exports[`features/unified-share-modal/SharedLinkSection should render disabled create shared link message when item share is false and url is empty 1`] = `
+<Tooltip
+  className="usm-disabled-message-tooltip"
+  constrainToScrollParent={false}
+  constrainToWindow={true}
+  isDisabled={false}
+  position="top-right"
+  text="You do not have permission to create the link."
+  theme="default"
+>
+  <Toggle
+    isDisabled={true}
+    isOn={false}
+    label={
+      <FormattedMessage
+        defaultMessage="Create shared link"
+        id="boxui.unifiedShare.linkShareOff"
+      />
+    }
+    name="toggle"
+  />
 </Tooltip>
 `;
 
@@ -606,29 +556,20 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
   constrainToWindow={true}
   isDisabled={false}
   position="top-right"
-  text={
-    <FormattedMessage
-      defaultMessage="You do not have permission to remove the link."
-      id="boxui.unifiedShare.removeLinkTooltip"
-    />
-  }
+  text="You do not have permission to remove the link."
   theme="default"
 >
-  <div
-    className="share-toggle-container"
-  >
-    <Toggle
-      isDisabled={true}
-      isOn={true}
-      label={
-        <FormattedMessage
-          defaultMessage="Shared link is created"
-          id="boxui.unifiedShare.linkShareOn"
-        />
-      }
-      name="toggle"
-    />
-  </div>
+  <Toggle
+    isDisabled={true}
+    isOn={true}
+    label={
+      <FormattedMessage
+        defaultMessage="Shared link is created"
+        id="boxui.unifiedShare.linkShareOn"
+      />
+    }
+    name="toggle"
+  />
 </Tooltip>
 `;
 
@@ -658,29 +599,20 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToWindow={true}
       isDisabled={false}
       position="top-right"
-      text={
-        <FormattedMessage
-          defaultMessage="You do not have permission to remove the link."
-          id="boxui.unifiedShare.removeLinkTooltip"
-        />
-      }
+      text="You do not have permission to remove the link."
       theme="default"
     >
-      <div
-        className="share-toggle-container"
-      >
-        <Toggle
-          isDisabled={true}
-          isOn={true}
-          label={
-            <FormattedMessage
-              defaultMessage="Shared link is created"
-              id="boxui.unifiedShare.linkShareOn"
-            />
-          }
-          name="toggle"
-        />
-      </div>
+      <Toggle
+        isDisabled={true}
+        isOn={true}
+        label={
+          <FormattedMessage
+            defaultMessage="Shared link is created"
+            id="boxui.unifiedShare.linkShareOn"
+          />
+        }
+        name="toggle"
+      />
     </Tooltip>
   </div>
   <div
@@ -698,6 +630,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -728,15 +661,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -769,12 +698,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       constrainToWindow={true}
       isDisabled={false}
       position="top-center"
-      text={
-        <FormattedMessage
-          defaultMessage="This permission can only be changed in Box Notes"
-          id="boxui.unifiedShare.sharedLinkPermissionsEditTooltip"
-        />
-      }
+      text="This permission can only be changed in Box Notes"
       theme="default"
     >
       <PlainButton
@@ -811,21 +735,17 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={false}
-        isOn={true}
-        label={
-          <FormattedMessage
-            defaultMessage="Shared link is created"
-            id="boxui.unifiedShare.linkShareOn"
-          />
-        }
-        name="toggle"
-      />
-    </div>
+    <Toggle
+      isDisabled={false}
+      isOn={true}
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is created"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
+      name="toggle"
+    />
   </div>
   <div
     className="shared-link-field-row"
@@ -842,6 +762,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -872,15 +793,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -911,9 +828,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       }
     />
     <GuideTooltip
+      body="Select the new edit option to easily share your file with people or groups."
       isShown={false}
       onDismiss={[Function]}
       position="bottom-center"
+      title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -957,21 +876,17 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={false}
-        isOn={true}
-        label={
-          <FormattedMessage
-            defaultMessage="Shared link is created"
-            id="boxui.unifiedShare.linkShareOn"
-          />
-        }
-        name="toggle"
-      />
-    </div>
+    <Toggle
+      isDisabled={false}
+      isOn={true}
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is created"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
+      name="toggle"
+    />
   </div>
   <div
     className="shared-link-field-row"
@@ -988,6 +903,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -1018,15 +934,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -1057,9 +969,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       }
     />
     <GuideTooltip
+      body="Select the new edit option to easily share your file with people or groups."
       isShown={false}
       onDismiss={[Function]}
       position="bottom-center"
+      title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -1102,21 +1016,17 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={false}
-        isOn={true}
-        label={
-          <FormattedMessage
-            defaultMessage="Shared link is created"
-            id="boxui.unifiedShare.linkShareOn"
-          />
-        }
-        name="toggle"
-      />
-    </div>
+    <Toggle
+      isDisabled={false}
+      isOn={true}
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is created"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
+      name="toggle"
+    />
   </div>
   <div
     className="shared-link-field-row"
@@ -1133,6 +1043,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -1163,15 +1074,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -1202,9 +1109,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       }
     />
     <GuideTooltip
+      body="Select the new edit option to easily share your file with people or groups."
       isShown={false}
       onDismiss={[Function]}
       position="bottom-center"
+      title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -1247,21 +1156,17 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={false}
-        isOn={true}
-        label={
-          <FormattedMessage
-            defaultMessage="Shared link is created"
-            id="boxui.unifiedShare.linkShareOn"
-          />
-        }
-        name="toggle"
-      />
-    </div>
+    <Toggle
+      isDisabled={false}
+      isOn={true}
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is created"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
+      name="toggle"
+    />
   </div>
   <div
     className="shared-link-field-row"
@@ -1278,6 +1183,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -1308,15 +1214,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}
@@ -1347,9 +1249,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       }
     />
     <GuideTooltip
+      body="Select the new edit option to easily share your file with people or groups."
       isShown={false}
       onDismiss={[Function]}
       position="bottom-center"
+      title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
@@ -1374,6 +1278,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
 
 exports[`features/unified-share-modal/SharedLinkSection should render settings link when handler is provided and shared link is enabled 1`] = `
 <PlainButton
+  aria-haspopup="dialog"
   className="shared-link-settings-btn"
   data-resin-target="settings"
   onClick={
@@ -1418,21 +1323,17 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   <div
     className="shared-link-toggle-row"
   >
-    <div
-      className="share-toggle-container"
-    >
-      <Toggle
-        isDisabled={false}
-        isOn={true}
-        label={
-          <FormattedMessage
-            defaultMessage="Shared link is created"
-            id="boxui.unifiedShare.linkShareOn"
-          />
-        }
-        name="toggle"
-      />
-    </div>
+    <Toggle
+      isDisabled={false}
+      isOn={true}
+      label={
+        <FormattedMessage
+          defaultMessage="Shared link is created"
+          id="boxui.unifiedShare.linkShareOn"
+        />
+      }
+      name="toggle"
+    />
   </div>
   <div
     className="shared-link-field-row"
@@ -1449,6 +1350,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       theme="callout"
     >
       <TextInputWithCopyButton
+        aria-label="URL"
         autofocus={false}
         buttonDefaultText={
           <FormattedMessage
@@ -1479,15 +1381,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       constrainToWindow={true}
       isDisabled={false}
       position="top-left"
-      text={
-        <FormattedMessage
-          defaultMessage="Send Shared Link"
-          id="boxui.unifiedShare.sendSharedLink"
-        />
-      }
+      text="Send Shared Link"
       theme="default"
     >
       <Button
+        aria-label="Send Shared Link"
         className="email-shared-link-btn"
         isLoading={false}
         showRadar={false}

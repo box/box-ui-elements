@@ -75,3 +75,22 @@
 .bcpr.bcpr-thumbnails-open .bcpr-navigate-left {
     left: 226px;
 }
+
+.is-responsive-web {
+    @include breakpoint($medium-screen) {
+        .be.bcpr {
+            position: relative;
+        }
+
+        .bcpr {
+            .bcpr-body {
+                position: static;
+                flex-direction: column;
+            }
+
+            .bcpr-container {
+                position: static;
+            }
+        }
+    }
+}

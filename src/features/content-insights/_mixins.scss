@@ -1,0 +1,7 @@
+@import '../../styles/variables';
+
+@mixin ContentInsightsHeaderText {
+    color: $bdl-gray-65;
+    font-weight: bold;
+    font-size: $bdl-fontSize-minimum;
+}

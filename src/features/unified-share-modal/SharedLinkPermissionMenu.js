@@ -8,6 +8,8 @@ import DropdownMenu, { MenuToggle } from '../../components/dropdown-menu';
 import LabelPill from '../../components/label-pill';
 import PlainButton from '../../components/plain-button';
 import { Menu, SelectMenuItem } from '../../components/menu';
+import { VIEW_SIZE_TYPE } from '../../components/media-query/constants';
+import withMediaQuery from '../../components/media-query/withMediaQuery';
 import type { TargetingApi } from '../targeting/types';
 
 import type { permissionLevelType } from './flowTypes';
@@ -26,6 +28,7 @@ type Props = {
     permissionLevel?: permissionLevelType,
     sharedLinkEditTagTargetingApi?: TargetingApi,
     sharedLinkEditTooltipTargetingApi?: TargetingApi,
+    size: string,
     submitting: boolean,
     trackingProps: {
         onChangeSharedLinkPermissionLevel?: Function,
@@ -58,6 +61,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
             permissionLevel,
             sharedLinkEditTagTargetingApi,
             sharedLinkEditTooltipTargetingApi,
+            size,
             submitting,
             trackingProps,
         } = this.props;
@@ -81,9 +85,12 @@ class SharedLinkPermissionMenu extends Component<Props> {
             },
         };
 
+        const isRightAligned = size === VIEW_SIZE_TYPE.small || size === VIEW_SIZE_TYPE.medium;
+
         return (
             <DropdownMenu
                 constrainToWindow
+                isRightAligned={isRightAligned}
                 onMenuClose={() => {
                     if (allowedPermissionLevels.includes(CAN_EDIT) && canShowTag && sharedLinkEditTagTargetingApi) {
                         sharedLinkEditTagTargetingApi.onComplete();
@@ -105,12 +112,14 @@ class SharedLinkPermissionMenu extends Component<Props> {
                         'is-disabled': submitting,
                         'bdl-is-disabled': submitting,
                     })}
+                    data-testid="usm-share-permissions-toggle"
                     disabled={submitting}
+                    type="button"
                     {...sharedLinkPermissionsMenuButtonProps}
                 >
                     <MenuToggle>{permissionLevels[permissionLevel].label}</MenuToggle>
                 </PlainButton>
-                <Menu className="ums-share-permissions-menu">
+                <Menu className="ums-share-permissions-menu" data-testid="usm-share-permissions-menu">
                     {allowedPermissionLevels.map(level => (
                         <SelectMenuItem
                             key={level}
@@ -135,4 +144,8 @@ class SharedLinkPermissionMenu extends Component<Props> {
     }
 }
 
-export default SharedLinkPermissionMenu;
+const sharedLinkPermissionMenu = withMediaQuery(SharedLinkPermissionMenu);
+sharedLinkPermissionMenu.displayName = 'SharedLinkPermissionMenu';
+
+export { SharedLinkPermissionMenu as SharedLinkPermissionMenuBase };
+export default sharedLinkPermissionMenu;

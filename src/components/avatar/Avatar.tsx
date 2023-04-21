@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { injectIntl, IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import Badgeable from '../badgeable';
 import AvatarImage from './AvatarImage';
 import AvatarInitials from './AvatarInitials';
 import UnknownUserAvatar from './UnknownUserAvatar';
 import GlobeBadge16 from '../../icon/fill/GlobeBadge16';
+
+import messages from './messages';
 
 import './Avatar.scss';
 
@@ -17,10 +20,18 @@ export interface AvatarProps {
      * Required if "name" is not specified.
      */
     avatarUrl?: string | null;
+    /**
+     * Icon React Element that will be shown as a badge in bottom right corner of Avatar.
+     *
+     * Will not be used if `shouldShowExternal` and `isExternal` is true, then GlobalBadge will be shown.
+     */
+    badgeIcon?: React.ReactElement;
     /** classname to add to the container element. */
     className?: string;
     /** Users id */
     id?: string | number | null;
+    /** Intl object */
+    intl: IntlShape;
     /** Whether this avatar should be labeled as external in the current context */
     isExternal?: boolean;
     /**
@@ -35,14 +46,30 @@ export interface AvatarProps {
     size?: keyof typeof SIZES | '';
 }
 
-function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal = false, size = '' }: AvatarProps) {
+function Avatar({
+    avatarUrl,
+    badgeIcon,
+    className,
+    name,
+    id,
+    intl,
+    isExternal,
+    shouldShowExternal = false,
+    size = '',
+}: AvatarProps) {
+    const { formatMessage } = intl;
+
     const [hasImageErrored, setHasImageErrored] = React.useState<boolean>(false);
     const [prevAvatarUrl, setPrevAvatarUrl] = React.useState<AvatarProps['avatarUrl']>(null);
 
     const classes = classNames([
         'avatar',
         className,
-        { [`avatar--${size}`]: size && SIZES[size], 'avatar--isExternal': shouldShowExternal && isExternal },
+        {
+            [`avatar--${size}`]: size && SIZES[size],
+            'avatar--isExternal': shouldShowExternal && isExternal,
+            'avatar--iconBadge': !!badgeIcon,
+        },
     ]);
 
     // Reset hasImageErrored state when avatarUrl changes
@@ -67,16 +94,19 @@ function Avatar({ avatarUrl, className, name, id, isExternal, shouldShowExternal
         avatar = <UnknownUserAvatar className="avatar-icon" />;
     }
 
+    let badge = null;
+    if (shouldShowExternal && isExternal) {
+        badge = <GlobeBadge16 className="bdl-Avatar-externalBadge" title={formatMessage(messages.externalUser)} />;
+    } else if (badgeIcon) {
+        badge = <div className="bdl-Avatar-badge bdl-Avatar-iconBadge">{badgeIcon}</div>;
+    }
+
     return (
-        <Badgeable
-            className={classes}
-            bottomRight={
-                shouldShowExternal && isExternal ? <GlobeBadge16 className="bdl-Avatar-externalBadge" /> : undefined
-            }
-        >
+        <Badgeable className={classes} bottomRight={badge}>
             <span>{avatar}</span>
         </Badgeable>
     );
 }
 
-export default Avatar;
+export { Avatar as AvatarBase };
+export default injectIntl(Avatar);

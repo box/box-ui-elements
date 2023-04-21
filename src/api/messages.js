@@ -32,6 +32,11 @@ const messages = defineMessages({
         description: 'Error message when an annotation comment update fails',
         defaultMessage: 'This comment could not be modified.',
     },
+    repliesFetchErrorMessage: {
+        id: 'be.api.repliesFetchErrorMessage',
+        description: 'Error message when fetching for comment replies fails',
+        defaultMessage: 'The replies to this comment could not be loaded.',
+    },
     taskActionErrorTitle: {
         id: 'be.api.taskActionErrorTitle',
         description: 'Title shown when an error occurs performing an action on a task',

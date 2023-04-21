@@ -42,3 +42,27 @@
     line-height: $bdl-line-height;
     letter-spacing: .3px;
 }
+
+@mixin bdl-targetIE11 {
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+        @content;
+    }
+}
+
+@mixin bdl-lineClamp($max-lines: 2, $line-height: 1.5) {
+    display: -webkit-box; /* stylelint-disable-line value-no-vendor-prefix */
+    overflow: hidden;
+    line-height: $line-height;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical; /* stylelint-disable-line property-no-vendor-prefix */
+    -webkit-line-clamp: $max-lines;
+
+    // On IE11 we truncate to a single line since line-clamp
+    // is not supported
+    @include bdl-targetIE11 {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

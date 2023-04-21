@@ -8,6 +8,7 @@ describe('icons/item-icon/ItemIcon', () => {
     describe.each([
         'audio',
         'bookmark',
+        'boxcanvas',
         'boxnote',
         'code',
         'default',

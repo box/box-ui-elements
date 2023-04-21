@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../components/plain-button';
 import Button from '../../components/button';
@@ -51,7 +52,7 @@ type Props = {
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     config?: USMConfig,
-    intl: any,
+    intl: IntlShape,
     isAllowEditSharedLinkForFileEnabled: boolean,
     item: itemtype,
     itemType: ItemType,
@@ -308,7 +309,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         />
                     </Tooltip>
                     {!hideEmailButton && (
-                        <Tooltip position="top-left" text={<FormattedMessage {...messages.sendSharedLink} />}>
+                        <Tooltip position="top-left" text={intl.formatMessage(messages.sendSharedLink)}>
                             <Button
                                 aria-label={intl.formatMessage(messages.sendSharedLink)}
                                 className="email-shared-link-btn"
@@ -372,7 +373,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         </GuideTooltip>
                     )}
                     {isEditableBoxNote && (
-                        <Tooltip text={<FormattedMessage {...messages.sharedLinkPermissionsEditTooltip} />}>
+                        <Tooltip text={intl.formatMessage(messages.sharedLinkPermissionsEditTooltip)}>
                             <PlainButton isDisabled className="can-edit-btn">
                                 <FormattedMessage {...messages.sharedLinkPermissionsEdit} />
                             </PlainButton>
@@ -446,15 +447,13 @@ class SharedLinkSection extends React.Component<Props, State> {
                     position="middle-right"
                     showCloseButton
                     text={
-                        tooltips['shared-link-settings'] || (
-                            <FormattedMessage {...messages.sharedLinkSettingsCalloutText} />
-                        )
+                        tooltips['shared-link-settings'] || intl.formatMessage(messages.sharedLinkSettingsCalloutText)
                     }
                     theme="callout"
                 >
                     <PlainButton
                         {...sharedLinkSettingsButtonProps}
-                        aria-label={intl.formatMessage(messages.settingsButtonLabel)}
+                        aria-haspopup="dialog"
                         className="shared-link-settings-btn"
                         onClick={onSettingsClick}
                         type="button"
@@ -467,7 +466,7 @@ class SharedLinkSection extends React.Component<Props, State> {
     }
 
     renderToggle() {
-        const { item, onDismissTooltip, onToggleSharedLink, sharedLink, submitting, tooltips } = this.props;
+        const { intl, item, onDismissTooltip, onToggleSharedLink, sharedLink, submitting, tooltips } = this.props;
         const { canChangeAccessLevel, expirationTimestamp, url } = sharedLink;
         const isSharedLinkEnabled = !!url;
         const canAddSharedLink = this.canAddSharedLink(isSharedLinkEnabled, item.grantedPermissions.itemShare);
@@ -475,7 +474,6 @@ class SharedLinkSection extends React.Component<Props, State> {
         const isToggleEnabled = (canAddSharedLink || canRemoveSharedLink) && !submitting;
 
         let linkText;
-
         if (isSharedLinkEnabled) {
             linkText = <FormattedMessage {...messages.linkShareOn} />;
             if (expirationTimestamp && expirationTimestamp !== 0) {
@@ -484,16 +482,15 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <FormattedMessage {...messages.linkShareOn} />
                         <Tooltip
                             position="top-center"
-                            text={
-                                <FormattedMessage
-                                    {...messages.sharedLinkExpirationTooltip}
-                                    values={{
-                                        expiration: convertToMs(expirationTimestamp),
-                                    }}
-                                />
-                            }
+                            text={intl.formatMessage(messages.sharedLinkExpirationTooltip, {
+                                expiration: convertToMs(expirationTimestamp),
+                            })}
                         >
-                            <span className="shared-link-expiration-badge">
+                            <span
+                                aria-label={intl.formatMessage(messages.expiresMessage)}
+                                className="shared-link-expiration-badge"
+                                role="img"
+                            >
                                 <IconClock color={bdlWatermelonRed} />
                             </span>
                         </Tooltip>
@@ -505,18 +502,16 @@ class SharedLinkSection extends React.Component<Props, State> {
         }
 
         const toggleComponent = (
-            <div className="share-toggle-container">
-                <Toggle
-                    isDisabled={!isToggleEnabled}
-                    isOn={isSharedLinkEnabled}
-                    label={linkText}
-                    name="toggle"
-                    onChange={onToggleSharedLink}
-                    ref={ref => {
-                        this.toggleRef = ref;
-                    }}
-                />
-            </div>
+            <Toggle
+                isDisabled={!isToggleEnabled}
+                isOn={isSharedLinkEnabled}
+                label={linkText}
+                name="toggle"
+                onChange={onToggleSharedLink}
+                ref={ref => {
+                    this.toggleRef = ref;
+                }}
+            />
         );
 
         if (!submitting) {
@@ -538,10 +533,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                     );
                 }
                 return (
-                    <Tooltip
-                        position="top-right"
-                        text={<FormattedMessage {...messages.sharedLinkDisabledTooltipCopy} />}
-                    >
+                    <Tooltip position="top-right" text={intl.formatMessage(messages.sharedLinkDisabledTooltipCopy)}>
                         {toggleComponent}
                     </Tooltip>
                 );
@@ -556,7 +548,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                     <Tooltip
                         className="usm-disabled-message-tooltip"
                         position="top-right"
-                        text={<FormattedMessage {...tooltipDisabledMessage} />}
+                        text={intl.formatMessage(tooltipDisabledMessage)}
                     >
                         {toggleComponent}
                     </Tooltip>
@@ -589,5 +581,5 @@ class SharedLinkSection extends React.Component<Props, State> {
         );
     }
 }
-
-export default SharedLinkSection;
+export { SharedLinkSection as SharedLinkSectionBase };
+export default injectIntl(SharedLinkSection);

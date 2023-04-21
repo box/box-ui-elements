@@ -17,6 +17,7 @@ export interface CheckboxProps {
     hideLabel?: boolean;
     /** id - Unique `id` for the input */
     id?: string;
+    inputClassName?: string;
     /** isChecked - whether the checkbox is checked or not */
     isChecked?: boolean; // @TODO: eventually call this `checked`
     /** isDisabled - whether the checkbox is disabled or not */
@@ -31,6 +32,8 @@ export interface CheckboxProps {
         | {
               (e: React.FocusEvent<HTMLInputElement>): void;
           };
+    /** onFocus - focus callback function that takes the event as the argument  */
+    onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
     /** onChange - change callback function that takes the event as the argument */
     onChange?: (e: React.SyntheticEvent<HTMLInputElement, Event>) => string | number | boolean | void;
     /** Subsection below the checkbox */
@@ -47,10 +50,12 @@ const Checkbox = ({
     fieldLabel,
     hideLabel,
     id,
+    inputClassName,
     isChecked,
     isDisabled,
     label,
     name,
+    onFocus,
     onChange,
     subsection,
     tooltip,
@@ -65,9 +70,11 @@ const Checkbox = ({
             <input
                 aria-describedby={description ? `description_${inputID}` : ''}
                 checked={isChecked}
+                className={inputClassName}
                 disabled={isDisabled}
                 id={inputID}
                 name={name}
+                onFocus={onFocus}
                 onChange={onChange}
                 type="checkbox"
                 {...rest}

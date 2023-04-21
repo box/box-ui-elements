@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 
 import ContentExplorerModes from './modes';
-import ItemTypes from './item-types';
+import { TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK } from '../../constants';
 
 const ContentExplorerModePropType = PropTypes.oneOf([
     ContentExplorerModes.COPY,
@@ -18,7 +18,7 @@ const FolderPropType = PropTypes.shape({
 
 const FoldersPathPropType = PropTypes.arrayOf(FolderPropType);
 
-const ItemTypePropType = PropTypes.oneOf([ItemTypes.FILE, ItemTypes.FOLDER, ItemTypes.BOOKMARK]);
+const ItemTypePropType = PropTypes.oneOf([TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK]);
 
 const ItemPropType = PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -43,7 +43,15 @@ const ItemsPropType = PropTypes.arrayOf(ItemOrPlaceholderPropType);
 
 const ItemsMapPropType = PropTypes.objectOf(ItemPropType);
 
+const BreadcrumbPropType = PropTypes.shape({
+    className: PropTypes.string,
+    itemsBeforeOverflow: PropTypes.number,
+    overflowIcon: PropTypes.node,
+    threshold: PropTypes.number,
+});
+
 export {
+    BreadcrumbPropType,
     ContentExplorerModePropType,
     FolderPropType,
     FoldersPathPropType,

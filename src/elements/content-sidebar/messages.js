@@ -7,6 +7,31 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    activitySidebarFilterOptionAllActivity: {
+        id: 'be.activitySidebarFilter.status.allActivity',
+        defaultMessage: 'All Activity',
+        description: 'Dropdown option for filtering all activity from activity list',
+    },
+    activitySidebarFilterOptionAllComments: {
+        id: 'be.activitySidebarFilter.status.allComments',
+        defaultMessage: 'All Comments',
+        description: 'Dropdown option for filtering all comments from comments list',
+    },
+    activitySidebarFilterOptionOpen: {
+        id: 'be.activitySidebarFilter.status.open',
+        defaultMessage: 'Unresolved Comments',
+        description: 'Dropdown option for filtering unresolved comments from activity or comments list',
+    },
+    activitySidebarFilterOptionResolved: {
+        id: 'be.activitySidebarFilter.status.resolved',
+        defaultMessage: 'Resolved Comments',
+        description: 'Dropdown option for filtering resolved comments from activity or comments list',
+    },
+    activitySidebarFilterOptionTasks: {
+        id: 'be.activitySidebarFilter.status.tasks',
+        defaultMessage: 'Tasks',
+        description: 'Dropdown option for filtering tasks from activity list',
+    },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
         defaultMessage: 'Sign documents or send signature requests, right from where your content lives',
@@ -21,6 +46,16 @@ const messages = defineMessages({
         id: 'be.contentSidebar.boxSignRequest',
         defaultMessage: 'Request Signature',
         description: 'label for button that opens a Box Sign signature request experience',
+    },
+    boxSignRequestSignature: {
+        id: 'be.contentSidebar.boxSignRequestSignature',
+        defaultMessage: 'Request Signature',
+        description: 'One of the dropdown options that opens a Box Sign request signature experience',
+    },
+    boxSignSignMyself: {
+        id: 'be.contentSidebar.boxSignSignMyself',
+        defaultMessage: 'Sign Myself',
+        description: 'One of the dropdown options that opens a Box Sign sign myself experience',
     },
     boxSignSignature: {
         id: 'be.contentSidebar.boxSignSignature',

@@ -72,13 +72,15 @@ type Props = {
     /** Controls whether or not the sidebar is expanded on the page */
     expanded: boolean,
 
+    isLogoVisible?: boolean,
+
     linkProps: Object,
 
     onToggle: () => void,
 } & InjectIntlProvidedProps;
 
 function CollapsibleSidebarLogo(props: Props) {
-    const { badge, buttonProps, className, expanded, linkProps, onToggle, intl } = props;
+    const { badge, buttonProps, className, expanded, isLogoVisible = true, linkProps, onToggle, intl } = props;
 
     const classes = classNames('bdl-CollapsibleSidebar-logo', className);
 
@@ -102,16 +104,18 @@ function CollapsibleSidebarLogo(props: Props) {
                 expandedElement={
                     <>
                         {toggleButton}
-                        <LinkBase className="bdl-CollapsibleSidebar-logoLink" {...linkProps}>
-                            <>
-                                <StyledLogo
-                                    className="bdl-CollapsibleSidebar-logoIcon"
-                                    height={32 + 2 * 1 /* border */ + 2 * 4 /* padding */}
-                                    width={61 + 2 * 1 /* border */ + 2 * 4 /* padding */}
-                                />
-                                {badge}
-                            </>
-                        </LinkBase>
+                        {isLogoVisible && (
+                            <LinkBase className="bdl-CollapsibleSidebar-logoLink" {...linkProps}>
+                                <>
+                                    <StyledLogo
+                                        className="bdl-CollapsibleSidebar-logoIcon"
+                                        height={32 + 2 * 1 /* border */ + 2 * 4 /* padding */}
+                                        width={61 + 2 * 1 /* border */ + 2 * 4 /* padding */}
+                                    />
+                                    {badge}
+                                </>
+                            </LinkBase>
+                        )}
                     </>
                 }
             />

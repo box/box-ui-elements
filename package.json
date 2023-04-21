@@ -82,11 +82,13 @@
         "start:storybook": "LANGUAGE=en-US REACT=true BABEL_ENV=development NODE_ENV=development start-storybook -p 6061",
         "start:storybook:ci": "yarn start:storybook --ci",
         "start:storybook:legacy": "BROWSERSLIST_ENV=production yarn start:storybook",
-        "test": "NODE_ICU_DATA=node_modules/full-icu BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.config.js",
+        "test": "BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.config.js",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
-        "test:images": "yarn test -c scripts/jest/jest.images.config.js --maxWorkers=4",
+        "test:images": "BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.images.config.js --maxWorkers=4",
+        "test:images:update": "BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.images.config.js -u --maxWorkers=4",
         "test:visuals": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images",
+        "test:visuals:update": "start-server-and-test start:storybook:ci http-get://localhost:6061 test:images:update",
         "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false"
     },
     "browserslist": {
@@ -118,7 +120,7 @@
         }
     },
     "engines": {
-        "node": ">=10.x",
+        "node": ">=14.0.0 <15.0.0",
         "yarn": ">=1.10.0"
     },
     "devDependencies": {
@@ -140,7 +142,7 @@
         "@box/cldr-data": "^34.2.0",
         "@box/frontend": "8.0.0",
         "@box/languages": "^1.0.0",
-        "@box/react-virtualized": "9.22.3-rc-box.2",
+        "@box/react-virtualized": "9.22.3-rc-box.7",
         "@commitlint/cli": "^8.3.5",
         "@commitlint/config-conventional": "^8.3.4",
         "@formatjs/intl-pluralrules": "^1.5.2",
@@ -184,7 +186,7 @@
         "@types/webpack": "^4.41.3",
         "@typescript-eslint/eslint-plugin": "^4.11.1",
         "@typescript-eslint/parser": "^4.11.1",
-        "@wojtekmaj/enzyme-adapter-react-17": "^0.4.0",
+        "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
         "autoprefixer": "^9.7.4",
         "axios": "0.25.0",
         "babel-core": "^7.0.0-bridge.0",
@@ -236,7 +238,6 @@
         "flow-typed": "^2.6.2",
         "form-serialize": "^0.7.2",
         "formik": "^2.0.3",
-        "full-icu": "^1.3.1",
         "husky": "^4.0.10",
         "ilib-tree-node": "^1.2.0",
         "immutable": "^3.7.4",
@@ -256,7 +257,6 @@
         "mocha": "^6.2.2",
         "mousetrap": "^1.6.3",
         "mutationobserver-shim": "^0.3.3",
-        "node-sass": "^4.13.1",
         "npm-run-all": "^4.1.3",
         "nsp": "^3.2.1",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
@@ -294,6 +294,7 @@
         "regenerator-runtime": "^0.13.3",
         "rimraf": "^3.0.1",
         "sanitize-html": "1.21.1",
+        "sass": "1.34.1",
         "sass-lint": "^1.13.1",
         "sass-loader": "^8.0.2",
         "sass-variable-parser": "^1.2.2",
@@ -316,7 +317,7 @@
         "ts-loader": "^6.2.1",
         "typescript": "^3.7.5",
         "uniqid": "^5.2.0",
-        "uuid": "^3.3.2",
+        "uuid": "^8.3.2",
         "wait-on": "^3.3.0",
         "webpack": "^4.41.5",
         "webpack-bundle-analyzer": "^3.6.0",
@@ -327,7 +328,7 @@
     },
     "peerDependencies": {
         "@box/cldr-data": "^34.2.0",
-        "@box/react-virtualized": "9.22.3-rc-box.2",
+        "@box/react-virtualized": "9.22.3-rc-box.6",
         "@hapi/address": ">=2.0.0 <2.1.2",
         "axios": "^0.25.0",
         "classnames": "^2.2.5",
@@ -364,9 +365,10 @@
         "react-textarea-autosize": "^7.1.0",
         "regenerator-runtime": "^0.13.2",
         "sanitize-html": "1.21.1",
+        "sass": "1.34.1",
         "scroll-into-view-if-needed": "^2.2.20",
         "tabbable": "^1.1.2",
-        "uuid": "^3.3.2"
+        "uuid": "^8.3.2"
     },
     "comments": {
         "dependencies": {

@@ -35,14 +35,16 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 >
   <PlainButton
     aria-label="test title"
-    className="bdl-AdditionalTab"
+    className="bdl-AdditionalTab bdl-is-overflow"
     data-testid="additionaltab"
     isDisabled={false}
     onClick={[Function]}
     type="button"
   >
-    <IconEllipsis
+    <Apps16
       color="#909090"
+      height={20}
+      width={20}
     />
   </PlainButton>
 </AdditionalTabTooltip>
@@ -55,7 +57,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
 >
   <PlainButton
     aria-label="test title"
-    className="bdl-AdditionalTab"
+    className="bdl-AdditionalTab bdl-is-overflow"
     data-testid="additionaltab"
     isDisabled={false}
     onClick={[Function]}

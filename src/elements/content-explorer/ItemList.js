@@ -166,6 +166,7 @@ const ItemList = ({
                                 disableSort
                                 dataKey={FIELD_ID}
                                 cellRenderer={iconCell}
+                                headerRole="gridcell"
                                 width={isSmall ? 30 : 50}
                                 flexShrink={0}
                             />
@@ -180,7 +181,7 @@ const ItemList = ({
                             />
                             {isSmall ? null : (
                                 <Column
-                                    className="bce-item-coloumn"
+                                    className="bce-item-column"
                                     disableSort={!hasSort}
                                     label={
                                         isRecents
@@ -196,7 +197,7 @@ const ItemList = ({
                             )}
                             {isSmall || isMedium ? null : (
                                 <Column
-                                    className="bce-item-coloumn"
+                                    className="bce-item-column"
                                     disableSort={!hasSort}
                                     label={intl.formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
@@ -210,6 +211,7 @@ const ItemList = ({
                                 disableSort
                                 dataKey={FIELD_ID}
                                 cellRenderer={moreOptionsCell}
+                                headerRole="gridcell"
                                 width={isSmall || !canShare ? 58 : 140}
                                 flexShrink={0}
                             />

@@ -8,7 +8,7 @@ import uniqueId from 'lodash/uniqueId';
 
 // @ts-ignore flow import
 import { RESIN_TAG_TARGET } from '../../common/variables';
-import Alert16 from '../../icon/fill/Alert16';
+import AlertBadge16 from '../../icon/fill/AlertBadge16';
 import Calendar16 from '../../icon/fill/Calendar16';
 import ClearBadge16 from '../../icon/fill/ClearBadge16';
 
@@ -819,7 +819,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                         </PlainButton>
                     ) : null}
                     {hasError ? (
-                        <Alert16
+                        <AlertBadge16
                             className="date-picker-icon-alert"
                             title={<FormattedMessage {...messages.iconAlertText} />}
                         />

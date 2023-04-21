@@ -4,7 +4,7 @@ Our development setup assumes a LINUX/BSD environemnt.
 
 ## Project Setup
 
-1. Install Node v12.
+1. Install Node v14.
 2. Install Yarn package manager `https://yarnpkg.com/en/docs/install` v1.10 or higher.
 3. Fork the upstream repo `https://github.com/box/box-ui-elements` via github.
 4. Clone your fork locally `git clone git@github.com:[YOUR GITHUB USERNAME]/box-ui-elements.git`.
@@ -169,3 +169,16 @@ test('something happens', () => {
 ```
 
 See [React Testing Recipes](https://reactjs.org/docs/testing-recipes.html) for more examples.
+
+## Troubleshooting
+
+### Python
+
+```
+gyp verb check python checking for Python executable "/usr/bin/python" in the PATH
+gyp verb `which` failed Error: not found: /usr/bin/python
+```
+
+1. Ensure you have Python 2 installed
+2. Get the location of your Python installation via `which python`
+3. `yarn config set python /path/to/python`

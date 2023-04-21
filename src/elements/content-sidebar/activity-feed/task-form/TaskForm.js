@@ -456,6 +456,7 @@ class TaskForm extends React.Component<Props, State> {
                         <DatePicker
                             className="bcs-task-add-due-date-input"
                             error={this.getErrorByFieldname('taskDueDate')}
+                            errorTooltipPosition="bottom-right"
                             inputProps={{
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',

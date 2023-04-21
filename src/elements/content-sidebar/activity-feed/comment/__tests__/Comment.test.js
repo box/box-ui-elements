@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
+import noop from 'lodash/noop';
 
 import Comment from '../Comment';
 import CommentForm from '../../comment-form/CommentForm';
+import { FEED_ITEM_TYPE_TASK } from '../../../../../constants';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 
@@ -13,6 +15,7 @@ const currentUser = {
 const approverSelectorContacts = [];
 const mentionSelectorContacts = [];
 const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
+const TIME_STRING_SEPT_28_2017 = '2017-09-28T10:40:41-07:00';
 
 const allHandlers = {
     tasks: {
@@ -48,7 +51,6 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 mentionSelectorContacts={mentionSelectorContacts}
             />,
         );
-
         // validating that the Tooltip and the comment posted time are properly set
         expect(wrapper.find('ActivityTimestamp').prop('date')).toEqual(unixTime);
 
@@ -137,6 +139,73 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         },
     );
 
+    test.each`
+        can_resolve | onEdit       | expectedResolveMenuExistance
+        ${false}    | ${noop}      | ${false}
+        ${false}    | ${jest.fn()} | ${false}
+        ${true}     | ${noop}      | ${false}
+        ${true}     | ${jest.fn()} | ${true}
+    `(
+        `given can_resolve permission = $can_resolve and onEdit prop = $onEdit, resolve menu existance should be: $expectedResolveMenuExistance`,
+        ({ can_resolve, onEdit, expectedResolveMenuExistance }) => {
+            const comment = {
+                created_at: TIME_STRING_SEPT_27_2017,
+                created_by: { name: '50 Cent', id: 10 },
+                id: '123',
+                status: 'open',
+                tagged_message: 'test',
+            };
+
+            const wrapper = shallow(
+                <Comment
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onDelete={jest.fn()}
+                    onEdit={onEdit}
+                    permissions={{ can_resolve }}
+                />,
+            );
+
+            expect(wrapper.find('[data-testid="resolve-comment"]').exists()).toBe(expectedResolveMenuExistance);
+        },
+    );
+
+    test.each`
+        status        | expectedResolveMenuExistance | expectedUnresolvedMenuExistance
+        ${'open'}     | ${true}                      | ${false}
+        ${'resolved'} | ${false}                     | ${true}
+    `(
+        `given status = $status, resolve menu existance should be: $expectedResolveMenuExistance and unresolve menu existance should be: $expectedUnresolvedMenuExistance`,
+        ({ status, expectedResolveMenuExistance, expectedUnresolvedMenuExistance }) => {
+            const comment = {
+                created_at: TIME_STRING_SEPT_27_2017,
+                created_by: { name: '50 Cent', id: 10 },
+                id: '123',
+                permissions: { can_resolve: true },
+                tagged_message: 'test',
+                status,
+            };
+
+            const wrapper = shallow(
+                <Comment
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onDelete={jest.fn()}
+                    onEdit={jest.fn()}
+                />,
+            );
+
+            expect(wrapper.find('[data-testid="resolve-comment"]').exists()).toBe(expectedResolveMenuExistance);
+            expect(wrapper.find('[data-testid="unresolve-comment"]').exists()).toBe(expectedUnresolvedMenuExistance);
+        },
+    );
+
     test('should not show actions menu when comment is pending', () => {
         const comment = {
             created_at: TIME_STRING_SEPT_27_2017,
@@ -166,10 +235,11 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             created_at: TIME_STRING_SEPT_27_2017,
             tagged_message: 'test',
             created_by: { name: '50 Cent', id: 10 },
-            type: 'task',
+            type: FEED_ITEM_TYPE_TASK,
             permissions: { can_edit: true, can_delete: true },
         };
         const mockOnEdit = jest.fn();
+        const mockOnSelect = jest.fn();
         const wrapper = mount(
             <Comment
                 id="123"
@@ -179,6 +249,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
                 handlers={allHandlers}
                 mentionSelectorContacts={mentionSelectorContacts}
                 onEdit={mockOnEdit}
+                onSelect={mockOnSelect}
             />,
         );
 
@@ -199,17 +270,62 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        const updatePayload = { id: '000', hasMention: true, text: 'updated message' };
-        instance.handleUpdate(updatePayload);
+        const updateMessagePayload = { id: '000', hasMention: true, text: 'updated message' };
+        instance.handleMessageUpdate(updateMessagePayload);
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(mockOnEdit).toHaveBeenCalledWith(
-            updatePayload.id,
-            updatePayload.text,
-            updatePayload.hasMention,
+            updateMessagePayload.id,
+            updateMessagePayload.text,
+            undefined,
+            updateMessagePayload.hasMention,
             comment.permissions,
         );
     });
+
+    test.each`
+        status        | menuItemTestId         | expectedNewStatus
+        ${'open'}     | ${'resolve-comment'}   | ${'resolved'}
+        ${'resolved'} | ${'unresolve-comment'} | ${'open'}
+    `(
+        `should allow user to resolve / unresolve if they have resolve permissions, edit handler is defined and given status is $status`,
+        ({ status, menuItemTestId, expectedNewStatus }) => {
+            const comment = {
+                created_at: TIME_STRING_SEPT_27_2017,
+                created_by: { name: '50 Cent', id: 10 },
+                hasMention: false,
+                id: '123',
+                permissions: { can_resolve: true, can_edit: false, can_delete: false },
+                tagged_message: 'test',
+                type: FEED_ITEM_TYPE_TASK,
+            };
+            const onEdit = jest.fn();
+            const onSelect = jest.fn();
+            const wrapper = mount(
+                <Comment
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    onEdit={onEdit}
+                    onSelect={onSelect}
+                    status={status}
+                />,
+            );
+
+            wrapper.find('button[data-testid="comment-actions-menu"]').simulate('click');
+            wrapper.find(`MenuItem[data-testid="${menuItemTestId}"]`).simulate('click');
+
+            expect(onEdit).toBeCalledWith(
+                comment.id,
+                undefined,
+                expectedNewStatus,
+                comment.hasMention,
+                comment.permissions,
+            );
+        },
+    );
 
     test('should render an error when one is defined', () => {
         const comment = {
@@ -271,4 +387,41 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
 
         expect(onActionSpy).toHaveBeenCalledTimes(1);
     });
+
+    test.each`
+        created_at                  | modified_at                 | status        | expectedIsEdited
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'open'}     | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'open'}     | ${true}
+        ${TIME_STRING_SEPT_27_2017} | ${undefined}                | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_27_2017} | ${'resolved'} | ${false}
+        ${TIME_STRING_SEPT_27_2017} | ${TIME_STRING_SEPT_28_2017} | ${'resolved'} | ${false}
+    `(
+        `given created_at = $created_at, modified_at = $modified_at and status = $status, isEdited prop on ActivityMessage should be: $expectedIsEdited`,
+        ({ created_at, modified_at, status, expectedIsEdited }) => {
+            const comment = {
+                created_at,
+                modified_at,
+                tagged_message: 'test',
+                created_by: { name: '50 Cent', id: 10 },
+                permissions: { can_delete: true, can_edit: true },
+            };
+
+            const wrapper = shallow(
+                <Comment
+                    id="123"
+                    {...comment}
+                    approverSelectorContacts={approverSelectorContacts}
+                    currentUser={currentUser}
+                    handlers={allHandlers}
+                    mentionSelectorContacts={mentionSelectorContacts}
+                    status={status}
+                />,
+            );
+
+            expect(wrapper.find('ForwardRef(withFeatureConsumer(ActivityMessage))').prop('isEdited')).toEqual(
+                expectedIsEdited,
+            );
+        },
+    );
 });

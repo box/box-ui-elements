@@ -16,4 +16,24 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityItem'
     test.each([true, false])('should compile its className with isFocused equal to %s', isFocused => {
         expect(getWrapper({ isFocused }).hasClass('bcs-is-focused')).toBe(isFocused);
     });
+
+    test('should compile its className with isHoverable if isHoverable is true and hasNewThreadedReplies is true', () => {
+        const wrapper = getWrapper({ isHoverable: true, hasNewThreadedReplies: true });
+
+        expect(wrapper.hasClass('bcs-is-hoverable')).toBe(true);
+    });
+
+    test.each`
+        hasNewThreadedReplies | isHoverable
+        ${false}              | ${false}
+        ${true}               | ${false}
+        ${false}              | ${true}
+    `(
+        `should not compile its className with isHoverable if isHoverable is $isHoverable and hasNewThreadedReplies is $hasNewThreadedReplies`,
+        ({ hasNewThreadedReplies, isHoverable }) => {
+            const wrapper = getWrapper({ isHoverable, hasNewThreadedReplies });
+
+            expect(wrapper.hasClass('bcs-is-hoverable')).toBe(false);
+        },
+    );
 });

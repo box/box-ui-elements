@@ -13,6 +13,8 @@ import API from '../../api';
 import messages from '../common/messages';
 import SidebarAccessStats from './SidebarAccessStats';
 import SidebarClassification from './SidebarClassification';
+// $FlowFixMe typescript component
+import SidebarContentInsights from './SidebarContentInsights';
 import SidebarContent from './SidebarContent';
 import SidebarFileProperties from './SidebarFileProperties';
 import SidebarNotices from './SidebarNotices';
@@ -32,7 +34,8 @@ import {
     IS_ERROR_DISPLAYED,
     SIDEBAR_VIEW_DETAILS,
 } from '../../constants';
-import type { ClassificationInfo, FileAccessStats, Errors } from './flowTypes';
+import type { Errors } from '../common/flowTypes';
+import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';
@@ -40,10 +43,13 @@ import './DetailsSidebar.scss';
 
 type ExternalProps = {
     classification?: ClassificationInfo,
+    contentInsights?: ContentInsights,
     elementId: string,
+    fetchContentInsights?: () => void,
     fileId: string,
     hasAccessStats?: boolean,
     hasClassification?: boolean,
+    hasContentInsights?: boolean,
     hasNotices?: boolean,
     hasProperties?: boolean,
     hasRetentionPolicy?: boolean,
@@ -51,6 +57,7 @@ type ExternalProps = {
     hasVersions?: boolean,
     onAccessStatsClick?: Function,
     onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
+    onContentInsightsClick?: () => void,
     onRetentionPolicyExtendClick?: Function,
     onVersionHistoryClick?: Function,
     retentionPolicy?: Object,
@@ -97,16 +104,24 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     }
 
     componentDidMount() {
+        const { hasAccessStats, hasContentInsights, fetchContentInsights } = this.props;
+
         this.fetchFile();
-        if (this.props.hasAccessStats) {
+        if (hasAccessStats) {
             this.fetchAccessStats();
+        }
+
+        if (hasContentInsights && fetchContentInsights) {
+            fetchContentInsights();
         }
     }
 
-    componentDidUpdate({ hasAccessStats: prevHasAccessStats }: Props) {
-        const { hasAccessStats } = this.props;
+    componentDidUpdate({ hasAccessStats: prevHasAccessStats, hasContentInsights: prevHasContentInsights }: Props) {
+        const { hasAccessStats, hasContentInsights, fetchContentInsights } = this.props;
         // Component visibility props such as hasAccessStats can sometimes be flipped after an async call
         const hasAccessStatsChanged = prevHasAccessStats !== hasAccessStats;
+        const hasContentInsightsChanged = prevHasContentInsights !== hasContentInsights;
+
         if (hasAccessStatsChanged) {
             if (hasAccessStats) {
                 this.fetchAccessStats();
@@ -117,6 +132,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                     accessStatsError: undefined,
                 });
             }
+        }
+
+        if (hasContentInsightsChanged && hasContentInsights && fetchContentInsights) {
+            fetchContentInsights();
         }
     }
 
@@ -316,16 +335,19 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     render() {
         const {
             classification,
+            contentInsights,
             elementId,
             hasProperties,
             hasNotices,
             hasAccessStats,
             hasClassification,
+            hasContentInsights,
             hasRetentionPolicy,
             hasVersions,
             onAccessStatsClick,
             onVersionHistoryClick,
             onClassificationClick,
+            onContentInsightsClick,
             onRetentionPolicyExtendClick,
             retentionPolicy,
         }: Props = this.props;
@@ -354,6 +376,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                         file={file}
                         onAccessStatsClick={onAccessStatsClick}
                         {...accessStatsError}
+                    />
+                )}
+                {file && hasContentInsights && (
+                    <SidebarContentInsights
+                        contentInsights={contentInsights}
+                        onContentInsightsClick={onContentInsightsClick}
                     />
                 )}
                 {file && hasProperties && (

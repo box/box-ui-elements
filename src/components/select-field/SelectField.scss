@@ -55,9 +55,16 @@
 .bdl-SelectFieldDropdown {
     z-index: 4;
     min-width: 100%;
-    margin-top: $bdl-grid-unit * 2;
     overflow-x: hidden;
     border-radius: $bdl-border-radius-size-med;
+
+    &[data-placement='bottom-start'] {
+        margin-top: $bdl-grid-unit * 2;
+    }
+
+    &[data-placement='top-start'] {
+        margin-bottom: $bdl-grid-unit * 2;
+    }
 }
 
 .bdl-SelectField-optionText {

@@ -27,6 +27,36 @@ const messages = defineMessages({
         defaultMessage: '{time, date, full} at {time, time, short}',
         description: 'Comment posted full date time for title',
     },
+    commentResolveMenuItem: {
+        id: 'be.contentSidebar.activityFeed.comment.commentResolveMenuItem',
+        defaultMessage: 'Resolve',
+        description: 'Text to show on menu item to resolve the comment',
+    },
+    commentUnresolveMenuItem: {
+        id: 'be.contentSidebar.activityFeed.comment.commentUnresolveMenuItem',
+        defaultMessage: 'Unresolve',
+        description: 'Text to show on menu item to unresolve the comment',
+    },
+    reply: {
+        id: 'be.contentSidebar.activityFeed.comment.reply',
+        defaultMessage: 'Reply',
+        description: 'Text to show on button to start replying to comment',
+    },
+    replyInThread: {
+        id: 'be.contentSidebar.activityFeed.comment.replyInThread',
+        defaultMessage: 'Reply in thread',
+        description: 'Text to show on reply form input placeholder',
+    },
+    hideReplies: {
+        id: 'be.contentSidebar.activityFeed.comment.hideReplies',
+        defaultMessage: 'Hide replies',
+        description: 'Text to show to hide more replies of comment or annotation',
+    },
+    showReplies: {
+        id: 'be.contentSidebar.activityFeed.comment.showReplies',
+        defaultMessage: 'See {repliesToLoadCount, plural, one {# reply} other {# replies}}',
+        description: 'Text to show to get more replies of comment or annotation',
+    },
 });
 
 export default messages;
