@@ -17,7 +17,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 import { bdlWatermelonRed } from '../../styles/variables';
 import type { ItemType } from '../../common/types/core';
 import type { TargetingApi } from '../targeting/types';
-import { isBoxNote } from '../../utils/file';
+import { isBoxCanvas, isBoxNote } from '../../utils/file';
 import Browser from '../../utils/Browser';
 
 import convertToBoxItem from './utils/item';
@@ -383,7 +383,21 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        {permissionLevel === CAN_EDIT ? (
+                        // TODO: temporary change to support Canvas not being truly public
+                        {/* eslint-disable-next-line no-nested-ternary */}
+                        {isBoxCanvas(item) ? (
+                            permissionLevel === CAN_EDIT ? (
+                                <FormattedMessage
+                                    data-testid="shared-link-editable-publicly-available-message"
+                                    {...messages.canvasSharedLinkEditablePubliclyAvailable}
+                                />
+                            ) : (
+                                <FormattedMessage
+                                    data-testid="shared-link-publicly-available-message"
+                                    {...messages.canvasSharedLinkPubliclyAvailable}
+                                />
+                            )
+                        ) : permissionLevel === CAN_EDIT ? (
                             <FormattedMessage
                                 data-testid="shared-link-editable-publicly-available-message"
                                 {...messages.sharedLinkEditablePubliclyAvailable}

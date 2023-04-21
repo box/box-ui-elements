@@ -352,6 +352,7 @@ export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
 
 /* ------------------ File Extensions ---------------------- */
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
+export const FILE_EXTENSION_BOX_CANVAS = 'boxcanvas';
 export const FILE_EXTENSION_GOOGLE_DOC = 'gdoc';
 export const FILE_EXTENSION_GOOGLE_SHEET = 'gsheet';
 export const FILE_EXTENSION_GOOGLE_SLIDE = 'gslides';

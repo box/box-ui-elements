@@ -9,6 +9,7 @@ import {
     TYPED_ID_FILE_PREFIX,
     TYPED_ID_FOLDER_PREFIX,
     FILE_EXTENSION_BOX_NOTE,
+    FILE_EXTENSION_BOX_CANVAS,
     FILE_EXTENSION_GOOGLE_DOC,
     FILE_EXTENSION_GOOGLE_SHEET,
     FILE_EXTENSION_GOOGLE_SLIDE,
@@ -45,6 +46,15 @@ export function getTypedFolderId(id: string): string {
  */
 export function isBoxNote(file: BoxItem): boolean {
     return file.extension === FILE_EXTENSION_BOX_NOTE;
+}
+
+/**
+ * Determines if the file is box canvas
+ * @param {Object} file a box file
+ * @return boolean true if it is box canvas
+ */
+export function isBoxCanvas(file: BoxItem): boolean {
+    return file.extension === FILE_EXTENSION_BOX_CANVAS;
 }
 
 /**
