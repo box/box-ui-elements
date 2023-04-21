@@ -279,6 +279,7 @@ class SharedLinkSection extends React.Component<Props, State> {
         const hideEmailButton = config && config.showEmailSharedLinkForm === false;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
+        const isBoxCanvasFile = isBoxCanvas(convertToBoxItem(item));
         const allowedPermissionLevels = this.getAllowedPermissionLevels();
 
         return (
@@ -385,7 +386,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         </span>
                         // TODO: temporary change to support Canvas not being truly public
                         {/* eslint-disable-next-line no-nested-ternary */}
-                        {isBoxCanvas(item) ? (
+                        {isBoxCanvasFile ? (
                             permissionLevel === CAN_EDIT ? (
                                 <FormattedMessage
                                     data-testid="shared-link-editable-publicly-available-message"
