@@ -258,12 +258,6 @@ const messages = defineMessages({
         description: 'Text shown in share modal for Canvas file when shared link is open to public access',
         id: 'boxui.unifiedShare.canvasSharedLinkPubliclyAvailable',
     },
-    canvasSharedLinkEditablePubliclyAvailable: {
-        defaultMessage: 'Box sign-in required',
-        description:
-            'Text shown in share modal for Canvas file when shared link is editable and is open to public access',
-        id: 'boxui.unifiedShare.canvasSharedLinkEditablePubliclyAvailable',
-    },
     sharedLinkElevatedEditableCompanyAvailable: {
         defaultMessage: 'People who have access to this link can edit.',
         description: 'Text shown in share modal when shared link is editable and is open to company access',

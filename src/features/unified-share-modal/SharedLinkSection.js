@@ -385,26 +385,20 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        // TODO: temporary change to support Canvas not being truly public
-                        {/* eslint-disable-next-line no-nested-ternary */}
-                        {isBoxCanvasFile ? (
-                            permissionLevel === CAN_EDIT ? (
-                                <FormattedMessage
-                                    data-testid="shared-link-editable-publicly-available-message"
-                                    {...messages.canvasSharedLinkEditablePubliclyAvailable}
-                                />
-                            ) : (
-                                <FormattedMessage
-                                    data-testid="shared-link-publicly-available-message"
-                                    {...messages.canvasSharedLinkPubliclyAvailable}
-                                />
-                            )
-                        ) : permissionLevel === CAN_EDIT ? (
+                        {/* TODO: [CANVAS-5353] temporary change to support Canvas not being truly public */}
+                        {isBoxCanvasFile && (
+                            <FormattedMessage
+                                data-testid="shared-link-publicly-available-message"
+                                {...messages.canvasSharedLinkPubliclyAvailable}
+                            />
+                        )}
+                        {!isBoxCanvasFile && permissionLevel === CAN_EDIT && (
                             <FormattedMessage
                                 data-testid="shared-link-editable-publicly-available-message"
                                 {...messages.sharedLinkEditablePubliclyAvailable}
                             />
-                        ) : (
+                        )}
+                        {!isBoxCanvasFile && permissionLevel !== CAN_EDIT && (
                             <FormattedMessage
                                 data-testid="shared-link-publicly-available-message"
                                 {...messages.sharedLinkPubliclyAvailable}
