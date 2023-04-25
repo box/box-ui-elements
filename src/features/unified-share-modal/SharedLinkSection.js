@@ -385,7 +385,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        {/* TODO: [CANVAS-5353] temporary change to support Canvas not being truly public */}
+                        {/* TODO: temporary change to support Canvas not being truly public */}
                         {isBoxCanvasFile && (
                             <FormattedMessage
                                 data-testid="shared-link-publicly-available-message"
