@@ -19,6 +19,7 @@ import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import ThreadedCommentsAPI from './ThreadedComments';
 import FileAccessStatsAPI from './FileAccessStats';
+import FileActivitiesAPI from './FileActivities';
 import MarkerBasedGroupsAPI from './MarkerBasedGroups';
 import MarkerBasedUsersAPI from './MarkerBasedUsers';
 import GroupsAPI from './Groups';
@@ -116,6 +117,11 @@ class APIFactory {
      * @property {FileAccessStatsAPI}
      */
     fileAccessStatsAPI: FileAccessStatsAPI;
+
+    /*
+     * @property {FileActivitiesAPI}
+     */
+    fileActivitiesAPI: FileActivitiesAPI;
 
     /*
      * @property {MarkerBasedGroupsAPI}
@@ -264,6 +270,11 @@ class APIFactory {
         if (this.fileAccessStatsAPI) {
             this.fileAccessStatsAPI.destroy();
             delete this.fileAccessStatsAPI;
+        }
+
+        if (this.fileActivitiesAPI) {
+            this.fileActivitiesAPI.destroy();
+            delete this.fileActivitiesAPI;
         }
 
         if (this.tasksNewAPI) {
@@ -594,6 +605,21 @@ class APIFactory {
 
         this.fileAccessStatsAPI = new FileAccessStatsAPI(this.options);
         return this.fileAccessStatsAPI;
+    }
+
+    /**
+     * API for file access stats
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {FileAccessStatsAPI} FileActivitiesAPI instance
+     */
+    getFileActivitiesAPI(shouldDestroy: boolean): FileActivitiesAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.FileActivitiesAPI = new FileActivitiesAPI(this.options);
+        return this.FileActivitiesAPI;
     }
 
     /**

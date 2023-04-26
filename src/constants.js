@@ -470,6 +470,16 @@ export const ACTIVITY_FILTER_OPTION_RESOLVED: 'resolved' = 'resolved';
 export const ACTIVITY_FILTER_OPTION_TASKS: 'tasks' = 'tasks';
 export const ACTIVITY_FILTER_OPTION_UNRESOLVED: 'open' = 'open';
 
+/* ------------------ UAA Activity Types ------------------ */
+export const UAA_ACTIVITY_TYPE_ANNOTATION: 'annotation' = 'annotation';
+export const UAA_ACTIVITY_TYPE_APP_ACTIVITY: 'app_activity' = 'app_activity';
+export const UAA_ACTIVITY_TYPE_COMMENT: 'comment' = 'comment';
+export const UAA_ACTIVITY_TYPE_TASK: 'task' = 'task';
+export const UAA_ACTIVITY_TYPE_VERSION: 'versions' = 'versions';
+
+/* ------------------ UAA Type ------------------ */
+export const UAA_TYPE_ACTIVITY: 'activity' = 'activity';
+
 /* ----------------- Theme ---------------------------*/
 export const THEME_VERY_DARK = 'vDark';
 export const THEME_DARK = 'dark';

@@ -15,6 +15,7 @@ import Base from './Base';
 import AnnotationsAPI from './Annotations';
 import CommentsAPI from './Comments';
 import ThreadedCommentsAPI from './ThreadedComments';
+import FileActivitiesAPI from './FileActivities';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
 import GroupsAPI from './Groups';
@@ -36,6 +37,10 @@ import {
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
     TASK_MAX_GROUP_ASSIGNEES,
+    UAA_ACTIVITY_TYPE_ANNOTATION,
+    UAA_ACTIVITY_TYPE_APP_ACTIVITY,
+    UAA_ACTIVITY_TYPE_COMMENT,
+    UAA_ACTIVITY_TYPE_TASK,
 } from '../constants';
 import type {
     TaskCompletionRule,
@@ -75,6 +80,7 @@ import type {
     Tasks,
     ThreadedComments as ThreadedCommentsType,
 } from '../common/types/feed';
+import { parseUAAResponseForFeed } from './utils';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 
@@ -135,6 +141,11 @@ class Feed extends Base {
      * @property {ThreadedCommentsAPI}
      */
     threadedCommentsAPI: ThreadedCommentsAPI;
+
+    /**
+     * @property {FileActivitiesAPI}
+     */
+    fileActivitiesAPI: FileActivitiesAPI;
 
     /**
      * @property {BoxItem}
@@ -368,12 +379,14 @@ class Feed extends Base {
             shouldShowReplies = false,
             shouldShowTasks = true,
             shouldShowVersions = true,
+            shouldUseUAA = false,
         }: {
             shouldShowAnnotations?: boolean,
             shouldShowAppActivity?: boolean,
             shouldShowReplies?: boolean,
             shouldShowTasks?: boolean,
             shouldShowVersions?: boolean,
+            shouldUseUAA?: boolean,
         } = {},
     ): void {
         const { id, permissions = {} } = file;
@@ -400,32 +413,62 @@ class Feed extends Base {
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
         const commentsPromise = shouldShowReplies
-            ? this.fetchThreadedComments(permissions)
-            : this.fetchComments(permissions);
+            ? this.fetchThreadedComments(permissions, shouldUseUAA)
+            : this.fetchComments(permissions, shouldUseUAA);
         const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
-        Promise.all([
-            versionsPromise,
-            currentVersionPromise,
-            commentsPromise,
-            tasksPromise,
-            appActivityPromise,
-            annotationsPromise,
-        ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-            const versionsWithCurrent = currentVersion
-                ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
-                : undefined;
-            const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
-            if (!this.isDestroyed()) {
-                this.setCachedItems(id, sortedFeedItems);
-                if (this.errors.length) {
-                    errorCallback(sortedFeedItems, this.errors);
-                } else {
-                    successCallback(sortedFeedItems);
+        const fileActivitiesPromise = shouldUseUAA
+            ? this.fetchFileActivities(permissions, [
+                  UAA_ACTIVITY_TYPE_ANNOTATION,
+                  UAA_ACTIVITY_TYPE_APP_ACTIVITY,
+                  UAA_ACTIVITY_TYPE_COMMENT,
+                  UAA_ACTIVITY_TYPE_TASK,
+              ])
+            : Promise.resolve();
+
+        if (shouldUseUAA) {
+            Promise.all([versionsPromise, currentVersionPromise, fileActivitiesPromise]).then(
+                ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                    const { entries } = feedItems[0];
+                    const versionsWithCurrent = currentVersion
+                        ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                        : undefined;
+                    const parsedFeedItems = parseUAAResponseForFeed(entries);
+                    const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
+                    if (!this.isDestroyed()) {
+                        this.setCachedItems(id, sortedFeedItems);
+                        if (this.errors.length) {
+                            errorCallback(sortedFeedItems, this.errors);
+                        } else {
+                            successCallback(sortedFeedItems);
+                        }
+                    }
+                },
+            );
+        } else {
+            Promise.all([
+                versionsPromise,
+                currentVersionPromise,
+                commentsPromise,
+                tasksPromise,
+                appActivityPromise,
+                annotationsPromise,
+            ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                const versionsWithCurrent = currentVersion
+                    ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                    : undefined;
+                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
+                if (!this.isDestroyed()) {
+                    this.setCachedItems(id, sortedFeedItems);
+                    if (this.errors.length) {
+                        errorCallback(sortedFeedItems, this.errors);
+                    } else {
+                        successCallback(sortedFeedItems);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     fetchAnnotations(permissions: BoxItemPermission, shouldFetchReplies?: boolean): Promise<?Annotations> {
@@ -450,7 +493,7 @@ class Feed extends Base {
      * @param {Object} permissions - the file permissions
      * @return {Promise} - the file comments
      */
-    fetchComments(permissions: BoxItemPermission): Promise<?Comments> {
+    fetchComments(permissions: BoxItemPermission, shouldUseUAA?: boolean): Promise<?Comments> {
         this.commentsAPI = new CommentsAPI(this.options);
         return new Promise(resolve => {
             this.commentsAPI.getComments(
@@ -458,6 +501,7 @@ class Feed extends Base {
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
+                shouldUseUAA,
             );
         });
     }
@@ -513,7 +557,7 @@ class Feed extends Base {
      * @param {Object} permissions - the file permissions
      * @return {Promise} - the file comments
      */
-    fetchThreadedComments(permissions: BoxItemPermission): Promise<?ThreadedCommentsType> {
+    fetchThreadedComments(permissions: BoxItemPermission, shouldUseUAA?: boolean): Promise<?ThreadedCommentsType> {
         this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
         return new Promise(resolve => {
             this.threadedCommentsAPI.getComments({
@@ -521,6 +565,29 @@ class Feed extends Base {
                 fileId: this.file.id,
                 permissions,
                 successCallback: resolve,
+                shouldUseUAA,
+            });
+        });
+    }
+
+    /**
+     * Fetches the file activities for a file
+     *
+     * @param {Object} permissions - the file permissions
+     * @return {Promise} - the file comments
+     */
+    fetchFileActivities(
+        permissions: BoxItemPermission,
+        activityTypes: UAAActivityTypes[],
+    ): Promise<?ThreadedCommentsType> {
+        this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
+        return new Promise(resolve => {
+            this.fileActivitiesAPI.getActivities({
+                errorCallback: this.fetchFeedItemErrorCallback.bind(this, resolve),
+                fileId: this.file.id,
+                permissions,
+                successCallback: resolve,
+                activityTypes,
             });
         });
     }
