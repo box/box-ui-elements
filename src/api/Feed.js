@@ -413,8 +413,8 @@ class Feed extends Base {
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
         const commentsPromise = shouldShowReplies
-            ? this.fetchThreadedComments(permissions, shouldUseUAA)
-            : this.fetchComments(permissions, shouldUseUAA);
+            ? this.fetchThreadedComments(permissions)
+            : this.fetchComments(permissions);
         const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
         const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
@@ -493,7 +493,7 @@ class Feed extends Base {
      * @param {Object} permissions - the file permissions
      * @return {Promise} - the file comments
      */
-    fetchComments(permissions: BoxItemPermission, shouldUseUAA?: boolean): Promise<?Comments> {
+    fetchComments(permissions: BoxItemPermission): Promise<?Comments> {
         this.commentsAPI = new CommentsAPI(this.options);
         return new Promise(resolve => {
             this.commentsAPI.getComments(
@@ -501,7 +501,6 @@ class Feed extends Base {
                 permissions,
                 resolve,
                 this.fetchFeedItemErrorCallback.bind(this, resolve),
-                shouldUseUAA,
             );
         });
     }
@@ -557,7 +556,7 @@ class Feed extends Base {
      * @param {Object} permissions - the file permissions
      * @return {Promise} - the file comments
      */
-    fetchThreadedComments(permissions: BoxItemPermission, shouldUseUAA?: boolean): Promise<?ThreadedCommentsType> {
+    fetchThreadedComments(permissions: BoxItemPermission): Promise<?ThreadedCommentsType> {
         this.threadedCommentsAPI = new ThreadedCommentsAPI(this.options);
         return new Promise(resolve => {
             this.threadedCommentsAPI.getComments({
@@ -565,7 +564,6 @@ class Feed extends Base {
                 fileId: this.file.id,
                 permissions,
                 successCallback: resolve,
-                shouldUseUAA,
             });
         });
     }
