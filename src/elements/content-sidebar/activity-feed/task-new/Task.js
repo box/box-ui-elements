@@ -71,6 +71,7 @@ type Props = {|
     onEdit?: Function,
     onModalClose?: Function,
     onView?: Function,
+    shouldUseUAA?: boolean,
     translatedTaggedMessage?: string,
     translations?: Translations,
 |};
@@ -212,6 +213,7 @@ class Task extends React.Component<Props, State> {
             onEdit,
             onView,
             permissions,
+            shouldUseUAA,
             status,
             task_links,
             task_type,
@@ -235,13 +237,16 @@ class Task extends React.Component<Props, State> {
 
         const currentUserAssignment = assignments && assignments.find(({ target }) => target.id === currentUser.id);
 
-        const createdByUser = created_by.target || PLACEHOLDER_USER;
+        const createdByUser =
+            (shouldUseUAA ? created_by.type === 'user' && created_by : created_by.target) || PLACEHOLDER_USER;
 
         const createdAtTimestamp = new Date(created_at).getTime();
 
         const isTaskCompleted = !(status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
 
-        const isCreator = created_by.target.id === currentUser.id;
+        const isCreator = shouldUseUAA
+            ? created_by.id === currentUser.id && created_by.type === 'user'
+            : created_by.target.id === currentUser.id;
 
         const isMultiFile = task_links.entries.length > 1;
 

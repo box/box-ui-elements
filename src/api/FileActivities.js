@@ -21,7 +21,7 @@ class FileActivities extends Base {
             throw new Error('Missing file id!');
         }
 
-        return `${this.getBaseApiUrl()}${getUAAQueryParams(id, activityTypes)}`;
+        return `${this.getBaseApiUrl()}${getUAAQueryParams(id, activityTypes, true)}`;
     }
 
     /**

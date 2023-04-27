@@ -80,7 +80,7 @@ import type {
     Tasks,
     ThreadedComments as ThreadedCommentsType,
 } from '../common/types/feed';
-import { parseUAAResponseForFeed } from './utils';
+import { parseFileActivitiesResponseForFeed } from './utils';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 
@@ -434,7 +434,7 @@ class Feed extends Base {
                     const versionsWithCurrent = currentVersion
                         ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
                         : undefined;
-                    const parsedFeedItems = parseUAAResponseForFeed(entries);
+                    const parsedFeedItems = parseFileActivitiesResponseForFeed(entries);
                     const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
                     if (!this.isDestroyed()) {
                         this.setCachedItems(id, sortedFeedItems);
