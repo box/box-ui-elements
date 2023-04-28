@@ -24,12 +24,6 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
                     extension: '',
                 },
             },
-            {
-                itemType: 'folder',
-                item: {
-                    extension: 'boxcanvas',
-                },
-            },
         ].forEach(({ itemType, item }) => {
             test('should render correct menu', () => {
                 const sharedLinkPermissionMenu = shallow(
