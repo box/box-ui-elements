@@ -6,7 +6,7 @@ import type { ItemType } from '../../common/types/core';
 
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
 
-import type { accessLevelType } from './flowTypes';
+import type { accessLevelType, item as itemtype } from './flowTypes';
 
 import SharedLinkAccessDescription from './SharedLinkAccessDescription';
 import messages from './messages';
@@ -15,10 +15,11 @@ type Props = {
     accessLevel?: accessLevelType,
     enterpriseName?: string,
     hasDescription?: boolean,
+    item: itemtype,
     itemType: ItemType,
 };
 
-const SharedLinkAccessLabel = ({ accessLevel, enterpriseName, hasDescription, itemType }: Props) => {
+const SharedLinkAccessLabel = ({ accessLevel, enterpriseName, hasDescription, item, itemType }: Props) => {
     const messageKeyMap = {
         [ANYONE_WITH_LINK]: 'peopleWithTheLinkText',
         [ANYONE_IN_COMPANY]: enterpriseName === '' ? 'peopleInYourCompany' : 'peopleInEnterpriseName',
@@ -40,6 +41,7 @@ const SharedLinkAccessLabel = ({ accessLevel, enterpriseName, hasDescription, it
             <SharedLinkAccessDescription
                 accessLevel={accessLevel}
                 enterpriseName={enterpriseName}
+                item={item}
                 itemType={itemType}
             />
         </span>

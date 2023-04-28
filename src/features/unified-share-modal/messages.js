@@ -291,6 +291,11 @@ const messages = defineMessages({
     },
 
     // shared link access descriptions
+    canvasPeopleWithLinkDescription: {
+        defaultMessage: 'Box sign-in required',
+        description: 'Description of a Canvas shared link',
+        id: 'boxui.unifiedShare.canvasPeopleWithLinkDescription',
+    },
     peopleWithLinkDescription: {
         defaultMessage: 'Publicly accessible and no sign-in required',
         description: 'Description of an open shared link',
