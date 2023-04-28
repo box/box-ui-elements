@@ -169,6 +169,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('shouold render correct data-testid if has been scrolled', () => {
+        const wrapper = getWrapper({
+            feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
+        });
+        wrapper.setState({ isScrolled: true });
+
+        expect(wrapper.find('[data-testid="activityfeedscrolled"]').exists()).toBe(true);
+    });
+
     test('should correctly render active state', () => {
         const wrapper = getWrapper({
             feedItems,
