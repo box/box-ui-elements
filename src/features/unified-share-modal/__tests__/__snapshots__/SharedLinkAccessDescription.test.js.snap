@@ -143,19 +143,3 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
   />
 </small>
 `;
-
-exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct menu 4`] = `
-<small
-  className="usm-menu-description"
->
-  <FormattedMessage
-    defaultMessage="Box sign-in required"
-    id="boxui.unifiedShare.canvasPeopleWithLinkDescription"
-    values={
-      Object {
-        "company": "Box",
-      }
-    }
-  />
-</small>
-`;
