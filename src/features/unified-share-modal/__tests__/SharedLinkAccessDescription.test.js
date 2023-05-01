@@ -8,16 +8,29 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
         [
             {
                 itemType: 'file',
+                item: {
+                    extension: '',
+                },
+            },
+            {
+                itemType: 'file',
+                item: {
+                    extension: 'boxcanvas',
+                },
             },
             {
                 itemType: 'folder',
+                item: {
+                    extension: '',
+                },
             },
-        ].forEach(({ itemType }) => {
+        ].forEach(({ itemType, item }) => {
             test('should render correct menu', () => {
                 const sharedLinkPermissionMenu = shallow(
                     <SharedLinkAccessDescription
                         accessLevel={ANYONE_WITH_LINK}
                         enterpriseName="Box"
+                        item={item}
                         itemType={itemType}
                     />,
                 );
@@ -51,6 +64,7 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
                     <SharedLinkAccessDescription
                         accessLevel={ANYONE_IN_COMPANY}
                         enterpriseName={name}
+                        item={{ extension: '' }}
                         itemType={itemType}
                     />,
                 );
@@ -74,6 +88,7 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
                     <SharedLinkAccessDescription
                         accessLevel={PEOPLE_IN_ITEM}
                         enterpriseName="Box"
+                        item={{ extension: '' }}
                         itemType={itemType}
                     />,
                 );

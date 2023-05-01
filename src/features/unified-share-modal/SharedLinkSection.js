@@ -331,6 +331,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         allowedAccessLevels={allowedAccessLevels}
                         changeAccessLevel={changeSharedLinkAccessLevel}
                         enterpriseName={enterpriseName}
+                        item={item}
                         itemType={itemType}
                         onDismissTooltip={() => onDismissTooltip('shared-link-access-menu')}
                         tooltipContent={tooltips['shared-link-access-menu'] || null}

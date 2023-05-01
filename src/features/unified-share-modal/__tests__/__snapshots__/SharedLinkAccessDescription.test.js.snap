@@ -117,6 +117,22 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
   className="usm-menu-description"
 >
   <FormattedMessage
+    defaultMessage="Box sign-in required"
+    id="boxui.unifiedShare.canvasPeopleWithLinkDescription"
+    values={
+      Object {
+        "company": "Box",
+      }
+    }
+  />
+</small>
+`;
+
+exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct menu 3`] = `
+<small
+  className="usm-menu-description"
+>
+  <FormattedMessage
     defaultMessage="Publicly accessible and no sign-in required"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
