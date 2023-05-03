@@ -181,16 +181,34 @@ class ContentExplorer extends Component {
     }
 
     componentDidUpdate({ initialFoldersPath: prevInitialFoldersPath }) {
-        const { initialFoldersPath } = this.props;
+        const { initialFoldersPath, isSelectAllAllowed } = this.props;
+        const { isSelectAllChecked } = this.state;
 
         if (prevInitialFoldersPath !== initialFoldersPath) {
             this.handleFoldersPathUpdated(initialFoldersPath);
+        }
+        if (!this.isLoadingItems() && isSelectAllAllowed) {
+            const areAllItemsSelected = this.areAllItemsSelected();
+            if (areAllItemsSelected !== isSelectAllChecked) {
+                this.setState({ isSelectAllChecked: areAllItemsSelected });
+            }
         }
     }
 
     componentWillUnmount() {
         document.removeEventListener('click', this.handleDocumentClick, true);
     }
+
+    areAllItemsSelected = () => {
+        const { items } = this.props;
+        const { selectedItems } = this.state;
+
+        return items.every(item => selectedItems[item.id]);
+    };
+
+    isLoadingItems = () => {
+        return this.props?.items?.[0]?.isLoading;
+    };
 
     getCurrentFolder() {
         const { foldersPath } = this.state;
@@ -329,7 +347,7 @@ class ContentExplorer extends Component {
             newSelectedItems[item.id] = item;
         }
 
-        this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: false });
+        this.setState({ selectedItems: newSelectedItems });
 
         if (onSelectedItemsUpdate) {
             onSelectedItemsUpdate(newSelectedItems);
@@ -353,7 +371,6 @@ class ContentExplorer extends Component {
         } else if (!item.isActionDisabled) {
             onChooseItems([item]);
         }
-        this.setState({ isSelectAllChecked: false });
     };
 
     handleItemNameClick = (event, index) => {
@@ -373,7 +390,6 @@ class ContentExplorer extends Component {
         event.stopPropagation();
 
         this.enterFolder(item);
-        this.setState({ isSelectAllChecked: false });
     };
 
     toggleSelectedItem = (selectedItems, item) => {
@@ -414,8 +430,8 @@ class ContentExplorer extends Component {
     };
 
     handleSelectAllClick = async () => {
-        const { items, onSelectedItemsUpdate } = this.props;
-        if (items && items[0] && items[0].isLoading) {
+        const { onSelectedItemsUpdate } = this.props;
+        if (this.isLoadingItems()) {
             return;
         }
         const { isSelectAllChecked } = this.state;
