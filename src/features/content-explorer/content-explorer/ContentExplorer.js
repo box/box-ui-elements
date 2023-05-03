@@ -207,8 +207,7 @@ class ContentExplorer extends Component {
     };
 
     isLoadingItems = () => {
-        const { items } = this.props;
-        return items && items[0] && items[0].isLoading;
+        return this.props?.items?.[0]?.isLoading;
     };
 
     getCurrentFolder() {
