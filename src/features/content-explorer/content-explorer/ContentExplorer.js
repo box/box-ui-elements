@@ -188,9 +188,9 @@ class ContentExplorer extends Component {
             this.handleFoldersPathUpdated(initialFoldersPath);
         }
         if (!this.isLoadingItems() && isSelectAllAllowed) {
-            const areAllCurrentItemsSelected = this.areAllCurrentItemsSelected();
-            if (areAllCurrentItemsSelected !== isSelectAllChecked) {
-                this.setState({ isSelectAllChecked: areAllCurrentItemsSelected });
+            const areAllItemsSelected = this.areAllItemsSelected();
+            if (areAllItemsSelected !== isSelectAllChecked) {
+                this.setState({ isSelectAllChecked: areAllItemsSelected });
             }
         }
     }
@@ -199,14 +199,11 @@ class ContentExplorer extends Component {
         document.removeEventListener('click', this.handleDocumentClick, true);
     }
 
-    areAllCurrentItemsSelected = () => {
+    areAllItemsSelected = () => {
         const { items } = this.props;
         const { selectedItems } = this.state;
 
-        const someItemIsNotSelected = items.some(item => {
-            return !selectedItems[item.id];
-        });
-        return !someItemIsNotSelected;
+        return items.every(item => selectedItems[item.id]);
     };
 
     isLoadingItems = () => {

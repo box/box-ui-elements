@@ -463,11 +463,10 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 { id: '2', name: 'item2' },
                 { id: '3', name: 'item3' },
             ];
-            const isSelectAllAllowed = true;
             const wrapper = renderComponent(
                 {
                     items,
-                    isSelectAllAllowed,
+                    isSelectAllAllowed: true,
                     onSelectItem: onSelectItemSpy,
                     contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
                 },
@@ -489,7 +488,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 .at(clickedItemIndex3)
                 .simulate('click');
 
-            expect(Object.keys(wrapper.state('selectedItems')).length).toEqual(3);
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(3);
             expect(wrapper.state('isSelectAllChecked')).toBe(true);
         });
 
@@ -501,25 +500,23 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 { id: '2', name: 'item2' },
             ];
             const selectedItems = { '1': items[clickedItemIndex], '2': items[clickedItemIndex2] };
-            const isSelectAllAllowed = true;
-            const isSelectAllChecked = true;
             const wrapper = renderComponent(
                 {
                     items,
-                    isSelectAllAllowed,
+                    isSelectAllAllowed: true,
                     onSelectItem: onSelectItemSpy,
                     contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
                 },
                 true,
             );
-            wrapper.setState({ selectedItems, isSelectAllChecked });
+            wrapper.setState({ selectedItems, isSelectAllChecked: true });
 
             wrapper
                 .find('.table-row')
                 .at(clickedItemIndex)
                 .simulate('click');
 
-            expect(Object.keys(wrapper.state('selectedItems')).length).toEqual(1);
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(1);
             expect(wrapper.state('isSelectAllChecked')).toBe(false);
         });
     });
