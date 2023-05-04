@@ -50,7 +50,6 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
       "onChange": [Function],
     }
   }
-  isPositionDynamic={false}
   label={
     <FormattedMessage
       defaultMessage="Invite People"
@@ -244,7 +243,6 @@ exports[`features/unified-share-modal/ContactsField render should render default
       "onChange": [Function],
     }
   }
-  isPositionDynamic={false}
   label={
     <FormattedMessage
       defaultMessage="Invite People"

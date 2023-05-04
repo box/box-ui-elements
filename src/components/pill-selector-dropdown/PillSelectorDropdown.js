@@ -96,7 +96,6 @@ class PillSelectorDropdown extends React.Component<Props, State> {
         disabled: false,
         error: '',
         inputProps: {},
-        isPositionDynamic: false,
         label: '',
         onBlur: noop,
         onPillCreate: noop,
