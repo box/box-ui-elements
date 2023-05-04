@@ -11,6 +11,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
       "name": undefined,
     }
   }
+  isPositionDynamic={false}
   label=""
   onBlur={[Function]}
   onInput={[Function]}
@@ -69,6 +70,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
       "name": undefined,
     }
   }
+  isPositionDynamic={false}
   label=""
   onBlur={[Function]}
   onInput={[Function]}
@@ -96,6 +98,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
       "name": "pill",
     }
   }
+  isPositionDynamic={false}
   label=""
   onBlur={[Function]}
   onInput={[Function]}

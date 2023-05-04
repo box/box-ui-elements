@@ -35,6 +35,7 @@ exports[`features/invite-collaborators-modal/InviteCollaboratorsModal render() s
     disabled={false}
     error=""
     inputProps={Object {}}
+    isPositionDynamic={false}
     label={
       <FormattedMessage
         defaultMessage="Invite"

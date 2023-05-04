@@ -3,7 +3,7 @@
 exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should render disabled pill selector 1`] = `
 <SelectorDropdown
   className="bdl-PillSelectorDropdown pill-selector-wrapper"
-  isPositionDynamic={true}
+  isPositionDynamic={false}
   onEnter={[Function]}
   onSelect={[Function]}
   selector={
