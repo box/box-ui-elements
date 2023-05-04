@@ -33,7 +33,7 @@ type Props = {
     allowedAccessLevels: allowedAccessLevelsType,
     changeAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
     enterpriseName?: string,
-    item: itemtype,
+    item?: itemtype,
     itemType: ItemType,
     onDismissTooltip: () => void,
     submitting: boolean,
