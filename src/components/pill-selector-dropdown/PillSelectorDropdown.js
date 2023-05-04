@@ -38,6 +38,8 @@ type Props = {
     getPillImageUrl?: (data: { id: string, [key: string]: any }) => string | Promise<?string>,
     /** Passed in by `SelectorDropdown` for accessibility */
     inputProps: Object,
+    /** Option to enable dynamic positioning with popper */
+    isPositionDynamic?: boolean,
     /** Input label */
     label: React.Node,
     /** Called when pill selector input is blurred */
@@ -239,6 +241,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             getPillClassName,
             getPillImageUrl,
             inputProps,
+            isPositionDynamic,
             label,
             onRemove,
             onSuggestedPillAdd,
@@ -258,7 +261,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             <SelectorDropdown
                 className={classNames('bdl-PillSelectorDropdown', 'pill-selector-wrapper', className)}
                 dividerIndex={dividerIndex}
-                isPositionDynamic
+                isPositionDynamic={isPositionDynamic}
                 onEnter={this.handleEnter}
                 onSelect={this.handleSelect}
                 overlayTitle={overlayTitle}

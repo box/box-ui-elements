@@ -52,6 +52,10 @@ type State = {
 };
 
 class SelectorDropdown extends React.Component<Props, State> {
+    static defaultProps = {
+        isPositionDynamic: false,
+    };
+
     constructor(props: Props) {
         super(props);
 
@@ -252,7 +256,7 @@ class SelectorDropdown extends React.Component<Props, State> {
             overlayTitle,
             children,
             className,
-            isPositionDynamic = false,
+            isPositionDynamic,
             title,
             selector,
             shouldScroll,
