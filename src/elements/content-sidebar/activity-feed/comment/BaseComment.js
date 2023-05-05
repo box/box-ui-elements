@@ -52,7 +52,6 @@ type BaseCommentProps = {
     isPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    message?: string,
     modified_at?: string | number,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
     onEdit: (
@@ -97,7 +96,6 @@ const BaseComment = (props: BaseCommentProps) => {
         getMentionWithQuery,
         hasReplies = false,
         mentionSelectorContacts,
-        message = '',
         modified_at,
         onDelete,
         onEdit,
@@ -192,7 +190,7 @@ const BaseComment = (props: BaseCommentProps) => {
         mentionSelectorContacts,
         translations,
     };
-    const displayMessage = tagged_message || message;
+    // const displayMessage = tagged_message || message;
 
     return (
         // TODO: Change className to bcs-Comment once FF is removed
@@ -312,7 +310,7 @@ const BaseComment = (props: BaseCommentProps) => {
                         <ActivityMessage
                             id={id}
                             isEdited={isEdited && !isResolved}
-                            tagged_message={displayMessage}
+                            tagged_message={tagged_message}
                             translatedTaggedMessage={translatedTaggedMessage}
                             {...translations}
                             translationFailed={error ? true : null}

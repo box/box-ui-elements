@@ -12,12 +12,12 @@ import {
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_VERSION,
     FEED_ITEM_TYPE_TASK,
-    UAA_ACTIVITY_TYPE_ANNOTATION,
-    UAA_ACTIVITY_TYPE_APP_ACTIVITY,
-    UAA_ACTIVITY_TYPE_COMMENT,
-    UAA_ACTIVITY_TYPE_TASK,
-    UAA_ACTIVITY_TYPE_VERSION,
-    UAA_TYPE_ACTIVITY,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
+    FILE_TYPE_ACTIVITY,
 } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
@@ -172,21 +172,36 @@ type ActivityFilterItemType =
     | typeof COMMENT_STATUS_RESOLVED
     | typeof FEED_ITEM_TYPE_TASK;
 
-type UAAType = typeof UAA_TYPE_ACTIVITY;
+type FileActivityType = typeof FILE_TYPE_ACTIVITY;
 
-type UAAActivityTypes =
-    | typeof UAA_ACTIVITY_TYPE_ANNOTATION
-    | typeof UAA_ACTIVITY_TYPE_APP_ACTIVITY
-    | typeof UAA_ACTIVITY_TYPE_COMMENT
-    | typeof UAA_ACTIVITY_TYPE_TASK
-    | typeof UAA_ACTIVITY_TYPE_VERSION;
+type FileActivityTypes =
+    | typeof FILE_ACTIVITY_TYPE_ANNOTATION
+    | typeof FILE_ACTIVITY_TYPE_APP_ACTIVITY
+    | typeof FILE_ACTIVITY_TYPE_COMMENT
+    | typeof FILE_ACTIVITY_TYPE_TASK
+    | typeof FILE_ACTIVITY_TYPE_VERSION;
 
-type UAASource = { [typeof UAAActivityTypes]: FeedItem };
+type FileActivitySource =
+    | {
+          annotation: FeedItem,
+      }
+    | {
+          app_activity: FeedItem,
+      }
+    | {
+          comment: FeedItem,
+      }
+    | {
+          task: FeedItem,
+      }
+    | {
+          versions: FeedItem,
+      };
 
-type UAAFileActivity = {
-    activityType: UAAActivityTypes,
-    source: UAASource,
-    type: UAAType,
+type FileActivity = {
+    activityType: FileActivityTypes,
+    source: FileActivitySource,
+    type: FileActivityType,
 };
 
 export type {
@@ -217,6 +232,6 @@ export type {
     Task,
     Tasks,
     ThreadedComments,
-    UAAActivityTypes,
-    UAAFileActivity,
+    FileActivityTypes,
+    FileActivity,
 };

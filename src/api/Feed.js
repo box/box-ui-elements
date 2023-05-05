@@ -15,7 +15,7 @@ import Base from './Base';
 import AnnotationsAPI from './Annotations';
 import CommentsAPI from './Comments';
 import ThreadedCommentsAPI from './ThreadedComments';
-import FileActivitiesAPI from './FileActivities';
+import FileActivitiesAPI, { parseFileActivitiesResponseForFeed } from './FileActivities';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
 import GroupsAPI from './Groups';
@@ -37,10 +37,10 @@ import {
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
     TASK_MAX_GROUP_ASSIGNEES,
-    UAA_ACTIVITY_TYPE_ANNOTATION,
-    UAA_ACTIVITY_TYPE_APP_ACTIVITY,
-    UAA_ACTIVITY_TYPE_COMMENT,
-    UAA_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
 } from '../constants';
 import type {
     TaskCompletionRule,
@@ -76,11 +76,12 @@ import type {
     FeedItem,
     FeedItems,
     FeedItemStatus,
+    FileActivity,
+    FileActivityTypes,
     Task,
     Tasks,
     ThreadedComments as ThreadedCommentsType,
 } from '../common/types/feed';
-import { parseFileActivitiesResponseForFeed } from './utils';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 
@@ -420,30 +421,38 @@ class Feed extends Base {
 
         const fileActivitiesPromise = shouldUseUAA
             ? this.fetchFileActivities(permissions, [
-                  UAA_ACTIVITY_TYPE_ANNOTATION,
-                  UAA_ACTIVITY_TYPE_APP_ACTIVITY,
-                  UAA_ACTIVITY_TYPE_COMMENT,
-                  UAA_ACTIVITY_TYPE_TASK,
+                  FILE_ACTIVITY_TYPE_ANNOTATION,
+                  FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                  FILE_ACTIVITY_TYPE_COMMENT,
+                  FILE_ACTIVITY_TYPE_TASK,
               ])
             : Promise.resolve();
+
+        const handleFeedItems = (feedItems: FeedItems) => {
+            if (!this.isDestroyed()) {
+                this.setCachedItems(id, feedItems);
+                if (this.errors.length) {
+                    errorCallback(feedItems, this.errors);
+                } else {
+                    successCallback(feedItems);
+                }
+            }
+        };
 
         if (shouldUseUAA) {
             Promise.all([versionsPromise, currentVersionPromise, fileActivitiesPromise]).then(
                 ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                    if (!feedItems || !feedItems.length || !feedItems[0].entries) {
+                        return;
+                    }
+
                     const { entries } = feedItems[0];
                     const versionsWithCurrent = currentVersion
                         ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
                         : undefined;
                     const parsedFeedItems = parseFileActivitiesResponseForFeed(entries);
                     const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
-                    if (!this.isDestroyed()) {
-                        this.setCachedItems(id, sortedFeedItems);
-                        if (this.errors.length) {
-                            errorCallback(sortedFeedItems, this.errors);
-                        } else {
-                            successCallback(sortedFeedItems);
-                        }
-                    }
+                    handleFeedItems(sortedFeedItems);
                 },
             );
         } else {
@@ -459,14 +468,7 @@ class Feed extends Base {
                     ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
                     : undefined;
                 const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
-                if (!this.isDestroyed()) {
-                    this.setCachedItems(id, sortedFeedItems);
-                    if (this.errors.length) {
-                        errorCallback(sortedFeedItems, this.errors);
-                    } else {
-                        successCallback(sortedFeedItems);
-                    }
-                }
+                handleFeedItems(sortedFeedItems);
             });
         }
     }
@@ -574,10 +576,7 @@ class Feed extends Base {
      * @param {Object} permissions - the file permissions
      * @return {Promise} - the file comments
      */
-    fetchFileActivities(
-        permissions: BoxItemPermission,
-        activityTypes: UAAActivityTypes[],
-    ): Promise<?ThreadedCommentsType> {
+    fetchFileActivities(permissions: BoxItemPermission, activityTypes: FileActivityTypes[]): Promise<?FileActivity> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {
             this.fileActivitiesAPI.getActivities({

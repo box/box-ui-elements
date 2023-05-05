@@ -611,15 +611,15 @@ class APIFactory {
      * API for file access stats
      *
      * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
-     * @return {FileAccessStatsAPI} FileActivitiesAPI instance
+     * @return {FileActivitiesAPI} FileActivitiesAPI instance
      */
     getFileActivitiesAPI(shouldDestroy: boolean): FileActivitiesAPI {
         if (shouldDestroy) {
             this.destroy();
         }
 
-        this.FileActivitiesAPI = new FileActivitiesAPI(this.options);
-        return this.FileActivitiesAPI;
+        this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
+        return this.fileActivitiesAPI;
     }
 
     /**
