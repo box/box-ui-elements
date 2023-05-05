@@ -15,7 +15,7 @@ type Props = {
     accessLevel?: accessLevelType,
     enterpriseName?: string,
     hasDescription?: boolean,
-    item: itemtype,
+    item?: itemtype,
     itemType: ItemType,
 };
 

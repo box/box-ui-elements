@@ -13,7 +13,7 @@ import messages from './messages';
 type Props = {
     accessLevel?: accessLevelType,
     enterpriseName?: string,
-    item: itemtype,
+    item?: itemtype,
     itemType: ItemType,
 };
 
@@ -23,7 +23,7 @@ const SharedLinkAccessDescription = ({ accessLevel, enterpriseName, item, itemTy
     switch (accessLevel) {
         case ANYONE_WITH_LINK:
             // TODO: temporary change to support Canvas not being truly public
-            if (isBoxCanvas(convertToBoxItem(item))) {
+            if (item && isBoxCanvas(convertToBoxItem(item))) {
                 description = messages.canvasPeopleWithLinkDescription;
             } else {
                 description = messages.peopleWithLinkDescription;
