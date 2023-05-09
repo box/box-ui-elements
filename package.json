@@ -369,8 +369,5 @@
             "@hapi/address": "Version 2.1.2+ requires a polyfill for TextEncoder. Pinning to version 2.1.1 prevents IE11 from breaking.",
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
         }
-    },
-    "resolutions": {
-        "node-gyp": "^9.3.1"
     }
 }
