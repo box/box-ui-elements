@@ -203,7 +203,7 @@ class ContentExplorer extends Component {
         const { items } = this.props;
         const { selectedItems } = this.state;
 
-        return items.every(item => selectedItems[item.id]);
+        return items.length > 0 && items.every(item => selectedItems[item.id]);
     };
 
     isLoadingItems = () => {
