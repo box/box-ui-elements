@@ -99,7 +99,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         });
 
         test('should pass isSelectAllChecked to ContentExplorerSelectAll', () => {
-            const isSelectAllChecked = true;
+            const isSelectAllChecked = false;
             const wrapper = renderComponent({ isSelectAllAllowed: true });
             wrapper.setState({ isSelectAllChecked });
 
