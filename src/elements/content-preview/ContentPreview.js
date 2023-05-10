@@ -822,6 +822,14 @@ class ContentPreview extends React.PureComponent<Props, State> {
             showProgress: false,
             skipServerUpdate: true,
             useHotkeys: false,
+            /* NOTES:
+             - Add features option to pass to box-content-preview like is done when passing feature configurations to BUIE
+            */
+            features: {
+                newPlainText: {
+                    enabled: true,
+                },
+            },
         };
         const { Preview } = global.Box;
         this.preview = new Preview();
