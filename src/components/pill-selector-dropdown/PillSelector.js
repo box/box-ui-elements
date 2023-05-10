@@ -242,7 +242,7 @@ class PillSelectorBase extends React.Component<Props, State> {
                                       onRemove={onRemove.bind(this, option, index)}
                                       // $FlowFixMe option.text is for backwards compatibility
                                       text={option.displayText || option.text}
-                                      showAvatar
+                                      showAvatar={showAvatars}
                                       id={option.id}
                                       hasWarning={option.hasWarning}
                                       isExternal={option.isExternalUser}
@@ -278,9 +278,7 @@ class PillSelectorBase extends React.Component<Props, State> {
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
-                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className, {
-                            'bdl-PillSelector-input--showAvatars': showAvatars,
-                        })}
+                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className)}
                         disabled={disabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}
