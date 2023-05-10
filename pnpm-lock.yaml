@@ -479,8 +479,8 @@ devDependencies:
     specifier: ^2.1.0
     version: 2.1.0(immutable@3.7.4)
   react-intl:
-    specifier: ^3.11.0
-    version: 3.11.0(react@17.0.1)
+    specifier: ^6.4.2
+    version: 6.4.2(react@17.0.1)(typescript@5.0.4)
   react-measure:
     specifier: ^2.3.0
     version: 2.3.0(react-dom@17.0.1)(react@17.0.1)
@@ -555,10 +555,10 @@ devDependencies:
     version: 7.0.10
   storybook-addon-intl:
     specifier: ^3.2.0
-    version: 3.2.0(react-dom@17.0.1)(react-intl@3.11.0)(react@17.0.1)
+    version: 3.2.0(react-dom@17.0.1)(react-intl@6.4.2)(react@17.0.1)
   storybook-react-intl:
     specifier: ^2.0.1
-    version: 2.0.1(@storybook/components@7.0.10)(@storybook/manager-api@7.0.10)(@storybook/preview-api@7.0.10)(@storybook/types@7.0.10)(react-dom@17.0.1)(react-intl@3.11.0)(react@17.0.1)
+    version: 2.0.1(@storybook/components@7.0.10)(@storybook/manager-api@7.0.10)(@storybook/preview-api@7.0.10)(@storybook/types@7.0.10)(react-dom@17.0.1)(react-intl@6.4.2)(react@17.0.1)
   string-replace-loader:
     specifier: ^2.2.0
     version: 2.2.0(webpack@4.41.5)
@@ -4837,10 +4837,54 @@ packages:
       '@floating-ui/core': 1.2.6
     dev: true
 
-  /@formatjs/intl-listformat@1.4.8:
-    resolution: {integrity: sha512-WNMQlEg0e50VZrGIkgD5n7+DAMGt3boKi1GJALfhFMymslJb5i+5WzWxyj/3a929Z6MAFsmzRIJjKuv+BxKAOQ==}
+  /@formatjs/ecma402-abstract@1.15.0:
+    resolution: {integrity: sha512-7bAYAv0w4AIao9DNg0avfOLTCPE9woAgs6SpXuMq11IN3A+l+cq8ghczwqSZBM11myvPSJA7vLn72q0rJ0QK6Q==}
     dependencies:
-      '@formatjs/intl-utils': 2.3.0
+      '@formatjs/intl-localematcher': 0.2.32
+      tslib: 2.5.0
+    dev: true
+
+  /@formatjs/fast-memoize@2.0.1:
+    resolution: {integrity: sha512-M2GgV+qJn5WJQAYewz7q2Cdl6fobQa69S1AzSM2y0P68ZDbK5cWrJIcPCO395Of1ksftGZoOt4LYCO/j9BKBSA==}
+    dependencies:
+      tslib: 2.5.0
+    dev: true
+
+  /@formatjs/icu-messageformat-parser@2.4.0:
+    resolution: {integrity: sha512-6Dh5Z/gp4F/HovXXu/vmd0If5NbYLB5dZrmhWVNb+BOGOEU3wt7Z/83KY1dtd7IDhAnYHasbmKE1RbTE0J+3hw==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 1.15.0
+      '@formatjs/icu-skeleton-parser': 1.4.0
+      tslib: 2.5.0
+    dev: true
+
+  /@formatjs/icu-skeleton-parser@1.4.0:
+    resolution: {integrity: sha512-Qq347VM616rVLkvN6QsKJELazRyNlbCiN47LdH0Mc5U7E2xV0vatiVhGqd3KFgbc055BvtnUXR7XX60dCGFuWg==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 1.15.0
+      tslib: 2.5.0
+    dev: true
+
+  /@formatjs/intl-displaynames@6.3.2:
+    resolution: {integrity: sha512-kBOh0O7QYKLUqaZujLSEF2+au017plPp63R6Hrokl+oDtLyTt9y9pEuCTbOKh/P8CC9THnDLKRKgeVWZw5Ek8A==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 1.15.0
+      '@formatjs/intl-localematcher': 0.2.32
+      tslib: 2.5.0
+    dev: true
+
+  /@formatjs/intl-listformat@7.2.2:
+    resolution: {integrity: sha512-YIruRGwUrmgVOXjWi6VbwPcRNBkEfgK2DFjyyqopCmpfJ+39vnl46oLpVchErnuXs6kkARy5GcGaGV7xRsH4lw==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 1.15.0
+      '@formatjs/intl-localematcher': 0.2.32
+      tslib: 2.5.0
+    dev: true
+
+  /@formatjs/intl-localematcher@0.2.32:
+    resolution: {integrity: sha512-k/MEBstff4sttohyEpXxCmC3MqbUn9VvHGlZ8fauLzkbwXmVrEeyzS+4uhrvAk9DWU9/7otYWxyDox4nT/KVLQ==}
+    dependencies:
+      tslib: 2.5.0
     dev: true
 
   /@formatjs/intl-pluralrules@1.5.2:
@@ -4867,8 +4911,22 @@ packages:
     deprecated: the package is rather renamed to @formatjs/ecma-abstract with some changes in functionality (primarily selectUnit is removed and we don't plan to make any further changes to this package
     dev: true
 
-  /@formatjs/macro@0.2.8:
-    resolution: {integrity: sha512-5IBdn5+D8VGdi6Px0M/PidtqzHVrOj3dVJdV+YmWNRaWHdSvBd1wUd0gMcZnQXAxN+RzlGS/ddfOxFkjSlyQuA==}
+  /@formatjs/intl@2.7.2(typescript@5.0.4):
+    resolution: {integrity: sha512-ziiQfnXwY0/rXhtohSAmYMqDjRsihoMKdl8H2aA+FvxG9638E0XrvfBFCb+1HhimNiuqRz5fTY7F/bZtsJxsjA==}
+    peerDependencies:
+      typescript: ^4.7 || 5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+    dependencies:
+      '@formatjs/ecma402-abstract': 1.15.0
+      '@formatjs/fast-memoize': 2.0.1
+      '@formatjs/icu-messageformat-parser': 2.4.0
+      '@formatjs/intl-displaynames': 6.3.2
+      '@formatjs/intl-listformat': 7.2.2
+      intl-messageformat: 10.3.5
+      tslib: 2.5.0
+      typescript: 5.0.4
     dev: true
 
   /@hapi/address@2.1.1:
@@ -8391,10 +8449,6 @@ packages:
 
   /@types/html-minifier-terser@6.1.0:
     resolution: {integrity: sha512-oh/6byDPnL1zeNXFrDXFLyZjkr1MsBG667IM792caf1L2UPOOMf65NFzjUH/ltyfwjAGfs1rsX1eftK0jC/KIg==}
-    dev: true
-
-  /@types/invariant@2.2.35:
-    resolution: {integrity: sha512-DxX1V9P8zdJPYQat1gHyY0xj3efl8gnMVjiM9iCY6y27lj+PoQWkgjt8jDqmovPqULkKVpKRg8J36iQiA+EtEg==}
     dev: true
 
   /@types/is-function@1.0.1:
@@ -17602,16 +17656,20 @@ packages:
     resolution: {integrity: sha512-OEUYNA7D06agqPOYhbTkl0T8HA3QKSuwWh1HiClEnpd9vw7N+3XsQt5iZ0GUEchp5CW1fQk/tary+NsbF3yQ1Q==}
     dev: true
 
-  /intl-locales-supported@1.8.12:
-    resolution: {integrity: sha512-FJPl7p1LYO/C+LpwlDcvVpq7AeFTdFgwnq1JjdNYKjb51xkIxssXRR8LaA0fJFogjwRRztqw1ahgSJMSZsSFdw==}
-    deprecated: bad publish
-    dev: true
-
   /intl-messageformat-parser@3.6.4:
     resolution: {integrity: sha512-RgPGwue0mJtoX2Ax8EmMzJzttxjnva7gx0Q7mKJ4oALrTZvtmCeAw5Msz2PcjW4dtCh/h7vN/8GJCxZO1uv+OA==}
     deprecated: We've written a new parser that's 6x faster and is backwards compatible. Please use @formatjs/icu-messageformat-parser
     dependencies:
       '@formatjs/intl-unified-numberformat': 3.2.0
+    dev: true
+
+  /intl-messageformat@10.3.5:
+    resolution: {integrity: sha512-6kPkftF8Jg3XJCkGKa5OD+nYQ+qcSxF4ZkuDdXZ6KGG0VXn+iblJqRFyDdm9VvKcMyC0Km2+JlVQffFM52D0YA==}
+    dependencies:
+      '@formatjs/ecma402-abstract': 1.15.0
+      '@formatjs/fast-memoize': 2.0.1
+      '@formatjs/icu-messageformat-parser': 2.4.0
+      tslib: 2.5.0
     dev: true
 
   /intl-messageformat@7.8.4:
@@ -23840,25 +23898,27 @@ packages:
       react: 17.0.1
     dev: true
 
-  /react-intl@3.11.0(react@17.0.1):
-    resolution: {integrity: sha512-W5kc9uCkNRjw4ijZ9cBts5VDtK2DkILKZ1WpqmvVLHZ6EIHMFZkhFs6LQJurN+2msdROfB59gc5K1z8kM0u6/w==}
+  /react-intl@6.4.2(react@17.0.1)(typescript@5.0.4):
+    resolution: {integrity: sha512-q8QyLZfbyqV3Ifa7vtjRrgfSQPGTR6Fi+u9tP/CuzhUPl9DJEPIrvUFhlBryKtRW2qNASqchaP/79Obip+h6oA==}
     peerDependencies:
-      react: ^16.3.0
+      react: ^16.6.0 || 17 || 18
+      typescript: ^4.7 || 5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
     dependencies:
-      '@formatjs/intl-listformat': 1.4.8
-      '@formatjs/intl-relativetimeformat': 4.5.9
-      '@formatjs/intl-unified-numberformat': 3.2.0
-      '@formatjs/intl-utils': 2.3.0
-      '@formatjs/macro': 0.2.8
+      '@formatjs/ecma402-abstract': 1.15.0
+      '@formatjs/icu-messageformat-parser': 2.4.0
+      '@formatjs/intl': 2.7.2(typescript@5.0.4)
+      '@formatjs/intl-displaynames': 6.3.2
+      '@formatjs/intl-listformat': 7.2.2
       '@types/hoist-non-react-statics': 3.3.1
-      '@types/invariant': 2.2.35
+      '@types/react': 16.9.18
       hoist-non-react-statics: 3.3.2
-      intl-format-cache: 4.3.1
-      intl-locales-supported: 1.8.12
-      intl-messageformat: 7.8.4
-      intl-messageformat-parser: 3.6.4
+      intl-messageformat: 10.3.5
       react: 17.0.1
-      shallow-equal: 1.2.1
+      tslib: 2.5.0
+      typescript: 5.0.4
     dev: true
 
   /react-is@16.13.1:
@@ -26231,7 +26291,7 @@ packages:
     resolution: {integrity: sha512-siT1RiqlfQnGqgT/YzXVUNsom9S0H1OX+dpdGN1xkyYATo4I6sep5NmsRD/40s3IIOvlCq6akxkqG82urIZW1w==}
     dev: true
 
-  /storybook-addon-intl@3.2.0(react-dom@17.0.1)(react-intl@3.11.0)(react@17.0.1):
+  /storybook-addon-intl@3.2.0(react-dom@17.0.1)(react-intl@6.4.2)(react@17.0.1):
     resolution: {integrity: sha512-EdfKjR6rnmzP5GKYjoAB+tluNc/ffpF1qmvv8kIgF4UvyxOVHS1yx7WfiqLsx0yK1BftZ1Lp66d/plEjpOUpIA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -26239,7 +26299,7 @@ packages:
     dependencies:
       '@storybook/theming': 7.0.10(react-dom@17.0.1)(react@17.0.1)
       react: 17.0.1
-      react-intl: 3.11.0(react@17.0.1)
+      react-intl: 6.4.2(react@17.0.1)(typescript@5.0.4)
     transitivePeerDependencies:
       - react-dom
     dev: true
@@ -26267,7 +26327,7 @@ packages:
       react-dom: 17.0.1(react@17.0.1)
     dev: true
 
-  /storybook-react-intl@2.0.1(@storybook/components@7.0.10)(@storybook/manager-api@7.0.10)(@storybook/preview-api@7.0.10)(@storybook/types@7.0.10)(react-dom@17.0.1)(react-intl@3.11.0)(react@17.0.1):
+  /storybook-react-intl@2.0.1(@storybook/components@7.0.10)(@storybook/manager-api@7.0.10)(@storybook/preview-api@7.0.10)(@storybook/types@7.0.10)(react-dom@17.0.1)(react-intl@6.4.2)(react@17.0.1):
     resolution: {integrity: sha512-3QlyWHdQnroM78Kgaj5u7sqDtR1VfUXbuRgNqw0z5d7XHnAP1uyNXCH+aRWD4Ybxp+DLQsge+LZkusKjI+zf/Q==}
     peerDependencies:
       '@storybook/components': ^7.0.0
@@ -26289,7 +26349,7 @@ packages:
       '@storybook/types': 7.0.10
       react: 17.0.1
       react-dom: 17.0.1(react@17.0.1)
-      react-intl: 3.11.0(react@17.0.1)
+      react-intl: 6.4.2(react@17.0.1)(typescript@5.0.4)
       storybook-i18n: 2.0.6(@storybook/components@7.0.10)(@storybook/manager-api@7.0.10)(@storybook/preview-api@7.0.10)(@storybook/types@7.0.10)(react-dom@17.0.1)(react@17.0.1)
     dev: true
 
