@@ -11,6 +11,7 @@ import RoundPill from './RoundPill';
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
 import type { RoundOption, Option, OptionValue, SuggestedPillsFilter } from './flowTypes';
+import type { Position } from '../tooltip';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -22,6 +23,8 @@ type Props = {
     className?: string,
     disabled?: boolean,
     error?: React.Node,
+    /** Position of error message tooltip */
+    errorTooltipPosition?: Position,
     /** Called on pill render to get a specific class name to use for a particular option. Note: Only has effect when showRoundedPills is true. */
     getPillClassName?: (option: Option) => string,
     /** Function to retrieve the image URL associated with a pill */
@@ -52,6 +55,7 @@ type DefaultProps = {
     allowInvalidPills: boolean,
     disabled: boolean,
     error: string,
+    errorTooltipPosition: string,
     inputProps: Object,
     placeholder: string,
     selectedOptions: List<Object>,
@@ -65,6 +69,7 @@ class PillSelectorBase extends React.Component<Props, State> {
         allowInvalidPills: false,
         disabled: false,
         error: '',
+        errorTooltipPosition: 'bottom-left',
         inputProps: {},
         placeholder: '',
         selectedOptions: [],
@@ -185,6 +190,7 @@ class PillSelectorBase extends React.Component<Props, State> {
             className,
             disabled,
             error,
+            errorTooltipPosition,
             getPillClassName,
             getPillImageUrl,
             inputProps,
@@ -219,7 +225,7 @@ class PillSelectorBase extends React.Component<Props, State> {
         };
 
         return (
-            <Tooltip isShown={hasError} text={error || ''} position="bottom-left" theme="error">
+            <Tooltip isShown={hasError} text={error || ''} position={errorTooltipPosition} theme="error">
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
