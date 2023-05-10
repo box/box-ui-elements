@@ -55,7 +55,7 @@ type DefaultProps = {
     allowInvalidPills: boolean,
     disabled: boolean,
     error: string,
-    errorTooltipPosition: string,
+    errorTooltipPosition: Position,
     inputProps: Object,
     placeholder: string,
     selectedOptions: List<Object>,
