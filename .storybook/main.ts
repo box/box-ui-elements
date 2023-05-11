@@ -32,14 +32,15 @@ const config: StorybookConfig = {
         // You can change the configuration based on that.
         // 'PRODUCTION' is used when building the static version of storybook.
 
-        // Make whatever fine-grained changes you need
+        // It's okay, Typescript. We know it's defined in this case.
+        // @ts-ignore
         config.resolve.alias = {
+            // @ts-ignore
             ...config.resolve.alias,
             'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
             'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
         };
 
-        // Return the altered config
         return config;
     },
 };

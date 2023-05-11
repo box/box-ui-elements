@@ -1,5 +1,5 @@
 import { Preview } from '@storybook/react';
-// import { reactIntl } from './reactIntl';
+import './customStyles.css';
 import enUS from '../i18n/en-US';
 import deDE from '../i18n/de-DE';
 import frFR from '../i18n/fr-FR';
