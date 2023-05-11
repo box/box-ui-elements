@@ -12,6 +12,7 @@ import PillSelector from './PillSelector';
 import type { contactType as Contact } from '../../features/unified-share-modal/flowTypes';
 import type { SelectOptionProp } from '../select-field/props';
 import type { Option, OptionValue, SelectedOptions, SuggestedPillsFilter } from './flowTypes';
+import type { Position } from '../tooltip';
 
 import './PillSelectorDropdown.scss';
 
@@ -32,6 +33,8 @@ type Props = {
     dropdownScrollBoundarySelector?: string,
     /** Error message */
     error?: React.Node,
+    /** Position of error message tooltip */
+    errorTooltipPosition?: Position,
     /** Called on pill render to get a specific class name to use for a particular option. Note: Only has effect when showRoundedPills is true. */
     getPillClassName?: (option: Option) => string,
     /** Function to retrieve the image URL associated with a pill */
@@ -238,6 +241,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
             dividerIndex,
             dropdownScrollBoundarySelector,
             error,
+            errorTooltipPosition,
             getPillClassName,
             getPillImageUrl,
             inputProps,
@@ -276,6 +280,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                         allowInvalidPills={allowInvalidPills}
                         disabled={disabled}
                         error={error}
+                        errorTooltipPosition={errorTooltipPosition}
                         getPillClassName={getPillClassName}
                         getPillImageUrl={getPillImageUrl}
                         onBlur={this.handleBlur}
