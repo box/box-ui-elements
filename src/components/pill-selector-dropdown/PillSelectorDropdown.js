@@ -290,8 +290,8 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                         onSuggestedPillAdd={onSuggestedPillAdd}
                         placeholder={placeholder}
                         selectedOptions={selectedOptions}
-                        showRoundedPills={showRoundedPills}
                         showAvatars={showAvatars && showRoundedPills}
+                        showRoundedPills={showRoundedPills}
                         suggestedPillsData={suggestedPillsData}
                         suggestedPillsFilter={suggestedPillsFilter}
                         suggestedPillsTitle={suggestedPillsTitle}
