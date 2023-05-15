@@ -4,7 +4,7 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { ContentState, EditorState } from 'draft-js';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Replies } from '../BaseComment';
+import Replies from '../Replies';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
 jest.mock('react-intl', () => ({

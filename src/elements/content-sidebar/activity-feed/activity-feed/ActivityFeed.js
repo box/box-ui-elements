@@ -14,7 +14,7 @@ import CommentForm from '../comment-form';
 import EmptyState from './EmptyState';
 import InlineError from '../../../../components/inline-error/InlineError';
 import LoadingIndicator from '../../../../components/loading-indicator/LoadingIndicator';
-import messages from './messages';
+import annotationsMessages from './messages';
 import { collapseFeedState, ItemTypes } from './activityFeedUtils';
 import {
     FEED_ITEM_TYPE_ANNOTATION,
@@ -336,9 +336,9 @@ class ActivityFeed extends React.Component<Props, State> {
             });
 
         const errorMessageByEntryType = {
-            annotation: messages.annotationMissingError,
-            comment: messages.commentMissingError,
-            task: messages.taskMissingError,
+            annotation: annotationsMessages.annotationMissingError,
+            comment: annotationsMessages.commentMissingError,
+            task: annotationsMessages.taskMissingError,
         };
 
         const inlineFeedItemErrorMessage = activeFeedEntryType
@@ -415,7 +415,7 @@ class ActivityFeed extends React.Component<Props, State> {
                     )}
                     {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (
                         <InlineError
-                            title={<FormattedMessage {...messages.feedInlineErrorTitle} />}
+                            title={<FormattedMessage {...annotationsMessages.feedInlineErrorTitle} />}
                             className="bcs-feedItemInlineError"
                         >
                             <FormattedMessage {...inlineFeedItemErrorMessage} />

@@ -12,7 +12,7 @@ import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
 
-import messages from './messages';
+import annotationsMessages from './messages';
 
 import './ActivityThread.scss';
 
@@ -99,7 +99,7 @@ const ActivityThread = ({
                     type="button"
                     data-testid="activity-thread-button"
                 >
-                    <FormattedMessage values={{ repliesToLoadCount }} {...messages.showReplies} />
+                    <FormattedMessage values={{ repliesToLoadCount }} {...annotationsMessages.showReplies} />
                 </PlainButton>
             );
         }
@@ -111,7 +111,7 @@ const ActivityThread = ({
                     type="button"
                     data-testid="activity-thread-button"
                 >
-                    <FormattedMessage {...messages.hideReplies} />
+                    <FormattedMessage {...annotationsMessages.hideReplies} />
                 </PlainButton>
             );
         }

@@ -2,7 +2,7 @@
 import React from 'react';
 import Comment from '../comment';
 import LoadingIndicator from '../../../../components/loading-indicator';
-import { BaseComment } from '../comment/BaseComment';
+import BaseCommentWrapper from '../comment/BaseCommentWrapper';
 
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
@@ -52,7 +52,7 @@ const ActivityThreadReplies = ({
     const renderComment = (reply: CommentType) => {
         if (hasNewThreadedReplies) {
             return (
-                <BaseComment
+                <BaseCommentWrapper
                     key={`${reply.type}${reply.id}`}
                     {...reply}
                     currentUser={currentUser}

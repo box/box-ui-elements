@@ -13,7 +13,7 @@ import Comment from '../comment';
 import TaskNew from '../task-new';
 import Version, { CollapsedVersion } from '../version';
 import withErrorHandling from '../../withErrorHandling';
-import { BaseComment } from '../comment/BaseComment';
+import BaseCommentWrapper from '../comment/BaseCommentWrapper';
 import {
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_APP_ACTIVITY,
@@ -35,6 +35,9 @@ import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 
+import { type OnAnnotationEdit, type OnCommentEdit } from '../comment/types';
+import AnnotationActivityLinkProvider from './AnnotationActivityLinkProvider';
+
 type Props = {
     activeFeedItem: FeedItem,
     activeFeedItemRef: { current: null | HTMLElement },
@@ -51,20 +54,12 @@ type Props = {
     items: FeedItems,
     mentionSelectorContacts?: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
-    onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
+    onAnnotationEdit?: OnAnnotationEdit,
     onAnnotationSelect?: (annotation: Annotation) => void,
     onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
-    onCommentEdit?: (
-        id: string,
-        text?: string,
-        status?: FeedItemStatus,
-        hasMention: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
+    onCommentEdit?: OnCommentEdit,
     onCommentSelect?: (id: string | null) => void,
     onHideReplies?: (id: string, replies: Array<CommentType>) => void,
     onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
@@ -161,6 +156,28 @@ const ActiveState = ({
                     onReplySelect: onCommentSelectHandler(item.id),
                 };
 
+                const commentAndAnnotationCommonProps = {
+                    ...item,
+                    ...replyProps,
+                    currentUser,
+                    getAvatarUrl,
+                    getMentionWithQuery,
+                    getUserProfileUrl,
+                    mentionSelectorContacts,
+                    onHideReplies: shownReplies => onHideReplies(item.id, shownReplies),
+                    onSelect: onCommentSelectHandler(item.id),
+                    permissions: {
+                        can_delete: getProp(item.permissions, 'can_delete', false),
+                        can_edit: getProp(item.permissions, 'can_edit', false),
+                        can_reply: getProp(item.permissions, 'can_reply', false),
+                        can_resolve: getProp(item.permissions, 'can_resolve', false),
+                    },
+                    // TODO: legitimate, pre-existing typing issue that was previously undetected
+                    // $FlowFixMe
+                    repliesTotalCount: item.total_reply_count,
+                    translations,
+                };
+
                 switch (item.type) {
                     case FEED_ITEM_TYPE_COMMENT:
                         return (
@@ -173,28 +190,15 @@ const ActiveState = ({
                                 ref={refValue}
                             >
                                 {hasNewThreadedReplies ? (
-                                    <BaseComment
-                                        {...item}
-                                        {...replyProps}
-                                        currentUser={currentUser}
-                                        getAvatarUrl={getAvatarUrl}
-                                        getMentionWithQuery={getMentionWithQuery}
-                                        getUserProfileUrl={getUserProfileUrl}
-                                        mentionSelectorContacts={mentionSelectorContacts}
+                                    // TODO: legitimate, pre-existing typing issue that was previously undetected
+                                    // Conflict between BoxCommentPermissions and BoxTaskPermissions
+                                    // $FlowFixMe
+                                    <BaseCommentWrapper
+                                        {...commentAndAnnotationCommonProps}
                                         onDelete={onCommentDelete}
-                                        onEdit={onCommentEdit}
+                                        onCommentEdit={onCommentEdit}
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
-                                        onSelect={onCommentSelectHandler(item.id)}
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_COMMENT)}
-                                        onHideReplies={shownReplies => onHideReplies(item.id, shownReplies)}
-                                        permissions={{
-                                            can_delete: getProp(item.permissions, 'can_delete', false),
-                                            can_edit: getProp(item.permissions, 'can_edit', false),
-                                            can_reply: getProp(item.permissions, 'can_reply', false),
-                                            can_resolve: getProp(item.permissions, 'can_resolve', false),
-                                        }}
-                                        repliesTotalCount={item.total_reply_count}
-                                        translations={translations}
                                     />
                                 ) : (
                                     <ActivityThread
@@ -296,42 +300,64 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                <ActivityThread
-                                    data-testid="activity-thread"
-                                    currentUser={currentUser}
-                                    getAvatarUrl={getAvatarUrl}
-                                    getMentionWithQuery={getMentionWithQuery}
-                                    getUserProfileUrl={getUserProfileUrl}
-                                    hasNewThreadedReplies={hasNewThreadedReplies}
-                                    hasReplies={hasReplies}
-                                    isPending={item.isPending}
-                                    isRepliesLoading={item.isRepliesLoading}
-                                    mentionSelectorContacts={mentionSelectorContacts}
-                                    onHideReplies={onHideRepliesHandler(item.id)}
-                                    onReplyCreate={onReplyCreateHandler(item.id, item.type)}
-                                    onReplyDelete={onReplyDeleteHandler(item.id)}
-                                    onReplyEdit={onReplyUpdateHandler(item.id)}
-                                    onReplySelect={onCommentSelectHandler(item.id)}
-                                    onShowReplies={onShowRepliesHandler(item.id, item.type)}
-                                    repliesTotalCount={item.total_reply_count}
-                                    replies={item.replies}
-                                    translations={translations}
-                                >
-                                    <AnnotationActivity
+                                {hasNewThreadedReplies ? (
+                                    // TODO: legitimate, pre-existing typing issue that was previously undetected
+                                    // Conflict between BoxCommentPermissions and BoxTaskPermissions
+                                    // $FlowFixMe
+                                    <BaseCommentWrapper
+                                        {...commentAndAnnotationCommonProps}
+                                        annotationActivityLink={
+                                            <AnnotationActivityLinkProvider
+                                                item={item}
+                                                onCommentSelectHandler={onCommentSelectHandler}
+                                            />
+                                        }
+                                        onDelete={onAnnotationDelete}
+                                        onAnnotationEdit={onAnnotationEdit}
+                                        onReplyCreate={reply =>
+                                            onReplyCreate(item.id, FEED_ITEM_TYPE_ANNOTATION, reply)
+                                        }
+                                        onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_ANNOTATION)}
+                                        tagged_message={item.description?.message ?? ''}
+                                    />
+                                ) : (
+                                    <ActivityThread
+                                        data-testid="activity-thread"
                                         currentUser={currentUser}
                                         getAvatarUrl={getAvatarUrl}
-                                        getUserProfileUrl={getUserProfileUrl}
                                         getMentionWithQuery={getMentionWithQuery}
-                                        hasVersions={hasVersions}
-                                        isCurrentVersion={currentFileVersionId === itemFileVersionId}
-                                        item={item}
+                                        getUserProfileUrl={getUserProfileUrl}
+                                        hasNewThreadedReplies={hasNewThreadedReplies}
+                                        hasReplies={hasReplies}
+                                        isPending={item.isPending}
+                                        isRepliesLoading={item.isRepliesLoading}
                                         mentionSelectorContacts={mentionSelectorContacts}
-                                        onEdit={onAnnotationEdit}
-                                        onDelete={onAnnotationDelete}
-                                        onSelect={onAnnotationSelect}
-                                        onStatusChange={onAnnotationStatusChange}
-                                    />
-                                </ActivityThread>
+                                        onHideReplies={onHideRepliesHandler(item.id)}
+                                        onReplyCreate={onReplyCreateHandler(item.id, item.type)}
+                                        onReplyDelete={onReplyDeleteHandler(item.id)}
+                                        onReplyEdit={onReplyUpdateHandler(item.id)}
+                                        onReplySelect={onCommentSelectHandler(item.id)}
+                                        onShowReplies={onShowRepliesHandler(item.id, item.type)}
+                                        repliesTotalCount={item.total_reply_count}
+                                        replies={item.replies}
+                                        translations={translations}
+                                    >
+                                        <AnnotationActivity
+                                            currentUser={currentUser}
+                                            getAvatarUrl={getAvatarUrl}
+                                            getUserProfileUrl={getUserProfileUrl}
+                                            getMentionWithQuery={getMentionWithQuery}
+                                            hasVersions={hasVersions}
+                                            isCurrentVersion={currentFileVersionId === itemFileVersionId}
+                                            item={item}
+                                            mentionSelectorContacts={mentionSelectorContacts}
+                                            onEdit={onAnnotationEdit}
+                                            onDelete={onAnnotationDelete}
+                                            onSelect={onAnnotationSelect}
+                                            onStatusChange={onAnnotationStatusChange}
+                                        />
+                                    </ActivityThread>
+                                )}
                             </ActivityItem>
                         );
                     default:

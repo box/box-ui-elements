@@ -187,8 +187,8 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         ${false}              | ${'Comment'}
     `('should show $component when hasNewThreadedReplies is $hasNewThreadedReplies', ({ hasNewThreadedReplies }) => {
         const wrapper = getShallowWrapper({ hasNewThreadedReplies }).dive();
-
-        expect(wrapper.find('BaseComment')).toHaveLength(hasNewThreadedReplies ? 1 : 0);
+        // BaseComment x2 because it is now also used for annotations
+        expect(wrapper.find('BaseCommentWrapper')).toHaveLength(hasNewThreadedReplies ? 2 : 0);
         expect(wrapper.find('Comment')).toHaveLength(hasNewThreadedReplies ? 0 : 1);
     });
 });

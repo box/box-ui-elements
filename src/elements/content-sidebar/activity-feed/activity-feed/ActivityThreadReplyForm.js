@@ -11,7 +11,7 @@ import type { SelectorItems } from '../../../../common/types/core';
 
 import CommentForm from '../comment-form';
 
-import messages from './messages';
+import annotationsMessages from './messages';
 import './ActivityThreadReplyForm.scss';
 
 type ActivityThreadReplyFromProps = {
@@ -37,7 +37,7 @@ function ActivityThreadReplyForm({
     intl,
 }: Props) {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
-    const placeholder = intl.formatMessage(messages.replyInThread);
+    const placeholder = intl.formatMessage(annotationsMessages.replyInThread);
 
     const showForm = () => {
         setShowReplyForm(true);
@@ -76,7 +76,7 @@ function ActivityThreadReplyForm({
             isDisabled={isDisabled}
         >
             <ArrowArcRight className="bcs-ActivityThreadReplyForm-arrow" />
-            <FormattedMessage {...messages.reply} />
+            <FormattedMessage {...annotationsMessages.reply} />
         </PlainButton>
     );
 }
