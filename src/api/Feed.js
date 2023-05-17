@@ -122,7 +122,7 @@ const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[]
         // $FlowFixMe
         const taskItem: Task = source[FILE_ACTIVITY_TYPE_TASK];
 
-        switch (item.type) {
+        switch (item.activity_type) {
             case FILE_ACTIVITY_TYPE_TASK:
                 // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
                 if (!!taskItem.assigned_to && !!taskItem.assigned_to.entries) {
@@ -161,7 +161,7 @@ const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[]
                 }
                 break;
             default:
-                return item;
+                break;
         }
 
         parsedData.push(...Object.values(source));

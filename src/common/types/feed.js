@@ -199,7 +199,7 @@ type FileActivitySource =
       };
 
 type FileActivity = {
-    activityType: FileActivityTypes,
+    activity_type: FileActivityTypes,
     source: FileActivitySource,
     type: FileActivityType,
 };
