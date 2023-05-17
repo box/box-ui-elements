@@ -190,7 +190,6 @@ const BaseComment = (props: BaseCommentProps) => {
         mentionSelectorContacts,
         translations,
     };
-    // const displayMessage = tagged_message || message;
 
     return (
         // TODO: Change className to bcs-Comment once FF is removed

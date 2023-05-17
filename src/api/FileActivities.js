@@ -4,84 +4,24 @@
  * @author Box
  */
 
-import isString from 'lodash/isString';
 import Base from './Base';
-import {
-    PERMISSION_CAN_COMMENT,
-    PERMISSION_CAN_VIEW_ANNOTATIONS,
-    ERROR_CODE_FETCH_ACTIVITY,
-    FILE_ACTIVITY_TYPE_TASK,
-    FILE_ACTIVITY_TYPE_COMMENT,
-} from '../constants';
+import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_VIEW_ANNOTATIONS, ERROR_CODE_FETCH_ACTIVITY } from '../constants';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
 import type { FileActivity, FileActivityTypes } from '../common/types/feed';
 
-export const parseFileActivitiesResponseForFeed = (data?: FileActivity[]) => {
-    if (!data || !data.length) {
-        return [];
-    }
-
-    const parsedData = [];
-
-    data.map(item => {
-        if (item.source) {
-            // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
-            const taskItem = item.source[FILE_ACTIVITY_TYPE_TASK];
-            const commentItem = item.source[FILE_ACTIVITY_TYPE_COMMENT];
-            if (taskItem) {
-                if (!!taskItem.assigned_to && !!taskItem.assigned_to.entries) {
-                    taskItem.assigned_to.entries.map(entry => {
-                        entry.role = entry.role.toUpperCase();
-                        entry.status = entry.status.toUpperCase();
-
-                        return entry;
-                    });
-                }
-                if (taskItem.completion_rule && isString(taskItem.completion_rule)) {
-                    taskItem.completion_rule = taskItem.completion_rule.toUpperCase();
-                }
-                if (taskItem.status && isString(taskItem.status)) {
-                    taskItem.status = taskItem.status.toUpperCase();
-                }
-                if (taskItem.task_type && isString(taskItem.task_type)) {
-                    taskItem.task_type = taskItem.task_type.toUpperCase();
-                }
-
-                taskItem.created_by = {
-                    target: taskItem.created_by,
-                };
-            } else if (commentItem) {
-                commentItem.tagged_message = commentItem.tagged_message || commentItem.message;
-
-                if (commentItem.replies) {
-                    commentItem.replies.map(reply => {
-                        reply.tagged_message = reply.tagged_message || reply.message || '';
-
-                        return reply;
-                    });
-                }
-            }
-
-            parsedData.push(...Object.values(item.source));
-        }
-
-        return item;
-    });
-
-    return { entries: parsedData };
-};
-
 const getFileActivityQueryParams = (
     fileID: string,
-    activityTypes?: FileActivityTypes[],
+    activityTypes?: FileActivityTypes[] = [],
     enableReplies?: boolean = true,
 ) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
+    const hasActivityTypes = !!activityTypes && !!activityTypes.length;
+    const enabledRepliesQueryParam = '&enable_replies=true&reply_limit=1';
 
-    return `${baseEndpoint}${
-        !!activityTypes && !!activityTypes.length ? `&activity_types=${activityTypes.join()}` : ''
-    }${enableReplies ? '&enable_replies=true&reply_limit=1' : ''}`;
+    return `${baseEndpoint}${hasActivityTypes ? `&activity_types=${activityTypes.join()}` : ''}${
+        enableReplies ? enabledRepliesQueryParam : ''
+    }`;
 };
 
 class FileActivities extends Base {

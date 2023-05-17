@@ -9,6 +9,10 @@ import {
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_VERSION,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
     IS_ERROR_DISPLAYED,
     TASK_MAX_GROUP_ASSIGNEES,
 } from '../../constants';
@@ -417,6 +421,7 @@ describe('api/Feed', () => {
             feed.fetchVersions = jest.fn().mockResolvedValue(versions);
             feed.fetchCurrentVersion = jest.fn().mockResolvedValue(mockCurrentVersion);
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasks);
+            feed.fetchFileActivities = jest.fn().mockResolvedValue(sortedItems);
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.fetchThreadedComments = jest.fn().mockResolvedValue(threadedComments);
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
@@ -582,6 +587,21 @@ describe('api/Feed', () => {
                     undefined,
                     undefined,
                 );
+                done();
+            });
+        });
+
+        test('should use the file activities api if shouldUseUAA is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldUseUAA: true });
+            setImmediate(() => {
+                expect(feed.fetchFileActivities).toBeCalledWith(file.permissions, [
+                    FILE_ACTIVITY_TYPE_ANNOTATION,
+                    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                    FILE_ACTIVITY_TYPE_COMMENT,
+                    FILE_ACTIVITY_TYPE_TASK,
+                ]);
+                expect(feed.fetchComments).not.toBeCalled();
+                expect(feed.fetchThreadedComments).not.toBeCalled();
                 done();
             });
         });

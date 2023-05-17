@@ -3,6 +3,7 @@
  * @file Helper for activity feed API's
  * @author Box
  */
+import isString from 'lodash/isString';
 import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import type { MessageDescriptor } from 'react-intl';
@@ -15,7 +16,7 @@ import Base from './Base';
 import AnnotationsAPI from './Annotations';
 import CommentsAPI from './Comments';
 import ThreadedCommentsAPI from './ThreadedComments';
-import FileActivitiesAPI, { parseFileActivitiesResponseForFeed } from './FileActivities';
+import FileActivitiesAPI from './FileActivities';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
 import GroupsAPI from './Groups';
@@ -100,6 +101,75 @@ const getItemWithFilteredReplies = <T: { replies?: Array<Comment> }>(item: T, re
 const getItemWithPendingReply = <T: { replies?: Array<Comment> }>(item: T, reply: Comment): T => {
     const { replies = [], ...rest } = item;
     return { replies: [...replies, reply], ...rest };
+};
+
+const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[] }) => {
+    if (!response || !response.entries || !response.entries.length) {
+        return [];
+    }
+
+    const data = response.entries;
+    const parsedData = [];
+
+    data.map(item => {
+        if (!item.source) {
+            return item;
+        }
+
+        const source = { ...item.source };
+        // $FlowFixMe
+        const commentItem: Comment = source[FILE_ACTIVITY_TYPE_COMMENT];
+        // $FlowFixMe
+        const taskItem: Task = source[FILE_ACTIVITY_TYPE_TASK];
+
+        switch (item.type) {
+            case FILE_ACTIVITY_TYPE_TASK:
+                // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
+                if (!!taskItem.assigned_to && !!taskItem.assigned_to.entries) {
+                    // $FlowFixMe
+                    taskItem.assigned_to.entries.map(entry => {
+                        entry.role = entry.role.toUpperCase();
+                        entry.status = entry.status.toUpperCase();
+
+                        return entry;
+                    });
+                }
+                if (taskItem.completion_rule && isString(taskItem.completion_rule)) {
+                    taskItem.completion_rule = taskItem.completion_rule.toUpperCase();
+                }
+                if (taskItem.status && isString(taskItem.status)) {
+                    taskItem.status = taskItem.status.toUpperCase();
+                }
+                if (taskItem.task_type && isString(taskItem.task_type)) {
+                    taskItem.task_type = taskItem.task_type.toUpperCase();
+                }
+
+                // $FlowFixMe
+                taskItem.created_by = {
+                    target: taskItem.created_by,
+                };
+                break;
+            case FILE_ACTIVITY_TYPE_COMMENT:
+                commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
+
+                if (commentItem.replies && commentItem.replies.length) {
+                    commentItem.replies.map(reply => {
+                        reply.tagged_message = reply.tagged_message || reply.message || '';
+
+                        return reply;
+                    });
+                }
+                break;
+            default:
+                return item;
+        }
+
+        parsedData.push(...Object.values(source));
+
+        return item;
+    });
+
+    return { entries: parsedData };
 };
 
 class Feed extends Base {
@@ -408,16 +478,23 @@ class Feed extends Base {
         this.file = file;
         this.errors = [];
         this.errorCallback = onError;
-        const annotationsPromise = shouldShowAnnotations
-            ? this.fetchAnnotations(permissions, shouldShowReplies)
-            : Promise.resolve();
-        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
-        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
-        const commentsPromise = shouldShowReplies
-            ? this.fetchThreadedComments(permissions)
-            : this.fetchComments(permissions);
-        const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
-        const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
+        const annotationsPromise =
+            !shouldUseUAA && shouldShowAnnotations
+                ? this.fetchAnnotations(permissions, shouldShowReplies)
+                : Promise.resolve();
+        const versionsPromise = !shouldUseUAA && shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise =
+            !shouldUseUAA && shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
+        const commentsPromise = () => {
+            if (shouldUseUAA) {
+                return Promise.resolve();
+            }
+
+            return shouldShowReplies ? this.fetchThreadedComments(permissions) : this.fetchComments(permissions);
+        };
+        const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
+        const appActivityPromise =
+            !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
         const fileActivitiesPromise = shouldUseUAA
             ? this.fetchFileActivities(permissions, [
@@ -442,15 +519,16 @@ class Feed extends Base {
         if (shouldUseUAA) {
             Promise.all([versionsPromise, currentVersionPromise, fileActivitiesPromise]).then(
                 ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                    if (!feedItems || !feedItems.length || !feedItems[0].entries) {
+                    if (!feedItems || !feedItems.length) {
                         return;
                     }
 
-                    const { entries } = feedItems[0];
+                    const fileActivitiesResponse = feedItems[0];
                     const versionsWithCurrent = currentVersion
                         ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
                         : undefined;
-                    const parsedFeedItems = parseFileActivitiesResponseForFeed(entries);
+                    const parsedFeedItems = parseFileActivitiesResponseForFeed(fileActivitiesResponse);
+                    // $FlowFixMe
                     const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
                     handleFeedItems(sortedFeedItems);
                 },
@@ -459,7 +537,7 @@ class Feed extends Base {
             Promise.all([
                 versionsPromise,
                 currentVersionPromise,
-                commentsPromise,
+                commentsPromise(),
                 tasksPromise,
                 appActivityPromise,
                 annotationsPromise,
@@ -576,7 +654,7 @@ class Feed extends Base {
      * @param {Object} permissions - the file permissions
      * @return {Promise} - the file comments
      */
-    fetchFileActivities(permissions: BoxItemPermission, activityTypes: FileActivityTypes[]): Promise<?FileActivity> {
+    fetchFileActivities(permissions: BoxItemPermission, activityTypes: FileActivityTypes[]): Promise<Object> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {
             this.fileActivitiesAPI.getActivities({
