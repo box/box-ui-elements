@@ -9,33 +9,30 @@ import type { Annotation } from '../../../../common/types/feed';
 type AnnotationActivityLinkProviderProps = {
     isCurrentVersion: boolean,
     item: Annotation,
-    onCommentSelectHandler: (itemId: string) => (isSelected: boolean) => void,
+    onSelect: (annotation: Annotation) => void,
 };
 
-const AnnotationActivityLinkProvider = ({
-    isCurrentVersion,
-    item,
-    onCommentSelectHandler,
-}: AnnotationActivityLinkProviderProps) => {
-    const isFileVersionUnavailable = item.file_version === null;
+const AnnotationActivityLinkProvider = ({ isCurrentVersion, item, onSelect }: AnnotationActivityLinkProviderProps) => {
+    const { file_version, id, target } = item;
+
+    const isFileVersionUnavailable = file_version === null;
 
     const linkMessage = isCurrentVersion
         ? annotationsMessages.annotationActivityPageItem
         : annotationsMessages.annotationActivityVersionLink;
-    const linkValue = isCurrentVersion ? item.target?.location.value : item.file_version?.version_number;
+    const linkValue = isCurrentVersion ? target?.location.value : file_version?.version_number;
 
     const activityLinkMessage = isFileVersionUnavailable
         ? annotationsMessages.annotationActivityVersionUnavailable
         : { ...linkMessage, values: { number: linkValue } };
 
-    // $FlowFixMe
-    const handleSelect = () => onCommentSelectHandler(item.id);
+    const handleSelect = () => onSelect(item);
 
     return (
         <AnnotationActivityLink
             className="bcs-AnnotationActivity-link"
             data-resin-target="annotationLink"
-            id={item.id}
+            id={id}
             isDisabled={isFileVersionUnavailable}
             message={activityLinkMessage}
             onClick={handleSelect}

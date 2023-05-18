@@ -309,7 +309,7 @@ const ActiveState = ({
                                         annotationActivityLink={
                                             <AnnotationActivityLinkProvider
                                                 item={item}
-                                                onCommentSelectHandler={onCommentSelectHandler}
+                                                onSelect={onAnnotationSelect}
                                                 isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                             />
                                         }
