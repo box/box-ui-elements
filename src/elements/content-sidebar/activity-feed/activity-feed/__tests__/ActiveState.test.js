@@ -126,6 +126,7 @@ const getShallowWrapper = (params = {}) =>
             items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
             currentUser={currentUser}
             currentFileVersionId="123"
+            onAnnotationSelect={() => null}
             {...params}
         />,
     );
@@ -187,8 +188,8 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         ${false}              | ${'Comment'}
     `('should show $component when hasNewThreadedReplies is $hasNewThreadedReplies', ({ hasNewThreadedReplies }) => {
         const wrapper = getShallowWrapper({ hasNewThreadedReplies }).dive();
-        // BaseComment x2 because it is now also used for annotations
         expect(wrapper.find('BaseComment')).toHaveLength(hasNewThreadedReplies ? 2 : 0);
         expect(wrapper.find('Comment')).toHaveLength(hasNewThreadedReplies ? 0 : 1);
+        expect(wrapper.find('AnnotationActivity')).toHaveLength(hasNewThreadedReplies ? 0 : 1);
     });
 });

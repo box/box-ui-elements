@@ -22,6 +22,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
       }
     }
     items={Array []}
+    onAnnotationSelect={[Function]}
   />
 </Fragment>
 `;
@@ -36,6 +37,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     }
   }
   items={Array []}
+  onAnnotationSelect={[Function]}
 />
 `;
 
@@ -98,6 +100,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
             "type": "annotation",
           }
         }
+        onSelect={[Function]}
       />
     </ActivityThread>
   </ForwardRef(ActivityItem)>
