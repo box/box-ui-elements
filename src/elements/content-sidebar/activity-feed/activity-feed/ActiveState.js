@@ -300,7 +300,7 @@ const ActiveState = ({
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
-                                {hasNewThreadedReplies ? (
+                                {hasNewThreadedReplies && onAnnotationSelect ? (
                                     // TODO: legitimate, pre-existing typing issue that was previously undetected
                                     // Conflict between BoxCommentPermissions and BoxTaskPermissions
                                     // $FlowFixMe

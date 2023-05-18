@@ -342,7 +342,8 @@ export const BaseComment = ({
                     {...commentProps}
                     isParentPending={isPending}
                     isRepliesLoading={isRepliesLoading}
-                    onCommentEdit={onCommentEdit}
+                    // note that passing down onCommentEdit does not allow editing replies
+                    onEdit={noop}
                     onHideReplies={onHideReplies}
                     onReplyCreate={onReplyCreate}
                     onReplySelect={onSelect}
@@ -364,7 +365,7 @@ type RepliesProps = {
     isParentPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onCommentEdit: OnCommentEdit,
+    onEdit: Function,
     onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
     onReplySelect?: (isSelected: boolean) => void,
@@ -382,7 +383,7 @@ export const Replies = ({
     isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
-    onCommentEdit,
+    onEdit,
     onReplyCreate,
     onReplySelect = noop,
     onShowReplies,
@@ -446,9 +447,7 @@ export const Replies = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     isPending={isParentPending || reply.isPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    // Note that this, unfortunately, does not enable modifying replies,
-                                    // so it's just a placeholder til we figure out the implementation.
-                                    onCommentEdit={onCommentEdit}
+                                    onCommentEdit={onEdit}
                                     onSelect={onReplySelect}
                                     onDelete={noop}
                                     permissions={getReplyPermissions(reply)}

@@ -98,7 +98,7 @@ export const annotationBase: Annotation = {
 const annotationActivityLinkProviderProps = {
     isCurrentVersion: true,
     item: annotationBase,
-    onCommentSelectHandler: () => () => {
+    onSelect: () => {
         // eslint-disable-next-line no-alert
         alert('meow');
     },
