@@ -37,6 +37,8 @@ import type {
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
+import { type OnAnnotationEdit } from '../comment/types';
+
 import './ActivityFeed.scss';
 
 type Props = {
@@ -58,7 +60,7 @@ type Props = {
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
-    onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
+    onAnnotationEdit?: OnAnnotationEdit,
     onAnnotationSelect?: (annotation: Annotation) => void,
     onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,

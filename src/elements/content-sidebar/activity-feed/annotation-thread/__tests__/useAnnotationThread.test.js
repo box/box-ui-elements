@@ -170,7 +170,11 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
 
             const { result } = getHook();
             act(() => {
-                result.current.annotationActions.handleAnnotationEdit(annotation.id, updatedText, { can_edit: true });
+                result.current.annotationActions.handleAnnotationEdit({
+                    id: annotation.id,
+                    permissions: { can_edit: true },
+                    text: updatedText,
+                });
             });
 
             expect(mockHandleEdit).toBeCalledWith({

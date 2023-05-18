@@ -13,6 +13,7 @@ import Checkmark16 from '../../../../icon/line/Checkmark16';
 import CommentForm from '../comment-form';
 import CreateReply from './CreateReply';
 import DeleteConfirmation from '../common/delete-confirmation';
+import IconAnnotation from '../../../../icons/two-toned/IconAnnotation';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import Media from '../../../../components/media';
 import messages from './messages';
@@ -24,6 +25,7 @@ import X16 from '../../../../icon/fill/X16';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED, PLACEHOLDER_USER } from '../../../../constants';
 import { MenuItem } from '../../../../components/menu';
+import { type OnAnnotationEdit, type OnCommentEdit } from './types';
 import type {
     ActionItemError,
     BoxCommentPermission,
@@ -34,11 +36,13 @@ import type {
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { Translations } from '../../flowTypes';
+
 import './BaseComment.scss';
 import './Replies.scss';
 import './Comment.scss';
 
-type BaseCommentProps = {
+export type BaseCommentProps = {
+    annotationActivityLink?: React.Element<any>,
     created_at: string | number,
     created_by: User,
     currentUser?: User,
@@ -53,16 +57,9 @@ type BaseCommentProps = {
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
+    onAnnotationEdit?: OnAnnotationEdit,
+    onCommentEdit: OnCommentEdit,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
-    onEdit: (
-        id: string,
-        text?: string,
-        status?: FeedItemStatus,
-        hasMention: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
     onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
     onSelect: (isSelected: boolean) => void,
@@ -77,37 +74,37 @@ type BaseCommentProps = {
 };
 
 // TODO: Replace and rename to Comment component once threaded replies refactor is fully implemented
-const BaseComment = (props: BaseCommentProps) => {
-    const {
-        created_by,
-        created_at,
-        permissions = {},
-        id,
-        isPending = false,
-        isRepliesLoading = false,
-        error,
-        tagged_message = '',
-        translatedTaggedMessage,
-        translations,
-        currentUser,
-        isDisabled,
-        getAvatarUrl,
-        getUserProfileUrl,
-        getMentionWithQuery,
-        hasReplies = false,
-        mentionSelectorContacts,
-        modified_at,
-        onDelete,
-        onEdit,
-        onSelect,
-        onReplyCreate,
-        onShowReplies,
-        onHideReplies,
-        replies = [],
-        repliesTotalCount = 0,
-        status,
-    } = props;
-
+export const BaseComment = ({
+    annotationActivityLink,
+    created_at,
+    created_by,
+    currentUser,
+    error,
+    getAvatarUrl,
+    getMentionWithQuery,
+    getUserProfileUrl,
+    hasReplies = false,
+    id,
+    isDisabled,
+    isPending = false,
+    isRepliesLoading = false,
+    mentionSelectorContacts,
+    modified_at,
+    onAnnotationEdit,
+    onCommentEdit,
+    onDelete,
+    onHideReplies,
+    onReplyCreate,
+    onSelect,
+    onShowReplies,
+    permissions = {},
+    replies = [],
+    repliesTotalCount = 0,
+    status,
+    tagged_message = '',
+    translatedTaggedMessage,
+    translations,
+}: BaseCommentProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState<boolean>(false);
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
@@ -157,22 +154,31 @@ const BaseComment = (props: BaseCommentProps) => {
         onSelect(false);
     };
 
-    const handleMessageUpdate = ({
-        id: messageID,
-        text,
-        hasMention,
-    }: {
-        hasMention: boolean,
-        id: string,
-        text: string,
-    }): void => {
-        onEdit(messageID, text, undefined, hasMention, permissions);
+    const handleMessageUpdate = ({ id: messageID, text, hasMention }) => {
+        // Since we have to pass onCommentEdit through annotations (to Replies), onAnnotationEdit essentially overrides onCommentEdit
+        if (onAnnotationEdit) {
+            onAnnotationEdit({ id: messageID, text, permissions });
+        } else if (onCommentEdit) {
+            onCommentEdit({
+                id: messageID,
+                text,
+                hasMention,
+                permissions,
+            });
+        }
         commentFormSubmitHandler();
     };
 
     const handleStatusUpdate = (selectedStatus: FeedItemStatus): void => {
-        onEdit(id, undefined, selectedStatus, false, permissions);
+        if (onAnnotationEdit) {
+            onAnnotationEdit({ id, permissions });
+        } else if (onCommentEdit) {
+            onCommentEdit({ id, status: selectedStatus, hasMention: false, permissions });
+        }
     };
+
+    // Since we have to pass onCommentEdit through annotations (to Replies), onAnnotationEdit essentially overrides onCommentEdit
+    const onEdit = onAnnotationEdit ?? onCommentEdit;
 
     const canDelete = permissions.can_delete;
     const canEdit = onEdit !== noop && permissions.can_edit;
@@ -200,7 +206,17 @@ const BaseComment = (props: BaseCommentProps) => {
                 })}
             >
                 <Media.Figure>
-                    <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} />
+                    <Avatar
+                        getAvatarUrl={getAvatarUrl}
+                        user={createdByUser}
+                        badgeIcon={
+                            annotationActivityLink ? (
+                                <IconAnnotation title={<FormattedMessage {...messages.annotationBadge} />} />
+                            ) : (
+                                undefined
+                            )
+                        }
+                    />
                 </Media.Figure>
                 <Media.Body>
                     {isMenuVisible && (
@@ -284,6 +300,7 @@ const BaseComment = (props: BaseCommentProps) => {
                     </div>
                     <div className="bcs-Comment-timestamp">
                         <ActivityTimestamp date={createdAtTimestamp} />
+                        {annotationActivityLink && annotationActivityLink}
                     </div>
                     <ActivityStatus status={status} />
                     {isEditing ? (
@@ -325,6 +342,7 @@ const BaseComment = (props: BaseCommentProps) => {
                     {...commentProps}
                     isParentPending={isPending}
                     isRepliesLoading={isRepliesLoading}
+                    onCommentEdit={onCommentEdit}
                     onHideReplies={onHideReplies}
                     onReplyCreate={onReplyCreate}
                     onReplySelect={onSelect}
@@ -346,6 +364,7 @@ type RepliesProps = {
     isParentPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
+    onCommentEdit: OnCommentEdit,
     onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
     onReplySelect?: (isSelected: boolean) => void,
@@ -355,7 +374,7 @@ type RepliesProps = {
     translations?: Translations,
 };
 
-const Replies = ({
+export const Replies = ({
     currentUser,
     getAvatarUrl,
     getMentionWithQuery,
@@ -363,6 +382,7 @@ const Replies = ({
     isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
+    onCommentEdit,
     onReplyCreate,
     onReplySelect = noop,
     onShowReplies,
@@ -426,9 +446,11 @@ const Replies = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     isPending={isParentPending || reply.isPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
+                                    // Note that this, unfortunately, does not enable modifying replies,
+                                    // so it's just a placeholder til we figure out the implementation.
+                                    onCommentEdit={onCommentEdit}
                                     onSelect={onReplySelect}
                                     onDelete={noop}
-                                    onEdit={noop}
                                     permissions={getReplyPermissions(reply)}
                                     translations={translations}
                                 />
@@ -452,5 +474,3 @@ const Replies = ({
         </div>
     );
 };
-
-export { BaseComment, Replies };

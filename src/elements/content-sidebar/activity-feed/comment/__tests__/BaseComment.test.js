@@ -6,50 +6,30 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { ContentState, EditorState } from 'draft-js';
 import { BaseComment } from '../BaseComment';
 
-jest.mock('../../Avatar', () => () => 'Avatar');
+import {
+    annotation,
+    annotationPreviousVersion,
+    comment,
+    currentUser,
+    reply1,
+    reply2,
+    replies,
+    TIME_STRING_SEPT_27_2017,
+    TIME_STRING_SEPT_28_2017,
+} from '../stories/common';
+import messages from '../messages';
+import localize from '../../../../../../test/support/i18n';
+
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
     FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
 }));
-
-const TIME_STRING_SEPT_27_2017 = '2017-09-27T10:40:41-07:00';
-const TIME_STRING_SEPT_28_2017 = '2017-09-28T10:40:41-07:00';
-const TIME_STRING_SEPT_29_2017 = '2017-09-29T10:40:41-07:00';
-const comment = {
-    created_at: TIME_STRING_SEPT_27_2017,
-    tagged_message: 'test',
-    created_by: { name: '50 Cent', id: 10 },
-    permissions: { can_delete: true, can_edit: true, can_resolve: true },
-};
-
-const reply1 = {
-    id: 2,
-    type: 'comment',
-    created_at: TIME_STRING_SEPT_28_2017,
-    tagged_message: 'test reply 1',
-    created_by: { name: 'Eminem', id: 11 },
-    permissions: { can_delete: true, can_edit: true, can_resolve: true },
-};
-const reply2 = {
-    id: 3,
-    type: 'comment',
-    created_at: TIME_STRING_SEPT_29_2017,
-    tagged_message: 'test reply 2',
-    created_by: { name: 'Snoop Dogg', id: 12 },
-    permissions: { can_delete: true, can_edit: true, can_resolve: true },
-};
-
-const currentUser = {
-    name: 'testuser',
-    id: 11,
-};
 
 const replyCreate = jest.fn();
 const onSelect = jest.fn();
 const hideReplies = jest.fn();
 const showReplies = jest.fn();
 
-const replies = [reply1, reply2];
 const repliesProps = {
     hasReplies: true,
     onReplyCreate: replyCreate,
@@ -58,11 +38,12 @@ const repliesProps = {
     onShowReplies: showReplies,
 };
 
-const getWrapper = props =>
+// eslint-disable-next-line import/prefer-default-export
+export const getWrapper = props =>
     render(
         <IntlProvider locale="en">
             <BaseComment
-                id="123"
+                id="1"
                 {...comment}
                 approverSelectorContacts={[]}
                 currentUser={currentUser}
@@ -74,20 +55,38 @@ const getWrapper = props =>
     );
 
 describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
-    test('should correctly render comment with replies', () => {
-        getWrapper({ ...repliesProps });
-        // validating that the Tooltip and the comment posted time are properly set
-        expect(screen.getByText(comment.tagged_message)).toBeInTheDocument();
-        expect(screen.getByText(comment.created_by.name)).toBeInTheDocument();
+    test.each`
+        activityItem
+        ${annotation}
+        ${comment}
+    `(`should render activity item with replies`, ({ activityItem }) => {
+        getWrapper({ ...activityItem, ...repliesProps });
+
+        expect(screen.getByText(activityItem.tagged_message)).toBeInTheDocument();
+        expect(screen.getByText(activityItem.created_by.name)).toBeInTheDocument();
         expect(screen.getByText('Sep 27, 2017')).toBeInTheDocument();
-        // reply 1
+
         expect(screen.getByText(reply1.tagged_message)).toBeInTheDocument();
         expect(screen.getByText(reply1.created_by.name)).toBeInTheDocument();
         expect(screen.getByText('Sep 28, 2017')).toBeInTheDocument();
-        // reply 2
+
         expect(screen.getByText(reply2.tagged_message)).toBeInTheDocument();
         expect(screen.getByText(reply2.created_by.name)).toBeInTheDocument();
         expect(screen.getByText('Sep 29, 2017')).toBeInTheDocument();
+    });
+
+    test('should render annotation badge when annotationActivityLink prop is defined', () => {
+        getWrapper({ ...annotation, ...repliesProps });
+        expect(screen.getByText(localize(messages.annotationBadge.id))).toBeInTheDocument();
+    });
+
+    test.each`
+        annotationType               | linkText
+        ${annotation}                | ${'Page 1'}
+        ${annotationPreviousVersion} | ${'Version 1'}
+    `(`should properly render AnnotationActivityLink`, ({ annotationType, linkText }) => {
+        getWrapper({ ...annotationType, ...repliesProps });
+        expect(screen.getByText(linkText)).toBeInTheDocument();
     });
 
     test('should correctly render comment when translation is enabled', () => {
@@ -113,23 +112,23 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
     });
 
     test.each`
-        permissions                                                  | onEdit       | showDelete | showEdit | showResolve
-        ${{ can_delete: true, can_edit: true, can_resolve: true }}   | ${jest.fn()} | ${true}    | ${true}  | ${true}
-        ${{ can_delete: true, can_edit: false, can_resolve: true }}  | ${jest.fn()} | ${true}    | ${false} | ${true}
-        ${{ can_delete: false, can_edit: true, can_resolve: true }}  | ${jest.fn()} | ${false}   | ${true}  | ${true}
-        ${{ can_delete: true, can_edit: false, can_resolve: true }}  | ${undefined} | ${true}    | ${false} | ${true}
-        ${{ can_delete: false, can_edit: true, can_resolve: true }}  | ${undefined} | ${false}   | ${true}  | ${true}
-        ${{ can_delete: true, can_edit: true, can_resolve: true }}   | ${undefined} | ${true}    | ${true}  | ${true}
-        ${{ can_delete: true, can_edit: true, can_resolve: false }}  | ${jest.fn()} | ${true}    | ${true}  | ${false}
-        ${{ can_delete: true, can_edit: false, can_resolve: false }} | ${jest.fn()} | ${true}    | ${false} | ${false}
-        ${{ can_delete: false, can_edit: true, can_resolve: false }} | ${jest.fn()} | ${false}   | ${true}  | ${false}
-        ${{ can_delete: true, can_edit: false, can_resolve: false }} | ${undefined} | ${true}    | ${false} | ${false}
-        ${{ can_delete: false, can_edit: true, can_resolve: false }} | ${undefined} | ${false}   | ${true}  | ${false}
-        ${{ can_delete: true, can_edit: true, can_resolve: false }}  | ${undefined} | ${true}    | ${true}  | ${false}
+        permissions                                                  | onCommentEdit | showDelete | showEdit | showResolve
+        ${{ can_delete: true, can_edit: true, can_resolve: true }}   | ${jest.fn()}  | ${true}    | ${true}  | ${true}
+        ${{ can_delete: true, can_edit: false, can_resolve: true }}  | ${jest.fn()}  | ${true}    | ${false} | ${true}
+        ${{ can_delete: false, can_edit: true, can_resolve: true }}  | ${jest.fn()}  | ${false}   | ${true}  | ${true}
+        ${{ can_delete: true, can_edit: false, can_resolve: true }}  | ${undefined}  | ${true}    | ${false} | ${true}
+        ${{ can_delete: false, can_edit: true, can_resolve: true }}  | ${undefined}  | ${false}   | ${true}  | ${true}
+        ${{ can_delete: true, can_edit: true, can_resolve: true }}   | ${undefined}  | ${true}    | ${true}  | ${true}
+        ${{ can_delete: true, can_edit: true, can_resolve: false }}  | ${jest.fn()}  | ${true}    | ${true}  | ${false}
+        ${{ can_delete: true, can_edit: false, can_resolve: false }} | ${jest.fn()}  | ${true}    | ${false} | ${false}
+        ${{ can_delete: false, can_edit: true, can_resolve: false }} | ${jest.fn()}  | ${false}   | ${true}  | ${false}
+        ${{ can_delete: true, can_edit: false, can_resolve: false }} | ${undefined}  | ${true}    | ${false} | ${false}
+        ${{ can_delete: false, can_edit: true, can_resolve: false }} | ${undefined}  | ${false}   | ${true}  | ${false}
+        ${{ can_delete: true, can_edit: true, can_resolve: false }}  | ${undefined}  | ${true}    | ${true}  | ${false}
     `(
-        `show menu for a comment with permissions $permissions and onEdit ($onEdit), should showDelete: $showDelete, showEdit: $showEdit, showResolve: $showResolve`,
-        ({ permissions, onEdit, showDelete, showEdit, showResolve }) => {
-            getWrapper({ onEdit, permissions });
+        `show menu for a comment with permissions $permissions and onCommentEdit ($onCommentEdit), should showDelete: $showDelete, showEdit: $showEdit, showResolve: $showResolve`,
+        ({ permissions, onCommentEdit, showDelete, showEdit, showResolve }) => {
+            getWrapper({ onCommentEdit, permissions });
 
             const menuItem = screen.queryByTestId('comment-actions-menu');
 
@@ -186,28 +185,57 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
         expect(menuItem).not.toBeInTheDocument();
     });
 
-    test('should allow user to edit if they have edit permissions on the task and edit handler is defined', async () => {
-        const mockOnEdit = jest.fn();
+    test.each`
+        activityItem  | activityItemType
+        ${comment}    | ${'comment'}
+        ${annotation} | ${'annotation'}
+    `(
+        'should allow user to edit if they have edit permissions on the $activityItemType and edit handler is defined',
+        async ({ activityItem, activityItemType }) => {
+            const mockOnCommentEdit = jest.fn();
+            const mockOnAnnotationEdit = jest.fn();
 
-        getWrapper({ type: 'task', onEdit: mockOnEdit });
+            const isComment = activityItemType === 'comment';
+            const isAnnotation = activityItemType === 'annotation';
 
-        const menuItem = screen.queryByTestId('comment-actions-menu');
+            getWrapper({
+                ...activityItem,
+                onCommentEdit: isComment ? mockOnCommentEdit : undefined,
+                onAnnotationEdit: isAnnotation ? mockOnAnnotationEdit : undefined,
+            });
 
-        fireEvent.click(menuItem);
+            const menuItem = screen.queryByTestId('comment-actions-menu');
 
-        expect(screen.getByTestId('edit-comment')).toBeInTheDocument();
-        fireEvent.click(screen.getByTestId('edit-comment'));
+            fireEvent.click(menuItem);
 
-        expect(screen.queryByTestId('edit-comment')).not.toBeInTheDocument();
-        expect(screen.getByTestId('bcs-CommentForm-body')).toBeInTheDocument();
+            expect(screen.getByTestId('edit-comment')).toBeInTheDocument();
+            fireEvent.click(screen.getByTestId('edit-comment'));
 
-        await fireEvent.click(screen.getByRole('button', { name: 'Post' }));
-        expect(mockOnEdit).toBeCalledWith('123', 'test', undefined, false, {
-            can_delete: true,
-            can_edit: true,
-            can_resolve: true,
-        });
-    });
+            expect(screen.queryByTestId('edit-comment')).not.toBeInTheDocument();
+            expect(screen.getByTestId('bcs-CommentForm-body')).toBeInTheDocument();
+
+            await fireEvent.click(screen.getByRole('button', { name: 'Post' }));
+
+            if (isComment) {
+                expect(mockOnCommentEdit).toBeCalledWith({
+                    hasMention: false,
+                    id: '1',
+                    permissions: { can_delete: true, can_edit: true, can_resolve: true, can_reply: true },
+                    text: comment.tagged_message,
+                });
+                expect(mockOnAnnotationEdit).not.toBeCalled();
+            }
+
+            if (isAnnotation) {
+                expect(mockOnAnnotationEdit).toBeCalledWith({
+                    id: '1',
+                    permissions: { can_delete: true, can_edit: true, can_resolve: true, can_reply: true },
+                    text: comment.tagged_message,
+                });
+                expect(mockOnCommentEdit).not.toBeCalled();
+            }
+        },
+    );
 
     test.each`
         status        | menuItemTestId         | expectedNewStatus
@@ -223,7 +251,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
                 permissions: { can_resolve: true, can_edit: false, can_delete: false },
                 type: 'task',
                 status,
-                onEdit: mockOnEdit,
+                onCommentEdit: mockOnEdit,
             });
 
             const menuItem = screen.queryByTestId('comment-actions-menu');
@@ -235,10 +263,15 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
             expect(screen.queryByTestId(menuItemTestId)).not.toBeInTheDocument();
 
-            expect(mockOnEdit).toBeCalledWith('123', undefined, expectedNewStatus, false, {
-                can_delete: false,
-                can_edit: false,
-                can_resolve: true,
+            expect(mockOnEdit).toBeCalledWith({
+                hasMention: false,
+                id: '1',
+                permissions: {
+                    can_delete: false,
+                    can_edit: false,
+                    can_resolve: true,
+                },
+                status: expectedNewStatus,
             });
         },
     );

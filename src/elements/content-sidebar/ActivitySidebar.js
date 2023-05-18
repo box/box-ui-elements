@@ -73,6 +73,8 @@ import type { Translations } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
 
+import { type OnAnnotationEdit } from './activity-feed/comment/types';
+
 type ExternalProps = {
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
@@ -194,7 +196,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
+    handleAnnotationEdit: OnAnnotationEdit = ({ id, text, permissions }) => {
         const { api, emitAnnotationUpdateEvent, file } = this.props;
 
         emitAnnotationUpdateEvent(
