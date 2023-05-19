@@ -10,6 +10,9 @@ import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
 import type { FileActivity, FileActivityTypes } from '../common/types/feed';
 
+// We only show the latest reply in the UI
+const REPLY_LIMIT = 1;
+
 const getFileActivityQueryParams = (
     fileID: string,
     activityTypes?: FileActivityTypes[] = [],
@@ -17,11 +20,10 @@ const getFileActivityQueryParams = (
 ) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
-    const enabledRepliesQueryParam = '&enable_replies=true&reply_limit=1';
+    const enabledRepliesQueryParam = enableReplies ? `&enable_replies=true&reply_limit=${REPLY_LIMIT}` : '';
+    const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
 
-    return `${baseEndpoint}${hasActivityTypes ? `&activity_types=${activityTypes.join()}` : ''}${
-        enableReplies ? enabledRepliesQueryParam : ''
-    }`;
+    return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}`;
 };
 
 class FileActivities extends Base {
@@ -43,6 +45,7 @@ class FileActivities extends Base {
      * API URL for filtered file activities
      *
      * @param {string} [id] - a box file id
+     * @param {Array<FileActivityTypes>} activityTypes - optional. Array of File Activity types to filter by, returns all Activity Types if omitted.
      * @return {string} base url for files
      */
     getFilteredUrl(id?: string, activityTypes?: FileActivityTypes[]): string {
@@ -56,16 +59,13 @@ class FileActivities extends Base {
     /**
      * API for fetching file activities
      *
+     * @param {Array<FileActivityTypes>} activityTypes - optional. Array of File Activity types to filter by, returns all Activity Types if omitted.
+     * @param {Function} errorCallback - the error callback
      * @param {string} fileId - the file id
      * @param {BoxItemPermission} permissions - the permissions for the file
-     * @param {Function} successCallback - the success callback
-     * @param {Function} errorCallback - the error callback
-     * @param {array} fields - the fields to fetch
-     * @param {string} marker the marker from the start to start fetching at
-     * @param {number} limit - the number of items to fetch
-     * @param {boolean} shouldFetchAll - true if should get all the pages before calling the sucessCallback
      * @param {number} repliesCount - number of replies to return, by deafult all replies all returned
-     *  @returns {void}
+     * @param {Function} successCallback - the success callback
+     * @returns {void}
      */
     getActivities({
         activityTypes,

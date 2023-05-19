@@ -30,6 +30,10 @@ import {
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     TASK_NEW_APPROVED,
@@ -38,10 +42,6 @@ import {
     TASK_NEW_NOT_STARTED,
     TYPED_ID_FEED_PREFIX,
     TASK_MAX_GROUP_ASSIGNEES,
-    FILE_ACTIVITY_TYPE_ANNOTATION,
-    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
-    FILE_ACTIVITY_TYPE_COMMENT,
-    FILE_ACTIVITY_TYPE_TASK,
 } from '../constants';
 import type {
     TaskCompletionRule,
@@ -117,15 +117,13 @@ const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[]
         }
 
         const source = { ...item.source };
-        // $FlowFixMe
-        const commentItem: Comment = source[FILE_ACTIVITY_TYPE_COMMENT];
-        // $FlowFixMe
-        const taskItem: Task = source[FILE_ACTIVITY_TYPE_TASK];
 
         switch (item.activity_type) {
-            case FILE_ACTIVITY_TYPE_TASK:
+            case FILE_ACTIVITY_TYPE_TASK: {
+                // $FlowFixMe
+                const taskItem: Task = source[FILE_ACTIVITY_TYPE_TASK];
                 // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
-                if (!!taskItem.assigned_to && !!taskItem.assigned_to.entries) {
+                if (taskItem.assigned_to?.entries) {
                     // $FlowFixMe
                     taskItem.assigned_to.entries.map(entry => {
                         entry.role = entry.role.toUpperCase();
@@ -149,7 +147,10 @@ const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[]
                     target: taskItem.created_by,
                 };
                 break;
-            case FILE_ACTIVITY_TYPE_COMMENT:
+            }
+            case FILE_ACTIVITY_TYPE_COMMENT: {
+                // $FlowFixMe
+                const commentItem: Comment = source[FILE_ACTIVITY_TYPE_COMMENT];
                 commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
 
                 if (commentItem.replies && commentItem.replies.length) {
@@ -160,8 +161,10 @@ const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[]
                     });
                 }
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
 
         parsedData.push(...Object.values(source));
