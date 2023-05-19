@@ -481,13 +481,12 @@ class Feed extends Base {
         this.file = file;
         this.errors = [];
         this.errorCallback = onError;
+
+        // Using the UAA File Activities endpoint replaces the need for these calls
         const annotationsPromise =
             !shouldUseUAA && shouldShowAnnotations
                 ? this.fetchAnnotations(permissions, shouldShowReplies)
                 : Promise.resolve();
-        const versionsPromise = !shouldUseUAA && shouldShowVersions ? this.fetchVersions() : Promise.resolve();
-        const currentVersionPromise =
-            !shouldUseUAA && shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
         const commentsPromise = () => {
             if (shouldUseUAA) {
                 return Promise.resolve();
@@ -499,6 +498,8 @@ class Feed extends Base {
         const appActivityPromise =
             !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
+        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
         const fileActivitiesPromise = shouldUseUAA
             ? this.fetchFileActivities(permissions, [
                   FILE_ACTIVITY_TYPE_ANNOTATION,
