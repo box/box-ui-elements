@@ -365,7 +365,7 @@ type RepliesProps = {
     isParentPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onEdit: Function,
+    onEdit: OnCommentEdit,
     onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
     onReplySelect?: (isSelected: boolean) => void,
