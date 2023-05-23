@@ -105,7 +105,7 @@ const getItemWithPendingReply = <T: { replies?: Array<Comment> }>(item: T, reply
 
 const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[] }) => {
     if (!response || !response.entries || !response.entries.length) {
-        return [];
+        return { entries: [] };
     }
 
     const data = response.entries;
@@ -120,17 +120,20 @@ const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[]
 
         switch (item.activity_type) {
             case FILE_ACTIVITY_TYPE_TASK: {
-                // $FlowFixMe
-                const taskItem: Task = source[FILE_ACTIVITY_TYPE_TASK];
+                const taskItem = source[FILE_ACTIVITY_TYPE_TASK];
                 // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
-                if (taskItem.assigned_to?.entries) {
-                    // $FlowFixMe
-                    taskItem.assigned_to.entries.map(entry => {
-                        entry.role = entry.role.toUpperCase();
-                        entry.status = entry.status.toUpperCase();
 
-                        return entry;
+                if (taskItem.assigned_to?.entries) {
+                    const assignedToEntries = taskItem.assigned_to.entries.map(entry => {
+                        const assignedToEntry = { ...entry };
+
+                        assignedToEntry.role = entry.role.toUpperCase();
+                        assignedToEntry.status = entry.status.toUpperCase();
+
+                        return assignedToEntry;
                     });
+                    // $FlowFixMe Converting to uppercase makes role and status a string, which is incompatible with string literal
+                    taskItem.assigned_to.entries = assignedToEntries;
                 }
                 if (taskItem.completion_rule && isString(taskItem.completion_rule)) {
                     taskItem.completion_rule = taskItem.completion_rule.toUpperCase();
@@ -141,25 +144,27 @@ const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[]
                 if (taskItem.task_type && isString(taskItem.task_type)) {
                     taskItem.task_type = taskItem.task_type.toUpperCase();
                 }
-
-                // $FlowFixMe
+                // $FlowFixMe File Activities only returns a created_by user, Flow type fix is needed
                 taskItem.created_by = {
                     target: taskItem.created_by,
                 };
                 break;
             }
             case FILE_ACTIVITY_TYPE_COMMENT: {
-                // $FlowFixMe
                 const commentItem: Comment = source[FILE_ACTIVITY_TYPE_COMMENT];
-                commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
 
                 if (commentItem.replies && commentItem.replies.length) {
-                    commentItem.replies.map(reply => {
-                        reply.tagged_message = reply.tagged_message || reply.message || '';
+                    const replies = commentItem.replies.map(reply => {
+                        const commentItemReply = { ...reply };
+                        commentItemReply.tagged_message = reply.tagged_message || reply.message || '';
 
-                        return reply;
+                        return commentItemReply;
                     });
+
+                    commentItem.replies = replies;
                 }
+
+                commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
                 break;
             }
             default: {
@@ -532,7 +537,7 @@ class Feed extends Base {
                         ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
                         : undefined;
                     const parsedFeedItems = parseFileActivitiesResponseForFeed(fileActivitiesResponse);
-                    // $FlowFixMe
+                    // $FlowFixMe Does not need to be sorted once we include versions in the file activities call
                     const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
                     handleFeedItems(sortedFeedItems);
                 },

@@ -21,6 +21,7 @@ import {
 } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
+import type { TaskNew } from './tasks';
 
 type FeedItemType =
     | typeof FEED_ITEM_TYPE_ANNOTATION
@@ -183,19 +184,19 @@ type FileActivityTypes =
 
 type FileActivitySource =
     | {
-          annotation: FeedItem,
+          annotation: Annotation,
       }
     | {
-          app_activity: FeedItem,
+          app_activity: AppActivityItem,
       }
     | {
-          comment: FeedItem,
+          comment: Comment,
       }
     | {
-          task: FeedItem,
+          task: TaskNew,
       }
     | {
-          versions: FeedItem,
+          versions: BoxItemVersion,
       };
 
 type FileActivity = {
