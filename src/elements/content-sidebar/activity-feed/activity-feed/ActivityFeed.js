@@ -375,7 +375,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             showCommentMessage={showCommentForm}
                         />
                     )}
-                    {!isEmpty && !isLoading && (
+                    {!isEmpty && !isLoading && onCommentUpdate && (
                         <ActiveState
                             {...activityFeedError}
                             activeFeedItem={activeFeedItem}
@@ -399,7 +399,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAnnotationStatusChange={onAnnotationStatusChange}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
-                            onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onCommentEdit={hasCommentPermission ? props => onCommentUpdate(...props) : noop}
                             onCommentSelect={this.setSelectedItem}
                             onHideReplies={onHideReplies}
                             onReplyCreate={hasCommentPermission ? onReplyCreate : noop}

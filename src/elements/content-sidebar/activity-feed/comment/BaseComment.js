@@ -210,10 +210,8 @@ export const BaseComment = ({
                         getAvatarUrl={getAvatarUrl}
                         user={createdByUser}
                         badgeIcon={
-                            annotationActivityLink ? (
+                            annotationActivityLink && (
                                 <IconAnnotation title={<FormattedMessage {...messages.annotationBadge} />} />
-                            ) : (
-                                undefined
                             )
                         }
                     />
