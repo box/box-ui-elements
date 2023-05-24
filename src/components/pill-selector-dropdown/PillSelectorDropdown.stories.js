@@ -240,8 +240,8 @@ export const showAvatars = () => {
                     onSelect={handleSelect}
                     selectedOptions={state.selectedOptions}
                     selectorOptions={state.selectorOptions}
-                    showRoundedPills
                     showAvatars
+                    showRoundedPills
                     validateForError={validateForError}
                     validator={validator}
                 >
