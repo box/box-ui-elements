@@ -3,9 +3,8 @@
  * @file Helper for activity feed API's
  * @author Box
  */
-import isString from 'lodash/isString';
-import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, getMissingItemTextOrStatus, isUserCorrectableError } from '../utils/error';
 import commonMessages from '../elements/common/messages';
@@ -103,79 +102,93 @@ const getItemWithPendingReply = <T: { replies?: Array<Comment> }>(item: T, reply
     return { replies: [...replies, reply], ...rest };
 };
 
-const parseFileActivitiesResponseForFeed = (response?: { entries: FileActivity[] }) => {
+export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
     if (!response || !response.entries || !response.entries.length) {
         return { entries: [] };
     }
 
     const data = response.entries;
-    const parsedData = [];
+    const parseReplies = (replies: Comment[]): Comment[] => {
+        const parsedReplies = [...replies];
 
-    data.map(item => {
-        if (!item.source) {
-            return item;
-        }
+        return parsedReplies.map(reply => {
+            return { ...reply, tagged_message: reply.tagged_message || reply.message || '' };
+        });
+    };
 
-        const source = { ...item.source };
-
-        switch (item.activity_type) {
-            case FILE_ACTIVITY_TYPE_TASK: {
-                const taskItem = source[FILE_ACTIVITY_TYPE_TASK];
-                // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
-
-                if (taskItem.assigned_to?.entries) {
-                    const assignedToEntries = taskItem.assigned_to.entries.map(entry => {
-                        const assignedToEntry = { ...entry };
-
-                        assignedToEntry.role = entry.role.toUpperCase();
-                        assignedToEntry.status = entry.status.toUpperCase();
-
-                        return assignedToEntry;
-                    });
-                    // $FlowFixMe Converting to uppercase makes role and status a string, which is incompatible with string literal
-                    taskItem.assigned_to.entries = assignedToEntries;
-                }
-                if (taskItem.completion_rule && isString(taskItem.completion_rule)) {
-                    taskItem.completion_rule = taskItem.completion_rule.toUpperCase();
-                }
-                if (taskItem.status && isString(taskItem.status)) {
-                    taskItem.status = taskItem.status.toUpperCase();
-                }
-                if (taskItem.task_type && isString(taskItem.task_type)) {
-                    taskItem.task_type = taskItem.task_type.toUpperCase();
-                }
-                // $FlowFixMe File Activities only returns a created_by user, Flow type fix is needed
-                taskItem.created_by = {
-                    target: taskItem.created_by,
-                };
-                break;
+    const parsedData = data
+        .map(item => {
+            if (!item.source) {
+                return null;
             }
-            case FILE_ACTIVITY_TYPE_COMMENT: {
-                const commentItem: Comment = source[FILE_ACTIVITY_TYPE_COMMENT];
 
-                if (commentItem.replies && commentItem.replies.length) {
-                    const replies = commentItem.replies.map(reply => {
-                        const commentItemReply = { ...reply };
-                        commentItemReply.tagged_message = reply.tagged_message || reply.message || '';
+            const source = { ...item.source };
 
-                        return commentItemReply;
-                    });
+            switch (item.activity_type) {
+                case FILE_ACTIVITY_TYPE_TASK: {
+                    const taskItem = { ...source[FILE_ACTIVITY_TYPE_TASK] };
+                    // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
 
-                    commentItem.replies = replies;
+                    if (taskItem.assigned_to?.entries) {
+                        const assignedToEntries = taskItem.assigned_to.entries.map(entry => {
+                            const assignedToEntry = { ...entry };
+
+                            assignedToEntry.role = entry.role.toUpperCase();
+                            assignedToEntry.status = entry.status.toUpperCase();
+
+                            return assignedToEntry;
+                        });
+                        // $FlowFixMe Converting to uppercase makes role and status a string, which is incompatible with string literal
+                        taskItem.assigned_to.entries = assignedToEntries;
+                    }
+                    if (taskItem.completion_rule) {
+                        taskItem.completion_rule = taskItem.completion_rule.toUpperCase();
+                    }
+                    if (taskItem.status) {
+                        taskItem.status = taskItem.status.toUpperCase();
+                    }
+                    if (taskItem.task_type) {
+                        taskItem.task_type = taskItem.task_type.toUpperCase();
+                    }
+                    // $FlowFixMe File Activities only returns a created_by user, Flow type fix is needed
+                    taskItem.created_by = { target: taskItem.created_by };
+
+                    return taskItem;
+                }
+                case FILE_ACTIVITY_TYPE_COMMENT: {
+                    const commentItem: Comment = { ...source[FILE_ACTIVITY_TYPE_COMMENT] };
+
+                    if (commentItem.replies && commentItem.replies.length) {
+                        const replies = parseReplies(commentItem.replies);
+
+                        commentItem.replies = replies;
+                    }
+
+                    commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
+
+                    return commentItem;
+                }
+                case FILE_ACTIVITY_TYPE_ANNOTATION: {
+                    const annotationItem: Annotation = { ...source[FILE_ACTIVITY_TYPE_ANNOTATION] };
+
+                    if (annotationItem.replies && annotationItem.replies.length) {
+                        const replies = parseReplies(annotationItem.replies);
+
+                        annotationItem.replies = replies;
+                    }
+
+                    return annotationItem;
+                }
+                case FILE_ACTIVITY_TYPE_APP_ACTIVITY: {
+                    return { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
                 }
 
-                commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
-                break;
+                default: {
+                    return null;
+                }
             }
-            default: {
-                break;
-            }
-        }
-
-        parsedData.push(...Object.values(source));
-
-        return item;
-    });
+        })
+        .filter(item => !!item);
 
     return { entries: parsedData };
 };
@@ -536,7 +549,7 @@ class Feed extends Base {
                     const versionsWithCurrent = currentVersion
                         ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
                         : undefined;
-                    const parsedFeedItems = parseFileActivitiesResponseForFeed(fileActivitiesResponse);
+                    const parsedFeedItems = getParsedFileActivitiesResponse(fileActivitiesResponse);
                     // $FlowFixMe Does not need to be sorted once we include versions in the file activities call
                     const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
                     handleFeedItems(sortedFeedItems);
@@ -660,7 +673,8 @@ class Feed extends Base {
     /**
      * Fetches the file activities for a file
      *
-     * @param {Object} permissions - the file permissions
+     * @param {BoxItemPermission} permissions - the file permissions
+     * @param {FileActivityTypes[]} activityTypes - the activity types to filter by
      * @return {Promise} - the file comments
      */
     fetchFileActivities(permissions: BoxItemPermission, activityTypes: FileActivityTypes[]): Promise<Object> {
@@ -668,7 +682,7 @@ class Feed extends Base {
         return new Promise(resolve => {
             this.fileActivitiesAPI.getActivities({
                 errorCallback: this.fetchFeedItemErrorCallback.bind(this, resolve),
-                fileId: this.file.id,
+                fileID: this.file.id,
                 permissions,
                 successCallback: resolve,
                 activityTypes,

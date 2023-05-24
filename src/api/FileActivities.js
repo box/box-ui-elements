@@ -63,42 +63,42 @@ class FileActivities extends Base {
      * @param {Function} errorCallback - the error callback
      * @param {string} fileId - the file id
      * @param {BoxItemPermission} permissions - the permissions for the file
-     * @param {number} repliesCount - number of replies to return, by deafult all replies all returned
+     * @param {number} repliesCount - number of replies to return, by deafult all replies are returned
      * @param {Function} successCallback - the success callback
      * @returns {void}
      */
     getActivities({
         activityTypes,
         errorCallback,
-        fileId,
+        fileID,
         permissions,
         repliesCount,
         successCallback,
     }: {
         activityTypes: FileActivityTypes[],
         errorCallback: (e: ElementsXhrError, code: string) => void,
-        fileId: string,
+        fileID: string,
         permissions: BoxItemPermission,
         repliesCount?: number,
         successCallback: (activity: FileActivity) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_ACTIVITY;
         try {
-            this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileId);
-            this.checkApiCallValidity(PERMISSION_CAN_VIEW_ANNOTATIONS, permissions, fileId);
+            this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileID);
+            this.checkApiCallValidity(PERMISSION_CAN_VIEW_ANNOTATIONS, permissions, fileID);
         } catch (e) {
             errorCallback(e, this.errorCode);
             return;
         }
 
         this.get({
-            id: fileId,
+            id: fileID,
             successCallback,
             errorCallback,
             requestData: {
                 ...(repliesCount ? { replies_count: repliesCount } : null),
             },
-            url: this.getFilteredUrl(fileId, activityTypes),
+            url: this.getFilteredUrl(fileID, activityTypes),
         });
     }
 }
