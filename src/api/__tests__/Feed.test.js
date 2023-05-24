@@ -858,7 +858,7 @@ describe('api/Feed', () => {
                         FILE_ACTIVITY_TYPE_TASK,
                     ],
                     errorCallback: expect.any(Function),
-                    fileId: feed.file.id,
+                    fileID: feed.file.id,
                     permissions,
                     successCallback: expect.any(Function),
                 });
