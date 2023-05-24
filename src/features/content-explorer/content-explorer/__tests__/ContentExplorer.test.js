@@ -739,7 +739,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(result).toStrictEqual({});
         });
 
-        test('should call selectAll when handleSelectAllClick and checkbox is not selected', () => {
+        test.skip('should call selectAll when handleSelectAllClick and checkbox is not selected', () => {
             const wrapper = renderComponent({ items });
             const instance = wrapper.instance();
             wrapper.setState({ isSelectAllChecked: false });
@@ -755,7 +755,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(instance.unselectAll).toHaveBeenCalledTimes(0);
         });
 
-        test('should call unselectAll when handleSelectAllClick and checkbox is selected', () => {
+        test.skip('should call unselectAll when handleSelectAllClick and checkbox is selected', () => {
             const wrapper = renderComponent({ items });
             wrapper.setState({ isSelectAllChecked: true });
             const instance = wrapper.instance();

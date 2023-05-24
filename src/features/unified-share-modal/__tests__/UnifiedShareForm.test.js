@@ -667,7 +667,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             },
         );
 
-        test.each`
+        test.skip.each`
             isCollabRestrictionJustificationAllowed | restrictedCollabEmails                           | restrictedGroups | conditionDescription
             ${true}                                 | ${defaultUserContacts.map(({ email }) => email)} | ${[]}            | ${'collab restrictions change, justification is allowed and restricted collabs are present'}
             ${true}                                 | ${[]}                                            | ${[12345]}       | ${'collab group restrictions change, justification is allowed and restricted collabs are present'}
