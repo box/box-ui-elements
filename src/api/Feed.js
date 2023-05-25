@@ -102,19 +102,20 @@ const getItemWithPendingReply = <T: { replies?: Array<Comment> }>(item: T, reply
     return { replies: [...replies, reply], ...rest };
 };
 
+const parseReplies = (replies: Comment[]): Comment[] => {
+    const parsedReplies = [...replies];
+
+    return parsedReplies.map(reply => {
+        return { ...reply, tagged_message: reply.tagged_message || reply.message || '' };
+    });
+};
+
 export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
     if (!response || !response.entries || !response.entries.length) {
         return { entries: [] };
     }
 
     const data = response.entries;
-    const parseReplies = (replies: Comment[]): Comment[] => {
-        const parsedReplies = [...replies];
-
-        return parsedReplies.map(reply => {
-            return { ...reply, tagged_message: reply.tagged_message || reply.message || '' };
-        });
-    };
 
     const parsedData: Array<Object> = data
         .map(item => {
@@ -137,7 +138,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
 
                             return assignedToEntry;
                         });
-                        // $FlowFixMe Converting to uppercase makes role and status a string, which is incompatible with string literal
+                        // $FlowFixMe Using the toUpperCase method makes Flow assume role and status is a string type, which is incompatible with string literal
                         taskItem.assigned_to.entries = assignedToEntries;
                     }
                     if (taskItem.completion_rule) {
