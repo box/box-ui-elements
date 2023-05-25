@@ -174,7 +174,7 @@ const FILE_VERSIONS_FIELDS_TO_FETCH = [
     FIELD_VERSION_NUMBER,
 ];
 
-// Fields needed for Content Picker to show shared link permissions
+// Fields needed to show shared link permissions
 const FILE_SHARED_LINK_FIELDS_TO_FETCH = [FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS, FIELD_SHARED_LINK];
 
 // Fields needed to get tasks data

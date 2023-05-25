@@ -1005,7 +1005,7 @@ class ContentPicker extends Component<Props, State> {
     };
 
     /**
-     * Chages the sort by and sort direction
+     * Changes the sort by and sort direction
      *
      * @private
      * @param {string} sortBy - field to sorty by
