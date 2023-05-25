@@ -13,14 +13,10 @@ import type { FileActivity, FileActivityTypes } from '../common/types/feed';
 // We only show the latest reply in the UI
 const REPLY_LIMIT = 1;
 
-const getFileActivityQueryParams = (
-    fileID: string,
-    activityTypes?: FileActivityTypes[] = [],
-    enableReplies?: boolean = true,
-) => {
+const getFileActivityQueryParams = (fileID: string, activityTypes?: FileActivityTypes[] = []) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
-    const enabledRepliesQueryParam = enableReplies ? `&enable_replies=true&reply_limit=${REPLY_LIMIT}` : '';
+    const enabledRepliesQueryParam = `&enable_replies=true&reply_limit=${REPLY_LIMIT}`;
     const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
 
     return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}`;
@@ -28,32 +24,14 @@ const getFileActivityQueryParams = (
 
 class FileActivities extends Base {
     /**
-     * API URL for file activities
-     *
-     * @param {string} [id] - a box file id
-     * @return {string} base url for files
-     */
-    getUrl(id?: string): string {
-        if (!id) {
-            throw new Error('Missing file id!');
-        }
-
-        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, undefined, true)}`;
-    }
-
-    /**
      * API URL for filtered file activities
      *
      * @param {string} [id] - a box file id
      * @param {Array<FileActivityTypes>} activityTypes - optional. Array of File Activity types to filter by, returns all Activity Types if omitted.
      * @return {string} base url for files
      */
-    getFilteredUrl(id?: string, activityTypes?: FileActivityTypes[]): string {
-        if (!id) {
-            throw new Error('Missing file id!');
-        }
-
-        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes, true)}`;
+    getFilteredUrl(id: string, activityTypes?: FileActivityTypes[]): string {
+        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes)}`;
     }
 
     /**
@@ -63,7 +41,7 @@ class FileActivities extends Base {
      * @param {Function} errorCallback - the error callback
      * @param {string} fileId - the file id
      * @param {BoxItemPermission} permissions - the permissions for the file
-     * @param {number} repliesCount - number of replies to return, by deafult all replies are returned
+     * @param {number} repliesCount - number of replies to return, by default all replies are returned
      * @param {Function} successCallback - the success callback
      * @returns {void}
      */
@@ -84,6 +62,10 @@ class FileActivities extends Base {
     }): void {
         this.errorCode = ERROR_CODE_FETCH_ACTIVITY;
         try {
+            if (!fileID) {
+                throw new Error('Missing file id!');
+            }
+
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileID);
             this.checkApiCallValidity(PERMISSION_CAN_VIEW_ANNOTATIONS, permissions, fileID);
         } catch (e) {

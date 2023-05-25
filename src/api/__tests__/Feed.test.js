@@ -2317,7 +2317,7 @@ describe('api/Feed', () => {
             response
             ${{ entries: mockFileActivities }}
             ${{ entries: [...mockFileActivities, { test: 'filtered out' }] }}
-        `('should return a a parsed entries array when response is valid', ({ response }) => {
+        `('should return a parsed entries array when response is valid', ({ response }) => {
             expect(getParsedFileActivitiesResponse(response)).toEqual({
                 entries: [
                     mockFormattedAnnotations[0],

@@ -17,7 +17,6 @@ import {
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
     FILE_ACTIVITY_TYPE_VERSION,
-    FILE_TYPE_ACTIVITY,
 } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
@@ -173,8 +172,6 @@ type ActivityFilterItemType =
     | typeof COMMENT_STATUS_RESOLVED
     | typeof FEED_ITEM_TYPE_TASK;
 
-type FileActivityType = typeof FILE_TYPE_ACTIVITY;
-
 type FileActivityTypes =
     | typeof FILE_ACTIVITY_TYPE_ANNOTATION
     | typeof FILE_ACTIVITY_TYPE_APP_ACTIVITY
@@ -202,7 +199,7 @@ type FileActivitySource =
 type FileActivity = {
     activity_type: FileActivityTypes,
     source: FileActivitySource,
-    type: FileActivityType,
+    type: 'activity',
 };
 
 export type {

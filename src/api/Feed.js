@@ -116,7 +116,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
         });
     };
 
-    const parsedData = data
+    const parsedData: Array<Object> = data
         .map(item => {
             if (!item.source) {
                 return null;
@@ -128,7 +128,6 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                 case FILE_ACTIVITY_TYPE_TASK: {
                     const taskItem = { ...source[FILE_ACTIVITY_TYPE_TASK] };
                     // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
-
                     if (taskItem.assigned_to?.entries) {
                         const assignedToEntries = taskItem.assigned_to.entries.map(entry => {
                             const assignedToEntry = { ...entry };
@@ -156,7 +155,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                     return taskItem;
                 }
                 case FILE_ACTIVITY_TYPE_COMMENT: {
-                    const commentItem: Comment = { ...source[FILE_ACTIVITY_TYPE_COMMENT] };
+                    const commentItem = { ...source[FILE_ACTIVITY_TYPE_COMMENT] };
 
                     if (commentItem.replies && commentItem.replies.length) {
                         const replies = parseReplies(commentItem.replies);
@@ -169,7 +168,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                     return commentItem;
                 }
                 case FILE_ACTIVITY_TYPE_ANNOTATION: {
-                    const annotationItem: Annotation = { ...source[FILE_ACTIVITY_TYPE_ANNOTATION] };
+                    const annotationItem = { ...source[FILE_ACTIVITY_TYPE_ANNOTATION] };
 
                     if (annotationItem.replies && annotationItem.replies.length) {
                         const replies = parseReplies(annotationItem.replies);

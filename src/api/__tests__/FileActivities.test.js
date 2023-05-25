@@ -16,20 +16,6 @@ describe('api/FileActivities', () => {
         fileActivities = null;
     });
 
-    describe('getUrl()', () => {
-        test('should the return correct url for fileActivities', () => {
-            expect(fileActivities.getUrl('1')).toBe(
-                'https://api.box.com/2.0/file_activities?file_id=1&enable_replies=true&reply_limit=1',
-            );
-        });
-
-        test('should throw an error for no file id', () => {
-            expect(() => {
-                fileActivities.getUrl();
-            }).toThrow();
-        });
-    });
-
     describe('getFilteredUrl()', () => {
         test.each`
             activityTypes                        | expected
@@ -45,19 +31,13 @@ describe('api/FileActivities', () => {
                 );
             },
         );
-
-        test('should throw an error for no file id', () => {
-            expect(() => {
-                fileActivities.getFilteredUrl();
-            }).toThrow();
-        });
     });
 
     describe('getActivities()', () => {
         const errorCallback = jest.fn();
         const successCallback = jest.fn();
 
-        test('should format its parameters and call the underlying markerGet method', () => {
+        test('should call the underlying get method', () => {
             const permissions = {
                 can_comment: true,
                 can_view_annotations: true,

@@ -477,9 +477,6 @@ export const FILE_ACTIVITY_TYPE_COMMENT: 'comment' = 'comment';
 export const FILE_ACTIVITY_TYPE_TASK: 'task' = 'task';
 export const FILE_ACTIVITY_TYPE_VERSION: 'versions' = 'versions';
 
-/* ------------------ File Type ------------------ */
-export const FILE_TYPE_ACTIVITY: 'activity' = 'activity';
-
 /* ----------------- Theme ---------------------------*/
 export const THEME_VERY_DARK = 'vDark';
 export const THEME_DARK = 'dark';
