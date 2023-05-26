@@ -208,7 +208,7 @@ export type justificationReasonType = {
 };
 export type getJustificationReasonsResponseType = {
     classificationLabelId: string,
-    options: Array<justificationReasonType>,
+    options?: Array<justificationReasonType>,
 };
 
 // Prop types used in the invite section of the Unified Share Form
