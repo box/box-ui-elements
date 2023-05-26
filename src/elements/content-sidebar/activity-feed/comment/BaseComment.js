@@ -73,7 +73,6 @@ export type BaseCommentProps = {
     translations?: Translations,
 };
 
-// TODO: Replace and rename to Comment component once threaded replies refactor is fully implemented
 export const BaseComment = ({
     annotationActivityLink,
     created_at,
@@ -298,7 +297,7 @@ export const BaseComment = ({
                     </div>
                     <div className="bcs-Comment-timestamp">
                         <ActivityTimestamp date={createdAtTimestamp} />
-                        {annotationActivityLink && annotationActivityLink}
+                        {annotationActivityLink}
                     </div>
                     <ActivityStatus status={status} />
                     {isEditing ? (
@@ -340,8 +339,7 @@ export const BaseComment = ({
                     {...commentProps}
                     isParentPending={isPending}
                     isRepliesLoading={isRepliesLoading}
-                    // note that passing down onCommentEdit does not allow editing replies
-                    onEdit={noop}
+                    onCommentEdit={onCommentEdit}
                     onHideReplies={onHideReplies}
                     onReplyCreate={onReplyCreate}
                     onReplySelect={onSelect}
@@ -363,7 +361,7 @@ type RepliesProps = {
     isParentPending?: boolean,
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
-    onEdit: OnCommentEdit,
+    onCommentEdit: OnCommentEdit,
     onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
     onReplySelect?: (isSelected: boolean) => void,
@@ -381,7 +379,7 @@ export const Replies = ({
     isParentPending = false,
     isRepliesLoading = false,
     mentionSelectorContacts,
-    onEdit,
+    onCommentEdit,
     onReplyCreate,
     onReplySelect = noop,
     onShowReplies,
@@ -445,7 +443,7 @@ export const Replies = ({
                                     getUserProfileUrl={getUserProfileUrl}
                                     isPending={isParentPending || reply.isPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
-                                    onCommentEdit={onEdit}
+                                    onCommentEdit={onCommentEdit}
                                     onSelect={onReplySelect}
                                     onDelete={noop}
                                     permissions={getReplyPermissions(reply)}
