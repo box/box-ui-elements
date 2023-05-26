@@ -18,12 +18,7 @@ import {
     PEOPLE_IN_ITEM,
 } from './constants';
 import messages from './messages';
-import type {
-    accessLevelType,
-    accessLevelsDisabledReasonType,
-    allowedAccessLevelsType,
-    item as itemtype,
-} from './flowTypes';
+import type { accessLevelType, accessLevelsDisabledReasonType, allowedAccessLevelsType } from './flowTypes';
 
 const accessLevels = [ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM];
 
@@ -33,7 +28,6 @@ type Props = {
     allowedAccessLevels: allowedAccessLevelsType,
     changeAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
     enterpriseName?: string,
-    item?: itemtype,
     itemType: ItemType,
     onDismissTooltip: () => void,
     submitting: boolean,
@@ -66,14 +60,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
     };
 
     renderMenu() {
-        const {
-            accessLevel,
-            accessLevelsDisabledReason,
-            allowedAccessLevels,
-            enterpriseName,
-            item,
-            itemType,
-        } = this.props;
+        const { accessLevel, accessLevelsDisabledReason, allowedAccessLevels, enterpriseName, itemType } = this.props;
         return (
             <Menu className="usm-share-access-menu" data-testid="usm-share-access-menu">
                 {accessLevels.map(level => {
@@ -111,7 +98,6 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                                     accessLevel={level}
                                     enterpriseName={enterpriseName}
                                     hasDescription
-                                    item={item}
                                     itemType={itemType}
                                 />
                             </SelectMenuItem>
@@ -126,7 +112,6 @@ class SharedLinkAccessMenu extends React.Component<Props> {
         const {
             accessLevel,
             enterpriseName,
-            item,
             itemType,
             onDismissTooltip,
             submitting,
@@ -161,7 +146,6 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                                 accessLevel={accessLevel}
                                 enterpriseName={enterpriseName}
                                 hasDescription={false}
-                                item={item}
                                 itemType={itemType}
                             />
                         </MenuToggle>
