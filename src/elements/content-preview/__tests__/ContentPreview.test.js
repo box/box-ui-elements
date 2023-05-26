@@ -28,13 +28,14 @@ describe('elements/content-preview/ContentPreview', () => {
             this.getThumbnail = jest.fn();
             this.updateContentInsightsOptions = jest.fn();
         };
-        global.performance = {
+        jest.spyOn(global, 'performance', 'get').mockReturnValue({
             now: jest.fn().mockReturnValue(PERFORMANCE_TIME),
-        };
+        });
     });
 
     afterEach(() => {
         delete global.Box;
+        jest.restoreAllMocks();
     });
 
     describe('constructor()', () => {
