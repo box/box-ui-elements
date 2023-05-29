@@ -28,6 +28,7 @@
 /src/features/item-details/                 @box/preview
 /src/features/metadata-based-view/          @box/ui-elements
 /src/features/metadata-instance-editor/     @box/ui-elements
+/src/styles/constants/                      @box/ui-elements
 
 # Tests
 /test/                                      @box/webapp

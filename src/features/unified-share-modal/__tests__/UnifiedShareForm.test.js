@@ -695,6 +695,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                     defaultItem.typedID,
                     JUSTIFICATION_CHECKPOINT_EXTERNAL_COLLAB,
                 );
+                expect(wrapper.state('justificationReasons')).toEqual([]);
             },
         );
     });
