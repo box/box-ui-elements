@@ -114,7 +114,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         this.setState({ isFetchingJustificationReasons: true });
 
         return getJustificationReasons(item.typedID, checkpoint)
-            .then(({ classificationLabelId, options }: GetJustificationReasonsResponse) => {
+            .then(({ classificationLabelId, options = [] }: GetJustificationReasonsResponse) => {
                 this.setState({
                     classificationLabelId,
                     justificationReasons: options.map(({ id, title }) => ({
