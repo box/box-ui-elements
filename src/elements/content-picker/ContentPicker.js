@@ -9,7 +9,6 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import Header from '../common/header';
@@ -850,7 +849,6 @@ class ContentPicker extends Component<Props, State> {
         const existing: BoxItem = selected[cacheKey];
         const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
         const existInSelected = selectedKeys.indexOf(cacheKey) !== -1;
-        const itemCanSetShareAccess = getProp(item, 'permissions.can_set_share_access', false);
 
         // Existing object could have mutated and we just need to update the
         // reference in the selected map. In that case treat it like a new selection.
@@ -863,7 +861,7 @@ class ContentPicker extends Component<Props, State> {
             // We are selecting a new item that was never
             // selected before. However if we are in a single
             // item selection mode, we should also unselect any
-            // prior item that was item that was selected.
+            // prior item that was selected.
 
             // Check if we hit the selection limit and if selection
             // is not already currently in the selected data structure.
@@ -886,7 +884,7 @@ class ContentPicker extends Component<Props, State> {
             // If can set share access, fetch the shared link properties of the item
             // In the case where another item is selected, any in flight XHR will get
             // cancelled
-            if (canSetShareAccess && itemCanSetShareAccess && forceSharedLink) {
+            if (canSetShareAccess && forceSharedLink) {
                 this.fetchSharedLinkInfo(item);
             }
         }
@@ -940,7 +938,7 @@ class ContentPicker extends Component<Props, State> {
         // if no shared link currently exists, create a shared link with enterprise default
         if (!item[FIELD_SHARED_LINK]) {
             // $FlowFixMe
-            this.changeShareAccess(null, item);
+            this.changeShareAccess(undefined, item);
         } else {
             const { selected } = this.state;
             const { id, type } = item;
@@ -962,7 +960,7 @@ class ContentPicker extends Component<Props, State> {
      * @param {Object} item file or folder object
      * @return {void}
      */
-    changeShareAccess = (access: Access, item: BoxItem): void => {
+    changeShareAccess = (access?: Access, item: BoxItem): void => {
         const { canSetShareAccess }: Props = this.props;
         if (!item || !canSetShareAccess) {
             return;
@@ -974,7 +972,7 @@ class ContentPicker extends Component<Props, State> {
         }
 
         const { can_set_share_access }: BoxItemPermission = permissions;
-        if (!can_set_share_access) {
+        if (access !== undefined && !can_set_share_access) {
             return;
         }
 
