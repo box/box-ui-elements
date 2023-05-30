@@ -20,6 +20,7 @@ import {
 } from '../constants';
 import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
 import type {
+    Access,
     BoxItem,
     BoxItemPermission,
     FlattenedBoxItem,
@@ -165,7 +166,7 @@ class Item extends Base {
     /**
      * API to delete an Item
      *
-     * @param {Object} item - Item to delete
+     * @param {BoxItem} item - Item to delete
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -221,7 +222,7 @@ class Item extends Base {
     /**
      * API to rename an Item
      *
-     * @param {Object} item - Item to rename
+     * @param {BoxItem} item - Item to rename
      * @param {string} name - Item new name
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
@@ -316,8 +317,8 @@ class Item extends Base {
     /**
      * API to create, modify (change access), or remove a shared link
      *
-     * @param {Object} item - Item to share
-     * @param {string} access - Shared access level
+     * @param {BoxItem} item - Item to share
+     * @param {Access} access - Shared access level
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} [options.fields] - Optionally include specific fields
@@ -325,7 +326,7 @@ class Item extends Base {
      */
     async share(
         item: BoxItem,
-        access: ?string, // if "access" is undefined, the backend will set the default access level for the shared link
+        access: ?Access, // if "access" is undefined, the backend will set the default access level for the shared link
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: RequestOptions = {},
