@@ -48,7 +48,9 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
   <ForwardRef(ActivityItem)
     className="bcs-activity-feed-annotation-activity"
     data-testid="annotation-activity"
+    hasNewThreadedReplies={false}
     isFocused={false}
+    isHoverable={true}
     key="annotationanno_123"
   >
     <ActivityThread
