@@ -297,6 +297,8 @@ const ActiveState = ({
                                 key={item.type + item.id}
                                 className="bcs-activity-feed-annotation-activity"
                                 data-testid="annotation-activity"
+                                isHoverable
+                                hasNewThreadedReplies={hasNewThreadedReplies}
                                 isFocused={isFocused}
                                 ref={refValue}
                             >
