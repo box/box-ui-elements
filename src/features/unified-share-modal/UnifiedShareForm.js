@@ -114,7 +114,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         this.setState({ isFetchingJustificationReasons: true });
 
         return getJustificationReasons(item.typedID, checkpoint)
-            .then(({ classificationLabelId, options }: GetJustificationReasonsResponse) => {
+            .then(({ classificationLabelId, options = [] }: GetJustificationReasonsResponse) => {
                 this.setState({
                     classificationLabelId,
                     justificationReasons: options.map(({ id, title }) => ({
@@ -569,17 +569,19 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                                 <FormattedMessage {...messages.collabAccess} />
                             </Link>
                         ),
+                        upgradeLink: (
+                            <PlainButton
+                                className="upgrade-link"
+                                data-resin-target={resinTarget}
+                                onClick={openUpgradePlanModal}
+                                type="button"
+                            >
+                                <FormattedMessage {...messages.upgradeLink} />
+                            </PlainButton>
+                        ),
                     }}
                     {...messages.setLevelOfCollabAccess}
                 />
-                <PlainButton
-                    className="upgrade-link"
-                    data-resin-target={resinTarget}
-                    onClick={openUpgradePlanModal}
-                    type="button"
-                >
-                    <FormattedMessage {...messages.upgradeLink} />
-                </PlainButton>
             </>
         );
     }
