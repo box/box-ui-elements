@@ -937,7 +937,6 @@ class ContentPicker extends Component<Props, State> {
     handleSharedLinkSuccess = (item: BoxItem) => {
         // if no shared link currently exists, create a shared link with enterprise default
         if (!item[FIELD_SHARED_LINK]) {
-            // $FlowFixMe
             this.changeShareAccess(undefined, item);
         } else {
             const { selected } = this.state;

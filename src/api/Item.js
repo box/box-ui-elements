@@ -326,7 +326,7 @@ class Item extends Base {
      */
     async share(
         item: BoxItem,
-        access: ?Access, // if "access" is undefined, the backend will set the default access level for the shared link
+        access?: Access, // if "access" is undefined, the backend will set the default access level for the shared link
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: RequestOptions = {},
