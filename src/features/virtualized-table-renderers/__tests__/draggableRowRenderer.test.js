@@ -11,7 +11,7 @@ describe('features/virtualized-table-renderers/draggableRowRenderer', () => {
     let draggableProvided;
     let draggableSnapshot;
 
-    const getWrapper = params => shallow(<DragDropContext>{draggableRowRenderer(params)}</DragDropContext>);
+    const getWrapper = params => shallow(<DragDropContext>{draggableRowRenderer(params)}</DragDropContext>).dive();
 
     const getRenderPropWrapper = (...args) => wrapper.find('Connect(Draggable)').renderProp('children')(...args);
 
