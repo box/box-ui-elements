@@ -11,8 +11,8 @@ const vars = require('../src/styles/variables.json');
 const allSections = [
     {
         name: 'Elements',
-        components: () => [
-            '../src/elements/content-explorer/ContentExplorer.js',
+        components: [
+            '../src/elements/content-explorer/index.js',
             '../src/elements/content-open-with/ContentOpenWith.js',
             '../src/elements/content-picker/ContentPicker.js',
             '../src/elements/content-preview/ContentPreview.js',
@@ -44,7 +44,7 @@ const allSections = [
             '../src/components/flyout/Flyout.js',
             '../src/components/ghost/Ghost.js',
             '../src/components/flyout/Overlay.js',
-            '../src/components/focus-trap/FocusTrap.js',
+            // '../src/components/focus-trap/FocusTrap.js', TODO: reenable as storybook
             '../src/components/footer-indicator/FooterIndicator.js',
             '../src/components/header/Header.js',
             '../src/components/hotkeys/HotkeyFriendlyModal.js',
@@ -292,7 +292,11 @@ module.exports = {
         return `import ${name} from 'box-ui-elements/es/${packageRelativePath}/${name}';`;
     },
     pagePerSection: true,
-    require: [path.resolve(__dirname, 'styleguide.setup.js'), path.resolve(__dirname, 'styleguide.styles.scss')],
+    require: [
+        path.resolve(__dirname, 'styleguide.setup.js'),
+        path.resolve(__dirname, 'styleguide.imports.js'),
+        path.resolve(__dirname, 'styleguide.styles.scss'),
+    ],
     showSidebar: process.env.BROWSERSLIST_ENV !== 'test',
     styleguideDir: path.join(__dirname, '../styleguide'),
     sections: allSections,

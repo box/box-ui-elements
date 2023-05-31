@@ -1,7 +1,6 @@
 ### Examples
 
 ```
-const Table = require('box-ui-elements/es/components/table').Table;
 const TableBody = require('box-ui-elements/es/components/table').TableBody;
 const TableCell = require('box-ui-elements/es/components/table').TableCell;
 const TableHeader = require('box-ui-elements/es/components/table').TableHeader;

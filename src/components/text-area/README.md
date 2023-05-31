@@ -1,8 +1,6 @@
 ### Examples
 **Basic**
 ```
-const TextArea = require('box-ui-elements/es/components/text-area').default;
-
 <TextArea
     name="textarea"
     label="Your story"
@@ -12,8 +10,6 @@ const TextArea = require('box-ui-elements/es/components/text-area').default;
 
 **Basic with (optional) text hidden**
 ```
-const TextArea = require('box-ui-elements/es/components/text-area').default;
-
 <TextArea
     hideOptionalLabel
     name="textarea"
@@ -24,8 +20,6 @@ const TextArea = require('box-ui-elements/es/components/text-area').default;
 
 **Required**
 ```
-const TextArea = require('box-ui-elements/es/components/text-area').default;
-
 <TextArea
     isRequired
     name="textarea"
@@ -36,8 +30,6 @@ const TextArea = require('box-ui-elements/es/components/text-area').default;
 
 **With Hidden Label**
 ```
-const TextArea = require('box-ui-elements/es/components/text-area').default;
-
 <TextArea
     hideLabel
     name="textarea"

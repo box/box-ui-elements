@@ -1,8 +1,6 @@
 ### Examples
 **Email**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 <TextInput
     label="Email Address"
     name="email"
@@ -13,8 +11,6 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
 ```
 **Url**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 <TextInput
     label="Url"
     name="url"
@@ -24,8 +20,6 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
 ```
 **Must Say Box**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 function customFn(value) {
     if (value !== 'box') {
         return {
@@ -46,8 +40,6 @@ function customFn(value) {
 ```
 **Minimum length**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 <TextInput
     minLength={ 3 }
     name="minlenCheck"
@@ -58,8 +50,6 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
 ```
 **Maximum length**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 <TextInput
     maxLength={ 5 }
     name="maxlenCheck"
@@ -70,8 +60,6 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
 ```
 **Tooltip on hover**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 <TextInput
     name="tooltipCheck"
     label="Tooltip on hover"
@@ -82,8 +70,6 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
 ```
 **Label Hidden**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
  <TextInput
     label="This label text should be hidden"
     name="hidden label"
@@ -94,8 +80,6 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
 ```
 **Disabled**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 <TextInput
     name="disabled"
     isDisabled
@@ -106,8 +90,6 @@ const TextInput = require('box-ui-elements/es/components/form-elements/text-inpu
 ```
 **Loading**
 ```
-const TextInput = require('box-ui-elements/es/components/form-elements/text-input').default;
-
 <TextInput
     name="loading"
     isDisabled

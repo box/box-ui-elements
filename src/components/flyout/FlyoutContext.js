@@ -2,7 +2,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 
-type FlyoutContextValues = {
+export type FlyoutContextValues = {
     closeOverlay: Function,
 };
 

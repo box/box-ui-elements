@@ -5,9 +5,8 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const RsyncPlugin = require('@box/frontend/webpack/RsyncPlugin');
-const safeParser = require('postcss-safe-parser');
 const packageJSON = require('../package.json');
 const rsyncConf = fs.existsSync('scripts/rsync.json') ? require('./rsync.json') : {}; // eslint-disable-line
 const license = require('./license');
@@ -78,7 +77,9 @@ function getConfig(isReactExternalized) {
         },
         devServer: {
             host: '0.0.0.0',
-            stats,
+            devMiddleware: {
+                stats,
+            },
         },
         resolveLoader: {
             modules: [path.resolve('src'), path.resolve('node_modules')],
@@ -117,12 +118,7 @@ function getConfig(isReactExternalized) {
             }),
             new MiniCssExtractPlugin({
                 filename: '[name].css',
-            }),
-            new OptimizeCssAssetsPlugin({
-                cssProcessorOptions: {
-                    discardComments: { removeAll: true },
-                    parser: safeParser,
-                },
+                ignoreOrder: true,
             }),
             new BannerPlugin(license),
             new IgnorePlugin({
@@ -130,6 +126,21 @@ function getConfig(isReactExternalized) {
             }),
         ],
         stats,
+        optimization: {
+            minimize: true,
+            minimizer: [
+                new CssMinimizerPlugin({
+                    minimizerOptions: {
+                        preset: [
+                            'default',
+                            {
+                                discardComments: { removeAll: true },
+                            },
+                        ],
+                    },
+                }),
+            ],
+        },
     };
 
     if (isDev) {

@@ -1,9 +1,7 @@
 ### Examples
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [selectedValues, setSelectedValues] = React.useState([2,3])
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -12,25 +10,21 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
-        selectedValues: selectedOptions.map(option => option.value),
-    });
+    setSelectedValues(selectedOptions.map(option => option.value))
 };
 
 <MultiSelectField
     onChange={ handleChange }
     options={ options }
     placeholder="Choose something"
-    selectedValues={ state.selectedValues }
+    selectedValues={ selectedValues }
 />
 ```
 
 Clear Option Enabled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [selectedValues, setSelectedValues] = React.useState([2,3])
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -39,16 +33,14 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
-        selectedValues: selectedOptions.map(option => option.value),
-    });
+    setSelectedValues(selectedOptions.map(option => option.value))
 };
 
 <MultiSelectField
     onChange={ handleChange }
     options={ options }
     placeholder="Choose something"
-    selectedValues={ state.selectedValues }
+    selectedValues={ selectedValues }
     shouldShowClearOption={true}
 />
 ```
@@ -56,9 +48,7 @@ const handleChange = selectedOptions => {
 Search Input Enabled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [selectedValues, setSelectedValues] = React.useState([2,3])
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -67,16 +57,14 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
-        selectedValues: selectedOptions.map(option => option.value),
-    });
+    setSelectedValues(selectedOptions.map(option => option.value))
 };
 
 <MultiSelectField
     onChange={ handleChange }
     options={ options }
     placeholder="Choose something"
-    selectedValues={ state.selectedValues }
+    selectedValues={ selectedValues }
     shouldShowSearchInput={true}
 />
 ```
@@ -84,9 +72,7 @@ const handleChange = selectedOptions => {
 Search Input and Clear Option Enabled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [selectedValues, setSelectedValues] = React.useState([2,3])
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -95,16 +81,14 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
-        selectedValues: selectedOptions.map(option => option.value),
-    });
+    setSelectedValues(selectedOptions.map(option => option.value))
 };
 
 <MultiSelectField
     onChange={ handleChange }
     options={ options }
     placeholder="Choose something"
-    selectedValues={ state.selectedValues }
+    selectedValues={ selectedValues }
     shouldShowSearchInput={true}
     shouldShowClearOption={true}
 />
@@ -113,9 +97,7 @@ const handleChange = selectedOptions => {
 Labeled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [selectedValues, setSelectedValues] = React.useState([2,3])
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -124,9 +106,7 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
-        selectedValues: selectedOptions.map(option => option.value),
-    });
+    setSelectedValues(selectedOptions.map(option => option.value))
 };
 
 <Label text="Multi select field">
@@ -134,7 +114,7 @@ const handleChange = selectedOptions => {
         onChange={ handleChange }
         options={ options }
         placeholder="Choose something"
-        selectedValues={ state.selectedValues }
+        selectedValues={ selectedValues }
     />
 </Label>
 ```
@@ -142,9 +122,7 @@ const handleChange = selectedOptions => {
 Header Content
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [selectedValues, setSelectedValues] = React.useState([2,3])
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -153,9 +131,7 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
-        selectedValues: selectedOptions.map(option => option.value),
-    });
+    setSelectedValues(selectedOptions.map(option => option.value))
 };
 
 <MultiSelectField
@@ -163,16 +139,14 @@ const handleChange = selectedOptions => {
     onChange={ handleChange }
     options={ options }
     placeholder="Choose something"
-    selectedValues={ state.selectedValues }
+    selectedValues={ selectedValues }
 />
 ```
 
 Invalid
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [selectedValues, setSelectedValues] = React.useState([2,3])
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -181,9 +155,7 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
-        selectedValues: selectedOptions.map(option => option.value),
-    });
+    setSelectedValues(selectedOptions.map(option => option.value))
 };
 
 <Label text="Multi select field">
@@ -192,7 +164,7 @@ const handleChange = selectedOptions => {
         onChange={ handleChange }
         options={ options }
         placeholder="Choose something"
-        selectedValues={ state.selectedValues }
+        selectedValues={ selectedValues }
     />
 </Label>
 ```

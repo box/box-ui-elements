@@ -1,9 +1,7 @@
 ### Examples
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -16,16 +14,14 @@ const options = [
 const separatorIndices = [2, 4];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <SingleSelectField
     isDisabled={ false }
     onChange={ handleChange }
     options={ options }
-    selectedValue={ state.selectedValue }
+    selectedValue={ selectedValue }
     separatorIndices={ separatorIndices }
 />
 ```
@@ -33,9 +29,7 @@ const handleChange = selectedOption => {
 Clear Option Enabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -46,15 +40,13 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <SingleSelectField
     onChange={ handleChange }
     options={ options }
-    selectedValue={ state.selectedValue }
+    selectedValue={ selectedValue }
     shouldShowClearOption={true}
 />
 ```
@@ -62,9 +54,7 @@ const handleChange = selectedOption => {
 Search Input Enabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -75,15 +65,13 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <SingleSelectField
     onChange={ handleChange }
     options={ options }
-    selectedValue={ state.selectedValue }
+    selectedValue={ selectedValue }
     shouldShowSearchInput={true}
 />
 ```
@@ -91,9 +79,7 @@ const handleChange = selectedOption => {
 Search Input and Clear Option Enabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -104,15 +90,13 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <SingleSelectField
     onChange={ handleChange }
     options={ options }
-    selectedValue={ state.selectedValue }
+    selectedValue={ selectedValue }
     shouldShowSearchInput={true}
     shouldShowClearOption={true}
 />
@@ -121,9 +105,7 @@ const handleChange = selectedOption => {
 Disabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -137,16 +119,14 @@ const options = [
     isDisabled
     onChange={ () => {} }
     options={ options }
-    selectedValue={ state.selectedValue }
+    selectedValue={ selectedValue }
 />
 ```
 
 Labeled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -157,16 +137,14 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <Label text="Single select field">
     <SingleSelectField
         onChange={ handleChange }
         options={ options }
-        selectedValue={ state.selectedValue }
+        selectedValue={ selectedValue }
     />
 </Label>
 ```
@@ -174,9 +152,7 @@ const handleChange = selectedOption => {
 Header Content
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -187,15 +163,13 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <SingleSelectField
     onChange={ handleChange }
     options={ options }
-    selectedValue={ state.selectedValue }
+    selectedValue={ selectedValue }
     shouldShowClearOption={true}
 />
 ```
@@ -203,9 +177,7 @@ const handleChange = selectedOption => {
 Invalid
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -216,9 +188,7 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <Label text="Single select field">
@@ -226,7 +196,7 @@ const handleChange = selectedOption => {
         error="oops"
         onChange={ handleChange }
         options={ options }
-        selectedValue={ state.selectedValue }
+        selectedValue={ selectedValue }
     />
 </Label>
 ```
@@ -234,9 +204,7 @@ const handleChange = selectedOption => {
 Search Input
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [ selectedValue, setSelectedValues] = React.useState('b');
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -247,16 +215,14 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
-        selectedValue: selectedOption.value,
-    });
+    setSelectedValues(selectedOption.value)
 };
 
 <Label text="Single select field">
     <SingleSelectField
         onChange={ handleChange }
         options={ options }
-        selectedValue={ state.selectedValue }
+        selectedValue={ selectedValue }
         shouldShowSearchInput
     />
 </Label>

@@ -1,8 +1,6 @@
 ### Examples
 **Basic**
 ```
-const TextArea = require('box-ui-elements/es/components/form-elements/text-area').default;
-
 <TextArea
     name="textarea"
     label="Your story"
@@ -12,8 +10,6 @@ const TextArea = require('box-ui-elements/es/components/form-elements/text-area'
 
 **Validated Text Area**
 ```
-const TextArea = require('box-ui-elements/es/components/form-elements/text-area').default;
-
 function textAreaValidator(value) {
     if (!value.includes('www')) {
         return {

@@ -1,6 +1,5 @@
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-explorer))
 ```jsx
-var ContentExplorer = require('./ContentExplorer').default;
 
 <IntlProvider locale="en">
     <ContentExplorer
