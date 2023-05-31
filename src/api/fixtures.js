@@ -1,5 +1,10 @@
 // @flow
-import { TASK_NEW_NOT_STARTED } from '../constants';
+import {
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
+    TASK_NEW_NOT_STARTED,
+} from '../constants';
 
 export const annotations = [
     {
@@ -394,7 +399,40 @@ export const threadedCommentsFormatted = [
     },
 ];
 
+export const fileActivities = [
+    { activity_type: FILE_ACTIVITY_TYPE_ANNOTATION, source: { annotation: annotationsWithFormattedReplies[0] } },
+    { activity_type: FILE_ACTIVITY_TYPE_COMMENT, source: { comment: threadedCommentsFormatted[0] } },
+    {
+        activity_type: FILE_ACTIVITY_TYPE_TASK,
+        source: {
+            task: {
+                ...task,
+                assigned_to: {
+                    ...task.assigned_to,
+                    entries: [
+                        {
+                            id: '1',
+                            target: { name: 'Beyonce', id: '2', avatar_url: '', type: 'user' },
+                            status: 'not_started',
+                            permissions: {
+                                can_delete: false,
+                                can_update: false,
+                            },
+                            role: 'assignee',
+                            type: 'task_collaborator',
+                        },
+                    ],
+                },
+                created_by: task.created_by.target,
+                status: 'not_started',
+                task_type: 'general',
+            },
+        },
+    },
+];
+
 export default {
+    fileActivities,
     task,
     threadedComments,
     threadedCommentsFormatted,
