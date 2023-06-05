@@ -20,6 +20,7 @@ import {
 } from '../constants';
 import type { ElementsErrorCallback, RequestData, RequestOptions } from '../common/types/api';
 import type {
+    Access,
     BoxItem,
     BoxItemPermission,
     FlattenedBoxItem,
@@ -165,7 +166,7 @@ class Item extends Base {
     /**
      * API to delete an Item
      *
-     * @param {Object} item - Item to delete
+     * @param {BoxItem} item - Item to delete
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @return {void}
@@ -221,7 +222,7 @@ class Item extends Base {
     /**
      * API to rename an Item
      *
-     * @param {Object} item - Item to rename
+     * @param {BoxItem} item - Item to rename
      * @param {string} name - Item new name
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
@@ -286,32 +287,38 @@ class Item extends Base {
     };
 
     /**
-     * Validate an item update request
+     * Validate request to update an item shared link
      *
      * @param {string|void} itemID - ID of item to share
      * @param {BoxItemPermission|void} itemPermissions - Permissions for item
-     * @param {boolean|void} canSkipSetShareAccess - skip the check for can_set_share_access when creating a new shared link
+     * @param {boolean|void} canSkipSetShareAccessPermission - skip `can_set_share_access` permission check
      * @throws {Error}
      * @return {void}
      */
-    validateRequest(itemID: ?string, itemPermissions: ?BoxItemPermission, canSkipSetShareAccess: boolean = false) {
+    validateSharedLinkRequest(
+        itemID: ?string,
+        itemPermissions: ?BoxItemPermission,
+        canSkipSetShareAccessPermission: boolean = false,
+    ) {
         if (!itemID || !itemPermissions) {
             this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadItemError();
         }
 
+        // It is sometimes necessary to skip `can_set_share_access` permission check
+        // e.g. Viewer permission can create shared links but cannot update access level
         const { can_share, can_set_share_access }: BoxItemPermission = itemPermissions;
-        if (!can_share || (!canSkipSetShareAccess && !can_set_share_access)) {
+        if (!can_share || (!canSkipSetShareAccessPermission && !can_set_share_access)) {
             this.errorCode = ERROR_CODE_SHARE_ITEM;
             throw getBadPermissionsError();
         }
     }
 
     /**
-     * API to create, modify (change access) or remove a shared link
+     * API to create, modify (change access), or remove a shared link
      *
-     * @param {Object} item - Item to share
-     * @param {string} access - Shared access level
+     * @param {BoxItem} item - Item to share
+     * @param {Access} access - Shared access level
      * @param {Function} successCallback - Success callback
      * @param {Function|void} errorCallback - Error callback
      * @param {Array<string>|void} [options.fields] - Optionally include specific fields
@@ -319,7 +326,7 @@ class Item extends Base {
      */
     async share(
         item: BoxItem,
-        access: ?string, // if "access" is undefined, the backend will set the default access level for the shared link
+        access?: Access, // if "access" is undefined, the backend will set the default access level for the shared link
         successCallback: Function,
         errorCallback: ElementsErrorCallback = noop,
         options: RequestOptions = {},
@@ -329,14 +336,14 @@ class Item extends Base {
         }
 
         try {
-            const { id, permissions }: BoxItem = item;
+            const { id, permissions, shared_link: sharedLink }: BoxItem = item;
             this.id = id;
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
 
-            // if we use the default access level, we don't need permission to set the access level
-            const canSkipSetShareAccess = access === undefined;
-            this.validateRequest(id, permissions, canSkipSetShareAccess);
+            // skip permission check when creating links with default access level
+            const canSkipSetShareAccessPermission = !sharedLink && access === undefined;
+            this.validateSharedLinkRequest(id, permissions, canSkipSetShareAccessPermission);
 
             const { fields } = options;
             const requestData: RequestData = {
@@ -383,7 +390,7 @@ class Item extends Base {
             this.successCallback = successCallback;
             this.errorCallback = errorCallback;
 
-            this.validateRequest(id, permissions);
+            this.validateSharedLinkRequest(id, permissions);
 
             const { fields } = options;
             const requestData: RequestData = {

@@ -560,7 +560,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
     });
 
     describe('handleSharedLinkSuccess()', () => {
-        const getApiShareMock = jest.fn().mockImplementation((newItem, access, callback) => callback());
+        const getApiShareMock = jest.fn().mockImplementation((item, access, callback) => callback());
         const getApiMock = jest.fn().mockReturnValue({ share: getApiShareMock });
         const updateCollectionMock = jest.fn();
 
@@ -581,8 +581,8 @@ describe('elements/content-explorer/ContentExplorer', () => {
         });
 
         afterEach(() => {
-            getApiShareMock.mockClear();
             getApiMock.mockClear();
+            getApiShareMock.mockClear();
             updateCollectionMock.mockClear();
         });
 

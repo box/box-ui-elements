@@ -301,7 +301,7 @@ describe('api/Item', () => {
         });
     });
 
-    describe('validateRequest()', () => {
+    describe('validateSharedLinkRequest()', () => {
         const MOCK_ITEM_ERROR = new Error('missing item data');
         const MOCK_PERMISSIONS_ERROR = new Error('missing permissions');
         const MOCK_SUFFICIENT_PERMISSIONS = {
@@ -319,7 +319,7 @@ describe('api/Item', () => {
             ${undefined}    | ${MOCK_SUFFICIENT_PERMISSIONS} | ${'itemID is missing'}
             ${MOCK_ITEM_ID} | ${undefined}                   | ${'itemPermissions is missing'}
         `('should throw a bad item error if $description', ({ itemID, itemPermissions }) => {
-            expect(() => item.validateRequest(itemID, itemPermissions)).toThrowError(MOCK_ITEM_ERROR);
+            expect(() => item.validateSharedLinkRequest(itemID, itemPermissions)).toThrowError(MOCK_ITEM_ERROR);
             expect(item.errorCode).toBe(ERROR_CODE_SHARE_ITEM);
         });
 
@@ -329,24 +329,26 @@ describe('api/Item', () => {
             ${{ can_share: false, can_set_share_access: true }}  | ${'set share access but not share'}
             ${{ can_share: true, can_set_share_access: false }}  | ${'share but not set share access'}
         `('should throw a bad permissions error when the user can $description', ({ itemPermissions }) => {
-            expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions)).toThrowError(MOCK_PERMISSIONS_ERROR);
+            expect(() => item.validateSharedLinkRequest(MOCK_ITEM_ID, itemPermissions)).toThrowError(
+                MOCK_PERMISSIONS_ERROR,
+            );
             expect(item.errorCode).toBe(ERROR_CODE_SHARE_ITEM);
         });
 
         test('should not throw an error if the request is valid', () => {
-            expect(() => item.validateRequest(MOCK_ITEM_ID, MOCK_SUFFICIENT_PERMISSIONS)).not.toThrow();
+            expect(() => item.validateSharedLinkRequest(MOCK_ITEM_ID, MOCK_SUFFICIENT_PERMISSIONS)).not.toThrow();
             expect(item.errorCode).toBeUndefined();
         });
 
-        test('should skip `can_set_share_access` check when canSkipSetShareAccess is true', () => {
+        test('should skip `can_set_share_access` check when canSkipSetShareAccessPermission is true', () => {
             const itemPermissions = { can_share: true, can_set_share_access: false };
-            expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions, true)).not.toThrow();
+            expect(() => item.validateSharedLinkRequest(MOCK_ITEM_ID, itemPermissions, true)).not.toThrow();
             expect(item.errorCode).toBeUndefined();
         });
 
-        test('should not skip `can_set_share_access` check when canSkipSetShareAccess is false', () => {
+        test('should not skip `can_set_share_access` check when canSkipSetShareAccessPermission is false', () => {
             const itemPermissions = { can_share: true, can_set_share_access: false };
-            expect(() => item.validateRequest(MOCK_ITEM_ID, itemPermissions, false)).toThrowError(
+            expect(() => item.validateSharedLinkRequest(MOCK_ITEM_ID, itemPermissions, false)).toThrowError(
                 MOCK_PERMISSIONS_ERROR,
             );
             expect(item.errorCode).toBe(ERROR_CODE_SHARE_ITEM);
@@ -357,7 +359,7 @@ describe('api/Item', () => {
         let shareSuccessHandlerSpy;
         let errorHandlerSpy;
         let getUrlSpy;
-        let validateRequestSpy;
+        let validateSharedLinkRequestSpy;
         const MOCK_DATA = { shared_link: '', permissions: {} };
         beforeEach(() => {
             file = {
@@ -370,7 +372,7 @@ describe('api/Item', () => {
             shareSuccessHandlerSpy = jest.spyOn(item, 'shareSuccessHandler');
             errorHandlerSpy = jest.spyOn(item, 'errorHandler');
             getUrlSpy = jest.spyOn(item, 'getUrl').mockReturnValue('url');
-            validateRequestSpy = jest.spyOn(item, 'validateRequest').mockReturnValue(null);
+            validateSharedLinkRequestSpy = jest.spyOn(item, 'validateSharedLinkRequest').mockReturnValue(null);
             jest.spyOn(item, 'getCache').mockImplementation(() => ({
                 get: jest.fn().mockReturnValue('success'),
                 has: jest.fn().mockReturnValue(false),
@@ -391,7 +393,7 @@ describe('api/Item', () => {
         describe('with missing data', () => {
             const MOCK_MISSING_DATA_ERROR = new Error('missing data');
             beforeEach(() => {
-                validateRequestSpy.mockImplementation(() => {
+                validateSharedLinkRequestSpy.mockImplementation(() => {
                     throw MOCK_MISSING_DATA_ERROR;
                 });
             });
@@ -503,7 +505,7 @@ describe('api/Item', () => {
             };
             shareSuccessHandlerSpy = jest.spyOn(item, 'shareSuccessHandler');
             getUrlSpy = jest.spyOn(item, 'getUrl').mockReturnValue('url');
-            jest.spyOn(item, 'validateRequest').mockReturnValue(null);
+            jest.spyOn(item, 'validateSharedLinkRequest').mockReturnValue(null);
             jest.spyOn(item, 'getCache').mockImplementation(() => ({
                 get: jest.fn().mockReturnValue('success'),
                 has: jest.fn().mockReturnValue(false),
