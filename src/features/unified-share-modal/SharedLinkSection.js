@@ -18,7 +18,7 @@ import IconGlobe from '../../icons/general/IconGlobe';
 import { bdlWatermelonRed } from '../../styles/variables';
 import type { ItemType } from '../../common/types/core';
 import type { TargetingApi } from '../targeting/types';
-import { isBoxCanvas, isBoxNote } from '../../utils/file';
+import { isBoxNote } from '../../utils/file';
 import Browser from '../../utils/Browser';
 
 import convertToBoxItem from './utils/item';
@@ -280,7 +280,6 @@ class SharedLinkSection extends React.Component<Props, State> {
         const hideEmailButton = config && config.showEmailSharedLinkForm === false;
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
-        const isBoxCanvasFile = isBoxCanvas(convertToBoxItem(item));
         const allowedPermissionLevels = this.getAllowedPermissionLevels();
 
         return (
@@ -385,20 +384,13 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        {/* TODO: temporary change to support Canvas not being truly public */}
-                        {isBoxCanvasFile && (
-                            <FormattedMessage
-                                data-testid="shared-link-publicly-available-message"
-                                {...messages.canvasSharedLinkPubliclyAvailable}
-                            />
-                        )}
-                        {!isBoxCanvasFile && permissionLevel === CAN_EDIT && (
+                        {permissionLevel === CAN_EDIT && (
                             <FormattedMessage
                                 data-testid="shared-link-editable-publicly-available-message"
                                 {...messages.sharedLinkEditablePubliclyAvailable}
                             />
                         )}
-                        {!isBoxCanvasFile && permissionLevel !== CAN_EDIT && (
+                        {permissionLevel !== CAN_EDIT && (
                             <FormattedMessage
                                 data-testid="shared-link-publicly-available-message"
                                 {...messages.sharedLinkPubliclyAvailable}
