@@ -53,8 +53,8 @@ We also recommend using `yarn resolutions` to fix the version of `react` and `re
 {
     ...
     "resolutions": {
-        "react": "16.9.0",
-        "react-dom": "16.9.0"
+        "react": "17.0.1",
+        "react-dom": "17.0.1"
     },
     ...
 }
