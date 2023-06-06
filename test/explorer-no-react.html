@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Box Content Picker Test Page</title>
+        <title>Box Content Explorer Test Page</title>
         <style>
             body,
             html {
@@ -33,18 +33,18 @@
                 display: flex;
             }
         </style>
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/explorer.css" />
+        <link rel="stylesheet" type="text/css" href="../dist/dev/en-US/explorer.css" />
     </head>
     <body>
         <div class="inputs">
             <div>
                 <label>
                     <div>Root Folder Id</div>
-                    <input class="folder" type="text" placeholder="Enter root folder id" value="0" />
+                    <input class="folder" type="text" placeholder="Enter root folder id" />
                 </label>
                 <label>
                     <div>Current Folder Id</div>
-                    <input class="currentFolder" type="text" placeholder="Enter root folder id" value="42732985861" />
+                    <input class="currentFolder" type="text" placeholder="Enter root folder id" />
                 </label>
                 <label>
                     <div>Auth Token</div>
@@ -55,14 +55,14 @@
         </div>
         <div class="container">
             <h1>
-                Content Explorer With request and response intercepting. Only showing PNG files and navigating to
+                Content Explorer with request and response intercepting. Only showing PNG files and navigating to
                 another folder on load and token generator
             </h1>
             <div class="explorer1"></div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.4.1/umd/react.development.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.4.1/umd/react-dom.development.js"></script>
-        <script src="../dev/en-US/explorer.no.react.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.1/umd/react.development.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.1/umd/react-dom.development.js"></script>
+        <script src="../dist/dev/en-US/explorer.no.react.js"></script>
         <script>
             function load() {
                 const { ContentExplorer } = Box;

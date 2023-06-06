@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Box File Picker Test Page</title>
+        <title>Box Elements Test Page</title>
         <style>
             body,
             html {
@@ -48,15 +48,15 @@
                 background: red;
             }
         </style>
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/picker.css" />
-        <link rel="stylesheet" type="text/css" href="../dev/en-US/uploader.css" />
+        <link rel="stylesheet" type="text/css" href="../dist/dev/en-US/picker.css" />
+        <link rel="stylesheet" type="text/css" href="../dist/dev/en-US/uploader.css" />
     </head>
     <body>
         <div class="inputs">
             <div>
                 <label>
                     <div>Folder Id</div>
-                    <input class="folder" type="text" placeholder="Enter root folder id" value="0" />
+                    <input class="folder" type="text" placeholder="Enter root folder id" />
                 </label>
                 <label>
                     <div>Auth Token</div>
@@ -100,11 +100,17 @@
             <h1>Folder Picker (max 3 items / token generator / no upload)</h1>
             <div class="folderPicker2"></div>
         </div>
-        <script src="../dev/en-US/picker.js"></script>
-        <script src="../dev/en-US/uploader.js"></script>
+        <script src="../dist/dev/en-US/picker.js"></script>
+        <script src="../dist/dev/en-US/uploader.js"></script>
         <script>
             function load() {
                 const { FilePicker, FolderPicker, ContentPicker, ContentUploader } = Box;
+                const token = document.querySelector('.token').value || localStorage.getItem('token');
+                const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('folder', folderId);
+
                 const tokenGenerator1 = id => {
                     if (id === `folder_${folderId}`) {
                         return Promise.resolve(token);
@@ -119,12 +125,6 @@
                         return Promise.reject();
                     }
                 };
-
-                const token = document.querySelector('.token').value || localStorage.getItem('token');
-                const folderId = document.querySelector('.folder').value || localStorage.getItem('folder');
-
-                localStorage.setItem('token', token);
-                localStorage.setItem('folder', folderId);
 
                 const filePicker1 = new FilePicker();
                 document.querySelector('.filePicker1').innerHTML = '';
