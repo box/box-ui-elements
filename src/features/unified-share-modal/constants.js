@@ -17,6 +17,7 @@ const PREVIEWER = 'Previewer';
 const PREVIEWER_UPLOADER = 'Previewer Uploader';
 const OWNER = 'Owner';
 const VIEWER = 'Viewer';
+const APPROVER = 'Approver';
 const VIEWER_UPLOADER = 'Viewer Uploader';
 const UPLOADER = 'Uploader';
 
@@ -123,4 +124,5 @@ export {
     UPLOADER,
     VIEWER,
     VIEWER_UPLOADER,
+    APPROVER,
 };

@@ -4,7 +4,16 @@ import { FormattedMessage } from 'react-intl';
 
 import type { ItemType } from '../../common/types/core';
 
-import { EDITOR, CO_OWNER, PREVIEWER, PREVIEWER_UPLOADER, VIEWER, VIEWER_UPLOADER, UPLOADER } from './constants';
+import {
+    EDITOR,
+    CO_OWNER,
+    PREVIEWER,
+    PREVIEWER_UPLOADER,
+    VIEWER,
+    VIEWER_UPLOADER,
+    UPLOADER,
+    APPROVER,
+} from './constants';
 import InviteePermissionsDescription from './InviteePermissionsDescription';
 import messages from './messages';
 
@@ -23,6 +32,7 @@ const InviteePermissionsLabel = ({ hasDescription, inviteePermissionLevel, itemT
         [VIEWER]: messages.viewerLevelText,
         [PREVIEWER]: messages.previewerLevelText,
         [UPLOADER]: messages.uploaderLevelText,
+        [APPROVER]: messages.approverLevelText,
     };
 
     const permissionLabelTexts = {
@@ -33,8 +43,10 @@ const InviteePermissionsLabel = ({ hasDescription, inviteePermissionLevel, itemT
         [VIEWER]: messages.viewerLevelButtonLabel,
         [PREVIEWER]: messages.previewerLevelButtonLabel,
         [UPLOADER]: messages.uploaderLevelButtonLabel,
+        [APPROVER]: messages.approverLevelButtonLabel,
     };
 
+    console.log(permissionLabelTexts);
     return hasDescription ? (
         <span>
             <strong>

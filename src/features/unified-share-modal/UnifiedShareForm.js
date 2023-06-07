@@ -254,7 +254,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { onInviteePermissionChange } = inviteCollabTracking;
 
         this.setState({ inviteePermissionLevel: permissionLevel });
-
+        console.log('asdfasfasdf');
         if (onInviteePermissionChange) {
             onInviteePermissionChange(permissionLevel);
         }

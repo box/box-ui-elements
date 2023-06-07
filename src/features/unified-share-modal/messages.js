@@ -418,6 +418,23 @@ const messages = defineMessages({
         description: 'Text used in button label to describe permission level - viewer uploader',
         id: 'boxui.unifiedShare.viewerUploaderLevelButtonLabel',
     },
+
+    approverLevelButtonLabel: {
+        defaultMessage: 'Invite as Approver',
+        description: 'Text used in button label to describe permission level - approver',
+        id: 'boxui.unifiedShare.approverLevelButtonLabel',
+    },
+    approverLevelText: {
+        defaultMessage: 'Approve this document',
+        description: 'Text for approverlevel in invitee permission dropdown',
+        id: 'boxui.unifiedShare.approverLevelText',
+    },
+    approverLevelDescription: {
+        defaultMessage: 'Approve this document',
+        description: 'Description for Viewer permission level in invitee permission dropdown',
+        id: 'boxui.unifiedShare.approverLevelDescription',
+    },
+
     viewerUploaderLevelText: {
         defaultMessage: 'Viewer Uploader',
         description: 'Text for Viewer Uploader permission level in invitee permission dropdown',

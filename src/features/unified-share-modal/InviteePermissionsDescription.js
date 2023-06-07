@@ -4,7 +4,16 @@ import { FormattedMessage } from 'react-intl';
 
 import type { ItemType } from '../../common/types/core';
 
-import { EDITOR, CO_OWNER, PREVIEWER, PREVIEWER_UPLOADER, VIEWER, VIEWER_UPLOADER, UPLOADER } from './constants';
+import {
+    EDITOR,
+    CO_OWNER,
+    PREVIEWER,
+    PREVIEWER_UPLOADER,
+    VIEWER,
+    VIEWER_UPLOADER,
+    UPLOADER,
+    APPROVER,
+} from './constants';
 import messages from './messages';
 
 type Props = {
@@ -21,6 +30,7 @@ const InviteePermissionDescription = ({ inviteePermissionLevel, itemType }: Prop
         [VIEWER]: messages.viewerLevelDescription,
         [PREVIEWER]: messages.previewerLevelDescription,
         [UPLOADER]: messages.uploaderLevelDescription,
+        [APPROVER]: messages.approverLevelDescription,
     };
 
     const description = permissionDescriptions[inviteePermissionLevel];
