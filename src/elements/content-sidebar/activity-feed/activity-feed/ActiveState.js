@@ -20,6 +20,7 @@ import {
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
+    FILE_ACTIVITY_TYPE_VERSION,
 } from '../../../../constants';
 import type {
     Annotation,
@@ -147,6 +148,8 @@ const ActiveState = ({
         onShowReplies(id, type);
     };
 
+    const hasMultipleVersions = item => item.versions || (shouldUseUAA && item.version_start !== item.version_end);
+
     return (
         <ul className="bcs-activity-feed-active-state">
             {items.map((item: FeedItem) => {
@@ -273,14 +276,15 @@ const ActiveState = ({
                             </ActivityItem>
                         );
                     case FEED_ITEM_TYPE_VERSION:
+                    case FILE_ACTIVITY_TYPE_VERSION:
                         return (
                             <ActivityItem key={item.type + item.id} className="bcs-version-item" data-testid="version">
-                                {item.versions ? (
+                                {hasMultipleVersions(item) ? (
                                     // $FlowFixMe
-                                    <CollapsedVersion {...item} onInfo={onVersionInfo} />
+                                    <CollapsedVersion {...item} onInfo={onVersionInfo} shouldUseUAA={shouldUseUAA} />
                                 ) : (
                                     // $FlowFixMe
-                                    <Version {...item} onInfo={onVersionInfo} />
+                                    <Version {...item} onInfo={onVersionInfo} shouldUseUAA={shouldUseUAA} />
                                 )}
                             </ActivityItem>
                         );

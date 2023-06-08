@@ -62,6 +62,7 @@ function getMessageForAction(
 type Props = {
     collaborators: { [collaborator_id: string]: User },
     onInfo?: Function,
+    shouldUseUAA?: boolean,
     version_end: number,
     version_start: number,
     versions: FileVersions,
@@ -70,7 +71,7 @@ type Props = {
 const CollapsedVersion = (props: Props): React.Node => {
     // $FlowFixMe
     const action = selectors.getVersionAction(props);
-    const { collaborators, intl, onInfo, versions, version_start, version_end } = props;
+    const { collaborators, intl, onInfo, shouldUseUAA, versions, version_start, version_end } = props;
 
     return (
         <ActivityCard className="bcs-Version">
@@ -83,9 +84,13 @@ const CollapsedVersion = (props: Props): React.Node => {
                         aria-label={intl.formatMessage(messages.getVersionInfo)}
                         className="bcs-Version-info"
                         data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
-                        onClick={() => {
-                            onInfo({ versions });
-                        }}
+                        onClick={
+                            shouldUseUAA
+                                ? onInfo
+                                : () => {
+                                      onInfo({ versions });
+                                  }
+                        }
                         type="button"
                     >
                         <IconInfo height={16} width={16} />

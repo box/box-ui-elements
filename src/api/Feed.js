@@ -33,6 +33,7 @@ import {
     FILE_ACTIVITY_TYPE_APP_ACTIVITY,
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     PERMISSION_CAN_VIEW_ANNOTATIONS,
@@ -117,6 +118,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
     }
 
     const data = response.entries;
+    const versions = [];
 
     const parsedData: Array<Object> = data
         .map(item => {
@@ -188,6 +190,31 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                     return appActivityItem;
                 }
 
+                case FILE_ACTIVITY_TYPE_VERSION: {
+                    const versionsItem = { ...source[FILE_ACTIVITY_TYPE_VERSION] };
+
+                    if (versionsItem.action_by) {
+                        const collaborators = {};
+
+                        versionsItem.action_by.map(collaborator => {
+                            collaborators[collaborator.id] = { ...collaborator };
+                            return collaborator;
+                        });
+
+                        versionsItem.collaborators = collaborators;
+                    }
+                    if (versionsItem.end?.number !== undefined) {
+                        versionsItem.version_end = versionsItem.end.number;
+                        versionsItem.id = versionsItem.end.id;
+                    }
+                    if (versionsItem.start?.number !== undefined) {
+                        versionsItem.version_start = versionsItem.start.number;
+                    }
+
+                    versions.push(versionsItem);
+                    return null;
+                }
+
                 default: {
                     return null;
                 }
@@ -195,7 +222,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
         })
         .filter(item => !!item);
 
-    return { entries: parsedData };
+    return [...versions, ...parsedData];
 };
 
 class Feed extends Base {
@@ -520,9 +547,9 @@ class Feed extends Base {
         const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
         const appActivityPromise =
             !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
-
-        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
-        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
+        const versionsPromise = !shouldUseUAA && shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise =
+            !shouldUseUAA && shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
 
         const annotationActivityType =
             shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
@@ -530,11 +557,13 @@ class Feed extends Base {
                 : [];
         const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
+        const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
         const filteredActivityTypes = [
             ...annotationActivityType,
             ...appActivityActivityType,
             FILE_ACTIVITY_TYPE_COMMENT,
             ...taskActivityType,
+            ...versionsActivityType,
         ];
 
         const fileActivitiesPromise = shouldUseUAA
@@ -553,22 +582,14 @@ class Feed extends Base {
         };
 
         if (shouldUseUAA) {
-            Promise.all([versionsPromise, currentVersionPromise, fileActivitiesPromise]).then(
-                ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                    if (!feedItems || !feedItems.length) {
-                        return;
-                    }
+            fileActivitiesPromise.then(response => {
+                if (!response) {
+                    return;
+                }
 
-                    const fileActivitiesResponse = feedItems[0];
-                    const versionsWithCurrent = currentVersion
-                        ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
-                        : undefined;
-                    const parsedFeedItems = getParsedFileActivitiesResponse(fileActivitiesResponse);
-                    // $FlowFixMe Does not need to be sorted once we include versions in the file activities call
-                    const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
-                    handleFeedItems(sortedFeedItems);
-                },
-            );
+                const parsedFeedItems = getParsedFileActivitiesResponse(response);
+                handleFeedItems(parsedFeedItems);
+            });
         } else {
             Promise.all([
                 versionsPromise,
