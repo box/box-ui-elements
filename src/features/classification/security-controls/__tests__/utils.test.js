@@ -101,20 +101,7 @@ describe('features/classification/security-controls/utils', () => {
                     enabled: true,
                 },
             };
-            const { message: watermarkFormattedMessages } = getFullSecurityControlsMessages(accessPolicy)[0];
-            const { props: formattedMessageProps = {} } = watermarkFormattedMessages;
-            const { children: objArr = [] } = formattedMessageProps;
-            const { props: firstMessageObj = {} } = objArr[0];
-            const { props: linkObj = {} } = objArr[1];
-            const { props: secondMessageObj = {} } = linkObj.children;
-
-            const expectedFirstMessageId = 'boxui.securityControls.watermarkingApplied';
-            const expectedSecondMessageId = 'boxui.securityControls.linkForMoreDetails';
-
-            expect(objArr.length).toEqual(2);
-            expect(firstMessageObj.id).toEqual(expectedFirstMessageId);
-            expect(secondMessageObj.id).toEqual(expectedSecondMessageId);
-            expect(formattedMessageProps).toMatchSnapshot();
+            expect(getFullSecurityControlsMessages(accessPolicy)).toEqual([{ message: messages.watermarkingApplied }]);
         });
 
         test('should include correct message when external collab is blocked', () => {

@@ -121,11 +121,6 @@ const messages = defineMessages({
         description: 'Bullet point that summarizes watermarking applied to classification',
         id: 'boxui.securityControls.watermarkingApplied',
     },
-    linkForMoreDetails: {
-        defaultMessage: 'Click here for more details.',
-        description: 'The text of a link to a help article for more information.',
-        id: 'boxui.securityControls.linkForMoreDetails',
-    },
     externalCollabBlock: {
         defaultMessage: 'External collaboration restricted.',
         description:
