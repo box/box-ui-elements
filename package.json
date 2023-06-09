@@ -81,7 +81,7 @@
         "start:storybook": "LANGUAGE=en-US REACT=true BABEL_ENV=development NODE_ENV=development NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6061",
         "start:storybook:ci": "yarn start:storybook --ci",
         "start:storybook:legacy": "BROWSERSLIST_ENV=production yarn start:storybook",
-        "test": "BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.config.js",
+        "test": "BABEL_ENV=test NODE_ENV=test NODE_OPTIONS=--openssl-legacy-provider yarn jest -c scripts/jest/jest.config.js",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start:examples cy:open",
         "test:images": "BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.images.config.js --maxWorkers=4",

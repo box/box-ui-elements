@@ -10,8 +10,8 @@ blue=$"\n\e[1;34m(ℹ) "
 end=$"\e[0m\n"
 
 # While running yarn, the registry changes to registry.yarnpkg.com which is a mirror to the public NPM registry
-YARN_PUBLIC_REGISTRY_REGEX="^https://registry\.yarnpkg\.com\/?$"
-NPM_PUBLIC_REGISTRY_REGEX="^https://registry\.npmjs\.org\/?$"
+YARN_PUBLIC_REGISTRY_REGEX="^https:\/\/registry\.yarnpkg\.com\/?$"
+NPM_PUBLIC_REGISTRY_REGEX="^https:\/\/registry\.npmjs\.org\/?$"
 NPM_PUBLIC_REGISTRY="https://registry.npmjs.org"
 
 check_release_scripts_changed() {
