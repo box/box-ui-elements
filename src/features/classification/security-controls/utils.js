@@ -1,12 +1,9 @@
 // @flow
-import * as React from 'react';
 import getProp from 'lodash/get';
 import isNil from 'lodash/isNil';
-import { FormattedMessage } from 'react-intl';
 
 import type { Controls, MessageItem } from '../flowTypes';
 
-import Link from '../../../components/link/Link';
 import appRestrictionsMessageMap from './appRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
@@ -99,20 +96,9 @@ const getSharedLinkMessages = (controls: Controls): Array<MessageItem> => {
 const getWatermarkingMessages = (controls: Controls): Array<MessageItem> => {
     const items = [];
     const isWatermarkEnabled = getProp(controls, `${WATERMARK}.enabled`, false);
+
     if (isWatermarkEnabled) {
-        const formattedMessages = (
-            <>
-                <FormattedMessage {...messages.watermarkingApplied} />
-                <Link
-                    className="support-link"
-                    href="https://support.box.com/hc/en-us/articles/360044195253"
-                    target="_blank"
-                >
-                    <FormattedMessage {...messages.linkForMoreDetails} />
-                </Link>
-            </>
-        );
-        items.push({ message: formattedMessages });
+        items.push({ message: messages.watermarkingApplied });
     }
 
     return items;
