@@ -7,6 +7,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    annotationBadge: {
+        id: 'be.contentSidebar.activityFeed.comment.annotationBadge',
+        defaultMessage: 'Annotation Badge',
+        description: 'Title icon indicating that the activity item is an annotation',
+    },
     commentDeleteMenuItem: {
         id: 'be.contentSidebar.activityFeed.comment.commentDeleteMenuItem',
         defaultMessage: 'Delete',

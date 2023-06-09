@@ -27,6 +27,8 @@ import IconAnnotation from '../../../../icons/two-toned/IconAnnotation';
 
 import './AnnotationActivity.scss';
 
+import { type OnAnnotationEdit } from '../comment/types';
+
 type Props = {
     currentUser?: User,
     getAvatarUrl: GetAvatarUrlCallback,
@@ -37,7 +39,7 @@ type Props = {
     item: Annotation,
     mentionSelectorContacts?: SelectorItems<User>,
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
-    onEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
+    onEdit?: OnAnnotationEdit,
     onSelect?: (annotation: Annotation) => any,
     onStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
 };
@@ -90,7 +92,7 @@ const AnnotationActivity = ({
     const handleFormCancel = (): void => setIsEditing(false);
     const handleFormSubmit = ({ text }): void => {
         setIsEditing(false);
-        onEdit(id, text, permissions);
+        onEdit({ id, text, permissions });
     };
     const handleMenuClose = (): void => setIsMenuOpen(false);
     const handleMenuOpen = (): void => setIsMenuOpen(true);
