@@ -122,6 +122,7 @@ function useSharedLink(
         // Shared link access level change function
         const updatedChangeSharedLinkAccessLevelFn: SharedLinkUpdateLevelFnType = () => (newAccessLevel: string) =>
             connectToItemShare({
+                // $FlowFixMe
                 access: transformAccess(newAccessLevel),
                 successFn: data => {
                     currentAccessLevel.current = newAccessLevel;

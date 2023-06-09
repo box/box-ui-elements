@@ -1,4 +1,5 @@
 import React from 'react';
+import { shallow } from 'enzyme';
 
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from '../constants';
 import SharedLinkAccessDescription from '../SharedLinkAccessDescription';
@@ -24,19 +25,6 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
 
                 expect(wrapper).toMatchSnapshot();
             });
-        });
-
-        test('should render correct description for Canvas file', () => {
-            const wrapper = shallow(
-                <SharedLinkAccessDescription
-                    accessLevel={ANYONE_WITH_LINK}
-                    enterpriseName="Box"
-                    item={{ extension: 'boxcanvas' }}
-                    itemType="file"
-                />,
-            );
-
-            expect(wrapper.find('FormattedMessage').prop('defaultMessage')).toBe('Box sign-in required');
         });
     });
 

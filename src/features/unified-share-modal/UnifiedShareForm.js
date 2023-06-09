@@ -569,17 +569,19 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                                 <FormattedMessage {...messages.collabAccess} />
                             </Link>
                         ),
+                        upgradeLink: (
+                            <PlainButton
+                                className="upgrade-link"
+                                data-resin-target={resinTarget}
+                                onClick={openUpgradePlanModal}
+                                type="button"
+                            >
+                                <FormattedMessage {...messages.upgradeLink} />
+                            </PlainButton>
+                        ),
                     }}
                     {...messages.setLevelOfCollabAccess}
                 />
-                <PlainButton
-                    className="upgrade-link"
-                    data-resin-target={resinTarget}
-                    onClick={openUpgradePlanModal}
-                    type="button"
-                >
-                    <FormattedMessage {...messages.upgradeLink} />
-                </PlainButton>
             </>
         );
     }

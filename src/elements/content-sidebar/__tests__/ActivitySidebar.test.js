@@ -694,28 +694,31 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
 
         test.each`
-            annotationsEnabled | appActivityEnabled | repliesEnabled | tasksEnabled | versionsEnabled | expectedAnnotations | expectedAppActivity | expectedReplies | expectedTasks | expectedVersions
-            ${false}           | ${false}           | ${false}       | ${false}     | ${false}        | ${false}            | ${false}            | ${false}        | ${false}      | ${false}
-            ${true}            | ${true}            | ${true}        | ${true}      | ${true}         | ${true}             | ${true}             | ${true}         | ${true}       | ${true}
+            annotationsEnabled | appActivityEnabled | repliesEnabled | tasksEnabled | versionsEnabled | uaaIntegrationEnabled | expectedAnnotations | expectedAppActivity | expectedReplies | expectedTasks | expectedVersions | expectedUseUAA
+            ${false}           | ${false}           | ${false}       | ${false}     | ${false}        | ${false}              | ${false}            | ${false}            | ${false}        | ${false}      | ${false}         | ${false}
+            ${true}            | ${true}            | ${true}        | ${true}      | ${true}         | ${true}               | ${true}             | ${true}             | ${true}         | ${true}       | ${true}          | ${true}
         `(
-            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, repliesEnabled=$repliesEnabled, tasksEnabled=$tasksEnabled and versionsEnabled=$versionsEnabled',
+            'should fetch the feed items based on features: annotationsEnabled=$annotationsEnabled, appActivityEnabled=$appActivityEnabled, repliesEnabled=$repliesEnabled, tasksEnabled=$tasksEnabled, versionsEnabled=$versionsEnabled and uaaIntegrationEnabled=$uaaIntegrationEnabled',
             ({
                 annotationsEnabled,
                 appActivityEnabled,
                 repliesEnabled,
                 tasksEnabled,
                 versionsEnabled,
+                uaaIntegrationEnabled,
                 expectedAnnotations,
                 expectedAppActivity,
                 expectedReplies,
                 expectedTasks,
                 expectedVersions,
+                expectedUseUAA,
             }) => {
                 wrapper = getWrapper({
                     features: {
                         activityFeed: {
                             annotations: { enabled: annotationsEnabled },
                             appActivity: { enabled: appActivityEnabled },
+                            uaaIntegration: { enabled: uaaIntegrationEnabled },
                         },
                     },
                     hasReplies: repliesEnabled,
@@ -741,6 +744,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowReplies: expectedReplies,
                         shouldShowTasks: expectedTasks,
                         shouldShowVersions: expectedVersions,
+                        shouldUseUAA: expectedUseUAA,
                     },
                 );
             },
@@ -773,6 +777,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowReplies: true,
                     shouldShowTasks: true,
                     shouldShowVersions: true,
+                    shouldUseUAA: false,
                 },
             );
         });

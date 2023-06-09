@@ -818,7 +818,7 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Chages the sort by and sort direction
+     * Changes the sort by and sort direction
      *
      * @private
      * @param {string} sortBy - field to sort by
@@ -1275,33 +1275,23 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Object} item file or folder
      * @returns {void}
      */
-    handleSharedLinkSuccess = (newItem: BoxItem) => {
+    handleSharedLinkSuccess = (item: BoxItem) => {
         const { currentCollection } = this.state;
 
-        if (!newItem[FIELD_SHARED_LINK]) {
-            const { canSetShareAccess }: Props = this.props;
-            if (!newItem || !canSetShareAccess) {
-                return;
-            }
-
-            const { permissions, type } = newItem;
-            if (!permissions || !type) {
-                return;
-            }
-
+        if (item.type && !item[FIELD_SHARED_LINK]) {
             // create a shared link with default access, and update the collection
             const access = undefined;
-            this.api.getAPI(type).share(newItem, access, (updatedItem: BoxItem) => {
+            this.api.getAPI(item.type).share(item, access, (updatedItem: BoxItem) => {
                 this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
             });
         } else {
             // update collection with existing shared link
-            this.updateCollection(currentCollection, newItem, () => this.setState({ isShareModalOpen: true }));
+            this.updateCollection(currentCollection, item, () => this.setState({ isShareModalOpen: true }));
         }
     };
 
     /**
-     * Chages the sort by and sort direction
+     * Callback for sharing an item
      *
      * @private
      * @return {void}

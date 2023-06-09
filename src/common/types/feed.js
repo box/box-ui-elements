@@ -12,9 +12,15 @@ import {
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_VERSION,
     FEED_ITEM_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
 } from '../../constants';
 import type { BoxItemPermission, BoxItemVersion, Reply, User } from './core';
 import type { Annotation, AnnotationPermission, Annotations } from './annotations';
+import type { TaskNew } from './tasks';
 
 type FeedItemType =
     | typeof FEED_ITEM_TYPE_ANNOTATION
@@ -166,6 +172,36 @@ type ActivityFilterItemType =
     | typeof COMMENT_STATUS_RESOLVED
     | typeof FEED_ITEM_TYPE_TASK;
 
+type FileActivityTypes =
+    | typeof FILE_ACTIVITY_TYPE_ANNOTATION
+    | typeof FILE_ACTIVITY_TYPE_APP_ACTIVITY
+    | typeof FILE_ACTIVITY_TYPE_COMMENT
+    | typeof FILE_ACTIVITY_TYPE_TASK
+    | typeof FILE_ACTIVITY_TYPE_VERSION;
+
+type FileActivitySource =
+    | {
+          annotation: Annotation,
+      }
+    | {
+          app_activity: AppActivityItem,
+      }
+    | {
+          comment: Comment,
+      }
+    | {
+          task: TaskNew,
+      }
+    | {
+          versions: BoxItemVersion,
+      };
+
+type FileActivity = {
+    activity_type: FileActivityTypes,
+    source: FileActivitySource,
+    type: 'activity',
+};
+
 export type {
     ActionItemError,
     ActivityFilterItemType,
@@ -188,6 +224,8 @@ export type {
     FeedItems,
     FeedItemStatus,
     FeedItemType,
+    FileActivity,
+    FileActivityTypes,
     FocusableFeedItem,
     FocusableFeedItemType,
     Reply,

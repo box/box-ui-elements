@@ -79,6 +79,7 @@ type Props = {
     onTaskModalClose?: Function,
     onTaskView?: Function,
     onVersionInfo?: Function,
+    shouldUseUAA?: boolean,
     translations?: Translations,
 };
 
@@ -116,6 +117,7 @@ const ActiveState = ({
     onTaskModalClose,
     onTaskView,
     onVersionInfo,
+    shouldUseUAA,
     translations,
 }: Props): React.Node => {
     const onCommentSelectHandler = (itemId: string) => (isSelected: boolean) => {
@@ -265,6 +267,7 @@ const ActiveState = ({
                                     onEdit={onTaskEdit}
                                     onView={onTaskView}
                                     onModalClose={onTaskModalClose}
+                                    shouldUseUAA={shouldUseUAA}
                                     translations={translations}
                                 />
                             </ActivityItem>

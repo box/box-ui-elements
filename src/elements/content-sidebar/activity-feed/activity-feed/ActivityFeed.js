@@ -94,6 +94,7 @@ type Props = {
     onTaskUpdate?: Function,
     onTaskView?: Function,
     onVersionHistoryClick?: Function,
+    shouldUseUAA?: boolean,
     translations?: Translations,
 };
 
@@ -311,6 +312,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onTaskUpdate,
             onTaskView,
             onVersionHistoryClick,
+            shouldUseUAA,
             translations,
         } = this.props;
         const { isInputOpen, isScrolled } = this.state;
@@ -426,6 +428,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onTaskModalClose={onTaskModalClose}
                             onTaskView={onTaskView}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
+                            shouldUseUAA={shouldUseUAA}
                             translations={translations}
                         />
                     )}
