@@ -111,6 +111,7 @@ lint_and_test() {
 
     # Tests
     printf "${blue}Running tests...${end}"
+    unset OPENSSL_FORCE_FIPS_MODE
     yarn test || return 1
     printf "${green}Tests done!${end}"
 }
