@@ -187,7 +187,7 @@ check_branch_dirty() {
 check_npm_registry() {
     npm_registry=$(npm config get registry)
     if [[ ! $npm_registry =~ (${YARN_PUBLIC_REGISTRY_REGEX}|${NPM_PUBLIC_REGISTRY_REGEX}) ]] ; then
-        printf "${red}${$npm_registry} is not the correct registry! Make sure ~/.npmrc points to ${NPM_PUBLIC_REGISTRY}${end}"
+        printf "${red}${npm_registry} is not the correct registry! Make sure ~/.npmrc points to ${NPM_PUBLIC_REGISTRY}${end}"
         return 1
     fi
 }
