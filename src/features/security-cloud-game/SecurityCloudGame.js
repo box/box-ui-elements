@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import FocusTrap from '../../components/focus-trap';
 import Tooltip from '../../components/tooltip';
 
 import DragCloud from './DragCloud';
@@ -43,8 +42,6 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
             cloudSize: minGameBoardLength / CLOUD_SIZE_RATIO,
             gridTrackSize: minGameBoardLength / GRID_TRACK_SIZE_RATIO,
         });
-
-        messageElement.focus({ preventScroll: true });
     }, [height, width]);
 
     useEffect(() => {
@@ -198,25 +195,20 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
         return <FormattedMessage {...messages.instructions} />;
     };
 
-    const hideMessageTooltip = () => {
-        const { current: messageElement } = messageElementRef;
-        return document.activeElement !== messageElement;
-    };
-
     /**
      * Renders the cloud game
      * @returns {JSX}
      */
     return (
-        <FocusTrap>
+        <div>
             <div className="bdl-SecurityCloudGame-liveText" aria-live="polite">
                 {liveText}
             </div>
             <div className="bdl-SecurityCloudGame" style={{ height: `${height}px`, width: `${width}px` }}>
                 <Tooltip
+                    ariaHidden
                     className="bdl-SecurityCloudGame-tooltip"
                     constrainToWindow={false}
-                    isShown={hideMessageTooltip() ? false : undefined}
                     position="bottom-center"
                     text={renderMessage()}
                 >
@@ -224,7 +216,6 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
                         ref={messageElementRef}
                         className="bdl-SecurityCloudGame-message"
                         aria-label={getAccessibilityInstructions()}
-                        tabIndex={-1}
                     >
                         {renderMessage()}
                     </div>
@@ -234,7 +225,7 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
                     {renderDragCloud()}
                 </div>
             </div>
-        </FocusTrap>
+        </div>
     );
 };
 
