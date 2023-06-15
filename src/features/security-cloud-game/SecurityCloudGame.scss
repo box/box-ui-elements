@@ -30,10 +30,14 @@
 
     .bdl-SecurityCloudGame-message {
         flex: none;
+        height: 40px;
         padding: 10px;
+        overflow: hidden;
         color: $white;
         font-size: 16px;
+        white-space: nowrap;
         text-align: center;
+        text-overflow: ellipsis;
         background-color: rgba(0, 0, 0, .1);
     }
 
@@ -47,6 +51,10 @@
 .bdl-SecurityCloudGame-liveText {
     position: absolute;
     left: -9999px;
+}
+
+.bdl-SecurityCloudGame-tooltip.bdl-Tooltip {
+    max-width: 100%;
 }
 
 .bdl-DragCloud {
