@@ -121,13 +121,6 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -278,13 +271,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -465,13 +451,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -703,19 +682,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       accessLevelsDisabledReason={Object {}}
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
-      item={
-        Object {
-          "accessLevel": "peopleInYourCompany",
-          "description": "some description",
-          "extension": "boxnote",
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-          "id": 12345,
-          "name": "text.boxnote",
-          "type": "file",
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -850,13 +816,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -998,13 +957,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -1145,13 +1097,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -1292,13 +1237,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
@@ -1466,13 +1404,6 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       allowedAccessLevels={Object {}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
-      item={
-        Object {
-          "grantedPermissions": Object {
-            "itemShare": true,
-          },
-        }
-      }
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}

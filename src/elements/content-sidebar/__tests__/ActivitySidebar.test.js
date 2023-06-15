@@ -1407,10 +1407,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().handleAnnotationEdit('123', 'hello', {
-                can_edit: true,
-                can_delete: true,
-                can_resolve: true,
+            wrapper.instance().handleAnnotationEdit({
+                id: '123',
+                permissions: {
+                    can_edit: true,
+                    can_delete: true,
+                    can_resolve: true,
+                },
+                text: 'hello',
             });
 
             expect(mockEmitAnnotationUpdateEvent).toBeCalledWith(

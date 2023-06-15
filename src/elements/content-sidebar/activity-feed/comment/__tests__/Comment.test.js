@@ -274,13 +274,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         instance.handleMessageUpdate(updateMessagePayload);
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
-        expect(mockOnEdit).toHaveBeenCalledWith(
-            updateMessagePayload.id,
-            updateMessagePayload.text,
-            undefined,
-            updateMessagePayload.hasMention,
-            comment.permissions,
-        );
+        expect(mockOnEdit).toHaveBeenCalledWith({
+            hasMention: updateMessagePayload.hasMention,
+            id: updateMessagePayload.id,
+            permissions: comment.permissions,
+            text: updateMessagePayload.text,
+        });
     });
 
     test.each`
@@ -317,13 +316,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
             wrapper.find('button[data-testid="comment-actions-menu"]').simulate('click');
             wrapper.find(`MenuItem[data-testid="${menuItemTestId}"]`).simulate('click');
 
-            expect(onEdit).toBeCalledWith(
-                comment.id,
-                undefined,
-                expectedNewStatus,
-                comment.hasMention,
-                comment.permissions,
-            );
+            expect(onEdit).toBeCalledWith({
+                hasMention: comment.hasMention,
+                id: comment.id,
+                permissions: comment.permissions,
+                status: expectedNewStatus,
+            });
         },
     );
 

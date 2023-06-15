@@ -350,7 +350,7 @@ describe('api/Annotations', () => {
                 data: { data: { message } },
                 errorCallback,
                 successCallback,
-                url: 'https://api.box.com/2.0/undoc/annotations/67890/replies',
+                url: 'https://api.box.com/2.0/undoc/annotations/67890/replies?file_id=12345',
             });
         });
         test.each([
