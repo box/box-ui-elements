@@ -74,6 +74,7 @@ const DraggableVirtualizedTable = ({
                             )}
                             {children}
                         </VirtualizedTable>
+                        {droppableProvided.placeholder}
                     </div>
                 )}
             </Droppable>
