@@ -73,7 +73,7 @@
 }
 
 .bcpr.bcpr-thumbnails-open .bcpr-navigate-left {
-    left: 226px;
+    left: 191px;
 }
 
 .is-responsive-web {
@@ -90,6 +90,10 @@
 
             .bcpr-container {
                 position: static;
+            }
+
+            &.bcpr-thumbnails-open .bcpr-navigate-left {
+                left: 0;
             }
         }
     }
