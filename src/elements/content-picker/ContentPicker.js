@@ -788,7 +788,7 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        if (!name) {
+        if (!name.trim()) {
             this.setState({
                 errorCode: ERROR_CODE_ITEM_NAME_INVALID,
                 isLoading: false,
@@ -807,7 +807,7 @@ class ContentPicker extends Component<Props, State> {
         this.setState({ isLoading: true });
         this.api.getFolderAPI().create(
             id,
-            name,
+            name.trim(),
             () => {
                 this.fetchFolder(id);
             },
