@@ -16,7 +16,7 @@ input[type='tel'],
 input[type='number'],
 div[contentEditable='true'],
 textarea {
-    width: 100%;
+    width: 262px;
 
     @include box-inputs;
 }
