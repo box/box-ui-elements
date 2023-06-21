@@ -3,13 +3,18 @@
 .be-modal {
     .be-modal-btns {
         display: flex;
-        justify-content: center;
+        justify-content: flex-end;
         padding: 15px 0 0;
 
         .btn {
             @include bdl-Button--large;
 
-            margin-left: 8px;
+            margin-top: 0;
+            margin-bottom: 0;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
         }
     }
 

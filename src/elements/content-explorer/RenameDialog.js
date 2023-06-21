@@ -120,12 +120,12 @@ const RenameDialog = ({
                 <input ref={ref} defaultValue={nameWithoutExt} onKeyDown={onKeyDown} required type="text" />
             </label>
             <div className="be-modal-btns">
-                <PrimaryButton isLoading={isLoading} onClick={rename} type="button">
-                    <FormattedMessage {...messages.rename} />
-                </PrimaryButton>
                 <Button isDisabled={isLoading} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
+                <PrimaryButton isLoading={isLoading} onClick={rename} type="button">
+                    <FormattedMessage {...messages.rename} />
+                </PrimaryButton>
             </div>
         </Modal>
     );
