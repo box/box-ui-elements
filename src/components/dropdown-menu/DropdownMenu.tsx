@@ -1,43 +1,44 @@
-// @flow
 import * as React from 'react';
 import TetherComponent from 'react-tether';
 import classNames from 'classnames';
+// @ts-ignore no types
 import noop from 'lodash/noop';
+// @ts-ignore no types
 import uniqueId from 'lodash/uniqueId';
 
 import { KEYS } from '../../constants';
 import './DropdownMenu.scss';
 
 type Props = {
-    bodyElement?: HTMLElement,
-    children: React.Node,
+    bodyElement?: HTMLElement;
+    children: React.ReactNode;
     /** Forces menu to render within the scroll parent */
-    className?: string,
+    className?: string;
     /** Forces menu to render within the visible window */
-    constrainToScrollParent: boolean,
+    constrainToScrollParent: boolean;
     /** Right aligns menu to button */
-    constrainToWindow: boolean,
+    constrainToWindow: boolean;
     /** Forces menu to render within the visible window and pins the dropdown if scrolled */
-    constrainToWindowWithPin?: boolean,
+    constrainToWindowWithPin?: boolean;
     /** Enables responsive behaviors for this component */
-    isResponsive?: boolean,
+    isResponsive?: boolean;
     /** Function called when menu is opened */
-    isRightAligned: boolean,
+    isRightAligned: boolean;
     /** Handler for dropdown menu close events */
-    onMenuClose?: (event: SyntheticEvent<> | MouseEvent) => void,
+    onMenuClose?: (event: React.SyntheticEvent | MouseEvent) => void;
     /** Handler for dropdown menu open events */
-    onMenuOpen?: () => void,
+    onMenuOpen?: () => void;
     /** "attachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
-    tetherAttachment?: string,
+    tetherAttachment?: string;
     /** "targetAttachment" prop for the TetherComponent, will overwrite the default settings and ignore isRightAligned option */
-    tetherTargetAttachment?: string,
+    tetherTargetAttachment?: string;
     /** Set true to close dropdown menu on event bubble instead of event capture */
-    useBubble?: boolean,
+    useBubble?: boolean;
 };
 
 type State = {
-    initialFocusIndex: ?number,
-    isOpen: boolean,
+    initialFocusIndex?: number;
+    isOpen: boolean;
 };
 
 class DropdownMenu extends React.Component<Props, State> {
@@ -84,18 +85,14 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     }
 
-    menuID: string;
-
-    menuButtonID: string;
-
-    openMenuAndSetFocusIndex = (initialFocusIndex: ?number) => {
+    openMenuAndSetFocusIndex = (initialFocusIndex?: number) => {
         this.setState({
             initialFocusIndex,
             isOpen: true,
         });
     };
 
-    closeMenu = (event: SyntheticEvent<> | MouseEvent) => {
+    closeMenu = (event: KeyboardEvent | MouseEvent) => {
         const { onMenuClose = noop } = this.props;
         this.setState(
             {
@@ -113,7 +110,7 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleButtonClick = (event: SyntheticEvent<>) => {
+    handleButtonClick = (event: MouseEvent) => {
         const { isOpen } = this.state;
 
         event.stopPropagation();
@@ -126,7 +123,7 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleButtonKeyDown = (event: SyntheticKeyboardEvent<>) => {
+    handleButtonKeyDown = (event: KeyboardEvent) => {
         const { isOpen } = this.state;
 
         switch (event.key) {
@@ -160,7 +157,7 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     };
 
-    handleMenuClose = (isKeyboardEvent: boolean, event: SyntheticEvent<> | MouseEvent) => {
+    handleMenuClose = (isKeyboardEvent: boolean, event: KeyboardEvent | MouseEvent) => {
         this.closeMenu(event);
         this.focusButton();
     };
@@ -214,6 +211,7 @@ class DropdownMenu extends React.Component<Props, State> {
             'aria-expanded': isOpen ? 'true' : 'false',
         };
 
+        // @ts-ignore TODO: add proper types for MenuButton
         if (menuButton.props['aria-haspopup'] === undefined) {
             menuButtonProps['aria-haspopup'] = 'true';
         }
@@ -266,7 +264,9 @@ class DropdownMenu extends React.Component<Props, State> {
         const bodyEl = bodyElement instanceof HTMLElement ? bodyElement : document.body;
 
         return (
+            // @ts-ignore TODO: add proper types for TetherComponent
             <TetherComponent
+                // @ts-ignore TODO: add proper types for TetherComponent
                 attachment={tetherAttachment || attachment}
                 bodyElement={bodyEl}
                 className={classNames({ 'bdl-DropdownMenu--responsive': isResponsive }, className)}
@@ -275,7 +275,9 @@ class DropdownMenu extends React.Component<Props, State> {
                 enabled={isOpen}
                 targetAttachment={tetherTargetAttachment || targetAttachment}
             >
+                {/* @ts-ignore TODO: add proper types for MenuButton */}
                 {React.cloneElement(menuButton, menuButtonProps)}
+                {/* @ts-ignore TODO: add proper types for Menu */}
                 {isOpen && React.cloneElement(menu, menuProps)}
             </TetherComponent>
         );
