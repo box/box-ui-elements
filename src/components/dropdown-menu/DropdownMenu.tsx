@@ -6,6 +6,7 @@ import noop from 'lodash/noop';
 // @ts-ignore no types
 import uniqueId from 'lodash/uniqueId';
 
+// @ts-ignore no type declaration for the constants
 import { KEYS } from '../../constants';
 import './DropdownMenu.scss';
 
@@ -37,7 +38,7 @@ type Props = {
 };
 
 type State = {
-    initialFocusIndex?: number;
+    initialFocusIndex: number | null;
     isOpen: boolean;
 };
 
@@ -85,7 +86,7 @@ class DropdownMenu extends React.Component<Props, State> {
         }
     }
 
-    openMenuAndSetFocusIndex = (initialFocusIndex?: number) => {
+    openMenuAndSetFocusIndex = (initialFocusIndex: number | null) => {
         this.setState({
             initialFocusIndex,
             isOpen: true,
@@ -203,7 +204,15 @@ class DropdownMenu extends React.Component<Props, State> {
         const menuButton = elements[0];
         const menu = elements[1];
 
-        const menuButtonProps: Object = {
+        const menuButtonProps: {
+            id: string;
+            key: string;
+            onClick: (event: MouseEvent) => void;
+            onKeyDown: (event: KeyboardEvent) => void;
+            'aria-expanded': string;
+            'aria-haspopup'?: string;
+            'aria-controls'?: string;
+        } = {
             id: this.menuButtonID,
             key: this.menuButtonID,
             onClick: this.handleButtonClick, // NOTE: Overrides button's handler
@@ -275,10 +284,9 @@ class DropdownMenu extends React.Component<Props, State> {
                 enabled={isOpen}
                 targetAttachment={tetherTargetAttachment || targetAttachment}
             >
-                {/* @ts-ignore TODO: add proper types for MenuButton */}
-                {React.cloneElement(menuButton, menuButtonProps)}
-                {/* @ts-ignore TODO: add proper types for Menu */}
-                {isOpen && React.cloneElement(menu, menuProps)}
+                {/* TODO: fix the menuButton and menu types to avoid the casting */}
+                {React.cloneElement(menuButton as React.ReactElement, menuButtonProps)}
+                {isOpen && React.cloneElement(menu as React.ReactElement, menuProps)}
             </TetherComponent>
         );
     }

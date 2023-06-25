@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 
 import IconCaretDown from '../../icons/general/IconCaretDown';
@@ -6,7 +5,7 @@ import IconCaretDown from '../../icons/general/IconCaretDown';
 import './MenuToggle.scss';
 
 type Props = {
-    children?: React.Node,
+    children?: React.ReactNode;
 };
 
 const MenuToggle = ({ children }: Props) => (
