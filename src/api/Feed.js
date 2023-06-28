@@ -686,7 +686,7 @@ class Feed extends Base {
     fetchFileActivities(
         permissions: BoxItemPermission,
         activityTypes: FileActivityTypes[],
-        shouldShowReplies: boolean,
+        shouldShowReplies?: boolean = false,
     ): Promise<Object> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {

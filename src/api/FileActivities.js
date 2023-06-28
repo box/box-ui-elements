@@ -5,7 +5,12 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT, ERROR_CODE_FETCH_ACTIVITY } from '../constants';
+import {
+    ERROR_CODE_FETCH_ACTIVITY,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    PERMISSION_CAN_COMMENT,
+    PERMISSION_CAN_VIEW_ANNOTATIONS,
+} from '../constants';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
 import type { FileActivity, FileActivityTypes } from '../common/types/feed';
@@ -20,8 +25,7 @@ const getFileActivityQueryParams = (
 ) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
-    const enableReplies = shouldShowReplies ? 'true' : 'false';
-    const enabledRepliesQueryParam = `&enable_replies=${enableReplies}&reply_limit=${REPLY_LIMIT}`;
+    const enabledRepliesQueryParam = `&enable_replies=${shouldShowReplies}&reply_limit=${REPLY_LIMIT}`;
     const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
 
     return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}`;
@@ -76,6 +80,9 @@ class FileActivities extends Base {
             }
 
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileID);
+            if (activityTypes.includes(FILE_ACTIVITY_TYPE_ANNOTATION)) {
+                this.checkApiCallValidity(PERMISSION_CAN_VIEW_ANNOTATIONS, permissions, fileID);
+            }
         } catch (e) {
             errorCallback(e, this.errorCode);
             return;
