@@ -33,6 +33,7 @@ class FileActivities extends Base {
      *
      * @param {string} [id] - a box file id
      * @param {Array<FileActivityTypes>} activityTypes - optional. Array of File Activity types to filter by, returns all Activity Types if omitted.
+     * @param {boolean} shouldShowReplies - optional. Specify if replies should be included in the response
      * @return {string} base url for files
      */
     getFilteredUrl(id: string, activityTypes?: FileActivityTypes[], shouldShowReplies?: boolean): string {
@@ -47,6 +48,7 @@ class FileActivities extends Base {
      * @param {string} fileId - the file id
      * @param {BoxItemPermission} permissions - the permissions for the file
      * @param {number} repliesCount - number of replies to return, by default all replies are returned
+     * @param {boolean} shouldShowReplies - specify if replies should be included in the response
      * @param {Function} successCallback - the success callback
      * @returns {void}
      */

@@ -680,12 +680,13 @@ class Feed extends Base {
      *
      * @param {BoxItemPermission} permissions - the file permissions
      * @param {FileActivityTypes[]} activityTypes - the activity types to filter by
+     * @param {boolean} shouldShowReplies - specify if replies should be included in the response
      * @return {Promise} - the file comments
      */
     fetchFileActivities(
         permissions: BoxItemPermission,
         activityTypes: FileActivityTypes[],
-        shouldShowReplies,
+        shouldShowReplies: boolean,
     ): Promise<Object> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {
