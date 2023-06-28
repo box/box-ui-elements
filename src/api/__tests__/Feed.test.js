@@ -852,7 +852,7 @@ describe('api/Feed', () => {
             });
 
             test('should return a promise and call the file activities api', () => {
-                const permissions = { can_edit: true, can_delete: true, can_resolve: true };
+                const permissions = { can_edit: true, can_delete: true, can_resolve: true, can_view_annotations: true };
                 const fileActivityItems = feed.fetchFileActivities(permissions, [
                     FILE_ACTIVITY_TYPE_ANNOTATION,
                     FILE_ACTIVITY_TYPE_APP_ACTIVITY,

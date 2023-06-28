@@ -74,11 +74,15 @@ describe('api/FileActivities', () => {
             });
         });
 
-        test('should reject with an error code for calls with can_comment as false', () => {
+        test.each([
+            { can_comment: true, can_view_annotations: false },
+            { can_comment: false, can_view_annotations: true },
+            { can_comment: false, can_view_annotations: false },
+        ])('should reject with an error code for calls with invalid permissions %s', permissions => {
             fileActivities.getActivities({
                 fileID: '123',
-                activityTypes: ['comment', 'task'],
-                permissions: [{ can_comment: false }],
+                activityTypes: ['annotation', 'comment', 'task'],
+                permissions,
                 successCallback,
                 errorCallback,
             });
