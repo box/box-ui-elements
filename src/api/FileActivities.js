@@ -5,7 +5,7 @@
  */
 
 import Base from './Base';
-import { PERMISSION_CAN_COMMENT, PERMISSION_CAN_VIEW_ANNOTATIONS, ERROR_CODE_FETCH_ACTIVITY } from '../constants';
+import { PERMISSION_CAN_COMMENT, ERROR_CODE_FETCH_ACTIVITY } from '../constants';
 import type { BoxItemPermission } from '../common/types/core';
 import type { ElementsXhrError } from '../common/types/api';
 import type { FileActivity, FileActivityTypes } from '../common/types/feed';
@@ -13,10 +13,15 @@ import type { FileActivity, FileActivityTypes } from '../common/types/feed';
 // We only show the latest reply in the UI
 const REPLY_LIMIT = 1;
 
-const getFileActivityQueryParams = (fileID: string, activityTypes?: FileActivityTypes[] = []) => {
+const getFileActivityQueryParams = (
+    fileID: string,
+    activityTypes?: FileActivityTypes[] = [],
+    shouldShowReplies?: boolean = false,
+) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
-    const enabledRepliesQueryParam = `&enable_replies=true&reply_limit=${REPLY_LIMIT}`;
+    const enableReplies = shouldShowReplies ? 'true' : 'false';
+    const enabledRepliesQueryParam = `&enable_replies=${enableReplies}&reply_limit=${REPLY_LIMIT}`;
     const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
 
     return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}`;
@@ -30,8 +35,8 @@ class FileActivities extends Base {
      * @param {Array<FileActivityTypes>} activityTypes - optional. Array of File Activity types to filter by, returns all Activity Types if omitted.
      * @return {string} base url for files
      */
-    getFilteredUrl(id: string, activityTypes?: FileActivityTypes[]): string {
-        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes)}`;
+    getFilteredUrl(id: string, activityTypes?: FileActivityTypes[], shouldShowReplies?: boolean): string {
+        return `${this.getBaseApiUrl()}${getFileActivityQueryParams(id, activityTypes, shouldShowReplies)}`;
     }
 
     /**
@@ -51,6 +56,7 @@ class FileActivities extends Base {
         fileID,
         permissions,
         repliesCount,
+        shouldShowReplies,
         successCallback,
     }: {
         activityTypes: FileActivityTypes[],
@@ -58,6 +64,7 @@ class FileActivities extends Base {
         fileID: string,
         permissions: BoxItemPermission,
         repliesCount?: number,
+        shouldShowReplies?: boolean,
         successCallback: (activity: FileActivity) => void,
     }): void {
         this.errorCode = ERROR_CODE_FETCH_ACTIVITY;
@@ -67,7 +74,6 @@ class FileActivities extends Base {
             }
 
             this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileID);
-            this.checkApiCallValidity(PERMISSION_CAN_VIEW_ANNOTATIONS, permissions, fileID);
         } catch (e) {
             errorCallback(e, this.errorCode);
             return;
@@ -80,7 +86,7 @@ class FileActivities extends Base {
             requestData: {
                 ...(repliesCount ? { replies_count: repliesCount } : null),
             },
-            url: this.getFilteredUrl(fileID, activityTypes),
+            url: this.getFilteredUrl(fileID, activityTypes, shouldShowReplies),
         });
     }
 }

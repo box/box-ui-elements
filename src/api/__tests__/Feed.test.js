@@ -606,14 +606,24 @@ describe('api/Feed', () => {
         });
 
         test('should use the file activities api if shouldUseUAA is true', done => {
-            feed.feedItems(file, false, successCb, errorCb, errorCb, { shouldUseUAA: true });
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldUseUAA: true,
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowTasks: true,
+                shouldShowReplies: true,
+            });
             setImmediate(() => {
-                expect(feed.fetchFileActivities).toBeCalledWith(file.permissions, [
-                    FILE_ACTIVITY_TYPE_ANNOTATION,
-                    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
-                    FILE_ACTIVITY_TYPE_COMMENT,
-                    FILE_ACTIVITY_TYPE_TASK,
-                ]);
+                expect(feed.fetchFileActivities).toBeCalledWith(
+                    file.permissions,
+                    [
+                        FILE_ACTIVITY_TYPE_ANNOTATION,
+                        FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                        FILE_ACTIVITY_TYPE_COMMENT,
+                        FILE_ACTIVITY_TYPE_TASK,
+                    ],
+                    true,
+                );
                 expect(feed.fetchComments).not.toBeCalled();
                 expect(feed.fetchThreadedComments).not.toBeCalled();
                 done();

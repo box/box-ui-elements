@@ -26,8 +26,21 @@ describe('api/FileActivities', () => {
         `(
             'should return the filtered query parameters as $expected when $activityTypes is passed in',
             ({ activityTypes, expected }) => {
-                expect(fileActivities.getFilteredUrl('1', activityTypes)).toBe(
+                expect(fileActivities.getFilteredUrl('1', activityTypes, true)).toBe(
                     `https://api.box.com/2.0/file_activities?file_id=1${expected}&enable_replies=true&reply_limit=1`,
+                );
+            },
+        );
+
+        test.each`
+            enableReplies | expected
+            ${true}       | ${'&enable_replies=true'}
+            ${false}      | ${'&enable_replies=false'}
+        `(
+            'should return the enable_replies as $expected when $enableReplies is passed in',
+            ({ enableReplies, expected }) => {
+                expect(fileActivities.getFilteredUrl('1', ['comment', 'annotation', 'task'], enableReplies)).toBe(
+                    `https://api.box.com/2.0/file_activities?file_id=1&activity_types=comment,annotation,task${expected}&reply_limit=1`,
                 );
             },
         );
@@ -40,7 +53,6 @@ describe('api/FileActivities', () => {
         test('should call the underlying get method', () => {
             const permissions = {
                 can_comment: true,
-                can_view_annotations: true,
             };
 
             fileActivities.getActivities({
@@ -49,6 +61,7 @@ describe('api/FileActivities', () => {
                 permissions,
                 successCallback,
                 errorCallback,
+                shouldShowReplies: true,
             });
 
             expect(fileActivities.get).toBeCalledWith({
@@ -61,15 +74,11 @@ describe('api/FileActivities', () => {
             });
         });
 
-        test.each([
-            { can_comment: true, can_view_annotations: false },
-            { can_comment: false, can_view_annotations: true },
-            { can_comment: false, can_view_annotations: false },
-        ])('should reject with an error code for calls with invalid permissions %s', permissions => {
+        test('should reject with an error code for calls with can_comment as false', () => {
             fileActivities.getActivities({
                 fileID: '123',
                 activityTypes: ['comment', 'task'],
-                permissions,
+                permissions: [{ can_comment: false }],
                 successCallback,
                 errorCallback,
             });
