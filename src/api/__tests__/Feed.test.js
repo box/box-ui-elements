@@ -870,6 +870,7 @@ describe('api/Feed', () => {
                     errorCallback: expect.any(Function),
                     fileID: feed.file.id,
                     permissions,
+                    shouldShowReplies: false,
                     successCallback: expect.any(Function),
                 });
                 expect(fileActivityItems).resolves.toEqual({ entries: mockFileActivities });
