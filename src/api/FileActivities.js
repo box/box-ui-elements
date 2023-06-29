@@ -8,6 +8,7 @@ import Base from './Base';
 import {
     ERROR_CODE_FETCH_ACTIVITY,
     FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_COMMENT,
     PERMISSION_CAN_COMMENT,
     PERMISSION_CAN_VIEW_ANNOTATIONS,
 } from '../constants';
@@ -80,7 +81,9 @@ class FileActivities extends Base {
                 throw new Error('Missing file id!');
             }
 
-            this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileID);
+            if (activityTypes.includes(FILE_ACTIVITY_TYPE_COMMENT)) {
+                this.checkApiCallValidity(PERMISSION_CAN_COMMENT, permissions, fileID);
+            }
             if (activityTypes.includes(FILE_ACTIVITY_TYPE_ANNOTATION)) {
                 this.checkApiCallValidity(PERMISSION_CAN_VIEW_ANNOTATIONS, permissions, fileID);
             }

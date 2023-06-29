@@ -520,13 +520,18 @@ class Feed extends Base {
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
 
-        const filteredActivityTypes = [];
-        if (shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]) {
-            filteredActivityTypes.push(FILE_ACTIVITY_TYPE_ANNOTATION);
-        }
-        if (shouldShowAppActivity) filteredActivityTypes.push(FILE_ACTIVITY_TYPE_APP_ACTIVITY);
-        filteredActivityTypes.push(FILE_ACTIVITY_TYPE_COMMENT);
-        if (shouldShowTasks) filteredActivityTypes.push(FILE_ACTIVITY_TYPE_TASK);
+        const annotationActivityType =
+            shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
+                ? [FILE_ACTIVITY_TYPE_ANNOTATION]
+                : [];
+        const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
+        const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
+        const filteredActivityTypes = [
+            ...annotationActivityType,
+            ...appActivityActivityType,
+            FILE_ACTIVITY_TYPE_COMMENT,
+            ...taskActivityType,
+        ];
 
         const fileActivitiesPromise = shouldUseUAA
             ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
