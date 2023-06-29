@@ -35,6 +35,7 @@ import {
     FILE_ACTIVITY_TYPE_TASK,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
+    PERMISSION_CAN_VIEW_ANNOTATIONS,
     TASK_NEW_APPROVED,
     TASK_NEW_COMPLETED,
     TASK_NEW_REJECTED,
@@ -518,13 +519,22 @@ class Feed extends Base {
 
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
+
+        const annotationActivityType =
+            shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
+                ? [FILE_ACTIVITY_TYPE_ANNOTATION]
+                : [];
+        const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
+        const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
+        const filteredActivityTypes = [
+            ...annotationActivityType,
+            ...appActivityActivityType,
+            FILE_ACTIVITY_TYPE_COMMENT,
+            ...taskActivityType,
+        ];
+
         const fileActivitiesPromise = shouldUseUAA
-            ? this.fetchFileActivities(permissions, [
-                  FILE_ACTIVITY_TYPE_ANNOTATION,
-                  FILE_ACTIVITY_TYPE_APP_ACTIVITY,
-                  FILE_ACTIVITY_TYPE_COMMENT,
-                  FILE_ACTIVITY_TYPE_TASK,
-              ])
+            ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
             : Promise.resolve();
 
         const handleFeedItems = (feedItems: FeedItems) => {
@@ -675,9 +685,14 @@ class Feed extends Base {
      *
      * @param {BoxItemPermission} permissions - the file permissions
      * @param {FileActivityTypes[]} activityTypes - the activity types to filter by
+     * @param {boolean} shouldShowReplies - specify if replies should be included in the response
      * @return {Promise} - the file comments
      */
-    fetchFileActivities(permissions: BoxItemPermission, activityTypes: FileActivityTypes[]): Promise<Object> {
+    fetchFileActivities(
+        permissions: BoxItemPermission,
+        activityTypes: FileActivityTypes[],
+        shouldShowReplies?: boolean = false,
+    ): Promise<Object> {
         this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
         return new Promise(resolve => {
             this.fileActivitiesAPI.getActivities({
@@ -686,6 +701,7 @@ class Feed extends Base {
                 permissions,
                 successCallback: resolve,
                 activityTypes,
+                shouldShowReplies,
             });
         });
     }
