@@ -25,7 +25,8 @@ const getFileActivityQueryParams = (
 ) => {
     const baseEndpoint = `/file_activities?file_id=${fileID}`;
     const hasActivityTypes = !!activityTypes && !!activityTypes.length;
-    const enabledRepliesQueryParam = `&enable_replies=${shouldShowReplies}&reply_limit=${REPLY_LIMIT}`;
+    const enableReplies = shouldShowReplies ? 'true' : 'false';
+    const enabledRepliesQueryParam = `&enable_replies=${enableReplies}&reply_limit=${REPLY_LIMIT}`;
     const activityTypeQueryParam = hasActivityTypes ? `&activity_types=${activityTypes.join()}` : '';
 
     return `${baseEndpoint}${activityTypeQueryParam}${enabledRepliesQueryParam}`;
