@@ -566,15 +566,18 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
         const boxItem = {
             shared_link: 'not null',
-            permissions: 'not null',
-            type: 'not null',
+            permissions: {
+                can_share: true,
+                can_set_share_access: false,
+            },
+            type: 'file',
         };
 
         let wrapper;
         let instance;
 
         beforeEach(() => {
-            wrapper = getWrapper({ canShare: true, canSetShareAccess: true });
+            wrapper = getWrapper();
             instance = wrapper.instance();
             instance.api = { getAPI: getApiMock };
             instance.updateCollection = updateCollectionMock;
@@ -586,7 +589,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
             updateCollectionMock.mockClear();
         });
 
-        test('should create shared link when it doesnt exist yet', () => {
+        test('should create shared link if it does not exist', () => {
             instance.handleSharedLinkSuccess({ ...boxItem, shared_link: null });
 
             expect(getApiMock).toBeCalledTimes(1);
@@ -594,7 +597,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(updateCollectionMock).toBeCalledTimes(1);
         });
 
-        test('should not create shared link when one already exists', () => {
+        test('should not create shared link if it already exists', () => {
             instance.handleSharedLinkSuccess(boxItem);
 
             expect(getApiMock).not.toBeCalled();

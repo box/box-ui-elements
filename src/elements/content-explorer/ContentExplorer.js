@@ -1282,6 +1282,7 @@ class ContentExplorer extends Component<Props, State> {
         if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
             // create a shared link with default access, and update the collection
             const access = undefined;
+            // $FlowFixMe
             this.api.getAPI(item.type).share(item, access, (updatedItem: BoxItem) => {
                 this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
             });
@@ -1690,7 +1691,6 @@ class ContentExplorer extends Component<Props, State> {
                             canDownload={canDownload}
                             canPreview={canPreview}
                             canRename={canRename}
-                            canSetShareAccess={canSetShareAccess}
                             canShare={canShare}
                             currentCollection={currentCollection}
                             focusedRow={focusedRow}
