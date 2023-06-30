@@ -1,13 +1,13 @@
 import * as func from '../../../utils/function';
-import * as webcrypto from '../../../utils/webcrypto';
 import * as uploadUtil from '../../../utils/uploads';
-import MultiputUpload from '../MultiputUpload';
+import * as webcrypto from '../../../utils/webcrypto';
 import MultiputPart, {
-    PART_STATE_UPLOADED,
-    PART_STATE_UPLOADING,
     PART_STATE_DIGEST_READY,
     PART_STATE_NOT_STARTED,
+    PART_STATE_UPLOADED,
+    PART_STATE_UPLOADING,
 } from '../MultiputPart';
+import MultiputUpload from '../MultiputUpload';
 
 import { ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED } from '../../../constants';
 
@@ -362,15 +362,37 @@ describe('api/uploads/MultiputUpload', () => {
         });
 
         test('should set parallelism to 1 for Zones', async () => {
-            multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
-                .fn()
-                .mockReturnValueOnce('fupload-ec2usw1.app.box.com');
-            multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce({ data: {} });
-            multiputUploadTest.createSessionSuccessHandler = jest.fn();
+            const ZONES_URLS = [
+                'fupload-ause1',
+                'fupload-euc1',
+                'fupload-euw2',
+                'fupload-ane1',
+                'fupload-euw1',
+                'fupload-as1',
+                'fupload-sae1',
+                'fupload-euw9',
+                'fupload-nane1',
+                'fupload-usw1',
+                'fupload-ec2',
+            ];
 
-            await multiputUploadTest.preflightSuccessHandler();
-            expect(multiputUploadTest.config.parallelism).toBe(1);
-            expect(multiputUploadTest.createSessionSuccessHandler).toBeCalledTimes(1);
+            const promises = ZONES_URLS.map(url => {
+                multiputUploadTest.getBaseUploadUrlFromPreflightResponse = jest
+                    .fn()
+                    .mockReturnValueOnce(`${url}.app.box.com`);
+                multiputUploadTest.xhr.post = jest.fn().mockReturnValueOnce({ data: {} });
+                multiputUploadTest.createSessionSuccessHandler = jest.fn();
+
+                return multiputUploadTest
+                    .preflightSuccessHandler()
+                    .then(() => {
+                        expect(multiputUploadTest.config.parallelism).toBe(1);
+                        expect(multiputUploadTest.createSessionSuccessHandler).toBeCalledTimes(11);
+                    })
+                    .finally(() => jest.clearAllMocks()); // Reset the mocks for the next promise
+            });
+
+            await Promise.all(promises);
         });
 
         test('should call createSessionSuccessHandler when the session is created successfully', async () => {
