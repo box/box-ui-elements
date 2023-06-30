@@ -43,6 +43,7 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
+    FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
     DEFAULT_ROOT,
     VIEW_SEARCH,
@@ -1278,7 +1279,7 @@ class ContentExplorer extends Component<Props, State> {
     handleSharedLinkSuccess = (item: BoxItem) => {
         const { currentCollection } = this.state;
 
-        if (item.type && !item[FIELD_SHARED_LINK]) {
+        if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
             // create a shared link with default access, and update the collection
             const access = undefined;
             this.api.getAPI(item.type).share(item, access, (updatedItem: BoxItem) => {
@@ -1304,8 +1305,8 @@ class ContentExplorer extends Component<Props, State> {
             return;
         }
 
-        const { permissions } = selected;
-        if (!permissions) {
+        const { permissions, type } = selected;
+        if (!permissions || !type) {
             return;
         }
 
