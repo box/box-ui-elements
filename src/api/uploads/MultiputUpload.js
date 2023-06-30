@@ -4,30 +4,30 @@
  * @author Box
  */
 
-import noop from 'lodash/noop';
 import isNaN from 'lodash/isNaN';
-import { getFileLastModifiedAsISONoMSIfPossible, getBoundedExpBackoffRetryDelay } from '../../utils/uploads';
-import { retryNumOfTimes } from '../../utils/function';
-import { digest } from '../../utils/webcrypto';
-import hexToBase64 from '../../utils/base64';
-import createWorker from '../../utils/uploadsSHA1Worker';
-import Browser from '../../utils/Browser';
+import noop from 'lodash/noop';
+import type { APIOptions } from '../../common/types/api';
+import type { StringAnyMap } from '../../common/types/core';
+import type { MultiputConfig } from '../../common/types/upload';
 import {
     DEFAULT_RETRY_DELAY_MS,
     ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED,
     HTTP_STATUS_CODE_FORBIDDEN,
     MS_IN_S,
 } from '../../constants';
+import Browser from '../../utils/Browser';
+import hexToBase64 from '../../utils/base64';
+import { retryNumOfTimes } from '../../utils/function';
+import { getBoundedExpBackoffRetryDelay, getFileLastModifiedAsISONoMSIfPossible } from '../../utils/uploads';
+import createWorker from '../../utils/uploadsSHA1Worker';
+import { digest } from '../../utils/webcrypto';
+import BaseMultiput from './BaseMultiput';
 import MultiputPart, {
-    PART_STATE_UPLOADED,
-    PART_STATE_UPLOADING,
     PART_STATE_DIGEST_READY,
     PART_STATE_NOT_STARTED,
+    PART_STATE_UPLOADED,
+    PART_STATE_UPLOADING,
 } from './MultiputPart';
-import BaseMultiput from './BaseMultiput';
-import type { MultiputConfig } from '../../common/types/upload';
-import type { StringAnyMap } from '../../common/types/core';
-import type { APIOptions } from '../../common/types/api';
 
 // Constants used for specifying log event types.
 
@@ -287,8 +287,22 @@ class MultiputUpload extends BaseMultiput {
         const uploadUrl = this.getBaseUploadUrlFromPreflightResponse(preflightResponse);
         let createSessionUrl = `${uploadUrl}/files/upload_sessions`;
 
+        const ZONES_URLS = [
+            'fupload-ause1',
+            'fupload-euc1',
+            'fupload-euw2',
+            'fupload-ane1',
+            'fupload-euw1',
+            'fupload-as1',
+            'fupload-sae1',
+            'fupload-euw9',
+            'fupload-nane1',
+            'fupload-usw1',
+            'fupload-ec2',
+        ];
+
         // Parallelism is currently detrimental to multiput upload performance in Zones, so set it to 1.
-        if (createSessionUrl.includes('fupload-ec2')) {
+        if (ZONES_URLS.some(url => createSessionUrl.includes(url))) {
             this.config.parallelism = 1;
         }
 
