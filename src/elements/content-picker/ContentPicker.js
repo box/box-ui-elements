@@ -9,7 +9,6 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import Header from '../common/header';
@@ -37,7 +36,6 @@ import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     FIELD_NAME,
-    FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
     SORT_ASC,
     TYPE_FILE,
@@ -938,7 +936,7 @@ class ContentPicker extends Component<Props, State> {
      */
     handleSharedLinkSuccess = (item: BoxItem) => {
         // if no shared link currently exists, create a shared link with enterprise default
-        if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
+        if (!item[FIELD_SHARED_LINK]) {
             this.changeShareAccess(undefined, item);
         } else {
             const { selected } = this.state;
@@ -972,8 +970,8 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        const { can_set_share_access }: BoxItemPermission = permissions;
-        if (access !== undefined && !can_set_share_access) {
+        const { can_share, can_set_share_access }: BoxItemPermission = permissions;
+        if (access === undefined ? !can_share : !can_set_share_access) {
             return;
         }
 

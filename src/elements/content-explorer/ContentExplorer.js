@@ -43,7 +43,6 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
-    FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
     DEFAULT_ROOT,
     VIEW_SEARCH,
@@ -1279,7 +1278,7 @@ class ContentExplorer extends Component<Props, State> {
     handleSharedLinkSuccess = (item: BoxItem) => {
         const { currentCollection } = this.state;
 
-        if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
+        if (!item[FIELD_SHARED_LINK]) {
             // create a shared link with default access, and update the collection
             const access = undefined;
             // $FlowFixMe
