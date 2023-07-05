@@ -43,6 +43,7 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
+    FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
     DEFAULT_ROOT,
     VIEW_SEARCH,
@@ -1275,20 +1276,19 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Object} item file or folder
      * @returns {void}
      */
-    handleSharedLinkSuccess = (item: BoxItem) => {
+    handleSharedLinkSuccess = async (item: BoxItem) => {
         const { currentCollection } = this.state;
+        let updatedItem = item;
 
-        if (!item[FIELD_SHARED_LINK]) {
-            // create a shared link with default access, and update the collection
-            const access = undefined;
+        // if there is no shared link, create one with enterprise default access
+        if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
             // $FlowFixMe
-            this.api.getAPI(item.type).share(item, access, (updatedItem: BoxItem) => {
-                this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
+            await this.api.getAPI(item.type).share(item, undefined, (sharedItem: BoxItem) => {
+                updatedItem = sharedItem;
             });
-        } else {
-            // update collection with existing shared link
-            this.updateCollection(currentCollection, item, () => this.setState({ isShareModalOpen: true }));
         }
+
+        this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
     };
 
     /**

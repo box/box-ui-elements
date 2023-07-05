@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 import type { Node } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
+import getProp from 'lodash/get';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import Header from '../common/header';
@@ -36,6 +37,7 @@ import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     FIELD_NAME,
+    FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
     SORT_ASC,
     TYPE_FILE,
@@ -934,20 +936,24 @@ class ContentPicker extends Component<Props, State> {
      * @param {Object} item file or folder
      * @returns {void}
      */
-    handleSharedLinkSuccess = (item: BoxItem) => {
-        // if no shared link currently exists, create a shared link with enterprise default
-        if (!item[FIELD_SHARED_LINK]) {
-            this.changeShareAccess(undefined, item);
-        } else {
-            const { selected } = this.state;
-            const { id, type } = item;
+    handleSharedLinkSuccess = async (item: BoxItem) => {
+        const { selected } = this.state;
+        const { id, type } = item;
+        // $FlowFixMe
+        const cacheKey = this.api.getAPI(type).getCacheKey(id);
+        let updatedItem = item;
+
+        // if there is no shared link, create one with enterprise default access
+        if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
             // $FlowFixMe
-            const cacheKey = this.api.getAPI(type).getCacheKey(id);
-            // if shared link already exists, update the collection in state
-            this.updateItemInCollection(item);
-            if (item.selected && item !== selected[cacheKey]) {
-                this.select(item, { forceSharedLink: false });
-            }
+            await this.api.getAPI(item.type).share(item, undefined, (sharedItem: BoxItem) => {
+                updatedItem = sharedItem;
+            });
+        }
+
+        this.updateItemInCollection(updatedItem);
+        if (item.selected && item !== selected[cacheKey]) {
+            this.select(item, { forceSharedLink: false });
         }
     };
 
@@ -959,7 +965,7 @@ class ContentPicker extends Component<Props, State> {
      * @param {Object} item file or folder object
      * @return {void}
      */
-    changeShareAccess = (access?: Access, item: BoxItem): void => {
+    changeShareAccess = (access: Access, item: BoxItem): void => {
         const { canSetShareAccess }: Props = this.props;
         if (!item || !canSetShareAccess) {
             return;
@@ -970,8 +976,8 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        const { can_share, can_set_share_access }: BoxItemPermission = permissions;
-        if (access === undefined ? !can_share : !can_set_share_access) {
+        const { can_set_share_access }: BoxItemPermission = permissions;
+        if (!can_set_share_access) {
             return;
         }
 
