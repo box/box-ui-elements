@@ -589,16 +589,16 @@ describe('elements/content-explorer/ContentExplorer', () => {
             updateCollectionMock.mockClear();
         });
 
-        test('should create shared link if it does not exist', () => {
-            instance.handleSharedLinkSuccess({ ...boxItem, shared_link: null });
+        test('should create shared link if it does not exist', async () => {
+            await instance.handleSharedLinkSuccess({ ...boxItem, shared_link: null });
 
             expect(getApiMock).toBeCalledTimes(1);
             expect(getApiShareMock).toBeCalledTimes(1);
             expect(updateCollectionMock).toBeCalledTimes(1);
         });
 
-        test('should not create shared link if it already exists', () => {
-            instance.handleSharedLinkSuccess(boxItem);
+        test('should not create shared link if it already exists', async () => {
+            await instance.handleSharedLinkSuccess(boxItem);
 
             expect(getApiMock).not.toBeCalled();
             expect(getApiShareMock).not.toBeCalled();
