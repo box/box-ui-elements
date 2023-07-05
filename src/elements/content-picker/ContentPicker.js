@@ -952,8 +952,8 @@ class ContentPicker extends Component<Props, State> {
         }
 
         this.updateItemInCollection(updatedItem);
-        if (item.selected && item !== selected[cacheKey]) {
-            this.select(item, { forceSharedLink: false });
+        if (updatedItem.selected && updatedItem !== selected[cacheKey]) {
+            this.select(updatedItem, { forceSharedLink: false });
         }
     };
 
