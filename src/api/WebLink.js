@@ -8,7 +8,6 @@ import Item from './Item';
 import { CACHE_PREFIX_WEBLINK, ERROR_CODE_FETCH_WEBLINK } from '../constants';
 import { findMissingProperties } from '../utils/fields';
 import type { RequestOptions } from '../common/types/api';
-import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
 
 class WebLink extends Item {
@@ -37,14 +36,14 @@ class WebLink extends Item {
      * Gets a Box weblink
      *
      * @param {string} id - Weblink id
-     * @param {(newItem: BoxItem) => void} successCallback - Function to call with results
+     * @param {Function} successCallback - Function to call with results
      * @param {Function} errorCallback - Function to call with errors
-     * @param {Array<String>} fields - Array of field strings
+     * @param {Array<string>|void} fields - Optionally include specific fields
      * @returns {Promise}
      */
     async getWeblink(
         id: string,
-        successCallback: (newItem: BoxItem) => void,
+        successCallback: Function,
         errorCallback: Function,
         { fields }: RequestOptions = {},
     ): Promise<void> {

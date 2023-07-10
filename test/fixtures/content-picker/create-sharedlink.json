@@ -19,7 +19,7 @@
         "can_comment": true,
         "can_rename": false,
         "can_delete": false,
-        "can_share": false,
+        "can_share": true,
         "can_set_share_access": true,
         "can_invite_collaborator": false,
         "can_annotate": false,

@@ -61,6 +61,7 @@ type Props = {
 
 const Content = ({
     currentCollection,
+    fieldsToShow = [],
     focusedRow,
     gridColumnCount = 1,
     isMedium,
@@ -68,7 +69,6 @@ const Content = ({
     tableRef,
     view,
     viewMode = VIEW_MODE_LIST,
-    fieldsToShow = [],
     ...rest
 }: Props) => {
     const isViewEmpty = isEmpty(view, currentCollection, fieldsToShow);
