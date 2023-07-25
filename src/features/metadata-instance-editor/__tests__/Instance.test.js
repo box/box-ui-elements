@@ -164,25 +164,37 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render templated metadata instance with CascadePolicy', () => {
-        const wrapper = shallow(
-            <Instance
-                cascadePolicy={{
-                    canEdit: true,
-                    id: 'hello',
-                }}
-                data={data}
-                dataValue="value"
-                intl={intl}
-                isCascadingPolicyApplicable
-                shouldShowCascadingOptions
-                template={{
-                    fields,
-                }}
-            />,
-        );
-        expect(wrapper).toMatchSnapshot();
-    });
+    test.each`
+        cascadePolicy                     | isCascadingPolicyApplicable
+        ${{ canEdit: true, id: 'hello' }} | ${true}
+        ${{ canEdit: true, id: 'hello' }} | ${false}
+        ${null}                           | ${true}
+        ${null}                           | ${false}
+    `(
+        'should correctly render templated metadata instance when cascadePolicy is $cascadePolicy and isCascadingPolicyApplicable is $isCascadingPolicyApplicable',
+        ({ cascadePolicy, isCascadingPolicyApplicable }) => {
+            const wrapper = shallow(
+                <Instance
+                    cascadePolicy={cascadePolicy}
+                    data={data}
+                    dataValue="value"
+                    intl={intl}
+                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                    shouldShowCascadingOptions
+                    onModification={jest.fn()}
+                    onRemove={jest.fn()}
+                    onSave={jest.fn()}
+                    canEdit
+                    template={{
+                        fields,
+                    }}
+                />,
+            );
+
+            wrapper.setState({ isEditing: true });
+            expect(wrapper).toMatchSnapshot();
+        },
+    );
 
     test('should correctly render custom metadata instance', () => {
         const wrapper = shallow(
@@ -216,13 +228,37 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    test('should correctly render the footer', () => {
+    test('should correctly render the footer when editing and no cascade policy', () => {
         const wrapper = shallow(
             <Instance
                 canEdit
                 data={data}
                 dataValue="value"
                 intl={intl}
+                onModification={jest.fn()}
+                onRemove={jest.fn()}
+                onSave={jest.fn()}
+                template={{
+                    fields,
+                }}
+            />,
+        );
+
+        wrapper.setState({ isEditing: true });
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should correctly render the footer when editing and cascade policy', () => {
+        const wrapper = shallow(
+            <Instance
+                canEdit
+                data={data}
+                dataValue="value"
+                intl={intl}
+                cascadePolicy={{
+                    id: 'hello',
+                }}
+                isCascadingPolicyApplicable
                 onModification={jest.fn()}
                 onRemove={jest.fn()}
                 onSave={jest.fn()}
