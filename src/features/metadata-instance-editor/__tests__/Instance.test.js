@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { render, screen, fireEvent } from '@testing-library/react';
 import TEMPLATE_CUSTOM_PROPERTIES from '../constants';
 import { InstanceBase as Instance } from '../Instance';
 import { isValidValue } from '../../metadata-instance-fields/validateMetadataField';
@@ -168,12 +169,14 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
         cascadePolicy                     | isCascadingPolicyApplicable
         ${{ canEdit: true, id: 'hello' }} | ${true}
         ${{ canEdit: true, id: 'hello' }} | ${false}
+        ${{ canEdit: true }}              | ${true}
+        ${{ canEdit: true }}              | ${false}
         ${null}                           | ${true}
         ${null}                           | ${false}
     `(
         'should correctly render templated metadata instance when cascadePolicy is $cascadePolicy and isCascadingPolicyApplicable is $isCascadingPolicyApplicable',
         ({ cascadePolicy, isCascadingPolicyApplicable }) => {
-            const wrapper = shallow(
+            const { container } = render(
                 <Instance
                     cascadePolicy={cascadePolicy}
                     data={data}
@@ -191,8 +194,11 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 />,
             );
 
-            wrapper.setState({ isEditing: true });
-            expect(wrapper).toMatchSnapshot();
+            const editButton = screen.queryByTestId('metadata-instance-edit-button');
+            if (editButton) {
+                fireEvent.click(editButton);
+            }
+            expect(container).toMatchSnapshot();
         },
     );
 
