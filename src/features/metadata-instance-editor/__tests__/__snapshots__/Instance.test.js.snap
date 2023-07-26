@@ -25,7 +25,6 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
           aria-pressed={false}
           className="metadata-instance-editor-instance-edit"
           data-resin-target="metadata-instanceedit"
-          data-testid="metadata-instance-edit-button"
           onClick={[Function]}
           type="button"
         >
@@ -705,7 +704,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
-            data-testid="metadata-instance-edit-button"
             tabindex="0"
             type="button"
           >
@@ -1397,7 +1395,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
-            data-testid="metadata-instance-edit-button"
             tabindex="0"
             type="button"
           >
@@ -2088,7 +2085,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
-            data-testid="metadata-instance-edit-button"
             tabindex="0"
             type="button"
           >
@@ -2779,7 +2775,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
-            data-testid="metadata-instance-edit-button"
             tabindex="0"
             type="button"
           >
@@ -3470,7 +3465,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
-            data-testid="metadata-instance-edit-button"
             tabindex="0"
             type="button"
           >
@@ -4304,7 +4298,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
-          data-testid="metadata-instance-edit-button"
           onClick={[Function]}
           type="button"
         >
@@ -4420,7 +4413,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
-          data-testid="metadata-instance-edit-button"
           onClick={[Function]}
           type="button"
         >
@@ -4521,7 +4513,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
-          data-testid="metadata-instance-edit-button"
           onClick={[Function]}
           type="button"
         >
@@ -4728,7 +4719,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
-          data-testid="metadata-instance-edit-button"
           onClick={[Function]}
           type="button"
         >
