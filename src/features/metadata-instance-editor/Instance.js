@@ -571,7 +571,6 @@ class Instance extends React.PureComponent<Props, State> {
                         data-resin-target="metadata-instanceedit"
                         onClick={this.toggleIsEditing}
                         type="button"
-                        data-testid="metadata-instance-edit-button"
                     >
                         <IconEdit />
                     </PlainButton>
