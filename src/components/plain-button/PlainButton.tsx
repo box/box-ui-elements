@@ -34,7 +34,6 @@ const PlainButton = ({
             event.stopPropagation();
         };
     }
-    // console.log(rest);
 
     return (
         // eslint-disable-next-line react/button-has-type
