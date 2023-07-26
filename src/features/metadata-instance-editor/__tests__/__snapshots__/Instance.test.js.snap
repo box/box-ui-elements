@@ -17,9 +17,11 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
+        text="Edit Metadata"
         theme="default"
       >
         <PlainButton
+          aria-label="Edit Metadata"
           aria-pressed={false}
           className="metadata-instance-editor-instance-edit"
           data-resin-target="metadata-instanceedit"
@@ -699,6 +701,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           class="bdl-Collapsible-actionItems"
         >
           <button
+            aria-label="Edit Metadata"
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
@@ -1390,6 +1393,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           class="bdl-Collapsible-actionItems"
         >
           <button
+            aria-label="Edit Metadata"
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
@@ -2080,6 +2084,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           class="bdl-Collapsible-actionItems"
         >
           <button
+            aria-label="Edit Metadata"
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
@@ -2770,6 +2775,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           class="bdl-Collapsible-actionItems"
         >
           <button
+            aria-label="Edit Metadata"
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
@@ -3460,6 +3466,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           class="bdl-Collapsible-actionItems"
         >
           <button
+            aria-label="Edit Metadata"
             aria-pressed="true"
             class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
             data-resin-target="metadata-instanceedit"
@@ -4289,9 +4296,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
+        text="Edit Metadata"
         theme="default"
       >
         <PlainButton
+          aria-label="Edit Metadata"
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
@@ -4403,9 +4412,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
+        text="Edit Metadata"
         theme="default"
       >
         <PlainButton
+          aria-label="Edit Metadata"
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
@@ -4502,9 +4513,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
+        text="Edit Metadata"
         theme="default"
       >
         <PlainButton
+          aria-label="Edit Metadata"
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"
@@ -4707,9 +4720,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         constrainToWindow={true}
         isDisabled={false}
         position="top-left"
+        text="Edit Metadata"
         theme="default"
       >
         <PlainButton
+          aria-label="Edit Metadata"
           aria-pressed={true}
           className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
           data-resin-target="metadata-instanceedit"

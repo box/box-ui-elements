@@ -148,7 +148,7 @@ const userDefinedTemplateField = [
     },
 ];
 
-const intl = { formatMessage: () => {} };
+const intl = { formatMessage: jest.fn().mockReturnValue('Edit Metadata') };
 
 describe('features/metadata-instance-editor/fields/Instance', () => {
     test('should correctly render templated metadata instance', () => {
@@ -194,7 +194,7 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 />,
             );
 
-            const editButton = screen.queryByTestId('metadata-instance-edit-button');
+            const editButton = screen.queryByLabelText('Edit Metadata');
             if (editButton) {
                 fireEvent.click(editButton);
             }
