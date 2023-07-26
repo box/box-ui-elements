@@ -9,15 +9,17 @@ import { bdlGray65 } from '../../styles/variables';
 import './CloseButton.scss';
 
 type Props = {
+    /** ariaLabel defines a string value that labels the current element */
+    ariaLabel?: string;
     /** Custom class for the close button */
     className?: string,
     /** onClick handler for the close button */
     onClick?: Function,
 }
 
-const CloseButton = ({ className, onClick }: Props) => {
+const CloseButton = ({ className, onClick, ariaLabel = 'close' }: Props) => {
     return (
-        <Button className={classNames('bdl-CloseButton', className)} onClick={onClick} type="button">
+        <Button ariaLabel={ariaLabel} className={classNames('bdl-CloseButton', className)} onClick={onClick} type="button">
             <IconClose color={bdlGray65} height={18} width={18} />
         </Button>
     );

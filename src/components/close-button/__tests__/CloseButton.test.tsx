@@ -37,4 +37,22 @@ describe('components/close-button/CloseButton', () => {
             expect(handleClick).toHaveBeenCalledTimes(1);
         });
     });
+
+    describe('accesability properties', () => {
+        test('should have a custom accesiblity label', () => {
+            const ariaLabel = 'accessiblityAriaLabelValue';
+
+            render(<CloseButton ariaLabel={ariaLabel} />);
+
+            const closeButton = screen.getByRole('button');
+            expect(closeButton).toHaveAttribute('aria-label', ariaLabel);
+        });
+
+        test('should have a default accesiblity label', () => {
+            render(<CloseButton />);
+
+            const closeButton = screen.getByRole('button');
+            expect(closeButton).toHaveAttribute('aria-label', 'close');
+        });
+    });
 });

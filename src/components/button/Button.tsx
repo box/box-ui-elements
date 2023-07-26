@@ -11,6 +11,8 @@ export enum ButtonType {
     SUBMIT = 'submit',
 }
 export interface ButtonProps {
+    /** ariaLabel defines a string value that labels the current element */
+    ariaLabel?: string;
     /** Child components for the button, generally localized text */
     children?: React.ReactNode;
     /** Custom class for the button */
@@ -59,6 +61,7 @@ class Button extends React.Component<ButtonProps> {
 
     render() {
         const {
+            ariaLabel,
             children,
             className,
             icon,
@@ -92,6 +95,7 @@ class Button extends React.Component<ButtonProps> {
         let button = (
             // eslint-disable-next-line react/button-has-type
             <button
+                aria-label={ariaLabel}
                 ref={element => {
                     this.btnElement = element;
                     if (setRef) {
