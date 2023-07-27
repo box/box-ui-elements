@@ -27,6 +27,7 @@ import type { Translations } from '../../flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { ActionItemError, BoxCommentPermission, FeedItemStatus } from '../../../../common/types/feed';
 import './Comment.scss';
+import { type OnCommentEdit } from './types';
 
 type Props = {
     created_at: string | number,
@@ -42,15 +43,7 @@ type Props = {
     mentionSelectorContacts?: SelectorItems<>,
     modified_at?: string | number,
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
-    onEdit: (
-        id: string,
-        text?: string,
-        status?: FeedItemStatus,
-        hasMention: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
+    onEdit: OnCommentEdit,
     onSelect: (isSelected: boolean) => void,
     permissions: BoxCommentPermission,
     status?: FeedItemStatus,
@@ -133,13 +126,13 @@ class Comment extends React.Component<Props, State> {
 
     handleMessageUpdate = ({ id, text, hasMention }: { hasMention: boolean, id: string, text: string }): void => {
         const { onEdit, permissions } = this.props;
-        onEdit(id, text, undefined, hasMention, permissions);
+        onEdit({ id, text, hasMention, permissions });
         this.commentFormSubmitHandler();
     };
 
     handleStatusUpdate = (status: FeedItemStatus): void => {
         const { id, onEdit, permissions } = this.props;
-        onEdit(id, undefined, status, false, permissions);
+        onEdit({ id, status, hasMention: false, permissions });
     };
 
     render(): React.Node {

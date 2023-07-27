@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import FocusTrap from '../../components/focus-trap';
+import Tooltip from '../../components/tooltip';
 
 import DragCloud from './DragCloud';
 import DropCloud from './DropCloud';
@@ -12,8 +12,8 @@ import { checkOverlap, getGridPosition, getRandomCloudPosition } from './utils';
 import './SecurityCloudGame.scss';
 
 // pick these numbers to balance accessibility and game complexity
-const CLOUD_SIZE_RATIO = 5;
-const GRID_TRACK_SIZE_RATIO = 20;
+const CLOUD_SIZE_RATIO = 4;
+const GRID_TRACK_SIZE_RATIO = 16;
 
 const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width }) => {
     const [dropCloudPosition, setDropCloudPosition] = useState(null);
@@ -42,8 +42,6 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
             cloudSize: minGameBoardLength / CLOUD_SIZE_RATIO,
             gridTrackSize: minGameBoardLength / GRID_TRACK_SIZE_RATIO,
         });
-
-        messageElement.focus();
     }, [height, width]);
 
     useEffect(() => {
@@ -202,25 +200,32 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
      * @returns {JSX}
      */
     return (
-        <FocusTrap>
+        <div>
             <div className="bdl-SecurityCloudGame-liveText" aria-live="polite">
                 {liveText}
             </div>
             <div className="bdl-SecurityCloudGame" style={{ height: `${height}px`, width: `${width}px` }}>
-                <div
-                    ref={messageElementRef}
-                    className="bdl-SecurityCloudGame-message"
-                    aria-label={getAccessibilityInstructions()}
-                    tabIndex={-1}
+                <Tooltip
+                    ariaHidden
+                    className="bdl-SecurityCloudGame-tooltip"
+                    constrainToWindow={false}
+                    position="bottom-center"
+                    text={renderMessage()}
                 >
-                    {renderMessage()}
-                </div>
+                    <div
+                        ref={messageElementRef}
+                        className="bdl-SecurityCloudGame-message"
+                        aria-label={getAccessibilityInstructions()}
+                    >
+                        {renderMessage()}
+                    </div>
+                </Tooltip>
                 <div className="bdl-SecurityCloudGame-board">
                     {renderDropCloud()}
                     {renderDragCloud()}
                 </div>
             </div>
-        </FocusTrap>
+        </div>
     );
 };
 

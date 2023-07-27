@@ -120,6 +120,10 @@ export type FlyoutProps = {
      */
     constrainToWindow?: boolean,
     /**
+     * Sets tether constrain to window with pin
+     */
+    constrainToWindowWithPin?: boolean,
+    /**
      * Toggles responsive behavior
      */
     isResponsive?: boolean,
@@ -373,6 +377,7 @@ class Flyout extends React.Component<Props, State> {
             className = '',
             constrainToScrollParent,
             constrainToWindow,
+            constrainToWindowWithPin,
             isResponsive,
             offset,
             openOnHover,
@@ -432,6 +437,14 @@ class Flyout extends React.Component<Props, State> {
             constraints.push({
                 to: 'window',
                 attachment: 'together',
+            });
+        }
+
+        if (constrainToWindowWithPin) {
+            constraints.push({
+                to: 'window',
+                attachment: 'together',
+                pin: true,
             });
         }
 

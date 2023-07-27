@@ -14,8 +14,8 @@
     border-left: 2px solid transparent;
     outline: none;
 
-    .bce-item-coloumn {
-        color: $bdl-gray-62;
+    .bce-item-column {
+        color: $bdl-gray-65;
     }
 
     .bce-more-options {
@@ -42,7 +42,7 @@
             opacity: 1;
         }
 
-        .bce-item-coloumn,
+        .bce-item-column,
         .be & .btn-plain {
             color: $dark-cerulean;
             outline: none;
@@ -55,13 +55,17 @@
 
         .bce-more-options {
             opacity: 1;
+
+            .btn {
+                border-color: $grey-blue;
+
+                &:focus {
+                    border-color: $bdl-gray;
+                }
+            }
         }
 
-        .bce-btn-more-options {
-            border-color: $grey-blue;
-        }
-
-        .bce-item-coloumn,
+        .bce-item-column,
         .be & .btn-plain {
             color: $dark-cerulean;
         }
@@ -91,7 +95,7 @@
     box-shadow: 0 4px 6px -2px $transparent-black;
 
     .ReactVirtualized__Table__headerColumn {
-        color: $bdl-gray-62;
+        color: $bdl-gray-65;
         font-weight: normal;
         text-transform: none;
     }

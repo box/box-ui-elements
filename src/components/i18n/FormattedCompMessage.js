@@ -184,7 +184,7 @@ class FormattedCompMessage extends React.Component<Props, State> {
         // the reviewer finds and submit translation tickets to Jira and/or fixed
         // translations directly back to Mojito.
         // 3. It can be used by the planned "text experiment framework" to identify
-        // whole strings in the UI that can be A/B tested in various langauges without
+        // whole strings in the UI that can be A/B tested in various languages without
         // publishing new versions of the code.
         return React.createElement(
             tagName,

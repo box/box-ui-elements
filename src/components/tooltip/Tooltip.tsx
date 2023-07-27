@@ -5,8 +5,6 @@ import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
 
 import TetherPosition from '../../common/tether-positions';
-// @ts-ignore flow import
-import FocusTrap from '../focus-trap';
 import CloseButton from './CloseButton';
 
 import './Tooltip.scss';
@@ -84,16 +82,12 @@ export type DefaultTooltipProps = {
 export type TooltipProps = {
     /** Sets aria-hidden attribute on tooltip */
     ariaHidden?: boolean;
-    /** Sets aria-label attribute on tooltip */
-    ariaLabel?: string;
     /** An HTML element to append the tooltip container into (otherwise appends to body) */
     bodyElement?: HTMLElement;
     /** A React element to put the tooltip on */
     children: React.ReactChild;
     /** A CSS class for the tooltip */
     className?: string;
-    /** Allow the component to maintain focus until escaped */
-    isFocusTrapped?: boolean;
     /** Forces the tooltip to be shown or hidden (useful for errors) */
     isShown?: boolean;
     /** Whether to add tabindex=0.  Defaults to `true` */
@@ -138,14 +132,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
     }
 
     componentDidUpdate(prevProps: TooltipProps, prevState: State) {
-        if (this.isControlled()) {
+        const isControlled = this.isControlled();
+
+        // Reset wasClosedByUser state when isShown transitions from false to true
+        if (isControlled) {
             if (!prevProps.isShown && this.props.isShown) {
-                // Reset wasClosedByUser state when isShown transitions from false to true
                 this.setState({ wasClosedByUser: false });
-                document.addEventListener('keydown', this.handleKeyDown, true);
-            }
-            if (!prevState.wasClosedByUser && this.state.wasClosedByUser) {
-                document.removeEventListener('keydown', this.handleKeyDown, true);
             }
         } else {
             if (!prevState.isShown && this.state.isShown) {
@@ -223,11 +215,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
     handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             event.stopPropagation();
-            if (this.isControlled()) {
-                this.setState({ isShown: false, wasClosedByUser: true });
-            } else {
-                this.setState({ isShown: false });
-            }
+            this.setState({ isShown: false });
         }
         this.fireChildEvent('onKeyDown', event);
     };
@@ -246,14 +234,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
     render() {
         const {
             ariaHidden,
-            ariaLabel,
             bodyElement,
             children,
             className,
             constrainToScrollParent,
             constrainToWindow,
             isDisabled,
-            isFocusTrapped,
             isTabbable = true,
             offset,
             position = TooltipPosition.TOP_CENTER,
@@ -358,12 +344,6 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 {withCloseButton && <CloseButton onClick={this.closeTooltip} />}
             </>
         );
-        let role;
-        if (isFocusTrapped) {
-            role = 'dialog';
-        } else if (theme !== TooltipTheme.ERROR) {
-            role = 'tooltip';
-        }
 
         const tooltip = stopBubble ? (
             <div
@@ -377,10 +357,9 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 role="presentation"
             >
                 <div
-                    role={role}
+                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
                     aria-live="polite"
                     aria-hidden={ariaHidden || isLabelMatchingTooltipText}
-                    aria-labelledby={ariaLabel}
                     data-testid="bdl-Tooltip"
                 >
                     {tooltipInner}
@@ -390,13 +369,12 @@ class Tooltip extends React.Component<TooltipProps, State> {
             <div
                 aria-live="polite"
                 aria-hidden={ariaHidden || isLabelMatchingTooltipText}
-                aria-labelledby={ariaLabel}
                 className={classes}
                 data-testid="bdl-Tooltip"
                 id={this.tooltipID}
                 onMouseEnter={this.handleMouseEnter}
                 onMouseLeave={this.handleMouseLeave}
-                role={role}
+                role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
             >
                 {tooltipInner}
             </div>
@@ -405,14 +383,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
                 {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
-                {showTooltip &&
-                    (isFocusTrapped ? (
-                        <FocusTrap aria-modal shouldDefaultFocus>
-                            {tooltip}
-                        </FocusTrap>
-                    ) : (
-                        tooltip
-                    ))}
+                {showTooltip && tooltip}
             </TetherComponent>
         );
     }

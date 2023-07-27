@@ -37,6 +37,8 @@ import type {
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
+import { type OnAnnotationEdit } from '../comment/types';
+
 import './ActivityFeed.scss';
 
 type Props = {
@@ -52,12 +54,13 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
     hasReplies?: boolean,
     hasVersions?: boolean,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<User>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
-    onAnnotationEdit?: (id: string, text: string, permissions: AnnotationPermission) => void,
+    onAnnotationEdit?: OnAnnotationEdit,
     onAnnotationSelect?: (annotation: Annotation) => void,
     onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
     onAppActivityDelete?: Function,
@@ -91,6 +94,7 @@ type Props = {
     onTaskUpdate?: Function,
     onTaskView?: Function,
     onVersionHistoryClick?: Function,
+    shouldUseUAA?: boolean,
     translations?: Translations,
 };
 
@@ -283,6 +287,7 @@ class ActivityFeed extends React.Component<Props, State> {
             getAvatarUrl,
             getMentionWithQuery,
             getUserProfileUrl,
+            hasNewThreadedReplies,
             hasReplies,
             hasVersions,
             isDisabled,
@@ -307,6 +312,7 @@ class ActivityFeed extends React.Component<Props, State> {
             onTaskUpdate,
             onTaskView,
             onVersionHistoryClick,
+            shouldUseUAA,
             translations,
         } = this.props;
         const { isInputOpen, isScrolled } = this.state;
@@ -349,7 +355,7 @@ class ActivityFeed extends React.Component<Props, State> {
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
                 className={classNames('bcs-activity-feed', { 'bcs-is-scrolled': isScrolled })}
-                data-testid="activityfeed"
+                data-testid={isScrolled ? 'activityfeedscrolled' : 'activityfeed'}
                 onKeyDown={this.onKeyDown}
             >
                 <div
@@ -383,6 +389,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
                             getUserProfileUrl={getUserProfileUrl}
+                            hasNewThreadedReplies={hasNewThreadedReplies}
                             hasReplies={hasReplies}
                             hasVersions={hasVersions}
                             isDisabled={isDisabled}
@@ -394,7 +401,21 @@ class ActivityFeed extends React.Component<Props, State> {
                             onAnnotationStatusChange={onAnnotationStatusChange}
                             onAppActivityDelete={onAppActivityDelete}
                             onCommentDelete={hasCommentPermission ? onCommentDelete : noop}
-                            onCommentEdit={hasCommentPermission ? onCommentUpdate : noop}
+                            onCommentEdit={
+                                hasCommentPermission && onCommentUpdate
+                                    ? props => {
+                                          onCommentUpdate(
+                                              props.id,
+                                              props.text,
+                                              props.status,
+                                              props.hasMention,
+                                              props.permissions,
+                                              props.onSuccess,
+                                              props.onError,
+                                          );
+                                      }
+                                    : noop
+                            }
                             onCommentSelect={this.setSelectedItem}
                             onHideReplies={onHideReplies}
                             onReplyCreate={hasCommentPermission ? onReplyCreate : noop}
@@ -407,6 +428,7 @@ class ActivityFeed extends React.Component<Props, State> {
                             onTaskModalClose={onTaskModalClose}
                             onTaskView={onTaskView}
                             onVersionInfo={onVersionHistoryClick ? this.openVersionHistoryPopup : null}
+                            shouldUseUAA={shouldUseUAA}
                             translations={translations}
                         />
                     )}

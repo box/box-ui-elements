@@ -114,6 +114,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
                     })}
                     data-testid="usm-share-permissions-toggle"
                     disabled={submitting}
+                    type="button"
                     {...sharedLinkPermissionsMenuButtonProps}
                 >
                     <MenuToggle>{permissionLevels[permissionLevel].label}</MenuToggle>

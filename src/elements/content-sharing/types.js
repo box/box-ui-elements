@@ -1,5 +1,6 @@
 // @flow
 import type {
+    Access,
     BoxItemClassification,
     BoxItemPermission,
     Collaboration,
@@ -137,7 +138,7 @@ export type GetContactsByEmailFnType = () => (filterTerm: {
 export type SendInvitesFnType = () => InviteCollaboratorsRequest => Promise<null | Array<Function>>;
 
 export type ConnectToItemShareFnType = ({
-    access?: string,
+    access?: Access,
     errorFn?: Function,
     requestOptions?: RequestOptions,
     successFn?: Function,

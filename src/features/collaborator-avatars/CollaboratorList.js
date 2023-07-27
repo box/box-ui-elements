@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import { ModalActions } from '../../components/modal';
 import Button from '../../components/button';
-import PlainButton from '../../components/plain-button';
 import { Link } from '../../components/link';
 import CollaborationBadge from '../../icons/badges/CollaborationBadge';
 import type {
@@ -51,9 +50,9 @@ class CollaboratorList extends React.Component<Props> {
         const { collaborators, onDoneClick, maxCollaboratorListSize, trackingProps } = this.props;
         const { usernameProps, emailProps, manageLinkProps, viewAdditionalProps, doneButtonProps } = trackingProps;
         const manageAllBtn = (
-            <PlainButton className="manage-all-btn" type="button">
+            <span className="manage-all-btn">
                 <FormattedMessage {...messages.manageAllLinkText} />
-            </PlainButton>
+            </span>
         );
         const maxListSizeToRender = Math.min(maxCollaboratorListSize, MAX_COLLABORATOR_LIST_SIZE);
 
@@ -92,7 +91,7 @@ class CollaboratorList extends React.Component<Props> {
                     )}
                 </ul>
                 <ModalActions>
-                    <Button className="btn-done" onClick={onDoneClick} {...doneButtonProps}>
+                    <Button className="btn-done" onClick={onDoneClick} type="button" {...doneButtonProps}>
                         <FormattedMessage {...commonMessages.done} />
                     </Button>
                 </ModalActions>

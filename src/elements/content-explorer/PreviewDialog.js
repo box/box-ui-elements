@@ -1,6 +1,6 @@
 /**
  * @flow
- * @file Content Explorer Preview dialog
+ * @file Content Explorer Preview Dialog
  * @author Box
  */
 

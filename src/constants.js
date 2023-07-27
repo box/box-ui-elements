@@ -94,6 +94,7 @@ export const FIELD_PARENT = 'parent';
 export const FIELD_EXTENSION = 'extension';
 export const FIELD_ITEM_EXPIRATION = 'expires_at';
 export const FIELD_PERMISSIONS = 'permissions';
+export const FIELD_PERMISSIONS_CAN_SHARE = `${FIELD_PERMISSIONS}.can_share`;
 export const FIELD_PERMISSIONS_CAN_UPLOAD = `${FIELD_PERMISSIONS}.can_upload`;
 export const FIELD_ITEM_COLLECTION = 'item_collection';
 export const FIELD_PATH_COLLECTION = 'path_collection';
@@ -177,7 +178,7 @@ export const DELIMITER_SLASH: 'slash' = 'slash';
 export const DELIMITER_CARET: 'caret' = 'caret';
 
 /* ---------------------- Defaults -------------------------- */
-export const DEFAULT_PREVIEW_VERSION = '2.81.0';
+export const DEFAULT_PREVIEW_VERSION = '2.95.0';
 export const DEFAULT_LOCALE = 'en-US';
 export const DEFAULT_PATH_STATIC = 'platform/elements';
 export const DEFAULT_PATH_STATIC_PREVIEW = 'platform/preview';
@@ -362,6 +363,7 @@ export const SKILLS_STATUS_PENDING = 'skills_pending_status';
 export const SKILLS_STATUS_INVOKED = 'skills_invoked_status';
 
 /* ------------------ File Extensions ---------------------- */
+export const FILE_EXTENSION_BOX_CANVAS = 'boxcanvas';
 export const FILE_EXTENSION_BOX_NOTE = 'boxnote';
 export const FILE_EXTENSION_GOOGLE_DOC = 'gdoc';
 export const FILE_EXTENSION_GOOGLE_SHEET = 'gsheet';
@@ -465,6 +467,19 @@ export const TASK_MAX_GROUP_ASSIGNEES: 250 = 250;
 /* ------------------ Comment (and Annotation) Statuses ----------------- */
 export const COMMENT_STATUS_OPEN: 'open' = 'open';
 export const COMMENT_STATUS_RESOLVED: 'resolved' = 'resolved';
+
+/* ------------------ Activity Filter Options ------------------ */
+export const ACTIVITY_FILTER_OPTION_ALL: 'all' = 'all';
+export const ACTIVITY_FILTER_OPTION_RESOLVED: 'resolved' = 'resolved';
+export const ACTIVITY_FILTER_OPTION_TASKS: 'tasks' = 'tasks';
+export const ACTIVITY_FILTER_OPTION_UNRESOLVED: 'open' = 'open';
+
+/* ------------------ File Activity Types ------------------ */
+export const FILE_ACTIVITY_TYPE_ANNOTATION: 'annotation' = 'annotation';
+export const FILE_ACTIVITY_TYPE_APP_ACTIVITY: 'app_activity' = 'app_activity';
+export const FILE_ACTIVITY_TYPE_COMMENT: 'comment' = 'comment';
+export const FILE_ACTIVITY_TYPE_TASK: 'task' = 'task';
+export const FILE_ACTIVITY_TYPE_VERSION: 'versions' = 'versions';
 
 /* ----------------- Theme ---------------------------*/
 export const THEME_VERY_DARK = 'vDark';

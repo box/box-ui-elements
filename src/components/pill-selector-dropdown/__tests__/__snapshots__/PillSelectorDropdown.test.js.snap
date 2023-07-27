@@ -3,6 +3,7 @@
 exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should render disabled pill selector 1`] = `
 <SelectorDropdown
   className="bdl-PillSelectorDropdown pill-selector-wrapper"
+  isPositionDynamic={false}
   onEnter={[Function]}
   onSelect={[Function]}
   selector={
@@ -11,7 +12,6 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should 
       aria-label="test"
       disabled={true}
       error=""
-      inputProps={Object {}}
       onBlur={[Function]}
       onChange={[Function]}
       onCompositionEnd={[Function]}

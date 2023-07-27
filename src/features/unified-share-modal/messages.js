@@ -118,11 +118,6 @@ const messages = defineMessages({
         description: 'Accessible label for shared link input field',
         id: 'boxui.share.sharedLinkURLLabel',
     },
-    settingsButtonLabel: {
-        defaultMessage: 'Open shared link settings popup',
-        description: 'Accessible label for button that loads share settings popup',
-        id: 'boxui.unifiedShare.settingsButtonLabel',
-    },
     linkShareOff: {
         defaultMessage: 'Create shared link',
         description: 'Call to action text for allowing the user to create a new shared link',
@@ -544,6 +539,19 @@ const messages = defineMessages({
         defaultMessage: 'Expires',
         description: 'Label for tooltips or other components that display expiration icons',
         id: 'boxui.unifiedShare.expiresMessage',
+    },
+    setLevelOfCollabAccess: {
+        defaultMessage:
+            'Set the level of {collaboratorAccess} and increase security through one of our paid plans. {upgradeLink}',
+        description:
+            'Used in a dialog box that urges the user to upgrade. The collaboratorAccess variable is replaced with the words "collaborator access" from the string with the id boxui.unifiedShare.collabAccess',
+        id: 'boxui.unifiedShare.levelOfCollabAccess',
+    },
+    collabAccess: {
+        defaultMessage: 'collaborator access',
+        description:
+            'Used in a dialog box that urges the user to upgrade. This is substituted into the middle of the sentence in the string with id boxui.unifiedShare.levelOfCollabAccess',
+        id: 'boxui.unifiedShare.collabAccess',
     },
 });
 

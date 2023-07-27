@@ -37,6 +37,7 @@ import {
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     FIELD_NAME,
+    FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
     SORT_ASC,
     TYPE_FILE,
@@ -789,7 +790,7 @@ class ContentPicker extends Component<Props, State> {
             return;
         }
 
-        if (!name) {
+        if (!name.trim()) {
             this.setState({
                 errorCode: ERROR_CODE_ITEM_NAME_INVALID,
                 isLoading: false,
@@ -808,7 +809,7 @@ class ContentPicker extends Component<Props, State> {
         this.setState({ isLoading: true });
         this.api.getFolderAPI().create(
             id,
-            name,
+            name.trim(),
             () => {
                 this.fetchFolder(id);
             },
@@ -850,7 +851,6 @@ class ContentPicker extends Component<Props, State> {
         const existing: BoxItem = selected[cacheKey];
         const existingFromCache: BoxItem = this.api.getCache().get(cacheKey);
         const existInSelected = selectedKeys.indexOf(cacheKey) !== -1;
-        const itemCanSetShareAccess = getProp(item, 'permissions.can_set_share_access', false);
 
         // Existing object could have mutated and we just need to update the
         // reference in the selected map. In that case treat it like a new selection.
@@ -863,7 +863,7 @@ class ContentPicker extends Component<Props, State> {
             // We are selecting a new item that was never
             // selected before. However if we are in a single
             // item selection mode, we should also unselect any
-            // prior item that was item that was selected.
+            // prior item that was selected.
 
             // Check if we hit the selection limit and if selection
             // is not already currently in the selected data structure.
@@ -886,7 +886,7 @@ class ContentPicker extends Component<Props, State> {
             // If can set share access, fetch the shared link properties of the item
             // In the case where another item is selected, any in flight XHR will get
             // cancelled
-            if (canSetShareAccess && itemCanSetShareAccess && forceSharedLink) {
+            if (canSetShareAccess && forceSharedLink) {
                 this.fetchSharedLinkInfo(item);
             }
         }
@@ -936,21 +936,24 @@ class ContentPicker extends Component<Props, State> {
      * @param {Object} item file or folder
      * @returns {void}
      */
-    handleSharedLinkSuccess = (item: BoxItem) => {
-        // if no shared link currently exists, create a shared link with enterprise default
-        if (!item[FIELD_SHARED_LINK]) {
+    handleSharedLinkSuccess = async (item: BoxItem) => {
+        const { selected } = this.state;
+        const { id, type } = item;
+        // $FlowFixMe
+        const cacheKey = this.api.getAPI(type).getCacheKey(id);
+        let updatedItem = item;
+
+        // if there is no shared link, create one with enterprise default access
+        if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
             // $FlowFixMe
-            this.changeShareAccess(null, item);
-        } else {
-            const { selected } = this.state;
-            const { id, type } = item;
-            // $FlowFixMe
-            const cacheKey = this.api.getAPI(type).getCacheKey(id);
-            // if shared link already exists, update the collection in state
-            this.updateItemInCollection(item);
-            if (item.selected && item !== selected[cacheKey]) {
-                this.select(item, { forceSharedLink: false });
-            }
+            await this.api.getAPI(item.type).share(item, undefined, (sharedItem: BoxItem) => {
+                updatedItem = sharedItem;
+            });
+        }
+
+        this.updateItemInCollection(updatedItem);
+        if (updatedItem.selected && updatedItem !== selected[cacheKey]) {
+            this.select(updatedItem, { forceSharedLink: false });
         }
     };
 
@@ -1005,7 +1008,7 @@ class ContentPicker extends Component<Props, State> {
     };
 
     /**
-     * Chages the sort by and sort direction
+     * Changes the sort by and sort direction
      *
      * @private
      * @param {string} sortBy - field to sorty by

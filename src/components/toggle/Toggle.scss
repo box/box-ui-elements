@@ -61,7 +61,7 @@
             left: -3px;
             height: 26px;
             background: $white;
-            border: 1px solid $bdl-gray-62;
+            border: 1px solid $bdl-gray-65;
             border-radius: 50%;
             box-shadow: 0 1px 2px fade-out($black, .9);
             transition: left .2s ease, background .2s ease;
@@ -170,7 +170,7 @@ $width: $height * 2;
         width: $height;
         height: $height;
         background-color: $white;
-        border: 1px solid $bdl-gray-62;
+        border: 1px solid $bdl-gray-65;
         border-radius: 100%;
         transition: margin .4s;
     }
@@ -197,7 +197,7 @@ $width: $height * 2;
 
         &::after {
             background-color: darken($white, 2%);
-            border-color: lighten($bdl-gray-62, 32%);
+            border-color: lighten($bdl-gray-65, 32%);
         }
     }
 

@@ -22,6 +22,7 @@ type Props = {
     getAvatarUrl: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
     getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
     hasReplies: boolean,
     isAlwaysExpanded?: boolean,
     isPending?: boolean,
@@ -52,6 +53,7 @@ const ActivityThread = ({
     getAvatarUrl,
     getMentionWithQuery,
     getUserProfileUrl,
+    hasNewThreadedReplies = false,
     hasReplies,
     isAlwaysExpanded = false,
     isPending,
@@ -134,6 +136,7 @@ const ActivityThread = ({
                             getAvatarUrl={getAvatarUrl}
                             getMentionWithQuery={getMentionWithQuery}
                             getUserProfileUrl={getUserProfileUrl}
+                            hasNewThreadedReplies={hasNewThreadedReplies}
                             isRepliesLoading={isRepliesLoading}
                             mentionSelectorContacts={mentionSelectorContacts}
                             onDelete={onReplyDelete}

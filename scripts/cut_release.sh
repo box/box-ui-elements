@@ -10,8 +10,8 @@ blue=$"\n\e[1;34m(ℹ) "
 end=$"\e[0m\n"
 
 # While running yarn, the registry changes to registry.yarnpkg.com which is a mirror to the public NPM registry
-YARN_PUBLIC_REGISTRY_REGEX="^https://registry\.yarnpkg\.com/$"
-NPM_PUBLIC_REGISTRY_REGEX="^https://registry\.npmjs\.org/$"
+YARN_PUBLIC_REGISTRY_REGEX="^https:\/\/registry\.yarnpkg\.com\/?$"
+NPM_PUBLIC_REGISTRY_REGEX="^https:\/\/registry\.npmjs\.org\/?$"
 NPM_PUBLIC_REGISTRY="https://registry.npmjs.org"
 
 check_release_scripts_changed() {
@@ -111,6 +111,7 @@ lint_and_test() {
 
     # Tests
     printf "${blue}Running tests...${end}"
+    unset OPENSSL_FORCE_FIPS_MODE
     yarn test || return 1
     printf "${green}Tests done!${end}"
 }
@@ -185,8 +186,9 @@ check_branch_dirty() {
 }
 
 check_npm_registry() {
-    if [[ ! $(npm config get registry) =~ (${YARN_PUBLIC_REGISTRY_REGEX}|${NPM_PUBLIC_REGISTRY_REGEX}) ]] ; then
-        printf "${red}Not pointing at the right npm registry! Make sure ~/.npmrc points to ${NPM_PUBLIC_REGISTRY}${end}"
+    npm_registry=$(npm config get registry)
+    if [[ ! $npm_registry =~ (${YARN_PUBLIC_REGISTRY_REGEX}|${NPM_PUBLIC_REGISTRY_REGEX}) ]] ; then
+        printf "${red}${npm_registry} is not the correct registry! Make sure ~/.npmrc points to ${NPM_PUBLIC_REGISTRY}${end}"
         return 1
     fi
 }

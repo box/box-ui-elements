@@ -18,6 +18,7 @@ describe('elements/common/media-query/withMediaQuery', () => {
         expect(containerProps.anyPointer).not.toBeNull();
         expect(containerProps.hover).not.toBeNull();
         expect(containerProps.anyHover).not.toBeNull();
+        expect(containerProps.isTouchDevice).not.toBeNull();
     });
 
     test('should render inner component', () => {

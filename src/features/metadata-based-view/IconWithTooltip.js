@@ -10,7 +10,7 @@ import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';
 import IconPencil from '../../icons/general/IconPencil';
 
-import { bdlGray62 } from '../../styles/variables';
+import { bdlGray65 } from '../../styles/variables';
 
 import { CANCEL_ICON_TYPE, EDIT_ICON_TYPE, SAVE_ICON_TYPE } from './constants';
 
@@ -36,21 +36,21 @@ const IconWithTooltip = ({
         case CANCEL_ICON_TYPE:
             iconBtn = (
                 <PlainButton className={className} type="button" onClick={onClick}>
-                    <IconClose color={bdlGray62} width={16} height={16} />
+                    <IconClose color={bdlGray65} width={16} height={16} />
                 </PlainButton>
             );
             break;
         case EDIT_ICON_TYPE:
             iconBtn = (
                 <PlainButton className={className} type="button" onClick={onClick}>
-                    <IconPencil color={bdlGray62} />
+                    <IconPencil color={bdlGray65} />
                 </PlainButton>
             );
             break;
         case SAVE_ICON_TYPE:
             iconBtn = (
                 <Button className={className} isLoading={isUpdating} type="button" onClick={onClick}>
-                    <IconCheck color={bdlGray62} width={16} height={16} />
+                    <IconCheck color={bdlGray65} width={16} height={16} />
                 </Button>
             );
             break;

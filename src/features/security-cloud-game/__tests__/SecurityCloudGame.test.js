@@ -37,13 +37,13 @@ describe('features/security-cloud-game/SecurityCloudGame', () => {
 
         const dropCloud = wrapper.find(DropCloud);
         expect(dropCloud.prop('position')).toEqual({
-            x: 79,
-            y: 79,
+            x: 74,
+            y: 74,
         });
         const dragCloud = wrapper.find(DragCloud);
         expect(dragCloud.prop('position')).toEqual({
-            x: 395,
-            y: 395,
+            x: 370,
+            y: 370,
         });
     });
 

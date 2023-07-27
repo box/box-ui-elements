@@ -309,7 +309,7 @@ export default class Annotations extends MarkerBasedApi {
             data: { data: { message } },
             errorCallback,
             successCallback,
-            url: this.getUrlWithRepliesForId(annotationId),
+            url: `${this.getUrlWithRepliesForId(annotationId)}?file_id=${fileId}`,
         });
     }
 }

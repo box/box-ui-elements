@@ -29,6 +29,10 @@ import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
+    ACTIVITY_FILTER_OPTION_ALL,
+    ACTIVITY_FILTER_OPTION_RESOLVED,
+    ACTIVITY_FILTER_OPTION_TASKS,
+    ACTIVITY_FILTER_OPTION_UNRESOLVED,
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
     FEED_ITEM_TYPE_ANNOTATION,
@@ -49,6 +53,8 @@ import type {
 import type {
     Annotation,
     AnnotationPermission,
+    ActivityFilterItemType,
+    ActivityFilterOption,
     BoxCommentPermission,
     Comment,
     CommentFeedItemType,
@@ -66,6 +72,8 @@ import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
+
+import { type OnAnnotationEdit } from './activity-feed/comment/types';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
@@ -93,7 +101,7 @@ type PropsWithoutContext = {
     hasSidebarInitialized?: boolean,
     isDisabled: boolean,
     onAnnotationSelect: Function,
-    onFilterChange: (status?: FeedItemStatus) => void,
+    onFilterChange: (status?: ActivityFilterItemType) => void,
     onVersionChange: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
@@ -111,7 +119,7 @@ type State = {
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     contactsLoaded?: boolean,
     feedItems?: FeedItems,
-    feedItemsStatusFilter?: FeedItemStatus,
+    feedItemsStatusFilter?: ActivityFilterItemType,
     mentionSelectorContacts?: SelectorItems<UserMini>,
 };
 
@@ -188,7 +196,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    handleAnnotationEdit = (id: string, text: string, permissions: AnnotationPermission) => {
+    handleAnnotationEdit: OnAnnotationEdit = ({ id, text, permissions }) => {
         const { api, emitAnnotationUpdateEvent, file } = this.props;
 
         emitAnnotationUpdateEvent(
@@ -712,6 +720,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             activeFeedEntryType === FEED_ITEM_TYPE_COMMENT;
         const shouldShowAppActivity = isFeatureEnabled(features, 'activityFeed.appActivity.enabled');
         const shouldShowAnnotations = isFeatureEnabled(features, 'activityFeed.annotations.enabled');
+        const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
 
         api.getFeedAPI(shouldDestroy).feedItems(
             file,
@@ -719,7 +728,14 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             shouldFetchReplies ? this.fetchRepliesForFeedItems : this.fetchFeedItemsSuccessCallback,
             this.fetchFeedItemsErrorCallback,
             this.errorCallback,
-            { shouldShowAnnotations, shouldShowAppActivity, shouldShowReplies, shouldShowTasks, shouldShowVersions },
+            {
+                shouldShowAnnotations,
+                shouldShowAppActivity,
+                shouldShowReplies,
+                shouldShowTasks,
+                shouldShowVersions,
+                shouldUseUAA,
+            },
         );
     }
 
@@ -1090,7 +1106,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         onAnnotationSelect(annotation);
     };
 
-    handleItemsFiltered = (status?: FeedItemStatus) => {
+    handleItemsFiltered = (status?: ActivityFilterItemType) => {
         const { onFilterChange } = this.props;
 
         this.setState({ feedItemsStatusFilter: status });
@@ -1099,11 +1115,19 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     getFilteredFeedItems = (): FeedItems | typeof undefined => {
         const { feedItems, feedItemsStatusFilter } = this.state;
-        if (!feedItems || !feedItemsStatusFilter) {
+        if (!feedItems || !feedItemsStatusFilter || feedItemsStatusFilter === ACTIVITY_FILTER_OPTION_ALL) {
             return feedItems;
         }
+        // Filter is completed on two properties (status and type) because filtering on comments (resolved vs. unresolved)
+        // requires looking at item status to see if it is open or resolved. To filter all tasks, we need to look at the
+        // item type. Item type is also used to keep versions in the feed. Task also has a status but it's status will be
+        // "NOT_STARTED" or "COMPLETED" so it will not conflict with comment's status.
         return feedItems.filter(item => {
-            return item.status === feedItemsStatusFilter || item.type === FEED_ITEM_TYPE_VERSION;
+            return (
+                item.status === feedItemsStatusFilter ||
+                item.type === FEED_ITEM_TYPE_VERSION ||
+                item.type === feedItemsStatusFilter
+            );
         });
     };
 
@@ -1145,17 +1169,32 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     renderActivitySidebarFilter = () => {
-        const { features } = this.props;
+        const { features, hasTasks } = this.props;
         const { feedItemsStatusFilter } = this.state;
         const shouldShowActivityFeedFilter = isFeatureEnabled(features, 'activityFeed.filter.enabled');
+        const shouldShowAdditionalFilterOptions = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
 
         if (!shouldShowActivityFeedFilter) {
             return null;
         }
+
+        const activityFilterOptions: ActivityFilterOption[] = [
+            ACTIVITY_FILTER_OPTION_ALL,
+            ACTIVITY_FILTER_OPTION_UNRESOLVED,
+        ];
+        if (shouldShowAdditionalFilterOptions) {
+            // Determine which filter options to show based on what activity types are available in current context
+            activityFilterOptions.push(ACTIVITY_FILTER_OPTION_RESOLVED);
+            if (hasTasks) {
+                activityFilterOptions.push(ACTIVITY_FILTER_OPTION_TASKS);
+            }
+        }
+
         return (
             <ActivitySidebarFilter
-                feedItemStatus={feedItemsStatusFilter}
-                onFeedItemStatusClick={selectedStatus => {
+                activityFilterOptions={activityFilterOptions}
+                feedItemType={feedItemsStatusFilter}
+                onFeedItemTypeClick={selectedStatus => {
                     this.handleItemsFiltered(selectedStatus);
                 }}
             />
@@ -1171,8 +1210,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     renderTitle = () => {
         const { features } = this.props;
-        if (isFeatureEnabled(features, 'activityFeed.filter.enabled')) {
-            return undefined;
+        const shouldHideTitle = isFeatureEnabled(features, 'activityFeed.filter.enabled');
+
+        if (shouldHideTitle) {
+            return null;
         }
         return <FormattedMessage {...messages.sidebarActivityTitle} />;
     };
@@ -1184,6 +1225,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             currentUser,
             currentUserError,
             elementId,
+            features,
             file,
             hasReplies,
             hasVersions,
@@ -1193,6 +1235,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             onTaskView,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
+        const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
+        const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
 
         return (
             <SidebarContent
@@ -1215,6 +1259,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     getAvatarUrl={this.getAvatarUrl}
                     getMentionWithQuery={this.getMention}
                     getUserProfileUrl={getUserProfileUrl}
+                    hasNewThreadedReplies={isNewThreadedRepliesEnabled}
                     hasReplies={hasReplies}
                     hasVersions={hasVersions}
                     isDisabled={isDisabled}
@@ -1240,6 +1285,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     onTaskUpdate={this.updateTask}
                     onTaskView={onTaskView}
                     onVersionHistoryClick={onVersionHistoryClick}
+                    shouldUseUAA={shouldUseUAA}
                 />
             </SidebarContent>
         );

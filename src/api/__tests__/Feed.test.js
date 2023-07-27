@@ -9,14 +9,24 @@ import {
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_VERSION,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
     IS_ERROR_DISPLAYED,
     TASK_MAX_GROUP_ASSIGNEES,
 } from '../../constants';
 import AnnotationsAPI from '../Annotations';
-import Feed from '../Feed';
+import Feed, { getParsedFileActivitiesResponse } from '../Feed';
 import ThreadedCommentsAPI from '../ThreadedComments';
 import { annotation as mockAnnotation } from '../../__mocks__/annotations';
-import { task as mockTask, threadedComments as mockThreadedComments, threadedCommentsFormatted } from '../fixtures';
+import {
+    fileActivities as mockFileActivities,
+    task as mockTask,
+    threadedComments as mockThreadedComments,
+    threadedCommentsFormatted,
+    annotationsWithFormattedReplies as mockFormattedAnnotations,
+} from '../fixtures';
 
 const mockErrors = [{ code: 'error_code_0' }, { code: 'error_code_1' }];
 
@@ -297,6 +307,14 @@ jest.mock('../AppActivity', () =>
     })),
 );
 
+jest.mock('../FileActivities', () => {
+    return jest.fn().mockImplementation(() => ({
+        getActivities: jest.fn().mockReturnValue({
+            entries: mockFileActivities,
+        }),
+    }));
+});
+
 describe('api/Feed', () => {
     let feed;
     const comments = {
@@ -417,6 +435,7 @@ describe('api/Feed', () => {
             feed.fetchVersions = jest.fn().mockResolvedValue(versions);
             feed.fetchCurrentVersion = jest.fn().mockResolvedValue(mockCurrentVersion);
             feed.fetchTasksNew = jest.fn().mockResolvedValue(tasks);
+            feed.fetchFileActivities = jest.fn().mockResolvedValue({ entries: mockFileActivities });
             feed.fetchComments = jest.fn().mockResolvedValue(comments);
             feed.fetchThreadedComments = jest.fn().mockResolvedValue(threadedComments);
             feed.fetchAppActivity = jest.fn().mockReturnValue(appActivities);
@@ -582,6 +601,31 @@ describe('api/Feed', () => {
                     undefined,
                     undefined,
                 );
+                done();
+            });
+        });
+
+        test('should use the file activities api if shouldUseUAA is true', done => {
+            feed.feedItems(file, false, successCb, errorCb, errorCb, {
+                shouldUseUAA: true,
+                shouldShowAnnotations: true,
+                shouldShowAppActivity: true,
+                shouldShowTasks: true,
+                shouldShowReplies: true,
+            });
+            setImmediate(() => {
+                expect(feed.fetchFileActivities).toBeCalledWith(
+                    file.permissions,
+                    [
+                        FILE_ACTIVITY_TYPE_ANNOTATION,
+                        FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                        FILE_ACTIVITY_TYPE_COMMENT,
+                        FILE_ACTIVITY_TYPE_TASK,
+                    ],
+                    true,
+                );
+                expect(feed.fetchComments).not.toBeCalled();
+                expect(feed.fetchThreadedComments).not.toBeCalled();
                 done();
             });
         });
@@ -798,6 +842,38 @@ describe('api/Feed', () => {
                 const taskItems = feed.fetchTasksNew();
                 expect(taskItems instanceof Promise).toBeTruthy();
                 expect(feed.tasksNewAPI.getTasksForFile).toBeCalled();
+            });
+        });
+
+        describe('fetchFileActivities()', () => {
+            beforeEach(() => {
+                feed.file = file;
+                feed.fetchFeedItemErrorCallback = jest.fn();
+            });
+
+            test('should return a promise and call the file activities api', () => {
+                const permissions = { can_edit: true, can_delete: true, can_resolve: true, can_view_annotations: true };
+                const fileActivityItems = feed.fetchFileActivities(permissions, [
+                    FILE_ACTIVITY_TYPE_ANNOTATION,
+                    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                    FILE_ACTIVITY_TYPE_COMMENT,
+                    FILE_ACTIVITY_TYPE_TASK,
+                ]);
+                expect(fileActivityItems instanceof Promise).toBeTruthy();
+                expect(feed.fileActivitiesAPI.getActivities).toBeCalledWith({
+                    activityTypes: [
+                        FILE_ACTIVITY_TYPE_ANNOTATION,
+                        FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+                        FILE_ACTIVITY_TYPE_COMMENT,
+                        FILE_ACTIVITY_TYPE_TASK,
+                    ],
+                    errorCallback: expect.any(Function),
+                    fileID: feed.file.id,
+                    permissions,
+                    shouldShowReplies: false,
+                    successCallback: expect.any(Function),
+                });
+                expect(fileActivityItems).resolves.toEqual({ entries: mockFileActivities });
             });
         });
     });
@@ -2233,6 +2309,33 @@ describe('api/Feed', () => {
 
             feed.modifyFeedItemRepliesCountBy(id, 1);
             expect(feed.updateFeedItem).toBeCalledWith({ total_reply_count: total_reply_count + 1 }, id);
+        });
+    });
+
+    describe('getParsedFileActivitiesResponse()', () => {
+        test.each`
+            response
+            ${undefined}
+            ${{}}
+            ${{ entries: { test: 'invalid' } }}
+            ${{ entries: [{ test: 'invalid' }] }}
+            ${{ entries: [{ source: { activity: 'invalid' } }] }}
+        `('should return an empty entries array when the response is $response', ({ response }) => {
+            expect(getParsedFileActivitiesResponse(response)).toEqual({ entries: [] });
+        });
+
+        test.each`
+            response
+            ${{ entries: mockFileActivities }}
+            ${{ entries: [...mockFileActivities, { test: 'filtered out' }] }}
+        `('should return a parsed entries array when response is valid', ({ response }) => {
+            expect(getParsedFileActivitiesResponse(response)).toEqual({
+                entries: [
+                    mockFormattedAnnotations[0],
+                    threadedCommentsFormatted[0],
+                    { ...mockTask, task_type: 'GENERAL', created_by: { target: mockTask.created_by.target } },
+                ],
+            });
         });
     });
 });

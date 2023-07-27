@@ -7,15 +7,30 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    activitySidebarFilterOptionAll: {
-        id: 'be.activitySidebarFilter.status.all',
+    activitySidebarFilterOptionAllActivity: {
+        id: 'be.activitySidebarFilter.status.allActivity',
+        defaultMessage: 'All Activity',
+        description: 'Dropdown option for filtering all activity from activity list',
+    },
+    activitySidebarFilterOptionAllComments: {
+        id: 'be.activitySidebarFilter.status.allComments',
         defaultMessage: 'All Comments',
-        description: 'One of the dropdown options to select in order to filter comments',
+        description: 'Dropdown option for filtering all comments from comments list',
     },
     activitySidebarFilterOptionOpen: {
         id: 'be.activitySidebarFilter.status.open',
         defaultMessage: 'Unresolved Comments',
-        description: 'One of the dropdown options to select in order to filter comments',
+        description: 'Dropdown option for filtering unresolved comments from activity or comments list',
+    },
+    activitySidebarFilterOptionResolved: {
+        id: 'be.activitySidebarFilter.status.resolved',
+        defaultMessage: 'Resolved Comments',
+        description: 'Dropdown option for filtering resolved comments from activity or comments list',
+    },
+    activitySidebarFilterOptionTasks: {
+        id: 'be.activitySidebarFilter.status.tasks',
+        defaultMessage: 'Tasks',
+        description: 'Dropdown option for filtering tasks from activity list',
     },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',

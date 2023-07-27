@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 
 import { scrollIntoView } from '../../utils/dom';
+import PopperComponent from '../popper';
+import { PLACEMENT_BOTTOM_START } from '../popper/constants';
 import ScrollWrapper from '../scroll-wrapper';
 import { OVERLAY_WRAPPER_CLASS } from '../../constants';
 
@@ -23,6 +25,8 @@ type Props = {
     dividerIndex?: number,
     /** Options to keep the results always open */
     isAlwaysOpen?: boolean,
+    /** Option to enable dynamic positioning with popper */
+    isPositionDynamic?: boolean,
     /** Function called on keyboard "Enter" event only if enter does not trigger selection */
     onEnter?: (event: SyntheticKeyboardEvent<HTMLDivElement>) => void,
     /** Function called with the index of the selected option and the event (selected by keyboard or click) */
@@ -48,6 +52,10 @@ type State = {
 };
 
 class SelectorDropdown extends React.Component<Props, State> {
+    static defaultProps = {
+        isPositionDynamic: false,
+    };
+
     constructor(props: Props) {
         super(props);
 
@@ -243,7 +251,16 @@ class SelectorDropdown extends React.Component<Props, State> {
 
     render() {
         const { listboxID, selectItem, setActiveItem, setActiveItemID, closeDropdown } = this;
-        const { dividerIndex, overlayTitle, children, className, title, selector, shouldScroll } = this.props;
+        const {
+            dividerIndex,
+            overlayTitle,
+            children,
+            className,
+            isPositionDynamic,
+            title,
+            selector,
+            shouldScroll,
+        } = this.props;
         const { activeItemID, activeItemIndex } = this.state;
         const isOpen = this.isDropdownOpen();
         const inputProps: Object = {
@@ -311,13 +328,17 @@ class SelectorDropdown extends React.Component<Props, State> {
                 onPaste={this.handleInput}
                 ref={this.selectorDropdownRef}
             >
-                {React.cloneElement(selector, { inputProps })}
-                {isOpen && (
-                    <div className={`${OVERLAY_WRAPPER_CLASS} is-visible`}>
+                <PopperComponent
+                    isPositionDynamic={isPositionDynamic}
+                    isOpen={isOpen}
+                    placement={PLACEMENT_BOTTOM_START}
+                >
+                    {React.cloneElement(selector, { inputProps })}
+                    <div className={`SelectorDropdown-overlay ${OVERLAY_WRAPPER_CLASS} is-visible`}>
                         {title}
                         {shouldScroll ? <ScrollWrapper>{list}</ScrollWrapper> : list}
                     </div>
-                )}
+                </PopperComponent>
             </div>
         );
     }

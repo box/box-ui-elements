@@ -13,16 +13,6 @@ describe('elements/content-sidebar/ActivityFeed/Avatar', () => {
 
     const getWrapper = props => shallow(<Avatar {...props} />);
 
-    test('should render nothing if no avatarUrl in state and getAvatarUrl method was passed', () => {
-        expect(
-            getWrapper({ user, getAvatarUrl })
-                .dive()
-                .find('Avatar')
-                .exists(),
-        ).toBe(false);
-        expect(getAvatarUrl).toBeCalledWith(user.id);
-    });
-
     test('should render avatar with initials if getAvatarUrl is not passed in and no avatarUrl is in state', () => {
         expect(
             getWrapper({ user })

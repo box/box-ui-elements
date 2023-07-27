@@ -22,6 +22,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
       }
     }
     items={Array []}
+    onAnnotationSelect={[Function]}
   />
 </Fragment>
 `;
@@ -36,6 +37,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     }
   }
   items={Array []}
+  onAnnotationSelect={[Function]}
 />
 `;
 
@@ -46,7 +48,9 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
   <ForwardRef(ActivityItem)
     className="bcs-activity-feed-annotation-activity"
     data-testid="annotation-activity"
+    hasNewThreadedReplies={false}
     isFocused={false}
+    isHoverable={true}
     key="annotationanno_123"
   >
     <ActivityThread
@@ -57,6 +61,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
       data-testid="activity-thread"
+      hasNewThreadedReplies={false}
       hasReplies={false}
       onHideReplies={[Function]}
       onReplyCreate={[Function]}
@@ -97,12 +102,15 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
             "type": "annotation",
           }
         }
+        onSelect={[Function]}
       />
     </ActivityThread>
   </ForwardRef(ActivityItem)>
   <ForwardRef(ActivityItem)
     data-testid="comment"
+    hasNewThreadedReplies={false}
     isFocused={false}
+    isHoverable={true}
     key="commentc_123"
   >
     <ActivityThread
@@ -113,6 +121,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         }
       }
       data-testid="activity-thread"
+      hasNewThreadedReplies={false}
       hasReplies={false}
       onHideReplies={[Function]}
       onReplyCreate={[Function]}

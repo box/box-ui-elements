@@ -560,42 +560,45 @@ describe('elements/content-explorer/ContentExplorer', () => {
     });
 
     describe('handleSharedLinkSuccess()', () => {
-        const getApiShareMock = jest.fn().mockImplementation((newItem, access, callback) => callback());
+        const getApiShareMock = jest.fn().mockImplementation((item, access, callback) => callback());
         const getApiMock = jest.fn().mockReturnValue({ share: getApiShareMock });
         const updateCollectionMock = jest.fn();
 
         const boxItem = {
             shared_link: 'not null',
-            permissions: 'not null',
-            type: 'not null',
+            permissions: {
+                can_share: true,
+                can_set_share_access: false,
+            },
+            type: 'file',
         };
 
         let wrapper;
         let instance;
 
         beforeEach(() => {
-            wrapper = getWrapper({ canShare: true, canSetShareAccess: true });
+            wrapper = getWrapper();
             instance = wrapper.instance();
             instance.api = { getAPI: getApiMock };
             instance.updateCollection = updateCollectionMock;
         });
 
         afterEach(() => {
-            getApiShareMock.mockClear();
             getApiMock.mockClear();
+            getApiShareMock.mockClear();
             updateCollectionMock.mockClear();
         });
 
-        test('should create shared link when it doesnt exist yet', () => {
-            instance.handleSharedLinkSuccess({ ...boxItem, shared_link: null });
+        test('should create shared link if it does not exist', async () => {
+            await instance.handleSharedLinkSuccess({ ...boxItem, shared_link: null });
 
             expect(getApiMock).toBeCalledTimes(1);
             expect(getApiShareMock).toBeCalledTimes(1);
             expect(updateCollectionMock).toBeCalledTimes(1);
         });
 
-        test('should not create shared link when one already exists', () => {
-            instance.handleSharedLinkSuccess(boxItem);
+        test('should not create shared link if it already exists', async () => {
+            await instance.handleSharedLinkSuccess(boxItem);
 
             expect(getApiMock).not.toBeCalled();
             expect(getApiShareMock).not.toBeCalled();

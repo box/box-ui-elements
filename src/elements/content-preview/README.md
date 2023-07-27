@@ -1,5 +1,5 @@
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-preview))
-***IMPORTANT:*** The Content Preview UI Element works differently from the other UI Elements above. The React component is a wrapper for the [Preview library](https://developer.box.com/docs/box-content-preview). It also requires a langauge (defaults to en-US) to be passed in since the preview library bundles are localized. Providing a language will automatically pull in the corresponding preview.js bundle and dynamically load it by adding a script tag. It will also dynamically load the additional required preview.css file by adding a link tag.
+***IMPORTANT:*** The Content Preview UI Element works differently from the other UI Elements above. The React component is a wrapper for the [Preview library](https://developer.box.com/docs/box-content-preview). It also requires a language (defaults to en-US) to be passed in since the preview library bundles are localized. Providing a language will automatically pull in the corresponding preview.js bundle and dynamically load it by adding a script tag. It will also dynamically load the additional required preview.css file by adding a link tag.
 
 ```jsx
 var ContentPreview = require('./ContentPreview').default;

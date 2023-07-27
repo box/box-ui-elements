@@ -122,6 +122,10 @@
             line-height: $bdl-line-height + $bdl-grid-unit * 2;
         }
     }
+
+    .SelectorDropdown-overlay > ul.overlay {
+        position: relative;
+    }
 }
 
 /*

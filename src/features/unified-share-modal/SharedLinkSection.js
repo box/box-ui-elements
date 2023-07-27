@@ -384,12 +384,13 @@ class SharedLinkSection extends React.Component<Props, State> {
                         <span className="security-indicator-icon-globe">
                             <IconGlobe height={12} width={12} />
                         </span>
-                        {permissionLevel === CAN_EDIT ? (
+                        {permissionLevel === CAN_EDIT && (
                             <FormattedMessage
                                 data-testid="shared-link-editable-publicly-available-message"
                                 {...messages.sharedLinkEditablePubliclyAvailable}
                             />
-                        ) : (
+                        )}
+                        {permissionLevel !== CAN_EDIT && (
                             <FormattedMessage
                                 data-testid="shared-link-publicly-available-message"
                                 {...messages.sharedLinkPubliclyAvailable}
@@ -438,7 +439,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                 >
                     <PlainButton
                         {...sharedLinkSettingsButtonProps}
-                        aria-label={intl.formatMessage(messages.settingsButtonLabel)}
+                        aria-haspopup="dialog"
                         className="shared-link-settings-btn"
                         onClick={onSettingsClick}
                         type="button"

@@ -43,6 +43,7 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     SORT_ASC,
     FIELD_NAME,
+    FIELD_PERMISSIONS_CAN_SHARE,
     FIELD_SHARED_LINK,
     DEFAULT_ROOT,
     VIEW_SEARCH,
@@ -818,7 +819,7 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Chages the sort by and sort direction
+     * Changes the sort by and sort direction
      *
      * @private
      * @param {string} sortBy - field to sort by
@@ -837,7 +838,7 @@ class ContentExplorer extends Component<Props, State> {
     /**
      * Sets state with currentCollection updated to have items.selected properties
      * set according to the given selected param. Also updates the selected item in the
-     * currentcollection. selectedItem will be set to the selected state
+     * currentCollection. selectedItem will be set to the selected state
      * item if it is in currentCollection, otherwise it will be set to undefined.
      *
      * @private
@@ -1275,33 +1276,23 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Object} item file or folder
      * @returns {void}
      */
-    handleSharedLinkSuccess = (newItem: BoxItem) => {
+    handleSharedLinkSuccess = async (item: BoxItem) => {
         const { currentCollection } = this.state;
+        let updatedItem = item;
 
-        if (!newItem[FIELD_SHARED_LINK]) {
-            const { canSetShareAccess }: Props = this.props;
-            if (!newItem || !canSetShareAccess) {
-                return;
-            }
-
-            const { permissions, type } = newItem;
-            if (!permissions || !type) {
-                return;
-            }
-
-            // create a shared link with default access, and update the collection
-            const access = undefined;
-            this.api.getAPI(type).share(newItem, access, (updatedItem: BoxItem) => {
-                this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
+        // if there is no shared link, create one with enterprise default access
+        if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
+            // $FlowFixMe
+            await this.api.getAPI(item.type).share(item, undefined, (sharedItem: BoxItem) => {
+                updatedItem = sharedItem;
             });
-        } else {
-            // update collection with existing shared link
-            this.updateCollection(currentCollection, newItem, () => this.setState({ isShareModalOpen: true }));
         }
+
+        this.updateCollection(currentCollection, updatedItem, () => this.setState({ isShareModalOpen: true }));
     };
 
     /**
-     * Chages the sort by and sort direction
+     * Callback for sharing an item
      *
      * @private
      * @return {void}
@@ -1314,8 +1305,8 @@ class ContentExplorer extends Component<Props, State> {
             return;
         }
 
-        const { permissions } = selected;
-        if (!permissions) {
+        const { permissions, type } = selected;
+        if (!permissions || !type) {
             return;
         }
 
@@ -1699,7 +1690,6 @@ class ContentExplorer extends Component<Props, State> {
                             canDownload={canDownload}
                             canPreview={canPreview}
                             canRename={canRename}
-                            canSetShareAccess={canSetShareAccess}
                             canShare={canShare}
                             currentCollection={currentCollection}
                             focusedRow={focusedRow}

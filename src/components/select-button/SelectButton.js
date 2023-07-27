@@ -12,14 +12,30 @@ type Props = {
     error?: React.Node,
     errorTooltipPosition?: Position,
     isDisabled: boolean,
+    /** A CSS class for the tooltip's tether element component */
+    tooltipTetherClassName?: string,
 };
 
 const SelectButton = React.forwardRef<Props, HTMLButtonElement>(
     (
-        { children, className = '', error, errorTooltipPosition = 'middle-right', isDisabled = false, ...rest }: Props,
+        {
+            children,
+            className = '',
+            error,
+            errorTooltipPosition = 'middle-right',
+            isDisabled = false,
+            tooltipTetherClassName,
+            ...rest
+        }: Props,
         ref,
     ) => (
-        <Tooltip isShown={!!error} position={errorTooltipPosition} text={error} theme="error">
+        <Tooltip
+            isShown={!!error}
+            position={errorTooltipPosition}
+            tetherElementClassName={tooltipTetherClassName}
+            text={error}
+            theme="error"
+        >
             <button
                 className={classNames(className, 'select-button', 'bdl-SelectButton', {
                     'is-invalid': !!error,

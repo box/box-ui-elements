@@ -6,8 +6,34 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
     className="collaborator-list-item"
   >
     <div
-      className="user"
+      className="bdl-CollaboratorListItem-user user"
     >
+      <div
+        className="info"
+      >
+        <div
+          className="name"
+        >
+          <Link
+            className=""
+            href="/profile/undefined"
+            rel="noopener"
+            target="_blank"
+          >
+            test c
+          </Link>
+        </div>
+        <div
+          className="email"
+        >
+          <Link
+            className=""
+            href="mailto:testc@example.com"
+          >
+            testc@example.com
+          </Link>
+        </div>
+      </div>
       <CollaboratorAvatarItem
         allowBadging={true}
         email="testc@example.com"
@@ -20,34 +46,6 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
         id={1}
         name="test c"
       />
-      <div
-        className="info"
-      >
-        <div
-          className="name"
-        >
-          <Link
-            className=""
-            href="/profile/undefined"
-            rel="noopener"
-            target="_blank"
-            title="test c"
-          >
-            test c
-          </Link>
-        </div>
-        <div
-          className="email"
-        >
-          <Link
-            className=""
-            href="mailto:testc@example.com"
-            title="testc@example.com"
-          >
-            testc@example.com
-          </Link>
-        </div>
-      </div>
     </div>
     <div
       className="role"
@@ -62,8 +60,17 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
     className="collaborator-list-item"
   >
     <div
-      className="user"
+      className="bdl-CollaboratorListItem-user user"
     >
+      <div
+        className="info"
+      >
+        <div
+          className="name group"
+        >
+          test c
+        </div>
+      </div>
       <CollaboratorAvatarItem
         allowBadging={true}
         email="testc@example.com"
@@ -76,15 +83,6 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
         id={1}
         name="test c"
       />
-      <div
-        className="info"
-      >
-        <div
-          className="name group"
-        >
-          test c
-        </div>
-      </div>
     </div>
     <div
       className="role"
@@ -99,8 +97,34 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
     className="collaborator-list-item"
   >
     <div
-      className="user"
+      className="bdl-CollaboratorListItem-user user"
     >
+      <div
+        className="info"
+      >
+        <div
+          className="name pending"
+        >
+          <Link
+            className=""
+            href="/profile/undefined"
+            rel="noopener"
+            target="_blank"
+          >
+            test c
+          </Link>
+        </div>
+        <div
+          className="email"
+        >
+          <Link
+            className=""
+            href="mailto:testc@example.com"
+          >
+            testc@example.com
+          </Link>
+        </div>
+      </div>
       <CollaboratorAvatarItem
         allowBadging={true}
         email="testc@example.com"
@@ -113,34 +137,6 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
         id={1}
         name="test c"
       />
-      <div
-        className="info"
-      >
-        <div
-          className="name pending"
-        >
-          <Link
-            className=""
-            href="/profile/undefined"
-            rel="noopener"
-            target="_blank"
-            title="test c"
-          >
-            test c
-          </Link>
-        </div>
-        <div
-          className="email"
-        >
-          <Link
-            className=""
-            href="mailto:testc@example.com"
-            title="testc@example.com"
-          >
-            testc@example.com
-          </Link>
-        </div>
-      </div>
     </div>
     <div
       className="role"

@@ -4,7 +4,7 @@ Our development setup assumes a LINUX/BSD environemnt.
 
 ## Project Setup
 
-1. Install Node v14.
+1. Install Node v18.
 2. Install Yarn package manager `https://yarnpkg.com/en/docs/install` v1.10 or higher.
 3. Fork the upstream repo `https://github.com/box/box-ui-elements` via github.
 4. Clone your fork locally `git clone git@github.com:[YOUR GITHUB USERNAME]/box-ui-elements.git`.
@@ -53,8 +53,8 @@ We also recommend using `yarn resolutions` to fix the version of `react` and `re
 {
     ...
     "resolutions": {
-        "react": "16.9.0",
-        "react-dom": "16.9.0"
+        "react": "17.0.1",
+        "react-dom": "17.0.1"
     },
     ...
 }

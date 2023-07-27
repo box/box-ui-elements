@@ -95,8 +95,10 @@ const DragCloud = ({
             return;
         }
 
-        event.preventDefault();
-        event.stopPropagation();
+        if (isMoving) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
         if (event.key === ' ') {
             handleSpacebar();

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct menu 1`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct description 1`] = `
 <small
   className="usm-menu-description"
 >
@@ -16,7 +16,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 </small>
 `;
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct menu 2`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct description 2`] = `
 <small
   className="usm-menu-description"
 >
@@ -32,7 +32,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 </small>
 `;
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct menu 3`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct description 3`] = `
 <small
   className="usm-menu-description"
 >
@@ -48,7 +48,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 </small>
 `;
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct menu 4`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct description 4`] = `
 <small
   className="usm-menu-description"
 >
@@ -64,7 +64,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 </small>
 `;
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people in item should render correct menu 1`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in item should render correct description 1`] = `
 <small
   className="usm-menu-description"
 >
@@ -80,7 +80,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
 </small>
 `;
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people in item should render correct menu 2`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in item should render correct description 2`] = `
 <small
   className="usm-menu-description"
 >
@@ -96,7 +96,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
 </small>
 `;
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct menu 1`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct description 1`] = `
 <small
   className="usm-menu-description"
 >
@@ -112,7 +112,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
 </small>
 `;
 
-exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct menu 2`] = `
+exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct description 2`] = `
 <small
   className="usm-menu-description"
 >

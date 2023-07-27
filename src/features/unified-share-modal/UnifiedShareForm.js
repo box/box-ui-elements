@@ -3,10 +3,8 @@
 import * as React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
-import FormattedCompMessage from '../../components/i18n/FormattedCompMessage';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import { Link } from '../../components/link';
 import Button from '../../components/button';
@@ -116,7 +114,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         this.setState({ isFetchingJustificationReasons: true });
 
         return getJustificationReasons(item.typedID, checkpoint)
-            .then(({ classificationLabelId, options }: GetJustificationReasonsResponse) => {
+            .then(({ classificationLabelId, options = [] }: GetJustificationReasonsResponse) => {
                 this.setState({
                     classificationLabelId,
                     justificationReasons: options.map(({ id, title }) => ({
@@ -461,10 +459,9 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
               };
         const avatars = this.renderCollaboratorAvatars();
         const { ftuxConfirmButtonProps } = modalTracking;
-        const dialogLabelId = uniqueId('usm-ftux-dialog-label');
         const ftuxTooltipText = (
             <div>
-                <h4 id={dialogLabelId} className="ftux-tooltip-title">
+                <h4 className="ftux-tooltip-title">
                     <FormattedMessage {...messages.ftuxNewUSMUserTitle} />
                 </h4>
                 <p className="ftux-tooltip-body">
@@ -481,9 +478,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             </div>
         );
         const ftuxTooltipProps = {
-            ariaLabel: dialogLabelId,
             className: 'usm-ftux-tooltip',
-            isFocusTrapped: true,
             // don't want ftux tooltip to show if the recommended sharing tooltip callout is showing
             isShown: !recommendedSharingTooltipCalloutName && shouldRenderFTUXTooltip && showCalloutForUser,
             position: 'middle-left',
@@ -563,28 +558,30 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         const { openUpgradePlanModal = () => {} } = this.props;
         return (
             <>
-                <FormattedCompMessage
-                    id="boxui.unifiedShare.upgradeCollaboratorAccessDescription"
-                    description="Description for cta to upgrade to get collaborator access controls"
-                >
-                    Set the level of{' '}
-                    <Link
-                        className="upgrade-link"
-                        href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
-                        target="_blank"
-                    >
-                        collaborator access
-                    </Link>{' '}
-                    and increase security through one of our paid plans.{' '}
-                </FormattedCompMessage>
-                <PlainButton
-                    className="upgrade-link"
-                    data-resin-target={resinTarget}
-                    onClick={openUpgradePlanModal}
-                    type="button"
-                >
-                    <FormattedMessage {...messages.upgradeLink} />
-                </PlainButton>
+                <FormattedMessage
+                    values={{
+                        collaboratorAccess: (
+                            <Link
+                                className="upgrade-link"
+                                href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                                target="_blank"
+                            >
+                                <FormattedMessage {...messages.collabAccess} />
+                            </Link>
+                        ),
+                        upgradeLink: (
+                            <PlainButton
+                                className="upgrade-link"
+                                data-resin-target={resinTarget}
+                                onClick={openUpgradePlanModal}
+                                type="button"
+                            >
+                                <FormattedMessage {...messages.upgradeLink} />
+                            </PlainButton>
+                        ),
+                    }}
+                    {...messages.setLevelOfCollabAccess}
+                />
             </>
         );
     }

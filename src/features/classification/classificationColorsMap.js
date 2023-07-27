@@ -51,7 +51,7 @@ const classificationColorsMap = {
     [CLASSIFICATION_COLOR_ID_7]: {
         name: messages.classificationGrey,
         color: vars.bdlGray20,
-        tinycon: vars.bdlGray62,
+        tinycon: vars.bdlGray65,
     },
 };
 

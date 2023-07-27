@@ -836,6 +836,18 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+                test('should not set focus to first row if target has role of slider', () => {
+                    const wrapper = getWrapper({
+                        gridColumnCount,
+                        isGridView: true,
+                        selectedItems: ['a'],
+                    });
+                    wrapper.setState({ focusedIndex: undefined });
+                    const instance = wrapper.instance();
+                    const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+                    shortcut.handler({ target: { role: 'slider' } });
+                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                });
                 test('should call event.preventDefault() and set focus to next item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -863,6 +875,18 @@ describe('components/table/makeSelectable', () => {
             });
             describe('left', () => {
                 const hotKey = 'left';
+                test('should not set focus to first row if target has role of slider', () => {
+                    const wrapper = getWrapper({
+                        gridColumnCount,
+                        isGridView: true,
+                        selectedItems: ['a'],
+                    });
+                    wrapper.setState({ focusedIndex: undefined });
+                    const instance = wrapper.instance();
+                    const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+                    shortcut.handler({ target: { role: 'slider' } });
+                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                });
                 test('should call event.preventDefault() and call onSelect with new focused item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -914,6 +938,18 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+                test('should not set focus to first row if target has role of slider', () => {
+                    const wrapper = getWrapper({
+                        gridColumnCount,
+                        isGridView: true,
+                        selectedItems: ['a'],
+                    });
+                    wrapper.setState({ focusedIndex: undefined });
+                    const instance = wrapper.instance();
+                    const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+                    shortcut.handler({ target: { role: 'slider' } });
+                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                });
                 test('should call event.preventDefault() and set focus to next row item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -941,6 +977,18 @@ describe('components/table/makeSelectable', () => {
             });
             describe('up', () => {
                 const hotKey = 'up';
+                test('should not set focus to first row if target has role of slider', () => {
+                    const wrapper = getWrapper({
+                        gridColumnCount,
+                        isGridView: true,
+                        selectedItems: ['a'],
+                    });
+                    wrapper.setState({ focusedIndex: undefined });
+                    const instance = wrapper.instance();
+                    const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+                    shortcut.handler({ target: { role: 'slider' } });
+                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                });
                 test('should call event.preventDefault() and call onSelect with new focused item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,

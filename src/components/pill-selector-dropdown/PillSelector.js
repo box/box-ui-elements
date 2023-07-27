@@ -11,6 +11,7 @@ import RoundPill from './RoundPill';
 import Pill from './Pill';
 import SuggestedPillsRow from './SuggestedPillsRow';
 import type { RoundOption, Option, OptionValue, SuggestedPillsFilter } from './flowTypes';
+import type { Position } from '../tooltip';
 
 function stopDefaultEvent(event) {
     event.preventDefault();
@@ -22,16 +23,19 @@ type Props = {
     className?: string,
     disabled?: boolean,
     error?: React.Node,
+    /** Position of error message tooltip */
+    errorTooltipPosition?: Position,
     /** Called on pill render to get a specific class name to use for a particular option. Note: Only has effect when showRoundedPills is true. */
     getPillClassName?: (option: Option) => string,
     /** Function to retrieve the image URL associated with a pill */
     getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
+    innerRef?: React.Ref<any>,
     inputProps: Object,
     onInput: Function,
     onRemove: Function,
     onSuggestedPillAdd?: Function,
     placeholder: string,
-    selectedOptions: Array<Object> | List<Object>,
+    selectedOptions: List<Object>,
     /** Whether to show avatars in pills (if rounded style is enabled) */
     showAvatars?: boolean,
     /** Whether to use rounded style for pills */
@@ -47,11 +51,25 @@ type State = {
     selectedIndex: number,
 };
 
-class PillSelector extends React.Component<Props, State> {
-    static defaultProps = {
+type DefaultProps = {
+    allowInvalidPills: boolean,
+    disabled: boolean,
+    error: string,
+    errorTooltipPosition: Position,
+    inputProps: Object,
+    placeholder: string,
+    selectedOptions: List<Object>,
+    validator: () => boolean,
+};
+
+type Config = React.Config<Props, DefaultProps>;
+
+class PillSelectorBase extends React.Component<Props, State> {
+    static defaultProps: DefaultProps = {
         allowInvalidPills: false,
         disabled: false,
         error: '',
+        errorTooltipPosition: 'bottom-left',
         inputProps: {},
         placeholder: '',
         selectedOptions: [],
@@ -172,6 +190,7 @@ class PillSelector extends React.Component<Props, State> {
             className,
             disabled,
             error,
+            errorTooltipPosition,
             getPillClassName,
             getPillImageUrl,
             inputProps,
@@ -179,6 +198,7 @@ class PillSelector extends React.Component<Props, State> {
             onRemove,
             onSuggestedPillAdd,
             placeholder,
+            innerRef,
             selectedOptions,
             showAvatars,
             showRoundedPills,
@@ -205,7 +225,7 @@ class PillSelector extends React.Component<Props, State> {
         };
 
         return (
-            <Tooltip isShown={hasError} text={error || ''} position="bottom-left" theme="error">
+            <Tooltip isShown={hasError} text={error || ''} position={errorTooltipPosition} theme="error">
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
                     className={classes}
@@ -213,6 +233,7 @@ class PillSelector extends React.Component<Props, State> {
                     onClick={this.handleClick}
                     onFocus={this.handleFocus}
                     onKeyDown={this.handleKeyDown}
+                    ref={innerRef}
                 >
                     {showRoundedPills
                         ? selectedOptions.map((option: RoundOption, index: number) => {
@@ -227,7 +248,7 @@ class PillSelector extends React.Component<Props, State> {
                                       onRemove={onRemove.bind(this, option, index)}
                                       // $FlowFixMe option.text is for backwards compatibility
                                       text={option.displayText || option.text}
-                                      showAvatar
+                                      showAvatar={showAvatars}
                                       id={option.id}
                                       hasWarning={option.hasWarning}
                                       isExternal={option.isExternalUser}
@@ -263,9 +284,7 @@ class PillSelector extends React.Component<Props, State> {
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
-                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className, {
-                            'bdl-PillSelector-input--showAvatars': showAvatars,
-                        })}
+                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className)}
                         disabled={disabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}
@@ -288,5 +307,12 @@ class PillSelector extends React.Component<Props, State> {
         );
     }
 }
+
+export { PillSelectorBase };
+
+const PillSelector = React.forwardRef<Config, HTMLSpanElement>((props: Config, ref: React.Ref<any>) => (
+    <PillSelectorBase {...props} innerRef={ref} />
+));
+PillSelector.displayName = 'PillSelector';
 
 export default PillSelector;

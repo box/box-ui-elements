@@ -208,7 +208,7 @@ class Folder extends Item {
     /**
      * Does the network request for fetching a folder
      *
-     * @param {Array<String>} fields Array of field strings
+     * @param {Array<string>|void} fields - Optionally include specific fields
      * @return {Promise}
      */
     folderRequest(

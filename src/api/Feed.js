@@ -3,8 +3,8 @@
  * @file Helper for activity feed API's
  * @author Box
  */
-import uniqueId from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import uniqueId from 'lodash/uniqueId';
 import type { MessageDescriptor } from 'react-intl';
 import { getBadItemError, getBadUserError, getMissingItemTextOrStatus, isUserCorrectableError } from '../utils/error';
 import commonMessages from '../elements/common/messages';
@@ -15,6 +15,7 @@ import Base from './Base';
 import AnnotationsAPI from './Annotations';
 import CommentsAPI from './Comments';
 import ThreadedCommentsAPI from './ThreadedComments';
+import FileActivitiesAPI from './FileActivities';
 import VersionsAPI from './Versions';
 import TasksNewAPI from './tasks/TasksNew';
 import GroupsAPI from './Groups';
@@ -28,8 +29,13 @@ import {
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
+    PERMISSION_CAN_VIEW_ANNOTATIONS,
     TASK_NEW_APPROVED,
     TASK_NEW_COMPLETED,
     TASK_NEW_REJECTED,
@@ -71,6 +77,8 @@ import type {
     FeedItem,
     FeedItems,
     FeedItemStatus,
+    FileActivity,
+    FileActivityTypes,
     Task,
     Tasks,
     ThreadedComments as ThreadedCommentsType,
@@ -93,6 +101,97 @@ const getItemWithFilteredReplies = <T: { replies?: Array<Comment> }>(item: T, re
 const getItemWithPendingReply = <T: { replies?: Array<Comment> }>(item: T, reply: Comment): T => {
     const { replies = [], ...rest } = item;
     return { replies: [...replies, reply], ...rest };
+};
+
+const parseReplies = (replies: Comment[]): Comment[] => {
+    const parsedReplies = [...replies];
+
+    return parsedReplies.map(reply => {
+        return { ...reply, tagged_message: reply.tagged_message || reply.message || '' };
+    });
+};
+
+export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
+    if (!response || !response.entries || !response.entries.length) {
+        return { entries: [] };
+    }
+
+    const data = response.entries;
+
+    const parsedData: Array<Object> = data
+        .map(item => {
+            if (!item.source) {
+                return null;
+            }
+
+            const source = { ...item.source };
+
+            switch (item.activity_type) {
+                case FILE_ACTIVITY_TYPE_TASK: {
+                    const taskItem = { ...source[FILE_ACTIVITY_TYPE_TASK] };
+                    // UAA follows a lowercased enum naming convention, convert to uppercase to align with task api
+                    if (taskItem.assigned_to?.entries) {
+                        const assignedToEntries = taskItem.assigned_to.entries.map(entry => {
+                            const assignedToEntry = { ...entry };
+
+                            assignedToEntry.role = entry.role.toUpperCase();
+                            assignedToEntry.status = entry.status.toUpperCase();
+
+                            return assignedToEntry;
+                        });
+                        // $FlowFixMe Using the toUpperCase method makes Flow assume role and status is a string type, which is incompatible with string literal
+                        taskItem.assigned_to.entries = assignedToEntries;
+                    }
+                    if (taskItem.completion_rule) {
+                        taskItem.completion_rule = taskItem.completion_rule.toUpperCase();
+                    }
+                    if (taskItem.status) {
+                        taskItem.status = taskItem.status.toUpperCase();
+                    }
+                    if (taskItem.task_type) {
+                        taskItem.task_type = taskItem.task_type.toUpperCase();
+                    }
+                    // $FlowFixMe File Activities only returns a created_by user, Flow type fix is needed
+                    taskItem.created_by = { target: taskItem.created_by };
+
+                    return taskItem;
+                }
+                case FILE_ACTIVITY_TYPE_COMMENT: {
+                    const commentItem = { ...source[FILE_ACTIVITY_TYPE_COMMENT] };
+
+                    if (commentItem.replies && commentItem.replies.length) {
+                        const replies = parseReplies(commentItem.replies);
+
+                        commentItem.replies = replies;
+                    }
+
+                    commentItem.tagged_message = commentItem.tagged_message || commentItem.message || '';
+
+                    return commentItem;
+                }
+                case FILE_ACTIVITY_TYPE_ANNOTATION: {
+                    const annotationItem = { ...source[FILE_ACTIVITY_TYPE_ANNOTATION] };
+
+                    if (annotationItem.replies && annotationItem.replies.length) {
+                        const replies = parseReplies(annotationItem.replies);
+
+                        annotationItem.replies = replies;
+                    }
+
+                    return annotationItem;
+                }
+                case FILE_ACTIVITY_TYPE_APP_ACTIVITY: {
+                    return { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
+                }
+
+                default: {
+                    return null;
+                }
+            }
+        })
+        .filter(item => !!item);
+
+    return { entries: parsedData };
 };
 
 class Feed extends Base {
@@ -135,6 +234,11 @@ class Feed extends Base {
      * @property {ThreadedCommentsAPI}
      */
     threadedCommentsAPI: ThreadedCommentsAPI;
+
+    /**
+     * @property {FileActivitiesAPI}
+     */
+    fileActivitiesAPI: FileActivitiesAPI;
 
     /**
      * @property {BoxItem}
@@ -368,12 +472,14 @@ class Feed extends Base {
             shouldShowReplies = false,
             shouldShowTasks = true,
             shouldShowVersions = true,
+            shouldUseUAA = false,
         }: {
             shouldShowAnnotations?: boolean,
             shouldShowAppActivity?: boolean,
             shouldShowReplies?: boolean,
             shouldShowTasks?: boolean,
             shouldShowVersions?: boolean,
+            shouldUseUAA?: boolean,
         } = {},
     ): void {
         const { id, permissions = {} } = file;
@@ -394,38 +500,87 @@ class Feed extends Base {
         this.file = file;
         this.errors = [];
         this.errorCallback = onError;
-        const annotationsPromise = shouldShowAnnotations
-            ? this.fetchAnnotations(permissions, shouldShowReplies)
-            : Promise.resolve();
+
+        // Using the UAA File Activities endpoint replaces the need for these calls
+        const annotationsPromise =
+            !shouldUseUAA && shouldShowAnnotations
+                ? this.fetchAnnotations(permissions, shouldShowReplies)
+                : Promise.resolve();
+        const commentsPromise = () => {
+            if (shouldUseUAA) {
+                return Promise.resolve();
+            }
+
+            return shouldShowReplies ? this.fetchThreadedComments(permissions) : this.fetchComments(permissions);
+        };
+        const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
+        const appActivityPromise =
+            !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
+
         const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
         const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
-        const commentsPromise = shouldShowReplies
-            ? this.fetchThreadedComments(permissions)
-            : this.fetchComments(permissions);
-        const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
-        const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
 
-        Promise.all([
-            versionsPromise,
-            currentVersionPromise,
-            commentsPromise,
-            tasksPromise,
-            appActivityPromise,
-            annotationsPromise,
-        ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-            const versionsWithCurrent = currentVersion
-                ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
-                : undefined;
-            const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
+        const annotationActivityType =
+            shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
+                ? [FILE_ACTIVITY_TYPE_ANNOTATION]
+                : [];
+        const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
+        const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
+        const filteredActivityTypes = [
+            ...annotationActivityType,
+            ...appActivityActivityType,
+            FILE_ACTIVITY_TYPE_COMMENT,
+            ...taskActivityType,
+        ];
+
+        const fileActivitiesPromise = shouldUseUAA
+            ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
+            : Promise.resolve();
+
+        const handleFeedItems = (feedItems: FeedItems) => {
             if (!this.isDestroyed()) {
-                this.setCachedItems(id, sortedFeedItems);
+                this.setCachedItems(id, feedItems);
                 if (this.errors.length) {
-                    errorCallback(sortedFeedItems, this.errors);
+                    errorCallback(feedItems, this.errors);
                 } else {
-                    successCallback(sortedFeedItems);
+                    successCallback(feedItems);
                 }
             }
-        });
+        };
+
+        if (shouldUseUAA) {
+            Promise.all([versionsPromise, currentVersionPromise, fileActivitiesPromise]).then(
+                ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                    if (!feedItems || !feedItems.length) {
+                        return;
+                    }
+
+                    const fileActivitiesResponse = feedItems[0];
+                    const versionsWithCurrent = currentVersion
+                        ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                        : undefined;
+                    const parsedFeedItems = getParsedFileActivitiesResponse(fileActivitiesResponse);
+                    // $FlowFixMe Does not need to be sorted once we include versions in the file activities call
+                    const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
+                    handleFeedItems(sortedFeedItems);
+                },
+            );
+        } else {
+            Promise.all([
+                versionsPromise,
+                currentVersionPromise,
+                commentsPromise(),
+                tasksPromise,
+                appActivityPromise,
+                annotationsPromise,
+            ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                const versionsWithCurrent = currentVersion
+                    ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                    : undefined;
+                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
+                handleFeedItems(sortedFeedItems);
+            });
+        }
     }
 
     fetchAnnotations(permissions: BoxItemPermission, shouldFetchReplies?: boolean): Promise<?Annotations> {
@@ -521,6 +676,32 @@ class Feed extends Base {
                 fileId: this.file.id,
                 permissions,
                 successCallback: resolve,
+            });
+        });
+    }
+
+    /**
+     * Fetches the file activities for a file
+     *
+     * @param {BoxItemPermission} permissions - the file permissions
+     * @param {FileActivityTypes[]} activityTypes - the activity types to filter by
+     * @param {boolean} shouldShowReplies - specify if replies should be included in the response
+     * @return {Promise} - the file comments
+     */
+    fetchFileActivities(
+        permissions: BoxItemPermission,
+        activityTypes: FileActivityTypes[],
+        shouldShowReplies?: boolean = false,
+    ): Promise<Object> {
+        this.fileActivitiesAPI = new FileActivitiesAPI(this.options);
+        return new Promise(resolve => {
+            this.fileActivitiesAPI.getActivities({
+                errorCallback: this.fetchFeedItemErrorCallback.bind(this, resolve),
+                fileID: this.file.id,
+                permissions,
+                successCallback: resolve,
+                activityTypes,
+                shouldShowReplies,
             });
         });
     }
