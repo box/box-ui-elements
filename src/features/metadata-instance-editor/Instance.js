@@ -52,7 +52,7 @@ type Props = {
     hasError: boolean,
     id: string,
     intl: Object,
-    isCascadingPolicyApplicable?: boolean,
+    isCascadingPolicyApplicable: boolean,
     isDirty: boolean,
     isOpen: boolean,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
@@ -102,6 +102,7 @@ class Instance extends React.PureComponent<Props, State> {
     static defaultProps = {
         data: {},
         isDirty: false,
+        isCascadingPolicyApplicable: false,
     };
 
     constructor(props: Props) {
@@ -207,10 +208,11 @@ class Instance extends React.PureComponent<Props, State> {
             isDirty,
             isCascadingPolicyApplicable,
             onSave,
+            template,
         }: Props = this.props;
         const { data: currentData, errors, isCascadingEnabled, isCascadingOverwritten }: State = this.state;
-        const hasCascadePolicy = !!cascadePolicy?.id;
-        const hasCascadePermission = !hasCascadePolicy || (hasCascadePolicy && isCascadingPolicyApplicable);
+        const isCustomInstance = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
+        const hasCascadePermission = isCustomInstance ? true : isCascadingPolicyApplicable;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
             return;
@@ -532,12 +534,16 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {boolean} true if editable
      */
     canEdit(): boolean {
-        const { canEdit, onModification, onRemove, onSave }: Props = this.props;
-        return (
+        const { canEdit, onModification, onRemove, onSave, template, isCascadingPolicyApplicable }: Props = this.props;
+        const isCustom = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
+        const hasCascadePermission = isCustom ? true : isCascadingPolicyApplicable;
+
+        return !!(
             canEdit &&
             typeof onRemove === 'function' &&
             typeof onSave === 'function' &&
-            typeof onModification === 'function'
+            typeof onModification === 'function' &&
+            hasCascadePermission
         );
     }
 
@@ -551,10 +557,10 @@ class Instance extends React.PureComponent<Props, State> {
         return this.canEdit() && isEditing;
     }
 
-    renderEditButton = (canEditInstance: boolean) => {
+    renderEditButton = () => {
         const { intl, isDirty }: Props = this.props;
         const { isBusy }: State = this.state;
-        const canEdit = this.canEdit() && canEditInstance;
+        const canEdit = this.canEdit();
         const isEditing = this.isEditing();
         const editClassName = classNames('metadata-instance-editor-instance-edit', {
             'metadata-instance-editor-instance-is-editing': isEditing,
@@ -581,13 +587,7 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {
-            cascadePolicy = {},
-            isDirty,
-            isCascadingPolicyApplicable = false, // does user have cascading policy permissions
-            isOpen,
-            template,
-        }: Props = this.props;
+        const { isDirty, isOpen, template }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
@@ -598,11 +598,10 @@ class Instance extends React.PureComponent<Props, State> {
             shouldShowCascadeOptions,
             isCascadingOverwritten,
         }: State = this.state;
-        const isProperties = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
-        const isEditing = this.isEditing();
-        const hasCascadePolicy = !!cascadePolicy?.id;
-        const hasCascadePermission = !hasCascadePolicy || (hasCascadePolicy && isCascadingPolicyApplicable);
-        const canEditInstance = !!(isEditing && hasCascadePermission);
+        const isCustomInstance = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
+        console.log(this.isEditing());
+        console.log(this.props);
+        console.log(this.state);
 
         if (!template || isHidden(template)) {
             return null;
@@ -619,7 +618,7 @@ class Instance extends React.PureComponent<Props, State> {
                         [RESIN_TAG_TARGET]: 'metadata-card',
                     }}
                     hasStickyHeader
-                    headerActionItems={this.renderEditButton(hasCascadePermission)}
+                    headerActionItems={this.renderEditButton()}
                     isBordered
                     isOpen={isOpen}
                     title={this.getTitle()}
@@ -638,25 +637,25 @@ class Instance extends React.PureComponent<Props, State> {
                             <Form onValidSubmit={isDirty ? this.onSave : noop}>
                                 <div className="metadata-instance-editor-instance">
                                     <CascadePolicy
-                                        canEdit={canEditInstance}
+                                        canEdit={this.isEditing()}
                                         isCascadingEnabled={isCascadingEnabled}
                                         isCascadingOverwritten={isCascadingOverwritten}
-                                        isCustomMetadata={isProperties}
+                                        isCustomMetadata={isCustomInstance}
                                         onCascadeModeChange={this.onCascadeModeChange}
                                         onCascadeToggle={this.onCascadeToggle}
                                         shouldShowCascadeOptions={shouldShowCascadeOptions}
                                     />
 
-                                    {isProperties ? (
+                                    {isCustomInstance ? (
                                         <CustomInstance
-                                            canEdit={canEditInstance}
+                                            canEdit={this.isEditing()}
                                             data={data}
                                             onFieldChange={this.onFieldChange}
                                             onFieldRemove={this.onFieldRemove}
                                         />
                                     ) : (
                                         <TemplatedInstance
-                                            canEdit={canEditInstance}
+                                            canEdit={this.isEditing()}
                                             data={data}
                                             errors={errors}
                                             onFieldChange={this.onFieldChange}
@@ -665,7 +664,7 @@ class Instance extends React.PureComponent<Props, State> {
                                         />
                                     )}
                                 </div>
-                                {canEditInstance && (
+                                {this.isEditing() && (
                                     <Footer
                                         onCancel={this.onCancel}
                                         onRemove={this.onConfirmRemove}
