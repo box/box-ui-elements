@@ -599,9 +599,6 @@ class Instance extends React.PureComponent<Props, State> {
             isCascadingOverwritten,
         }: State = this.state;
         const isCustomInstance = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
-        console.log(this.isEditing());
-        console.log(this.props);
-        console.log(this.state);
 
         if (!template || isHidden(template)) {
             return null;
