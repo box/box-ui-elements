@@ -54,6 +54,7 @@ type Props = {
     intl: Object,
     isCascadingPolicyApplicable: boolean,
     isDirty: boolean,
+    isFromFolder?: boolean,
     isOpen: boolean,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
     onRemove?: (id: string) => void,
@@ -103,6 +104,7 @@ class Instance extends React.PureComponent<Props, State> {
         data: {},
         isDirty: false,
         isCascadingPolicyApplicable: false,
+        isFromFolder: false,
     };
 
     constructor(props: Props) {
@@ -528,15 +530,29 @@ class Instance extends React.PureComponent<Props, State> {
         return ops;
     }
 
+    isInstanceCascadingPolicyApplicable = () => {
+        const { template, isFromFolder }: Props = this.props;
+        const isNotCustom = template.templateKey !== TEMPLATE_CUSTOM_PROPERTIES;
+        return isNotCustom && isFromFolder;
+    };
+
     /**
      * Utility function to determine if instance is editable
      *
      * @return {boolean} true if editable
      */
     canEdit(): boolean {
-        const { canEdit, onModification, onRemove, onSave, template, isCascadingPolicyApplicable }: Props = this.props;
+        const {
+            canEdit,
+            onModification,
+            onRemove,
+            onSave,
+            template,
+            isCascadingPolicyApplicable,
+            isFromFolder,
+        }: Props = this.props;
         const isCustom = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
-        const hasCascadePermission = isCustom ? true : isCascadingPolicyApplicable;
+        const hasCascadePermission = isCustom || !isFromFolder ? true : isCascadingPolicyApplicable;
 
         return !!(
             canEdit &&
@@ -633,15 +649,17 @@ class Instance extends React.PureComponent<Props, State> {
                         <LoadingIndicatorWrapper isLoading={isBusy}>
                             <Form onValidSubmit={isDirty ? this.onSave : noop}>
                                 <div className="metadata-instance-editor-instance">
-                                    <CascadePolicy
-                                        canEdit={this.isEditing()}
-                                        isCascadingEnabled={isCascadingEnabled}
-                                        isCascadingOverwritten={isCascadingOverwritten}
-                                        isCustomMetadata={isCustomInstance}
-                                        onCascadeModeChange={this.onCascadeModeChange}
-                                        onCascadeToggle={this.onCascadeToggle}
-                                        shouldShowCascadeOptions={shouldShowCascadeOptions}
-                                    />
+                                    {this.isInstanceCascadingPolicyApplicable() && (
+                                        <CascadePolicy
+                                            canEdit={this.isEditing()}
+                                            isCascadingEnabled={isCascadingEnabled}
+                                            isCascadingOverwritten={isCascadingOverwritten}
+                                            isCustomMetadata={isCustomInstance}
+                                            onCascadeModeChange={this.onCascadeModeChange}
+                                            onCascadeToggle={this.onCascadeToggle}
+                                            shouldShowCascadeOptions={shouldShowCascadeOptions}
+                                        />
+                                    )}
 
                                     {isCustomInstance ? (
                                         <CustomInstance

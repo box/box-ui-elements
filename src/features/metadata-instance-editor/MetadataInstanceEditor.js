@@ -17,6 +17,7 @@ type Props = {
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
+    isFromFolder?: boolean,
     onAdd?: (template: MetadataTemplate) => void,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
@@ -37,6 +38,7 @@ const MetadataInstanceEditor = ({
     canAdd,
     isCascadingPolicyApplicable = false,
     isDropdownBusy,
+    isFromFolder = false,
     editors = [],
     onModification,
     onRemove,
@@ -67,6 +69,7 @@ const MetadataInstanceEditor = ({
                         onRemove={onRemove}
                         onSave={onSave}
                         selectedTemplateKey={selectedTemplateKey}
+                        isFromFolder={isFromFolder}
                     />
                 </ScrollWrapper>
             )}
