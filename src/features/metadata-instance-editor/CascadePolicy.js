@@ -38,7 +38,7 @@ const CascadePolicy = ({
 
     return canEdit ? (
         <>
-            <div className="metadata-cascade-editor">
+            <div className="metadata-cascade-editor" data-testid="metadata-cascade-policy">
                 <div className="metadata-cascade-enable">
                     <div>
                         <FormattedMessage tagName="strong" {...messages.enableCascadePolicy} />

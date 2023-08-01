@@ -151,19 +151,44 @@ const userDefinedTemplateField = [
 const intl = { formatMessage: jest.fn().mockReturnValue('Edit Metadata') };
 
 describe('features/metadata-instance-editor/fields/Instance', () => {
-    test('should correctly render templated metadata instance', () => {
-        const wrapper = shallow(
-            <Instance
-                data={data}
-                dataValue="value"
-                intl={intl}
-                template={{
-                    fields,
-                }}
-            />,
-        );
-        expect(wrapper).toMatchSnapshot();
-    });
+    test.each`
+        isFolderInstance
+        ${true}
+        ${false}
+    `(
+        'should correctly render templated metadata instance when isFolderInstance is $isFolderInstance',
+        ({ isFolderInstance }) => {
+            render(
+                <Instance
+                    cascadePolicy={{ canEdit: true, id: 'hello' }}
+                    data={data}
+                    dataValue="value"
+                    intl={intl}
+                    isCascadingPolicyApplicable
+                    isFolderInstance={isFolderInstance}
+                    shouldShowCascadingOptions
+                    onModification={jest.fn()}
+                    onRemove={jest.fn()}
+                    onSave={jest.fn()}
+                    canEdit
+                    template={{
+                        fields,
+                    }}
+                />,
+            );
+
+            const editButton = screen.queryByLabelText('Edit Metadata');
+            if (editButton) {
+                fireEvent.click(editButton);
+            }
+            const metadataInstanceEditor = screen.queryByTestId('metadata-cascade-policy');
+            if (isFolderInstance) {
+                expect(metadataInstanceEditor).toBeInTheDocument();
+            } else {
+                expect(metadataInstanceEditor).not.toBeInTheDocument();
+            }
+        },
+    );
 
     test.each`
         cascadePolicy                     | isCascadingPolicyApplicable
@@ -183,6 +208,7 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                     dataValue="value"
                     intl={intl}
                     isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                    isFolderInstance
                     shouldShowCascadingOptions
                     onModification={jest.fn()}
                     onRemove={jest.fn()}

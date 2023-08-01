@@ -11,7 +11,27 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
     }
     className=""
     hasStickyHeader={true}
-    headerActionItems={null}
+    headerActionItems={
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        position="top-left"
+        text="Edit Metadata"
+        theme="default"
+      >
+        <PlainButton
+          aria-label="Edit Metadata"
+          aria-pressed={false}
+          className="metadata-instance-editor-instance-edit"
+          data-resin-target="metadata-instanceedit"
+          onClick={[Function]}
+          type="button"
+        >
+          <IconEdit />
+        </PlainButton>
+      </Tooltip>
+    }
     isBordered={true}
     isOpen={true}
     title={
@@ -36,15 +56,6 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
             canEdit={false}
             data={
@@ -172,15 +183,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={true}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <CustomInstance
             canEdit={false}
             data={
@@ -197,187 +199,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             }
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
-          />
-        </div>
-      </Form>
-    </LoadingIndicatorWrapper>
-  </Collapsible>
-</div>
-`;
-
-exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance 1`] = `
-<div>
-  <Collapsible
-    animationDuration={550}
-    buttonProps={
-      Object {
-        "data-resin-target": "metadata-card",
-      }
-    }
-    className=""
-    hasStickyHeader={true}
-    headerActionItems={null}
-    isBordered={true}
-    isOpen={true}
-    title={
-      <span
-        className="metadata-instance-editor-instance-title"
-      >
-        <IconMetadataColored
-          type="default"
-        />
-        <span
-          className="metadata-instance-editor-instance-title-text"
-        />
-      </span>
-    }
-  >
-    <LoadingIndicatorWrapper
-      isLoading={false}
-    >
-      <Form
-        onValidSubmit={[Function]}
-      >
-        <div
-          className="metadata-instance-editor-instance"
-        >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
-          <TemplatedInstance
-            canEdit={false}
-            data={
-              Object {
-                "datefield": "2018-06-20T00:00:00.000Z",
-                "enumfield": "yes",
-                "floatfield": 1,
-                "multiselectfield": Array [
-                  "yes",
-                  "no",
-                ],
-                "stringfield": "some string",
-              }
-            }
-            errors={Object {}}
-            onFieldChange={[Function]}
-            onFieldRemove={[Function]}
-            template={
-              Object {
-                "fields": Array [
-                  Object {
-                    "displayName": "No Description Field",
-                    "id": "field0",
-                    "key": "nodescfield",
-                    "type": "string",
-                  },
-                  Object {
-                    "description": "example of a string field",
-                    "displayName": "String Field",
-                    "id": "field1",
-                    "key": "stringfield",
-                    "type": "string",
-                  },
-                  Object {
-                    "description": "example of an empty string field",
-                    "displayName": "Empty String Field",
-                    "id": "field2",
-                    "key": "emptystring",
-                    "type": "string",
-                  },
-                  Object {
-                    "description": "example of a float field",
-                    "displayName": "Float Field",
-                    "id": "field3",
-                    "key": "floatfield",
-                    "type": "float",
-                  },
-                  Object {
-                    "description": "example of an empty float field",
-                    "displayName": "Empty Float Field",
-                    "id": "field4",
-                    "key": "emptyfloat",
-                    "type": "float",
-                  },
-                  Object {
-                    "description": "example of a enum field",
-                    "displayName": "Enum Field",
-                    "id": "field5",
-                    "key": "enumfield",
-                    "options": Array [
-                      Object {
-                        "key": "yes",
-                      },
-                      Object {
-                        "key": "no",
-                      },
-                    ],
-                    "type": "enum",
-                  },
-                  Object {
-                    "description": "example of an empty enum field",
-                    "displayName": "Empty Enum Field",
-                    "id": "field6",
-                    "key": "emptyenumfield",
-                    "options": Array [
-                      Object {
-                        "key": "yes",
-                      },
-                      Object {
-                        "key": "no",
-                      },
-                    ],
-                    "type": "enum",
-                  },
-                  Object {
-                    "description": "example of a date field",
-                    "displayName": "Date Field",
-                    "id": "field7",
-                    "key": "datefield",
-                    "type": "date",
-                  },
-                  Object {
-                    "description": "example of an empty date field",
-                    "displayName": "Empty Date Field",
-                    "id": "field8",
-                    "key": "emptydatefield",
-                    "type": "date",
-                  },
-                  Object {
-                    "description": "example of a multi select field field",
-                    "displayName": "Multi Select Field",
-                    "id": "field9",
-                    "key": "multiselectfield",
-                    "options": Array [
-                      Object {
-                        "key": "yes",
-                      },
-                      Object {
-                        "key": "no",
-                      },
-                      Object {
-                        "key": "maybe",
-                      },
-                      Object {
-                        "key": "idk?",
-                      },
-                      Object {
-                        "key": "oh well",
-                      },
-                      Object {
-                        "key": "whatever",
-                      },
-                    ],
-                    "type": "multiSelect",
-                  },
-                ],
-              }
-            }
           />
         </div>
       </Form>
@@ -622,6 +443,2540 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true, "id": "hello"} and isCascadingPolicyApplicable is true 1`] = `
+<div>
+  <div>
+    <div
+      class="collapsible-card is-open is-bordered"
+    >
+      <div
+        class="collapsible-card-header has-sticky-header"
+      >
+        <button
+          aria-expanded="true"
+          class="btn-plain collapsible-card-title"
+          data-resin-target="metadata-cardcollapse"
+          type="button"
+        >
+          <span
+            class="metadata-instance-editor-instance-title"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-metadata "
+              focusable="false"
+              height="16"
+              role="presentation"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                class="fill-color"
+                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
+                fill="#9f3fed"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="metadata-instance-editor-instance-title-text"
+            />
+          </span>
+          <svg
+            aria-hidden="true"
+            class="icon-caret-down collapsible-card-header-caret"
+            focusable="false"
+            height="6"
+            role="presentation"
+            viewBox="0 0 10 6"
+            width="8"
+          >
+            <path
+              class="fill-color"
+              d="M0 .5l5 5 5-5H0z"
+              fill="#909090"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <span
+          class="bdl-Collapsible-actionItems"
+        >
+          <button
+            aria-label="Edit Metadata"
+            aria-pressed="true"
+            class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+            data-resin-target="metadata-instanceedit"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-edit "
+              focusable="false"
+              height="14"
+              role="presentation"
+              viewBox="0 0 14 14"
+              width="14"
+            >
+              <path
+                class="fill-color"
+                d="M3.21 7.89l6.47-6.48a2 2 0 0 1 2.88 2.78h-.05L6 10.72 3.21 7.89zM2.24 9l2.83 2.83L1.67 13c-.52.18-.79-.1-.62-.61z"
+                fill="#6f6f6f"
+              />
+            </svg>
+          </button>
+        </span>
+      </div>
+      <div
+        aria-hidden="false"
+        class="rah-static rah-static--height-auto"
+        style="height: auto; overflow: visible;"
+      >
+        <div>
+          <div
+            class="collapsible-card-content"
+          >
+            <div
+              class="loading-indicator-wrapper "
+            >
+              <form
+                novalidate=""
+              >
+                <div
+                  class="metadata-instance-editor-instance"
+                >
+                  <div
+                    class="metadata-cascade-editor"
+                    data-testid="metadata-cascade-policy"
+                  >
+                    <div
+                      class="metadata-cascade-enable"
+                    >
+                      <div>
+                        <div />
+                        <div
+                          class="toggle-container metadata-cascade-toggle cascade-on"
+                        >
+                          <label
+                            class="toggle-simple"
+                          >
+                            <input
+                              checked=""
+                              class="toggle-simple-input"
+                              role="switch"
+                              type="checkbox"
+                            />
+                            <div
+                              class="toggle-simple-switch"
+                            />
+                            <div
+                              class="toggle-simple-label"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <div
+                        class="cascade-policy-text"
+                      >
+                        <div />
+                         
+                        <a
+                          class="link cascade-policy-learnmore-link"
+                          href="https://community.box.com/t5/Organizing-and-Tracking-Content/Metadata/ta-p/30765"
+                          rel="noopener"
+                          target="_blank"
+                        >
+                          <div />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          No Description Field
+                        </span>
+                      </span>
+                      <input
+                        aria-invalid="false"
+                        name="nodescfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          String Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description65"
+                      >
+                        example of a string field
+                      </div>
+                      <input
+                        aria-describedby="description65"
+                        aria-invalid="false"
+                        name="stringfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value="some string"
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty String Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description67"
+                      >
+                        example of an empty string field
+                      </div>
+                      <input
+                        aria-describedby="description67"
+                        aria-invalid="false"
+                        name="emptystring"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Float Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description69"
+                      >
+                        example of a float field
+                      </div>
+                      <input
+                        aria-describedby="description69"
+                        aria-invalid="false"
+                        name="floatfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value="1"
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty Float Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description71"
+                      >
+                        example of an empty float field
+                      </div>
+                      <input
+                        aria-describedby="description71"
+                        aria-invalid="false"
+                        name="emptyfloat"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-EnumMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Enum Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-EnumMetadataField-desc"
+                      >
+                        example of a enum field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield73"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="yes"
+                          type="button"
+                        >
+                          yes
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-EnumMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty Enum Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-EnumMetadataField-desc"
+                      >
+                        example of an empty enum field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield75"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="Select Value"
+                          type="button"
+                        >
+                          Select Value
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-DateMetadataField date-picker-wrapper show-clear-btn"
+                  >
+                    <span
+                      class="date-picker-icon-holder"
+                    >
+                      <label>
+                        <span
+                          class="label bdl-Label"
+                        >
+                          <span>
+                            Date Field
+                          </span>
+                        </span>
+                        <div
+                          class="date-picker-description"
+                          id="description78"
+                        >
+                          example of a date field
+                        </div>
+                        <input
+                          aria-describedby="description78"
+                          aria-errormessage="errorMessage77"
+                          aria-invalid="false"
+                          class="date-picker-input"
+                          placeholder="Set Date"
+                          type="text"
+                          value="Wed Jun 20 2018 00:00:00 GMT-0700 (Pacific Daylight Time)"
+                        />
+                        <span
+                          class="accessibility-hidden"
+                          id="errorMessage77"
+                          role="alert"
+                        />
+                      </label>
+                      <button
+                        aria-label="Clear Date"
+                        class="btn-plain date-picker-clear-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <path
+                            d="M7.19 8L4.46 5.27a.572.572 0 01.81-.81L8 7.19l2.73-2.73a.572.572 0 01.81.81L8.81 8l2.73 2.73a.572.572 0 01-.81.81L8 8.81l-2.73 2.73a.572.572 0 01-.81-.81L7.19 8zm5.76 4.95a7 7 0 10-9.9-9.9 7 7 0 009.9 9.9z"
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        aria-label="Choose Date"
+                        class="btn-plain date-picker-open-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <g
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          >
+                            <path
+                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
+                            />
+                            <g
+                              transform="translate(3 5.5)"
+                            >
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.833"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.667"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.67"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="5"
+                              />
+                            </g>
+                          </g>
+                        </svg>
+                      </button>
+                      <input
+                        class="date-picker-unix-time-input"
+                        readonly=""
+                        type="hidden"
+                        value="2018-06-20T00:00:00.000Z"
+                      />
+                    </span>
+                  </div>
+                  <div
+                    class="bdl-DateMetadataField date-picker-wrapper"
+                  >
+                    <span
+                      class="date-picker-icon-holder"
+                    >
+                      <label>
+                        <span
+                          class="label bdl-Label"
+                        >
+                          <span>
+                            Empty Date Field
+                          </span>
+                        </span>
+                        <div
+                          class="date-picker-description"
+                          id="description83"
+                        >
+                          example of an empty date field
+                        </div>
+                        <input
+                          aria-describedby="description83"
+                          aria-errormessage="errorMessage82"
+                          aria-invalid="false"
+                          class="date-picker-input"
+                          placeholder="Set Date"
+                          type="text"
+                          value=""
+                        />
+                        <span
+                          class="accessibility-hidden"
+                          id="errorMessage82"
+                          role="alert"
+                        />
+                      </label>
+                      <button
+                        aria-label="Choose Date"
+                        class="btn-plain date-picker-open-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <g
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          >
+                            <path
+                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
+                            />
+                            <g
+                              transform="translate(3 5.5)"
+                            >
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.833"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.667"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.67"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="5"
+                              />
+                            </g>
+                          </g>
+                        </svg>
+                      </button>
+                      <input
+                        class="date-picker-unix-time-input"
+                        readonly=""
+                        type="hidden"
+                        value=""
+                      />
+                    </span>
+                  </div>
+                  <div
+                    class="bdl-MultiSelectMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Multi Select Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-MultiSelectMetadataField-desc"
+                      >
+                        example of a multi select field field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield86"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="yes, no"
+                          type="button"
+                        >
+                          yes, no
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="metadata-instance-editor-footer"
+                >
+                  <div
+                    class="metadata-instance-editor-footer-delete"
+                  >
+                    <button
+                      class="btn-plain "
+                      data-resin-target="metadata-instanceremove"
+                      type="button"
+                    >
+                      <div />
+                    </button>
+                  </div>
+                  <div
+                    class="metadata-instance-editor-footer-save-cancel"
+                  >
+                    <button
+                      class="btn"
+                      data-resin-target="metadata-instancecancel"
+                      type="button"
+                    >
+                      <span
+                        class="btn-content"
+                      >
+                        <div />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true} and isCascadingPolicyApplicable is false 1`] = `
+<div>
+  <div>
+    <div
+      class="collapsible-card is-open is-bordered"
+    >
+      <div
+        class="collapsible-card-header has-sticky-header"
+      >
+        <button
+          aria-expanded="true"
+          class="btn-plain collapsible-card-title"
+          data-resin-target="metadata-cardcollapse"
+          type="button"
+        >
+          <span
+            class="metadata-instance-editor-instance-title"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-metadata "
+              focusable="false"
+              height="16"
+              role="presentation"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                class="fill-color"
+                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
+                fill="#0061d5"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="metadata-instance-editor-instance-title-text"
+            />
+          </span>
+          <svg
+            aria-hidden="true"
+            class="icon-caret-down collapsible-card-header-caret"
+            focusable="false"
+            height="6"
+            role="presentation"
+            viewBox="0 0 10 6"
+            width="8"
+          >
+            <path
+              class="fill-color"
+              d="M0 .5l5 5 5-5H0z"
+              fill="#909090"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        aria-hidden="false"
+        class="rah-static rah-static--height-auto"
+        style="height: auto; overflow: visible;"
+      >
+        <div>
+          <div
+            class="collapsible-card-content"
+          >
+            <div
+              class="loading-indicator-wrapper "
+            >
+              <form
+                novalidate=""
+              >
+                <div
+                  class="metadata-instance-editor-instance"
+                >
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      No Description Field
+                    </dt>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      String Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a string field
+                    </i>
+                    <dd>
+                      some string
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty String Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty string field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Float Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a float field
+                    </i>
+                    <dd>
+                      1
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty Float Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty float field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Enum Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a enum field
+                    </i>
+                    <dd>
+                      yes
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty Enum Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty enum field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Date Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a date field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty Date Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty date field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Multi Select Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a multi select field field
+                    </i>
+                    <dd>
+                      yes, no
+                    </dd>
+                  </dl>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true} and isCascadingPolicyApplicable is true 1`] = `
+<div>
+  <div>
+    <div
+      class="collapsible-card is-open is-bordered"
+    >
+      <div
+        class="collapsible-card-header has-sticky-header"
+      >
+        <button
+          aria-expanded="true"
+          class="btn-plain collapsible-card-title"
+          data-resin-target="metadata-cardcollapse"
+          type="button"
+        >
+          <span
+            class="metadata-instance-editor-instance-title"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-metadata "
+              focusable="false"
+              height="16"
+              role="presentation"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                class="fill-color"
+                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
+                fill="#0061d5"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="metadata-instance-editor-instance-title-text"
+            />
+          </span>
+          <svg
+            aria-hidden="true"
+            class="icon-caret-down collapsible-card-header-caret"
+            focusable="false"
+            height="6"
+            role="presentation"
+            viewBox="0 0 10 6"
+            width="8"
+          >
+            <path
+              class="fill-color"
+              d="M0 .5l5 5 5-5H0z"
+              fill="#909090"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <span
+          class="bdl-Collapsible-actionItems"
+        >
+          <button
+            aria-label="Edit Metadata"
+            aria-pressed="true"
+            class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+            data-resin-target="metadata-instanceedit"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-edit "
+              focusable="false"
+              height="14"
+              role="presentation"
+              viewBox="0 0 14 14"
+              width="14"
+            >
+              <path
+                class="fill-color"
+                d="M3.21 7.89l6.47-6.48a2 2 0 0 1 2.88 2.78h-.05L6 10.72 3.21 7.89zM2.24 9l2.83 2.83L1.67 13c-.52.18-.79-.1-.62-.61z"
+                fill="#6f6f6f"
+              />
+            </svg>
+          </button>
+        </span>
+      </div>
+      <div
+        aria-hidden="false"
+        class="rah-static rah-static--height-auto"
+        style="height: auto; overflow: visible;"
+      >
+        <div>
+          <div
+            class="collapsible-card-content"
+          >
+            <div
+              class="loading-indicator-wrapper "
+            >
+              <form
+                novalidate=""
+              >
+                <div
+                  class="metadata-instance-editor-instance"
+                >
+                  <div
+                    class="metadata-cascade-editor"
+                    data-testid="metadata-cascade-policy"
+                  >
+                    <div
+                      class="metadata-cascade-enable"
+                    >
+                      <div>
+                        <div />
+                        <div
+                          class="toggle-container metadata-cascade-toggle cascade-off"
+                        >
+                          <label
+                            class="toggle-simple"
+                          >
+                            <input
+                              class="toggle-simple-input"
+                              role="switch"
+                              type="checkbox"
+                            />
+                            <div
+                              class="toggle-simple-switch"
+                            />
+                            <div
+                              class="toggle-simple-label"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <div
+                        class="cascade-policy-text"
+                      >
+                        <div />
+                         
+                        <a
+                          class="link cascade-policy-learnmore-link"
+                          href="https://community.box.com/t5/Organizing-and-Tracking-Content/Metadata/ta-p/30765"
+                          rel="noopener"
+                          target="_blank"
+                        >
+                          <div />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          No Description Field
+                        </span>
+                      </span>
+                      <input
+                        aria-invalid="false"
+                        name="nodescfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          String Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description96"
+                      >
+                        example of a string field
+                      </div>
+                      <input
+                        aria-describedby="description96"
+                        aria-invalid="false"
+                        name="stringfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value="some string"
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty String Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description98"
+                      >
+                        example of an empty string field
+                      </div>
+                      <input
+                        aria-describedby="description98"
+                        aria-invalid="false"
+                        name="emptystring"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Float Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description100"
+                      >
+                        example of a float field
+                      </div>
+                      <input
+                        aria-describedby="description100"
+                        aria-invalid="false"
+                        name="floatfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value="1"
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty Float Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description102"
+                      >
+                        example of an empty float field
+                      </div>
+                      <input
+                        aria-describedby="description102"
+                        aria-invalid="false"
+                        name="emptyfloat"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-EnumMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Enum Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-EnumMetadataField-desc"
+                      >
+                        example of a enum field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield104"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="yes"
+                          type="button"
+                        >
+                          yes
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-EnumMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty Enum Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-EnumMetadataField-desc"
+                      >
+                        example of an empty enum field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield106"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="Select Value"
+                          type="button"
+                        >
+                          Select Value
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-DateMetadataField date-picker-wrapper show-clear-btn"
+                  >
+                    <span
+                      class="date-picker-icon-holder"
+                    >
+                      <label>
+                        <span
+                          class="label bdl-Label"
+                        >
+                          <span>
+                            Date Field
+                          </span>
+                        </span>
+                        <div
+                          class="date-picker-description"
+                          id="description109"
+                        >
+                          example of a date field
+                        </div>
+                        <input
+                          aria-describedby="description109"
+                          aria-errormessage="errorMessage108"
+                          aria-invalid="false"
+                          class="date-picker-input"
+                          placeholder="Set Date"
+                          type="text"
+                          value="Wed Jun 20 2018 00:00:00 GMT-0700 (Pacific Daylight Time)"
+                        />
+                        <span
+                          class="accessibility-hidden"
+                          id="errorMessage108"
+                          role="alert"
+                        />
+                      </label>
+                      <button
+                        aria-label="Clear Date"
+                        class="btn-plain date-picker-clear-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <path
+                            d="M7.19 8L4.46 5.27a.572.572 0 01.81-.81L8 7.19l2.73-2.73a.572.572 0 01.81.81L8.81 8l2.73 2.73a.572.572 0 01-.81.81L8 8.81l-2.73 2.73a.572.572 0 01-.81-.81L7.19 8zm5.76 4.95a7 7 0 10-9.9-9.9 7 7 0 009.9 9.9z"
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        aria-label="Choose Date"
+                        class="btn-plain date-picker-open-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <g
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          >
+                            <path
+                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
+                            />
+                            <g
+                              transform="translate(3 5.5)"
+                            >
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.833"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.667"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.67"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="5"
+                              />
+                            </g>
+                          </g>
+                        </svg>
+                      </button>
+                      <input
+                        class="date-picker-unix-time-input"
+                        readonly=""
+                        type="hidden"
+                        value="2018-06-20T00:00:00.000Z"
+                      />
+                    </span>
+                  </div>
+                  <div
+                    class="bdl-DateMetadataField date-picker-wrapper"
+                  >
+                    <span
+                      class="date-picker-icon-holder"
+                    >
+                      <label>
+                        <span
+                          class="label bdl-Label"
+                        >
+                          <span>
+                            Empty Date Field
+                          </span>
+                        </span>
+                        <div
+                          class="date-picker-description"
+                          id="description114"
+                        >
+                          example of an empty date field
+                        </div>
+                        <input
+                          aria-describedby="description114"
+                          aria-errormessage="errorMessage113"
+                          aria-invalid="false"
+                          class="date-picker-input"
+                          placeholder="Set Date"
+                          type="text"
+                          value=""
+                        />
+                        <span
+                          class="accessibility-hidden"
+                          id="errorMessage113"
+                          role="alert"
+                        />
+                      </label>
+                      <button
+                        aria-label="Choose Date"
+                        class="btn-plain date-picker-open-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <g
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          >
+                            <path
+                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
+                            />
+                            <g
+                              transform="translate(3 5.5)"
+                            >
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.833"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.667"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.67"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="5"
+                              />
+                            </g>
+                          </g>
+                        </svg>
+                      </button>
+                      <input
+                        class="date-picker-unix-time-input"
+                        readonly=""
+                        type="hidden"
+                        value=""
+                      />
+                    </span>
+                  </div>
+                  <div
+                    class="bdl-MultiSelectMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Multi Select Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-MultiSelectMetadataField-desc"
+                      >
+                        example of a multi select field field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield117"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="yes, no"
+                          type="button"
+                        >
+                          yes, no
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="metadata-instance-editor-footer"
+                >
+                  <div
+                    class="metadata-instance-editor-footer-delete"
+                  >
+                    <button
+                      class="btn-plain "
+                      data-resin-target="metadata-instanceremove"
+                      type="button"
+                    >
+                      <div />
+                    </button>
+                  </div>
+                  <div
+                    class="metadata-instance-editor-footer-save-cancel"
+                  >
+                    <button
+                      class="btn"
+                      data-resin-target="metadata-instancecancel"
+                      type="button"
+                    >
+                      <span
+                        class="btn-content"
+                      >
+                        <div />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is null and isCascadingPolicyApplicable is false 1`] = `
+<div>
+  <div>
+    <div
+      class="collapsible-card is-open is-bordered"
+    >
+      <div
+        class="collapsible-card-header has-sticky-header"
+      >
+        <button
+          aria-expanded="true"
+          class="btn-plain collapsible-card-title"
+          data-resin-target="metadata-cardcollapse"
+          type="button"
+        >
+          <span
+            class="metadata-instance-editor-instance-title"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-metadata "
+              focusable="false"
+              height="16"
+              role="presentation"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                class="fill-color"
+                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
+                fill="#0061d5"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="metadata-instance-editor-instance-title-text"
+            />
+          </span>
+          <svg
+            aria-hidden="true"
+            class="icon-caret-down collapsible-card-header-caret"
+            focusable="false"
+            height="6"
+            role="presentation"
+            viewBox="0 0 10 6"
+            width="8"
+          >
+            <path
+              class="fill-color"
+              d="M0 .5l5 5 5-5H0z"
+              fill="#909090"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+      <div
+        aria-hidden="false"
+        class="rah-static rah-static--height-auto"
+        style="height: auto; overflow: visible;"
+      >
+        <div>
+          <div
+            class="collapsible-card-content"
+          >
+            <div
+              class="loading-indicator-wrapper "
+            >
+              <form
+                novalidate=""
+              >
+                <div
+                  class="metadata-instance-editor-instance"
+                >
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      No Description Field
+                    </dt>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      String Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a string field
+                    </i>
+                    <dd>
+                      some string
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty String Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty string field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Float Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a float field
+                    </i>
+                    <dd>
+                      1
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty Float Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty float field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Enum Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a enum field
+                    </i>
+                    <dd>
+                      yes
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty Enum Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty enum field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Date Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a date field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Empty Date Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of an empty date field
+                    </i>
+                    <dd>
+                      <div />
+                    </dd>
+                  </dl>
+                  <dl
+                    class="bdl-ReadOnlyMetadataField"
+                  >
+                    <dt>
+                      Multi Select Field
+                    </dt>
+                    <i
+                      class="bdl-ReadOnlyMetadataField-desc"
+                    >
+                      example of a multi select field field
+                    </i>
+                    <dd>
+                      yes, no
+                    </dd>
+                  </dl>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is null and isCascadingPolicyApplicable is true 1`] = `
+<div>
+  <div>
+    <div
+      class="collapsible-card is-open is-bordered"
+    >
+      <div
+        class="collapsible-card-header has-sticky-header"
+      >
+        <button
+          aria-expanded="true"
+          class="btn-plain collapsible-card-title"
+          data-resin-target="metadata-cardcollapse"
+          type="button"
+        >
+          <span
+            class="metadata-instance-editor-instance-title"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-metadata "
+              focusable="false"
+              height="16"
+              role="presentation"
+              viewBox="0 0 16 16"
+              width="16"
+            >
+              <path
+                class="fill-color"
+                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
+                fill="#0061d5"
+                fill-rule="evenodd"
+              />
+            </svg>
+            <span
+              class="metadata-instance-editor-instance-title-text"
+            />
+          </span>
+          <svg
+            aria-hidden="true"
+            class="icon-caret-down collapsible-card-header-caret"
+            focusable="false"
+            height="6"
+            role="presentation"
+            viewBox="0 0 10 6"
+            width="8"
+          >
+            <path
+              class="fill-color"
+              d="M0 .5l5 5 5-5H0z"
+              fill="#909090"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </button>
+        <span
+          class="bdl-Collapsible-actionItems"
+        >
+          <button
+            aria-label="Edit Metadata"
+            aria-pressed="true"
+            class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+            data-resin-target="metadata-instanceedit"
+            tabindex="0"
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              class="icon-edit "
+              focusable="false"
+              height="14"
+              role="presentation"
+              viewBox="0 0 14 14"
+              width="14"
+            >
+              <path
+                class="fill-color"
+                d="M3.21 7.89l6.47-6.48a2 2 0 0 1 2.88 2.78h-.05L6 10.72 3.21 7.89zM2.24 9l2.83 2.83L1.67 13c-.52.18-.79-.1-.62-.61z"
+                fill="#6f6f6f"
+              />
+            </svg>
+          </button>
+        </span>
+      </div>
+      <div
+        aria-hidden="false"
+        class="rah-static rah-static--height-auto"
+        style="height: auto; overflow: visible;"
+      >
+        <div>
+          <div
+            class="collapsible-card-content"
+          >
+            <div
+              class="loading-indicator-wrapper "
+            >
+              <form
+                novalidate=""
+              >
+                <div
+                  class="metadata-instance-editor-instance"
+                >
+                  <div
+                    class="metadata-cascade-editor"
+                    data-testid="metadata-cascade-policy"
+                  >
+                    <div
+                      class="metadata-cascade-enable"
+                    >
+                      <div>
+                        <div />
+                        <div
+                          class="toggle-container metadata-cascade-toggle cascade-off"
+                        >
+                          <label
+                            class="toggle-simple"
+                          >
+                            <input
+                              class="toggle-simple-input"
+                              role="switch"
+                              type="checkbox"
+                            />
+                            <div
+                              class="toggle-simple-switch"
+                            />
+                            <div
+                              class="toggle-simple-label"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <div
+                        class="cascade-policy-text"
+                      >
+                        <div />
+                         
+                        <a
+                          class="link cascade-policy-learnmore-link"
+                          href="https://community.box.com/t5/Organizing-and-Tracking-Content/Metadata/ta-p/30765"
+                          rel="noopener"
+                          target="_blank"
+                        >
+                          <div />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          No Description Field
+                        </span>
+                      </span>
+                      <input
+                        aria-invalid="false"
+                        name="nodescfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          String Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description127"
+                      >
+                        example of a string field
+                      </div>
+                      <input
+                        aria-describedby="description127"
+                        aria-invalid="false"
+                        name="stringfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value="some string"
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty String Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description129"
+                      >
+                        example of an empty string field
+                      </div>
+                      <input
+                        aria-describedby="description129"
+                        aria-invalid="false"
+                        name="emptystring"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Float Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description131"
+                      >
+                        example of a float field
+                      </div>
+                      <input
+                        aria-describedby="description131"
+                        aria-invalid="false"
+                        name="floatfield"
+                        placeholder="Set Value"
+                        type="text"
+                        value="1"
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-TextMetadataField text-input-container"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty Float Field
+                        </span>
+                      </span>
+                      <div
+                        class="text-input-description"
+                        id="description133"
+                      >
+                        example of an empty float field
+                      </div>
+                      <input
+                        aria-describedby="description133"
+                        aria-invalid="false"
+                        name="emptyfloat"
+                        placeholder="Set Value"
+                        type="text"
+                        value=""
+                      />
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-EnumMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Enum Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-EnumMetadataField-desc"
+                      >
+                        example of a enum field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield135"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="yes"
+                          type="button"
+                        >
+                          yes
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-EnumMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Empty Enum Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-EnumMetadataField-desc"
+                      >
+                        example of an empty enum field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield137"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="Select Value"
+                          type="button"
+                        >
+                          Select Value
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                  <div
+                    class="bdl-DateMetadataField date-picker-wrapper show-clear-btn"
+                  >
+                    <span
+                      class="date-picker-icon-holder"
+                    >
+                      <label>
+                        <span
+                          class="label bdl-Label"
+                        >
+                          <span>
+                            Date Field
+                          </span>
+                        </span>
+                        <div
+                          class="date-picker-description"
+                          id="description140"
+                        >
+                          example of a date field
+                        </div>
+                        <input
+                          aria-describedby="description140"
+                          aria-errormessage="errorMessage139"
+                          aria-invalid="false"
+                          class="date-picker-input"
+                          placeholder="Set Date"
+                          type="text"
+                          value="Wed Jun 20 2018 00:00:00 GMT-0700 (Pacific Daylight Time)"
+                        />
+                        <span
+                          class="accessibility-hidden"
+                          id="errorMessage139"
+                          role="alert"
+                        />
+                      </label>
+                      <button
+                        aria-label="Clear Date"
+                        class="btn-plain date-picker-clear-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <path
+                            d="M7.19 8L4.46 5.27a.572.572 0 01.81-.81L8 7.19l2.73-2.73a.572.572 0 01.81.81L8.81 8l2.73 2.73a.572.572 0 01-.81.81L8 8.81l-2.73 2.73a.572.572 0 01-.81-.81L7.19 8zm5.76 4.95a7 7 0 10-9.9-9.9 7 7 0 009.9 9.9z"
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        aria-label="Choose Date"
+                        class="btn-plain date-picker-open-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <g
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          >
+                            <path
+                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
+                            />
+                            <g
+                              transform="translate(3 5.5)"
+                            >
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.833"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.667"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.67"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="5"
+                              />
+                            </g>
+                          </g>
+                        </svg>
+                      </button>
+                      <input
+                        class="date-picker-unix-time-input"
+                        readonly=""
+                        type="hidden"
+                        value="2018-06-20T00:00:00.000Z"
+                      />
+                    </span>
+                  </div>
+                  <div
+                    class="bdl-DateMetadataField date-picker-wrapper"
+                  >
+                    <span
+                      class="date-picker-icon-holder"
+                    >
+                      <label>
+                        <span
+                          class="label bdl-Label"
+                        >
+                          <span>
+                            Empty Date Field
+                          </span>
+                        </span>
+                        <div
+                          class="date-picker-description"
+                          id="description145"
+                        >
+                          example of an empty date field
+                        </div>
+                        <input
+                          aria-describedby="description145"
+                          aria-errormessage="errorMessage144"
+                          aria-invalid="false"
+                          class="date-picker-input"
+                          placeholder="Set Date"
+                          type="text"
+                          value=""
+                        />
+                        <span
+                          class="accessibility-hidden"
+                          id="errorMessage144"
+                          role="alert"
+                        />
+                      </label>
+                      <button
+                        aria-label="Choose Date"
+                        class="btn-plain date-picker-open-btn"
+                        type="button"
+                      >
+                        <svg
+                          aria-hidden="true"
+                          focusable="false"
+                          height="16"
+                          role="presentation"
+                          viewBox="0 0 16 16"
+                          width="16"
+                        >
+                          <g
+                            fill="#909090"
+                            fill-rule="evenodd"
+                          >
+                            <path
+                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
+                            />
+                            <g
+                              transform="translate(3 5.5)"
+                            >
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.833"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.667"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="5.67"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="8.5"
+                                y="2.5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                y="5"
+                              />
+                              <rect
+                                height="1.5"
+                                rx="0.5"
+                                width="1.5"
+                                x="2.83"
+                                y="5"
+                              />
+                            </g>
+                          </g>
+                        </svg>
+                      </button>
+                      <input
+                        class="date-picker-unix-time-input"
+                        readonly=""
+                        type="hidden"
+                        value=""
+                      />
+                    </span>
+                  </div>
+                  <div
+                    class="bdl-MultiSelectMetadataField"
+                  >
+                    <label>
+                      <span
+                        class="label bdl-Label"
+                      >
+                        <span>
+                          Multi Select Field
+                        </span>
+                      </span>
+                      <i
+                        class="bdl-MultiSelectMetadataField-desc"
+                      >
+                        example of a multi select field field
+                      </i>
+                      <div
+                        class="bdl-SelectField select-container"
+                      >
+                        <button
+                          aria-autocomplete="list"
+                          aria-expanded="false"
+                          aria-owns="selectfield148"
+                          class="select-button bdl-SelectButton"
+                          role="listbox"
+                          title="yes, no"
+                          type="button"
+                        >
+                          yes, no
+                        </button>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                <div
+                  class="metadata-instance-editor-footer"
+                >
+                  <div
+                    class="metadata-instance-editor-footer-delete"
+                  >
+                    <button
+                      class="btn-plain "
+                      data-resin-target="metadata-instanceremove"
+                      type="button"
+                    >
+                      <div />
+                    </button>
+                  </div>
+                  <div
+                    class="metadata-instance-editor-footer-save-cancel"
+                  >
+                    <button
+                      class="btn"
+                      data-resin-target="metadata-instancecancel"
+                      type="button"
+                    >
+                      <span
+                        class="btn-content"
+                      >
+                        <div />
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when isFolderInstance is true 1`] = `
 <div>
   <div>
     <div
@@ -1312,1846 +3667,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 </div>
 `;
 
-exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true} and isCascadingPolicyApplicable is false 1`] = `
-<div>
-  <div>
-    <div
-      class="collapsible-card is-open is-bordered"
-    >
-      <div
-        class="collapsible-card-header has-sticky-header"
-      >
-        <button
-          aria-expanded="true"
-          class="btn-plain collapsible-card-title"
-          data-resin-target="metadata-cardcollapse"
-          type="button"
-        >
-          <span
-            class="metadata-instance-editor-instance-title"
-          >
-            <svg
-              aria-hidden="true"
-              class="icon-metadata "
-              focusable="false"
-              height="16"
-              role="presentation"
-              viewBox="0 0 16 16"
-              width="16"
-            >
-              <path
-                class="fill-color"
-                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
-                fill="#0061d5"
-                fill-rule="evenodd"
-              />
-            </svg>
-            <span
-              class="metadata-instance-editor-instance-title-text"
-            />
-          </span>
-          <svg
-            aria-hidden="true"
-            class="icon-caret-down collapsible-card-header-caret"
-            focusable="false"
-            height="6"
-            role="presentation"
-            viewBox="0 0 10 6"
-            width="8"
-          >
-            <path
-              class="fill-color"
-              d="M0 .5l5 5 5-5H0z"
-              fill="#909090"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
-      <div
-        aria-hidden="false"
-        class="rah-static rah-static--height-auto"
-        style="height: auto; overflow: visible;"
-      >
-        <div>
-          <div
-            class="collapsible-card-content"
-          >
-            <div
-              class="loading-indicator-wrapper "
-            >
-              <form
-                novalidate=""
-              >
-                <div
-                  class="metadata-instance-editor-instance"
-                >
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      No Description Field
-                    </dt>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      String Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a string field
-                    </i>
-                    <dd>
-                      some string
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty String Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty string field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Float Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a float field
-                    </i>
-                    <dd>
-                      1
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty Float Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty float field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Enum Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a enum field
-                    </i>
-                    <dd>
-                      yes
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty Enum Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty enum field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Date Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a date field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty Date Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty date field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Multi Select Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a multi select field field
-                    </i>
-                    <dd>
-                      yes, no
-                    </dd>
-                  </dl>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true} and isCascadingPolicyApplicable is true 1`] = `
-<div>
-  <div>
-    <div
-      class="collapsible-card is-open is-bordered"
-    >
-      <div
-        class="collapsible-card-header has-sticky-header"
-      >
-        <button
-          aria-expanded="true"
-          class="btn-plain collapsible-card-title"
-          data-resin-target="metadata-cardcollapse"
-          type="button"
-        >
-          <span
-            class="metadata-instance-editor-instance-title"
-          >
-            <svg
-              aria-hidden="true"
-              class="icon-metadata "
-              focusable="false"
-              height="16"
-              role="presentation"
-              viewBox="0 0 16 16"
-              width="16"
-            >
-              <path
-                class="fill-color"
-                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
-                fill="#0061d5"
-                fill-rule="evenodd"
-              />
-            </svg>
-            <span
-              class="metadata-instance-editor-instance-title-text"
-            />
-          </span>
-          <svg
-            aria-hidden="true"
-            class="icon-caret-down collapsible-card-header-caret"
-            focusable="false"
-            height="6"
-            role="presentation"
-            viewBox="0 0 10 6"
-            width="8"
-          >
-            <path
-              class="fill-color"
-              d="M0 .5l5 5 5-5H0z"
-              fill="#909090"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <span
-          class="bdl-Collapsible-actionItems"
-        >
-          <button
-            aria-label="Edit Metadata"
-            aria-pressed="true"
-            class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
-            data-resin-target="metadata-instanceedit"
-            tabindex="0"
-            type="button"
-          >
-            <svg
-              aria-hidden="true"
-              class="icon-edit "
-              focusable="false"
-              height="14"
-              role="presentation"
-              viewBox="0 0 14 14"
-              width="14"
-            >
-              <path
-                class="fill-color"
-                d="M3.21 7.89l6.47-6.48a2 2 0 0 1 2.88 2.78h-.05L6 10.72 3.21 7.89zM2.24 9l2.83 2.83L1.67 13c-.52.18-.79-.1-.62-.61z"
-                fill="#6f6f6f"
-              />
-            </svg>
-          </button>
-        </span>
-      </div>
-      <div
-        aria-hidden="false"
-        class="rah-static rah-static--height-auto"
-        style="height: auto; overflow: visible;"
-      >
-        <div>
-          <div
-            class="collapsible-card-content"
-          >
-            <div
-              class="loading-indicator-wrapper "
-            >
-              <form
-                novalidate=""
-              >
-                <div
-                  class="metadata-instance-editor-instance"
-                >
-                  <div
-                    class="metadata-cascade-editor"
-                  >
-                    <div
-                      class="metadata-cascade-enable"
-                    >
-                      <div>
-                        <div />
-                        <div
-                          class="toggle-container metadata-cascade-toggle cascade-off"
-                        >
-                          <label
-                            class="toggle-simple"
-                          >
-                            <input
-                              class="toggle-simple-input"
-                              role="switch"
-                              type="checkbox"
-                            />
-                            <div
-                              class="toggle-simple-switch"
-                            />
-                            <div
-                              class="toggle-simple-label"
-                            />
-                          </label>
-                        </div>
-                      </div>
-                      <div
-                        class="cascade-policy-text"
-                      >
-                        <div />
-                         
-                        <a
-                          class="link cascade-policy-learnmore-link"
-                          href="https://community.box.com/t5/Organizing-and-Tracking-Content/Metadata/ta-p/30765"
-                          rel="noopener"
-                          target="_blank"
-                        >
-                          <div />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          No Description Field
-                        </span>
-                      </span>
-                      <input
-                        aria-invalid="false"
-                        name="nodescfield"
-                        placeholder="Set Value"
-                        type="text"
-                        value=""
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          String Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description38"
-                      >
-                        example of a string field
-                      </div>
-                      <input
-                        aria-describedby="description38"
-                        aria-invalid="false"
-                        name="stringfield"
-                        placeholder="Set Value"
-                        type="text"
-                        value="some string"
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Empty String Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description40"
-                      >
-                        example of an empty string field
-                      </div>
-                      <input
-                        aria-describedby="description40"
-                        aria-invalid="false"
-                        name="emptystring"
-                        placeholder="Set Value"
-                        type="text"
-                        value=""
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Float Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description42"
-                      >
-                        example of a float field
-                      </div>
-                      <input
-                        aria-describedby="description42"
-                        aria-invalid="false"
-                        name="floatfield"
-                        placeholder="Set Value"
-                        type="text"
-                        value="1"
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Empty Float Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description44"
-                      >
-                        example of an empty float field
-                      </div>
-                      <input
-                        aria-describedby="description44"
-                        aria-invalid="false"
-                        name="emptyfloat"
-                        placeholder="Set Value"
-                        type="text"
-                        value=""
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-EnumMetadataField"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Enum Field
-                        </span>
-                      </span>
-                      <i
-                        class="bdl-EnumMetadataField-desc"
-                      >
-                        example of a enum field
-                      </i>
-                      <div
-                        class="bdl-SelectField select-container"
-                      >
-                        <button
-                          aria-autocomplete="list"
-                          aria-expanded="false"
-                          aria-owns="selectfield46"
-                          class="select-button bdl-SelectButton"
-                          role="listbox"
-                          title="yes"
-                          type="button"
-                        >
-                          yes
-                        </button>
-                      </div>
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-EnumMetadataField"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Empty Enum Field
-                        </span>
-                      </span>
-                      <i
-                        class="bdl-EnumMetadataField-desc"
-                      >
-                        example of an empty enum field
-                      </i>
-                      <div
-                        class="bdl-SelectField select-container"
-                      >
-                        <button
-                          aria-autocomplete="list"
-                          aria-expanded="false"
-                          aria-owns="selectfield48"
-                          class="select-button bdl-SelectButton"
-                          role="listbox"
-                          title="Select Value"
-                          type="button"
-                        >
-                          Select Value
-                        </button>
-                      </div>
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-DateMetadataField date-picker-wrapper show-clear-btn"
-                  >
-                    <span
-                      class="date-picker-icon-holder"
-                    >
-                      <label>
-                        <span
-                          class="label bdl-Label"
-                        >
-                          <span>
-                            Date Field
-                          </span>
-                        </span>
-                        <div
-                          class="date-picker-description"
-                          id="description51"
-                        >
-                          example of a date field
-                        </div>
-                        <input
-                          aria-describedby="description51"
-                          aria-errormessage="errorMessage50"
-                          aria-invalid="false"
-                          class="date-picker-input"
-                          placeholder="Set Date"
-                          type="text"
-                          value="Wed Jun 20 2018 00:00:00 GMT-0700 (Pacific Daylight Time)"
-                        />
-                        <span
-                          class="accessibility-hidden"
-                          id="errorMessage50"
-                          role="alert"
-                        />
-                      </label>
-                      <button
-                        aria-label="Clear Date"
-                        class="btn-plain date-picker-clear-btn"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          height="16"
-                          role="presentation"
-                          viewBox="0 0 16 16"
-                          width="16"
-                        >
-                          <path
-                            d="M7.19 8L4.46 5.27a.572.572 0 01.81-.81L8 7.19l2.73-2.73a.572.572 0 01.81.81L8.81 8l2.73 2.73a.572.572 0 01-.81.81L8 8.81l-2.73 2.73a.572.572 0 01-.81-.81L7.19 8zm5.76 4.95a7 7 0 10-9.9-9.9 7 7 0 009.9 9.9z"
-                            fill="#909090"
-                            fill-rule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        aria-label="Choose Date"
-                        class="btn-plain date-picker-open-btn"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          height="16"
-                          role="presentation"
-                          viewBox="0 0 16 16"
-                          width="16"
-                        >
-                          <g
-                            fill="#909090"
-                            fill-rule="evenodd"
-                          >
-                            <path
-                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
-                            />
-                            <g
-                              transform="translate(3 5.5)"
-                            >
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.833"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.667"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.67"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="5"
-                              />
-                            </g>
-                          </g>
-                        </svg>
-                      </button>
-                      <input
-                        class="date-picker-unix-time-input"
-                        readonly=""
-                        type="hidden"
-                        value="2018-06-20T00:00:00.000Z"
-                      />
-                    </span>
-                  </div>
-                  <div
-                    class="bdl-DateMetadataField date-picker-wrapper"
-                  >
-                    <span
-                      class="date-picker-icon-holder"
-                    >
-                      <label>
-                        <span
-                          class="label bdl-Label"
-                        >
-                          <span>
-                            Empty Date Field
-                          </span>
-                        </span>
-                        <div
-                          class="date-picker-description"
-                          id="description56"
-                        >
-                          example of an empty date field
-                        </div>
-                        <input
-                          aria-describedby="description56"
-                          aria-errormessage="errorMessage55"
-                          aria-invalid="false"
-                          class="date-picker-input"
-                          placeholder="Set Date"
-                          type="text"
-                          value=""
-                        />
-                        <span
-                          class="accessibility-hidden"
-                          id="errorMessage55"
-                          role="alert"
-                        />
-                      </label>
-                      <button
-                        aria-label="Choose Date"
-                        class="btn-plain date-picker-open-btn"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          height="16"
-                          role="presentation"
-                          viewBox="0 0 16 16"
-                          width="16"
-                        >
-                          <g
-                            fill="#909090"
-                            fill-rule="evenodd"
-                          >
-                            <path
-                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
-                            />
-                            <g
-                              transform="translate(3 5.5)"
-                            >
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.833"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.667"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.67"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="5"
-                              />
-                            </g>
-                          </g>
-                        </svg>
-                      </button>
-                      <input
-                        class="date-picker-unix-time-input"
-                        readonly=""
-                        type="hidden"
-                        value=""
-                      />
-                    </span>
-                  </div>
-                  <div
-                    class="bdl-MultiSelectMetadataField"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Multi Select Field
-                        </span>
-                      </span>
-                      <i
-                        class="bdl-MultiSelectMetadataField-desc"
-                      >
-                        example of a multi select field field
-                      </i>
-                      <div
-                        class="bdl-SelectField select-container"
-                      >
-                        <button
-                          aria-autocomplete="list"
-                          aria-expanded="false"
-                          aria-owns="selectfield59"
-                          class="select-button bdl-SelectButton"
-                          role="listbox"
-                          title="yes, no"
-                          type="button"
-                        >
-                          yes, no
-                        </button>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-                <div
-                  class="metadata-instance-editor-footer"
-                >
-                  <div
-                    class="metadata-instance-editor-footer-delete"
-                  >
-                    <button
-                      class="btn-plain "
-                      data-resin-target="metadata-instanceremove"
-                      type="button"
-                    >
-                      <div />
-                    </button>
-                  </div>
-                  <div
-                    class="metadata-instance-editor-footer-save-cancel"
-                  >
-                    <button
-                      class="btn"
-                      data-resin-target="metadata-instancecancel"
-                      type="button"
-                    >
-                      <span
-                        class="btn-content"
-                      >
-                        <div />
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is null and isCascadingPolicyApplicable is false 1`] = `
-<div>
-  <div>
-    <div
-      class="collapsible-card is-open is-bordered"
-    >
-      <div
-        class="collapsible-card-header has-sticky-header"
-      >
-        <button
-          aria-expanded="true"
-          class="btn-plain collapsible-card-title"
-          data-resin-target="metadata-cardcollapse"
-          type="button"
-        >
-          <span
-            class="metadata-instance-editor-instance-title"
-          >
-            <svg
-              aria-hidden="true"
-              class="icon-metadata "
-              focusable="false"
-              height="16"
-              role="presentation"
-              viewBox="0 0 16 16"
-              width="16"
-            >
-              <path
-                class="fill-color"
-                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
-                fill="#0061d5"
-                fill-rule="evenodd"
-              />
-            </svg>
-            <span
-              class="metadata-instance-editor-instance-title-text"
-            />
-          </span>
-          <svg
-            aria-hidden="true"
-            class="icon-caret-down collapsible-card-header-caret"
-            focusable="false"
-            height="6"
-            role="presentation"
-            viewBox="0 0 10 6"
-            width="8"
-          >
-            <path
-              class="fill-color"
-              d="M0 .5l5 5 5-5H0z"
-              fill="#909090"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
-      <div
-        aria-hidden="false"
-        class="rah-static rah-static--height-auto"
-        style="height: auto; overflow: visible;"
-      >
-        <div>
-          <div
-            class="collapsible-card-content"
-          >
-            <div
-              class="loading-indicator-wrapper "
-            >
-              <form
-                novalidate=""
-              >
-                <div
-                  class="metadata-instance-editor-instance"
-                >
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      No Description Field
-                    </dt>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      String Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a string field
-                    </i>
-                    <dd>
-                      some string
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty String Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty string field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Float Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a float field
-                    </i>
-                    <dd>
-                      1
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty Float Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty float field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Enum Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a enum field
-                    </i>
-                    <dd>
-                      yes
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty Enum Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty enum field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Date Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a date field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Empty Date Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of an empty date field
-                    </i>
-                    <dd>
-                      <div />
-                    </dd>
-                  </dl>
-                  <dl
-                    class="bdl-ReadOnlyMetadataField"
-                  >
-                    <dt>
-                      Multi Select Field
-                    </dt>
-                    <i
-                      class="bdl-ReadOnlyMetadataField-desc"
-                    >
-                      example of a multi select field field
-                    </i>
-                    <dd>
-                      yes, no
-                    </dd>
-                  </dl>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is null and isCascadingPolicyApplicable is true 1`] = `
-<div>
-  <div>
-    <div
-      class="collapsible-card is-open is-bordered"
-    >
-      <div
-        class="collapsible-card-header has-sticky-header"
-      >
-        <button
-          aria-expanded="true"
-          class="btn-plain collapsible-card-title"
-          data-resin-target="metadata-cardcollapse"
-          type="button"
-        >
-          <span
-            class="metadata-instance-editor-instance-title"
-          >
-            <svg
-              aria-hidden="true"
-              class="icon-metadata "
-              focusable="false"
-              height="16"
-              role="presentation"
-              viewBox="0 0 16 16"
-              width="16"
-            >
-              <path
-                class="fill-color"
-                d="M8 16A8 8 0 1 1 8 0a8 8 0 0 1 0 16zm-2.515-5.879L6.2 7.263l1.376 2.202a.5.5 0 0 0 .848 0L9.8 7.263l.715 2.858a.5.5 0 0 0 .97-.242l-1-4a.5.5 0 0 0-.909-.144L8 8.257 6.424 5.735a.5.5 0 0 0-.91.144l-1 4a.5.5 0 0 0 .971.242z"
-                fill="#0061d5"
-                fill-rule="evenodd"
-              />
-            </svg>
-            <span
-              class="metadata-instance-editor-instance-title-text"
-            />
-          </span>
-          <svg
-            aria-hidden="true"
-            class="icon-caret-down collapsible-card-header-caret"
-            focusable="false"
-            height="6"
-            role="presentation"
-            viewBox="0 0 10 6"
-            width="8"
-          >
-            <path
-              class="fill-color"
-              d="M0 .5l5 5 5-5H0z"
-              fill="#909090"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </button>
-        <span
-          class="bdl-Collapsible-actionItems"
-        >
-          <button
-            aria-label="Edit Metadata"
-            aria-pressed="true"
-            class="btn-plain metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
-            data-resin-target="metadata-instanceedit"
-            tabindex="0"
-            type="button"
-          >
-            <svg
-              aria-hidden="true"
-              class="icon-edit "
-              focusable="false"
-              height="14"
-              role="presentation"
-              viewBox="0 0 14 14"
-              width="14"
-            >
-              <path
-                class="fill-color"
-                d="M3.21 7.89l6.47-6.48a2 2 0 0 1 2.88 2.78h-.05L6 10.72 3.21 7.89zM2.24 9l2.83 2.83L1.67 13c-.52.18-.79-.1-.62-.61z"
-                fill="#6f6f6f"
-              />
-            </svg>
-          </button>
-        </span>
-      </div>
-      <div
-        aria-hidden="false"
-        class="rah-static rah-static--height-auto"
-        style="height: auto; overflow: visible;"
-      >
-        <div>
-          <div
-            class="collapsible-card-content"
-          >
-            <div
-              class="loading-indicator-wrapper "
-            >
-              <form
-                novalidate=""
-              >
-                <div
-                  class="metadata-instance-editor-instance"
-                >
-                  <div
-                    class="metadata-cascade-editor"
-                  >
-                    <div
-                      class="metadata-cascade-enable"
-                    >
-                      <div>
-                        <div />
-                        <div
-                          class="toggle-container metadata-cascade-toggle cascade-off"
-                        >
-                          <label
-                            class="toggle-simple"
-                          >
-                            <input
-                              class="toggle-simple-input"
-                              role="switch"
-                              type="checkbox"
-                            />
-                            <div
-                              class="toggle-simple-switch"
-                            />
-                            <div
-                              class="toggle-simple-label"
-                            />
-                          </label>
-                        </div>
-                      </div>
-                      <div
-                        class="cascade-policy-text"
-                      >
-                        <div />
-                         
-                        <a
-                          class="link cascade-policy-learnmore-link"
-                          href="https://community.box.com/t5/Organizing-and-Tracking-Content/Metadata/ta-p/30765"
-                          rel="noopener"
-                          target="_blank"
-                        >
-                          <div />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          No Description Field
-                        </span>
-                      </span>
-                      <input
-                        aria-invalid="false"
-                        name="nodescfield"
-                        placeholder="Set Value"
-                        type="text"
-                        value=""
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          String Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description69"
-                      >
-                        example of a string field
-                      </div>
-                      <input
-                        aria-describedby="description69"
-                        aria-invalid="false"
-                        name="stringfield"
-                        placeholder="Set Value"
-                        type="text"
-                        value="some string"
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Empty String Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description71"
-                      >
-                        example of an empty string field
-                      </div>
-                      <input
-                        aria-describedby="description71"
-                        aria-invalid="false"
-                        name="emptystring"
-                        placeholder="Set Value"
-                        type="text"
-                        value=""
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Float Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description73"
-                      >
-                        example of a float field
-                      </div>
-                      <input
-                        aria-describedby="description73"
-                        aria-invalid="false"
-                        name="floatfield"
-                        placeholder="Set Value"
-                        type="text"
-                        value="1"
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-TextMetadataField text-input-container"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Empty Float Field
-                        </span>
-                      </span>
-                      <div
-                        class="text-input-description"
-                        id="description75"
-                      >
-                        example of an empty float field
-                      </div>
-                      <input
-                        aria-describedby="description75"
-                        aria-invalid="false"
-                        name="emptyfloat"
-                        placeholder="Set Value"
-                        type="text"
-                        value=""
-                      />
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-EnumMetadataField"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Enum Field
-                        </span>
-                      </span>
-                      <i
-                        class="bdl-EnumMetadataField-desc"
-                      >
-                        example of a enum field
-                      </i>
-                      <div
-                        class="bdl-SelectField select-container"
-                      >
-                        <button
-                          aria-autocomplete="list"
-                          aria-expanded="false"
-                          aria-owns="selectfield77"
-                          class="select-button bdl-SelectButton"
-                          role="listbox"
-                          title="yes"
-                          type="button"
-                        >
-                          yes
-                        </button>
-                      </div>
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-EnumMetadataField"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Empty Enum Field
-                        </span>
-                      </span>
-                      <i
-                        class="bdl-EnumMetadataField-desc"
-                      >
-                        example of an empty enum field
-                      </i>
-                      <div
-                        class="bdl-SelectField select-container"
-                      >
-                        <button
-                          aria-autocomplete="list"
-                          aria-expanded="false"
-                          aria-owns="selectfield79"
-                          class="select-button bdl-SelectButton"
-                          role="listbox"
-                          title="Select Value"
-                          type="button"
-                        >
-                          Select Value
-                        </button>
-                      </div>
-                    </label>
-                  </div>
-                  <div
-                    class="bdl-DateMetadataField date-picker-wrapper show-clear-btn"
-                  >
-                    <span
-                      class="date-picker-icon-holder"
-                    >
-                      <label>
-                        <span
-                          class="label bdl-Label"
-                        >
-                          <span>
-                            Date Field
-                          </span>
-                        </span>
-                        <div
-                          class="date-picker-description"
-                          id="description82"
-                        >
-                          example of a date field
-                        </div>
-                        <input
-                          aria-describedby="description82"
-                          aria-errormessage="errorMessage81"
-                          aria-invalid="false"
-                          class="date-picker-input"
-                          placeholder="Set Date"
-                          type="text"
-                          value="Wed Jun 20 2018 00:00:00 GMT-0700 (Pacific Daylight Time)"
-                        />
-                        <span
-                          class="accessibility-hidden"
-                          id="errorMessage81"
-                          role="alert"
-                        />
-                      </label>
-                      <button
-                        aria-label="Clear Date"
-                        class="btn-plain date-picker-clear-btn"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          height="16"
-                          role="presentation"
-                          viewBox="0 0 16 16"
-                          width="16"
-                        >
-                          <path
-                            d="M7.19 8L4.46 5.27a.572.572 0 01.81-.81L8 7.19l2.73-2.73a.572.572 0 01.81.81L8.81 8l2.73 2.73a.572.572 0 01-.81.81L8 8.81l-2.73 2.73a.572.572 0 01-.81-.81L7.19 8zm5.76 4.95a7 7 0 10-9.9-9.9 7 7 0 009.9 9.9z"
-                            fill="#909090"
-                            fill-rule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                      <button
-                        aria-label="Choose Date"
-                        class="btn-plain date-picker-open-btn"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          height="16"
-                          role="presentation"
-                          viewBox="0 0 16 16"
-                          width="16"
-                        >
-                          <g
-                            fill="#909090"
-                            fill-rule="evenodd"
-                          >
-                            <path
-                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
-                            />
-                            <g
-                              transform="translate(3 5.5)"
-                            >
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.833"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.667"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.67"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="5"
-                              />
-                            </g>
-                          </g>
-                        </svg>
-                      </button>
-                      <input
-                        class="date-picker-unix-time-input"
-                        readonly=""
-                        type="hidden"
-                        value="2018-06-20T00:00:00.000Z"
-                      />
-                    </span>
-                  </div>
-                  <div
-                    class="bdl-DateMetadataField date-picker-wrapper"
-                  >
-                    <span
-                      class="date-picker-icon-holder"
-                    >
-                      <label>
-                        <span
-                          class="label bdl-Label"
-                        >
-                          <span>
-                            Empty Date Field
-                          </span>
-                        </span>
-                        <div
-                          class="date-picker-description"
-                          id="description87"
-                        >
-                          example of an empty date field
-                        </div>
-                        <input
-                          aria-describedby="description87"
-                          aria-errormessage="errorMessage86"
-                          aria-invalid="false"
-                          class="date-picker-input"
-                          placeholder="Set Date"
-                          type="text"
-                          value=""
-                        />
-                        <span
-                          class="accessibility-hidden"
-                          id="errorMessage86"
-                          role="alert"
-                        />
-                      </label>
-                      <button
-                        aria-label="Choose Date"
-                        class="btn-plain date-picker-open-btn"
-                        type="button"
-                      >
-                        <svg
-                          aria-hidden="true"
-                          focusable="false"
-                          height="16"
-                          role="presentation"
-                          viewBox="0 0 16 16"
-                          width="16"
-                        >
-                          <g
-                            fill="#909090"
-                            fill-rule="evenodd"
-                          >
-                            <path
-                              d="M13.436 0c.892 0 1.215.093 1.54.267.327.174.583.43.757.756.174.326.267.65.267 1.54v10.873c0 .892-.093 1.215-.267 1.54-.174.327-.43.583-.756.757-.326.174-.65.267-1.54.267H2.563c-.892 0-1.215-.093-1.54-.267a1.817 1.817 0 01-.757-.756C.093 14.65 0 14.327 0 13.437V2.563c0-.892.093-1.215.267-1.54.174-.327.43-.583.756-.757C1.35.093 1.673 0 2.563 0h10.873zM13 4H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1z"
-                            />
-                            <g
-                              transform="translate(3 5.5)"
-                            >
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.833"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.667"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="5.67"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="8.5"
-                                y="2.5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                y="5"
-                              />
-                              <rect
-                                height="1.5"
-                                rx="0.5"
-                                width="1.5"
-                                x="2.83"
-                                y="5"
-                              />
-                            </g>
-                          </g>
-                        </svg>
-                      </button>
-                      <input
-                        class="date-picker-unix-time-input"
-                        readonly=""
-                        type="hidden"
-                        value=""
-                      />
-                    </span>
-                  </div>
-                  <div
-                    class="bdl-MultiSelectMetadataField"
-                  >
-                    <label>
-                      <span
-                        class="label bdl-Label"
-                      >
-                        <span>
-                          Multi Select Field
-                        </span>
-                      </span>
-                      <i
-                        class="bdl-MultiSelectMetadataField-desc"
-                      >
-                        example of a multi select field field
-                      </i>
-                      <div
-                        class="bdl-SelectField select-container"
-                      >
-                        <button
-                          aria-autocomplete="list"
-                          aria-expanded="false"
-                          aria-owns="selectfield90"
-                          class="select-button bdl-SelectButton"
-                          role="listbox"
-                          title="yes, no"
-                          type="button"
-                        >
-                          yes, no
-                        </button>
-                      </div>
-                    </label>
-                  </div>
-                </div>
-                <div
-                  class="metadata-instance-editor-footer"
-                >
-                  <div
-                    class="metadata-instance-editor-footer-delete"
-                  >
-                    <button
-                      class="btn-plain "
-                      data-resin-target="metadata-instanceremove"
-                      type="button"
-                    >
-                      <div />
-                    </button>
-                  </div>
-                  <div
-                    class="metadata-instance-editor-footer-save-cancel"
-                  >
-                    <button
-                      class="btn"
-                      data-resin-target="metadata-instancecancel"
-                      type="button"
-                    >
-                      <span
-                        class="btn-content"
-                      >
-                        <div />
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
 exports[`features/metadata-instance-editor/fields/Instance should correctly render the busy indicator 1`] = `
 <div>
   <Collapsible
@@ -3188,15 +3703,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
             canEdit={false}
             data={
@@ -3344,7 +3850,27 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     }
     className=""
     hasStickyHeader={true}
-    headerActionItems={null}
+    headerActionItems={
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        position="top-left"
+        text="Edit Metadata"
+        theme="default"
+      >
+        <PlainButton
+          aria-label="Edit Metadata"
+          aria-pressed={true}
+          className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+          data-resin-target="metadata-instanceedit"
+          onClick={[Function]}
+          type="button"
+        >
+          <IconEdit />
+        </PlainButton>
+      </Tooltip>
+    }
     isBordered={true}
     isOpen={true}
     title={
@@ -3369,17 +3895,8 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
-            canEdit={false}
+            canEdit={true}
             data={
               Object {
                 "datefield": "2018-06-20T00:00:00.000Z",
@@ -3417,6 +3934,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             }
           />
         </div>
+        <Footer
+          onCancel={[Function]}
+          onRemove={[Function]}
+          showSave={false}
+        />
       </Form>
     </LoadingIndicatorWrapper>
   </Collapsible>
@@ -3434,7 +3956,27 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     }
     className=""
     hasStickyHeader={true}
-    headerActionItems={null}
+    headerActionItems={
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        position="top-left"
+        text="Edit Metadata"
+        theme="default"
+      >
+        <PlainButton
+          aria-label="Edit Metadata"
+          aria-pressed={true}
+          className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+          data-resin-target="metadata-instanceedit"
+          onClick={[Function]}
+          type="button"
+        >
+          <IconEdit />
+        </PlainButton>
+      </Tooltip>
+    }
     isBordered={true}
     isOpen={true}
     title={
@@ -3459,17 +4001,8 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
-            canEdit={false}
+            canEdit={true}
             data={
               Object {
                 "datefield": "2018-06-20T00:00:00.000Z",
@@ -3492,6 +4025,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             }
           />
         </div>
+        <Footer
+          onCancel={[Function]}
+          onRemove={[Function]}
+          showSave={false}
+        />
       </Form>
     </LoadingIndicatorWrapper>
   </Collapsible>
@@ -3554,15 +4092,6 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={true}
-            isCascadingEnabled={true}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
             canEdit={true}
             data={
@@ -3715,7 +4244,27 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
     }
     className=""
     hasStickyHeader={true}
-    headerActionItems={null}
+    headerActionItems={
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        position="top-left"
+        text="Edit Metadata"
+        theme="default"
+      >
+        <PlainButton
+          aria-label="Edit Metadata"
+          aria-pressed={true}
+          className="metadata-instance-editor-instance-edit metadata-instance-editor-instance-is-editing"
+          data-resin-target="metadata-instanceedit"
+          onClick={[Function]}
+          type="button"
+        >
+          <IconEdit />
+        </PlainButton>
+      </Tooltip>
+    }
     isBordered={true}
     isOpen={true}
     title={
@@ -3740,17 +4289,8 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
-            canEdit={false}
+            canEdit={true}
             data={
               Object {
                 "datefield": "2018-06-20T00:00:00.000Z",
@@ -3879,6 +4419,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             }
           />
         </div>
+        <Footer
+          onCancel={[Function]}
+          onRemove={[Function]}
+          showSave={false}
+        />
       </Form>
     </LoadingIndicatorWrapper>
   </Collapsible>
@@ -3921,17 +4466,8 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
-            canEdit={false}
+            canEdit={true}
             data={
               Object {
                 "datefield": "2018-06-20T00:00:00.000Z",
@@ -4060,6 +4596,11 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             }
           />
         </div>
+        <Footer
+          onCancel={[Function]}
+          onRemove={[Function]}
+          showSave={true}
+        />
       </Form>
     </LoadingIndicatorWrapper>
   </Collapsible>
@@ -4102,15 +4643,6 @@ exports[`features/metadata-instance-editor/fields/Instance should not render foo
         <div
           className="metadata-instance-editor-instance"
         >
-          <CascadePolicy
-            canEdit={false}
-            isCascadingEnabled={false}
-            isCascadingOverwritten={false}
-            isCustomMetadata={false}
-            onCascadeModeChange={[Function]}
-            onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
-          />
           <TemplatedInstance
             canEdit={false}
             data={

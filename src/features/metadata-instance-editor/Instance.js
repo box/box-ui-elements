@@ -54,7 +54,7 @@ type Props = {
     intl: Object,
     isCascadingPolicyApplicable: boolean,
     isDirty: boolean,
-    isFromFolder?: boolean,
+    isFolderInstance?: boolean,
     isOpen: boolean,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
     onRemove?: (id: string) => void,
@@ -104,7 +104,7 @@ class Instance extends React.PureComponent<Props, State> {
         data: {},
         isDirty: false,
         isCascadingPolicyApplicable: false,
-        isFromFolder: false,
+        isFolderInstance: false,
     };
 
     constructor(props: Props) {
@@ -530,10 +530,15 @@ class Instance extends React.PureComponent<Props, State> {
         return ops;
     }
 
-    isInstanceCascadingPolicyApplicable = () => {
-        const { template, isFromFolder }: Props = this.props;
-        const isNotCustom = template.templateKey !== TEMPLATE_CUSTOM_PROPERTIES;
-        return isNotCustom && isFromFolder;
+    /**
+     * Utility function to determine if instance should consider cascading policy
+     *
+     * @return {boolean} true if cascading policy is applicable
+     */
+    isCascadingPolicyApplicable = () => {
+        const { template, isFolderInstance }: Props = this.props;
+        const isTemplatedInstance = template.templateKey !== TEMPLATE_CUSTOM_PROPERTIES;
+        return isTemplatedInstance && isFolderInstance;
     };
 
     /**
@@ -549,10 +554,10 @@ class Instance extends React.PureComponent<Props, State> {
             onSave,
             template,
             isCascadingPolicyApplicable,
-            isFromFolder,
+            isFolderInstance,
         }: Props = this.props;
         const isCustom = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
-        const hasCascadePermission = isCustom || !isFromFolder ? true : isCascadingPolicyApplicable;
+        const hasCascadePermission = isCustom || !isFolderInstance ? true : isCascadingPolicyApplicable;
 
         return !!(
             canEdit &&
@@ -649,7 +654,7 @@ class Instance extends React.PureComponent<Props, State> {
                         <LoadingIndicatorWrapper isLoading={isBusy}>
                             <Form onValidSubmit={isDirty ? this.onSave : noop}>
                                 <div className="metadata-instance-editor-instance">
-                                    {this.isInstanceCascadingPolicyApplicable() && (
+                                    {this.isCascadingPolicyApplicable() && (
                                         <CascadePolicy
                                             canEdit={this.isEditing()}
                                             isCascadingEnabled={isCascadingEnabled}
