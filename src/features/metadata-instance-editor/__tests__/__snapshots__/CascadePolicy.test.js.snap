@@ -37,6 +37,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
 <Fragment>
   <div
     className="metadata-cascade-editor"
+    data-testid="metadata-cascade-policy"
   >
     <div
       className="metadata-cascade-enable"
