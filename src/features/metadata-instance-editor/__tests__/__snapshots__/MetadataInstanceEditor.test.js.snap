@@ -1092,6 +1092,7 @@ exports[`features/metadata-editor-editor/MetadataInstanceEditor should correctly
           ]
         }
         isCascadingPolicyApplicable={false}
+        isFolderInstance={false}
       />
     </ScrollWrapper>
   </div>
