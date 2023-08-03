@@ -119,15 +119,4 @@ describe('components/button/Button', () => {
         const wrapper = shallow(<Button showRadar>Test</Button>);
         expect(wrapper.find('RadarAnimation')).toMatchSnapshot();
     });
-
-    test('accesability label is present', () => {
-        const ariaLabel = 'accessiblityAriaLabelValue';
-        const wrapper = shallow(<Button ariaLabel={ariaLabel}>accesability</Button>);
-        expect(wrapper.prop('aria-label')).toBe(ariaLabel);
-    });
-
-    test('accesability label is not present', () => {
-        const wrapper = shallow(<Button>accesability</Button>);
-        expect(wrapper.prop('aria-label')).not.toBeDefined();
-    });
 });

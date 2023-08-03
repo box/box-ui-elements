@@ -7,8 +7,6 @@ import LoadingIndicator from '../loading-indicator';
 import RadarAnimation from '../radar';
 
 type Props = {
-    /** ariaLabel defines a string value that labels the current element */
-    ariaLabel?: string;
     /** Child components for the button, generally localized text */
     children?: React.Node,
     /** Custom class for the button */
@@ -56,7 +54,7 @@ class Button extends React.Component<Props> {
     };
 
     render() {
-        const { ariaLabel, children, className, isDisabled, isLoading, isSelected, setRef, type, showRadar, ...rest } = this.props;
+        const { children, className, isDisabled, isLoading, isSelected, setRef, type, showRadar, ...rest } = this.props;
 
         const buttonProps = omit(rest, ['onClick']);
         if (isDisabled) {
@@ -76,7 +74,6 @@ class Button extends React.Component<Props> {
         let button = (
             // eslint-disable-next-line react/button-has-type
             <button
-                aria-label={ariaLabel}
                 ref={element => {
                     this.btnElement = element;
                     if (setRef) {

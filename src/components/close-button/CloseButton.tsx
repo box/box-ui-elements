@@ -1,25 +1,29 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
+import { injectIntl, IntlShape } from 'react-intl';
+
 import Button, { ButtonType } from '../button';
 import IconClose from '../../icons/general/IconClose';
 import { bdlGray65 } from '../../styles/variables';
 
+// @ts-ignore flow import
+import messages from '../../common/messages';
+
 import './CloseButton.scss';
 
 export interface CloseButtonProps {
-    /** ariaLabel defines a string value that labels the current element */
-    ariaLabel?: string;
+    intl: IntlShape;
     /** Custom class for the close button */
     className?: string;
     /** onClick handler for the close button */
     onClick?: Function;
 }
 
-const CloseButton = ({ className, onClick, ariaLabel = 'close' }: CloseButtonProps) => {
+const CloseButton = ({ intl, className, onClick }: CloseButtonProps) => {
     return (
         <Button
-            ariaLabel={ariaLabel}
+            aria-label={intl.formatMessage(messages.close)}
             className={classNames('bdl-CloseButton', className)}
             data-testid="bdl-CloseButton"
             onClick={onClick}
@@ -30,4 +34,5 @@ const CloseButton = ({ className, onClick, ariaLabel = 'close' }: CloseButtonPro
     );
 };
 
-export default CloseButton;
+export { CloseButton as CloseButtonBase };
+export default injectIntl(CloseButton);
