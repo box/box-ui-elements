@@ -23,6 +23,12 @@ describe('components/close-button/CloseButton', () => {
             expect(closeButton).toHaveClass(customClass);
             expect(closeButton).toHaveClass('bdl-CloseButton');
         });
+
+        test('should have an accessibility label', () => {
+            render(<CloseButton />);
+            const closeButton = screen.getByRole('button');
+            expect(closeButton).toHaveAttribute('aria-label');
+        });
     });
 
     describe('onClick()', () => {
@@ -35,14 +41,6 @@ describe('components/close-button/CloseButton', () => {
             fireEvent.click(closeButton);
 
             expect(handleClick).toHaveBeenCalledTimes(1);
-        });
-    });
-
-    describe('accesability properties', () => {
-        test('should have an accessibility label', () => {
-            render(<CloseButton />);
-            const closeButton = screen.getByRole('button');
-            expect(closeButton).toHaveAttribute('aria-label');
         });
     });
 });
