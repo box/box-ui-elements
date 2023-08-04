@@ -39,7 +39,7 @@ describe('components/close-button/CloseButton', () => {
     });
 
     describe('accesability properties', () => {
-        test('should have an accesiblity label', () => {
+        test('should have an accessibility label', () => {
             render(<CloseButton />);
             const closeButton = screen.getByRole('button');
             expect(closeButton).toHaveAttribute('aria-label');
