@@ -13,14 +13,15 @@ import messages from '../../common/messages';
 import './CloseButton.scss';
 
 export interface CloseButtonProps {
-    intl: IntlShape;
     /** Custom class for the close button */
     className?: string;
+    /** Intl object */
+    intl: IntlShape;
     /** onClick handler for the close button */
     onClick?: Function;
 }
 
-const CloseButton = ({ intl, className, onClick }: CloseButtonProps) => {
+const CloseButton = ({ className, intl, onClick }: CloseButtonProps) => {
     return (
         <Button
             aria-label={intl.formatMessage(messages.close)}
