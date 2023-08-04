@@ -35,5 +35,4 @@ const CloseButton = ({ className, intl, onClick }: CloseButtonProps) => {
     );
 };
 
-export { CloseButton as CloseButtonBase };
 export default injectIntl(CloseButton);
