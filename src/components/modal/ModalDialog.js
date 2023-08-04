@@ -143,6 +143,7 @@ class ModalDialog extends React.Component<Props> {
         const divProps = omit(rest, ['children', 'closeButtonProps', 'onRequestClose', 'intl']);
 
         divProps.role = isAlertType ? 'alertdialog' : 'dialog';
+        divProps['aria-modal'] = true;
         divProps['aria-labelledby'] = `${this.modalID}-label`;
         if (isAlertType) {
             divProps['aria-describedby'] = `${this.modalID}-desc`;
