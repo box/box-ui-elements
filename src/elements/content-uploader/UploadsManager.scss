@@ -6,6 +6,7 @@
     width: 100%;
     max-height: 0;
     transition: max-height .5s;
+    display: none;
 
     .bcu-progress-container {
         margin-right: 0;
@@ -23,6 +24,7 @@
 
     &.bcu-is-visible {
         max-height: 60px;
+        display: initial;
     }
 
     .bcu-uploads-manager-item-list {
