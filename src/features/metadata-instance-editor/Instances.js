@@ -7,8 +7,6 @@ import type { JSONPatchOperations } from '../../common/types/api';
 
 type Props = {
     editors?: Array<MetadataEditor>,
-    isCascadingPolicyApplicable?: boolean,
-    isFolderInstance?: boolean,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
     onSave?: (
@@ -20,15 +18,7 @@ type Props = {
     selectedTemplateKey?: string,
 };
 
-const Instances = ({
-    isCascadingPolicyApplicable = false,
-    isFolderInstance,
-    editors = [],
-    onModification,
-    onRemove,
-    onSave,
-    selectedTemplateKey,
-}: Props) =>
+const Instances = ({ editors = [], onModification, onRemove, onSave, selectedTemplateKey }: Props) =>
     editors.map<React.Element<typeof Instance>>(
         ({ isDirty = false, instance, hasError = false, template }: MetadataEditor) => {
             const { templateKey } = template;
@@ -40,7 +30,7 @@ const Instances = ({
                     data={instance.data}
                     hasError={hasError}
                     id={instance.id}
-                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                    isCascadingPolicyApplicable={!!instance?.isCascadingPolicyApplicable}
                     isDirty={isDirty}
                     isOpen={isOpen}
                     key={`${instance.id}-${templateKey}`}
@@ -48,7 +38,7 @@ const Instances = ({
                     onSave={onSave}
                     onRemove={onRemove}
                     template={template}
-                    isFolderInstance={isFolderInstance}
+                    isFolderInstance={!!instance?.isFolderInstance}
                 />
             );
         },

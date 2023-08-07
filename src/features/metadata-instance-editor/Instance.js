@@ -209,12 +209,11 @@ class Instance extends React.PureComponent<Props, State> {
             id,
             isDirty,
             isCascadingPolicyApplicable,
+            isFolderInstance,
             onSave,
-            template,
         }: Props = this.props;
         const { data: currentData, errors, isCascadingEnabled, isCascadingOverwritten }: State = this.state;
-        const isCustomInstance = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
-        const hasCascadePermission = isCustomInstance ? true : isCascadingPolicyApplicable;
+        const hasCascadePermission = isFolderInstance ? isCascadingPolicyApplicable : true;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
             return;
@@ -446,10 +445,7 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {boolean} true if cascading policy is enabled
      */
     isCascadingEnabled(props: Props) {
-        if (props.cascadePolicy) {
-            return !!props.cascadePolicy.id;
-        }
-        return false;
+        return !!props?.cascadePolicy?.id;
     }
 
     /**
@@ -531,40 +527,18 @@ class Instance extends React.PureComponent<Props, State> {
     }
 
     /**
-     * Utility function to determine if instance should consider cascading policy
-     *
-     * @return {boolean} true if cascading policy is applicable
-     */
-    isCascadingPolicyApplicable = () => {
-        const { template, isFolderInstance }: Props = this.props;
-        const isTemplatedInstance = template.templateKey !== TEMPLATE_CUSTOM_PROPERTIES;
-        return isTemplatedInstance && isFolderInstance;
-    };
-
-    /**
      * Utility function to determine if instance is editable
      *
      * @return {boolean} true if editable
      */
     canEdit(): boolean {
-        const {
-            canEdit,
-            onModification,
-            onRemove,
-            onSave,
-            template,
-            isCascadingPolicyApplicable,
-            isFolderInstance,
-        }: Props = this.props;
-        const isCustom = template.templateKey === TEMPLATE_CUSTOM_PROPERTIES;
-        const hasCascadePermission = isCustom || !isFolderInstance ? true : isCascadingPolicyApplicable;
+        const { canEdit, onModification, onRemove, onSave }: Props = this.props;
 
         return !!(
             canEdit &&
             typeof onRemove === 'function' &&
             typeof onSave === 'function' &&
-            typeof onModification === 'function' &&
-            hasCascadePermission
+            typeof onModification === 'function'
         );
     }
 
@@ -608,7 +582,7 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { isDirty, isOpen, template }: Props = this.props;
+        const { isDirty, isOpen, template, isFolderInstance }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
@@ -654,7 +628,8 @@ class Instance extends React.PureComponent<Props, State> {
                         <LoadingIndicatorWrapper isLoading={isBusy}>
                             <Form onValidSubmit={isDirty ? this.onSave : noop}>
                                 <div className="metadata-instance-editor-instance">
-                                    {this.isCascadingPolicyApplicable() && (
+                                    {/* policies aren't enabled on custom instances but we show this anyway to display a message to inform the user */}
+                                    {isFolderInstance && (
                                         <CascadePolicy
                                             canEdit={this.isEditing()}
                                             isCascadingEnabled={isCascadingEnabled}
