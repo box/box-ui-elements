@@ -37,6 +37,7 @@ describe('components/modal/ModalDialog', () => {
 
     test('should set aria props on modal dialog when rendered', () => {
         expect(wrapper.prop('role')).toEqual('dialog');
+        expect(wrapper.prop('aria-modal')).toEqual(true);
         expect(wrapper.prop('aria-labelledby')).toEqual(`${instance.modalID}-label`);
     });
 
