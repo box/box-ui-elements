@@ -118,7 +118,6 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
     }
 
     const data = response.entries;
-    const versions = [];
 
     const parsedData: Array<Object> = data
         .map(item => {
@@ -196,6 +195,10 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                     if (versionsItem.action_by) {
                         const collaborators = {};
 
+                        if (versionsItem.action_by.length === 1) {
+                            versionsItem.uploader_display_name = versionsItem.action_by[0].name;
+                        }
+
                         versionsItem.action_by.map(collaborator => {
                             collaborators[collaborator.id] = { ...collaborator };
                             return collaborator;
@@ -211,8 +214,42 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                         versionsItem.version_start = versionsItem.start.number;
                     }
 
-                    versions.push(versionsItem);
-                    return null;
+                    if (versionsItem.version_start === versionsItem.version_end) {
+                        versionsItem.version_number = versionsItem.version_start;
+
+                        if (
+                            versionsItem.action_type === 'created' &&
+                            versionsItem.start?.created_at &&
+                            versionsItem.start?.created_by
+                        ) {
+                            const modifiedAt = versionsItem.start.created_at;
+                            const modifiedBy = { ...versionsItem.start.created_by };
+                            versionsItem.modified_at = modifiedAt;
+                            versionsItem.modified_by = modifiedBy;
+                        }
+                        if (
+                            versionsItem.action_type === 'trashed' &&
+                            versionsItem.start?.trashed_at &&
+                            versionsItem.start?.trashed_by
+                        ) {
+                            const trashedAt = versionsItem.start.trashed_at;
+                            const trashedBy = { ...versionsItem.start.trashed_by };
+                            versionsItem.trashed_at = trashedAt;
+                            versionsItem.trashed_by = trashedBy;
+                        }
+                        if (
+                            versionsItem.action_type === 'restored' &&
+                            versionsItem.start?.restored_at &&
+                            versionsItem.start?.restored_by
+                        ) {
+                            const restoredAt = versionsItem.start.restored_at;
+                            const restoredBy = { ...versionsItem.start.restored_by };
+                            versionsItem.restored_at = restoredAt;
+                            versionsItem.restored_by = restoredBy;
+                        }
+                    }
+
+                    return versionsItem;
                 }
 
                 default: {
@@ -220,9 +257,10 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                 }
             }
         })
-        .filter(item => !!item);
+        .filter(item => !!item)
+        .reverse();
 
-    return [...versions, ...parsedData];
+    return parsedData;
 };
 
 class Feed extends Base {
