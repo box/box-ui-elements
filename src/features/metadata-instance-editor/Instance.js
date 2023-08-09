@@ -203,17 +203,8 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onSave = (): void => {
-        const {
-            cascadePolicy,
-            data: originalData,
-            id,
-            isDirty,
-            isCascadingPolicyApplicable,
-            isFolderInstance,
-            onSave,
-        }: Props = this.props;
+        const { cascadePolicy = {}, data: originalData, id, isDirty, onSave, isFolderInstance }: Props = this.props;
         const { data: currentData, errors, isCascadingEnabled, isCascadingOverwritten }: State = this.state;
-        const hasCascadePermission = isFolderInstance ? isCascadingPolicyApplicable : true;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
             return;
@@ -224,19 +215,16 @@ class Instance extends React.PureComponent<Props, State> {
             isEditing: false,
             shouldShowCascadeOptions: false,
         });
-        onSave(
-            id,
-            this.createJSONPatch(currentData, originalData),
-            hasCascadePermission
-                ? {
-                      canEdit: cascadePolicy ? cascadePolicy.canEdit : false,
-                      id: cascadePolicy ? cascadePolicy.id : undefined,
-                      isEnabled: isCascadingEnabled,
-                      overwrite: isCascadingOverwritten,
-                  }
-                : undefined,
-            cloneDeep(currentData),
-        );
+
+        const cascadePolicyData = {
+            ...cascadePolicy,
+            isEnabled: isFolderInstance ? isCascadingEnabled : false,
+            overwrite: isCascadingOverwritten,
+        };
+
+        const clonedCurrentData = cloneDeep(currentData);
+        const JSONPatch = this.createJSONPatch(clonedCurrentData, originalData);
+        onSave(id, JSONPatch, cascadePolicyData, clonedCurrentData);
     };
 
     /**
@@ -403,8 +391,8 @@ class Instance extends React.PureComponent<Props, State> {
      * Get the delete confirmation message base on the template key
      */
     getConfirmationMessage(): React.Node {
-        const { template, isCascadingPolicyApplicable }: Props = this.props;
-        const isFile = !isCascadingPolicyApplicable;
+        const { template, isFolderInstance }: Props = this.props;
+        const isFile = !isFolderInstance;
         return this.renderDeleteMessage(isFile, template);
     }
 

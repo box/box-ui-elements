@@ -15,7 +15,9 @@ type Props = {
     blurExceptionClassNames?: Array<string>,
     canAdd: boolean,
     editors?: Array<MetadataEditor>,
+    isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
+    isFolderInstance?: boolean,
     onAdd?: (template: MetadataTemplate) => void,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
@@ -34,7 +36,9 @@ type Props = {
 const MetadataInstanceEditor = ({
     blurExceptionClassNames,
     canAdd,
+    isCascadingPolicyApplicable = false,
     isDropdownBusy,
+    isFolderInstance = false,
     editors = [],
     onModification,
     onRemove,
@@ -60,6 +64,8 @@ const MetadataInstanceEditor = ({
                 <ScrollWrapper>
                     <Instances
                         editors={editors}
+                        isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                        isFolderInstance={isFolderInstance}
                         onModification={onModification}
                         onRemove={onRemove}
                         onSave={onSave}
