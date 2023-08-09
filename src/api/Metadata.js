@@ -128,7 +128,7 @@ class Metadata extends File {
     /**
      * Returns the custom properties template
      *
-     * @return {Object} temaplte for custom properties
+     * @return {Object} template for custom properties
      */
     getCustomPropertiesTemplate(): MetadataTemplate {
         return {
