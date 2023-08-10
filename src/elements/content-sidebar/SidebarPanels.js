@@ -106,8 +106,8 @@ class SidebarPanels extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { location, onVersionChange }: Props = this.props;
-        const { location: prevLocation }: Props = prevProps;
+        const { location, onVersionChange } = this.props;
+        const { location: prevLocation } = prevProps;
 
         // Reset the current version id if the wrapping versions route is no longer active
         if (onVersionChange && this.getVersionsMatchPath(prevLocation) && !this.getVersionsMatchPath(location)) {

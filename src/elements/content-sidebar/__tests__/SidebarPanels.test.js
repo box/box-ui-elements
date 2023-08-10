@@ -150,20 +150,37 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
     });
 
-    test('should reset the current version if the versions route is no longer active', () => {
+    describe('componentDidUpdate', () => {
         const onVersionChange = jest.fn();
-        const wrapper = getWrapper({ location: { pathname: '/activity' }, onVersionChange });
 
-        wrapper.setProps({ location: { pathname: '/activity/versions/123' }, isOpen: true });
-        expect(onVersionChange).not.toBeCalled();
+        test.each([
+            ['/activity/versions/123', '/activity/versions/456'],
+            ['/activity/versions/123', '/details/versions/456'],
+            ['/activity/versions', '/activity/versions/123'],
+            ['/activity/versions', '/details/versions'],
+        ])('should not reset the current version if the versions route is still active', (prevPathname, pathname) => {
+            const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
+            wrapper.setProps({ location: { pathname } });
+            expect(onVersionChange).not.toBeCalled();
+        });
 
-        wrapper.setProps({ location: { pathname: '/activity/versions/123' }, isOpen: false });
-        expect(onVersionChange).not.toBeCalled();
+        test.each([true, false])('should not reset the current version if the sidebar is toggled', isOpen => {
+            const wrapper = getWrapper({ isOpen, location: { pathname: '/details/versions/123' }, onVersionChange });
+            wrapper.setProps({ isOpen: !isOpen });
+            expect(onVersionChange).not.toBeCalled();
+        });
 
-        wrapper.setProps({ location: { pathname: '/activity/versions/456' }, isOpen: true });
-        expect(onVersionChange).not.toBeCalled();
-
-        wrapper.setProps({ location: { pathname: '/details' } });
-        expect(onVersionChange).lastCalledWith(null);
+        test.each([
+            ['/activity/versions/123', '/metadata'],
+            ['/activity/versions/123', '/activity'],
+            ['/activity/versions', '/metadata'],
+            ['/details/versions/123', '/metadata'],
+            ['/details/versions/123', '/details'],
+            ['/details/versions', '/metadata'],
+        ])('should reset the current version if the versions route is no longer active', (prevPathname, pathname) => {
+            const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
+            wrapper.setProps({ location: { pathname } });
+            expect(onVersionChange).toBeCalledWith(null);
+        });
     });
 });
