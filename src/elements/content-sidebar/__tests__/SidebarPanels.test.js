@@ -11,18 +11,23 @@ jest.mock('../SidebarUtils');
 describe('elements/content-sidebar/SidebarPanels', () => {
     const getWrapper = ({ path = '/', ...rest } = {}) =>
         mount(
-            <MemoryRouter initialEntries={[path]} keyLength={0}>
-                <SidebarPanels
-                    file={{ id: '1234' }}
-                    hasActivity
-                    hasDetails
-                    hasMetadata
-                    hasSkills
-                    hasVersions
-                    isOpen
-                    {...rest}
-                />
-            </MemoryRouter>,
+            <SidebarPanels
+                file={{ id: '1234' }}
+                hasActivity
+                hasDetails
+                hasMetadata
+                hasSkills
+                hasVersions
+                isOpen
+                {...rest}
+            />,
+            {
+                wrappingComponent: MemoryRouter,
+                wrappingComponentProps: {
+                    initialEntries: [path],
+                    keyLength: 0,
+                },
+            },
         );
 
     describe('render', () => {
@@ -143,5 +148,22 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             expect(instance.metadataSidebar.current.refresh).toHaveBeenCalledWith();
             expect(instance.versionsSidebar.current.refresh).toHaveBeenCalledWith();
         });
+    });
+
+    test('should reset the current version if the versions route is no longer active', () => {
+        const onVersionChange = jest.fn();
+        const wrapper = getWrapper({ location: { pathname: '/activity' }, onVersionChange });
+
+        wrapper.setProps({ location: { pathname: '/activity/versions/123' }, isOpen: true });
+        expect(onVersionChange).not.toBeCalled();
+
+        wrapper.setProps({ location: { pathname: '/activity/versions/123' }, isOpen: false });
+        expect(onVersionChange).not.toBeCalled();
+
+        wrapper.setProps({ location: { pathname: '/activity/versions/456' }, isOpen: true });
+        expect(onVersionChange).not.toBeCalled();
+
+        wrapper.setProps({ location: { pathname: '/details' } });
+        expect(onVersionChange).lastCalledWith(null);
     });
 });

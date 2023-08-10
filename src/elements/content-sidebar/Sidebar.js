@@ -10,14 +10,13 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import { matchPath, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import type { Location, RouterHistory } from 'react-router-dom';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
-import { SIDEBAR_PATH_VERSIONS } from '../../constants';
 import { withCurrentUser } from '../common/current-user';
 import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
@@ -98,7 +97,7 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, location, onVersionChange }: Props = this.props;
+        const { fileId, history, location }: Props = this.props;
         const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
 
@@ -112,17 +111,7 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
-
-        // Reset the current version id if the wrapping versions route is no longer active
-        if (onVersionChange && this.getVersionsMatchPath(prevLocation) && !this.getVersionsMatchPath(location)) {
-            onVersionChange(null);
-        }
     }
-
-    getVersionsMatchPath = (location: Location) => {
-        const pathname = getProp(location, 'pathname', '');
-        return matchPath(pathname, SIDEBAR_PATH_VERSIONS);
-    };
 
     getUrlPrefix = (pathname: string) => {
         const basePath = pathname.substring(1).split('/')[0];
