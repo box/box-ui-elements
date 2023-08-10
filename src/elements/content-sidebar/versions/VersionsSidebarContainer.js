@@ -95,11 +95,6 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         }
     }
 
-    componentWillUnmount() {
-        // Reset the current version id since the wrapping route is no longer active
-        this.props.onVersionChange(null);
-    }
-
     handleActionDelete = (versionId: string): Promise<void> => {
         this.setState({ isLoading: true });
 

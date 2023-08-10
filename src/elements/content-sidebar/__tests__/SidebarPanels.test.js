@@ -11,18 +11,23 @@ jest.mock('../SidebarUtils');
 describe('elements/content-sidebar/SidebarPanels', () => {
     const getWrapper = ({ path = '/', ...rest } = {}) =>
         mount(
-            <MemoryRouter initialEntries={[path]} keyLength={0}>
-                <SidebarPanels
-                    file={{ id: '1234' }}
-                    hasActivity
-                    hasDetails
-                    hasMetadata
-                    hasSkills
-                    hasVersions
-                    isOpen
-                    {...rest}
-                />
-            </MemoryRouter>,
+            <SidebarPanels
+                file={{ id: '1234' }}
+                hasActivity
+                hasDetails
+                hasMetadata
+                hasSkills
+                hasVersions
+                isOpen
+                {...rest}
+            />,
+            {
+                wrappingComponent: MemoryRouter,
+                wrappingComponentProps: {
+                    initialEntries: [path],
+                    keyLength: 0,
+                },
+            },
         );
 
     describe('render', () => {
@@ -142,6 +147,40 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             expect(instance.detailsSidebar.current.refresh).toHaveBeenCalledWith();
             expect(instance.metadataSidebar.current.refresh).toHaveBeenCalledWith();
             expect(instance.versionsSidebar.current.refresh).toHaveBeenCalledWith();
+        });
+    });
+
+    describe('componentDidUpdate', () => {
+        const onVersionChange = jest.fn();
+
+        test.each([
+            ['/activity/versions/123', '/activity/versions/456'],
+            ['/activity/versions/123', '/details/versions/456'],
+            ['/activity/versions', '/activity/versions/123'],
+            ['/activity/versions', '/details/versions'],
+        ])('should not reset the current version if the versions route is still active', (prevPathname, pathname) => {
+            const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
+            wrapper.setProps({ location: { pathname } });
+            expect(onVersionChange).not.toBeCalled();
+        });
+
+        test.each([true, false])('should not reset the current version if the sidebar is toggled', isOpen => {
+            const wrapper = getWrapper({ isOpen, location: { pathname: '/details/versions/123' }, onVersionChange });
+            wrapper.setProps({ isOpen: !isOpen });
+            expect(onVersionChange).not.toBeCalled();
+        });
+
+        test.each([
+            ['/activity/versions/123', '/metadata'],
+            ['/activity/versions/123', '/activity'],
+            ['/activity/versions', '/metadata'],
+            ['/details/versions/123', '/metadata'],
+            ['/details/versions/123', '/details'],
+            ['/details/versions', '/metadata'],
+        ])('should reset the current version if the versions route is no longer active', (prevPathname, pathname) => {
+            const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
+            wrapper.setProps({ location: { pathname } });
+            expect(onVersionChange).toBeCalledWith(null);
         });
     });
 });

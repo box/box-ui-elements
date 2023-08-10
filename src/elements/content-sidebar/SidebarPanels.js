@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import flow from 'lodash/flow';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { matchPath, Redirect, Route, Switch, type Location } from 'react-router-dom';
 import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
@@ -47,6 +47,7 @@ type Props = {
     hasSkills: boolean,
     hasVersions: boolean,
     isOpen: boolean,
+    location: Location,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
     onVersionChange?: Function,
@@ -87,6 +88,8 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     MARK_NAME_JS_LOADING_VERSIONS,
 );
 
+const SIDEBAR_PATH_VERSIONS = '/:sidebar(activity|details)/versions/:versionId?';
+
 class SidebarPanels extends React.Component<Props, State> {
     activitySidebar: ElementRefType = React.createRef();
 
@@ -101,6 +104,21 @@ class SidebarPanels extends React.Component<Props, State> {
     componentDidMount() {
         this.setState({ isInitialized: true });
     }
+
+    componentDidUpdate(prevProps: Props): void {
+        const { location, onVersionChange } = this.props;
+        const { location: prevLocation } = prevProps;
+
+        // Reset the current version id if the wrapping versions route is no longer active
+        if (onVersionChange && this.getVersionsMatchPath(prevLocation) && !this.getVersionsMatchPath(location)) {
+            onVersionChange(null);
+        }
+    }
+
+    getVersionsMatchPath = (location: Location) => {
+        const { pathname } = location;
+        return matchPath(pathname, SIDEBAR_PATH_VERSIONS);
+    };
 
     /**
      * Refreshes the contents of the active sidebar
@@ -250,7 +268,7 @@ class SidebarPanels extends React.Component<Props, State> {
                 )}
                 {hasVersions && (
                     <Route
-                        path="/:sidebar(activity|details)/versions/:versionId?"
+                        path={SIDEBAR_PATH_VERSIONS}
                         render={({ match }) => (
                             <LoadableVersionsSidebar
                                 fileId={fileId}
