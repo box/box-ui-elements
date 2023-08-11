@@ -88,13 +88,13 @@ const OverallUploadsProgressBar = ({
 
     return (
         <div
+            aria-hidden={!isVisible}
             className="bcu-overall-progress-bar"
             data-resin-target={isExpanded ? 'uploadcollapse' : 'uploadexpand'}
             onClick={onClick}
             onKeyDown={onKeyDown}
             role="button"
             tabIndex={isVisible ? '0' : '-1'}
-            aria-hidden={!isVisible}
         >
             <span className="bcu-upload-status">{status}</span>
             <ProgressBar percent={updatedPercent} />
