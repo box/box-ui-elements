@@ -9,12 +9,3 @@ The UI Elements use [react-intl](https://github.com/formatjs/react-intl) for int
 The `language` property is a string that can be one of `en-AU`, `en-CA`, `en-GB`, `en-US`, `bn-IN`, `da-DK`, `de-DE`, `es-419`, `es-ES`, `fi-FI`, `fr-CA`, `fr-FR`, `hi-IN`, `it-IT`, `ja-JP`, `ko-KR`, `nb-NO`, `nl-NL`, `pl-PL`, `pt-BR`, `ru-RU`, `sv-SE`, `tr-TR`, `zh-CN`, `zh-TW`.
 
 The `messages` property is a map of message keys and translated strings. All the messages that the UI elements use can be found under the [i18n](i18n) folder. We distribute them as JS modules within the `box-ui-elements` npm package and they can be imported like any other module - `import box-ui-elements/i18n/[LANGUAGE FROM ABOVE]`. The code examples for each of the UI Elements assume `en-US` and show how the US english messages are imported in.
-
-For `react-intl` to work properly, please look at its [requirements](https://github.com/formatjs/react-intl/blob/master/docs/Getting-Started.md#runtime-requirements). You may need to polyfill [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl) if you are supporting older browsers. One approach can be to import polyfills within your own application via:
-
-```js static
-import '@formatjs/intl-pluralrules/dist-es6/polyfill';
-import '@formatjs/intl-relativetimeformat/dist-es6/polyfill';
-```
-
-

@@ -16,7 +16,7 @@ Our development setup assumes a LINUX/BSD environemnt.
 
 A published version of the style guide can be seen at https://opensource.box.com/box-ui-elements/. The style guide uses **_live_** demo data within the UI Elements. Due to security restrictions this data is read-only. You can run a local version of the style guide as follows:
 
-1. Start the style guide server via `yarn start` (or via `yarn start:examples:legacy`, to include support for IE 11).
+1. Start the style guide server via `yarn start`.
 2. Navigate to `http://localhost:6060/` to see the UI Elements in action. If testing on a different machine or VM, you can instead use the IP address shown on your terminal window.
 
 **_NOTE:_** _This note applies to testing top level UI Elements only and not the lower level components. If you want to use your own live data for the style guide, then start the style guide server using [your own developer auth token](https://developer.box.com/docs/authenticate-with-developer-token) and a file or folder ID via_
@@ -72,7 +72,6 @@ To test the Box UI Elements with your own project use local Yarn linking.
 ## Common Script Commands
 
 - `yarn start` to launch a local style guide examples server. Uses demo live data for Elements.
-- `yarn start:examples:legacy` same as above, but with IE 11 support.
 - `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
 - `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
 - `yarn lint` to lint js and css.

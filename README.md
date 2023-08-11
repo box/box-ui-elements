@@ -54,7 +54,6 @@ Box UI Elements use [SCSS stylesheets](https://sass-lang.com/guide). Each of the
 
 ### Browser Support
 * Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
-* Limited support for Internet Explorer 11 (requires ES2015 polyfill)
 * Mobile Chrome and Safari
 
 ### Supported Packages
