@@ -15,6 +15,7 @@ import {
     FILE_ACTIVITY_TYPE_TASK,
     IS_ERROR_DISPLAYED,
     TASK_MAX_GROUP_ASSIGNEES,
+    FILE_ACTIVITY_TYPE_VERSION,
 } from '../../constants';
 import AnnotationsAPI from '../Annotations';
 import Feed, { getParsedFileActivitiesResponse } from '../Feed';
@@ -612,6 +613,7 @@ describe('api/Feed', () => {
                 shouldShowAppActivity: true,
                 shouldShowTasks: true,
                 shouldShowReplies: true,
+                shouldShowVersions: true,
             });
             setImmediate(() => {
                 expect(feed.fetchFileActivities).toBeCalledWith(
@@ -621,6 +623,7 @@ describe('api/Feed', () => {
                         FILE_ACTIVITY_TYPE_APP_ACTIVITY,
                         FILE_ACTIVITY_TYPE_COMMENT,
                         FILE_ACTIVITY_TYPE_TASK,
+                        FILE_ACTIVITY_TYPE_VERSION,
                     ],
                     true,
                 );
@@ -2321,7 +2324,7 @@ describe('api/Feed', () => {
             ${{ entries: [{ test: 'invalid' }] }}
             ${{ entries: [{ source: { activity: 'invalid' } }] }}
         `('should return an empty entries array when the response is $response', ({ response }) => {
-            expect(getParsedFileActivitiesResponse(response)).toEqual({ entries: [] });
+            expect(getParsedFileActivitiesResponse(response)).toEqual([]);
         });
 
         test.each`
@@ -2329,13 +2332,11 @@ describe('api/Feed', () => {
             ${{ entries: mockFileActivities }}
             ${{ entries: [...mockFileActivities, { test: 'filtered out' }] }}
         `('should return a parsed entries array when response is valid', ({ response }) => {
-            expect(getParsedFileActivitiesResponse(response)).toEqual({
-                entries: [
-                    mockFormattedAnnotations[0],
-                    threadedCommentsFormatted[0],
-                    { ...mockTask, task_type: 'GENERAL', created_by: { target: mockTask.created_by.target } },
-                ],
-            });
+            expect(getParsedFileActivitiesResponse(response)).toEqual([
+                { ...mockTask, task_type: 'GENERAL', created_by: { target: mockTask.created_by.target } },
+                threadedCommentsFormatted[0],
+                mockFormattedAnnotations[0],
+            ]);
         });
     });
 });

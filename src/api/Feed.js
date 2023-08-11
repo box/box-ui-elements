@@ -114,7 +114,7 @@ const parseReplies = (replies: Comment[]): Comment[] => {
 
 export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
     if (!response || !response.entries || !response.entries.length) {
-        return { entries: [] };
+        return [];
     }
 
     const data = response.entries;
