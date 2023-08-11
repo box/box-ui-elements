@@ -41,7 +41,7 @@ const ACTION_MAP = {
 const Version = (props: Props): React.Node => {
     // $FlowFixMe
     const action = selectors.getVersionAction(props);
-    const { id, intl, onInfo, shouldUseUAA, version_number, version_promoted } = props;
+    const { id, intl, onInfo, version_number, version_promoted } = props;
     // $FlowFixMe
     const user = selectors.getVersionUser(props);
     const name = user.name === FILE_REQUEST_NAME ? intl.formatMessage(messages.fileRequestDisplayName) : user.name;
@@ -63,13 +63,7 @@ const Version = (props: Props): React.Node => {
                         aria-label={intl.formatMessage(messages.getVersionInfo)}
                         className="bcs-Version-info"
                         data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
-                        onClick={
-                            shouldUseUAA
-                                ? onInfo
-                                : () => {
-                                      onInfo({ id, version_number });
-                                  }
-                        }
+                        onClick={() => onInfo({ id, version_number })}
                         type="button"
                     >
                         <IconInfo height={16} width={16} />
