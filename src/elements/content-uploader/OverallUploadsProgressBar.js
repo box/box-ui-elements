@@ -94,6 +94,7 @@ const OverallUploadsProgressBar = ({
             onKeyDown={onKeyDown}
             role="button"
             tabIndex={isVisible ? '0' : '-1'}
+            aria-hidden={!isVisible}
         >
             <span className="bcu-upload-status">{status}</span>
             <ProgressBar percent={updatedPercent} />
