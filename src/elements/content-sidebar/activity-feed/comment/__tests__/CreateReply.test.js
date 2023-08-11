@@ -27,9 +27,9 @@ const getWrapper = props =>
             <CreateReply
                 isDisabled={false}
                 onCancel={onCancel}
+                onClick={onClick}
                 onFocus={onFocus}
                 onSubmit={onSubmit}
-                onClick={onClick}
                 showReplyForm={false}
                 {...props}
             />

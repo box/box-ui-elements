@@ -6,7 +6,7 @@ import ActivityThreadReplies from '../ActivityThreadReplies.js';
 import { replies } from '../fixtures';
 
 describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThreadReplies', () => {
-    const getWrapper = props => render(<ActivityThreadReplies replies={replies} isExpanded={false} {...props} />);
+    const getWrapper = props => render(<ActivityThreadReplies isExpanded={false} replies={replies} {...props} />);
 
     test('should render all replies', () => {
         const { queryByText } = getWrapper();

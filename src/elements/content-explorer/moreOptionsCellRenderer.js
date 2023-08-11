@@ -23,18 +23,18 @@ export default (
     isSmall: boolean,
 ) => ({ rowData }: { rowData: BoxItem }) => (
     <MoreOptions
-        canPreview={canPreview}
-        canShare={canShare}
-        canDownload={canDownload}
         canDelete={canDelete}
+        canDownload={canDownload}
+        canPreview={canPreview}
         canRename={canRename}
-        onItemSelect={onItemSelect}
-        onItemDelete={onItemDelete}
-        onItemDownload={onItemDownload}
-        onItemRename={onItemRename}
-        onItemShare={onItemShare}
-        onItemPreview={onItemPreview}
+        canShare={canShare}
         isSmall={isSmall}
         item={rowData}
+        onItemDelete={onItemDelete}
+        onItemDownload={onItemDownload}
+        onItemPreview={onItemPreview}
+        onItemRename={onItemRename}
+        onItemSelect={onItemSelect}
+        onItemShare={onItemShare}
     />
 );

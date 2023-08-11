@@ -102,20 +102,20 @@ class ContentExplorer extends ES6Wrapper {
     render() {
         render(
             <ContentExplorerReactComponent
+                componentRef={this.setComponent}
                 language={this.language}
                 messages={this.messages}
-                rootFolderId={this.id}
-                token={this.token}
-                componentRef={this.setComponent}
+                onCreate={this.onCreate}
                 onDelete={this.onDelete}
                 onDownload={this.onDownload}
+                onInteraction={this.onInteraction}
+                onNavigate={this.onNavigate}
                 onPreview={this.onPreview}
                 onRename={this.onRename}
                 onSelect={this.onSelect}
                 onUpload={this.onUpload}
-                onCreate={this.onCreate}
-                onNavigate={this.onNavigate}
-                onInteraction={this.onInteraction}
+                rootFolderId={this.id}
+                token={this.token}
                 {...this.options}
             />,
             this.container,

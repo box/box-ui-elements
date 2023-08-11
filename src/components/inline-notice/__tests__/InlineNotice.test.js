@@ -58,7 +58,7 @@ describe('components/inline-notice/InlineNotice', () => {
         const role = 'alert';
 
         const wrapper = render(
-            <InlineNotice role={role} aria-label={label}>
+            <InlineNotice aria-label={label} role={role}>
                 a message
             </InlineNotice>,
         );

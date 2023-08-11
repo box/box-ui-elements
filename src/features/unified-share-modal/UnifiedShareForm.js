@@ -492,19 +492,19 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                 <Tooltip {...ftuxTooltipProps}>
                     <div className="invite-collaborator-container" data-testid="invite-collaborator-container">
                         <EmailForm
+                            collabRestrictionType={collabRestrictionType}
                             config={config}
                             contactLimit={contactLimit}
-                            collabRestrictionType={collabRestrictionType}
                             contactsFieldAvatars={avatars}
                             contactsFieldDisabledTooltip={contactsFieldDisabledTooltip}
                             contactsFieldLabel={<FormattedMessage {...messages.inviteFieldLabel} />}
-                            getContacts={getCollaboratorContacts}
                             getContactAvatarUrl={getContactAvatarUrl}
+                            getContacts={getCollaboratorContacts}
                             inlineNotice={inlineNotice}
                             isContactsFieldEnabled={canInvite}
                             isExpanded={isInviteSectionExpanded}
-                            isFetchingJustificationReasons={isFetchingJustificationReasons}
                             isExternalUserSelected={this.hasExternalContact(INVITE_COLLABS_CONTACTS_TYPE)}
+                            isFetchingJustificationReasons={isFetchingJustificationReasons}
                             isRestrictionJustificationEnabled={this.shouldRequireCollabJustification()}
                             justificationReasons={justificationReasons}
                             onContactInput={this.openInviteCollaborators}
@@ -515,9 +515,9 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             recommendedSharingTooltipCalloutName={recommendedSharingTooltipCalloutName}
                             restrictedEmails={restrictedCollabEmails}
                             restrictedGroups={restrictedGroups}
+                            selectedContacts={this.state.inviteCollabsContacts}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
-                            selectedContacts={this.state.inviteCollabsContacts}
                             suggestedCollaborators={suggestedCollaborators}
                             updateSelectedContacts={this.updateInviteCollabsContacts}
                             {...inviteCollabsEmailTracking}
@@ -545,8 +545,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             avatarsContent = canShowCollaboratorAvatars && (
                 <CollaboratorAvatars
                     collaborators={collaborators.filter(collaborator => String(collaborator.userID) !== currentUserID)}
-                    onClick={this.showCollaboratorList}
                     containerAttributes={modalTracking.collaboratorAvatarsProps}
+                    onClick={this.showCollaboratorList}
                 />
             );
         }
@@ -629,11 +629,11 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
         return (
             inviteePermissions && (
                 <InviteePermissionsMenu
+                    changeInviteePermissionLevel={this.handleInviteePermissionChange}
                     disabled={!canInvite || submitting}
-                    inviteePermissionsButtonProps={inviteCollabTracking.inviteePermissionsButtonProps}
                     inviteePermissionLevel={this.state.inviteePermissionLevel}
                     inviteePermissions={inviteePermissions}
-                    changeInviteePermissionLevel={this.handleInviteePermissionChange}
+                    inviteePermissionsButtonProps={inviteCollabTracking.inviteePermissionsButtonProps}
                     itemType={type}
                 />
             )
@@ -651,11 +651,11 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
             listContent = (
                 <CollaboratorList
+                    collaborators={collaborators}
+                    item={item}
                     itemName={name}
                     itemType={type}
                     onDoneClick={this.closeCollaboratorList}
-                    item={item}
-                    collaborators={collaborators}
                     trackingProps={collaboratorListTracking}
                 />
             );
@@ -710,7 +710,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
         return (
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
-                <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
+                <LoadingIndicatorWrapper hideContent isLoading={isFetching}>
                     {!hasExpandedSections && allShareRestrictionWarning}
                     {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
@@ -719,30 +719,30 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                     {!hasExpandedSections && (
                         <SharedLinkSection
                             addSharedLink={onAddLink}
-                            autofocusSharedLink={this.shouldAutoFocusSharedLink()}
                             autoCreateSharedLink={createSharedLinkOnLoad}
-                            config={config}
-                            triggerCopyOnLoad={createSharedLinkOnLoad && focusSharedLinkOnLoad}
+                            autofocusSharedLink={this.shouldAutoFocusSharedLink()}
                             changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                             changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
+                            config={config}
                             intl={intl}
                             isAllowEditSharedLinkForFileEnabled={isAllowEditSharedLinkForFileEnabled}
                             item={item}
                             itemType={item.type}
+                            onCopyError={onCopyError}
+                            onCopyInit={onCopyInit}
+                            onCopySuccess={onCopySuccess}
                             onDismissTooltip={onDismissTooltip}
                             onEmailSharedLinkClick={this.openEmailSharedLinkForm}
                             onSettingsClick={onSettingsClick}
                             onToggleSharedLink={this.onToggleSharedLink}
-                            onCopyInit={onCopyInit}
-                            onCopySuccess={onCopySuccess}
-                            onCopyError={onCopyError}
                             sharedLink={sharedLink}
                             sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
                             sharedLinkEditTooltipTargetingApi={sharedLinkEditTooltipTargetingApi}
                             showSharedLinkSettingsCallout={showSharedLinkSettingsCallout}
                             submitting={submitting || isFetching}
-                            trackingProps={sharedLinkTracking}
                             tooltips={tooltips}
+                            trackingProps={sharedLinkTracking}
+                            triggerCopyOnLoad={createSharedLinkOnLoad && focusSharedLinkOnLoad}
                         />
                     )}
 
@@ -774,9 +774,9 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             onPillCreate={this.handleEmailSharedLinkPillCreate}
                             onRequestClose={this.closeEmailSharedLinkForm}
                             onSubmit={this.handleSendSharedLink}
+                            selectedContacts={this.state.emailSharedLinkContacts}
                             showEnterEmailsCallout={showEnterEmailsCallout}
                             submitting={submitting}
-                            selectedContacts={this.state.emailSharedLinkContacts}
                             updateSelectedContacts={this.updateEmailSharedLinkContacts}
                             {...sharedLinkEmailTracking}
                         />

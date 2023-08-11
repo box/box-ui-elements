@@ -49,23 +49,23 @@ const ContentExplorerModal = ({
     ...rest
 }: Props) => (
     <Modal
-        title={title}
         className={classNames('content-explorer-modal', className, {
             'bdl-ContentExplorerModal--responsive': isResponsive,
         })}
         isOpen={isOpen}
         onRequestClose={onRequestClose}
+        title={title}
     >
         {description}
         <ContentExplorer
             breadcrumbProps={breadcrumbProps}
             customInput={customInput}
             isResponsive={isResponsive}
+            listHeight={285}
+            listWidth={560}
             onCancelButtonClick={onRequestClose}
             onSelectedClick={onSelectedClick}
             onSelectItem={onSelectItem}
-            listWidth={560}
-            listHeight={285}
             {...rest}
         />
     </Modal>

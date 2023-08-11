@@ -185,11 +185,11 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
+                                ref={refValue}
                                 data-testid="comment"
+                                hasNewThreadedReplies={hasNewThreadedReplies}
                                 isFocused={isFocused}
                                 isHoverable
-                                hasNewThreadedReplies={hasNewThreadedReplies}
-                                ref={refValue}
                             >
                                 {hasNewThreadedReplies ? (
                                     // TODO: legitimate, pre-existing typing issue that was previously undetected
@@ -197,15 +197,15 @@ const ActiveState = ({
                                     // $FlowFixMe
                                     <BaseComment
                                         {...commentAndAnnotationCommonProps}
-                                        onDelete={onCommentDelete}
                                         onCommentEdit={onCommentEdit}
+                                        onDelete={onCommentDelete}
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_COMMENT)}
                                     />
                                 ) : (
                                     <ActivityThread
-                                        data-testid="activity-thread"
                                         currentUser={currentUser}
+                                        data-testid="activity-thread"
                                         getAvatarUrl={getAvatarUrl}
                                         getMentionWithQuery={getMentionWithQuery}
                                         getUserProfileUrl={getUserProfileUrl}
@@ -220,8 +220,8 @@ const ActiveState = ({
                                         onReplyEdit={onReplyUpdateHandler(item.id)}
                                         onReplySelect={onCommentSelectHandler(item.id)}
                                         onShowReplies={onShowRepliesHandler(item.id, item.type)}
-                                        repliesTotalCount={item.total_reply_count}
                                         replies={item.replies}
+                                        repliesTotalCount={item.total_reply_count}
                                         translations={translations}
                                     >
                                         <Comment
@@ -250,10 +250,10 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
+                                ref={refValue}
                                 className="bcs-activity-feed-task-new"
                                 data-testid="task"
                                 isFocused={isFocused}
-                                ref={refValue}
                             >
                                 <TaskNew
                                     {...item}
@@ -265,8 +265,8 @@ const ActiveState = ({
                                     onAssignmentUpdate={onTaskAssignmentUpdate}
                                     onDelete={onTaskDelete}
                                     onEdit={onTaskEdit}
-                                    onView={onTaskView}
                                     onModalClose={onTaskModalClose}
+                                    onView={onTaskView}
                                     shouldUseUAA={shouldUseUAA}
                                     translations={translations}
                                 />
@@ -298,12 +298,12 @@ const ActiveState = ({
                         return (
                             <ActivityItem
                                 key={item.type + item.id}
+                                ref={refValue}
                                 className="bcs-activity-feed-annotation-activity"
                                 data-testid="annotation-activity"
-                                isHoverable
                                 hasNewThreadedReplies={hasNewThreadedReplies}
                                 isFocused={isFocused}
-                                ref={refValue}
+                                isHoverable
                             >
                                 {hasNewThreadedReplies && onAnnotationSelect ? (
                                     // TODO: legitimate, pre-existing typing issue that was previously undetected
@@ -313,9 +313,9 @@ const ActiveState = ({
                                         {...commentAndAnnotationCommonProps}
                                         annotationActivityLink={
                                             <AnnotationActivityLinkProvider
+                                                isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                                 item={item}
                                                 onSelect={onAnnotationSelect}
-                                                isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                             />
                                         }
                                         onAnnotationEdit={onAnnotationEdit}
@@ -328,8 +328,8 @@ const ActiveState = ({
                                     />
                                 ) : (
                                     <ActivityThread
-                                        data-testid="activity-thread"
                                         currentUser={currentUser}
+                                        data-testid="activity-thread"
                                         getAvatarUrl={getAvatarUrl}
                                         getMentionWithQuery={getMentionWithQuery}
                                         getUserProfileUrl={getUserProfileUrl}
@@ -344,21 +344,21 @@ const ActiveState = ({
                                         onReplyEdit={onReplyUpdateHandler(item.id)}
                                         onReplySelect={onCommentSelectHandler(item.id)}
                                         onShowReplies={onShowRepliesHandler(item.id, item.type)}
-                                        repliesTotalCount={item.total_reply_count}
                                         replies={item.replies}
+                                        repliesTotalCount={item.total_reply_count}
                                         translations={translations}
                                     >
                                         <AnnotationActivity
                                             currentUser={currentUser}
                                             getAvatarUrl={getAvatarUrl}
-                                            getUserProfileUrl={getUserProfileUrl}
                                             getMentionWithQuery={getMentionWithQuery}
+                                            getUserProfileUrl={getUserProfileUrl}
                                             hasVersions={hasVersions}
                                             isCurrentVersion={currentFileVersionId === itemFileVersionId}
                                             item={item}
                                             mentionSelectorContacts={mentionSelectorContacts}
-                                            onEdit={onAnnotationEdit}
                                             onDelete={onAnnotationDelete}
+                                            onEdit={onAnnotationEdit}
                                             onSelect={onAnnotationSelect}
                                             onStatusChange={onAnnotationStatusChange}
                                         />

@@ -6,7 +6,7 @@ import Select from './Select';
 import notes from './Select.stories.md';
 
 export const basic = () => (
-    <Select name="select" label="Album">
+    <Select label="Album" name="select">
         <option>Illmatic</option>
         <option>The Marshall Mathers LP</option>
         <option>All Eyez on Me</option>
@@ -20,13 +20,13 @@ export const basic = () => (
 );
 
 export const disabled = () => (
-    <Select name="select" label="Disabled Select" isDisabled={boolean('isDisabled', true)}>
+    <Select isDisabled={boolean('isDisabled', true)} label="Disabled Select" name="select">
         <option>Straight Outta Compton</option>
     </Select>
 );
 
 export const withErrorMessage = () => (
-    <Select name="select" label="Album" error="Not For Kidz">
+    <Select error="Not For Kidz" label="Album" name="select">
         <option>Illmatic</option>
         <option>The Marshall Mathers LP</option>
         <option>All Eyez on Me</option>
@@ -40,7 +40,7 @@ export const withErrorMessage = () => (
 );
 
 export const withErrorOutline = () => (
-    <Select name="select" label="Album" showErrorOutline={boolean('showErrorOutline', true)}>
+    <Select label="Album" name="select" showErrorOutline={boolean('showErrorOutline', true)}>
         <option>Illmatic</option>
         <option>The Marshall Mathers LP</option>
         <option>All Eyez on Me</option>
@@ -54,7 +54,7 @@ export const withErrorOutline = () => (
 );
 
 export const withInfoTooltip = () => (
-    <Select name="select" label="Album" infoTooltip={"Here's your favorite 90s rap albums"}>
+    <Select infoTooltip={"Here's your favorite 90s rap albums"} label="Album" name="select">
         <option>Illmatic</option>
         <option>The Marshall Mathers LP</option>
         <option>All Eyez on Me</option>

@@ -18,7 +18,7 @@ describe('elements/common/nav-button/NavButton', () => {
         test('applies a custom activeClassName instead of the default', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton to="/activity" activeClassName="bdl-is-selected">
+                    <NavButton activeClassName="bdl-is-selected" to="/activity">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
@@ -43,7 +43,7 @@ describe('elements/common/nav-button/NavButton', () => {
         test('does not apply its activeClassName', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton to="/details" activeClassName="bdl-is-selected">
+                    <NavButton activeClassName="bdl-is-selected" to="/details">
                         Details
                     </NavButton>
                 </MemoryRouter>,
@@ -92,7 +92,7 @@ describe('elements/common/nav-button/NavButton', () => {
         test('applies custom activeClassName for exact matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton exact to="/activity" activeClassName="bdl-is-selected">
+                    <NavButton activeClassName="bdl-is-selected" exact to="/activity">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
@@ -104,7 +104,7 @@ describe('elements/common/nav-button/NavButton', () => {
         test('applies custom activeClassName for partial matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity/versions']}>
-                    <NavButton exact to="/activity" activeClassName="bdl-is-selected">
+                    <NavButton activeClassName="bdl-is-selected" exact to="/activity">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
@@ -166,7 +166,7 @@ describe('elements/common/nav-button/NavButton', () => {
         test('applies custom activeClassName for strict matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity/']}>
-                    <NavButton strict to="/activity/" activeClassName="bdl-is-selected">
+                    <NavButton activeClassName="bdl-is-selected" strict to="/activity/">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
@@ -178,7 +178,7 @@ describe('elements/common/nav-button/NavButton', () => {
         test('does not apply custom activeClassName for non-strict matches', () => {
             const button = render(
                 <MemoryRouter initialEntries={['/activity']}>
-                    <NavButton strict to="/activity/" activeClassName="bdl-is-selected">
+                    <NavButton activeClassName="bdl-is-selected" strict to="/activity/">
                         Activity
                     </NavButton>
                 </MemoryRouter>,
@@ -200,7 +200,7 @@ describe('elements/common/nav-button/NavButton', () => {
 
             const button = mount(
                 <Router history={mockHistory}>
-                    <NavButton to="/activity/test" onClick={clickHandler}>
+                    <NavButton onClick={clickHandler} to="/activity/test">
                         Activity Test
                     </NavButton>
                 </Router>,

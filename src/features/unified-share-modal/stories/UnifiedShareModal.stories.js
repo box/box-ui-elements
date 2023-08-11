@@ -251,16 +251,16 @@ export const basic = () => {
                                         });
                                     });
                                 }}
-                                collaboratorsList={state.collaboratorsList}
                                 collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                                collaboratorsList={state.collaboratorsList}
                                 currentUserID="0"
                                 getCollaboratorContacts={() => {
                                     return Promise.resolve(contacts);
                                 }}
+                                getInitialData={getInitialData}
                                 getSharedLinkContacts={() => {
                                     return Promise.resolve(contacts);
                                 }}
-                                getInitialData={getInitialData}
                                 inviteePermissions={[
                                     { default: false, text: 'Co-owner', value: 'Co-owner' },
                                     { default: true, text: 'Editor', value: 'Editor' },
@@ -451,17 +451,17 @@ export const withSharedLink = () => {
                                         });
                                     });
                                 }}
-                                collaboratorsList={state.collaboratorsList}
                                 collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                                collaboratorsList={state.collaboratorsList}
                                 currentUserID="0"
                                 focusSharedLinkOnLoad={false}
                                 getCollaboratorContacts={() => {
                                     return Promise.resolve(contacts);
                                 }}
+                                getInitialData={getInitialData}
                                 getSharedLinkContacts={() => {
                                     return Promise.resolve(contacts);
                                 }}
-                                getInitialData={getInitialData}
                                 inviteePermissions={[
                                     { default: false, text: 'Co-owner', value: 'Co-owner' },
                                     { default: true, text: 'Editor', value: 'Editor' },
@@ -652,17 +652,17 @@ export const withAutofocusedSharedLink = () => {
                                         });
                                     });
                                 }}
-                                collaboratorsList={state.collaboratorsList}
                                 collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                                collaboratorsList={state.collaboratorsList}
                                 currentUserID="0"
                                 focusSharedLinkOnLoad
                                 getCollaboratorContacts={() => {
                                     return Promise.resolve(contacts);
                                 }}
+                                getInitialData={getInitialData}
                                 getSharedLinkContacts={() => {
                                     return Promise.resolve(contacts);
                                 }}
-                                getInitialData={getInitialData}
                                 inviteePermissions={[
                                     { default: false, text: 'Co-owner', value: 'Co-owner' },
                                     { default: true, text: 'Editor', value: 'Editor' },
@@ -830,17 +830,17 @@ export const withFormOnly = () => {
                                 });
                             });
                         }}
-                        collaboratorsList={state.collaboratorsList}
                         collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                        collaboratorsList={state.collaboratorsList}
                         currentUserID="0"
                         displayInModal={false}
                         getCollaboratorContacts={() => {
                             return Promise.resolve(contacts);
                         }}
+                        getInitialData={getInitialData}
                         getSharedLinkContacts={() => {
                             return Promise.resolve(contacts);
                         }}
-                        getInitialData={getInitialData}
                         inviteePermissions={[
                             { default: false, text: 'Co-owner', value: 'Co-owner' },
                             { default: true, text: 'Editor', value: 'Editor' },

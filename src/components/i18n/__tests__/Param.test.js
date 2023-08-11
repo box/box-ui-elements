@@ -10,7 +10,7 @@ describe('components/i18n/Param', () => {
     test('should correctly render its string argument', () => {
         const wrapper = render(
             <span>
-                <Param value="asdf" description="foo" />
+                <Param description="foo" value="asdf" />
             </span>,
         );
 
@@ -21,7 +21,7 @@ describe('components/i18n/Param', () => {
         const name = 'asdf';
         const wrapper = render(
             <span>
-                <Param value={name} description="foo" />
+                <Param description="foo" value={name} />
             </span>,
         );
 
@@ -31,7 +31,7 @@ describe('components/i18n/Param', () => {
     test('should correctly render its numeric argument', () => {
         const wrapper = render(
             <span>
-                <Param value={3} description="foo" />
+                <Param description="foo" value={3} />
             </span>,
         );
 
@@ -41,7 +41,7 @@ describe('components/i18n/Param', () => {
     test('should correctly render an undefined argument', () => {
         const wrapper = render(
             <span>
-                <Param value={undefined} description="foo" />
+                <Param description="foo" value={undefined} />
             </span>,
         );
 
@@ -51,7 +51,7 @@ describe('components/i18n/Param', () => {
     test('should correctly render a null argument', () => {
         const wrapper = render(
             <span>
-                <Param value={null} description="foo" />
+                <Param description="foo" value={null} />
             </span>,
         );
 
@@ -62,7 +62,7 @@ describe('components/i18n/Param', () => {
         const tmp = <b>foo!</b>;
         const wrapper = render(
             <span>
-                <Param value={tmp} description="foo" />
+                <Param description="foo" value={tmp} />
             </span>,
         );
 
@@ -75,7 +75,7 @@ describe('components/i18n/Param', () => {
         };
         const wrapper = render(
             <span>
-                <Param value={f} description="foo" />
+                <Param description="foo" value={f} />
             </span>,
         );
 

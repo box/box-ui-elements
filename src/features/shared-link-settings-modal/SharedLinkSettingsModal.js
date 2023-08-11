@@ -251,8 +251,8 @@ class SharedLinkSettingsModal extends Component {
         return (
             <VanityNameSection
                 canChangeVanityName={canChangeVanityName}
-                isVanityEnabled={isVanityEnabled}
                 error={vanityNameError}
+                isVanityEnabled={isVanityEnabled}
                 onChange={this.onVanityNameChange}
                 onCheckboxChange={this.onVanityCheckboxChange}
                 serverURL={serverURL}
@@ -354,8 +354,8 @@ class SharedLinkSettingsModal extends Component {
                 directLinkInputProps={directLinkInputProps}
                 downloadCheckboxProps={downloadCheckboxProps}
                 isDirectLinkAvailable={isDirectLinkAvailable}
-                isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
                 isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
+                isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
                 isDirectLinkUnavailableDueToMaliciousContent={isDirectLinkUnavailableDueToMaliciousContent}
                 isDownloadAvailable={isDownloadAvailable}
                 isDownloadEnabled={isDownloadEnabled}

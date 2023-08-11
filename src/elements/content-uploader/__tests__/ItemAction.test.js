@@ -49,9 +49,9 @@ describe('elements/content-uploader/ItemAction', () => {
         const wrapper = shallow(
             <ItemAction
                 intl={{ formatMessage: data => <span {...data} /> }}
+                isResumableUploadsEnabled
                 onClick={noop}
                 status={status}
-                isResumableUploadsEnabled
             />,
         );
 

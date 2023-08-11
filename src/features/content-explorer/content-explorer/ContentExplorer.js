@@ -538,14 +538,14 @@ class ContentExplorer extends Component {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <div
+                ref={ref => {
+                    this.domNode = ref;
+                }}
                 className={classNames('content-explorer', className, {
                     'bdl-ContentExplorer--responsive': isResponsive,
                 })}
                 data-testid="content-explorer"
                 onClick={this.handleContentExplorerClick}
-                ref={ref => {
-                    this.domNode = ref;
-                }}
                 {...contentExplorerProps}
             >
                 <ContentExplorerHeaderActions
@@ -555,12 +555,12 @@ class ContentExplorer extends Component {
                     foldersPath={foldersPath}
                     hasFolderTreeBreadcrumbs={hasFolderTreeBreadcrumbs}
                     isCreateNewFolderAllowed={isCreateNewFolderAllowed}
+                    numTotalItems={numTotalItems}
                     onCreateNewFolderButtonClick={onCreateNewFolderButtonClick}
-                    onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onEnterFolder={this.enterFolder}
                     onExitSearch={this.handleExitSearch}
+                    onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onSearchSubmit={this.handleSearchSubmit}
-                    numTotalItems={numTotalItems}
                     searchInputProps={searchInputProps}
                     showCreateNewFolderButton={showCreateNewFolderButton}
                 >
@@ -589,8 +589,8 @@ class ContentExplorer extends Component {
                     itemButtonRenderer={itemButtonRenderer}
                     itemIconRenderer={itemIconRenderer}
                     itemNameLinkRenderer={itemNameLinkRenderer}
-                    items={items}
                     itemRowRenderer={itemRowRenderer}
+                    items={items}
                     noItemsRenderer={this.renderItemListEmptyState}
                     numItemsPerPage={numItemsPerPage}
                     numTotalItems={numTotalItems}
@@ -614,17 +614,17 @@ class ContentExplorer extends Component {
                     isChooseButtonLoading={isChooseButtonLoading}
                     isCopyButtonLoading={isCopyButtonLoading}
                     isMoveButtonLoading={isMoveButtonLoading}
+                    isNoSelectionAllowed={isNoSelectionAllowed}
                     isResponsive={isResponsive}
                     isSelectAllAllowed={isSelectAllAllowed}
                     onCancelClick={onCancelButtonClick}
                     onChooseClick={onChooseItems}
                     onCopyClick={onCopyItem}
                     onFoldersPathUpdated={this.handleFoldersPathUpdated}
-                    onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
+                    onSelectedClick={onSelectedClick}
                     onViewSelectedClick={onViewSelectedClick}
                     selectedItems={selectedItems}
-                    isNoSelectionAllowed={isNoSelectionAllowed}
                 />
             </div>
         );

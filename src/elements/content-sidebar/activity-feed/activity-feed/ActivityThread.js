@@ -95,9 +95,9 @@ const ActivityThread = ({
             return (
                 <PlainButton
                     className="bcs-ActivityThread-toggle"
+                    data-testid="activity-thread-button"
                     onClick={onShowReplies}
                     type="button"
-                    data-testid="activity-thread-button"
                 >
                     <FormattedMessage values={{ repliesToLoadCount }} {...messages.showReplies} />
                 </PlainButton>
@@ -107,9 +107,9 @@ const ActivityThread = ({
             return (
                 <PlainButton
                     className="bcs-ActivityThread-toggle"
+                    data-testid="activity-thread-button"
                     onClick={onHideRepliesHandler}
                     type="button"
-                    data-testid="activity-thread-button"
                 >
                     <FormattedMessage {...messages.hideReplies} />
                 </PlainButton>
@@ -155,8 +155,8 @@ const ActivityThread = ({
                         mentionSelectorContacts={mentionSelectorContacts}
                         onFocus={handleFormFocusOrShow}
                         onHide={handleFormHide}
-                        onShow={handleFormFocusOrShow}
                         onReplyCreate={onReplyCreate}
+                        onShow={handleFormFocusOrShow}
                     />
                 )}
             </div>

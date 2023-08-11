@@ -11,6 +11,6 @@ import type { BoxItem } from '../../../common/types/core';
 
 export default (dimension: number = 32) => ({ rowData }: { rowData: BoxItem }) => (
     <div className="be-item-icon">
-        <IconCell rowData={rowData} dimension={dimension} />
+        <IconCell dimension={dimension} rowData={rowData} />
     </div>
 );

@@ -14,13 +14,13 @@ describe('KeyBinder', () => {
     const getWrapper = props => {
         return shallow(
             <KeyBinder
+                columnCount={10}
                 id="123"
+                items={[]}
                 onScrollToChange={onScrollToChangeMock}
                 rowCount={10}
-                items={[]}
-                columnCount={10}
-                scrollToRow={0}
                 scrollToColumn={0}
+                scrollToRow={0}
                 {...props}
             >
                 {() => {}}

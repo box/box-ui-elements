@@ -92,10 +92,10 @@ describe('FeatureFlag', () => {
                 <FeatureFlag feature="foo">
                     <FeatEnabled />
                 </FeatureFlag>
-                <FeatureFlag not feature="foo">
+                <FeatureFlag feature="foo" not>
                     <FeatEnabledNot />
                 </FeatureFlag>
-                <FeatureFlag not feature="bar">
+                <FeatureFlag feature="bar" not>
                     <FeatDisabledNot />
                 </FeatureFlag>
             </FeatureProvider>,
@@ -116,7 +116,7 @@ describe('FeatureFlag', () => {
                     foo,
                 }}
             >
-                <FeatureFlag disabled={disabledFn} enabled={enabledFn} not feature="foo" />
+                <FeatureFlag disabled={disabledFn} enabled={enabledFn} feature="foo" not />
             </FeatureProvider>,
         );
         expect(disabledFn).toHaveBeenCalled();

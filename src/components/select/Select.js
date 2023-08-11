@@ -65,14 +65,14 @@ const Select = ({
                         {infoTooltip && (
                             <Tooltip isShown={infoTooltipIsOpen} position="middle-right" text={infoTooltip}>
                                 <PlainButton
-                                    type="button"
                                     className="tooltip-icon-container"
                                     onClick={() => setInfoTooltipIsOpen(!infoTooltipIsOpen)}
+                                    type="button"
                                 >
                                     <IconInfo
                                         height={16}
-                                        width={16}
                                         title={<FormattedMessage {...messages.moreInfo} />}
+                                        width={16}
                                         {...infoIconProps}
                                     />
                                 </PlainButton>

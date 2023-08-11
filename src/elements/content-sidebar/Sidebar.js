@@ -241,7 +241,7 @@ class Sidebar extends React.Component<Props, State> {
         });
 
         return (
-            <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
+            <aside className={styleClassName} data-testid="preview-sidebar" id={this.id}>
                 {isLoading ? (
                     <div className="bcs-loading">
                         <LoadingIndicator />
@@ -262,11 +262,13 @@ class Sidebar extends React.Component<Props, State> {
                             />
                         )}
                         <SidebarPanels
+                            key={file.id}
+                            ref={this.sidebarPanels}
                             activitySidebarProps={activitySidebarProps}
                             currentUser={currentUser}
                             currentUserError={currentUserError}
-                            elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
+                            elementId={this.id}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}
@@ -277,12 +279,10 @@ class Sidebar extends React.Component<Props, State> {
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
                             isOpen={isOpen}
-                            key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
                             onAnnotationSelect={onAnnotationSelect}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
-                            ref={this.sidebarPanels}
                             versionsSidebarProps={versionsSidebarProps}
                         />
                     </>

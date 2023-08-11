@@ -52,9 +52,9 @@ describe('components/time/ReadableTime', () => {
         ({ timestamp, allowFutureTimestamps = true, alwaysShowTime = false, showWeekday = false }) => {
             const wrapper = mount(
                 <ReadableTime
-                    intl={intl}
                     allowFutureTimestamps={allowFutureTimestamps}
                     alwaysShowTime={alwaysShowTime}
+                    intl={intl}
                     relativeThreshold={oneHourInMs}
                     showWeekday={showWeekday}
                     timestamp={timestamp}

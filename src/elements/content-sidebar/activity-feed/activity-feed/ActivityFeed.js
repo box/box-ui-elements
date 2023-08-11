@@ -434,8 +434,8 @@ class ActivityFeed extends React.Component<Props, State> {
                     )}
                     {isInlineFeedItemErrorVisible && inlineFeedItemErrorMessage && (
                         <InlineError
-                            title={<FormattedMessage {...messages.feedInlineErrorTitle} />}
                             className="bcs-feedItemInlineError"
+                            title={<FormattedMessage {...messages.feedInlineErrorTitle} />}
                         >
                             <FormattedMessage {...inlineFeedItemErrorMessage} />
                         </InlineError>
@@ -444,21 +444,21 @@ class ActivityFeed extends React.Component<Props, State> {
 
                 {showCommentForm ? (
                     <CommentForm
-                        onSubmit={this.resetFeedScroll}
-                        isDisabled={isDisabled}
-                        mentionSelectorContacts={mentionSelectorContacts}
-                        contactsLoaded={contactsLoaded}
                         className={classNames('bcs-activity-feed-comment-input', {
                             'bcs-is-disabled': isDisabled,
                         })}
+                        contactsLoaded={contactsLoaded}
                         createComment={hasCommentPermission ? this.onCommentCreate : noop}
+                        getAvatarUrl={getAvatarUrl}
                         getMentionWithQuery={getMentionWithQuery}
+                        isDisabled={isDisabled}
                         isOpen={isInputOpen}
+                        mentionSelectorContacts={mentionSelectorContacts}
                         // $FlowFixMe
-                        user={currentUser}
                         onCancel={this.commentFormCancelHandler}
                         onFocus={this.commentFormFocusHandler}
-                        getAvatarUrl={getAvatarUrl}
+                        onSubmit={this.resetFeedScroll}
+                        user={currentUser}
                     />
                 ) : null}
             </div>

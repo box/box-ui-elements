@@ -67,25 +67,25 @@ const Content = ({
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}
         {isEmpty(view, currentCollection) ? (
-            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
+            <EmptyState isLoading={currentCollection.percentLoaded !== 100} view={view} />
         ) : (
             <ItemList
-                view={view}
-                rootId={rootId}
-                isSmall={isSmall}
-                rootElement={rootElement}
-                focusedRow={focusedRow}
-                currentCollection={currentCollection}
-                tableRef={tableRef}
                 canSetShareAccess={canSetShareAccess}
+                currentCollection={currentCollection}
+                extensionsWhitelist={extensionsWhitelist}
+                focusedRow={focusedRow}
                 hasHitSelectionLimit={hasHitSelectionLimit}
                 isSingleSelect={isSingleSelect}
-                selectableType={selectableType}
-                onItemSelect={onItemSelect}
-                onItemClick={onItemClick}
+                isSmall={isSmall}
                 onFocusChange={onFocusChange}
+                onItemClick={onItemClick}
+                onItemSelect={onItemSelect}
                 onShareAccessChange={onShareAccessChange}
-                extensionsWhitelist={extensionsWhitelist}
+                rootElement={rootElement}
+                rootId={rootId}
+                selectableType={selectableType}
+                tableRef={tableRef}
+                view={view}
             />
         )}
     </div>

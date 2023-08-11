@@ -115,8 +115,8 @@ function MessageCenterModal({
                 <AnimateHeight duration={300} height={isExpanded ? 'auto' : 0}>
                     <section className="bdl-MessageCenterModal-categorySelector">
                         <CategorySelector
-                            currentCategory={category}
                             categories={categories}
+                            currentCategory={category}
                             onSelect={value => {
                                 cache.clearAll();
                                 setCategory(value);
@@ -185,12 +185,12 @@ function MessageCenterModal({
                     <div
                         ref={registerChild}
                         className="bdl-MessageCenterModal-message"
-                        style={style}
                         data-testid="messagecentermodalmessage"
+                        style={style}
                     >
                         <Message
-                            contentPreviewProps={contentPreviewProps}
                             apiHost={apiHost}
+                            contentPreviewProps={contentPreviewProps}
                             {...message}
                             getToken={getToken}
                         />

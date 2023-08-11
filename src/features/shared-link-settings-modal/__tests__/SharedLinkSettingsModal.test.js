@@ -30,8 +30,18 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
     const getWrapper = (props = {}) =>
         shallow(
             <SharedLinkSettingsModal
-                onSubmit={sandbox.stub()}
+                canChangeDownload={canChangeDownload}
+                canChangeExpiration={canChangeExpiration}
+                canChangePassword={canChangePassword}
                 canChangeVanityName={canChangeVanityName}
+                directLink={directLink}
+                isDirectLinkAvailable={isDirectLinkAvailable}
+                isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
+                isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
+                isDownloadAvailable={isDownloadAvailable}
+                isDownloadEnabled={isDownloadEnabled}
+                isPasswordAvailable={isPasswordAvailable}
+                isPasswordEnabled={isPasswordEnabled}
                 item={{
                     bannerPolicy: {
                         body: 'test',
@@ -46,19 +56,9 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
                     type: 'folder',
                     typedID: 'd_12345',
                 }}
-                vanityName={vanityName}
+                onSubmit={sandbox.stub()}
                 serverURL={serverURL}
-                canChangePassword={canChangePassword}
-                isPasswordAvailable={isPasswordAvailable}
-                isPasswordEnabled={isPasswordEnabled}
-                canChangeExpiration={canChangeExpiration}
-                isDownloadAvailable={isDownloadAvailable}
-                canChangeDownload={canChangeDownload}
-                isDownloadEnabled={isDownloadEnabled}
-                directLink={directLink}
-                isDirectLinkAvailable={isDirectLinkAvailable}
-                isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
-                isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
+                vanityName={vanityName}
                 {...props}
             />,
         );

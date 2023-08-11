@@ -367,8 +367,8 @@ class ContentSidebar extends React.Component<Props, State> {
                             getViewer={getViewer}
                             hasActivityFeed={hasActivityFeed}
                             hasAdditionalTabs={hasAdditionalTabs}
-                            hasNav={hasNav}
                             hasMetadata={hasMetadata}
+                            hasNav={hasNav}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
                             isDefaultOpen={isDefaultOpen}

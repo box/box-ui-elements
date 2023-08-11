@@ -142,11 +142,11 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             ];
             const wrapper = shallow(
                 <PillSelector
-                    showRoundedPills
+                    getPillClassName={getPillClassName}
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
                     selectedOptions={options}
-                    getPillClassName={getPillClassName}
+                    showRoundedPills
                 />,
             );
 

@@ -206,13 +206,13 @@ export const BaseComment = ({
             >
                 <Media.Figure>
                     <Avatar
-                        getAvatarUrl={getAvatarUrl}
-                        user={createdByUser}
                         badgeIcon={
                             annotationActivityLink && (
                                 <IconAnnotation title={<FormattedMessage {...messages.annotationBadge} />} />
                             )
                         }
+                        getAvatarUrl={getAvatarUrl}
+                        user={createdByUser}
                     />
                 </Media.Figure>
                 <Media.Body>
@@ -224,12 +224,12 @@ export const BaseComment = ({
                             targetAttachment="bottom right"
                         >
                             <Media.Menu
-                                isDisabled={isConfirmingDelete}
                                 data-testid="comment-actions-menu"
                                 dropdownProps={{
                                     onMenuOpen: () => onSelect(true),
                                     onMenuClose: handleMenuClose,
                                 }}
+                                isDisabled={isConfirmingDelete}
                                 menuProps={{
                                     'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
                                 }}
@@ -290,9 +290,9 @@ export const BaseComment = ({
                     <div className="bcs-Comment-headline">
                         <UserLink
                             data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                            getUserProfileUrl={getUserProfileUrl}
                             id={createdByUser.id}
                             name={createdByUser.name}
-                            getUserProfileUrl={getUserProfileUrl}
                         />
                     </div>
                     <div className="bcs-Comment-timestamp">
@@ -302,22 +302,22 @@ export const BaseComment = ({
                     <ActivityStatus status={status} />
                     {isEditing ? (
                         <CommentForm
-                            isDisabled={isDisabled}
                             className={classNames('bcs-Comment-editor', {
                                 'bcs-is-disabled': isDisabled,
                             })}
-                            updateComment={handleMessageUpdate}
-                            isOpen={isInputOpen}
+                            entityId={id}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
                             // $FlowFixMe
-                            user={currentUser}
+                            isDisabled={isDisabled}
+                            isEditing={isEditing}
+                            isOpen={isInputOpen}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             onCancel={commentFormCancelHandler}
                             onFocus={commentFormFocusHandler}
-                            isEditing={isEditing}
-                            entityId={id}
                             tagged_message={tagged_message}
-                            getAvatarUrl={getAvatarUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
+                            updateComment={handleMessageUpdate}
+                            user={currentUser}
                         />
                     ) : (
                         <ActivityMessage
@@ -326,8 +326,8 @@ export const BaseComment = ({
                             tagged_message={tagged_message}
                             translatedTaggedMessage={translatedTaggedMessage}
                             {...translations}
-                            translationFailed={error ? true : null}
                             getUserProfileUrl={getUserProfileUrl}
+                            translationFailed={error ? true : null}
                         />
                     )}
                 </Media.Body>
@@ -444,8 +444,8 @@ export const Replies = ({
                                     isPending={isParentPending || reply.isPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onCommentEdit={onCommentEdit}
-                                    onSelect={onReplySelect}
                                     onDelete={noop}
+                                    onSelect={onReplySelect}
                                     permissions={getReplyPermissions(reply)}
                                     translations={translations}
                                 />

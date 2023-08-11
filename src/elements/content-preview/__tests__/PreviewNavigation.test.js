@@ -16,12 +16,12 @@ const getWrapper = ({ collection = ['a', 'b', 'c'], onNavigateLeft = noop, onNav
         <Router history={historyMock}>
             <PreviewNavigation
                 collection={collection}
+                history={historyMock}
                 intl={{
                     formatMessage: jest.fn(),
                 }}
                 onNavigateLeft={onNavigateLeft}
                 onNavigateRight={onNavigateRight}
-                history={historyMock}
                 {...rest}
             />
         </Router>,

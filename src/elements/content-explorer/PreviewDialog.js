@@ -76,37 +76,37 @@ const PreviewDialog = ({
     const files: BoxItem[] = items.filter(({ type }) => type === TYPE_FILE);
     return (
         <Modal
+            appElement={appElement}
+            className={CLASS_MODAL_CONTENT_FULL_BLEED}
+            contentLabel={intl.formatMessage(messages.preview)}
             isOpen={isOpen}
+            onRequestClose={onCancel}
+            overlayClassName={CLASS_MODAL_OVERLAY}
             parentSelector={() => parentElement}
             portalClassName={`${CLASS_MODAL} be-modal-preview`}
-            className={CLASS_MODAL_CONTENT_FULL_BLEED}
-            overlayClassName={CLASS_MODAL_OVERLAY}
-            contentLabel={intl.formatMessage(messages.preview)}
-            onRequestClose={onCancel}
-            appElement={appElement}
         >
             <ContentPreview
                 {...contentPreviewProps}
-                fileId={item.id}
                 apiHost={apiHost}
                 appHost={appHost}
-                staticHost={staticHost}
-                staticPath={staticPath}
-                previewLibraryVersion={previewLibraryVersion}
-                cache={cache}
-                token={token}
-                hasHeader
                 autoFocus
+                cache={cache}
+                canDownload={canDownload}
                 collection={files}
-                onLoad={onLoad}
+                contentPreviewProps={contentPreviewProps}
+                fileId={item.id}
+                hasHeader
                 onClose={onCancel}
                 onDownload={onDownload}
-                canDownload={canDownload}
-                sharedLink={sharedLink}
-                sharedLinkPassword={sharedLinkPassword}
-                contentPreviewProps={contentPreviewProps}
+                onLoad={onLoad}
+                previewLibraryVersion={previewLibraryVersion}
                 requestInterceptor={requestInterceptor}
                 responseInterceptor={responseInterceptor}
+                sharedLink={sharedLink}
+                sharedLinkPassword={sharedLinkPassword}
+                staticHost={staticHost}
+                staticPath={staticPath}
+                token={token}
             />
         </Modal>
     );

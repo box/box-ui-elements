@@ -24,10 +24,10 @@ const ContentExplorerNewFolderButton = ({
     return doesModeAllowCreateNewFolder ? (
         <Button
             className="content-explorer-new-folder-button"
-            type="button"
-            onClick={onClick}
             isDisabled={isDisabled}
+            onClick={onClick}
             title={!isCreateNewFolderAllowed ? intl.formatMessage(messages.newFolderForbidden) : ''}
+            type="button"
         >
             <FormattedMessage {...messages.newFolder} />
         </Button>

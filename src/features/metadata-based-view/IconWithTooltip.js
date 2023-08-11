@@ -35,22 +35,22 @@ const IconWithTooltip = ({
     switch (type) {
         case CANCEL_ICON_TYPE:
             iconBtn = (
-                <PlainButton className={className} type="button" onClick={onClick}>
-                    <IconClose color={bdlGray65} width={16} height={16} />
+                <PlainButton className={className} onClick={onClick} type="button">
+                    <IconClose color={bdlGray65} height={16} width={16} />
                 </PlainButton>
             );
             break;
         case EDIT_ICON_TYPE:
             iconBtn = (
-                <PlainButton className={className} type="button" onClick={onClick}>
+                <PlainButton className={className} onClick={onClick} type="button">
                     <IconPencil color={bdlGray65} />
                 </PlainButton>
             );
             break;
         case SAVE_ICON_TYPE:
             iconBtn = (
-                <Button className={className} isLoading={isUpdating} type="button" onClick={onClick}>
-                    <IconCheck color={bdlGray65} width={16} height={16} />
+                <Button className={className} isLoading={isUpdating} onClick={onClick} type="button">
+                    <IconCheck color={bdlGray65} height={16} width={16} />
                 </Button>
             );
             break;

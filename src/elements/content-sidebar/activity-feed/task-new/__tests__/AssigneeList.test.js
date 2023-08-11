@@ -50,12 +50,12 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             const initialCount = 2;
             const wrapper = shallow(
                 <AssigneeList
-                    onExpand={onExpand}
-                    onCollapse={onCollapse}
-                    isOpen={false}
-                    users={assignees}
-                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
+                    initialAssigneeCount={initialCount}
+                    isOpen={false}
+                    onCollapse={onCollapse}
+                    onExpand={onExpand}
+                    users={assignees}
                 />,
             );
             const assigneeList = global.queryAllByTestId(wrapper, 'assignee-list-item');
@@ -67,10 +67,10 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             const initialCount = 2;
             const wrapper = shallow(
                 <AssigneeList
+                    getAvatarUrl={mockGetAvatarUrl}
+                    initialAssigneeCount={initialCount}
                     onExpand={onExpand}
                     users={assignees}
-                    initialAssigneeCount={initialCount}
-                    getAvatarUrl={mockGetAvatarUrl}
                 />,
             );
             const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees');
@@ -106,12 +106,12 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
                 };
                 const wrapper = shallow(
                     <AssigneeList
-                        onExpand={onExpand}
-                        onCollapse={onCollapse}
-                        users={paginatedAssignees}
-                        initialAssigneeCount={initialCount}
                         getAvatarUrl={mockGetAvatarUrl}
+                        initialAssigneeCount={initialCount}
                         isOpen={false}
+                        onCollapse={onCollapse}
+                        onExpand={onExpand}
+                        users={paginatedAssignees}
                     />,
                 );
                 const expandBtn = global.queryAllByTestId(wrapper, 'show-more-assignees');
@@ -128,12 +128,12 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             const initialCount = 3;
             const wrapper = shallow(
                 <AssigneeList
-                    onExpand={onExpand}
-                    onCollapse={onCollapse}
-                    users={assignees}
-                    isOpen={false}
-                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
+                    initialAssigneeCount={initialCount}
+                    isOpen={false}
+                    onCollapse={onCollapse}
+                    onExpand={onExpand}
+                    users={assignees}
                 />,
             );
             expect(global.queryAllByTestId(wrapper, 'show-more-assignees')).toHaveLength(0);
@@ -144,12 +144,12 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             const initialCount = 2;
             const wrapper = mount(
                 <AssigneeList
-                    isOpen={false}
-                    onExpand={onExpand}
-                    onCollapse={onCollapse}
-                    users={assignees}
-                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
+                    initialAssigneeCount={initialCount}
+                    isOpen={false}
+                    onCollapse={onCollapse}
+                    onExpand={onExpand}
+                    users={assignees}
                 />,
             );
 
@@ -163,12 +163,12 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeList', () => {
             const initialCount = 2;
             const wrapper = mount(
                 <AssigneeList
-                    isOpen
-                    onExpand={onExpand}
-                    onCollapse={onCollapse}
-                    users={assignees}
-                    initialAssigneeCount={initialCount}
                     getAvatarUrl={mockGetAvatarUrl}
+                    initialAssigneeCount={initialCount}
+                    isOpen
+                    onCollapse={onCollapse}
+                    onExpand={onExpand}
+                    users={assignees}
                 />,
             );
 

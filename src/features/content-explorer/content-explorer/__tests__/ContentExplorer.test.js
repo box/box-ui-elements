@@ -19,15 +19,15 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                         name: 'folder',
                     },
                 ]}
-                onEnterFolder={() => {}}
-                onSearchSubmit={() => {}}
-                onExitSearch={() => {}}
                 items={[]}
+                listHeight={500}
+                listWidth={500}
                 numItemsPerPage={100}
                 numTotalItems={100}
+                onEnterFolder={() => {}}
+                onExitSearch={() => {}}
                 onLoadMoreItems={() => {}}
-                listWidth={500}
-                listHeight={500}
+                onSearchSubmit={() => {}}
                 {...props}
             />
         );

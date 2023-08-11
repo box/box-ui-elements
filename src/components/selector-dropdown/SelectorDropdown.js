@@ -322,15 +322,15 @@ class SelectorDropdown extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
+                ref={this.selectorDropdownRef}
                 className={classNames('SelectorDropdown', className)}
                 onFocus={this.handleFocus}
                 onKeyDown={this.handleKeyDown}
                 onPaste={this.handleInput}
-                ref={this.selectorDropdownRef}
             >
                 <PopperComponent
-                    isPositionDynamic={isPositionDynamic}
                     isOpen={isOpen}
+                    isPositionDynamic={isPositionDynamic}
                     placement={PLACEMENT_BOTTOM_START}
                 >
                     {React.cloneElement(selector, { inputProps })}

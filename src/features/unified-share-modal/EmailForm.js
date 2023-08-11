@@ -422,8 +422,8 @@ class EmailForm extends React.Component<Props, State> {
                         disabled={!isContactsFieldEnabled}
                         error={contactsFieldError}
                         fieldRef={this.contactsFieldRef}
-                        getContacts={getContacts}
                         getContactAvatarUrl={getContactAvatarUrl}
+                        getContacts={getContacts}
                         getPillClassName={this.getContactPillClassName}
                         label={contactsFieldLabel}
                         onContactAdd={this.handleContactAdd}
@@ -431,10 +431,10 @@ class EmailForm extends React.Component<Props, State> {
                         onInput={this.handleContactInput}
                         onPillCreate={onPillCreate}
                         selectedContacts={selectedContacts}
+                        showContactAvatars
                         suggestedCollaborators={suggestedCollaborators}
                         validateForError={this.validateContactField}
                         validator={this.isValidContactPill}
-                        showContactAvatars
                     />
                 </Tooltip>
             </div>
@@ -473,11 +473,11 @@ class EmailForm extends React.Component<Props, State> {
                         isRestrictionJustificationEnabled={isRestrictionJustificationEnabled}
                         justificationReasons={justificationReasons}
                         onRemoveRestrictedContacts={this.handleRemoveRestrictedContacts}
+                        onSelectJustificationReason={this.handleSelectJustificationReason}
                         restrictedEmails={restrictedEmails}
                         restrictedGroups={restrictedGroups}
                         selectedContacts={selectedContacts}
                         selectedJustificationReason={selectedJustificationReason}
-                        onSelectJustificationReason={this.handleSelectJustificationReason}
                     />
                 )}
                 {contactsFieldAvatars}

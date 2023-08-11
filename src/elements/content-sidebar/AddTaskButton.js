@@ -71,10 +71,10 @@ class AddTaskButton extends React.Component<Props, State> {
                 />
                 <TaskModal
                     error={error}
+                    isTaskFormOpen={isTaskFormOpen}
+                    onModalClose={this.handleModalClose}
                     onSubmitError={this.handleSubmitError}
                     onSubmitSuccess={this.handleModalClose}
-                    onModalClose={this.handleModalClose}
-                    isTaskFormOpen={isTaskFormOpen}
                     taskFormProps={taskFormProps}
                     taskType={taskType}
                 />

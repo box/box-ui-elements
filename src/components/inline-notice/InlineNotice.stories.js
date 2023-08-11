@@ -28,23 +28,23 @@ export const withoutTitle = () => (
 
 export const withTitle = () => (
     <div>
-        <InlineNotice type="warning" title="Warning Title">
+        <InlineNotice title="Warning Title" type="warning">
             This is a warning notice. You might want to pay attention to this.
         </InlineNotice>
 
-        <InlineNotice type="error" title="Error Title">
+        <InlineNotice title="Error Title" type="error">
             This is an error notice. You really want to pay attention to this.
         </InlineNotice>
 
-        <InlineNotice type="success" title="Success Title">
+        <InlineNotice title="Success Title" type="success">
             This is a success notice. You ought to feel really good about this.
         </InlineNotice>
 
-        <InlineNotice type="info" title="Info Title">
+        <InlineNotice title="Info Title" type="info">
             This is an info notice. You should get some context from this.
         </InlineNotice>
 
-        <InlineNotice type="generic" title="Generic Title">
+        <InlineNotice title="Generic Title" type="generic">
             This is a generic notice. You will just want to notice this.
         </InlineNotice>
     </div>

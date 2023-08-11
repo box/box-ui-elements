@@ -28,13 +28,13 @@ function generateClickHandler(message) {
 export const basic = () => (
     <DropdownMenu
         isResponsive
-        onMenuOpen={() => {
-            /* eslint-disable-next-line no-console */
-            console.log('menu opened');
-        }}
         onMenuClose={() => {
             /* eslint-disable-next-line no-console */
             console.log('menu closed');
+        }}
+        onMenuOpen={() => {
+            /* eslint-disable-next-line no-console */
+            console.log('menu opened');
         }}
     >
         <PlainButton className="dropdown-menu-example-button" type="button">
@@ -46,8 +46,8 @@ export const basic = () => (
             <MenuItem onClick={generateClickHandler('View Profile')}>View Profile</MenuItem>
             <MenuItem onClick={generateClickHandler('Help')}>Help</MenuItem>
             <MenuItem
-                onClick={generateClickHandler('Should Not Fire This Handler')}
                 isDisabled={boolean('isDisabled', true)}
+                onClick={generateClickHandler('Should Not Fire This Handler')}
             >
                 Disabled Option
             </MenuItem>
@@ -86,7 +86,7 @@ export const responsiveWithHeader = () => (
             </MenuToggle>
         </PlainButton>
         <Menu>
-            <MenuHeader title="Optional Title" subtitle="Subtitle" /> <MenuItem>View Profile</MenuItem>
+            <MenuHeader subtitle="Subtitle" title="Optional Title" /> <MenuItem>View Profile</MenuItem>
             <MenuItem>Help</MenuItem>
             <MenuItem isDisabled={boolean('isDisabled', true)}>Disabled Option</MenuItem>
             <MenuSeparator />

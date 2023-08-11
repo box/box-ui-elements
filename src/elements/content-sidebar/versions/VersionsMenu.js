@@ -74,7 +74,7 @@ const VersionsMenu = React.memo<Props>(({ intl, versions, ...rest }: Props) => {
     return (
         <ul className="bcs-VersionsMenu">
             {versionGroups.map(({ groupHeading, groupVersions }) => (
-                <li className="bcs-VersionsMenu-item" key={groupHeading}>
+                <li key={groupHeading} className="bcs-VersionsMenu-item">
                     <VersionsGroup currentId={currentId} heading={groupHeading} versions={groupVersions} {...rest} />
                 </li>
             ))}

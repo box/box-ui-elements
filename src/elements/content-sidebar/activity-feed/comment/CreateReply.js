@@ -49,18 +49,18 @@ const CreateReply = ({
             {showReplyForm && !isDisabled ? (
                 <CommentForm
                     className="bcs-CreateReply-form"
-                    isOpen
+                    createComment={handleSubmit}
+                    getMentionWithQuery={getMentionWithQuery}
                     isEditing
-                    showTip={false}
+                    isOpen
+                    mentionSelectorContacts={mentionSelectorContacts}
                     onCancel={onCancel}
                     onFocus={onFocus}
-                    createComment={handleSubmit}
-                    mentionSelectorContacts={mentionSelectorContacts}
-                    getMentionWithQuery={getMentionWithQuery}
                     placeholder={placeholder}
+                    showTip={false}
                 />
             ) : (
-                <PlainButton className="bcs-CreateReply-toggle" onClick={onClick} type="button" isDisabled={isDisabled}>
+                <PlainButton className="bcs-CreateReply-toggle" isDisabled={isDisabled} onClick={onClick} type="button">
                     <ArrowArcRight className="bcs-CreateReply-arrow" />
                     <FormattedMessage {...messages.reply} />
                 </PlainButton>

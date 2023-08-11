@@ -12,7 +12,7 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
     });
 
     test('should set custom class name when provided', () => {
-        const wrapper = shallow(<RoundPill onRemove={onRemoveStub} text="box" className="MyClass" />);
+        const wrapper = shallow(<RoundPill className="MyClass" onRemove={onRemoveStub} text="box" />);
 
         expect(wrapper.hasClass('MyClass')).toBe(true);
     });
@@ -26,7 +26,7 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
     });
 
     test('should have the selected class when isSelected is true', () => {
-        const wrapper = shallow(<RoundPill isSelected isDisabled={false} onRemove={onRemoveStub} text="box" />);
+        const wrapper = shallow(<RoundPill isDisabled={false} isSelected onRemove={onRemoveStub} text="box" />);
 
         expect(wrapper.hasClass('bdl-RoundPill--selected')).toBe(true);
     });
@@ -44,7 +44,7 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
     });
 
     test('should generate LabelPill with error class when isValid is false and hasWarning is true', () => {
-        const wrapper = shallow(<RoundPill isValid={false} hasWarning onRemove={onRemoveStub} text="box" />);
+        const wrapper = shallow(<RoundPill hasWarning isValid={false} onRemove={onRemoveStub} text="box" />);
 
         expect(wrapper.hasClass('bdl-RoundPill--error')).toBe(true);
     });
@@ -72,7 +72,7 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
 
     test('should do nothing when getPillImageUrl returns a rejected Promise', () => {
         const wrapper = shallow(
-            <RoundPill name="name" id="123" showAvatar getPillImageUrl={() => Promise.reject(new Error())} />,
+            <RoundPill getPillImageUrl={() => Promise.reject(new Error())} id="123" name="name" showAvatar />,
         );
         expect(wrapper.state('avatarUrl')).toBe(undefined);
         const instance = wrapper.instance();
@@ -91,7 +91,7 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
         [contact => `/test?id=${contact.id}`, '/test?id=123'],
         [contact => Promise.resolve(`/test?id=${contact.id}`), '/test?id=123'],
     ])('should use the avatar URL when the prop (and show avatar) are provided', (getPillImageUrl, expected) => {
-        const wrapper = shallow(<RoundPill name="name" id="123" showAvatar getPillImageUrl={getPillImageUrl} />);
+        const wrapper = shallow(<RoundPill getPillImageUrl={getPillImageUrl} id="123" name="name" showAvatar />);
         expect(wrapper.state('avatarUrl')).toBe(undefined);
         const instance = wrapper.instance();
 
@@ -107,7 +107,7 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
 
     test('should not have the avatar URL when the id prop is missing', () => {
         const wrapper = shallow(
-            <RoundPill name="name" showAvatar getPillImageUrl={contact => `/test?id=${contact.id}`} />,
+            <RoundPill getPillImageUrl={contact => `/test?id=${contact.id}`} name="name" showAvatar />,
         );
 
         expect(wrapper.find('LabelPillIcon').length).toBe(2);

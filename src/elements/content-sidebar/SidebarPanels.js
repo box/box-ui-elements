@@ -167,8 +167,8 @@ class SidebarPanels extends React.Component<Props, State> {
                         path={`/${SIDEBAR_VIEW_SKILLS}`}
                         render={() => (
                             <LoadableSkillsSidebar
-                                elementId={elementId}
                                 key={file.id}
+                                elementId={elementId}
                                 file={file}
                                 getPreview={getPreview}
                                 getViewer={getViewer}
@@ -195,18 +195,18 @@ class SidebarPanels extends React.Component<Props, State> {
                                 : undefined;
                             return (
                                 <LoadableActivitySidebar
-                                    elementId={elementId}
+                                    ref={this.activitySidebar}
+                                    activeFeedEntryId={match.params.activeFeedEntryId}
+                                    activeFeedEntryType={match.params.activeFeedEntryId && activeFeedEntryType}
                                     currentUser={currentUser}
                                     currentUserError={currentUserError}
+                                    elementId={elementId}
                                     file={file}
                                     hasSidebarInitialized={isInitialized}
                                     onAnnotationSelect={onAnnotationSelect}
                                     onVersionChange={onVersionChange}
                                     onVersionHistoryClick={onVersionHistoryClick}
-                                    ref={this.activitySidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_ACTIVITY}
-                                    activeFeedEntryId={match.params.activeFeedEntryId}
-                                    activeFeedEntryType={match.params.activeFeedEntryId && activeFeedEntryType}
                                     {...activitySidebarProps}
                                 />
                             );
@@ -219,13 +219,13 @@ class SidebarPanels extends React.Component<Props, State> {
                         path={`/${SIDEBAR_VIEW_DETAILS}`}
                         render={() => (
                             <LoadableDetailsSidebar
+                                key={fileId}
+                                ref={this.detailsSidebar}
                                 elementId={elementId}
                                 fileId={fileId}
                                 hasSidebarInitialized={isInitialized}
-                                key={fileId}
                                 hasVersions={hasVersions}
                                 onVersionHistoryClick={onVersionHistoryClick}
-                                ref={this.detailsSidebar}
                                 startMarkName={MARK_NAME_JS_LOADING_DETAILS}
                                 {...detailsSidebarProps}
                             />
@@ -238,10 +238,10 @@ class SidebarPanels extends React.Component<Props, State> {
                         path={`/${SIDEBAR_VIEW_METADATA}`}
                         render={() => (
                             <LoadableMetadataSidebar
+                                ref={this.metadataSidebar}
                                 elementId={elementId}
                                 fileId={fileId}
                                 hasSidebarInitialized={isInitialized}
-                                ref={this.metadataSidebar}
                                 startMarkName={MARK_NAME_JS_LOADING_METADATA}
                                 {...metadataSidebarProps}
                             />
@@ -253,12 +253,12 @@ class SidebarPanels extends React.Component<Props, State> {
                         path="/:sidebar(activity|details)/versions/:versionId?"
                         render={({ match }) => (
                             <LoadableVersionsSidebar
+                                key={fileId}
+                                ref={this.versionsSidebar}
                                 fileId={fileId}
                                 hasSidebarInitialized={isInitialized}
-                                key={fileId}
                                 onVersionChange={onVersionChange}
                                 parentName={match.params.sidebar}
-                                ref={this.versionsSidebar}
                                 versionId={match.params.versionId}
                                 {...versionsSidebarProps}
                             />

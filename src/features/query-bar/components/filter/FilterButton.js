@@ -317,10 +317,10 @@ class FilterButton extends React.Component<Props, State> {
                                     return (
                                         <Condition
                                             key={`metadata-view-filter-item-${condition.id}`}
-                                            hasUserSubmitted={hasUserSubmitted}
                                             columns={columns}
                                             condition={condition}
                                             deleteCondition={this.deleteCondition}
+                                            hasUserSubmitted={hasUserSubmitted}
                                             index={index}
                                             onColumnChange={this.handleColumnChange}
                                             onConnectorChange={this.handleConnectorChange}
@@ -332,7 +332,7 @@ class FilterButton extends React.Component<Props, State> {
                                 })}
                             </div>
                             <div className="filter-button-dropdown-footer">
-                                <Button type="button" onClick={this.addFilter}>
+                                <Button onClick={this.addFilter} type="button">
                                     <FormattedMessage {...messages.addFilterButtonText} />
                                 </Button>
 

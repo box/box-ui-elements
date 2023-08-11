@@ -148,21 +148,21 @@ class ContentExplorerModalContainerExamples extends Component {
                 <h5>{exampleMessage}</h5>
                 {isModalOpen && (
                     <ContentExplorerModalContainer
-                        modalTitle='Move or copy "Item.boxnote"'
-                        modalDescription="This is some optional description text."
-                        onRequestClose={this.closeModal}
-                        onCreateFolderSubmit={this.handleCreateFolderSubmit}
                         contentExplorerMode="moveCopy"
                         initialFoldersPath={foldersPath}
-                        onEnterFolder={this.handleEnterFolder}
-                        onMoveItem={this.handleMoveItem}
-                        onCopyItem={this.handleCopyItem}
-                        onSearchSubmit={this.handleSearchSubmit}
-                        onExitSearch={this.handleExitSearch}
                         items={items}
+                        modalDescription="This is some optional description text."
+                        modalTitle='Move or copy "Item.boxnote"'
                         numItemsPerPage={100}
                         numTotalItems={items.length}
+                        onCopyItem={this.handleCopyItem}
+                        onCreateFolderSubmit={this.handleCreateFolderSubmit}
+                        onEnterFolder={this.handleEnterFolder}
+                        onExitSearch={this.handleExitSearch}
                         onLoadMoreItems={() => {}}
+                        onMoveItem={this.handleMoveItem}
+                        onRequestClose={this.closeModal}
+                        onSearchSubmit={this.handleSearchSubmit}
                     />
                 )}
             </div>

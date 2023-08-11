@@ -56,7 +56,7 @@ describe('features/content-explorer/item-list/ItemListName', () => {
         test('should use linkRenderer when specified', () => {
             const itemId = '1';
             const name = 'item';
-            const linkRenderer = props => <button type="button" className={`name-${props.itemId}`} />;
+            const linkRenderer = props => <button className={`name-${props.itemId}`} type="button" />;
             linkRenderer.propTypes = { itemId: PropTypes.string };
             const wrapper = renderComponent({
                 itemId,

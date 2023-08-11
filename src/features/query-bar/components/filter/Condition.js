@@ -177,7 +177,7 @@ const Condition = ({
         return (
             <div className="condition-delete-button">
                 <button className="delete-button" onClick={onDeleteButtonClick} type="button">
-                    <IconClose width={deleteButtonIconWidth} height={deleteButtonIconHeight} color="#999EA4" />
+                    <IconClose color="#999EA4" height={deleteButtonIconHeight} width={deleteButtonIconWidth} />
                 </button>
             </div>
         );
@@ -293,7 +293,7 @@ const Condition = ({
         return (
             error && (
                 <div className="condition-error-icon-status">
-                    <Tooltip text={error || ''} position="middle-right" theme="error">
+                    <Tooltip position="middle-right" text={error || ''} theme="error">
                         <span>
                             <IconAlertDefault />
                         </span>

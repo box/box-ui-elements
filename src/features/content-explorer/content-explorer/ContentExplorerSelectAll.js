@@ -29,10 +29,10 @@ const ContentExplorerSelectAll = ({
         )}
         <Tooltip isShown={isLabelHidden ? undefined : false} text={<FormattedMessage {...messages.selectAll} />}>
             <Checkbox
-                hideLabel
                 className="content-explorer-select-all-checkbox"
-                onChange={handleSelectAllClick}
+                hideLabel
                 isChecked={isSelectAllChecked}
+                onChange={handleSelectAllClick}
             />
         </Tooltip>
     </div>

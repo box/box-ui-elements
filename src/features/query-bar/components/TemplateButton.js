@@ -75,8 +75,8 @@ class TemplateButton extends React.Component<Props, State> {
             <Button
                 className={buttonClasses}
                 isDisabled={!templates || templates.length === 0}
-                type="button"
                 onClick={this.toggleTemplateDropdownButton}
+                type="button"
             >
                 <MenuToggle>
                     {icon}
@@ -96,15 +96,15 @@ class TemplateButton extends React.Component<Props, State> {
         const { activeTemplate, templates, usedTemplates } = this.props;
         return (
             <TemplateDropdown
-                className="query-bar-template-dropdown-flyout"
-                defaultTemplateIcon={<MetadataDefaultBadge className="template-list-item-badge" />}
-                title={this.renderTitle()}
-                onAdd={this.updateActiveTemplate}
                 activeTemplate={activeTemplate}
                 activeTemplateIcon={<MetadataActiveBadge className="template-list-item-badge" />}
-                templates={templates || []}
-                usedTemplates={usedTemplates}
+                className="query-bar-template-dropdown-flyout"
+                defaultTemplateIcon={<MetadataDefaultBadge className="template-list-item-badge" />}
                 entryButton={this.renderEntryButton()}
+                onAdd={this.updateActiveTemplate}
+                templates={templates || []}
+                title={this.renderTitle()}
+                usedTemplates={usedTemplates}
             />
         );
     }

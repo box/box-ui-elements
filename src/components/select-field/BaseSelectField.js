@@ -587,12 +587,12 @@ class BaseSelectField extends React.Component<Props, State> {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
+                ref={this.selectFieldContainerRef}
                 className={classNames(className, 'bdl-SelectField', 'select-container')}
                 onBlur={this.handleBlur}
                 onKeyDown={this.handleKeyDown}
-                ref={this.selectFieldContainerRef}
             >
-                <PopperComponent placement={dropdownPlacement} isOpen={isOpen} modifiers={dropdownModifiers}>
+                <PopperComponent isOpen={isOpen} modifiers={dropdownModifiers} placement={dropdownPlacement}>
                     {this.renderSelectButton()}
                     <SelectFieldDropdown
                         isScrollable={isScrollable}

@@ -70,15 +70,15 @@ class AdditionalTab extends React.PureComponent<Props, State> {
         } else if (id && id > 0) {
             TabIcon = (
                 <img
+                    alt={title}
                     className="bdl-AdditionalTab-icon"
-                    src={iconUrl}
                     onError={this.onImageError}
                     onLoad={onImageLoad}
-                    alt={title}
+                    src={iconUrl}
                 />
             );
         } else {
-            TabIcon = <Apps16 color={bdlGray50} width={20} height={20} />;
+            TabIcon = <Apps16 color={bdlGray50} height={20} width={20} />;
         }
 
         return TabIcon;
@@ -116,9 +116,9 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                     aria-label={title}
                     className={className}
                     data-testid="additionaltab"
-                    type="button"
                     isDisabled={isDisabled}
                     onClick={() => callbackFn({ id, callbackData: rest })}
+                    type="button"
                 >
                     {this.getTabIcon()}
                 </PlainButton>

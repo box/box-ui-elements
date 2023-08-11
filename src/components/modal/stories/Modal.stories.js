@@ -28,10 +28,10 @@ export const basic = () => {
                 <IntlProvider locale="en">
                     <div>
                         <Modal
-                            title="Box: Sharing is simple"
-                            onRequestClose={closeModal}
-                            isOpen={state.isModalOpen}
                             focusElementSelector="input"
+                            isOpen={state.isModalOpen}
+                            onRequestClose={closeModal}
+                            title="Box: Sharing is simple"
                         >
                             <p>
                                 Elements can be auto-focused by implementing transition logic in componentDidUpdate.
@@ -85,11 +85,11 @@ export const withCustomBackdropClickHandler = () => {
                 <IntlProvider locale="en">
                     <div>
                         <Modal
-                            title="Box: Sharing is simple"
-                            onRequestClose={closeModal}
-                            isOpen={state.isModalOpen}
                             focusElementSelector="input"
+                            isOpen={state.isModalOpen}
                             onBackdropClick={confirmBackdropClose}
+                            onRequestClose={closeModal}
+                            title="Box: Sharing is simple"
                         >
                             <p>
                                 Elements can be auto-focused by implementing transition logic in componentDidUpdate.

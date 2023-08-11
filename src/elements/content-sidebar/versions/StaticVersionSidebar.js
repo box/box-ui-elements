@@ -47,9 +47,9 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props)
     return (
         <div
             className="bcs-StaticVersionSidebar"
-            role="tabpanel"
             data-resin-component="preview"
             data-resin-feature="versions"
+            role="tabpanel"
         >
             <div className="bcs-StaticVersionSidebar-header">
                 <h3 className="bcs-StaticVersionSidebar-title">
@@ -66,7 +66,7 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props)
                     crawlerPosition="top"
                     isLoading={isLoading}
                 >
-                    <VersionsMenu versions={versions} fileId="1" versionCount={3} versionLimit={3} />
+                    <VersionsMenu fileId="1" versionCount={3} versionLimit={3} versions={versions} />
                 </LoadingIndicatorWrapper>
             </div>
 

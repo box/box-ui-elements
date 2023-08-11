@@ -69,22 +69,22 @@ class SelectorDropdownContainer extends Component {
             <div style={{ paddingBottom: '330px' }}>
                 <label labelFor="title-check">
                     <input
-                        type="checkbox"
-                        name="title-check"
                         id="title-check"
-                        value={showTitle}
+                        name="title-check"
                         onClick={this.handleShowTitle}
+                        type="checkbox"
+                        value={showTitle}
                     />
                     <span style={{ paddingLeft: '4px' }}>Add title to overlay</span>
                 </label>
                 <br />
                 <label labelFor="remain-open-check">
                     <input
-                        type="checkbox"
-                        name="remain-open-check"
                         id="remain-open-check"
-                        value={remainOpen}
+                        name="remain-open-check"
                         onClick={this.handleRemainOpen}
+                        type="checkbox"
+                        value={remainOpen}
                     />
                     <span style={{ paddingLeft: '4px' }}>Overlay should remain open</span>
                 </label>

@@ -30,8 +30,8 @@ const AdditionalTabTooltip = ({ children, defaultTooltipText, isFtuxVisible, ftu
 
     return (
         <TargetedClickThroughGuideTooltip
-            className="bdl-AdditionalTabTooltip"
             body={text}
+            className="bdl-AdditionalTabTooltip"
             position="middle-right"
             shouldTarget
             useTargetingApi={targetingApi}

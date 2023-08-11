@@ -10,7 +10,6 @@ module.exports = {
         'react/default-props-match-prop-types': 'off', // fixme
         'react/destructuring-assignment': 'off', // fixme
         'react/forbid-prop-types': 'off', // fixme
-        'react/jsx-sort-props': 'off', // fixme
         'react/jsx-no-bind': 'off', // fixme
         'react/sort-comp': 'off', // fixme
         'react/no-unused-prop-types': 'off', // fixme
@@ -18,7 +17,7 @@ module.exports = {
         'react/no-array-index-key': 'off', // fixme
         'react/no-this-in-sfc': 'off',
         'import/no-unresolved': 'off', // fixme
-        "no-unused-expressions": 'off', // disabled in favor for typescript version of error
+        'no-unused-expressions': 'off', // disabled in favor for typescript version of error
     },
     overrides: [
         {
@@ -38,13 +37,13 @@ module.exports = {
                 '@typescript-eslint/ban-types': [
                     'error',
                     {
-                        'types': {
-                            'Function': false, // fixme
-                            'Object': false, // fixme
-                            'object': false, // fixme
+                        types: {
+                            Function: false, // fixme
+                            Object: false, // fixme
+                            object: false, // fixme
                             '{}': false, // fixme
-                        }
-                    }
+                        },
+                    },
                 ],
                 // note you must disable the base rule as it can report incorrect errors:
                 'no-use-before-define': 'off',
@@ -60,10 +59,10 @@ module.exports = {
                         minimumDescriptionLength: 1,
                     },
                 ],
-                'camelcase': 'error',
+                camelcase: 'error',
                 'no-shadow': 'off',
                 '@typescript-eslint/no-shadow': ['error'],
-                "@typescript-eslint/no-unused-expressions": 'error', // moves eslint no-unused-expressions to a typescript error
+                '@typescript-eslint/no-unused-expressions': 'error', // moves eslint no-unused-expressions to a typescript error
             },
         },
     ],

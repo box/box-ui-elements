@@ -69,6 +69,7 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                 <label className="toggle-simple">
                     <input
+                        ref={ref}
                         checked={isOn}
                         className="toggle-simple-input"
                         disabled={isDisabled}
@@ -76,7 +77,6 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
                         onBlur={onBlur}
                         onChange={onChange}
                         onFocus={onFocus}
-                        ref={ref}
                         role="switch"
                         type="checkbox"
                         {...rest}

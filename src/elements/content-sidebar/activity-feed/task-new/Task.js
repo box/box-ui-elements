@@ -266,9 +266,9 @@ class Task extends React.Component<Props, State> {
             <ActivityCard
                 className="bcs-Task"
                 data-resin-feature="tasks"
+                data-resin-numassignees={assignments && assignments.length}
                 data-resin-taskid={id}
                 data-resin-tasktype={task_type}
-                data-resin-numassignees={assignments && assignments.length}
             >
                 {/* $FlowFixMe */}
                 {inlineError ? <ActivityError {...inlineError} /> : null}
@@ -279,7 +279,7 @@ class Task extends React.Component<Props, State> {
                     data-testid="task-card"
                 >
                     <Media.Figure className="bcs-Task-avatar">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} badgeIcon={<TaskTypeIcon />} />
+                        <Avatar badgeIcon={<TaskTypeIcon />} getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     </Media.Figure>
                     <Media.Body>
                         {isMenuVisible && (
@@ -290,8 +290,8 @@ class Task extends React.Component<Props, State> {
                                 targetAttachment="bottom right"
                             >
                                 <Media.Menu
-                                    isDisabled={isConfirmingDelete}
                                     data-testid="task-actions-menu"
+                                    isDisabled={isConfirmingDelete}
                                     menuProps={{
                                         'data-resin-component': ACTIVITY_TARGETS.TASK_OPTIONS,
                                     }}
@@ -352,17 +352,17 @@ class Task extends React.Component<Props, State> {
                                 tagged_message={description}
                                 translatedTaggedMessage={translatedTaggedMessage}
                                 {...translations}
-                                translationFailed={error ? true : null}
                                 getUserProfileUrl={getUserProfileUrl}
+                                translationFailed={error ? true : null}
                             />
                         </div>
                         <div className="bcs-Task-assigneeListContainer">
                             <AssigneeList
+                                getAvatarUrl={getAvatarUrl}
+                                initialAssigneeCount={3}
                                 isOpen={isAssigneeListOpen}
                                 onCollapse={this.handleAssigneeListCollapse}
                                 onExpand={this.handleAssigneeListExpand}
-                                getAvatarUrl={getAvatarUrl}
-                                initialAssigneeCount={3}
                                 users={isAssigneeListOpen ? assignedToFull : assigned_to}
                             />
                         </div>
@@ -370,20 +370,12 @@ class Task extends React.Component<Props, State> {
                             <div className="bcs-Task-actionsContainer" data-testid="action-container">
                                 <TaskActions
                                     isMultiFile={isMultiFile}
-                                    taskType={task_type}
                                     onTaskApproval={
                                         isPending
                                             ? noop
                                             : () =>
                                                   // $FlowFixMe checked by shouldShowActions
                                                   this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_APPROVED)
-                                    }
-                                    onTaskReject={
-                                        isPending
-                                            ? noop
-                                            : () =>
-                                                  // $FlowFixMe checked by shouldShowActions
-                                                  this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
                                     }
                                     onTaskComplete={
                                         isPending
@@ -396,7 +388,15 @@ class Task extends React.Component<Props, State> {
                                                       TASK_NEW_COMPLETED,
                                                   )
                                     }
+                                    onTaskReject={
+                                        isPending
+                                            ? noop
+                                            : () =>
+                                                  // $FlowFixMe checked by shouldShowActions
+                                                  this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
+                                    }
                                     onTaskView={onView && (() => onView(id, isCreator))}
+                                    taskType={task_type}
                                 />
                             </div>
                         )}
@@ -406,10 +406,10 @@ class Task extends React.Component<Props, State> {
                     editMode={TASK_EDIT_MODE_EDIT}
                     error={modalError}
                     feedbackUrl={getFeatureConfig(features, 'activityFeed.tasks').feedbackUrl || ''}
+                    isTaskFormOpen={isEditing}
+                    onModalClose={this.handleEditModalClose}
                     onSubmitError={this.handleEditSubmitError}
                     onSubmitSuccess={this.handleEditModalClose}
-                    onModalClose={this.handleEditModalClose}
-                    isTaskFormOpen={isEditing}
                     taskFormProps={{
                         id,
                         approvers: assignedToFull.entries,

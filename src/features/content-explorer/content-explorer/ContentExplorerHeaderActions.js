@@ -184,9 +184,9 @@ class ContentExplorerHeaderActions extends Component {
                     {showCreateNewFolderButton && (
                         <ContentExplorerNewFolderButton
                             contentExplorerMode={contentExplorerMode}
-                            onClick={onCreateNewFolderButtonClick}
-                            isDisabled={!isCreateNewFolderAllowed || isInSearchMode}
                             isCreateNewFolderAllowed={isCreateNewFolderAllowed}
+                            isDisabled={!isCreateNewFolderAllowed || isInSearchMode}
+                            onClick={onCreateNewFolderButtonClick}
                         />
                     )}
                     {children}
@@ -203,8 +203,8 @@ class ContentExplorerHeaderActions extends Component {
                         breadcrumbProps={breadcrumbProps}
                         foldersPath={foldersPath}
                         isUpButtonDisabled={isBreadcrumbButtonDisabled}
-                        onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
+                        onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
                     />
                 )}
             </div>

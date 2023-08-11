@@ -39,7 +39,7 @@ const VersionsItemRetention = ({ retention }: Props) => {
         <FormattedMessage
             {...RETENTION_MAP[dispositionAction]}
             values={{
-                time: <ReadableTime timestamp={dispositionAtTime} showWeekday />,
+                time: <ReadableTime showWeekday timestamp={dispositionAtTime} />,
             }}
         />
     );
