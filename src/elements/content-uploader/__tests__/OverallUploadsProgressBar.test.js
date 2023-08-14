@@ -100,4 +100,12 @@ describe('elements/content-uploader/OverallUploadsProgressBar', () => {
 
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should be visible for assistive technologies when displayed', () => {
+        const wrapper = getWrapper({
+            isVisible: true,
+        });
+
+        expect(wrapper).toMatchSnapshot();
+    });
 });
