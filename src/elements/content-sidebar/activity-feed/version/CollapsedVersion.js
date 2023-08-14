@@ -61,6 +61,7 @@ function getMessageForAction(
 
 type Props = {
     collaborators: { [collaborator_id: string]: User },
+    id: string,
     onInfo?: Function,
     shouldUseUAA?: boolean,
     version_end: number,

@@ -20,7 +20,6 @@ import {
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
-    FILE_ACTIVITY_TYPE_VERSION,
 } from '../../../../constants';
 import type {
     Annotation,
@@ -276,7 +275,6 @@ const ActiveState = ({
                             </ActivityItem>
                         );
                     case FEED_ITEM_TYPE_VERSION:
-                    case FILE_ACTIVITY_TYPE_VERSION:
                         return (
                             <ActivityItem key={item.type + item.id} className="bcs-version-item" data-testid="version">
                                 {hasMultipleVersions(item) ? (

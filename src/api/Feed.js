@@ -190,8 +190,10 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                 }
 
                 case FILE_ACTIVITY_TYPE_VERSION: {
+                    // $FlowFixMe
                     const versionsItem = { ...source[FILE_ACTIVITY_TYPE_VERSION] };
 
+                    versionsItem.type = 'file_version';
                     if (versionsItem.action_by) {
                         const collaborators = {};
 
