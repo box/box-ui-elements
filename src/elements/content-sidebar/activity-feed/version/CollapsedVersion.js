@@ -85,7 +85,9 @@ const CollapsedVersion = (props: Props): React.Node => {
                         aria-label={intl.formatMessage(messages.getVersionInfo)}
                         className="bcs-Version-info"
                         data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
-                        onClick={() => onInfo(shouldUseUAA ? { id, version_number: version_end } : { versions })}
+                        onClick={() => {
+                            onInfo(shouldUseUAA ? { id, version_number: version_end } : { versions });
+                        }}
                         type="button"
                     >
                         <IconInfo height={16} width={16} />

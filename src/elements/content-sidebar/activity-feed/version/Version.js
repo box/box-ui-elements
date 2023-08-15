@@ -26,7 +26,6 @@ type Props = {
     id: string,
     modified_by: User,
     onInfo?: Function,
-    shouldUseUAA?: boolean,
     version_number: string,
     version_promoted?: string,
 } & InjectIntlProvidedProps;
@@ -63,7 +62,9 @@ const Version = (props: Props): React.Node => {
                         aria-label={intl.formatMessage(messages.getVersionInfo)}
                         className="bcs-Version-info"
                         data-resin-target={ACTIVITY_TARGETS.VERSION_CARD}
-                        onClick={() => onInfo({ id, version_number })}
+                        onClick={() => {
+                            onInfo({ id, version_number });
+                        }}
                         type="button"
                     >
                         <IconInfo height={16} width={16} />
