@@ -88,6 +88,7 @@ const OverallUploadsProgressBar = ({
 
     return (
         <div
+            aria-hidden={!isVisible}
             className="bcu-overall-progress-bar"
             data-resin-target={isExpanded ? 'uploadcollapse' : 'uploadexpand'}
             onClick={onClick}
