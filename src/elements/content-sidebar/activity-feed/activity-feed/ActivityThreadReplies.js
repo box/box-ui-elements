@@ -49,6 +49,10 @@ const ActivityThreadReplies = ({
         };
     };
 
+    const handleOnEdit = ({ hasMention, id, onError, onSuccess, permissions, status, text }): void => {
+        onEdit(id, text, status, hasMention, permissions, onSuccess, onError);
+    };
+
     const renderComment = (reply: CommentType) => {
         if (hasNewThreadedReplies) {
             return (
@@ -61,7 +65,7 @@ const ActivityThreadReplies = ({
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onDelete}
-                    onCommentEdit={onEdit}
+                    onCommentEdit={handleOnEdit}
                     onSelect={onSelect}
                     permissions={getReplyPermissions(reply)}
                     translations={translations}
@@ -79,7 +83,7 @@ const ActivityThreadReplies = ({
                 getUserProfileUrl={getUserProfileUrl}
                 mentionSelectorContacts={mentionSelectorContacts}
                 onDelete={onDelete}
-                onEdit={onEdit}
+                onEdit={handleOnEdit}
                 onSelect={onSelect}
                 permissions={getReplyPermissions(reply)}
                 translations={translations}
