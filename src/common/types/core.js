@@ -214,9 +214,12 @@ type BoxItemVersionRetention = {
 };
 
 type BoxItemVersion = {
+    action_by?: User[],
+    action_type?: string,
     authenticated_download_url?: string,
     collaborators?: Object,
     created_at: string,
+    end?: Object,
     extension?: string,
     id: string,
     is_download_available?: boolean,
@@ -229,6 +232,7 @@ type BoxItemVersion = {
     retention?: BoxItemVersionRetention,
     sha1?: string,
     size?: number,
+    start?: Object,
     trashed_at: ?string,
     trashed_by?: ?User,
     type: 'file_version',

@@ -190,7 +190,6 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                 }
 
                 case FILE_ACTIVITY_TYPE_VERSION: {
-                    // $FlowFixMe
                     const versionsItem = { ...source[FILE_ACTIVITY_TYPE_VERSION] };
 
                     versionsItem.type = 'file_version';
@@ -224,30 +223,24 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                             versionsItem.start?.created_at &&
                             versionsItem.start?.created_by
                         ) {
-                            const modifiedAt = versionsItem.start.created_at;
-                            const modifiedBy = { ...versionsItem.start.created_by };
-                            versionsItem.modified_at = modifiedAt;
-                            versionsItem.modified_by = modifiedBy;
+                            versionsItem.modified_at = versionsItem.start.created_at;
+                            versionsItem.modified_by = { ...versionsItem.start.created_by };
                         }
                         if (
                             versionsItem.action_type === 'trashed' &&
                             versionsItem.start?.trashed_at &&
                             versionsItem.start?.trashed_by
                         ) {
-                            const trashedAt = versionsItem.start.trashed_at;
-                            const trashedBy = { ...versionsItem.start.trashed_by };
-                            versionsItem.trashed_at = trashedAt;
-                            versionsItem.trashed_by = trashedBy;
+                            versionsItem.trashed_at = versionsItem.start.trashed_at;
+                            versionsItem.trashed_by = { ...versionsItem.start.trashed_by };
                         }
                         if (
                             versionsItem.action_type === 'restored' &&
                             versionsItem.start?.restored_at &&
                             versionsItem.start?.restored_by
                         ) {
-                            const restoredAt = versionsItem.start.restored_at;
-                            const restoredBy = { ...versionsItem.start.restored_by };
-                            versionsItem.restored_at = restoredAt;
-                            versionsItem.restored_by = restoredBy;
+                            versionsItem.restored_at = versionsItem.start.restored_at;
+                            versionsItem.restored_by = { ...versionsItem.start.restored_by };
                         }
                     }
 
