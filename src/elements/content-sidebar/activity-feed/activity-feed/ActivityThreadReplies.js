@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import noop from 'lodash/noop';
 import Comment from '../comment';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import { BaseComment } from '../comment/BaseComment';
@@ -51,7 +50,9 @@ const ActivityThreadReplies = ({
     };
 
     const handleOnEdit = ({ hasMention, id, onError, onSuccess, permissions, status, text }): void => {
-        onEdit(id, text, status, hasMention, permissions, onSuccess, onError);
+        if (onEdit) {
+            onEdit(id, text, status, hasMention, permissions, onSuccess, onError);
+        }
     };
 
     const renderComment = (reply: CommentType) => {
@@ -66,7 +67,7 @@ const ActivityThreadReplies = ({
                     getUserProfileUrl={getUserProfileUrl}
                     mentionSelectorContacts={mentionSelectorContacts}
                     onDelete={onDelete}
-                    onCommentEdit={onEdit ? handleOnEdit : noop}
+                    onCommentEdit={handleOnEdit}
                     onSelect={onSelect}
                     permissions={getReplyPermissions(reply)}
                     translations={translations}
@@ -84,7 +85,7 @@ const ActivityThreadReplies = ({
                 getUserProfileUrl={getUserProfileUrl}
                 mentionSelectorContacts={mentionSelectorContacts}
                 onDelete={onDelete}
-                onEdit={onEdit ? handleOnEdit : noop}
+                onEdit={handleOnEdit}
                 onSelect={onSelect}
                 permissions={getReplyPermissions(reply)}
                 translations={translations}
