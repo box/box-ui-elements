@@ -54,7 +54,7 @@ type Props = {
     intl: Object,
     isCascadingPolicyApplicable: boolean,
     isDirty: boolean,
-    isFolderInstance?: boolean,
+    isFolderMetadata?: boolean,
     isOpen: boolean,
     onModification?: (id: string, isDirty: boolean, type?: string) => void,
     onRemove?: (id: string) => void,
@@ -104,7 +104,7 @@ class Instance extends React.PureComponent<Props, State> {
         data: {},
         isDirty: false,
         isCascadingPolicyApplicable: false,
-        isFolderInstance: false,
+        isFolderMetadata: false,
     };
 
     constructor(props: Props) {
@@ -203,7 +203,7 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {void}
      */
     onSave = (): void => {
-        const { cascadePolicy = {}, data: originalData, id, isDirty, onSave, isFolderInstance }: Props = this.props;
+        const { cascadePolicy = {}, data: originalData, id, isDirty, onSave, isFolderMetadata }: Props = this.props;
         const { data: currentData, errors, isCascadingEnabled, isCascadingOverwritten }: State = this.state;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
@@ -218,7 +218,7 @@ class Instance extends React.PureComponent<Props, State> {
 
         const cascadePolicyData = {
             ...cascadePolicy,
-            isEnabled: isFolderInstance ? isCascadingEnabled : false,
+            isEnabled: isFolderMetadata ? isCascadingEnabled : false,
             overwrite: isCascadingOverwritten,
         };
 
@@ -391,8 +391,8 @@ class Instance extends React.PureComponent<Props, State> {
      * Get the delete confirmation message base on the template key
      */
     getConfirmationMessage(): React.Node {
-        const { template, isFolderInstance }: Props = this.props;
-        const isFile = !isFolderInstance;
+        const { template, isFolderMetadata }: Props = this.props;
+        const isFile = !isFolderMetadata;
         return this.renderDeleteMessage(isFile, template);
     }
 
@@ -570,7 +570,7 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { isDirty, isOpen, template, isFolderInstance }: Props = this.props;
+        const { isDirty, isOpen, template, isFolderMetadata }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
@@ -617,7 +617,7 @@ class Instance extends React.PureComponent<Props, State> {
                             <Form onValidSubmit={isDirty ? this.onSave : noop}>
                                 <div className="metadata-instance-editor-instance">
                                     {/* policies aren't enabled on custom instances but we show this anyway to display a message to inform the user */}
-                                    {isFolderInstance && (
+                                    {isFolderMetadata && (
                                         <CascadePolicy
                                             canEdit={this.isEditing()}
                                             isCascadingEnabled={isCascadingEnabled}

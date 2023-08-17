@@ -152,12 +152,12 @@ const intl = { formatMessage: jest.fn().mockReturnValue('Edit Metadata') };
 
 describe('features/metadata-instance-editor/fields/Instance', () => {
     test.each`
-        isFolderInstance
+        isFolderMetadata
         ${true}
         ${false}
     `(
-        'should correctly render templated metadata instance when isFolderInstance is $isFolderInstance',
-        ({ isFolderInstance }) => {
+        'should correctly render templated metadata instance when isFolderMetadata is $isFolderMetadata',
+        ({ isFolderMetadata }) => {
             render(
                 <Instance
                     cascadePolicy={{ canEdit: true, id: 'hello' }}
@@ -165,7 +165,7 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                     dataValue="value"
                     intl={intl}
                     isCascadingPolicyApplicable
-                    isFolderInstance={isFolderInstance}
+                    isFolderMetadata={isFolderMetadata}
                     shouldShowCascadingOptions
                     onModification={jest.fn()}
                     onRemove={jest.fn()}
@@ -182,7 +182,7 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 fireEvent.click(editButton);
             }
             const metadataInstanceEditor = screen.queryByTestId('metadata-cascade-policy');
-            if (isFolderInstance) {
+            if (isFolderMetadata) {
                 expect(metadataInstanceEditor).toBeInTheDocument();
             } else {
                 expect(metadataInstanceEditor).not.toBeInTheDocument();
@@ -208,7 +208,7 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                     dataValue="value"
                     intl={intl}
                     isCascadingPolicyApplicable={isCascadingPolicyApplicable}
-                    isFolderInstance
+                    isFolderMetadata
                     shouldShowCascadingOptions
                     onModification={jest.fn()}
                     onRemove={jest.fn()}

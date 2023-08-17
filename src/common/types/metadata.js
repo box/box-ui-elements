@@ -89,7 +89,7 @@ type MetadataInstance = {
     data: MetadataFields,
     id: string,
     isCascadingPolicyApplicable?: boolean,
-    isFolderInstance?: boolean,
+    isFolderMetadata?: boolean,
 };
 
 type MetadataInstanceV2 = {

@@ -16,7 +16,7 @@ Array [
     id="editor1"
     isCascadingPolicyApplicable={false}
     isDirty={false}
-    isFolderInstance={false}
+    isFolderMetadata={false}
     isOpen={false}
     key="editor1-template1"
     template={
@@ -121,7 +121,7 @@ Array [
     id="editor2"
     isCascadingPolicyApplicable={false}
     isDirty={true}
-    isFolderInstance={false}
+    isFolderMetadata={false}
     isOpen={false}
     key="editor2-template2"
     template={

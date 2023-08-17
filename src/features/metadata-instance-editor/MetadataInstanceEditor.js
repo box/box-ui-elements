@@ -17,7 +17,7 @@ type Props = {
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
-    isFolderInstance?: boolean,
+    isFolderMetadata?: boolean,
     onAdd?: (template: MetadataTemplate) => void,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
@@ -38,7 +38,7 @@ const MetadataInstanceEditor = ({
     canAdd,
     isCascadingPolicyApplicable = false,
     isDropdownBusy,
-    isFolderInstance = false,
+    isFolderMetadata = false,
     editors = [],
     onModification,
     onRemove,
@@ -65,7 +65,7 @@ const MetadataInstanceEditor = ({
                     <Instances
                         editors={editors}
                         isCascadingPolicyApplicable={isCascadingPolicyApplicable}
-                        isFolderInstance={isFolderInstance}
+                        isFolderMetadata={isFolderMetadata}
                         onModification={onModification}
                         onRemove={onRemove}
                         onSave={onSave}
