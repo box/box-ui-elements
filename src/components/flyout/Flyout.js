@@ -54,6 +54,13 @@ const positions = {
 };
 
 /**
+ * The set of container's aria-haspopup attribute values which are compatible with popup's role attribute according to MDN: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-haspopup
+ */
+const ARIA_HASPOPUP_COMPATIBLE_ROLES = ['menu', 'listbox', 'tree', 'grid', 'dialog'];
+
+const getAriaHaspopupFromRole = (role: string) => (ARIA_HASPOPUP_COMPATIBLE_ROLES.includes(role) ? role : 'false');
+
+/**
  * Checks if there is a clickable ancestor or self
  * @param {Node} rootNode The base node we should stop at
  * @param {Node} targetNode The target node of the event
@@ -151,6 +158,10 @@ export type FlyoutProps = {
      * Time in milliseconds that the button should wait before opening and closing the flyout
      */
     openOnHoverDelayTimeout?: number,
+    /**
+     * Set custom 'role' for overlay and 'aria-haspopup' for overlay button. 'dialog' by default
+     */
+    overlayRole?: string,
     /** An array of CSS classes for portaled elements in the overlay, used to check whether a click is inside the overlay */
     portaledClasses: Array<string>,
     /**
@@ -394,6 +405,7 @@ class Flyout extends React.Component<Props, State> {
 
         const overlayButton = elements[0];
         const overlayContent = elements[1];
+        const overlayRole = this.props.overlayRole || 'dialog';
 
         const overlayButtonProps: Object = {
             id: this.overlayButtonID,
@@ -404,7 +416,7 @@ class Flyout extends React.Component<Props, State> {
             onMouseLeave: this.handleButtonHoverLeave,
             role: 'button',
             tabIndex: '0',
-            'aria-haspopup': 'true',
+            'aria-haspopup': getAriaHaspopupFromRole(overlayRole),
             'aria-expanded': isVisible ? 'true' : 'false',
         };
 
@@ -415,7 +427,7 @@ class Flyout extends React.Component<Props, State> {
         const overlayProps = {
             id: this.overlayID,
             key: this.overlayID,
-            role: 'dialog',
+            role: overlayRole,
             onClick: this.handleOverlayClick,
             onClose: this.handleOverlayClose,
             onMouseEnter: this.handleButtonHover,

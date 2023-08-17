@@ -24,12 +24,7 @@ describe('components/flyout/Flyout', () => {
     );
     FakeButton.displayName = 'FakeButton';
     /* eslint-disable */
-    const FakeOverlay = ({
-        onClick = () => {},
-        onClose = () => {},
-        shouldDefaultFocus = false,
-        ...rest
-    }) => (
+    const FakeOverlay = ({ onClick = () => {}, onClose = () => {}, shouldDefaultFocus = false, ...rest }) => (
         <div {...rest} className="overlay-wrapper is-visible">
             <div className="overlay">
                 <input type="text" />
@@ -82,7 +77,7 @@ describe('components/flyout/Flyout', () => {
 
             expect(button.prop('id')).toEqual(instance.overlayButtonID);
             expect(button.key()).toEqual(instance.overlayButtonID);
-            expect(button.prop('aria-haspopup')).toEqual('true');
+            expect(button.prop('aria-haspopup')).toEqual('dialog');
             expect(button.prop('aria-expanded')).toEqual('false');
             expect(button.prop('aria-controls')).toBeFalsy();
         });
@@ -290,6 +285,37 @@ describe('components/flyout/Flyout', () => {
                 );
                 expect(wrapper.prop('offset')).toEqual(offset);
             });
+        });
+
+        ['menu', 'listbox', 'tree', 'grid', 'dialog'].forEach(role => {
+            test('should match overlay "role" with button "aria-haspopup" if compatible', () => {
+                const wrapper = mount(
+                    <Flyout overlayRole={role}>
+                        <FakeButton />
+                        <FakeOverlay />
+                    </Flyout>,
+                );
+
+                wrapper.setState({
+                    isVisible: true,
+                });
+                expect(wrapper.find(FakeOverlay).prop('role')).toEqual(wrapper.find(FakeButton).prop('aria-haspopup'));
+            });
+        });
+
+        test('should set "aria-haspopup" to "false" if "role" is not compatible', () => {
+            const wrapper = mount(
+                <Flyout overlayRole="tab">
+                    <FakeButton />
+                    <FakeOverlay />
+                </Flyout>,
+            );
+
+            wrapper.setState({
+                isVisible: true,
+            });
+            expect(wrapper.find(FakeOverlay).prop('role')).toEqual('tab');
+            expect(wrapper.find(FakeButton).prop('aria-haspopup')).toEqual('false');
         });
     });
 
