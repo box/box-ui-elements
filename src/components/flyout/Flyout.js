@@ -53,6 +53,8 @@ const positions = {
     },
 };
 
+const OVERLAY_ROLE = 'dialog';
+
 /**
  * Checks if there is a clickable ancestor or self
  * @param {Node} rootNode The base node we should stop at
@@ -404,7 +406,7 @@ class Flyout extends React.Component<Props, State> {
             onMouseLeave: this.handleButtonHoverLeave,
             role: 'button',
             tabIndex: '0',
-            'aria-haspopup': 'true',
+            'aria-haspopup': OVERLAY_ROLE,
             'aria-expanded': isVisible ? 'true' : 'false',
         };
 
@@ -415,7 +417,7 @@ class Flyout extends React.Component<Props, State> {
         const overlayProps = {
             id: this.overlayID,
             key: this.overlayID,
-            role: 'dialog',
+            role: OVERLAY_ROLE,
             onClick: this.handleOverlayClick,
             onClose: this.handleOverlayClose,
             onMouseEnter: this.handleButtonHover,

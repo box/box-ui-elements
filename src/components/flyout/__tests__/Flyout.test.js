@@ -24,12 +24,7 @@ describe('components/flyout/Flyout', () => {
     );
     FakeButton.displayName = 'FakeButton';
     /* eslint-disable */
-    const FakeOverlay = ({
-        onClick = () => {},
-        onClose = () => {},
-        shouldDefaultFocus = false,
-        ...rest
-    }) => (
+    const FakeOverlay = ({ onClick = () => {}, onClose = () => {}, shouldDefaultFocus = false, ...rest }) => (
         <div {...rest} className="overlay-wrapper is-visible">
             <div className="overlay">
                 <input type="text" />
@@ -82,7 +77,7 @@ describe('components/flyout/Flyout', () => {
 
             expect(button.prop('id')).toEqual(instance.overlayButtonID);
             expect(button.key()).toEqual(instance.overlayButtonID);
-            expect(button.prop('aria-haspopup')).toEqual('true');
+            expect(button.prop('aria-haspopup')).toEqual('dialog');
             expect(button.prop('aria-expanded')).toEqual('false');
             expect(button.prop('aria-controls')).toBeFalsy();
         });
