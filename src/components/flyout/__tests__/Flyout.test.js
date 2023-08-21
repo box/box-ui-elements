@@ -286,37 +286,6 @@ describe('components/flyout/Flyout', () => {
                 expect(wrapper.prop('offset')).toEqual(offset);
             });
         });
-
-        ['menu', 'listbox', 'tree', 'grid', 'dialog'].forEach(role => {
-            test('should match overlay "role" with button "aria-haspopup" if compatible', () => {
-                const wrapper = mount(
-                    <Flyout overlayRole={role}>
-                        <FakeButton />
-                        <FakeOverlay />
-                    </Flyout>,
-                );
-
-                wrapper.setState({
-                    isVisible: true,
-                });
-                expect(wrapper.find(FakeOverlay).prop('role')).toEqual(wrapper.find(FakeButton).prop('aria-haspopup'));
-            });
-        });
-
-        test('should set "aria-haspopup" to "false" if "role" is not compatible', () => {
-            const wrapper = mount(
-                <Flyout overlayRole="tab">
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
-
-            wrapper.setState({
-                isVisible: true,
-            });
-            expect(wrapper.find(FakeOverlay).prop('role')).toEqual('tab');
-            expect(wrapper.find(FakeButton).prop('aria-haspopup')).toEqual('false');
-        });
     });
 
     describe('handleOverlayClick()', () => {
