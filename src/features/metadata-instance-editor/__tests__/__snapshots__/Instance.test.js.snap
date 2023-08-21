@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen prop should be true 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={50}
     buttonProps={
@@ -143,7 +145,9 @@ exports[`features/metadata-instance-editor/fields/Instance message id should be 
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render custom metadata instance 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={550}
     buttonProps={
@@ -209,7 +213,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true, "id": "hello"} and isCascadingPolicyApplicable is false 1`] = `
 <div>
-  <div>
+  <div
+    data-testid="metadata-instance"
+  >
     <div
       class="collapsible-card is-open is-bordered"
     >
@@ -901,7 +907,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true, "id": "hello"} and isCascadingPolicyApplicable is true 1`] = `
 <div>
-  <div>
+  <div
+    data-testid="metadata-instance"
+  >
     <div
       class="collapsible-card is-open is-bordered"
     >
@@ -1593,7 +1601,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true} and isCascadingPolicyApplicable is false 1`] = `
 <div>
-  <div>
+  <div
+    data-testid="metadata-instance"
+  >
     <div
       class="collapsible-card is-open is-bordered"
     >
@@ -2284,7 +2294,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is {"canEdit": true} and isCascadingPolicyApplicable is true 1`] = `
 <div>
-  <div>
+  <div
+    data-testid="metadata-instance"
+  >
     <div
       class="collapsible-card is-open is-bordered"
     >
@@ -2975,7 +2987,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is null and isCascadingPolicyApplicable is false 1`] = `
 <div>
-  <div>
+  <div
+    data-testid="metadata-instance"
+  >
     <div
       class="collapsible-card is-open is-bordered"
     >
@@ -3666,7 +3680,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render templated metadata instance when cascadePolicy is null and isCascadingPolicyApplicable is true 1`] = `
 <div>
-  <div>
+  <div
+    data-testid="metadata-instance"
+  >
     <div
       class="collapsible-card is-open is-bordered"
     >
@@ -4356,7 +4372,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render the busy indicator 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={550}
     buttonProps={
@@ -4528,7 +4546,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render the footer even when all fields are hidden 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={150}
     buttonProps={
@@ -4634,7 +4654,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render the footer even when there are no fields in a template 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={50}
     buttonProps={
@@ -4725,7 +4747,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render the footer when editing and cascade policy 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={550}
     buttonProps={
@@ -4922,7 +4946,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render the footer when editing and no cascade policy 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={550}
     buttonProps={
@@ -5119,7 +5145,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should correctly render the footer with save button when dirty 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={550}
     buttonProps={
@@ -5296,7 +5324,9 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
 `;
 
 exports[`features/metadata-instance-editor/fields/Instance should not render footer when not editing 1`] = `
-<div>
+<div
+  data-testid="metadata-instance"
+>
   <Collapsible
     animationDuration={550}
     buttonProps={

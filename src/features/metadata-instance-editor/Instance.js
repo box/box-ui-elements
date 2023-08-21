@@ -356,6 +356,7 @@ class Instance extends React.PureComponent<Props, State> {
                     className={classNames('metadata-instance-editor-instance-title-text', {
                         'metadata-instance-editor-instance-has-error': hasError,
                     })}
+                    data-testid={hasError ? 'metadata-instance-has-error' : undefined}
                 >
                     {isProperties ? <FormattedMessage {...messages.customTitle} /> : template.displayName}
                 </span>
@@ -591,7 +592,7 @@ class Instance extends React.PureComponent<Props, State> {
         const animationDuration = (fields.length + 1) * 50;
 
         return (
-            <div ref={this.collapsibleRef}>
+            <div ref={this.collapsibleRef} data-testid="metadata-instance">
                 <Collapsible
                     animationDuration={animationDuration}
                     buttonProps={{

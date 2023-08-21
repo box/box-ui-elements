@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { render, screen } from '@testing-library/react';
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
 
@@ -455,6 +456,23 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
         );
 
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render editors with errors', () => {
+        render(
+            <MetadataInstanceEditor
+                editors={[editor5, editor5, editor3]}
+                onModification={jest.fn()}
+                onSave={jest.fn()}
+                templates={[]}
+            />,
+        );
+
+        const instances = screen.queryAllByTestId('metadata-instance');
+        expect(instances).toHaveLength(3);
+
+        const errorInstances = screen.queryAllByTestId('metadata-instance-has-error');
+        expect(errorInstances).toHaveLength(2);
     });
 
     test('should correctly render editors with template filters', () => {
