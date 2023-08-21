@@ -570,7 +570,7 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { isDirty, isOpen, template, isFolderMetadata }: Props = this.props;
+        const { isDirty, isFolderMetadata, isOpen, template }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
