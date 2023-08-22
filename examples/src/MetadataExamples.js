@@ -1036,6 +1036,7 @@ class MetadataExamples extends React.PureComponent {
                         canAdd
                         editors={this.state.editors}
                         isCascadingPolicyApplicable
+                        isFolderMetadata
                         onAdd={this.onAdd}
                         onModification={this.onModification}
                         onRemove={this.onRemove}
@@ -1053,6 +1054,7 @@ class MetadataExamples extends React.PureComponent {
                     <MetadataInstanceEditor
                         canAdd
                         editors={this.state.editors}
+                        isFolderMetadata
                         onAdd={this.onAdd}
                         onModification={this.onModification}
                         onRemove={this.onRemove}
@@ -1067,6 +1069,7 @@ class MetadataExamples extends React.PureComponent {
                 <div className="metadata-container">
                     <MetadataInstanceEditor
                         canAdd
+                        isFolderMetadata
                         onAdd={this.onAdd}
                         onModification={this.onModification}
                         onRemove={this.onRemove}
@@ -1082,6 +1085,7 @@ class MetadataExamples extends React.PureComponent {
                     <MetadataInstanceEditor
                         canAdd
                         editors={this.state.editors}
+                        isFolderMetadata
                         onAdd={this.onAdd}
                         onModification={this.onModification}
                         onRemove={this.onRemove}
