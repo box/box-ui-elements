@@ -31,7 +31,7 @@ const CascadePolicy = ({
     shouldShowCascadeOptions,
 }: Props) => {
     const readOnlyState = isCascadingEnabled ? (
-        <div className="metadata-cascade-notice">
+        <div className="metadata-cascade-notice" data-testid="metadata-cascade-notice">
             <FormattedMessage {...messages.metadataCascadePolicyEnabledInfo} />
         </div>
     ) : null;

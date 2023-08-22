@@ -1,8 +1,15 @@
+// @flow
 import React from 'react';
 
 import { render, screen } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
+
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+    FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
+}));
 
 // Templates
 
@@ -407,6 +414,9 @@ const editor3 = {
         canEdit: true,
         id: 'editor3',
         data: {},
+        cascadePolicy: {
+            id: 'test',
+        },
     },
     template: template3,
 };
@@ -444,6 +454,10 @@ const templatesOnServer = [template1, template2, template3, template4, template5
 // State of editors from server
 const editorsOnServer = [editor1, editor2, editor3, editor4, editor5];
 
+const Wrapper = ({ children }: { children?: React.ReactNode }) => {
+    return <IntlProvider locale="en">{children}</IntlProvider>;
+};
+
 describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
     test('should correctly render editors', () => {
         const wrapper = shallow(<MetadataInstanceEditor editors={editorsOnServer} templates={templatesOnServer} />);
@@ -461,11 +475,15 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
     test('should render editors with errors', () => {
         render(
             <MetadataInstanceEditor
+                isFolderMetadata
                 editors={[editor5, editor5, editor3]}
                 onModification={jest.fn()}
                 onSave={jest.fn()}
                 templates={[]}
             />,
+            {
+                wrapper: Wrapper,
+            },
         );
 
         const instances = screen.queryAllByTestId('metadata-instance');
@@ -473,6 +491,9 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
 
         const errorInstances = screen.queryAllByTestId('metadata-instance-has-error');
         expect(errorInstances).toHaveLength(2);
+
+        const noticeInstances = screen.queryAllByTestId('metadata-cascade-notice');
+        expect(noticeInstances).toHaveLength(1);
     });
 
     test('should correctly render editors with template filters', () => {

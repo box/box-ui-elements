@@ -212,6 +212,9 @@ exports[`features/metadata-editor-editor/MetadataInstanceEditor should correctly
           Object {
             "instance": Object {
               "canEdit": true,
+              "cascadePolicy": Object {
+                "id": "test",
+              },
               "data": Object {},
               "id": "editor3",
             },
@@ -971,6 +974,9 @@ exports[`features/metadata-editor-editor/MetadataInstanceEditor should correctly
             Object {
               "instance": Object {
                 "canEdit": true,
+                "cascadePolicy": Object {
+                  "id": "test",
+                },
                 "data": Object {},
                 "id": "editor3",
               },
