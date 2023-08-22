@@ -3,6 +3,7 @@
 exports[`features/metadata-instance-editor/CascadePolicy should correctly render cascade policy in edit mode 1`] = `
 <div
   className="metadata-cascade-notice"
+  data-testid="metadata-cascade-notice"
 >
   <FormattedMessage
     defaultMessage="This template and its values are being cascaded to all items in this folder and its subfolders."
@@ -14,6 +15,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
 exports[`features/metadata-instance-editor/CascadePolicy should correctly render cascade policy in edit mode and overwrite is on 1`] = `
 <div
   className="metadata-cascade-notice"
+  data-testid="metadata-cascade-notice"
 >
   <FormattedMessage
     defaultMessage="This template and its values are being cascaded to all items in this folder and its subfolders."
@@ -25,6 +27,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
 exports[`features/metadata-instance-editor/CascadePolicy should correctly render cascade policy read only mode 1`] = `
 <div
   className="metadata-cascade-notice"
+  data-testid="metadata-cascade-notice"
 >
   <FormattedMessage
     defaultMessage="This template and its values are being cascaded to all items in this folder and its subfolders."
