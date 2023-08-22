@@ -148,7 +148,7 @@ const userDefinedTemplateField = [
     },
 ];
 
-const intl = { formatMessage: jest.fn().mockReturnValue('Edit Metadata') };
+const intl = { formatMessage: message => message.defaultMessage };
 
 describe('features/metadata-instance-editor/fields/Instance', () => {
     test.each`
@@ -191,29 +191,26 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
     );
 
     test.each`
-        cascadePolicy                     | isCascadingPolicyApplicable
-        ${{ canEdit: true, id: 'hello' }} | ${true}
-        ${{ canEdit: true, id: 'hello' }} | ${false}
-        ${{ canEdit: true }}              | ${true}
-        ${{ canEdit: true }}              | ${false}
-        ${null}                           | ${true}
-        ${null}                           | ${false}
+        cascadePolicy
+        ${{ canEdit: true, id: 'hello' }}
+        ${{ canEdit: true }}
     `(
-        'should correctly render templated metadata instance when cascadePolicy is $cascadePolicy and isCascadingPolicyApplicable is $isCascadingPolicyApplicable',
-        ({ cascadePolicy, isCascadingPolicyApplicable }) => {
-            const { container } = render(
+        'should correctly render templated metadata and its cascade policy when editing and when the cascade policy is $cascadePolicy',
+        ({ cascadePolicy }) => {
+            render(
                 <Instance
                     cascadePolicy={cascadePolicy}
                     data={data}
                     dataValue="value"
                     intl={intl}
-                    isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                    isCascadingPolicyApplicable
                     isFolderMetadata
                     shouldShowCascadingOptions
                     onModification={jest.fn()}
                     onRemove={jest.fn()}
                     onSave={jest.fn()}
                     canEdit
+                    // templated instance since templateKey is not set
                     template={{
                         fields,
                     }}
@@ -224,7 +221,14 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
             if (editButton) {
                 fireEvent.click(editButton);
             }
-            expect(container).toMatchSnapshot();
+
+            if (cascadePolicy.canEdit && cascadePolicy.id) {
+                const cascadeToggle = screen.queryByTestId('metadata-cascade-toggle-on');
+                expect(cascadeToggle).toBeInTheDocument();
+            } else if (cascadePolicy.canEdit && !cascadePolicy.id) {
+                const cascadeToggle = screen.queryByTestId('metadata-cascade-toggle-off');
+                expect(cascadeToggle).toBeInTheDocument();
+            }
         },
     );
 

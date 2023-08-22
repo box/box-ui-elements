@@ -47,6 +47,7 @@ const CascadePolicy = ({
                                 className={`metadata-cascade-toggle ${
                                     isCascadingEnabled ? 'cascade-on' : 'cascade-off'
                                 }`}
+                                data-testid={`metadata-cascade-toggle-${isCascadingEnabled ? 'on' : 'off'}`}
                                 isOn={isCascadingEnabled}
                                 label=""
                                 onChange={e => onCascadeToggle(e.target.checked)}

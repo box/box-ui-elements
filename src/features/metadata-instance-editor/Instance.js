@@ -523,7 +523,7 @@ class Instance extends React.PureComponent<Props, State> {
     canEdit(): boolean {
         const { canEdit, onModification, onRemove, onSave }: Props = this.props;
 
-        return !!(
+        return (
             canEdit &&
             typeof onRemove === 'function' &&
             typeof onSave === 'function' &&
