@@ -23,12 +23,16 @@ import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import AppActivityAPI from './AppActivity';
 import {
+    ACTION_TYPE_CREATED,
+    ACTION_TYPE_RESTORED,
+    ACTION_TYPE_TRASHED,
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
     ERROR_CODE_GROUP_EXCEEDS_LIMIT,
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_TASK,
+    FEED_ITEM_TYPE_VERSION,
     FILE_ACTIVITY_TYPE_ANNOTATION,
     FILE_ACTIVITY_TYPE_APP_ACTIVITY,
     FILE_ACTIVITY_TYPE_COMMENT,
@@ -192,7 +196,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                 case FILE_ACTIVITY_TYPE_VERSION: {
                     const versionsItem = { ...source[FILE_ACTIVITY_TYPE_VERSION] };
 
-                    versionsItem.type = 'file_version';
+                    versionsItem.type = FEED_ITEM_TYPE_VERSION;
                     if (versionsItem.action_by) {
                         const collaborators = {};
 
@@ -207,11 +211,11 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
 
                         versionsItem.collaborators = collaborators;
                     }
-                    if (versionsItem.end?.number !== undefined) {
+                    if (versionsItem.end?.number) {
                         versionsItem.version_end = versionsItem.end.number;
                         versionsItem.id = versionsItem.end.id;
                     }
-                    if (versionsItem.start?.number !== undefined) {
+                    if (versionsItem.start?.number) {
                         versionsItem.version_start = versionsItem.start.number;
                     }
 
@@ -219,7 +223,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                         versionsItem.version_number = versionsItem.version_start;
 
                         if (
-                            versionsItem.action_type === 'created' &&
+                            versionsItem.action_type === ACTION_TYPE_CREATED &&
                             versionsItem.start?.created_at &&
                             versionsItem.start?.created_by
                         ) {
@@ -227,7 +231,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                             versionsItem.modified_by = { ...versionsItem.start.created_by };
                         }
                         if (
-                            versionsItem.action_type === 'trashed' &&
+                            versionsItem.action_type === ACTION_TYPE_TRASHED &&
                             versionsItem.start?.trashed_at &&
                             versionsItem.start?.trashed_by
                         ) {
@@ -235,7 +239,7 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                             versionsItem.trashed_by = { ...versionsItem.start.trashed_by };
                         }
                         if (
-                            versionsItem.action_type === 'restored' &&
+                            versionsItem.action_type === ACTION_TYPE_RESTORED &&
                             versionsItem.start?.restored_at &&
                             versionsItem.start?.restored_by
                         ) {

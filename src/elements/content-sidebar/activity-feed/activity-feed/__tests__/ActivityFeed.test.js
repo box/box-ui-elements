@@ -144,11 +144,12 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const wrapper = getWrapper({
             currentUser,
             feedItems: [first_version],
+            shouldUseUAA: false,
         });
         expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
 
-    test('should render empty state when UAA is enabled and there is 1 version (current version from file) and the start and end version are the same', () => {
+    test('should render empty state when UAA is enabled and there is 1 version event (current version of file) and the start and end version are the same', () => {
         const wrapper = getWrapper({
             currentUser,
             feedItems: [{ ...first_version, version_start: 1, version_end: 1 }],
@@ -157,7 +158,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
 
-    test('should not render empty state when UAA is enabled and there is 1 version (current version from file) and the start and end version are different', () => {
+    test('should not render empty state when UAA is enabled and there is 1 version event (current version of file) and the start and end version are different', () => {
         const wrapper = getWrapper({
             currentUser,
             feedItems: [{ ...first_version, version_start: 1, version_end: 2 }],

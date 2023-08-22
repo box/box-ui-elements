@@ -13,9 +13,9 @@ import {
     FILE_ACTIVITY_TYPE_APP_ACTIVITY,
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
     IS_ERROR_DISPLAYED,
     TASK_MAX_GROUP_ASSIGNEES,
-    FILE_ACTIVITY_TYPE_VERSION,
 } from '../../constants';
 import AnnotationsAPI from '../Annotations';
 import Feed, { getParsedFileActivitiesResponse } from '../Feed';
