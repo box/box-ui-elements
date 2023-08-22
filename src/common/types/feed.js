@@ -134,6 +134,7 @@ type AppActivityAPIItems = {
 
 type AppActivityItem = {|
     created_at: string,
+    occurred_at?: string,
     permissions: BoxItemPermission,
     ...BaseAppActivityItem,
 |};

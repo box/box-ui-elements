@@ -181,7 +181,11 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                     return annotationItem;
                 }
                 case FILE_ACTIVITY_TYPE_APP_ACTIVITY: {
-                    return { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
+                    const appActivityItem = { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
+
+                    appActivityItem.created_at = appActivityItem.occurred_at;
+
+                    return appActivityItem;
                 }
 
                 default: {
