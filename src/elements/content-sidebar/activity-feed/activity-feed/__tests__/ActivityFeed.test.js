@@ -144,8 +144,27 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const wrapper = getWrapper({
             currentUser,
             feedItems: [first_version],
+            shouldUseUAA: false,
         });
         expect(wrapper.find('EmptyState').exists()).toBe(true);
+    });
+
+    test('should render empty state when UAA is enabled and there is 1 version event (current version of file) and the start and end version are the same', () => {
+        const wrapper = getWrapper({
+            currentUser,
+            feedItems: [{ ...first_version, version_start: 1, version_end: 1 }],
+            shouldUseUAA: true,
+        });
+        expect(wrapper.find('EmptyState').exists()).toBe(true);
+    });
+
+    test('should not render empty state when UAA is enabled and there is 1 version event (current version of file) and the start and end version are different', () => {
+        const wrapper = getWrapper({
+            currentUser,
+            feedItems: [{ ...first_version, version_start: 1, version_end: 2 }],
+            shouldUseUAA: true,
+        });
+        expect(wrapper.find('EmptyState').exists()).toBe(false);
     });
 
     test('should render approval comment form if comment submit handler is passed in and comment permissions', () => {

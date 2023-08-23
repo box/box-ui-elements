@@ -471,6 +471,11 @@ export const ACTIVITY_FILTER_OPTION_RESOLVED: 'resolved' = 'resolved';
 export const ACTIVITY_FILTER_OPTION_TASKS: 'tasks' = 'tasks';
 export const ACTIVITY_FILTER_OPTION_UNRESOLVED: 'open' = 'open';
 
+/* ------------------ File Activity Action Types ----------- */
+export const ACTION_TYPE_CREATED: 'created' = 'created';
+export const ACTION_TYPE_RESTORED: 'restored' = 'restored';
+export const ACTION_TYPE_TRASHED: 'trashed' = 'trashed';
+
 /* ------------------ File Activity Types ------------------ */
 export const FILE_ACTIVITY_TYPE_ANNOTATION: 'annotation' = 'annotation';
 export const FILE_ACTIVITY_TYPE_APP_ACTIVITY: 'app_activity' = 'app_activity';

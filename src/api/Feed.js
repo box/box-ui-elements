@@ -23,16 +23,21 @@ import TaskCollaboratorsAPI from './tasks/TaskCollaborators';
 import TaskLinksAPI from './tasks/TaskLinks';
 import AppActivityAPI from './AppActivity';
 import {
+    ACTION_TYPE_CREATED,
+    ACTION_TYPE_RESTORED,
+    ACTION_TYPE_TRASHED,
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
     ERROR_CODE_GROUP_EXCEEDS_LIMIT,
     FEED_ITEM_TYPE_ANNOTATION,
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_TASK,
+    FEED_ITEM_TYPE_VERSION,
     FILE_ACTIVITY_TYPE_ANNOTATION,
     FILE_ACTIVITY_TYPE_APP_ACTIVITY,
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     PERMISSION_CAN_VIEW_ANNOTATIONS,
@@ -113,7 +118,7 @@ const parseReplies = (replies: Comment[]): Comment[] => {
 
 export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
     if (!response || !response.entries || !response.entries.length) {
-        return { entries: [] };
+        return [];
     }
 
     const data = response.entries;
@@ -188,14 +193,73 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                     return appActivityItem;
                 }
 
+                case FILE_ACTIVITY_TYPE_VERSION: {
+                    const versionsItem = { ...source[FILE_ACTIVITY_TYPE_VERSION] };
+
+                    versionsItem.type = FEED_ITEM_TYPE_VERSION;
+                    if (versionsItem.action_by) {
+                        const collaborators = {};
+
+                        if (versionsItem.action_by.length === 1) {
+                            versionsItem.uploader_display_name = versionsItem.action_by[0].name;
+                        }
+
+                        versionsItem.action_by.map(collaborator => {
+                            collaborators[collaborator.id] = { ...collaborator };
+                            return collaborator;
+                        });
+
+                        versionsItem.collaborators = collaborators;
+                    }
+                    if (versionsItem.end?.number) {
+                        versionsItem.version_end = versionsItem.end.number;
+                        versionsItem.id = versionsItem.end.id;
+                    }
+                    if (versionsItem.start?.number) {
+                        versionsItem.version_start = versionsItem.start.number;
+                    }
+
+                    if (versionsItem.version_start === versionsItem.version_end) {
+                        versionsItem.version_number = versionsItem.version_start;
+
+                        if (
+                            versionsItem.action_type === ACTION_TYPE_CREATED &&
+                            versionsItem.start?.created_at &&
+                            versionsItem.start?.created_by
+                        ) {
+                            versionsItem.modified_at = versionsItem.start.created_at;
+                            versionsItem.modified_by = { ...versionsItem.start.created_by };
+                        }
+                        if (
+                            versionsItem.action_type === ACTION_TYPE_TRASHED &&
+                            versionsItem.start?.trashed_at &&
+                            versionsItem.start?.trashed_by
+                        ) {
+                            versionsItem.trashed_at = versionsItem.start.trashed_at;
+                            versionsItem.trashed_by = { ...versionsItem.start.trashed_by };
+                        }
+                        if (
+                            versionsItem.action_type === ACTION_TYPE_RESTORED &&
+                            versionsItem.start?.restored_at &&
+                            versionsItem.start?.restored_by
+                        ) {
+                            versionsItem.restored_at = versionsItem.start.restored_at;
+                            versionsItem.restored_by = { ...versionsItem.start.restored_by };
+                        }
+                    }
+
+                    return versionsItem;
+                }
+
                 default: {
                     return null;
                 }
             }
         })
-        .filter(item => !!item);
+        .filter(item => !!item)
+        .reverse();
 
-    return { entries: parsedData };
+    return parsedData;
 };
 
 class Feed extends Base {
@@ -520,9 +584,9 @@ class Feed extends Base {
         const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
         const appActivityPromise =
             !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
-
-        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
-        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
+        const versionsPromise = !shouldUseUAA && shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise =
+            !shouldUseUAA && shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
 
         const annotationActivityType =
             shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
@@ -530,11 +594,13 @@ class Feed extends Base {
                 : [];
         const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
+        const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
         const filteredActivityTypes = [
             ...annotationActivityType,
             ...appActivityActivityType,
             FILE_ACTIVITY_TYPE_COMMENT,
             ...taskActivityType,
+            ...versionsActivityType,
         ];
 
         const fileActivitiesPromise = shouldUseUAA
@@ -553,22 +619,14 @@ class Feed extends Base {
         };
 
         if (shouldUseUAA) {
-            Promise.all([versionsPromise, currentVersionPromise, fileActivitiesPromise]).then(
-                ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                    if (!feedItems || !feedItems.length) {
-                        return;
-                    }
+            fileActivitiesPromise.then(response => {
+                if (!response) {
+                    return;
+                }
 
-                    const fileActivitiesResponse = feedItems[0];
-                    const versionsWithCurrent = currentVersion
-                        ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
-                        : undefined;
-                    const parsedFeedItems = getParsedFileActivitiesResponse(fileActivitiesResponse);
-                    // $FlowFixMe Does not need to be sorted once we include versions in the file activities call
-                    const sortedFeedItems = sortFeedItems(versionsWithCurrent, parsedFeedItems);
-                    handleFeedItems(sortedFeedItems);
-                },
-            );
+                const parsedFeedItems = getParsedFileActivitiesResponse(response);
+                handleFeedItems(parsedFeedItems);
+            });
         } else {
             Promise.all([
                 versionsPromise,
