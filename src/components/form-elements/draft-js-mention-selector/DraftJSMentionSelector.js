@@ -73,7 +73,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
             },
         ]);
 
-        // @NOTE (smotraghi 2017-05-30):
+        // @NOTE:
         // This component might be either own its EditorState (in which case it lives in `this.state.internalEditorState`)
         // or be a controlled component whose EditorState is passed in via the `editorState` prop.
         // If `props.editorState` is set, `internalEditorState` is `null`,

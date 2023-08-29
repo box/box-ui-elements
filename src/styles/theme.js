@@ -49,7 +49,7 @@ const theme = {
         scrollShadowRgba: 'rgba(0, 0, 0, 0.12)',
     },
 
-    // TODO(akahn): Should be the same keys as the default if applicable
+    // TODO: Should be the same keys as the default if applicable
     modes: {
         admin: {},
         dark: {},

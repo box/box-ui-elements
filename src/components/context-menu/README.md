@@ -5,7 +5,7 @@ It handles positioning the menu attached to the target on right click and global
 ### Examples
 **Simple Menu**
 ```js
-// @NOTE (wyu): You can only use require instead of import in markdown.
+// @NOTE: You can only use require instead of import in markdown.
 const Menu = require('../menu').Menu;
 const MenuItem = require('../menu').MenuItem;
 
