@@ -9,7 +9,7 @@ Renders a progress bar similar to the ones used on Youtube.
 ```
 **Demo**
 ```
-// @NOTE (wyu): As recommended by styleguidist, if you need a more complex demo
+// @NOTE: As recommended by styleguidist, if you need a more complex demo
 // it’s often a good idea to define it in a separate JavaScript file and require
 // it in Markdown
 
