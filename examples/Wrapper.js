@@ -2,7 +2,6 @@
 /**
  * Wrapper component for styleguidist examples
  */
-import 'core-js'; // For IE11
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 
