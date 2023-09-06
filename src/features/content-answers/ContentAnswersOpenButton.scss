@@ -1,0 +1,33 @@
+@import '../../styles/variables';
+
+.BoxAIIconColor {
+    width: 20px;
+    height: 20px;
+}
+
+.ContentAnswersOpenButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: $bdl-gray-02;
+    border: none;
+
+    .btn-content {
+        display: flex;
+    }
+
+    &:focus {
+        background-color: $bdl-gray-10;
+    }
+
+    &:not(.bdl-is-disabled):hover,
+    &:not(.is-disabled):hover {
+        background-color: $bdl-gray-10;
+    }
+}
+
+.ContentAnswersOpenButton-tooltip {
+    text-align: center;
+}
