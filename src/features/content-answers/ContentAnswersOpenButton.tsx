@@ -10,11 +10,11 @@ import messages from './messages';
 import './ContentAnswersOpenButton.scss';
 
 interface ContentAnswersOpenButtonProps {
-    onClick: () => void;
     intl: IntlShape;
+    onClick: () => void;
 }
 
-const ContentAnswersOpenButton = ({ onClick, intl }: ContentAnswersOpenButtonProps) => {
+const ContentAnswersOpenButton = ({ intl, onClick }: ContentAnswersOpenButtonProps) => {
     const { formatMessage } = intl;
 
     const getTooltipText = () => {

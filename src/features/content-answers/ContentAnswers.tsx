@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 
 const ContentAnswers = () => {
-    const [openContentAnswersModal, setOpenContentAnswersModal] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
-        setOpenContentAnswersModal(!openContentAnswersModal);
+        setIsModalOpen(!isModalOpen);
     };
 
     return (
