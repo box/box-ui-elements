@@ -41,6 +41,7 @@ import {
     HTTP_STATUS_CODE_CONFLICT,
     IS_ERROR_DISPLAYED,
     PERMISSION_CAN_VIEW_ANNOTATIONS,
+    PERMISSION_CAN_COMMENT,
     TASK_NEW_APPROVED,
     TASK_NEW_COMPLETED,
     TASK_NEW_REJECTED,
@@ -595,17 +596,20 @@ class Feed extends Base {
         const appActivityActivityType = shouldShowAppActivity ? [FILE_ACTIVITY_TYPE_APP_ACTIVITY] : [];
         const taskActivityType = shouldShowTasks ? [FILE_ACTIVITY_TYPE_TASK] : [];
         const versionsActivityType = shouldShowVersions ? [FILE_ACTIVITY_TYPE_VERSION] : [];
+        const commentActivityType = permissions[PERMISSION_CAN_COMMENT] ? [FILE_ACTIVITY_TYPE_COMMENT] : [];
         const filteredActivityTypes = [
             ...annotationActivityType,
             ...appActivityActivityType,
-            FILE_ACTIVITY_TYPE_COMMENT,
+            ...commentActivityType,
             ...taskActivityType,
             ...versionsActivityType,
         ];
 
-        const fileActivitiesPromise = shouldUseUAA
-            ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
-            : Promise.resolve();
+        const fileActivitiesPromise =
+            // Only fetch when activity types are explicitly stated
+            shouldUseUAA && filteredActivityTypes.length
+                ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
+                : Promise.resolve();
 
         const handleFeedItems = (feedItems: FeedItems) => {
             if (!this.isDestroyed()) {
