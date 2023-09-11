@@ -1,11 +1,6 @@
 @import '../../styles/variables';
 
-.BoxAIIconColor {
-    width: 20px;
-    height: 20px;
-}
-
-.ContentAnswersOpenButton {
+.bdl-ContentAnswersOpenButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,8 +21,4 @@
     &:not(.is-disabled):hover {
         background-color: $bdl-gray-10;
     }
-}
-
-.ContentAnswersOpenButton-tooltip {
-    text-align: center;
 }

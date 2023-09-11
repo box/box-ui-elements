@@ -11,7 +11,7 @@ const ContentAnswers = () => {
 
     return (
         <div>
-            <ContentAnswersOpenButton handleClick={handleClick} />
+            <ContentAnswersOpenButton onClick={handleClick} />
         </div>
     );
 };

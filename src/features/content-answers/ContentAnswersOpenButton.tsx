@@ -1,7 +1,7 @@
 import React from 'react';
 import { injectIntl, IntlShape } from 'react-intl';
 
-import BoxAIIconColor from '../../icon/logo/BoxAiLogo';
+import BoxAiLogo from '../../icon/logo/BoxAiLogo';
 import Button from '../../components/button';
 import Tooltip from '../../components/tooltip';
 
@@ -9,24 +9,27 @@ import messages from './messages';
 
 import './ContentAnswersOpenButton.scss';
 
-interface Props {
-    handleClick: Function;
+interface ContentAnswersOpenButtonProps {
+    onClick: () => void;
     intl: IntlShape;
 }
 
-const ContentAnswersOpenButton = ({ handleClick, intl }: Props) => {
+const ContentAnswersOpenButton = ({ onClick, intl }: ContentAnswersOpenButtonProps) => {
+    const { formatMessage } = intl;
+
     const getTooltipText = () => {
-        return intl.formatMessage(messages.defaultTooltip);
+        return formatMessage(messages.defaultTooltip);
     };
 
     return (
-        <Tooltip className="ContentAnswersOpenButton-tooltip" text={getTooltipText()}>
+        <Tooltip text={getTooltipText()}>
             <Button
-                className="ContentAnswersOpenButton"
+                aria-label={formatMessage(messages.contentAnswersTitle)}
+                className="bdl-ContentAnswersOpenButton"
                 data-testid="content-answers-open-button"
-                onClick={handleClick}
+                onClick={onClick}
             >
-                <BoxAIIconColor className="BoxAIIconColor" />
+                <BoxAiLogo width={20} height={20} />
             </Button>
         </Tooltip>
     );
