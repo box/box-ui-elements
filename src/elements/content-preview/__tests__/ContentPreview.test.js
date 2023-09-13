@@ -2,6 +2,7 @@ import React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import * as TokenService from '../../../utils/TokenService';
+import PreviewHeader from '../preview-header/PreviewHeader';
 import PreviewMask from '../PreviewMask';
 import SidebarUtils from '../../content-sidebar/SidebarUtils';
 import { ContentPreviewComponent as ContentPreview } from '../ContentPreview';
@@ -1348,6 +1349,18 @@ describe('elements/content-preview/ContentPreview', () => {
             const pageThumbnail = instance.getThumbnail(pageNumber);
 
             expect(pageThumbnail).toBeNull();
+        });
+    });
+
+    describe('render previewHeader with given contentAnswersProps', () => {
+        const contentAnswersProps = { show: true };
+        test('should render contentAnswers with contentAnswersProps', () => {
+            props.contentAnswersProps = contentAnswersProps;
+            props.hasHeader = true;
+            const wrapper = getWrapper(props);
+            const previewHeaderElement = wrapper.find(PreviewHeader);
+
+            expect(previewHeaderElement.prop('contentAnswersProps')).toEqual(contentAnswersProps);
         });
     });
 });

@@ -89,6 +89,7 @@ type Props = {
     canDownload?: boolean,
     className: string,
     collection: Array<string | BoxItem>,
+    contentAnswersProps: ContentAnswersProps,
     contentOpenWithProps: ContentOpenWithProps,
     contentSidebarProps: ContentSidebarProps,
     enableThumbnailsSidebar: boolean,
@@ -229,6 +230,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         canDownload: true,
         className: '',
         collection: [],
+        contentAnswersProps: {},
         contentOpenWithProps: {},
         contentSidebarProps: {},
         enableThumbnailsSidebar: false,
@@ -1261,8 +1263,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             language,
             messages,
             className,
-            contentSidebarProps,
+            contentAnswersProps,
             contentOpenWithProps,
+            contentSidebarProps,
             hasHeader,
             history,
             isLarge,
@@ -1320,6 +1323,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             canDownload={this.canDownload()}
                             canPrint={canPrint}
                             onDownload={this.download}
+                            contentAnswersProps={contentAnswersProps}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
                             selectedVersion={selectedVersion}

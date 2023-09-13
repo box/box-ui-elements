@@ -10,6 +10,7 @@ import type { InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
+import ContentAnswers from '../../../features/content-answers/ContentAnswers';
 import FileInfo from './FileInfo';
 import IconClose from '../../../icons/general/IconClose';
 import IconDownload from '../../../icons/general/IconDownloadSolid';
@@ -28,6 +29,7 @@ type Props = {
     canAnnotate: boolean,
     canDownload: boolean,
     canPrint?: boolean,
+    contentAnswersProps?: ContentAnswersProps,
     contentOpenWithProps?: ContentOpenWithProps,
     file?: BoxItem,
     logoUrl?: string,
@@ -46,6 +48,7 @@ const PreviewHeader = ({
     canAnnotate,
     canDownload,
     canPrint,
+    contentAnswersProps = {},
     contentOpenWithProps = {},
     file,
     intl,
@@ -57,6 +60,7 @@ const PreviewHeader = ({
     token,
 }: Props) => {
     const fileId = file && file.id;
+    const shouldRenderAnswers = fileId && contentAnswersProps.show;
     const shouldRenderOpenWith = fileId && contentOpenWithProps.show;
     const currentVersionId = getProp(file, 'file_version.id');
     const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
@@ -95,6 +99,7 @@ const PreviewHeader = ({
                                     {...contentOpenWithProps}
                                 />
                             )}
+                            {shouldRenderAnswers && <ContentAnswers />}
                             {canAnnotate && (
                                 <>
                                     <PlainButton

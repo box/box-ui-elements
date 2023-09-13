@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 
+type ExternalProps = {
+    show?: boolean;
+};
+
 const ContentAnswers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -16,4 +20,5 @@ const ContentAnswers = () => {
     );
 };
 
+export type ContentAnswersProps = ExternalProps;
 export default ContentAnswers;
