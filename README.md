@@ -16,7 +16,6 @@
 <img alt="npm beta version" src="https://img.shields.io/npm/v/box-ui-elements/beta.svg">
 </a>
 
-
 [Box UI Elements](https://developer.box.com/docs/box-ui-elements)
 ==========================================================================
 Box UI Elements are pre-built UI components that allow developers to add features of the main Box web application into their own applications. Use Box UI Elements to navigate through, upload, preview, and select content stored on Box. Box UI Elements are available as React components and framework-agnostic JavaScript libraries.
