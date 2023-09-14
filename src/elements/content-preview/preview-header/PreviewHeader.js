@@ -10,7 +10,8 @@ import type { InjectIntlProvidedProps } from 'react-intl';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
-import ContentAnswers from '../../../features/content-answers/ContentAnswers';
+// $FlowFixMe typescript component
+import ContentAnswers from '../../../features/content-answers';
 import FileInfo from './FileInfo';
 import IconClose from '../../../icons/general/IconClose';
 import IconDownload from '../../../icons/general/IconDownloadSolid';
