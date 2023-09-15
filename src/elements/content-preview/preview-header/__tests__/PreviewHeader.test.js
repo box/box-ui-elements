@@ -21,12 +21,17 @@ describe('elements/content-preview/preview-header/PreviewHeader', () => {
         expect(wrapper.exists('FileInfo')).toBe(true);
     });
 
-    it('should render contentAnswers if show prop is set to true', () => {
-        const contentAnswersProps = { show: true };
-        const file = { id: '123' };
+    test.each`
+        file             | show     | expected
+        ${{ id: '123' }} | ${true}  | ${true}
+        ${{ id: '123' }} | ${false} | ${false}
+        ${{}}            | ${true}  | ${false}
+        ${{}}            | ${false} | ${false}
+    `('should render correctly with given file and show prop', ({ file, show, expected }) => {
+        const contentAnswersProps = { show };
         const wrapper = getWrapper({ contentAnswersProps, file });
 
-        expect(wrapper.exists(ContentAnswers)).toBe(true);
+        expect(wrapper.exists(ContentAnswers)).toBe(expected);
     });
 
     test.each([
