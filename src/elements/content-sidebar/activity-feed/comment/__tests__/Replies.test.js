@@ -46,6 +46,7 @@ const currentUser = {
 const mockUserProfileUrl = jest.fn();
 const replySelect = jest.fn();
 const replyCreate = jest.fn();
+const replyDelete = jest.fn();
 const showReplies = jest.fn();
 const hideReplies = jest.fn();
 
@@ -70,6 +71,7 @@ const getWrapper = props =>
                 replies={replies}
                 onReplySelect={replySelect}
                 onReplyCreate={replyCreate}
+                onReplyDelete={replyDelete}
                 onShowReplies={showReplies}
                 onHideReplies={hideReplies}
                 {...props}
@@ -168,6 +170,22 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
         fireEvent.click(screen.getByText('Post'));
         expect(replyCreate).toBeCalledTimes(1);
         expect(replyCreate).toBeCalledWith('Batman');
+    });
+
+    test('should call onReplyDelete when reply is deleted', () => {
+        getWrapper({ replies: [comment] });
+
+        expect(screen.getByTestId('comment-actions-menu')).toBeInTheDocument();
+        fireEvent.click(screen.getByTestId('comment-actions-menu'));
+
+        expect(screen.getByTestId('delete-comment')).toBeInTheDocument();
+        fireEvent.click(screen.getByTestId('delete-comment'));
+
+        expect(screen.getByTestId('bcs-delete-confirmation-delete')).toBeInTheDocument();
+        fireEvent.click(screen.getByTestId('bcs-delete-confirmation-delete'));
+
+        expect(replyDelete).toBeCalledTimes(1);
+        expect(replyDelete).toBeCalledWith({ id: comment.id, permissions: comment.permissions });
     });
 
     test('should show Hide Replies and call onHideReplies when clicked', () => {
