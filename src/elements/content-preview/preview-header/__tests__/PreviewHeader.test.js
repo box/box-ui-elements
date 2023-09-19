@@ -1,5 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+
+import ContentAnswers from '../../../../features/content-answers';
 import PreviewHeader from '..';
 
 describe('elements/content-preview/preview-header/PreviewHeader', () => {
@@ -17,6 +19,19 @@ describe('elements/content-preview/preview-header/PreviewHeader', () => {
 
         expect(wrapper.exists('Logo')).toBe(false);
         expect(wrapper.exists('FileInfo')).toBe(true);
+    });
+
+    test.each`
+        file             | show     | expected
+        ${{ id: '123' }} | ${true}  | ${true}
+        ${{ id: '123' }} | ${false} | ${false}
+        ${{}}            | ${true}  | ${false}
+        ${{}}            | ${false} | ${false}
+    `('should render correctly with given file and show prop', ({ file, show, expected }) => {
+        const contentAnswersProps = { show };
+        const wrapper = getWrapper({ contentAnswersProps, file });
+
+        expect(wrapper.exists(ContentAnswers)).toBe(expected);
     });
 
     test.each([
