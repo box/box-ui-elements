@@ -176,7 +176,7 @@ button svg {
         &:focus {
             background-color: lighten($primary-color, 8%);
             border: $bdl-btn-border-width solid $primary-color;
-            box-shadow: inset 0 0 0 1px fade-out($white, .2), 0 1px 2px fade-out($black, .9);
+            box-shadow: $bdl-btn-primary-box-shadow;
         }
 
         &:hover {
