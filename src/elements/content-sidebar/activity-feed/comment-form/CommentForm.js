@@ -6,6 +6,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
+import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
 import Avatar from '../Avatar';
@@ -37,11 +38,17 @@ type Props = {
     onFocus?: Function,
     onSubmit?: Function,
     placeholder?: string,
+    shouldFocusOnOpen?: boolean,
     showTip?: boolean,
     tagged_message?: string,
     updateComment?: Function,
     user?: User,
 } & InjectIntlProvidedProps;
+
+const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
+    shouldFocusOnOpen
+        ? EditorState.moveFocusToEnd(createMentionSelectorState(message))
+        : createMentionSelectorState(message);
 
 type State = {
     commentEditorState: any,
@@ -50,18 +57,19 @@ type State = {
 class CommentForm extends React.Component<Props, State> {
     static defaultProps = {
         isOpen: false,
+        shouldFocusOnOpen: false,
     };
 
     state = {
-        commentEditorState: createMentionSelectorState(this.props.tagged_message),
+        commentEditorState: getEditorState(this.props.shouldFocusOnOpen, this.props.tagged_message),
     };
 
     componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
-        const { isOpen } = this.props;
+        const { isOpen, shouldFocusOnOpen } = this.props;
 
         if (isOpen !== prevIsOpen && !isOpen) {
             this.setState({
-                commentEditorState: createMentionSelectorState(),
+                commentEditorState: getEditorState(shouldFocusOnOpen),
             });
         }
     }
@@ -86,7 +94,7 @@ class CommentForm extends React.Component<Props, State> {
         }
 
         this.setState({
-            commentEditorState: createMentionSelectorState(),
+            commentEditorState: getEditorState(false),
         });
     };
 
