@@ -87,6 +87,26 @@ export const PreviewWithSidebar = () => {
     );
 };
 
+export const PreviewWithBoxAI = () => {
+    const fileId = text('File ID', global.FILE_ID);
+    const token = text('Access Token', global.TOKEN);
+
+    return (
+        <IntlProvider locale="en">
+            <ContentPreview
+                contentAnswersProps={{
+                    show: true,
+                }}
+                features={global.FEATURES}
+                fileId={fileId}
+                hasHeader
+                key={`${fileId}-${token}`}
+                token={token}
+            />
+        </IntlProvider>
+    );
+};
+
 export default {
     title: 'Elements|ContentPreview',
     component: ContentPreview,

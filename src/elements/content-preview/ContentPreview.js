@@ -1323,7 +1323,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             canDownload={this.canDownload()}
                             canPrint={canPrint}
                             onDownload={this.download}
-                            contentAnswersProps={contentAnswersProps}
+                            contentAnswersProps={{
+                                ...contentAnswersProps,
+                                fileId: currentFileId,
+                                fileExtension: currentExtension,
+                                versionId: selectedVersionId,
+                            }}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
                             selectedVersion={selectedVersion}

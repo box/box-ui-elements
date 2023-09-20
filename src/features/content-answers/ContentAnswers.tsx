@@ -4,10 +4,13 @@ import ContentAnswersModal from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 
 type ExternalProps = {
+    fileExtension: string;
+    fileId: string;
     show?: boolean;
+    versionId: string;
 };
 
-const ContentAnswers = () => {
+const ContentAnswers = ({ fileExtension }: ExternalProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -20,7 +23,7 @@ const ContentAnswers = () => {
 
     return (
         <div className="ContentAnswers">
-            <ContentAnswersOpenButton onClick={handleClick} />
+            <ContentAnswersOpenButton onClick={handleClick} fileExtension={fileExtension} />
             <ContentAnswersModal isOpen={isModalOpen} onRequestClose={handleClose} />
         </div>
     );
