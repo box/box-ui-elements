@@ -1,0 +1,44 @@
+@import '../../styles/variables';
+
+.ContentAnswersModalFooter {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: end;
+    padding: 16px 20px;
+    background: white;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 -1px 0 #e8e8e8;
+
+    .ContentAnswersModalFooter-avatar {
+        height: 32px;
+        margin-bottom: 4px;
+    }
+
+    .ContentAnswersModalFooter-submitButton {
+        height: 40px;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .text-area-container {
+        width: 100%;
+        margin: 0 16px;
+    }
+
+    textarea {
+        display: flex;
+        width: 100%;
+        height: 40px;
+        margin: 0;
+        overflow: hidden;
+        font-size: 14px;
+        border: 1px solid #6f6f6f;
+        border-radius: 6px;
+    }
+
+    textarea:focus {
+        border: 1.5px solid rgb(36, 124, 252);
+    }
+}
