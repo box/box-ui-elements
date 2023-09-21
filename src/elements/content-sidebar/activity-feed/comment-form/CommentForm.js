@@ -65,11 +65,11 @@ class CommentForm extends React.Component<Props, State> {
     };
 
     componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
-        const { isOpen, shouldFocusOnOpen } = this.props;
+        const { isOpen } = this.props;
 
         if (isOpen !== prevIsOpen && !isOpen) {
             this.setState({
-                commentEditorState: getEditorState(shouldFocusOnOpen),
+                commentEditorState: getEditorState(false),
             });
         }
     }

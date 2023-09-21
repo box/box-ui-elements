@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
+import { render as renderRTLFunc } from '@testing-library/react';
+import { EditorState } from 'draft-js';
 
 import Button from '../../../../../components/button/Button';
 import Media from '../../../../../components/media';
@@ -12,15 +14,13 @@ const intlFake = {
 };
 
 describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () => {
-    const render = props =>
-        mount(
-            <CommentForm
-                getMentionWithQuery={() => {}}
-                intl={intlFake}
-                user={{ id: 123, name: 'foo bar' }}
-                {...props}
-            />,
-        );
+    const getComponent = (props = {}) => (
+        <CommentForm getMentionWithQuery={() => {}} intl={intlFake} user={{ id: 123, name: 'foo bar' }} {...props} />
+    );
+
+    const render = props => mount(getComponent(props));
+
+    const renderRTL = props => renderRTLFunc(getComponent(props));
 
     test('should correctly render initial state', () => {
         const wrapper = render();
@@ -162,5 +162,21 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
                 .at(0)
                 .prop('placeholder'),
         ).toEqual('Your comment goes here');
+    });
+
+    test('should not focus on textbox when shouldFocusOnOpen is false', () => {
+        const mockFocusFunc = jest.fn();
+        EditorState.moveFocusToEnd = mockFocusFunc;
+
+        renderRTL();
+        expect(mockFocusFunc).not.toHaveBeenCalled();
+    });
+
+    test('should focus on textbox when shouldFocusOnOpen is true', () => {
+        const mockFocusFunc = jest.fn();
+        EditorState.moveFocusToEnd = mockFocusFunc;
+
+        renderRTL({ shouldFocusOnOpen: true });
+        expect(mockFocusFunc).toHaveBeenCalled();
     });
 });
