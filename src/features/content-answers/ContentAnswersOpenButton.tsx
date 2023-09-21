@@ -11,22 +11,22 @@ import messages from './messages';
 import './ContentAnswersOpenButton.scss';
 
 interface ContentAnswersOpenButtonProps {
+    fileExtension: string;
     intl: IntlShape;
     onClick: () => void;
-    fileExtension: string;
 }
 
-const ContentAnswersOpenButton = ({ intl, onClick, fileExtension }: ContentAnswersOpenButtonProps) => {
+const ContentAnswersOpenButton = ({ fileExtension, intl, onClick }: ContentAnswersOpenButtonProps) => {
     const { formatMessage } = intl;
 
     const isAllowedFileType = (extension: string) => {
         const allowedTypes = CODE_FILE_EXTENSIONS.concat(DOCUMENT_FILE_EXTENSIONS).concat(TEXT_FILE_EXTENSIONS);
-        return allowedTypes.indexOf(extension) !== -1;
+        return allowedTypes.includes(extension);
     };
 
     const getTooltipText = () => {
         if (!isAllowedFileType(fileExtension)) {
-            return intl.formatMessage(messages.disabledTooltipFileNotCompatible);
+            return formatMessage(messages.disabledTooltipFileNotCompatible);
         }
 
         return formatMessage(messages.defaultTooltip);
@@ -38,8 +38,8 @@ const ContentAnswersOpenButton = ({ intl, onClick, fileExtension }: ContentAnswe
                 aria-label={formatMessage(messages.contentAnswersTitle)}
                 className="bdl-ContentAnswersOpenButton"
                 data-testid="content-answers-open-button"
-                onClick={onClick}
                 isDisabled={!isAllowedFileType(fileExtension)}
+                onClick={onClick}
             >
                 <BoxAiLogo width={20} height={20} />
             </Button>
