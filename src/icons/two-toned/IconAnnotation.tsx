@@ -14,12 +14,12 @@ const IconAnnotation = ({ className = '', height = 24, title, width = 24 }: TwoT
     >
         <g fillRule="nonzero" fill="none">
             <circle
+                aria-label="Inline comment"
                 className="background-color"
-                fill={bdlYellorange}
                 cx="16.162"
                 cy="16.162"
+                fill={bdlYellorange}
                 r="16"
-                aria-label="Inline comment"
                 tabIndex={0}
             />
             <path
