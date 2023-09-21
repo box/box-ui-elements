@@ -61,7 +61,6 @@ const PreviewHeader = ({
     token,
 }: Props) => {
     const fileId = file && file.id;
-
     const shouldRenderAnswers = fileId && contentAnswersProps.show;
     const shouldRenderOpenWith = fileId && contentOpenWithProps.show;
     const currentExtension = getProp(file, 'extension');
