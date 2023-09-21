@@ -55,6 +55,10 @@ export const getWrapper = props =>
     );
 
 describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
+    beforeEach(() => {
+        EditorState.moveFocusToEnd = editor => editor;
+    });
+
     test.each`
         activityItem
         ${annotation}
@@ -402,5 +406,17 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
         expect(showReplies).toBeCalledTimes(1);
         expect(hideReplies).not.toBeCalled();
+    });
+
+    test('should focus on the edit CommentForm when it is opened', () => {
+        const mockFocusFunc = jest.fn();
+        EditorState.moveFocusToEnd = mockFocusFunc;
+
+        getWrapper({ canEdit: true });
+        const menuItem = screen.getByTestId('comment-actions-menu');
+        fireEvent.click(menuItem);
+        const editButton = screen.getByTestId('edit-comment');
+        fireEvent.click(editButton);
+        expect(mockFocusFunc).toHaveBeenCalled();
     });
 });
