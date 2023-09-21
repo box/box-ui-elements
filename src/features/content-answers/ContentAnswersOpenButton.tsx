@@ -20,7 +20,7 @@ const ContentAnswersOpenButton = ({ fileExtension, intl, onClick }: ContentAnswe
     const { formatMessage } = intl;
 
     const isAllowedFileType = (extension: string) => {
-        const allowedTypes = CODE_FILE_EXTENSIONS.concat(DOCUMENT_FILE_EXTENSIONS).concat(TEXT_FILE_EXTENSIONS);
+        const allowedTypes = [...CODE_FILE_EXTENSIONS, ...DOCUMENT_FILE_EXTENSIONS, ...TEXT_FILE_EXTENSIONS];
         return allowedTypes.includes(extension);
     };
 
