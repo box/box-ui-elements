@@ -1,0 +1,43 @@
+@import '../../styles/variables';
+
+.ContentAnswersModalFooter {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: end;
+    padding: 16px 20px;
+    background: $white;
+    border-radius: 0 0 $bdl-border-radius-size-xlarge $bdl-border-radius-size-xlarge;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 -1px 0 $bdl-gray-10;
+
+    .ContentAnswersModalFooter-avatar {
+        height: 32px;
+        margin-bottom: 4px;
+    }
+
+    .ContentAnswersModalFooter-submitButton {
+        height: $bdl-btn-height-large;
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .text-area-container {
+        width: 100%;
+        margin: 0 16px;
+    }
+
+    textarea {
+        display: flex;
+        width: 100%;
+        height: 40px;
+        margin: 0;
+        overflow: hidden;
+        font-size: 14px;
+        border: 1px solid $bdl-gray-65;
+        border-radius: $bdl-border-radius-size-med;
+    }
+
+    textarea:focus {
+        border: 1.5px solid $bdl-box-blue;
+    }
+}
