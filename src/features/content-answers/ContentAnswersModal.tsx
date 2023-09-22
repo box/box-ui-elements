@@ -19,9 +19,9 @@ type Props = {
 const ContentAnswersModal = ({ isModalOpen, onRequestClose }: Props) => {
     return (
         <Modal
-            isOpen={isModalOpen}
             className="ContentAnswersModal"
             data-testid="content-answers-modal"
+            isOpen={isModalOpen}
             onRequestClose={onRequestClose}
             title={
                 <>
