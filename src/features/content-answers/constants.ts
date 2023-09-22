@@ -68,9 +68,12 @@ export const DOCUMENT_FILE_EXTENSIONS = [
     'indd',
     'indt',
     'inx',
+    'key',
+    'numbers',
     'odp',
     'ods',
     'odt',
+    'pages',
     'pdf',
     'ppt',
     'pptx',
@@ -79,9 +82,6 @@ export const DOCUMENT_FILE_EXTENSIONS = [
     'xls',
     'xlsm',
     'xlsx',
-    'key',
-    'pages',
-    'numbers',
 ];
 
 export const TEXT_FILE_EXTENSIONS = [
