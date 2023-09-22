@@ -21,7 +21,7 @@ const ContentAnswers = () => {
     return (
         <div className="ContentAnswers">
             <ContentAnswersOpenButton onClick={handleClick} />
-            <ContentAnswersModal isModalOpen={isModalOpen} onRequestClose={handleClose} />
+            <ContentAnswersModal isOpen={isModalOpen} onRequestClose={handleClose} />
         </div>
     );
 };

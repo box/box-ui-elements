@@ -12,16 +12,16 @@ import messages from './messages';
 import './ContentAnswersModal.scss';
 
 type Props = {
-    isModalOpen: boolean;
+    isOpen: boolean;
     onRequestClose: () => void;
 };
 
-const ContentAnswersModal = ({ isModalOpen, onRequestClose }: Props) => {
+const ContentAnswersModal = ({ isOpen, onRequestClose }: Props) => {
     return (
         <Modal
             className="ContentAnswersModal"
             data-testid="content-answers-modal"
-            isOpen={isModalOpen}
+            isOpen={isOpen}
             onRequestClose={onRequestClose}
             title={
                 <>

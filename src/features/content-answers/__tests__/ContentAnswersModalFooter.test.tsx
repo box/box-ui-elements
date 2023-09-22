@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 // @ts-ignore flow import
 import localize from '../../../../test/support/i18n';
 import ContentAnswersModalFooter from '../ContentAnswersModalFooter';
-import { mockLongPrompt, TEXT_AREA } from '../constants';
+import { MOCK_LONG_PROMPT, TEXT_AREA } from '../constants';
 
 import messages from '../messages';
 
@@ -30,7 +30,7 @@ describe('features/content-answers/ContentAnswersModalFooter', () => {
         renderComponent();
         const input = screen.getByTestId('content-answers-question-input');
 
-        fireEvent.change(input, { target: { value: mockLongPrompt } });
+        fireEvent.change(input, { target: { value: MOCK_LONG_PROMPT } });
 
         const error = screen.queryAllByText(
             localize(messages.maxCharactersReachedError.id, { characterLimit: TEXT_AREA.MAX_LENGTH }),
