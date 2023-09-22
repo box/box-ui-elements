@@ -16,6 +16,7 @@ type Props = {
 };
 
 const ContentAnswersModalFooter = ({ intl }: Props) => {
+    const { formatMessage } = intl;
     const [inputMessage, setInputMessage] = useState('');
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const [hasMaxCharacterError, setHasMaxCharacterError] = useState(false);
@@ -39,15 +40,15 @@ const ContentAnswersModalFooter = ({ intl }: Props) => {
                 data-testid="content-answers-question-input"
                 error={
                     hasMaxCharacterError &&
-                    intl.formatMessage(messages.maxCharactersReachedError, {
+                    formatMessage(messages.maxCharactersReachedError, {
                         characterLimit: TEXT_AREA.MAX_LENGTH,
                     })
                 }
                 hideLabel
-                label={intl.formatMessage(messages.askQuestionPlaceholder)}
+                label={formatMessage(messages.askQuestionPlaceholder)}
                 maxLength={TEXT_AREA.MAX_LENGTH}
                 onChange={handleInputChange}
-                placeholder={intl.formatMessage(messages.askQuestionPlaceholder)}
+                placeholder={formatMessage(messages.askQuestionPlaceholder)}
                 value={inputMessage}
             />
             <PrimaryButton

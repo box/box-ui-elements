@@ -11,7 +11,7 @@ const ContentAnswers = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
-        setIsModalOpen(prevState => !prevState);
+        setIsModalOpen(true);
     };
 
     const handleClose = () => {
@@ -19,9 +19,9 @@ const ContentAnswers = () => {
     };
 
     return (
-        <div>
+        <div className="ContentAnswers">
             <ContentAnswersOpenButton onClick={handleClick} />
-            {isModalOpen && <ContentAnswersModal onRequestClose={handleClose} />}
+            <ContentAnswersModal isModalOpen={isModalOpen} onRequestClose={handleClose} />
         </div>
     );
 };

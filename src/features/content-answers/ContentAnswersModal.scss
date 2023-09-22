@@ -1,5 +1,7 @@
+@import '../../styles/variables';
+
 .ContentAnswersModal {
-    .modal-dialog-containter {
+    .modal-dialog-container {
         display: flex;
         flex-basis: 0;
         width: 100%;
@@ -12,7 +14,7 @@
         height: 100%;
         max-height: 702px;
         padding: 0;
-        background-color: #f4f4f4;
+        background-color: $bdl-gray-05;
     }
 
     .modal-header-container {
@@ -20,16 +22,12 @@
         margin: 0;
         padding: 16px 20px;
         background-color: white;
-        border-radius: 12px 12px 0 0;
-        box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 1px 0 #e8e8e8;
+        border-radius: $bdl-border-radius-size-xlarge $bdl-border-radius-size-xlarge 0 0;
+        box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 1px 0 $bdl-gray-10;
 
         .modal-title {
             display: flex;
             align-items: center;
-        }
-
-        p {
-            margin: 0;
         }
 
         .BoxAiLogo {

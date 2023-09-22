@@ -12,24 +12,21 @@ import messages from './messages';
 import './ContentAnswersModal.scss';
 
 type Props = {
+    isModalOpen: boolean;
     onRequestClose: () => void;
 };
 
-const ContentAnswersModal = ({ onRequestClose }: Props) => {
+const ContentAnswersModal = ({ isModalOpen, onRequestClose }: Props) => {
     return (
         <Modal
-            isOpen
+            isOpen={isModalOpen}
             className="ContentAnswersModal"
             data-testid="content-answers-modal"
             onRequestClose={onRequestClose}
             title={
                 <>
                     <BoxAiLogo className="BoxAiLogo" data-testid="content-answers-icon-color" width={32} height={32} />
-                    <p>
-                        <span>
-                            <FormattedMessage {...messages.contentAnswersTitle} />
-                        </span>
-                    </p>
+                    <FormattedMessage {...messages.contentAnswersTitle} />
                 </>
             }
         >
