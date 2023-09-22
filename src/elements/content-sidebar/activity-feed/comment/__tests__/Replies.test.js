@@ -173,10 +173,13 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
     });
 
     test('should call onReplyDelete when reply is deleted', () => {
-        getWrapper({ replies: [comment] });
+        getWrapper({
+            replies: [comment, comment2],
+        });
 
-        expect(screen.getByTestId('comment-actions-menu')).toBeInTheDocument();
-        fireEvent.click(screen.getByTestId('comment-actions-menu'));
+        const [menu] = screen.getAllByTestId('comment-actions-menu');
+
+        fireEvent.click(menu);
 
         expect(screen.getByTestId('delete-comment')).toBeInTheDocument();
         fireEvent.click(screen.getByTestId('delete-comment'));
@@ -185,7 +188,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
         fireEvent.click(screen.getByTestId('bcs-delete-confirmation-delete'));
 
         expect(replyDelete).toBeCalledTimes(1);
+
         expect(replyDelete).toBeCalledWith({ id: comment.id, permissions: comment.permissions });
+        expect(replyDelete).not.toBeCalledWith({ id: comment2.id, permissions: comment2.permissions });
     });
 
     test('should show Hide Replies and call onHideReplies when clicked', () => {
