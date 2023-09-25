@@ -38,7 +38,7 @@ type Props = {
     onFocus?: Function,
     onSubmit?: Function,
     placeholder?: string,
-    shouldFocusOnOpen?: boolean,
+    shouldFocusOnOpen: boolean,
     showTip?: boolean,
     tagged_message?: string,
     updateComment?: Function,
