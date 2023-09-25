@@ -3,7 +3,7 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { ContentState, EditorState } from 'draft-js';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { Replies } from '../BaseComment';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -177,15 +177,16 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
             replies: [comment, comment2],
         });
 
-        const [menu] = screen.getAllByTestId('comment-actions-menu');
-
+        const [menu] = screen.getAllByLabelText('Options');
         fireEvent.click(menu);
 
-        expect(screen.getByTestId('delete-comment')).toBeInTheDocument();
-        fireEvent.click(screen.getByTestId('delete-comment'));
+        const menuDelete = screen.getByLabelText('Delete');
+        expect(menuDelete).toBeInTheDocument();
+        fireEvent.click(menuDelete);
 
-        expect(screen.getByTestId('bcs-delete-confirmation-delete')).toBeInTheDocument();
-        fireEvent.click(screen.getByTestId('bcs-delete-confirmation-delete'));
+        const confirmationDelete = within(screen.getByRole('dialog')).getByLabelText('Delete');
+        expect(confirmationDelete).toBeInTheDocument();
+        fireEvent.click(confirmationDelete);
 
         expect(replyDelete).toBeCalledTimes(1);
 

@@ -269,6 +269,7 @@ export const BaseComment = ({
                                 )}
                                 {canDelete && (
                                     <MenuItem
+                                        aria-label={messages.commentDeleteMenuItem.defaultMessage}
                                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
                                         data-testid="delete-comment"
                                         onClick={handleDeleteClick}
