@@ -322,6 +322,7 @@ const ActiveState = ({
                                             />
                                         }
                                         onAnnotationEdit={onAnnotationEdit}
+                                        onCommentEdit={onCommentEdit}
                                         onDelete={onAnnotationDelete}
                                         onReplyCreate={reply =>
                                             onReplyCreate(item.id, FEED_ITEM_TYPE_ANNOTATION, reply)
