@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
-import { render as renderRTLFunc } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { EditorState } from 'draft-js';
 
 import Button from '../../../../../components/button/Button';
@@ -18,12 +18,12 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
         <CommentForm getMentionWithQuery={() => {}} intl={intlFake} user={{ id: 123, name: 'foo bar' }} {...props} />
     );
 
-    const render = props => mount(getComponent(props));
+    const getWrapper = props => mount(getComponent(props));
 
-    const renderRTL = props => renderRTLFunc(getComponent(props));
+    const getWrapperRTL = props => render(getComponent(props));
 
     test('should correctly render initial state', () => {
-        const wrapper = render();
+        const wrapper = getWrapper();
 
         expect(wrapper.find('[contentEditable]').length).toEqual(1);
         expect(wrapper.find('.bcs-CommentFormControls').length).toEqual(0);
@@ -33,7 +33,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     test('should call onFocus handler when input is focused', () => {
         const onFocusSpy = jest.fn();
 
-        const wrapper = render({ onFocus: onFocusSpy });
+        const wrapper = getWrapper({ onFocus: onFocusSpy });
 
         const mentionSelector = wrapper.find('[contentEditable]');
         mentionSelector.simulate('focus');
@@ -42,7 +42,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
 
     test('should call oncancel handler when input is canceled', () => {
         const onCancelSpy = jest.fn();
-        const wrapper = render({ isOpen: true, onCancel: onCancelSpy });
+        const wrapper = getWrapper({ isOpen: true, onCancel: onCancelSpy });
         const cancelButton = wrapper.find(Button).first();
 
         cancelButton.simulate('click');
@@ -50,7 +50,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     });
 
     test('should render open comment input when isOpen is true', () => {
-        const wrapper = render({ isOpen: true });
+        const wrapper = getWrapper({ isOpen: true });
 
         expect(wrapper.find(Media).hasClass('bcs-is-open')).toBe(true);
         expect(wrapper.find('.bcs-CommentFormControls').length).toEqual(1);
@@ -58,7 +58,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     });
 
     test('should set required to false on comment input when not open', () => {
-        const wrapper = render();
+        const wrapper = getWrapper();
 
         expect(
             wrapper
@@ -69,7 +69,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     });
 
     test('should set required to true on comment input when isOpen is true', () => {
-        const wrapper = render({ isOpen: true });
+        const wrapper = getWrapper({ isOpen: true });
 
         expect(
             wrapper
@@ -89,7 +89,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     `(`should call createComment $expectedCallCount times`, ({ commentText, expectedCallCount }) => {
         const createCommentSpy = jest.fn();
 
-        const wrapper = render({ createComment: createCommentSpy });
+        const wrapper = getWrapper({ createComment: createCommentSpy });
         const instance = wrapper.instance();
 
         instance.getFormattedCommentText = jest.fn().mockReturnValue(commentText);
@@ -103,7 +103,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     });
 
     test('should have editor state reflect tagged_message prop when not empty', () => {
-        const wrapper = render({ tagged_message: 'hey there' });
+        const wrapper = getWrapper({ tagged_message: 'hey there' });
 
         expect(
             wrapper
@@ -120,7 +120,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     });
 
     test('should have editor state reflect empty state when no tagged_message prop is passed', () => {
-        const wrapper = render();
+        const wrapper = getWrapper();
 
         expect(
             wrapper
@@ -137,7 +137,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     });
 
     test('should not display trigger @mention selector when getMentionQuery prop is empty', () => {
-        const wrapper = render({ getMentionWithQuery: null });
+        const wrapper = getWrapper({ getMentionWithQuery: null });
 
         expect(
             wrapper
@@ -148,13 +148,13 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
     });
 
     test('should not show mention tip is showTip is false', () => {
-        const wrapper = render({ showTip: false });
+        const wrapper = getWrapper({ showTip: false });
 
         expect(wrapper.find('.bcs-CommentForm-tip').length).toEqual(0);
     });
 
     test('should show custom placeholder when provided', () => {
-        const wrapper = render({ placeholder: 'Your comment goes here' });
+        const wrapper = getWrapper({ placeholder: 'Your comment goes here' });
 
         expect(
             wrapper
@@ -168,7 +168,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
         const mockFocusFunc = jest.fn();
         EditorState.moveFocusToEnd = mockFocusFunc;
 
-        renderRTL();
+        getWrapperRTL();
         expect(mockFocusFunc).not.toHaveBeenCalled();
     });
 
@@ -176,7 +176,7 @@ describe('elements/content-sidebar/ActivityFeed/comment-form/CommentForm', () =>
         const mockFocusFunc = jest.fn();
         EditorState.moveFocusToEnd = mockFocusFunc;
 
-        renderRTL({ shouldFocusOnOpen: true });
+        getWrapperRTL({ shouldFocusOnOpen: true });
         expect(mockFocusFunc).toHaveBeenCalled();
     });
 });
