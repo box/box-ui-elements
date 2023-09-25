@@ -284,7 +284,13 @@ class Task extends React.Component<Props, State> {
                             user={createdByUser}
                             badgeIcon={
                                 <TaskTypeIcon
-                                    title={<FormattedMessage {...messages.taskAnnotationAccessibleSVGTitle} />}
+                                    title={
+                                        task_type === 'APPROVAL' ? (
+                                            <FormattedMessage {...messages.approvalTaskAnnotationAccessibleSVGTitle} />
+                                        ) : (
+                                            <FormattedMessage {...messages.generalTaskAnnotationAccessibleSVGTitle} />
+                                        )
+                                    }
                                 />
                             }
                         />
