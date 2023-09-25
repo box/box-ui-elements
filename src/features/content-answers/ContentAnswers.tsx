@@ -4,13 +4,16 @@ import ContentAnswersModal from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 
 type ExternalProps = {
+    show?: boolean;
+};
+
+type Props = {
     fileExtension: string;
     fileId: string;
-    show?: boolean;
     versionId: string;
 };
 
-const ContentAnswers = ({ fileExtension }: ExternalProps) => {
+const ContentAnswers = ({ fileExtension }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
