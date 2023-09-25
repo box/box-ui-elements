@@ -55,9 +55,7 @@ export const getWrapper = props =>
     );
 
 describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
-    beforeEach(() => {
-        EditorState.moveFocusToEnd = editor => editor;
-    });
+    EditorState.moveFocusToEnd = editor => editor;
 
     test.each`
         activityItem
