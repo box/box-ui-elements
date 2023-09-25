@@ -49,6 +49,7 @@
         flex: 1 1 auto;
         flex-direction: column;
         width: 100%; // Explicit width required since flex-direction is column
+        min-height: 93px;
         overflow-x: hidden;
         overflow-y: auto;
 
