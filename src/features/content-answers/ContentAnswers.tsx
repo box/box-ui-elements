@@ -23,7 +23,7 @@ const ContentAnswers = ({ fileExtension }: ExternalProps) => {
 
     return (
         <div className="ContentAnswers">
-            <ContentAnswersOpenButton onClick={handleClick} fileExtension={fileExtension} />
+            <ContentAnswersOpenButton fileExtension={fileExtension} onClick={handleClick} />
             <ContentAnswersModal isOpen={isModalOpen} onRequestClose={handleClose} />
         </div>
     );
