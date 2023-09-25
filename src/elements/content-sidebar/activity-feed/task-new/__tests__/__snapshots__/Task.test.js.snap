@@ -16,7 +16,16 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
       className="bcs-Task-avatar"
     >
       <Avatar
-        badgeIcon={<IconTaskGeneral />}
+        badgeIcon={
+          <IconTaskGeneral
+            title={
+              <FormattedMessage
+                defaultMessage="Task"
+                id="be.contentSidebar.activityFeed.task.IconAnnotation"
+              />
+            }
+          />
+        }
         user={
           Object {
             "id": "5",

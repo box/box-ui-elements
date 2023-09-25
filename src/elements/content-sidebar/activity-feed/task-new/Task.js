@@ -279,7 +279,15 @@ class Task extends React.Component<Props, State> {
                     data-testid="task-card"
                 >
                     <Media.Figure className="bcs-Task-avatar">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} badgeIcon={<TaskTypeIcon />} />
+                        <Avatar
+                            getAvatarUrl={getAvatarUrl}
+                            user={createdByUser}
+                            badgeIcon={
+                                <TaskTypeIcon
+                                    title={<FormattedMessage {...messages.taskAnnotationAccessibleSVGTitle} />}
+                                />
+                            }
+                        />
                     </Media.Figure>
                     <Media.Body>
                         {isMenuVisible && (

@@ -4,6 +4,7 @@ exports[`icons/general/IconAnnotation should correctly render default icon 1`] =
 <AccessibleSVG
   className="bdl-IconAnnotation "
   height={24}
+  tabIndex={0}
   viewBox="0 0 32 32"
   width={24}
 >
@@ -12,13 +13,11 @@ exports[`icons/general/IconAnnotation should correctly render default icon 1`] =
     fillRule="nonzero"
   >
     <circle
-      aria-label="Inline comment"
       className="background-color"
       cx="16.162"
       cy="16.162"
       fill="#f5b31b"
       r="16"
-      tabIndex={0}
     />
     <path
       className="foreground-color"

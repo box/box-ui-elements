@@ -62,6 +62,11 @@ const messages = defineMessages({
         defaultMessage: 'See {repliesToLoadCount, plural, one {# reply} other {# replies}}',
         description: 'Text to show to get more replies of comment or annotation',
     },
+    inlineCommentAnnotationAccessibleSVGTitle: {
+        id: 'be.contentSidebar.activityFeed.comment.IconAnnotation',
+        defaultMessage: 'Inline Comment',
+        description: 'Text for aria label of circle type icon',
+    },
 });
 
 export default messages;

@@ -175,6 +175,11 @@ const messages = defineMessages({
         defaultMessage: 'There are multiple files associated with this task',
         description: 'Tooltip text for multi-file icon, explaining that the task involves multiple files',
     },
+    taskAnnotationAccessibleSVGTitle: {
+        id: 'be.contentSidebar.activityFeed.task.IconAnnotation',
+        defaultMessage: 'Task',
+        description: 'Text for aria label of circle type icon',
+    },
 });
 
 export default messages;

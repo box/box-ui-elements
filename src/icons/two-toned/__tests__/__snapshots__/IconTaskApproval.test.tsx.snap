@@ -4,6 +4,7 @@ exports[`icons/general/IconTaskApproval should correctly render default icon 1`]
 <AccessibleSVG
   className="bdl-IconTaskApproval "
   height={24}
+  tabIndex={0}
   viewBox="0 0 32 32"
   width={24}
 >
