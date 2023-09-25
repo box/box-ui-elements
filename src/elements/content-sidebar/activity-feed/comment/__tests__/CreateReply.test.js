@@ -37,6 +37,10 @@ const getWrapper = props =>
     );
 
 describe('elements/content-sidebar/ActivityFeed/comment/CreateReply', () => {
+    beforeEach(() => {
+        EditorState.moveFocusToEnd = editor => editor;
+    });
+
     afterEach(() => {
         jest.restoreAllMocks();
     });
@@ -123,5 +127,13 @@ describe('elements/content-sidebar/ActivityFeed/comment/CreateReply', () => {
         fireEvent.click(screen.getByText('Post'));
         expect(onSubmit).toBeCalledTimes(1);
         expect(onSubmit).toBeCalledWith('Batman');
+    });
+
+    test('reply form should be focused when opened', () => {
+        const mockFocusFunc = jest.fn();
+        EditorState.moveFocusToEnd = mockFocusFunc;
+
+        getWrapper({ showReplyForm: true });
+        expect(mockFocusFunc).toHaveBeenCalled();
     });
 });

@@ -302,22 +302,23 @@ export const BaseComment = ({
                     <ActivityStatus status={status} />
                     {isEditing ? (
                         <CommentForm
-                            isDisabled={isDisabled}
                             className={classNames('bcs-Comment-editor', {
                                 'bcs-is-disabled': isDisabled,
                             })}
-                            updateComment={handleMessageUpdate}
+                            entityId={id}
+                            getAvatarUrl={getAvatarUrl}
+                            getMentionWithQuery={getMentionWithQuery}
+                            isDisabled={isDisabled}
+                            isEditing={isEditing}
                             isOpen={isInputOpen}
-                            // $FlowFixMe
-                            user={currentUser}
+                            mentionSelectorContacts={mentionSelectorContacts}
                             onCancel={commentFormCancelHandler}
                             onFocus={commentFormFocusHandler}
-                            isEditing={isEditing}
-                            entityId={id}
+                            shouldFocusOnOpen
                             tagged_message={tagged_message}
-                            getAvatarUrl={getAvatarUrl}
-                            mentionSelectorContacts={mentionSelectorContacts}
-                            getMentionWithQuery={getMentionWithQuery}
+                            updateComment={handleMessageUpdate}
+                            // $FlowFixMe
+                            user={currentUser}
                         />
                     ) : (
                         <ActivityMessage
