@@ -20,8 +20,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           <IconTaskGeneral
             title={
               <FormattedMessage
-                defaultMessage="Task"
-                id="be.contentSidebar.activityFeed.task.IconAnnotation"
+                defaultMessage="General Task"
+                id="be.contentSidebar.activityFeed.task.generalTaskAnnotationAccessibleSVGTitle"
               />
             }
           />

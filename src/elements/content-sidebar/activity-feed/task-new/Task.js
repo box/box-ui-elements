@@ -280,8 +280,6 @@ class Task extends React.Component<Props, State> {
                 >
                     <Media.Figure className="bcs-Task-avatar">
                         <Avatar
-                            getAvatarUrl={getAvatarUrl}
-                            user={createdByUser}
                             badgeIcon={
                                 <TaskTypeIcon
                                     title={
@@ -293,6 +291,8 @@ class Task extends React.Component<Props, State> {
                                     }
                                 />
                             }
+                            getAvatarUrl={getAvatarUrl}
+                            user={createdByUser}
                         />
                     </Media.Figure>
                     <Media.Body>

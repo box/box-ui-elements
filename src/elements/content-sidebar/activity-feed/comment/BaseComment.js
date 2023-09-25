@@ -206,8 +206,6 @@ export const BaseComment = ({
             >
                 <Media.Figure>
                     <Avatar
-                        getAvatarUrl={getAvatarUrl}
-                        user={createdByUser}
                         badgeIcon={
                             annotationActivityLink && (
                                 <IconAnnotation
@@ -215,6 +213,8 @@ export const BaseComment = ({
                                 />
                             )
                         }
+                        getAvatarUrl={getAvatarUrl}
+                        user={createdByUser}
                     />
                 </Media.Figure>
                 <Media.Body>
