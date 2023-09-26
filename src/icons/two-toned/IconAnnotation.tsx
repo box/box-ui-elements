@@ -11,7 +11,6 @@ const IconAnnotation = ({ className = '', height = 24, title, width = 24 }: TwoT
         title={title}
         viewBox="0 0 32 32"
         width={width}
-        tabIndex={0}
     >
         <g fillRule="nonzero" fill="none">
             <circle className="background-color" cx="16.162" cy="16.162" fill={bdlYellorange} r="16" />
