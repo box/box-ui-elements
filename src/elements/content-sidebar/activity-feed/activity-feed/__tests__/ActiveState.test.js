@@ -193,7 +193,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         expect(wrapper.find('AnnotationActivity')).toHaveLength(hasNewThreadedReplies ? 0 : 1);
     });
 
-    test('Annotationq BaseComment has onCommentEdit to edit replies', () => {
+    test('Annotation BaseComment has onCommentEdit to edit replies', () => {
         const onCommentEdit = () => {};
         const wrapper = getShallowWrapper({ hasNewThreadedReplies: true, items: [annotation], onCommentEdit }).dive();
         const baseComment = wrapper.find('BaseComment');
