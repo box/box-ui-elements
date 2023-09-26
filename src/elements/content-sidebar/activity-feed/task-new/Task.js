@@ -283,7 +283,7 @@ class Task extends React.Component<Props, State> {
                             badgeIcon={
                                 <TaskTypeIcon
                                     title={
-                                        task_type === 'APPROVAL' ? (
+                                        task_type === TASK_TYPE_APPROVAL ? (
                                             <FormattedMessage {...messages.approvalTaskAnnotationAccessibleSVGTitle} />
                                         ) : (
                                             <FormattedMessage {...messages.generalTaskAnnotationAccessibleSVGTitle} />
