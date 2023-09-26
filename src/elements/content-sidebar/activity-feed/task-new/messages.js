@@ -178,12 +178,12 @@ const messages = defineMessages({
     generalTaskAnnotationAccessibleSVGTitle: {
         id: 'be.contentSidebar.activityFeed.task.generalTaskAnnotationAccessibleSVGTitle',
         defaultMessage: 'General Task',
-        description: 'Text for aria label of circle type icon',
+        description: 'Text for aria label of general task circle type icon',
     },
     approvalTaskAnnotationAccessibleSVGTitle: {
         id: 'be.contentSidebar.activityFeed.task.approvalTaskAnnotationAccessibleSVGTitle',
         defaultMessage: 'Approval Task',
-        description: 'Text for aria label of circle type icon',
+        description: 'Text for aria label of approval taskcircle type icon',
     },
 });
 
