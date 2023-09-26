@@ -58,6 +58,7 @@ class DeleteConfirmation extends React.Component<Props> {
                 </div>
                 <div>
                     <Button
+                        aria-label={commonMessages.cancel.defaultMessage}
                         className="bcs-DeleteConfirmation-cancel"
                         onClick={onDeleteCancel}
                         type="button"
@@ -66,6 +67,7 @@ class DeleteConfirmation extends React.Component<Props> {
                         <FormattedMessage {...commonMessages.cancel} />
                     </Button>
                     <PrimaryButton
+                        aria-label={commonMessages.delete.defaultMessage}
                         className="bcs-DeleteConfirmation-delete"
                         onClick={onDeleteConfirm}
                         type="button"
