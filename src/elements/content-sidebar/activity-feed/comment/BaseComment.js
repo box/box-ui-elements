@@ -62,6 +62,7 @@ export type BaseCommentProps = {
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any,
     onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
+    onReplyDelete?: ({ id: string, permissions?: BoxCommentPermission }) => void,
     onSelect: (isSelected: boolean) => void,
     onShowReplies?: () => void,
     permissions: BoxCommentPermission,
@@ -94,6 +95,7 @@ export const BaseComment = ({
     onDelete,
     onHideReplies,
     onReplyCreate,
+    onReplyDelete,
     onSelect,
     onShowReplies,
     permissions = {},
@@ -269,6 +271,7 @@ export const BaseComment = ({
                                 )}
                                 {canDelete && (
                                     <MenuItem
+                                        aria-label={messages.commentDeleteMenuItem.defaultMessage}
                                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
                                         data-testid="delete-comment"
                                         onClick={handleDeleteClick}
@@ -345,6 +348,7 @@ export const BaseComment = ({
                     onCommentEdit={onCommentEdit}
                     onHideReplies={onHideReplies}
                     onReplyCreate={onReplyCreate}
+                    onReplyDelete={onReplyDelete}
                     onReplySelect={onSelect}
                     onShowReplies={onShowReplies}
                     replies={replies}
@@ -367,6 +371,7 @@ type RepliesProps = {
     onCommentEdit: OnCommentEdit,
     onHideReplies?: (shownReplies: CommentType[]) => void,
     onReplyCreate?: (reply: string) => void,
+    onReplyDelete?: ({ id: string, permissions?: BoxCommentPermission }) => void,
     onReplySelect?: (isSelected: boolean) => void,
     onShowReplies?: () => void,
     replies: CommentType[],
@@ -384,6 +389,7 @@ export const Replies = ({
     mentionSelectorContacts,
     onCommentEdit,
     onReplyCreate,
+    onReplyDelete,
     onReplySelect = noop,
     onShowReplies,
     onHideReplies,
@@ -448,7 +454,7 @@ export const Replies = ({
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onCommentEdit={onCommentEdit}
                                     onSelect={onReplySelect}
-                                    onDelete={noop}
+                                    onDelete={onReplyDelete}
                                     permissions={getReplyPermissions(reply)}
                                     translations={translations}
                                 />
