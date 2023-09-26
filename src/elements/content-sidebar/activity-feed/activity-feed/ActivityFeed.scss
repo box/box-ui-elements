@@ -49,7 +49,7 @@
         flex: 1 1 auto;
         flex-direction: column;
         width: 100%; // Explicit width required since flex-direction is column
-        min-height: 93px;
+        min-height: $sidebarContentMinHeight;
         overflow-x: hidden;
         overflow-y: auto;
 
@@ -134,7 +134,7 @@
 
     .bcs-activity-feed-comment-input {
         flex: 0 0 auto;
-        min-height: 93px;
+        min-height: $sidebarContentMinHeight;
         max-height: 500px;
         overflow: hidden;
         background-color: $white;
