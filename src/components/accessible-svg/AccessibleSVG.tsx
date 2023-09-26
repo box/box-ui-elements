@@ -15,8 +15,6 @@ export interface SVGProps {
     viewBox?: string;
     /** Width for the svg */
     width?: number;
-    /** Tab index for svg */
-    tabIndex?: number;
 }
 
 export interface AccessibleSVGProps {
