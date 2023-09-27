@@ -58,7 +58,7 @@ const messages = defineMessages({
         description: 'Text to show to get more replies of comment or annotation',
     },
     inlineCommentAnnotationAccessibleSVGTitle: {
-        id: 'be.contentSidebar.activityFeed.comment.IconAnnotation',
+        id: 'be.contentSidebar.activityFeed.comment.inlineCommentAnnotationAccessibleSVGTitle',
         defaultMessage: 'Inline Comment',
         description: 'Text for aria label of circle type icon',
     },
