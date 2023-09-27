@@ -90,6 +90,7 @@ export const FIELD_DATE: 'date' = 'date';
 export const FIELD_NAME: 'name' = 'name';
 export const FIELD_TYPE = 'type';
 export const FIELD_SIZE: 'size' = 'size';
+export const FIELD_PROMOTED_BY = 'promoted_by';
 export const FIELD_PARENT = 'parent';
 export const FIELD_EXTENSION = 'extension';
 export const FIELD_ITEM_EXPIRATION = 'expires_at';
