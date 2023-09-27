@@ -227,7 +227,7 @@ type BoxItemVersion = {
     modified_by: ?User,
     name?: string,
     permissions?: BoxItemVersionPermission,
-    promoted_by: ?User,
+    promoted_by?: ?User,
     restored_at?: string,
     restored_by?: ?User,
     retention?: BoxItemVersionRetention,
