@@ -211,7 +211,7 @@ export const BaseComment = ({
                         badgeIcon={
                             annotationActivityLink && (
                                 <IconAnnotation
-                                    title={<FormattedMessage {...messages.inlineCommentAnnotationAccessibleSVGTitle} />}
+                                    title={<FormattedMessage {...messages.inlineCommentAnnotationIconTitle} />}
                                 />
                             )
                         }

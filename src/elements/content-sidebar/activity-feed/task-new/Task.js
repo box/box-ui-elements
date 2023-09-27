@@ -260,9 +260,9 @@ class Task extends React.Component<Props, State> {
 
         const TaskTypeIcon =
             task_type === TASK_TYPE_APPROVAL ? (
-                <IconTaskApproval title={<FormattedMessage {...messages.approvalTaskAnnotationAccessibleSVGTitle} />} />
+                <IconTaskApproval title={<FormattedMessage {...messages.approvalTaskAnnotationIconTitle} />} />
             ) : (
-                <IconTaskGeneral title={<FormattedMessage {...messages.generalTaskAnnotationAccessibleSVGTitle} />} />
+                <IconTaskGeneral title={<FormattedMessage {...messages.generalTaskAnnotationIconTitle} />} />
             );
 
         const isMenuVisible = (permissions.can_delete || permissions.can_update) && !isPending;
