@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/content-answers/body/WelcomeMessage should render correct filename 1`] = `
+<div
+  className="WelcomeMessage"
+  data-testid="content-answers-welcome-message"
+>
+  <ContentAnswersGridCard>
+    <div
+      className="WelcomeMessage-title"
+    >
+      <FormattedMessage
+        defaultMessage="Welcome to Box AI"
+        id="boxui.contentAnswers.welcomeMessageTitle"
+      />
+    </div>
+    <div
+      className="WelcomeMessage-askQuestionText"
+    >
+      <FormattedMessage
+        defaultMessage="Ask questions about {name}"
+        id="boxui.contentAnswers.welcomeAskQuestionText"
+        values={
+          Object {
+            "name": <b>
+              “
+              test
+              ”
+            </b>,
+          }
+        }
+      />
+    </div>
+    <div
+      className="WelcomeMessage-clearChatText"
+    >
+      <FormattedMessage
+        defaultMessage="This chat will be cleared when you close this document"
+        id="boxui.contentAnswers.welcomeClearChatText"
+      />
+    </div>
+  </ContentAnswersGridCard>
+</div>
+`;
+
+exports[`features/content-answers/body/WelcomeMessage should render correctly without filename 1`] = `
+<div
+  className="WelcomeMessage"
+  data-testid="content-answers-welcome-message"
+>
+  <ContentAnswersGridCard>
+    <div
+      className="WelcomeMessage-title"
+    >
+      <FormattedMessage
+        defaultMessage="Welcome to Box AI"
+        id="boxui.contentAnswers.welcomeMessageTitle"
+      />
+    </div>
+    <div
+      className="WelcomeMessage-askQuestionText"
+    >
+      <FormattedMessage
+        defaultMessage="Ask questions about {name}"
+        id="boxui.contentAnswers.welcomeAskQuestionText"
+        values={
+          Object {
+            "name": <b>
+              “
+              
+              ”
+            </b>,
+          }
+        }
+      />
+    </div>
+    <div
+      className="WelcomeMessage-clearChatText"
+    >
+      <FormattedMessage
+        defaultMessage="This chat will be cleared when you close this document"
+        id="boxui.contentAnswers.welcomeClearChatText"
+      />
+    </div>
+  </ContentAnswersGridCard>
+</div>
+`;

@@ -1,0 +1,25 @@
+@import '../../../styles/variables';
+
+.WelcomeMessage {
+    .ContentAnswersGridCard {
+        margin-top: 20px;
+    }
+}
+
+.WelcomeMessage-title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.WelcomeMessage-askQuestionText {
+    margin: 12px 0;
+    font-size: 15px;
+}
+
+.WelcomeMessage-clearChatText {
+    margin: 0;
+    color: #6f6f6f;
+    font-size: 13px;
+}

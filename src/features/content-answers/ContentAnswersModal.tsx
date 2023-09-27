@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import BoxAiLogo from '../../icon/logo/BoxAiLogo';
-import ContentAnswersModalContent from './ContentAnswersModalContent';
+import ContentAnswersModalContent from './body/ContentAnswersModalContent';
 import ContentAnswersModalFooter from './ContentAnswersModalFooter';
 // @ts-ignore flow import
 import Modal from '../../components/modal/Modal';
@@ -12,11 +12,12 @@ import messages from './messages';
 import './ContentAnswersModal.scss';
 
 type Props = {
+    fileName: string;
     isOpen: boolean;
     onRequestClose: () => void;
 };
 
-const ContentAnswersModal = ({ isOpen, onRequestClose }: Props) => {
+const ContentAnswersModal = ({ fileName, isOpen, onRequestClose }: Props) => {
     return (
         <Modal
             className="ContentAnswersModal"
@@ -30,7 +31,7 @@ const ContentAnswersModal = ({ isOpen, onRequestClose }: Props) => {
                 </>
             }
         >
-            <ContentAnswersModalContent />
+            <ContentAnswersModalContent fileName={fileName} />
             <ContentAnswersModalFooter />
         </Modal>
     );

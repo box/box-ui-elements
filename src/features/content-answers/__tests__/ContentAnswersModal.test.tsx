@@ -5,7 +5,7 @@ import ContentAnswersModal from '../ContentAnswersModal';
 
 describe('features/content-answers/ContentAnswersModal', () => {
     const renderComponent = (props?: {}) =>
-        render(<ContentAnswersModal isOpen onRequestClose={jest.fn()} {...props} />);
+        render(<ContentAnswersModal fileName="" isOpen onRequestClose={jest.fn()} {...props} />);
 
     test('should render the header icon', () => {
         renderComponent();

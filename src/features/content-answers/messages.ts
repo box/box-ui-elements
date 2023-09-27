@@ -31,6 +31,21 @@ const messages = defineMessages({
         description: 'Error tooltip to show inside text area if the user reached the character limit',
         id: 'boxui.contentAnswers.maxCharactersReachedError',
     },
+    welcomeAskQuestionText: {
+        defaultMessage: 'Ask questions about {name}',
+        description: 'Content Answers welcome message for asking questions',
+        id: 'boxui.contentAnswers.welcomeAskQuestionText',
+    },
+    welcomeClearChatText: {
+        defaultMessage: 'This chat will be cleared when you close this document',
+        description: 'Content Answers welcome message for clearing the chat',
+        id: 'boxui.contentAnswers.welcomeClearChatText',
+    },
+    welcomeMessageTitle: {
+        defaultMessage: 'Welcome to Box AI',
+        description: 'Content Answers welcome message title',
+        id: 'boxui.contentAnswers.welcomeMessageTitle',
+    },
 });
 
 export default messages;

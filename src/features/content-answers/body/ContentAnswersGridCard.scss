@@ -1,0 +1,26 @@
+@import '../../../styles/variables';
+
+.ContentAnswersGridCard {
+    margin-top: 16px;
+
+    .BoxAIIcon-iconAvatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: $bdl-light-blue-20;
+        border-radius: 50%;
+    }
+
+    .ContentAnswersGridCard-body {
+        padding: 16px;
+        background-color: white;
+        border: 1px solid $bdl-gray-10;
+        border-radius: 12px;
+    }
+
+    .bdl-Media-figure {
+        margin: 12px 12px 0 0;
+    }
+}

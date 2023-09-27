@@ -7,7 +7,11 @@ type ExternalProps = {
     show?: boolean;
 };
 
-const ContentAnswers = () => {
+type Props = {
+    fileName: string;
+};
+
+const ContentAnswers = ({ fileName }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -21,7 +25,7 @@ const ContentAnswers = () => {
     return (
         <div className="ContentAnswers">
             <ContentAnswersOpenButton onClick={handleClick} />
-            <ContentAnswersModal isOpen={isModalOpen} onRequestClose={handleClose} />
+            <ContentAnswersModal fileName={fileName} isOpen={isModalOpen} onRequestClose={handleClose} />
         </div>
     );
 };
