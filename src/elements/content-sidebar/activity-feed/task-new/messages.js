@@ -183,7 +183,7 @@ const messages = defineMessages({
     approvalTaskAnnotationAccessibleSVGTitle: {
         id: 'be.contentSidebar.activityFeed.task.approvalTaskAnnotationAccessibleSVGTitle',
         defaultMessage: 'Approval Task',
-        description: 'Text for aria label of approval taskcircle type icon',
+        description: 'Text for aria label of approval task circle type icon',
     },
 });
 
