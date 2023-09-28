@@ -202,6 +202,7 @@ const ActiveState = ({
                                         onDelete={onCommentDelete}
                                         onCommentEdit={onCommentEdit}
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
+                                        onReplyDelete={onReplyDeleteHandler(item.id)}
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_COMMENT)}
                                     />
                                 ) : (
@@ -321,6 +322,7 @@ const ActiveState = ({
                                             />
                                         }
                                         onAnnotationEdit={onAnnotationEdit}
+                                        onCommentEdit={onCommentEdit}
                                         onDelete={onAnnotationDelete}
                                         onReplyCreate={reply =>
                                             onReplyCreate(item.id, FEED_ITEM_TYPE_ANNOTATION, reply)
