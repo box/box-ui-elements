@@ -35,14 +35,13 @@ describe('elements/content-preview/preview-header/PreviewHeader', () => {
     });
 
     it('should render ContentAnswers correctly and provided the correct props', () => {
+        const file = { extension: 'doc', file_version: { id: '1' }, id: '123' };
         const contentAnswersProps = { show: true };
         const wrapper = getWrapper({
             contentAnswersProps,
-            file: { extension: 'doc', file_version: { id: '1' }, id: '123' },
+            file,
         });
-        expect(wrapper.find(ContentAnswers).prop('fileExtension')).toBe('doc');
-        expect(wrapper.find(ContentAnswers).prop('fileId')).toBe('123');
-        expect(wrapper.find(ContentAnswers).prop('versionId')).toBe('1');
+        expect(wrapper.find(ContentAnswers).prop('file')).toBe(file);
     });
 
     test.each([
