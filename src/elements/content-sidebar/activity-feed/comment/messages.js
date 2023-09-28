@@ -60,7 +60,7 @@ const messages = defineMessages({
     inlineCommentAnnotationIconTitle: {
         id: 'be.contentSidebar.activityFeed.comment.inlineCommentAnnotationIconTitle',
         defaultMessage: 'Inline Comment',
-        description: 'Text for aria label of circle type icon',
+        description: 'Text for aria label of Inline comment circle type icon',
     },
 });
 
