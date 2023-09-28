@@ -19,6 +19,9 @@ import uniqueid from 'lodash/uniqueId';
 import Measure from 'react-measure';
 import { withRouter } from 'react-router-dom';
 import type { ContextRouter } from 'react-router-dom';
+import Client from 'box-typescript-sdk-gen/lib/client.generated.js';
+import { DeveloperTokenAuth } from 'box-typescript-sdk-gen/lib/developerTokenAuth.generated.js';
+
 import { decode } from '../../utils/keys';
 import makeResponsive from '../common/makeResponsive';
 import { withNavRouter } from '../common/nav-router';
@@ -303,6 +306,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         logger.onReadyMetric({
             endMarkName: MARK_NAME_JS_READY,
         });
+
+        const auth = new DeveloperTokenAuth({ token: 'token' });
+        this.client = new Client({ auth });
     }
 
     /**
@@ -1249,6 +1255,16 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return null;
     };
 
+    handleFetchAnswer = async (fileId, prompt) => {
+        const response = await this.client.intelligence.createAiAsk({
+            mode: 'single_item_qa',
+            prompt,
+            items: [{ id: 'id', type: 'file' }],
+        });
+
+        console.log(`The answer is: ${response.answer}`);
+    };
+
     /**
      * Renders the file preview
      *
@@ -1307,7 +1323,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const currentVersionId = getProp(file, 'file_version.id');
         const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
-
+        this.handleFetchAnswer('currentFileId', 'summarize');
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
