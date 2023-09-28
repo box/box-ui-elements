@@ -7,7 +7,13 @@ type ExternalProps = {
     show?: boolean;
 };
 
-const ContentAnswers = () => {
+type Props = {
+    fileExtension: string;
+    fileId: string;
+    versionId: string;
+};
+
+const ContentAnswers = ({ fileExtension }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -20,7 +26,7 @@ const ContentAnswers = () => {
 
     return (
         <div className="ContentAnswers">
-            <ContentAnswersOpenButton onClick={handleClick} />
+            <ContentAnswersOpenButton fileExtension={fileExtension} onClick={handleClick} />
             <ContentAnswersModal isOpen={isModalOpen} onRequestClose={handleClose} />
         </div>
     );

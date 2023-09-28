@@ -63,6 +63,7 @@ const PreviewHeader = ({
     const fileId = file && file.id;
     const shouldRenderAnswers = fileId && contentAnswersProps.show;
     const shouldRenderOpenWith = fileId && contentOpenWithProps.show;
+    const currentExtension = getProp(file, 'extension');
     const currentVersionId = getProp(file, 'file_version.id');
     const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
     const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
@@ -100,7 +101,13 @@ const PreviewHeader = ({
                                     {...contentOpenWithProps}
                                 />
                             )}
-                            {shouldRenderAnswers && <ContentAnswers />}
+                            {shouldRenderAnswers && (
+                                <ContentAnswers
+                                    fileExtension={currentExtension}
+                                    fileId={fileId}
+                                    versionId={selectedVersionId}
+                                />
+                            )}
                             {canAnnotate && (
                                 <>
                                     <PlainButton

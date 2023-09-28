@@ -26,6 +26,12 @@ const messages = defineMessages({
         description: 'Default tooltip message for Content Answers entry point button',
         id: 'boxui.contentAnswers.defaultTooltip',
     },
+    disabledTooltipFileNotCompatible: {
+        defaultMessage: 'Box AI is not currently supported for this file type',
+        description:
+            'Disabled tooltip message for Content Answers entry point button when the file type is not supported',
+        id: 'boxui.contentAnswers.disabledTooltipFileNotCompatible',
+    },
     maxCharactersReachedError: {
         defaultMessage: 'Maximum of {characterLimit} characters reached',
         description: 'Error tooltip to show inside text area if the user reached the character limit',
