@@ -118,6 +118,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         test.each`
             versionUser         | expected
             ${defaultUser}      | ${defaultUser.name}
+            ${promotedByUser}   | ${promotedByUser.name}
             ${restoreUser}      | ${restoreUser.name}
             ${trashedUser}      | ${trashedUser.name}
             ${PLACEHOLDER_USER} | ${unknownUser}
