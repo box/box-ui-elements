@@ -18,6 +18,7 @@ jest.mock('../../../../utils/dom', () => ({
 describe('elements/content-sidebar/versions/VersionsItem', () => {
     const defaultDate = new Date('2019-03-01T00:00:00');
     const defaultUser = { name: 'Test User', id: 10 };
+    const promotedByUser = { name: 'Promote User', id: 13 };
     const restoreDate = new Date('2019-05-01T00:00:00');
     const restoreUser = { name: 'Restore User', id: 12 };
     const trashedDate = new Date('2019-04-01T00:00:00');
@@ -131,6 +132,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         test.each`
             versionUser                                         | expected
             ${defaultUser}                                      | ${defaultUser.name}
+            ${promotedByUser}                                   | ${promotedByUser.name}
             ${restoreUser}                                      | ${restoreUser.name}
             ${trashedUser}                                      | ${trashedUser.name}
             ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }} | ${(<FormattedMessage {...messages.fileRequestDisplayName} />)}
