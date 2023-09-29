@@ -26,6 +26,8 @@ type Props = {
     buttonProps?: Object,
     buttonSuccessText?: string | React.Node,
     className: string,
+    /** Disables copy function when copyDisabled is true */
+    copyDisabled?: boolean,
     disabled?: boolean,
     /** Label displayed for the text input */
     // TODO: Make label required
@@ -159,11 +161,15 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
     };
 
     handleCopyEvent = (event: SyntheticEvent<>) => {
-        this.animateCopyButton();
+        if (this.props.copyDisabled) {
+            event.preventDefault();
+        } else {
+            this.animateCopyButton();
 
-        const { onCopySuccess } = this.props;
-        if (onCopySuccess) {
-            onCopySuccess(event);
+            const { onCopySuccess } = this.props;
+            if (onCopySuccess) {
+                onCopySuccess(event);
+            }
         }
     };
 
