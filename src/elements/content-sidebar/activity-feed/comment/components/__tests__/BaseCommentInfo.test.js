@@ -40,12 +40,12 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentInfo', () => 
         // This could fail for some locales, but I was unable to use the ReadableTime component to get the properly-formatted time programmatically
         expect(wrapper.getByText('Sep 27, 2017')).toBeInTheDocument();
 
-        expect(wrapper.queryByText(localize(messages.annotationBadge.id))).not.toBeInTheDocument();
+        expect(wrapper.queryByText(localize(messages.inlineCommentAnnotationIconTitle.id))).not.toBeInTheDocument();
     });
     test('should render an annotation badge if annotationActivityLink is defined', () => {
         const wrapper = getWrapper({
             annotationActivityLink: <AnnotationActivityLinkProvider {...annotationActivityLinkProviderProps} />,
         });
-        expect(wrapper.getByText('Annotation Badge')).toBeInTheDocument();
+        expect(wrapper.getByText(localize(messages.inlineCommentAnnotationIconTitle.id))).toBeInTheDocument();
     });
 });
