@@ -10,7 +10,7 @@ type Props = {
 
 const ContentAnswersModalContent = ({ fileName }: Props) => {
     return (
-        <div className="ContentAnswersModalContent">
+        <div className="bdl-ContentAnswersModalContent">
             <WelcomeMessage fileName={fileName} />
         </div>
     );

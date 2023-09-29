@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import ContentAnswersGridCard from './ContentAnswersGridCard';
 
-import messages from '../messages';
+import messages from './messages';
 
 import './WelcomeMessage.scss';
 
@@ -13,15 +13,18 @@ type Props = {
 
 const WelcomeMessage = ({ fileName }: Props) => {
     return (
-        <div className="WelcomeMessage" data-testid="content-answers-welcome-message">
+        <div className="bdl-WelcomeMessage" data-testid="content-answers-welcome-message">
             <ContentAnswersGridCard>
-                <div className="WelcomeMessage-title">
+                <div className="bdl-WelcomeMessage-title">
                     <FormattedMessage {...messages.welcomeMessageTitle} />
                 </div>
-                <div className="WelcomeMessage-askQuestionText">
-                    <FormattedMessage {...messages.welcomeAskQuestionText} values={{ name: <b>“{fileName}”</b> }} />
+                <div className="bdl-WelcomeMessage-askQuestionText">
+                    <FormattedMessage
+                        {...messages.welcomeAskQuestionText}
+                        values={{ name: <b data-testid="content-answers-filename">“{fileName}”</b> }}
+                    />
                 </div>
-                <div className="WelcomeMessage-clearChatText">
+                <div className="bdl-WelcomeMessage-clearChatText">
                     <FormattedMessage {...messages.welcomeClearChatText} />
                 </div>
             </ContentAnswersGridCard>

@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.ContentAnswersModal {
+.bdl-ContentAnswersModal {
     .modal-dialog-container {
         display: flex;
         flex-basis: 0;
@@ -20,7 +20,7 @@
     .modal-header-container {
         z-index: 1;
         margin: 0;
-        padding: 16px 20px;
+        padding: $bdl-grid-unit * 4 $bdl-grid-unit * 5;
         background-color: white;
         border-radius: $bdl-border-radius-size-xlarge $bdl-border-radius-size-xlarge 0 0;
         box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 1px 0 $bdl-gray-10;
@@ -30,8 +30,8 @@
             align-items: center;
         }
 
-        .BoxAiLogo {
-            margin-right: 12px;
+        .bdl-BoxAiLogo {
+            margin-right: $bdl-grid-unit * 3;
         }
     }
 

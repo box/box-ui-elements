@@ -23,7 +23,7 @@ const ContentAnswers = ({ fileName }: Props) => {
     };
 
     return (
-        <div className="ContentAnswers">
+        <div className="bdl-ContentAnswers">
             <ContentAnswersOpenButton onClick={handleClick} />
             <ContentAnswersModal fileName={fileName} isOpen={isModalOpen} onRequestClose={handleClose} />
         </div>

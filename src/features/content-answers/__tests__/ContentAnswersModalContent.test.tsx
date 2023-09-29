@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 
 import ContentAnswersModalContent from '../ContentAnswersModalContent';
 
-describe('features/content-answers/body/ContentAnswersModalContent', () => {
+describe('features/content-answers/ContentAnswersModalContent', () => {
     const renderComponent = (props?: {}) => {
         render(<ContentAnswersModalContent fileName="" {...props} />);
     };

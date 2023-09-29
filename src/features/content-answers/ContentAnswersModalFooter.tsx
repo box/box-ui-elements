@@ -32,8 +32,8 @@ const ContentAnswersModalFooter = ({ intl }: Props) => {
     };
 
     return (
-        <div className="ContentAnswersModalFooter">
-            <div className="ContentAnswersModalFooter-avatar">
+        <div className="bdl-ContentAnswersModalFooter">
+            <div className="bdl-ContentAnswersModalFooter-avatar">
                 <Avatar />
             </div>
             <TextArea
@@ -52,7 +52,7 @@ const ContentAnswersModalFooter = ({ intl }: Props) => {
                 value={inputMessage}
             />
             <PrimaryButton
-                className="ContentAnswersModalFooter-submitButton"
+                className="bdl-ContentAnswersModalFooter-submitButton"
                 data-testid="content-answers-submit-button"
                 isDisabled={isSubmitDisabled}
             >
