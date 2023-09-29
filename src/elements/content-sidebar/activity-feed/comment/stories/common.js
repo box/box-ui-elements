@@ -95,7 +95,7 @@ export const annotationBase: Annotation = {
     type: 'annotation',
 };
 
-const annotationActivityLinkProviderProps = {
+export const annotationActivityLinkProviderProps = {
     isCurrentVersion: true,
     item: annotationBase,
     onSelect: () => {
