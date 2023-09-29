@@ -208,13 +208,15 @@ export const BaseComment = ({
             >
                 <Media.Figure>
                     <Avatar
-                        getAvatarUrl={getAvatarUrl}
-                        user={createdByUser}
                         badgeIcon={
                             annotationActivityLink && (
-                                <IconAnnotation title={<FormattedMessage {...messages.annotationBadge} />} />
+                                <IconAnnotation
+                                    title={<FormattedMessage {...messages.inlineCommentAnnotationIconTitle} />}
+                                />
                             )
                         }
+                        getAvatarUrl={getAvatarUrl}
+                        user={createdByUser}
                     />
                 </Media.Figure>
                 <Media.Body>
