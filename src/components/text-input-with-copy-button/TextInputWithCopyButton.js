@@ -26,7 +26,6 @@ type Props = {
     buttonProps?: Object,
     buttonSuccessText?: string | React.Node,
     className: string,
-    /** Disables copy function when copyDisabled is true */
     disabled?: boolean,
     /** Label displayed for the text input */
     // TODO: Make label required
