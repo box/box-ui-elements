@@ -1313,7 +1313,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <APIContext.Provider value={(this.api: any)}>
+                <APIContext.Provider value={(this.api: API)}>
                     <div
                         id={this.id}
                         className={styleClassName}
