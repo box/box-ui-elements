@@ -25,6 +25,8 @@ class Intelligence extends Base {
      *
      * @param {string} prompt - Question
      * @param {Array<object>} items - Array of items to ask about
+     * @param {Function} successCallback - Function to call with results
+     * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
      */
     async ask(prompt: string, items: Array<BoxItem>, successCallback: Function, errorCallback: ElementsErrorCallback) {
@@ -44,13 +46,6 @@ class Intelligence extends Base {
         });
 
         const url = `${this.getBaseApiUrl()}/ai/ask`;
-        const body = {
-            data: {
-                mode: 'single_item_qa',
-                prompt,
-                items,
-            },
-        };
 
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
@@ -59,9 +54,13 @@ class Intelligence extends Base {
             .post({
                 url,
                 id: items[0].id,
-                data: body,
+                data: {
+                    mode: 'single_item_qa',
+                    prompt,
+                    items,
+                },
             })
-            .then(this.successCallback)
+            .then(this.successHandler)
             .catch(this.errorHandler);
     }
 }
