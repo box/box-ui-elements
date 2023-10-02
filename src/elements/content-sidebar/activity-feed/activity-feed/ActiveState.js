@@ -35,7 +35,12 @@ import type { SelectorItems, User } from '../../../../common/types/core';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
 
-import { type OnAnnotationEdit, type OnCommentEdit } from '../comment/types';
+import type {
+    OnAnnotationEdit,
+    OnAnnotationStatusChange,
+    OnCommentEdit,
+    OnCommentStatusChange,
+} from '../comment/types';
 import AnnotationActivityLinkProvider from './AnnotationActivityLinkProvider';
 
 type Props = {
@@ -56,7 +61,7 @@ type Props = {
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: OnAnnotationEdit,
     onAnnotationSelect?: (annotation: Annotation) => void,
-    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
+    onAnnotationStatusChange: OnAnnotationStatusChange,
     onAppActivityDelete?: Function,
     onCommentDelete?: Function,
     onCommentEdit?: OnCommentEdit,
@@ -104,7 +109,7 @@ const ActiveState = ({
     onAnnotationStatusChange,
     onAppActivityDelete,
     onCommentDelete,
-    onCommentEdit,
+    onCommentEdit = noop,
     onCommentSelect = noop,
     onHideReplies = noop,
     onReplyCreate = noop,
@@ -145,6 +150,13 @@ const ActiveState = ({
     };
     const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
         onShowReplies(id, type);
+    };
+    const onCommentStatusChangeHandler: OnCommentStatusChange = (props: {
+        id: string,
+        permissions: AnnotationPermission | BoxCommentPermission,
+        status: FeedItemStatus,
+    }) => {
+        onCommentEdit({ hasMention: false, ...props });
     };
 
     const hasMultipleVersions = item => item.versions || (shouldUseUAA && item.version_start !== item.version_end);
@@ -204,6 +216,7 @@ const ActiveState = ({
                                         onReplyCreate={reply => onReplyCreate(item.id, FEED_ITEM_TYPE_COMMENT, reply)}
                                         onReplyDelete={onReplyDeleteHandler(item.id)}
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_COMMENT)}
+                                        onStatusChange={onCommentStatusChangeHandler}
                                     />
                                 ) : (
                                     <ActivityThread
@@ -324,6 +337,7 @@ const ActiveState = ({
                                         onAnnotationEdit={onAnnotationEdit}
                                         onCommentEdit={onCommentEdit}
                                         onDelete={onAnnotationDelete}
+                                        onStatusChange={onAnnotationStatusChange}
                                         onReplyCreate={reply =>
                                             onReplyCreate(item.id, FEED_ITEM_TYPE_ANNOTATION, reply)
                                         }

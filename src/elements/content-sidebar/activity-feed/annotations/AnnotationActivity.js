@@ -27,7 +27,7 @@ import IconAnnotation from '../../../../icons/two-toned/IconAnnotation';
 
 import './AnnotationActivity.scss';
 
-import { type OnAnnotationEdit } from '../comment/types';
+import type { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/types';
 
 type Props = {
     currentUser?: User,
@@ -41,7 +41,7 @@ type Props = {
     onDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onEdit?: OnAnnotationEdit,
     onSelect?: (annotation: Annotation) => any,
-    onStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
+    onStatusChange?: OnAnnotationStatusChange,
 };
 
 const AnnotationActivity = ({
@@ -108,7 +108,7 @@ const AnnotationActivity = ({
     };
     const handleSelect = () => onSelect(item);
 
-    const handleStatusChange = (newStatus: FeedItemStatus) => onStatusChange(id, newStatus, permissions);
+    const handleStatusChange = (newStatus: FeedItemStatus) => onStatusChange({ id, status: newStatus, permissions });
 
     const createdAtTimestamp = new Date(created_at).getTime();
     const createdByUser = created_by || PLACEHOLDER_USER;

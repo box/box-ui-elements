@@ -3,6 +3,12 @@ import type { AnnotationPermission, BoxCommentPermission, FeedItemStatus } from 
 
 export type OnAnnotationEdit = (args: { id: string, permissions: AnnotationPermission, text?: string }) => void;
 
+export type OnAnnotationStatusChange = (args: {
+    id: string,
+    permissions: AnnotationPermission,
+    status: FeedItemStatus,
+}) => void;
+
 export type OnCommentEdit = (args: {
     hasMention: boolean,
     id: string,
@@ -11,4 +17,11 @@ export type OnCommentEdit = (args: {
     permissions: BoxCommentPermission,
     status?: FeedItemStatus,
     text?: string,
+}) => void;
+
+export type OnCommentStatusChange = (args: {
+    hasMention?: boolean,
+    id: string,
+    permissions: BoxCommentPermission,
+    status: FeedItemStatus,
 }) => void;

@@ -18,7 +18,7 @@ import type { AnnotationThreadError } from './types';
 
 import './AnnotationThreadContent.scss';
 
-import type { OnAnnotationEdit } from '../comment/types';
+import type { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/types';
 
 type Props = {
     annotation?: Annotation,
@@ -31,7 +31,7 @@ type Props = {
     mentionSelectorContacts: SelectorItems<>,
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
     onAnnotationEdit?: OnAnnotationEdit,
-    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
+    onAnnotationStatusChange: OnAnnotationStatusChange,
     onReplyCreate?: (text: string) => void,
     onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
     onReplyEdit?: (

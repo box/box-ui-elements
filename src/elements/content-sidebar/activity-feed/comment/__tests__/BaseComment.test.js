@@ -246,14 +246,13 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
     `(
         `should allow user to resolve / unresolve if they have resolve permissions, edit handler is defined and given status is $status`,
         ({ status, menuItemTestId, expectedNewStatus }) => {
-            const mockOnEdit = jest.fn();
+            const mockOnStatusChange = jest.fn();
 
             getWrapper({
-                hasMention: false,
                 permissions: { can_resolve: true, can_edit: false, can_delete: false },
                 type: 'task',
                 status,
-                onCommentEdit: mockOnEdit,
+                onStatusChange: mockOnStatusChange,
             });
 
             const menuItem = screen.queryByTestId('comment-actions-menu');
@@ -265,8 +264,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
             expect(screen.queryByTestId(menuItemTestId)).not.toBeInTheDocument();
 
-            expect(mockOnEdit).toBeCalledWith({
-                hasMention: false,
+            expect(mockOnStatusChange).toBeCalledWith({
                 id: '1',
                 permissions: {
                     can_delete: false,
