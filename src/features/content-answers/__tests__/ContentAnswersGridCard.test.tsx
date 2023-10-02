@@ -9,7 +9,8 @@ describe('features/content-answers/ContentAnswersGridCard', () => {
     };
 
     test('should render the grid card if there are children', () => {
-        renderComponent({ children: <div /> });
+        renderComponent({ children: <div data-testid="testChildren" /> });
         expect(screen.queryByTestId('content-answers-grid-card')).toBeInTheDocument();
+        expect(screen.queryByTestId('testChildren')).toBeInTheDocument();
     });
 });

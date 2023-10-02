@@ -19,7 +19,6 @@ describe('features/content-answers/WelcomeMessage', () => {
         const mockFileName = 'testFile';
         renderComponent({ fileName: mockFileName });
         const fileNameContent = screen.getByTestId('content-answers-filename').textContent;
-        // remove the quotes wrapped outside of file name
-        expect(fileNameContent?.slice(1, -1)).toEqual(mockFileName);
+        expect(fileNameContent).toEqual(`“${mockFileName}”`);
     });
 });
