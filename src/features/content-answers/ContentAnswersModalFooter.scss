@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.ContentAnswersModalFooter {
+.bdl-ContentAnswersModalFooter {
     position: relative;
     z-index: 1;
     display: flex;
@@ -10,12 +10,12 @@
     border-radius: 0 0 $bdl-border-radius-size-xlarge $bdl-border-radius-size-xlarge;
     box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 -1px 0 $bdl-gray-10;
 
-    .ContentAnswersModalFooter-avatar {
+    .bdl-ContentAnswersModalFooter-avatar {
         height: 32px;
         margin-bottom: 4px;
     }
 
-    .ContentAnswersModalFooter-submitButton {
+    .bdl-ContentAnswersModalFooter-submitButton {
         height: $bdl-btn-height-large;
         margin: 0;
         font-size: 14px;
