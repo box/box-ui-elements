@@ -1309,10 +1309,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
-        /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
+                <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown}>
                     {hasHeader && (
                         <PreviewHeader
                             file={file}
