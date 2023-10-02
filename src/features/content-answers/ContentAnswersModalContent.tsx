@@ -4,7 +4,7 @@ import './ContentAnswersModalContent.scss';
 
 const ContentAnswersModalContent = () => {
     // TODO: Add Modal Content Detail
-    return <div className="ContentAnswersModalContent">Modal Content</div>;
+    return <div className="bdl-ContentAnswersModalContent">Modal Content</div>;
 };
 
 export default ContentAnswersModalContent;

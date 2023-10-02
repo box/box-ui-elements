@@ -19,13 +19,18 @@ type Props = {
 const ContentAnswersModal = ({ isOpen, onRequestClose }: Props) => {
     return (
         <Modal
-            className="ContentAnswersModal"
+            className="bdl-ContentAnswersModal"
             data-testid="content-answers-modal"
             isOpen={isOpen}
             onRequestClose={onRequestClose}
             title={
                 <>
-                    <BoxAiLogo className="BoxAiLogo" data-testid="content-answers-icon-color" width={32} height={32} />
+                    <BoxAiLogo
+                        className="bdl-BoxAiLogo"
+                        data-testid="content-answers-icon-color"
+                        width={32}
+                        height={32}
+                    />
                     <FormattedMessage {...messages.contentAnswersTitle} />
                 </>
             }
