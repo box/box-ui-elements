@@ -19,8 +19,8 @@ import uniqueid from 'lodash/uniqueId';
 import Measure from 'react-measure';
 import { withRouter } from 'react-router-dom';
 import type { ContextRouter } from 'react-router-dom';
-import Client from 'box-typescript-sdk-gen/lib/client.generated.js';
-import { DeveloperTokenAuth } from 'box-typescript-sdk-gen/lib/developerTokenAuth.generated.js';
+import { BoxClient } from 'box-typescript-sdk-gen/lib/client.generated.js';
+import { BoxDeveloperTokenAuth } from 'box-typescript-sdk-gen/lib/developerTokenAuth.generated.js';
 
 import { decode } from '../../utils/keys';
 import makeResponsive from '../common/makeResponsive';
@@ -307,8 +307,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             endMarkName: MARK_NAME_JS_READY,
         });
 
-        const auth = new DeveloperTokenAuth({ token: 'token' });
-        this.client = new Client({ auth });
+        const auth = new BoxDeveloperTokenAuth({ token: 'iJnkBzTpQzLkeToFAF3hn5xxqL0fxbdD' });
+        this.client = new BoxClient({ auth });
     }
 
     /**
@@ -1259,7 +1259,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const response = await this.client.intelligence.createAiAsk({
             mode: 'single_item_qa',
             prompt,
-            items: [{ id: 'id', type: 'file' }],
+            items: [{ id: '1222291629977', type: 'file' }],
         });
 
         console.log(`The answer is: ${response.answer}`);
