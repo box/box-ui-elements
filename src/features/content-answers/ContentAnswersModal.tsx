@@ -6,17 +6,21 @@ import ContentAnswersModalContent from './ContentAnswersModalContent';
 import ContentAnswersModalFooter from './ContentAnswersModalFooter';
 // @ts-ignore flow import
 import Modal from '../../components/modal/Modal';
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
+import { BoxItem } from '../../common/types/core';
 
 import messages from './messages';
 
 import './ContentAnswersModal.scss';
 
 type Props = {
+    file: BoxItem;
     isOpen: boolean;
     onRequestClose: () => void;
 };
 
-const ContentAnswersModal = ({ isOpen, onRequestClose }: Props) => {
+const ContentAnswersModal = ({ file, isOpen, onRequestClose }: Props) => {
     return (
         <Modal
             className="bdl-ContentAnswersModal"
@@ -36,7 +40,7 @@ const ContentAnswersModal = ({ isOpen, onRequestClose }: Props) => {
             }
         >
             <ContentAnswersModalContent />
-            <ContentAnswersModalFooter />
+            <ContentAnswersModalFooter data-testid="content-answers-modal-footer" file={file} />
         </Modal>
     );
 };
