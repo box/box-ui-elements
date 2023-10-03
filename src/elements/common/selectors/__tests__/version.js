@@ -10,6 +10,7 @@ import {
 
 describe('elements/common/selectors/version', () => {
     const defaultUser = { name: 'Test User', id: 10 };
+    const promotedByUser = { name: 'Promote User', id: 13 };
     const restoreDate = '2019-04-01T00:00:00';
     const restoreUser = { name: 'Restore User', id: 12 };
     const trashedDate = '2019-05-01T00:00:00';
@@ -36,20 +37,21 @@ describe('elements/common/selectors/version', () => {
 
     describe('getVersionUser()', () => {
         test.each`
-            modified_by         | restored_by    | trashed_by     | uploader_display_name | expected
-            ${null}             | ${null}        | ${null}        | ${null}               | ${PLACEHOLDER_USER}
-            ${null}             | ${null}        | ${null}        | ${FILE_REQUEST_NAME}  | ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }}
-            ${PLACEHOLDER_USER} | ${null}        | ${null}        | ${null}               | ${PLACEHOLDER_USER}
-            ${PLACEHOLDER_USER} | ${null}        | ${null}        | ${FILE_REQUEST_NAME}  | ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }}
-            ${defaultUser}      | ${null}        | ${null}        | ${null}               | ${defaultUser}
-            ${defaultUser}      | ${restoreUser} | ${null}        | ${null}               | ${restoreUser}
-            ${defaultUser}      | ${restoreUser} | ${trashedUser} | ${null}               | ${restoreUser}
-            ${defaultUser}      | ${null}        | ${trashedUser} | ${null}               | ${trashedUser}
+            description                                      | modified_by         | promoted_by       | restored_by    | trashed_by     | uploader_display_name | expected
+            ${'All null values'}                             | ${null}             | ${null}           | ${null}        | ${null}        | ${null}               | ${PLACEHOLDER_USER}
+            ${'Uploader Display Name'}                       | ${null}             | ${null}           | ${null}        | ${null}        | ${FILE_REQUEST_NAME}  | ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }}
+            ${'Placeholder User'}                            | ${PLACEHOLDER_USER} | ${null}           | ${null}        | ${null}        | ${null}               | ${PLACEHOLDER_USER}
+            ${'Placeholder User with Uploader Display Name'} | ${PLACEHOLDER_USER} | ${null}           | ${null}        | ${null}        | ${FILE_REQUEST_NAME}  | ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }}
+            ${'Default User'}                                | ${defaultUser}      | ${null}           | ${null}        | ${null}        | ${null}               | ${defaultUser}
+            ${'Promoted User'}                               | ${defaultUser}      | ${promotedByUser} | ${null}        | ${null}        | ${null}               | ${promotedByUser}
+            ${'Restored User'}                               | ${defaultUser}      | ${promotedByUser} | ${restoreUser} | ${null}        | ${null}               | ${restoreUser}
+            ${'Trashed User'}                                | ${defaultUser}      | ${promotedByUser} | ${restoreUser} | ${trashedUser} | ${null}               | ${restoreUser}
         `(
-            'should return the most relevant user',
-            ({ expected, modified_by, restored_by, trashed_by, uploader_display_name }) => {
+            'should return the most relevant user - $description',
+            ({ expected, modified_by, promoted_by, restored_by, trashed_by, uploader_display_name }) => {
                 const version = {
                     modified_by,
+                    promoted_by,
                     restored_by,
                     trashed_by,
                     uploader_display_name,
