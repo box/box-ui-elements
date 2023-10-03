@@ -1,9 +1,7 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import ContentAnswersModalError from '../ContentAnswersModalError';
-
-import messages from '../messages';
 
 describe('features/content-answers/ContentAnswersModalError', () => {
     const renderComponent = (props?: {}) => render(<ContentAnswersModalError {...props} />);
