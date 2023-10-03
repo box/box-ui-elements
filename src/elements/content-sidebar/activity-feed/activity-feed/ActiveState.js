@@ -109,7 +109,7 @@ const ActiveState = ({
     onAnnotationStatusChange,
     onAppActivityDelete,
     onCommentDelete,
-    onCommentEdit = noop,
+    onCommentEdit,
     onCommentSelect = noop,
     onHideReplies = noop,
     onReplyCreate = noop,
@@ -156,7 +156,9 @@ const ActiveState = ({
         permissions: AnnotationPermission | BoxCommentPermission,
         status: FeedItemStatus,
     }) => {
-        onCommentEdit({ hasMention: false, ...props });
+        if (onCommentEdit) {
+            onCommentEdit({ hasMention: false, ...props });
+        }
     };
 
     const hasMultipleVersions = item => item.versions || (shouldUseUAA && item.version_start !== item.version_end);
