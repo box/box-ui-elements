@@ -79,7 +79,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
     test('should render annotation badge when annotationActivityLink prop is defined', () => {
         getWrapper({ ...annotation, ...repliesProps });
-        expect(screen.getByText(localize(messages.annotationBadge.id))).toBeInTheDocument();
+        expect(screen.getByText(localize(messages.inlineCommentAnnotationIconTitle.id))).toBeInTheDocument();
     });
 
     test.each`

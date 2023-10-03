@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import getProp from 'lodash/get';
 import ContentAnswersModal from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 // @ts-ignore: no ts definition
@@ -15,7 +16,6 @@ type Props = {
 };
 
 const ContentAnswers = ({ file }: Props) => {
-    const fileName = file && file.name;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleClick = () => {
@@ -26,10 +26,20 @@ const ContentAnswers = ({ file }: Props) => {
         setIsModalOpen(false);
     };
 
+    const currentExtension = getProp(file, 'extension');
     return (
         <div className="bdl-ContentAnswers">
-            <ContentAnswersOpenButton onClick={handleClick} />
-            <ContentAnswersModal fileName={fileName} isOpen={isModalOpen} onRequestClose={handleClose} />
+            <ContentAnswersOpenButton
+                data-testid="content-answers-open-button"
+                fileExtension={currentExtension}
+                onClick={handleClick}
+            />
+            <ContentAnswersModal
+                data-testid="content-answers-modal"
+                file={file}
+                isOpen={isModalOpen}
+                onRequestClose={handleClose}
+            />
         </div>
     );
 };
