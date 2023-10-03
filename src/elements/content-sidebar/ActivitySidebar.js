@@ -18,6 +18,7 @@ import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
+import { getParsedFileActivitiesResponse } from '../../api/Feed';
 import { WithAnnotatorContextProps, withAnnotatorContext } from '../common/annotator-context';
 import { EVENT_DATA_READY, EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError } from '../../utils/error';
@@ -39,6 +40,11 @@ import {
     FEED_ITEM_TYPE_COMMENT,
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
@@ -1108,26 +1114,61 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
     handleItemsFiltered = (status?: ActivityFilterItemType) => {
         const { onFilterChange } = this.props;
-
-        this.setState({ feedItemsStatusFilter: status });
+        this.setState({ feedItemsStatusFilter: status }, this.getFilteredFeedItems);
         onFilterChange(status);
+    };
+
+    getFilters = (status?: ActivityFilterItemType) => {
+        let filters = [
+            FILE_ACTIVITY_TYPE_ANNOTATION,
+            FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+            FILE_ACTIVITY_TYPE_COMMENT,
+            FILE_ACTIVITY_TYPE_TASK,
+            FILE_ACTIVITY_TYPE_VERSION,
+        ];
+
+        if (status === ACTIVITY_FILTER_OPTION_UNRESOLVED || status === ACTIVITY_FILTER_OPTION_RESOLVED) {
+            filters = [FILE_ACTIVITY_TYPE_ANNOTATION, FILE_ACTIVITY_TYPE_COMMENT, FILE_ACTIVITY_TYPE_VERSION];
+        }
+
+        if (status === FILE_ACTIVITY_TYPE_TASK) {
+            filters = [FILE_ACTIVITY_TYPE_TASK, FILE_ACTIVITY_TYPE_VERSION];
+        }
+
+        return filters;
     };
 
     getFilteredFeedItems = (): FeedItems | typeof undefined => {
         const { feedItems, feedItemsStatusFilter } = this.state;
-        if (!feedItems || !feedItemsStatusFilter || feedItemsStatusFilter === ACTIVITY_FILTER_OPTION_ALL) {
-            return feedItems;
-        }
-        // Filter is completed on two properties (status and type) because filtering on comments (resolved vs. unresolved)
-        // requires looking at item status to see if it is open or resolved. To filter all tasks, we need to look at the
-        // item type. Item type is also used to keep versions in the feed. Task also has a status but it's status will be
-        // "NOT_STARTED" or "COMPLETED" so it will not conflict with comment's status.
-        return feedItems.filter(item => {
-            return (
-                item.status === feedItemsStatusFilter ||
-                item.type === FEED_ITEM_TYPE_VERSION ||
-                item.type === feedItemsStatusFilter
+        const { api, file } = this.props;
+        const { permissions = {} } = file;
+        const feedAPI = api.getFeedAPI(false);
+        feedAPI.file = file;
+
+        // Clear the feedItems before fetching new data to trigger loading indicator
+        this.setState({ feedItems: undefined });
+
+        // Get the file activity filters
+        const filters = this.getFilters(feedItemsStatusFilter);
+
+        feedAPI.fetchFileActivities(permissions, filters, true).then(items => {
+            const parsedFeedItems = getParsedFileActivitiesResponse(items);
+
+            if (!feedItems || !feedItemsStatusFilter || feedItemsStatusFilter === ACTIVITY_FILTER_OPTION_ALL) {
+                return this.setState({ feedItems: parsedFeedItems });
+            }
+
+            // Filter is completed on two properties (status and type) because filtering on comments (resolved vs. unresolved)
+            // requires looking at item status to see if it is open or resolved. Item type is also used to keep versions in the feed.
+            // Task also has a status but it's status will be "NOT_STARTED" or "COMPLETED" so it will not conflict with comment's status.
+            const filteredActivity = parsedFeedItems.filter(
+                item =>
+                    item.status === feedItemsStatusFilter ||
+                    item.type === FEED_ITEM_TYPE_VERSION ||
+                    item.type === feedItemsStatusFilter,
             );
+
+            return this.setState({ feedItems: filteredActivity });
         });
     };
 
@@ -1234,7 +1275,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getUserProfileUrl,
             onTaskView,
         } = this.props;
-        const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
+        const {
+            activityFeedError,
+            approverSelectorContacts,
+            contactsLoaded,
+            feedItems,
+            mentionSelectorContacts,
+        } = this.state;
         const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
         const shouldUseUAA = isFeatureEnabled(features, 'activityFeed.uaaIntegration.enabled');
 
@@ -1253,7 +1300,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     approverSelectorContacts={approverSelectorContacts}
                     currentUser={currentUser}
                     currentUserError={currentUserError}
-                    feedItems={this.getFilteredFeedItems()}
+                    feedItems={feedItems}
                     file={file}
                     getApproverWithQuery={this.getApprover}
                     getAvatarUrl={this.getAvatarUrl}

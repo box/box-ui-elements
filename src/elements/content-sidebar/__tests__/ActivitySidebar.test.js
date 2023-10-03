@@ -4,13 +4,17 @@ import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import ActivitySidebarFilter from '../ActivitySidebarFilter';
 import { filterableActivityFeedItems, formattedReplies } from '../fixtures';
-import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
+import {
+    FEED_ITEM_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
+} from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
-
-// const mockReplace = jest.fn();
-// jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const userError = 'Bad box user!';
 
@@ -26,6 +30,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         deleteTaskNew: jest.fn(),
         deleteThreadedComment: jest.fn(),
         feedItems: jest.fn(),
+        fetchFileActivities: jest.fn(),
         fetchReplies: jest.fn(),
         fetchThreadedComment: jest.fn(),
         updateAnnotation: jest.fn(),
@@ -1496,35 +1501,220 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getFilteredFeedItems()', () => {
-        const {
-            annotationOpen: expectedAnnotationOpen,
-            annotationResolved: expectedAnnotationResolved,
-            commentOpen: expectedCommentOpen,
-            commentResolved: expectedCommentResolved,
-            taskItem: expectedTaskItem,
-            versionItem: expectedVersionItem,
-        } = filterableActivityFeedItems;
-
+    describe('getFilters()', () => {
         test.each`
             status        | expected
-            ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
-            ${'open'}     | ${[expectedAnnotationOpen, expectedCommentOpen, expectedVersionItem]}
-            ${'resolved'} | ${[expectedAnnotationResolved, expectedCommentResolved, expectedVersionItem]}
-            ${'task'}     | ${[expectedTaskItem, expectedVersionItem]}
+            ${undefined}  | ${[FILE_ACTIVITY_TYPE_ANNOTATION, FILE_ACTIVITY_TYPE_APP_ACTIVITY, FILE_ACTIVITY_TYPE_COMMENT, FILE_ACTIVITY_TYPE_TASK, FILE_ACTIVITY_TYPE_VERSION]}
+            ${'open'}     | ${[FILE_ACTIVITY_TYPE_ANNOTATION, FILE_ACTIVITY_TYPE_COMMENT, FILE_ACTIVITY_TYPE_VERSION]}
+            ${'resolved'} | ${[FILE_ACTIVITY_TYPE_ANNOTATION, FILE_ACTIVITY_TYPE_COMMENT, FILE_ACTIVITY_TYPE_VERSION]}
+            ${'task'}     | ${[FILE_ACTIVITY_TYPE_TASK, FILE_ACTIVITY_TYPE_VERSION]}
+        `('should return the correct filters when status equals to $status', ({ status, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({
+                feedItemsStatusFilter: status,
+            });
+
+            expect(instance.getFilters(status)).toMatchObject(expected);
+        });
+    });
+
+    describe('getFilteredFeedItems()', () => {
+        const {
+            annotationOpen,
+            annotationResolved,
+            commentOpen,
+            commentResolved,
+            taskItem,
+            versionItem,
+        } = filterableActivityFeedItems;
+
+        const expectedAnnotationOpen = {
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                id: '6187936317',
+                login: 'jdoe@box.com',
+                name: 'Jhon',
+                type: 'user',
+            },
+            id: 'open2',
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+                can_reply: true,
+            },
+            status: 'open',
+        };
+
+        const expectedAnnotationResolved = {
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                type: 'user',
+                id: '6187936317',
+                name: 'Jhon',
+                login: 'jdoe@box.com',
+            },
+            description: { message: 'test' },
+            id: 'open2',
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: { can_delete: true, can_edit: true, can_reply: true },
+            status: 'resolved',
+        };
+
+        const expectedCommentOpen = {
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                id: '6187936317',
+                login: 'jdoe@box.com',
+                name: 'Jhon',
+                type: 'user',
+            },
+            id: 'open1',
+            message: 'test',
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: {
+                can_delete: true,
+                can_edit: true,
+                can_reply: true,
+            },
+            status: 'open',
+            tagged_message: 'test',
+        };
+
+        const expectedCommentResolved = {
+            created_at: '2022-07-26T09:08:20-07:00',
+            created_by: {
+                type: 'user',
+                id: '6187936317',
+                name: 'Jhon',
+                login: 'jdoe@box.com',
+            },
+            id: 'open1',
+            message: 'test',
+            modified_at: '2022-07-26T09:08:20-07:00',
+            permissions: { can_delete: true, can_edit: true, can_reply: true },
+            status: 'resolved',
+            tagged_message: 'test',
+        };
+
+        const expectedTaskItem = {
+            assigned_to: {
+                entries: [
+                    {
+                        id: '1',
+                        permissions: {
+                            can_delete: false,
+                            can_update: false,
+                        },
+                        role: 'ASSIGNEE',
+                        status: 'NOT_STARTED',
+                        target: {
+                            avatar_url: '',
+                            id: '2',
+                            name: 'Beyonce',
+                            type: 'user',
+                        },
+                        type: 'task_collaborator',
+                    },
+                ],
+                limit: 10,
+                next_marker: null,
+            },
+            created_at: '2019-01-01',
+            created_by: {
+                target: {
+                    id: '000',
+                    role: 'CREATOR',
+                    status: 'NOT_STARTED',
+                    target: {
+                        id: '100',
+                        name: 'Jay-Z',
+                    },
+                    type: 'task_collaborator',
+                },
+            },
+            due_at: '2019-02-02',
+            id: '0',
+            permissions: {
+                can_update: false,
+                can_delete: false,
+                can_create_task_collaborator: false,
+                can_create_task_link: false,
+            },
+            status: 'NOT_STARTED',
+            task_links: {
+                entries: [
+                    {
+                        id: '03',
+                        permissions: {
+                            can_delete: false,
+                            can_update: false,
+                        },
+                        target: {
+                            id: '4',
+                            type: 'file',
+                        },
+                        type: 'task_link',
+                    },
+                ],
+                limit: 1,
+                next_marker: null,
+            },
+        };
+
+        const expectedVersionItem = {
+            id: '1060370614597',
+            authenticated_download_url: 'https://someurl.com',
+            created_at: '2022-07-06T03:01:28-07:00',
+            extension: 'boxnote',
+            is_download_available: true,
+            modified_at: '2022-07-06T03:01:28-07:00',
+            modified_by: {
+                id: '18836063940',
+                login: 'jdoe@box.com',
+                name: 'John Doe',
+                type: 'user',
+            },
+            name: 'Title',
+            permissions: {
+                can_annotate: false,
+                can_create_annotations: false,
+                can_delete: true,
+                can_download: true,
+                can_preview: true,
+                can_view_annotations: false,
+                can_view_annotations_all: true,
+                can_view_annotations_self: true,
+            },
+            restored_at: null,
+            restored_by: null,
+            retention: null,
+            size: 4159,
+            trashed_at: null,
+            trashed_by: null,
+            type: 'file_version',
+            uploader_display_name: 'John Doe',
+            version_number: undefined,
+        };
+
+        test.each`
+            status        | entries                                                                                      | expected
+            ${undefined}  | ${[annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem, versionItem]} | ${[expectedVersionItem, expectedTaskItem, expectedCommentResolved, expectedCommentOpen, expectedAnnotationResolved, expectedAnnotationOpen]}
+            ${'open'}     | ${[annotationOpen, annotationResolved, commentOpen, commentResolved, versionItem]}           | ${[expectedVersionItem, expectedCommentOpen, expectedAnnotationOpen]}
+            ${'resolved'} | ${[annotationOpen, annotationResolved, commentOpen, commentResolved, versionItem]}           | ${[expectedVersionItem, expectedCommentResolved, expectedAnnotationResolved]}
+            ${'task'}     | ${[taskItem, versionItem]}                                                                   | ${[expectedVersionItem, expectedTaskItem]}
         `(
-            'should filter feed items of type "comment" or "annotation" based on status equal to $status',
-            ({ status, expected }) => {
-                const {
-                    annotationOpen,
-                    annotationResolved,
-                    commentOpen,
-                    commentResolved,
-                    taskItem,
-                    versionItem,
-                } = cloneDeep(filterableActivityFeedItems);
+            'should correctly filter feed items when status is equal to $status',
+            async ({ status, entries, expected }) => {
                 const wrapper = getWrapper();
                 const instance = wrapper.instance();
+
+                api.getFeedAPI().fetchFileActivities = jest
+                    .fn()
+                    .mockImplementationOnce(() => Promise.resolve({ entries }));
+
                 instance.setState({
                     feedItems: [
                         annotationOpen,
@@ -1538,7 +1728,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.setState({
                     feedItemsStatusFilter: status,
                 });
-                expect(instance.getFilteredFeedItems()).toMatchObject(expected);
+
+                await instance.getFilteredFeedItems();
+
+                expect(instance.state.feedItems).toMatchObject(expected);
             },
         );
     });
@@ -1557,8 +1750,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const wrapper = getWrapper({ onFilterChange: mockOnFilterChange });
                 const instance = wrapper.instance();
                 instance.setState = jest.fn();
+                instance.getFilteredFeedItems = jest.fn();
                 instance.handleItemsFiltered(status);
-                expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
+                expect(instance.setState).toBeCalledWith(
+                    { feedItemsStatusFilter: expected },
+                    instance.getFilteredFeedItems,
+                );
                 expect(mockOnFilterChange).toBeCalledWith(expected);
             },
         );
