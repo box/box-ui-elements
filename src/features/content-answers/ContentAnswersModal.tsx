@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import BoxAiLogo from '../../icon/logo/BoxAiLogo';
@@ -21,7 +21,6 @@ type Props = {
 };
 
 const ContentAnswersModal = ({ file, isOpen, onRequestClose }: Props) => {
-    const [hasError, setHasError] = useState(true);
     return (
         <Modal
             className="bdl-ContentAnswersModal"
@@ -40,8 +39,8 @@ const ContentAnswersModal = ({ file, isOpen, onRequestClose }: Props) => {
                 </>
             }
         >
-            <ContentAnswersModalContent hasError={hasError} />
-            {!hasError && <ContentAnswersModalFooter data-testid="content-answers-modal-footer" file={file} />}
+            <ContentAnswersModalContent />
+            <ContentAnswersModalFooter data-testid="content-answers-modal-footer" file={file} />
         </Modal>
     );
 };
