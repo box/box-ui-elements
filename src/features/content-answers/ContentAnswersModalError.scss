@@ -1,0 +1,29 @@
+@import '../../styles/variables';
+
+.bdl-ContentAnswersModalError {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+
+    &-illustration {
+        margin-block-end: 1.5rem;
+    }
+
+    h2 {
+        margin: 0;
+        font-weight: bold;
+        font-size: 1rem;
+        margin-block-end: .75rem;
+    }
+
+    p {
+        margin: 0;
+        font-weight: normal;
+        font-size: .875rem;
+        letter-spacing: .01875rem;
+    }
+}
