@@ -121,6 +121,7 @@ export const FIELD_URL = 'url';
 export const FIELD_CREATED_BY = 'created_by';
 export const FIELD_MODIFIED_BY = 'modified_by';
 export const FIELD_OWNED_BY = 'owned_by';
+export const FIELD_PROMOTED_BY = 'promoted_by';
 export const FIELD_RESTORED_BY = 'restored_by';
 export const FIELD_TRASHED_BY = 'trashed_by';
 export const FIELD_DESCRIPTION = 'description';
