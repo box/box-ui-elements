@@ -10,7 +10,7 @@ pull_request_rules:
       conditions:
           - author=boxmoji
           - base=master
-          - files~=^[a-z]{2}-[A-Z]{2}\.properties$
+          - files~=^i18n/
           - status-success="Validate"
           - status-success=license/cla
           - status-success=lint_test_build
