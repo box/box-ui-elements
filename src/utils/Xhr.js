@@ -36,7 +36,7 @@ class Xhr {
 
     axios: Axios;
 
-    axiosSource: CancelTokenSource;
+    axiosAbortController: AbortController;
 
     clientName: ?string;
 
@@ -107,7 +107,7 @@ class Xhr {
         this.version = version;
 
         this.axios = axios.create();
-        this.axiosSource = axios.CancelToken.source();
+        this.axiosAbortController = new AbortController();
         this.axios.interceptors.response.use(this.responseInterceptor, this.errorInterceptor);
 
         if (typeof requestInterceptor === 'function') {
@@ -271,7 +271,7 @@ class Xhr {
     }): Promise<StringAnyMap> {
         return this.getHeaders(id, headers).then(hdrs =>
             this.axios.get(url, {
-                cancelToken: this.axiosSource.token,
+                signal: this.axiosAbortController.signal,
                 params,
                 headers: hdrs,
                 parsedUrl: this.getParsedUrl(url),
@@ -487,7 +487,7 @@ class Xhr {
                     method,
                     headers: hdrs,
                     onUploadProgress: progressHandlerToUse,
-                    cancelToken: this.axiosSource.token,
+                    signal: this.axiosAbortController.signal,
                 })
                     .then(response => {
                         clearTimeout(idleTimeout);
@@ -506,13 +506,13 @@ class Xhr {
      *
      * @return {void}
      */
-    abort(): void {
+    abort(reason: string): void {
         if (this.retryTimeout) {
             clearTimeout(this.retryTimeout);
         }
-        if (this.axiosSource) {
-            this.axiosSource.cancel();
-            this.axiosSource = axios.CancelToken.source();
+
+        if (this.axiosAbortController) {
+            this.axiosAbortController.abort(reason);
         }
     }
 }

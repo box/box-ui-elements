@@ -6,7 +6,7 @@
 /* eslint-disable no-unused-vars */
 // NOTE: all of these imports resolve to `any`
 // see https://github.com/facebook/flow/issues/7574
-import type { $AxiosXHR, $AxiosError, Axios, CancelTokenSource } from 'axios';
+import type { $AxiosXHR, $AxiosError, Axios, AbortController } from 'axios';
 import type FolderAPI from '../src/api/Folder';
 import type FileAPI from '../src/api/File';
 import type WebLinkAPI from '../src/api/WebLink';
