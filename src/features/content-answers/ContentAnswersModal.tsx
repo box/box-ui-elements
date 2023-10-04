@@ -6,32 +6,41 @@ import ContentAnswersModalContent from './ContentAnswersModalContent';
 import ContentAnswersModalFooter from './ContentAnswersModalFooter';
 // @ts-ignore flow import
 import Modal from '../../components/modal/Modal';
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
+import { BoxItem } from '../../common/types/core';
 
 import messages from './messages';
 
 import './ContentAnswersModal.scss';
 
 type Props = {
+    file: BoxItem;
     isOpen: boolean;
     onRequestClose: () => void;
 };
 
-const ContentAnswersModal = ({ isOpen, onRequestClose }: Props) => {
+const ContentAnswersModal = ({ file, isOpen, onRequestClose }: Props) => {
     return (
         <Modal
-            className="ContentAnswersModal"
+            className="bdl-ContentAnswersModal"
             data-testid="content-answers-modal"
             isOpen={isOpen}
             onRequestClose={onRequestClose}
             title={
                 <>
-                    <BoxAiLogo className="BoxAiLogo" data-testid="content-answers-icon-color" width={32} height={32} />
+                    <BoxAiLogo
+                        className="bdl-BoxAiLogo"
+                        data-testid="content-answers-icon-color"
+                        width={32}
+                        height={32}
+                    />
                     <FormattedMessage {...messages.contentAnswersTitle} />
                 </>
             }
         >
             <ContentAnswersModalContent />
-            <ContentAnswersModalFooter />
+            <ContentAnswersModalFooter data-testid="content-answers-modal-footer" file={file} />
         </Modal>
     );
 };

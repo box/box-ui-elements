@@ -159,11 +159,16 @@ class TextInputWithCopyButton extends React.PureComponent<Props, State> {
     };
 
     handleCopyEvent = (event: SyntheticEvent<>) => {
-        this.animateCopyButton();
+        const { disabled, onCopySuccess } = this.props;
 
-        const { onCopySuccess } = this.props;
-        if (onCopySuccess) {
-            onCopySuccess(event);
+        if (disabled) {
+            event.preventDefault();
+        } else {
+            this.animateCopyButton();
+
+            if (onCopySuccess) {
+                onCopySuccess(event);
+            }
         }
     };
 

@@ -1,9 +1,11 @@
 @import '../../../common/variables';
 
 .bcs-Replies {
+    margin-top: $bdl-grid-unit * 3;
+
     .bcs-Replies-content {
         position: relative;
-        margin-bottom: $bdl-grid-unit * 6;
+        margin-bottom: $bdl-grid-unit * 4;
         padding-left: $bdl-grid-unit * 5;
 
         .bcs-Replies-list {
@@ -16,7 +18,7 @@
         }
 
         li:not(:last-child) {
-            margin-bottom: $bdl-grid-unit * 7;
+            margin-bottom: $bdl-grid-unit * 4;
         }
     }
 

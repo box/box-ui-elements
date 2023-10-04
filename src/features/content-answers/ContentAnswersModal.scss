@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.ContentAnswersModal {
+.bdl-ContentAnswersModal {
     .modal-dialog-container {
         display: flex;
         flex-basis: 0;
@@ -30,7 +30,7 @@
             align-items: center;
         }
 
-        .BoxAiLogo {
+        .bdl-BoxAiLogo {
             margin-right: 12px;
         }
     }

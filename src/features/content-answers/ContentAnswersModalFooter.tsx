@@ -6,17 +6,25 @@ import PrimaryButton from '../../components/primary-button';
 // @ts-ignore flow import
 import TextArea from '../../components/text-area';
 import { TEXT_AREA } from './constants';
+import withCurrentUser from '../../elements/common/current-user';
+
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
+import { BoxItem, User } from '../../../common/types/core';
 
 import './ContentAnswersModalFooter.scss';
 
 import messages from './messages';
 
 type Props = {
+    file: BoxItem;
+    currentUser?: User;
     intl: IntlShape;
 };
 
-const ContentAnswersModalFooter = ({ intl }: Props) => {
+const ContentAnswersModalFooter = ({ currentUser, intl }: Props) => {
     const { formatMessage } = intl;
+    const { id, name } = currentUser || {};
     const [inputMessage, setInputMessage] = useState('');
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const [hasMaxCharacterError, setHasMaxCharacterError] = useState(false);
@@ -32,9 +40,9 @@ const ContentAnswersModalFooter = ({ intl }: Props) => {
     };
 
     return (
-        <div className="ContentAnswersModalFooter">
-            <div className="ContentAnswersModalFooter-avatar">
-                <Avatar />
+        <div className="bdl-ContentAnswersModalFooter">
+            <div className="bdl-ContentAnswersModalFooter-avatar">
+                <Avatar id={id} name={name} />
             </div>
             <TextArea
                 data-testid="content-answers-question-input"
@@ -52,7 +60,7 @@ const ContentAnswersModalFooter = ({ intl }: Props) => {
                 value={inputMessage}
             />
             <PrimaryButton
-                className="ContentAnswersModalFooter-submitButton"
+                className="bdl-ContentAnswersModalFooter-submitButton"
                 data-testid="content-answers-submit-button"
                 isDisabled={isSubmitDisabled}
             >
@@ -62,4 +70,4 @@ const ContentAnswersModalFooter = ({ intl }: Props) => {
     );
 };
 
-export default injectIntl(ContentAnswersModalFooter);
+export default withCurrentUser(injectIntl(ContentAnswersModalFooter));
