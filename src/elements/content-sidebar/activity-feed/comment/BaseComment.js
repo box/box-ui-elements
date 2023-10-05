@@ -4,6 +4,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
 
+import { useActivityFeedContext } from '../utils/ActivityFeedContext';
 import { BaseCommentMenuWrapper } from './components/BaseCommentMenuWrapper';
 import { BaseCommentInfo } from './components/BaseCommentInfo';
 import { COMMENT_STATUS_RESOLVED } from '../../../../constants';
@@ -98,6 +99,7 @@ export const BaseComment = ({
     translatedTaggedMessage,
     translations,
 }: BaseCommentProps) => {
+    const { setActivityFeedRef } = useActivityFeedContext();
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
 
@@ -108,12 +110,14 @@ export const BaseComment = ({
 
     const commentFormCancelHandler = (): void => {
         setIsInputOpen(false);
+        setActivityFeedRef({ property: 'isEditingAComment', value: false });
         setIsEditing(false);
         onSelect(false);
     };
 
     const commentFormSubmitHandler = (): void => {
         setIsInputOpen(false);
+        setActivityFeedRef({ property: 'isEditingAComment', value: false });
         setIsEditing(false);
         onSelect(false);
     };

@@ -1,22 +1,22 @@
 // @flow
 import React from 'react';
 import type { BoxCommentPermission, FeedItemStatus } from '../../../../../common/types/feed';
+import type { OnAnnotationEdit, OnCommentEdit } from '../types';
 
 import { BaseCommentMenu } from './BaseCommentMenu';
-import type { OnAnnotationStatusChange, OnCommentStatusChange } from '../types';
 
 export interface BaseCommentMenuWrapperProps {
     canDelete: boolean;
     canEdit: boolean;
     canResolve: boolean;
     id: string;
-    isEditing: boolean;
-    isInputOpen: boolean;
     isResolved: boolean;
+    onAnnotationEdit?: OnAnnotationEdit | typeof undefined;
+    onCommentEdit: OnCommentEdit;
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any;
     onSelect: (isSelected: boolean) => void;
-    onStatusChange?: OnAnnotationStatusChange | OnCommentStatusChange | typeof undefined;
     permissions: BoxCommentPermission;
+    setEditingCommentsIds: (editingCommentsIds: string[] | ((prevState: string[]) => string[])) => void;
     setIsEditing: ((boolean => boolean) | boolean) => void;
     setIsInputOpen: ((boolean => boolean) | boolean) => void;
 }
@@ -26,14 +26,14 @@ export const BaseCommentMenuWrapper = ({
     canEdit,
     canResolve,
     id,
-    isEditing,
-    isInputOpen,
     isResolved,
+    onAnnotationEdit,
+    onCommentEdit,
     onDelete,
     onSelect,
-    onStatusChange,
     permissions,
     setIsEditing,
+    setEditingCommentsIds,
     setIsInputOpen,
 }: BaseCommentMenuWrapperProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState<boolean>(false);
@@ -54,21 +54,17 @@ export const BaseCommentMenuWrapper = ({
     };
 
     const handleEditClick = (): void => {
+        setEditingCommentsIds((prevState: string[]) => [...prevState, id]);
         setIsEditing(true);
         setIsInputOpen(true);
         onSelect(true);
     };
 
-    const handleMenuClose = (): void => {
-        if (isConfirmingDelete || isEditing || isInputOpen) {
-            return;
-        }
-        onSelect(false);
-    };
-
     const handleStatusUpdate = (selectedStatus: FeedItemStatus): void => {
-        if (onStatusChange) {
-            onStatusChange({ id, status: selectedStatus, permissions });
+        if (onAnnotationEdit) {
+            onAnnotationEdit({ id, permissions });
+        } else if (onCommentEdit) {
+            onCommentEdit({ id, status: selectedStatus, hasMention: false, permissions });
         }
     };
 
@@ -81,7 +77,6 @@ export const BaseCommentMenuWrapper = ({
             handleDeleteClick={handleDeleteClick}
             handleDeleteConfirm={handleDeleteConfirm}
             handleEditClick={handleEditClick}
-            handleMenuClose={handleMenuClose}
             handleStatusUpdate={handleStatusUpdate}
             isConfirmingDelete={isConfirmingDelete}
             isResolved={isResolved}
