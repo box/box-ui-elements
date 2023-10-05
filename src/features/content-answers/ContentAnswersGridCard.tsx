@@ -13,7 +13,7 @@ const ContentAnswersGridCard = ({ children }: Props) => {
     return (
         <Media className="bdl-ContentAnswersGridCard" data-testid="content-answers-grid-card">
             <Media.Figure>
-                <div className="bdl-BoxAIIcon-iconAvatar">
+                <div className="bdl-ContentAnswersGridCard-icon">
                     <BoxAi height={16} width={16} />
                 </div>
             </Media.Figure>

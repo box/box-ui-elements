@@ -19,6 +19,6 @@ describe('features/content-answers/WelcomeMessage', () => {
         const mockFileName = 'testFile';
         renderComponent({ fileName: mockFileName });
         const fileNameContent = screen.getByTestId('content-answers-filename').textContent;
-        expect(fileNameContent).toEqual(`“${mockFileName}”`);
+        expect(fileNameContent).toEqual(`"${mockFileName}"`);
     });
 });

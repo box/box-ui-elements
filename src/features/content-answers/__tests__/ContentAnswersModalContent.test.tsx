@@ -5,7 +5,7 @@ import ContentAnswersModalContent from '../ContentAnswersModalContent';
 
 describe('features/content-answers/ContentAnswersModalContent', () => {
     const renderComponent = (props?: {}) => {
-        render(<ContentAnswersModalContent fileName="" {...props} />);
+        render(<ContentAnswersModalContent fileName="name" {...props} />);
     };
 
     test('should render welcome message', () => {

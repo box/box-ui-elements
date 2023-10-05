@@ -3,19 +3,19 @@
 .bdl-ContentAnswersGridCard {
     margin-top: $bdl-grid-unit * 4;
 
-    .bdl-BoxAIIcon-iconAvatar {
+    &-icon {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
+        width: $bdl-grid-unit * 8;
+        height: $bdl-grid-unit * 8;
         background: $bdl-light-blue-20;
         border-radius: 50%;
     }
 
-    .bdl-ContentAnswersGridCard-body {
+    &-body {
         padding: $bdl-grid-unit * 4;
-        background-color: white;
+        background-color: $white;
         border: 1px solid $bdl-gray-10;
         border-radius: $bdl-border-radius-size-xlarge;
     }

@@ -21,7 +21,7 @@ const WelcomeMessage = ({ fileName }: Props) => {
                 <div className="bdl-WelcomeMessage-askQuestionText">
                     <FormattedMessage
                         {...messages.welcomeAskQuestionText}
-                        values={{ name: <b data-testid="content-answers-filename">“{fileName}”</b> }}
+                        values={{ name: <b data-testid="content-answers-filename">&quot;{fileName}&quot;</b> }}
                     />
                 </div>
                 <div className="bdl-WelcomeMessage-clearChatText">
