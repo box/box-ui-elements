@@ -15,12 +15,20 @@ function withTargetedClickThrough<Config>(
         closeOnClickOutside,
         shouldTarget,
         useTargetingApi,
+        onDismiss,
         ...rest
     }: {|
         ...Config,
         ...$Exact<TargetedComponentProps>,
     |}) => {
         const { canShow, onComplete, onClose, onShow } = useTargetingApi();
+
+        const handleClose = () => {
+            onClose();
+            if (onDismiss) {
+                onDismiss();
+            }
+        };
 
         const handleOnComplete = () => {
             if (shouldTarget && canShow) {
@@ -39,7 +47,7 @@ function withTargetedClickThrough<Config>(
         }, [shouldShow, onShow]);
 
         return (
-            <WrappedComponent showCloseButton stopBubble {...rest} isShown={shouldShow} onDismiss={onClose}>
+            <WrappedComponent showCloseButton stopBubble {...rest} isShown={shouldShow} onDismiss={handleClose}>
                 <span
                     className="bdl-targeted-click-through"
                     data-targeting="click-through"
