@@ -72,9 +72,7 @@ export const BaseCommentMenu = ({
                         className="bcs-Comment-unresolveComment"
                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                         data-testid="unresolve-comment"
-                        onClick={() => {
-                            handleStatusUpdate(COMMENT_STATUS_OPEN);
-                        }}
+                        onClick={() => handleStatusUpdate(COMMENT_STATUS_OPEN)}
                         onMouseDown={(event: any) => {
                             event.stopPropagation();
                         }}
