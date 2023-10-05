@@ -121,6 +121,7 @@ export const FIELD_URL = 'url';
 export const FIELD_CREATED_BY = 'created_by';
 export const FIELD_MODIFIED_BY = 'modified_by';
 export const FIELD_OWNED_BY = 'owned_by';
+export const FIELD_PROMOTED_BY = 'promoted_by';
 export const FIELD_RESTORED_BY = 'restored_by';
 export const FIELD_TRASHED_BY = 'trashed_by';
 export const FIELD_DESCRIPTION = 'description';
@@ -306,6 +307,7 @@ export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_SEARCH = 'search_error';
 export const ERROR_CODE_METADATA_QUERY = 'metadata_query_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
+export const ERROR_CODE_INTELLIGENCE = 'fetch_intelligence_error';
 
 /* ------------------ Origins ---------------------- */
 export const ORIGIN_CONTENT_PREVIEW: 'content_preview' = 'content_preview';

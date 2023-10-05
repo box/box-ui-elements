@@ -34,11 +34,12 @@ const getVersionAction = ({ restored_at, trashed_at, version_promoted }: $Shape<
 
 const getVersionUser = ({
     modified_by,
+    promoted_by,
     restored_by,
     trashed_by,
     uploader_display_name,
 }: $Shape<BoxItemVersion>): User => {
-    const { name, id, ...rest } = restored_by || trashed_by || modified_by || PLACEHOLDER_USER;
+    const { name, id, ...rest } = restored_by || trashed_by || promoted_by || modified_by || PLACEHOLDER_USER;
     const isAnonymous = id === PLACEHOLDER_USER.id;
     return { ...rest, id, name: isAnonymous && uploader_display_name ? uploader_display_name : name };
 };
