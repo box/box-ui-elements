@@ -4,9 +4,9 @@
     &.hasNewThreadedReplies {
         padding: 2px $bdl-grid-unit * 2;
 
+        // This brittle selector is here in order to only select the parent BaseComment and not the BaseComments which constitute its replies.
         & > div {
-            padding: $bdl-grid-unit * 2;
-            padding-right: $bdl-grid-unit * 4;
+            padding: $bdl-grid-unit * 3 $bdl-grid-unit * 3 $bdl-grid-unit * 5;
         }
 
         &.bcs-is-hoverable:hover {

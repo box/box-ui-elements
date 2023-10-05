@@ -55,6 +55,8 @@ export const getWrapper = props =>
     );
 
 describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
+    EditorState.moveFocusToEnd = editor => editor;
+
     test.each`
         activityItem
         ${annotation}
@@ -77,7 +79,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
     test('should render annotation badge when annotationActivityLink prop is defined', () => {
         getWrapper({ ...annotation, ...repliesProps });
-        expect(screen.getByText(localize(messages.annotationBadge.id))).toBeInTheDocument();
+        expect(screen.getByText(localize(messages.inlineCommentAnnotationIconTitle.id))).toBeInTheDocument();
     });
 
     test.each`
@@ -402,5 +404,17 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
         expect(showReplies).toBeCalledTimes(1);
         expect(hideReplies).not.toBeCalled();
+    });
+
+    test('should focus on the edit CommentForm when it is opened', () => {
+        const mockFocusFunc = jest.fn();
+        EditorState.moveFocusToEnd = mockFocusFunc;
+
+        getWrapper({ canEdit: true });
+        const menuItem = screen.getByTestId('comment-actions-menu');
+        fireEvent.click(menuItem);
+        const editButton = screen.getByTestId('edit-comment');
+        fireEvent.click(editButton);
+        expect(mockFocusFunc).toHaveBeenCalled();
     });
 });

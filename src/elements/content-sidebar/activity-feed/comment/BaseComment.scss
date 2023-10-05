@@ -3,28 +3,50 @@
 $repliesPaddingLeft: 40px;
 
 .bcs-BaseComment {
-    .bcs-Comment-timestamp {
-        margin-bottom: $bdl-grid-unit * 4;
-    }
-
-    .bcs-ActivityTimestamp {
-        color: $bdl-gray-65;
-    }
+    font-size: $bdl-fontSize--dejaBlue;
 
     .bcs-CommentForm-input {
         background-color: $white;
+    }
+
+    .bcs-CommentFormControls {
+        display: flex;
+        flex-direction: row-reverse;
+
+        .btn {
+            margin: $bdl-grid-unit * 3 0 0 $bdl-grid-unit * 3;
+        }
     }
 
     .btn-plain:focus-visible {
         outline: auto;
     }
 
-    .bcs-Replies {
-        margin: $bdl-grid-unit * 3 0;
-        padding-left: $repliesPaddingLeft;
+    .bcs-Comment-media {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        margin-bottom: $bdl-grid-unit * 4;
     }
 
-    .bcs-Comment-media {
-        margin-bottom: $bdl-grid-unit * 3;
+    .mention-selector-wrapper {
+        margin: 0;
     }
+
+    .public-DraftEditor-content {
+        width: 100%;
+        min-height: $bdl-grid-unit * 12;
+    }
+}
+
+.bcs-BaseComment-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.bcs-BaseComment-content {
+    width: 100%;
+    margin-top: 4 * $bdl-grid-unit;
 }

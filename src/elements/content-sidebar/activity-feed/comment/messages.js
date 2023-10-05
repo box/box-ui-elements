@@ -7,11 +7,6 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    annotationBadge: {
-        id: 'be.contentSidebar.activityFeed.comment.annotationBadge',
-        defaultMessage: 'Annotation Badge',
-        description: 'Title icon indicating that the activity item is an annotation',
-    },
     commentDeleteMenuItem: {
         id: 'be.contentSidebar.activityFeed.comment.commentDeleteMenuItem',
         defaultMessage: 'Delete',
@@ -61,6 +56,11 @@ const messages = defineMessages({
         id: 'be.contentSidebar.activityFeed.comment.showReplies',
         defaultMessage: 'See {repliesToLoadCount, plural, one {# reply} other {# replies}}',
         description: 'Text to show to get more replies of comment or annotation',
+    },
+    inlineCommentAnnotationIconTitle: {
+        id: 'be.contentSidebar.activityFeed.comment.inlineCommentAnnotationIconTitle',
+        defaultMessage: 'Inline Comment',
+        description: 'Text for aria label of Inline comment circle type icon',
     },
 });
 

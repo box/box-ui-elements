@@ -3,7 +3,7 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { ContentState, EditorState } from 'draft-js';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { Replies } from '../BaseComment';
 
 jest.mock('../../Avatar', () => () => 'Avatar');
@@ -46,6 +46,7 @@ const currentUser = {
 const mockUserProfileUrl = jest.fn();
 const replySelect = jest.fn();
 const replyCreate = jest.fn();
+const replyDelete = jest.fn();
 const showReplies = jest.fn();
 const hideReplies = jest.fn();
 
@@ -70,6 +71,7 @@ const getWrapper = props =>
                 replies={replies}
                 onReplySelect={replySelect}
                 onReplyCreate={replyCreate}
+                onReplyDelete={replyDelete}
                 onShowReplies={showReplies}
                 onHideReplies={hideReplies}
                 {...props}
@@ -168,6 +170,28 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
         fireEvent.click(screen.getByText('Post'));
         expect(replyCreate).toBeCalledTimes(1);
         expect(replyCreate).toBeCalledWith('Batman');
+    });
+
+    test('should call onReplyDelete when reply is deleted', () => {
+        getWrapper({
+            replies: [comment, comment2],
+        });
+
+        const [menu] = screen.getAllByLabelText('Options');
+        fireEvent.click(menu);
+
+        const menuDelete = screen.getByLabelText('Delete');
+        expect(menuDelete).toBeInTheDocument();
+        fireEvent.click(menuDelete);
+
+        const confirmationDelete = within(screen.getByRole('dialog')).getByLabelText('Delete');
+        expect(confirmationDelete).toBeInTheDocument();
+        fireEvent.click(confirmationDelete);
+
+        expect(replyDelete).toBeCalledTimes(1);
+
+        expect(replyDelete).toBeCalledWith({ id: comment.id, permissions: comment.permissions });
+        expect(replyDelete).not.toBeCalledWith({ id: comment2.id, permissions: comment2.permissions });
     });
 
     test('should show Hide Replies and call onHideReplies when clicked', () => {

@@ -258,7 +258,12 @@ class Task extends React.Component<Props, State> {
                 currentUserAssignment.status === TASK_NEW_NOT_STARTED;
         }
 
-        const TaskTypeIcon = task_type === TASK_TYPE_APPROVAL ? IconTaskApproval : IconTaskGeneral;
+        const TaskTypeIcon =
+            task_type === TASK_TYPE_APPROVAL ? (
+                <IconTaskApproval title={<FormattedMessage {...messages.approvalTaskAnnotationIconTitle} />} />
+            ) : (
+                <IconTaskGeneral title={<FormattedMessage {...messages.generalTaskAnnotationIconTitle} />} />
+            );
 
         const isMenuVisible = (permissions.can_delete || permissions.can_update) && !isPending;
 
@@ -279,7 +284,7 @@ class Task extends React.Component<Props, State> {
                     data-testid="task-card"
                 >
                     <Media.Figure className="bcs-Task-avatar">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} badgeIcon={<TaskTypeIcon />} />
+                        <Avatar badgeIcon={TaskTypeIcon} getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     </Media.Figure>
                     <Media.Body>
                         {isMenuVisible && (

@@ -100,7 +100,7 @@ const PreviewHeader = ({
                                     {...contentOpenWithProps}
                                 />
                             )}
-                            {shouldRenderAnswers && <ContentAnswers />}
+                            {shouldRenderAnswers && <ContentAnswers file={file} />}
                             {canAnnotate && (
                                 <>
                                     <PlainButton

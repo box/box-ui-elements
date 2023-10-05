@@ -41,7 +41,7 @@ import { type OnAnnotationEdit } from '../comment/types';
 
 import './ActivityFeed.scss';
 
-type Props = {
+export type ActivityFeedProps = {
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
     activityFeedError: ?Errors,
@@ -49,6 +49,7 @@ type Props = {
     contactsLoaded?: boolean,
     currentUser?: User,
     feedItems?: FeedItems,
+    // $FlowFixMe file.file_version (BoxItem[BoxItemVersion]) has many apparently long-standing type errors
     file: BoxItem,
     getApproverWithQuery?: Function,
     getAvatarUrl: GetAvatarUrlCallback,
@@ -104,7 +105,7 @@ type State = {
     selectedItemId: string | null,
 };
 
-class ActivityFeed extends React.Component<Props, State> {
+class ActivityFeed extends React.Component<ActivityFeedProps, State> {
     state = {
         isScrolled: false,
         isInputOpen: false,
@@ -119,7 +120,7 @@ class ActivityFeed extends React.Component<Props, State> {
         this.resetFeedScroll();
     }
 
-    componentDidUpdate(prevProps: Props, prevState: State) {
+    componentDidUpdate(prevProps: ActivityFeedProps, prevState: State) {
         const {
             activeFeedEntryId: prevActiveFeedEntryId,
             currentUser: prevCurrentUser,
@@ -168,7 +169,7 @@ class ActivityFeed extends React.Component<Props, State> {
      * @param {object} currentUser - The user that is logged into the account
      * @param {object} feedItems - Items in the activity feed
      */
-    isEmpty = ({ feedItems, shouldUseUAA }: Props = this.props): boolean => {
+    isEmpty = ({ feedItems, shouldUseUAA }: ActivityFeedProps = this.props): boolean => {
         if (feedItems === undefined) {
             return false;
         }

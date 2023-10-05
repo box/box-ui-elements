@@ -27,11 +27,21 @@ describe('elements/content-preview/preview-header/PreviewHeader', () => {
         ${{ id: '123' }} | ${false} | ${false}
         ${{}}            | ${true}  | ${false}
         ${{}}            | ${false} | ${false}
-    `('should render correctly with given file and show prop', ({ file, show, expected }) => {
+    `('should render ContentAnswers correctly with given file and show prop', ({ file, show, expected }) => {
         const contentAnswersProps = { show };
         const wrapper = getWrapper({ contentAnswersProps, file });
 
         expect(wrapper.exists(ContentAnswers)).toBe(expected);
+    });
+
+    it('should render ContentAnswers correctly and provided the correct props', () => {
+        const file = { extension: 'doc', file_version: { id: '1' }, id: '123' };
+        const contentAnswersProps = { show: true };
+        const wrapper = getWrapper({
+            contentAnswersProps,
+            file,
+        });
+        expect(wrapper.find(ContentAnswers).prop('file')).toBe(file);
     });
 
     test.each([
