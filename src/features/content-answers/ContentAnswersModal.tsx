@@ -21,6 +21,7 @@ type Props = {
 };
 
 const ContentAnswersModal = ({ file, isOpen, onRequestClose }: Props) => {
+    const fileName = file && file.name;
     return (
         <Modal
             className="bdl-ContentAnswersModal"
@@ -39,7 +40,7 @@ const ContentAnswersModal = ({ file, isOpen, onRequestClose }: Props) => {
                 </>
             }
         >
-            <ContentAnswersModalContent />
+            <ContentAnswersModalContent fileName={fileName} />
             <ContentAnswersModalFooter data-testid="content-answers-modal-footer" file={file} />
         </Modal>
     );

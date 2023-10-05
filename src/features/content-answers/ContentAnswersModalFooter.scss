@@ -5,36 +5,35 @@
     z-index: 1;
     display: flex;
     align-items: end;
-    padding: 16px 20px;
+    padding: $bdl-grid-unit * 4 $bdl-grid-unit * 5;
     background: $white;
     border-radius: 0 0 $bdl-border-radius-size-xlarge $bdl-border-radius-size-xlarge;
     box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 -1px 0 $bdl-gray-10;
 
-    .bdl-ContentAnswersModalFooter-avatar {
-        height: 32px;
-        margin-bottom: 4px;
-    }
-
-    .bdl-ContentAnswersModalFooter-submitButton {
-        height: $bdl-btn-height-large;
-        margin: 0;
-        font-size: 14px;
+    &-avatar {
+        height: $bdl-grid-unit * 8;
+        margin-bottom: $bdl-grid-unit;
     }
 
     .text-area-container {
         width: 100%;
-        margin: 0 16px;
+        margin: 0 $bdl-grid-unit * 4;
     }
 
     textarea {
-        display: flex;
         width: 100%;
-        height: 40px;
+        height: $bdl-grid-unit * 10;
         margin: 0;
+        padding: 0;
         overflow: hidden;
         font-size: 14px;
-        border: 1px solid $bdl-gray-65;
+        line-height: 1.25rem;
+        letter-spacing: .01875rem;
+        border: none;
         border-radius: $bdl-border-radius-size-med;
+        box-shadow: 0 0 0 .0625rem $bdl-gray-50;
+        padding-block: .625rem;
+        padding-inline: .75rem;
     }
 
     textarea:focus {

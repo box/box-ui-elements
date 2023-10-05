@@ -1,10 +1,19 @@
 import React from 'react';
 
+import WelcomeMessage from './WelcomeMessage';
+
 import './ContentAnswersModalContent.scss';
 
-const ContentAnswersModalContent = () => {
-    // TODO: Add Modal Content Detail
-    return <div className="bdl-ContentAnswersModalContent">Modal Content</div>;
+type Props = {
+    fileName: string;
+};
+
+const ContentAnswersModalContent = ({ fileName }: Props) => {
+    return (
+        <div className="bdl-ContentAnswersModalContent">
+            <WelcomeMessage fileName={fileName} />
+        </div>
+    );
 };
 
 export default ContentAnswersModalContent;

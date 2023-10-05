@@ -3,6 +3,6 @@
 .bdl-ContentAnswersModalContent {
     flex: 1 1 auto;
     width: auto;
-    padding: 0 20px 20px 20px;
+    padding: 0 $bdl-grid-unit * 5 $bdl-grid-unit * 5 $bdl-grid-unit * 5;
     overflow: auto;
 }
