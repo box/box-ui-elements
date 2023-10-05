@@ -35,6 +35,7 @@ const AdditionalTabTooltip = ({ children, defaultTooltipText, isFtuxVisible, ftu
             position="middle-right"
             shouldTarget
             useTargetingApi={targetingApi}
+            onDismiss={() => {}}
         >
             {children}
         </TargetedClickThroughGuideTooltip>
