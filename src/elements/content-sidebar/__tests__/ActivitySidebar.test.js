@@ -1446,10 +1446,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const instance = wrapper.instance();
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().handleAnnotationStatusChange('123', 'open', {
-                can_edit: true,
-                can_delete: true,
-                can_resolve: true,
+            wrapper.instance().handleAnnotationStatusChange({
+                id: '123',
+                status: 'open',
+                permissions: {
+                    can_edit: true,
+                    can_delete: true,
+                    can_resolve: true,
+                },
             });
 
             expect(mockEmitAnnotationUpdateEvent).toBeCalledWith({ id: '123', status: 'open' }, true);

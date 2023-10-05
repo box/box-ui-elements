@@ -37,7 +37,7 @@ import type {
 import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
 import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
 import type { Translations } from '../../flowTypes';
-import { type OnAnnotationEdit } from '../comment/types';
+import type { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/types';
 
 import './ActivityFeed.scss';
 
@@ -63,7 +63,7 @@ export type ActivityFeedProps = {
     onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
     onAnnotationEdit?: OnAnnotationEdit,
     onAnnotationSelect?: (annotation: Annotation) => void,
-    onAnnotationStatusChange?: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
+    onAnnotationStatusChange: OnAnnotationStatusChange,
     onAppActivityDelete?: Function,
     onCommentCreate?: Function,
     onCommentDelete?: Function,
