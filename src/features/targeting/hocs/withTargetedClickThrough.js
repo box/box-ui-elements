@@ -24,9 +24,9 @@ function withTargetedClickThrough<Config>(
 
         const handleClose = () => {
             onClose();
-            // $FlowIssue[incompatible-type]
+            // $FlowIssue
             if (rest?.onDismiss) {
-                // $FlowIssue[incompatible-type]
+                // $FlowIssue
                 rest?.onDismiss();
             }
         };
