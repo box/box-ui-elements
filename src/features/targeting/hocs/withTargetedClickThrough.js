@@ -15,7 +15,6 @@ function withTargetedClickThrough<Config>(
         closeOnClickOutside,
         shouldTarget,
         useTargetingApi,
-        onDismiss,
         ...rest
     }: {|
         ...Config,
@@ -25,8 +24,10 @@ function withTargetedClickThrough<Config>(
 
         const handleClose = () => {
             onClose();
-            if (onDismiss) {
-                onDismiss();
+            // $FlowIssue[incompatible-type]
+            if (rest?.onDismiss) {
+                // $FlowIssue[incompatible-type]
+                rest?.onDismiss();
             }
         };
 
