@@ -351,8 +351,10 @@ describe('src/elements/content-sidebar/activity-feed/useAnnotationThread', () =>
 
             const { result } = getHook();
             act(() => {
-                result.current.annotationActions.handleAnnotationStatusChange(annotation.id, 'resolved', {
-                    can_resolve: true,
+                result.current.annotationActions.handleAnnotationStatusChange({
+                    id: annotation.id,
+                    status: 'resolved',
+                    permissions: { can_resolve: true },
                 });
             });
 
