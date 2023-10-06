@@ -25,7 +25,6 @@ function withTargetedClickThrough<Config>(
 
         const handleClose = () => {
             onClose();
-            // $FlowFixMe Flow does not yet support method or property calls in optional chains.
             if (onDismiss) {
                 // $FlowFixMe Flow does not yet support method or property calls in optional chains.
                 onDismiss();
