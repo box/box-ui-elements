@@ -26,7 +26,7 @@ function withTargetedClickThrough<Config>(
         const handleClose = () => {
             onClose();
             if (onDismiss) {
-                // $FlowFixMe does not yet support method or property calls in optional chains.
+                // $FlowFixMe onDismiss should be declared in both inferred types, which is not true, because we declare props types as Union of Config & TargetedComponentProps
                 onDismiss();
             }
         };
