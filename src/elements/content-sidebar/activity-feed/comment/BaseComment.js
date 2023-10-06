@@ -94,7 +94,7 @@ export const BaseComment = ({
     permissions = {},
     replies = [],
     repliesTotalCount = 0,
-    setEditingCommentsIds,
+    setEditingCommentsIds = () => {},
     status,
     tagged_message = '',
     translatedTaggedMessage,
