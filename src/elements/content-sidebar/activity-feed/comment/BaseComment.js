@@ -4,7 +4,6 @@ import * as React from 'react';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
 
-import { useActivityFeedContext } from '../utils/ActivityFeedContext';
 import { BaseCommentMenuWrapper } from './components/BaseCommentMenuWrapper';
 import { BaseCommentInfo } from './components/BaseCommentInfo';
 import { COMMENT_STATUS_RESOLVED } from '../../../../constants';
@@ -60,6 +59,7 @@ export type BaseCommentProps = {
     permissions: BoxCommentPermission,
     replies?: CommentType[],
     repliesTotalCount?: number,
+    setEditingCommentsIds: (editingCommentsIds: string[] | ((prevState: string[]) => string[])) => void,
     status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -94,12 +94,12 @@ export const BaseComment = ({
     permissions = {},
     replies = [],
     repliesTotalCount = 0,
+    setEditingCommentsIds,
     status,
     tagged_message = '',
     translatedTaggedMessage,
     translations,
 }: BaseCommentProps) => {
-    const { setActivityFeedRef } = useActivityFeedContext();
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
 
@@ -110,14 +110,14 @@ export const BaseComment = ({
 
     const commentFormCancelHandler = (): void => {
         setIsInputOpen(false);
-        setActivityFeedRef({ property: 'isEditingAComment', value: false });
+        setEditingCommentsIds((prevState: string[]) => prevState.filter(commentId => commentId !== id));
         setIsEditing(false);
         onSelect(false);
     };
 
     const commentFormSubmitHandler = (): void => {
         setIsInputOpen(false);
-        setActivityFeedRef({ property: 'isEditingAComment', value: false });
+        setEditingCommentsIds((prevState: string[]) => prevState.filter(commentId => commentId !== id));
         setIsEditing(false);
         onSelect(false);
     };
@@ -187,6 +187,7 @@ export const BaseComment = ({
                             onStatusChange={onStatusChange}
                             permissions={permissions}
                             setIsEditing={setIsEditing}
+                            setEditingCommentsIds={setEditingCommentsIds}
                             setIsInputOpen={setIsInputOpen}
                         />
                     )}
@@ -241,6 +242,7 @@ export const BaseComment = ({
                     onShowReplies={onShowReplies}
                     replies={replies}
                     repliesTotalCount={repliesTotalCount}
+                    setEditingCommentsIds={setEditingCommentsIds}
                 />
             )}
         </div>
@@ -264,6 +266,7 @@ type RepliesProps = {
     onShowReplies?: () => void,
     replies: CommentType[],
     repliesTotalCount?: number,
+    setEditingCommentsIds: (editingCommentsIds: string[] | ((prevState: string[]) => string[])) => void,
     translations?: Translations,
 };
 
@@ -284,6 +287,7 @@ export const Replies = ({
     replies,
     repliesTotalCount = 0,
     translations,
+    setEditingCommentsIds,
 }: RepliesProps) => {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
@@ -344,6 +348,7 @@ export const Replies = ({
                                     onSelect={onReplySelect}
                                     onDelete={onReplyDelete}
                                     permissions={getReplyPermissions(reply)}
+                                    setEditingCommentsIds={setEditingCommentsIds}
                                     translations={translations}
                                 />
                             </li>

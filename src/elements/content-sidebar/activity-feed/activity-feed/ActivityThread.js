@@ -44,6 +44,7 @@ type Props = {
     onShowReplies?: () => void,
     replies?: Array<CommentType>,
     repliesTotalCount?: number,
+    setEditingCommentsIds: (editingCommentsIds: string[] | ((prevState: string[]) => string[])) => void,
     translations?: Translations,
 };
 
@@ -67,6 +68,7 @@ const ActivityThread = ({
     onShowReplies = noop,
     replies = [],
     repliesTotalCount = 0,
+    setEditingCommentsIds,
     translations,
 }: Props) => {
     const { length: repliesLength } = replies;
@@ -143,6 +145,7 @@ const ActivityThread = ({
                             onEdit={onReplyEdit}
                             onSelect={onReplySelect}
                             replies={replies}
+                            setEditingCommentsIds={setEditingCommentsIds}
                             translations={translations}
                         />
                     )}
