@@ -157,4 +157,57 @@ describe('features/presence/utils/sortByActivity', () => {
             });
         });
     });
+
+    describe('convertMillisecondsToUnitAndValue()', () => {
+        [
+            {
+                ms: 0,
+                expected: { unit: 'second', value: 0 },
+            },
+            {
+                ms: 1000,
+                expected: { unit: 'second', value: 1 },
+            },
+            {
+                ms: 1000 * 59,
+                expected: { unit: 'second', value: 59 },
+            },
+            {
+                ms: 1000 * 60,
+                expected: { unit: 'minute', value: 1 },
+            },
+            {
+                ms: 1000 * 60 * 59,
+                expected: { unit: 'minute', value: 59 },
+            },
+            {
+                ms: 1000 * 60 * 60,
+                expected: { unit: 'hour', value: 1 },
+            },
+            {
+                ms: 1000 * 60 * 60 * 23,
+                expected: { unit: 'hour', value: 23 },
+            },
+            {
+                ms: 1000 * 60 * 60 * 24,
+                expected: { unit: 'day', value: 1 },
+            },
+            {
+                ms: 1000 * 60 * 60 * 24 * 10,
+                expected: { unit: 'day', value: 10 },
+            },
+            {
+                ms: 1000 * 60 * 60 * 24 * 30,
+                expected: { unit: 'month', value: 1 },
+            },
+            {
+                ms: 1000 * 60 * 60 * 24 * 30 * 10,
+                expected: { unit: 'month', value: 10 },
+            },
+        ].forEach(({ ms, expected }) => {
+            test(`should return ${JSON.stringify(expected)} when passed ${ms}`, () => {
+                expect(convertMillisecondsToUnitAndValue(ms)).toEqual(expected);
+            });
+        });
+    });
 });

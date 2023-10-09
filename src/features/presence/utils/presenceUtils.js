@@ -1,7 +1,11 @@
 import messages from '../messages';
 
-const MS_IN_A_MINUTE = 60000; // number of milliseconds in one minute
-const MS_IN_A_DAY = 86400000; // number of milliseconds in one day
+const SEC_IN_MINUTE = 60;
+const SEC_IN_HOUR = SEC_IN_MINUTE * 60;
+const SEC_IN_DAY = SEC_IN_HOUR * 24;
+const SEC_IN_MONTH = SEC_IN_DAY * 30;
+const MS_IN_A_MINUTE = SEC_IN_MINUTE * 1000;
+const MS_IN_A_DAY = SEC_IN_DAY * 1000;
 const INTERACTION_TYPE_MODIFY = 'user.item_modify';
 const INTERACTION_TYPE_UPLOAD = 'user.item_upload';
 const INTERACTION_TYPE_PREVIEW = 'user.item_preview';
@@ -60,4 +64,24 @@ function determineInteractionMessage(interactionType, interactedAt) {
     return message;
 }
 
-export { sortByActivity, getLastActionTimeMS, determineInteractionMessage };
+function convertMillisecondsToUnitAndValue(ms) {
+    const seconds = ms / 1000;
+    const abs = Math.abs(seconds);
+    if (abs < SEC_IN_MINUTE) {
+        return { unit: 'second', value: seconds };
+    }
+    if (abs < SEC_IN_HOUR) {
+        return { unit: 'minute', value: Math.round(seconds / SEC_IN_MINUTE) };
+    }
+    if (abs < SEC_IN_DAY) {
+        return { unit: 'hour', value: Math.round(seconds / SEC_IN_HOUR) };
+    }
+
+    if (abs < SEC_IN_MONTH) {
+        return { unit: 'day', value: Math.round(seconds / SEC_IN_DAY) };
+    }
+
+    return { unit: 'month', value: Math.round(seconds / SEC_IN_MONTH) };
+}
+
+export { sortByActivity, getLastActionTimeMS, determineInteractionMessage, convertMillisecondsToUnitAndValue };
