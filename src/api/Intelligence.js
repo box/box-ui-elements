@@ -6,19 +6,8 @@
 
 import Base from './Base';
 import type { BoxItem } from '../common/types/core';
-import type { ElementsErrorCallback } from '../common/types/api';
 
 class Intelligence extends Base {
-    /**
-     * @property {Function}
-     */
-    successCallback: Function;
-
-    /**
-     * @property {Function}
-     */
-    errorCallback: ElementsErrorCallback;
-
     /**
      * API endpoint to ask ai a question
      *
