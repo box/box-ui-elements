@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { injectIntl, FormattedMessage, IntlShape } from 'react-intl';
 
 import Avatar from '../../components/avatar';
