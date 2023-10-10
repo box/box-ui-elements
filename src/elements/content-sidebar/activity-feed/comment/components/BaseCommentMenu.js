@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
+import noop from 'lodash/noop';
 
 import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../../constants';
@@ -28,7 +29,7 @@ export interface BaseCommentMenuProps {
     handleDeleteClick: () => void;
     handleDeleteConfirm: () => void;
     handleEditClick: () => void;
-    handleMenuClose?: () => void;
+    handleMenuClose?: Function;
     handleStatusUpdate: (selectedStatus: FeedItemStatus) => void;
     isConfirmingDelete: boolean;
     isResolved: boolean;
@@ -42,7 +43,7 @@ export const BaseCommentMenu = ({
     handleDeleteClick,
     handleDeleteConfirm,
     handleEditClick,
-    handleMenuClose = () => {},
+    handleMenuClose = noop,
     handleStatusUpdate,
     isConfirmingDelete,
     isResolved,
