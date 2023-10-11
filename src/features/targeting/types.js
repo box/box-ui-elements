@@ -35,6 +35,7 @@ export type UseTargetingApi = () => TargetingApi;
 export type TargetedComponentProps = {
     children: React.Node,
     closeOnClickOutside?: boolean,
+    onDismiss?: Function,
     shouldTarget: boolean,
     useTargetingApi: () => TargetingApi,
 };

@@ -22,7 +22,7 @@ import type {
     Comment as CommentType,
 } from '../../../../common/types/feed';
 import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { OnAnnotationEdit, OnCommentEdit } from './types';
+import type { OnAnnotationEdit, OnCommentEdit, OnAnnotationStatusChange, OnCommentStatusChange } from './types';
 import type { SelectorItems, User } from '../../../../common/types/core';
 import type { Translations } from '../../flowTypes';
 
@@ -55,6 +55,7 @@ export type BaseCommentProps = {
     onReplyDelete?: ({ id: string, permissions?: BoxCommentPermission }) => void,
     onSelect: (isSelected: boolean) => void,
     onShowReplies?: () => void,
+    onStatusChange?: OnAnnotationStatusChange | OnCommentStatusChange,
     permissions: BoxCommentPermission,
     replies?: CommentType[],
     repliesTotalCount?: number,
@@ -88,6 +89,7 @@ export const BaseComment = ({
     onReplyDelete,
     onSelect,
     onShowReplies,
+    onStatusChange,
     permissions = {},
     replies = [],
     repliesTotalCount = 0,
@@ -176,10 +178,9 @@ export const BaseComment = ({
                             isEditing={isEditing}
                             isInputOpen={isInputOpen}
                             isResolved={isResolved}
-                            onAnnotationEdit={onAnnotationEdit}
-                            onCommentEdit={onCommentEdit}
                             onDelete={onDelete}
                             onSelect={onSelect}
+                            onStatusChange={onStatusChange}
                             permissions={permissions}
                             setIsEditing={setIsEditing}
                             setIsInputOpen={setIsInputOpen}

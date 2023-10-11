@@ -15,12 +15,21 @@ function withTargetedClickThrough<Config>(
         closeOnClickOutside,
         shouldTarget,
         useTargetingApi,
+        onDismiss,
         ...rest
     }: {|
         ...Config,
         ...$Exact<TargetedComponentProps>,
     |}) => {
         const { canShow, onComplete, onClose, onShow } = useTargetingApi();
+
+        const handleClose = () => {
+            onClose();
+            if (onDismiss) {
+                // $FlowFixMe onDismiss should be declared in both inferred types, which is not true, because we declare props types as Union of Config & TargetedComponentProps
+                onDismiss();
+            }
+        };
 
         const handleOnComplete = () => {
             if (shouldTarget && canShow) {
@@ -39,7 +48,7 @@ function withTargetedClickThrough<Config>(
         }, [shouldShow, onShow]);
 
         return (
-            <WrappedComponent showCloseButton stopBubble {...rest} isShown={shouldShow} onDismiss={onClose}>
+            <WrappedComponent showCloseButton stopBubble {...rest} isShown={shouldShow} onDismiss={handleClose}>
                 <span
                     className="bdl-targeted-click-through"
                     data-targeting="click-through"

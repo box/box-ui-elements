@@ -31,7 +31,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
 import { mark } from '../../utils/performance';
-import { withFeatureProvider } from '../common/feature-checking';
+import { withFeatureConsumer, withFeatureProvider } from '../common/feature-checking';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import ReloadNotification from './ReloadNotification';
 import API from '../../api';
@@ -373,16 +373,15 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props, prevState: State): void {
-        const { advancedContentInsights, previewExperiences, token } = this.props;
-        const {
-            advancedContentInsights: prevContentInsightsOptions,
-            previewExperiences: prevPreviewExperiences,
-            token: prevToken,
-        } = prevProps;
+        const { features, previewExperiences, token } = this.props;
+        const { features: prevFeatures, previewExperiences: prevPreviewExperiences, token: prevToken } = prevProps;
         const { currentFileId } = this.state;
         const hasFileIdChanged = prevState.currentFileId !== currentFileId;
         const hasTokenChanged = prevToken !== token;
-        const haveContentInsightsChanged = !isEqual(prevContentInsightsOptions, advancedContentInsights);
+        const haveAdvancedContentInsightsChanged = !isEqual(
+            prevFeatures?.advancedContentInsights,
+            features?.advancedContentInsights,
+        );
         const haveExperiencesChanged = prevPreviewExperiences !== previewExperiences;
 
         if (hasFileIdChanged) {
@@ -401,8 +400,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
             this.preview.updateExperiences(previewExperiences);
         }
 
-        if (advancedContentInsights && haveContentInsightsChanged && this.preview?.updateContentInsightsOptions) {
-            this.preview.updateContentInsightsOptions(advancedContentInsights);
+        if (
+            this.preview?.updateContentInsightsOptions &&
+            features?.advancedContentInsights &&
+            haveAdvancedContentInsightsChanged
+        ) {
+            this.preview.updateContentInsightsOptions(features?.advancedContentInsights);
         }
     }
 
@@ -770,9 +773,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     loadPreview = async (): Promise<void> => {
         const {
-            advancedContentInsights,
+            advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             annotatorState: { activeAnnotationId } = {},
             enableThumbnailsSidebar,
+            features,
             fileOptions,
             onAnnotatorEvent,
             onAnnotator,
@@ -811,9 +815,10 @@ class ContentPreview extends React.PureComponent<Props, State> {
         }
 
         const previewOptions = {
-            advancedContentInsights,
+            advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             container: `#${this.id} .bcpr-content`,
             enableThumbnailsSidebar,
+            features,
             fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
@@ -1399,6 +1404,7 @@ export default flow([
     withAnnotations,
     withRouter,
     withNavRouter,
+    withFeatureConsumer,
     withFeatureProvider,
     withLogger(ORIGIN_CONTENT_PREVIEW),
     withErrorBoundary(ORIGIN_CONTENT_PREVIEW),
