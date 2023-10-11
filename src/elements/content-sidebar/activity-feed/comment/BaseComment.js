@@ -105,6 +105,7 @@ export const BaseComment = ({
 
     const commentFormFocusHandler = (): void => {
         setIsInputOpen(true);
+        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
         onSelect(true);
     };
 
@@ -363,7 +364,11 @@ export const Replies = ({
                     mentionSelectorContacts={mentionSelectorContacts}
                     onCancel={handleCancelNewReply}
                     onClick={handleNewReplyButton}
-                    onFocus={() => onReplySelect(true)}
+                    onFocus={() => {
+                        console.log('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%');
+
+                        onReplySelect(true);
+                    }}
                     onSubmit={reply => handleSubmitNewReply(reply, onReplyCreate)}
                     showReplyForm={showReplyForm}
                 />
