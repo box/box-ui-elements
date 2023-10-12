@@ -46,6 +46,8 @@ const ContentAnswersModalFooter = ({ currentUser, intl, isLoading, onAsk }: Prop
     const handleOnAsk = useCallback(() => {
         if (!isSubmitDisabled && prompt) {
             onAsk(prompt);
+            setPrompt('');
+            setIsSubmitDisabled(true);
         }
     }, [isSubmitDisabled, onAsk, prompt]);
 

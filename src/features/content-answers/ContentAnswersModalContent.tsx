@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import throttle from 'lodash/throttle';
 
 import Answer from './Answer';
 import Question from './Question';
 import WelcomeMessage from './WelcomeMessage';
-
+// @ts-ignore flow import
+import { scrollIntoView } from '../../utils/dom';
 import { QuestionType } from './ContentAnswersModal';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
@@ -19,6 +21,22 @@ type Props = {
 };
 
 const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, questions }: Props) => {
+    const messagesEndRef = useRef(null);
+
+    const handleScrollToBottom = useCallback(behavior => {
+        if (messagesEndRef.current) {
+            scrollIntoView(messagesEndRef.current, { behavior });
+        }
+    }, []);
+
+    const throttledScrollToBottom = throttle(handleScrollToBottom, 200);
+
+    useEffect(() => {
+        if (isLoading) {
+            handleScrollToBottom('smooth');
+        }
+    }, [handleScrollToBottom, isLoading]);
+
     return (
         <div className="bdl-ContentAnswersModalContent">
             <WelcomeMessage fileName={fileName} />
@@ -28,11 +46,16 @@ const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, question
                         return (
                             <li key={index}>
                                 <Question currentUser={currentUser} prompt={prompt} />
-                                <Answer answer={answer} isLoading={isLoading} />
+                                <Answer
+                                    answer={answer}
+                                    handleScrollToBottom={throttledScrollToBottom}
+                                    isLoading={isLoading}
+                                />
                             </li>
                         );
                     })}
             </ul>
+            <div ref={messagesEndRef} />
         </div>
     );
 };
