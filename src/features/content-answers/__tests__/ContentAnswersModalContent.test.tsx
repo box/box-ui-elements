@@ -2,13 +2,18 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 import ContentAnswersModalContent from '../ContentAnswersModalContent';
-
+// @ts-ignore flow import
+import { scrollIntoView } from '../../../utils/dom';
 import {
     mockCurrentUser,
     mockQuestionsNoAnswer,
     mockQuestionsWithAnswer,
     mockQuestionsWithAnswerAndNoAnswer,
 } from '../__mocks__/mocks';
+
+jest.mock('../../../utils/dom', () => ({
+    scrollIntoView: jest.fn(),
+}));
 
 describe('features/content-answers/ContentAnswersModalContent', () => {
     const renderComponent = (props?: {}) => {
@@ -58,5 +63,10 @@ describe('features/content-answers/ContentAnswersModalContent', () => {
 
         const loadingElement = screen.queryAllByTestId('LoadingElement');
         expect(loadingElement.length).toEqual(1);
+    });
+
+    test('should call handleScrollToBottom when isLoading set to true', () => {
+        renderComponent({ isLoading: true });
+        expect(scrollIntoView).toBeCalled();
     });
 });

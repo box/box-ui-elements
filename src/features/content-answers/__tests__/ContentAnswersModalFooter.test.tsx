@@ -40,6 +40,18 @@ describe('features/content-answers/ContentAnswersModalFooter', () => {
         expect(submitButton).not.toHaveClass('is-disabled');
     });
 
+    test('test clear the prompt when ask button is clicked', () => {
+        renderComponent();
+        const submitButton = screen.getByTestId('content-answers-submit-button');
+        const input = screen.getByTestId('content-answers-question-input');
+
+        fireEvent.change(input, { target: { value: 'Test' } });
+        expect(input).toHaveValue('Test');
+
+        fireEvent.click(submitButton);
+        expect(input).toHaveValue('');
+    });
+
     test('should show an error if the character limit is reached', () => {
         renderComponent();
         const input = screen.getByTestId('content-answers-question-input');

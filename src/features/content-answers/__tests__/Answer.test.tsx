@@ -14,6 +14,13 @@ describe('features/content-answers/answer', () => {
         expect(answer).toBeInTheDocument();
     });
 
+    test('should call handleScrollToBottom when there is an answer', () => {
+        const handleScrollToBottom = jest.fn();
+        renderComponent({ answer: 'some answer', handleScrollToBottom, isLoading: false });
+
+        expect(handleScrollToBottom).toBeCalledWith('smooth');
+    });
+
     test('should render the loading element', () => {
         renderComponent({ answer: '', handleScrollToBottom: jest.fn(), isLoading: true });
 
