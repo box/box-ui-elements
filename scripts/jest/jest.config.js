@@ -9,12 +9,7 @@ module.exports = {
         '\\.(css|less|scss|md)$': '<rootDir>/scripts/jest/mocks/styleMock.js',
     },
     transformIgnorePatterns: ['node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data))'],
-    testPathIgnorePatterns: [
-        '/node_modules/',
-        'stories.test.js$',
-        'stories.test.tsx$',
-        '<rootDir>/src/elements/content-sidebar/activity-feed/activity-feed/__tests__/ActivityFeed.test.js',
-    ],
+    testPathIgnorePatterns: ['/node_modules/', 'stories.test.js$', 'stories.test.tsx$'],
     collectCoverage: false,
     coverageDirectory: '<rootDir>/reports',
     collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', '!**/node_modules/**', '!**/__tests__/**'],
@@ -28,6 +23,4 @@ module.exports = {
         '<rootDir>/scripts/jest/jest-setup.js',
     ],
     snapshotSerializers: ['enzyme-to-json/serializer'],
-
-    testMatch: ['<rootDir>/src/elements/content-sidebar/activity-feed/activity-feed/__tests__/ActivityFeedRTL.test.js'],
 };
