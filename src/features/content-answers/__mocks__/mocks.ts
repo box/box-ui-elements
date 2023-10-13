@@ -15,6 +15,7 @@ export const mockFile = {
 export const mockQuestionsNoAnswer: QuestionType[] = [
     {
         prompt: 'summarize',
+        error: null,
     },
 ];
 
@@ -23,6 +24,7 @@ export const mockQuestionsWithAnswer: QuestionType[] = [
         prompt: 'summarize another question',
         answer: 'summarize answer',
         createdAt: '',
+        error: null,
     },
 ];
 

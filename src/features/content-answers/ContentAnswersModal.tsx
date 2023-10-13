@@ -26,6 +26,7 @@ export type QuestionType = {
     prompt: string;
     answer?: string;
     createdAt?: string;
+    error: ElementsXhrError;
 };
 
 type Props = {
@@ -53,10 +54,15 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
         setQuestions([...updatedQuestions, lastQuestion]);
     }, []);
 
-    const handleErrorCallback = useCallback((error: ElementsXhrError): void => {
+    const handleErrorCallback = useCallback((error: ElementsXhrError, updatedQuestions): void => {
         setIsLoading(false);
         if (error) {
-            // TODO: render error component
+            const lastQuestion = updatedQuestions.pop();
+            if (lastQuestion && lastQuestion.prompt) {
+                lastQuestion.error = error;
+            }
+
+            setQuestions([...updatedQuestions, lastQuestion]);
         }
     }, []);
 
@@ -69,14 +75,14 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                     type: 'file',
                 },
             ];
-            const updatedQuestions = [...questions, { prompt }];
+            const updatedQuestions = [...questions, { prompt, error: null }];
             setQuestions(updatedQuestions);
             setIsLoading(true);
             try {
                 const response = await api.getIntelligenceAPI(true).ask(prompt, items);
                 handleSuccessCallback(response, updatedQuestions);
             } catch (e) {
-                handleErrorCallback(e);
+                handleErrorCallback(e, updatedQuestions);
             }
         },
         [api, file, handleErrorCallback, handleSuccessCallback, questions],

@@ -24,11 +24,11 @@ const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, question
             <WelcomeMessage fileName={fileName} />
             <ul>
                 {questions &&
-                    questions.map(({ prompt, answer = '' }, index) => {
+                    questions.map(({ prompt, answer = '', error }, index) => {
                         return (
                             <li key={index}>
                                 <Question currentUser={currentUser} prompt={prompt} />
-                                <Answer answer={answer} isLoading={isLoading} />
+                                <Answer answer={answer} error={error} isLoading={isLoading} />
                             </li>
                         );
                     })}

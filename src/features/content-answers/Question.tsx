@@ -1,7 +1,7 @@
 import React from 'react';
+
 import Media from '../../components/media';
 import Avatar from '../../components/avatar';
-
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { User } from '../../../common/types/core';
