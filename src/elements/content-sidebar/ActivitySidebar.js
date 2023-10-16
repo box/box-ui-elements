@@ -33,6 +33,7 @@ import {
     ACTIVITY_FILTER_OPTION_RESOLVED,
     ACTIVITY_FILTER_OPTION_TASKS,
     ACTIVITY_FILTER_OPTION_UNRESOLVED,
+    COMMENT_STATUS_RESOLVED,
     DEFAULT_COLLAB_DEBOUNCE,
     ERROR_CODE_FETCH_ACTIVITY,
     FEED_ITEM_TYPE_ANNOTATION,
@@ -237,6 +238,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             (annotation: Annotation) => {
                 emitAnnotationUpdateEvent(annotation);
                 this.feedSuccessCallback();
+
+                if (status === COMMENT_STATUS_RESOLVED) {
+                    this.hideRepliesForFeedItem(id);
+                }
             },
             this.feedErrorCallback,
         );
@@ -468,6 +473,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 onSuccess();
             }
             onCommentUpdate();
+
+            if (status === COMMENT_STATUS_RESOLVED) {
+                this.hideRepliesForFeedItem(id);
+            }
         };
 
         if (hasReplies) {
@@ -1129,6 +1138,15 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 item.type === feedItemsStatusFilter
             );
         });
+    };
+
+    hideRepliesForFeedItem = (feedItemId: string) => {
+        const { feedItems } = this.state;
+        const feedItem = feedItems.find((item: FeedItem) => item.id === feedItemId);
+        const lastReply = feedItem.replies.slice(-1);
+        if (lastReply.length) {
+            this.updateReplies(feedItemId, lastReply);
+        }
     };
 
     onTaskModalClose = () => {
