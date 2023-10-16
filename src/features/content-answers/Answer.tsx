@@ -11,7 +11,7 @@ import './Answer.scss';
 
 type Props = {
     answer?: string;
-    error: ElementsXhrError;
+    error?: ElementsXhrError;
     isLoading: boolean;
 };
 

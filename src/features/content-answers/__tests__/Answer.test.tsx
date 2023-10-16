@@ -11,14 +11,14 @@ describe('features/content-answers/answer', () => {
         render(<Answer {...props} />);
 
     test('should render the answer', () => {
-        renderComponent({ answer: 'some answer', error: null, isLoading: false });
+        renderComponent({ answer: 'some answer', error: undefined, isLoading: false });
 
         const answer = screen.getByText('some answer');
         expect(answer).toBeInTheDocument();
     });
 
     test('should render the loading element', () => {
-        renderComponent({ answer: '', error: null, isLoading: true });
+        renderComponent({ answer: '', error: undefined, isLoading: true });
 
         const loadingElement = screen.getByTestId('LoadingElement');
         expect(loadingElement).toBeInTheDocument();

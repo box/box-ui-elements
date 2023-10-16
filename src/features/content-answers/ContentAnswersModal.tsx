@@ -26,7 +26,7 @@ export type QuestionType = {
     prompt: string;
     answer?: string;
     createdAt?: string;
-    error: ElementsXhrError;
+    error?: string;
 };
 
 type Props = {
@@ -56,14 +56,13 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
 
     const handleErrorCallback = useCallback((error: ElementsXhrError, updatedQuestions): void => {
         setIsLoading(false);
-        if (error) {
-            const lastQuestion = updatedQuestions.pop();
-            if (lastQuestion && lastQuestion.prompt) {
-                lastQuestion.error = error;
-            }
 
-            setQuestions([...updatedQuestions, lastQuestion]);
+        const lastQuestion = updatedQuestions.pop();
+        if (lastQuestion && lastQuestion.prompt) {
+            lastQuestion.error = error;
         }
+
+        setQuestions([...updatedQuestions, lastQuestion]);
     }, []);
 
     const handleOnAsk = useCallback(
@@ -75,7 +74,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                     type: 'file',
                 },
             ];
-            const updatedQuestions = [...questions, { prompt, error: null }];
+            const updatedQuestions = [...questions, { prompt }];
             setQuestions(updatedQuestions);
             setIsLoading(true);
             try {
