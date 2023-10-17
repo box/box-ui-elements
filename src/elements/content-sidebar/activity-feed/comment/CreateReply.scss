@@ -1,6 +1,9 @@
 @import '../../../common/variables';
 
 .bcs-CreateReply {
+    margin-top: $bdl-grid-unit * 2;
+    margin-bottom: $bdl-grid-unit * 4;
+
     .bcs-CreateReply-toggle {
         display: flex;
         align-items: center;

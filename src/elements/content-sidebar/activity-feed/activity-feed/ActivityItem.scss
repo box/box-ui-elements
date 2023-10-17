@@ -6,7 +6,7 @@
 
         // This brittle selector is here in order to only select the parent BaseComment and not the BaseComments which constitute its replies.
         & > div {
-            padding: $bdl-grid-unit * 3 $bdl-grid-unit * 3 $bdl-grid-unit * 5;
+            padding: $bdl-grid-unit * 3 $bdl-grid-unit * 3 $bdl-grid-unit;
         }
 
         &.bcs-is-hoverable:hover {
