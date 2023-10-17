@@ -1143,8 +1143,9 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     hideRepliesForFeedItem = (feedItemId: string) => {
         const { feedItems } = this.state;
         const feedItem = feedItems.find((item: FeedItem) => item.id === feedItemId);
-        const lastReply = feedItem.replies.slice(-1);
-        if (lastReply.length > 1) {
+        const { replies } = feedItem;
+        if (replies.length > 1) {
+            const lastReply = feedItem.replies.slice(-1);
             this.updateReplies(feedItemId, lastReply);
         }
     };
