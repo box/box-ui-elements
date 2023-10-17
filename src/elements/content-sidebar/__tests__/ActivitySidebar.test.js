@@ -1591,6 +1591,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(updateReplies).not.toBeCalled();
         });
 
+        test('should not call updateReplies when the feedItem does not exist for the given feedItemId', () => {
+            const wrapper = getWrapper();
+            const updateReplies = jest.fn();
+            const instance = wrapper.instance();
+            instance.updateReplies = updateReplies;
+
+            wrapper.setState({ feedItems: [] });
+
+            instance.hideRepliesForFeedItem(123);
+
+            expect(updateReplies).not.toBeCalled();
+        });
+
         test('should call updateReplies with lastReply and feedItemId if there are replies', () => {
             const wrapper = getWrapper();
             const updateReplies = jest.fn();
