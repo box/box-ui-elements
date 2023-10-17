@@ -1569,7 +1569,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('hideRepliesForFeedItem()', () => {
-        test('should not call updateReplies if there are no replies', () => {
+        test.each`
+            replies
+            ${undefined}
+            ${[]}
+            ${[{ id: 123 }]}
+        `('should not call updateReplies when replies is $replies', ({ replies }) => {
             const wrapper = getWrapper();
             const updateReplies = jest.fn();
             const instance = wrapper.instance();
@@ -1578,24 +1583,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const itemId = '999';
 
             wrapper.setState({
-                feedItems: [{ id: itemId, replies: [], type: 'comment' }],
-            });
-
-            instance.hideRepliesForFeedItem(itemId);
-
-            expect(updateReplies).not.toBeCalled();
-        });
-
-        test('should not call updateReplies if there is one reply', () => {
-            const wrapper = getWrapper();
-            const updateReplies = jest.fn();
-            const instance = wrapper.instance();
-            instance.updateReplies = updateReplies;
-
-            const itemId = '999';
-
-            wrapper.setState({
-                feedItems: [{ id: itemId, replies: [{ id: 123 }], type: 'comment' }],
+                feedItems: [{ id: itemId, replies, type: 'comment' }],
             });
 
             instance.hideRepliesForFeedItem(itemId);

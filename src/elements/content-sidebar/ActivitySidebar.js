@@ -1144,7 +1144,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         const { feedItems } = this.state;
         const feedItem = feedItems.find((item: FeedItem) => item.id === feedItemId);
         const { replies } = feedItem;
-        if (replies.length > 1) {
+        if (replies && replies.length > 1) {
             const lastReply = feedItem.replies.slice(-1);
             this.updateReplies(feedItemId, lastReply);
         }
