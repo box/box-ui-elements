@@ -57,7 +57,7 @@ const first_version = {
     version_number: '1',
 };
 
-export const file = {
+const file = {
     id: '12345',
     permissions: {
         can_comment: true,
@@ -117,7 +117,7 @@ const taskWithAssignment = {
 };
 
 const feedItems = [...comments.entries];
-export const currentUser = { name: 'Kanye West', id: 10 };
+const currentUser = { name: 'Kanye West', id: 10 };
 
 const getWrapper = props => shallow(<ActivityFeed currentUser={currentUser} file={file} {...props} />);
 
