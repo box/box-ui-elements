@@ -1141,10 +1141,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     };
 
     hideRepliesForFeedItem = (feedItemId: string) => {
-        const { feedItems } = this.state;
-        const feedItem = feedItems.find((item: FeedItem) => item.id === feedItemId);
-        const { replies } = feedItem || {};
-        if (replies && replies.length > 1) {
+        const { feedItems = [] } = this.state;
+        // unfortunately, casting to any is the only way to avoid flow issues resulting
+        // from replies not existing on certain FeedItem types
+        const feedItem: any = feedItems.find(item => item.id === feedItemId);
+        const { replies = [] } = feedItem || {};
+        if (replies.length > 1) {
             const lastReply = replies.slice(-1);
             this.updateReplies(feedItemId, lastReply);
         }
