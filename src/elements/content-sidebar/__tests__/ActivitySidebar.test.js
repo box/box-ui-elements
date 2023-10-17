@@ -1568,6 +1568,60 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         );
     });
 
+    describe('hideRepliesForFeedItem()', () => {
+        test('should not call updateReplies if there are no replies', () => {
+            const wrapper = getWrapper();
+            const updateReplies = jest.fn();
+            const instance = wrapper.instance();
+            instance.updateReplies = updateReplies;
+
+            const itemId = '999';
+
+            wrapper.setState({
+                feedItems: [{ id: itemId, replies: [], type: 'comment' }],
+            });
+
+            instance.hideRepliesForFeedItem(itemId);
+
+            expect(updateReplies).not.toBeCalled();
+        });
+
+        test('should not call updateReplies if there is one reply', () => {
+            const wrapper = getWrapper();
+            const updateReplies = jest.fn();
+            const instance = wrapper.instance();
+            instance.updateReplies = updateReplies;
+
+            const itemId = '999';
+
+            wrapper.setState({
+                feedItems: [{ id: itemId, replies: [{ id: 123 }], type: 'comment' }],
+            });
+
+            instance.hideRepliesForFeedItem(itemId);
+
+            expect(updateReplies).not.toBeCalled();
+        });
+
+        test('should call updateReplies with lastReply and feedItemId if there are replies', () => {
+            const wrapper = getWrapper();
+            const updateReplies = jest.fn();
+            const instance = wrapper.instance();
+            instance.updateReplies = updateReplies;
+
+            const itemId = '999';
+            const lastReplyId = '456';
+            const expectedReplies = [{ id: lastReplyId }];
+
+            wrapper.setState({
+                feedItems: [{ id: itemId, replies: [{ id: 123 }, { id: lastReplyId }], type: 'comment' }],
+            });
+
+            instance.hideRepliesForFeedItem(itemId);
+            expect(updateReplies).toBeCalledWith(itemId, expectedReplies);
+        });
+    });
+
     describe('renderAddTaskButton()', () => {
         test('should return null when hasTasks is false', () => {
             const wrapper = getWrapper({ hasTasks: false });
