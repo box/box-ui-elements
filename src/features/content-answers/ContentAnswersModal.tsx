@@ -23,10 +23,10 @@ import messages from './messages';
 import './ContentAnswersModal.scss';
 
 export type QuestionType = {
-    prompt: string;
     answer?: string;
     createdAt?: string;
     error?: string;
+    prompt: string;
 };
 
 type Props = {
@@ -49,20 +49,18 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
         if (lastQuestion && lastQuestion.prompt) {
             lastQuestion.answer = response.data.answer;
             lastQuestion.createdAt = response.data.created_at;
+            setQuestions([...updatedQuestions, lastQuestion]);
         }
-
-        setQuestions([...updatedQuestions, lastQuestion]);
     }, []);
 
-    const handleErrorCallback = useCallback((error: ElementsXhrError, updatedQuestions): void => {
+    const handleErrorCallback = useCallback((error: ElementsXhrError, updatedQuestions: QuestionType[]): void => {
         setIsLoading(false);
 
         const lastQuestion = updatedQuestions.pop();
         if (lastQuestion && lastQuestion.prompt) {
             lastQuestion.error = error;
+            setQuestions([...updatedQuestions, lastQuestion]);
         }
-
-        setQuestions([...updatedQuestions, lastQuestion]);
     }, []);
 
     const handleOnAsk = useCallback(

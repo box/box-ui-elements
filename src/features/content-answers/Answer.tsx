@@ -19,8 +19,8 @@ const Answer = ({ answer, error, isLoading }: Props) => {
     return (
         <div className="bdl-Answer">
             {answer && <ContentAnswersGridCard>{answer}</ContentAnswersGridCard>}
-            {!answer && isLoading && <LoadingElement />}
-            {error && <InlineError error={error} />}
+            {!answer && !error && isLoading && <LoadingElement />}
+            {error && <InlineError />}
         </div>
     );
 };

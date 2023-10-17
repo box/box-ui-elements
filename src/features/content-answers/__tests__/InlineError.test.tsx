@@ -3,9 +3,6 @@ import { IntlProvider } from 'react-intl';
 import { render, screen } from '@testing-library/react';
 
 import InlineError from '../InlineError';
-// @ts-ignore: no ts definition
-// eslint-disable-next-line import/named
-import { ElementsXhrError } from '../../../common/types/api';
 
 import messages from '../messages';
 
@@ -16,11 +13,10 @@ describe('features/content-answers/InlineError', () => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
 
-    const renderComponent = (props: { error: ElementsXhrError }) =>
-        render(<InlineError {...props} />, { wrapper: IntlWrapper });
+    const renderComponent = () => render(<InlineError />, { wrapper: IntlWrapper });
 
     test('should show inline error message', () => {
-        renderComponent({ error: new Error('error') });
+        renderComponent();
         expect(screen.getByText(messages.inlineErrorText.defaultMessage)).toBeInTheDocument();
     });
 });
