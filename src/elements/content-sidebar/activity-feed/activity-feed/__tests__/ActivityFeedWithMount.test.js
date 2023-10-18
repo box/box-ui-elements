@@ -25,8 +25,6 @@ const first_version = {
     modified_by: { name: 'Akon', id: 11 },
     version_number: '1',
 };
-30;
-3;
 
 const file = {
     id: '12345',
@@ -60,6 +58,18 @@ const createComment = (id = 1) => {
     };
 };
 
+const getComments = wrapper => {
+    return wrapper.find('[data-testid="comment"]').filterWhere(n => {
+        return typeof n.type() === 'string';
+    });
+};
+
+const filterReactNodes = nodes => {
+    return nodes.filterWhere(n => {
+        return typeof n.type() === 'function';
+    });
+};
+
 describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     const Wrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
@@ -80,28 +90,27 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             hasReplies: true,
         });
 
-        // filter out DOM nodes. We only want to test React components
-        const menuButtons = wrapper.find('.bdl-Media-menu').filterWhere(n => {
-            return typeof n.type() === 'function';
-        });
-        const replyButtons = wrapper.find('.bcs-CreateReply-toggle').filterWhere(n => {
-            return typeof n.type() === 'function';
-        });
+        const menuButtons = filterReactNodes(wrapper.find('.bdl-Media-menu'));
+        const replyButtons = filterReactNodes(wrapper.find('.bcs-CreateReply-toggle'));
         const comment2ReplyButton = replyButtons.at(1);
         const comment1MenuButton = menuButtons.at(0);
 
         comment2ReplyButton.simulate('click');
+        let comments = getComments(wrapper);
+        expect(comments.at(1).hasClass('bcs-is-focused')).toBe(true);
+
         const comment2Input = wrapper.find('.bcs-CreateReply-form');
+        expect(comment2Input.exists()).toBe(true);
+
         comment1MenuButton.simulate('click');
+        comments = getComments(wrapper);
+        expect(comments.at(0).hasClass('bcs-is-focused')).toBe(true);
+
         // click by it self does not trigger onFocus event so we need to call onFocus manually
         // and then click ¯\_(ツ)_/¯
         comment2Input.prop('onFocus')();
         comment2Input.simulate('click');
-
-        const comments = wrapper.find('[data-testid="comment"]').filterWhere(n => {
-            return typeof n.type() === 'string';
-        });
-
+        comments = getComments(wrapper);
         expect(comments.at(1).hasClass('bcs-is-focused')).toBe(true);
     });
 });
