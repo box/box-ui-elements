@@ -64,12 +64,6 @@ const getComments = wrapper => {
     });
 };
 
-const filterReactNodes = nodes => {
-    return nodes.filterWhere(n => {
-        return typeof n.type() === 'function';
-    });
-};
-
 describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     const Wrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
@@ -90,8 +84,8 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             hasReplies: true,
         });
 
-        const menuButtons = filterReactNodes(wrapper.find('.bdl-Media-menu'));
-        const replyButtons = filterReactNodes(wrapper.find('.bcs-CreateReply-toggle'));
+        const menuButtons = wrapper.find('PlainButton.bdl-Media-menu');
+        const replyButtons = wrapper.find('PlainButton.bcs-CreateReply-toggle');
         const comment2ReplyButton = replyButtons.at(1);
         const comment1MenuButton = menuButtons.at(0);
 
