@@ -1,12 +1,15 @@
+// @flow
 import { useEffect, useRef } from 'react';
 
-function useOnOutsideClick(callback) {
-    const ref = useRef();
+function useOnOutsideClick(callback: Function) {
+    const ref = useRef<?HTMLElement>();
 
     useEffect(() => {
-        function handleClickOutside(event) {
-            if (ref.current && !ref.current.contains(event.target)) {
-                callback();
+        function handleClickOutside(event: MouseEvent) {
+            if (ref.current && ref.current instanceof Element) {
+                if (event.target instanceof Node && !ref.current.contains(event.target)) {
+                    callback();
+                }
             }
         }
 

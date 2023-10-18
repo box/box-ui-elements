@@ -127,7 +127,7 @@ const ActiveState = ({
     shouldUseUAA,
     translations,
 }: Props): React.Node => {
-    const [editingCommentsIds, setEditingCommentsIds] = React.useState<string[]>([]);
+    const [editingCommentIds, setEditingCommentIds] = React.useState<string[]>([]);
 
     const onCommentSelectHandler = (itemId: string) => (isSelected: boolean) => {
         onCommentSelect(isSelected ? itemId : null);
@@ -166,10 +166,10 @@ const ActiveState = ({
     };
 
     const handleUnselect = React.useCallback(() => {
-        if (!editingCommentsIds?.length) {
+        if (editingCommentIds.length === 0) {
             onCommentSelect(null);
         }
-    }, [editingCommentsIds, onCommentSelect]);
+    }, [editingCommentIds, onCommentSelect]);
 
     const activityFeedRef = useOnOutsideClick(handleUnselect);
 
@@ -231,7 +231,7 @@ const ActiveState = ({
                                         onReplyDelete={onReplyDeleteHandler(item.id)}
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_COMMENT)}
                                         onStatusChange={onCommentStatusChangeHandler}
-                                        setEditingCommentsIds={setEditingCommentsIds}
+                                        setEditingCommentIds={setEditingCommentIds}
                                     />
                                 ) : (
                                     <ActivityThread
@@ -250,7 +250,7 @@ const ActiveState = ({
                                         onReplyDelete={onReplyDeleteHandler(item.id)}
                                         onReplyEdit={onReplyUpdateHandler(item.id)}
                                         onReplySelect={onCommentSelectHandler(item.id)}
-                                        setEditingCommentsIds={setEditingCommentsIds}
+                                        setEditingCommentIds={setEditingCommentIds}
                                         onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                         repliesTotalCount={item.total_reply_count}
                                         replies={item.replies}
@@ -359,7 +359,7 @@ const ActiveState = ({
                                         }
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_ANNOTATION)}
                                         tagged_message={item.description?.message ?? ''}
-                                        setEditingCommentsIds={setEditingCommentsIds}
+                                        setEditingCommentIds={setEditingCommentIds}
                                     />
                                 ) : (
                                     <ActivityThread
@@ -381,7 +381,7 @@ const ActiveState = ({
                                         onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                         repliesTotalCount={item.total_reply_count}
                                         replies={item.replies}
-                                        setEditingCommentsIds={setEditingCommentsIds}
+                                        setEditingCommentIds={setEditingCommentIds}
                                         translations={translations}
                                     >
                                         <AnnotationActivity

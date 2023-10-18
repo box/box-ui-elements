@@ -15,7 +15,7 @@ export interface BaseCommentMenuWrapperProps {
     onSelect: (isSelected: boolean) => void;
     onStatusChange?: OnAnnotationStatusChange | OnCommentStatusChange | typeof undefined;
     permissions: BoxCommentPermission;
-    setEditingCommentsIds: (editingCommentsIds: string[] | ((prevState: string[]) => string[])) => void;
+    setEditingCommentIds: (editingCommentIds: string[] | ((prevState: string[]) => string[])) => void;
     setIsEditing: ((boolean => boolean) | boolean) => void;
     setIsInputOpen: ((boolean => boolean) | boolean) => void;
 }
@@ -31,7 +31,7 @@ export const BaseCommentMenuWrapper = ({
     onStatusChange,
     permissions,
     setIsEditing,
-    setEditingCommentsIds,
+    setEditingCommentIds,
     setIsInputOpen,
 }: BaseCommentMenuWrapperProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState<boolean>(false);
@@ -52,7 +52,7 @@ export const BaseCommentMenuWrapper = ({
     };
 
     const handleEditClick = (): void => {
-        setEditingCommentsIds((prevState: string[]) => [...prevState, id]);
+        setEditingCommentIds((prevState: string[]) => [...prevState, id]);
         setIsEditing(true);
         setIsInputOpen(true);
         onSelect(true);

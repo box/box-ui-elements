@@ -59,7 +59,7 @@ export type BaseCommentProps = {
     permissions: BoxCommentPermission,
     replies?: CommentType[],
     repliesTotalCount?: number,
-    setEditingCommentsIds: (editingCommentsIds: string[] | ((prevState: string[]) => string[])) => void,
+    setEditingCommentIds: (editingCommentIds: string[] | ((prevState: string[]) => string[])) => void,
     status?: FeedItemStatus,
     tagged_message: string,
     translatedTaggedMessage?: string,
@@ -94,7 +94,7 @@ export const BaseComment = ({
     permissions = {},
     replies = [],
     repliesTotalCount = 0,
-    setEditingCommentsIds = () => {},
+    setEditingCommentIds = () => {},
     status,
     tagged_message = '',
     translatedTaggedMessage,
@@ -110,14 +110,14 @@ export const BaseComment = ({
 
     const commentFormCancelHandler = (): void => {
         setIsInputOpen(false);
-        setEditingCommentsIds((prevState: string[]) => prevState.filter(commentId => commentId !== id));
+        setEditingCommentIds((prevState: string[]) => prevState.filter(commentId => commentId !== id));
         setIsEditing(false);
         onSelect(false);
     };
 
     const commentFormSubmitHandler = (): void => {
         setIsInputOpen(false);
-        setEditingCommentsIds((prevState: string[]) => prevState.filter(commentId => commentId !== id));
+        setEditingCommentIds((prevState: string[]) => prevState.filter(commentId => commentId !== id));
         setIsEditing(false);
         onSelect(false);
     };
@@ -187,7 +187,7 @@ export const BaseComment = ({
                             onStatusChange={onStatusChange}
                             permissions={permissions}
                             setIsEditing={setIsEditing}
-                            setEditingCommentsIds={setEditingCommentsIds}
+                            setEditingCommentIds={setEditingCommentIds}
                             setIsInputOpen={setIsInputOpen}
                         />
                     )}
@@ -242,7 +242,7 @@ export const BaseComment = ({
                     onShowReplies={onShowReplies}
                     replies={replies}
                     repliesTotalCount={repliesTotalCount}
-                    setEditingCommentsIds={setEditingCommentsIds}
+                    setEditingCommentIds={setEditingCommentIds}
                 />
             )}
         </div>
@@ -266,7 +266,7 @@ type RepliesProps = {
     onShowReplies?: () => void,
     replies: CommentType[],
     repliesTotalCount?: number,
-    setEditingCommentsIds: (editingCommentsIds: string[] | ((prevState: string[]) => string[])) => void,
+    setEditingCommentIds: (editingCommentIds: string[] | ((prevState: string[]) => string[])) => void,
     translations?: Translations,
 };
 
@@ -287,7 +287,7 @@ export const Replies = ({
     replies,
     repliesTotalCount = 0,
     translations,
-    setEditingCommentsIds,
+    setEditingCommentIds,
 }: RepliesProps) => {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
@@ -348,7 +348,7 @@ export const Replies = ({
                                     onSelect={onReplySelect}
                                     onDelete={onReplyDelete}
                                     permissions={getReplyPermissions(reply)}
-                                    setEditingCommentsIds={setEditingCommentsIds}
+                                    setEditingCommentIds={setEditingCommentIds}
                                     translations={translations}
                                 />
                             </li>
