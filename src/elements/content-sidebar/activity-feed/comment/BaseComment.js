@@ -101,6 +101,21 @@ export const BaseComment = ({
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
 
+    const prevStatus = React.useRef<FeedItemStatus | undefined>(status);
+
+    React.useEffect(() => {
+        if (
+            onHideReplies &&
+            status === COMMENT_STATUS_RESOLVED &&
+            status !== prevStatus.current &&
+            repliesTotalCount === replies.length
+        ) {
+            onHideReplies(replies.splice(-1));
+        }
+
+        prevStatus.current = status;
+    }, [onHideReplies, replies, repliesTotalCount, status]);
+
     const commentFormFocusHandler = (): void => {
         setIsInputOpen(true);
         onSelect(true);
