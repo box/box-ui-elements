@@ -34,10 +34,11 @@ type Props = {
     currentUser?: User;
     file: BoxItem;
     isOpen: boolean;
+    onAsk: Function;
     onRequestClose: () => void;
 };
 
-const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }: Props) => {
+const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestClose }: Props) => {
     const fileName = file && file.name;
     const [hasError, setHasError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -66,6 +67,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
     const handleAsk = useCallback(
         async (prompt: string, isRetry = false) => {
             setHasError(false);
+            onAsk();
             const id = file && file.id;
             const items = [
                 {
@@ -86,7 +88,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
             }
             setIsLoading(false);
         },
-        [api, file, handleErrorCallback, handleSuccessCallback, questions],
+        [api, file, handleErrorCallback, handleSuccessCallback, onAsk, questions],
     );
 
     const handleRetry = useCallback(() => {
