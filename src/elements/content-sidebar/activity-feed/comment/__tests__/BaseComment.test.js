@@ -19,6 +19,7 @@ import {
 } from '../stories/common';
 import messages from '../messages';
 import localize from '../../../../../../test/support/i18n';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../../constants';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
@@ -39,22 +40,27 @@ const repliesProps = {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export const getWrapper = props =>
-    render(
-        <IntlProvider locale="en">
-            <BaseComment
-                id="1"
-                {...comment}
-                approverSelectorContacts={[]}
-                currentUser={currentUser}
-                mentionSelectorContacts={[]}
-                onSelect={onSelect}
-                {...props}
-            />
-        </IntlProvider>,
-    );
+const getComponent = props => (
+    <IntlProvider locale="en">
+        <BaseComment
+            id="1"
+            {...comment}
+            approverSelectorContacts={[]}
+            currentUser={currentUser}
+            mentionSelectorContacts={[]}
+            onSelect={onSelect}
+            {...props}
+        />
+    </IntlProvider>
+);
+
+const getWrapper = props => render(getComponent(props));
 
 describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     EditorState.moveFocusToEnd = editor => editor;
 
     test.each`
@@ -415,4 +421,42 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
         fireEvent.click(editButton);
         expect(mockFocusFunc).toHaveBeenCalled();
     });
+
+    test('should hide replies when status changes to resolved, hideOnReplies is defined, there is more than one reply, and replies are not collapsed', () => {
+        const { rerender } = getWrapper({ ...repliesProps, repliesTotalCount: replies.length });
+        rerender(getComponent({ ...repliesProps, repliesTotalCount: replies.length, status: COMMENT_STATUS_RESOLVED }));
+        expect(hideReplies).toHaveBeenCalledWith(replies.slice(-1));
+    });
+
+    test.each`
+        onHideReplies  | repliesTotalCount | repliesLength | status
+        ${'undefined'} | ${'equal'}        | ${2}          | ${COMMENT_STATUS_RESOLVED}
+        ${'undefined'} | ${'not equal'}    | ${2}          | ${COMMENT_STATUS_RESOLVED}
+        ${'undefined'} | ${'equal'}        | ${2}          | ${COMMENT_STATUS_OPEN}
+        ${'undefined'} | ${'not equal'}    | ${2}          | ${COMMENT_STATUS_OPEN}
+        ${'defined'}   | ${'equal'}        | ${2}          | ${COMMENT_STATUS_OPEN}
+        ${'defined'}   | ${'not equal'}    | ${2}          | ${COMMENT_STATUS_RESOLVED}
+        ${'undefined'} | ${'equal'}        | ${2}          | ${COMMENT_STATUS_RESOLVED}
+        ${'undefined'} | ${'not equal'}    | ${1}          | ${COMMENT_STATUS_RESOLVED}
+        ${'undefined'} | ${'equal'}        | ${1}          | ${COMMENT_STATUS_OPEN}
+        ${'undefined'} | ${'not equal'}    | ${1}          | ${COMMENT_STATUS_OPEN}
+        ${'defined'}   | ${'equal'}        | ${1}          | ${COMMENT_STATUS_OPEN}
+        ${'defined'}   | ${'not equal'}    | ${1}          | ${COMMENT_STATUS_RESOLVED}
+        ${'defined'}   | ${'equal'}        | ${1}          | ${COMMENT_STATUS_RESOLVED}
+    `(
+        'should not hide replies when onHideReplies is $onHideReplies, repliesTotalCount is $repliesTotalCount to the shown replies, and status changes to $status',
+        ({ onHideReplies, repliesTotalCount, repliesLength, status }) => {
+            const props = {
+                ...repliesProps,
+                onHideReplies: onHideReplies === 'defined' ? hideReplies : undefined,
+                replies: replies.slice(0, repliesLength),
+                repliesTotalCount: repliesTotalCount === 'equal' ? replies.length : replies.length + 1,
+            };
+
+            const { rerender } = getWrapper(props);
+            rerender(getComponent({ ...props, status }));
+
+            expect(hideReplies).not.toHaveBeenCalled();
+        },
+    );
 });

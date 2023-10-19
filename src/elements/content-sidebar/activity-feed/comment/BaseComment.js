@@ -108,9 +108,10 @@ export const BaseComment = ({
             onHideReplies &&
             status === COMMENT_STATUS_RESOLVED &&
             status !== prevStatus.current &&
+            replies.length > 1 &&
             repliesTotalCount === replies.length
         ) {
-            onHideReplies(replies.splice(-1));
+            onHideReplies(replies.slice(-1));
         }
 
         prevStatus.current = status;
