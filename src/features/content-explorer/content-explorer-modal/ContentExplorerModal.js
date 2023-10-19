@@ -32,6 +32,7 @@ type Props = {
     onSelectedClick?: () => void,
     onSelectedItemsUpdate?: Function,
     onViewSelectedClick?: Function,
+    shouldNotUsePortal?: boolean,
     title?: string,
 };
 
@@ -46,6 +47,7 @@ const ContentExplorerModal = ({
     onRequestClose,
     onSelectedClick,
     onSelectItem,
+    shouldNotUsePortal = false,
     ...rest
 }: Props) => (
     <Modal
@@ -55,6 +57,7 @@ const ContentExplorerModal = ({
         })}
         isOpen={isOpen}
         onRequestClose={onRequestClose}
+        shouldNotUsePortal={shouldNotUsePortal}
     >
         {description}
         <ContentExplorer
