@@ -7,6 +7,7 @@ import {
     mockCurrentUser,
     mockQuestionsNoAnswer,
     mockQuestionsWithAnswer,
+    mockQuestionsWithError,
     mockQuestionsWithAnswerAndNoAnswer,
 } from '../__mocks__/mocks';
 
@@ -58,5 +59,12 @@ describe('features/content-answers/ContentAnswersModalContent', () => {
 
         const loadingElement = screen.queryAllByTestId('LoadingElement');
         expect(loadingElement.length).toEqual(1);
+    });
+
+    test('should render only the inline error which not loading and there is an error', () => {
+        renderComponent({ isLoading: false, questions: mockQuestionsWithError });
+
+        expect(screen.getByTestId('InlineError')).toBeInTheDocument();
+        expect(screen.queryByTestId('Answer')).not.toBeInTheDocument();
     });
 });

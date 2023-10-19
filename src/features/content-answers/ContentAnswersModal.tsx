@@ -25,7 +25,7 @@ import './ContentAnswersModal.scss';
 export type QuestionType = {
     answer?: string;
     createdAt?: string;
-    error?: string;
+    error?: ElementsXhrError;
     prompt: string;
 };
 

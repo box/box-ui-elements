@@ -26,6 +26,14 @@ export const mockQuestionsWithAnswer: QuestionType[] = [
     },
 ];
 
+export const mockQuestionsWithError: QuestionType[] = [
+    {
+        prompt: 'summarize',
+        answer: '',
+        error: new Error('error'),
+    },
+];
+
 export const mockQuestionsWithAnswerAndNoAnswer: QuestionType[] = [
     ...mockQuestionsWithAnswer,
     ...mockQuestionsNoAnswer,
