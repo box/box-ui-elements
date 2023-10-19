@@ -1,0 +1,19 @@
+@import '../../styles/variables';
+
+.bdl-ContentAnswersModalFooterActions {
+    position: relative;
+    top: -$bdl-grid-unit * 4;
+    right: 0;
+    left: 0;
+    align-self: flex-start;
+    width: 100%;
+    padding: $bdl-grid-unit * 3 0 0 0;
+}
+
+.bdl-ContentAnswersModalFooterActions-Button {
+    display: flex;
+    align-items: center;
+    min-height: $bdl-grid-unit * 10;
+    margin: auto;
+    padding: 0 $bdl-grid-unit * 4;
+}

@@ -57,6 +57,11 @@ const messages = defineMessages({
         description: 'Error tooltip to show inside text area if the user reached the character limit',
         id: 'boxui.contentAnswers.maxCharactersReachedError',
     },
+    retryResponse: {
+        defaultMessage: 'Retry',
+        description: 'Retry button label to send again the question to the service',
+        id: 'boxui.contentAnswers.retryResponse',
+    },
     welcomeAskQuestionText: {
         defaultMessage: 'Ask questions about {name}',
         description: 'Content Answers welcome message for asking questions',
