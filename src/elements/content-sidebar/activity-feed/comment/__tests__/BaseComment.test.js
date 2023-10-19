@@ -422,7 +422,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
         expect(mockFocusFunc).toHaveBeenCalled();
     });
 
-    test('should hide replies when status changes to resolved, hideOnReplies is defined, there is more than one reply, and replies are not collapsed', () => {
+    test('should hide replies when status changes to resolved, onHideReplies is defined, there is more than one reply, and replies are not collapsed', () => {
         const { rerender } = getWrapper({ ...repliesProps, repliesTotalCount: replies.length });
         rerender(getComponent({ ...repliesProps, repliesTotalCount: replies.length, status: COMMENT_STATUS_RESOLVED }));
         expect(hideReplies).toHaveBeenCalledWith(replies.slice(-1));
