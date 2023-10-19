@@ -41,10 +41,12 @@ const ContentAnswersOpenButton = ({
     };
 
     const getTooltipText = () => {
+        if (isHighlighted) {
+            return formatMessage(messages.hasQuestionsTooltip);
+        }
         if (!isAllowedFileType(fileExtension)) {
             return formatMessage(messages.disabledTooltipFileNotCompatible);
         }
-
         return formatMessage(messages.defaultTooltip);
     };
 

@@ -38,6 +38,12 @@ describe('features/content-answers/ContentAnswersOpenButton', () => {
         expect(screen.getByText(messages.disabledTooltipFileNotCompatible.defaultMessage)).toBeInTheDocument();
     });
 
+    test('should display return to box ai when highlighted', () => {
+        renderComponent({ isHighlighted: true });
+        fireEvent.mouseOver(screen.getByTestId('content-answers-open-button'));
+        expect(screen.getByText(messages.hasQuestionsTooltip.defaultMessage)).toBeInTheDocument();
+    });
+
     test('should not call onclick callback when filetype is not allowed', () => {
         const onClick = jest.fn();
         renderComponent({ fileExtension: 'invalid', onClick });
