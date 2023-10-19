@@ -64,7 +64,7 @@ const getComments = wrapper => {
     });
 };
 
-describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
+describe('elements/content-sidebar/activity-feed/activity-feed/__tests__/ActivityFeedWithMount.test.js', () => {
     const Wrapper = ({ children }: { children?: React.ReactNode }) => {
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
