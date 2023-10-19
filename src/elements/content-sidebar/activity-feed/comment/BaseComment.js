@@ -101,7 +101,7 @@ export const BaseComment = ({
     const [isEditing, setIsEditing] = React.useState<boolean>(false);
     const [isInputOpen, setIsInputOpen] = React.useState<boolean>(false);
 
-    const prevStatus = React.useRef<FeedItemStatus | undefined>(status);
+    const prevStatus = React.useRef<?FeedItemStatus>(status);
 
     React.useEffect(() => {
         if (
