@@ -1,72 +1,73 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 
 import ContentAnswersModalContent from '../ContentAnswersModalContent';
-// @ts-ignore flow import
-import { scrollIntoView } from '../../../utils/dom';
-import {
-    mockCurrentUser,
-    mockQuestionsNoAnswer,
-    mockQuestionsWithAnswer,
-    mockQuestionsWithAnswerAndNoAnswer,
-} from '../__mocks__/mocks';
-
-jest.mock('../../../utils/dom', () => ({
-    scrollIntoView: jest.fn(),
-}));
+import { mockCurrentUser, mockFile, mockQuestionsWithAnswer } from '../__mocks__/mocks';
 
 describe('features/content-answers/ContentAnswersModalContent', () => {
-    const renderComponent = (props?: {}) => {
+    const scrollIntoViewMock = jest.fn();
+    const renderComponent = (props?: {}) =>
         render(
             <ContentAnswersModalContent
                 currentUser={mockCurrentUser}
-                fileName="name"
+                fileName={mockFile.name}
                 isLoading={false}
-                questions={mockQuestionsNoAnswer}
+                questions={[]}
                 {...props}
             />,
         );
-    };
 
-    test('should render welcome message', () => {
+    beforeEach(() => {
+        HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+    });
+
+    afterEach(() => {
+        // Restore the original implementation of scrollIntoView
+        delete HTMLElement.prototype.scrollIntoView;
+    });
+
+    test('handleScrollToBottom is called with instant behavior on component mount', async () => {
         renderComponent();
-        expect(screen.queryByTestId('content-answers-welcome-message')).toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(scrollIntoViewMock).toBeCalledWith({ behavior: 'instant' });
+        });
     });
 
-    test('should render only the prompt while loading', () => {
-        renderComponent({ isLoading: true });
+    test('scrollIntoView function is called with smooth behavior when the answer is updated', () => {
+        const { rerender } = renderComponent({ isLoading: true });
 
-        expect(screen.getByText(mockQuestionsNoAnswer[0].prompt)).toBeInTheDocument();
+        rerender(
+            <ContentAnswersModalContent
+                currentUser={mockCurrentUser}
+                fileName={mockFile.name}
+                isLoading={false}
+                questions={mockQuestionsWithAnswer}
+            />,
+        );
 
-        const loadingElement = screen.getByTestId('LoadingElement');
-        expect(loadingElement).toBeInTheDocument();
+        expect(scrollIntoViewMock).toBeCalledWith({ behavior: 'smooth' });
+        expect(scrollIntoViewMock).toBeCalledTimes(2);
     });
 
-    test('should render only the prompt, answer and not loading', () => {
-        renderComponent({ questions: mockQuestionsWithAnswer });
-        const { answer = '', prompt } = mockQuestionsWithAnswer[0];
+    test('should not call scrollIntoView if scroll distance is higher than threshold the next time an answer is updated', () => {
+        const { container, rerender } = renderComponent({ questions: [] });
+        const modalContent = container.firstChild;
 
-        expect(screen.getByText(prompt)).toBeInTheDocument();
-        expect(screen.getByText(answer)).toBeInTheDocument();
+        // @ts-ignore should be here
+        modalContent.scrollTop = -10;
+        // @ts-ignore should be available
+        fireEvent.scroll(modalContent);
 
-        const loadingElement = screen.queryByTestId('LoadingElement');
-        expect(loadingElement).not.toBeInTheDocument();
-    });
+        rerender(
+            <ContentAnswersModalContent
+                currentUser={mockCurrentUser}
+                fileName={mockFile.name}
+                isLoading={false}
+                questions={mockQuestionsWithAnswer}
+            />,
+        );
 
-    test('should render original question with another the prompt, with no answer while loading', () => {
-        renderComponent({ isLoading: true, questions: mockQuestionsWithAnswerAndNoAnswer });
-        const { answer = '', prompt } = mockQuestionsWithAnswerAndNoAnswer[0];
-
-        expect(screen.getByText(prompt)).toBeInTheDocument();
-        expect(screen.getByText(answer)).toBeInTheDocument();
-        expect(screen.getByText(mockQuestionsWithAnswerAndNoAnswer[1].prompt)).toBeInTheDocument();
-
-        const loadingElement = screen.queryAllByTestId('LoadingElement');
-        expect(loadingElement.length).toEqual(1);
-    });
-
-    test('should call handleScrollToBottom when isLoading set to true', () => {
-        renderComponent({ isLoading: true });
-        expect(scrollIntoView).toBeCalled();
+        expect(scrollIntoViewMock).not.toBeCalled();
     });
 });
