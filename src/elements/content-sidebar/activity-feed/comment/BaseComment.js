@@ -104,13 +104,11 @@ export const BaseComment = ({
     const prevStatus = React.useRef<?FeedItemStatus>(status);
 
     React.useEffect(() => {
-        if (
-            onHideReplies &&
-            status === COMMENT_STATUS_RESOLVED &&
-            status !== prevStatus.current &&
-            replies.length > 1 &&
-            repliesTotalCount === replies.length
-        ) {
+        const isStatusChangedToResolved = status === COMMENT_STATUS_RESOLVED && status !== prevStatus.current;
+
+        const isRepliesExpanded = replies.length > 1 && repliesTotalCount === replies.length;
+
+        if (onHideReplies && isStatusChangedToResolved && isRepliesExpanded) {
             onHideReplies(replies.slice(-1));
         }
 
