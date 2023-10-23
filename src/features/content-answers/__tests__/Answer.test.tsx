@@ -19,6 +19,7 @@ describe('features/content-answers/answer', () => {
 
         const loadingElement = screen.getByTestId('LoadingElement');
         expect(loadingElement).toBeInTheDocument();
-        expect(screen.queryAllByTestId('content-answers-grid-card')).toHaveLength(1);
+        // expect there is only one element at Answer Component which is loading element
+        expect(screen.getByTestId('Answer').children.length).toBe(1);
     });
 });

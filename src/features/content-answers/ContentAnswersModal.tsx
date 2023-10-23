@@ -16,7 +16,7 @@ import { withAPIContext } from '../../elements/common/api-context';
 import APIFactory from '../../api';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
-import { ElementsXhrError } from '../../../common/types/api';
+import { ElementsXhrError } from '../../common/types/api';
 
 import messages from './messages';
 

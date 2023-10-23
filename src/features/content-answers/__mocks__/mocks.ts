@@ -51,3 +51,16 @@ export const mockApi = {
         }),
     }),
 };
+
+export const mockApiReturnError = {
+    getIntelligenceAPI: jest.fn().mockReturnValue({
+        ask: jest.fn().mockImplementation(() => {
+            throw new Error('error');
+        }),
+    }),
+    getUsersAPI: jest.fn().mockReturnValue({
+        getUser: jest.fn().mockReturnValue({
+            data: mockCurrentUser,
+        }),
+    }),
+};

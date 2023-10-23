@@ -2,14 +2,21 @@ import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import ContentAnswersModal from '../ContentAnswersModal';
-import { mockApi, mockCurrentUser, mockFile, mockQuestionsWithAnswer } from '../__mocks__/mocks';
+import {
+    mockApi,
+    mockApiReturnError,
+    mockCurrentUser,
+    mockFile,
+    mockQuestionsWithAnswer,
+    mockQuestionsWithError,
+} from '../__mocks__/mocks';
 // @ts-ignore: no ts definition
 import APIContext from '../../../elements/common/api-context';
 
 describe('features/content-answers/ContentAnswersModal', () => {
-    const renderComponent = (props?: {}) =>
+    const renderComponent = (api: {}, props?: {}) => {
         render(
-            <APIContext.Provider value={mockApi}>
+            <APIContext.Provider value={api}>
                 <ContentAnswersModal
                     currentUser={mockCurrentUser}
                     file={mockFile}
@@ -19,9 +26,10 @@ describe('features/content-answers/ContentAnswersModal', () => {
                 />
             </APIContext.Provider>,
         );
+    };
 
     test('should render the header icon', () => {
-        renderComponent();
+        renderComponent(mockApi);
 
         const headerIcon = screen.queryByTestId('content-answers-icon-color');
         expect(headerIcon).toBeInTheDocument();
@@ -29,7 +37,7 @@ describe('features/content-answers/ContentAnswersModal', () => {
 
     test('should ask for answer when prompt is submitted', async () => {
         const { answer = '', prompt } = mockQuestionsWithAnswer[0];
-        renderComponent();
+        renderComponent(mockApi);
 
         const textArea = screen.getByTestId('content-answers-question-input');
         fireEvent.change(textArea, { target: { value: prompt } });
@@ -43,5 +51,18 @@ describe('features/content-answers/ContentAnswersModal', () => {
 
         expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
         expect(screen.getByText(answer)).toBeInTheDocument();
+    });
+
+    test('should render inlineError when ask function failed', async () => {
+        const { prompt } = mockQuestionsWithError[0];
+        renderComponent(mockApiReturnError);
+
+        const textArea = screen.getByTestId('content-answers-question-input');
+        fireEvent.change(textArea, { target: { value: prompt } });
+
+        const submitButton = screen.getByTestId('content-answers-submit-button');
+        fireEvent.click(submitButton);
+
+        expect(screen.getByTestId('InlineError')).toBeInTheDocument();
     });
 });
