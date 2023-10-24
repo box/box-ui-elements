@@ -5,19 +5,19 @@
         margin-top: $bdl-grid-unit * 5;
     }
 
-    &-title {
+    .bdl-WelcomeMessage-title {
         margin: 0;
         font-weight: bold;
         font-size: 15px;
         line-height: 20px;
     }
 
-    &-askQuestionText {
+    .bdl-WelcomeMessage-askQuestionText {
         margin: $bdl-grid-unit * 3 0;
         font-size: 15px;
     }
 
-    &-clearChatText {
+    .bdl-WelcomeMessage-clearChatText {
         margin: 0;
         color: $bdl-gray-65;
         font-size: 13px;

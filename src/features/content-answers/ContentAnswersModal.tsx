@@ -43,23 +43,19 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
     const [questions, setQuestions] = useState<QuestionType[]>([]);
 
     const handleSuccessCallback = useCallback((response, updatedQuestions): void => {
-        setIsLoading(false);
+        const lastQuestion = updatedQuestions[updatedQuestions.length - 1];
 
-        const lastQuestion = updatedQuestions.pop();
         if (lastQuestion && lastQuestion.prompt) {
             lastQuestion.answer = response.data.answer;
             lastQuestion.createdAt = response.data.created_at;
-            setQuestions([...updatedQuestions, lastQuestion]);
         }
     }, []);
 
     const handleErrorCallback = useCallback((error: ElementsXhrError, updatedQuestions: QuestionType[]): void => {
-        setIsLoading(false);
+        const lastQuestion = updatedQuestions[updatedQuestions.length - 1];
 
-        const lastQuestion = updatedQuestions.pop();
         if (lastQuestion && lastQuestion.prompt) {
             lastQuestion.error = error;
-            setQuestions([...updatedQuestions, lastQuestion]);
         }
     }, []);
 
@@ -81,6 +77,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
             } catch (e) {
                 handleErrorCallback(e, updatedQuestions);
             }
+            setIsLoading(false);
         },
         [api, file, handleErrorCallback, handleSuccessCallback, questions],
     );

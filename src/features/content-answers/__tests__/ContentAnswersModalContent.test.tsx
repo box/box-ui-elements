@@ -61,8 +61,8 @@ describe('features/content-answers/ContentAnswersModalContent', () => {
         expect(loadingElement.length).toEqual(1);
     });
 
-    test('should render only the inline error which not loading and there is an error', () => {
-        renderComponent({ isLoading: false, questions: mockQuestionsWithError });
+    test('should render only the inline error when there is an error', () => {
+        renderComponent({ questions: mockQuestionsWithError });
 
         expect(screen.getByTestId('InlineError')).toBeInTheDocument();
         expect(screen.queryByTestId('Answer')).not.toBeInTheDocument();

@@ -18,7 +18,7 @@ const InlineError = () => {
                 </div>
             </Media.Figure>
             <Media.Body>
-                <div className="bdl-InlineError-AlertIcon">
+                <div className="bdl-InlineError-alertIcon">
                     <TriangleAlert16 height={20} width={20} />
                 </div>
                 <div className="bdl-InlineError-text">

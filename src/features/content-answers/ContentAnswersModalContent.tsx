@@ -30,8 +30,7 @@ const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, question
                         return (
                             <li key={index}>
                                 <Question currentUser={currentUser} prompt={prompt} />
-                                {!hasError && <Answer answer={answer} isLoading={isLoading} />}
-                                {hasError && !isLoading && <InlineError />}
+                                {hasError ? <InlineError /> : <Answer answer={answer} isLoading={isLoading} />}
                             </li>
                         );
                     })}

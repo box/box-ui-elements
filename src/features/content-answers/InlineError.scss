@@ -3,7 +3,7 @@
 .bdl-InlineError {
     margin-top: $bdl-grid-unit * 4;
 
-    &-icon {
+    .bdl-InlineError-icon {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -13,13 +13,13 @@
         border-radius: 50%;
     }
 
-    &-text {
+    .bdl-InlineError-text {
         flex-grow: 1;
         margin: 0 $bdl-grid-unit * 3;
         font-size: $bdl-fontSize--dejaBlue;
     }
 
-    &-AlertIcon {
+    .bdl-InlineError-alertIcon {
         width: 20px;
         height: 20px;
     }
