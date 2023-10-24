@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
 import type { BoxCommentPermission, FeedItemStatus } from '../../../../../common/types/feed';
-import type { OnAnnotationEdit, OnCommentEdit } from '../types';
 
 import { BaseCommentMenu } from './BaseCommentMenu';
+import type { OnAnnotationStatusChange, OnCommentStatusChange } from '../types';
 
 export interface BaseCommentMenuWrapperProps {
     canDelete: boolean;
@@ -13,10 +13,9 @@ export interface BaseCommentMenuWrapperProps {
     isEditing: boolean;
     isInputOpen: boolean;
     isResolved: boolean;
-    onAnnotationEdit?: OnAnnotationEdit | typeof undefined;
-    onCommentEdit: OnCommentEdit;
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any;
     onSelect: (isSelected: boolean) => void;
+    onStatusChange?: OnAnnotationStatusChange | OnCommentStatusChange | typeof undefined;
     permissions: BoxCommentPermission;
     setIsEditing: ((boolean => boolean) | boolean) => void;
     setIsInputOpen: ((boolean => boolean) | boolean) => void;
@@ -30,10 +29,9 @@ export const BaseCommentMenuWrapper = ({
     isEditing,
     isInputOpen,
     isResolved,
-    onAnnotationEdit,
-    onCommentEdit,
     onDelete,
     onSelect,
+    onStatusChange,
     permissions,
     setIsEditing,
     setIsInputOpen,
@@ -69,10 +67,8 @@ export const BaseCommentMenuWrapper = ({
     };
 
     const handleStatusUpdate = (selectedStatus: FeedItemStatus): void => {
-        if (onAnnotationEdit) {
-            onAnnotationEdit({ id, permissions });
-        } else if (onCommentEdit) {
-            onCommentEdit({ id, status: selectedStatus, hasMention: false, permissions });
+        if (onStatusChange) {
+            onStatusChange({ id, status: selectedStatus, permissions });
         }
     };
 

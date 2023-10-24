@@ -41,6 +41,13 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should render with disabled input', () => {
+            const wrapper = shallow(<PillSelector isInputDisabled onInput={onInputStub} onRemove={onRemoveStub} />);
+            const input = wrapper.find('textarea');
+
+            expect(input.prop('disabled')).toBe(true);
+        });
+
         test('should add is-focused class when input is focused', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             wrapper.setState({ isFocused: true });
@@ -53,6 +60,20 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             wrapper.setState({ isFocused: false });
 
             expect(wrapper.find('.is-focused').length).toBe(0);
+        });
+
+        test('should add bdl-PillSelector-input--nextLine class when prop is set to true', () => {
+            const wrapper = shallow(
+                <PillSelector onInput={onInputStub} onRemove={onRemoveStub} isInputFocusedNextLine />,
+            );
+
+            expect(wrapper.find('.bdl-PillSelector-input--nextLine').length).toBe(1);
+        });
+
+        test('should not add bdl-PillSelector-input--nextLine class when prop is not given', () => {
+            const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
+
+            expect(wrapper.find('.bdl-PillSelector-input--nextLine').length).toBe(0);
         });
 
         test('should add show-error class when error is given', () => {

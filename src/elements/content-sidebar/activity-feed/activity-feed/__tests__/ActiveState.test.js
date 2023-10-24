@@ -199,4 +199,33 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         const baseComment = wrapper.find('BaseComment');
         expect(baseComment.props().onCommentEdit).toEqual(onCommentEdit);
     });
+
+    test('Annotation BaseComment has onStatusChange from onAnnotationStatusChange', () => {
+        const onAnnotationStatusChange = () => {};
+        const wrapper = getShallowWrapper({
+            hasNewThreadedReplies: true,
+            items: [annotation],
+            onAnnotationStatusChange,
+        }).dive();
+        const baseComment = wrapper.find('BaseComment');
+        expect(baseComment.props().onStatusChange).toEqual(onAnnotationStatusChange);
+    });
+
+    test('Comment BaseComment has onStatusChange from onCommentEdit', () => {
+        const onCommentEdit = jest.fn();
+
+        const props = {
+            hasNewThreadedReplies: true,
+            items: [comment],
+            onCommentEdit,
+        };
+
+        const wrapper = getShallowWrapper(props).dive();
+        const baseComment = wrapper.find('BaseComment');
+        const onStatusChangeProp = baseComment.props().onStatusChange;
+        const expectedProps = { hasMention: false, ...props };
+
+        onStatusChangeProp(expectedProps);
+        expect(onCommentEdit).toHaveBeenCalledWith(expectedProps);
+    });
 });

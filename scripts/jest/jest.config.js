@@ -13,6 +13,7 @@ module.exports = {
     collectCoverage: false,
     coverageDirectory: '<rootDir>/reports',
     collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', '!**/node_modules/**', '!**/__tests__/**'],
+    coveragePathIgnorePatterns: ['\\.stories.*$', 'src/icon/*', 'src/icons/*', 'src/illustration'],
     globalSetup: '<rootDir>/scripts/jest/env-setup.js',
     roots: ['src'],
     rootDir: '../../',

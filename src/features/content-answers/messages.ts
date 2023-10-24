@@ -32,6 +32,11 @@ const messages = defineMessages({
             'Disabled tooltip message for Content Answers entry point button when the file type is not supported',
         id: 'boxui.contentAnswers.disabledTooltipFileNotCompatible',
     },
+    inlineErrorText: {
+        defaultMessage: 'The Box AI service was unavailable.',
+        description: 'Content Answers error message when the service fails',
+        id: 'boxui.contentAnswers.inlineErrorText',
+    },
     intelligenceUnavailableDescription: {
         defaultMessage: 'The Box AI service is not responding.',
         description: 'Box AI Q&A service unavailable error description',
@@ -51,6 +56,21 @@ const messages = defineMessages({
         defaultMessage: 'Maximum of {characterLimit} characters reached',
         description: 'Error tooltip to show inside text area if the user reached the character limit',
         id: 'boxui.contentAnswers.maxCharactersReachedError',
+    },
+    welcomeAskQuestionText: {
+        defaultMessage: 'Ask questions about {name}',
+        description: 'Content Answers welcome message for asking questions',
+        id: 'boxui.contentAnswers.welcomeAskQuestionText',
+    },
+    welcomeClearChatText: {
+        defaultMessage: 'This chat will be cleared when you close this document',
+        description: 'Content Answers welcome message for clearing the chat',
+        id: 'boxui.contentAnswers.welcomeClearChatText',
+    },
+    welcomeMessageTitle: {
+        defaultMessage: 'Welcome to Box AI',
+        description: 'Content Answers welcome message title',
+        id: 'boxui.contentAnswers.welcomeMessageTitle',
     },
 });
 

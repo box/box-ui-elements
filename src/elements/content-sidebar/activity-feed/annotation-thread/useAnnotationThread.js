@@ -14,7 +14,7 @@ import type { BoxItem, User } from '../../../../common/types/core';
 import type { BoxCommentPermission, Comment, FeedItemStatus } from '../../../../common/types/feed';
 import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
 import type { AnnotationThreadError } from './types';
-import type { OnAnnotationEdit } from '../comment/types';
+import type { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/types';
 
 const normalizeReplies = (repliesArray?: Array<Comment>): { [string]: Comment } => {
     if (!repliesArray) {
@@ -54,7 +54,7 @@ type UseAnnotationThread = {
         handleAnnotationCreate: (text: string) => void,
         handleAnnotationDelete: ({ id: string, permissions: AnnotationPermission }) => void,
         handleAnnotationEdit: OnAnnotationEdit,
-        handleAnnotationStatusChange: (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => void,
+        handleAnnotationStatusChange: OnAnnotationStatusChange,
     },
     error?: AnnotationThreadError,
     isLoading: boolean,
@@ -323,11 +323,7 @@ const useAnnotationThread = ({
         });
     };
 
-    const handleAnnotationStatusChange = (
-        id: string,
-        status: FeedItemStatus,
-        permissions: AnnotationPermission,
-    ): void => {
+    const handleAnnotationStatusChange: OnAnnotationStatusChange = ({ id, permissions, status }): void => {
         setAnnotation(prevAnnotation => ({ ...prevAnnotation, isPending: true }));
 
         handleStatusChange({

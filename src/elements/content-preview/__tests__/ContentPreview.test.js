@@ -110,9 +110,10 @@ describe('elements/content-preview/ContentPreview', () => {
             file = { id: '123' };
 
             props = {
-                advancedContentInsights: {
-                    enabled: true,
-                    isActive: false,
+                features: {
+                    advancedContentInsights: {
+                        isActive: false,
+                    },
                 },
             };
 
@@ -123,9 +124,9 @@ describe('elements/content-preview/ContentPreview', () => {
             instance.destroyPreview = jest.fn();
             instance.fetchFile = jest.fn();
 
-            const updatedContentInsightsOptions = { enabled: true, isActive: true };
+            const updatedContentInsightsOptions = { isActive: true };
 
-            wrapper.setProps({ advancedContentInsights: updatedContentInsightsOptions });
+            wrapper.setProps({ features: { advancedContentInsights: updatedContentInsightsOptions } });
 
             expect(instance.preview.updateContentInsightsOptions).toHaveBeenCalledWith(updatedContentInsightsOptions);
         });

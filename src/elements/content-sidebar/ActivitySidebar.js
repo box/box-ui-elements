@@ -79,7 +79,7 @@ import type { Translations } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import './ActivitySidebar.scss';
 
-import { type OnAnnotationEdit } from './activity-feed/comment/types';
+import type { OnAnnotationEdit, OnAnnotationStatusChange } from './activity-feed/comment/types';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
@@ -230,7 +230,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         this.fetchFeedItems();
     };
 
-    handleAnnotationStatusChange = (id: string, status: FeedItemStatus, permissions: AnnotationPermission) => {
+    handleAnnotationStatusChange: OnAnnotationStatusChange = ({ id, permissions, status }) => {
         const { api, emitAnnotationUpdateEvent, file } = this.props;
 
         emitAnnotationUpdateEvent({ id, status }, true);

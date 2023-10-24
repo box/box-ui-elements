@@ -50,6 +50,10 @@
             border-color: $primary-color;
             outline: 0;
             box-shadow: none;
+
+            .bdl-PillSelector-input--nextLine {
+                flex: 1 1 100%;
+            }
         }
 
         &.show-error {
