@@ -3,6 +3,11 @@ import { render, screen } from '@testing-library/react';
 
 import ContentAnswersModalError from '../ContentAnswersModalError';
 
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+    FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
+}));
+
 describe('features/content-answers/ContentAnswersModalError', () => {
     const renderComponent = (props?: {}) => render(<ContentAnswersModalError {...props} />);
 
