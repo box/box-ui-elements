@@ -10,10 +10,6 @@
     border: 1px solid #2222224d;
 }
 
-@mixin ButtonOutline {
-    box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;
-}
-
 .bdl-ContentAnswersOpenButton {
     display: flex;
     align-items: center;
@@ -35,7 +31,7 @@
     &.bdl-ContentAnswersOpenButton--hasQuestions {
         @include BackgroundGradient;
 
-        .bdl-BoxAIIcon {
+        .bdl-ContentAnswersOpenButton-icon {
             path {
                 fill: $white;
             }
@@ -46,10 +42,10 @@
         @include BackgroundGradientHover;
     }
 
-    &.bdl-ContentAnswersOpenButton--hasQuestions:not(.bdl-is-disabled):focus,
-    &.bdl-ContentAnswersOpenButton--hasQuestions:not(.is-disabled):focus {
+    &.bdl-ContentAnswersOpenButton--hasQuestions:not(.bdl-is-disabled):focus {
         @include BackgroundGradientHover;
-        @include ButtonOutline;
+
+        box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;
     }
 
     &-tooltip {

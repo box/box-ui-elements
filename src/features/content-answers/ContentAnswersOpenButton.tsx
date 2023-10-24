@@ -65,7 +65,7 @@ const ContentAnswersOpenButton = ({
                     buttonRef.current = ref;
                 }}
             >
-                <BoxAiLogo className="bdl-BoxAIIcon" width={20} height={20} />
+                <BoxAiLogo className="bdl-ContentAnswersOpenButton-icon" width={20} height={20} />
             </Button>
         </Tooltip>
     );
