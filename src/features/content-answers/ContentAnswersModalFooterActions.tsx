@@ -1,55 +1,48 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import { QuestionType } from './ContentAnswersModal';
-import { Button } from '../../components';
+import Button from '../../components/button';
 
 import messages from './messages';
 
 import './ContentAnswersModalFooterActions.scss';
 
 interface Props {
-    lastQuestion: QuestionType | null;
+    hasError: boolean;
     onRetryResponse: Function;
 }
 
-const ContentAnswersModalFooterActions = ({ lastQuestion, onRetryResponse }: Props) => {
-    const shouldShowRetryButton = lastQuestion && lastQuestion.error;
+const ContentAnswersModalFooterActions = ({ hasError, onRetryResponse }: Props) => {
     const retryButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
     const handleRetryClick = React.useCallback(() => {
-        onRetryResponse(lastQuestion);
-    }, [lastQuestion, onRetryResponse]);
+        onRetryResponse();
+    }, [onRetryResponse]);
 
     React.useEffect(() => {
         if (retryButtonRef.current) {
-            setTimeout(() => {
-                if (retryButtonRef.current) {
-                    // typescript doesnt know about the if statement above the setTimeout... so it throws a type error
-                    retryButtonRef.current.focus();
-                }
-            }, 0);
+            if (hasError) {
+                retryButtonRef.current.focus();
+            }
         }
-    }, [retryButtonRef]);
+    }, [retryButtonRef, hasError]);
 
-    if (!shouldShowRetryButton) {
+    if (!hasError) {
         return null;
     }
 
     return (
         <div className="bdl-ContentAnswersModalFooterActions" data-testid="content-answers-modal-footer-actions">
-            {shouldShowRetryButton && (
-                <Button
-                    setRef={(ref: HTMLButtonElement) => {
-                        retryButtonRef.current = ref;
-                    }}
-                    className="bdl-ContentAnswersModalFooterActions-Button"
-                    data-testid="content-answers-retry-response-button"
-                    onClick={handleRetryClick}
-                >
-                    <FormattedMessage {...messages.retryResponse} />
-                </Button>
-            )}
+            <Button
+                setRef={(ref: HTMLButtonElement) => {
+                    retryButtonRef.current = ref;
+                }}
+                className="bdl-ContentAnswersModalFooterActions-button"
+                data-testid="content-answers-retry-response-button"
+                onClick={handleRetryClick}
+            >
+                <FormattedMessage {...messages.retryResponse} />
+            </Button>
         </div>
     );
 };

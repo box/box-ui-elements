@@ -10,10 +10,9 @@
     padding: $bdl-grid-unit * 3 0 0 0;
 }
 
-.bdl-ContentAnswersModalFooterActions-Button {
-    display: flex;
-    align-items: center;
-    min-height: $bdl-grid-unit * 10;
-    margin: auto;
-    padding: 0 $bdl-grid-unit * 4;
+.bdl-ContentAnswersModalFooterActions-button {
+    &:not(.bdl-is-disabled):focus {
+        border: 1px solid #bcbcbc;
+        box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;
+    }
 }

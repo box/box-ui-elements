@@ -112,7 +112,6 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                 currentUser={currentUser}
                 data-testid="content-answers-modal-footer"
                 isLoading={isLoading}
-                lastQuestion={questions.length > 0 ? questions[questions.length - 1] : null}
                 onAsk={handleOnAsk}
             />
         </Modal>

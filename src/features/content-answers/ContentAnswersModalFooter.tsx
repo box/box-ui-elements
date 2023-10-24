@@ -9,7 +9,6 @@ import { TEXT_AREA } from './constants';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { User } from '../../../common/types/core';
-import { QuestionType } from './ContentAnswersModal';
 
 import messages from './messages';
 
@@ -19,7 +18,6 @@ type Props = {
     currentUser?: User;
     intl: IntlShape;
     isLoading: boolean;
-    lastQuestion: QuestionType | null;
     onAsk: Function;
 };
 
@@ -65,7 +63,7 @@ const ContentAnswersModalFooter = ({ currentUser, intl, isLoading, onAsk }: Prop
 
     return (
         <div className="bdl-ContentAnswersModalFooter">
-            {/* TODO enable this here when inline error is there and connect it <ContentAnswersModalFooterActions lastQuestion={lastQuestion} onRetryResponse={() => handleOnAsk(true)} /> */}
+            {/* TODO enable this here when inline error is there and connect it <ContentAnswersModalFooterActions hasError={hasError} onRetryResponse={() => {}} />  */}
             <div className="bdl-ContentAnswersModalFooter-questionInput">
                 <div className="bdl-ContentAnswersModalFooter-avatar">
                     <Avatar id={id} name={name} />
