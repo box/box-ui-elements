@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Answer from './Answer';
+import InlineError from './InlineError';
 import Question from './Question';
 import WelcomeMessage from './WelcomeMessage';
 
@@ -24,11 +25,12 @@ const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, question
             <WelcomeMessage fileName={fileName} />
             <ul>
                 {questions &&
-                    questions.map(({ prompt, answer = '' }, index) => {
+                    questions.map(({ prompt, error, answer = '' }, index) => {
+                        const hasError = !!error;
                         return (
                             <li key={index}>
                                 <Question currentUser={currentUser} prompt={prompt} />
-                                <Answer answer={answer} isLoading={isLoading} />
+                                {hasError ? <InlineError /> : <Answer answer={answer} isLoading={isLoading} />}
                             </li>
                         );
                     })}

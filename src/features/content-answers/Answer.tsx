@@ -12,7 +12,7 @@ type Props = {
 
 const Answer = ({ answer, isLoading }: Props) => {
     return (
-        <div className="bdl-Answer">
+        <div className="bdl-Answer" data-testid="Answer">
             {answer && <ContentAnswersGridCard>{answer}</ContentAnswersGridCard>}
             {!answer && isLoading && <LoadingElement />}
         </div>
