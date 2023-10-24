@@ -42,22 +42,27 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [questions, setQuestions] = useState<QuestionType[]>([]);
 
-    const handleSuccessCallback = useCallback((response, updatedQuestions): void => {
-        const lastQuestion = updatedQuestions[updatedQuestions.length - 1];
+    const handleSuccessCallback = useCallback((prevQuestions, prompt, response): void => {
+        const updatedQuestion = {
+            answer: response.data.answer,
+            createdAt: response.data.created_at,
+            prompt,
+        };
 
-        if (lastQuestion && lastQuestion.prompt) {
-            lastQuestion.answer = response.data.answer;
-            lastQuestion.createdAt = response.data.created_at;
-        }
+        setQuestions([...prevQuestions, updatedQuestion]);
     }, []);
 
-    const handleErrorCallback = useCallback((error: ElementsXhrError, updatedQuestions: QuestionType[]): void => {
-        const lastQuestion = updatedQuestions[updatedQuestions.length - 1];
+    const handleErrorCallback = useCallback(
+        (error: ElementsXhrError, prevQuestions: QuestionType[], prompt: string): void => {
+            const updatedQuestion = {
+                error,
+                prompt,
+            };
 
-        if (lastQuestion && lastQuestion.prompt) {
-            lastQuestion.error = error;
-        }
-    }, []);
+            setQuestions([...prevQuestions, updatedQuestion]);
+        },
+        [],
+    );
 
     const handleOnAsk = useCallback(
         async (prompt: string) => {
@@ -68,14 +73,14 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                     type: 'file',
                 },
             ];
-            const updatedQuestions = [...questions, { prompt }];
-            setQuestions(updatedQuestions);
+            const prevQuestions = [...questions];
+            setQuestions([...prevQuestions, { prompt }]);
             setIsLoading(true);
             try {
                 const response = await api.getIntelligenceAPI(true).ask(prompt, items);
-                handleSuccessCallback(response, updatedQuestions);
+                handleSuccessCallback(prevQuestions, prompt, response);
             } catch (e) {
-                handleErrorCallback(e, updatedQuestions);
+                handleErrorCallback(e, prevQuestions, prompt);
             }
             setIsLoading(false);
         },
