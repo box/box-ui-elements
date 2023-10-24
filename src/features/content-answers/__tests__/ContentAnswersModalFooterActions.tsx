@@ -10,11 +10,7 @@ describe('features/content-answers/ContentAnswersModalFooterActions', () => {
 
     const renderComponent = (props = {}) => {
         return render(
-            <ContentAnswersModalFooterActions
-                lastQuestion={mockQuestionsWithAnswer[0]}
-                onRetryResponse={stubs.onRetryResponse}
-                {...props}
-            />,
+            <ContentAnswersModalFooterActions hasError={false} onRetryResponse={stubs.onRetryResponse} {...props} />,
         );
     };
 
@@ -25,7 +21,7 @@ describe('features/content-answers/ContentAnswersModalFooterActions', () => {
     });
 
     test('should show the retry response button', async () => {
-        renderComponent({ lastQuestion: mockQuestionsWithError[0] });
+        renderComponent({ hasError: true });
         const retryResponseButton = screen.getByTestId('content-answers-retry-response-button');
         expect(retryResponseButton).toBeInTheDocument();
         await waitFor(() => {
@@ -34,11 +30,11 @@ describe('features/content-answers/ContentAnswersModalFooterActions', () => {
     });
 
     test('should call the retry response function if the button is clicked', () => {
-        renderComponent({ lastQuestion: mockQuestionsWithError[0] });
+        renderComponent({ hasError: true });
         const retryResponseButton = screen.getByTestId('content-answers-retry-response-button');
 
         fireEvent.click(retryResponseButton);
 
-        expect(stubs.onRetryResponse).toHaveBeenCalledWith(mockQuestionsWithError[0]);
+        expect(stubs.onRetryResponse).toHaveBeenCalled();
     });
 });

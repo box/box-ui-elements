@@ -20,7 +20,6 @@ describe('features/content-answers/ContentAnswersModalFooter', () => {
                     currentUser={mockCurrentUser}
                     isLoading={false}
                     onAsk={jest.fn()}
-                    lastQuestion={null}
                     {...props}
                 />
             </APIContext.Provider>,
