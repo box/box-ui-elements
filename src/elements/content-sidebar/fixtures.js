@@ -204,7 +204,6 @@ export const filterableActivityFeedItems = {
                 trashed_by: null,
                 type: FEED_ITEM_TYPE_VERSION,
                 uploader_display_name: 'John Doe',
-                version_number: '27',
             },
         },
     },
