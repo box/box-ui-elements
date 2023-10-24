@@ -14,7 +14,7 @@ import {
 import APIContext from '../../../elements/common/api-context';
 
 describe('features/content-answers/ContentAnswersModal', () => {
-    const renderComponent = (api: {}, props?: {}) => {
+    const renderComponent = (api = mockApi, props?: {}) => {
         render(
             <APIContext.Provider value={api}>
                 <ContentAnswersModal
@@ -29,7 +29,7 @@ describe('features/content-answers/ContentAnswersModal', () => {
     };
 
     test('should render the header icon', () => {
-        renderComponent(mockApi);
+        renderComponent();
 
         const headerIcon = screen.queryByTestId('content-answers-icon-color');
         expect(headerIcon).toBeInTheDocument();
@@ -37,7 +37,7 @@ describe('features/content-answers/ContentAnswersModal', () => {
 
     test('should ask for answer when prompt is submitted', async () => {
         const { answer = '', prompt } = mockQuestionsWithAnswer[0];
-        renderComponent(mockApi);
+        renderComponent();
 
         const textArea = screen.getByTestId('content-answers-question-input');
         fireEvent.change(textArea, { target: { value: prompt } });
