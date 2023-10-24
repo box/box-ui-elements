@@ -1,7 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ContentAnswersModalFooterActions from '../ContentAnswersModalFooterActions';
-import { mockQuestionsWithAnswer, mockQuestionsWithError } from '../__mocks__/mocks';
 
 describe('features/content-answers/ContentAnswersModalFooterActions', () => {
     const stubs = {
