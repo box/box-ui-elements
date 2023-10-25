@@ -39,6 +39,7 @@ type Props = {
 
 const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }: Props) => {
     const fileName = file && file.name;
+    const [hasError, setHasError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [questions, setQuestions] = useState<QuestionType[]>([]);
 
@@ -55,6 +56,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
     }, []);
 
     const handleErrorCallback = useCallback((error: ElementsXhrError): void => {
+        setHasError(true);
         setQuestions(prevState => {
             const lastQuestion = prevState[prevState.length - 1];
             return [...prevState.slice(0, -1), { ...lastQuestion, error }];
@@ -62,7 +64,8 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
     }, []);
 
     const handleOnAsk = useCallback(
-        async (prompt: string) => {
+        async (prompt: string, isRetry = false) => {
+            setHasError(false);
             const id = file && file.id;
             const items = [
                 {
@@ -70,7 +73,17 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                     type: 'file',
                 },
             ];
-            setQuestions([...questions, { prompt }]);
+            if (isRetry) {
+                const newQuestions = [...questions];
+                const lastQuestion = newQuestions.pop();
+                if (lastQuestion) {
+                    delete lastQuestion.error;
+                    setQuestions([...newQuestions, lastQuestion]);
+                }
+            } else {
+                setQuestions([...questions, { prompt }]);
+            }
+
             setIsLoading(true);
             try {
                 const response = await api.getIntelligenceAPI(true).ask(prompt, items);
@@ -82,6 +95,10 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
         },
         [api, file, handleErrorCallback, handleSuccessCallback, questions],
     );
+
+    const handleOnRetry = useCallback(async () => {
+        handleOnAsk(questions[questions.length - 1].prompt, true);
+    }, [handleOnAsk, questions]);
 
     return (
         <Modal
@@ -111,8 +128,10 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
             <ContentAnswersModalFooter
                 currentUser={currentUser}
                 data-testid="content-answers-modal-footer"
+                hasError={hasError}
                 isLoading={isLoading}
                 onAsk={handleOnAsk}
+                onRetry={handleOnRetry}
             />
         </Modal>
     );

@@ -65,4 +65,50 @@ describe('features/content-answers/ContentAnswersModal', () => {
 
         expect(screen.getByTestId('InlineError')).toBeInTheDocument();
     });
+
+    test('should render retry button when ask request fails', async () => {
+        const { prompt } = mockQuestionsWithError[0];
+        renderComponent(mockApiReturnError);
+
+        const textArea = screen.getByTestId('content-answers-question-input');
+        fireEvent.change(textArea, { target: { value: prompt } });
+
+        const submitButton = screen.getByTestId('content-answers-submit-button');
+        fireEvent.click(submitButton);
+
+        expect(screen.getByTestId('content-answers-retry-button')).toBeInTheDocument();
+    });
+
+    test('should render retry button when ask request fails', async () => {
+        const { prompt } = mockQuestionsWithError[0];
+        const apiMock = {
+            ...mockApi,
+            getIntelligenceAPI: jest.fn().mockReturnValue({
+                ask: jest
+                    .fn()
+                    .mockImplementationOnce(() => {
+                        throw new Error('error');
+                    })
+                    .mockResolvedValueOnce({
+                        data: mockQuestionsWithAnswer[0],
+                    }),
+            }),
+        };
+        renderComponent(apiMock);
+
+        const textArea = screen.getByTestId('content-answers-question-input');
+        fireEvent.change(textArea, { target: { value: prompt } });
+
+        const submitButton = screen.getByTestId('content-answers-submit-button');
+        fireEvent.click(submitButton);
+
+        const retryButton = screen.getByTestId('content-answers-retry-button');
+        fireEvent.click(retryButton);
+
+        await waitFor(() => {
+            expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            expect(screen.getByText(mockQuestionsWithAnswer[0].answer!)).toBeInTheDocument();
+        });
+    });
 });

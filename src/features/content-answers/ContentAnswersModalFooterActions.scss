@@ -11,6 +11,10 @@
 }
 
 .bdl-ContentAnswersModalFooterActions-button {
+    display: flex;
+    align-items: center;
+    margin: auto;
+
     &:not(.bdl-is-disabled):focus {
         border: 1px solid #bcbcbc;
         box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;

@@ -4,36 +4,34 @@ import ContentAnswersModalFooterActions from '../ContentAnswersModalFooterAction
 
 describe('features/content-answers/ContentAnswersModalFooterActions', () => {
     const stubs = {
-        onRetryResponse: jest.fn(),
+        onRetry: jest.fn(),
     };
 
     const renderComponent = (props = {}) => {
-        return render(
-            <ContentAnswersModalFooterActions hasError={false} onRetryResponse={stubs.onRetryResponse} {...props} />,
-        );
+        return render(<ContentAnswersModalFooterActions hasError={false} onRetry={stubs.onRetry} {...props} />);
     };
 
-    test('should not show the retry response button', () => {
+    test('should not show the retry button', () => {
         renderComponent();
-        const retryResponseButton = screen.queryByTestId('content-answers-retry-response-button');
-        expect(retryResponseButton).not.toBeInTheDocument();
+        const retryButton = screen.queryByTestId('content-answers-retry-button');
+        expect(retryButton).not.toBeInTheDocument();
     });
 
-    test('should show the retry response button', async () => {
+    test('should show the retry button', async () => {
         renderComponent({ hasError: true });
-        const retryResponseButton = screen.getByTestId('content-answers-retry-response-button');
-        expect(retryResponseButton).toBeInTheDocument();
+        const retryButton = screen.getByTestId('content-answers-retry-button');
+        expect(retryButton).toBeInTheDocument();
         await waitFor(() => {
-            expect(document.activeElement).toBe(retryResponseButton);
+            expect(document.activeElement).toBe(retryButton);
         });
     });
 
     test('should call the retry response function if the button is clicked', () => {
         renderComponent({ hasError: true });
-        const retryResponseButton = screen.getByTestId('content-answers-retry-response-button');
+        const retryButton = screen.getByTestId('content-answers-retry-button');
 
-        fireEvent.click(retryResponseButton);
+        fireEvent.click(retryButton);
 
-        expect(stubs.onRetryResponse).toHaveBeenCalled();
+        expect(stubs.onRetry).toHaveBeenCalled();
     });
 });

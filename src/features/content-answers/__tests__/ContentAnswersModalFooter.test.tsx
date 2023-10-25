@@ -18,8 +18,10 @@ describe('features/content-answers/ContentAnswersModalFooter', () => {
             <APIContext.Provider value={mockApi}>
                 <ContentAnswersModalFooter
                     currentUser={mockCurrentUser}
+                    hasError={false}
                     isLoading={false}
                     onAsk={jest.fn()}
+                    onRetry={jest.fn()}
                     {...props}
                 />
             </APIContext.Provider>,

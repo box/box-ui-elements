@@ -9,15 +9,15 @@ import './ContentAnswersModalFooterActions.scss';
 
 interface Props {
     hasError: boolean;
-    onRetryResponse: Function;
+    onRetry: Function;
 }
 
-const ContentAnswersModalFooterActions = ({ hasError, onRetryResponse }: Props) => {
+const ContentAnswersModalFooterActions = ({ hasError, onRetry }: Props) => {
     const retryButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
     const handleRetryClick = React.useCallback(() => {
-        onRetryResponse();
-    }, [onRetryResponse]);
+        onRetry();
+    }, [onRetry]);
 
     React.useEffect(() => {
         if (retryButtonRef.current) {
@@ -38,7 +38,7 @@ const ContentAnswersModalFooterActions = ({ hasError, onRetryResponse }: Props) 
                     retryButtonRef.current = ref;
                 }}
                 className="bdl-ContentAnswersModalFooterActions-button"
-                data-testid="content-answers-retry-response-button"
+                data-testid="content-answers-retry-button"
                 onClick={handleRetryClick}
             >
                 <FormattedMessage {...messages.retryResponse} />
