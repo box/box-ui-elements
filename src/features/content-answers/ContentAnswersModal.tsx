@@ -63,7 +63,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
         });
     }, []);
 
-    const handleOnAsk = useCallback(
+    const handleAsk = useCallback(
         async (prompt: string, isRetry = false) => {
             setHasError(false);
             const id = file && file.id;
@@ -74,12 +74,8 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                 },
             ];
             if (isRetry) {
-                const newQuestions = [...questions];
-                const lastQuestion = newQuestions.pop();
-                if (lastQuestion) {
-                    delete lastQuestion.error;
-                    setQuestions([...newQuestions, lastQuestion]);
-                }
+                const nextQuestions = [...(isRetry ? questions.slice(0, -1) : questions)];
+                setQuestions([...nextQuestions, { prompt }]);
             } else {
                 setQuestions([...questions, { prompt }]);
             }
@@ -96,9 +92,9 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
         [api, file, handleErrorCallback, handleSuccessCallback, questions],
     );
 
-    const handleOnRetry = useCallback(async () => {
-        handleOnAsk(questions[questions.length - 1].prompt, true);
-    }, [handleOnAsk, questions]);
+    const handleRetry = useCallback(() => {
+        handleAsk(questions[questions.length - 1].prompt, true);
+    }, [handleAsk, questions]);
 
     return (
         <Modal
@@ -130,8 +126,8 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                 data-testid="content-answers-modal-footer"
                 hasError={hasError}
                 isLoading={isLoading}
-                onAsk={handleOnAsk}
-                onRetry={handleOnRetry}
+                onAsk={handleAsk}
+                onRetry={handleRetry}
             />
         </Modal>
     );

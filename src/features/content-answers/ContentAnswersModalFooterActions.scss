@@ -3,16 +3,11 @@
 .bdl-ContentAnswersModalFooterActions {
     position: relative;
     top: -$bdl-grid-unit * 4;
-    right: 0;
-    left: 0;
-    align-self: flex-start;
-    width: 100%;
+    display: flex;
     padding: $bdl-grid-unit * 3 0 0 0;
 }
 
 .bdl-ContentAnswersModalFooterActions-button {
-    display: flex;
-    align-items: center;
     margin: auto;
 
     &:not(.bdl-is-disabled):focus {

@@ -32,6 +32,6 @@ describe('features/content-answers/ContentAnswersModalFooterActions', () => {
 
         fireEvent.click(retryButton);
 
-        expect(stubs.onRetry).toHaveBeenCalled();
+        expect(stubs.onRetry).toBeCalled();
     });
 });
