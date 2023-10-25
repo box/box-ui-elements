@@ -74,6 +74,11 @@ describe('features/content-answers/ContentAnswersModalContent', () => {
         });
     });
 
+    test('handleScrollToBottom is called when answer is loading', () => {
+        renderComponent({ isLoading: true });
+        expect(scrollIntoViewMock).toBeCalledTimes(1);
+    });
+
     test('scrollIntoView function is called with smooth behavior when the answer is updated', () => {
         const { rerender } = renderComponent({ isLoading: true });
 

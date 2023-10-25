@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import throttle from 'lodash/throttle';
 
 import Answer from './Answer';
 import InlineError from './InlineError';
@@ -22,46 +21,35 @@ type Props = {
 const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, questions }: Props) => {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    const handleScrollToBottom = useCallback(behavior => {
-        if (messagesEndRef.current && messagesEndRef.current.scrollIntoView) {
-            messagesEndRef.current.scrollIntoView({ behavior });
-        }
-    }, []);
+    const handleScrollToBottom = useCallback(
+        behavior => {
+            if (messagesEndRef.current && messagesEndRef.current.scrollIntoView) {
+                messagesEndRef.current.scrollIntoView({ behavior });
+            }
+        },
+        [messagesEndRef],
+    );
 
-    const throttledScrollToBottom = throttle(handleScrollToBottom, 1000);
-
-    // Scroll to the bottom when modal opened
     useEffect(() => {
         setTimeout(() => {
             handleScrollToBottom('instant');
         }, 0);
     }, [handleScrollToBottom]);
 
-    // Scroll to the bottom if a new answer is loading
     useEffect(() => {
-        if (isLoading) {
-            handleScrollToBottom('smooth');
-        }
+        handleScrollToBottom('smooth');
     }, [handleScrollToBottom, isLoading]);
 
     return (
         <div className="bdl-ContentAnswersModalContent" data-testid="content-answers-modal-content">
             <WelcomeMessage fileName={fileName} />
             <ul>
-                {questions?.map(({ prompt, error, answer = '' }, index) => {
+                {questions.map(({ prompt, error, answer = '' }, index) => {
                     const hasError = !!error;
                     return (
                         <li key={index}>
                             <Question currentUser={currentUser} prompt={prompt} />
-                            {hasError ? (
-                                <InlineError />
-                            ) : (
-                                <Answer
-                                    answer={answer}
-                                    handleScrollToBottom={throttledScrollToBottom}
-                                    isLoading={isLoading}
-                                />
-                            )}
+                            {hasError ? <InlineError /> : <Answer answer={answer} isLoading={isLoading} />}
                         </li>
                     );
                 })}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import ContentAnswersGridCard from './ContentAnswersGridCard';
 import LoadingElement from './LoadingElement';
@@ -7,17 +7,10 @@ import './Answer.scss';
 
 type Props = {
     answer?: string;
-    handleScrollToBottom: Function;
     isLoading: boolean;
 };
 
-const Answer = ({ answer, handleScrollToBottom, isLoading }: Props) => {
-    useEffect(() => {
-        if (answer) {
-            handleScrollToBottom('smooth');
-        }
-    }, [answer, handleScrollToBottom]);
-
+const Answer = ({ answer, isLoading }: Props) => {
     return (
         <div className="bdl-Answer" data-testid="Answer">
             {answer && <ContentAnswersGridCard>{answer}</ContentAnswersGridCard>}
