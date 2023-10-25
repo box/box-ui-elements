@@ -16,16 +16,17 @@ import { withAPIContext } from '../../elements/common/api-context';
 import APIFactory from '../../api';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
-import { ElementsXhrError } from '../../../common/types/api';
+import { ElementsXhrError } from '../../common/types/api';
 
 import messages from './messages';
 
 import './ContentAnswersModal.scss';
 
 export type QuestionType = {
-    prompt: string;
     answer?: string;
     createdAt?: string;
+    error?: ElementsXhrError;
+    prompt: string;
 };
 
 type Props = {
@@ -41,23 +42,23 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [questions, setQuestions] = useState<QuestionType[]>([]);
 
-    const handleSuccessCallback = useCallback((response, updatedQuestions): void => {
-        setIsLoading(false);
+    const handleSuccessCallback = useCallback((response): void => {
+        const question = {
+            answer: response.data.answer,
+            createdAt: response.data.created_at,
+        };
 
-        const lastQuestion = updatedQuestions.pop();
-        if (lastQuestion && lastQuestion.prompt) {
-            lastQuestion.answer = response.data.answer;
-            lastQuestion.createdAt = response.data.created_at;
-        }
-
-        setQuestions([...updatedQuestions, lastQuestion]);
+        setQuestions(prevState => {
+            const lastQuestion = prevState[prevState.length - 1];
+            return [...prevState.slice(0, -1), { ...lastQuestion, ...question }];
+        });
     }, []);
 
     const handleErrorCallback = useCallback((error: ElementsXhrError): void => {
-        setIsLoading(false);
-        if (error) {
-            // TODO: render error component
-        }
+        setQuestions(prevState => {
+            const lastQuestion = prevState[prevState.length - 1];
+            return [...prevState.slice(0, -1), { ...lastQuestion, error }];
+        });
     }, []);
 
     const handleOnAsk = useCallback(
@@ -69,15 +70,15 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                     type: 'file',
                 },
             ];
-            const updatedQuestions = [...questions, { prompt }];
-            setQuestions(updatedQuestions);
+            setQuestions([...questions, { prompt }]);
             setIsLoading(true);
             try {
                 const response = await api.getIntelligenceAPI(true).ask(prompt, items);
-                handleSuccessCallback(response, updatedQuestions);
+                handleSuccessCallback(response);
             } catch (e) {
                 handleErrorCallback(e);
             }
+            setIsLoading(false);
         },
         [api, file, handleErrorCallback, handleSuccessCallback, questions],
     );

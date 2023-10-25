@@ -2,19 +2,15 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import throttle from 'lodash/throttle';
 
 import Answer from './Answer';
+import InlineError from './InlineError';
 import Question from './Question';
 import WelcomeMessage from './WelcomeMessage';
+import { QuestionType } from './ContentAnswersModal';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { User } from '../../../common/types/core';
 
 import './ContentAnswersModalContent.scss';
-
-export type QuestionType = {
-    prompt: string;
-    answer?: string;
-    createdAt?: string;
-};
 
 type Props = {
     currentUser?: User;
@@ -52,12 +48,23 @@ const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, question
         <div className="bdl-ContentAnswersModalContent" data-testid="content-answers-modal-content">
             <WelcomeMessage fileName={fileName} />
             <ul>
-                {questions?.map(({ prompt, answer = '' }, index) => (
-                    <li key={index}>
-                        <Question currentUser={currentUser} prompt={prompt} />
-                        <Answer answer={answer} handleScrollToBottom={throttledScrollToBottom} isLoading={isLoading} />
-                    </li>
-                ))}
+                {questions?.map(({ prompt, error, answer = '' }, index) => {
+                    const hasError = !!error;
+                    return (
+                        <li key={index}>
+                            <Question currentUser={currentUser} prompt={prompt} />
+                            {hasError ? (
+                                <InlineError />
+                            ) : (
+                                <Answer
+                                    answer={answer}
+                                    handleScrollToBottom={throttledScrollToBottom}
+                                    isLoading={isLoading}
+                                />
+                            )}
+                        </li>
+                    );
+                })}
             </ul>
             <div ref={messagesEndRef} />
         </div>

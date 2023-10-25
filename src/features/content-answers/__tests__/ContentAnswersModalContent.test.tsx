@@ -7,6 +7,7 @@ import {
     mockFile,
     mockQuestionsNoAnswer,
     mockQuestionsWithAnswer,
+    mockQuestionsWithError,
     mockQuestionsWithAnswerAndNoAnswer,
 } from '../__mocks__/mocks';
 
@@ -87,5 +88,12 @@ describe('features/content-answers/ContentAnswersModalContent', () => {
 
         expect(scrollIntoViewMock).toBeCalledWith({ behavior: 'smooth' });
         expect(scrollIntoViewMock).toBeCalledTimes(2);
+    });
+
+    test('should render only the inline error when there is an error', () => {
+        renderComponent({ questions: mockQuestionsWithError });
+
+        expect(screen.getByTestId('InlineError')).toBeInTheDocument();
+        expect(screen.queryByTestId('Answer')).not.toBeInTheDocument();
     });
 });

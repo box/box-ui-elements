@@ -19,7 +19,7 @@ const Answer = ({ answer, handleScrollToBottom, isLoading }: Props) => {
     }, [answer, handleScrollToBottom]);
 
     return (
-        <div className="bdl-Answer">
+        <div className="bdl-Answer" data-testid="Answer">
             {answer && <ContentAnswersGridCard>{answer}</ContentAnswersGridCard>}
             {!answer && isLoading && <LoadingElement />}
         </div>

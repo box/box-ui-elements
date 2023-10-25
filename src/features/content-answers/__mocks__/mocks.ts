@@ -26,6 +26,14 @@ export const mockQuestionsWithAnswer: QuestionType[] = [
     },
 ];
 
+export const mockQuestionsWithError: QuestionType[] = [
+    {
+        prompt: 'summarize',
+        answer: '',
+        error: new Error('error'),
+    },
+];
+
 export const mockQuestionsWithAnswerAndNoAnswer: QuestionType[] = [
     ...mockQuestionsWithAnswer,
     ...mockQuestionsNoAnswer,
@@ -35,6 +43,19 @@ export const mockApi = {
     getIntelligenceAPI: jest.fn().mockReturnValue({
         ask: jest.fn().mockReturnValue({
             data: mockQuestionsWithAnswer[0],
+        }),
+    }),
+    getUsersAPI: jest.fn().mockReturnValue({
+        getUser: jest.fn().mockReturnValue({
+            data: mockCurrentUser,
+        }),
+    }),
+};
+
+export const mockApiReturnError = {
+    getIntelligenceAPI: jest.fn().mockReturnValue({
+        ask: jest.fn().mockImplementation(() => {
+            throw new Error('error');
         }),
     }),
     getUsersAPI: jest.fn().mockReturnValue({
