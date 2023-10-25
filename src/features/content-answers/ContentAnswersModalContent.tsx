@@ -30,12 +30,14 @@ const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, question
         [messagesEndRef],
     );
 
+    // scroll to bottom instantly when modal opens
     useEffect(() => {
         setTimeout(() => {
             handleScrollToBottom('instant');
         }, 0);
     }, [handleScrollToBottom]);
 
+    // scroll to bottom for both cases that answer is loading and answer has been generated
     useEffect(() => {
         handleScrollToBottom('smooth');
     }, [handleScrollToBottom, isLoading]);
