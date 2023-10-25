@@ -6,9 +6,6 @@ var ContentPreview = require('./ContentPreview').default;
 
 <IntlProvider locale="en">
     <ContentPreview
-        contentAnswersProps={{
-            show: true
-        }}
         contentSidebarProps={{
             detailsSidebarProps: {
                 hasAccessStats: true,

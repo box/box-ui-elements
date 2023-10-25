@@ -36,19 +36,19 @@
                 fill: $white;
             }
         }
+
+        &:hover {
+            @include BackgroundGradientHover;
+        }
+
+        &:not(.bdl-is-disabled):focus {
+            @include BackgroundGradientHover;
+
+            box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;
+        }
     }
 
-    &.bdl-ContentAnswersOpenButton--hasQuestions:hover {
-        @include BackgroundGradientHover;
-    }
-
-    &.bdl-ContentAnswersOpenButton--hasQuestions:not(.bdl-is-disabled):focus {
-        @include BackgroundGradientHover;
-
-        box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;
-    }
-
-    &-tooltip {
+    .bdl-ContentAnswersOpenButton-tooltip {
         text-align: center;
     }
 }
