@@ -56,8 +56,6 @@ const ContentAnswersModalFooter = ({ currentUser, intl, isLoading, onAsk }: Prop
             if (event.keyCode === 13 && event.shiftKey === false) {
                 event.preventDefault();
                 handleOnAsk();
-                setPrompt('');
-                setIsSubmitDisabled(true);
             }
         },
         [handleOnAsk],

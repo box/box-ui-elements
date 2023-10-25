@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import throttle from 'lodash/throttle';
 
-import ContentAnswersModalChat from './ContentAnswersModalChat';
+import Answer from './Answer';
+import Question from './Question';
+import WelcomeMessage from './WelcomeMessage';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { User } from '../../../common/types/core';
+
+import './ContentAnswersModalContent.scss';
 
 export type QuestionType = {
     prompt: string;
@@ -19,58 +24,41 @@ type Props = {
 };
 
 const ContentAnswersModalContent = ({ currentUser, fileName, isLoading, questions }: Props) => {
-    const contentRef = React.useRef<HTMLDivElement | null>(null);
-    const messagesEndRef = React.useRef<HTMLDivElement | null>(null);
-    const userScrolled = React.useRef(false);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    const handleScrollToBottom = React.useCallback(behavior => {
-        if (messagesEndRef.current && messagesEndRef.current.scrollIntoView && contentRef.current) {
-            // Only scroll if the content is at bottom
-            if (!userScrolled.current) {
-                messagesEndRef.current.scrollIntoView({ behavior });
-            }
+    const handleScrollToBottom = useCallback(behavior => {
+        if (messagesEndRef.current && messagesEndRef.current.scrollIntoView) {
+            messagesEndRef.current.scrollIntoView({ behavior });
         }
     }, []);
 
-    // Handle user scrolling
-    const handleScroll = () => {
-        if (contentRef.current) {
-            const { scrollTop, clientHeight, scrollHeight } = contentRef.current;
-            const threshold = scrollHeight - (scrollTop + clientHeight);
-            userScrolled.current = threshold > 5;
-        }
-    };
+    const throttledScrollToBottom = throttle(handleScrollToBottom, 1000);
 
-    // Scroll to the bottom on chat load
-    React.useEffect(() => {
+    // Scroll to the bottom when modal opened
+    useEffect(() => {
         setTimeout(() => {
             handleScrollToBottom('instant');
         }, 0);
     }, [handleScrollToBottom]);
 
     // Scroll to the bottom if a new answer is loading
-    React.useEffect(() => {
+    useEffect(() => {
         if (isLoading) {
-            userScrolled.current = false;
             handleScrollToBottom('smooth');
         }
     }, [handleScrollToBottom, isLoading]);
 
     return (
-        <div
-            className="bdl-ContentAnswersModalContent"
-            data-testid="content-answers-modal-content"
-            onScroll={handleScroll}
-            ref={contentRef}
-        >
-            <ContentAnswersModalChat
-                currentUser={currentUser}
-                data-testid="content-answers-modal-content"
-                fileName={fileName}
-                handleScrollToBottom={handleScrollToBottom}
-                isLoading={isLoading}
-                questions={questions}
-            />
+        <div className="bdl-ContentAnswersModalContent" data-testid="content-answers-modal-content">
+            <WelcomeMessage fileName={fileName} />
+            <ul>
+                {questions?.map(({ prompt, answer = '' }, index) => (
+                    <li key={index}>
+                        <Question currentUser={currentUser} prompt={prompt} />
+                        <Answer answer={answer} handleScrollToBottom={throttledScrollToBottom} isLoading={isLoading} />
+                    </li>
+                ))}
+            </ul>
             <div ref={messagesEndRef} />
         </div>
     );

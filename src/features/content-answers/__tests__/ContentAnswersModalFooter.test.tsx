@@ -40,7 +40,7 @@ describe('features/content-answers/ContentAnswersModalFooter', () => {
         expect(submitButton).not.toHaveClass('is-disabled');
     });
 
-    test('test clear the prompt when ask button is clicked', () => {
+    test('should clear the prompt when ask button is clicked', () => {
         renderComponent();
         const submitButton = screen.getByTestId('content-answers-submit-button');
         const input = screen.getByTestId('content-answers-question-input');
