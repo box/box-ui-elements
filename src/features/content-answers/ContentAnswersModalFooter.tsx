@@ -20,8 +20,8 @@ type Props = {
     hasError: boolean;
     intl: IntlShape;
     isLoading: boolean;
-    onAsk: Function;
-    onRetry: Function;
+    onAsk: (prompt: string) => void;
+    onRetry: () => void;
 };
 
 const ContentAnswersModalFooter = ({ currentUser, hasError, intl, isLoading, onAsk, onRetry }: Props) => {

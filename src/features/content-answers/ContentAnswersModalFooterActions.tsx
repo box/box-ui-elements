@@ -9,7 +9,7 @@ import './ContentAnswersModalFooterActions.scss';
 
 interface Props {
     hasError: boolean;
-    onRetry: Function;
+    onRetry: () => void;
 }
 
 const ContentAnswersModalFooterActions = ({ hasError, onRetry }: Props) => {

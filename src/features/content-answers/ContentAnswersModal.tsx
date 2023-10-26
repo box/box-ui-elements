@@ -34,7 +34,7 @@ type Props = {
     currentUser?: User;
     file: BoxItem;
     isOpen: boolean;
-    onAsk: Function;
+    onAsk: () => void;
     onRequestClose: () => void;
 };
 
