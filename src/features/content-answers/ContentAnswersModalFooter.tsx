@@ -9,6 +9,7 @@ import { TEXT_AREA } from './constants';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { User } from '../../../common/types/core';
+import ContentAnswersModalFooterActions from './ContentAnswersModalFooterActions';
 
 import messages from './messages';
 
@@ -16,12 +17,14 @@ import './ContentAnswersModalFooter.scss';
 
 type Props = {
     currentUser?: User;
+    hasError: boolean;
     intl: IntlShape;
     isLoading: boolean;
     onAsk: Function;
+    onRetry: Function;
 };
 
-const ContentAnswersModalFooter = ({ currentUser, intl, isLoading, onAsk }: Props) => {
+const ContentAnswersModalFooter = ({ currentUser, hasError, intl, isLoading, onAsk, onRetry }: Props) => {
     const { formatMessage } = intl;
     const { id, name } = currentUser || {};
     const [prompt, setPrompt] = useState('');
@@ -63,33 +66,36 @@ const ContentAnswersModalFooter = ({ currentUser, intl, isLoading, onAsk }: Prop
 
     return (
         <div className="bdl-ContentAnswersModalFooter">
-            <div className="bdl-ContentAnswersModalFooter-avatar">
-                <Avatar id={id} name={name} />
+            <ContentAnswersModalFooterActions hasError={hasError} onRetry={onRetry} />
+            <div className="bdl-ContentAnswersModalFooter-questionInput">
+                <div className="bdl-ContentAnswersModalFooter-avatar">
+                    <Avatar id={id} name={name} />
+                </div>
+                <TextArea
+                    data-testid="content-answers-question-input"
+                    error={
+                        hasMaxCharacterError &&
+                        formatMessage(messages.maxCharactersReachedError, {
+                            characterLimit: TEXT_AREA.MAX_LENGTH,
+                        })
+                    }
+                    hideLabel
+                    label={formatMessage(messages.askQuestionPlaceholder)}
+                    maxLength={TEXT_AREA.MAX_LENGTH}
+                    onChange={handleInputChange}
+                    placeholder={formatMessage(messages.askQuestionPlaceholder)}
+                    value={prompt}
+                    onKeyDown={handleKeyDown}
+                />
+                <PrimaryButton
+                    className="bdl-ContentAnswersModalFooter-submitButton"
+                    data-testid="content-answers-submit-button"
+                    isDisabled={isSubmitDisabled}
+                    onClick={handleOnAsk}
+                >
+                    <FormattedMessage {...messages.ask} />
+                </PrimaryButton>
             </div>
-            <TextArea
-                data-testid="content-answers-question-input"
-                error={
-                    hasMaxCharacterError &&
-                    formatMessage(messages.maxCharactersReachedError, {
-                        characterLimit: TEXT_AREA.MAX_LENGTH,
-                    })
-                }
-                hideLabel
-                label={formatMessage(messages.askQuestionPlaceholder)}
-                maxLength={TEXT_AREA.MAX_LENGTH}
-                onChange={handleInputChange}
-                placeholder={formatMessage(messages.askQuestionPlaceholder)}
-                value={prompt}
-                onKeyDown={handleKeyDown}
-            />
-            <PrimaryButton
-                className="bdl-ContentAnswersModalFooter-submitButton"
-                data-testid="content-answers-submit-button"
-                isDisabled={isSubmitDisabled}
-                onClick={handleOnAsk}
-            >
-                <FormattedMessage {...messages.ask} />
-            </PrimaryButton>
         </div>
     );
 };
