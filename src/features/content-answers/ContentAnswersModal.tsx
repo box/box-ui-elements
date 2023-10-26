@@ -39,6 +39,7 @@ type Props = {
 
 const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }: Props) => {
     const fileName = file && file.name;
+    const [hasError, setHasError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [questions, setQuestions] = useState<QuestionType[]>([]);
 
@@ -55,14 +56,16 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
     }, []);
 
     const handleErrorCallback = useCallback((error: ElementsXhrError): void => {
+        setHasError(true);
         setQuestions(prevState => {
             const lastQuestion = prevState[prevState.length - 1];
             return [...prevState.slice(0, -1), { ...lastQuestion, error }];
         });
     }, []);
 
-    const handleOnAsk = useCallback(
-        async (prompt: string) => {
+    const handleAsk = useCallback(
+        async (prompt: string, isRetry = false) => {
+            setHasError(false);
             const id = file && file.id;
             const items = [
                 {
@@ -70,7 +73,10 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                     type: 'file',
                 },
             ];
-            setQuestions([...questions, { prompt }]);
+
+            const nextQuestions = [...(isRetry ? questions.slice(0, -1) : questions)];
+            setQuestions([...nextQuestions, { prompt }]);
+
             setIsLoading(true);
             try {
                 const response = await api.getIntelligenceAPI(true).ask(prompt, items);
@@ -82,6 +88,10 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
         },
         [api, file, handleErrorCallback, handleSuccessCallback, questions],
     );
+
+    const handleRetry = useCallback(() => {
+        handleAsk(questions[questions.length - 1].prompt, true);
+    }, [handleAsk, questions]);
 
     return (
         <Modal
@@ -111,8 +121,10 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
             <ContentAnswersModalFooter
                 currentUser={currentUser}
                 data-testid="content-answers-modal-footer"
+                hasError={hasError}
                 isLoading={isLoading}
-                onAsk={handleOnAsk}
+                onAsk={handleAsk}
+                onRetry={handleRetry}
             />
         </Modal>
     );
