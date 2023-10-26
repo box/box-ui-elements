@@ -17,6 +17,7 @@ type Props = {
 
 const ContentAnswers = ({ file }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [hasQuestions, setHasQuestions] = useState(false);
     const [isHighlighted, setIsHighlighted] = useState(false);
 
     const handleClick = useCallback(() => {
@@ -25,11 +26,14 @@ const ContentAnswers = ({ file }: Props) => {
 
     const handleClose = useCallback(() => {
         setIsModalOpen(false);
-    }, [setIsModalOpen]);
+        if (hasQuestions) {
+            setIsHighlighted(true);
+        }
+    }, [hasQuestions]);
 
     const handleAsk = useCallback(() => {
-        setIsHighlighted(true);
-    }, [setIsHighlighted]);
+        setHasQuestions(true);
+    }, []);
 
     const currentExtension = getProp(file, 'extension');
     return (
