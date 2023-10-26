@@ -73,12 +73,9 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onRequestClose }:
                     type: 'file',
                 },
             ];
-            if (isRetry) {
-                const nextQuestions = [...(isRetry ? questions.slice(0, -1) : questions)];
-                setQuestions([...nextQuestions, { prompt }]);
-            } else {
-                setQuestions([...questions, { prompt }]);
-            }
+
+            const nextQuestions = [...(isRetry ? questions.slice(0, -1) : questions)];
+            setQuestions([...nextQuestions, { prompt }]);
 
             setIsLoading(true);
             try {
