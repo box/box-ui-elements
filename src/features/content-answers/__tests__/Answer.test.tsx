@@ -4,10 +4,10 @@ import { render, screen } from '@testing-library/react';
 import Answer from '../Answer';
 
 describe('features/content-answers/answer', () => {
-    const renderComponent = (props: { answer: string; isLoading: boolean }) => render(<Answer {...props} />);
+    const renderComponent = (props?: {}) => render(<Answer isLoading={false} {...props} />);
 
     test('should only render the answer', () => {
-        renderComponent({ answer: 'some answer', isLoading: false });
+        renderComponent({ answer: 'some answer' });
 
         const answer = screen.getByText('some answer');
         expect(answer).toBeInTheDocument();
