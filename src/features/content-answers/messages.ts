@@ -32,6 +32,11 @@ const messages = defineMessages({
             'Disabled tooltip message for Content Answers entry point button when the file type is not supported',
         id: 'boxui.contentAnswers.disabledTooltipFileNotCompatible',
     },
+    hasQuestionsTooltip: {
+        defaultMessage: 'Return to Box AI',
+        description: 'Existing questions tooltip message for Content Answers entry point button',
+        id: 'boxui.contentAnswers.hasQuestionsTooltip',
+    },
     inlineErrorText: {
         defaultMessage: 'The Box AI service was unavailable.',
         description: 'Content Answers error message when the service fails',

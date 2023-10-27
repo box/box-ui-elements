@@ -1,5 +1,15 @@
 @import '../../styles/variables';
 
+@mixin BackgroundGradient {
+    background: linear-gradient(135deg, #fe01da 0%, $bdl-light-blue 100%);
+    border: 1px solid #ffffff4d;
+}
+
+@mixin BackgroundGradientHover {
+    background: linear-gradient(0deg, #2223, #2223), linear-gradient(135deg, #fe01da 0%, $bdl-light-blue 100%);
+    border: 1px solid #2222224d;
+}
+
 .bdl-ContentAnswersOpenButton {
     display: flex;
     align-items: center;
@@ -16,5 +26,29 @@
     &:not(.bdl-is-disabled):focus,
     &:not(.bdl-is-disabled):hover {
         background-color: $bdl-gray-10;
+    }
+
+    &.bdl-ContentAnswersOpenButton--hasQuestions {
+        @include BackgroundGradient;
+
+        .bdl-ContentAnswersOpenButton-icon {
+            path {
+                fill: $white;
+            }
+        }
+
+        &:hover {
+            @include BackgroundGradientHover;
+        }
+
+        &:not(.bdl-is-disabled):focus {
+            @include BackgroundGradientHover;
+
+            box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;
+        }
+    }
+
+    .bdl-ContentAnswersOpenButton-tooltip {
+        text-align: center;
     }
 }

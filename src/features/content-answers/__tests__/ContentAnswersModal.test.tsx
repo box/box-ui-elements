@@ -22,6 +22,7 @@ describe('features/content-answers/ContentAnswersModal', () => {
                     file={mockFile}
                     isOpen
                     onRequestClose={jest.fn()}
+                    onAsk={jest.fn()}
                     {...props}
                 />
             </APIContext.Provider>,
@@ -36,8 +37,9 @@ describe('features/content-answers/ContentAnswersModal', () => {
     });
 
     test('should ask for answer when prompt is submitted', async () => {
+        const onAskMock = jest.fn();
         const { answer = '', prompt } = mockQuestionsWithAnswer[0];
-        renderComponent();
+        renderComponent(mockApi, { onAsk: onAskMock });
 
         const textArea = screen.getByTestId('content-answers-question-input');
         fireEvent.change(textArea, { target: { value: prompt } });
@@ -49,6 +51,7 @@ describe('features/content-answers/ContentAnswersModal', () => {
             expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(prompt, [{ id: mockFile.id, type: 'file' }]),
         );
 
+        expect(onAskMock).toBeCalled();
         expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
         expect(screen.getByText(answer)).toBeInTheDocument();
     });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import getProp from 'lodash/get';
 import ContentAnswersModal from './ContentAnswersModal';
@@ -17,14 +17,23 @@ type Props = {
 
 const ContentAnswers = ({ file }: Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [hasQuestions, setHasQuestions] = useState(false);
+    const [isHighlighted, setIsHighlighted] = useState(false);
 
-    const handleClick = () => {
+    const handleClick = useCallback(() => {
         setIsModalOpen(true);
-    };
+    }, [setIsModalOpen]);
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setIsModalOpen(false);
-    };
+        if (hasQuestions) {
+            setIsHighlighted(true);
+        }
+    }, [hasQuestions]);
+
+    const handleAsk = useCallback(() => {
+        setHasQuestions(true);
+    }, []);
 
     const currentExtension = getProp(file, 'extension');
     return (
@@ -32,12 +41,15 @@ const ContentAnswers = ({ file }: Props) => {
             <ContentAnswersOpenButton
                 data-testid="content-answers-open-button"
                 fileExtension={currentExtension}
+                isHighlighted={isHighlighted}
+                isModalOpen={isModalOpen}
                 onClick={handleClick}
             />
             <ContentAnswersModal
                 data-testid="content-answers-modal"
                 file={file}
                 isOpen={isModalOpen}
+                onAsk={handleAsk}
                 onRequestClose={handleClose}
             />
         </div>
