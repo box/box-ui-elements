@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import ContentAnswersGridCard from './ContentAnswersGridCard';
 import LoadingElement from './LoadingElement';

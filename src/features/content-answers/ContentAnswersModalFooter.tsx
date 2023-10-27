@@ -49,6 +49,8 @@ const ContentAnswersModalFooter = ({ currentUser, hasError, intl, isLoading, onA
     const handleOnAsk = useCallback(() => {
         if (!isSubmitDisabled && prompt) {
             onAsk(prompt);
+            setPrompt('');
+            setIsSubmitDisabled(true);
         }
     }, [isSubmitDisabled, onAsk, prompt]);
 
@@ -57,8 +59,6 @@ const ContentAnswersModalFooter = ({ currentUser, hasError, intl, isLoading, onA
             if (event.keyCode === 13 && event.shiftKey === false) {
                 event.preventDefault();
                 handleOnAsk();
-                setPrompt('');
-                setIsSubmitDisabled(true);
             }
         },
         [handleOnAsk],
