@@ -89,7 +89,7 @@ export const withoutModal = () => {
 };
 
 export default {
-    title: 'Elements|ContentSharing',
+    title: 'Elements/ContentSharing',
     component: ContentSharing,
     parameters: {
         notes,

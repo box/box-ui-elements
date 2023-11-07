@@ -23,7 +23,7 @@ import type APICache from './Cache';
  * @param {string} sortDirection desc or asc
  * @return {Function} comparator function
  */
-export default function(sortBy: SortBy, sortDirection: SortDirection, cache: APICache): Function {
+export default function comparator(sortBy: SortBy, sortDirection: SortDirection, cache: APICache): Function {
     const invert: number = sortDirection === SORT_DESC ? 1 : -1;
     return (a: string, b: string): number => {
         const itemA: BoxItem = cache.get(a);

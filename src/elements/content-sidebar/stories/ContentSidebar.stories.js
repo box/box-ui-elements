@@ -26,7 +26,7 @@ export const Sidebar = () => (
 );
 
 export default {
-    title: 'Elements|ContentSidebar',
+    title: 'Elements/ContentSidebar',
     Component: ContentSidebar,
     parameters: {
         notes,

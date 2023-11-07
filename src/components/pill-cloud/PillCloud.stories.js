@@ -40,7 +40,7 @@ export const regular = () => {
 };
 
 export default {
-    title: 'Components|PillCloud',
+    title: 'Components/PillCloud',
     component: PillCloud,
     parameters: {
         notes,

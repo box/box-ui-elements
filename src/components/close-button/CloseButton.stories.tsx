@@ -6,7 +6,7 @@ import notes from './CloseButton.stories.md';
 export const regular = () => <CloseButton />;
 
 export default {
-    title: 'Components|Buttons/CloseButton',
+    title: 'Components/Buttons/CloseButton',
     component: CloseButton,
     parameters: {
         notes,

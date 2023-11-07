@@ -11,7 +11,7 @@ export const regular = () => (
 );
 
 export default {
-    title: 'Components|ErrorMask',
+    title: 'Components/ErrorMask',
     component: ErrorMask,
     parameters: {
         notes,

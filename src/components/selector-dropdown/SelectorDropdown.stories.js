@@ -8,7 +8,7 @@ import notes from './SelectorDropdown.stories.md';
 export const basic = () => <SelectorDropdownExamples />;
 
 export default {
-    title: 'Components|SelectorDropdown',
+    title: 'Components/SelectorDropdown',
     component: SelectorDropdown,
     parameters: {
         notes,

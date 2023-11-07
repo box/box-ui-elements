@@ -5,7 +5,7 @@ import BoxDrive140 from './BoxDrive140';
 export const boxDrive140 = () => <BoxDrive140 />;
 
 export default {
-    title: 'Illustration|BoxDrive140',
+    title: 'Illustration/BoxDrive140',
     component: BoxDrive140,
     parameters: {
         notes: "`import BoxDrive140 from 'box-ui-elements/es/illustration/BoxDrive140';`",

@@ -79,7 +79,7 @@ const description = `
 `;
 
 export default {
-    title: 'Icons|ItemIcon',
+    title: 'Icons/ItemIcon',
     subcomponents: { ItemIcon, ItemIconMonotone },
     parameters: {
         componentSubtitle: description,

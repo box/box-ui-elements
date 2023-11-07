@@ -59,7 +59,7 @@ export const withDropdown = () => {
 };
 
 export default {
-    title: 'Components|CategorySelector',
+    title: 'Components/CategorySelector',
     component: CategorySelector,
     parameters: {
         notes,

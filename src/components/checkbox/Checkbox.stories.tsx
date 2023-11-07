@@ -68,7 +68,7 @@ export const withSubsection = () => (
 );
 
 export default {
-    title: 'Components|Checkbox',
+    title: 'Components/Checkbox',
     component: Checkbox,
     parameters: {
         notes,

@@ -51,5 +51,5 @@ export const allIcons = () => (
 );
 
 export default {
-    title: 'Icons|Collections',
+    title: 'Icons/Collections',
 };

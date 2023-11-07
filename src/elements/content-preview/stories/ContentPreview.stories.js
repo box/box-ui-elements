@@ -108,7 +108,7 @@ export const PreviewWithBoxAI = () => {
 };
 
 export default {
-    title: 'Elements|ContentPreview',
+    title: 'Elements/ContentPreview',
     component: ContentPreview,
     parameters: {
         notes,

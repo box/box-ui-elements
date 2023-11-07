@@ -52,7 +52,7 @@ export const deleteDialog = () => {
 };
 
 export default {
-    title: 'Elements|ContentExplorer|DeleteConfirmationDialog',
+    title: 'Elements/ContentExplorer/DeleteConfirmationDialog',
     component: DeleteConfirmationDialog,
     parameters: {
         notes,

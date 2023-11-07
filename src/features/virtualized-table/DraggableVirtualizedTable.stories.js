@@ -52,7 +52,7 @@ export const Basic = () => {
 };
 
 export default {
-    title: 'Features|DraggableVirtualizedTable',
+    title: 'Features/DraggableVirtualizedTable',
     component: DraggableVirtualizedTable,
     parameters: {
         notes,

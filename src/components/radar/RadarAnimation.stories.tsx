@@ -64,7 +64,7 @@ export const withOffset = () => (
 );
 
 export default {
-    title: 'Components|RadarAnimation',
+    title: 'Components/RadarAnimation',
     component: RadarAnimation,
     parameters: {
         notes,

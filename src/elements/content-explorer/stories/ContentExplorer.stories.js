@@ -1,17 +1,16 @@
 // @flow
+
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
-
 import ContentExplorer from '../ContentExplorer';
-import notes from './ContentExplorer.notes.md';
 
-export const withPreview = () => (
+export const withPreview = (args: any) => (
     <IntlProvider locale="en">
-        <ContentExplorer features={global.FEATURES} rootFolderId={global.FOLDER_ID} token={global.TOKEN} />
+        <ContentExplorer features={global.FEATUREFLIPS} {...args} />
     </IntlProvider>
 );
 
-export const withPreviewSidebar = () => (
+export const withPreviewSidebar = (args: any) => (
     <IntlProvider locale="en">
         <ContentExplorer
             contentPreviewProps={{
@@ -24,23 +23,24 @@ export const withPreviewSidebar = () => (
                         hasRetentionPolicy: true,
                         hasVersions: true,
                     },
-                    features: global.FEATURES,
+                    features: global.FEATUREFLIPS,
                     hasActivityFeed: true,
                     hasMetadata: true,
                     hasSkills: true,
                 },
             }}
-            features={global.FEATURES}
-            rootFolderId={global.FOLDER_ID}
-            token={global.TOKEN}
+            features={global.FEATUREFLIPS}
+            {...args}
         />
     </IntlProvider>
 );
 
 export default {
-    title: 'Elements|ContentExplorer',
+    title: 'Elements/ContentExplorer',
     component: ContentExplorer,
-    parameters: {
-        notes,
+    tags: ['autodocs'],
+    args: {
+        folderId: global.FOLDER_ID,
+        token: global.TOKEN,
     },
 };

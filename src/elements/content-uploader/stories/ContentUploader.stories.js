@@ -10,7 +10,7 @@ export const Uploader = () => (
 );
 
 export default {
-    title: 'Elements|ContentUploader',
+    title: 'Elements/ContentUploader',
     component: ContentUploader,
     parameters: {
         notes,

@@ -31,7 +31,7 @@ export const withMultipleCrumbs = () => (
 );
 
 export default {
-    title: 'Components|Breadcrumb',
+    title: 'Components/Breadcrumb',
     component: Breadcrumb,
     parameters: {
         notes,

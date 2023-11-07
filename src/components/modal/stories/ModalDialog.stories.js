@@ -19,7 +19,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Components|ModalDialog',
+    title: 'Components/ModalDialog',
     component: ModalDialog,
     parameters: {
         notes,

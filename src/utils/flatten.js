@@ -21,7 +21,12 @@ import type APICache from './Cache';
  * @param {WebLink} weblinkAPI api for web links
  * @return {Array} list with items replaced with reference keys
  */
-export default function(list: BoxItem[], folderAPI: FolderAPI, fileAPI: FileAPI, weblinkAPI: WebLinkAPI): string[] {
+export default function flatten(
+    list: BoxItem[],
+    folderAPI: FolderAPI,
+    fileAPI: FileAPI,
+    weblinkAPI: WebLinkAPI,
+): string[] {
     const items: string[] = [];
     list.forEach((item: BoxItem) => {
         const { id, type }: BoxItem = item;

@@ -9,7 +9,7 @@ export const Example = () => {
 };
 
 export default {
-    title: 'Components|Dropdowns/ListItems/DatalistItem',
+    title: 'Components/Dropdowns/ListItems/DatalistItem',
     component: DatalistItem,
     parameters: {
         notes,

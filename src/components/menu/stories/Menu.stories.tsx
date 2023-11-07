@@ -95,7 +95,7 @@ export const withChildOnResize = () => {
 };
 
 export default {
-    title: 'Components|Menu',
+    title: 'Components/Menu',
     component: Menu,
     parameters: {
         notes,

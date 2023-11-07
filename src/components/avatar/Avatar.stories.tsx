@@ -90,7 +90,7 @@ export const withMultipleAvatars = () => (
 export const withoutNameOrInitials = () => <Avatar />;
 
 export default {
-    title: 'Components|Avatar',
+    title: 'Components/Avatar',
     component: Avatar,
     parameters: {
         notes,

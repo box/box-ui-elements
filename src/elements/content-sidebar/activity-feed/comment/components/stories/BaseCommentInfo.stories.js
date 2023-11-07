@@ -19,7 +19,7 @@ export const Annotation = getTemplate({
 export const Comment = getTemplate();
 
 export default {
-    title: 'Components|BaseCommentInfo',
+    title: 'Components/BaseCommentInfo',
     component: BaseCommentInfo,
     parameters: { layout: 'centered' },
 };

@@ -19,7 +19,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Components|SelectMenuLinkItem',
+    title: 'Components/SelectMenuLinkItem',
     component: SelectMenuLinkItem,
     parameters: {
         notes,

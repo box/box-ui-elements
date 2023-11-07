@@ -361,7 +361,7 @@ export const withRangeAndKeyboardInput = () => {
 };
 
 export default {
-    title: 'Components|DatePicker',
+    title: 'Components/DatePicker',
     component: DatePicker,
     parameters: {
         notes,

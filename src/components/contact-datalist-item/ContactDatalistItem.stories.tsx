@@ -14,7 +14,7 @@ export const Example = () => (
 );
 
 export default {
-    title: 'Components|Dropdowns/ListItems/ContactDatalistItem',
+    title: 'Components/Dropdowns/ListItems/ContactDatalistItem',
     component: ContactDatalistItem,
     parameters: {
         notes: 'Used as a child of user/contact list components such as the PillSelectorDropdown',

@@ -73,7 +73,7 @@ export const severalComponents = () => (
 );
 
 export default {
-    title: 'Components|LabelPill',
+    title: 'Components/LabelPill',
     subcomponents: {
         'LabelPill.Pill': LabelPill.Pill,
         'LabelPill.Text': LabelPill.Text,
