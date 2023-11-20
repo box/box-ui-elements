@@ -12,7 +12,6 @@ const config: { webpackFinal: (config: any) => Promise<any>; stories: string[]; 
             name: '@storybook/addon-styling',
             options: {
                 sass: {
-                    // Require your Sass preprocessor here
                     implementation: require('sass'),
                 },
             },
@@ -39,4 +38,5 @@ const config: { webpackFinal: (config: any) => Promise<any>; stories: string[]; 
         return config;
     },
 };
+
 export default config;

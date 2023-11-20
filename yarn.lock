@@ -5674,7 +5674,7 @@
     lodash "^4.17.21"
     ts-dedent "^2.0.0"
 
-"@storybook/addon-docs@7.5.3", "@storybook/addon-docs@^7.5.3":
+"@storybook/addon-docs@7.5.3":
   version "7.5.3"
   resolved "https://registry.yarnpkg.com/@storybook/addon-docs/-/addon-docs-7.5.3.tgz#36c28c9a54b28e3b4b1450e821d65e07be6da45b"
   integrity sha512-JVQ6iCXKESij/SbE4Wq47dkSSgBRulvA8SUf8NWL5m9qpiHrg0lPSERHfoTLiB5uC/JwF0OKIlhxoWl+zCmtYg==
@@ -5872,7 +5872,7 @@
     "@storybook/preview-api" "7.5.3"
     "@storybook/theming" "7.5.3"
 
-"@storybook/addon-viewport@7.5.3", "@storybook/addon-viewport@^7.5.3":
+"@storybook/addon-viewport@7.5.3":
   version "7.5.3"
   resolved "https://registry.yarnpkg.com/@storybook/addon-viewport/-/addon-viewport-7.5.3.tgz#05fb97114d0186977e25a5a448dea5fba66042ce"
   integrity sha512-gT2XX0NNBrzSs1nrxadl6LnvcwgN7z2R0LzTK8/hxvx4D0EnXrV3feXLzjewr8ZYjzfEeSpO+W+bQTVNm3fNsg==
@@ -6483,7 +6483,7 @@
     "@storybook/global" "^5.0.0"
     "@storybook/preview-api" "7.5.3"
 
-"@storybook/manager-api@7.5.3", "@storybook/manager-api@^7.0.12", "@storybook/manager-api@^7.5.3":
+"@storybook/manager-api@7.5.3", "@storybook/manager-api@^7.0.12":
   version "7.5.3"
   resolved "https://registry.yarnpkg.com/@storybook/manager-api/-/manager-api-7.5.3.tgz#6e9e791a8996631dc77f3a0cecc34ce4f4869647"
   integrity sha512-d8mVLr/5BEG4bAS2ZeqYTy/aX4jPEpZHdcLaWoB4mAM+PAL9wcWsirUyApKtDVYLITJf/hd8bb2Dm2ok6E45gA==
@@ -6610,7 +6610,7 @@
     "@storybook/react" "7.5.3"
     "@types/node" "^18.0.0"
 
-"@storybook/react@7.5.3", "@storybook/react@^7.5.3":
+"@storybook/react@7.5.3":
   version "7.5.3"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-7.5.3.tgz#fe01ff2057826bdf55b0852deea7e76859757c01"
   integrity sha512-dZILdM36xMFDjdmmy421G5X+sOIncB2qF3IPTooniG1i1Z6v/dVNo57ovdID9lDTNa+AWr2fLB9hANiISMqmjQ==
@@ -28473,6 +28473,7 @@ string-replace-loader@^2.2.0:
     schema-utils "^1.0.0"
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.2.3:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
