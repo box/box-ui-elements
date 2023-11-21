@@ -16,13 +16,13 @@ describe('components/pill-selector-dropdown/Pill', () => {
     });
 
     test('should have the selected class when isSelected is true', () => {
-        const wrapper = shallow(<Pill isSelected isDisabled={false} onRemove={onRemoveStub} text="box" />);
+        const wrapper = shallow(<Pill isDisabled={false} isSelected onRemove={onRemoveStub} text="box" />);
 
         expect(wrapper.hasClass('is-selected')).toBe(true);
     });
 
     test('should generate pill with invalid class when pill is not valid', () => {
-        const wrapper = shallow(<Pill isValid={false} isSelected onRemove={onRemoveStub} text="box" />);
+        const wrapper = shallow(<Pill isSelected isValid={false} onRemove={onRemoveStub} text="box" />);
         expect(wrapper).toMatchSnapshot();
     });
 

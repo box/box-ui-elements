@@ -1251,6 +1251,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     activeFeedEntryType={activeFeedEntryType}
                     activityFeedError={activityFeedError}
                     approverSelectorContacts={approverSelectorContacts}
+                    contactsLoaded={contactsLoaded}
                     currentUser={currentUser}
                     currentUserError={currentUserError}
                     feedItems={this.getFilteredFeedItems()}
@@ -1264,7 +1265,6 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     hasVersions={hasVersions}
                     isDisabled={isDisabled}
                     mentionSelectorContacts={mentionSelectorContacts}
-                    contactsLoaded={contactsLoaded}
                     onAnnotationDelete={this.handleAnnotationDelete}
                     onAnnotationEdit={this.handleAnnotationEdit}
                     onAnnotationSelect={this.handleAnnotationSelect}

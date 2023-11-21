@@ -22,8 +22,8 @@ const PillCloud = ({ options, onSelect, selectedOptions = [], buttonProps = {} }
                     className={classNames('bdl-Pill', 'bdl-PillCloud-button', 'pill', 'pill-cloud-button', {
                         'is-selected': selectedOptions.find(op => isEqual(op, option)),
                     })}
-                    onClick={onSelect ? () => onSelect(option) : undefined}
                     data-resin-target={option.value}
+                    onClick={onSelect ? () => onSelect(option) : undefined}
                     {...buttonProps}
                 >
                     {option.displayText}

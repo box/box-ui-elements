@@ -123,9 +123,9 @@ const activityFeedError = { title: 't', content: 'm' };
 const getShallowWrapper = (params = {}) =>
     shallow(
         <ActiveState
-            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
-            currentUser={currentUser}
             currentFileVersionId="123"
+            currentUser={currentUser}
+            items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
             onAnnotationSelect={() => null}
             {...params}
         />,

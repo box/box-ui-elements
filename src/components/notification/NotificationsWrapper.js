@@ -9,7 +9,7 @@ type Props = {
 };
 
 const NotificationsWrapper = ({ children }: Props) => (
-    <Portal className="notifications-wrapper" aria-live="polite">
+    <Portal aria-live="polite" className="notifications-wrapper">
         {children ? <FocusTrap>{children}</FocusTrap> : null}
     </Portal>
 );

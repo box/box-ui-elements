@@ -23,7 +23,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails', () =>
         ${TASK_NEW_APPROVED}    | ${MOCK_DATE}
         ${null}                 | ${MOCK_DATE}
     `('should render details for status $status', ({ status, completedAt }) => {
-        const wrapper = mount(<AssigneeDetails status={status} user={MOCK_USER} completedAt={completedAt} />);
+        const wrapper = mount(<AssigneeDetails completedAt={completedAt} status={status} user={MOCK_USER} />);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -31,10 +31,10 @@ describe('elements/content-sidebar/ActivityFeed/task-new/AssigneeDetails', () =>
         const mockClassName = 'some-class';
         const wrapper = render(
             <AssigneeDetails
+                className={mockClassName}
+                completedAt={MOCK_DATE}
                 status={TASK_NEW_APPROVED}
                 user={MOCK_USER}
-                completedAt={MOCK_DATE}
-                className={mockClassName}
             />,
         );
         expect(wrapper.hasClass(mockClassName)).toBe(true);

@@ -10,11 +10,11 @@ export const regular = () => <Ghost isAnimated={boolean('isAnimated', true)} />;
 
 export const withoutAnimation = () => <Ghost isAnimated={false} />;
 
-export const circle = () => <Ghost borderRadius="50%" width={32} height={32} />;
+export const circle = () => <Ghost borderRadius="50%" height={32} width={32} />;
 
-export const rectangle = () => <Ghost width={100} height={32} />;
+export const rectangle = () => <Ghost height={32} width={100} />;
 
-export const pill = () => <Ghost borderRadius={12} width={100} height={24} />;
+export const pill = () => <Ghost borderRadius={12} height={24} width={100} />;
 
 export const complicatedLayout = () => (
     <Media style={{ maxWidth: 400 }}>
@@ -28,7 +28,7 @@ export const complicatedLayout = () => (
                 <Ghost width="50%" />
             </p>
             <p>
-                <Ghost width={100} height={32} /> <Ghost width={100} height={32} />
+                <Ghost height={32} width={100} /> <Ghost height={32} width={100} />
             </p>
         </Media.Body>
     </Media>

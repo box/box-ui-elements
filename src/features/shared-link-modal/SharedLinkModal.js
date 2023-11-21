@@ -148,10 +148,10 @@ class SharedLinkModal extends Component<Props, State> {
                 emailMessageProps={emailMessageProps}
                 getContacts={getContacts}
                 isExpanded={this.state.isEmailSharedLinkExpanded}
-                sendEmail={sendEmail}
-                onRequestClose={onRequestClose}
-                submitting={submitting}
                 onExpand={this.handleEmailSharedLinkExpand}
+                onRequestClose={onRequestClose}
+                sendEmail={sendEmail}
+                submitting={submitting}
             />
         );
     }

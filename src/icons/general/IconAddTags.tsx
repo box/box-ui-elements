@@ -31,7 +31,7 @@ const IconAddTags = ({
             stroke={color}
             strokeWidth={strokeWidth}
         />
-        <circle className="fill-color" fill={color} cx="23.5" cy="8.5" r="2.5" />
+        <circle className="fill-color" cx="23.5" cy="8.5" fill={color} r="2.5" />
     </AccessibleSVG>
 );
 

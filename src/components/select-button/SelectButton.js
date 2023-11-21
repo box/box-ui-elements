@@ -37,11 +37,11 @@ const SelectButton = React.forwardRef<Props, HTMLButtonElement>(
             theme="error"
         >
             <button
+                ref={ref}
                 className={classNames(className, 'select-button', 'bdl-SelectButton', {
                     'is-invalid': !!error,
                 })}
                 disabled={isDisabled}
-                ref={ref}
                 type="button"
                 {...rest}
             >

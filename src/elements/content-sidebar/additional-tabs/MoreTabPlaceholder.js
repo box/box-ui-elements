@@ -11,7 +11,7 @@ import IconEllipsis from '../../../icons/general/IconEllipsis';
 const MoreTabPlaceholder = () => {
     return (
         <div className="bdl-AdditionalTabPlaceholder">
-            <IconEllipsis color={bdlGray10} className="bdl-AdditionalTabPlaceholder-moreIcon" />
+            <IconEllipsis className="bdl-AdditionalTabPlaceholder-moreIcon" color={bdlGray10} />
         </div>
     );
 };

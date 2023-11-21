@@ -32,7 +32,7 @@ export const withCustomComponent = () => {
 
     return (
         <Router>
-            <LinkButton href="/" component={CustomRouterLink}>
+            <LinkButton component={CustomRouterLink} href="/">
                 A link
             </LinkButton>
         </Router>

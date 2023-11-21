@@ -7,7 +7,7 @@ import notes from './RadioButton.stories.md';
 export const basic = () => <RadioButton label="Radio Button 1" value="radio1" />;
 
 export const disabled = () => (
-    <RadioButton label="Disabled Radio Button" value="radio2" isDisabled={boolean('isDisabled', true)} />
+    <RadioButton isDisabled={boolean('isDisabled', true)} label="Disabled Radio Button" value="radio2" />
 );
 
 export default {

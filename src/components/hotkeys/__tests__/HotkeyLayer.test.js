@@ -119,7 +119,7 @@ describe('components/hotkeys/HotkeyLayer', () => {
 
         test('should return custom shortcut to open help modal when custom shortcut is provided', () => {
             const wrapper = shallow(
-                <HotkeyLayer helpModalShortcut="!" enableHelpModal>
+                <HotkeyLayer enableHelpModal helpModalShortcut="!">
                     <div>hi</div>
                 </HotkeyLayer>,
             );

@@ -44,14 +44,14 @@ export const itemIcons = () => {
     return (
         <>
             {itemTypeOptions.map(t => (
-                <span style={{ padding: 8 }} key={t}>
+                <span key={t} style={{ padding: 8 }}>
                     <Tooltip text={t}>
                         <span style={{ display: 'inline-block' }}>
                             <Icon
-                                iconType={t}
-                                dimension={number('dimension', 32, { range: true, min: 10, max: 64, step: 2 })}
-                                title={text('title', '')}
                                 className={text('className', '')}
+                                dimension={number('dimension', 32, { range: true, min: 10, max: 64, step: 2 })}
+                                iconType={t}
+                                title={text('title', '')}
                             />
                         </span>
                     </Tooltip>
@@ -64,8 +64,8 @@ export const itemIcons = () => {
                     Hover icons in grid to view the <code>iconType</code> prop
                 </b>
                 <p style={{ display: 'flex', alignItems: 'center', paddingTop: 16, paddingLeft: 8 }}>
-                    <Tooltip text="default" isShown position={TooltipPosition.MIDDLE_RIGHT}>
-                        <Icon iconType="default" dimension={32} />
+                    <Tooltip isShown position={TooltipPosition.MIDDLE_RIGHT} text="default">
+                        <Icon dimension={32} iconType="default" />
                     </Tooltip>
                 </p>
             </div>

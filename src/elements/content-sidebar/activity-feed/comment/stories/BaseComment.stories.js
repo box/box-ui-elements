@@ -11,9 +11,9 @@ import { COMMENT_STATUS_RESOLVED } from '../../../../../constants';
 const getTemplate = customProps => (props: BaseCommentProps) => (
     <IntlProvider locale="en">
         <BaseComment
-            id="123"
             approverSelectorContacts={[]}
             currentUser={currentUser}
+            id="123"
             mentionSelectorContacts={[]}
             onSelect={onSelect}
             {...repliesProps}

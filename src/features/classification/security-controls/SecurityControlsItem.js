@@ -21,12 +21,12 @@ const SecurityControlsItem = ({ message, tooltipMessage }: Props) => {
             {tooltipMessage && (
                 <Tooltip
                     className="bdl-SecurityControlsItem-tooltip"
-                    text={<FormattedMessage {...tooltipMessage} />}
-                    position="middle-right"
                     isTabbable={false}
+                    position="middle-right"
+                    text={<FormattedMessage {...tooltipMessage} />}
                 >
                     <span className="bdl-SecurityControlsItem-tooltipIcon">
-                        <IconInfo color={bdlBoxBlue} width={ICON_SIZE} height={ICON_SIZE} />
+                        <IconInfo color={bdlBoxBlue} height={ICON_SIZE} width={ICON_SIZE} />
                     </span>
                 </Tooltip>
             )}

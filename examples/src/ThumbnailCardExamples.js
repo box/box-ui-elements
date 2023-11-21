@@ -64,8 +64,8 @@ const ThumbnailCardExamples = () => {
                     {new Array(3).fill(true).map((_, i) => (
                         <ThumbnailCard
                             key={`thumbnailcard-${i}`}
-                            icon={icon}
                             highlightOnHover
+                            icon={icon}
                             subtitle={subtitle}
                             thumbnail={thumbnail}
                             title={title}

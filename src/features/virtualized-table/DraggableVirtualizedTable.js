@@ -57,9 +57,9 @@ const DraggableVirtualizedTable = ({
                         <VirtualizedTable
                             {...rest}
                             className={tableClassName}
-                            rowRenderer={draggableRowRenderer}
                             height={tableHeight}
                             rowData={rowData}
+                            rowRenderer={draggableRowRenderer}
                         >
                             {shouldShowDragHandle && (
                                 <Column

@@ -180,7 +180,7 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
             throw new Error('SubmenuItem must have exactly two children, a trigger component and a <Menu>');
         }
 
-        const chevron = <Arrow16 className="menu-item-arrow" width={12} height={12} />;
+        const chevron = <Arrow16 className="menu-item-arrow" height={12} width={12} />;
 
         const menuItemProps: SubmenuItemProps = {
             ...omit(rest, ['bottomBoundaryElement', 'onClick', 'onOpen', 'rightBoundaryElement', 'role', 'tabIndex']),

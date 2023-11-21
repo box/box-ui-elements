@@ -41,9 +41,9 @@ const SecurityControlsModal = ({
     return (
         <Modal
             className="bdl-SecurityControlsModal"
-            title={title}
-            onRequestClose={closeModal}
             isOpen={isSecurityControlsModalOpen}
+            onRequestClose={closeModal}
+            title={title}
         >
             <p>
                 <FormattedMessage {...messages.modalDescription} />

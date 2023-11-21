@@ -11,13 +11,13 @@ export const basic = () => (
 );
 
 export const withOptionalText = () => (
-    <Label text="Input Label" showOptionalText={boolean('showOptionalText', true)}>
+    <Label showOptionalText={boolean('showOptionalText', true)} text="Input Label">
         <input type="text" />
     </Label>
 );
 
 export const withInfoTooltip = () => (
-    <Label text="Input Label" infoTooltip="I stand above this icon">
+    <Label infoTooltip="I stand above this icon" text="Input Label">
         <input type="text" />
     </Label>
 );

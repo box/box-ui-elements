@@ -90,11 +90,11 @@ export const basic = () => {
                                 emailMessageProps={{ 'data-resin-target': 'message' }}
                                 expiration={1509173940}
                                 getContacts={getContacts}
+                                isEditAllowed={state.permissionLevel === 'canEdit'}
                                 isOpen={state.isOpen}
+                                isPreviewAllowed={state.permissionLevel === 'canView'}
                                 itemName="somefile.gif"
                                 itemType="file"
-                                isEditAllowed={state.permissionLevel === 'canEdit'}
-                                isPreviewAllowed={state.permissionLevel === 'canView'}
                                 onRequestClose={closeModal}
                                 onSettingsClick={() => null}
                                 permissionLevel={state.permissionLevel}

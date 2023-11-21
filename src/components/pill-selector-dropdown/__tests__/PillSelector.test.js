@@ -64,7 +64,7 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
 
         test('should add bdl-PillSelector-input--nextLine class when prop is set to true', () => {
             const wrapper = shallow(
-                <PillSelector onInput={onInputStub} onRemove={onRemoveStub} isInputFocusedNextLine />,
+                <PillSelector isInputFocusedNextLine onInput={onInputStub} onRemove={onRemoveStub} />,
             );
 
             expect(wrapper.find('.bdl-PillSelector-input--nextLine').length).toBe(1);
@@ -163,11 +163,11 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             ];
             const wrapper = shallow(
                 <PillSelector
-                    showRoundedPills
+                    getPillClassName={getPillClassName}
                     onInput={onInputStub}
                     onRemove={onRemoveStub}
                     selectedOptions={options}
-                    getPillClassName={getPillClassName}
+                    showRoundedPills
                 />,
             );
 

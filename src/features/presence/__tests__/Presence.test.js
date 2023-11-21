@@ -21,7 +21,7 @@ describe('features/presence/Presence', () => {
         test('should correctly render empty state', () => {
             const collaborators = [];
 
-            const wrapper = shallow(<Presence intl={intl} collaborators={collaborators} />);
+            const wrapper = shallow(<Presence collaborators={collaborators} intl={intl} />);
 
             expect(wrapper.find('.presence-avatar-container').length).toBe(1);
             expect(wrapper.find('PresenceAvatar').length).toBe(0);
@@ -31,7 +31,7 @@ describe('features/presence/Presence', () => {
         test('should set isDropdownActive to true and call OnFlyoutOpen when _handleOverlayOpen is called', () => {
             const onFlyoutOpenSpy = jest.fn();
             const wrapper = shallow(
-                <Presence intl={intl} collaborators={collaboratorList} onFlyoutOpen={onFlyoutOpenSpy} />,
+                <Presence collaborators={collaboratorList} intl={intl} onFlyoutOpen={onFlyoutOpenSpy} />,
             );
 
             const instance = wrapper.instance();
@@ -46,8 +46,8 @@ describe('features/presence/Presence', () => {
             const onFlyoutCloseSpy = jest.fn();
             const wrapper = shallow(
                 <Presence
-                    intl={intl}
                     collaborators={collaboratorList}
+                    intl={intl}
                     onFlyoutClose={onFlyoutCloseSpy}
                     onFlyoutOpen={onFlyoutOpenSpy}
                 />,
@@ -67,9 +67,9 @@ describe('features/presence/Presence', () => {
             test('should render autofly on load when the experiment bucket is "flyout"', () => {
                 const wrapper = shallow(
                     <Presence
-                        intl={intl}
                         collaborators={collaboratorList}
                         experimentBucket="flyout"
+                        intl={intl}
                         onClickViewCollaborators={jest.fn()}
                     />,
                 );
@@ -88,9 +88,9 @@ describe('features/presence/Presence', () => {
                 ].forEach(({ bucketName }) => {
                     const wrapper = shallow(
                         <Presence
-                            intl={intl}
                             collaborators={collaboratorList}
                             experimentBucket={bucketName}
+                            intl={intl}
                             onClickViewCollaborators={jest.fn()}
                         />,
                     );
@@ -103,9 +103,9 @@ describe('features/presence/Presence', () => {
                 const noCollaborators = [];
                 const wrapper = shallow(
                     <Presence
-                        intl={intl}
                         collaborators={noCollaborators}
                         experimentBucket="flyout"
+                        intl={intl}
                         onClickViewCollaborators={jest.fn()}
                     />,
                 );
@@ -115,7 +115,7 @@ describe('features/presence/Presence', () => {
 
             test('should not render autofly treatment when there is no click handler to open the recents panel', () => {
                 const wrapper = shallow(
-                    <Presence intl={intl} collaborators={collaboratorList} experimentBucket="flyout" />,
+                    <Presence collaborators={collaboratorList} experimentBucket="flyout" intl={intl} />,
                 );
                 expect(wrapper).toMatchSnapshot();
                 expect(wrapper.find('.presence-autofly-first-load').length).toBe(0);
@@ -129,9 +129,9 @@ describe('features/presence/Presence', () => {
                 };
                 const wrapper = shallow(
                     <Presence
-                        intl={intl}
                         collaborators={collaboratorList}
                         experimentBucket="flyout"
+                        intl={intl}
                         onClickViewCollaborators={mockOnClickViewCollaborators}
                     />,
                 );
@@ -144,9 +144,9 @@ describe('features/presence/Presence', () => {
             test('should show the Presence dropdown when state.showActivityPrompt is false', () => {
                 const wrapper = shallow(
                     <Presence
-                        intl={intl}
                         collaborators={collaboratorList}
                         experimentBucket="flyout"
+                        intl={intl}
                         onClickViewCollaborators={jest.fn()}
                     />,
                 );
@@ -160,9 +160,9 @@ describe('features/presence/Presence', () => {
                 const mockRequestAccessStats = jest.fn();
                 const wrapper = shallow(
                     <Presence
-                        intl={intl}
                         collaborators={collaboratorList}
                         experimentBucket="flyout"
+                        intl={intl}
                         onAccessStatsRequested={mockRequestAccessStats}
                         onClickViewCollaborators={jest.fn()}
                     />,

@@ -107,12 +107,12 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should correctly render task', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
+        const wrapper = shallow(<Task currentUser={currentUser} onDelete={jest.fn()} onEdit={jest.fn()} {...task} />);
         expect(wrapper).toMatchSnapshot();
     });
 
     test('should show assignment status badges for each assignee', () => {
-        const wrapper = mount(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
+        const wrapper = mount(<Task currentUser={currentUser} onDelete={jest.fn()} onEdit={jest.fn()} {...task} />);
         expect(wrapper.find('[data-testid="avatar-group-avatar-container"]')).toHaveLength(2);
     });
 
@@ -127,7 +127,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should not show due date container if not set', () => {
-        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...task} />);
+        const wrapper = shallow(<Task currentUser={currentUser} onDelete={jest.fn()} onEdit={jest.fn()} {...task} />);
         expect(wrapper.find('[data-testid="task-due-date"]')).toHaveLength(0);
     });
 
@@ -135,8 +135,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = mount(
             <Task
                 currentUser={currentUser}
-                onEdit={jest.fn()}
                 onDelete={jest.fn()}
+                onEdit={jest.fn()}
                 {...task}
                 due_at={new Date() + 1000}
             />,
@@ -149,9 +149,9 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             <Task
                 {...task}
                 currentUser={currentUser}
-                onEdit={jest.fn()}
-                onDelete={jest.fn()}
                 due_at={new Date() - 1000}
+                onDelete={jest.fn()}
+                onEdit={jest.fn()}
                 status="NOT_STARTED"
             />,
         );
@@ -163,9 +163,9 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             <Task
                 {...task}
                 currentUser={currentUser}
-                onEdit={jest.fn()}
-                onDelete={jest.fn()}
                 due_at={new Date() - 1000}
+                onDelete={jest.fn()}
+                onEdit={jest.fn()}
                 status="COMPLETED"
             />,
         );
@@ -179,7 +179,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             isPending: true,
         };
 
-        const wrapper = shallow(<Task currentUser={currentUser} onEdit={jest.fn()} onDelete={jest.fn()} {...myTask} />);
+        const wrapper = shallow(<Task currentUser={currentUser} onDelete={jest.fn()} onEdit={jest.fn()} {...myTask} />);
         expect(wrapper.find('[data-testid="task-card"]').hasClass('bcs-is-pending')).toBe(true);
     });
 
@@ -231,22 +231,22 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     });
 
     test('should show actions for task type', () => {
-        const approvalTask = mount(<Task {...task} task_type="APPROVAL" currentUser={currentUser} />).render();
+        const approvalTask = mount(<Task {...task} currentUser={currentUser} task_type="APPROVAL" />).render();
         const approvalBtns = global.queryAllByTestId(approvalTask, 'approve-task');
         const rejectBtns = global.queryAllByTestId(approvalTask, 'reject-task');
         expect(approvalBtns).toHaveLength(1);
         expect(rejectBtns).toHaveLength(1);
 
-        const generalTask = mount(<Task {...task} task_type="GENERAL" currentUser={currentUser} />).render();
+        const generalTask = mount(<Task {...task} currentUser={currentUser} task_type="GENERAL" />).render();
         const completeBtns = global.queryAllByTestId(generalTask, 'complete-task');
         expect(completeBtns).toHaveLength(1);
     });
 
     test('should show proper icons for task avatar based on task type', () => {
-        const approvalTask = mount(<Task {...task} task_type="APPROVAL" currentUser={currentUser} />);
+        const approvalTask = mount(<Task {...task} currentUser={currentUser} task_type="APPROVAL" />);
         expect(approvalTask.find('IconTaskApproval')).toHaveLength(1);
 
-        const generalTask = mount(<Task {...task} task_type="GENERAL" currentUser={currentUser} />);
+        const generalTask = mount(<Task {...task} currentUser={currentUser} task_type="GENERAL" />);
         expect(generalTask.find('IconTaskGeneral')).toHaveLength(1);
     });
 
@@ -255,9 +255,9 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = mount(
             <Task
                 {...task}
+                approverSelectorContacts={approverSelectorContacts}
                 currentUser={currentUser}
                 onAssignmentUpdate={onAssignmentUpdateSpy}
-                approverSelectorContacts={approverSelectorContacts}
             />,
         );
 
@@ -286,11 +286,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = shallow(
             <Task
                 {...task}
-                permissions={{ can_delete: false, can_update: true }}
-                currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
+                currentUser={otherUser}
                 handlers={allHandlers}
                 onDelete={jest.fn()}
+                permissions={{ can_delete: false, can_update: true }}
             />,
         );
         wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
@@ -303,11 +303,11 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = shallow(
             <Task
                 {...task}
-                permissions={{ can_delete: true, can_update: false }}
-                currentUser={otherUser}
                 approverSelectorContacts={approverSelectorContacts}
+                currentUser={otherUser}
                 handlers={allHandlers}
                 onEdit={jest.fn()}
+                permissions={{ can_delete: true, can_update: false }}
             />,
         );
         wrapper.find('MediaMenu[data-testid="task-actions-menu"]').simulate('click');
@@ -322,8 +322,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 {...task}
                 currentUser={currentUser}
                 error={{ title: 'blah', message: 'blah' }}
-                onEdit={jest.fn()}
                 onDelete={jest.fn()}
+                onEdit={jest.fn()}
             />,
         );
 
@@ -344,8 +344,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
                 {...taskWithMarker}
                 currentUser={currentUser}
                 error={{ title: 'blah', message: 'blah' }}
-                onEdit={jest.fn()}
                 onDelete={jest.fn()}
+                onEdit={jest.fn()}
             />,
         );
         const instance = wrapper.instance();
@@ -382,8 +382,8 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
         const wrapper = mount(
             <Task
                 currentUser={currentUser}
-                onEdit={jest.fn()}
                 onDelete={jest.fn()}
+                onEdit={jest.fn()}
                 {...taskWithThirtyAssignees}
                 due_at={new Date() + 1000}
             />,

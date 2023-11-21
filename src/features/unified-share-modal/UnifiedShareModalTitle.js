@@ -58,11 +58,11 @@ const UnifiedShareModalTitle = ({ isEmailLinkSectionExpanded, showCollaboratorLi
             <span className="bdl-UnifiedShareModalTitle">{title}</span>
             {canUserSeeClassification && (
                 <Classification
+                    className="bdl-UnifiedShareModalTitle-classification"
+                    color={classificationColor}
                     definition={bannerPolicy ? bannerPolicy.body : undefined}
                     messageStyle="tooltip"
                     name={classification}
-                    color={classificationColor}
-                    className="bdl-UnifiedShareModalTitle-classification"
                 />
             )}
         </>

@@ -16,12 +16,12 @@ function ActivityItem(
 ) {
     return (
         <li
+            ref={ref}
             className={classNames('bcs-ActivityItem', className, {
                 'bcs-is-focused': isFocused,
                 'bcs-is-hoverable': isHoverable && hasNewThreadedReplies,
                 hasNewThreadedReplies,
             })}
-            ref={ref}
             {...rest}
         >
             {children}

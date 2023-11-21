@@ -82,16 +82,16 @@ const Content = ({
                 <ProgressBar percent={currentCollection.percentLoaded} />
             )}
 
-            {isViewEmpty && <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />}
+            {isViewEmpty && <EmptyState isLoading={currentCollection.percentLoaded !== 100} view={view} />}
             {!isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList currentCollection={currentCollection} fieldsToShow={fieldsToShow} {...rest} />
             )}
             {!isViewEmpty && isListView && (
                 <ItemList
                     currentCollection={currentCollection}
-                    onSortChange={onSortChange}
                     focusedRow={focusedRow}
                     isMedium={isMedium}
+                    onSortChange={onSortChange}
                     tableRef={tableRef}
                     view={view}
                     {...rest}

@@ -37,9 +37,9 @@ function Message({
                 date={date}
                 fileUpload={fileUpload}
                 getToken={getToken}
+                name={name}
                 tags={tags}
                 title={title}
-                name={name}
             />
         );
     }
@@ -53,17 +53,17 @@ function Message({
                 date={date}
                 fileUpload={fileUpload}
                 getToken={getToken}
+                name={name}
                 tags={tags}
                 title={title}
-                name={name}
             />
         );
     }
     if (templateName === TITLE_BODY_TAGS) {
-        return <TitleBodyTags body={body} date={date} tags={tags} title={title} name={name} />;
+        return <TitleBodyTags body={body} date={date} name={name} tags={tags} title={title} />;
     }
     if (templateName === TITLE_BODY_TAGS_BUTTON && button1) {
-        return <TitleBodyTagsButton body={body} button1={button1} date={date} tags={tags} title={title} name={name} />;
+        return <TitleBodyTagsButton body={body} button1={button1} date={date} name={name} tags={tags} title={title} />;
     }
 
     return null;

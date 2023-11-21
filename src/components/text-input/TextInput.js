@@ -78,7 +78,7 @@ const TextInput = ({
                 tooltip={labelTooltip}
             >
                 {!!description && (
-                    <div id={descriptionID} className="text-input-description">
+                    <div className="text-input-description" id={descriptionID}>
                         {description}
                     </div>
                 )}

@@ -202,7 +202,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
                 { id: '1', name: 'item1' },
                 { id: '2', name: 'item2' },
             ];
-            const itemIconRenderer = () => <button type="button" className="icon-test" />;
+            const itemIconRenderer = () => <button className="icon-test" type="button" />;
             const wrapper = renderComponent({
                 items,
                 itemIconRenderer,
@@ -218,7 +218,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
                 { id: '1', name: 'item1' },
                 { id: '2', name: 'item2' },
             ];
-            const itemButtonRenderer = () => <button type="button" className="button-test" />;
+            const itemButtonRenderer = () => <button className="button-test" type="button" />;
             const wrapper = renderComponent({
                 items,
                 itemButtonRenderer,

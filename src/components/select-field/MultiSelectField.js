@@ -35,9 +35,9 @@ const optionsWithClearOption = (options: Array<Object>, shouldShowClearOption?: 
 const MultiSelectField = ({ intl, options, shouldShowClearOption, ...rest }: Props) => (
     <BaseSelectField
         {...rest}
-        shouldShowClearOption={shouldShowClearOption}
-        options={optionsWithClearOption(options, shouldShowClearOption, intl)}
         multiple
+        options={optionsWithClearOption(options, shouldShowClearOption, intl)}
+        shouldShowClearOption={shouldShowClearOption}
     />
 );
 

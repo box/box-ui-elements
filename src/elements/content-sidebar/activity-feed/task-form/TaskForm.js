@@ -380,8 +380,8 @@ class TaskForm extends React.Component<Props, State> {
                     >
                         <PillSelectorDropdown
                             className={pillSelectorOverlayClasses}
-                            error={this.getErrorByFieldname('taskAssignees')}
                             disabled={isForbiddenErrorOnEdit}
+                            error={this.getErrorByFieldname('taskAssignees')}
                             inputProps={{ 'data-testid': 'task-form-assignee-input' }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
@@ -393,8 +393,8 @@ class TaskForm extends React.Component<Props, State> {
                             placeholder={intl.formatMessage(commentFormMessages.approvalAddAssignee)}
                             selectedOptions={selectedApprovers}
                             selectorOptions={approverOptions}
-                            shouldSetActiveItemOnOpen
                             shouldClearUnmatchedInput
+                            shouldSetActiveItemOnOpen
                             validateForError={() => this.validateForm('taskAssignees')}
                         >
                             {approverOptions.map(({ id, name, item = {} }) => (
@@ -421,20 +421,20 @@ class TaskForm extends React.Component<Props, State> {
                                         isChecked={isCompletionRuleCheckboxChecked}
                                         isDisabled={isCompletionRuleCheckboxDisabled || isForbiddenErrorOnEdit}
                                         label={<FormattedMessage {...messages.taskAnyCheckboxLabel} />}
-                                        tooltip={intl.formatMessage(messages.taskAnyInfoGroupTooltip)}
                                         name="completionRule"
                                         onChange={this.handleCompletionRuleChange}
+                                        tooltip={intl.formatMessage(messages.taskAnyInfoGroupTooltip)}
                                     />
                                 </FeatureFlag>
-                                <FeatureFlag not feature="activityFeed.tasks.assignToGroup">
+                                <FeatureFlag feature="activityFeed.tasks.assignToGroup" not>
                                     <Checkbox
                                         data-testid="task-form-completion-rule-checkbox"
                                         isChecked={isCompletionRuleCheckboxChecked}
                                         isDisabled={isCompletionRuleCheckboxDisabled || isForbiddenErrorOnEdit}
                                         label={<FormattedMessage {...messages.taskAnyCheckboxLabel} />}
-                                        tooltip={intl.formatMessage(messages.taskAnyInfoTooltip)}
                                         name="completionRule"
                                         onChange={this.handleCompletionRuleChange}
+                                        tooltip={intl.formatMessage(messages.taskAnyInfoTooltip)}
                                     />
                                 </FeatureFlag>
                             </>
@@ -477,8 +477,8 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-cancel-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL}
                                 data-testid="task-form-cancel-button"
-                                onClick={this.handleCancelClick}
                                 isDisabled={isLoading}
+                                onClick={this.handleCancelClick}
                                 type="button"
                                 {...this.addResinInfo()}
                             >

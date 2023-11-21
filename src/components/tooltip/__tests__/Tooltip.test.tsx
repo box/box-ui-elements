@@ -260,7 +260,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should set aria-hidden as true if ariaHidden is true', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="test" ariaHidden>
+                <Tooltip ariaHidden isShown text="test">
                     <button aria-label="test" />
                 </Tooltip>,
             );
@@ -270,7 +270,7 @@ describe('components/tooltip/Tooltip', () => {
 
         test('should not set aria-describedby when ariaHidden is true', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" ariaHidden>
+                <Tooltip ariaHidden isShown text="hi">
                     <button aria-label="test" />
                 </Tooltip>,
             );
@@ -280,7 +280,7 @@ describe('components/tooltip/Tooltip', () => {
         });
         test('should not set aria-errormessage when ariaHidden is true', () => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" ariaHidden>
+                <Tooltip ariaHidden isShown text="hi">
                     <button aria-label="test" />
                 </Tooltip>,
             );
@@ -382,7 +382,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('should stop event propagation when stopBubble is set', () => {
         test.each([['onClick', 'onContextMenu', 'onKeyPress']])('when %o', onEvent => {
             const wrapper = shallow(
-                <Tooltip isShown text="hi" stopBubble>
+                <Tooltip isShown stopBubble text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -404,7 +404,7 @@ describe('components/tooltip/Tooltip', () => {
     describe('componentDidUpdate', () => {
         test('should reset wasClosedByUser to false if isShown prop is transitioned from false to true', () => {
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi" isShown>
+                <Tooltip isShown text="hi">
                     <button />
                 </Tooltip>,
             );
@@ -435,7 +435,7 @@ describe('components/tooltip/Tooltip', () => {
         test('should call onDismiss if provided', () => {
             const onDismissMock = jest.fn();
             const wrapper = shallow<Tooltip>(
-                <Tooltip text="hi" onDismiss={onDismissMock}>
+                <Tooltip onDismiss={onDismissMock} text="hi">
                     <button />
                 </Tooltip>,
             );

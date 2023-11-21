@@ -74,10 +74,10 @@ function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.E
                         position={TooltipPosition.BOTTOM_CENTER}
                         text={
                             <PresenceAvatarTooltipContent
-                                name={name}
                                 interactedAt={interactedAt}
                                 interactionType={interactionType}
                                 isActive={isActive}
+                                name={name}
                             />
                         }
                     >

@@ -11,39 +11,39 @@ export const relativeTimestamps = () => (
     <div>
         <div>
             <ReadableTime
-                timestamp={Date.now() - MILLISECONDS_PER_HOUR + 30 * 60 * 1000}
                 relativeThreshold={MILLISECONDS_PER_HOUR}
+                timestamp={Date.now() - MILLISECONDS_PER_HOUR + 30 * 60 * 1000}
             />
         </div>
         <div>
             <ReadableTime
-                timestamp={Date.now() - 2 * MILLISECONDS_PER_HOUR}
                 relativeThreshold={MILLISECONDS_PER_HOUR}
+                timestamp={Date.now() - 2 * MILLISECONDS_PER_HOUR}
             />
         </div>
         <div>
-            <ReadableTime timestamp={Date.now() - MILLISECONDS_PER_DAY} relativeThreshold={MILLISECONDS_PER_HOUR} />
+            <ReadableTime relativeThreshold={MILLISECONDS_PER_HOUR} timestamp={Date.now() - MILLISECONDS_PER_DAY} />
         </div>
     </div>
 );
 
 export const dateWithoutTime = () => (
-    <ReadableTime timestamp={Date.now() - MILLISECONDS_PER_WEEK} relativeThreshold={MILLISECONDS_PER_HOUR} />
+    <ReadableTime relativeThreshold={MILLISECONDS_PER_HOUR} timestamp={Date.now() - MILLISECONDS_PER_WEEK} />
 );
 
 export const dateWithTime = () => (
     <ReadableTime
-        timestamp={Date.now() - MILLISECONDS_PER_WEEK}
-        relativeThreshold={MILLISECONDS_PER_HOUR}
         alwaysShowTime
+        relativeThreshold={MILLISECONDS_PER_HOUR}
+        timestamp={Date.now() - MILLISECONDS_PER_WEEK}
     />
 );
 
 export const dateInTheFutureWhenNotAllowed = () => (
     <ReadableTime
-        timestamp={Date.now() + 70 * MILLISECONDS_PER_DAY}
-        relativeThreshold={MILLISECONDS_PER_HOUR}
         allowFutureTimestamps={false}
+        relativeThreshold={MILLISECONDS_PER_HOUR}
+        timestamp={Date.now() + 70 * MILLISECONDS_PER_DAY}
     />
 );
 

@@ -89,8 +89,8 @@ const ItemAction = ({
     if (status === STATUS_ERROR && code === ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED && !!onUpgradeCTAClick) {
         return (
             <PrimaryButton
-                onClick={onUpgradeCTAClick}
                 data-resin-target="large_version_error_inline_upgrade_cta"
+                onClick={onUpgradeCTAClick}
                 type="button"
             >
                 <FormattedMessage {...messages.uploadsFileSizeLimitExceededUpgradeMessageForUpgradeCta} />

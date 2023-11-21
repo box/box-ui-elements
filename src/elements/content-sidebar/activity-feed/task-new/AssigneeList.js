@@ -40,12 +40,12 @@ function AssigneeList(props: Props) {
             return (
                 <li key={id} className="bcs-AssigneeList-listItem" data-testid="assignee-list-item">
                     <AvatarGroupAvatar
-                        status={status}
                         className="bcs-AssigneeList-listItemAvatar"
-                        user={target}
                         getAvatarUrl={getAvatarUrl}
+                        status={status}
+                        user={target}
                     />
-                    <AssigneeDetails user={target} status={status} completedAt={completedAt} />
+                    <AssigneeDetails completedAt={completedAt} status={status} user={target} />
                 </li>
             );
         });
@@ -65,10 +65,10 @@ function AssigneeList(props: Props) {
             {!isOpen && hiddenAssigneeCount > 0 && (
                 <div className="bcs-AssigneeList-toggleBtn">
                     <PlainButton
+                        className="lnk"
                         data-resin-target="showmorebtn"
                         data-testid="show-more-assignees"
                         onClick={onExpand}
-                        className="lnk"
                     >
                         <FormattedMessage
                             {...additionalAssigneeMessage}
@@ -84,10 +84,10 @@ function AssigneeList(props: Props) {
             {isOpen && (
                 <div className="bcs-AssigneeList-toggleBtn">
                     <PlainButton
+                        className="lnk"
                         data-resin-target="showlessbtn"
                         data-testid="show-less-assignees"
                         onClick={onCollapse}
-                        className="lnk"
                     >
                         <FormattedMessage {...messages.taskShowLessAssignees} />
                     </PlainButton>

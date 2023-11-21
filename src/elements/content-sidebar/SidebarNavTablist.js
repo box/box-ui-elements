@@ -57,9 +57,9 @@ const SidebarNavTablist = ({ children, history, elementId, isOpen, onNavigate }:
         <div
             aria-orientation="vertical"
             className="bcs-SidebarNav-main"
+            onKeyDown={handleKeyDown}
             role="tablist"
             tabIndex="0"
-            onKeyDown={handleKeyDown}
         >
             {React.Children.map(children, tab => {
                 if (!tab) {

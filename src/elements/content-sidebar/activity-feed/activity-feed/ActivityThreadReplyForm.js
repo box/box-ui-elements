@@ -52,28 +52,28 @@ function ActivityThreadReplyForm({
     return showReplyForm ? (
         <CommentForm
             className="bcs-ActivityThreadReplyForm-comment"
-            isOpen
-            isEditing
-            showTip={false}
-            // $FlowFixMe user is needed for showing an avatar, we don't need that here
-            user={{}}
-            getAvatarUrl={() => Promise.resolve()}
-            onCancel={hideForm}
-            onFocus={onFocus}
             createComment={({ text }) => {
                 onReplyCreate(text);
                 hideForm();
             }}
-            mentionSelectorContacts={mentionSelectorContacts}
+            getAvatarUrl={() => Promise.resolve()}
             getMentionWithQuery={getMentionWithQuery}
+            isEditing
+            isOpen
+            mentionSelectorContacts={mentionSelectorContacts}
+            onCancel={hideForm}
+            onFocus={onFocus}
             placeholder={placeholder}
+            showTip={false}
+            // $FlowFixMe user is needed for showing an avatar, we don't need that here
+            user={{}}
         />
     ) : (
         <PlainButton
             className="bcs-ActivityThreadReplyForm-toggle"
+            isDisabled={isDisabled}
             onClick={showForm}
             type="button"
-            isDisabled={isDisabled}
         >
             <ArrowArcRight className="bcs-ActivityThreadReplyForm-arrow" />
             <FormattedMessage {...messages.reply} />

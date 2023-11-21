@@ -20,7 +20,7 @@ describe('components/table/makeSelectable', () => {
     const data = ['a', 'b', 'c', 'd', 'e'];
 
     const getWrapper = (props = {}) =>
-        shallow(<SelectableTable onSelect={sandbox.stub()} data={data} selectedItems={[]} enableHotkeys {...props} />);
+        shallow(<SelectableTable data={data} enableHotkeys onSelect={sandbox.stub()} selectedItems={[]} {...props} />);
 
     afterEach(() => {
         jest.clearAllTimers();

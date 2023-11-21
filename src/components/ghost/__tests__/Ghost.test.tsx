@@ -31,7 +31,7 @@ describe('components/Ghost', () => {
         'merges style prop on top of inline styling options when there is $label',
         ({ borderRadius, height, width, style }) => {
             expect(
-                render(<Ghost borderRadius={borderRadius} height={height} width={width} style={style} />),
+                render(<Ghost borderRadius={borderRadius} height={height} style={style} width={width} />),
             ).toMatchSnapshot();
         },
     );

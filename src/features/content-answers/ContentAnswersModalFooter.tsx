@@ -83,9 +83,9 @@ const ContentAnswersModalFooter = ({ currentUser, hasError, intl, isLoading, onA
                     label={formatMessage(messages.askQuestionPlaceholder)}
                     maxLength={TEXT_AREA.MAX_LENGTH}
                     onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
                     placeholder={formatMessage(messages.askQuestionPlaceholder)}
                     value={prompt}
-                    onKeyDown={handleKeyDown}
                 />
                 <PrimaryButton
                     className="bdl-ContentAnswersModalFooter-submitButton"

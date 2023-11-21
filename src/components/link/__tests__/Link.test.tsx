@@ -74,7 +74,7 @@ describe('components/link/Link', () => {
     test('should use "refProp" prop for element if passed', () => {
         const linkRef = jest.fn();
         mount(
-            <Link linkRef={linkRef} refProp="ref" href="my-route">
+            <Link href="my-route" linkRef={linkRef} refProp="ref">
                 a link
             </Link>,
         );

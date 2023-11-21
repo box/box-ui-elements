@@ -31,14 +31,14 @@ const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, intl, max
         gridMinColumns < maxColumnCount && (
             <div className="bdl-GridViewSlider">
                 <PlainButton
+                    aria-label={formatMessage(messages.gridViewDecreaseColumnSize)}
                     className="bdl-GridViewSlider-button"
                     onClick={() => {
                         onChange(Math.max(RANGE_MIN, sliderValue - RANGE_STEP));
                     }}
                     type="button"
-                    aria-label={formatMessage(messages.gridViewDecreaseColumnSize)}
                 >
-                    <IconMinusThin color={bdlGray50} width={14} height={14} />
+                    <IconMinusThin color={bdlGray50} height={14} width={14} />
                 </PlainButton>
                 <input
                     aria-label={formatMessage(messages.gridViewColumnSize)}
@@ -53,14 +53,14 @@ const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, intl, max
                     value={sliderValue}
                 />
                 <PlainButton
+                    aria-label={formatMessage(messages.gridViewIncreaseColumnSize)}
                     className="bdl-GridViewSlider-button"
                     onClick={() => {
                         onChange(Math.min(RANGE_MAX, sliderValue + RANGE_STEP));
                     }}
                     type="button"
-                    aria-label={formatMessage(messages.gridViewIncreaseColumnSize)}
                 >
-                    <IconPlusThin color={bdlGray50} width={14} height={14} />
+                    <IconPlusThin color={bdlGray50} height={14} width={14} />
                 </PlainButton>
             </div>
         )

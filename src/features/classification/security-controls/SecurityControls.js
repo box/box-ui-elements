@@ -107,8 +107,8 @@ class SecurityControls extends React.Component<Props, State> {
                             classificationName={classificationName}
                             closeModal={this.closeModal}
                             definition={definition}
-                            itemName={itemName}
                             isSecurityControlsModalOpen={isSecurityControlsModalOpen}
+                            itemName={itemName}
                             modalItems={modalItems}
                         />
                     </>

@@ -33,9 +33,9 @@ const TaskActions = ({
         action = onTaskView && (
             <PrimaryButton
                 className="bcs-TaskActions-button"
+                data-resin-target={ACTIVITY_TARGETS.TASK_VIEW_DETAILS}
                 data-testid="view-task"
                 onClick={onTaskView}
-                data-resin-target={ACTIVITY_TARGETS.TASK_VIEW_DETAILS}
             >
                 <FormattedMessage {...messages.tasksFeedViewDetailsAction} />
             </PrimaryButton>
@@ -45,17 +45,17 @@ const TaskActions = ({
             <>
                 <Button
                     className="bcs-TaskActions-button"
+                    data-resin-target={ACTIVITY_TARGETS.TASK_REJECT}
                     data-testid="reject-task"
                     onClick={onTaskReject}
-                    data-resin-target={ACTIVITY_TARGETS.TASK_REJECT}
                 >
                     <FormattedMessage {...messages.tasksFeedRejectAction} />
                 </Button>
                 <PrimaryButton
                     className="bcs-TaskActions-button"
+                    data-resin-target={ACTIVITY_TARGETS.TASK_APPROVE}
                     data-testid="approve-task"
                     onClick={onTaskApproval}
-                    data-resin-target={ACTIVITY_TARGETS.TASK_APPROVE}
                 >
                     <FormattedMessage {...messages.tasksFeedApproveAction} />
                 </PrimaryButton>
@@ -65,9 +65,9 @@ const TaskActions = ({
         action = (
             <PrimaryButton
                 className="bcs-TaskActions-button"
+                data-resin-target={ACTIVITY_TARGETS.TASK_COMPLETE}
                 data-testid="complete-task"
                 onClick={onTaskComplete}
-                data-resin-target={ACTIVITY_TARGETS.TASK_COMPLETE}
             >
                 <FormattedMessage {...messages.tasksFeedCompleteAction} />
             </PrimaryButton>

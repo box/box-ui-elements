@@ -17,7 +17,7 @@ const ContentExplorerIncludeSubfolders = ({ isDisabled, onChange, tooltipMessage
             )}
         </>
     );
-    return <Toggle label={label} isDisabled={isDisabled} onChange={onChange} />;
+    return <Toggle isDisabled={isDisabled} label={label} onChange={onChange} />;
 };
 
 ContentExplorerIncludeSubfolders.propTypes = {

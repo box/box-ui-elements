@@ -12,10 +12,10 @@ export const Preview = () => {
     return (
         <IntlProvider locale="en">
             <ContentPreview
+                key={`${fileId}-${token}`}
                 features={global.FEATURES}
                 fileId={fileId}
                 hasHeader
-                key={`${fileId}-${token}`}
                 token={token}
             />
         </IntlProvider>
@@ -29,6 +29,7 @@ export const PreviewWithAnnotations = () => {
     return (
         <IntlProvider locale="en">
             <ContentPreview
+                key={`${fileId}-${token}`}
                 contentSidebarProps={{
                     detailsSidebarProps: {
                         hasAccessStats: true,
@@ -47,7 +48,6 @@ export const PreviewWithAnnotations = () => {
                 features={global.FEATURES}
                 fileId={fileId}
                 hasHeader
-                key={`${fileId}-${token}`}
                 showAnnotations
                 token={token}
             />
@@ -62,6 +62,7 @@ export const PreviewWithSidebar = () => {
     return (
         <IntlProvider locale="en">
             <ContentPreview
+                key={`${fileId}-${token}`}
                 contentSidebarProps={{
                     detailsSidebarProps: {
                         hasAccessStats: true,
@@ -80,7 +81,6 @@ export const PreviewWithSidebar = () => {
                 features={global.FEATURES}
                 fileId={fileId}
                 hasHeader
-                key={`${fileId}-${token}`}
                 token={token}
             />
         </IntlProvider>
@@ -94,13 +94,13 @@ export const PreviewWithBoxAI = () => {
     return (
         <IntlProvider locale="en">
             <ContentPreview
+                key={`${fileId}-${token}`}
                 contentAnswersProps={{
                     show: true,
                 }}
                 features={global.FEATURES}
                 fileId={fileId}
                 hasHeader
-                key={`${fileId}-${token}`}
                 token={token}
             />
         </IntlProvider>

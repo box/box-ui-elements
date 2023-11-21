@@ -204,9 +204,9 @@ function SharingModal({
             <Internationalize language={language} messages={messages}>
                 <NotificationsWrapper>
                     <Notification
+                        duration={DURATION_SHORT}
                         onClose={() => setIsInitialDataErrorVisible(false)}
                         type={TYPE_ERROR}
-                        duration={DURATION_SHORT}
                     >
                         <span>
                             <FormattedMessage {...initialDataErrorMessage} />
@@ -254,8 +254,8 @@ function SharingModal({
                     serverURL={serverURL}
                     setChangeSharedLinkAccessLevel={setChangeSharedLinkAccessLevel}
                     setChangeSharedLinkPermissionLevel={setChangeSharedLinkPermissionLevel}
-                    setGetContacts={setGetContacts}
                     setCollaboratorsList={setCollaboratorsList}
+                    setGetContacts={setGetContacts}
                     setIsLoading={setIsLoading}
                     setItem={setItem}
                     setOnAddLink={setOnAddLink}
@@ -266,8 +266,8 @@ function SharingModal({
                 />
                 {isVisible && currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
                     <SharedLinkSettingsModal
-                        isDirectLinkUnavailableDueToDownloadSettings={false}
                         isDirectLinkUnavailableDueToAccessPolicy={false}
+                        isDirectLinkUnavailableDueToDownloadSettings={false}
                         isDirectLinkUnavailableDueToMaliciousContent={false}
                         isOpen={isVisible}
                         item={item}
@@ -281,10 +281,10 @@ function SharingModal({
                 {isVisible && currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
                     <UnifiedShareModal
                         canInvite={sharedLink.canInvite}
-                        config={config}
                         changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
                         changeSharedLinkPermissionLevel={changeSharedLinkPermissionLevel}
                         collaboratorsList={collaboratorsList}
+                        config={config}
                         currentUserID={currentUserID}
                         displayInModal={displayInModal}
                         getCollaboratorContacts={getContacts}
@@ -296,8 +296,8 @@ function SharingModal({
                         isOpen={isVisible}
                         item={item}
                         onAddLink={onAddLink}
-                        onRequestClose={displayInModal ? () => setIsVisible(false) : noop}
                         onRemoveLink={onRemoveLink}
+                        onRequestClose={displayInModal ? () => setIsVisible(false) : noop}
                         onSettingsClick={() => setCurrentView(CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS)}
                         sendInvites={sendInvites}
                         sharedLink={{

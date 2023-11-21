@@ -36,9 +36,12 @@ export const basic = () => {
             {state => (
                 <IntlProvider locale="en">
                     <Form
+                        formValidityState={state.formValidityState}
                         onChange={formData => {
                             componentStore.set({ formValidityState: {}, formData });
                         }}
+                        /* eslint-disable-next-line no-console */
+                        onInvalidSubmit={formValidityState => console.log(formValidityState)}
                         onValidSubmit={() => {
                             // On a server validation error, set formValidityState to
                             // push error states to child inputs
@@ -51,21 +54,18 @@ export const basic = () => {
                                 },
                             });
                         }}
-                        /* eslint-disable-next-line no-console */
-                        onInvalidSubmit={formValidityState => console.log(formValidityState)}
-                        formValidityState={state.formValidityState}
                     >
                         <div>
                             <TextInput
-                                name="username"
+                                isRequired={boolean('isRequired', true)}
                                 label="Username"
+                                name="username"
                                 placeholder="swagmaster6"
                                 type="text"
-                                isRequired={boolean('isRequired', true)}
                             />
                         </div>
                         <div>
-                            <TextInput name="email" label="Email Address" placeholder="user@example.com" type="email" />
+                            <TextInput label="Email Address" name="email" placeholder="user@example.com" type="email" />
                         </div>
                         <div>
                             <TextInput
@@ -77,7 +77,7 @@ export const basic = () => {
                             />
                         </div>
 
-                        <Select name="albumselect" label="Album">
+                        <Select label="Album" name="albumselect">
                             <option value={1}>Illmatic</option>
                             <option value={2}>The Marshall Mathers LP</option>
                             <option value={3}>All Eyez on Me</option>
@@ -92,15 +92,15 @@ export const basic = () => {
                         <div>
                             <div>
                                 <Toggle
-                                    name="showtextareatoggle"
                                     id="showtextareatoggle"
                                     isOn={state.formData.showtextareatoggle === 'on'}
                                     label="Show TextArea"
+                                    name="showtextareatoggle"
                                     onChange={() => null}
                                 />
                             </div>
                             {state.formData.showtextareatoggle === 'on' ? (
-                                <TextArea name="textarea" label="Your story" placeholder="Once upon a time" />
+                                <TextArea label="Your story" name="textarea" placeholder="Once upon a time" />
                             ) : null}
                         </div>
 

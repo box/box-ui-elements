@@ -91,10 +91,10 @@ export const empty = () => {
                 <PillSelectorDropdown
                     allowCustomPills
                     error={state.error}
-                    placeholder="Names or email addresses"
                     onInput={handleInput}
                     onRemove={handleRemove}
                     onSelect={handleSelect}
+                    placeholder="Names or email addresses"
                     selectedOptions={state.selectedOptions}
                     selectorOptions={state.selectorOptions}
                     validateForError={validateForError}
@@ -137,10 +137,10 @@ export const withPills = () => {
                 <PillSelectorDropdown
                     allowCustomPills
                     error={state.error}
-                    placeholder="Names or email addresses"
                     onInput={handleInput}
                     onRemove={handleRemove}
                     onSelect={handleSelect}
+                    placeholder="Names or email addresses"
                     selectedOptions={state.selectedOptions}
                     selectorOptions={state.selectorOptions}
                     validateForError={validateForError}
@@ -183,10 +183,10 @@ export const showRoundedPills = () => {
                 <PillSelectorDropdown
                     allowCustomPills
                     error={state.error}
-                    placeholder="Names or email addresses"
                     onInput={handleInput}
                     onRemove={handleRemove}
                     onSelect={handleSelect}
+                    placeholder="Names or email addresses"
                     selectedOptions={state.selectedOptions}
                     selectorOptions={state.selectorOptions}
                     showRoundedPills
@@ -234,10 +234,10 @@ export const showAvatars = () => {
                 <PillSelectorDropdown
                     allowCustomPills
                     error={state.error}
-                    placeholder="Names or email addresses"
                     onInput={handleInput}
                     onRemove={handleRemove}
                     onSelect={handleSelect}
+                    placeholder="Names or email addresses"
                     selectedOptions={state.selectedOptions}
                     selectorOptions={state.selectorOptions}
                     showAvatars
@@ -300,10 +300,10 @@ export const customPillStyles = () => {
                     allowCustomPills
                     error={state.error}
                     getPillClassName={getPillClassName}
-                    placeholder="Names or email addresses"
                     onInput={handleInput}
                     onRemove={handleRemove}
                     onSelect={handleSelect}
+                    placeholder="Names or email addresses"
                     selectedOptions={state.selectedOptions}
                     selectorOptions={state.selectorOptions}
                     showRoundedPills

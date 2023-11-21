@@ -102,7 +102,7 @@ function Avatar({
     }
 
     return (
-        <Badgeable className={classes} bottomRight={badge}>
+        <Badgeable bottomRight={badge} className={classes}>
             <span>{avatar}</span>
         </Badgeable>
     );

@@ -277,13 +277,13 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                     <DraftJSMentionSelectorCore
                         contacts={contacts}
                         contactsLoaded={contactsLoaded}
+                        description={description}
                         editorState={editorState}
                         error={error}
                         hideLabel={hideLabel}
                         isDisabled={isDisabled}
                         isRequired={isRequired}
                         label={label}
-                        description={description}
                         mentionTriggers={mentionTriggers}
                         onBlur={handleBlur}
                         onChange={handleChange}

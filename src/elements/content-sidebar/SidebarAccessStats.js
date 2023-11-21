@@ -56,7 +56,6 @@ const SidebarAccessStats = ({
             title={<FormattedMessage {...messages.sidebarAccessStats} />}
         >
             <AccessStats
-                errorMessage={errorMessage}
                 commentCount={comment_count}
                 commentStatButtonProps={{
                     [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.COMMENTS,
@@ -65,21 +64,22 @@ const SidebarAccessStats = ({
                 downloadStatButtonProps={{
                     [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.DOWNLOADS,
                 }}
-                previewCount={preview_count}
-                previewStatButtonProps={{
-                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS,
-                }}
-                viewStatButtonProps={{
-                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEWS,
-                }}
                 editCount={edit_count}
                 editStatButtonProps={{
                     [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.EDITS,
                 }}
-                openAccessStatsModal={onAccessStatsClick}
+                errorMessage={errorMessage}
                 isBoxNote={isBoxNote(file)}
+                openAccessStatsModal={onAccessStatsClick}
+                previewCount={preview_count}
+                previewStatButtonProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.PREVIEWS,
+                }}
                 viewMoreButtonProps={{
                     [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEW_DETAILS,
+                }}
+                viewStatButtonProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.ACCESS_STATS.VIEWS,
                 }}
             />
         </SidebarSection>

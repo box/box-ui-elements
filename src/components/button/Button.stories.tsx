@@ -48,7 +48,7 @@ export const iconAndTextButton = () => (
 
 export const fixingMargins = () => (
     <>
-        <InlineNotice type="error" title="Note">
+        <InlineNotice title="Note" type="error">
             The PlainButton variant has a <b>margin of 0</b> and needs special handling due to how the margin is defined
             for <b>hover/active states</b>.
             <br /> The methods shown below will cause problems for PlainButton. See PlainButton docs for details.

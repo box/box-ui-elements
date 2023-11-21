@@ -216,8 +216,8 @@ export const BaseComment = ({
                             tagged_message={tagged_message}
                             translatedTaggedMessage={translatedTaggedMessage}
                             {...translations}
-                            translationFailed={error ? true : null}
                             getUserProfileUrl={getUserProfileUrl}
+                            translationFailed={error ? true : null}
                         />
                     )}
                 </div>
@@ -337,8 +337,8 @@ export const Replies = ({
                                     isPending={isParentPending || reply.isPending}
                                     mentionSelectorContacts={mentionSelectorContacts}
                                     onCommentEdit={onCommentEdit}
-                                    onSelect={onReplySelect}
                                     onDelete={onReplyDelete}
+                                    onSelect={onReplySelect}
                                     permissions={getReplyPermissions(reply)}
                                     translations={translations}
                                 />

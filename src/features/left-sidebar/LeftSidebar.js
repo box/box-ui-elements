@@ -263,11 +263,11 @@ class LeftSidebar extends React.Component<Props, State> {
 
         const builtNavList = (
             <NavList
+                key={`list-${id}`}
                 className={classes}
                 collapsed={collapsed}
                 heading={heading}
                 placeholder={placeholderEl}
-                key={`list-${id}`}
                 ulProps={ulProps}
             >
                 {(menuItems && menuItems.map(props => this.getNavLink(props, leftSidebarProps))) || null}
@@ -276,8 +276,8 @@ class LeftSidebar extends React.Component<Props, State> {
 
         return canReceiveDrop ? (
             <LeftSidebarDropWrapper
-                isDragging={leftSidebarProps.isDragging}
                 dropTargetRef={dropTargetRef}
+                isDragging={leftSidebarProps.isDragging}
                 showDropZoneOnHover={showDropZoneOnHover}
             >
                 {builtNavList}
@@ -336,9 +336,9 @@ class LeftSidebar extends React.Component<Props, State> {
         // Check for menu items on links so we don't double-highlight groups
         return canReceiveDrop && !props.menuItems ? (
             <LeftSidebarDropWrapper
-                isDragging={leftSidebarProps.isDragging}
-                dropTargetRef={dropTargetRef}
                 key={`link-${id}`}
+                dropTargetRef={dropTargetRef}
+                isDragging={leftSidebarProps.isDragging}
                 showDropZoneOnHover={showDropZoneOnHover}
             >
                 {builtLink}
@@ -398,10 +398,10 @@ class LeftSidebar extends React.Component<Props, State> {
 
                     return (
                         <LoadingIndicatorWrapper
+                            key={`loading-indicator-${key}`}
                             className="favorites-loading-wrapper"
                             crawlerPosition="top"
                             isLoading={showLoadingIndicator && !collapsed}
-                            key={`loading-indicator-${key}`}
                         >
                             {this.getNavList(props, leftSidebarProps, showLoadingIndicator, props.onToggleCollapse)}
                         </LoadingIndicatorWrapper>

@@ -63,8 +63,8 @@ class AdditionalTabs extends PureComponent<Props, State> {
                     tabs.map(tabData => (
                         <AdditionalTab
                             key={tabData.id}
-                            onImageLoad={this.onImageLoad}
                             isLoading={isLoading}
+                            onImageLoad={this.onImageLoad}
                             {...tabData}
                         />
                     ))}

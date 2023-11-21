@@ -83,8 +83,8 @@ class SharedLinkAccessMenu extends React.Component<Props> {
 
                     return (
                         <Tooltip
-                            isDisabled={!isDisabledByPolicy}
                             key={`tooltip-${level}`}
+                            isDisabled={!isDisabledByPolicy}
                             position="top-center"
                             text={<FormattedMessage {...tooltipMessage} />}
                         >
@@ -130,7 +130,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                 text={tooltipContent}
                 theme="callout"
             >
-                <DropdownMenu onMenuOpen={onSharedLinkAccessMenuOpen} constrainToWindow>
+                <DropdownMenu constrainToWindow onMenuOpen={onSharedLinkAccessMenuOpen}>
                     <PlainButton
                         className={classNames('lnk', {
                             'is-disabled': submitting,

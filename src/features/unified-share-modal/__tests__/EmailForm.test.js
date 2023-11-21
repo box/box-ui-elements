@@ -42,16 +42,16 @@ describe('features/unified-share-modal/EmailForm', () => {
         shallow(
             <EmailForm
                 contactsFieldDisabledTooltip="You do not have permission to invite collaborators."
+                getContacts={jest.fn()}
+                inlineNotice={{}}
                 intl={intl}
                 isContactsFieldEnabled
-                getContacts={jest.fn()}
                 onRequestClose={jest.fn()}
                 onSubmit={jest.fn()}
                 openInviteSection={jest.fn()}
                 restrictedGroups={[]}
                 selectedContacts={[]}
                 showEnterEmailsCallout
-                inlineNotice={{}}
                 submitting={false}
                 updateSelectedContacts={jest.fn()}
                 {...props}

@@ -8,11 +8,11 @@ import notes from './RadioGroup.stories.md';
 
 export const basic = () => (
     <RadioGroup name="radiogroup" value="radio3">
-        <RadioButton label="Radio Button 1" value="radio1" description="I have a description" />
-        <RadioButton label="Radio Button 2" value="radio2" description="I also have a description" />
+        <RadioButton description="I have a description" label="Radio Button 1" value="radio1" />
+        <RadioButton description="I also have a description" label="Radio Button 2" value="radio2" />
         <RadioButton label="Radio Button 3" value="radio3" />
         <RadioButton label="Radio Button 4" value="radio4" />
-        <RadioButton label="Disabled Radio Button" value="radio5" isDisabled={boolean('isDisabled', true)} />
+        <RadioButton isDisabled={boolean('isDisabled', true)} label="Disabled Radio Button" value="radio5" />
     </RadioGroup>
 );
 
@@ -33,9 +33,9 @@ export const withCustomRadioButtonComponent = () => {
             <input
                 checked={isSelected}
                 name={name}
+                style={{ cursor: 'pointer', height: '20px', opacity: 0, width: '20px' }}
                 type="radio"
                 value={value}
-                style={{ cursor: 'pointer', height: '20px', opacity: 0, width: '20px' }}
             />
         </span>
     );

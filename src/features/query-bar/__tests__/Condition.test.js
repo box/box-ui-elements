@@ -12,12 +12,12 @@ describe('features/query-bar/components/filter/Condition', () => {
     const getWrapper = (props = {}) => {
         return shallow(
             <Condition
-                index={0}
                 columns={columns}
                 condition={invalidCondition}
                 deleteCondition={() => {}}
-                update={() => {}}
+                index={0}
                 intl={{ formatMessage: () => {} }}
+                update={() => {}}
                 {...props}
             />,
         );

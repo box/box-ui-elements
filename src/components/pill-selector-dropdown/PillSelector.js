@@ -231,33 +231,33 @@ class PillSelectorBase extends React.Component<Props, State> {
         };
 
         return (
-            <Tooltip isShown={hasError} text={error || ''} position={errorTooltipPosition} theme="error">
+            <Tooltip isShown={hasError} position={errorTooltipPosition} text={error || ''} theme="error">
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
                 <span
+                    ref={innerRef}
                     className={classes}
                     onBlur={this.handleBlur}
                     onClick={this.handleClick}
                     onFocus={this.handleFocus}
                     onKeyDown={this.handleKeyDown}
-                    ref={innerRef}
                 >
                     {showRoundedPills
                         ? selectedOptions.map((option: RoundOption, index: number) => {
                               return (
                                   <RoundPill
+                                      key={option.value}
                                       className={getPillClassName ? getPillClassName(option) : undefined}
                                       getPillImageUrl={getPillImageUrl}
-                                      isValid={allowInvalidPills ? validator(option) : true}
+                                      hasWarning={option.hasWarning}
+                                      id={option.id}
                                       isDisabled={disabled}
+                                      isExternal={option.isExternalUser}
                                       isSelected={index === selectedIndex}
-                                      key={option.value}
+                                      isValid={allowInvalidPills ? validator(option) : true}
                                       onRemove={onRemove.bind(this, option, index)}
+                                      showAvatar={showAvatars}
                                       // $FlowFixMe option.text is for backwards compatibility
                                       text={option.displayText || option.text}
-                                      showAvatar={showAvatars}
-                                      id={option.id}
-                                      hasWarning={option.hasWarning}
-                                      isExternal={option.isExternalUser}
                                   />
                               );
                           })
@@ -265,10 +265,10 @@ class PillSelectorBase extends React.Component<Props, State> {
                               // TODO: This and associated types will be removed once all views are updates with round pills.
                               return (
                                   <Pill
-                                      isValid={allowInvalidPills ? validator(option) : true}
+                                      key={option.value}
                                       isDisabled={disabled}
                                       isSelected={index === selectedIndex}
-                                      key={option.value}
+                                      isValid={allowInvalidPills ? validator(option) : true}
                                       onRemove={onRemove.bind(this, option, index)}
                                       // $FlowFixMe option.text is for backwards compatibility
                                       text={option.displayText || option.text}
@@ -278,17 +278,20 @@ class PillSelectorBase extends React.Component<Props, State> {
 
                     {/* hidden element for focus/key events during pill selection */}
                     <span
+                        ref={this.hiddenRef}
                         aria-hidden="true"
                         className="accessibility-hidden"
-                        onBlur={this.resetSelectedIndex}
-                        ref={this.hiddenRef}
-                        tabIndex={-1}
                         data-testid="pill-selection-helper"
+                        onBlur={this.resetSelectedIndex}
+                        tabIndex={-1}
                     />
                     <textarea
                         {...ariaAttrs}
                         {...rest}
                         {...inputProps}
+                        ref={input => {
+                            this.inputEl = input;
+                        }}
                         autoComplete="off"
                         className={classNames('bdl-PillSelector-input', 'pill-selector-input', className, {
                             'bdl-PillSelector-input--nextLine': isInputFocusedNextLine,
@@ -296,18 +299,15 @@ class PillSelectorBase extends React.Component<Props, State> {
                         disabled={disabled || isInputDisabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}
-                        ref={input => {
-                            this.inputEl = input;
-                        }}
                     />
                     <SuggestedPillsRow
                         onSuggestedPillAdd={onSuggestedPillAdd}
                         selectedPillsValues={this.getPillsByKey('value')}
-                        suggestedPillsFilter={suggestedPillsFilter}
                         suggestedPillsData={suggestedPillsData}
+                        suggestedPillsFilter={suggestedPillsFilter}
                         title={suggestedPillsTitle}
                     />
-                    <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
+                    <span className="accessibility-hidden" id={this.errorMessageID} role="alert">
                         {error}
                     </span>
                 </span>

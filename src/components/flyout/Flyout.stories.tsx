@@ -74,10 +74,10 @@ export const Complex = () => {
                 </PlainButton>
                 <Overlay>
                     <div>
-                        <TextArea name="textarea" label="Provide Feedback" />
+                        <TextArea label="Provide Feedback" name="textarea" />
                     </div>
                     <div>
-                        <TextInput name="email" label="Email Address" placeholder="user@example.com" type="email" />
+                        <TextInput label="Email Address" name="email" placeholder="user@example.com" type="email" />
                     </div>
                     <div className="icon-menu-container">
                         <PrimaryButton>Submit</PrimaryButton>

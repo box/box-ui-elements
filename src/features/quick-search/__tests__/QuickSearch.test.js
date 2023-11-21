@@ -115,7 +115,7 @@ describe('features/quick-search/QuickSearch', () => {
             );
             const title = <div>title</div>;
             const wrapper = shallow(
-                <QuickSearch title={title} inputProps={inputProps}>
+                <QuickSearch inputProps={inputProps} title={title}>
                     {children}
                 </QuickSearch>,
             );

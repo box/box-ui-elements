@@ -15,7 +15,7 @@ export const withBorder = () => {
         console.log('closed', arg);
     };
     return (
-        <Collapsible isOpen onOpen={onOpen} onClose={onClose} isBordered title="Collapsible card title">
+        <Collapsible isBordered isOpen onClose={onClose} onOpen={onOpen} title="Collapsible card title">
             <div>This is content of a collapsible component</div>
             <div>
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the

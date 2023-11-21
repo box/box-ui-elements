@@ -10,9 +10,9 @@ describe('features/classification/security-controls/SecurityControlsModal', () =
     const getWrapper = props =>
         shallow(
             <SecurityControlsModal
+                classificationName="internal"
                 closeModal={jest.fn()}
                 definition="classification definition"
-                classificationName="internal"
                 isSecurityControlsModalOpen={false}
                 itemName="welcome.pdf"
                 modalItems={modalItems}

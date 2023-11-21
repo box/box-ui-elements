@@ -63,7 +63,7 @@ export function SidebarNavSignButton({ blockedReason, intl, status, targetingApi
                     {...rest}
                 >
                     <BoxSign28 className="bcs-SidebarNavSignButton-icon" />
-                    <Sign16 width={20} height={20} className="bcs-SidebarNavSignButton-icon--grayscale" />
+                    <Sign16 className="bcs-SidebarNavSignButton-icon--grayscale" height={20} width={20} />
                 </PlainButton>
             </Tooltip>
         </FtuxTooltip>

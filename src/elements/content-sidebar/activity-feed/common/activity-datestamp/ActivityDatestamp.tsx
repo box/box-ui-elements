@@ -25,7 +25,7 @@ const ActivityDatestamp = ({ date, ...rest }: Props) => {
     const dateInMs = new Date(date).getTime();
     // Only show time if activity time is within the last year
     const showTime = now - dateInMs < MILLISECONDS_PER_YEAR;
-    return <ReadableTime timestamp={dateInMs} alwaysShowTime={showTime} relativeThreshold={0} {...rest} />;
+    return <ReadableTime alwaysShowTime={showTime} relativeThreshold={0} timestamp={dateInMs} {...rest} />;
 };
 
 export default ActivityDatestamp;

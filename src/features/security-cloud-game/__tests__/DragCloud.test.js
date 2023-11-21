@@ -11,8 +11,8 @@ describe('features/security-cloud-game/DragCloud', () => {
     test('should correctly render', () => {
         const wrapper = shallow(
             <DragCloud
-                gameBoardSize={{ height: 500, width: 500 }}
                 cloudSize={100}
+                gameBoardSize={{ height: 500, width: 500 }}
                 gridTrackSize={20}
                 intl={intl}
                 position={{ x: 10, y: 20 }}
@@ -44,8 +44,8 @@ describe('features/security-cloud-game/DragCloud', () => {
 
             wrapper = mount(
                 <DragCloud
-                    gameBoardSize={{ height: 500, width: 500 }}
                     cloudSize={50}
+                    gameBoardSize={{ height: 500, width: 500 }}
                     gridTrackSize={10}
                     intl={intl}
                     onDrop={onDrop}
@@ -122,8 +122,8 @@ describe('features/security-cloud-game/DragCloud', () => {
 
         const wrapper = shallow(
             <DragCloud
-                gameBoardSize={{ height: 500, width: 500 }}
                 cloudSize={50}
+                gameBoardSize={{ height: 500, width: 500 }}
                 gridTrackSize={10}
                 intl={intl}
                 onDrop={onDrop}

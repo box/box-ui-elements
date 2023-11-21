@@ -23,8 +23,8 @@ describe('features/content-insights/ContentInsightsSummary', () => {
     const getWrapper = (props = {}) =>
         render(
             <ContentInsightsSummary
-                graphData={mockData}
                 error={undefined}
+                graphData={mockData}
                 isLoading={false}
                 onClick={jest.fn()}
                 previousPeriodCount={1}

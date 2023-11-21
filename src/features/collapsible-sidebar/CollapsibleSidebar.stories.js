@@ -84,9 +84,9 @@ export const basic = () => {
             <CollapsibleSidebar expanded={boolean('isExpanded', true)}>
                 <CollapsibleSidebarLogo
                     canEndTrial={false}
+                    expanded={boolean('isExpanded', true)}
                     linkProps={linkProps}
                     onToggle={noop}
-                    expanded={boolean('isExpanded', true)}
                 />
                 <CollapsibleSidebarNav>
                     <ul>
@@ -288,8 +288,8 @@ export const basic = () => {
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
                                         href="/"
-                                        shouldHideTooltip
                                         icon={<Folder16 height={20} width={20} />}
+                                        shouldHideTooltip
                                     />
                                 }
                                 expanded={boolean('isExpanded', true)}
@@ -297,13 +297,13 @@ export const basic = () => {
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
                                         href="/"
-                                        shouldHideTooltip
                                         icon={<Folder16 height={20} width={20} />}
                                         overflowAction={
                                             <Link href="/">
                                                 <IconPlusRound color="white" />
                                             </Link>
                                         }
+                                        shouldHideTooltip
                                         showOverflowAction="hover"
                                         text="Should Hide Tooltip"
                                     />

@@ -56,8 +56,8 @@ const AnnotationActivityMenu = ({
         <DropdownMenu constrainToScrollParent isRightAligned onMenuClose={onMenuClose} onMenuOpen={onMenuOpen}>
             <PlainButton
                 className={classNames('bcs-AnnotationActivityMenu', className)}
-                isDisabled={isDisabled}
                 data-testid="annotation-activity-actions-menu"
+                isDisabled={isDisabled}
                 type="button"
             >
                 <IconEllipsis color={bdlGray50} height={16} width={16} />

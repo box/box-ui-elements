@@ -18,7 +18,7 @@ const draggableRowRenderer = (params: RowRendererParams) => {
     const draggableId = rowData.id || key;
 
     return (
-        <Draggable draggableId={draggableId} index={index} key={draggableId}>
+        <Draggable key={draggableId} draggableId={draggableId} index={index}>
             {(draggableProvided: DraggableProvided, draggableSnapshot: DraggableStateSnapshot) => {
                 const { isDragging } = draggableSnapshot;
                 const { draggableProps, dragHandleProps, innerRef } = draggableProvided;

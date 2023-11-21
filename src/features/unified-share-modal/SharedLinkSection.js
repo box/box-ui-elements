@@ -332,8 +332,8 @@ class SharedLinkSection extends React.Component<Props, State> {
                         enterpriseName={enterpriseName}
                         itemType={itemType}
                         onDismissTooltip={() => onDismissTooltip('shared-link-access-menu')}
-                        tooltipContent={tooltips['shared-link-access-menu'] || null}
                         submitting={submitting}
+                        tooltipContent={tooltips['shared-link-access-menu'] || null}
                         trackingProps={{
                             onChangeSharedLinkAccessLevel,
                             onSharedLinkAccessMenuOpen,
@@ -342,11 +342,10 @@ class SharedLinkSection extends React.Component<Props, State> {
                     />
                     {!isEditableBoxNote && accessLevel !== PEOPLE_IN_ITEM && (
                         <GuideTooltip
+                            body={intl.formatMessage(messages.ftuxEditPermissionTooltipBody)}
                             isShown={
                                 allowedPermissionLevels.includes(CAN_EDIT) && sharedLinkEditTooltipTargetingApi?.canShow
                             }
-                            title={intl.formatMessage(messages.ftuxEditPermissionTooltipTitle)}
-                            body={intl.formatMessage(messages.ftuxEditPermissionTooltipBody)}
                             onDismiss={() => {
                                 if (sharedLinkEditTooltipTargetingApi) {
                                     const { onClose } = sharedLinkEditTooltipTargetingApi;
@@ -354,6 +353,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                                 }
                             }}
                             position="bottom-center"
+                            title={intl.formatMessage(messages.ftuxEditPermissionTooltipTitle)}
                         >
                             <SharedLinkPermissionMenu
                                 allowedPermissionLevels={allowedPermissionLevels}
@@ -373,7 +373,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                     )}
                     {isEditableBoxNote && (
                         <Tooltip text={intl.formatMessage(messages.sharedLinkPermissionsEditTooltip)}>
-                            <PlainButton isDisabled className="can-edit-btn">
+                            <PlainButton className="can-edit-btn" isDisabled>
                                 <FormattedMessage {...messages.sharedLinkPermissionsEdit} />
                             </PlainButton>
                         </Tooltip>
@@ -489,14 +489,14 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         const toggleComponent = (
             <Toggle
+                ref={ref => {
+                    this.toggleRef = ref;
+                }}
                 isDisabled={!isToggleEnabled}
                 isOn={isSharedLinkEnabled}
                 label={linkText}
                 name="toggle"
                 onChange={onToggleSharedLink}
-                ref={ref => {
-                    this.toggleRef = ref;
-                }}
             />
         );
 

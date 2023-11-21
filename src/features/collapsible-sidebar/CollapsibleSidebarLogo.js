@@ -86,9 +86,9 @@ function CollapsibleSidebarLogo(props: Props) {
 
     const toggleButton = (
         <StyledToggleButton
+            aria-label={intl.formatMessage(expanded ? messages.collapseButtonLabel : messages.expandButtonLabel)}
             className="bdl-CollapsibleSidebar-toggleButton"
             onClick={onToggle}
-            aria-label={intl.formatMessage(expanded ? messages.collapseButtonLabel : messages.expandButtonLabel)}
             type="button"
             {...buttonProps}
         >

@@ -70,8 +70,8 @@ class SingleSelectField extends React.Component<Props> {
                 className={!isFieldSelected && placeholder ? 'placeholder' : ''}
                 isDisabled={isDisabled}
                 onChange={this.handleChange}
-                placeholder={placeholder}
                 options={optionsWithClearOption}
+                placeholder={placeholder}
                 shouldShowClearOption={shouldShowClearOption}
                 {...selectFieldProps}
             />

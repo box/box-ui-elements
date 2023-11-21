@@ -17,7 +17,7 @@ describe('components/Media', () => {
         const compoundComponent = (
             <Media>
                 <Media.Figure>
-                    <img src="" alt="some img" />
+                    <img alt="some img" src="" />
                 </Media.Figure>
 
                 <Media.Body>

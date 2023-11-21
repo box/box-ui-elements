@@ -70,17 +70,17 @@ class ContentUploader extends ES6Wrapper {
 
         render(
             <UploaderComponent
+                componentRef={this.setComponent}
                 language={this.language}
                 messages={this.messages}
-                componentRef={this.setComponent}
-                rootFolderId={this.id}
-                token={this.token}
+                modal={((modal: any): ModalOptions)}
+                onBeforeUpload={this.onBeforeUpload}
                 onClose={this.onClose}
                 onComplete={this.onComplete}
                 onError={this.onError}
-                onBeforeUpload={this.onBeforeUpload}
                 onUpload={this.onUpload}
-                modal={((modal: any): ModalOptions)}
+                rootFolderId={this.id}
+                token={this.token}
                 {...rest}
             />,
             this.container,
