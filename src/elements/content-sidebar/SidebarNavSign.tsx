@@ -26,6 +26,7 @@ export function SidebarNavSign() {
         status: boxSignStatus,
         targetingApi: boxSignTargetingApi,
         isSignRemoveInterstitialEnabled,
+        customFtuxTooltip,
     } = useFeatureConfig('boxSign');
 
     return (
@@ -37,6 +38,7 @@ export function SidebarNavSign() {
                         status={boxSignStatus}
                         targetingApi={boxSignTargetingApi}
                         data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
+                        CustomFtuxTooltip={customFtuxTooltip}
                     />
                     <Menu>
                         <MenuItem data-testid="sign-request-signature-button" onClick={onBoxClickRequestSignature}>
@@ -56,6 +58,7 @@ export function SidebarNavSign() {
                     onClick={onBoxClickRequestSignature}
                     status={boxSignStatus}
                     targetingApi={boxSignTargetingApi}
+                    CustomFtuxTooltip={customFtuxTooltip}
                 />
             )}
         </>

@@ -21,16 +21,23 @@ export type Props = PlainButtonProps & {
         onComplete: () => void;
         onShow: () => void;
     };
+    CustomFtuxTooltip?: React.ElementType;
+};
+
+type SignButtonProps = {
+    disableTooltip?: boolean;
 };
 
 export const PlaceholderTooltip = ({ children }: { children: React.ReactNode }) => children;
 
-export function SidebarNavSignButton({ blockedReason, intl, status, targetingApi, ...rest }: Props) {
+export function SidebarNavSignButton({ blockedReason, intl, status, targetingApi, CustomFtuxTooltip, ...rest }: Props) {
     const isSignDisabled = !!blockedReason;
     const isTargeted = targetingApi && targetingApi.canShow;
     const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
     const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
     const buttonClassName = classnames('bcs-SidebarNavSignButton', { 'bdl-is-disabled': isSignDisabled });
+    const ftuxTitle = intl.formatMessage(messages.boxSignFtuxTitle);
+    const ftuxBody = intl.formatMessage(messages.boxSignFtuxBody);
 
     let tooltipMessage = label;
 
@@ -46,26 +53,43 @@ export function SidebarNavSignButton({ blockedReason, intl, status, targetingApi
         default:
     }
 
+    const SignButton = ({ disableTooltip = false }: SignButtonProps) => (
+        <Tooltip isDisabled={disableTooltip} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
+            <PlainButton
+                aria-label={label}
+                className={buttonClassName}
+                data-testid="sign-button"
+                isDisabled={isSignDisabled}
+                {...rest}
+            >
+                <BoxSign28 className="bcs-SidebarNavSignButton-icon" />
+                <Sign16 width={20} height={20} className="bcs-SidebarNavSignButton-icon--grayscale" />
+            </PlainButton>
+        </Tooltip>
+    );
+
+    if (CustomFtuxTooltip) {
+        return (
+            <CustomFtuxTooltip
+                body={ftuxBody}
+                disabled={isSignDisabled}
+                renderAnchor={({ disableTooltip }: SignButtonProps = {}) => (
+                    <SignButton disableTooltip={disableTooltip} />
+                )}
+                title={ftuxTitle}
+            />
+        );
+    }
+
     return (
         <FtuxTooltip
-            body={intl.formatMessage(messages.boxSignFtuxBody)}
+            body={ftuxBody}
             position={TooltipPosition.MIDDLE_LEFT}
             shouldTarget={isTargeted}
-            title={intl.formatMessage(messages.boxSignFtuxTitle)}
+            title={ftuxTitle}
             useTargetingApi={() => targetingApi}
         >
-            <Tooltip isDisabled={isTargeted} position={TooltipPosition.MIDDLE_LEFT} text={tooltipMessage}>
-                <PlainButton
-                    aria-label={label}
-                    className={buttonClassName}
-                    data-testid="sign-button"
-                    isDisabled={isSignDisabled}
-                    {...rest}
-                >
-                    <BoxSign28 className="bcs-SidebarNavSignButton-icon" />
-                    <Sign16 width={20} height={20} className="bcs-SidebarNavSignButton-icon--grayscale" />
-                </PlainButton>
-            </Tooltip>
+            <SignButton disableTooltip={isTargeted} />
         </FtuxTooltip>
     );
 }

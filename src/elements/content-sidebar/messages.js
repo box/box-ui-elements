@@ -39,7 +39,7 @@ const messages = defineMessages({
     },
     boxSignFtuxTitle: {
         id: 'be.contentSidebar.boxSignFtuxTitle',
-        defaultMessage: 'Box Sign - Secure, seamless e-signatures in Box',
+        defaultMessage: 'Box Sign - Secure, seamless e‑signatures in Box',
         description: 'title for first-time user experience tooltip shown to new users of Box Sign',
     },
     boxSignRequest: {

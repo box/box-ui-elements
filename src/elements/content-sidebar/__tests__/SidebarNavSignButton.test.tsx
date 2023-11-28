@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import BoxSign28 from '../../../icon/logo/BoxSign28';
 import PlainButton from '../../../components/plain-button';
 import SidebarNavSignButton from '../SidebarNavSignButton';
@@ -7,8 +7,14 @@ import SidebarNavSignButton from '../SidebarNavSignButton';
 import TargetedClickThroughGuideTooltip from '../../../features/targeting/TargetedClickThroughGuideTooltip';
 import Tooltip from '../../../components/tooltip';
 
+const mockTargetingApi = {
+    onClose: jest.fn(),
+    onComplete: jest.fn(),
+    onShow: jest.fn(),
+};
+
 describe('elements/content-sidebar/SidebarNavSignButton', () => {
-    const getWrapper = (props = {}) => shallow(<SidebarNavSignButton {...props} />).dive();
+    const getWrapper = (props = {}) => mount(<SidebarNavSignButton {...props} />);
 
     test.each`
         status       | label
@@ -24,16 +30,21 @@ describe('elements/content-sidebar/SidebarNavSignButton', () => {
     });
 
     test.each`
-        targetingApi          | isFtuxVisible | isTooltipVisible
-        ${{ canShow: true }}  | ${true}       | ${false}
-        ${{ canShow: false }} | ${false}      | ${true}
-        ${undefined}          | ${false}      | ${true}
+        targetingApi                               | isFtuxVisible | isTooltipVisible
+        ${{ ...mockTargetingApi, canShow: true }}  | ${true}       | ${false}
+        ${{ ...mockTargetingApi, canShow: false }} | ${false}      | ${true}
+        ${undefined}                               | ${false}      | ${true}
     `(
         'should render the ftux and main tooltip based on the targeting api',
         ({ isFtuxVisible, isTooltipVisible, targetingApi }) => {
             const wrapper = getWrapper({ targetingApi });
 
-            expect(wrapper.find(Tooltip).prop('isDisabled')).toBe(!isTooltipVisible);
+            expect(
+                wrapper
+                    .find(Tooltip)
+                    .at(targetingApi?.canShow ? 1 : 0)
+                    .prop('isDisabled'),
+            ).toBe(!isTooltipVisible);
             expect(wrapper.exists(TargetedClickThroughGuideTooltip)).toBe(isFtuxVisible);
             expect(wrapper.exists(BoxSign28)).toBe(true); // Child components should always be rendered
         },
@@ -49,12 +60,34 @@ describe('elements/content-sidebar/SidebarNavSignButton', () => {
     `(
         'should render the correct main tooltip and ftux tooltip based on the blockedReason',
         ({ blockedReason, isDisabled, tooltipMessage }) => {
-            const wrapper = getWrapper({ blockedReason, targetingApi: { canShow: true } });
+            const wrapper = getWrapper({ blockedReason, targetingApi: { ...mockTargetingApi, canShow: true } });
 
-            expect(wrapper.find(Tooltip).prop('text')).toBe(tooltipMessage);
+            expect(
+                wrapper
+                    .find(Tooltip)
+                    .at(blockedReason ? 0 : 1)
+                    .prop('text'),
+            ).toBe(tooltipMessage);
             expect(wrapper.exists(BoxSign28)).toBe(true);
-            expect(wrapper.find(PlainButton).prop('isDisabled')).toBe(isDisabled);
+            expect(
+                wrapper
+                    .find(PlainButton)
+                    .at(0)
+                    .prop('isDisabled'),
+            ).toBe(isDisabled);
             expect(wrapper.exists(TargetedClickThroughGuideTooltip)).toBe(!isDisabled);
         },
     );
+
+    test('should correctly render a custom ftux tooltip component', () => {
+        const CustomFtuxTooltip = jest.fn().mockImplementation(({ renderAnchor }) => {
+            return renderAnchor();
+        });
+        const wrapper = getWrapper({ CustomFtuxTooltip });
+
+        expect(wrapper.find(CustomFtuxTooltip).prop('body')).toBeTruthy();
+        expect(wrapper.find(CustomFtuxTooltip).prop('disabled')).toBe(false);
+        expect(wrapper.find(CustomFtuxTooltip).prop('title')).toBeTruthy();
+        expect(wrapper.find(PlainButton).exists()).toBe(true);
+    });
 });

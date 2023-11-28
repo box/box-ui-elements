@@ -1,12 +1,22 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import SidebarNavSign from '../SidebarNavSign';
+import SidebarNavSignButton from '../SidebarNavSignButton';
 // @ts-ignore Module is written in Flow
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
+
+jest.mock('../SidebarNavSignButton', () => {
+    const original = jest.requireActual('../SidebarNavSignButton');
+    return {
+        __esModule: true,
+        default: jest.fn(original.default),
+    };
+});
 
 describe('elements/content-sidebar/SidebarNavSign', () => {
     const onClickRequestSignature = jest.fn();
     const onClickSignMyself = jest.fn();
+    const customFtuxTooltip = jest.fn().mockReturnValue(null);
 
     const renderComponent = (props = {}, features = {}) =>
         render(
@@ -76,5 +86,20 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
         fireEvent.click(getByTestId('sign-button'));
         fireEvent.click(getByTestId('sign-sign-myself-button'));
         expect(onClickSignMyself).toBeCalled();
+    });
+
+    test('should correctly pass a custom ftux tooltip component', () => {
+        const features = {
+            boxSign: {
+                customFtuxTooltip,
+            },
+        };
+        renderComponent({}, features);
+        expect(SidebarNavSignButton).toHaveBeenCalledWith(
+            expect.objectContaining({
+                CustomFtuxTooltip: customFtuxTooltip,
+            }),
+            {},
+        );
     });
 });
