@@ -659,7 +659,7 @@ describe('api/Item', () => {
             item.errorHandler = jest.fn();
             item.getUrl = jest.fn().mockReturnValueOnce('url');
             item.xhr = {
-                delete: jest.fn().mockReturnValueOnce(Promise.reject(error)),
+                delete: jest.fn().mockRejectedValue(error),
             };
             return item.deleteItem(file, 'success', 'error').then(() => {
                 expect(item.errorHandler).toHaveBeenCalledWith(error);
