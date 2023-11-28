@@ -6,8 +6,7 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import ContentUploader from '../../content-uploader';
 import messages from '../messages';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../../constants';
@@ -18,6 +17,7 @@ type Props = {
     appElement: HTMLElement,
     contentUploaderProps: ContentUploaderProps,
     currentFolderId: ?string,
+    intl: IntlShape,
     isOpen: boolean,
     onClose: Function,
     onUpload?: Function,
@@ -28,7 +28,7 @@ type Props = {
     sharedLinkPassword?: string,
     token: Token,
     uploadHost: string,
-} & InjectIntlProvidedProps;
+};
 
 const UploadDialog = ({
     isOpen,

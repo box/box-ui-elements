@@ -5,8 +5,7 @@
  */
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import messages from '../messages';
 import { Breadcrumbs } from '../breadcrumbs';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../../constants';
@@ -14,12 +13,13 @@ import type { View, Collection } from '../../../common/types/core';
 
 type Props = {
     currentCollection: Collection,
+    intl: IntlShape,
     isSmall: boolean,
     onItemClick: Function,
     rootId: string,
     rootName?: string,
     view: View,
-} & InjectIntlProvidedProps;
+};
 
 const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
     let crumbs;

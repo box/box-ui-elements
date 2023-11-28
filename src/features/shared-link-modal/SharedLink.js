@@ -1,7 +1,6 @@
 /* @flow */
 import React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 
 import TextInputWithCopyButton from '../../components/text-input-with-copy-button';
 import Tooltip from '../../components/tooltip';
@@ -27,6 +26,7 @@ type Props = {
     copyButtonProps?: Object,
     enterpriseName?: string,
     expiration?: number,
+    intl: IntlShape,
     isDownloadAllowed?: boolean,
     isEditAllowed?: boolean,
     isPreviewAllowed?: boolean,
@@ -39,7 +39,7 @@ type Props = {
     settingsButtonProps?: Object,
     sharedLink: string,
     submitting?: boolean,
-} & InjectIntlProvidedProps;
+};
 
 const SharedLink = (props: Props) => {
     const {

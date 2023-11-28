@@ -4,8 +4,7 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import ActivityCard from '../ActivityCard';
 import IconInfo from '../../../../icons/general/IconInfo';
 import messages from '../../../common/messages';
@@ -24,11 +23,12 @@ import './Version.scss';
 
 type Props = {
     id: string,
+    intl: IntlShape,
     modified_by: User,
     onInfo?: Function,
     version_number: string,
     version_promoted?: string,
-} & InjectIntlProvidedProps;
+};
 
 const ACTION_MAP = {
     [VERSION_DELETE_ACTION]: messages.versionDeleted,

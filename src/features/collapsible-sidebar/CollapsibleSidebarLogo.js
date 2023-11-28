@@ -3,8 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import { bdlGridUnit, bdlBorderRadiusSizeLarge } from '../../styles/variables';
 import Logo from '../../icon/logo/BoxLogo';
 import PlainButton from '../../components/plain-button/PlainButton';
@@ -72,12 +71,14 @@ type Props = {
     /** Controls whether or not the sidebar is expanded on the page */
     expanded: boolean,
 
+    intl: IntlShape,
+
     isLogoVisible?: boolean,
 
     linkProps: Object,
 
     onToggle: () => void,
-} & InjectIntlProvidedProps;
+};
 
 function CollapsibleSidebarLogo(props: Props) {
     const { badge, buttonProps, className, expanded, isLogoVisible = true, linkProps, onToggle, intl } = props;

@@ -5,8 +5,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import AdditionalTabs from './additional-tabs';
 import IconChatRound from '../../icons/general/IconChatRound';
 import IconDocInfo from '../../icons/general/IconDocInfo';
@@ -37,9 +36,10 @@ type Props = {
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    intl: IntlShape,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-} & InjectIntlProvidedProps;
+};
 
 const SidebarNav = ({
     additionalTabs,

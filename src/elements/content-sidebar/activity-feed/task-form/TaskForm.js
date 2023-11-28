@@ -8,8 +8,7 @@ import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 import commonMessages from '../../../../common/messages';
 import messages from './messages';
 import commentFormMessages from '../comment-form/messages';
@@ -80,7 +79,7 @@ type TaskFormConsumerProps = {|
     getAvatarUrl: GetAvatarUrlCallback,
 |};
 
-type Props = TaskFormProps & TaskFormConsumerProps & InjectIntlProvidedProps;
+type Props = TaskFormProps & TaskFormConsumerProps & { intl: IntlShape };
 
 type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 

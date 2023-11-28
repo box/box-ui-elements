@@ -1,8 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 
 import IconHide from '../../icons/general/IconHide';
 import IconShow from '../../icons/general/IconShow';
@@ -19,9 +18,10 @@ const DIRECTION_RIGHT = 'right';
 type Props = {
     className?: string,
     direction?: string,
+    intl: IntlShape,
     isOpen: boolean,
     onClick?: Function,
-} & InjectIntlProvidedProps;
+};
 
 const SidebarToggleButton = ({
     className = '',

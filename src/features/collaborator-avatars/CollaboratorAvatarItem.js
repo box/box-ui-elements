@@ -1,7 +1,6 @@
 /* @flow */
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 
 import Badgeable from '../../components/badgeable/Badgeable';
 import Tooltip from '../../components/tooltip/Tooltip';
@@ -18,9 +17,10 @@ type Props = {
     },
     hasCustomAvatar: ?boolean,
     id: number,
+    intl: IntlShape,
     isExternalCollab?: boolean,
     name: string,
-} & InjectIntlProvidedProps;
+};
 
 const CollaboratorAvatarItem = (props: Props) => {
     const {

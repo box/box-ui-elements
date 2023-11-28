@@ -5,9 +5,8 @@
  */
 
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import { Route } from 'react-router-dom';
-import type { InjectIntlProvidedProps } from 'react-intl';
 import IconNavigateLeft from '../../icons/general/IconNavigateLeft';
 import IconNavigateRight from '../../icons/general/IconNavigateRight';
 import PlainButton from '../../components/plain-button/PlainButton';
@@ -17,9 +16,10 @@ import type { BoxItem } from '../../common/types/core';
 type Props = {
     collection: Array<string | BoxItem>,
     currentIndex: number,
+    intl: IntlShape,
     onNavigateLeft: Function,
     onNavigateRight: Function,
-} & InjectIntlProvidedProps;
+};
 
 const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft, onNavigateRight }: Props) => {
     const hasLeftNavigation = collection.length > 1 && currentIndex > 0 && currentIndex < collection.length;

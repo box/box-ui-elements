@@ -6,8 +6,7 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import { Table, Column } from '@box/react-virtualized/dist/es/Table';
 import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';
@@ -32,6 +31,7 @@ type Props = {
     canShare: boolean,
     currentCollection: Collection,
     focusedRow: number,
+    intl: IntlShape,
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -47,7 +47,7 @@ type Props = {
     rootId: string,
     tableRef: Function,
     view: View,
-} & InjectIntlProvidedProps;
+};
 
 const ItemList = ({
     view,

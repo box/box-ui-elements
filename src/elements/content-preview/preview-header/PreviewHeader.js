@@ -5,8 +5,7 @@
  */
 
 import React from 'react';
-import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
@@ -33,13 +32,14 @@ type Props = {
     contentAnswersProps?: ContentAnswersProps,
     contentOpenWithProps?: ContentOpenWithProps,
     file?: BoxItem,
+    intl: IntlShape,
     logoUrl?: string,
     onClose?: Function,
     onDownload: Function,
     onPrint: Function,
     selectedVersion: ?BoxItemVersion,
     token: ?string,
-} & InjectIntlProvidedProps;
+};
 
 const LoadableContentOpenWith = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../../content-open-with'),

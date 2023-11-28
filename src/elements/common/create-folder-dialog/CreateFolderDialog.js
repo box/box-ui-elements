@@ -6,8 +6,7 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, FormattedMessage, IntlShape } from 'react-intl';
 import PrimaryButton from '../../../components/primary-button/PrimaryButton';
 import Button from '../../../components/button/Button';
 import messages from '../messages';
@@ -22,12 +21,13 @@ import {
 type Props = {
     appElement: HTMLElement,
     errorCode: string,
+    intl: IntlShape,
     isLoading: boolean,
     isOpen: boolean,
     onCancel: Function,
     onCreate: Function,
     parentElement: HTMLElement,
-} & InjectIntlProvidedProps;
+};
 
 /* eslint-disable jsx-a11y/label-has-for */
 const CreateFolderDialog = ({

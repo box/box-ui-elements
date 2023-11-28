@@ -6,8 +6,7 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import { injectIntl, FormattedMessage, IntlShape } from 'react-intl';
 import PrimaryButton from '../../components/primary-button/PrimaryButton';
 import Button from '../../components/button/Button';
 import messages from '../common/messages';
@@ -18,13 +17,14 @@ import './DeleteConfirmationDialog.scss';
 
 type Props = {
     appElement: HTMLElement,
+    intl: IntlShape,
     isLoading: boolean,
     isOpen: boolean,
     item: BoxItem,
     onCancel: Function,
     onDelete: Function,
     parentElement: HTMLElement,
-} & InjectIntlProvidedProps;
+};
 
 const DeleteConfirmationDialog = ({
     isOpen,

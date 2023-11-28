@@ -1,11 +1,10 @@
 // @flow
 import * as React from 'react';
 import type { Node } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 import { AutoSizer } from '@box/react-virtualized/dist/es/AutoSizer/index';
 import { WindowScroller } from '@box/react-virtualized/dist/es/WindowScroller/index';
 
-import type { InjectIntlProvidedProps } from 'react-intl';
 import type { SortParams } from './flowTypes';
 
 import BaseVirtualizedTable from './BaseVirtualizedTable';
@@ -23,7 +22,7 @@ export type VirtualizedTableProps = {
     sort?: SortHandler,
 };
 
-type Props = VirtualizedTableProps & InjectIntlProvidedProps;
+type Props = VirtualizedTableProps & { intl: IntlShape };
 
 const VirtualizedTable = ({ children, height, intl, ...rest }: Props) => (
     <AutoSizer defaultHeight={height} disableHeight>
