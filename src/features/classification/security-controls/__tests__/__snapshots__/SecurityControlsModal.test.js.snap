@@ -13,7 +13,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
   }
   title={
     <FormattedMessage
-      defaultMessage="View Classification for '{itemName}'"
+      defaultMessage="View Classification for “{itemName}”"
       id="boxui.securityControls.modalTitle"
       values={
         Object {
