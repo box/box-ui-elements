@@ -11,7 +11,7 @@ end=$"\e[0m\n"
 
 check_generated_files() {
     printf "${blue}--------------------------------------${end}"
-    printf "${blue}Checking react-intl v3 usage${end}"
+    printf "${blue}Checking react-intl >= 3 usage${end}"
     printf "${blue}--------------------------------------${end}"
     ./scripts/findReactIntlViolators.js || return 1
 

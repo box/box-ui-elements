@@ -18,7 +18,7 @@ const lastModifiedByCellRenderer = (intl: any, { dateFormat }: LastModifiedByCel
         if (dateFormat) {
             lastModified = intl.formatDate(modified_at, dateFormat);
         } else if (intl.formatRelativeTime) {
-            // react-intl v3
+            // react-intl >= 3
             lastModified = intl.formatRelativeTime(Date.parse(modified_at) - Date.now(), 'day', {
                 style: 'short',
                 numeric: 'auto',

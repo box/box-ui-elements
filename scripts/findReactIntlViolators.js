@@ -47,7 +47,7 @@ getFilesInDirectory('src').forEach(file => {
     }
 });
 if (fail) {
-    console.log('Files above are using react-intl v3 features which is currently forbidden. Seek help from #frontend!'); // eslint-disable-line
+    console.log('Files above are using react-intl >= 3 features which is currently forbidden. Seek help from #frontend!'); // eslint-disable-line
     process.exit(1);
 } else {
     process.exit(0);

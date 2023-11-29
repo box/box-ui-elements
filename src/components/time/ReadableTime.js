@@ -79,7 +79,7 @@ const ReadableTime = ({
     const timeDiff = timestamp - Date.now();
     if (Math.abs(timeDiff) <= relativeThreshold) {
         if (intl.formatRelativeTime) {
-            // react-intl v3
+            // react-intl >= 3
             output = intl.formatRelativeTime(timeDiff);
         } else {
             // react-intl v2
