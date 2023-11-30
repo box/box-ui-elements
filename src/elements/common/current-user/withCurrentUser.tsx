@@ -2,6 +2,7 @@ import React from 'react';
 // @ts-ignore: no ts definition
 import messages from '../messages';
 // @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
 import { withAPIContext } from '../api-context';
 // @ts-ignore: no ts definition
 import { getBadItemError } from '../../../utils/error';

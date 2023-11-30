@@ -40,7 +40,7 @@ export const regular = () => {
 };
 
 export default {
-    title: 'Components|Nudge',
+    title: 'Components/Nudge',
     component: Nudge,
     parameters: {
         notes,

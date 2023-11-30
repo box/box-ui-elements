@@ -14,7 +14,7 @@ export const regular = () => (
 /* eslint-enable jsx-a11y/media-has-caption */
 
 export default {
-    title: 'Components|LoadingIndicatorWrapper',
+    title: 'Components/LoadingIndicatorWrapper',
     component: LoadingIndicatorWrapper,
     parameters: {
         notes,

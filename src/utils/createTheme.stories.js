@@ -267,7 +267,7 @@ export const ThemeExample = () => {
 };
 
 export default {
-    title: 'Theming|Theme',
+    title: 'Theming/Theme',
     component: ThemeExample,
     parameters: { notes },
 };

@@ -66,5 +66,5 @@ export const text = () => (
 );
 
 export default {
-    title: 'Theming|Typography',
+    title: 'Theming/Typography',
 };

@@ -5,7 +5,7 @@ import RetentionPolicyNonModifiable32 from './RetentionPolicyNonModifiable32';
 export const retentionPolicyNonModifiable32 = () => <RetentionPolicyNonModifiable32 />;
 
 export default {
-    title: 'Icon|Content|RetentionPolicyNonModifiable32',
+    title: 'Icon/Content/RetentionPolicyNonModifiable32',
     component: RetentionPolicyNonModifiable32,
     parameters: {
         notes:

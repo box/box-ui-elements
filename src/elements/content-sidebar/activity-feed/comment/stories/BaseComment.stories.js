@@ -40,6 +40,6 @@ export const PreviousVersion = getTemplate({
 });
 
 export default {
-    title: 'Components|BaseComment',
+    title: 'Components/BaseComment',
     component: BaseComment,
 };

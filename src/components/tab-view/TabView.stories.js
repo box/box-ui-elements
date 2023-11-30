@@ -159,7 +159,7 @@ export const dynamicWithLinks = () => (
 );
 
 export default {
-    title: 'Components|TabView',
+    title: 'Components/TabView',
     component: TabView,
     parameters: {
         notes,

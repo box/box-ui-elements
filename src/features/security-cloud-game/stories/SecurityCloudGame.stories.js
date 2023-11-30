@@ -15,7 +15,7 @@ export const Basic = () => {
 };
 
 export default {
-    title: 'Features|SecurityCloudGame',
+    title: 'Features/SecurityCloudGame',
     component: SecurityCloudGame,
     parameters: {
         notes,

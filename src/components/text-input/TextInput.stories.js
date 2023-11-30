@@ -75,7 +75,7 @@ export const requiredWithOnChange = () => {
 };
 
 export default {
-    title: 'Components|TextInput',
+    title: 'Components/TextInput',
     component: TextInput,
     parameters: {
         notes,

@@ -5,7 +5,7 @@ import Certificate56 from './Certificate56';
 export const certificate56 = () => <Certificate56 />;
 
 export default {
-    title: 'Illustration|Certificate56',
+    title: 'Illustration/Certificate56',
     component: Certificate56,
     parameters: {
         notes: "`import Certificate56 from 'box-ui-elements/es/illustration/Certificate56';`",

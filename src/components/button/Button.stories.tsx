@@ -83,7 +83,7 @@ export const fixingMargins = () => (
 );
 
 export default {
-    title: 'Components|Buttons/Button',
+    title: 'Components/Buttons/Button',
     component: Button,
     parameters: {
         notes,

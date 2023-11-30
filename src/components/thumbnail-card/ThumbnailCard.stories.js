@@ -12,7 +12,7 @@ export const basic = () => <ThumbnailCard thumbnail={thumbnail} title={title} />
 export const highlightOnHover = () => <ThumbnailCard highlightOnHover thumbnail={thumbnail} title={title} />;
 
 export default {
-    title: 'Components|ThumbnailCard',
+    title: 'Components/ThumbnailCard',
     component: ThumbnailCard,
     parameters: {
         notes,

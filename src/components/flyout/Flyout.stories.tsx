@@ -90,7 +90,7 @@ export const Complex = () => {
 };
 
 export default {
-    title: 'Components|Flyout',
+    title: 'Components/Flyout',
     component: Flyout,
     parameters: {
         notes,

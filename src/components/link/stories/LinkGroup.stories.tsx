@@ -14,7 +14,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Components|Links/LinkGroup',
+    title: 'Components/Links/LinkGroup',
     component: LinkGroup,
     parameters: {
         notes,

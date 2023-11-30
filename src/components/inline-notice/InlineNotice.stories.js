@@ -51,7 +51,7 @@ export const withTitle = () => (
 );
 
 export default {
-    title: 'Components|InlineNotice',
+    title: 'Components/InlineNotice',
     component: InlineNotice,
     parameters: {
         notes,
