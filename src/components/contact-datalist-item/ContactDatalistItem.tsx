@@ -79,12 +79,12 @@ class ContactDatalistItem extends React.PureComponent<ContactDatalistItemProps, 
             <DatalistItem className="contact-data-list-item" {...rest}>
                 {showAvatar && (
                     <Avatar
+                        avatarUrl={avatarUrl}
                         className="contact-avatar"
                         id={id}
-                        name={name}
                         isExternal={isExternal}
+                        name={name}
                         shouldShowExternal
-                        avatarUrl={avatarUrl}
                     />
                 )}
                 <div className="contact-name-container">

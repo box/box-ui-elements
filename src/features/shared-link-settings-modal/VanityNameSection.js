@@ -33,9 +33,9 @@ const VanityNameSection = ({
                         <FormattedMessage {...messages.vanityURLWarning} />
                     </span>
                 }
-                hideLabel
                 disabled={!canChangeVanityName}
                 error={error}
+                hideLabel
                 name="vanityName"
                 onChange={onChange}
                 placeholder={formatMessage(messages.vanityNamePlaceholder)}
@@ -54,11 +54,11 @@ const VanityNameSection = ({
             <hr />
             <Fieldset className="be vanity-name-section" title={<FormattedMessage {...messages.customURLLabel} />}>
                 <Checkbox
-                    label={<FormattedMessage {...messages.vanityURLEnableText} />}
                     isChecked={isVanityEnabled}
                     isDisabled={!canChangeVanityName}
-                    subsection={isVanityEnabled ? vanityURLInput : undefined}
+                    label={<FormattedMessage {...messages.vanityURLEnableText} />}
                     onChange={onCheckboxChange}
+                    subsection={isVanityEnabled ? vanityURLInput : undefined}
                 />
             </Fieldset>
         </div>

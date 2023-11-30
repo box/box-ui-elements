@@ -21,8 +21,8 @@ describe('features/content-answers/ContentAnswersModal', () => {
                     currentUser={mockCurrentUser}
                     file={mockFile}
                     isOpen
-                    onRequestClose={jest.fn()}
                     onAsk={jest.fn()}
+                    onRequestClose={jest.fn()}
                     {...props}
                 />
             </APIContext.Provider>,

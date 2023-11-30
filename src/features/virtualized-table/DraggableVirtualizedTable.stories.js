@@ -32,10 +32,10 @@ export const Basic = () => {
 
     return (
         <DraggableVirtualizedTable
-            tableId="tableId"
             onDragEnd={onDragEnd}
             rowData={rowData}
             shouldShowDragHandle={boolean('shouldShowDragHandle', true)}
+            tableId="tableId"
         >
             <Column cellRenderer={baseCellRenderer} dataKey="name" disableSort flexGrow={1} label="Name" width={1} />
             <Column

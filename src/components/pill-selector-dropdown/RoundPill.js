@@ -104,17 +104,17 @@ class RoundPill extends React.PureComponent<Props, State> {
         const { avatarUrl } = this.state;
 
         return (
-            <LabelPill.Pill size="large" className={this.getStyles()}>
+            <LabelPill.Pill className={this.getStyles()} size="large">
                 {showAvatar ? (
                     <LabelPill.Icon
-                        Component={Avatar}
-                        className="bdl-RoundPill-avatar"
                         avatarUrl={avatarUrl}
+                        className="bdl-RoundPill-avatar"
+                        Component={Avatar}
                         id={id}
                         isExternal={isExternal}
                         name={text}
-                        size="small"
                         shouldShowExternal
+                        size="small"
                     />
                 ) : null}
                 <LabelPill.Text className="bdl-RoundPill-text">{text}</LabelPill.Text>

@@ -63,7 +63,7 @@ const TextArea = ({
         <div className={classes}>
             <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
                 {!!description && (
-                    <div id={descriptionID} className="text-area-description">
+                    <div className="text-area-description" id={descriptionID}>
                         {description}
                     </div>
                 )}
@@ -82,7 +82,7 @@ const TextArea = ({
                         {...rest}
                     />
                 </Tooltip>
-                <span id={errorMessageID} className="accessibility-hidden" role="alert">
+                <span className="accessibility-hidden" id={errorMessageID} role="alert">
                     {error}
                 </span>
             </Label>

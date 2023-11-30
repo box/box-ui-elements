@@ -67,14 +67,14 @@ const ItemGrid = ({
             {({ height, width }) => (
                 <ArrowKeyStepper
                     columnCount={gridColumnCount}
-                    mode="cells"
                     isControlled
-                    scrollToRow={selectedRowIndex}
-                    scrollToColumn={selectedColumnIndex}
+                    mode="cells"
                     onScrollToChange={({ scrollToRow, scrollToColumn }) => {
                         onCellSelect(scrollToRow, scrollToColumn);
                     }}
                     rowCount={gridRowCount}
+                    scrollToColumn={selectedColumnIndex}
+                    scrollToRow={selectedRowIndex}
                 >
                     {({ scrollToRow }) => (
                         <GridView

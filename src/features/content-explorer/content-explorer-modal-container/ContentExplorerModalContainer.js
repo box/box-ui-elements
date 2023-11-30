@@ -211,23 +211,23 @@ class ContentExplorerModalContainer extends Component {
             <div className={classNames('content-explorer-modal-container', className)}>
                 <ContentExplorerModal
                     className={isNewFolderModalOpen ? 'hidden' : ''}
-                    title={modalTitle}
                     description={modalDescription}
                     initialFoldersPath={initialFoldersPath}
                     isOpen
-                    onEnterFolder={this.handleEnterFolder}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
+                    onEnterFolder={this.handleEnterFolder}
+                    title={modalTitle}
                     {...rest}
                 />
                 {isNewFolderModalOpen && (
                     <NewFolderModal
-                        isOpen
-                        parentFolderName={currentFolder.name}
-                        onRequestClose={this.handleNewFolderModalClose}
-                        onCreateFolderSubmit={onCreateFolderSubmit}
-                        onCreateFolderInput={onCreateFolderInput}
-                        isCreatingFolder={isCreatingFolder}
                         createFolderError={createFolderError}
+                        isCreatingFolder={isCreatingFolder}
+                        isOpen
+                        onCreateFolderInput={onCreateFolderInput}
+                        onCreateFolderSubmit={onCreateFolderSubmit}
+                        onRequestClose={this.handleNewFolderModalClose}
+                        parentFolderName={currentFolder.name}
                     />
                 )}
             </div>

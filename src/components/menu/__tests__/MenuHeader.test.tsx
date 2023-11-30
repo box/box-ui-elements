@@ -10,7 +10,7 @@ describe('components/menu/MenuHeader', () => {
             const classNameCustom = 'oh-class';
             const classNameChild = 'child-class';
             const { container } = render(
-                <MenuHeader title={<div className={classNameChild} />} className={classNameCustom} />,
+                <MenuHeader className={classNameCustom} title={<div className={classNameChild} />} />,
             );
 
             expect(container.firstChild).toHaveClass('bdl-MenuHeader');

@@ -1233,60 +1233,60 @@ class ContentPicker extends Component<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-picker">
+                <div ref={measureRef} className={styleClassName} data-testid="content-picker" id={this.id}>
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
-                            view={view}
                             isHeaderLogoVisible={isHeaderLogoVisible}
                             isSmall={isSmall}
-                            searchQuery={searchQuery}
                             logoUrl={logoUrl}
                             onSearch={this.search}
+                            searchQuery={searchQuery}
+                            view={view}
                         />
                         <SubHeader
-                            view={view}
-                            rootId={rootFolderId}
-                            isSmall={isSmall}
-                            rootName={rootName}
-                            currentCollection={currentCollection}
-                            canUpload={allowUpload}
                             canCreateNewFolder={allowCreate}
-                            onUpload={this.upload}
+                            canUpload={allowUpload}
+                            currentCollection={currentCollection}
+                            isSmall={isSmall}
                             onCreate={this.createFolder}
                             onItemClick={this.fetchFolder}
                             onSortChange={this.sort}
+                            onUpload={this.upload}
+                            rootId={rootFolderId}
+                            rootName={rootName}
+                            view={view}
                         />
                         <Content
-                            view={view}
-                            isSmall={isSmall}
-                            rootId={rootFolderId}
-                            rootElement={this.rootElement}
-                            focusedRow={focusedRow}
-                            selectableType={type}
                             canSetShareAccess={canSetShareAccess}
-                            extensionsWhitelist={extensions}
-                            hasHitSelectionLimit={hasHitSelectionLimit}
                             currentCollection={currentCollection}
+                            extensionsWhitelist={extensions}
+                            focusedRow={focusedRow}
+                            hasHitSelectionLimit={hasHitSelectionLimit}
                             isSingleSelect={isSingleSelect}
-                            tableRef={this.tableRef}
-                            onItemSelect={this.select}
-                            onItemClick={this.onItemClick}
+                            isSmall={isSmall}
                             onFocusChange={this.onFocusChange}
+                            onItemClick={this.onItemClick}
+                            onItemSelect={this.select}
                             onShareAccessChange={this.changeShareAccess}
+                            rootElement={this.rootElement}
+                            rootId={rootFolderId}
+                            selectableType={type}
+                            tableRef={this.tableRef}
+                            view={view}
                         />
                         <Footer
+                            cancelButtonLabel={cancelButtonLabel}
+                            chooseButtonLabel={chooseButtonLabel}
                             currentCollection={currentCollection}
+                            hasHitSelectionLimit={hasHitSelectionLimit}
+                            isSingleSelect={isSingleSelect}
+                            onCancel={this.cancel}
+                            onChoose={this.choose}
+                            onSelectedClick={this.showSelected}
+                            renderCustomActionButtons={renderCustomActionButtons}
                             selectedCount={selectedCount}
                             selectedItems={this.getSelectedItems()}
                             showSelectedButton={showSelectedButton}
-                            hasHitSelectionLimit={hasHitSelectionLimit}
-                            isSingleSelect={isSingleSelect}
-                            onSelectedClick={this.showSelected}
-                            onChoose={this.choose}
-                            onCancel={this.cancel}
-                            chooseButtonLabel={chooseButtonLabel}
-                            cancelButtonLabel={cancelButtonLabel}
-                            renderCustomActionButtons={renderCustomActionButtons}
                         >
                             {isPaginationVisible ? (
                                 <OffsetBasedPagination
@@ -1300,30 +1300,30 @@ class ContentPicker extends Component<Props, State> {
                     </div>
                     {allowUpload && !!this.appElement ? (
                         <UploadDialog
-                            isOpen={isUploadModalOpen}
-                            currentFolderId={id}
-                            token={token}
-                            sharedLink={sharedLink}
-                            sharedLinkPassword={sharedLinkPassword}
                             apiHost={apiHost}
-                            uploadHost={uploadHost}
-                            onClose={this.uploadSuccessHandler}
-                            parentElement={this.rootElement}
                             appElement={this.appElement}
                             contentUploaderProps={contentUploaderProps}
+                            currentFolderId={id}
+                            isOpen={isUploadModalOpen}
+                            onClose={this.uploadSuccessHandler}
+                            parentElement={this.rootElement}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            token={token}
+                            uploadHost={uploadHost}
                         />
                     ) : null}
                     {allowCreate && !!this.appElement ? (
                         <CreateFolderDialog
-                            isOpen={isCreateFolderModalOpen}
-                            onCreate={this.createFolderCallback}
-                            onCancel={this.closeModals}
-                            isLoading={isLoading}
-                            errorCode={errorCode}
-                            parentElement={this.rootElement}
                             appElement={this.appElement}
+                            errorCode={errorCode}
+                            isLoading={isLoading}
+                            isOpen={isCreateFolderModalOpen}
+                            onCancel={this.closeModals}
+                            onCreate={this.createFolderCallback}
+                            parentElement={this.rootElement}
                         />
                     ) : null}
                 </div>

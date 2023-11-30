@@ -21,7 +21,7 @@ type Props = {
 const VersionsList = ({ currentId, versions, ...rest }: Props) => (
     <ul className="bcs-VersionsList">
         {versions.map(version => (
-            <li className="bcs-VersionsList-item" key={version.id}>
+            <li key={version.id} className="bcs-VersionsList-item">
                 <Route
                     render={({ match }) => (
                         <VersionsItem

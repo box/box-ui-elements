@@ -23,11 +23,11 @@ const ContentExplorerBreadcrumbs = ({
         <Button
             aria-label={formatMessage(messages.clickToGoBack)}
             className="content-explorer-breadcrumbs-up-button"
-            type="button"
-            onClick={onUpButtonClick}
             isDisabled={isUpButtonDisabled}
+            onClick={onUpButtonClick}
+            type="button"
         >
-            <IconChevron direction="left" size="6px" color="#333" />
+            <IconChevron color="#333" direction="left" size="6px" />
         </Button>
         <Breadcrumb label={formatMessage(messages.breadcrumb)} {...breadcrumbProps}>
             {foldersPath.map((folder, i) => (

@@ -9,18 +9,18 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
     const renderComponent = props =>
         shallow(
             <ContentExplorerModalContainer
-                onRequestClose={() => {}}
-                isOpen
                 contentExplorerMode="selectFile"
                 initialFoldersPath={[{ id: '0', name: 'folder' }]}
                 initialSelectedItems={initialSelectedItems}
-                onEnterFolder={() => {}}
-                onSearchSubmit={() => {}}
-                onExitSearch={() => {}}
+                isOpen
                 items={[]}
                 numItemsPerPage={100}
                 numTotalItems={100}
+                onEnterFolder={() => {}}
+                onExitSearch={() => {}}
                 onLoadMoreItems={() => {}}
+                onRequestClose={() => {}}
+                onSearchSubmit={() => {}}
                 {...props}
             />,
         );

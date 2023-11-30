@@ -145,7 +145,7 @@ class PresenceCollaboratorsList extends React.Component<Props> {
                     role="list"
                 >
                     {collaborators.map(collaborator => (
-                        <PresenceCollaborator collaborator={collaborator} key={collaborator.id} role="listitem" />
+                        <PresenceCollaborator key={collaborator.id} collaborator={collaborator} role="listitem" />
                     ))}
                 </div>
                 {actions}

@@ -15,5 +15,5 @@ export default (onClick: (item: UploadItem) => void) => ({ rowData }: Props) => 
     if (rowData.isFolder) {
         return null;
     }
-    return <ItemRemove status={rowData.status} onClick={() => onClick(rowData)} />;
+    return <ItemRemove onClick={() => onClick(rowData)} status={rowData.status} />;
 };

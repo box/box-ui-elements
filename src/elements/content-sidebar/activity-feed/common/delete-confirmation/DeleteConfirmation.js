@@ -60,18 +60,18 @@ class DeleteConfirmation extends React.Component<Props> {
                     <Button
                         aria-label={commonMessages.cancel.defaultMessage}
                         className="bcs-DeleteConfirmation-cancel"
+                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CANCEL}
                         onClick={onDeleteCancel}
                         type="button"
-                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CANCEL}
                     >
                         <FormattedMessage {...commonMessages.cancel} />
                     </Button>
                     <PrimaryButton
                         aria-label={commonMessages.delete.defaultMessage}
                         className="bcs-DeleteConfirmation-delete"
+                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CONFIRM}
                         onClick={onDeleteConfirm}
                         type="button"
-                        data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CONFIRM}
                     >
                         <FormattedMessage {...commonMessages.delete} />
                     </PrimaryButton>

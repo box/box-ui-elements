@@ -7,10 +7,10 @@ describe('elements/content-sidebar/TaskModal', () => {
         return shallow(
             <TaskModal
                 feedbackUrl="http://example.dentist/"
+                isTaskFormOpen
+                onModalClose={jest.fn()}
                 onSubmitError={jest.fn()}
                 onSubmitSuccess={jest.fn()}
-                onModalClose={jest.fn()}
-                isTaskFormOpen
                 taskFormProps={{
                     approverSelectorContacts: null,
                     createTask: jest.fn(),

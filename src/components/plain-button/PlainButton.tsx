@@ -37,7 +37,7 @@ const PlainButton = ({
 
     return (
         // eslint-disable-next-line react/button-has-type
-        <button className={`btn-plain ${className}`} ref={getDOMRef} type={type} {...rest} {...buttonProps}>
+        <button ref={getDOMRef} className={`btn-plain ${className}`} type={type} {...rest} {...buttonProps}>
             {children}
         </button>
     );

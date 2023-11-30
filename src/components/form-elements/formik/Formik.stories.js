@@ -58,97 +58,88 @@ export const basic = () => {
                             display: 'inline-block',
                         }}
                     >
-                        <Field name="checkbox" label="Checkbox Field" component={Checkbox} />
-                        <Field name="toggle" label="Toggle Field" component={Toggle} />
+                        <Field component={Checkbox} label="Checkbox Field" name="checkbox" />
+                        <Field component={Toggle} label="Toggle Field" name="toggle" />
                         <Field
+                            component={TextInput}
                             isRequired={boolean('isRequired', true)}
                             label="Text Input Field"
                             name="textinput"
-                            type="text"
                             placeholder="Text Input Field"
-                            component={TextInput}
+                            type="text"
                         />
                         <Field
+                            component={TextArea}
                             isRequired={boolean('isRequired', true)}
                             label="Text Area Field"
                             name="textarea"
                             placeholder="Text Area Field"
-                            component={TextArea}
                         />
                         <b>Non-RadioGroup RadioButtons sharing the same name</b>
                         <br />
                         <br />
                         <Field
+                            component={RadioButtonField}
                             isSelected={false}
                             label="Radio Button Field 1"
                             name="radiobutton"
-                            component={RadioButtonField}
                             value="radio1"
                         />
                         <Field
+                            component={RadioButtonField}
                             isSelected={false}
                             label="Radio Button Field 2"
                             name="radiobutton"
-                            component={RadioButtonField}
                             value="radio2"
                         />
                         <br />
                         <Field
+                            component={SelectField}
                             label="Single Select Field"
                             name="singleselect"
-                            placeholder="Single Select Field"
                             options={[
                                 { displayText: 'Red', value: 'red' },
                                 { displayText: 'Green', value: 'green' },
                                 { displayText: 'Blue', value: 'blue' },
                             ]}
-                            component={SelectField}
+                            placeholder="Single Select Field"
                         />
                         <br />
                         <br />
                         <Field
+                            component={SelectField}
                             label="Multi Select Field"
-                            name="multiselect"
-                            placeholder="Multi Select Field"
                             multiple
+                            name="multiselect"
                             options={[
                                 { displayText: 'Red', value: 'red' },
                                 { displayText: 'Green', value: 'green' },
                                 { displayText: 'Blue', value: 'blue' },
                             ]}
-                            component={SelectField}
+                            placeholder="Multi Select Field"
                         />
                         <br />
                         <br />
                         <b>RadioGroup-ed RadioButtons</b>
                         <br />
                         <br />
-                        <Field name="radiogroup" component={RadioGroup}>
-                            <RadioButton label="Red" value="red" description="Red color" />
-                            <RadioButton label="Blue" value="blue" description="Blue color" />
+                        <Field component={RadioGroup} name="radiogroup">
+                            <RadioButton description="Red color" label="Red" value="red" />
+                            <RadioButton description="Blue color" label="Blue" value="blue" />
                         </Field>
                         <br />
                         <br />
                         <Field
+                            component={PillSelectorDropdownField}
                             label="Pill Selector Field"
                             name="pillselector"
                             placeholder="Colors"
-                            component={PillSelectorDropdownField}
                             validator={pillSelectorValidator}
                         />
                         <br />
                         <br />
                         <Field
-                            label="Pill Selector Field With Dropdown"
-                            name="pillselectordropdown"
-                            placeholder="Colors"
-                            options={[
-                                { displayText: 'Red', value: 'red' },
-                                { displayText: 'Green', value: 'green' },
-                                { displayText: 'Blue', value: 'blue' },
-                            ]}
                             component={PillSelectorDropdownField}
-                            validator={pillSelectorValidator}
                             dropdownRenderer={options =>
                                 options.map(option => (
                                     <DatalistItem key={option.value} style={{ color: option.value }}>
@@ -156,6 +147,15 @@ export const basic = () => {
                                     </DatalistItem>
                                 ))
                             }
+                            label="Pill Selector Field With Dropdown"
+                            name="pillselectordropdown"
+                            options={[
+                                { displayText: 'Red', value: 'red' },
+                                { displayText: 'Green', value: 'green' },
+                                { displayText: 'Blue', value: 'blue' },
+                            ]}
+                            placeholder="Colors"
+                            validator={pillSelectorValidator}
                         />
                     </Form>
                     <pre

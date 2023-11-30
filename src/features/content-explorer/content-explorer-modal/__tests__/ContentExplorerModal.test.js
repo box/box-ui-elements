@@ -6,17 +6,17 @@ describe('features/content-explorer/content-explorer-modal/ContentExplorerModal'
     const renderComponent = props =>
         shallow(
             <ContentExplorerModal
-                isOpen
                 contentExplorerMode="selectFile"
+                formatMessage={() => ''}
                 initialFoldersPath={[]}
-                onEnterFolder={() => {}}
-                onSearchSubmit={() => {}}
-                onExitSearch={() => {}}
+                isOpen
                 items={[]}
                 numItemsPerPage={100}
                 numTotalItems={100}
+                onEnterFolder={() => {}}
+                onExitSearch={() => {}}
                 onLoadMoreItems={() => {}}
-                formatMessage={() => ''}
+                onSearchSubmit={() => {}}
                 {...props}
             />,
         );

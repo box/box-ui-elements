@@ -63,7 +63,7 @@ const Classification = ({
         isClassified && hasModifiedAt && isValidDate(modifiedDate) && hasModifiedBy && messageStyle === STYLE_INLINE;
 
     const formattedModifiedAt = isModifiedMessageVisible && (
-        <FormattedDate value={modifiedDate} month="long" year="numeric" day="numeric" />
+        <FormattedDate day="numeric" month="long" value={modifiedDate} year="numeric" />
     );
 
     const modifiedByMessage = isImportedClassification ? messages.importedBy : messages.modifiedBy;

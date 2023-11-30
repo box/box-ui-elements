@@ -17,7 +17,7 @@ describe('features/quick-search/QuickSearchItem', () => {
     };
 
     test('should render datalist item', () => {
-        const wrapper = mount(<QuickSearchItem className="test" itemData={itemData} data-resin-query="test" />);
+        const wrapper = mount(<QuickSearchItem className="test" data-resin-query="test" itemData={itemData} />);
 
         expect(wrapper.find('DatalistItem').hasClass('quick-search-item')).toBe(true);
         expect(wrapper.find('DatalistItem').hasClass('test')).toBe(true);

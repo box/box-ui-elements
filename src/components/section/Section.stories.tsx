@@ -4,8 +4,8 @@ import Section from './Section';
 import notes from './Section.stories.md';
 
 export const basic = () => (
-    <Section title="User Info" description="Your account info">
-        <input name="textinput" type="email" placeholder="Enter email here" />
+    <Section description="Your account info" title="User Info">
+        <input name="textinput" placeholder="Enter email here" type="email" />
     </Section>
 );
 

@@ -270,7 +270,6 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                 onSelect={this.handleSelect}
                 overlayTitle={overlayTitle}
                 scrollBoundarySelector={dropdownScrollBoundarySelector}
-                shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
                 selector={
                     <PillSelector
                         onChange={noop} // fix console error
@@ -299,6 +298,7 @@ class PillSelectorDropdown extends React.Component<Props, State> {
                         value={this.state.inputValue}
                     />
                 }
+                shouldSetActiveItemOnOpen={shouldSetActiveItemOnOpen}
             >
                 {children}
             </SelectorDropdown>

@@ -22,8 +22,8 @@ const sizeOptions: LabelPillSize[] = [LabelPillSize.REGULAR, LabelPillSize.LARGE
 
 export const withText = () => (
     <LabelPill.Pill
-        type={select(typeLabel, typeOptions, LabelPillStatus.DEFAULT)}
         size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}
+        type={select(typeLabel, typeOptions, LabelPillStatus.DEFAULT)}
     >
         <LabelPill.Text>TEST TEXT</LabelPill.Text>
     </LabelPill.Pill>
@@ -31,8 +31,8 @@ export const withText = () => (
 
 export const withIcon = () => (
     <LabelPill.Pill
-        type={select(typeLabel, typeOptions, LabelPillStatus.DEFAULT)}
         size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}
+        type={select(typeLabel, typeOptions, LabelPillStatus.DEFAULT)}
     >
         <LabelPill.Icon Component={Shield16} />
     </LabelPill.Pill>
@@ -40,8 +40,8 @@ export const withIcon = () => (
 
 export const withBoth = () => (
     <LabelPill.Pill
-        type={select(typeLabel, typeOptions, LabelPillStatus.DEFAULT)}
         size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}
+        type={select(typeLabel, typeOptions, LabelPillStatus.DEFAULT)}
     >
         <LabelPill.Icon Component={Shield16} />
         <LabelPill.Text>TEST TEXT</LabelPill.Text>
@@ -50,23 +50,23 @@ export const withBoth = () => (
 
 export const severalComponents = () => (
     <div style={{ textAlign: 'center' }}>
-        <LabelPill.Pill type={LabelPillStatus.WARNING} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
+        <LabelPill.Pill size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)} type={LabelPillStatus.WARNING}>
             <LabelPill.Text>BETA</LabelPill.Text>
         </LabelPill.Pill>{' '}
-        <LabelPill.Pill type={LabelPillStatus.INFO} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
+        <LabelPill.Pill size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)} type={LabelPillStatus.INFO}>
             <LabelPill.Text>IN PROGRESS</LabelPill.Text>
         </LabelPill.Pill>{' '}
-        <LabelPill.Pill type={LabelPillStatus.WARNING} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
+        <LabelPill.Pill size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)} type={LabelPillStatus.WARNING}>
             <LabelPill.Icon Component={Shield16} />
             <LabelPill.Text>CONFIDENTIAL</LabelPill.Text>
         </LabelPill.Pill>{' '}
-        <LabelPill.Pill type={LabelPillStatus.FTUX} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
+        <LabelPill.Pill size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)} type={LabelPillStatus.FTUX}>
             <LabelPill.Text>NEW</LabelPill.Text>
         </LabelPill.Pill>{' '}
-        <LabelPill.Pill type={LabelPillStatus.ALERT} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
+        <LabelPill.Pill size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)} type={LabelPillStatus.ALERT}>
             <LabelPill.Text>DUE JUL 9 AT 11:59 PM</LabelPill.Text>
         </LabelPill.Pill>{' '}
-        <LabelPill.Pill type={LabelPillStatus.SUCCESS} size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)}>
+        <LabelPill.Pill size={select(sizeLabel, sizeOptions, LabelPillSize.REGULAR)} type={LabelPillStatus.SUCCESS}>
             <LabelPill.Text>SUCCESS</LabelPill.Text>
         </LabelPill.Pill>{' '}
     </div>

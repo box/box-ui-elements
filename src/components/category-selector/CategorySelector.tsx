@@ -141,14 +141,14 @@ const CategorySelector = ({
         <Measure client innerRef={linksRef} onResize={checkLinks}>
             {({ measureRef }) => (
                 <CategorySelectorComponent
+                    categories={categories}
+                    categoryProps={categoryProps}
+                    className={className}
+                    currentCategory={currentCategory}
+                    maxLinks={maxLinks}
                     measureRef={measureRef}
                     moreRef={moreRef}
-                    className={className}
-                    categories={categories}
-                    maxLinks={maxLinks}
-                    currentCategory={currentCategory}
                     onSelect={onSelect}
-                    categoryProps={categoryProps}
                 />
             )}
         </Measure>

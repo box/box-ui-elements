@@ -45,7 +45,7 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
             const wrapper = shallow(
                 <SidebarNavTablist history={history}>
                     {viewList.map(view => {
-                        return <div sidebarView={view} key={view} />;
+                        return <div key={view} sidebarView={view} />;
                     })}
                 </SidebarNavTablist>,
             );

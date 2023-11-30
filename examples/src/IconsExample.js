@@ -47,7 +47,7 @@ class IconsExample extends React.Component<Props, State> {
                         <PropsComponent />
                     </code>
                 )}
-                <button type="button" className="btn-toggle-props" onClick={() => this.togglePropsSection(iconName)}>
+                <button className="btn-toggle-props" onClick={() => this.togglePropsSection(iconName)} type="button">
                     {isExpanded ? 'Hide Props' : 'View Props'}
                 </button>
             </div>
@@ -62,14 +62,14 @@ class IconsExample extends React.Component<Props, State> {
                 <label htmlFor={this.darkToggleId}>
                     <input
                         className="dark-toggle"
-                        type="checkbox"
                         id={this.darkToggleId}
-                        value={this.state.darkBackgroundEnabled}
                         onChange={() => {
                             this.setState(state => {
                                 return { darkBackgroundEnabled: !state.darkBackgroundEnabled };
                             });
                         }}
+                        type="checkbox"
+                        value={this.state.darkBackgroundEnabled}
                     />
                     Enable dark background
                 </label>
@@ -79,7 +79,7 @@ class IconsExample extends React.Component<Props, State> {
                         const PropsComponent = icon.propsDocumentation;
                         const isExpanded = icon.name === this.state.expandedPropsComponent;
                         return (
-                            <div className={classNames('icon', { 'is-expanded': isExpanded })} key={icon.name}>
+                            <div key={icon.name} className={classNames('icon', { 'is-expanded': isExpanded })}>
                                 <Component />
                                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
                                 <label className="icon-label">{icon.name}</label>

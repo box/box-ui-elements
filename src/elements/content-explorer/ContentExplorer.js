@@ -1652,36 +1652,36 @@ class ContentExplorer extends Component<Props, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
+                <div ref={measureRef} className={styleClassName} data-testid="content-explorer" id={this.id}>
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         {!isDefaultViewMetadata && (
                             <>
                                 <Header
-                                    view={view}
                                     isSmall={isSmall}
-                                    searchQuery={searchQuery}
                                     logoUrl={logoUrl}
                                     onSearch={this.search}
+                                    searchQuery={searchQuery}
+                                    view={view}
                                 />
                                 <SubHeader
-                                    view={view}
-                                    viewMode={viewMode}
-                                    rootId={rootFolderId}
-                                    isSmall={isSmall}
-                                    rootName={rootName}
-                                    currentCollection={currentCollection}
-                                    canUpload={allowUpload}
                                     canCreateNewFolder={allowCreate}
+                                    canUpload={allowUpload}
+                                    currentCollection={currentCollection}
                                     gridColumnCount={gridColumnCount}
                                     gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
                                     gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                    isSmall={isSmall}
                                     maxGridColumnCountForWidth={maxGridColumnCount}
-                                    onUpload={this.upload}
                                     onCreate={this.createFolder}
                                     onGridViewSliderChange={this.onGridViewSliderChange}
                                     onItemClick={this.fetchFolder}
                                     onSortChange={this.sort}
+                                    onUpload={this.upload}
                                     onViewModeChange={this.changeViewMode}
+                                    rootId={rootFolderId}
+                                    rootName={rootName}
+                                    view={view}
+                                    viewMode={viewMode}
                                 />
                             </>
                         )}
@@ -1692,12 +1692,12 @@ class ContentExplorer extends Component<Props, State> {
                             canRename={canRename}
                             canShare={canShare}
                             currentCollection={currentCollection}
+                            fieldsToShow={fieldsToShow}
                             focusedRow={focusedRow}
                             gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
                             isMedium={isMedium}
                             isSmall={isSmall}
                             isTouch={isTouch}
-                            fieldsToShow={fieldsToShow}
                             onItemClick={this.onItemClick}
                             onItemDelete={this.delete}
                             onItemDownload={this.download}
@@ -1720,102 +1720,102 @@ class ContentExplorer extends Component<Props, State> {
                                     hasNextMarker={hasNextMarker}
                                     hasPrevMarker={hasPreviousMarker}
                                     offset={offset}
+                                    onMarkerBasedPageChange={this.markerBasedPaginate}
                                     onOffsetChange={this.paginate}
                                     pageSize={currentPageSize}
                                     totalCount={totalCount}
-                                    onMarkerBasedPageChange={this.markerBasedPaginate}
                                 />
                             </Footer>
                         )}
                     </div>
                     {allowUpload && !!this.appElement ? (
                         <UploadDialog
-                            isOpen={isUploadModalOpen}
-                            currentFolderId={id}
-                            token={token}
-                            sharedLink={sharedLink}
-                            sharedLinkPassword={sharedLinkPassword}
                             apiHost={apiHost}
-                            uploadHost={uploadHost}
-                            onClose={this.uploadSuccessHandler}
-                            parentElement={this.rootElement}
                             appElement={this.appElement}
-                            onUpload={onUpload}
                             contentUploaderProps={contentUploaderProps}
+                            currentFolderId={id}
+                            isOpen={isUploadModalOpen}
+                            onClose={this.uploadSuccessHandler}
+                            onUpload={onUpload}
+                            parentElement={this.rootElement}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            token={token}
+                            uploadHost={uploadHost}
                         />
                     ) : null}
                     {allowCreate && !!this.appElement ? (
                         <CreateFolderDialog
-                            isOpen={isCreateFolderModalOpen}
-                            onCreate={this.createFolderCallback}
-                            onCancel={this.closeModals}
-                            isLoading={isLoading}
-                            errorCode={errorCode}
-                            parentElement={this.rootElement}
                             appElement={this.appElement}
+                            errorCode={errorCode}
+                            isLoading={isLoading}
+                            isOpen={isCreateFolderModalOpen}
+                            onCancel={this.closeModals}
+                            onCreate={this.createFolderCallback}
+                            parentElement={this.rootElement}
                         />
                     ) : null}
                     {canDelete && selected && !!this.appElement ? (
                         <DeleteConfirmationDialog
-                            isOpen={isDeleteModalOpen}
-                            onDelete={this.deleteCallback}
-                            onCancel={this.closeModals}
-                            item={selected}
-                            isLoading={isLoading}
-                            parentElement={this.rootElement}
                             appElement={this.appElement}
+                            isLoading={isLoading}
+                            isOpen={isDeleteModalOpen}
+                            item={selected}
+                            onCancel={this.closeModals}
+                            onDelete={this.deleteCallback}
+                            parentElement={this.rootElement}
                         />
                     ) : null}
                     {canRename && selected && !!this.appElement ? (
                         <RenameDialog
-                            isOpen={isRenameModalOpen}
-                            onRename={this.renameCallback}
-                            onCancel={this.closeModals}
-                            item={selected}
-                            isLoading={isLoading}
-                            errorCode={errorCode}
-                            parentElement={this.rootElement}
                             appElement={this.appElement}
+                            errorCode={errorCode}
+                            isLoading={isLoading}
+                            isOpen={isRenameModalOpen}
+                            item={selected}
+                            onCancel={this.closeModals}
+                            onRename={this.renameCallback}
+                            parentElement={this.rootElement}
                         />
                     ) : null}
                     {canShare && selected && !!this.appElement ? (
                         <ShareDialog
-                            isOpen={isShareModalOpen}
-                            canSetShareAccess={canSetShareAccess}
-                            onShareAccessChange={this.changeShareAccess}
-                            onCancel={this.refreshCollection}
-                            item={selected}
-                            isLoading={isLoading}
-                            parentElement={this.rootElement}
                             appElement={this.appElement}
+                            canSetShareAccess={canSetShareAccess}
+                            isLoading={isLoading}
+                            isOpen={isShareModalOpen}
+                            item={selected}
+                            onCancel={this.refreshCollection}
+                            onShareAccessChange={this.changeShareAccess}
+                            parentElement={this.rootElement}
                         />
                     ) : null}
                     {canPreview && selected && !!this.appElement ? (
                         <PreviewDialog
+                            apiHost={apiHost}
+                            appElement={this.appElement}
+                            appHost={appHost}
+                            cache={this.api.getCache()}
+                            canDownload={canDownload}
+                            contentPreviewProps={contentPreviewProps}
+                            currentCollection={cloneDeep(currentCollection)}
                             isOpen={isPreviewModalOpen}
                             isTouch={isTouch}
-                            onCancel={this.closeModals}
                             item={selected}
-                            currentCollection={cloneDeep(currentCollection)}
-                            token={token}
-                            parentElement={this.rootElement}
-                            appElement={this.appElement}
-                            onPreview={onPreview}
+                            onCancel={this.closeModals}
                             onDownload={onDownload}
-                            canDownload={canDownload}
-                            cache={this.api.getCache()}
-                            apiHost={apiHost}
-                            appHost={appHost}
-                            staticHost={staticHost}
-                            staticPath={staticPath}
+                            onPreview={onPreview}
+                            parentElement={this.rootElement}
                             previewLibraryVersion={previewLibraryVersion}
-                            sharedLink={sharedLink}
-                            sharedLinkPassword={sharedLinkPassword}
-                            contentPreviewProps={contentPreviewProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
+                            sharedLink={sharedLink}
+                            sharedLinkPassword={sharedLinkPassword}
+                            staticHost={staticHost}
+                            staticPath={staticPath}
+                            token={token}
                         />
                     ) : null}
                 </div>

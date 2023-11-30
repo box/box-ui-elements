@@ -119,7 +119,7 @@ function MessageCenter({
     );
 
     return (
-        <Internationalize messages={messages} language={language}>
+        <Internationalize language={language} messages={messages}>
             <span className="bdl-MessageCenter" data-resin-component="messageCenter">
                 {isOpen ? (
                     <>
@@ -129,9 +129,9 @@ function MessageCenter({
                             contentPreviewProps={contentPreviewProps}
                             getToken={getToken}
                             messages={eligibleMessages}
+                            onMessageShown={onMessageShown}
                             onRequestClose={onRequestClose}
                             overscanRowCount={overscanRowCount}
-                            onMessageShown={onMessageShown}
                         />
                     </>
                 ) : (

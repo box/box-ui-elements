@@ -28,9 +28,9 @@ export const regular = () => {
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis rutrum turpis.
                         </span>
                     }
+                    header={<span>Heading goes here</span>}
                     illustration={<BoxMobile140 height={140} width={140} />}
                     isShown={state.isShown}
-                    header={<span>Heading goes here</span>}
                     onButtonClick={onButtonClick}
                     onCloseButtonClick={onNudgeClose}
                 />

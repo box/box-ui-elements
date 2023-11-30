@@ -35,15 +35,15 @@ class SelectFieldDropdown extends React.Component<Props> {
         return (
             <ul
                 ref={innerRef}
-                style={style}
-                data-placement={placement}
                 className={classNames('bdl-SelectFieldDropdown', 'overlay', {
                     [OVERLAY_SCROLLABLE_CLASS]: isScrollable,
                 })}
+                data-placement={placement}
                 id={selectFieldID}
+                onMouseDown={event => event.preventDefault()}
                 role="listbox"
                 // preventDefault on mousedown so blur doesn't happen before click
-                onMouseDown={event => event.preventDefault()}
+                style={style}
                 {...listboxProps}
             >
                 {children}

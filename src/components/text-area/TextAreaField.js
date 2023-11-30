@@ -15,7 +15,7 @@ const TextAreaField = ({ field, form, innerRef, isRequired, ...rest }: Props) =>
     const isTouched = getProp(touched, name);
     const error = isTouched ? getProp(errors, name) : null;
     return (
-        <TextAreaPrimitive {...field} {...rest} textareaRef={innerRef} error={error} hideOptionalLabel={isRequired} />
+        <TextAreaPrimitive {...field} {...rest} error={error} hideOptionalLabel={isRequired} textareaRef={innerRef} />
     );
 };
 

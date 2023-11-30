@@ -65,8 +65,8 @@ const AllowDownloadSection = ({
                 <hr />
                 <Tooltip
                     isDisabled={!isDirectLinkUnavailable}
-                    text={<FormattedMessage {...tooltipMessage} />}
                     position="middle-left"
+                    text={<FormattedMessage {...tooltipMessage} />}
                 >
                     <Fieldset
                         className="be"

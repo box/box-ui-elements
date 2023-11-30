@@ -42,7 +42,7 @@ describe('components/flyout/OverlayHeader', () => {
         test('should prevent default and stop propagation when elements in handleClick called', () => {
             const overlayClick = jest.fn();
             render(
-                <div role="presentation" onClick={overlayClick}>
+                <div onClick={overlayClick} role="presentation">
                     <OverlayHeader>
                         <p>Hi</p>
                     </OverlayHeader>

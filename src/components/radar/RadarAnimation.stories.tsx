@@ -58,7 +58,7 @@ export const topRight = () => (
 );
 
 export const withOffset = () => (
-    <RadarAnimation position={RadarAnimationPosition.MIDDLE_LEFT} offset="0 20px">
+    <RadarAnimation offset="0 20px" position={RadarAnimationPosition.MIDDLE_LEFT}>
         <Button>Middle Left, with offset</Button>
     </RadarAnimation>
 );

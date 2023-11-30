@@ -44,7 +44,7 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
             );
         case TYPE_WEBLINK:
             title = intl.formatMessage(messages.bookmark);
-            return <BookmarkIcon height={dimension} width={dimension} title={title} />;
+            return <BookmarkIcon height={dimension} title={title} width={dimension} />;
         default:
             title = intl.formatMessage(messages.file);
             return <FileIcon dimension={dimension} title={title} />;

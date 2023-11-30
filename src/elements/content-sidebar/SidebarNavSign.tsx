@@ -31,20 +31,20 @@ export function SidebarNavSign() {
     return (
         <>
             {isSignRemoveInterstitialEnabled ? (
-                <DropdownMenu isResponsive constrainToWindow isRightAligned>
+                <DropdownMenu constrainToWindow isResponsive isRightAligned>
                     <SidebarNavSignButton
                         blockedReason={boxSignBlockedReason}
+                        data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
                         status={boxSignStatus}
                         targetingApi={boxSignTargetingApi}
-                        data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
                     />
                     <Menu>
                         <MenuItem data-testid="sign-request-signature-button" onClick={onBoxClickRequestSignature}>
-                            <SignMeOthers32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
+                            <SignMeOthers32 className="bcs-SidebarNavSign-icon" height={16} width={16} />
                             <FormattedMessage {...messages.boxSignRequestSignature} />
                         </MenuItem>
                         <MenuItem data-testid="sign-sign-myself-button" onClick={onBoxClickSignMyself}>
-                            <SignMe32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
+                            <SignMe32 className="bcs-SidebarNavSign-icon" height={16} width={16} />
                             <FormattedMessage {...messages.boxSignSignMyself} />
                         </MenuItem>
                     </Menu>

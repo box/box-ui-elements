@@ -8,7 +8,7 @@ import testImageSrc from '../getTestImageSrc';
 
 describe('components/image-tooltip/ImageTooltip', () => {
     test('should correctly render an ImageTooltip', () => {
-        const image = <img src={testImageSrc} alt="foo" />;
+        const image = <img alt="foo" src={testImageSrc} />;
 
         const wrapper: ShallowWrapper = shallow(
             <ImageTooltip content="Foo content" image={image} isShown title="Bar">

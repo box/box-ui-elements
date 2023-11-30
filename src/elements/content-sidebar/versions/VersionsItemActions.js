@@ -117,10 +117,10 @@ const VersionsItemActions = ({
                 )}
                 {showDelete && (
                     <Tooltip
+                        isDisabled={!isRetained}
+                        isTabbable={false}
                         position="middle-left"
                         text={<FormattedMessage {...messages.versionActionDisabledRetention} />}
-                        isTabbable={false}
-                        isDisabled={!isRetained}
                     >
                         <VersionsItemAction
                             action="remove"

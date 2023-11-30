@@ -10,7 +10,7 @@ const RadioButtonField = ({ field, value, ...rest }: RadioButtonFieldProps) => {
         return <RadioButton value={value} {...rest} />;
     }
     const { value: fieldValue, ...fieldRest } = field;
-    return <RadioButton {...fieldRest} {...rest} value={value} isSelected={value === fieldValue} />;
+    return <RadioButton {...fieldRest} {...rest} isSelected={value === fieldValue} value={value} />;
 };
 
 export default RadioButtonField;

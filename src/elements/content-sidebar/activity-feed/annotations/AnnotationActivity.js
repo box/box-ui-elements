@@ -143,7 +143,7 @@ const AnnotationActivity = ({
                     })}
                 >
                     <Media.Figure className="bcs-AnnotationActivity-avatar">
-                        <Avatar getAvatarUrl={getAvatarUrl} user={createdByUser} badgeIcon={<IconAnnotation />} />
+                        <Avatar badgeIcon={<IconAnnotation />} getAvatarUrl={getAvatarUrl} user={createdByUser} />
                     </Media.Figure>
                     <Media.Body>
                         <div className="bcs-AnnotationActivity-headline">
@@ -178,9 +178,9 @@ const AnnotationActivity = ({
                                 isOpen={isEditing}
                                 mentionSelectorContacts={mentionSelectorContacts}
                                 onCancel={handleFormCancel}
+                                tagged_message={message}
                                 updateComment={handleFormSubmit}
                                 user={currentUser}
-                                tagged_message={message}
                             />
                         ) : (
                             <ActivityMessage
@@ -204,12 +204,12 @@ const AnnotationActivity = ({
                         className="bcs-AnnotationActivity-menu"
                         id={id}
                         isDisabled={isConfirmingDelete}
-                        status={status}
                         onDelete={handleDelete}
                         onEdit={handleEdit}
                         onMenuClose={handleMenuClose}
                         onMenuOpen={handleMenuOpen}
                         onStatusChange={handleStatusChange}
+                        status={status}
                     />
                 )}
                 {isConfirmingDelete && (

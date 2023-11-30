@@ -33,7 +33,27 @@ export const basic = () => {
                         {state.isOpen && (
                             <SharedLinkSettingsModal
                                 accessLevel="peopleWithTheLink"
+                                cancelButtonProps={{ 'data-resin-target': 'test' }}
+                                canChangeDownload
+                                canChangeExpiration
+                                canChangePassword
                                 canChangeVanityName
+                                directLink="https://box.com/download/path"
+                                directLinkInputProps={{ 'data-resin-target': 'test' }}
+                                downloadCheckboxProps={{ 'data-resin-target': 'test' }}
+                                expirationCheckboxProps={{ 'data-resin-target': 'test' }}
+                                expirationInputProps={{ 'data-resin-target': 'test' }}
+                                isDirectLinkAvailable
+                                isDirectLinkUnavailableDueToAccessPolicy
+                                isDirectLinkUnavailableDueToDownloadSettings={boolean(
+                                    'isDirectLinkUnavailableDueToDownloadSettings',
+                                    false,
+                                )}
+                                isDownloadAvailable
+                                isDownloadEnabled={boolean('isDownloadEnabled', false)}
+                                isOpen
+                                isPasswordAvailable
+                                isPasswordEnabled={boolean('isPasswordEnabled', false)}
                                 item={{
                                     bannerPolicy: {
                                         body: 'test',
@@ -48,36 +68,16 @@ export const basic = () => {
                                     type: 'folder',
                                     typedID: 'd_12345',
                                 }}
-                                isOpen
+                                modalProps={{ 'data-resin-feature': 'test' }}
                                 onRequestClose={() => componentStore.set({ isOpen: false })}
                                 onSubmit={fakeRequest}
+                                passwordCheckboxProps={{ 'data-resin-target': 'test' }}
+                                passwordInputProps={{ 'data-resin-target': 'test' }}
+                                saveButtonProps={{ 'data-resin-target': 'test' }}
                                 serverURL="https://box.com/v/"
                                 submitting={state.submitting}
                                 vanityName="vanity"
-                                canChangePassword
-                                isPasswordAvailable
-                                isPasswordEnabled={boolean('isPasswordEnabled', false)}
-                                canChangeExpiration
-                                isDownloadAvailable
-                                canChangeDownload
-                                isDownloadEnabled={boolean('isDownloadEnabled', false)}
-                                directLink="https://box.com/download/path"
-                                isDirectLinkAvailable
-                                isDirectLinkUnavailableDueToDownloadSettings={boolean(
-                                    'isDirectLinkUnavailableDueToDownloadSettings',
-                                    false,
-                                )}
-                                isDirectLinkUnavailableDueToAccessPolicy
                                 vanityNameInputProps={{ 'data-resin-target': 'test' }}
-                                passwordCheckboxProps={{ 'data-resin-target': 'test' }}
-                                passwordInputProps={{ 'data-resin-target': 'test' }}
-                                expirationCheckboxProps={{ 'data-resin-target': 'test' }}
-                                expirationInputProps={{ 'data-resin-target': 'test' }}
-                                downloadCheckboxProps={{ 'data-resin-target': 'test' }}
-                                directLinkInputProps={{ 'data-resin-target': 'test' }}
-                                saveButtonProps={{ 'data-resin-target': 'test' }}
-                                cancelButtonProps={{ 'data-resin-target': 'test' }}
-                                modalProps={{ 'data-resin-feature': 'test' }}
                                 warnOnPublic={state.isPublic}
                             />
                         )}

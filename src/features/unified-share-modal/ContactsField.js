@@ -187,11 +187,12 @@ class ContactsField extends React.Component<Props, State> {
 
         return (
             <PillSelectorDropdown
+                ref={fieldRef}
                 allowCustomPills
                 allowInvalidPills
                 className={pillSelectorOverlayClasses}
-                dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 disabled={disabled}
+                dividerIndex={shouldShowSuggested ? numSuggestedShowing : undefined}
                 error={error}
                 getPillClassName={getPillClassName}
                 getPillImageUrl={getContactAvatarUrl}
@@ -201,30 +202,29 @@ class ContactsField extends React.Component<Props, State> {
                 }}
                 label={label}
                 onInput={this.handlePillSelectorInput}
+                onPillCreate={onPillCreate}
                 onRemove={onContactRemove}
                 onSelect={onContactAdd}
-                onPillCreate={onPillCreate}
                 overlayTitle={shouldShowSuggested ? intl.formatMessage(messages.suggestedCollabsTitle) : undefined}
                 parseItems={this.handleParseItems}
                 placeholder={intl.formatMessage(commonMessages.pillSelectorPlaceholder)}
-                ref={fieldRef}
                 selectedOptions={selectedContacts}
+                selectorOptions={contacts}
                 showAvatars
                 showRoundedPills
-                selectorOptions={contacts}
                 validateForError={validateForError}
                 validator={validator}
             >
                 {contacts.map(({ email, isExternalUser, text = null, id }) => (
                     <ContactDatalistItem
-                        getContactAvatarUrl={getContactAvatarUrl}
                         key={id}
+                        getContactAvatarUrl={getContactAvatarUrl}
                         id={id}
                         isExternal={isExternalUser}
                         name={text}
+                        showAvatar={showContactAvatars}
                         subtitle={email || groupLabel}
                         title={text}
-                        showAvatar={showContactAvatars}
                     />
                 ))}
             </PillSelectorDropdown>

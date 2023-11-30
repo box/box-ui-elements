@@ -357,18 +357,18 @@ class Tooltip extends React.Component<TooltipProps, State> {
                 role="presentation"
             >
                 <div
-                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
-                    aria-live="polite"
                     aria-hidden={ariaHidden || isLabelMatchingTooltipText}
+                    aria-live="polite"
                     data-testid="bdl-Tooltip"
+                    role={theme === TooltipTheme.ERROR ? undefined : 'tooltip'}
                 >
                     {tooltipInner}
                 </div>
             </div>
         ) : (
             <div
-                aria-live="polite"
                 aria-hidden={ariaHidden || isLabelMatchingTooltipText}
+                aria-live="polite"
                 className={classes}
                 data-testid="bdl-Tooltip"
                 id={this.tooltipID}

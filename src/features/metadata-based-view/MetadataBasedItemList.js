@@ -257,7 +257,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                 break;
             case FILE_NAME_COLUMN_INDEX:
                 cellData = (
-                    <PlainButton type="button" onClick={() => this.handleItemClick(item)}>
+                    <PlainButton onClick={() => this.handleItemClick(item)} type="button">
                         {name}
                     </PlainButton>
                 );
@@ -288,9 +288,9 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                         {!isCellBeingEdited && <ReadOnlyMetadataField dataValue={value} displayName="" type={type} />}
                         {shouldShowEditIcon && (
                             <IconWithTooltip
-                                type={EDIT_ICON_TYPE}
-                                tooltipText={<FormattedMessage {...messages.editLabel} />}
                                 onClick={() => this.handleEditIconClick(columnIndex, rowIndex, value)}
+                                tooltipText={<FormattedMessage {...messages.editLabel} />}
+                                type={EDIT_ICON_TYPE}
                             />
                         )}
                         {isCellBeingEdited && (
@@ -300,7 +300,6 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                     dataKey={`${id}${key}`}
                                     dataValue={valueBeingEdited}
                                     displayName=""
-                                    type={type}
                                     onChange={(changeKey, changedValue) => {
                                         this.setState({
                                             valueBeingEdited: changedValue,
@@ -312,6 +311,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                         });
                                     }}
                                     options={options}
+                                    type={type}
                                 />
                                 <IconWithTooltip
                                     className="bdl-MetadataBasedItemList-cell--cancelIcon"
@@ -322,10 +322,10 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                 {value !== valueBeingEdited && (
                                     <IconWithTooltip
                                         className="bdl-MetadataBasedItemList-cell--saveIcon"
+                                        isUpdating={isUpdating}
                                         onClick={() => this.handleSave(item, fieldName, type, value, valueBeingEdited)}
                                         tooltipText={<FormattedMessage {...messages.save} />}
                                         type={SAVE_ICON_TYPE}
-                                        isUpdating={isUpdating}
                                     />
                                 )}
                             </div>
@@ -377,8 +377,8 @@ class MetadataBasedItemList extends React.Component<Props, State> {
 
         return (
             <div
-                className={classes}
                 key={key}
+                className={classes}
                 onMouseEnter={() => this.handleMouseEnter(columnIndex, rowIndex)}
                 onMouseLeave={this.handleMouseLeave}
                 style={style}
@@ -433,10 +433,10 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                                 height={height}
                                 hideBottomLeftGridScrollbar
                                 hideTopRightGridScrollbar
+                                onScroll={this.handleContentScroll}
                                 rowCount={rowCount + FIXED_ROW_NUMBER}
                                 rowHeight={50}
                                 width={width}
-                                onScroll={this.handleContentScroll}
                             />
                         </div>
                     );

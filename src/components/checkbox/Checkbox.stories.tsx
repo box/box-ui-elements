@@ -7,11 +7,11 @@ import notes from './Checkbox.stories.md';
 
 export const basic = () => (
     <Checkbox
+        description="isChecked is undefined, which makes this an uncontrolled component. You can turn this one on-off whenever you feel like!"
         fieldLabel="Field Label"
         id="1"
-        name="checkbox1"
         label="Uncontrolled checkbox"
-        description="isChecked is undefined, which makes this an uncontrolled component. You can turn this one on-off whenever you feel like!"
+        name="checkbox1"
     />
 );
 
@@ -24,18 +24,18 @@ export const controlled = () => {
             {state => (
                 <div>
                     <Checkbox
-                        name="checkbox2"
-                        label="Controlled checkbox"
-                        isChecked={state.isChecked}
-                        onChange={handleChange}
                         description="This is a controlled component."
+                        isChecked={state.isChecked}
+                        label="Controlled checkbox"
+                        name="checkbox2"
+                        onChange={handleChange}
                     />
                     <Checkbox
-                        name="checkbox3"
-                        label="Inverted Controlled checkbox"
-                        isChecked={!state.isChecked}
-                        onChange={handleChange}
                         description="This is a controlled component, whose value is the inverse of the one above."
+                        isChecked={!state.isChecked}
+                        label="Inverted Controlled checkbox"
+                        name="checkbox3"
+                        onChange={handleChange}
                     />
                 </div>
             )}
@@ -45,24 +45,24 @@ export const controlled = () => {
 
 export const disabled = () => (
     <Checkbox
-        name="checkbox5"
-        label="Disabled"
         isChecked={boolean('isChecked', true)}
         isDisabled={boolean('isDisabled', true)}
+        label="Disabled"
+        name="checkbox5"
     />
 );
 
 export const withTooltip = () => (
-    <Checkbox name="checkbox6" label="I have a tooltip" tooltip="See? Isn’t this great??" />
+    <Checkbox label="I have a tooltip" name="checkbox6" tooltip="See? Isn’t this great??" />
 );
 
 export const withSubsection = () => (
     <Checkbox
         id="321"
-        name="checkbox321"
         label="Checkbox with subsection"
+        name="checkbox321"
         subsection={
-            <Checkbox id="134" name="checkbox134" label="Subsection checkbox" description="Hi I'm a description" />
+            <Checkbox description="Hi I'm a description" id="134" label="Subsection checkbox" name="checkbox134" />
         }
     />
 );

@@ -317,7 +317,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             const onHandleFtuxCloseClickStub = jest.fn();
             const onOpenConfirmModalStub = jest.fn();
             const onToggleSharedLinkStub = jest.fn();
-            const input = mount(<input type="checkbox" readOnly />);
+            const input = mount(<input readOnly type="checkbox" />);
             const trackingProps = {
                 ...defaultTrackingProps,
                 sharedLinkTracking: {
@@ -354,7 +354,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                     onToggleLink: onToggleSharedLinkStub,
                 },
             };
-            const input = mount(<input type="checkbox" checked readOnly />);
+            const input = mount(<input checked readOnly type="checkbox" />);
 
             const wrapper = getWrapper({
                 sharedLink: {

@@ -135,9 +135,9 @@ class PillSelectorDropdownField extends React.PureComponent<Props, State> {
                 className={className}
                 disabled={isDisabled}
                 dropdownScrollBoundarySelector={dropdownScrollBoundarySelector}
+                error={error}
                 inputProps={inputProps}
                 label={label}
-                error={error}
                 onBlur={this.handleBlur}
                 onInput={this.handleInput}
                 onRemove={this.handleRemove}

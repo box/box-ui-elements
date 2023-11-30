@@ -6,7 +6,7 @@ import ColumnButton from '../components/ColumnButton';
 describe('features/query-bar/components/ColumnButton', () => {
     const getWrapper = (props = {}) => {
         const columns = [columnForDateType, columnWithFloatType];
-        return shallow(<ColumnButton onColumnChange={jest.fn()} columns={columns} {...props} />);
+        return shallow(<ColumnButton columns={columns} onColumnChange={jest.fn()} {...props} />);
     };
 
     describe('render', () => {

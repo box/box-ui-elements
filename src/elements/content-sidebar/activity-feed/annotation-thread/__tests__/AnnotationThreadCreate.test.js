@@ -10,10 +10,10 @@ jest.mock('../../comment-form', () => props => {
         <div>
             {props.isOpen && (
                 <div>
-                    <button type="button" onClick={props.onCancel}>
+                    <button onClick={props.onCancel} type="button">
                         Cancel
                     </button>
-                    <button type="button" onClick={() => props.createComment({ text: 'example message' })}>
+                    <button onClick={() => props.createComment({ text: 'example message' })} type="button">
                         Post
                     </button>
                 </div>

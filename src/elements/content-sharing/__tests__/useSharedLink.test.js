@@ -136,8 +136,8 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                         <FakeComponent
                             api={mockAPI}
                             itemType={itemType}
-                            permissions={MOCK_ITEM_PERMISSIONS}
                             options={{ handleUpdateSharedLinkError, handleUpdateSharedLinkSuccess }}
+                            permissions={MOCK_ITEM_PERMISSIONS}
                         />,
                     );
                 });
@@ -169,8 +169,8 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                         <FakeComponent
                             api={mockAPI}
                             itemType={itemType}
-                            permissions={MOCK_ITEM_PERMISSIONS}
                             options={{ handleRemoveSharedLinkError, handleRemoveSharedLinkSuccess }}
+                            permissions={MOCK_ITEM_PERMISSIONS}
                         />,
                     );
                 });
@@ -208,8 +208,8 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                         <FakeComponent
                             api={mockAPI}
                             itemType={itemType}
-                            permissions={permissions}
                             options={{ handleUpdateSharedLinkError, handleUpdateSharedLinkSuccess }}
+                            permissions={permissions}
                         />,
                     );
                 });
@@ -243,8 +243,8 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                     <FakeComponent
                         api={mockAPI}
                         itemType={TYPE_FILE}
-                        permissions={MOCK_ITEM_PERMISSIONS}
                         options={{ handleUpdateSharedLinkError, transformAccess }}
+                        permissions={MOCK_ITEM_PERMISSIONS}
                     />,
                 );
             });
@@ -263,8 +263,8 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                     <FakeComponent
                         api={mockAPI}
                         itemType={TYPE_FILE}
-                        permissions={MOCK_ITEM_PERMISSIONS}
                         options={{ handleUpdateSharedLinkError, transformPermissions }}
+                        permissions={MOCK_ITEM_PERMISSIONS}
                     />,
                 );
             });
@@ -283,8 +283,8 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                     <FakeComponent
                         api={mockAPI}
                         itemType={TYPE_FILE}
-                        permissions={MOCK_ITEM_PERMISSIONS}
                         options={{ handleUpdateSharedLinkError, transformSettings }}
+                        permissions={MOCK_ITEM_PERMISSIONS}
                     />,
                 );
             });

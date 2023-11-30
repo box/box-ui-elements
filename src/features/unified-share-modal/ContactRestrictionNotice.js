@@ -126,15 +126,15 @@ const ContactRestrictionNotice = ({
     ) : (
         <SingleSelectField
             data-resin-target="justificationReasonsSelect"
-            options={justificationReasons}
             onChange={onSelectJustificationReason}
+            options={justificationReasons}
             placeholder={intl.formatMessage(messages.justificationSelectPlaceholder)}
             selectedValue={selectedValue}
         />
     );
 
     return (
-        <Tooltip text={error} isShown={isErrorTooltipShown} position="middle-right" theme="error">
+        <Tooltip isShown={isErrorTooltipShown} position="middle-right" text={error} theme="error">
             <InlineNotice
                 className="bdl-ContactRestrictionNotice"
                 data-resin-component="contactRestrictionNotice"

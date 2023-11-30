@@ -74,8 +74,8 @@ const Checkbox = ({
                 disabled={isDisabled}
                 id={inputID}
                 name={name}
-                onFocus={onFocus}
                 onChange={onChange}
+                onFocus={onFocus}
                 type="checkbox"
                 {...rest}
             />
@@ -94,7 +94,7 @@ const Checkbox = ({
             {fieldLabel && <div className="label">{fieldLabel}</div>}
             {checkboxAndLabel}
             {description ? (
-                <div id={`description_${inputID}`} className="checkbox-description">
+                <div className="checkbox-description" id={`description_${inputID}`}>
                     {description}
                 </div>
             ) : null}

@@ -14,10 +14,10 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
                 contentExplorerMode="selectFile"
                 foldersPath={[]}
                 intl={{ formatMessage: () => {} }}
-                onFoldersPathUpdated={() => {}}
                 onEnterFolder={() => {}}
-                onSearchSubmit={() => {}}
                 onExitSearch={() => {}}
+                onFoldersPathUpdated={() => {}}
+                onSearchSubmit={() => {}}
                 {...props}
             >
                 {children}

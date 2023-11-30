@@ -30,7 +30,7 @@ const withAutoSizer = WrappedComponent => {
         return (
             <div style={{ flex: 1 }}>
                 <AutoSizer>
-                    {({ width: w, height: h }) => <WrappedComponent {...props} width={w} height={h} />}
+                    {({ width: w, height: h }) => <WrappedComponent {...props} height={h} width={w} />}
                 </AutoSizer>
             </div>
         );
@@ -50,10 +50,10 @@ const itemIconCellRenderer = rendererParams => {
                 itemIconRenderer(rendererParams)
             ) : (
                 <ItemListIcon
-                    type={type}
                     extension={extension}
                     hasCollaborations={hasCollaborations}
                     isExternallyOwned={isExternallyOwned}
+                    type={type}
                 />
             )}
         </div>
@@ -73,13 +73,13 @@ const itemNameCellRenderer = rendererParams => {
         name && (
             <div className={TABLE_CELL_CLASS}>
                 <ItemListName
-                    itemId={id}
-                    type={type}
-                    name={name}
-                    label={label}
                     isSelected={isItemSelected(id, selectedItems)}
-                    onClick={event => onItemNameClick(event, rowIndex)}
+                    itemId={id}
+                    label={label}
                     linkRenderer={itemNameLinkRenderer}
+                    name={name}
+                    onClick={event => onItemNameClick(event, rowIndex)}
+                    type={type}
                 />
             </div>
         )
@@ -171,13 +171,13 @@ const ItemList = ({
 
         if (item.isLoading) {
             return (
-                <div key={key} style={style} className={itemRowClassname} role="row">
+                <div key={key} className={itemRowClassname} role="row" style={style}>
                     {columns.map((column, columnIndex) => (
                         <div
                             key={columnIndex}
                             className={column.props.className}
-                            style={column.props.style}
                             role="gridcell"
+                            style={column.props.style}
                         >
                             {itemLoadingPlaceholderRenderer({
                                 item,
@@ -224,20 +224,20 @@ const ItemList = ({
             <TableComponent
                 gridClassName="table-body"
                 headerClassName="table-header-item"
-                width={width}
                 height={height}
-                rowHeight={rowHeight}
-                rowCount={items.length}
+                noRowsRenderer={noItemsRenderer}
                 onRowClick={onItemClick}
                 onRowDoubleClick={onItemDoubleClick}
+                rowCount={items.length}
                 rowGetter={getRow}
+                rowHeight={rowHeight}
                 rowRenderer={renderRow}
-                noRowsRenderer={noItemsRenderer}
+                width={width}
                 {...tableProps}
             >
                 <Column
-                    className="item-list-icon-col"
                     cellRenderer={itemIconCellRenderer}
+                    className="item-list-icon-col"
                     columnData={{
                         itemIconRenderer,
                     }}
@@ -245,22 +245,22 @@ const ItemList = ({
                     width={32}
                 />
                 <Column
-                    className="item-list-name-col"
                     cellRenderer={itemNameCellRenderer}
+                    className="item-list-name-col"
                     columnData={{
                         selectedItems,
                         onItemNameClick,
                         itemNameLinkRenderer,
                     }}
                     dataKey="name"
-                    width={0}
                     flexGrow={1}
                     flexShrink={0}
+                    width={0}
                 />
                 {additionalColumns}
                 <Column
-                    className="item-list-button-col"
                     cellRenderer={itemButtonCellRenderer}
+                    className="item-list-button-col"
                     columnData={{
                         contentExplorerMode,
                         itemButtonRenderer,

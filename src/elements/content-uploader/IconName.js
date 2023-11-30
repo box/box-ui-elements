@@ -26,7 +26,7 @@ const IconName = ({ name, extension, isFolder = false, isResumableUploadsEnabled
 
     if (isResumableUploadsEnabled && status === STATUS_ERROR) {
         icon = (
-            <Badgeable className="bcu-icon-badge" bottomRight={<IconAlertDefault height={18} width={18} />}>
+            <Badgeable bottomRight={<IconAlertDefault height={18} width={18} />} className="bcu-icon-badge">
                 {icon}
             </Badgeable>
         );

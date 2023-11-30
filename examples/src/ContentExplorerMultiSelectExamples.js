@@ -170,14 +170,14 @@ class ContentExplorerMultiSelectExamples extends Component {
                     contentExplorerMode="multiSelect"
                     headerActionsAccessory={this.renderHeaderActionsAccessory()}
                     initialFoldersPath={INITIAL_FOLDERS_PATH}
-                    onEnterFolder={this.handleEnterFolder}
-                    onChooseItems={this.handleChooseItems}
-                    onSearchSubmit={this.handleSearchSubmit}
-                    onExitSearch={this.handleExitSearch}
-                    showCreateNewFolderButton={false}
                     items={items}
-                    listWidth={600}
                     listHeight={350}
+                    listWidth={600}
+                    onChooseItems={this.handleChooseItems}
+                    onEnterFolder={this.handleEnterFolder}
+                    onExitSearch={this.handleExitSearch}
+                    onSearchSubmit={this.handleSearchSubmit}
+                    showCreateNewFolderButton={false}
                 />
                 <h5>{exampleMessage}</h5>
             </div>

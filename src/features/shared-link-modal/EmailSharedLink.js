@@ -170,16 +170,16 @@ class EmailSharedLink extends Component {
 
         return (
             <form
-                onSubmit={this.sendEmail}
                 className={classNames('email-shared-link', {
                     'is-expanded': isExpanded,
                 })}
+                onSubmit={this.sendEmail}
             >
                 <PillSelectorDropdown
                     allowCustomPills
                     error={pillSelectorError}
-                    label={<FormattedMessage {...messages.emailSharedLink} />}
                     inputProps={{ onFocus: onExpand, ...emailMessageProps }}
+                    label={<FormattedMessage {...messages.emailSharedLink} />}
                     onInput={this.handlePillSelectorInput}
                     onRemove={this.handlePillRemove}
                     onSelect={this.handlePillSelect}

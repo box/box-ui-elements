@@ -18,7 +18,7 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         const replies = cloneDeep(repliesMock);
 
         return render(
-            <ActivityThread replies={replies} repliesTotalCount={2} hasReplies {...props}>
+            <ActivityThread hasReplies replies={replies} repliesTotalCount={2} {...props}>
                 Test
             </ActivityThread>,
             { wrapper: Wrapper },

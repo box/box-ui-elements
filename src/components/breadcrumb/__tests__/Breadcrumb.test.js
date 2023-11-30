@@ -29,7 +29,7 @@ describe('components/breadcrumb/Breadcrumb', () => {
 
     test('should render dotdotdot crumbs if number of children exceeds threshold', () => {
         wrapper = shallow(
-            <Breadcrumb threshold={4} intl={intl}>
+            <Breadcrumb intl={intl} threshold={4}>
                 <Link>Home</Link>
                 <Link>Box Engineering</Link>
                 <Link>Frameworks</Link>

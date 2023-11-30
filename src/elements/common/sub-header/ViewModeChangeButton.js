@@ -33,16 +33,16 @@ const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, intl, v
         <Tooltip text={viewMessage}>
             <Button
                 aria-label={viewMessage}
-                data-testid="view-mode-change-button"
                 className={classNames('bdl-ViewModeChangeButton', className)}
-                type="button"
+                data-testid="view-mode-change-button"
                 onClick={onClick}
+                type="button"
                 {...rest}
             >
                 {isGridView ? (
-                    <IconListView color={bdlGray65} width={17} height={17} />
+                    <IconListView color={bdlGray65} height={17} width={17} />
                 ) : (
-                    <IconGridViewInverted color={bdlGray65} width={17} height={17} />
+                    <IconGridViewInverted color={bdlGray65} height={17} width={17} />
                 )}
             </Button>
         </Tooltip>

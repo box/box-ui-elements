@@ -14,12 +14,12 @@ const IconAutoCAD = ({ className = '', height = 30, title, width = 30 }: TwoTone
     >
         <defs>
             <radialGradient
-                id="b"
                 cx="527.83"
                 cy="-1214.99"
-                r="25.46"
                 gradientTransform="matrix(-.36 .92 .68 .26 1034.4 -168.33)"
                 gradientUnits="userSpaceOnUse"
+                id="b"
+                r="25.46"
             >
                 <stop offset="0" stopColor="#69252a" />
                 <stop offset=".15" stopColor="#803639" />
@@ -27,12 +27,12 @@ const IconAutoCAD = ({ className = '', height = 30, title, width = 30 }: TwoTone
                 <stop offset=".74" stopColor="#f48a82" />
             </radialGradient>
             <radialGradient
-                id="c"
                 cx="156.62"
                 cy="-1575.38"
-                r="25.12"
                 gradientTransform="matrix(-.37 .92 .67 .26 1117.49 283.6)"
                 gradientUnits="userSpaceOnUse"
+                id="c"
+                r="25.12"
             >
                 <stop offset="0" stopColor="#793835" />
                 <stop offset=".14" stopColor="#904743" />
@@ -40,12 +40,12 @@ const IconAutoCAD = ({ className = '', height = 30, title, width = 30 }: TwoTone
                 <stop offset=".61" stopColor="#f48a82" />
             </radialGradient>
             <radialGradient
-                id="d"
                 cx="-29.13"
                 cy="-947.08"
-                r="25.66"
                 gradientTransform="matrix(.26 .95 .72 -.19 711.16 -140.86)"
                 gradientUnits="userSpaceOnUse"
+                id="d"
+                r="25.66"
             >
                 <stop offset="0" stopColor="#793835" />
                 <stop offset=".13" stopColor="#803c39" />
@@ -55,26 +55,26 @@ const IconAutoCAD = ({ className = '', height = 30, title, width = 30 }: TwoTone
                 <stop offset=".87" stopColor="#f48a82" />
             </radialGradient>
             <linearGradient
-                id="a"
-                x1="4"
-                y1="778.43"
-                x2="10.06"
-                y2="765.34"
                 gradientTransform="matrix(1 0 0 -1 0 795.88)"
                 gradientUnits="userSpaceOnUse"
+                id="a"
+                x1="4"
+                x2="10.06"
+                y1="778.43"
+                y2="765.34"
             >
                 <stop offset="0" stopColor="#512427" />
                 <stop offset=".96" stopColor="#be2c34" />
             </linearGradient>
-            <linearGradient id="e" x1="25.41" y1="757.72" x2="19.95" y2="774.02" xlinkHref="#a" />
+            <linearGradient id="e" x1="25.41" x2="19.95" xlinkHref="#a" y1="757.72" y2="774.02" />
             <linearGradient
-                id="f"
-                x1="18.72"
-                y1="800.38"
-                x2="-.27"
-                y2="773.64"
                 gradientTransform="matrix(1 0 0 -1 0 795.88)"
                 gradientUnits="userSpaceOnUse"
+                id="f"
+                x1="18.72"
+                x2="-.27"
+                y1="800.38"
+                y2="773.64"
             >
                 <stop offset="0" stopColor="#d22" />
                 <stop offset=".04" stopColor="#d32424" />
@@ -84,12 +84,12 @@ const IconAutoCAD = ({ className = '', height = 30, title, width = 30 }: TwoTone
                 <stop offset=".98" stopColor="#682427" />
             </linearGradient>
             <radialGradient
-                id="g"
                 cx="186.38"
                 cy="-1038.13"
-                r="37.77"
                 gradientTransform="matrix(.24 .97 .64 -.16 641.18 -344.62)"
                 gradientUnits="userSpaceOnUse"
+                id="g"
+                r="37.77"
             >
                 <stop offset="0" stopColor="#d22" />
                 <stop offset=".74" stopColor="#942325" />
@@ -97,13 +97,13 @@ const IconAutoCAD = ({ className = '', height = 30, title, width = 30 }: TwoTone
                 <stop offset="1" stopColor="#752326" />
             </radialGradient>
             <linearGradient
-                id="h"
-                x1="-.17"
-                y1="773.63"
-                x2="27.91"
-                y2="778"
                 gradientTransform="matrix(1 0 0 -1 0 795.88)"
                 gradientUnits="userSpaceOnUse"
+                id="h"
+                x1="-.17"
+                x2="27.91"
+                y1="773.63"
+                y2="778"
             >
                 <stop offset="0" stopColor="#512427" />
                 <stop offset=".25" stopColor="#752326" />

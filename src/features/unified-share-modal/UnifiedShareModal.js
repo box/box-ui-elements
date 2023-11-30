@@ -179,8 +179,8 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                         title={
                             <UnifiedShareModalTitle
                                 isEmailLinkSectionExpanded={isEmailLinkSectionExpanded}
-                                showCollaboratorList={showCollaboratorList}
                                 item={item}
+                                showCollaboratorList={showCollaboratorList}
                             />
                         }
                         {...extendedModalProps}

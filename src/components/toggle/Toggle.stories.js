@@ -8,9 +8,9 @@ import notes from './Toggle.stories.md';
 
 export const basic = () => (
     <Toggle
-        name="toggle1"
-        label="Uncontrolled toggle"
         description="isOn is undefined, which makes this an uncontrolled component. You can turn this one on or off whenever you want."
+        label="Uncontrolled toggle"
+        name="toggle1"
     />
 );
 
@@ -32,18 +32,18 @@ export const controlled = () => {
             {state => (
                 <div>
                     <Toggle
-                        name="toggle2"
-                        label="Controlled toggle"
-                        isOn={state.isOn}
-                        onChange={onToggle}
                         description="This is a controlled component."
+                        isOn={state.isOn}
+                        label="Controlled toggle"
+                        name="toggle2"
+                        onChange={onToggle}
                     />
                     <Toggle
-                        name="toggle3"
-                        label="Inverted controlled toggle"
-                        isOn={!state.isOn}
-                        onChange={onToggle}
                         description="This is a controlled component, whose value is the inverse of the one above."
+                        isOn={!state.isOn}
+                        label="Inverted controlled toggle"
+                        name="toggle3"
+                        onChange={onToggle}
                     />
                 </div>
             )}
@@ -51,7 +51,7 @@ export const controlled = () => {
     );
 };
 
-export const disabled = () => <Toggle name="toggle4" label="Disabled" isDisabled={boolean('isDisabled', true)} />;
+export const disabled = () => <Toggle isDisabled={boolean('isDisabled', true)} label="Disabled" name="toggle4" />;
 
 export default {
     title: 'Components|Toggle',

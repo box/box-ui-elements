@@ -111,31 +111,25 @@ const ItemList = ({
 
     return (
         <KeyBinder
-            columnCount={1}
-            rowCount={rowCount}
             className="bcp-item-grid"
+            columnCount={1}
             id={id}
             items={items}
-            onSelect={onItemSelect}
             onOpen={onItemClick}
-            scrollToRow={focusedRow}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bcp-item-row-${scrollToRow}`)}
+            onSelect={onItemSelect}
+            rowCount={rowCount}
+            scrollToRow={focusedRow}
         >
             {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
                     {({ width, height }) => (
                         <Table
-                            width={width}
-                            height={height}
+                            ref={tableRef}
                             disableHeader
                             headerHeight={0}
-                            rowHeight={isSmall ? 70 : 50}
-                            rowCount={rowCount}
-                            rowGetter={({ index }) => items[index]}
-                            ref={tableRef}
-                            rowClassName={rowClassName}
+                            height={height}
                             onRowClick={onRowClick}
-                            scrollToIndex={scrollToRow}
                             onRowsRendered={({ startIndex, stopIndex }) => {
                                 onSectionRendered({
                                     rowStartIndex: startIndex,
@@ -145,27 +139,33 @@ const ItemList = ({
                                     focus(rootElement, `.bcp-item-row-${scrollToRow}`);
                                 }
                             }}
+                            rowClassName={rowClassName}
+                            rowCount={rowCount}
+                            rowGetter={({ index }) => items[index]}
+                            rowHeight={isSmall ? 70 : 50}
+                            scrollToIndex={scrollToRow}
+                            width={width}
                         >
                             <Column
-                                dataKey={FIELD_ID}
                                 cellRenderer={iconCell}
-                                width={isSmall ? 30 : 50}
+                                dataKey={FIELD_ID}
                                 flexShrink={0}
+                                width={isSmall ? 30 : 50}
                             />
-                            <Column dataKey={FIELD_NAME} cellRenderer={nameCell} width={300} flexGrow={1} />
+                            <Column cellRenderer={nameCell} dataKey={FIELD_NAME} flexGrow={1} width={300} />
                             {isSmall ? null : (
                                 <Column
-                                    dataKey={FIELD_SHARED_LINK}
                                     cellRenderer={shareAccessCell}
-                                    width={260}
+                                    dataKey={FIELD_SHARED_LINK}
                                     flexShrink={0}
+                                    width={260}
                                 />
                             )}
                             <Column
-                                dataKey={FIELD_ID}
                                 cellRenderer={selectionCell}
-                                width={isSmall ? 20 : 30}
+                                dataKey={FIELD_ID}
                                 flexShrink={0}
+                                width={isSmall ? 20 : 30}
                             />
                         </Table>
                     )}

@@ -131,8 +131,8 @@ class DraftJSEditor extends React.Component<Props> {
                     <div>
                         <Editor
                             {...a11yProps}
-                            ariaLabelledBy={this.labelID}
                             ariaDescribedBy={this.descriptionID}
+                            ariaLabelledBy={this.labelID}
                             editorState={editorState}
                             handleReturn={this.handleReturn}
                             onBlur={handleBlur}

@@ -115,12 +115,12 @@ class ScrollWrapper extends React.Component<Props, State> {
         return (
             <div className={classes} {...rest}>
                 <div
-                    className={classNames('scroll-wrap-container', `style--${shadowSize}`)}
-                    onScroll={this.throttledOnContentScroll}
                     ref={el => {
                         this.scrollRef = el;
                         scrollRefFn(el);
                     }}
+                    className={classNames('scroll-wrap-container', `style--${shadowSize}`)}
+                    onScroll={this.throttledOnContentScroll}
                 >
                     {children}
                 </div>

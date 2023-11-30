@@ -12,7 +12,7 @@ const IconLightning = ({ className = '', height = 24, title, width = 24 }: TwoTo
         viewBox="0 0 32 32"
         width={width}
     >
-        <circle className="background-color" fill={bdlBoxBlue} cx="16" cy="16" r="12" />
+        <circle className="background-color" cx="16" cy="16" fill={bdlBoxBlue} r="12" />
         <polygon
             className="foreground-color"
             fill={white}

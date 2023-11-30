@@ -64,16 +64,16 @@ const getWrapper = props =>
         <IntlProvider locale="en">
             <Replies
                 {...commentProps}
-                parentID="123"
                 hasReplies
-                isRepliesLoading={false}
                 isParentPending={false}
-                replies={replies}
-                onReplySelect={replySelect}
+                isRepliesLoading={false}
+                onHideReplies={hideReplies}
                 onReplyCreate={replyCreate}
                 onReplyDelete={replyDelete}
+                onReplySelect={replySelect}
                 onShowReplies={showReplies}
-                onHideReplies={hideReplies}
+                parentID="123"
+                replies={replies}
                 {...props}
             />
         </IntlProvider>,

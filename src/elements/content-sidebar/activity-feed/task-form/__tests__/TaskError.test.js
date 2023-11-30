@@ -21,7 +21,7 @@ describe('components/content-sidebar/activity-feed/task-form/TaskError', () => {
     ])(
         'when type is %s and edit mode is %s, with error obj %o, we show the proper inline error',
         (taskType, editMode, error) => {
-            const wrapper = mount(<TaskError taskType={taskType} editMode={editMode} error={error} />);
+            const wrapper = mount(<TaskError editMode={editMode} error={error} taskType={taskType} />);
             expect(wrapper).toMatchSnapshot();
         },
     );

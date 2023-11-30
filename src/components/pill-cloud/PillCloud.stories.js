@@ -27,12 +27,12 @@ export const regular = () => {
     return (
         <div>
             <PillCloud
+                buttonProps={{ 'data-button-type': 'pill-btn' }}
                 onSelect={option => {
                     setSelectedOption(option);
                 }}
                 options={pills}
                 selectedOptions={[selectedOption]}
-                buttonProps={{ 'data-button-type': 'pill-btn' }}
             />
             <div id="pill-cloud-output">Selected Pill: {selectedOption.displayText}</div>
         </div>

@@ -134,13 +134,13 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             <>
                 <SelectorDropdown
                     className="metadata-instance-editor-template-dropdown-menu"
-                    title={title}
                     isAlwaysOpen
                     onSelect={(index: number) => {
                         onAdd(templates[index]);
                     }}
                     selector={this.getSelector()}
                     shouldScroll
+                    title={title}
                 >
                     {indicatorOrMessage ? null : renderedTemplates}
                 </SelectorDropdown>
@@ -241,7 +241,7 @@ class TemplateDropdown extends React.PureComponent<Props, State> {
             return entryButton;
         }
         return (
-            <PlainButton data-resin-target="metadata-templateaddmenu" className={buttonToggleClassName} type="button">
+            <PlainButton className={buttonToggleClassName} data-resin-target="metadata-templateaddmenu" type="button">
                 <MenuToggle>
                     <FormattedMessage {...messages.metadataTemplateAdd} />
                 </MenuToggle>

@@ -49,12 +49,12 @@ function mapActivityNodes(node: HTMLLinkElement): React.Node {
         case 'A':
             return (
                 <Link
-                    href={href}
-                    data-resin-target={dataset.resinTarget}
-                    data-resin-action={dataset.resinAction}
                     key={`app_actvity_link_${href}`}
-                    rel="roreferrer noopener"
                     className="bcs-AppActivity-link"
+                    data-resin-action={dataset.resinAction}
+                    data-resin-target={dataset.resinTarget}
+                    href={href}
+                    rel="roreferrer noopener"
                     target="_blank"
                 >
                     {textContent}
@@ -123,8 +123,8 @@ class AppActivity extends React.PureComponent<Props, State> {
         return (
             <ActivityCard
                 className="bcs-AppActivity"
-                data-resin-target="loaded"
                 data-resin-feature={`appActivityCard${templateId}`}
+                data-resin-target="loaded"
             >
                 <Media
                     className={classNames({
@@ -133,8 +133,8 @@ class AppActivity extends React.PureComponent<Props, State> {
                 >
                     <Media.Figure>
                         <img
-                            className="bcs-AppActivity-icon"
                             alt={intl.formatMessage(messages.appActivityAltIcon, { appActivityName: name })}
+                            className="bcs-AppActivity-icon"
                             src={icon_url}
                         />
                     </Media.Figure>

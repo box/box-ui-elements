@@ -59,16 +59,16 @@ const ItemList = ({
                         width={300}
                     />
                     <Column
-                        className={isResumableUploadsEnabled ? '' : 'bcu-item-list-action-column'}
                         cellRenderer={actionCell}
+                        className={isResumableUploadsEnabled ? '' : 'bcu-item-list-action-column'}
                         dataKey="status"
                         flexShrink={0}
                         width={onUpgradeCTAClick ? 100 : 25}
                     />
                     {isResumableUploadsEnabled && (
                         <Column
-                            className="bcu-item-list-action-column"
                             cellRenderer={removeCell}
+                            className="bcu-item-list-action-column"
                             dataKey="remove"
                             flexShrink={0}
                             width={25}

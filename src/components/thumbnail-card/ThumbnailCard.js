@@ -28,9 +28,9 @@ const ThumbnailCard = ({
     ...rest
 }: Props) => (
     <div
+        className={classNames('thumbnail-card', className, { 'is-highlight-applied': highlightOnHover })}
         role="button"
         tabIndex="0"
-        className={classNames('thumbnail-card', className, { 'is-highlight-applied': highlightOnHover })}
         {...rest}
     >
         <ThumbnailCardThumbnail thumbnail={thumbnail} />

@@ -38,18 +38,18 @@ export const withCustomValidation = () => {
 };
 
 export const withMinimumLength = () => (
-    <TextInput minLength={3} name="minlenCheck" label="Minimum length" placeholder="Three or more" type="text" />
+    <TextInput label="Minimum length" minLength={3} name="minlenCheck" placeholder="Three or more" type="text" />
 );
 
 export const withMaximumLength = () => (
-    <TextInput maxLength={5} name="maxlenCheck" label="Maximum length" placeholder="Five or less" type="text" />
+    <TextInput label="Maximum length" maxLength={5} name="maxlenCheck" placeholder="Five or less" type="text" />
 );
 
 export const withTooltipOnHover = () => (
     <TextInput
-        name="tooltipCheck"
         label="Tooltip on hover"
         labelTooltip="I am the tooltip"
+        name="tooltipCheck"
         placeholder="Hover over the label"
         type="text"
     />
@@ -57,20 +57,20 @@ export const withTooltipOnHover = () => (
 
 export const withHiddenLabel = () => (
     <TextInput
+        hideLabel
         label="This label text should be hidden"
         name="hidden label"
         placeholder="Hidden (but accessible) label text"
         type="text"
-        hideLabel
     />
 );
 
 export const disabledInput = () => (
-    <TextInput name="disabled" isDisabled label="Disabled" placeholder="Disabled input" type="text" />
+    <TextInput isDisabled label="Disabled" name="disabled" placeholder="Disabled input" type="text" />
 );
 
 export const loading = () => (
-    <TextInput name="loading" isDisabled isLoading label="Loading" placeholder="Loading..." type="text" />
+    <TextInput isDisabled isLoading label="Loading" name="loading" placeholder="Loading..." type="text" />
 );
 
 export default {

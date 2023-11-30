@@ -106,8 +106,8 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestC
                     <BoxAiLogo
                         className="bdl-BoxAiLogo"
                         data-testid="content-answers-icon-color"
-                        width={32}
                         height={32}
+                        width={32}
                     />
                     <FormattedMessage {...messages.contentAnswersTitle} />
                 </>

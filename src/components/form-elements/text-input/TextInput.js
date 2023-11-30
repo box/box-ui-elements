@@ -191,28 +191,28 @@ class TextInput extends React.Component<Props, State> {
             <div className={className}>
                 <FormInput name={name} onValidityStateUpdate={this.onValidityStateUpdateHandler}>
                     <TextInputCore
-                        disabled={isDisabled}
-                        label={label}
-                        isRequired={isRequired}
-                        error={error ? error.message : null}
                         autoFocus={autoFocus}
+                        disabled={isDisabled}
+                        error={error ? error.message : null}
+                        hideLabel={hideLabel}
+                        inputRef={input => {
+                            this.input = input;
+                        }}
+                        isLoading={isLoading}
+                        isRequired={isRequired}
+                        label={label}
+                        labelTooltip={labelTooltip}
                         maxLength={maxLength}
                         minLength={minLength}
                         name={name}
                         onBlur={this.checkValidity}
-                        onFocus={onFocus}
                         onChange={this.onChange}
+                        onFocus={onFocus}
                         pattern={pattern}
                         placeholder={placeholder}
-                        inputRef={input => {
-                            this.input = input;
-                        }}
+                        readOnly={isReadOnly}
                         type={type}
                         value={value}
-                        readOnly={isReadOnly}
-                        isLoading={isLoading}
-                        labelTooltip={labelTooltip}
-                        hideLabel={hideLabel}
                     />
                 </FormInput>
             </div>

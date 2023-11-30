@@ -14,7 +14,7 @@ type Props = {
 
 const CloseButton = ({ intl, onClick }: Props) => (
     <PlainButton aria-label={intl.formatMessage(messages.close)} className="tooltip-close-button" onClick={onClick}>
-        <IconClose className="bdl-Tooltip-iconClose" width={14} height={14} />
+        <IconClose className="bdl-Tooltip-iconClose" height={14} width={14} />
     </PlainButton>
 );
 

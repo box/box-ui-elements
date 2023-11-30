@@ -50,11 +50,11 @@ function CollapsibleSidebarItem(props: Props) {
 
     const wrappedCollapsedElement = (
         <Tooltip
+            isDisabled={!tooltipMessage}
+            isShown={shouldHideTooltip ? false : undefined}
             isTabbable={false}
             position="middle-right"
             text={tooltipMessage}
-            isDisabled={!tooltipMessage}
-            isShown={shouldHideTooltip ? false : undefined}
         >
             {collapsedElement}
         </Tooltip>

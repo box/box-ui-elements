@@ -12,13 +12,13 @@ const addSpacing = (component: JSX.Element) => <div style={{ textAlign: 'center'
 export const allOptionsWithIcon = () =>
     addSpacing(
         <GuideTooltip
-            title="Lorem Ipsum"
             body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             icon={<FolderShared32 />}
-            steps={[1, 3]}
             /* eslint-disable no-console */
             primaryButtonProps={{ children: 'Next', onClick: () => console.log('next') }}
             secondaryButtonProps={{ children: 'Back', onClick: () => console.log('back') }}
+            steps={[1, 3]}
+            title="Lorem Ipsum"
             /* eslint-enable no-console */
         >
             <Button>example</Button>
@@ -32,9 +32,9 @@ allOptionsWithIcon.story = {
 export const titleImageBody = () =>
     addSpacing(
         <GuideTooltip
-            title="Lorem Ipsum"
             body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-            image={<img src={testImageSrc} alt="Lorem ipsum dolor" />}
+            image={<img alt="Lorem ipsum dolor" src={testImageSrc} />}
+            title="Lorem Ipsum"
         >
             <Button>example</Button>
         </GuideTooltip>,
@@ -47,10 +47,10 @@ titleImageBody.story = {
 export const noButtons = () =>
     addSpacing(
         <GuideTooltip
-            title="Lorem Ipsum"
             body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             icon={<FolderShared32 />}
             steps={[1, 3]}
+            title="Lorem Ipsum"
         >
             <Button>example</Button>
         </GuideTooltip>,
@@ -63,8 +63,8 @@ noButtons.story = {
 export const onlyTitleBody = () =>
     addSpacing(
         <GuideTooltip
-            title="Lorem Ipsum"
             body="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            title="Lorem Ipsum"
         >
             <Button>example</Button>
         </GuideTooltip>,

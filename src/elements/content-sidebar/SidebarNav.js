@@ -57,7 +57,7 @@ const SidebarNav = ({
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
 
     return (
-        <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
+        <div aria-label={intl.formatMessage(messages.sidebarNavLabel)} className="bcs-SidebarNav">
             <div className="bcs-SidebarNav-tabs">
                 <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
                     {hasActivity && (

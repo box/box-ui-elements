@@ -172,21 +172,21 @@ class ContentExplorerMultiSelectModalContainerExamples extends Component {
                 {isModalOpen && (
                     <ContentExplorerModalContainer
                         className="content-explorer-multi-select-modal-example"
-                        headerActionsAccessory={this.renderHeaderActionsAccessory()}
-                        modalTitle="Select multiple items"
-                        modalDescription="This is some optional description text."
-                        onRequestClose={this.closeModal}
                         contentExplorerMode="multiSelect"
+                        headerActionsAccessory={this.renderHeaderActionsAccessory()}
                         initialFoldersPath={foldersPath}
                         isCreateNewFolderAllowed={false}
-                        onEnterFolder={this.handleEnterFolder}
-                        onSearchSubmit={this.handleSearchSubmit}
-                        onExitSearch={this.handleExitSearch}
-                        showCreateNewFolderButton={false}
                         items={items}
+                        modalDescription="This is some optional description text."
+                        modalTitle="Select multiple items"
                         numItemsPerPage={100}
                         numTotalItems={items.length}
+                        onEnterFolder={this.handleEnterFolder}
+                        onExitSearch={this.handleExitSearch}
                         onLoadMoreItems={() => {}}
+                        onRequestClose={this.closeModal}
+                        onSearchSubmit={this.handleSearchSubmit}
+                        showCreateNewFolderButton={false}
                     />
                 )}
             </div>

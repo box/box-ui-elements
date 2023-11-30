@@ -139,7 +139,7 @@ const QuickSearchItem = ({
 
     const itemName =
         href && shouldNavigateOnItemClick ? (
-            <Link onClick={e => e.stopPropagation()} className="item-name" href={href} title={name} {...targetProps}>
+            <Link className="item-name" href={href} onClick={e => e.stopPropagation()} title={name} {...targetProps}>
                 {markedQueryMatches}
             </Link>
         ) : (
@@ -158,7 +158,7 @@ const QuickSearchItem = ({
                 <span className="item-subtext">
                     {(parentName || parentFolderRenderer) && (
                         <>
-                            <Folder16 title={<FormattedMessage {...messages.parentFolder} />} height={12} width={12} />
+                            <Folder16 height={12} title={<FormattedMessage {...messages.parentFolder} />} width={12} />
 
                             {parentFolderRenderer ? (
                                 parentFolderRenderer(itemData, closeDropdown)

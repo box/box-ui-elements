@@ -26,7 +26,7 @@ const PopperComponent = (props: Props) => {
         <Manager>
             <Reference>{({ ref }) => React.cloneElement(reference, { ref })}</Reference>
             {isOpen && (
-                <Popper placement={popperPlacement} modifiers={modifiers}>
+                <Popper modifiers={modifiers} placement={popperPlacement}>
                     {({ ref, style, placement, scheduleUpdate }) => {
                         const { style: contentStyles } = popperContent.props;
                         return React.cloneElement(popperContent, {

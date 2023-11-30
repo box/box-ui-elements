@@ -10,7 +10,6 @@ module.exports = {
         'react/default-props-match-prop-types': 'off', // fixme
         'react/destructuring-assignment': 'off', // fixme
         'react/forbid-prop-types': 'off', // fixme
-        'react/jsx-sort-props': 'off', // fixme
         'react/jsx-no-bind': 'off', // fixme
         'react/sort-comp': 'off', // fixme
         'react/no-unused-prop-types': 'off', // fixme

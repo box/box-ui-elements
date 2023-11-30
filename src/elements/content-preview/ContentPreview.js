@@ -1320,30 +1320,30 @@ class ContentPreview extends React.PureComponent<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: API)}>
                     <div
-                        id={this.id}
-                        className={styleClassName}
                         ref={measureRef}
+                        className={styleClassName}
+                        id={this.id}
                         onKeyDown={this.onKeyDown}
                         tabIndex={0}
                     >
                         {hasHeader && (
                             <PreviewHeader
-                                file={file}
-                                logoUrl={logoUrl}
-                                token={token}
-                                onClose={onHeaderClose}
-                                onPrint={this.print}
+                                canAnnotate={this.canAnnotate()}
                                 canDownload={this.canDownload()}
                                 canPrint={canPrint}
-                                onDownload={this.download}
                                 contentAnswersProps={contentAnswersProps}
                                 contentOpenWithProps={contentOpenWithProps}
-                                canAnnotate={this.canAnnotate()}
+                                file={file}
+                                logoUrl={logoUrl}
+                                onClose={onHeaderClose}
+                                onDownload={this.download}
+                                onPrint={this.print}
                                 selectedVersion={selectedVersion}
+                                token={token}
                             />
                         )}
                         <div className="bcpr-body">
-                            <div className="bcpr-container" onMouseMove={this.onMouseMove} ref={this.containerRef}>
+                            <div ref={this.containerRef} className="bcpr-container" onMouseMove={this.onMouseMove}>
                                 {file && (
                                     <Measure bounds onResize={this.onResize}>
                                         {({ measureRef: previewRef }) => (
@@ -1362,8 +1362,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             {file && (
                                 <LoadableSidebar
                                     {...contentSidebarProps}
+                                    ref={this.contentSidebar}
                                     apiHost={apiHost}
-                                    token={token}
                                     cache={this.api.getCache()}
                                     fileId={currentFileId}
                                     getPreview={this.getPreview}
@@ -1371,20 +1371,20 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                     history={history}
                                     isDefaultOpen={isLarge || isVeryLarge}
                                     language={language}
-                                    ref={this.contentSidebar}
-                                    sharedLink={sharedLink}
-                                    sharedLinkPassword={sharedLinkPassword}
-                                    requestInterceptor={requestInterceptor}
-                                    responseInterceptor={responseInterceptor}
                                     onAnnotationSelect={this.handleAnnotationSelect}
                                     onVersionChange={this.onVersionChange}
+                                    requestInterceptor={requestInterceptor}
+                                    responseInterceptor={responseInterceptor}
+                                    sharedLink={sharedLink}
+                                    sharedLinkPassword={sharedLinkPassword}
+                                    token={token}
                                 />
                             )}
                         </div>
                         {isReloadNotificationVisible && (
                             <ReloadNotification
-                                onClose={this.closeReloadNotification}
                                 onClick={this.loadFileFromStage}
+                                onClose={this.closeReloadNotification}
                             />
                         )}
                     </div>

@@ -20,8 +20,8 @@ const getWrapper = props =>
             <RepliesToggle
                 id="123"
                 isRepliesLoading={false}
-                onShowReplies={showReplies}
                 onHideReplies={hideReplies}
+                onShowReplies={showReplies}
                 repliesShownCount={shownCount}
                 repliesTotalCount={totalCount}
                 {...props}

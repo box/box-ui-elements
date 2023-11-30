@@ -95,15 +95,15 @@ class GridView extends React.Component<Props> {
             <Table
                 className="bdl-GridView"
                 disableHeader
+                gridClassName="bdl-GridView-body"
                 height={height}
+                rowClassName="bdl-GridView-tableRow"
                 rowCount={rowCount}
                 rowGetter={this.rowGetter}
                 rowHeight={this.cache.rowHeight}
-                width={width}
-                gridClassName="bdl-GridView-body"
-                rowClassName="bdl-GridView-tableRow"
                 scrollToIndex={scrollToRow}
                 sortDirection="ASC"
+                width={width}
             >
                 <Column cellRenderer={this.cellRenderer} dataKey="" flexGrow={1} width={400} />
             </Table>

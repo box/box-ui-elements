@@ -86,7 +86,7 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
                     <DraggableList className="draggable-list-example" listId={listId} onDragEnd={this.onDragEnd}>
                         {pendingColumns.map((item, index) => {
                             return (
-                                <PortaledDraggableListItem id={item.id} index={index} isDraggableViaHandle key={index}>
+                                <PortaledDraggableListItem key={index} id={item.id} index={index} isDraggableViaHandle>
                                     <Checkbox
                                         isChecked={item.isShown}
                                         label={item.displayName}
@@ -99,7 +99,7 @@ class ColumnButtonOverlay extends React.Component<Props, State> {
                     </DraggableList>
                 </div>
                 <div className="column-button-dropdown-footer">
-                    <PrimaryButton type="button" onClick={this.applyFilters}>
+                    <PrimaryButton onClick={this.applyFilters} type="button">
                         <FormattedMessage {...messages.applyFiltersButtonText} />
                     </PrimaryButton>
                 </div>

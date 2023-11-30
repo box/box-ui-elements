@@ -6,11 +6,11 @@ import notes from './TextInputWithCopyButton.stories.md';
 
 export const example = () => (
     <TextInputWithCopyButton
-        label="Copy this"
-        value="https://www.box.com/platform"
         buttonDefaultText="Copy"
         buttonSuccessText="Copied"
+        label="Copy this"
         type="url"
+        value="https://www.box.com/platform"
     />
 );
 

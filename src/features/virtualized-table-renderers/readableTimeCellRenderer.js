@@ -6,7 +6,7 @@ import type { CellRendererParams } from './flowTypes';
 
 const readableTimeCellRenderer = (cellRendererParams: CellRendererParams) =>
     baseCellRenderer(cellRendererParams, cellValue => (
-        <ReadableTime timestamp={Date.parse(cellValue)} alwaysShowTime />
+        <ReadableTime alwaysShowTime timestamp={Date.parse(cellValue)} />
     ));
 
 export default readableTimeCellRenderer;

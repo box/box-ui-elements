@@ -20,7 +20,7 @@ const LOADING_TABS = [
 ];
 
 const AdditionalTabsLoading = (): Array<React.Element<any>> => {
-    return LOADING_TABS.map((LoadingComponent, idx) => <LoadingComponent isLoading key={idx} />);
+    return LOADING_TABS.map((LoadingComponent, idx) => <LoadingComponent key={idx} isLoading />);
 };
 
 export default AdditionalTabsLoading;

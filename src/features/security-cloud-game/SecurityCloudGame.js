@@ -201,7 +201,7 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
      */
     return (
         <div>
-            <div className="bdl-SecurityCloudGame-liveText" aria-live="polite">
+            <div aria-live="polite" className="bdl-SecurityCloudGame-liveText">
                 {liveText}
             </div>
             <div className="bdl-SecurityCloudGame" style={{ height: `${height}px`, width: `${width}px` }}>
@@ -214,8 +214,8 @@ const SecurityCloudGame = ({ height, intl: { formatMessage }, onValidDrop, width
                 >
                     <div
                         ref={messageElementRef}
-                        className="bdl-SecurityCloudGame-message"
                         aria-label={getAccessibilityInstructions()}
+                        className="bdl-SecurityCloudGame-message"
                     >
                         {renderMessage()}
                     </div>

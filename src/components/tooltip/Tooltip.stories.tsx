@@ -79,9 +79,9 @@ export const withOffset = () => {
     return addSpacing(
         <Tooltip
             isShown={boolean('isShown', true)}
+            offset={text('offset', '0 20px')}
             position={select('Positions', positions, TooltipPosition.MIDDLE_LEFT)}
             text="this tooltip has 20px offset"
-            offset={text('offset', '0 20px')}
         >
             <Button>Learn more</Button>
         </Tooltip>,

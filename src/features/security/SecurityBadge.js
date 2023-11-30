@@ -22,7 +22,7 @@ const SecurityBadge = ({ className, color, icon, message, ...rest }: Props) => (
 );
 
 SecurityBadge.defaultProps = {
-    icon: <IconAlertDefault color={bdlYellow50} height={22} width={22} strokeWidth={3} />,
+    icon: <IconAlertDefault color={bdlYellow50} height={22} strokeWidth={3} width={22} />,
 };
 
 export default SecurityBadge;

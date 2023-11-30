@@ -206,14 +206,14 @@ class TabViewPrimitive extends React.Component<Props, State> {
 
         return (
             <div
-                className="tabs"
-                role="tablist"
-                tabIndex="0"
                 ref={ref => {
                     this.tabsContainer = ref;
                 }}
-                style={style}
+                className="tabs"
                 onKeyDown={!isDynamic ? this.handleKeyDown : null}
+                role="tablist"
+                style={style}
+                tabIndex="0"
             >
                 {React.Children.map(children, (tab, i) => {
                     const buttonProps = omit(tab.props, ['className', 'children', 'title']);
@@ -230,19 +230,19 @@ class TabViewPrimitive extends React.Component<Props, State> {
                     if (href) {
                         return (
                             <LinkButton
-                                className={classes}
                                 aria-controls={ariaControls}
                                 aria-selected={ariaSelected}
-                                id={id}
-                                role="tab"
+                                className={classes}
+                                component={component}
                                 href={href}
+                                id={id}
                                 linkRef={ref => {
                                     this.tabsElements[i] = ref;
                                 }}
                                 refProp={refProp}
+                                role="tab"
                                 tabIndex={tabIndex}
                                 to={href}
-                                component={component}
                             >
                                 <div className="tab-title">{tab.props.title}</div>
                                 <div className="tab-underline" />
@@ -251,17 +251,17 @@ class TabViewPrimitive extends React.Component<Props, State> {
                     }
                     return (
                         <button
-                            className={classes}
-                            aria-controls={ariaControls}
-                            aria-selected={ariaSelected}
-                            onClick={() => this.onClickTab(i)}
-                            role="tab"
-                            type="button"
-                            id={id}
                             ref={ref => {
                                 this.tabsElements[i] = ref;
                             }}
+                            aria-controls={ariaControls}
+                            aria-selected={ariaSelected}
+                            className={classes}
+                            id={id}
+                            onClick={() => this.onClickTab(i)}
+                            role="tab"
                             tabIndex={tabIndex}
+                            type="button"
                             {...buttonProps}
                         >
                             <div className="tab-title">{tab.props.title}</div>
@@ -284,8 +284,8 @@ class TabViewPrimitive extends React.Component<Props, State> {
                         hidden: !this.isLeftArrowVisible(),
                     })}
                     onClick={() => onTabFocus(focusedIndex - 1)}
-                    type="button"
                     tabIndex="-1"
+                    type="button"
                 >
                     <IconPageBack />
                 </button>
@@ -295,8 +295,8 @@ class TabViewPrimitive extends React.Component<Props, State> {
                         hidden: !this.isRightArrowVisible(),
                     })}
                     onClick={() => onTabFocus(focusedIndex + 1)}
-                    type="button"
                     tabIndex="-1"
+                    type="button"
                 >
                     <IconPageForward />
                 </button>
@@ -319,10 +319,10 @@ class TabViewPrimitive extends React.Component<Props, State> {
                     {React.Children.toArray(children).map((child, i) => (
                         <div
                             key={i}
-                            id={`${this.tabviewID}-panel-${i}`}
-                            aria-labelledby={`${this.tabviewID}-tab-${i + 1}`}
                             aria-hidden={selectedIndex !== i}
+                            aria-labelledby={`${this.tabviewID}-tab-${i + 1}`}
                             className={`tab-panel ${i === selectedIndex ? 'is-selected' : ''}`}
+                            id={`${this.tabviewID}-panel-${i}`}
                             role={TAB_PANEL_ROLE}
                         >
                             {child.props.children}

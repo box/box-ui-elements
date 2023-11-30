@@ -33,6 +33,7 @@ const Instances = ({
             const isOpen = editors.length === 1 || templateKey === selectedTemplateKey;
             return (
                 <Instance
+                    key={`${instance.id}-${templateKey}`}
                     canEdit={instance.canEdit}
                     cascadePolicy={instance.cascadePolicy}
                     data={instance.data}
@@ -41,10 +42,9 @@ const Instances = ({
                     isCascadingPolicyApplicable={isCascadingPolicyApplicable}
                     isDirty={isDirty}
                     isOpen={isOpen}
-                    key={`${instance.id}-${templateKey}`}
                     onModification={onModification}
-                    onSave={onSave}
                     onRemove={onRemove}
+                    onSave={onSave}
                     template={template}
                 />
             );

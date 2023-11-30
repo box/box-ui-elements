@@ -81,7 +81,7 @@ describe('components/text-area/TextArea', () => {
     });
 
     test('should not show optional text when hideOptionalLabel is true', () => {
-        const wrapper = shallow(<TextArea label="label" hideOptionalLabel />);
+        const wrapper = shallow(<TextArea hideOptionalLabel label="label" />);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -91,7 +91,7 @@ describe('components/text-area/TextArea', () => {
     });
 
     test('should render text area with description', () => {
-        const wrapper = shallow(<TextArea label="label" description="some description" />);
+        const wrapper = shallow(<TextArea description="some description" label="label" />);
 
         expect(wrapper).toMatchSnapshot();
     });

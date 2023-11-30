@@ -7,7 +7,7 @@ const columns = [columnForDateType, columnWithFloatType];
 
 describe('features/query-bar/components/ColumnButtonOverlay', () => {
     const getWrapper = (props = {}) => {
-        return shallow(<ColumnButtonOverlay onColumnChange={jest.fn()} columns={columns} {...props} />);
+        return shallow(<ColumnButtonOverlay columns={columns} onColumnChange={jest.fn()} {...props} />);
     };
 
     describe('render', () => {

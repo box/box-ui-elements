@@ -74,7 +74,7 @@ describe('features/presence/PresenceCollaboratorsList', () => {
             test('should calculate, call onScroll and set overflow state', () => {
                 const onScrollSpy = jest.fn();
                 const wrapper = shallow(
-                    <PresenceCollaboratorsList intl={intl} collaborators={collaboratorList} onScroll={onScrollSpy} />,
+                    <PresenceCollaboratorsList collaborators={collaboratorList} intl={intl} onScroll={onScrollSpy} />,
                     {
                         disableLifecycleMethods: true,
                     },
@@ -136,9 +136,9 @@ describe('features/presence/PresenceCollaboratorsList', () => {
     describe('render()', () => {
         const wrapper = shallow(
             <PresenceCollaboratorsList
-                intl={intl}
                 collaborators={collaboratorList}
                 getLinkCallback={() => {}}
+                intl={intl}
                 inviteCallback={() => {}}
             />,
             { disableLifecycleMethods: true },

@@ -28,12 +28,12 @@ const ContentAnswersModalFooterActions = ({ hasError, onRetry }: Props) => {
     return (
         <div className="bdl-ContentAnswersModalFooterActions" data-testid="content-answers-modal-footer-actions">
             <Button
-                setRef={(ref: HTMLButtonElement) => {
-                    retryButtonRef.current = ref;
-                }}
                 className="bdl-ContentAnswersModalFooterActions-button"
                 data-testid="content-answers-retry-button"
                 onClick={onRetry}
+                setRef={(ref: HTMLButtonElement) => {
+                    retryButtonRef.current = ref;
+                }}
                 size="large"
             >
                 <FormattedMessage {...messages.retryResponse} />

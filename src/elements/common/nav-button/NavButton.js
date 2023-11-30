@@ -47,6 +47,7 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
 
                 return (
                     <Component
+                        ref={ref}
                         className={classNames(className, { [activeClassName]: isActiveValue })}
                         onClick={event => {
                             if (onClick) {
@@ -58,7 +59,6 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
                                 method(to);
                             }
                         }}
-                        ref={ref}
                         {...rest}
                     >
                         {children}

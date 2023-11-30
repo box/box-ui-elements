@@ -1264,11 +1264,11 @@ class ContentUploader extends Component<Props, State> {
                             errorCode={errorCode}
                             fileLimit={fileLimit}
                             hasFiles={hasFiles}
+                            isDone={isDone}
                             isLoading={isLoading}
                             onCancel={this.cancel}
                             onClose={onClose}
                             onUpload={this.upload}
-                            isDone={isDone}
                         />
                     </div>
                 )}

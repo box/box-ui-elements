@@ -21,7 +21,7 @@ const BetaFeedbackBadge = ({ className = '', tooltip = false, ...rest }: Props) 
     const classes = classNames('bdl-HeaderFeedbackBadge', className);
     const { formUrl } = rest;
     const badge = tooltip ? (
-        <Tooltip text={<FormattedMessage {...messages.feedbackCtaText} />} position="middle-right">
+        <Tooltip position="middle-right" text={<FormattedMessage {...messages.feedbackCtaText} />}>
             <BetaBadge aria-hidden className="bdl-HeaderFeedbackBadge-betaBadge" />
         </Tooltip>
     ) : (
@@ -31,10 +31,10 @@ const BetaFeedbackBadge = ({ className = '', tooltip = false, ...rest }: Props) 
     // TODO: tooltip may require constrainToScrollParent & constrainToWindow in some contexts
     return (
         <span className={classes}>
-            <span id="bdl-HeaderFeedbackBadge-ariaLabel" aria-hidden="true" hidden>
+            <span aria-hidden="true" hidden id="bdl-HeaderFeedbackBadge-ariaLabel">
                 <FormattedMessage {...messages.feedbackFormDescription} />
             </span>
-            <Link href={formUrl} target="_blank" aria-labelledby="bdl-HeaderFeedbackBadge-ariaLabel">
+            <Link aria-labelledby="bdl-HeaderFeedbackBadge-ariaLabel" href={formUrl} target="_blank">
                 {badge}
             </Link>
         </span>

@@ -45,14 +45,14 @@ const TaskError = ({ editMode, error, taskType }: Props) => {
     }
 
     return taskGroupExceedsError ? (
-        <InlineNotice type="warning" title={<FormattedMessage {...messages.taskGroupExceedsLimitWarningTitle} />}>
+        <InlineNotice title={<FormattedMessage {...messages.taskGroupExceedsLimitWarningTitle} />} type="warning">
             <FormattedMessage
                 {...apiMessages.taskGroupExceedsLimitWarningMessage}
                 values={{ max: TASK_MAX_GROUP_ASSIGNEES }}
             />
         </InlineNotice>
     ) : (
-        <InlineNotice type="error" title={<FormattedMessage {...errorTitle} />}>
+        <InlineNotice title={<FormattedMessage {...errorTitle} />} type="error">
             <FormattedMessage {...errorMessage} />
         </InlineNotice>
     );

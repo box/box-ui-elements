@@ -18,7 +18,7 @@ const ItemGridThumbnail = ({ item }: Props) => {
                 <div className="bce-ItemGridThumbnail-item" style={{ backgroundImage: `url("${thumbnailUrl}")` }} />
             ) : (
                 <div className="bce-ItemGridThumbnail-item">
-                    <IconCell rowData={item} dimension={128} />
+                    <IconCell dimension={128} rowData={item} />
                 </div>
             )}
         </div>

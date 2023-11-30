@@ -121,36 +121,27 @@ const ItemList = ({
 
     return (
         <KeyBinder
+            className="bce-item-grid"
+            columnCount={1}
             id={id}
             items={items}
-            columnCount={1}
-            rowCount={rowCount}
-            className="bce-item-grid"
-            onRename={onItemRename}
-            onShare={onItemShare}
+            onDelete={onItemDelete}
             onDownload={onItemDownload}
             onOpen={onItemClick}
-            onSelect={onItemSelect}
-            onDelete={onItemDelete}
-            scrollToRow={focusedRow}
+            onRename={onItemRename}
             onScrollToChange={({ scrollToRow }) => focus(rootElement, `.bce-item-row-${scrollToRow}`)}
+            onSelect={onItemSelect}
+            onShare={onItemShare}
+            rowCount={rowCount}
+            scrollToRow={focusedRow}
         >
             {({ onSectionRendered, scrollToRow, focusOnRender }) => (
                 <AutoSizer>
                     {({ width, height }) => (
                         <Table
-                            width={width}
-                            height={height}
-                            headerHeight={isSmall ? 0 : 40}
-                            rowHeight={50}
-                            rowCount={rowCount}
-                            rowGetter={({ index }) => items[index]}
                             ref={tableRef}
-                            rowClassName={rowClassName}
-                            scrollToIndex={scrollToRow}
-                            sort={sort}
-                            sortBy={sortBy}
-                            sortDirection={sortDirection}
+                            headerHeight={isSmall ? 0 : 40}
+                            height={height}
                             onRowClick={({ rowData }) => onItemSelect(rowData)}
                             onRowsRendered={({ startIndex, stopIndex }) => {
                                 onSectionRendered({
@@ -161,59 +152,68 @@ const ItemList = ({
                                     focus(rootElement, `.bce-item-row-${scrollToRow}`);
                                 }
                             }}
+                            rowClassName={rowClassName}
+                            rowCount={rowCount}
+                            rowGetter={({ index }) => items[index]}
+                            rowHeight={50}
+                            scrollToIndex={scrollToRow}
+                            sort={sort}
+                            sortBy={sortBy}
+                            sortDirection={sortDirection}
+                            width={width}
                         >
                             <Column
-                                disableSort
-                                dataKey={FIELD_ID}
                                 cellRenderer={iconCell}
+                                dataKey={FIELD_ID}
+                                disableSort
+                                flexShrink={0}
                                 headerRole="gridcell"
                                 width={isSmall ? 30 : 50}
-                                flexShrink={0}
                             />
                             <Column
-                                disableSort={!hasSort}
-                                label={intl.formatMessage(messages.name)}
-                                dataKey={FIELD_NAME}
                                 cellRenderer={nameCell}
-                                headerRenderer={headerCellRenderer}
-                                width={300}
+                                dataKey={FIELD_NAME}
+                                disableSort={!hasSort}
                                 flexGrow={1}
+                                headerRenderer={headerCellRenderer}
+                                label={intl.formatMessage(messages.name)}
+                                width={300}
                             />
                             {isSmall ? null : (
                                 <Column
+                                    cellRenderer={dateCell}
                                     className="bce-item-column"
+                                    dataKey={FIELD_DATE}
                                     disableSort={!hasSort}
+                                    flexGrow={1}
+                                    headerRenderer={headerCellRenderer}
                                     label={
                                         isRecents
                                             ? intl.formatMessage(messages.interacted)
                                             : intl.formatMessage(messages.modified)
                                     }
-                                    dataKey={FIELD_DATE}
-                                    cellRenderer={dateCell}
-                                    headerRenderer={headerCellRenderer}
                                     width={isRecents ? 120 : 300}
-                                    flexGrow={1}
                                 />
                             )}
                             {isSmall || isMedium ? null : (
                                 <Column
-                                    className="bce-item-column"
-                                    disableSort={!hasSort}
-                                    label={intl.formatMessage(messages.size)}
-                                    dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}
-                                    headerRenderer={headerCellRenderer}
-                                    width={80}
+                                    className="bce-item-column"
+                                    dataKey={FIELD_SIZE}
+                                    disableSort={!hasSort}
                                     flexShrink={0}
+                                    headerRenderer={headerCellRenderer}
+                                    label={intl.formatMessage(messages.size)}
+                                    width={80}
                                 />
                             )}
                             <Column
-                                disableSort
-                                dataKey={FIELD_ID}
                                 cellRenderer={moreOptionsCell}
+                                dataKey={FIELD_ID}
+                                disableSort
+                                flexShrink={0}
                                 headerRole="gridcell"
                                 width={isSmall || !canShare ? 58 : 140}
-                                flexShrink={0}
                             />
                         </Table>
                     )}

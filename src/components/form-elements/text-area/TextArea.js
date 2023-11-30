@@ -159,9 +159,9 @@ class TextArea extends React.Component<Props, State> {
                         autoFocus={autoFocus}
                         disabled={isDisabled}
                         error={error ? error.message : null}
-                        label={label}
                         isRequired={isRequired}
                         isResizable={isResizable}
+                        label={label}
                         name={name}
                         onBlur={this.checkValidity}
                         onChange={this.onChange}

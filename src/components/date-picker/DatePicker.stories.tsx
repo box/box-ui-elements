@@ -81,19 +81,19 @@ export const basicWithKeyboardInput = () => {
 
 export const withDescription = () => (
     <IntlProvider locale="en-US">
-        <DatePicker placeholder="Date" description="Date of your birth" label="Date Picker" />
+        <DatePicker description="Date of your birth" label="Date Picker" placeholder="Date" />
     </IntlProvider>
 );
 
 export const manuallyEditable = () => (
     <IntlProvider locale="en-US">
-        <DatePicker isTextInputAllowed placeholder="Date" label="Date Picker" value={new Date('September 27, 2019')} />
+        <DatePicker isTextInputAllowed label="Date Picker" placeholder="Date" value={new Date('September 27, 2019')} />
     </IntlProvider>
 );
 
 export const manuallyEditableAndAccessible = () => (
     <IntlProvider locale="en-US">
-        <DatePicker isAccessible placeholder="Date" label="Date Picker" value={new Date('August 10, 2021')} />
+        <DatePicker isAccessible label="Date Picker" placeholder="Date" value={new Date('August 10, 2021')} />
     </IntlProvider>
 );
 
@@ -112,10 +112,10 @@ export const withLimitedDateRange = () => {
                 <IntlProvider locale="en-US">
                     <DatePicker
                         isTextInputAllowed
-                        placeholder="Date"
                         label="Date Picker"
-                        minDate={minDate}
                         maxDate={maxDate}
+                        minDate={minDate}
+                        placeholder="Date"
                         value={state.date}
                     />
                 </IntlProvider>
@@ -225,11 +225,11 @@ export const alwaysVisibleWithCustomInputField = () => {
 export const disabledWithErrorMessage = () => (
     <IntlProvider locale="en-US">
         <DatePicker
-            isDisabled
             error="Error Message"
-            placeholder="Date"
-            name="datepicker"
+            isDisabled
             label="Disabled Date Picker"
+            name="datepicker"
+            placeholder="Date"
         />
     </IntlProvider>
 );
@@ -239,9 +239,9 @@ export const customErrorTooltipPosition = () => (
         <DatePicker
             error="Error Message"
             errorTooltipPosition={TooltipPosition.MIDDLE_RIGHT}
-            placeholder="Date"
-            name="datepicker"
             label="Disabled Date Picker"
+            name="datepicker"
+            placeholder="Date"
         />
     </IntlProvider>
 );
@@ -286,8 +286,8 @@ export const withRange = () => {
                             }}
                             hideOptionalLabel
                             label="To Date"
-                            minDate={state.fromDate || MIN_TIME}
                             maxDate={TODAY}
+                            minDate={state.fromDate || MIN_TIME}
                             name="datepicker-to"
                             onChange={(date: Date) => {
                                 componentStore.set({ toDate: date });
@@ -344,8 +344,8 @@ export const withRangeAndKeyboardInput = () => {
                             hideOptionalLabel
                             isKeyboardInputAllowed
                             label="To Date"
-                            minDate={state.fromDate || MIN_TIME}
                             maxDate={TODAY}
+                            minDate={state.fromDate || MIN_TIME}
                             name="datepicker-to"
                             onChange={(date: Date) => {
                                 componentStore.set({ toDate: date });

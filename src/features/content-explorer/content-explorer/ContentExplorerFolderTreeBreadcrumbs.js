@@ -42,8 +42,8 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
                     <Menu>
                         {foldersPathWithoutLast.map((folder, i) => (
                             <MenuItem
-                                data-testid="folder-tree-item"
                                 key={folder.id}
+                                data-testid="folder-tree-item"
                                 onClick={event => onBreadcrumbClick(i, event)}
                             >
                                 {folder.name}
@@ -56,8 +56,8 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
                 <Arrow16
                     className="bdl-ContentExplorerFolderTreeBreadcrumbs-icon"
                     height={BREADCRUMB_ARROW_ICON_HEIGHT}
-                    width={BREADCRUMB_ARROW_ICON_WIDTH}
                     viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
+                    width={BREADCRUMB_ARROW_ICON_WIDTH}
                 />
             )}
             <span className="bdl-ContentExplorerFolderTreeBreadcrumbs-text" title={currentFolderName}>

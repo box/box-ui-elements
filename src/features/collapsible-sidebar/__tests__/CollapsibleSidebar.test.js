@@ -31,13 +31,13 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebar', () => {
             document.body.appendChild(attachTo);
             wrapper = mountToBody({
                 children: [
-                    <a href="/abc" className="first" key="1">
+                    <a key="1" className="first" href="/abc">
                         abc
                     </a>,
-                    <a href="/def" className="second" key="2">
+                    <a key="2" className="second" href="/def">
                         def
                     </a>,
-                    <a href="/ghi" className="third" key="3">
+                    <a key="3" className="third" href="/ghi">
                         def
                     </a>,
                 ],

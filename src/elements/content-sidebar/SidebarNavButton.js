@@ -42,12 +42,12 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
                 return (
-                    <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
+                    <Tooltip isTabbable={false} position="middle-left" text={tooltip}>
                         <NavButton
                             activeClassName="bcs-is-selected"
-                            aria-selected={isActiveValue}
                             aria-controls={`${id}-content`}
                             aria-label={tooltip}
+                            aria-selected={isActiveValue}
                             className="bcs-NavButton"
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}

@@ -10,7 +10,7 @@ describe('components/inline-error/InlineError', () => {
         const className = 'some-class';
 
         const wrapper = render(
-            <InlineError title={title} className={className}>
+            <InlineError className={className} title={title}>
                 {children}
             </InlineError>,
         );

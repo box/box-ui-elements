@@ -22,7 +22,7 @@ type Props = {
 
 const AddTaskMenu = (props: Props) => (
     <DropdownMenu constrainToScrollParent isRightAligned>
-        <Button isDisabled={props.isDisabled} type="button" setRef={props.setAddTaskButtonRef}>
+        <Button isDisabled={props.isDisabled} setRef={props.setAddTaskButtonRef} type="button">
             <MenuToggle>
                 <FormattedMessage {...messages.tasksAddTask} />
             </MenuToggle>
@@ -30,7 +30,7 @@ const AddTaskMenu = (props: Props) => (
         <Menu className="bcs-AddTaskMenu">
             <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_GENERAL)}>
                 <div className="bcs-AddTaskMenu-icon">
-                    <IconTaskGeneral width={30} height={30} />
+                    <IconTaskGeneral height={30} width={30} />
                 </div>
                 <div>
                     <div className="bcs-AddTaskMenu-title">
@@ -43,7 +43,7 @@ const AddTaskMenu = (props: Props) => (
             </MenuItem>
             <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}>
                 <div className="bcs-AddTaskMenu-icon">
-                    <IconTaskApproval width={30} height={30} />
+                    <IconTaskApproval height={30} width={30} />
                 </div>
                 <div>
                     <div className="bcs-AddTaskMenu-title">

@@ -759,7 +759,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                     <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
                         <>
                             {!!description && (
-                                <div id={this.descriptionID} className="date-picker-description">
+                                <div className="date-picker-description" id={this.descriptionID}>
                                     {description}
                                 </div>
                             )}
@@ -803,7 +803,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                                     />
                                 )}
                             </Tooltip>
-                            <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
+                            <span className="accessibility-hidden" id={this.errorMessageID} role="alert">
                                 {errorMessage}
                             </span>
                         </>

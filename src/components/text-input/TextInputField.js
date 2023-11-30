@@ -14,7 +14,7 @@ const TextInputField = ({ field, form, innerRef, isRequired, ...rest }: Props) =
     const { errors, touched } = form;
     const isTouched = getProp(touched, name);
     const error = isTouched ? getProp(errors, name) : null;
-    return <TextInputPrimitive {...field} {...rest} inputRef={innerRef} error={error} hideOptionalLabel={isRequired} />;
+    return <TextInputPrimitive {...field} {...rest} error={error} hideOptionalLabel={isRequired} inputRef={innerRef} />;
 };
 
 export default TextInputField;
