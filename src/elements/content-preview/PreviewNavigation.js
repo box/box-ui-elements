@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import { Route } from 'react-router-dom';
 import IconNavigateLeft from '../../icons/general/IconNavigateLeft';
 import IconNavigateRight from '../../icons/general/IconNavigateRight';

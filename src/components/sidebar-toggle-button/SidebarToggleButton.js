@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import classNames from 'classnames';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 
 import IconHide from '../../icons/general/IconHide';
 import IconShow from '../../icons/general/IconShow';

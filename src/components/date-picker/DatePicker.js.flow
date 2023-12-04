@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { defineMessages, injectIntl, FormattedMessage, IntlShape } from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage, type IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import Pikaday from 'pikaday';
 import range from 'lodash/range';

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { injectIntl, FormattedMessage, IntlShape } from 'react-intl';
+import { injectIntl, FormattedMessage, type IntlShape } from 'react-intl';
 import { isToday, isYesterday } from '../../../utils/datetime';
 import messages from '../messages';
 import './DateField.scss';

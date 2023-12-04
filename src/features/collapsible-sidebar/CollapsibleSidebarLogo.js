@@ -3,7 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import styled from 'styled-components';
 
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import { bdlGridUnit, bdlBorderRadiusSizeLarge } from '../../styles/variables';
 import Logo from '../../icon/logo/BoxLogo';
 import PlainButton from '../../components/plain-button/PlainButton';

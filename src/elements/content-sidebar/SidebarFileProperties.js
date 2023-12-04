@@ -6,7 +6,7 @@
 
 import React from 'react';
 import getProp from 'lodash/get';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import ItemProperties from '../../features/item-details/ItemProperties';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
 import getFileSize from '../../utils/getFileSize';

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import classNames from 'classnames';
 
 import { MenuLinkItem } from '../menu';

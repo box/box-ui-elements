@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import IconPlusThin from '../../icons/general/IconPlusThin';
 import IconMinusThin from '../../icons/general/IconMinusThin';
 import PlainButton from '../plain-button/PlainButton';

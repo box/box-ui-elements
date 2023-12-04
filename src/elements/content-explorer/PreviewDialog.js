@@ -6,7 +6,7 @@
 
 import React from 'react';
 import Modal from 'react-modal';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import cloneDeep from 'lodash/cloneDeep';
 import messages from '../common/messages';
 import ContentPreview from '../content-preview';

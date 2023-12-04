@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import messages from '../messages';
 import { Breadcrumbs } from '../breadcrumbs';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../../constants';

@@ -1,6 +1,6 @@
 /* @flow */
 import React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 
 import Badgeable from '../../components/badgeable/Badgeable';
 import Tooltip from '../../components/tooltip/Tooltip';
