@@ -88,6 +88,19 @@ jobs:
           name: E2E tests
           command: yarn test:e2e
 
+  chromatic-deploy:
+      <<: *defaults
+      steps:
+          - checkout
+          - restore-cache: *restore-yarn-cache
+          - run: *yarn
+          - save-cache: *save-yarn-cache
+          - run: *clean
+          - run: *i18n
+          - run:
+                name: Chromatic
+                command: yarn chromatic --ci"
+
 workflows:
   version: 2
   lint_test_build:
@@ -95,3 +108,4 @@ workflows:
       - lint
       - build-unit-tests
       - e2e-tests
+      - chromatic-deploy

@@ -11,4 +11,7 @@ export default {
         rootFolderId: global.FOLDER_ID,
         token: global.TOKEN,
     },
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
 };

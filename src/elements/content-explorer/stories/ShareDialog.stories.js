@@ -1,64 +1,57 @@
 // @flow
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
-import { State, Store } from '@sambego/storybook-state';
+import { useArgs } from '@storybook/preview-api';
 
 import PrimaryButton from '../../../components/primary-button/PrimaryButton';
 import { ACCESS_OPEN } from '../../../constants';
 
 import ShareDialog from '../ShareDialog';
-import notes from './ShareDialog.stories.md';
 
-export const shareDialog = () => {
-    const componentStore = new Store({
-        isModalOpen: false,
-    });
+// need to import this into the story because it's usually in ContentExplorer
+import '../../common/modal.scss';
 
-    const openModal = () =>
-        componentStore.set({
-            isModalOpen: true,
-        });
+const rootElement = document.createElement('div');
 
-    const closeModal = () => componentStore.set({ isModalOpen: false });
+export const shareDialog = {
+    render: args => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const [, setArgs] = useArgs();
 
-    const rootElement = document.createElement('div');
-    const appElement = document.createElement('div');
-    rootElement.appendChild(appElement);
-    if (document.body) {
-        document.body.appendChild(rootElement);
-    }
+        const handleOpenModal = () => setArgs({ isOpen: true });
 
-    return (
-        <State store={componentStore}>
-            {state => (
-                <div>
-                    <ShareDialog
-                        appElement={appElement}
-                        canSetShareAccess={boolean('canSetShareAccess', true)}
-                        isLoading={boolean('isLoading', false)}
-                        isOpen={state.isModalOpen}
-                        item={{
-                            id: 'abcdefg',
-                            shared_link: {
-                                access: ACCESS_OPEN,
-                                url: 'https://cloud.box.com/s/abcdefg',
-                            },
-                        }}
-                        onCancel={closeModal}
-                        onShareAccessChange={() => null}
-                        parentElement={rootElement}
-                    />
-                    <PrimaryButton onClick={openModal}>Launch ShareDialog</PrimaryButton>
-                </div>
-            )}
-        </State>
-    );
+        const handleCloseModal = () => setArgs({ isOpen: false });
+
+        if (document.body && document.getElementById('rootElement') === null) {
+            rootElement.setAttribute('id', 'rootElement');
+            document.body.appendChild(rootElement);
+        }
+
+        return (
+            <div>
+                <ShareDialog
+                    {...args}
+                    item={{
+                        id: 'abcdefg',
+                        shared_link: {
+                            access: ACCESS_OPEN,
+                            url: 'https://cloud.box.com/s/abcdefg',
+                        },
+                    }}
+                    onCancel={handleCloseModal}
+                    parentElement={rootElement}
+                />
+                <PrimaryButton onClick={handleOpenModal}>Launch ShareDialog</PrimaryButton>
+            </div>
+        );
+    },
 };
 
 export default {
     title: 'Elements/ContentExplorer/ShareDialog',
     component: ShareDialog,
-    parameters: {
-        notes,
+    args: {
+        canSetShareAccess: false,
+        isLoading: false,
+        isOpen: false,
     },
 };

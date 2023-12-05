@@ -1,4 +1,5 @@
 // @flow
+import { userEvent, waitFor, within } from '@storybook/testing-library';
 import ContentExplorer from '../ContentExplorer';
 
 export const basic = {};
@@ -21,6 +22,18 @@ export const withSidebar = {
                 hasSkills: true,
             },
         },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await waitFor(
+            async () => {
+                const row = canvas.getByText('Book Sample.pdf');
+                await userEvent.click(row);
+            },
+            {
+                timeout: 3250,
+            },
+        );
     },
 };
 

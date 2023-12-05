@@ -22,4 +22,7 @@ export default {
         hasVersions: true,
         token: global.TOKEN,
     },
+    parameters: {
+        chromatic: { disableSnapshot: false },
+    },
 };
