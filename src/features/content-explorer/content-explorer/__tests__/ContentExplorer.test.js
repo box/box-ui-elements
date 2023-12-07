@@ -28,6 +28,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 onLoadMoreItems={() => {}}
                 listWidth={500}
                 listHeight={500}
+                deselectAutoSelectedItem={() => {}}
                 {...props}
             />
         );

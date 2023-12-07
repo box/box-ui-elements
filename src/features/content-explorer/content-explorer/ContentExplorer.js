@@ -26,6 +26,8 @@ class ContentExplorer extends Component {
          * Each column has to be a Column element
          */
         additionalColumns: PropTypes.arrayOf(PropTypes.element),
+        /** Items that will show up as selected */
+        autoSelectedItems: PropTypes.object,
         /**  Allow users to choose no selections in MULTI_SELECT mode, defaults to false  */
         isNoSelectionAllowed: PropTypes.bool,
         /** Props for breadcrumbs */
@@ -42,6 +44,8 @@ class ContentExplorer extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         /** Props that contains the custom search input. Is rendered in header actions */
         customInput: PropTypes.func,
+        // Called when items are deselected
+        deselectAutoSelectedItem: PropTypes.func,
         /** Whether the user can see the breadcrumbs represented with the folder tree button */
         hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
@@ -329,9 +333,10 @@ class ContentExplorer extends Component {
     };
 
     handleItemClick = ({ event, index }) => {
-        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate } = this.props;
+        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate, autoSelectedItems } = this.props;
         const { selectedItems } = this.state;
         const item = items[index];
+        const allSelectedItems = { ...selectedItems, ...autoSelectedItems };
 
         if (item.isDisabled || item.isLoading || item.isActionDisabled) {
             return;
@@ -342,7 +347,7 @@ class ContentExplorer extends Component {
 
         let newSelectedItems = {};
         if (contentExplorerMode === ContentExplorerModes.MULTI_SELECT) {
-            newSelectedItems = this.toggleSelectedItem(selectedItems, item);
+            newSelectedItems = this.toggleSelectedItem(allSelectedItems, item);
         } else {
             newSelectedItems[item.id] = item;
         }
@@ -393,9 +398,11 @@ class ContentExplorer extends Component {
     };
 
     toggleSelectedItem = (selectedItems, item) => {
+        const { deselectAutoSelectedItem } = this.props;
         const result = { ...selectedItems };
         if (result[item.id]) {
             delete result[item.id];
+            deselectAutoSelectedItem(item.id);
         } else {
             result[item.id] = item;
         }
@@ -412,20 +419,19 @@ class ContentExplorer extends Component {
                 result[item.id] = item;
             }
         });
-
         return result;
     };
 
     unselectAll = () => {
-        const { items } = this.props;
+        const { items, deselectAutoSelectedItem } = this.props;
         const { selectedItems } = this.state;
         const result = { ...selectedItems };
         items.forEach(item => {
             if (result[item.id]) {
                 delete result[item.id];
+                deselectAutoSelectedItem(item.id);
             }
         });
-
         return result;
     };
 
@@ -492,9 +498,11 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
+            autoSelectedItems,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
+        const allSelectedItems = { ...selectedItems, ...autoSelectedItems };
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
         const currentFolder = this.getCurrentFolder();
         const contentExplorerProps = omit(rest, [
@@ -510,7 +518,7 @@ class ContentExplorer extends Component {
         const canIncludeSubfolders = !!includeSubfoldersProps;
         const hasSubheader = canIncludeSubfolders || isSelectAllAllowed;
 
-        const selectedItemsIds = Object.keys(selectedItems);
+        const selectedItemsIds = Object.keys(allSelectedItems);
         let areActionButtonsDisabled;
         // NOTE: it almost feels like this whole section should be inside the
         // ContentExplorerActionButtons instead. There's a lot of implicit knowledge
@@ -520,18 +528,18 @@ class ContentExplorer extends Component {
             // is selected and that item's isActionDisabled is false, we enable the action button
             areActionButtonsDisabled =
                 (selectedItemsIds.length === 0 && !isNoSelectionAllowed) ||
-                (selectedItemsIds.length === 1 && selectedItems[selectedItemsIds[0]].isActionDisabled);
+                (selectedItemsIds.length === 1 && allSelectedItems[selectedItemsIds[0]].isActionDisabled);
         } else if (isViewingSearchResults || contentExplorerMode === ContentExplorerModes.SELECT_FILE) {
             // Buttons are only enabled when an item is selected
             // When viewing search results, there is no "current folder"
             // When selecting a file, the file can only selected from the list
             areActionButtonsDisabled =
-                selectedItemsIds.length === 0 || selectedItems[selectedItemsIds[0]].isActionDisabled;
+                selectedItemsIds.length === 0 || allSelectedItems[selectedItemsIds[0]].isActionDisabled;
         } else {
             // Buttons are enabled using the selected item or the current folder if no item is selected
             areActionButtonsDisabled =
                 selectedItemsIds.length > 0
-                    ? selectedItems[selectedItemsIds[0]].isActionDisabled
+                    ? allSelectedItems[selectedItemsIds[0]].isActionDisabled
                     : currentFolder.isActionDisabled;
         }
 
@@ -599,7 +607,7 @@ class ContentExplorer extends Component {
                     onItemNameClick={this.handleItemNameClick}
                     onLoadMoreItems={onLoadMoreItems}
                     rowHeight={itemRowHeight}
-                    selectedItems={selectedItems}
+                    selectedItems={allSelectedItems}
                     width={listWidth}
                 />
                 <ContentExplorerActionButtons
@@ -623,7 +631,7 @@ class ContentExplorer extends Component {
                     onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
                     onViewSelectedClick={onViewSelectedClick}
-                    selectedItems={selectedItems}
+                    selectedItems={allSelectedItems}
                     isNoSelectionAllowed={isNoSelectionAllowed}
                 />
             </div>
