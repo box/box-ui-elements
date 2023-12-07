@@ -42,7 +42,7 @@ const Label = ({
     showOptionalText,
     hideLabel,
     children,
-    labelElProps = {},
+    labelElProps,
 }: LabelProps) => {
     const labelContent = [
         <span key="labelText">{text}</span>,
