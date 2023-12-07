@@ -24,14 +24,14 @@ export interface LabelProps {
     infoIconProps?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
     /** Tooltip text for the info icon */
     infoTooltip?: React.ReactNode;
+    /** Optional props for the label element */
+    labelElProps?: Object;
     /** Whether to show the `(Optional)` text next to the label for an optional field */
     showOptionalText?: boolean;
     /** The label text */
     text: React.ReactNode;
     /** Optional tooltip text for the label */
     tooltip?: React.ReactNode;
-    /** Optional peopierties for label element */
-    labelElProps?: Object;
 }
 
 const Label = ({

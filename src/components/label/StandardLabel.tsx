@@ -8,10 +8,10 @@ export interface StandardLabelProps {
     children: React.ReactElement;
     /** Text content of the label */
     labelContent: React.ReactNode;
+    /** Optional props for the label element */
+    labelElProps?: Object;
     /** Optional tooltip text for the label */
     tooltip?: React.ReactNode;
-    /** Optional peopierties for label element */
-    labelElProps?: Object;
 }
 
 const StandardLabel = ({ children, labelElProps, labelContent, tooltip }: StandardLabelProps) => {

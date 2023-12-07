@@ -8,7 +8,7 @@ export interface LabelPrimitiveProps {
     className?: string;
     /** Text content of the label */
     labelContent: React.ReactNode;
-    /** Optional peopierties for label element */
+    /** Optional props for the label element */
     labelElProps?: Object;
 }
 
