@@ -6,7 +6,7 @@ import notes from './Logo.stories.md';
 export const regular = () => <Logo title="Box" />;
 
 export default {
-    title: 'Components|Logo',
+    title: 'Components/Logo',
     component: Logo,
     parameters: {
         notes,

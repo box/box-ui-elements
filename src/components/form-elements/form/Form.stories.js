@@ -113,7 +113,7 @@ export const basic = () => {
 };
 
 export default {
-    title: 'Components|Form Elements/Form',
+    title: 'Components/Form Elements/Form',
     component: Form,
     parameters: {
         notes,

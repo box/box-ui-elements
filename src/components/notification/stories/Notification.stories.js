@@ -41,7 +41,7 @@ export const error = () => (
 );
 
 export default {
-    title: 'Components|Notifications/Notification',
+    title: 'Components/Notifications/Notification',
     component: Notification,
     parameters: {
         notes,

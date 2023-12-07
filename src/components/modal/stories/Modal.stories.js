@@ -118,7 +118,7 @@ export const withCustomBackdropClickHandler = () => {
 };
 
 export default {
-    title: 'Components|Modal',
+    title: 'Components/Modal',
     component: Modal,
     parameters: {
         notes,

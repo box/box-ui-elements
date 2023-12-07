@@ -74,7 +74,7 @@ export const loading = () => (
 );
 
 export default {
-    title: 'Components|Form Elements/TextInput',
+    title: 'Components/Form Elements/TextInput',
     component: TextInput,
     parameters: {
         notes,

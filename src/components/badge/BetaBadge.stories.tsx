@@ -4,6 +4,6 @@ import BetaBadge from './BetaBadge';
 export const betaBadge = () => <BetaBadge />;
 
 export default {
-    title: 'Components|Badges/BetaBadge',
+    title: 'Components/Badges/BetaBadge',
     component: BetaBadge,
 };

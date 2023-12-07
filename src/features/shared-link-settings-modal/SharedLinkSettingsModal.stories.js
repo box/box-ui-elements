@@ -90,7 +90,7 @@ export const basic = () => {
 };
 
 export default {
-    title: 'Features|SharedLinkSettingsModal',
+    title: 'Features/SharedLinkSettingsModal',
     component: SharedLinkSettingsModal,
     parameters: {
         notes,

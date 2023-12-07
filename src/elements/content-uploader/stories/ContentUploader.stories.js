@@ -1,18 +1,14 @@
-import * as React from 'react';
-import { IntlProvider } from 'react-intl';
+// @flow
 import ContentUploader from '../ContentUploader';
-import notes from './ContentUploader.notes.md';
 
-export const Uploader = () => (
-    <IntlProvider locale="en">
-        <ContentUploader features={global.FEATURES} rootFolderId={global.FOLDER_ID} token={global.TOKEN} />
-    </IntlProvider>
-);
+export const basic = {};
 
 export default {
-    title: 'Elements|ContentUploader',
+    title: 'Elements/ContentUploader',
     component: ContentUploader,
-    parameters: {
-        notes,
+    args: {
+        features: global.FEATURE_FLAGS,
+        rootFolderId: global.FOLDER_ID,
+        token: global.TOKEN,
     },
 };

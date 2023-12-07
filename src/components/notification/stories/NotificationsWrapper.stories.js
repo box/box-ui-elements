@@ -57,7 +57,7 @@ export const example = () => {
 };
 
 export default {
-    title: 'Components|Notifications/NotificationsWrapper',
+    title: 'Components/Notifications/NotificationsWrapper',
     component: NotificationsWrapper,
     parameters: {
         notes,

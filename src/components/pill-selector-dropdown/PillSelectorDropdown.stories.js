@@ -322,7 +322,7 @@ export const customPillStyles = () => {
 };
 
 export default {
-    title: 'Components|PillSelectorDropdown',
+    title: 'Components/PillSelectorDropdown',
     component: PillSelectorDropdown,
     parameters: {
         notes,

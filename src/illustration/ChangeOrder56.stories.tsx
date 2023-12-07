@@ -5,7 +5,7 @@ import ChangeOrder56 from './ChangeOrder56';
 export const changeOrder56 = () => <ChangeOrder56 />;
 
 export default {
-    title: 'Illustration|ChangeOrder56',
+    title: 'Illustration/ChangeOrder56',
     component: ChangeOrder56,
     parameters: {
         notes: "`import ChangeOrder56 from 'box-ui-elements/es/illustration/ChangeOrder56';`",

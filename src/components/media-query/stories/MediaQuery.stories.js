@@ -78,7 +78,7 @@ const DemoComponent = (props: Props) => {
 export const HigherOrderComponent = withMediaQuery(DemoComponent);
 
 export default {
-    title: 'Components|MediaQuery',
+    title: 'Components/MediaQuery',
     component: useMediaQuery,
     parameters: {
         notes,

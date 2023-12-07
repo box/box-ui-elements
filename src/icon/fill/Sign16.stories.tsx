@@ -5,7 +5,7 @@ import Sign16 from './Sign16';
 export const sign16 = () => <Sign16 />;
 
 export default {
-    title: 'Icon|Fill|Sign16',
+    title: 'Icon/Fill/Sign16',
     component: Sign16,
     parameters: {
         notes: "`import Sign16 from 'box-ui-elements/es/icon/fill/Sign16';`",

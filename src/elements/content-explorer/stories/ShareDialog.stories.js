@@ -56,7 +56,7 @@ export const shareDialog = () => {
 };
 
 export default {
-    title: 'Elements|ContentExplorer|ShareDialog',
+    title: 'Elements/ContentExplorer/ShareDialog',
     component: ShareDialog,
     parameters: {
         notes,

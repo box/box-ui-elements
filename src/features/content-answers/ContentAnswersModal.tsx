@@ -11,6 +11,7 @@ import Modal from '../../components/modal/Modal';
 // eslint-disable-next-line import/named
 import { BoxItem, User } from '../../../common/types/core';
 // @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
 import { withAPIContext } from '../../elements/common/api-context';
 // @ts-ignore: no ts definition
 import APIFactory from '../../api';

@@ -35,7 +35,7 @@ export const complicatedLayout = () => (
 );
 
 export default {
-    title: 'Components|Ghost',
+    title: 'Components/Ghost',
     component: Ghost,
     parameters: {
         notes,

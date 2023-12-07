@@ -22,7 +22,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Components|ModalActions',
+    title: 'Components/ModalActions',
     component: ModalActions,
     parameters: {
         notes,

@@ -23,7 +23,7 @@ export const basic = () => (
 export const withSubmenu = () => <ContextMenuWithSubmenuWithBoundariesElementExample />;
 
 export default {
-    title: 'Components|ContextMenu',
+    title: 'Components/ContextMenu',
     component: ContextMenu,
     parameters: {
         notes,

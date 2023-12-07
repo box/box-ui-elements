@@ -27,7 +27,7 @@ export const withValidation = () => {
 };
 
 export default {
-    title: 'Components|Form Elements/Textarea',
+    title: 'Components/Form Elements/Textarea',
     component: TextArea,
     parameters: {
         notes,

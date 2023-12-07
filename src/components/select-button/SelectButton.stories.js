@@ -24,7 +24,7 @@ export const withError = () => (
 );
 
 export default {
-    title: 'Components|SelectButton',
+    title: 'Components/SelectButton',
     component: SelectButton,
     parameters: {
         notes,

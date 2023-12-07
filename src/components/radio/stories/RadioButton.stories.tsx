@@ -11,7 +11,7 @@ export const disabled = () => (
 );
 
 export default {
-    title: 'Components|Radio/RadioButton',
+    title: 'Components/Radio/RadioButton',
     component: RadioButton,
     parameters: {
         notes,

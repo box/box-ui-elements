@@ -11,6 +11,7 @@ export const withCustomComponent = () => {
     // import { BrowserRouter as Router, Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 
     const CustomRouterLink = ({ href, children, ...rest }: RouterLinkProps) => (
+        // @ts-ignore TODO: figure out why this is giving a TS error
         <RouterLink to={href} {...rest}>
             {children}
         </RouterLink>
@@ -26,7 +27,7 @@ export const withCustomComponent = () => {
 };
 
 export default {
-    title: 'Components|Links/Link',
+    title: 'Components/Links/Link',
     component: Link,
     parameters: {
         notes,
