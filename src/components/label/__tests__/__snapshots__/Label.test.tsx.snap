@@ -10,6 +10,7 @@ exports[`components/label/Label should correctly render default element 1`] = `
       null,
     ]
   }
+  labelElProps={Object {}}
 >
   <input
     type="text"

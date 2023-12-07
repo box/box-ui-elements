@@ -30,9 +30,20 @@ export interface LabelProps {
     text: React.ReactNode;
     /** Optional tooltip text for the label */
     tooltip?: React.ReactNode;
+    /** Optional peopierties for label element */
+    labelElProps?: Object;
 }
 
-const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hideLabel, children }: LabelProps) => {
+const Label = ({
+    text,
+    tooltip,
+    infoTooltip,
+    infoIconProps,
+    showOptionalText,
+    hideLabel,
+    children,
+    labelElProps = {},
+}: LabelProps) => {
     const labelContent = [
         <span key="labelText">{text}</span>,
         showOptionalText ? <OptionalFormattedMessage key="optionalMessage" /> : null,
@@ -53,7 +64,7 @@ const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hi
     }
 
     return (
-        <StandardLabel labelContent={labelContent} tooltip={tooltip}>
+        <StandardLabel labelContent={labelContent} tooltip={tooltip} labelElProps={labelElProps}>
             {children}
         </StandardLabel>
     );

@@ -10,10 +10,16 @@ export interface StandardLabelProps {
     labelContent: React.ReactNode;
     /** Optional tooltip text for the label */
     tooltip?: React.ReactNode;
+    /** Optional peopierties for label element */
+    labelElProps?: Object;
 }
 
-const StandardLabel = ({ children, labelContent, tooltip }: StandardLabelProps) => {
-    const label = <LabelPrimitive labelContent={labelContent}>{children}</LabelPrimitive>;
+const StandardLabel = ({ children, labelElProps, labelContent, tooltip }: StandardLabelProps) => {
+    const label = (
+        <LabelPrimitive labelElProps={labelElProps} labelContent={labelContent}>
+            {children}
+        </LabelPrimitive>
+    );
 
     return tooltip ? (
         <Tooltip position={TooltipPosition.TOP_RIGHT} text={tooltip}>

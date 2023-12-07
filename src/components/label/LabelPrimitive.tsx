@@ -8,10 +8,12 @@ export interface LabelPrimitiveProps {
     className?: string;
     /** Text content of the label */
     labelContent: React.ReactNode;
+    /** Optional peopierties for label element */
+    labelElProps?: Object;
 }
 
-const LabelPrimitive = ({ children, className, labelContent, ...rest }: LabelPrimitiveProps) => (
-    <label>
+const LabelPrimitive = ({ children, className, labelContent, labelElProps, ...rest }: LabelPrimitiveProps) => (
+    <label {...labelElProps}>
         <span className={classNames('label bdl-Label', className)} {...rest}>
             {labelContent}
         </span>
