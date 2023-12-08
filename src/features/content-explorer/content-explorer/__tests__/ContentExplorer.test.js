@@ -269,6 +269,16 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
             expect(wrapper.find('ContentExplorerActionButtons').prop('areButtonsDisabled')).toBe(false);
         });
+
+        test('should render all items from both selectedItems state and autoSelectedItems prop', () => {
+            const wrapper = renderComponent({
+                autoSelectedItems: { '2': { id: '2', name: 'item2' } },
+            });
+            const selectedItems = { '1': { id: '1', name: 'item1' } };
+            wrapper.setState({ selectedItems });
+            expect(Object.keys(wrapper.find('ItemList').prop('selectedItems')).length).toBe(2);
+            expect(Object.keys(wrapper.find('ContentExplorerActionButtons').prop('selectedItems')).length).toBe(2);
+        });
     });
 
     describe('onEnterFolder', () => {
@@ -681,28 +691,37 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 selectedItems: { id: { id: 'id', name: 'name' } },
                 item: { id: 'id', name: 'name' },
                 expectedLength: 0,
+                shouldTriggerDeselectAutoSelectedItem: true,
             },
             {
                 selectedItems: { id: { id: 'id', name: 'name' } },
                 item: { id: 'id2', name: 'name' },
                 expectedLength: 2,
+                shouldTriggerDeselectAutoSelectedItem: false,
             },
             {
                 selectedItems: {},
                 item: { id: 'id', name: 'name' },
                 expectedLength: 1,
+                shouldTriggerDeselectAutoSelectedItem: false,
             },
-        ].forEach(({ selectedItems, item, expectedLength }) => {
+        ].forEach(({ selectedItems, item, expectedLength, shouldTriggerDeselectAutoSelectedItem }) => {
             test('should toggle', () => {
+                const deselectAutoSelectedItemMock = jest.fn();
+
                 const wrapper = renderComponent(
                     {
                         contentExplorerMode: ContentExplorerModes.SELECT_FILE,
+                        deselectAutoSelectedItem: deselectAutoSelectedItemMock,
                     },
                     false,
                 );
 
                 const result = wrapper.instance().toggleSelectedItem(selectedItems, item);
                 expect(Object.keys(result).length).toEqual(expectedLength);
+                if (shouldTriggerDeselectAutoSelectedItem) {
+                    expect(deselectAutoSelectedItemMock).toHaveBeenCalledTimes(Object.keys(selectedItems).length);
+                }
             });
             test('should set initialSelectedItems', () => {
                 const wrapper = renderComponent(
@@ -737,6 +756,15 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             wrapper.setState({ selectedItems });
             const result = wrapper.instance().unselectAll();
 
+            expect(result).toStrictEqual({});
+        });
+
+        test('should remove items from autoSelectedItems when unselectAll is called', () => {
+            const deselectAutoSelectedItem = jest.fn();
+            const wrapper = renderComponent({ items, deselectAutoSelectedItem });
+            wrapper.setState({ selectedItems });
+            const result = wrapper.instance().unselectAll();
+            expect(deselectAutoSelectedItem).toHaveBeenCalledTimes(items.length);
             expect(result).toStrictEqual({});
         });
 
@@ -786,6 +814,25 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.state('isSelectAllChecked')).toBeTruthy();
             expect(instance.selectAll).toHaveBeenCalledTimes(0);
             expect(instance.unselectAll).toHaveBeenCalledTimes(0);
+        });
+    });
+
+    describe('handleItemClick()', () => {
+        test('should update selectedItems state correctly with autoSelectedItems when new item is clicked', () => {
+            const items = [
+                { id: 'item1', name: 'name1' },
+                { id: 'item2', name: 'name2' },
+            ];
+            const autoSelectedItems = { item1: { id: 'item1', name: 'name1' } };
+            const mockEvent = { stopPropagation: () => {} };
+
+            const wrapper = renderComponent({
+                items,
+                autoSelectedItems,
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+            });
+            wrapper.instance().handleItemClick({ event: mockEvent, index: 1 });
+            expect(Object.keys(wrapper.state('selectedItems')).length).toEqual(2);
         });
     });
 });
