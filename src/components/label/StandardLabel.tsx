@@ -15,11 +15,7 @@ export interface StandardLabelProps {
 }
 
 const StandardLabel = ({ children, tooltip, ...rest }: StandardLabelProps) => {
-    const label = (
-        <LabelPrimitive {...rest}>
-            {children}
-        </LabelPrimitive>
-    );
+    const label = <LabelPrimitive {...rest}>{children}</LabelPrimitive>;
 
     return tooltip ? (
         <Tooltip position={TooltipPosition.TOP_RIGHT} text={tooltip}>
