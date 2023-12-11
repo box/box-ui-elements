@@ -14,9 +14,9 @@ export interface StandardLabelProps {
     tooltip?: React.ReactNode;
 }
 
-const StandardLabel = ({ children, labelElProps, labelContent, tooltip }: StandardLabelProps) => {
+const StandardLabel = ({ children, tooltip, ...rest }: StandardLabelProps) => {
     const label = (
-        <LabelPrimitive labelElProps={labelElProps} labelContent={labelContent}>
+        <LabelPrimitive {...rest}>
             {children}
         </LabelPrimitive>
     );
