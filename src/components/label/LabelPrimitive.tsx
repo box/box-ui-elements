@@ -9,7 +9,7 @@ export interface LabelPrimitiveProps {
     /** Text content of the label */
     labelContent: React.ReactNode;
     /** Optional props for the label element */
-    labelElProps?: Object;
+    labelElProps?: React.ComponentPropsWithoutRef<'label'>;
 }
 
 const LabelPrimitive = ({ children, className, labelContent, labelElProps, ...rest }: LabelPrimitiveProps) => (

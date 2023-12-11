@@ -25,7 +25,7 @@ export interface LabelProps {
     /** Tooltip text for the info icon */
     infoTooltip?: React.ReactNode;
     /** Optional props for the label element */
-    labelElProps?: Object;
+    labelElProps?: React.ComponentPropsWithoutRef<'label'>;
     /** Whether to show the `(Optional)` text next to the label for an optional field */
     showOptionalText?: boolean;
     /** The label text */
@@ -37,12 +37,12 @@ export interface LabelProps {
 const Label = ({
     text,
     tooltip,
+    labelElProps,
     infoTooltip,
     infoIconProps,
     showOptionalText,
     hideLabel,
     children,
-    labelElProps,
 }: LabelProps) => {
     const labelContent = [
         <span key="labelText">{text}</span>,
@@ -60,7 +60,11 @@ const Label = ({
     }
 
     if (hideLabel) {
-        return <HiddenLabel labelContent={labelContent}>{children}</HiddenLabel>;
+        return (
+            <HiddenLabel labelContent={labelContent} labelElProps={labelElProps}>
+                {children}
+            </HiddenLabel>
+        );
     }
 
     return (

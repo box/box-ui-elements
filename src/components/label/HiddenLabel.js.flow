@@ -8,10 +8,11 @@ const HIDDEN_CLASS_NAME = 'accessibility-hidden';
 type Props = {
     children: React.Node,
     labelContent: React.Node,
+    labelElProps?: React.Element<'label'>,
 };
 
-const HiddenLabel = ({ children, labelContent }: Props) => (
-    <LabelPrimitive className={HIDDEN_CLASS_NAME} labelContent={labelContent}>
+const HiddenLabel = ({ children, labelContent, labelElProps }: Props) => (
+    <LabelPrimitive className={HIDDEN_CLASS_NAME} labelContent={labelContent} labelElProps={labelElProps}>
         {children}
     </LabelPrimitive>
 );

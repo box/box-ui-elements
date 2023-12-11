@@ -9,7 +9,7 @@ export interface StandardLabelProps {
     /** Text content of the label */
     labelContent: React.ReactNode;
     /** Optional props for the label element */
-    labelElProps?: Object;
+    labelElProps?: React.ComponentPropsWithoutRef<'label'>;
     /** Optional tooltip text for the label */
     tooltip?: React.ReactNode;
 }
