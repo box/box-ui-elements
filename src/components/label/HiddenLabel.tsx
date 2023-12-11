@@ -11,8 +11,8 @@ export interface HiddenLabelProps {
     labelElProps?: React.ComponentPropsWithoutRef<'label'>;
 }
 
-const HiddenLabel = ({ children, labelContent, labelElProps }: HiddenLabelProps) => (
-    <LabelPrimitive className="accessibility-hidden" labelContent={labelContent} labelElProps={labelElProps}>
+const HiddenLabel = ({ children, ...rest }: HiddenLabelProps) => (
+    <LabelPrimitive className="accessibility-hidden" {...rest}>
         {children}
     </LabelPrimitive>
 );
