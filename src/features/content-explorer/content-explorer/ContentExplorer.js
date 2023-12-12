@@ -44,7 +44,7 @@ class ContentExplorer extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         /** Props that contains the custom search input. Is rendered in header actions */
         customInput: PropTypes.func,
-        // Called when items are deselected
+        /** Called when items are deselected */
         deselectAutoSelectedItem: PropTypes.func,
         /** Whether the user can see the breadcrumbs represented with the folder tree button */
         hasFolderTreeBreadcrumbs: PropTypes.bool,
@@ -459,6 +459,7 @@ class ContentExplorer extends Component {
         const {
             actionButtonsProps,
             additionalColumns,
+            autoSelectedItems,
             isNoSelectionAllowed = false,
             breadcrumbProps,
             cancelButtonProps,
@@ -498,7 +499,6 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
-            autoSelectedItems,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
@@ -514,6 +514,7 @@ class ContentExplorer extends Component {
             'initialSelectedItems',
             'onFoldersPathUpdate',
             'onSelectedItemsUpdate',
+            'deselectAutoSelectedItems',
         ]);
         const canIncludeSubfolders = !!includeSubfoldersProps;
         const hasSubheader = canIncludeSubfolders || isSelectAllAllowed;

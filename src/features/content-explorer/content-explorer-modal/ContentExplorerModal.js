@@ -12,14 +12,12 @@ import './ContentExplorerModal.scss';
 
 type Props = {
     additionalColumns?: Array<React.ComponentType<Column>>,
-    /** Items that will show up as selected */
-    autoSelectedItems: Object,
+    autoSelectedItems?: Object,
     breadcrumbProps?: BreadcrumbProps,
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
-    // Called when items are deselected
-    deselectAutoSelectedItem: Function,
+    deselectAutoSelectedItem?: Function,
     hasFolderTreeBreadcrumbs: boolean,
     includeSubfoldersProps?: Object,
     isNoSelectionAllowed?: boolean,
