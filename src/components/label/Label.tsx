@@ -24,6 +24,8 @@ export interface LabelProps {
     infoIconProps?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
     /** Tooltip text for the info icon */
     infoTooltip?: React.ReactNode;
+    /** Optional props for the label element */
+    labelElProps?: React.ComponentPropsWithoutRef<'label'>;
     /** Whether to show the `(Optional)` text next to the label for an optional field */
     showOptionalText?: boolean;
     /** The label text */
@@ -32,7 +34,16 @@ export interface LabelProps {
     tooltip?: React.ReactNode;
 }
 
-const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hideLabel, children }: LabelProps) => {
+const Label = ({
+    text,
+    tooltip,
+    labelElProps,
+    infoTooltip,
+    infoIconProps,
+    showOptionalText,
+    hideLabel,
+    children,
+}: LabelProps) => {
     const labelContent = [
         <span key="labelText">{text}</span>,
         showOptionalText ? <OptionalFormattedMessage key="optionalMessage" /> : null,
@@ -49,11 +60,15 @@ const Label = ({ text, tooltip, infoTooltip, infoIconProps, showOptionalText, hi
     }
 
     if (hideLabel) {
-        return <HiddenLabel labelContent={labelContent}>{children}</HiddenLabel>;
+        return (
+            <HiddenLabel labelContent={labelContent} labelElProps={labelElProps}>
+                {children}
+            </HiddenLabel>
+        );
     }
 
     return (
-        <StandardLabel labelContent={labelContent} tooltip={tooltip}>
+        <StandardLabel labelContent={labelContent} tooltip={tooltip} labelElProps={labelElProps}>
             {children}
         </StandardLabel>
     );
