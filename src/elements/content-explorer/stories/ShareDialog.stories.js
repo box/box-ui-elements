@@ -47,7 +47,7 @@ export const shareDialog = {
 };
 
 export default {
-    title: 'Elements/ContentExplorer/ShareDialog',
+    title: 'Elements/ContentExplorer',
     component: ShareDialog,
     args: {
         canSetShareAccess: false,

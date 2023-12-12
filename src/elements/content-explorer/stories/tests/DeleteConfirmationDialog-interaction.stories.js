@@ -77,6 +77,6 @@ export const deleteDialogIsLoading = {
 };
 
 export default {
-    title: 'Elements/ContentExplorer/tests/DeleteConfirmationDialog',
+    title: 'Elements/ContentExplorer/tests/DeleteConfirmationDialog/interaction',
     component: DeleteConfirmationDialog,
 };

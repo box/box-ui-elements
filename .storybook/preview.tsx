@@ -10,9 +10,9 @@ import { ProjectAnnotations, Renderer } from "@storybook/types";
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;
 global.FILE_ID = global.FILE_ID || '415542803939';
-global.FOLDER_ID = global.FOLDER_ID || '0';
+global.FOLDER_ID = global.FOLDER_ID || '69083462919';
 // NOTE: The token used is a readonly token accessing public data in a demo enterprise. DO NOT PUT A WRITE TOKEN
-global.TOKEN = global.TOKEN || 'y9TFkbZ1n29KEpR3Fl6Aqlc24tV5JAMh';
+global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 
 const preview: ProjectAnnotations<Renderer> = {
     globals: {

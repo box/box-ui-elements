@@ -24,7 +24,7 @@ export const deleteDialog = {
         const { appElement, rootElement } = addRootElement();
         return (
             <div>
-                <DeleteConfirmationDialog
+                {/*<DeleteConfirmationDialog
                     appElement={appElement}
                     item={{
                         id: '123456',
@@ -36,7 +36,7 @@ export const deleteDialog = {
                     {...args}
                 />
 
-                <PrimaryButton onClick={handleOpenModal}>Launch DeleteConfirmationDialog</PrimaryButton>
+                <PrimaryButton onClick={handleOpenModal}>Launch DeleteConfirmationDialog</PrimaryButton>*/}
             </div>
         );
     },
