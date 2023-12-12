@@ -17,7 +17,6 @@ type Props = {
     className?: string,
     customInput?: React.ComponentType<any>,
     description?: string,
-    deselectAutoSelectedItem?: Function,
     hasFolderTreeBreadcrumbs: boolean,
     includeSubfoldersProps?: Object,
     isNoSelectionAllowed?: boolean,

@@ -4,7 +4,6 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
 <div
   className="content-explorer"
   data-testid="content-explorer"
-  deselectAutoSelectedItem={[Function]}
   onClick={[Function]}
 >
   <ContentExplorerHeaderActions

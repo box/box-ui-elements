@@ -44,8 +44,6 @@ class ContentExplorer extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         /** Props that contains the custom search input. Is rendered in header actions */
         customInput: PropTypes.func,
-        /** Called when items are deselected */
-        deselectAutoSelectedItem: PropTypes.func,
         /** Whether the user can see the breadcrumbs represented with the folder tree button */
         hasFolderTreeBreadcrumbs: PropTypes.bool,
         /** Any extra items in the header to the right of the search input (and new folder button) */
@@ -353,7 +351,6 @@ class ContentExplorer extends Component {
         }
 
         this.setState({ selectedItems: newSelectedItems });
-
         if (onSelectedItemsUpdate) {
             onSelectedItemsUpdate(newSelectedItems);
         }
@@ -398,11 +395,9 @@ class ContentExplorer extends Component {
     };
 
     toggleSelectedItem = (selectedItems, item) => {
-        const { deselectAutoSelectedItem } = this.props;
         const result = { ...selectedItems };
         if (result[item.id]) {
             delete result[item.id];
-            deselectAutoSelectedItem(item.id);
         } else {
             result[item.id] = item;
         }
@@ -423,13 +418,12 @@ class ContentExplorer extends Component {
     };
 
     unselectAll = () => {
-        const { items, deselectAutoSelectedItem } = this.props;
+        const { items } = this.props;
         const { selectedItems } = this.state;
         const result = { ...selectedItems };
         items.forEach(item => {
             if (result[item.id]) {
                 delete result[item.id];
-                deselectAutoSelectedItem(item.id);
             }
         });
         return result;
@@ -442,6 +436,7 @@ class ContentExplorer extends Component {
         }
         const { isSelectAllChecked } = this.state;
         const newSelectedItems = isSelectAllChecked ? this.unselectAll() : this.selectAll();
+
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: !isSelectAllChecked });
         if (onSelectedItemsUpdate) {
             onSelectedItemsUpdate(newSelectedItems);
@@ -514,7 +509,6 @@ class ContentExplorer extends Component {
             'initialSelectedItems',
             'onFoldersPathUpdate',
             'onSelectedItemsUpdate',
-            'deselectAutoSelectedItems',
         ]);
         const canIncludeSubfolders = !!includeSubfoldersProps;
         const hasSubheader = canIncludeSubfolders || isSelectAllAllowed;

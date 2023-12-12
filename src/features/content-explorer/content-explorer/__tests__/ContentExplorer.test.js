@@ -28,7 +28,6 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 onLoadMoreItems={() => {}}
                 listWidth={500}
                 listHeight={500}
-                deselectAutoSelectedItem={() => {}}
                 {...props}
             />
         );
@@ -691,37 +690,28 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 selectedItems: { id: { id: 'id', name: 'name' } },
                 item: { id: 'id', name: 'name' },
                 expectedLength: 0,
-                shouldTriggerDeselectAutoSelectedItem: true,
             },
             {
                 selectedItems: { id: { id: 'id', name: 'name' } },
                 item: { id: 'id2', name: 'name' },
                 expectedLength: 2,
-                shouldTriggerDeselectAutoSelectedItem: false,
             },
             {
                 selectedItems: {},
                 item: { id: 'id', name: 'name' },
                 expectedLength: 1,
-                shouldTriggerDeselectAutoSelectedItem: false,
             },
-        ].forEach(({ selectedItems, item, expectedLength, shouldTriggerDeselectAutoSelectedItem }) => {
+        ].forEach(({ selectedItems, item, expectedLength }) => {
             test('should toggle', () => {
-                const deselectAutoSelectedItemMock = jest.fn();
-
                 const wrapper = renderComponent(
                     {
                         contentExplorerMode: ContentExplorerModes.SELECT_FILE,
-                        deselectAutoSelectedItem: deselectAutoSelectedItemMock,
                     },
                     false,
                 );
 
                 const result = wrapper.instance().toggleSelectedItem(selectedItems, item);
                 expect(Object.keys(result).length).toEqual(expectedLength);
-                if (shouldTriggerDeselectAutoSelectedItem) {
-                    expect(deselectAutoSelectedItemMock).toHaveBeenCalledTimes(Object.keys(selectedItems).length);
-                }
             });
             test('should set initialSelectedItems', () => {
                 const wrapper = renderComponent(
@@ -760,11 +750,9 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         });
 
         test('should remove items from autoSelectedItems when unselectAll is called', () => {
-            const deselectAutoSelectedItem = jest.fn();
-            const wrapper = renderComponent({ items, deselectAutoSelectedItem });
+            const wrapper = renderComponent({ items });
             wrapper.setState({ selectedItems });
             const result = wrapper.instance().unselectAll();
-            expect(deselectAutoSelectedItem).toHaveBeenCalledTimes(items.length);
             expect(result).toStrictEqual({});
         });
 
