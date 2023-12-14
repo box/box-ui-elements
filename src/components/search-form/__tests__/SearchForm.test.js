@@ -127,9 +127,9 @@ describe('components/search-form/SearchForm', () => {
         // Sift through the nested HOCs to find the correct element
         const searchActions = wrapper
             .find('LoadableSearchActions')
-            .shallow()
-            .shallow()
-            .shallow();
+            .dive()
+            .dive()
+            .dive();
         const { onClearHandler } = wrapper.instance();
         expect(searchActions.find('.clear-button').prop('onClick')).toEqual(onClearHandler);
     });
