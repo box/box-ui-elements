@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
 import { useArgs } from '@storybook/preview-api';
-import { addRootElement } from '../../../utils/storybook';
+
+import { addRootElement, defaultVisualConfig } from '../../../utils/storybook';
 import PrimaryButton from '../../../components/primary-button/PrimaryButton';
+
 import DeleteConfirmationDialog from '../DeleteConfirmationDialog';
 
 // need to import this into the story because it's usually in ContentExplorer
@@ -17,14 +19,14 @@ export const deleteDialog = {
         const handleOpenModal = () => setArgs({ isOpen: true });
 
         const handleCloseModal = () => {
-            // args.onCancel(); // need to call it from the args, so that it records the action
             setArgs({ isOpen: false });
         };
 
         const { appElement, rootElement } = addRootElement();
+
         return (
             <div>
-                {/*<DeleteConfirmationDialog
+                <DeleteConfirmationDialog
                     appElement={appElement}
                     item={{
                         id: '123456',
@@ -36,7 +38,7 @@ export const deleteDialog = {
                     {...args}
                 />
 
-                <PrimaryButton onClick={handleOpenModal}>Launch DeleteConfirmationDialog</PrimaryButton>*/}
+                <PrimaryButton onClick={handleOpenModal}>Launch DeleteConfirmationDialog</PrimaryButton>
             </div>
         );
     },

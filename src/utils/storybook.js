@@ -1,3 +1,5 @@
+// @flow
+
 // eslint-disable-next-line import/prefer-default-export
 export const addRootElement = () => {
     let appElement = document.getElementById('rootElement');
@@ -14,4 +16,24 @@ export const addRootElement = () => {
         rootElement.appendChild(appElement);
     }
     return { appElement, rootElement };
+};
+
+export const SLEEP_TIMEOUT = 3250;
+
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export const enableSnapshotsParams = {
+    chromatic: { disableSnapshot: false },
+};
+
+export const disableControlsParams = {
+    controls: { exclude: /.*/ },
+};
+
+export const defaultVisualConfig = {
+    parameters: {
+        ...enableSnapshotsParams,
+    },
 };

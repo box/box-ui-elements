@@ -3,31 +3,27 @@ import * as React from 'react';
 import { expect } from '@storybook/jest';
 import { within } from '@storybook/testing-library';
 
+import { ACCESS_OPEN } from '../../../../constants';
 import { addRootElement, defaultVisualConfig } from '../../../../utils/storybook';
 
-import DeleteConfirmationDialog from '../../DeleteConfirmationDialog';
+import ShareDialog from '../../ShareDialog';
 
 // need to import this into the story because it's usually in ContentExplorer
 import '../../../common/modal.scss';
 
 const item = {
-    id: '123456',
-    name:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque. Aliquam faucibus purus in massa tempor nec. Ut consequat semper viverra nam libero justo laoreet sit amet. Purus gravida quis blandit turpis cursus in hac. Dui ut ornare lectus sit amet est. Nisl condimentum id venenatis a condimentum vitae sapien ',
+    id: 'abcdefg',
+    shared_link: {
+        access: ACCESS_OPEN,
+        url: 'https://cloud.box.com/s/abcdefg',
+    },
 };
-export const deleteDialogNotLoading = {
+
+export const shareDialogNotLoading = {
     render: () => {
         const { appElement, rootElement } = addRootElement();
 
-        return (
-            <DeleteConfirmationDialog
-                appElement={appElement}
-                isLoading={false}
-                isOpen
-                item={item}
-                parentElement={rootElement}
-            />
-        );
+        return <ShareDialog appElement={appElement} isLoading={false} isOpen item={item} parentElement={rootElement} />;
     },
     play: async () => {
         const root = within(document.querySelector('#rootElement'));
@@ -45,19 +41,11 @@ export const deleteDialogNotLoading = {
     },
 };
 
-export const deleteDialogIsLoading = {
+export const shareDialogIsLoading = {
     render: () => {
         const { appElement, rootElement } = addRootElement();
 
-        return (
-            <DeleteConfirmationDialog
-                appElement={appElement}
-                isLoading
-                isOpen
-                item={item}
-                parentElement={rootElement}
-            />
-        );
+        return <ShareDialog appElement={appElement} isLoading isOpen item={item} parentElement={rootElement} />;
     },
     play: async () => {
         const root = within(document.querySelector('#rootElement'));
@@ -78,8 +66,8 @@ export const deleteDialogIsLoading = {
 };
 
 export default {
-    title: 'Elements/ContentExplorer/tests/DeleteConfirmationDialog/interaction',
-    component: DeleteConfirmationDialog,
+    title: 'Elements/ContentExplorer/tests/ShareDialog/interaction',
+    component: ShareDialog,
     parameters: {
         ...defaultVisualConfig.parameters,
     },
