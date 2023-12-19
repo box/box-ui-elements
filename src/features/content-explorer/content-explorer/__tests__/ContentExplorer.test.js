@@ -269,9 +269,9 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.find('ContentExplorerActionButtons').prop('areButtonsDisabled')).toBe(false);
         });
 
-        test('should render all items from both selectedItems state and autoSelectedItems prop', () => {
+        test('should render all items from both selectedItems state and controlledSelectedItems prop', () => {
             const wrapper = renderComponent({
-                autoSelectedItems: { '2': { id: '2', name: 'item2' } },
+                controlledSelectedItems: { '2': { id: '2', name: 'item2' } },
             });
             const selectedItems = { '1': { id: '1', name: 'item1' } };
             wrapper.setState({ selectedItems });
@@ -749,13 +749,6 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(result).toStrictEqual({});
         });
 
-        test('should remove items from autoSelectedItems when unselectAll is called', () => {
-            const wrapper = renderComponent({ items });
-            wrapper.setState({ selectedItems });
-            const result = wrapper.instance().unselectAll();
-            expect(result).toStrictEqual({});
-        });
-
         test('should call selectAll when handleSelectAllClick and checkbox is not selected', () => {
             const wrapper = renderComponent({ items });
             const instance = wrapper.instance();
@@ -806,21 +799,21 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
     });
 
     describe('handleItemClick()', () => {
-        test('should update selectedItems state correctly with autoSelectedItems when new item is clicked', () => {
+        test('should update selectedItems state correctly with controlledSelectedItems when new item is clicked', () => {
             const items = [
                 { id: 'item1', name: 'name1' },
                 { id: 'item2', name: 'name2' },
             ];
-            const autoSelectedItems = { item1: { id: 'item1', name: 'name1' } };
+            const controlledSelectedItems = { item1: { id: 'item1', name: 'name1' } };
             const mockEvent = { stopPropagation: () => {} };
 
             const wrapper = renderComponent({
                 items,
-                autoSelectedItems,
+                controlledSelectedItems,
                 contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
             });
             wrapper.instance().handleItemClick({ event: mockEvent, index: 1 });
-            expect(Object.keys(wrapper.state('selectedItems')).length).toEqual(2);
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(2);
         });
     });
 });

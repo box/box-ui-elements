@@ -27,7 +27,7 @@ class ContentExplorer extends Component {
          */
         additionalColumns: PropTypes.arrayOf(PropTypes.element),
         /** Items that will show up as selected */
-        autoSelectedItems: PropTypes.object,
+        controlledSelectedItems: PropTypes.object,
         /**  Allow users to choose no selections in MULTI_SELECT mode, defaults to false  */
         isNoSelectionAllowed: PropTypes.bool,
         /** Props for breadcrumbs */
@@ -331,10 +331,10 @@ class ContentExplorer extends Component {
     };
 
     handleItemClick = ({ event, index }) => {
-        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate, autoSelectedItems } = this.props;
+        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate, controlledSelectedItems } = this.props;
         const { selectedItems } = this.state;
         const item = items[index];
-        const allSelectedItems = { ...selectedItems, ...autoSelectedItems };
+        const allSelectedItems = { ...selectedItems, ...controlledSelectedItems };
 
         if (item.isDisabled || item.isLoading || item.isActionDisabled) {
             return;
@@ -454,7 +454,7 @@ class ContentExplorer extends Component {
         const {
             actionButtonsProps,
             additionalColumns,
-            autoSelectedItems,
+            controlledSelectedItems,
             isNoSelectionAllowed = false,
             breadcrumbProps,
             cancelButtonProps,
@@ -497,7 +497,8 @@ class ContentExplorer extends Component {
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
-        const allSelectedItems = { ...selectedItems, ...autoSelectedItems };
+        const allSelectedItems = { ...selectedItems, ...controlledSelectedItems };
+
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
         const currentFolder = this.getCurrentFolder();
         const contentExplorerProps = omit(rest, [

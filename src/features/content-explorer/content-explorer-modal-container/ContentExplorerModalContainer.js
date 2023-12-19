@@ -71,7 +71,7 @@ class ContentExplorerModalContainer extends Component {
         /** Initial items that will show up as selected */
         initialSelectedItems: PropTypes.object,
         /** Items that will show up as selected */
-        autoSelectedItems: PropTypes.object,
+        controlledSelectedItems: PropTypes.object,
         /**
          * Called when the current folder changes
          *

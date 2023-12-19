@@ -12,9 +12,9 @@ import './ContentExplorerModal.scss';
 
 type Props = {
     additionalColumns?: Array<React.ComponentType<Column>>,
-    autoSelectedItems?: Object,
     breadcrumbProps?: BreadcrumbProps,
     className?: string,
+    controlledSelectedItems?: Object,
     customInput?: React.ComponentType<any>,
     description?: string,
     hasFolderTreeBreadcrumbs: boolean,
