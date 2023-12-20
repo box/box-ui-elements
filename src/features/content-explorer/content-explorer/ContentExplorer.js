@@ -201,6 +201,10 @@ class ContentExplorer extends Component {
         document.removeEventListener('click', this.handleDocumentClick, true);
     }
 
+    getAllSelectedItems = () => {
+        return { ...this.state.selectedItems, ...this.props.controlledSelectedItems };
+    };
+
     areAllItemsSelected = () => {
         const { items } = this.props;
         const { selectedItems } = this.state;
@@ -331,10 +335,8 @@ class ContentExplorer extends Component {
     };
 
     handleItemClick = ({ event, index }) => {
-        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate, controlledSelectedItems } = this.props;
-        const { selectedItems } = this.state;
+        const { contentExplorerMode, items, onSelectItem, onSelectedItemsUpdate } = this.props;
         const item = items[index];
-        const allSelectedItems = { ...selectedItems, ...controlledSelectedItems };
 
         if (item.isDisabled || item.isLoading || item.isActionDisabled) {
             return;
@@ -345,7 +347,7 @@ class ContentExplorer extends Component {
 
         let newSelectedItems = {};
         if (contentExplorerMode === ContentExplorerModes.MULTI_SELECT) {
-            newSelectedItems = this.toggleSelectedItem(allSelectedItems, item);
+            newSelectedItems = this.toggleSelectedItem(this.getAllSelectedItems(), item);
         } else {
             newSelectedItems[item.id] = item;
         }
@@ -496,8 +498,8 @@ class ContentExplorer extends Component {
             searchInputProps,
             ...rest
         } = this.props;
-        const { isInSearchMode, foldersPath, selectedItems, isSelectAllChecked } = this.state;
-        const allSelectedItems = { ...selectedItems, ...controlledSelectedItems };
+        const { isInSearchMode, foldersPath, isSelectAllChecked } = this.state;
+        const allSelectedItems = this.getAllSelectedItems();
 
         const isViewingSearchResults = isInSearchMode && foldersPath.length === 1;
         const currentFolder = this.getCurrentFolder();
@@ -519,24 +521,22 @@ class ContentExplorer extends Component {
         // NOTE: it almost feels like this whole section should be inside the
         // ContentExplorerActionButtons instead. There's a lot of implicit knowledge
         // of what the action buttons are and what they should be doing.
+        const isFirstSelectedItemDisabled = allSelectedItems[selectedItemsIds[0]]?.isActionDisabled;
         if (contentExplorerMode === ContentExplorerModes.MULTI_SELECT) {
             // NOTE: only expecting to have 1 (choose) button so as long as something
             // is selected and that item's isActionDisabled is false, we enable the action button
             areActionButtonsDisabled =
                 (selectedItemsIds.length === 0 && !isNoSelectionAllowed) ||
-                (selectedItemsIds.length === 1 && allSelectedItems[selectedItemsIds[0]].isActionDisabled);
+                (selectedItemsIds.length === 1 && isFirstSelectedItemDisabled);
         } else if (isViewingSearchResults || contentExplorerMode === ContentExplorerModes.SELECT_FILE) {
             // Buttons are only enabled when an item is selected
             // When viewing search results, there is no "current folder"
             // When selecting a file, the file can only selected from the list
-            areActionButtonsDisabled =
-                selectedItemsIds.length === 0 || allSelectedItems[selectedItemsIds[0]].isActionDisabled;
+            areActionButtonsDisabled = selectedItemsIds.length === 0 || isFirstSelectedItemDisabled;
         } else {
             // Buttons are enabled using the selected item or the current folder if no item is selected
             areActionButtonsDisabled =
-                selectedItemsIds.length > 0
-                    ? allSelectedItems[selectedItemsIds[0]].isActionDisabled
-                    : currentFolder.isActionDisabled;
+                selectedItemsIds.length > 0 ? isFirstSelectedItemDisabled : currentFolder.isActionDisabled;
         }
 
         return (
