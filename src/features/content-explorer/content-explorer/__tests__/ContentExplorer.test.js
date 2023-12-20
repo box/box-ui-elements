@@ -268,6 +268,16 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
             expect(wrapper.find('ContentExplorerActionButtons').prop('areButtonsDisabled')).toBe(false);
         });
+
+        test('should render all items from both selectedItems state and controlledSelectedItems prop', () => {
+            const wrapper = renderComponent({
+                controlledSelectedItems: { '2': { id: '2', name: 'item2' } },
+            });
+            const selectedItems = { '1': { id: '1', name: 'item1' } };
+            wrapper.setState({ selectedItems });
+            expect(Object.keys(wrapper.find('ItemList').prop('selectedItems')).length).toBe(2);
+            expect(Object.keys(wrapper.find('ContentExplorerActionButtons').prop('selectedItems')).length).toBe(2);
+        });
     });
 
     describe('onEnterFolder', () => {
@@ -785,6 +795,25 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.state('isSelectAllChecked')).toBeTruthy();
             expect(instance.selectAll).toHaveBeenCalledTimes(0);
             expect(instance.unselectAll).toHaveBeenCalledTimes(0);
+        });
+    });
+
+    describe('handleItemClick()', () => {
+        test('should update selectedItems state correctly with controlledSelectedItems when new item is clicked', () => {
+            const items = [
+                { id: 'item1', name: 'name1' },
+                { id: 'item2', name: 'name2' },
+            ];
+            const controlledSelectedItems = { item1: { id: 'item1', name: 'name1' } };
+            const mockEvent = { stopPropagation: () => {} };
+
+            const wrapper = renderComponent({
+                items,
+                controlledSelectedItems,
+                contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
+            });
+            wrapper.instance().handleItemClick({ event: mockEvent, index: 1 });
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(2);
         });
     });
 });
