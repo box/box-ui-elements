@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
 import type { Node } from 'react';
-import { injectIntl, type IntlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import { AutoSizer } from '@box/react-virtualized/dist/es/AutoSizer/index';
 import { WindowScroller } from '@box/react-virtualized/dist/es/WindowScroller/index';
 

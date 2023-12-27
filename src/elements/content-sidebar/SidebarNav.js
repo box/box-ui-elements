@@ -5,7 +5,8 @@
  */
 
 import * as React from 'react';
-import { injectIntl, type IntlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import AdditionalTabs from './additional-tabs';
 import IconChatRound from '../../icons/general/IconChatRound';
 import IconDocInfo from '../../icons/general/IconDocInfo';

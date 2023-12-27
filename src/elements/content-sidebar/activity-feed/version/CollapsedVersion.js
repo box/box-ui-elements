@@ -4,7 +4,8 @@
  */
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import ActivityCard from '../ActivityCard';
 import IconInfo from '../../../../icons/general/IconInfo';
 import PlainButton from '../../../../components/plain-button';

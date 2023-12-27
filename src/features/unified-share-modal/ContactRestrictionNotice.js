@@ -3,7 +3,8 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
-import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 
 import Tooltip from '../../components/tooltip';
 import PlainButton from '../../components/plain-button';

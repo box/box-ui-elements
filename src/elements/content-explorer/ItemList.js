@@ -6,7 +6,8 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { injectIntl, type IntlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import { Table, Column } from '@box/react-virtualized/dist/es/Table';
 import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';

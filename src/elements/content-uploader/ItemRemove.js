@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { injectIntl, type IntlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import IconClose from '../../icons/general/IconClose';
