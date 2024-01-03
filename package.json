@@ -402,6 +402,8 @@
         }
     },
     "resolutions": {
-        "ip": "1.1.8"
+        "ip": "1.1.8",
+        "@types/react": "17.0.14",
+        "@types/react-dom": "17.0.14"
     }
 }
