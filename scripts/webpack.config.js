@@ -61,8 +61,9 @@ function getConfig(isReactExternalized) {
         bail: true,
         entry: entriesToBuild,
         output: {
-            path: outputPath,
             filename: `[name]${isReactExternalized ? noReactSuffix : ''}.js`,
+            hashFunction: 'xxhash64',
+            path: outputPath,
             publicPath: `/${version}/${language}/`,
         },
         resolve: {
