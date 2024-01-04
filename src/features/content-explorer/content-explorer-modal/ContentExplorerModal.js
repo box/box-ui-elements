@@ -14,6 +14,7 @@ type Props = {
     additionalColumns?: Array<React.ComponentType<Column>>,
     breadcrumbProps?: BreadcrumbProps,
     className?: string,
+    controlledSelectedItems?: Object,
     customInput?: React.ComponentType<any>,
     description?: string,
     hasFolderTreeBreadcrumbs: boolean,
