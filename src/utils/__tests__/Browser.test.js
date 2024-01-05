@@ -96,6 +96,34 @@ describe('util/Browser/getUserAgent()', () => {
     });
 });
 
+describe('util/Browser/canDownload()', () => {
+    test('should return true if browser is not mobile', () => {
+        browser.isMobile = jest.fn().mockReturnValue(false);
+        expect(browser.canDownload()).toBe(true);
+    });
+
+    test('should return false if browser is mobile and externalHost is present', () => {
+        browser.isMobile = jest.fn().mockReturnValue(true);
+        window.externalHost = {};
+        expect(browser.canDownload()).toBe(false);
+        window.externalHost = undefined;
+    });
+
+    test("should return false if browser is mobile and doesn't support downloads", () => {
+        browser.isMobile = jest.fn().mockReturnValue(true);
+        window.externalHost = undefined;
+        global.document.createElement = jest.fn().mockReturnValue({});
+        expect(browser.canDownload()).toBe(false);
+    });
+
+    test('should return true if browser is mobile and supports downloads', () => {
+        browser.isMobile = jest.fn().mockReturnValue(true);
+        window.externalHost = undefined;
+        global.document.createElement = jest.fn().mockReturnValue({ download: true });
+        expect(browser.canDownload()).toBe(true);
+    });
+});
+
 describe('util/Browser/canPlayDash()', () => {
     test('should return false when there is no media source', () => {
         expect(browser.canPlayDash()).toBeFalsy();
