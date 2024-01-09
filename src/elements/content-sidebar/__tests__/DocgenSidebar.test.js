@@ -31,19 +31,13 @@ describe('elements/content-sidebar/Docgen/DocgenSidebar', () => {
     test('should render Docgen sidebar component correctly with search and tags list', async () => {
         const wrapper = getWrapper(defaultProps);
 
-        // search bar
-        expect(
-            wrapper
-                .find('input')
-                .at(0)
-                .props().placeholder,
-        ).toEqual('Search');
+        const searchBar = wrapper.find('input').at(0);
+        expect(searchBar.props().placeholder).toEqual('Search');
 
         await wrapper.update();
 
-        // tags list
-        const tag = wrapper.find('p').findWhere(node => node.text() === 'Docgen Test Tag');
-        expect(tag).toHaveLength(2);
+        const tagList = wrapper.find('p').findWhere(node => node.text() === 'Docgen Test Tag');
+        expect(tagList).toHaveLength(2);
 
         expect(wrapper).toMatchSnapshot();
     });
