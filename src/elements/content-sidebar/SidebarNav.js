@@ -19,14 +19,16 @@ import SidebarToggle from './SidebarToggle';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
-    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_DOCGEN,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
+import Tag16 from '../../icon/fill/Tag16';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
@@ -37,6 +39,7 @@ type Props = {
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    isDocgenTemplate?: boolean,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
 } & InjectIntlProvidedProps;
@@ -53,6 +56,7 @@ const SidebarNav = ({
     intl,
     isOpen,
     onNavigate,
+    isDocgenTemplate = false,
 }: Props) => {
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
 
@@ -98,6 +102,15 @@ const SidebarNav = ({
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
                             <IconMetadataThick />
+                        </SidebarNavButton>
+                    )}
+                    {isDocgenTemplate && (
+                        <SidebarNavButton
+                            data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
+                            sidebarView={SIDEBAR_DOCGEN}
+                            tooltip="Box Doc Gen"
+                        >
+                            <Tag16 className="bcs-SidebarNavSignButton-icon" />
                         </SidebarNavButton>
                     )}
                 </SidebarNavTablist>

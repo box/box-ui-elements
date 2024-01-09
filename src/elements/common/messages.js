@@ -417,6 +417,11 @@ const messages = defineMessages({
         description: 'Title for the preview activity feed.',
         defaultMessage: 'Activity',
     },
+    sidebarDocgenTitle: {
+        id: 'be.sidebarDocgenTitle',
+        description: 'Title for the DocGen sidebar tab.',
+        defaultMessage: 'Doc Gen Tags',
+    },
     sidebarMetadataTitle: {
         id: 'be.sidebarMetadataTitle',
         description: 'Title for the preview metadata.',
