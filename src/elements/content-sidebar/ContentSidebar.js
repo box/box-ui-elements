@@ -23,8 +23,9 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureProvider } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 
-import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { WithLoggerProps } from '../../common/types/logging';
@@ -50,6 +51,7 @@ type Props = {
     currentUser?: User,
     defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
+    docGenSidebarProps?: DocGenSidebarProps,
     features: FeatureConfig,
     fileId?: string,
     getPreview: Function,
@@ -104,6 +106,7 @@ class ContentSidebar extends React.Component<Props, State> {
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         defaultView: '',
         detailsSidebarProps: {},
+        docGenSidebarProps: { enabled: false },
         getPreview: noop,
         getViewer: noop,
         hasActivityFeed: false,
@@ -325,6 +328,7 @@ class ContentSidebar extends React.Component<Props, State> {
             currentUser,
             defaultView,
             detailsSidebarProps,
+            docGenSidebarProps,
             fileId,
             getPreview,
             getViewer,
@@ -361,6 +365,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             className={className}
                             currentUser={currentUser}
                             detailsSidebarProps={detailsSidebarProps}
+                            docGenSidebarProps={docGenSidebarProps}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}

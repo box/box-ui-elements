@@ -18,6 +18,13 @@ exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return th
 />
 `;
 
+exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for docgen 1`] = `
+<FormattedMessage
+  defaultMessage="Doc Gen Tags"
+  id="be.sidebarDocGenTitle"
+/>
+`;
+
 exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for metadata 1`] = `
 <FormattedMessage
   defaultMessage="Metadata"

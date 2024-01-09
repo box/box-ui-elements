@@ -15,6 +15,7 @@ import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
+    ORIGIN_DOCGEN_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_VERSIONS_SIDEBAR,
@@ -23,8 +24,10 @@ import {
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
+    SIDEBAR_VIEW_DOCGEN,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
@@ -36,6 +39,7 @@ type Props = {
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
+    docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
     file: BoxItem,
     fileId: string,
@@ -43,6 +47,7 @@ type Props = {
     getViewer: Function,
     hasActivity: boolean,
     hasDetails: boolean,
+    hasDocGen: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
@@ -69,6 +74,7 @@ const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME
 const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
 const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task' };
@@ -83,6 +89,7 @@ const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
     MARK_NAME_JS_LOADING_METADATA,
 );
+const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
 const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_VERSIONS,
     MARK_NAME_JS_LOADING_VERSIONS,
@@ -153,6 +160,7 @@ class SidebarPanels extends React.Component<Props, State> {
             currentUser,
             currentUserError,
             detailsSidebarProps,
+            docGenSidebarProps,
             elementId,
             file,
             fileId,
@@ -160,6 +168,7 @@ class SidebarPanels extends React.Component<Props, State> {
             getViewer,
             hasActivity,
             hasDetails,
+            hasDocGen,
             hasMetadata,
             hasSkills,
             hasVersions,
@@ -266,6 +275,19 @@ class SidebarPanels extends React.Component<Props, State> {
                         )}
                     />
                 )}
+                {hasDocGen && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_DOCGEN}`}
+                        render={() => (
+                            <LoadableDocGenSidebar
+                                hasSidebarInitialized={isInitialized}
+                                startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
+                                {...docGenSidebarProps}
+                            />
+                        )}
+                    />
+                )}
                 {hasVersions && (
                     <Route
                         path={SIDEBAR_PATH_VERSIONS}
@@ -287,7 +309,9 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (hasSkills) {
+                        if (hasDocGen) {
+                            redirect = SIDEBAR_VIEW_DOCGEN;
+                        } else if (hasSkills) {
                             redirect = SIDEBAR_VIEW_SKILLS;
                         } else if (hasActivity) {
                             redirect = SIDEBAR_VIEW_ACTIVITY;
