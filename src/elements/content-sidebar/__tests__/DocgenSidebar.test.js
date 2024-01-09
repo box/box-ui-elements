@@ -48,14 +48,15 @@ describe('elements/content-sidebar/Docgen/DocgenSidebar', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    // TO DO should render empty state
-
-    // TO DO should render loading state
-
-    // TO DO error state
     test('componentDidMount() should call fetch tags', () => {
         getWrapper(defaultProps);
 
         expect(docgenPreviewSidebarProps.getDocgenTags).toHaveBeenCalled();
     });
+
+    // TO DO should render empty state
+
+    // TO DO should render loading state
+
+    // TO DO error state
 });
