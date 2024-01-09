@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`elements/content-sidebar/Docgen/DocgenSidebar should render Docgen sidebar component correctly with search and tags list 1`] = `
+<SidebarContent
+  elementId=""
+  sidebarView="metadata"
+  title="Box Docgen"
+>
+  <input
+    placeholder="Search"
+  />
+  <div>
+    <p
+      key="1"
+    >
+      Docgen Test Tag
+    </p>
+    <p
+      key="12"
+    >
+      Docgen Test Tag 2
+    </p>
+  </div>
+</SidebarContent>
+`;

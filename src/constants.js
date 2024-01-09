@@ -396,6 +396,7 @@ export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
 export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 export const SIDEBAR_VIEW_VERSIONS: 'versions' = 'versions';
+export const SIDEBAR_DOCGEN: 'docgen' = 'docgen';
 
 /* ------------------ HTTP Requests ---------------------- */
 export const HTTP_GET: 'GET' = 'GET';

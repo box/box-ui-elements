@@ -6,6 +6,7 @@ export const SIDEBAR_NAV_TARGETS = {
     SKILLS: 'sidebarskills',
     METADATA: 'sidebarmetadata',
     TOGGLE: 'sidebartoggle',
+    DOCGEN: 'sidebardocgen',
 };
 
 export const SECTION_TARGETS = {

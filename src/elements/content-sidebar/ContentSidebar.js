@@ -24,6 +24,7 @@ import { withFeatureProvider } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 
 import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { DocgenSidebarProps } from './DocgenSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
@@ -50,6 +51,7 @@ type Props = {
     currentUser?: User,
     defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
+    docgenPreviewSidebarProps: DocgenSidebarProps,
     features: FeatureConfig,
     fileId?: string,
     getPreview: Function,
@@ -325,6 +327,7 @@ class ContentSidebar extends React.Component<Props, State> {
             currentUser,
             defaultView,
             detailsSidebarProps,
+            docgenPreviewSidebarProps,
             fileId,
             getPreview,
             getViewer,
@@ -361,6 +364,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             className={className}
                             currentUser={currentUser}
                             detailsSidebarProps={detailsSidebarProps}
+                            docgenPreviewSidebarProps={docgenPreviewSidebarProps}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}
