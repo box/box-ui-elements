@@ -144,7 +144,7 @@ class Sidebar extends React.Component<Props, State> {
 
     componentDidMount() {
         // if docgen feature is enabled, load metadata to check whether file is a docgen template
-        if (this.props.features.docgen.enabled) {
+        if (this.props.features?.docgen?.enabled) {
             this.fetchMetadata();
         }
     }
@@ -327,7 +327,7 @@ class Sidebar extends React.Component<Props, State> {
                             currentUserError={currentUserError}
                             elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
-                            docgenPreviewSidebarProps={features.docgen}
+                            docgenPreviewSidebarProps={features?.docgen}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}
