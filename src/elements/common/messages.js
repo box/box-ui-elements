@@ -417,6 +417,11 @@ const messages = defineMessages({
         description: 'Title for the preview activity feed.',
         defaultMessage: 'Activity',
     },
+    sidebarDocGenTitle: {
+        id: 'be.sidebarDocGenTitle',
+        description: 'Title for the DocGen sidebar tab.',
+        defaultMessage: 'Doc Gen Tags',
+    },
     sidebarMetadataTitle: {
         id: 'be.sidebarMetadataTitle',
         description: 'Title for the preview metadata.',
@@ -1004,6 +1009,11 @@ const messages = defineMessages({
         id: 'be.personalFolder',
         description: 'Icon title for a Box item of type folder that is private and has no collaborators',
         defaultMessage: 'Personal Folder',
+    },
+    sidebarDocGenTooltip: {
+        id: 'be.sidebarDocGenTooltip',
+        defaultMessage: 'Box Doc Gen',
+        description: 'Icon title for a Box file of type DocGen template',
     },
 });
 

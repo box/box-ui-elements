@@ -313,6 +313,7 @@ export const ORIGIN_CONTENT_PREVIEW: 'content_preview' = 'content_preview';
 export const ORIGIN_CONTENT_SIDEBAR: 'content_sidebar' = 'content_sidebar';
 export const ORIGIN_ACTIVITY_SIDEBAR: 'activity_sidebar' = 'activity_sidebar';
 export const ORIGIN_DETAILS_SIDEBAR: 'details_sidebar' = 'details_sidebar';
+export const ORIGIN_DOCGEN_SIDEBAR: 'docgen_sidebar' = 'docgen_sidebar';
 export const ORIGIN_METADATA_SIDEBAR: 'metadata_sidebar' = 'metadata_sidebar';
 export const ORIGIN_SKILLS_SIDEBAR: 'skills_sidebar' = 'skills_sidebar';
 export const ORIGIN_VERSIONS_SIDEBAR: 'versions_sidebar' = 'versions_sidebar';
@@ -396,6 +397,7 @@ export const SIDEBAR_VIEW_DETAILS: 'details' = 'details';
 export const SIDEBAR_VIEW_METADATA: 'metadata' = 'metadata';
 export const SIDEBAR_VIEW_ACTIVITY: 'activity' = 'activity';
 export const SIDEBAR_VIEW_VERSIONS: 'versions' = 'versions';
+export const SIDEBAR_VIEW_DOCGEN: 'docgen' = 'docgen';
 
 /* ------------------ HTTP Requests ---------------------- */
 export const HTTP_GET: 'GET' = 'GET';

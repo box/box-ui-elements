@@ -17,6 +17,7 @@ import {
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_VERSIONS,
+    SIDEBAR_VIEW_DOCGEN,
 } from '../../constants';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { MetadataEditor } from '../../common/types/metadata';
@@ -151,6 +152,8 @@ class SidebarUtils {
                 return <FormattedMessage {...messages.sidebarMetadataTitle} />;
             case SIDEBAR_VIEW_ACTIVITY:
                 return <FormattedMessage {...messages.sidebarActivityTitle} />;
+            case SIDEBAR_VIEW_DOCGEN:
+                return <FormattedMessage {...messages.sidebarDocGenTitle} />;
             default:
                 return null;
         }
@@ -181,6 +184,11 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_VERSIONS:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "versions-sidebar" */ './versions');
+                break;
+            case SIDEBAR_VIEW_DOCGEN:
+                importFn = import(
+                    /* webpackMode: "lazy", webpackChunkName: "docgen-sidebar" */ './DocGenSidebar/DocGenSidebar'
+                );
                 break;
             default:
                 return Promise.resolve(null);

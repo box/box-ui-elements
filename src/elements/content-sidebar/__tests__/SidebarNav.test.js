@@ -5,6 +5,7 @@ import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholde
 import AdditionalTabs from '../additional-tabs';
 import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
+import Tag16 from '../../../icon/fill/Tag16';
 import IconChatRound from '../../../icons/general/IconChatRound';
 import IconDocInfo from '../../../icons/general/IconDocInfo';
 import IconMagicWand from '../../../icons/general/IconMagicWand';
@@ -108,5 +109,16 @@ describe('elements/content-sidebar/SidebarNav', () => {
     test('should not render the Box Sign entry point if its feature is not enabled', () => {
         const wrapper = getWrapper();
         expect(wrapper.exists(SidebarNavSignButton)).toBe(false);
+    });
+    test('should render docgen tab', () => {
+        const props = {
+            hasDocGen: true,
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper.find(IconMagicWand)).toHaveLength(0);
+        expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
+        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
+        expect(wrapper.find(IconChatRound)).toHaveLength(0);
+        expect(wrapper.find(Tag16)).toHaveLength(1);
     });
 });
