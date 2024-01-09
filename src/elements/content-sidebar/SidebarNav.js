@@ -108,7 +108,7 @@ const SidebarNav = ({
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             sidebarView={SIDEBAR_DOCGEN}
-                            tooltip="Box Docgen"
+                            tooltip="Box Doc Gen"
                         >
                             <Tag16 className="bcs-SidebarNavSignButton-icon" />
                         </SidebarNavButton>

@@ -308,7 +308,9 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (hasSkills) {
+                        if (isDocgenTemplate) {
+                            redirect = SIDEBAR_DOCGEN;
+                        } else if (hasSkills) {
                             redirect = SIDEBAR_VIEW_SKILLS;
                         } else if (hasActivity) {
                             redirect = SIDEBAR_VIEW_ACTIVITY;
@@ -316,8 +318,6 @@ class SidebarPanels extends React.Component<Props, State> {
                             redirect = SIDEBAR_VIEW_DETAILS;
                         } else if (hasMetadata) {
                             redirect = SIDEBAR_VIEW_METADATA;
-                        } else {
-                            redirect = SIDEBAR_DOCGEN;
                         }
 
                         return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
