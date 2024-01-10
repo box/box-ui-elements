@@ -28,7 +28,7 @@ import {
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
-import Tag16 from '../../icon/logo/Tag16';
+import Tag16 from '../../icon/fill/Tag16';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
