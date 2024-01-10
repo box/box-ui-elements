@@ -28,8 +28,9 @@ type ExternalProps = {
 };
 
 type DocgenTag = {
-    content: string,
-    id: string,
+    json_paths: string,
+    tag_content: string,
+    tag_type: string,
 };
 
 type Props = {
@@ -51,8 +52,8 @@ class DocgenSidebar extends React.PureComponent<Props, State> {
     };
 
     componentDidMount() {
-        this.props.docgenPreviewSidebarProps.getDocgenTags().then(({ tags }) => {
-            this.setState({ tags });
+        this.props.docgenPreviewSidebarProps.getDocgenTags().then(response => {
+            this.setState({ tags: response?.payload?.data });
         });
     }
 
@@ -67,7 +68,7 @@ class DocgenSidebar extends React.PureComponent<Props, State> {
                 {tags.length > 0 ? (
                     <div>
                         {tags.map(tag => (
-                            <p key={tag.id}>{tag.content}</p>
+                            <p key={tag.json_paths}>{tag.json_paths}</p>
                         ))}
                     </div>
                 ) : (
