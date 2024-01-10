@@ -5,18 +5,31 @@ import { DocgenSidebarComponent as DocgenSidebar } from '../DocgenSidebar';
 const docgenPreviewSidebarProps = {
     getDocgenTags: jest.fn().mockReturnValue(
         Promise.resolve({
-            enabled: true,
-            extension: 'docx',
-            tags: [
-                {
-                    id: '1',
-                    content: 'Docgen Test Tag',
-                },
-                {
-                    id: '12',
-                    content: 'Docgen Test Tag 2',
-                },
-            ],
+            payload: {
+                pagination: {},
+                data: [
+                    {
+                        tag_content: '{{ isActive }}',
+                        tag_type: 'text',
+                        json_paths: ['isActive'],
+                    },
+                    {
+                        tag_content: '{{ about }}',
+                        tag_type: 'text',
+                        json_paths: ['about'],
+                    },
+                    {
+                        tag_content: '{{ phone }}',
+                        tag_type: 'text',
+                        json_paths: ['phone'],
+                    },
+                    {
+                        tag_content: '{{ company }}',
+                        tag_type: 'text',
+                        json_paths: ['company'],
+                    },
+                ],
+            },
         }),
     ),
 };
