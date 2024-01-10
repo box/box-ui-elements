@@ -96,6 +96,7 @@ class Sidebar extends React.Component<Props, State> {
 
         this.state = {
             isDirty: this.getLocationState('open') || false,
+            isDocgenTemplate: false,
         };
 
         this.setForcedByLocation();
