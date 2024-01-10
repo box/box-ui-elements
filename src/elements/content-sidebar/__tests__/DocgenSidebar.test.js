@@ -41,6 +41,12 @@ describe('elements/content-sidebar/Docgen/DocgenSidebar', () => {
     const getWrapper = (props = defaultProps, options = {}) =>
         shallow(<DocgenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
+    test('componentDidMount() should call fetch tags', () => {
+        getWrapper(defaultProps);
+
+        expect(docgenPreviewSidebarProps.getDocgenTags).toHaveBeenCalled();
+    });
+
     test('should render Docgen sidebar component correctly with search and tags list', async () => {
         const wrapper = getWrapper(defaultProps);
 
@@ -49,16 +55,10 @@ describe('elements/content-sidebar/Docgen/DocgenSidebar', () => {
 
         await wrapper.update();
 
-        const tagList = wrapper.find('p').findWhere(node => node.text() === 'Docgen Test Tag');
-        expect(tagList).toHaveLength(2);
+        const tagList = wrapper.find('p');
+        expect(tagList).toHaveLength(4);
 
         expect(wrapper).toMatchSnapshot();
-    });
-
-    test('componentDidMount() should call fetch tags', () => {
-        getWrapper(defaultProps);
-
-        expect(docgenPreviewSidebarProps.getDocgenTags).toHaveBeenCalled();
     });
 
     // TO DO should render empty state

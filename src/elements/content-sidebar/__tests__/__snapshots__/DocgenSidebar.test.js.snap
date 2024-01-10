@@ -11,14 +11,24 @@ exports[`elements/content-sidebar/Docgen/DocgenSidebar should render Docgen side
   />
   <div>
     <p
-      key="1"
+      key="isActive"
     >
-      Docgen Test Tag
+      isActive
     </p>
     <p
-      key="12"
+      key="about"
     >
-      Docgen Test Tag 2
+      about
+    </p>
+    <p
+      key="phone"
+    >
+      phone
+    </p>
+    <p
+      key="company"
+    >
+      company
     </p>
   </div>
 </SidebarContent>
