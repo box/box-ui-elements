@@ -167,7 +167,7 @@ class Sidebar extends React.Component<Props, State> {
         }
 
         // need to re-check if file is a docgen-template
-        if (file.id !== prevFile.id) {
+        if (file.id !== prevFile.id && this.props.features?.docgen?.enabled) {
             this.fetchMetadata();
         }
     }
