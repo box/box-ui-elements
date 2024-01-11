@@ -373,5 +373,15 @@
     },
     "resolutions": {
         "ip": "1.1.8"
+    },
+    "overrides": {
+        "draft-js": {
+            "react": "$react",
+            "react-dom": "$react-dom"
+        },
+        "react-tether": {
+            "react": "$react",
+            "react-dom": "$react-dom"
+        }
     }
 }
