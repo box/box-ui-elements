@@ -15,7 +15,7 @@ export type Props = {
 
 function PresenceAvatarTooltipContent({ name, interactedAt, interactionType, intl, isActive }: Props): JSX.Element {
     const lastActionMessage = determineInteractionMessage(interactionType, interactedAt);
-    const { unit, value } = convertMillisecondsToUnitAndValue(Math.abs(interactedAt - Date.now()));
+    const { unit, value } = convertMillisecondsToUnitAndValue(Date.now() - interactedAt);
     let timeAgo;
 
     if (intl.formatRelativeTime) {

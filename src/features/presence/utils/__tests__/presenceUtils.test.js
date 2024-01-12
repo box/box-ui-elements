@@ -204,6 +204,14 @@ describe('features/presence/utils/sortByActivity', () => {
                 ms: 1000 * 60 * 60 * 24 * 30 * 10,
                 expected: { unit: 'month', value: 10 },
             },
+            {
+                ms: 1000 * 60 * 60 * 24 * 365,
+                expected: { unit: 'year', value: 1 },
+            },
+            {
+                ms: 1000 * 60 * 60 * 24 * 365 * 10,
+                expected: { unit: 'year', value: 10 },
+            },
         ].forEach(({ ms, expected }) => {
             test(`should return ${JSON.stringify(expected)} when passed ${ms}`, () => {
                 expect(convertMillisecondsToUnitAndValue(ms)).toEqual(expected);
