@@ -96,17 +96,47 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
+        "development": [
+            "last 1 Chrome versions",
+            "last 1 Firefox versions",
+            "last 1 Safari versions"
+        ]
     },
     "lint-staged": {
-        "*.js": ["eslint --fix", "git add"],
-        "*.ts": ["eslint --ext=.ts --fix", "git add"],
-        "*.tsx": ["eslint --ext=.tsx --fix", "git add"],
-        "*.md": ["prettier --write --parser=markdown", "git add"],
-        "*.json": ["prettier --write --parser=json", "git add"],
-        "*.html": ["prettier --write --parser=html", "git add"],
-        "*.scss": ["prettier --write --parser=scss", "stylelint --syntax scss --fix", "git add"],
-        "*.css": ["prettier --write --parser=css", "stylelint --syntax css --fix", "git add"]
+        "*.js": [
+            "eslint --fix",
+            "git add"
+        ],
+        "*.ts": [
+            "eslint --ext=.ts --fix",
+            "git add"
+        ],
+        "*.tsx": [
+            "eslint --ext=.tsx --fix",
+            "git add"
+        ],
+        "*.md": [
+            "prettier --write --parser=markdown",
+            "git add"
+        ],
+        "*.json": [
+            "prettier --write --parser=json",
+            "git add"
+        ],
+        "*.html": [
+            "prettier --write --parser=html",
+            "git add"
+        ],
+        "*.scss": [
+            "prettier --write --parser=scss",
+            "stylelint --syntax scss --fix",
+            "git add"
+        ],
+        "*.css": [
+            "prettier --write --parser=css",
+            "stylelint --syntax css --fix",
+            "git add"
+        ]
     },
     "husky": {
         "hooks": {
@@ -188,7 +218,7 @@
         "babel-core": "^7.0.0-bridge.0",
         "babel-eslint": "^10.0.3",
         "babel-jest": "^24.9.0",
-        "babel-loader": "^8.0.6",
+        "babel-loader": "^9.1.3",
         "babel-plugin-dynamic-import-node": "^2.3.0",
         "babel-plugin-flow-react-proptypes": "^25.1.0",
         "babel-plugin-react-intl": "^5.1.18",
@@ -207,7 +237,7 @@
         "copyfiles": "^2.2.0",
         "core-js": "^3.6.4",
         "cosmiconfig": "^6.0.0",
-        "css-loader": "^3.4.2",
+        "css-loader": "^6.8.1",
         "cssnano": "^4.1.10",
         "cypress": "3.8.2",
         "deepmerge": "^4.2.2",
@@ -259,7 +289,7 @@
         "optimize-css-assets-webpack-plugin": "^5.0.3",
         "ora": "^4.0.3",
         "pikaday": "^1.8.0",
-        "postcss-loader": "^3.0.0",
+        "postcss-loader": "^7.3.3",
         "postcss-safe-parser": "^4.0.1",
         "prettier": "^1.19.1",
         "prettier-eslint-cli": "^5.0.0",
@@ -293,7 +323,7 @@
         "sanitize-html": "1.21.1",
         "sass": "1.34.1",
         "sass-lint": "^1.13.1",
-        "sass-loader": "^8.0.2",
+        "sass-loader": "^13.3.3",
         "scroll-into-view-if-needed": "^2.2.20",
         "semantic-release": "^16.0.2",
         "simple-git": "^1.131.0",
@@ -309,14 +339,14 @@
         "stylelint-config-standard": "^19.0.0",
         "stylelint-order": "^3.1.1",
         "tabbable": "^1.1.3",
-        "ts-loader": "^6.2.1",
+        "ts-loader": "^9.5.1",
         "typescript": "^5.2.2",
         "uniqid": "^5.2.0",
         "uuid": "^8.3.2",
         "wait-on": "^3.3.0",
-        "webpack": "^4.41.5",
+        "webpack": "^5.89.0",
         "webpack-bundle-analyzer": "^3.6.0",
-        "webpack-cli": "^3.3.10",
+        "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^3.10.1",
         "worker-farm": "^1.7.0",
         "yargs": "^15.1.0"

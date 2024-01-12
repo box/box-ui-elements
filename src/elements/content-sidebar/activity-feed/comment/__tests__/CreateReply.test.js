@@ -18,8 +18,10 @@ const onFocus = jest.fn();
 const onSubmit = jest.fn();
 const onClick = jest.fn();
 
-const replyInThreadMessage = localize(messages.replyInThread.id);
-const replyMessage = localize(messages.reply.id);
+// const replyInThreadMessage = localize(messages.replyInThread.id);
+const replyInThreadMessage = messages.replyInThread.defaultMessage;
+// const replyMessage = localize(messages.reply.id);
+const replyMessage = messages.reply.defaultMessage;
 
 const getWrapper = props =>
     render(
