@@ -104,7 +104,6 @@ const PreviewDialog = ({
                 canDownload={canDownload}
                 sharedLink={sharedLink}
                 sharedLinkPassword={sharedLinkPassword}
-                contentPreviewProps={contentPreviewProps}
                 requestInterceptor={requestInterceptor}
                 responseInterceptor={responseInterceptor}
             />
