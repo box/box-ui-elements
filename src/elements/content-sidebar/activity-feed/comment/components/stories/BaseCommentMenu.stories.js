@@ -20,7 +20,7 @@ export const CannotModify = getTemplate({ canEdit: false });
 export const ConfirmingDelete = getTemplate({ isConfirmingDelete: true });
 
 export default {
-    title: 'Components|BaseCommentMenu',
+    title: 'Components/BaseCommentMenu',
     component: BaseCommentMenu,
     parameters: { layout: 'centered' },
 };

@@ -19,7 +19,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Components|Fieldset',
+    title: 'Components/Fieldset',
     component: Fieldset,
     parameters: {
         notes,

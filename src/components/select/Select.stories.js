@@ -68,7 +68,7 @@ export const withInfoTooltip = () => (
 );
 
 export default {
-    title: 'Components|Select',
+    title: 'Components/Select',
     component: Select,
     parameters: {
         notes,

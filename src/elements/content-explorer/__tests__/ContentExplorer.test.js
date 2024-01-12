@@ -630,4 +630,64 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(wrapper.find('[data-testid="content-explorer"]')).toHaveLength(1);
         });
     });
+
+    describe('deleteCallback', () => {
+        const getApiDeleteMock = jest.fn();
+        const getApiMock = jest.fn().mockReturnValue({ deleteItem: getApiDeleteMock });
+        const refreshCollectionMock = jest.fn();
+        const onDeleteMock = jest.fn();
+        const boxItem = {
+            id: '123',
+            parent: {
+                id: '122',
+            },
+            permissions: {
+                can_delete: true,
+            },
+            type: 'file',
+        };
+
+        let wrapper;
+        let instance;
+
+        beforeEach(() => {
+            wrapper = getWrapper({
+                canDelete: true,
+                onDelete: onDeleteMock,
+            });
+            instance = wrapper.instance();
+            instance.api = { getAPI: getApiMock, getCache: jest.fn() };
+            instance.refreshCollection = refreshCollectionMock;
+            instance.setState({
+                selected: boxItem,
+                isDeleteModalOpen: true,
+            });
+        });
+
+        afterEach(() => {
+            getApiMock.mockClear();
+            getApiDeleteMock.mockClear();
+            refreshCollectionMock.mockClear();
+        });
+
+        test('should call refreshCollection and onDelete callback on success', async () => {
+            getApiDeleteMock.mockImplementation((item, successCallback) => successCallback());
+            instance.deleteCallback();
+
+            expect(getApiMock).toBeCalledTimes(1);
+            expect(getApiDeleteMock).toBeCalledTimes(1);
+            expect(onDeleteMock).toBeCalledTimes(1);
+            expect(refreshCollectionMock).toBeCalledTimes(1);
+        });
+
+        test('should call refreshCollection on error', async () => {
+            getApiDeleteMock.mockImplementation((item, successCallback, errorCallback) => errorCallback());
+            instance.deleteCallback();
+
+            expect(getApiMock).toBeCalledTimes(1);
+            expect(getApiDeleteMock).toBeCalledTimes(1);
+            expect(onDeleteMock).not.toBeCalled();
+            expect(refreshCollectionMock).toBeCalledTimes(1);
+        });
+    });
 });

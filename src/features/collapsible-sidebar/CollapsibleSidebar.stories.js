@@ -344,7 +344,7 @@ basic.story = {
 };
 
 export default {
-    title: 'Features|CollapsibleSidebar',
+    title: 'Features/CollapsibleSidebar',
     component: CollapsibleSidebar,
     parameters: {
         notes,

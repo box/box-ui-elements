@@ -24,7 +24,7 @@ export const leftFacing = () => (
 );
 
 export default {
-    title: 'Components|SidebarToggleButton',
+    title: 'Components/SidebarToggleButton',
     component: SidebarToggleButton,
     parameters: {
         notes,

@@ -31,6 +31,10 @@ type Props = {
     getPillImageUrl?: (data: { id: string | number, [key: string]: any }) => string,
     innerRef?: React.Ref<any>,
     inputProps: Object,
+    /** Allows disabling the textarea element without disabling the whole PillSelector */
+    isInputDisabled?: boolean,
+    /** Whether to show textarea in next line when focused */
+    isInputFocusedNextLine?: boolean,
     onInput: Function,
     onRemove: Function,
     onSuggestedPillAdd?: Function,
@@ -194,6 +198,8 @@ class PillSelectorBase extends React.Component<Props, State> {
             getPillClassName,
             getPillImageUrl,
             inputProps,
+            isInputDisabled,
+            isInputFocusedNextLine,
             onInput,
             onRemove,
             onSuggestedPillAdd,
@@ -284,8 +290,10 @@ class PillSelectorBase extends React.Component<Props, State> {
                         {...rest}
                         {...inputProps}
                         autoComplete="off"
-                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className)}
-                        disabled={disabled}
+                        className={classNames('bdl-PillSelector-input', 'pill-selector-input', className, {
+                            'bdl-PillSelector-input--nextLine': isInputFocusedNextLine,
+                        })}
+                        disabled={disabled || isInputDisabled}
                         onInput={onInput}
                         placeholder={this.getNumSelected() === 0 ? placeholder : ''}
                         ref={input => {

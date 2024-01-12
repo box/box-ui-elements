@@ -43,7 +43,7 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
             &.bcs-is-open {
                 position: absolute;
                 bottom: 0;
-                z-index: 2;
+                z-index: 5; // Stack sidebar above annotations. See z-index values https://github.com/box/box-annotations/blob/master/src/common/BaseAnnotator.scss
                 max-height: 100%;
             }
         }

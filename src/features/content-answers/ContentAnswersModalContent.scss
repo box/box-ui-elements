@@ -5,4 +5,8 @@
     width: auto;
     padding: 0 $bdl-grid-unit * 5 $bdl-grid-unit * 5 $bdl-grid-unit * 5;
     overflow: auto;
+
+    ul {
+        margin: 0;
+    }
 }

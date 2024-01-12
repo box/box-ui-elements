@@ -1,24 +1,36 @@
-import { ERROR_CODE_INTELLIGENCE } from '../../constants';
 import Intelligence from '../Intelligence';
 
 describe('api/Intelligence', () => {
-    let errorCallback;
     let intelligence;
-    let successCallback;
-    const items = [{ id: '123', type: 'file' }];
-    const prompt = 'summarize';
+
+    const mockItems = [{ id: '123', type: 'file' }];
+    const mockPrompt = 'summarize';
 
     beforeEach(() => {
         intelligence = new Intelligence({});
-        successCallback = jest.fn();
-        errorCallback = jest.fn();
     });
 
-    test('should make request and call success handler', async () => {
+    test('should return promise with data', async () => {
         const data = { data: 'foo' };
         intelligence.xhr.post = jest.fn().mockReturnValueOnce(Promise.resolve(data));
-        await intelligence.ask(prompt, items, successCallback, errorCallback);
-        expect(successCallback).toBeCalledWith(data);
+        const response = await intelligence.ask(mockPrompt, mockItems);
+        expect(response).toEqual(data);
+    });
+
+    test('should make post to xhr', async () => {
+        const data = {
+            data: {
+                items: mockItems,
+                mode: 'single_item_qa',
+                prompt: mockPrompt,
+            },
+            id: 'file_123',
+            url: 'https://api.box.com/2.0/ai/ask',
+        };
+        const postMock = jest.fn();
+        intelligence.xhr.post = postMock.mockReturnValueOnce(Promise.resolve({}));
+        await intelligence.ask(mockPrompt, mockItems);
+        expect(postMock).toBeCalledWith(data);
     });
 
     test('should call error handler', async () => {
@@ -26,20 +38,31 @@ describe('api/Intelligence', () => {
             // eslint-disable-next-line prefer-promise-reject-errors
             Promise.reject({
                 response: {
-                    data: 'something',
+                    data: 'bad',
                 },
             }),
         );
-        await intelligence.ask(prompt, items, successCallback, errorCallback);
-        expect(errorCallback).toBeCalledWith('something', ERROR_CODE_INTELLIGENCE);
-        expect(successCallback).not.toBeCalled();
+        try {
+            await intelligence.ask(mockPrompt, mockItems);
+        } catch (e) {
+            expect(e).toEqual({
+                response: {
+                    data: 'bad',
+                },
+            });
+        }
     });
 
-    test('should throw error if prompt is missing  ', async () => {
+    test.each`
+        prompt        | items        | message              | missing
+        ${''}         | ${mockItems} | ${'Missing prompt!'} | ${'prompt'}
+        ${mockPrompt} | ${[{}]}      | ${'Invalid item!'}   | ${'item'}
+    `('should throw error if $missing is missing  ', async ({ prompt, items, message }) => {
         try {
-            await intelligence.ask('', items, successCallback, errorCallback);
+            await intelligence.ask(prompt, items);
+            expect(true).toEqual(false); // should never hit this line, if it does then the test fails
         } catch (e) {
-            expect(e.message).toEqual('Missing prompt!');
+            expect(e.message).toEqual(message);
         }
     });
 
@@ -49,19 +72,10 @@ describe('api/Intelligence', () => {
         ${[]}        | ${'an empty array'}
     `('should throw error if items is $description ', async ({ badItems }) => {
         try {
-            await intelligence.ask(prompt, badItems, successCallback, errorCallback);
+            await intelligence.ask(prompt, badItems);
             expect(true).toEqual(false); // should never hit this line, if it does then the test fails
         } catch (e) {
             expect(e.message).toEqual('Missing items!');
-        }
-    });
-
-    test('should throw error if items is an array with an empty item ', async () => {
-        try {
-            await intelligence.ask(prompt, [{}], successCallback, errorCallback);
-            expect(true).toEqual(false); // should never hit this line, if it does then the test fails
-        } catch (e) {
-            expect(e.message).toEqual('Invalid item!');
         }
     });
 });

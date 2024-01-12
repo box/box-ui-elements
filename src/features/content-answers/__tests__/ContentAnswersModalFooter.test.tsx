@@ -10,21 +10,20 @@ import { MOCK_LONG_PROMPT, TEXT_AREA } from '../constants';
 import APIContext from '../../../elements/common/api-context';
 
 import messages from '../messages';
+import { mockApi, mockCurrentUser } from '../__mocks__/mocks';
 
 describe('features/content-answers/ContentAnswersModalFooter', () => {
-    const usersAPI = {
-        getUser: (id: string, success: Function) => {
-            success({ id: '123', name: 'Greg Wong' });
-        },
-    };
-    const api = {
-        getUsersAPI: () => usersAPI,
-    };
-    const file = { id: '123' };
     const renderComponent = (props?: {}) =>
         render(
-            <APIContext.Provider value={api}>
-                <ContentAnswersModalFooter file={file} {...props} />
+            <APIContext.Provider value={mockApi}>
+                <ContentAnswersModalFooter
+                    currentUser={mockCurrentUser}
+                    hasError={false}
+                    isLoading={false}
+                    onAsk={jest.fn()}
+                    onRetry={jest.fn()}
+                    {...props}
+                />
             </APIContext.Provider>,
         );
 
@@ -43,6 +42,18 @@ describe('features/content-answers/ContentAnswersModalFooter', () => {
         expect(submitButton).not.toHaveClass('is-disabled');
     });
 
+    test('should clear the prompt when ask button is clicked', () => {
+        renderComponent();
+        const submitButton = screen.getByTestId('content-answers-submit-button');
+        const input = screen.getByTestId('content-answers-question-input');
+
+        fireEvent.change(input, { target: { value: 'Test' } });
+        expect(input).toHaveValue('Test');
+
+        fireEvent.click(submitButton);
+        expect(input).toHaveValue('');
+    });
+
     test('should show an error if the character limit is reached', () => {
         renderComponent();
         const input = screen.getByTestId('content-answers-question-input');
@@ -57,7 +68,29 @@ describe('features/content-answers/ContentAnswersModalFooter', () => {
 
     test('should render avatar', () => {
         renderComponent();
+
         const initials = screen.getByText('GW');
         expect(initials).toBeInTheDocument();
+    });
+
+    test.each`
+        keyCode | shiftKey | value     | result   | title
+        ${13}   | ${false} | ${'Test'} | ${true}  | ${'submit if enter is hit and shift is not held'}
+        ${13}   | ${true}  | ${''}     | ${false} | ${'not submit if enter is hit and shift is held'}
+        ${13}   | ${false} | ${''}     | ${false} | ${'not submit if enter is hit but no value is there'}
+    `('should $title', ({ keyCode, shiftKey, value, result }) => {
+        const mockOnAsk = jest.fn();
+        renderComponent({ onAsk: mockOnAsk });
+
+        const input = screen.getByTestId('content-answers-question-input');
+
+        fireEvent.change(input, { target: { value } });
+        fireEvent.keyDown(input, { keyCode, shiftKey });
+
+        if (result) {
+            expect(mockOnAsk).toBeCalledWith(value);
+        } else {
+            expect(mockOnAsk).not.toBeCalled();
+        }
     });
 });

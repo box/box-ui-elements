@@ -8,6 +8,10 @@
     background: $bdl-gray-10;
     transition: .4s opacity;
 
+    .be-is-small & {
+        margin-right: $bdl-grid-unit * 6;
+    }
+
     .bcu-progress {
         top: 0;
         left: 0;

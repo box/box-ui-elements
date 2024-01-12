@@ -23,7 +23,7 @@ export const withInfoTooltip = () => (
 );
 
 export default {
-    title: 'Components|Label',
+    title: 'Components/Label',
     component: Label,
     parameters: {
         notes,

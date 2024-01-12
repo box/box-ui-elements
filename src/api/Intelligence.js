@@ -5,32 +5,17 @@
  */
 
 import Base from './Base';
-import { ERROR_CODE_INTELLIGENCE } from '../constants';
 import type { BoxItem } from '../common/types/core';
-import type { ElementsErrorCallback } from '../common/types/api';
 
 class Intelligence extends Base {
-    /**
-     * @property {Function}
-     */
-    successCallback: Function;
-
-    /**
-     * @property {Function}
-     */
-    errorCallback: ElementsErrorCallback;
-
     /**
      * API endpoint to ask ai a question
      *
      * @param {string} prompt - Question
      * @param {Array<object>} items - Array of items to ask about
-     * @param {Function} successCallback - Function to call with results
-     * @param {Function} errorCallback - Function to call with errors
      * @return {Promise}
      */
-    async ask(prompt: string, items: Array<BoxItem>, successCallback: Function, errorCallback: ElementsErrorCallback) {
-        this.errorCode = ERROR_CODE_INTELLIGENCE;
+    async ask(prompt: string, items: Array<BoxItem>) {
         if (!prompt) {
             throw new Error('Missing prompt!');
         }
@@ -47,21 +32,15 @@ class Intelligence extends Base {
 
         const url = `${this.getBaseApiUrl()}/ai/ask`;
 
-        this.successCallback = successCallback;
-        this.errorCallback = errorCallback;
-
-        await this.xhr
-            .post({
-                url,
-                id: items[0].id,
-                data: {
-                    mode: 'single_item_qa',
-                    prompt,
-                    items,
-                },
-            })
-            .then(this.successHandler)
-            .catch(this.errorHandler);
+        return this.xhr.post({
+            url,
+            id: `file_${items[0].id}`,
+            data: {
+                mode: 'single_item_qa',
+                prompt,
+                items,
+            },
+        });
     }
 }
 

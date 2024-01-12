@@ -66,7 +66,7 @@ describe('components/search-form/SearchForm', () => {
             onSubmitMock.mockReset();
         });
 
-        test('should call onsubmit on form submit event', () => {
+        test('should call onSubmit on form submit event', () => {
             const wrapper = mount(<SearchForm onSubmit={onSubmitMock} placeholder="search" value="cheese" />);
             const form = wrapper.find('form');
 
@@ -75,7 +75,7 @@ describe('components/search-form/SearchForm', () => {
             expect(onSubmitMock).toBeCalledWith('cheese', expect.objectContaining(event));
         });
 
-        test('should call onsubmit on search icon button submit event', () => {
+        test('should call onSubmit on search icon button submit event', () => {
             const wrapper = mount(<SearchForm onSubmit={onSubmitMock} placeholder="search" value="cheese" />);
             const searchButton = wrapper.find('.search-button');
             expect(searchButton.prop('type')).toEqual('submit');
@@ -86,7 +86,7 @@ describe('components/search-form/SearchForm', () => {
         });
     });
 
-    test('should call onchange on form change', () => {
+    test('should call onChange on form change', () => {
         const onChangeSpy = sinon.spy();
         const wrapper = mount(<SearchForm onChange={onChangeSpy} placeholder="search" value="cheese" />);
         const form = wrapper.find('form');
@@ -124,8 +124,12 @@ describe('components/search-form/SearchForm', () => {
 
     test('should set the onClearHandler to the clear button onClick prop', () => {
         const wrapper = shallow(<SearchForm intl={intlShape} />).shallow();
-        const lodableComponent = wrapper.find('LoadableSearchActions').shallow();
-        const searchActions = lodableComponent.shallow();
+        // Sift through the nested HOCs to find the correct element
+        const searchActions = wrapper
+            .find('LoadableSearchActions')
+            .dive()
+            .dive()
+            .dive();
         const { onClearHandler } = wrapper.instance();
         expect(searchActions.find('.clear-button').prop('onClick')).toEqual(onClearHandler);
     });

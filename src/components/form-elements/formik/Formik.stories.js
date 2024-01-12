@@ -177,7 +177,7 @@ export const basic = () => {
 };
 
 export default {
-    title: 'Components|Formik Elements',
+    title: 'Components/Formik Elements',
     parameters: {
         notes,
     },

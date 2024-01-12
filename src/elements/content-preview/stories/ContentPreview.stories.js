@@ -1,116 +1,66 @@
 // @flow
 import * as React from 'react';
-import { text } from '@storybook/addon-knobs';
-import { IntlProvider } from 'react-intl';
 import ContentPreview from '../ContentPreview';
-import notes from './ContentPreview.notes.md';
 
-export const Preview = () => {
-    const fileId = text('File ID', global.FILE_ID);
-    const token = text('Access Token', global.TOKEN);
+export const basic = {};
 
-    return (
-        <IntlProvider locale="en">
-            <ContentPreview
-                features={global.FEATURES}
-                fileId={fileId}
-                hasHeader
-                key={`${fileId}-${token}`}
-                token={token}
-            />
-        </IntlProvider>
-    );
+export const withAnnotations = {
+    args: {
+        contentSidebarProps: {
+            detailsSidebarProps: {
+                hasAccessStats: true,
+                hasClassification: true,
+                hasNotices: true,
+                hasProperties: true,
+                hasRetentionPolicy: true,
+                hasVersions: true,
+            },
+            features: global.FEATURES,
+            hasActivityFeed: true,
+            hasMetadata: true,
+            hasSkills: true,
+            hasVersions: true,
+        },
+        showAnnotations: true,
+    },
 };
 
-export const PreviewWithAnnotations = () => {
-    const fileId = text('File ID', global.FILE_ID);
-    const token = text('Access Token', global.TOKEN);
-
-    return (
-        <IntlProvider locale="en">
-            <ContentPreview
-                contentSidebarProps={{
-                    detailsSidebarProps: {
-                        hasAccessStats: true,
-                        hasClassification: true,
-                        hasNotices: true,
-                        hasProperties: true,
-                        hasRetentionPolicy: true,
-                        hasVersions: true,
-                    },
-                    features: global.FEATURES,
-                    hasActivityFeed: true,
-                    hasMetadata: true,
-                    hasSkills: true,
-                    hasVersions: true,
-                }}
-                features={global.FEATURES}
-                fileId={fileId}
-                hasHeader
-                key={`${fileId}-${token}`}
-                showAnnotations
-                token={token}
-            />
-        </IntlProvider>
-    );
+export const withSidebar = {
+    args: {
+        contentSidebarProps: {
+            detailsSidebarProps: {
+                hasAccessStats: true,
+                hasClassification: true,
+                hasNotices: true,
+                hasProperties: true,
+                hasRetentionPolicy: true,
+                hasVersions: true,
+            },
+            features: global.FEATURE_FLAGS,
+            hasActivityFeed: true,
+            hasMetadata: true,
+            hasSkills: true,
+            hasVersions: true,
+        },
+    },
 };
 
-export const PreviewWithSidebar = () => {
-    const fileId = text('File ID', global.FILE_ID);
-    const token = text('Access Token', global.TOKEN);
-
-    return (
-        <IntlProvider locale="en">
-            <ContentPreview
-                contentSidebarProps={{
-                    detailsSidebarProps: {
-                        hasAccessStats: true,
-                        hasClassification: true,
-                        hasNotices: true,
-                        hasProperties: true,
-                        hasRetentionPolicy: true,
-                        hasVersions: true,
-                    },
-                    features: global.FEATURES,
-                    hasActivityFeed: true,
-                    hasMetadata: true,
-                    hasSkills: true,
-                    hasVersions: true,
-                }}
-                features={global.FEATURES}
-                fileId={fileId}
-                hasHeader
-                key={`${fileId}-${token}`}
-                token={token}
-            />
-        </IntlProvider>
-    );
-};
-
-export const PreviewWithBoxAI = () => {
-    const fileId = text('File ID', global.FILE_ID);
-    const token = text('Access Token', global.TOKEN);
-
-    return (
-        <IntlProvider locale="en">
-            <ContentPreview
-                contentAnswersProps={{
-                    show: true,
-                }}
-                features={global.FEATURES}
-                fileId={fileId}
-                hasHeader
-                key={`${fileId}-${token}`}
-                token={token}
-            />
-        </IntlProvider>
-    );
+export const withBoxAI = {
+    args: {
+        contentAnswersProps: {
+            show: true,
+        },
+    },
 };
 
 export default {
-    title: 'Elements|ContentPreview',
+    title: 'Elements/ContentPreview',
     component: ContentPreview,
-    parameters: {
-        notes,
+    render: ({ ...args }: any) => <ContentPreview key={`${args.fileId}-${args.token}`} {...args} />,
+    args: {
+        features: global.FEATURE_FLAGS,
+        fileId: global.FILE_ID,
+        hasHeader: true,
+        token: global.TOKEN,
     },
 };

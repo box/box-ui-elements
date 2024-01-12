@@ -19,7 +19,7 @@ const OverlayHeader = ({ children, className }: OverlayHeaderProps) => {
         event.preventDefault();
         event.stopPropagation();
     };
-
+    // @ts-ignore TODO: figure out why this is giving a TS error
     const { closeOverlay } = React.useContext(FlyoutContext);
 
     return (

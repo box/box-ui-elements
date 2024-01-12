@@ -48,7 +48,7 @@ export const dateInTheFutureWhenNotAllowed = () => (
 );
 
 export default {
-    title: 'Components|ReadableTime',
+    title: 'Components/ReadableTime',
     component: ReadableTime,
     parameters: {
         notes,

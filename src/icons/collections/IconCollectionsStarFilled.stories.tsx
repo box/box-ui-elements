@@ -5,7 +5,7 @@ import IconCollectionsStarFilled from './IconCollectionsStarFilled';
 export const collectionsStarFilled = () => <IconCollectionsStarFilled />;
 
 export default {
-    title: 'Icons|Collections|StarFilled',
+    title: 'Icons/Collections/StarFilled',
     component: IconCollectionsStarFilled,
     parameters: {
         notes:

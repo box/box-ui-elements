@@ -54,7 +54,7 @@ export const controlled = () => {
 export const disabled = () => <Toggle name="toggle4" label="Disabled" isDisabled={boolean('isDisabled', true)} />;
 
 export default {
-    title: 'Components|Toggle',
+    title: 'Components/Toggle',
     component: Toggle,
     parameters: {
         notes,

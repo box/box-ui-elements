@@ -28,7 +28,7 @@ export const withTruncatedText = () => (
 );
 
 export default {
-    title: 'Components|FooterIndicator',
+    title: 'Components/FooterIndicator',
     component: FooterIndicator,
     parameters: {
         notes,

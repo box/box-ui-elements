@@ -10,7 +10,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Components|Section',
+    title: 'Components/Section',
     component: Section,
     parameters: {
         notes,

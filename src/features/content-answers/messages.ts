@@ -32,6 +32,16 @@ const messages = defineMessages({
             'Disabled tooltip message for Content Answers entry point button when the file type is not supported',
         id: 'boxui.contentAnswers.disabledTooltipFileNotCompatible',
     },
+    hasQuestionsTooltip: {
+        defaultMessage: 'Return to Box AI',
+        description: 'Existing questions tooltip message for Content Answers entry point button',
+        id: 'boxui.contentAnswers.hasQuestionsTooltip',
+    },
+    inlineErrorText: {
+        defaultMessage: 'The Box AI service was unavailable.',
+        description: 'Content Answers error message when the service fails',
+        id: 'boxui.contentAnswers.inlineErrorText',
+    },
     intelligenceUnavailableDescription: {
         defaultMessage: 'The Box AI service is not responding.',
         description: 'Box AI Q&A service unavailable error description',
@@ -51,6 +61,11 @@ const messages = defineMessages({
         defaultMessage: 'Maximum of {characterLimit} characters reached',
         description: 'Error tooltip to show inside text area if the user reached the character limit',
         id: 'boxui.contentAnswers.maxCharactersReachedError',
+    },
+    retryResponse: {
+        defaultMessage: 'Retry',
+        description: 'Retry button label to send again the question to the service',
+        id: 'boxui.contentAnswers.retryResponse',
     },
     welcomeAskQuestionText: {
         defaultMessage: 'Ask questions about {name}',

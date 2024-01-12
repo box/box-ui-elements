@@ -7,7 +7,15 @@ import messages from '../messages';
 
 describe('features/content-answers/ContentAnswersOpenButton', () => {
     const renderComponent = (props?: {}) =>
-        render(<ContentAnswersOpenButton onClick={jest.fn()} fileExtension="doc" {...props} />);
+        render(
+            <ContentAnswersOpenButton
+                fileExtension="doc"
+                isHighlighted={false}
+                isModalOpen={false}
+                onClick={jest.fn()}
+                {...props}
+            />,
+        );
 
     test('should call the onClick callback', () => {
         const onClick = jest.fn();
@@ -30,6 +38,12 @@ describe('features/content-answers/ContentAnswersOpenButton', () => {
         expect(screen.getByText(messages.disabledTooltipFileNotCompatible.defaultMessage)).toBeInTheDocument();
     });
 
+    test('should display return to box ai when highlighted', () => {
+        renderComponent({ isHighlighted: true });
+        fireEvent.mouseOver(screen.getByTestId('content-answers-open-button'));
+        expect(screen.getByText(messages.hasQuestionsTooltip.defaultMessage)).toBeInTheDocument();
+    });
+
     test('should not call onclick callback when filetype is not allowed', () => {
         const onClick = jest.fn();
         renderComponent({ fileExtension: 'invalid', onClick });
@@ -37,5 +51,23 @@ describe('features/content-answers/ContentAnswersOpenButton', () => {
 
         fireEvent.click(screen.getByTestId('content-answers-open-button'));
         expect(onClick).toBeCalledTimes(0);
+    });
+
+    test('should highlight button if isHighlight is true', () => {
+        renderComponent({ isHighlighted: false });
+
+        expect(screen.getByTestId('content-answers-open-button')).not.toHaveClass(
+            'bdl-ContentAnswersOpenButton--hasQuestions',
+        );
+        expect(screen.getByTestId('content-answers-open-button').matches(':focus')).toBe(false);
+    });
+
+    test('should focus button when button is already highlighted and modal is closed', () => {
+        renderComponent({ isHighlighted: true });
+
+        expect(screen.getByTestId('content-answers-open-button')).toHaveClass(
+            'bdl-ContentAnswersOpenButton--hasQuestions',
+        );
+        expect(screen.getByTestId('content-answers-open-button').matches(':focus')).toBe(true);
     });
 });

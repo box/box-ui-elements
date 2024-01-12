@@ -943,7 +943,7 @@ export const withFormOnly = () => {
 };
 
 export default {
-    title: 'Features|UnifiedShareModal',
+    title: 'Features/UnifiedShareModal',
     component: UnifiedShareModal,
     parameters: {
         notes,

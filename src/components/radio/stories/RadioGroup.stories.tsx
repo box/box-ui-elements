@@ -52,7 +52,7 @@ export const withCustomRadioButtonComponent = () => {
 };
 
 export default {
-    title: 'Components|Radio/RadioGroup',
+    title: 'Components/Radio/RadioGroup',
     component: RadioGroup,
     parameters: {
         notes,

@@ -39,6 +39,6 @@ export const optional = () => {
 };
 
 export default {
-    title: 'Components|TimeInput',
+    title: 'Components/TimeInput',
     component: TimeInput,
 };

@@ -34,7 +34,7 @@ export const example = () => (
 );
 
 export default {
-    title: 'Components|Media/MediaBody',
+    title: 'Components/Media/MediaBody',
     component: MediaBody,
     parameters: {
         notes,

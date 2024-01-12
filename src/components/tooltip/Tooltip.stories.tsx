@@ -129,7 +129,7 @@ withLongText.story = {
 };
 
 export default {
-    title: 'Components|Tooltip',
+    title: 'Components/Tooltip',
     component: Tooltip,
     parameters: {
         notes,

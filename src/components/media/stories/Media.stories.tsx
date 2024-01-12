@@ -135,7 +135,7 @@ export const withFormElements = () => (
 );
 
 export default {
-    title: 'Components|Media/Media',
+    title: 'Components/Media/Media',
     component: Media,
     parameters: {
         notes,

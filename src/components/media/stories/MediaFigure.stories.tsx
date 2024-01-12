@@ -30,7 +30,7 @@ export const example = () => (
 );
 
 export default {
-    title: 'Components|Media/MediaFigure',
+    title: 'Components/Media/MediaFigure',
     component: MediaFigure,
     parameters: {
         notes,

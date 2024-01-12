@@ -3,7 +3,7 @@
 .bdl-ContentAnswersGridCard {
     margin-top: $bdl-grid-unit * 4;
 
-    &-icon {
+    .bdl-ContentAnswersGridCard-icon {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -13,7 +13,7 @@
         border-radius: 50%;
     }
 
-    &-body {
+    .bdl-ContentAnswersGridCard-body {
         padding: $bdl-grid-unit * 4;
         background-color: $white;
         border: 1px solid $bdl-gray-10;
@@ -21,6 +21,6 @@
     }
 
     .bdl-Media-figure {
-        margin: $bdl-grid-unit * 4 $bdl-grid-unit * 4 0 0;
+        margin: $bdl-grid-unit * 4 $bdl-grid-unit * 3 0 0;
     }
 }
