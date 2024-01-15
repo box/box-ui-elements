@@ -372,6 +372,7 @@
         }
     },
     "resolutions": {
-        "ip": "1.1.8"
+        "ip": "1.1.8",
+        "**/react-intl/**/@types/react": "^16.9.18"
     }
 }
