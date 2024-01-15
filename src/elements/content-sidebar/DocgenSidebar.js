@@ -24,7 +24,7 @@ type EUAProps = {
 
 type ExternalProps = {
     // isFeatureEnabled: boolean,
-    docgenPreviewSidebarProps: EUAProps,
+    docGenSidebarProps: EUAProps,
 };
 
 type DocGenTag = {
@@ -52,7 +52,7 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
     };
 
     componentDidMount() {
-        this.props.docgenPreviewSidebarProps.getDocGenTags().then(response => {
+        this.props.docGenSidebarProps.getDocGenTags().then(response => {
             this.setState({ tags: response?.payload?.data });
         });
     }

@@ -328,7 +328,7 @@ class Sidebar extends React.Component<Props, State> {
                             currentUserError={currentUserError}
                             elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
-                            docgenPreviewSidebarProps={features?.docgen}
+                            docGenSidebarProps={features?.docgen}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}

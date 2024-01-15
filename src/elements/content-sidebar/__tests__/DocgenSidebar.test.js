@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar';
 
-const docgenPreviewSidebarProps = {
+const docGenSidebarProps = {
     getDocGenTags: jest.fn().mockReturnValue(
         Promise.resolve({
             payload: {
@@ -35,7 +35,7 @@ const docgenPreviewSidebarProps = {
 };
 
 const defaultProps = {
-    docgenPreviewSidebarProps,
+    docGenSidebarProps,
 };
 describe('elements/content-sidebar/DocGen/DocGenSidebar', () => {
     const getWrapper = (props = defaultProps, options = {}) =>
@@ -44,7 +44,7 @@ describe('elements/content-sidebar/DocGen/DocGenSidebar', () => {
     test('componentDidMount() should call fetch tags', () => {
         getWrapper(defaultProps);
 
-        expect(docgenPreviewSidebarProps.getDocGenTags).toHaveBeenCalled();
+        expect(docGenSidebarProps.getDocGenTags).toHaveBeenCalled();
     });
 
     test('should render DocGen sidebar component correctly with search and tags list', async () => {

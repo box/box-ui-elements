@@ -38,7 +38,7 @@ type Props = {
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
-    docgenPreviewSidebarProps: DocGenSidebarProps,
+    docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
     file: BoxItem,
     fileId: string,
@@ -159,7 +159,7 @@ class SidebarPanels extends React.Component<Props, State> {
             currentUser,
             currentUserError,
             detailsSidebarProps,
-            docgenPreviewSidebarProps,
+            docGenSidebarProps,
             elementId,
             file,
             fileId,
@@ -282,7 +282,7 @@ class SidebarPanels extends React.Component<Props, State> {
                             <LoadableDocGenSidebar
                                 hasSidebarInitialized={isInitialized}
                                 startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
-                                docgenPreviewSidebarProps={docgenPreviewSidebarProps}
+                                docGenSidebarProps={docGenSidebarProps}
                             />
                         )}
                     />

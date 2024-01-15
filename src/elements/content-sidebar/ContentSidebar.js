@@ -51,7 +51,7 @@ type Props = {
     currentUser?: User,
     defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
-    docgenPreviewSidebarProps: DocGenSidebarProps,
+    docGenSidebarProps: DocGenSidebarProps,
     features: FeatureConfig,
     fileId?: string,
     getPreview: Function,
@@ -327,7 +327,7 @@ class ContentSidebar extends React.Component<Props, State> {
             currentUser,
             defaultView,
             detailsSidebarProps,
-            docgenPreviewSidebarProps,
+            docGenSidebarProps,
             fileId,
             getPreview,
             getViewer,
@@ -364,7 +364,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             className={className}
                             currentUser={currentUser}
                             detailsSidebarProps={detailsSidebarProps}
-                            docgenPreviewSidebarProps={docgenPreviewSidebarProps}
+                            docGenSidebarProps={docGenSidebarProps}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}
