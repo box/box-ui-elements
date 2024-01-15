@@ -1,7 +1,7 @@
 // @ts-check
 /**
  * @flow
- * @file Sign sidebar component
+ * @file Doc Gen sidebar component
  * @author Box
  */
 
