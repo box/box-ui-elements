@@ -24,7 +24,7 @@ import { withFeatureProvider } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 
 import type { DetailsSidebarProps } from './DetailsSidebar';
-import type { DocgenSidebarProps } from './DocgenSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
@@ -51,7 +51,7 @@ type Props = {
     currentUser?: User,
     defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
-    docgenPreviewSidebarProps: DocgenSidebarProps,
+    docgenPreviewSidebarProps: DocGenSidebarProps,
     features: FeatureConfig,
     fileId?: string,
     getPreview: Function,

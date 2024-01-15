@@ -19,7 +19,7 @@ import SidebarContent from './SidebarContent';
 
 type EUAProps = {
     enabled: boolean,
-    getDocgenTags: Function,
+    getDocGenTags: Function,
 };
 
 type ExternalProps = {
@@ -27,7 +27,7 @@ type ExternalProps = {
     docgenPreviewSidebarProps: EUAProps,
 };
 
-type DocgenTag = {
+type DocGenTag = {
     json_paths: Array<string>,
     tag_content: string,
     tag_type: string,
@@ -39,20 +39,20 @@ type Props = {
     ErrorContextProps &
     WithLoggerProps;
 
-type State = { tags: Array<DocgenTag> };
+type State = { tags: Array<DocGenTag> };
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
 // TO DO: implement actual sidebar content in separate tickets
-class DocgenSidebar extends React.PureComponent<Props, State> {
+class DocGenSidebar extends React.PureComponent<Props, State> {
     state = {
         tags: [],
     };
 
     componentDidMount() {
-        this.props.docgenPreviewSidebarProps.getDocgenTags().then(response => {
+        this.props.docgenPreviewSidebarProps.getDocGenTags().then(response => {
             this.setState({ tags: response?.payload?.data });
         });
     }
@@ -62,7 +62,7 @@ class DocgenSidebar extends React.PureComponent<Props, State> {
         const { tags } = this.state;
 
         return (
-            <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title="Box Docgen">
+            <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title="Box DocGen">
                 <input placeholder="Search" />
                 {isLoading && <div>Loading</div>}
                 {tags.length > 0 ? (
@@ -79,8 +79,8 @@ class DocgenSidebar extends React.PureComponent<Props, State> {
     }
 }
 
-export type DocgenSidebarProps = ExternalProps;
-export { DocgenSidebar as DocgenSidebarComponent };
+export type DocGenSidebarProps = ExternalProps;
+export { DocGenSidebar as DocGenSidebarComponent };
 export default flow([withLogger(ORIGIN_METADATA_SIDEBAR), withErrorBoundary(ORIGIN_METADATA_SIDEBAR), withAPIContext])(
-    DocgenSidebar,
+    DocGenSidebar,
 );

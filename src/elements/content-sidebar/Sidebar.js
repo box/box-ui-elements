@@ -64,7 +64,7 @@ type Props = {
 
 type State = {
     isDirty: boolean,
-    isDocgenTemplate?: boolean,
+    isDocGenTemplate?: boolean,
 };
 
 export const DOCGEN_FILE_TYPES = ['docx'];
@@ -96,7 +96,7 @@ class Sidebar extends React.Component<Props, State> {
 
         this.state = {
             isDirty: this.getLocationState('open') || false,
-            isDocgenTemplate: false,
+            isDocGenTemplate: false,
         };
 
         this.setForcedByLocation();
@@ -114,11 +114,11 @@ class Sidebar extends React.Component<Props, State> {
         if (editors && editors.length > 0) {
             const template = editors[0]?.template;
             const scopeIsGlobal = template.scope === 'global';
-            const templateKeyIsBoxDocgen = template.templateKey === 'boxDocGen';
-            const isDocgenTemplate = scopeIsGlobal && templateKeyIsBoxDocgen;
+            const templateKeyIsBoxDocGen = template.templateKey === 'boxDocGen';
+            const isDocGenTemplate = scopeIsGlobal && templateKeyIsBoxDocGen;
 
-            if (isDocgenTemplate) {
-                this.setState({ ...this.state, isDocgenTemplate });
+            if (isDocGenTemplate) {
+                this.setState({ ...this.state, isDocGenTemplate });
                 // navigate to docgen tab by default
                 history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
             }
@@ -319,7 +319,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
                                 isOpen={isOpen}
-                                isDocgenTemplate={this.state.isDocgenTemplate}
+                                isDocGenTemplate={this.state.isDocGenTemplate}
                             />
                         )}
                         <SidebarPanels
@@ -338,7 +338,7 @@ class Sidebar extends React.Component<Props, State> {
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
-                            isDocgenTemplate={this.state.isDocgenTemplate}
+                            isDocGenTemplate={this.state.isDocGenTemplate}
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}

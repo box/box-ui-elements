@@ -26,7 +26,7 @@ import {
     SIDEBAR_VIEW_DOCGEN,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
-import type { DocgenSidebarProps } from './DocgenSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
@@ -38,7 +38,7 @@ type Props = {
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
-    docgenPreviewSidebarProps: DocgenSidebarProps,
+    docgenPreviewSidebarProps: DocGenSidebarProps,
     elementId: string,
     file: BoxItem,
     fileId: string,
@@ -49,7 +49,7 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
-    isDocgenTemplate: boolean,
+    isDocGenTemplate: boolean,
     isOpen: boolean,
     location: Location,
     metadataSidebarProps: MetadataSidebarProps,
@@ -88,7 +88,7 @@ const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
     MARK_NAME_JS_LOADING_METADATA,
 );
-const LoadableDocgenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
+const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
 const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_VERSIONS,
     MARK_NAME_JS_LOADING_VERSIONS,
@@ -170,7 +170,7 @@ class SidebarPanels extends React.Component<Props, State> {
             hasMetadata,
             hasSkills,
             hasVersions,
-            isDocgenTemplate,
+            isDocGenTemplate,
             isOpen,
             metadataSidebarProps,
             onAnnotationSelect,
@@ -274,12 +274,12 @@ class SidebarPanels extends React.Component<Props, State> {
                         )}
                     />
                 )}
-                {isDocgenTemplate && (
+                {isDocGenTemplate && (
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_DOCGEN}`}
                         render={() => (
-                            <LoadableDocgenSidebar
+                            <LoadableDocGenSidebar
                                 hasSidebarInitialized={isInitialized}
                                 startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
                                 docgenPreviewSidebarProps={docgenPreviewSidebarProps}
@@ -308,7 +308,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (isDocgenTemplate) {
+                        if (isDocGenTemplate) {
                             redirect = SIDEBAR_VIEW_DOCGEN;
                         } else if (hasSkills) {
                             redirect = SIDEBAR_VIEW_SKILLS;

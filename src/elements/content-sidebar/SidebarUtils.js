@@ -153,7 +153,7 @@ class SidebarUtils {
             case SIDEBAR_VIEW_ACTIVITY:
                 return <FormattedMessage {...messages.sidebarActivityTitle} />;
             case SIDEBAR_VIEW_DOCGEN:
-                return <FormattedMessage {...messages.sidebarDocgenTitle} />;
+                return <FormattedMessage {...messages.sidebarDocGenTitle} />;
             default:
                 return null;
         }
@@ -186,7 +186,7 @@ class SidebarUtils {
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "versions-sidebar" */ './versions');
                 break;
             case SIDEBAR_VIEW_DOCGEN:
-                importFn = import(/* webpackMode: "lazy", webpackChunkName: "docgen-sidebar" */ './DocgenSidebar');
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "docgen-sidebar" */ './DocGenSidebar');
                 break;
             default:
                 return Promise.resolve(null);

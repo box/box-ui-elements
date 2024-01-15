@@ -39,7 +39,7 @@ type Props = {
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
-    isDocgenTemplate?: boolean,
+    isDocGenTemplate?: boolean,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
 } & InjectIntlProvidedProps;
@@ -56,7 +56,7 @@ const SidebarNav = ({
     intl,
     isOpen,
     onNavigate,
-    isDocgenTemplate = false,
+    isDocGenTemplate = false,
 }: Props) => {
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
 
@@ -104,7 +104,7 @@ const SidebarNav = ({
                             <IconMetadataThick />
                         </SidebarNavButton>
                     )}
-                    {isDocgenTemplate && (
+                    {isDocGenTemplate && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
