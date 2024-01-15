@@ -29,7 +29,7 @@ import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 import API from '../../api';
-import { SIDEBAR_DOCGEN } from '../../constants';
+import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -104,7 +104,7 @@ class Sidebar extends React.Component<Props, State> {
 
     navigateToDefaultTab() {
         const { history, location } = this.props;
-        if (location.pathname === `/${SIDEBAR_DOCGEN}`) {
+        if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
             history.push('/');
         }
     }
@@ -120,7 +120,7 @@ class Sidebar extends React.Component<Props, State> {
             if (isDocgenTemplate) {
                 this.setState({ ...this.state, isDocgenTemplate });
                 // navigate to docgen tab by default
-                history.push(`/${SIDEBAR_DOCGEN}`);
+                history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
             }
         } else {
             this.navigateToDefaultTab();

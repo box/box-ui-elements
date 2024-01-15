@@ -19,7 +19,7 @@ import SidebarToggle from './SidebarToggle';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
-    SIDEBAR_DOCGEN,
+    SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
@@ -107,7 +107,7 @@ const SidebarNav = ({
                     {isDocgenTemplate && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
-                            sidebarView={SIDEBAR_DOCGEN}
+                            sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip="Box Doc Gen"
                         >
                             <Tag16 className="bcs-SidebarNavSignButton-icon" />

@@ -23,7 +23,7 @@ import {
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
-    SIDEBAR_DOCGEN,
+    SIDEBAR_VIEW_DOCGEN,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocgenSidebarProps } from './DocgenSidebar';
@@ -88,7 +88,7 @@ const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
     MARK_NAME_JS_LOADING_METADATA,
 );
-const LoadableDocgenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
+const LoadableDocgenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
 const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_VERSIONS,
     MARK_NAME_JS_LOADING_VERSIONS,
@@ -277,7 +277,7 @@ class SidebarPanels extends React.Component<Props, State> {
                 {isDocgenTemplate && (
                     <Route
                         exact
-                        path={`/${SIDEBAR_DOCGEN}`}
+                        path={`/${SIDEBAR_VIEW_DOCGEN}`}
                         render={() => (
                             <LoadableDocgenSidebar
                                 hasSidebarInitialized={isInitialized}
@@ -309,7 +309,7 @@ class SidebarPanels extends React.Component<Props, State> {
                         let redirect = '';
 
                         if (isDocgenTemplate) {
-                            redirect = SIDEBAR_DOCGEN;
+                            redirect = SIDEBAR_VIEW_DOCGEN;
                         } else if (hasSkills) {
                             redirect = SIDEBAR_VIEW_SKILLS;
                         } else if (hasActivity) {
