@@ -17,14 +17,9 @@ import { withLogger } from '../common/logger';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import SidebarContent from './SidebarContent';
 
-type EUAProps = {
+type ExternalProps = {
     enabled: boolean,
     getDocGenTags: Function,
-};
-
-type ExternalProps = {
-    // isFeatureEnabled: boolean,
-    docGenSidebarProps: EUAProps,
 };
 
 type DocGenTag = {

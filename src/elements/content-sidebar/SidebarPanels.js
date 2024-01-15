@@ -282,7 +282,7 @@ class SidebarPanels extends React.Component<Props, State> {
                             <LoadableDocGenSidebar
                                 hasSidebarInitialized={isInitialized}
                                 startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
-                                docGenSidebarProps={docGenSidebarProps}
+                                {...docGenSidebarProps}
                             />
                         )}
                     />

@@ -35,7 +35,7 @@ const docGenSidebarProps = {
 };
 
 const defaultProps = {
-    docGenSidebarProps,
+    ...docGenSidebarProps,
 };
 describe('elements/content-sidebar/DocGen/DocGenSidebar', () => {
     const getWrapper = (props = defaultProps, options = {}) =>
