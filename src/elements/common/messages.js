@@ -417,8 +417,8 @@ const messages = defineMessages({
         description: 'Title for the preview activity feed.',
         defaultMessage: 'Activity',
     },
-    sidebarDocgenTitle: {
-        id: 'be.sidebarDocgenTitle',
+    sidebarDocGenTitle: {
+        id: 'be.sidebarDocGenTitle',
         description: 'Title for the DocGen sidebar tab.',
         defaultMessage: 'Doc Gen Tags',
     },

@@ -1,0 +1,65 @@
+@import '../../../styles/variables';
+@import '../../common/variables';
+
+.docgen-sidebar {
+    padding: 0 24px 0 24px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.docgen-tag-section {
+    margin-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid $bdl-gray-10;
+}
+
+.docgen-tag-section-header {
+    font-weight: normal;
+    font-size: $bdl-fontSize-minimum;
+    line-height: 14px;
+}
+
+.docgen-tag-path {
+    display: block;
+    height: 32px;
+    padding: 6px 12px;
+    font-weight: bold;
+    font-size: $bdl-fontSize--dejaBlue;
+    font-family: 'Lato', sans-serif;
+    border-radius: 6px;
+
+    &:hover {
+        background: $bdl-gray-10;
+    }
+}
+
+.docgen-loading {
+    margin-top: 16px;
+}
+
+.docgen-empty-state {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &--icon {
+        margin-top: 60px;
+        margin-bottom: 15px;
+    }
+}
+
+.docgen-error-state {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &--icon {
+        margin-top: 60px;
+        margin-bottom: 15px;
+    }
+}

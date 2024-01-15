@@ -29,7 +29,7 @@ import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 import API from '../../api';
-import { SIDEBAR_DOCGEN } from '../../constants';
+import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -64,7 +64,7 @@ type Props = {
 
 type State = {
     isDirty: boolean,
-    isDocgenTemplate?: boolean,
+    isDocGenTemplate?: boolean,
 };
 
 export const DOCGEN_FILE_TYPES = ['docx'];
@@ -96,15 +96,19 @@ class Sidebar extends React.Component<Props, State> {
 
         this.state = {
             isDirty: this.getLocationState('open') || false,
-            isDocgenTemplate: false,
+            isDocGenTemplate: false,
         };
 
         this.setForcedByLocation();
     }
 
-    navigateToDefaultTab() {
+    disableDocgenTab() {
         const { history, location } = this.props;
-        if (location.pathname === `/${SIDEBAR_DOCGEN}`) {
+        this.setState({
+            ...this.state,
+            isDocGenTemplate: false,
+        });
+        if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
             history.push('/');
         }
     }
@@ -114,32 +118,33 @@ class Sidebar extends React.Component<Props, State> {
         if (editors && editors.length > 0) {
             const template = editors[0]?.template;
             const scopeIsGlobal = template.scope === 'global';
-            const templateKeyIsBoxDocgen = template.templateKey === 'boxDocGen';
-            const isDocgenTemplate = scopeIsGlobal && templateKeyIsBoxDocgen;
+            const templateKeyIsBoxDocGen = template.templateKey === 'boxDocGen';
+            const isDocGenTemplate = scopeIsGlobal && templateKeyIsBoxDocGen;
 
-            if (isDocgenTemplate) {
-                this.setState({ ...this.state, isDocgenTemplate });
+            if (isDocGenTemplate) {
+                this.setState({ ...this.state, isDocGenTemplate });
                 // navigate to docgen tab by default
-                history.push(`/${SIDEBAR_DOCGEN}`);
+                history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
             }
         } else {
-            this.navigateToDefaultTab();
+            this.disableDocgenTab();
         }
     };
 
     fetchMetadata(): void {
         const { api, file }: Props = this.props;
+        this.setState({ ...this.state, isDocGenTemplate: false });
 
         if (file && DOCGEN_FILE_TYPES.includes(file.extension)) {
             api.getMetadataAPI(false).getMetadata(
                 file,
                 this.fetchMetadataSuccessCallback,
-                this.navigateToDefaultTab,
+                this.disableDocgenTab,
                 this.props.metadataSidebarProps.isFeatureEnabled,
                 { refreshCache: true },
             );
         } else {
-            this.navigateToDefaultTab();
+            this.disableDocgenTab();
         }
     }
 
@@ -318,8 +323,8 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
+                                isDocGenTemplate={this.state.isDocGenTemplate}
                                 isOpen={isOpen}
-                                isDocgenTemplate={this.state.isDocgenTemplate}
                             />
                         )}
                         <SidebarPanels
@@ -328,7 +333,7 @@ class Sidebar extends React.Component<Props, State> {
                             currentUserError={currentUserError}
                             elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
-                            docgenPreviewSidebarProps={features?.docgen}
+                            docGenSidebarProps={features?.docgen}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}
@@ -338,7 +343,7 @@ class Sidebar extends React.Component<Props, State> {
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
-                            isDocgenTemplate={this.state.isDocgenTemplate}
+                            isDocGenTemplate={this.state.isDocGenTemplate}
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}

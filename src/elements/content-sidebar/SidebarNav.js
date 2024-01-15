@@ -8,6 +8,7 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { InjectIntlProvidedProps } from 'react-intl';
 import AdditionalTabs from './additional-tabs';
+import Tag16 from '../../icon/fill/Tag16';
 import IconChatRound from '../../icons/general/IconChatRound';
 import IconDocInfo from '../../icons/general/IconDocInfo';
 import IconMagicWand from '../../icons/general/IconMagicWand';
@@ -19,7 +20,7 @@ import SidebarToggle from './SidebarToggle';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
-    SIDEBAR_DOCGEN,
+    SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
@@ -28,7 +29,6 @@ import {
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
-import Tag16 from '../../icon/fill/Tag16';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
@@ -39,7 +39,7 @@ type Props = {
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
-    isDocgenTemplate?: boolean,
+    isDocGenTemplate?: boolean,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
 } & InjectIntlProvidedProps;
@@ -53,10 +53,10 @@ const SidebarNav = ({
     hasDetails,
     hasMetadata,
     hasSkills,
+    isDocGenTemplate = false,
     intl,
     isOpen,
     onNavigate,
-    isDocgenTemplate = false,
 }: Props) => {
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
 
@@ -104,13 +104,13 @@ const SidebarNav = ({
                             <IconMetadataThick />
                         </SidebarNavButton>
                     )}
-                    {isDocgenTemplate && (
+                    {isDocGenTemplate && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
-                            sidebarView={SIDEBAR_DOCGEN}
+                            sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip="Box Doc Gen"
                         >
-                            <Tag16 className="bcs-SidebarNavSignButton-icon" />
+                            <Tag16 className="bcs-SidebarNavDocGenButton-icon" />
                         </SidebarNavButton>
                     )}
                 </SidebarNavTablist>

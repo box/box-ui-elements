@@ -15,6 +15,7 @@ import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
+    ORIGIN_DOCGEN_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_VERSIONS_SIDEBAR,
@@ -23,10 +24,10 @@ import {
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
-    SIDEBAR_DOCGEN,
+    SIDEBAR_VIEW_DOCGEN,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
-import type { DocgenSidebarProps } from './DocgenSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
@@ -38,7 +39,7 @@ type Props = {
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
-    docgenPreviewSidebarProps: DocgenSidebarProps,
+    docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
     file: BoxItem,
     fileId: string,
@@ -49,7 +50,7 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
-    isDocgenTemplate: boolean,
+    isDocGenTemplate: boolean,
     isOpen: boolean,
     location: Location,
     metadataSidebarProps: MetadataSidebarProps,
@@ -73,7 +74,7 @@ const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME
 const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
-const MARK_NAME_JS_LOADING_DOCGEN = `docgen_sidebar${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
 const URL_TO_FEED_ITEM_TYPE = { annotations: 'annotation', comments: 'comment', tasks: 'task' };
@@ -88,7 +89,7 @@ const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
     MARK_NAME_JS_LOADING_METADATA,
 );
-const LoadableDocgenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
+const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
 const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_VERSIONS,
     MARK_NAME_JS_LOADING_VERSIONS,
@@ -159,7 +160,7 @@ class SidebarPanels extends React.Component<Props, State> {
             currentUser,
             currentUserError,
             detailsSidebarProps,
-            docgenPreviewSidebarProps,
+            docGenSidebarProps,
             elementId,
             file,
             fileId,
@@ -170,7 +171,7 @@ class SidebarPanels extends React.Component<Props, State> {
             hasMetadata,
             hasSkills,
             hasVersions,
-            isDocgenTemplate,
+            isDocGenTemplate,
             isOpen,
             metadataSidebarProps,
             onAnnotationSelect,
@@ -274,15 +275,15 @@ class SidebarPanels extends React.Component<Props, State> {
                         )}
                     />
                 )}
-                {isDocgenTemplate && (
+                {isDocGenTemplate && (
                     <Route
                         exact
-                        path={`/${SIDEBAR_DOCGEN}`}
+                        path={`/${SIDEBAR_VIEW_DOCGEN}`}
                         render={() => (
-                            <LoadableDocgenSidebar
+                            <LoadableDocGenSidebar
                                 hasSidebarInitialized={isInitialized}
                                 startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
-                                docgenPreviewSidebarProps={docgenPreviewSidebarProps}
+                                {...docGenSidebarProps}
                             />
                         )}
                     />
@@ -308,8 +309,8 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (isDocgenTemplate) {
-                            redirect = SIDEBAR_DOCGEN;
+                        if (isDocGenTemplate) {
+                            redirect = SIDEBAR_VIEW_DOCGEN;
                         } else if (hasSkills) {
                             redirect = SIDEBAR_VIEW_SKILLS;
                         } else if (hasActivity) {
