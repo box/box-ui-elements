@@ -6,10 +6,11 @@ type Props = {
     children: React.Node,
     className?: string,
     labelContent: React.Node,
+    labelElProps?: React.Element<'label'>,
 };
 
-const LabelPrimitive = ({ children, className, labelContent, ...rest }: Props) => (
-    <label>
+const LabelPrimitive = ({ children, className, labelContent, labelElProps, ...rest }: Props) => (
+    <label {...labelElProps}>
         <span className={classNames('label bdl-Label', className)} {...rest}>
             {labelContent}
         </span>

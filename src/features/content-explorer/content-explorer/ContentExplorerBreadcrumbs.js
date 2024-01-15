@@ -30,9 +30,11 @@ const ContentExplorerBreadcrumbs = ({
             <IconChevron direction="left" size="6px" color="#333" />
         </Button>
         <Breadcrumb label={formatMessage(messages.breadcrumb)} {...breadcrumbProps}>
+            {/* The outer div for each crumb prevents styling conflicts when the crumbs menu is active */}
             {foldersPath.map((folder, i) => (
                 <div key={folder.id} className="lnk">
                     <PlainButton
+                        className="bdl-ContentExplorerBreadcrumbs-crumbLink"
                         data-testid="breadcrumb-lnk"
                         onClick={event => onBreadcrumbClick(i, event)}
                         title={folder.name}

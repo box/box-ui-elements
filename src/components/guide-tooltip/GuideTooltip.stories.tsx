@@ -86,7 +86,7 @@ onlyBody.story = {
 };
 
 export default {
-    title: 'Components|GuideTooltip',
+    title: 'Components/GuideTooltip',
     component: GuideTooltip,
     parameters: {
         notes,

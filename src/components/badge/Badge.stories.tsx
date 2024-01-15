@@ -19,7 +19,7 @@ export const alert = () => <Badge type={BadgeType.ALERT}>Alert Badge</Badge>;
 export const success = () => <Badge type={BadgeType.SUCCESS}>Success Badge</Badge>;
 
 export default {
-    title: 'Components|Badges/Badge',
+    title: 'Components/Badges/Badge',
     component: Badge,
     parameters: {
         notes,

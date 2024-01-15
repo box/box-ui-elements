@@ -46,7 +46,7 @@ export const collapsible = () => (
 );
 
 export default {
-    title: 'Components|NavSidebar',
+    title: 'Components/NavSidebar',
     component: NavSidebar,
     parameters: {
         notes,

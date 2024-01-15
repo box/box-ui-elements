@@ -32,7 +32,7 @@ export const example = () => (
 );
 
 export default {
-    title: 'Components|Media/MediaMenu',
+    title: 'Components/Media/MediaMenu',
     component: MediaMenu,
     parameters: {
         notes,

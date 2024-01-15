@@ -30,7 +30,7 @@ function isSortingNeeded(order?: Order[], sortBy: SortBy, sortDirection: SortDir
  * @param {Cache} cache item cache
  * @return {void}
  */
-export default function(
+export default function sorter(
     item: FlattenedBoxItem,
     sortBy: SortBy,
     sortDirection: SortDirection,

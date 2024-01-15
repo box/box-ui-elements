@@ -15,7 +15,7 @@ export const example = () => (
 );
 
 export default {
-    title: 'Components|TextInputWithCopyButton',
+    title: 'Components/TextInputWithCopyButton',
     component: TextInputWithCopyButton,
     parameters: {
         notes,

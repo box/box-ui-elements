@@ -12,7 +12,7 @@ export const withHTMLSymbol1 = () => <CountBadge isVisible value={String.fromCha
 export const withHTMLSymbol2 = () => <CountBadge isVisible value={String.fromCharCode(215)} />;
 
 export default {
-    title: 'Components|Badges/CountBadge',
+    title: 'Components/Badges/CountBadge',
     component: CountBadge,
     parameters: {
         notes,

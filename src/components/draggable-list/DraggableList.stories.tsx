@@ -75,7 +75,7 @@ export const Example = () => <DraggableListExamples />;
 export const ExampleIsDraggableViaHandle = () => <DraggableListExamples isDraggableViaHandle />;
 
 export default {
-    title: 'Components|DraggableList',
+    title: 'Components/DraggableList',
     component: DraggableList,
     parameters: {
         notes,

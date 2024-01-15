@@ -21,7 +21,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Components|ImageTooltip',
+    title: 'Components/ImageTooltip',
     component: ImageTooltip,
     parameters: {
         notes,

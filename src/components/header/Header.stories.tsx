@@ -13,7 +13,7 @@ export const regular = () => (
 );
 
 export default {
-    title: 'Components|Header',
+    title: 'Components/Header',
     component: Header,
     parameters: {
         notes,

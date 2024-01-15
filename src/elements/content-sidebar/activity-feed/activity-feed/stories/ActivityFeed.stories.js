@@ -65,6 +65,6 @@ export const LegacyComment = getTemplate({ hasNewThreadedReplies: false });
 export const ThreadedRepliesComment = getTemplate({ hasNewThreadedReplies: true });
 
 export default {
-    title: 'Components|ActivityFeed',
+    title: 'Components/ActivityFeed',
     component: ActivityFeed,
 };

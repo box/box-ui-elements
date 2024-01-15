@@ -14,7 +14,7 @@ export const basic = () => (
 );
 
 export default {
-    title: 'Features|SandboxBanner',
+    title: 'Features/SandboxBanner',
     component: SandboxBanner,
     parameters: {
         notes,

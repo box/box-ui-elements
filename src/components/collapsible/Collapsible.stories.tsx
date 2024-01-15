@@ -63,7 +63,7 @@ export const withButtonInHeader = () => (
 );
 
 export default {
-    title: 'Components|Collapsible',
+    title: 'Components/Collapsible',
     component: Collapsible,
     parameters: {
         notes,

@@ -103,7 +103,7 @@ export const responsiveWithHeader = () => (
 );
 
 export default {
-    title: 'Components|DropdownMenu',
+    title: 'Components/DropdownMenu',
     component: DropdownMenu,
     parameters: {
         notes,

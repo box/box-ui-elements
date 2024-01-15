@@ -123,7 +123,7 @@ const allColors = () => (
 export { allColors };
 
 export default {
-    title: 'Theming|Colors',
+    title: 'Theming/Colors',
     parameters: {
         notes: mdNotes,
     },

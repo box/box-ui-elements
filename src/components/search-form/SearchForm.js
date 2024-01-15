@@ -1,33 +1,16 @@
 // @flow
 import * as React from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 
-import ClearBadge16 from '../../icon/fill/ClearBadge16';
-import Search16 from '../../icon/fill/Search16';
+// $FlowFixMe
+import SearchActions from './SearchActions';
 
-import makeLoadable from '../loading-indicator/makeLoadable';
+// $FlowFixMe
+import messages from './messages';
 
 import './SearchForm.scss';
-
-const messages = defineMessages({
-    clearButtonTitle: {
-        defaultMessage: 'Clear',
-        description: 'Title for a clear button',
-        id: 'boxui.searchForm.clearButtonTitle',
-    },
-    searchButtonTitle: {
-        defaultMessage: 'Search',
-        description: 'Title for a search button',
-        id: 'boxui.searchForm.searchButtonTitle',
-    },
-    searchLabel: {
-        defaultMessage: 'Search query',
-        description: 'Label for a search input',
-        id: 'boxui.searchForm.searchLabel',
-    },
-});
 
 type Props = {
     /** Form submit action */
@@ -41,13 +24,13 @@ type Props = {
     method?: 'get' | 'post',
     /** Name of the text input */
     name?: string,
-    /** On change handler for the search input, debounced by 250ms */
+    /** On change handler for the search input */
     onChange?: Function,
     /** On submit handler for the search input */
     onSubmit?: Function,
     /** Extra query parameters in addition to the form data */
     queryParams: { [arg: string]: string },
-    /** Boolean to prevent propogation of search clear action */
+    /** Whether to prevent propagation of search clear action */
     shouldPreventClearEventPropagation?: boolean,
     /** If the clear button is shown when input field is not empty */
     useClearButton?: boolean,
@@ -177,35 +160,6 @@ class SearchFormBase extends React.Component<Props, State> {
             <input key={index} name={param} type="hidden" value={queryParams[param]} />
         ));
 
-        const SearchActions = () => (
-            <div className="action-buttons">
-                {onSubmit ? (
-                    <button
-                        type="submit"
-                        className="action-button search-button"
-                        title={formatMessage(messages.searchButtonTitle)}
-                    >
-                        <Search16 />
-                    </button>
-                ) : (
-                    <div className="action-button search-button">
-                        <Search16 />
-                    </div>
-                )}
-
-                <button
-                    className="action-button clear-button"
-                    onClick={this.onClearHandler}
-                    title={formatMessage(messages.clearButtonTitle)}
-                    type="button"
-                >
-                    <ClearBadge16 />
-                </button>
-            </div>
-        );
-
-        const LoadableSearchActions = makeLoadable(SearchActions);
-
         // @NOTE Prevent errors from React about controlled inputs
         const onChangeStub = () => {};
 
@@ -229,11 +183,13 @@ class SearchFormBase extends React.Component<Props, State> {
                         type="search"
                         {...inputProps}
                     />
-                    <LoadableSearchActions
+                    <SearchActions
+                        hasSubmitAction={!!onSubmit}
                         isLoading={isLoading}
                         loadingIndicatorProps={{
                             className: 'search-form-loading-indicator',
                         }}
+                        onClear={this.onClearHandler}
                     />
                     {hiddenInputs}
                 </form>

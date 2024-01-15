@@ -70,6 +70,8 @@ class ContentExplorerModalContainer extends Component {
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
         initialSelectedItems: PropTypes.object,
+        /** Items that will show up as selected */
+        controlledSelectedItems: PropTypes.object,
         /**
          * Called when the current folder changes
          *

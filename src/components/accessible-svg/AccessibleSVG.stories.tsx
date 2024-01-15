@@ -13,6 +13,6 @@ export const IconExample = (props: SVGProps) => (
 );
 
 export default {
-    title: 'Components|AccessibleSVG',
+    title: 'Components/AccessibleSVG',
     component: AccessibleSVG,
 };

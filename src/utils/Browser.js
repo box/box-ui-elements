@@ -83,6 +83,16 @@ class Browser {
     }
 
     /**
+     * Returns whether browser can download via HTML5.
+     *
+     * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/a/download.js
+     * @return {boolean} Whether browser supports downloading
+     */
+    static canDownload() {
+        return !Browser.isMobile() || (!window.externalHost && 'download' in document.createElement('a'));
+    }
+
+    /**
      * Checks the browser for Dash support using H264 high.
      * Dash requires MediaSource extensions to exist and be applicable
      * to the H264 container (since we use H264 and not webm)
