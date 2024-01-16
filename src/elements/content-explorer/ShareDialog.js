@@ -7,7 +7,8 @@
 import React from 'react';
 import Modal from 'react-modal';
 import noop from 'lodash/noop';
-import { injectIntl, FormattedMessage, type IntlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import PrimaryButton from '../../components/primary-button/PrimaryButton';
 import Button from '../../components/button/Button';
 import messages from '../common/messages';

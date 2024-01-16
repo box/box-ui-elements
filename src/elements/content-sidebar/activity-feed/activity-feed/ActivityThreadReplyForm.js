@@ -1,7 +1,8 @@
 // @flow
 
 import * as React from 'react';
-import { FormattedMessage, injectIntl, type IntlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../../../components/plain-button';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
