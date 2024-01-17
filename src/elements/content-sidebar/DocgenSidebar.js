@@ -22,9 +22,9 @@ type ExternalProps = {
 };
 
 type DocGenTag = {
-    json_paths: Array<string>,
-    tag_content: string,
-    tag_type: string,
+    jsonPaths: Array<string>,
+    tagContent: string,
+    tagType: string,
 };
 
 type Props = {
@@ -64,7 +64,7 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
                 {tags.length > 0 ? (
                     <div>
                         {tags.map(tag => (
-                            <p key={tag.json_paths[0]}>{tag.json_paths[0]}</p>
+                            <p key={tag.jsonPaths[0]}>{tag.jsonPaths[0]}</p>
                         ))}
                     </div>
                 ) : (
