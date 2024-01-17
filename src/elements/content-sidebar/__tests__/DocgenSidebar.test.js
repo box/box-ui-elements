@@ -37,7 +37,7 @@ const docGenSidebarProps = {
 const defaultProps = {
     ...docGenSidebarProps,
 };
-describe('elements/content-sidebar/DocGen/DocGenSidebar', () => {
+describe('elements/content-sidebar/DocGenSidebar', () => {
     const getWrapper = (props = defaultProps, options = {}) =>
         shallow(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
