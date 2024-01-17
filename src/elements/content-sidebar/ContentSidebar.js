@@ -23,9 +23,9 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureProvider } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 
-import type { DetailsSidebarProps } from './DetailsSidebar';
-import type { DocGenSidebarProps } from './DocGenSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { DocGenSidebarProps } from './DocgenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { WithLoggerProps } from '../../common/types/logging';
