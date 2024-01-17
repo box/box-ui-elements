@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/DocGen/DocGenSidebar should render DocGen sidebar component correctly with search and tags list 1`] = `
+exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar component correctly with search and tags list 1`] = `
 <SidebarContent
   elementId=""
   sidebarView="metadata"
