@@ -318,8 +318,8 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
-                                isOpen={isOpen}
                                 isDocGenTemplate={this.state.isDocGenTemplate}
+                                isOpen={isOpen}
                             />
                         )}
                         <SidebarPanels

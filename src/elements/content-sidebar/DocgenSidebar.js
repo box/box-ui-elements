@@ -47,9 +47,11 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
     };
 
     componentDidMount() {
-        this.props.getDocGenTags().then(response => {
-            this.setState({ tags: response?.payload?.data });
-        });
+        if (this.props.getDocGenTags) {
+            this.props.getDocGenTags().then(response => {
+                this.setState({ tags: response?.payload?.data });
+            });
+        }
     }
 
     render() {
