@@ -102,8 +102,12 @@ class Sidebar extends React.Component<Props, State> {
         this.setForcedByLocation();
     }
 
-    navigateToDefaultTab() {
+    disableDocgenTab() {
         const { history, location } = this.props;
+        this.setState({
+            ...this.state,
+            isDocGenTemplate: false,
+        });
         if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
             history.push('/');
         }
@@ -123,7 +127,7 @@ class Sidebar extends React.Component<Props, State> {
                 history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
             }
         } else {
-            this.navigateToDefaultTab();
+            this.disableDocgenTab();
         }
     };
 
@@ -134,12 +138,12 @@ class Sidebar extends React.Component<Props, State> {
             api.getMetadataAPI(false).getMetadata(
                 file,
                 this.fetchMetadataSuccessCallback,
-                this.navigateToDefaultTab,
+                this.disableDocgenTab,
                 this.props.metadataSidebarProps.isFeatureEnabled,
                 { refreshCache: true },
             );
         } else {
-            this.navigateToDefaultTab();
+            this.disableDocgenTab();
         }
     }
 
