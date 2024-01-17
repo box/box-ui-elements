@@ -1,4 +1,3 @@
-// @ts-check
 /**
  * @flow
  * @file Doc Gen sidebar component
