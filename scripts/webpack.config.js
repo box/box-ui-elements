@@ -3,11 +3,10 @@ const path = require('path');
 const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin.js');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const RsyncPlugin = require('@box/frontend/webpack/RsyncPlugin');
-const safeParser = require('postcss-safe-parser');
 const packageJSON = require('../package.json');
 const rsyncConf = fs.existsSync('scripts/rsync.json') ? require('./rsync.json') : {}; // eslint-disable-line
 const license = require('./license');
@@ -119,10 +118,17 @@ function getConfig(isReactExternalized) {
             new MiniCssExtractPlugin({
                 filename: '[name].css',
             }),
-            new OptimizeCssAssetsPlugin({
-                cssProcessorOptions: {
-                    discardComments: { removeAll: true },
-                    parser: safeParser,
+            new CssMinimizerPlugin({
+                minimizerOptions: {
+                    preset: [
+                        'default',
+                        {
+                            discardComments: { removeAll: true },
+                        },
+                    ],
+                    processorOptions: {
+                        safe: true,
+                    },
                 },
             }),
             new BannerPlugin(license),
