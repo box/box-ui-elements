@@ -372,7 +372,8 @@
         }
     },
     "resolutions": {
-        "ip": "1.1.8"
+        "ip": "1.1.8",
+        "terser-webpack-plugin": "^4.2.3"
     },
     "overrides": {
         "draft-js": {
