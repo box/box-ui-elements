@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { DocGenSidebarComponent as DocGenSidebar } from '../DocgenSidebar';
+import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
 
 const docGenSidebarProps = {
     getDocGenTags: jest.fn().mockReturnValue(

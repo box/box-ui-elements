@@ -6,25 +6,24 @@
 
 import flow from 'lodash/flow';
 import * as React from 'react';
-import type { ErrorContextProps } from '../../common/types/api';
-import type { WithLoggerProps } from '../../common/types/logging';
-import { ORIGIN_METADATA_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../constants';
-import { mark } from '../../utils/performance';
-import { withAPIContext } from '../common/api-context';
-import { withErrorBoundary } from '../common/error-boundary';
-import { withLogger } from '../common/logger';
-import { EVENT_JS_READY } from '../common/logger/constants';
-import SidebarContent from './SidebarContent';
+import type { ErrorContextProps } from '../../../common/types/api';
+import type { WithLoggerProps } from '../../../common/types/logging';
+import { ORIGIN_METADATA_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../../constants';
+import { mark } from '../../../utils/performance';
+import { withAPIContext } from '../../common/api-context';
+import { withErrorBoundary } from '../../common/error-boundary';
+import { withLogger } from '../../common/logger';
+import { EVENT_JS_READY } from '../../common/logger/constants';
+import SidebarContent from '../SidebarContent';
+import NoTagsAvailable from './NoTagsAvailable';
+import SearchInput from './SearchInput';
+import TagsList from './TagsList';
+
+import type { DocGenTag } from './types';
 
 type ExternalProps = {
     enabled: boolean,
     getDocGenTags: Function,
-};
-
-type DocGenTag = {
-    jsonPaths: Array<string>,
-    tagContent: string,
-    tagType: string,
 };
 
 type Props = {
@@ -48,7 +47,7 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
     componentDidMount() {
         if (this.props.getDocGenTags) {
             this.props.getDocGenTags().then(response => {
-                this.setState({ tags: response?.payload?.data });
+                this.setState({ tags: response?.data });
             });
         }
     }
@@ -59,17 +58,9 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title="Box DocGen">
-                <input placeholder="Search" />
+                <SearchInput />
                 {isLoading && <div>Loading</div>}
-                {tags.length > 0 ? (
-                    <div>
-                        {tags.map(tag => (
-                            <p key={tag.jsonPaths[0]}>{tag.jsonPaths[0]}</p>
-                        ))}
-                    </div>
-                ) : (
-                    <div>No Tags found</div>
-                )}
+                {tags.length > 0 ? <TagsList tags={tags} /> : <NoTagsAvailable />}
             </SidebarContent>
         );
     }

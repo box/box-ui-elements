@@ -186,7 +186,9 @@ class SidebarUtils {
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "versions-sidebar" */ './versions');
                 break;
             case SIDEBAR_VIEW_DOCGEN:
-                importFn = import(/* webpackMode: "lazy", webpackChunkName: "docgen-sidebar" */ './DocgenSidebar');
+                importFn = import(
+                    /* webpackMode: "lazy", webpackChunkName: "docgen-sidebar" */ './DocGenSidebar/DocGenSidebar'
+                );
                 break;
             default:
                 return Promise.resolve(null);
