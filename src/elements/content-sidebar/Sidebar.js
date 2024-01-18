@@ -133,6 +133,7 @@ class Sidebar extends React.Component<Props, State> {
 
     fetchMetadata(): void {
         const { api, file }: Props = this.props;
+        this.setState({ ...this.state, isDocGenTemplate: false });
 
         if (file && DOCGEN_FILE_TYPES.includes(file.extension)) {
             api.getMetadataAPI(false).getMetadata(
