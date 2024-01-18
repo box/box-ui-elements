@@ -1,35 +1,33 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
 
 const docGenSidebarProps = {
     getDocGenTags: jest.fn().mockReturnValue(
         Promise.resolve({
-            payload: {
-                pagination: {},
-                data: [
-                    {
-                        tagContent: '{{ isActive }}',
-                        tagType: 'text',
-                        jsonPaths: ['isActive'],
-                    },
-                    {
-                        tagContent: '{{ about }}',
-                        tagType: 'text',
-                        jsonPaths: ['about'],
-                    },
-                    {
-                        tagContent: '{{ phone }}',
-                        tagType: 'text',
-                        jsonPaths: ['phone'],
-                    },
-                    {
-                        tagContent: '{{ company }}',
-                        tagType: 'text',
-                        jsonPaths: ['company'],
-                    },
-                ],
-            },
+            pagination: {},
+            data: [
+                {
+                    tagContent: '{{ isActive }}',
+                    tagType: 'text',
+                    jsonPaths: ['isActive'],
+                },
+                {
+                    tagContent: '{{ about }}',
+                    tagType: 'text',
+                    jsonPaths: ['about'],
+                },
+                {
+                    tagContent: '{{ phone }}',
+                    tagType: 'text',
+                    jsonPaths: ['phone'],
+                },
+                {
+                    tagContent: '{{ company }}',
+                    tagType: 'text',
+                    jsonPaths: ['company'],
+                },
+            ],
         }),
     ),
 };
@@ -39,7 +37,7 @@ const defaultProps = {
 };
 describe('elements/content-sidebar/DocGenSidebar', () => {
     const getWrapper = (props = defaultProps, options = {}) =>
-        shallow(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
+        mount(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
     test('componentDidMount() should call fetch tags', () => {
         getWrapper(defaultProps);
@@ -48,7 +46,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
     });
 
     test('should render DocGen sidebar component correctly with search and tags list', async () => {
-        const wrapper = getWrapper(defaultProps);
+        const wrapper = await getWrapper(defaultProps);
 
         const searchBar = wrapper.find('input').at(0);
         expect(searchBar.props().placeholder).toEqual('Search');

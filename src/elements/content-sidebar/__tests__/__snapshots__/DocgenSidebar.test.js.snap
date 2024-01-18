@@ -1,35 +1,118 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar component correctly with search and tags list 1`] = `
-<SidebarContent
-  elementId=""
-  sidebarView="metadata"
-  title="Box DocGen"
+<DocGenSidebar
+  getDocGenTags={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": Promise {},
+        },
+      ],
+    }
+  }
+  logger={
+    Object {
+      "onReadyMetric": [MockFunction],
+    }
+  }
 >
-  <input
-    placeholder="Search"
-  />
-  <div>
-    <p
-      key="isActive"
+  <SidebarContent
+    elementId=""
+    sidebarView="metadata"
+    title="Box DocGen"
+  >
+    <div
+      aria-labelledby="metadata"
+      className="bcs-content"
+      data-testid="bcs-content"
+      id="metadata-content"
+      role="tabpanel"
     >
-      isActive
-    </p>
-    <p
-      key="about"
-    >
-      about
-    </p>
-    <p
-      key="phone"
-    >
-      phone
-    </p>
-    <p
-      key="company"
-    >
-      company
-    </p>
-  </div>
-</SidebarContent>
+      <div
+        className="bcs-content-header"
+      >
+        <h3
+          className="bcs-title"
+        >
+          Box DocGen
+        </h3>
+      </div>
+      <div
+        className="bcs-scroll-content-wrapper"
+      >
+        <div
+          className="bcs-scroll-content"
+        >
+          <SearchInput>
+            <input
+              placeholder="Search"
+            />
+          </SearchInput>
+          <TagsList
+            tags={
+              Array [
+                Object {
+                  "jsonPaths": Array [
+                    "isActive",
+                  ],
+                  "tagContent": "{{ isActive }}",
+                  "tagType": "text",
+                },
+                Object {
+                  "jsonPaths": Array [
+                    "about",
+                  ],
+                  "tagContent": "{{ about }}",
+                  "tagType": "text",
+                },
+                Object {
+                  "jsonPaths": Array [
+                    "phone",
+                  ],
+                  "tagContent": "{{ phone }}",
+                  "tagType": "text",
+                },
+                Object {
+                  "jsonPaths": Array [
+                    "company",
+                  ],
+                  "tagContent": "{{ company }}",
+                  "tagType": "text",
+                },
+              ]
+            }
+          >
+            <div>
+              <p
+                key="isActive"
+              >
+                isActive
+              </p>
+              <p
+                key="about"
+              >
+                about
+              </p>
+              <p
+                key="phone"
+              >
+                phone
+              </p>
+              <p
+                key="company"
+              >
+                company
+              </p>
+            </div>
+          </TagsList>
+        </div>
+      </div>
+    </div>
+  </SidebarContent>
+</DocGenSidebar>
 `;
