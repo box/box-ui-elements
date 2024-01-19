@@ -11,7 +11,7 @@ exports[`elements/content-sidebar/ActivityFeed/common/ActivityTimestamp should c
       defaultMessage="{time, date, full} at {time, time, short}"
       id="be.activityFeed.fullDateTime"
       values={
-        Object {
+        {
           "time": 1506534041000,
         }
       }

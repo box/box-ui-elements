@@ -8,7 +8,7 @@ exports[`features/access-stats/AccessStatsItemsList should render access stats l
     count={10}
     hasCountOverflowed={false}
     statButtonProps={
-      Object {
+      {
         "preview": 1,
       }
     }
@@ -18,7 +18,7 @@ exports[`features/access-stats/AccessStatsItemsList should render access stats l
     count={10}
     hasCountOverflowed={false}
     statButtonProps={
-      Object {
+      {
         "edit": 1,
       }
     }
@@ -28,7 +28,7 @@ exports[`features/access-stats/AccessStatsItemsList should render access stats l
     count={10}
     hasCountOverflowed={false}
     statButtonProps={
-      Object {
+      {
         "comment": 1,
       }
     }
@@ -38,7 +38,7 @@ exports[`features/access-stats/AccessStatsItemsList should render access stats l
     count={10}
     hasCountOverflowed={false}
     statButtonProps={
-      Object {
+      {
         "download": 1,
       }
     }
@@ -54,19 +54,19 @@ exports[`features/access-stats/AccessStatsItemsList should render download acces
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="view"
   />
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="edit"
   />
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="comment"
   />
 </ul>
@@ -79,25 +79,25 @@ exports[`features/access-stats/AccessStatsItemsList should render preview access
   <AccessStatsItem
     count={100}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="preview"
   />
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="edit"
   />
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="comment"
   />
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="download"
   />
 </ul>
@@ -111,7 +111,7 @@ exports[`features/access-stats/AccessStatsItemsList should render view access st
     count={100}
     hasCountOverflowed={false}
     statButtonProps={
-      Object {
+      {
         "value": 1,
       }
     }
@@ -120,13 +120,13 @@ exports[`features/access-stats/AccessStatsItemsList should render view access st
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="edit"
   />
   <AccessStatsItem
     count={0}
     hasCountOverflowed={false}
-    statButtonProps={Object {}}
+    statButtonProps={{}}
     type="comment"
   />
 </ul>

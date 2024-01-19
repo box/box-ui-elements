@@ -13,12 +13,12 @@ exports[`elements/content-sidebar/Skills/Keywords/EditableKeywords should correc
     onPaste={[Function]}
     onRemove={[Function]}
     selectedOptions={
-      Array [
-        Object {
+      [
+        {
           "displayText": "foo",
           "value": 0,
         },
-        Object {
+        {
           "displayText": "bar",
           "value": 1,
         },

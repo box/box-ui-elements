@@ -8,14 +8,14 @@ exports[`features/metadata-instance-editor/fields/Header should correctly render
   <TemplateDropdown
     onAdd={[MockFunction]}
     templates={
-      Array [
-        Object {
+      [
+        {
           "displayName": "visible-template",
           "isHidden": false,
         },
       ]
     }
-    usedTemplates={Array []}
+    usedTemplates={[]}
   />
 </div>
 `;

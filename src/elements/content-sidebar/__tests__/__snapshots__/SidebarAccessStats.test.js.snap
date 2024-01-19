@@ -34,36 +34,36 @@ exports[`elements/content-sidebar/SidebarAccessStats should render the component
   <AccessStats
     commentCount={0}
     commentStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-comments",
       }
     }
     downloadCount={0}
     downloadStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-downloads",
       }
     }
     editCount={0}
     editStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-edits",
       }
     }
     isBoxNote={false}
     previewCount={0}
     previewStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-previews",
       }
     }
     viewMoreButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-viewdetails",
       }
     }
     viewStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-views",
       }
     }
@@ -86,36 +86,36 @@ exports[`elements/content-sidebar/SidebarAccessStats should render the component
   <AccessStats
     commentCount={0}
     commentStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-comments",
       }
     }
     downloadCount={0}
     downloadStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-downloads",
       }
     }
     editCount={0}
     editStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-edits",
       }
     }
     isBoxNote={false}
     previewCount={1}
     previewStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-previews",
       }
     }
     viewMoreButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-viewdetails",
       }
     }
     viewStatButtonProps={
-      Object {
+      {
         "data-resin-target": "accessstats-views",
       }
     }

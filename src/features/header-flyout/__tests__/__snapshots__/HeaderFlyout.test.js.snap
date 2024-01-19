@@ -15,7 +15,7 @@ exports[`components/core/header/components/HeaderFlyout render() should include 
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <Overlay
@@ -72,7 +72,7 @@ exports[`components/core/header/components/HeaderFlyout render() should render d
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <Overlay
@@ -112,7 +112,7 @@ exports[`components/core/header/components/HeaderFlyout render() should render t
   offset="-4px 0px"
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <button

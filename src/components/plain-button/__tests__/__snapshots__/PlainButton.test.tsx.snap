@@ -14,11 +14,11 @@ exports[`components/plain-button/PlainButton should render component correctly a
   className="btn-plain "
   onClick={
     [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": undefined,
         },

@@ -10,7 +10,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
     <MediaFigure>
       <Component
         user={
-          Object {
+          {
             "id": 10,
             "name": "50 Cent",
           }
@@ -22,8 +22,8 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         attachment="top right"
         className="bcs-Comment-deleteConfirmationModal"
         constraints={
-          Array [
-            Object {
+          [
+            {
               "attachment": "together",
               "to": "scrollParent",
             },
@@ -36,14 +36,14 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
         <MediaMenu
           data-testid="comment-actions-menu"
           dropdownProps={
-            Object {
+            {
               "onMenuClose": [Function],
               "onMenuOpen": [Function],
             }
           }
           isDisabled={false}
           menuProps={
-            Object {
+            {
               "data-resin-component": "activityfeedcomment",
             }
           }
@@ -99,7 +99,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should correctly 
     <MediaFigure>
       <Component
         user={
-          Object {
+          {
             "id": 10,
             "name": "50 Cent",
           }
@@ -147,7 +147,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render an 
     <MediaFigure>
       <Component
         user={
-          Object {
+          {
             "id": 10,
             "name": "50 Cent",
           }
@@ -197,7 +197,7 @@ exports[`elements/content-sidebar/ActivityFeed/comment/Comment should render com
     <MediaFigure>
       <Component
         user={
-          Object {
+          {
             "id": 10,
             "name": "50 Cent",
           }

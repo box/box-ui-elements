@@ -6,16 +6,16 @@ exports[`features/access-stats/AccessStats should render access stats header pro
 >
   <AccessStatsItemsList
     commentCount={0}
-    commentStatButtonProps={Object {}}
+    commentStatButtonProps={{}}
     downloadCount={0}
-    downloadStatButtonProps={Object {}}
+    downloadStatButtonProps={{}}
     editCount={0}
-    editStatButtonProps={Object {}}
+    editStatButtonProps={{}}
     hasCountOverflowed={false}
     isBoxNote={false}
     previewCount={10000}
-    previewStatButtonProps={Object {}}
-    viewStatButtonProps={Object {}}
+    previewStatButtonProps={{}}
+    viewStatButtonProps={{}}
   />
 </div>
 `;
@@ -26,20 +26,20 @@ exports[`features/access-stats/AccessStats should render access stats list with 
 >
   <AccessStatsItemsList
     commentCount={0}
-    commentStatButtonProps={Object {}}
+    commentStatButtonProps={{}}
     downloadCount={0}
-    downloadStatButtonProps={Object {}}
+    downloadStatButtonProps={{}}
     editCount={0}
-    editStatButtonProps={Object {}}
+    editStatButtonProps={{}}
     hasCountOverflowed={false}
     isBoxNote={false}
     previewCount={0}
     previewStatButtonProps={
-      Object {
+      {
         "resin": 1,
       }
     }
-    viewStatButtonProps={Object {}}
+    viewStatButtonProps={{}}
   />
 </div>
 `;
@@ -50,16 +50,16 @@ exports[`features/access-stats/AccessStats should render access stats properly w
 >
   <AccessStatsItemsList
     commentCount={0}
-    commentStatButtonProps={Object {}}
+    commentStatButtonProps={{}}
     downloadCount={0}
-    downloadStatButtonProps={Object {}}
+    downloadStatButtonProps={{}}
     editCount={0}
-    editStatButtonProps={Object {}}
+    editStatButtonProps={{}}
     hasCountOverflowed={false}
     isBoxNote={false}
     previewCount={0}
-    previewStatButtonProps={Object {}}
-    viewStatButtonProps={Object {}}
+    previewStatButtonProps={{}}
+    viewStatButtonProps={{}}
   />
 </div>
 `;
@@ -80,17 +80,17 @@ exports[`features/access-stats/AccessStats should render access stats properly w
 >
   <AccessStatsItemsList
     commentCount={0}
-    commentStatButtonProps={Object {}}
+    commentStatButtonProps={{}}
     downloadCount={0}
-    downloadStatButtonProps={Object {}}
+    downloadStatButtonProps={{}}
     editCount={0}
-    editStatButtonProps={Object {}}
+    editStatButtonProps={{}}
     hasCountOverflowed={false}
     isBoxNote={false}
     openAccessStatsModal={[Function]}
     previewCount={1}
-    previewStatButtonProps={Object {}}
-    viewStatButtonProps={Object {}}
+    previewStatButtonProps={{}}
+    viewStatButtonProps={{}}
   />
   <PlainButton
     className="lnk access-stats-view-details"
@@ -110,16 +110,16 @@ exports[`features/access-stats/AccessStats should render access stats properly w
 >
   <AccessStatsItemsList
     commentCount={0}
-    commentStatButtonProps={Object {}}
+    commentStatButtonProps={{}}
     downloadCount={0}
-    downloadStatButtonProps={Object {}}
+    downloadStatButtonProps={{}}
     editCount={0}
-    editStatButtonProps={Object {}}
+    editStatButtonProps={{}}
     hasCountOverflowed={false}
     isBoxNote={false}
     previewCount={1}
-    previewStatButtonProps={Object {}}
-    viewStatButtonProps={Object {}}
+    previewStatButtonProps={{}}
+    viewStatButtonProps={{}}
   />
 </div>
 `;
@@ -130,17 +130,17 @@ exports[`features/access-stats/AccessStats should render view more button with e
 >
   <AccessStatsItemsList
     commentCount={0}
-    commentStatButtonProps={Object {}}
+    commentStatButtonProps={{}}
     downloadCount={0}
-    downloadStatButtonProps={Object {}}
+    downloadStatButtonProps={{}}
     editCount={0}
-    editStatButtonProps={Object {}}
+    editStatButtonProps={{}}
     hasCountOverflowed={false}
     isBoxNote={false}
     openAccessStatsModal={[Function]}
     previewCount={0}
-    previewStatButtonProps={Object {}}
-    viewStatButtonProps={Object {}}
+    previewStatButtonProps={{}}
+    viewStatButtonProps={{}}
   />
   <PlainButton
     className="lnk access-stats-view-details"

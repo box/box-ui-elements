@@ -14,7 +14,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
 >
   <SidebarAccessStats
     file={
-      Object {
+      {
         "description": "bar",
         "id": "foo",
       }
@@ -40,7 +40,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   >
     <SidebarNotices
       file={
-        Object {
+        {
           "description": "bar",
           "id": "foo",
         }
@@ -49,13 +49,13 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   </div>
   <SidebarClassification
     classification={
-      Object {
+      {
         "definition": "message",
         "name": "name",
       }
     }
     file={
-      Object {
+      {
         "description": "bar",
         "id": "foo",
       }
@@ -64,7 +64,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   />
   <SidebarAccessStats
     file={
-      Object {
+      {
         "description": "bar",
         "id": "foo",
       }
@@ -83,7 +83,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   >
     <SidebarVersions
       file={
-        Object {
+        {
           "description": "bar",
           "id": "foo",
         }
@@ -91,7 +91,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
     />
     <SidebarFileProperties
       file={
-        Object {
+        {
           "description": "bar",
           "id": "foo",
         }
@@ -121,7 +121,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   >
     <SidebarNotices
       file={
-        Object {
+        {
           "description": "bar",
           "id": "foo",
         }
@@ -156,7 +156,7 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
   >
     <SidebarFileProperties
       file={
-        Object {
+        {
           "description": "bar",
           "id": "foo",
         }

@@ -38,7 +38,7 @@ exports[`feature/query-bar/components/TemplateButton render() should render Temp
     </Button>
   }
   onAdd={[Function]}
-  templates={Array []}
+  templates={[]}
   title={
     <div
       className="template-dropdown-list-title"
@@ -49,6 +49,6 @@ exports[`feature/query-bar/components/TemplateButton render() should render Temp
       />
     </div>
   }
-  usedTemplates={Array []}
+  usedTemplates={[]}
 />
 `;

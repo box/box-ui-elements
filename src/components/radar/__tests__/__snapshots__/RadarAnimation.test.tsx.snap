@@ -5,8 +5,8 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-cen
   attachment="top center"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -40,8 +40,8 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-lef
   attachment="top left"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -75,8 +75,8 @@ exports[`components/radar/RadarAnimation should render correctly with bottom-rig
   attachment="top right"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -110,8 +110,8 @@ exports[`components/radar/RadarAnimation should render correctly with middle-cen
   attachment="middle center"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -145,8 +145,8 @@ exports[`components/radar/RadarAnimation should render correctly with middle-lef
   attachment="middle right"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -180,8 +180,8 @@ exports[`components/radar/RadarAnimation should render correctly with middle-rig
   attachment="middle left"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -216,8 +216,8 @@ exports[`components/radar/RadarAnimation should render correctly with tetherElem
   className="tether-element-class-name"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -251,8 +251,8 @@ exports[`components/radar/RadarAnimation should render correctly with top-center
   attachment="bottom center"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -286,8 +286,8 @@ exports[`components/radar/RadarAnimation should render correctly with top-left p
   attachment="bottom left"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -321,8 +321,8 @@ exports[`components/radar/RadarAnimation should render correctly with top-right 
   attachment="bottom right"
   classPrefix="radar-animation"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },

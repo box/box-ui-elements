@@ -28,8 +28,8 @@ exports[`components/tooltip/Tooltip render() should not render the close button 
   bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -52,8 +52,8 @@ exports[`components/tooltip/Tooltip render() should not render with close button
   bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -76,8 +76,8 @@ exports[`components/tooltip/Tooltip render() should not render with close button
   bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -120,8 +120,8 @@ exports[`components/tooltip/Tooltip render() should render children wrapped in t
   bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -150,8 +150,8 @@ exports[`components/tooltip/Tooltip render() should render correctly with callou
   bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -189,8 +189,8 @@ exports[`components/tooltip/Tooltip render() should render correctly with tether
   className="tether-element-class-name"
   classPrefix="tooltip"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
@@ -219,8 +219,8 @@ exports[`components/tooltip/Tooltip render() should render with close button if 
   bodyElement={<body />}
   classPrefix="tooltip"
   constraints={
-    Array [
-      Object {
+    [
+      {
         "attachment": "together",
         "to": "window",
       },
