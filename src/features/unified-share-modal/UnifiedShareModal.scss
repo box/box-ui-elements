@@ -3,78 +3,64 @@
 @import '../../styles/mixins/overlay';
 @import '../../components/pill-selector-dropdown/mixins';
 
-.is-responsive-web {
-    .collaborator-list {
-        min-width: 0;
-    }
+@include breakpoint($small-screen) {
+    .shared-link-access-row {
+        display: flex;
+        justify-content: space-between;
 
-    @include breakpoint($small-screen) {
-        .shared-link-access-row {
-            display: flex;
-            justify-content: space-between;
-
-            .btn-plain {
-                margin-right: 0;
-            }
+        .btn-plain {
+            margin-right: 0;
         }
     }
+}
 
-    @include breakpoint($medium-screen) {
-        .usm-menu-description {
-            white-space: normal;
-        }
-
-        .usm-share-access-menu {
-            //can't use just 'min' b/c SASS compiler error
-            width: #{'min(400px, 90%)'};
-        }
+@include breakpoint($medium-screen) {
+    .usm-menu-description {
+        white-space: normal;
     }
 
-    @include breakpoint($small-medium-screen) {
-        .collaborator-list {
-            height: auto;
-            border: 0;
-            border-radius: 0;
-            box-shadow: none;
-        }
+    .usm-share-access-menu {
+        width: #{'min(400px, 90%)'};
+    }
+}
 
-        .shared-link-field-container {
-            height: $bdl-btn-height;
+@include breakpoint($small-medium-screen) {
+    .shared-link-field-container {
+        height: $bdl-btn-height;
 
-            .btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 60px;
-                min-width: 0;
-                height: $bdl-btn-height;
-            }
-        }
-
-        .email-shared-link-btn {
+        .btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: $bdl-btn-height;
+            width: 60px;
+            min-width: 0;
             height: $bdl-btn-height;
         }
+    }
 
-        .unified-share-modal {
-            .modal-content {
-                padding-top: $bdl-grid-unit * 3;
-            }
+    .email-shared-link-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: $bdl-btn-height;
+        height: $bdl-btn-height;
+    }
 
-            .shared-link-field-row .email-shared-link-btn {
-                margin-left: $bdl-grid-unit * 4;
-            }
+    .unified-share-modal {
+        .modal-content {
+            padding-top: $bdl-grid-unit * 3;
         }
 
-        .text-input-container {
-            height: $bdl-btn-height;
+        .shared-link-field-row .email-shared-link-btn {
+            margin-left: $bdl-grid-unit * 4;
+        }
+    }
 
-            input {
-                height: 100%;
-            }
+    .text-input-container {
+        height: $bdl-btn-height;
+
+        input {
+            height: 100%;
         }
     }
 }
