@@ -127,6 +127,7 @@ export type FlyoutProps = {
     constrainToWindowWithPin?: boolean,
     /**
      * Toggles responsive behavior
+     * @deprecated, responsiveness is enabled for this component
      */
     isResponsive?: boolean,
     /**
@@ -380,7 +381,6 @@ class Flyout extends React.Component<Props, State> {
             constrainToScrollParent,
             constrainToWindow,
             constrainToWindowWithPin,
-            isResponsive,
             offset,
             openOnHover,
             position,
@@ -456,7 +456,7 @@ class Flyout extends React.Component<Props, State> {
             targetAttachment: tetherPosition.targetAttachment,
             enabled: isVisible,
             classes: {
-                element: classNames('flyout-overlay', { 'bdl-Flyout--responsive': isResponsive }, className),
+                element: classNames('bdl-Flyout', 'flyout-overlay', className),
             },
             constraints,
         };

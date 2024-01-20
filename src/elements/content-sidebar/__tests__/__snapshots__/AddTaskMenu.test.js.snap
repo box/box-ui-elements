@@ -4,7 +4,6 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
 <DropdownMenu
   constrainToScrollParent={true}
   constrainToWindow={false}
-  isResponsive={false}
   isRightAligned={true}
 >
   <Button

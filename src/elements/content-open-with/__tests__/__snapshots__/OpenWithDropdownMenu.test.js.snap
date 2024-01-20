@@ -4,7 +4,6 @@ exports[`elements/content-open-with/OpenWithDropdownMenu should render a button 
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={false}
-  isResponsive={false}
   isRightAligned={true}
 >
   <MultipleIntegrationsOpenWithButton />

@@ -32,13 +32,12 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             className="bdl-Pagination-dropdown"
             constrainToScrollParent={false}
             constrainToWindow={true}
-            isResponsive={false}
             isRightAligned={true}
           >
             <TetherComponent
               attachment="top right"
               bodyElement={<body />}
-              className="bdl-Pagination-dropdown"
+              className="bdl-DropdownMenu bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
                 Array [
@@ -300,13 +299,12 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             className="bdl-Pagination-dropdown"
             constrainToScrollParent={false}
             constrainToWindow={true}
-            isResponsive={false}
             isRightAligned={true}
           >
             <TetherComponent
               attachment="top right"
               bodyElement={<body />}
-              className="bdl-Pagination-dropdown"
+              className="bdl-DropdownMenu bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
                 Array [
@@ -568,13 +566,12 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             className="bdl-Pagination-dropdown"
             constrainToScrollParent={false}
             constrainToWindow={true}
-            isResponsive={false}
             isRightAligned={true}
           >
             <TetherComponent
               attachment="top right"
               bodyElement={<body />}
-              className="bdl-Pagination-dropdown"
+              className="bdl-DropdownMenu bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
                 Array [
@@ -836,13 +833,12 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             className="bdl-Pagination-dropdown"
             constrainToScrollParent={false}
             constrainToWindow={true}
-            isResponsive={false}
             isRightAligned={true}
           >
             <TetherComponent
               attachment="top right"
               bodyElement={<body />}
-              className="bdl-Pagination-dropdown"
+              className="bdl-DropdownMenu bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
                 Array [
@@ -1146,13 +1142,12 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             className="bdl-Pagination-dropdown"
             constrainToScrollParent={false}
             constrainToWindow={true}
-            isResponsive={false}
             isRightAligned={true}
           >
             <TetherComponent
               attachment="top right"
               bodyElement={<body />}
-              className="bdl-Pagination-dropdown"
+              className="bdl-DropdownMenu bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
                 Array [
@@ -1456,13 +1451,12 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
             className="bdl-Pagination-dropdown"
             constrainToScrollParent={false}
             constrainToWindow={true}
-            isResponsive={false}
             isRightAligned={true}
           >
             <TetherComponent
               attachment="top right"
               bodyElement={<body />}
-              className="bdl-Pagination-dropdown"
+              className="bdl-DropdownMenu bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
                 Array [

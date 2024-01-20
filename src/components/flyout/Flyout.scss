@@ -26,10 +26,9 @@
 }
 
 @include breakpoint($medium-screen) {
-    .flyout-overlay.bdl-Flyout--responsive {
+    .bdl-Flyout {
         &.flyout-overlay-enabled {
-            // cancels out the tether inline styling without having to set enabled=false
-            transform: none !important;
+            transform: none !important; // Override react-tether's inline style
         }
 
         .bdl-Overlay > .overlay {

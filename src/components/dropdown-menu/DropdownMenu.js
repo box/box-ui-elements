@@ -19,7 +19,10 @@ type Props = {
     constrainToWindow: boolean,
     /** Forces menu to render within the visible window and pins the dropdown if scrolled */
     constrainToWindowWithPin?: boolean,
-    /** Enables responsive behaviors for this component */
+    /**
+     * Enables responsive behaviors for this component
+     * @deprecated, responsiveness is enabled for this component
+     */
     isResponsive?: boolean,
     /** Function called when menu is opened */
     isRightAligned: boolean,
@@ -44,7 +47,6 @@ class DropdownMenu extends React.Component<Props, State> {
     static defaultProps = {
         constrainToScrollParent: false,
         constrainToWindow: false,
-        isResponsive: false,
         isRightAligned: false,
     };
 
@@ -189,7 +191,6 @@ class DropdownMenu extends React.Component<Props, State> {
             constrainToScrollParent,
             constrainToWindow,
             constrainToWindowWithPin,
-            isResponsive,
             isRightAligned,
             tetherAttachment,
             tetherTargetAttachment,
@@ -269,7 +270,7 @@ class DropdownMenu extends React.Component<Props, State> {
             <TetherComponent
                 attachment={tetherAttachment || attachment}
                 bodyElement={bodyEl}
-                className={classNames({ 'bdl-DropdownMenu--responsive': isResponsive }, className)}
+                className={classNames('bdl-DropdownMenu', className)}
                 classPrefix="dropdown-menu"
                 constraints={constraints}
                 enabled={isOpen}

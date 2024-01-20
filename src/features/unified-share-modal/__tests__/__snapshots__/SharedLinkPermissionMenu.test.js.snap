@@ -4,7 +4,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
-  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
@@ -84,7 +83,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
-  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
@@ -164,7 +162,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
-  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
@@ -244,7 +241,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
-  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
@@ -324,7 +320,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
-  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}
@@ -404,7 +399,6 @@ exports[`features/unified-share-modal/SharedLinkPermissionMenu render() it shoul
 <DropdownMenu
   constrainToScrollParent={false}
   constrainToWindow={true}
-  isResponsive={false}
   isRightAligned={false}
   onMenuClose={[Function]}
   onMenuOpen={[Function]}

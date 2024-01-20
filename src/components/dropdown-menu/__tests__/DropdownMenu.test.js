@@ -168,7 +168,7 @@ describe('components/dropdown-menu/DropdownMenu', () => {
             );
 
             expect(wrapper.is('TetherComponent')).toBe(true);
-            expect(wrapper.prop('className')).toEqual('foo');
+            expect(wrapper.prop('className')).toBe('bdl-DropdownMenu foo');
         });
 
         test('should render TetherComponent with a specific body element', () => {

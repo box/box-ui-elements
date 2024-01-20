@@ -186,7 +186,7 @@ describe('components/flyout/Flyout', () => {
             );
 
             expect(wrapper.prop('classes')).toEqual({
-                element: `flyout-overlay ${className}`,
+                element: `bdl-Flyout flyout-overlay ${className}`,
             });
         });
 
@@ -952,21 +952,6 @@ describe('components/flyout/Flyout', () => {
             sandbox.mock(instance).expects('closeOverlay');
 
             instance.handleOverlayClose();
-        });
-    });
-
-    describe('isResponsive', () => {
-        test('should have correct className when isResponsive is true', () => {
-            const wrapper = shallow(
-                <Flyout isResponsive>
-                    <FakeButton />
-                    <FakeOverlay />
-                </Flyout>,
-            );
-
-            expect(wrapper.prop('classes')).toEqual({
-                element: `flyout-overlay bdl-Flyout--responsive`,
-            });
         });
     });
 });

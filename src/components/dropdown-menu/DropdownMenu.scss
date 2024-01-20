@@ -20,7 +20,7 @@
 }
 
 @include breakpoint($medium-screen) {
-    .bdl-DropdownMenu--responsive {
+    .bdl-DropdownMenu {
         &.dropdown-menu-enabled {
             position: fixed;
             top: 0;
@@ -29,8 +29,7 @@
             left: 0;
             margin-top: 0;
             margin-bottom: $bdl-header-height;
-            // cancels out the tether inline styling without having to set enabled=false
-            transform: none !important;
+            transform: none !important; // Override react-tether's inline style
         }
 
         .aria-menu:not(.submenu) {
