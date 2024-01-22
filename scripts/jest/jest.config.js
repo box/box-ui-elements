@@ -1,11 +1,9 @@
-const ignores = ['node_modules', '__mocks__', 'dist'];
-
 module.exports = {
     clearMocks: true,
     collectCoverage: true,
     collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', '!**/node_modules/**', '!**/__tests__/**'],
     coverageDirectory: '<rootDir>/reports',
-    coveragePathIgnorePatterns: [...ignores, '\\.stories.*$', 'src/icon/*', 'src/icons/*', 'src/illustration'],
+    coveragePathIgnorePatterns: ['\\.stories.*$', 'src/icon/*', 'src/icons/*', 'src/illustration'],
     globalSetup: '<rootDir>/scripts/jest/env-setup.js',
     moduleNameMapper: {
         'box-ui-elements-locale-data': '<rootDir>/i18n/en-US.js',
@@ -26,6 +24,6 @@ module.exports = {
     snapshotSerializers: ['enzyme-to-json/serializer'],
     testEnvironment: 'jsdom',
     testMatch: ['**/__tests__/**/*.test.+(js|jsx|ts|tsx)'],
-    testPathIgnorePatterns: [...ignores, 'stories.test.js$', 'stories.test.tsx$', 'stories.test.d.ts'],
+    testPathIgnorePatterns: ['stories.test.js$', 'stories.test.tsx$', 'stories.test.d.ts'],
     transformIgnorePatterns: ['node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data))'],
 };
