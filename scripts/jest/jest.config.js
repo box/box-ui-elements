@@ -1,11 +1,11 @@
-const ignores = ['node_modules', '__fixtures__', '__mocks__', 'dist', 'lib'];
+const ignores = ['node_modules', '__mocks__', 'dist'];
 
 module.exports = {
     clearMocks: true,
-    collectCoverage: false,
+    collectCoverage: true,
     collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', '!**/node_modules/**', '!**/__tests__/**'],
     coverageDirectory: '<rootDir>/reports',
-    coveragePathIgnorePatterns: ['\\.stories.*$', 'src/icon/*', 'src/icons/*', 'src/illustration'],
+    coveragePathIgnorePatterns: [...ignores, '\\.stories.*$', 'src/icon/*', 'src/icons/*', 'src/illustration'],
     globalSetup: '<rootDir>/scripts/jest/env-setup.js',
     moduleNameMapper: {
         'box-ui-elements-locale-data': '<rootDir>/i18n/en-US.js',
