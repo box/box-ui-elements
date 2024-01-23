@@ -6,6 +6,7 @@
 
 import flow from 'lodash/flow';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import type { ErrorContextProps } from '../../../common/types/api';
 import type { WithLoggerProps } from '../../../common/types/logging';
 import { ORIGIN_METADATA_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../../constants';
@@ -17,6 +18,7 @@ import { EVENT_JS_READY } from '../../common/logger/constants';
 import SidebarContent from '../SidebarContent';
 import NoTagsAvailable from './NoTagsAvailable';
 import TagsList from './TagsList';
+import messages from './messages';
 
 import './DocGenSidebar.scss';
 
@@ -44,7 +46,6 @@ const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-// TO DO: implement actual sidebar content in separate tickets
 class DocGenSidebar extends React.PureComponent<Props, State> {
     state = {
         tags: {
@@ -77,11 +78,15 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
                 <div className="docgen-sidebar">
                     {isLoading && <div>Loading</div>}
                     <div className="docgen-tag-section">
-                        <span className="docgen-tag-section-header">Text tags</span>
+                        <span className="docgen-tag-section-header">
+                            <FormattedMessage {...messages.textTags} />
+                        </span>
                         {tags.text.length > 0 ? <TagsList tags={tags.text} /> : <NoTagsAvailable />}
                     </div>
                     <div className="docgen-tag-section">
-                        <span className="docgen-tag-section-header">Image tags</span>
+                        <span className="docgen-tag-section-header">
+                            <FormattedMessage {...messages.imageTags} />
+                        </span>
                         {tags.image.length > 0 ? <TagsList tags={tags.image} /> : <NoTagsAvailable />}
                     </div>
                 </div>
