@@ -6,19 +6,23 @@
 
 import flow from 'lodash/flow';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import type { ErrorContextProps } from '../../../common/types/api';
-import type { WithLoggerProps } from '../../../common/types/logging';
+import { injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
+
 import { ORIGIN_METADATA_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../../constants';
 import { mark } from '../../../utils/performance';
 import { withAPIContext } from '../../common/api-context';
 import { withErrorBoundary } from '../../common/error-boundary';
 import { withLogger } from '../../common/logger';
 import { EVENT_JS_READY } from '../../common/logger/constants';
-import SidebarContent from '../SidebarContent';
+import Loading from './Loading';
 import NoTagsAvailable from './NoTagsAvailable';
-import TagsList from './TagsList';
+import SidebarContent from '../SidebarContent';
+import TagsSection from './TagsSection';
 import messages from './messages';
+
+import type { ErrorContextProps } from '../../../common/types/api';
+import type { WithLoggerProps } from '../../../common/types/logging';
 
 import './DocGenSidebar.scss';
 
@@ -30,12 +34,13 @@ type ExternalProps = {
 };
 
 type Props = {
-    isLoading: boolean,
+    intl: IntlShape,
 } & ExternalProps &
     ErrorContextProps &
     WithLoggerProps;
 
 type State = {
+    loading: boolean,
     tags: {
         image: Array<DocGenTag>,
         text: Array<DocGenTag>,
@@ -48,6 +53,7 @@ mark(MARK_NAME_JS_READY);
 
 class DocGenSidebar extends React.PureComponent<Props, State> {
     state = {
+        loading: false,
         tags: {
             text: [],
             image: [],
@@ -56,6 +62,7 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
 
     componentDidMount() {
         if (this.props.getDocGenTags) {
+            this.setState({ ...this.state, loading: true });
             this.props.getDocGenTags().then(response => {
                 if (response) {
                     this.setState({
@@ -63,32 +70,39 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
                             text: response.data.filter(tag => tag.tagType === 'text'),
                             image: response.data.filter(tag => tag.tagType === 'image'),
                         },
+                        loading: false,
                     });
                 }
+                this.setState({ ...this.state, loading: false });
             });
         }
     }
 
     render() {
-        const { isLoading } = this.props;
-        const { tags } = this.state;
+        const { tags, loading } = this.state;
+
+        const hasNoTags = tags.image.length + tags.text.length === 0;
 
         return (
-            <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title="Doc Gen Tags">
+            <SidebarContent
+                sidebarView={SIDEBAR_VIEW_METADATA}
+                title={this.props.intl.formatMessage(messages.docgenTags)}
+            >
                 <div className="docgen-sidebar">
-                    {isLoading && <div>Loading</div>}
-                    <div className="docgen-tag-section">
-                        <span className="docgen-tag-section-header">
-                            <FormattedMessage {...messages.textTags} />
-                        </span>
-                        {tags.text.length > 0 ? <TagsList tags={tags.text} /> : <NoTagsAvailable />}
-                    </div>
-                    <div className="docgen-tag-section">
-                        <span className="docgen-tag-section-header">
-                            <FormattedMessage {...messages.imageTags} />
-                        </span>
-                        {tags.image.length > 0 ? <TagsList tags={tags.image} /> : <NoTagsAvailable />}
-                    </div>
+                    {loading ? (
+                        <Loading />
+                    ) : (
+                        <>
+                            {hasNoTags ? (
+                                <NoTagsAvailable />
+                            ) : (
+                                <>
+                                    <TagsSection message={messages.textTags} tags={tags.text} />
+                                    <TagsSection message={messages.imageTags} tags={tags.image} />
+                                </>
+                            )}
+                        </>
+                    )}
                 </div>
             </SidebarContent>
         );
@@ -97,6 +111,8 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
 
 export type DocGenSidebarProps = ExternalProps;
 export { DocGenSidebar as DocGenSidebarComponent };
-export default flow([withLogger(ORIGIN_METADATA_SIDEBAR), withErrorBoundary(ORIGIN_METADATA_SIDEBAR), withAPIContext])(
-    DocGenSidebar,
+export default injectIntl(
+    flow([withLogger(ORIGIN_METADATA_SIDEBAR), withErrorBoundary(ORIGIN_METADATA_SIDEBAR), withAPIContext])(
+        DocGenSidebar,
+    ),
 );

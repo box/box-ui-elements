@@ -17,6 +17,11 @@ const messages = defineMessages({
         description: 'Image tags section header',
         defaultMessage: 'Image tags',
     },
+    docgenTags: {
+        id: 'sidebar.docgen.docgenTags',
+        description: 'DocGen sidebar header',
+        defaultMessage: 'Doc Gen Tags',
+    },
 });
 
 export default messages;
