@@ -16,7 +16,6 @@ import { withLogger } from '../../common/logger';
 import { EVENT_JS_READY } from '../../common/logger/constants';
 import SidebarContent from '../SidebarContent';
 import NoTagsAvailable from './NoTagsAvailable';
-import SearchInput from './SearchInput';
 import TagsList from './TagsList';
 
 import './DocGenSidebar.scss';
@@ -76,7 +75,6 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
         return (
             <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title="Doc Gen Tags">
                 <div className="docgen-sidebar">
-                    <SearchInput />
                     {isLoading && <div>Loading</div>}
                     <div className="docgen-tag-section">
                         <span className="docgen-tag-section-header">Text tags</span>
