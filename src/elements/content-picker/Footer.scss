@@ -62,6 +62,12 @@
         margin-right: 5px;
         margin-left: 5px;
     }
+
+    .be-is-small & {
+        .bdl-Pagination-count {
+            display: none;
+        }
+    }
 }
 
 @keyframes be_pulse {
