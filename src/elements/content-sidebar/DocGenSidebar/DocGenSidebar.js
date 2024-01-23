@@ -19,6 +19,8 @@ import NoTagsAvailable from './NoTagsAvailable';
 import SearchInput from './SearchInput';
 import TagsList from './TagsList';
 
+import './DocGenSidebar.scss';
+
 import type { DocGenTag } from './types';
 
 type ExternalProps = {
@@ -32,7 +34,12 @@ type Props = {
     ErrorContextProps &
     WithLoggerProps;
 
-type State = { tags: Array<DocGenTag> };
+type State = {
+    tags: {
+        image: Array<DocGenTag>,
+        text: Array<DocGenTag>,
+    },
+};
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 
@@ -41,13 +48,23 @@ mark(MARK_NAME_JS_READY);
 // TO DO: implement actual sidebar content in separate tickets
 class DocGenSidebar extends React.PureComponent<Props, State> {
     state = {
-        tags: [],
+        tags: {
+            text: [],
+            image: [],
+        },
     };
 
     componentDidMount() {
         if (this.props.getDocGenTags) {
             this.props.getDocGenTags().then(response => {
-                this.setState({ tags: response?.data });
+                if (response) {
+                    this.setState({
+                        tags: {
+                            text: response.data.filter(tag => tag.tagType === 'text'),
+                            image: response.data.filter(tag => tag.tagType === 'image'),
+                        },
+                    });
+                }
             });
         }
     }
@@ -57,10 +74,19 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
         const { tags } = this.state;
 
         return (
-            <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title="Box DocGen">
-                <SearchInput />
-                {isLoading && <div>Loading</div>}
-                {tags.length > 0 ? <TagsList tags={tags} /> : <NoTagsAvailable />}
+            <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title="Doc Gen Tags">
+                <div className="docgen-sidebar">
+                    <SearchInput />
+                    {isLoading && <div>Loading</div>}
+                    <div className="docgen-tag-section">
+                        <span className="docgen-tag-section-header">Text tags</span>
+                        {tags.text.length > 0 ? <TagsList tags={tags.text} /> : <NoTagsAvailable />}
+                    </div>
+                    <div className="docgen-tag-section">
+                        <span className="docgen-tag-section-header">Image tags</span>
+                        {tags.image.length > 0 ? <TagsList tags={tags.image} /> : <NoTagsAvailable />}
+                    </div>
+                </div>
             </SidebarContent>
         );
     }

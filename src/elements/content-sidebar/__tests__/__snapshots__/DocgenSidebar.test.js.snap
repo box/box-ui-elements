@@ -24,7 +24,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
   <SidebarContent
     elementId=""
     sidebarView="metadata"
-    title="Box DocGen"
+    title="Doc Gen Tags"
   >
     <div
       aria-labelledby="metadata"
@@ -39,7 +39,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
         <h3
           className="bcs-title"
         >
-          Box DocGen
+          Doc Gen Tags
         </h3>
       </div>
       <div

@@ -1,0 +1,36 @@
+@import '../../../styles/variables';
+
+.docgen-sidebar {
+    // display: flex;
+    // flex-direction: column;
+    padding: 20px 24px 0 24px;
+}
+
+.docgen-tag-section {
+    margin-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.docgen-tag-section-header {
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+.docgen-tag-path {
+    display: block;
+    height: 32px;
+    padding: 6px 12px;
+    font-weight: bold;
+    font-family: 'Lato', sans-serif;
+    border-radius: 6px;
+
+    &:hover {
+        background: #e8e8e8;
+    }
+}
+
+.docgen-search-input {
+    padding: 10px, 12px, 16px, 12px;
+}
