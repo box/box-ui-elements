@@ -61,9 +61,31 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    // TO DO should render empty state
+    test('should render empty state when there are no tags', async () => {
+        const wrapper = await getWrapper({
+            ...defaultProps,
+            getDocGenTags: jest.fn().mockReturnValue(Promise.resolve({ data: [] })),
+        });
 
-    // TO DO should render loading state
+        await wrapper.update();
+
+        const emptyState = wrapper.find({ children: 'No Tags found' });
+        expect(emptyState).toHaveLength(1);
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render loading state', async () => {
+        const wrapper = await getWrapper({
+            ...defaultProps,
+            getDocGenTags: jest.fn().mockReturnValue(Promise.resolve({ data: [] })),
+        });
+
+        const loadingState = wrapper.find({ children: 'Loading tags' });
+        expect(loadingState).toHaveLength(1);
+
+        expect(wrapper).toMatchSnapshot();
+    });
 
     // TO DO error state
 });

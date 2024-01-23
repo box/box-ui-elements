@@ -188,3 +188,141 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
   </SidebarContent>
 </DocGenSidebar>
 `;
+
+exports[`elements/content-sidebar/DocGenSidebar should render empty state when there are no tags 1`] = `
+<DocGenSidebar
+  getDocGenTags={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": Promise {},
+        },
+      ],
+    }
+  }
+  intl={
+    Object {
+      "formatMessage": [Function],
+    }
+  }
+  logger={
+    Object {
+      "onReadyMetric": [MockFunction],
+    }
+  }
+>
+  <SidebarContent
+    elementId=""
+    sidebarView="metadata"
+    title="Doc Gen Tags"
+  >
+    <div
+      aria-labelledby="metadata"
+      className="bcs-content"
+      data-testid="bcs-content"
+      id="metadata-content"
+      role="tabpanel"
+    >
+      <div
+        className="bcs-content-header"
+      >
+        <h3
+          className="bcs-title"
+        >
+          Doc Gen Tags
+        </h3>
+      </div>
+      <div
+        className="bcs-scroll-content-wrapper"
+      >
+        <div
+          className="bcs-scroll-content"
+        >
+          <div
+            className="docgen-sidebar"
+          >
+            <NoTagsAvailable>
+              <div>
+                No Tags found
+              </div>
+            </NoTagsAvailable>
+          </div>
+        </div>
+      </div>
+    </div>
+  </SidebarContent>
+</DocGenSidebar>
+`;
+
+exports[`elements/content-sidebar/DocGenSidebar should render loading state 1`] = `
+<DocGenSidebar
+  getDocGenTags={
+    [MockFunction] {
+      "calls": Array [
+        Array [],
+      ],
+      "results": Array [
+        Object {
+          "type": "return",
+          "value": Promise {},
+        },
+      ],
+    }
+  }
+  intl={
+    Object {
+      "formatMessage": [Function],
+    }
+  }
+  logger={
+    Object {
+      "onReadyMetric": [MockFunction],
+    }
+  }
+>
+  <SidebarContent
+    elementId=""
+    sidebarView="metadata"
+    title="Doc Gen Tags"
+  >
+    <div
+      aria-labelledby="metadata"
+      className="bcs-content"
+      data-testid="bcs-content"
+      id="metadata-content"
+      role="tabpanel"
+    >
+      <div
+        className="bcs-content-header"
+      >
+        <h3
+          className="bcs-title"
+        >
+          Doc Gen Tags
+        </h3>
+      </div>
+      <div
+        className="bcs-scroll-content-wrapper"
+      >
+        <div
+          className="bcs-scroll-content"
+        >
+          <div
+            className="docgen-sidebar"
+          >
+            <Loading>
+              <div>
+                Loading tags
+              </div>
+            </Loading>
+          </div>
+        </div>
+      </div>
+    </div>
+  </SidebarContent>
+</DocGenSidebar>
+`;
