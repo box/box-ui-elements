@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import classNames from 'classnames';
 import flow from 'lodash/flow';
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
@@ -16,6 +17,7 @@ import { withErrorBoundary } from '../../common/error-boundary';
 import { withLogger } from '../../common/logger';
 import { EVENT_JS_READY } from '../../common/logger/constants';
 import Loading from './Loading';
+import Error from './Error';
 import NoTagsAvailable from './NoTagsAvailable';
 import SidebarContent from '../SidebarContent';
 import TagsSection from './TagsSection';
@@ -40,6 +42,7 @@ type Props = {
     WithLoggerProps;
 
 type State = {
+    hasError: boolean,
     loading: boolean,
     tags: {
         image: Array<DocGenTag>,
@@ -52,34 +55,47 @@ const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 class DocGenSidebar extends React.PureComponent<Props, State> {
-    state = {
-        loading: false,
-        tags: {
-            text: [],
-            image: [],
-        },
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            hasError: false,
+            loading: false,
+            tags: {
+                text: [],
+                image: [],
+            },
+        };
 
-    componentDidMount() {
+        this.loadTags = this.loadTags.bind(this);
+    }
+
+    loadTags() {
         if (this.props.getDocGenTags) {
             this.setState({ ...this.state, loading: true });
-            this.props.getDocGenTags().then(response => {
-                if (response) {
-                    this.setState({
-                        tags: {
-                            text: response.data.filter(tag => tag.tagType === 'text'),
-                            image: response.data.filter(tag => tag.tagType === 'image'),
-                        },
-                        loading: false,
-                    });
-                }
-                this.setState({ ...this.state, loading: false });
-            });
+            this.props
+                .getDocGenTags()
+                .then(response => {
+                    if (response) {
+                        this.setState({
+                            tags: {
+                                text: response.data.filter(tag => tag.tagType === 'text'),
+                                image: response.data.filter(tag => tag.tagType === 'image'),
+                            },
+                            loading: false,
+                        });
+                    }
+                    this.setState({ ...this.state, loading: false });
+                })
+                .catch(() => this.setState({ ...this.state, loading: false, hasError: true }));
         }
     }
 
+    componentDidMount() {
+        this.loadTags();
+    }
+
     render() {
-        const { tags, loading } = this.state;
+        const { hasError, tags, loading } = this.state;
 
         const hasNoTags = tags.image.length + tags.text.length === 0;
 
@@ -88,10 +104,10 @@ class DocGenSidebar extends React.PureComponent<Props, State> {
                 sidebarView={SIDEBAR_VIEW_METADATA}
                 title={this.props.intl.formatMessage(messages.docgenTags)}
             >
-                <div className="docgen-sidebar">
-                    {loading ? (
-                        <Loading />
-                    ) : (
+                <div className={classNames('docgen-sidebar', { center: hasNoTags || hasError || loading })}>
+                    {hasError && <Error onClick={this.loadTags} />}
+                    {!hasError && loading && <Loading />}
+                    {!hasError && !loading && (
                         <>
                             {hasNoTags ? (
                                 <NoTagsAvailable />

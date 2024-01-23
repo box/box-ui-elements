@@ -1,9 +1,12 @@
 @import '../../../styles/variables';
 
 .docgen-sidebar {
-    // display: flex;
-    // flex-direction: column;
     padding: 20px 24px 0 24px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
 }
 
 .docgen-tag-section {
@@ -29,4 +32,20 @@
     &:hover {
         background: #e8e8e8;
     }
+}
+
+.docgen-empty-state {
+    position: absolute;
+    top: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.docgen-error-state {
+    position: absolute;
+    top: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

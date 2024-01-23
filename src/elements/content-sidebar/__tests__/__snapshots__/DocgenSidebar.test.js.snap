@@ -247,7 +247,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
           >
             <NoTagsAvailable>
               <div>
-                No Tags found
+                This document has no tags
               </div>
             </NoTagsAvailable>
           </div>

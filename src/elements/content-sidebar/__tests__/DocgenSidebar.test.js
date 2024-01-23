@@ -69,7 +69,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         await wrapper.update();
 
-        const emptyState = wrapper.find({ children: 'No Tags found' });
+        const emptyState = wrapper.find({ children: 'This document has no tags' });
         expect(emptyState).toHaveLength(1);
 
         expect(wrapper).toMatchSnapshot();
