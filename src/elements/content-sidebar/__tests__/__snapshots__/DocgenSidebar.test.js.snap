@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar component correctly with search and tags list 1`] = `
+exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar component correctly with tags list 1`] = `
 <DocGenSidebar
   getDocGenTags={
     [MockFunction] {
@@ -13,6 +13,11 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
           "value": Promise {},
         },
       ],
+    }
+  }
+  intl={
+    Object {
+      "formatMessage": [Function],
     }
   }
   logger={
@@ -48,68 +53,135 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
         <div
           className="bcs-scroll-content"
         >
-          <SearchInput>
-            <input
-              placeholder="Search"
-            />
-          </SearchInput>
-          <TagsList
-            tags={
-              Array [
-                Object {
-                  "jsonPaths": Array [
-                    "isActive",
-                  ],
-                  "tagContent": "{{ isActive }}",
-                  "tagType": "text",
-                },
-                Object {
-                  "jsonPaths": Array [
-                    "about",
-                  ],
-                  "tagContent": "{{ about }}",
-                  "tagType": "text",
-                },
-                Object {
-                  "jsonPaths": Array [
-                    "phone",
-                  ],
-                  "tagContent": "{{ phone }}",
-                  "tagType": "text",
-                },
-                Object {
-                  "jsonPaths": Array [
-                    "company",
-                  ],
-                  "tagContent": "{{ company }}",
-                  "tagType": "text",
-                },
-              ]
-            }
+          <div
+            className="docgen-sidebar"
           >
-            <div>
-              <p
-                key="isActive"
+            <TagsSection
+              message={
+                Object {
+                  "defaultMessage": "Text tags",
+                  "id": "sidebar.docgen.textTags",
+                }
+              }
+              tags={
+                Array [
+                  Object {
+                    "jsonPaths": Array [
+                      "isActive",
+                    ],
+                    "tagContent": "{{ isActive }}",
+                    "tagType": "text",
+                  },
+                  Object {
+                    "jsonPaths": Array [
+                      "about",
+                    ],
+                    "tagContent": "{{ about }}",
+                    "tagType": "text",
+                  },
+                  Object {
+                    "jsonPaths": Array [
+                      "phone",
+                    ],
+                    "tagContent": "{{ phone }}",
+                    "tagType": "text",
+                  },
+                  Object {
+                    "jsonPaths": Array [
+                      "company",
+                    ],
+                    "tagContent": "{{ company }}",
+                    "tagType": "text",
+                  },
+                ]
+              }
+            >
+              <div
+                className="docgen-tag-section"
               >
-                isActive
-              </p>
-              <p
-                key="about"
-              >
-                about
-              </p>
-              <p
-                key="phone"
-              >
-                phone
-              </p>
-              <p
-                key="company"
-              >
-                company
-              </p>
-            </div>
-          </TagsList>
+                <span
+                  className="docgen-tag-section-header"
+                >
+                  <FormattedMessage
+                    defaultMessage="Text tags"
+                    id="sidebar.docgen.textTags"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </span>
+                <TagsList
+                  tags={
+                    Array [
+                      Object {
+                        "jsonPaths": Array [
+                          "isActive",
+                        ],
+                        "tagContent": "{{ isActive }}",
+                        "tagType": "text",
+                      },
+                      Object {
+                        "jsonPaths": Array [
+                          "about",
+                        ],
+                        "tagContent": "{{ about }}",
+                        "tagType": "text",
+                      },
+                      Object {
+                        "jsonPaths": Array [
+                          "phone",
+                        ],
+                        "tagContent": "{{ phone }}",
+                        "tagType": "text",
+                      },
+                      Object {
+                        "jsonPaths": Array [
+                          "company",
+                        ],
+                        "tagContent": "{{ company }}",
+                        "tagType": "text",
+                      },
+                    ]
+                  }
+                >
+                  <div>
+                    <span
+                      className="docgen-tag-path"
+                      key="isActive"
+                    >
+                      isActive
+                    </span>
+                    <span
+                      className="docgen-tag-path"
+                      key="about"
+                    >
+                      about
+                    </span>
+                    <span
+                      className="docgen-tag-path"
+                      key="phone"
+                    >
+                      phone
+                    </span>
+                    <span
+                      className="docgen-tag-path"
+                      key="company"
+                    >
+                      company
+                    </span>
+                  </div>
+                </TagsList>
+              </div>
+            </TagsSection>
+            <TagsSection
+              message={
+                Object {
+                  "defaultMessage": "Image tags",
+                  "id": "sidebar.docgen.imageTags",
+                }
+              }
+              tags={Array []}
+            />
+          </div>
         </div>
       </div>
     </div>
