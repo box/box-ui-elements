@@ -10,8 +10,8 @@ type Props = {
 const TagsList = ({ tags }: Props) => (
     <div>
         {tags.map(tag => (
-            <span className="docgen-tag-path" key={tag.jsonPaths[0]}>
-                {tag.jsonPaths[0]}
+            <span className="docgen-tag-path" key={tag.tagContent}>
+                {tag.tagContent}
             </span>
         ))}
     </div>

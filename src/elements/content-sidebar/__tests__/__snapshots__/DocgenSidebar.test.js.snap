@@ -146,27 +146,27 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                   <div>
                     <span
                       className="docgen-tag-path"
-                      key="isActive"
+                      key="{{ isActive }}"
                     >
-                      isActive
+                      {{ isActive }}
                     </span>
                     <span
                       className="docgen-tag-path"
-                      key="about"
+                      key="{{ about }}"
                     >
-                      about
+                      {{ about }}
                     </span>
                     <span
                       className="docgen-tag-path"
-                      key="phone"
+                      key="{{ phone }}"
                     >
-                      phone
+                      {{ phone }}
                     </span>
                     <span
                       className="docgen-tag-path"
-                      key="company"
+                      key="{{ company }}"
                     >
-                      company
+                      {{ company }}
                     </span>
                   </div>
                 </TagsList>
@@ -251,19 +251,17 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
               >
                 <NoTagsIcon>
                   <AccessibleSVG
-                    fill="none"
-                    height="140"
+                    height={140}
                     viewBox="0 0 141 140"
-                    width="141"
+                    width={141}
                   >
                     <svg
                       aria-hidden="true"
-                      fill="none"
                       focusable="false"
-                      height="140"
+                      height={140}
                       role="presentation"
                       viewBox="0 0 141 140"
-                      width="141"
+                      width={141}
                     >
                       <g
                         opacity="0.1"
