@@ -39,15 +39,6 @@ type Props = {
     ErrorContextProps &
     WithLoggerProps;
 
-// type State = {
-//     hasError: boolean,
-//     loading: boolean,
-//     tags: {
-//         image: Array<DocGenTag>,
-//         text: Array<DocGenTag>,
-//     },
-// };
-
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
