@@ -157,9 +157,10 @@
     }
 }
 
-.is-responsive-web {
-    @include breakpoint($medium-screen) {
-        .be .bcs-activity-feed,
+@include breakpoint($medium-screen) {
+    .be .bcs-activity-feed {
+        width: 100%;
+
         .bcs-activity-feed-comment-input {
             width: 100%;
         }
