@@ -28,8 +28,6 @@ import type { WithLoggerProps } from '../../../common/types/logging';
 
 import './DocGenSidebar.scss';
 
-import type { DocGenTag } from './types';
-
 type ExternalProps = {
     enabled: boolean,
     getDocGenTags: Function,
@@ -41,89 +39,82 @@ type Props = {
     ErrorContextProps &
     WithLoggerProps;
 
-type State = {
-    hasError: boolean,
-    loading: boolean,
-    tags: {
-        image: Array<DocGenTag>,
-        text: Array<DocGenTag>,
-    },
-};
+// type State = {
+//     hasError: boolean,
+//     loading: boolean,
+//     tags: {
+//         image: Array<DocGenTag>,
+//         text: Array<DocGenTag>,
+//     },
+// };
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-class DocGenSidebar extends React.PureComponent<Props, State> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            hasError: false,
-            loading: false,
-            tags: {
-                text: [],
-                image: [],
-            },
-        };
+const DocGenSidebar = (props: Props) => {
+    const [sidebarState, setSidebarState] = React.useState({
+        hasError: false,
+        loading: false,
+        tags: {
+            text: [],
+            image: [],
+        },
+    });
 
-        this.loadTags = this.loadTags.bind(this);
-    }
-
-    loadTags() {
-        if (this.props.getDocGenTags) {
-            this.setState({ ...this.state, loading: true });
-            this.props
+    const loadTags = () => {
+        if (props.getDocGenTags) {
+            setSidebarState({ ...sidebarState, loading: true });
+            props
                 .getDocGenTags()
                 .then(response => {
                     if (response) {
-                        this.setState({
+                        setSidebarState({
+                            ...sidebarState,
                             tags: {
                                 text: response.data.filter(tag => tag.tagType === 'text'),
                                 image: response.data.filter(tag => tag.tagType === 'image'),
                             },
                             loading: false,
                         });
+                    } else {
+                        setSidebarState({ ...sidebarState, loading: false });
                     }
-                    this.setState({ ...this.state, loading: false });
                 })
-                .catch(() => this.setState({ ...this.state, loading: false, hasError: true }));
+                .catch(() => setSidebarState({ ...sidebarState, loading: false, hasError: true }));
         }
-    }
+    };
 
-    componentDidMount() {
-        this.loadTags();
-    }
+    React.useEffect(() => {
+        loadTags();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    render() {
-        const { hasError, tags, loading } = this.state;
+    const { hasError, tags, loading } = sidebarState;
 
-        const hasNoTags = tags.image.length + tags.text.length === 0;
+    const hasNoTags = tags.image.length + tags.text.length === 0;
 
-        return (
-            <SidebarContent
-                sidebarView={SIDEBAR_VIEW_METADATA}
-                title={this.props.intl.formatMessage(messages.docgenTags)}
-            >
-                <div className={classNames('docgen-sidebar', { center: hasNoTags || hasError || loading })}>
-                    {hasError && <Error onClick={this.loadTags} />}
-                    {!hasError && loading && <Loading />}
-                    {!hasError && !loading && (
-                        <>
-                            {hasNoTags ? (
-                                <NoTagsAvailable />
-                            ) : (
-                                <>
-                                    <TagsSection message={messages.textTags} tags={tags.text} />
-                                    <TagsSection message={messages.imageTags} tags={tags.image} />
-                                </>
-                            )}
-                        </>
-                    )}
-                </div>
-            </SidebarContent>
-        );
-    }
-}
+    return (
+        <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={props.intl.formatMessage(messages.docgenTags)}>
+            <div className={classNames('docgen-sidebar', { center: hasNoTags || hasError || loading })}>
+                {hasError && <Error onClick={loadTags} />}
+                {!hasError && loading && <Loading />}
+                {!hasError && !loading && (
+                    <>
+                        {hasNoTags ? (
+                            <NoTagsAvailable />
+                        ) : (
+                            <>
+                                <TagsSection message={messages.textTags} tags={tags.text} />
+                                <TagsSection message={messages.imageTags} tags={tags.image} />
+                            </>
+                        )}
+                    </>
+                )}
+            </div>
+        </SidebarContent>
+    );
+};
 
 export type DocGenSidebarProps = ExternalProps;
 export { DocGenSidebar as DocGenSidebarComponent };
