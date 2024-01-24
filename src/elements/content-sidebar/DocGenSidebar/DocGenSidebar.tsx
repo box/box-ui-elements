@@ -1,50 +1,58 @@
-/**
- * @flow
- * @file Doc Gen sidebar component
- * @author Box
- */
-
 import classNames from 'classnames';
 import flow from 'lodash/flow';
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import { injectIntl, IntlShape } from 'react-intl';
 
-import { ORIGIN_METADATA_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../../constants';
-import { mark } from '../../../utils/performance';
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
+import { ORIGIN_DOCGEN_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../../constants';
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
 import { withAPIContext } from '../../common/api-context';
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
 import { withErrorBoundary } from '../../common/error-boundary';
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
 import { withLogger } from '../../common/logger';
-import { EVENT_JS_READY } from '../../common/logger/constants';
 import Loading from './Loading';
 import Error from './Error';
 import NoTagsAvailable from './NoTagsAvailable';
+// @ts-ignore: no ts definition
 import SidebarContent from '../SidebarContent';
 import TagsSection from './TagsSection';
+// @ts-ignore: no ts definition
 import messages from './messages';
-
-import type { ErrorContextProps } from '../../../common/types/api';
-import type { WithLoggerProps } from '../../../common/types/logging';
+// @ts-ignore: no ts definition
+import { ErrorContextProps } from '../../../common/types/api';
+// @ts-ignore: no ts definition
+import { WithLoggerProps } from '../../../common/types/logging';
 
 import './DocGenSidebar.scss';
+import { DocGenTag, DocGenTemplateTagsResponse } from './types';
 
 type ExternalProps = {
-    enabled: boolean,
-    getDocGenTags: Function,
+    enabled: boolean;
+    getDocGenTags: Function;
 };
 
 type Props = {
-    intl: IntlShape,
+    intl: IntlShape;
 } & ExternalProps &
     ErrorContextProps &
     WithLoggerProps;
 
-const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR}_${EVENT_JS_READY}`;
-
-mark(MARK_NAME_JS_READY);
+type State = {
+    hasError: boolean;
+    loading: boolean;
+    tags: {
+        image: DocGenTag[];
+        text: DocGenTag[];
+    };
+};
 
 const DocGenSidebar = (props: Props) => {
-    const [sidebarState, setSidebarState] = React.useState({
+    const [sidebarState, setSidebarState] = React.useState<State>({
         hasError: false,
         loading: false,
         tags: {
@@ -58,7 +66,7 @@ const DocGenSidebar = (props: Props) => {
             setSidebarState({ ...sidebarState, loading: true });
             props
                 .getDocGenTags()
-                .then(response => {
+                .then((response: DocGenTemplateTagsResponse) => {
                     if (response) {
                         setSidebarState({
                             ...sidebarState,
@@ -110,7 +118,5 @@ const DocGenSidebar = (props: Props) => {
 export type DocGenSidebarProps = ExternalProps;
 export { DocGenSidebar as DocGenSidebarComponent };
 export default injectIntl(
-    flow([withLogger(ORIGIN_METADATA_SIDEBAR), withErrorBoundary(ORIGIN_METADATA_SIDEBAR), withAPIContext])(
-        DocGenSidebar,
-    ),
+    flow([withLogger(ORIGIN_DOCGEN_SIDEBAR), withErrorBoundary(ORIGIN_DOCGEN_SIDEBAR), withAPIContext])(DocGenSidebar),
 );

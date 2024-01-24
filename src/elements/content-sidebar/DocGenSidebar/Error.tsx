@@ -1,16 +1,10 @@
-/**
- * @flow
- * @file Doc Gen sidebar component
- * @author Box
- */
-
 import * as React from 'react';
 
 import Button from '../../../components/button';
 import RereshIcon from './RereshIcon';
 
 type Props = {
-    onClick: () => void,
+    onClick: () => void;
 };
 
 const Error = ({ onClick }: Props) => (

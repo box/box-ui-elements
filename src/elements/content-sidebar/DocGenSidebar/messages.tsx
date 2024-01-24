@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file i18n messages
- * @author Box
- */
-
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({

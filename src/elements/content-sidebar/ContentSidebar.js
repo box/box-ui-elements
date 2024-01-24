@@ -25,7 +25,7 @@ import { withLogger } from '../common/logger';
 
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
-import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar.tsx';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { WithLoggerProps } from '../../common/types/logging';

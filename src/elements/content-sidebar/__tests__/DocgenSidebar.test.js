@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
+import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar.tsx';
 
 const intl = {
     formatMessage: message => message.defaultMessage,

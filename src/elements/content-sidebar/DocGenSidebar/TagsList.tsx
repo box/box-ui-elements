@@ -1,15 +1,10 @@
-/**
- * @flow
- * @file Doc Gen tags list component
- * @author Box
- */
-
 import * as React from 'react';
-import type { DocGenTag } from './types';
+
+import { DocGenTag } from './types';
 import './DocGenSidebar.scss';
 
 type Props = {
-    tags: DocGenTag[],
+    tags: DocGenTag[];
 };
 
 const TagsList = ({ tags }: Props) => (

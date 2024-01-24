@@ -187,7 +187,7 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_DOCGEN:
                 importFn = import(
-                    /* webpackMode: "lazy", webpackChunkName: "docgen-sidebar" */ './DocGenSidebar/DocGenSidebar'
+                    /* webpackMode: "lazy", webpackChunkName: "docgen-sidebar" */ './DocGenSidebar/DocGenSidebar.tsx'
                 );
                 break;
             default:

@@ -2,7 +2,7 @@ import * as React from 'react';
 import AccessibleSVG from '../../../components/accessible-svg/AccessibleSVG';
 
 const RereshIcon = () => (
-    <AccessibleSVG width="141" height="140" viewBox="0 0 141 140" fill="none">
+    <AccessibleSVG width={141} height={140} viewBox="0 0 141 140">
         <path
             opacity="0.1"
             d="M60.5 87.3753C60.5 86.3581 61.2863 85.8089 62.2753 86.0608C62.2753 86.0608 63.8724 87.1984 77.2909 87.1984C85.6317 87.1984 89.3297 90.6839 94.0805 90.6839C103.69 90.6839 109.315 86.503 109.315 86.503C110.175 85.9674 110.871 86.3667 110.871 87.3753V97.6708C110.871 98.6868 110.04 99.5112 109.019 99.5112H62.3527C61.3338 99.5112 60.5061 98.6884 60.5 97.6695V87.3753Z"
