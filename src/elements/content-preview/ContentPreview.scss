@@ -60,41 +60,26 @@
         }
     }
 
-    &.be-is-small {
-        .bcpr-body {
-            position: relative;
-        }
-
-        .bcs.bcs-is-open {
-            position: absolute;
-            right: 0;
-        }
+    &.bcpr-thumbnails-open .bcpr-navigate-left {
+        left: 191px;
     }
 }
 
-.bcpr.bcpr-thumbnails-open .bcpr-navigate-left {
-    left: 191px;
-}
+@include breakpoint($medium-screen) {
+    .bcpr {
+        position: relative;
 
-.is-responsive-web {
-    @include breakpoint($medium-screen) {
-        .be.bcpr {
-            position: relative;
+        .bcpr-body {
+            position: static;
+            flex-direction: column;
         }
 
-        .bcpr {
-            .bcpr-body {
-                position: static;
-                flex-direction: column;
-            }
+        .bcpr-container {
+            position: static;
+        }
 
-            .bcpr-container {
-                position: static;
-            }
-
-            &.bcpr-thumbnails-open .bcpr-navigate-left {
-                left: 0;
-            }
+        &.bcpr-thumbnails-open .bcpr-navigate-left {
+            left: 0;
         }
     }
 }
