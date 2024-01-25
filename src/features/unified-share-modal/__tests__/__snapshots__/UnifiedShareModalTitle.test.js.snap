@@ -9,7 +9,7 @@ exports[`features/unified-share-modal/HeaderTitle should not render classificati
       defaultMessage="Share ‘{itemName}’"
       id="boxui.unifiedShare.modalTitle"
       values={
-        Object {
+        {
           "itemName": "test file",
         }
       }

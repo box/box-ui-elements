@@ -14,7 +14,7 @@ exports[`feature/left-sidebar/LeftSidebar should not render nested menu items wi
           <LeftSidebarLink
             className="left-sidebar-link"
             htmlAttributes={
-              Object {
+              {
                 "href": "/folder/0",
               }
             }
@@ -29,12 +29,12 @@ exports[`feature/left-sidebar/LeftSidebar should not render nested menu items wi
       }
       key="list-all-files"
       placeholder={null}
-      ulProps={Object {}}
+      ulProps={{}}
     >
       <LeftSidebarLink
         className="left-sidebar-link"
         htmlAttributes={
-          Object {
+          {
             "href": "/recents",
           }
         }
@@ -61,7 +61,7 @@ exports[`feature/left-sidebar/LeftSidebar should pass badge elements appropriate
     <LeftSidebarLink
       className="left-sidebar-link"
       htmlAttributes={
-        Object {
+        {
           "href": "/folder/0",
         }
       }
@@ -87,7 +87,7 @@ exports[`feature/left-sidebar/LeftSidebar should pass icon components appropriat
     <LeftSidebarLink
       className="left-sidebar-link"
       htmlAttributes={
-        Object {
+        {
           "href": "/folder/0",
         }
       }
@@ -122,7 +122,7 @@ exports[`feature/left-sidebar/LeftSidebar should pass icon elements appropriatel
     <LeftSidebarLink
       className="left-sidebar-link"
       htmlAttributes={
-        Object {
+        {
           "href": "/folder/0",
         }
       }
@@ -157,7 +157,7 @@ exports[`feature/left-sidebar/LeftSidebar should pass in custom sidebar properti
     <LeftSidebarLink
       className="left-sidebar-link is-selected"
       customTheme={
-        Object {
+        {
           "contrastColor": "#123",
           "isLight": "yes",
           "primaryColorDark": "#123",
@@ -168,7 +168,7 @@ exports[`feature/left-sidebar/LeftSidebar should pass in custom sidebar properti
         }
       }
       htmlAttributes={
-        Object {
+        {
           "href": "/folder/0",
         }
       }
@@ -182,8 +182,8 @@ exports[`feature/left-sidebar/LeftSidebar should pass in custom sidebar properti
   </div>
   <CopyrightLink
     linkProps={
-      Object {
-        "htmlAttributes": Object {
+      {
+        "htmlAttributes": {
           "href": "/test-url",
         },
       }
@@ -228,7 +228,7 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
               <LeftSidebarLink
                 className="left-sidebar-link"
                 htmlAttributes={
-                  Object {
+                  {
                     "href": "/folder/0",
                   }
                 }
@@ -245,7 +245,7 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
         key="list-all-files"
         placeholder={null}
         ulProps={
-          Object {
+          {
             "onScroll": [Function],
             "ref": [Function],
           }
@@ -254,7 +254,7 @@ exports[`feature/left-sidebar/LeftSidebar should render collapsible nested menu 
         <LeftSidebarLink
           className="left-sidebar-link"
           htmlAttributes={
-            Object {
+            {
               "href": "/recents",
             }
           }
@@ -278,7 +278,7 @@ exports[`feature/left-sidebar/LeftSidebar should render instant login component 
 >
   <InstantLogin
     hrefAttributes={
-      Object {
+      {
         "href": "/master",
       }
     }
@@ -291,7 +291,7 @@ exports[`feature/left-sidebar/LeftSidebar should render instant login component 
     <LeftSidebarLink
       className="left-sidebar-link"
       htmlAttributes={
-        Object {
+        {
           "href": "/folder/0",
         }
       }
@@ -321,7 +321,7 @@ exports[`feature/left-sidebar/LeftSidebar should render non-collapsible nested m
           <LeftSidebarLink
             className="left-sidebar-link"
             htmlAttributes={
-              Object {
+              {
                 "href": "/folder/0",
               }
             }
@@ -336,12 +336,12 @@ exports[`feature/left-sidebar/LeftSidebar should render non-collapsible nested m
       }
       key="list-all-files"
       placeholder={null}
-      ulProps={Object {}}
+      ulProps={{}}
     >
       <LeftSidebarLink
         className="left-sidebar-link"
         htmlAttributes={
-          Object {
+          {
             "href": "/recents",
           }
         }
@@ -368,7 +368,7 @@ exports[`feature/left-sidebar/LeftSidebar should render one menu item with appro
     <LeftSidebarLink
       className="left-sidebar-link"
       htmlAttributes={
-        Object {
+        {
           "href": "/folder/0",
         }
       }
@@ -406,7 +406,7 @@ exports[`feature/left-sidebar/LeftSidebar should render placeholder inside neste
               <LeftSidebarLink
                 className="left-sidebar-link"
                 htmlAttributes={
-                  Object {
+                  {
                     "href": "/folder/0",
                   }
                 }
@@ -429,7 +429,7 @@ exports[`feature/left-sidebar/LeftSidebar should render placeholder inside neste
           </div>
         }
         ulProps={
-          Object {
+          {
             "onScroll": [Function],
             "ref": [Function],
           }

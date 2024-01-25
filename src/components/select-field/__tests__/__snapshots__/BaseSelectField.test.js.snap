@@ -16,7 +16,7 @@ exports[`components/select-field/BaseSelectField renderSelectButton() should sen
 `;
 
 exports[`components/select-field/BaseSelectField renderSelectOptions() should render option content using optionRenderer when provided 1`] = `
-Array [
+[
   <DatalistItem
     className="select-option"
     isSelected={false}

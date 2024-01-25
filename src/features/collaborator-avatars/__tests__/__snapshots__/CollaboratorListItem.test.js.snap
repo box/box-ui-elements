@@ -38,7 +38,7 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
         allowBadging={true}
         email="testc@example.com"
         expiration={
-          Object {
+          {
             "expiresAt": "Jan 1, 1966",
           }
         }
@@ -75,7 +75,7 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
         allowBadging={true}
         email="testc@example.com"
         expiration={
-          Object {
+          {
             "expiresAt": "Jan 1, 1966",
           }
         }
@@ -129,7 +129,7 @@ exports[`features/collaborator-avatars/CollaboratorListItem render() should rend
         allowBadging={true}
         email="testc@example.com"
         expiration={
-          Object {
+          {
             "expiresAt": "Jan 1, 1966",
           }
         }

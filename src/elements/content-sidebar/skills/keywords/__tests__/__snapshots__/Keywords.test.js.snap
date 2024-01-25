@@ -30,11 +30,11 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   <ReadOnlyselecteds
     duration={100}
     keywords={
-      Array [
-        Object {
+      [
+        {
           "text": "foo",
         },
-        Object {
+        {
           "text": "bar",
         },
       ]
@@ -72,11 +72,11 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   </Tooltip>
   <EditableKeywords
     keywords={
-      Array [
-        Object {
+      [
+        {
           "text": "foo",
         },
-        Object {
+        {
           "text": "bar",
         },
       ]
@@ -109,11 +109,11 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   <ReadOnlyselecteds
     duration={100}
     keywords={
-      Array [
-        Object {
+      [
+        {
           "text": "bar",
         },
-        Object {
+        {
           "text": "baz",
         },
       ]
@@ -130,11 +130,11 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   <ReadOnlyselecteds
     duration={100}
     keywords={
-      Array [
-        Object {
+      [
+        {
           "text": "foo",
         },
-        Object {
+        {
           "text": "bar",
         },
       ]
@@ -151,11 +151,11 @@ exports[`elements/content-sidebar/Skills/Keywords/Keywords should correctly rend
   <ReadOnlyselecteds
     duration={100}
     keywords={
-      Array [
-        Object {
+      [
+        {
           "text": "foo",
         },
-        Object {
+        {
           "text": "bar",
         },
       ]

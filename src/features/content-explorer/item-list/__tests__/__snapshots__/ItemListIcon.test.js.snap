@@ -3,7 +3,7 @@
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 1`] = `
 <IconCell
   rowData={
-    Object {
+    {
       "extension": undefined,
       "has_collaborations": false,
       "is_externally_owned": false,
@@ -16,7 +16,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 2`] = `
 <IconCell
   rowData={
-    Object {
+    {
       "extension": undefined,
       "has_collaborations": true,
       "is_externally_owned": false,
@@ -29,7 +29,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 3`] = `
 <IconCell
   rowData={
-    Object {
+    {
       "extension": undefined,
       "has_collaborations": true,
       "is_externally_owned": true,
@@ -42,7 +42,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 4`] = `
 <IconCell
   rowData={
-    Object {
+    {
       "extension": undefined,
       "has_collaborations": false,
       "is_externally_owned": true,

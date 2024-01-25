@@ -8,7 +8,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     <SecurityControlsItem
       key="0"
       message={
-        Object {
+        {
           "defaultMessage": "Shared links allowed for collaborators only.",
           "id": "boxui.securityControls.sharingCollabOnly",
         }
@@ -17,7 +17,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     <SecurityControlsItem
       key="1"
       message={
-        Object {
+        {
           "defaultMessage": "External collaboration limited to approved domains.",
           "id": "boxui.securityControls.externalCollabDomainList",
         }
@@ -26,7 +26,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     <SecurityControlsItem
       key="2"
       message={
-        Object {
+        {
           "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
           "id": "boxui.securityControls.desktopDownloadOwners",
         }
@@ -35,10 +35,10 @@ exports[`features/classification/security-controls/SecurityControls should rende
     <SecurityControlsItem
       key="3"
       message={
-        Object {
+        {
           "defaultMessage": "Only select applications are allowed: {appNames}",
           "id": "boxui.securityControls.appDownloadWhitelist",
-          "values": Object {
+          "values": {
             "appNames": "App 1, App 2",
           },
         }
@@ -56,7 +56,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     <SecurityControlsItem
       key="0"
       message={
-        Object {
+        {
           "defaultMessage": "Sharing, download and app restrictions apply",
           "id": "boxui.securityControls.shortSharingDownloadApp",
         }
@@ -80,30 +80,30 @@ exports[`features/classification/security-controls/SecurityControls should rende
     isSecurityControlsModalOpen={false}
     itemName="welcome.pdf"
     modalItems={
-      Array [
-        Object {
-          "message": Object {
+      [
+        {
+          "message": {
             "defaultMessage": "Shared links allowed for collaborators only.",
             "id": "boxui.securityControls.sharingCollabOnly",
           },
         },
-        Object {
-          "message": Object {
+        {
+          "message": {
             "defaultMessage": "External collaboration limited to approved domains.",
             "id": "boxui.securityControls.externalCollabDomainList",
           },
         },
-        Object {
-          "message": Object {
+        {
+          "message": {
             "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners.",
             "id": "boxui.securityControls.desktopDownloadOwners",
           },
         },
-        Object {
-          "message": Object {
+        {
+          "message": {
             "defaultMessage": "Only select applications are allowed: {appNames}",
             "id": "boxui.securityControls.appDownloadWhitelist",
-            "values": Object {
+            "values": {
               "appNames": "App 1, App 2",
             },
           },
@@ -122,7 +122,7 @@ exports[`features/classification/security-controls/SecurityControls should rende
     <SecurityControlsItem
       key="0"
       message={
-        Object {
+        {
           "defaultMessage": "Sharing, download and app restrictions apply",
           "id": "boxui.securityControls.shortSharingDownloadApp",
         }

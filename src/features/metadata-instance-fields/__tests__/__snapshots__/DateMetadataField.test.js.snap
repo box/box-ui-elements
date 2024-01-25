@@ -5,7 +5,7 @@ exports[`features/metadata-instance-editor/fields/DateMetadataField should corre
   className="bdl-DateMetadataField"
   dateFormat="utcISOString"
   displayFormat={
-    Object {
+    {
       "day": "numeric",
       "month": "long",
       "year": "numeric",

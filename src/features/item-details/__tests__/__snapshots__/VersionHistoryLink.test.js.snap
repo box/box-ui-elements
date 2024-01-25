@@ -8,7 +8,7 @@ exports[`features/item-details/VersionHistoryLink should render the formatted me
     defaultMessage="{versionCount, number} Saved Versions"
     id="boxui.itemDetails.savedVersions"
     values={
-      Object {
+      {
         "versionCount": 3,
       }
     }
@@ -26,7 +26,7 @@ exports[`features/item-details/VersionHistoryLink should render with PlainButton
     defaultMessage="{versionCount, number} Saved Versions"
     id="boxui.itemDetails.savedVersions"
     values={
-      Object {
+      {
         "versionCount": 3,
       }
     }

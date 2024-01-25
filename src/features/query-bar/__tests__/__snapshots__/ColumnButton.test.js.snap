@@ -14,7 +14,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-right"
 >
   <Button
@@ -57,7 +57,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-right"
 >
   <Button
@@ -83,8 +83,8 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   <Overlay>
     <ColumnButtonOverlay
       columns={
-        Array [
-          Object {
+        [
+          {
             "displayName": "Expire Date",
             "id": "4",
             "isShown": true,
@@ -92,7 +92,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
             "source": "metadata",
             "type": "date",
           },
-          Object {
+          {
             "displayName": "Count",
             "id": "6",
             "isShown": true,
@@ -122,7 +122,7 @@ exports[`features/query-bar/components/ColumnButton render should render ColumnB
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-right"
 >
   <Button

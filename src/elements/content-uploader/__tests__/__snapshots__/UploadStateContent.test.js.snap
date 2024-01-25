@@ -9,7 +9,7 @@ exports[`elements/content-uploader/UploadStateContent should render correctly wh
       defaultMessage="{option1} or {option2}"
       id="be.uploadOptions"
       values={
-        Object {
+        {
           "option1": <UploadInput
             handleChange={[Function]}
             inputLabel="file"

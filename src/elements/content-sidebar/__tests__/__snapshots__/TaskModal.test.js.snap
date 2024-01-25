@@ -8,9 +8,9 @@ exports[`elements/content-sidebar/TaskModal render should render a default compo
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
-    Object {
-      "backdrop": Object {},
-      "dialog": Object {},
+    {
+      "backdrop": {},
+      "dialog": {},
     }
   }
   title={
@@ -44,9 +44,9 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
-    Object {
-      "backdrop": Object {},
-      "dialog": Object {},
+    {
+      "backdrop": {},
+      "dialog": {},
     }
   }
   title={
@@ -81,9 +81,9 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
-    Object {
-      "backdrop": Object {},
-      "dialog": Object {},
+    {
+      "backdrop": {},
+      "dialog": {},
     }
   }
   title={
@@ -118,9 +118,9 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode C
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
-    Object {
-      "backdrop": Object {},
-      "dialog": Object {},
+    {
+      "backdrop": {},
+      "dialog": {},
     }
   }
   title={
@@ -155,9 +155,9 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
   isOpen={true}
   onRequestClose={[MockFunction]}
   style={
-    Object {
-      "backdrop": Object {},
-      "dialog": Object {},
+    {
+      "backdrop": {},
+      "dialog": {},
     }
   }
   title={

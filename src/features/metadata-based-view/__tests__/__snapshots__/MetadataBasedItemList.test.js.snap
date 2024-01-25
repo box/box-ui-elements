@@ -3,26 +3,26 @@
 exports[`features/metadata-based-view/MetadataBasedItemList render() should render a default component correctly 1`] = `
 <MetadataBasedItemList
   currentCollection={
-    Object {
-      "items": Array [
-        Object {
+    {
+      "items": [
+        {
           "id": "1",
-          "metadata": Object {
-            "enterprise": Object {
-              "fields": Array [
-                Object {
+          "metadata": {
+            "enterprise": {
+              "fields": [
+                {
                   "displayName": "Type",
                   "key": "metadata.enterprise_12345.awesomeTemplate.type",
                   "type": "string",
                   "value": "bill",
                 },
-                Object {
+                {
                   "displayName": "Amount",
                   "key": "metadata.enterprise_12345.awesomeTemplate.amount",
                   "type": "float",
                   "value": 100.12,
                 },
-                Object {
+                {
                   "displayName": "Created",
                   "key": "metadata.enterprise_12345.awesomeTemplate.created",
                   "type": "date",
@@ -35,24 +35,24 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
           "name": "name1.pdf",
           "size": "123",
         },
-        Object {
+        {
           "id": "2",
-          "metadata": Object {
-            "enterprise": Object {
-              "fields": Array [
-                Object {
+          "metadata": {
+            "enterprise": {
+              "fields": [
+                {
                   "displayName": "Type",
                   "key": "metadata.enterprise_12345.awesomeTemplate.type",
                   "type": "string",
                   "value": "receipt",
                 },
-                Object {
+                {
                   "displayName": "Amount",
                   "key": "metadata.enterprise_12345.awesomeTemplate.amount",
                   "type": "float",
                   "value": 200.88,
                 },
-                Object {
+                {
                   "displayName": "Created",
                   "key": "metadata.enterprise_12345.awesomeTemplate.created",
                   "type": "date",
@@ -70,25 +70,25 @@ exports[`features/metadata-based-view/MetadataBasedItemList render() should rend
     }
   }
   fieldsToShow={
-    Array [
+    [
       "size",
-      Object {
+      {
         "canEdit": true,
         "key": "metadata.enterprise_12345.awesomeTemplate.amount",
       },
-      Object {
+      {
         "canEdit": true,
         "displayName": "Created At",
         "key": "metadata.enterprise_12345.awesomeTemplate.created",
       },
-      Object {
+      {
         "canEdit": true,
         "key": "invalidKey",
       },
     ]
   }
   intl={
-    Object {
+    {
       "formatMessage": [MockFunction],
     }
   }
