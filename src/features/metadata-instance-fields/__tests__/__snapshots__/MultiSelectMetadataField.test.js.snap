@@ -9,7 +9,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectMetadataField shoul
       isEscapedWithReference={true}
       isScrollable={true}
       onChange={[Function]}
-      options={Array []}
+      options={[]}
       placeholder={
         <FormattedMessage
           defaultMessage="Select Values"
@@ -17,7 +17,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectMetadataField shoul
         />
       }
       selectedValues={
-        Array [
+        [
           "value",
         ]
       }
@@ -40,7 +40,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectMetadataField shoul
       isEscapedWithReference={true}
       isScrollable={true}
       onChange={[Function]}
-      options={Array []}
+      options={[]}
       placeholder={
         <FormattedMessage
           defaultMessage="Select Values"
@@ -48,7 +48,7 @@ exports[`features/metadata-instance-editor/fields/MultiSelectMetadataField shoul
         />
       }
       selectedValues={
-        Array [
+        [
           "value",
         ]
       }

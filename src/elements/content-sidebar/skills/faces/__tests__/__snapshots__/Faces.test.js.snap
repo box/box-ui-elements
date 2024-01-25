@@ -29,7 +29,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edi
   </Tooltip>
   <Face
     face={
-      Object {
+      {
         "text": "foo",
       }
     }
@@ -39,7 +39,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render edi
   />
   <Face
     face={
-      Object {
+      {
         "text": "bar",
       }
     }
@@ -69,7 +69,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render fac
 >
   <Face
     face={
-      Object {
+      {
         "text": "foo",
       }
     }
@@ -79,7 +79,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render fac
   />
   <Face
     face={
-      Object {
+      {
         "text": "bar",
       }
     }
@@ -97,7 +97,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render fac
 >
   <Face
     face={
-      Object {
+      {
         "text": "foo",
       }
     }
@@ -137,7 +137,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
   </Tooltip>
   <Face
     face={
-      Object {
+      {
         "text": "foo",
       }
     }
@@ -148,7 +148,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render sav
   />
   <Face
     face={
-      Object {
+      {
         "text": "bar",
       }
     }
@@ -194,9 +194,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render tim
 >
   <Face
     face={
-      Object {
-        "appears": Array [
-          Object {
+      {
+        "appears": [
+          {
             "start": 1,
           },
         ],
@@ -207,9 +207,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render tim
     onDelete={[Function]}
     onSelect={[Function]}
     selected={
-      Object {
-        "appears": Array [
-          Object {
+      {
+        "appears": [
+          {
             "start": 1,
           },
         ],
@@ -219,9 +219,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render tim
   />
   <Face
     face={
-      Object {
-        "appears": Array [
-          Object {
+      {
+        "appears": [
+          {
             "start": 1,
           },
         ],
@@ -232,9 +232,9 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render tim
     onDelete={[Function]}
     onSelect={[Function]}
     selected={
-      Object {
-        "appears": Array [
-          Object {
+      {
+        "appears": [
+          {
             "start": 1,
           },
         ],
@@ -246,8 +246,8 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render tim
     duration={100}
     interactionTarget="skill-facetimeslice"
     timeslices={
-      Array [
-        Object {
+      [
+        {
           "start": 1,
         },
       ]
@@ -263,7 +263,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render whe
 >
   <Face
     face={
-      Object {
+      {
         "text": "foo",
       }
     }
@@ -273,7 +273,7 @@ exports[`elements/content-sidebar/Skills/Faces/Faces should correctly render whe
   />
   <Face
     face={
-      Object {
+      {
         "text": "bar",
       }
     }

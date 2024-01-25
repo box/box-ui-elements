@@ -30,7 +30,7 @@ exports[`features/item-details/ItemProperties should render editable description
     <EditableDescription
       onDescriptionChange={[Function]}
       textAreaProps={
-        Object {
+        {
           "aria-labelledby": "description_3",
           "data-resin-target": "description",
         }
@@ -56,7 +56,7 @@ exports[`features/item-details/ItemProperties should render editable description
     <EditableDescription
       onDescriptionChange={[Function]}
       textAreaProps={
-        Object {
+        {
           "aria-labelledby": "description_4",
           "data-resin-target": "description",
         }

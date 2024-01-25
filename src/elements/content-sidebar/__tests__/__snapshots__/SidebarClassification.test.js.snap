@@ -4,7 +4,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
 <Collapsible
   animationDuration={100}
   buttonProps={
-    Object {
+    {
       "data-resin-target": "classification",
     }
   }
@@ -36,7 +36,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
 <Collapsible
   animationDuration={100}
   buttonProps={
-    Object {
+    {
       "data-resin-target": "classification",
     }
   }
@@ -62,7 +62,7 @@ exports[`elements/content-sidebar/SidebarClassification render() should render c
 <Collapsible
   animationDuration={100}
   buttonProps={
-    Object {
+    {
       "data-resin-target": "classification",
     }
   }

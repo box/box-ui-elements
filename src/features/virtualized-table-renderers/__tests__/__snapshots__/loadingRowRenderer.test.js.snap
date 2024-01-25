@@ -7,7 +7,7 @@ exports[`features/virtualized-table-renderers/loadingRowRenderer should successf
   key="3-0"
   role="row"
   style={
-    Object {
+    {
       "height": 52,
       "left": 0,
       "overflow": "hidden",

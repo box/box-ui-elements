@@ -3,7 +3,7 @@
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should create StaticVersionSidebar if onUpgradeClick is present 1`] = `
 <StaticVersionsSidebar
   error={
-    Object {
+    {
       "defaultMessage": "File versions could not be retrieved.",
       "id": "be.sidebarVersions.fetchError",
     }
@@ -14,14 +14,14 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
   parentName=""
   versionCount={0}
   versionLimit={Infinity}
-  versions={Array []}
+  versions={[]}
 />
 `;
 
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should set state to default values with error message 1`] = `
 <VersionsSidebar
   error={
-    Object {
+    {
       "defaultMessage": "File versions could not be retrieved.",
       "id": "be.sidebarVersions.fetchError",
     }
@@ -37,7 +37,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
   parentName=""
   versionCount={0}
   versionLimit={Infinity}
-  versions={Array []}
+  versions={[]}
 />
 `;
 
@@ -54,6 +54,6 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer render shoul
   parentName="activity"
   versionCount={Infinity}
   versionLimit={Infinity}
-  versions={Array []}
+  versions={[]}
 />
 `;

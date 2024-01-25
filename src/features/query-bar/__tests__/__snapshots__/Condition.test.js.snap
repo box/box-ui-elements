@@ -42,8 +42,8 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         isDisabled={false}
         onChange={[Function]}
         options={
-          Array [
-            Object {
+          [
+            {
               "displayText": "Contract Value",
               "type": "enum",
               "value": "3",
@@ -65,20 +65,20 @@ exports[`features/query-bar/components/filter/Condition render() should render C
         isDisabled={false}
         onChange={[Function]}
         options={
-          Array [
-            Object {
+          [
+            {
               "displayText": "is",
               "value": "=",
             },
-            Object {
+            {
               "displayText": "is not",
               "value": "<>",
             },
-            Object {
+            {
               "displayText": "is greater than",
               "value": ">",
             },
-            Object {
+            {
               "displayText": "is less than",
               "value": "<",
             },
@@ -93,10 +93,10 @@ exports[`features/query-bar/components/filter/Condition render() should render C
   >
     <ValueField
       onChange={[Function]}
-      selectedValues={Array []}
+      selectedValues={[]}
       valueOptions={
-        Array [
-          Object {
+        [
+          {
             "displayText": "$100",
             "value": "$100",
           },

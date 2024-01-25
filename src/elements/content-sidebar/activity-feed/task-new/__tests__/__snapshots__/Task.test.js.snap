@@ -27,7 +27,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           />
         }
         user={
-          Object {
+          {
             "id": "5",
             "name": "Steven Yang",
             "type": "user",
@@ -40,8 +40,8 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
         attachment="top right"
         className="bcs-Task-deleteConfirmationModal"
         constraints={
-          Array [
-            Object {
+          [
+            {
               "attachment": "together",
               "to": "scrollParent",
             },
@@ -55,7 +55,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           data-testid="task-actions-menu"
           isDisabled={false}
           menuProps={
-            Object {
+            {
               "data-resin-component": "activityfeedtask",
             }
           }
@@ -135,32 +135,32 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
           onCollapse={[Function]}
           onExpand={[Function]}
           users={
-            Object {
-              "entries": Array [
-                Object {
+            {
+              "entries": [
+                {
                   "id": "current-user-assignment-id",
-                  "permissions": Object {
+                  "permissions": {
                     "can_delete": true,
                     "can_update": true,
                   },
                   "role": "ASSIGNEE",
                   "status": "NOT_STARTED",
-                  "target": Object {
+                  "target": {
                     "id": "1",
                     "name": "Jake Thomas",
                     "type": "user",
                   },
                   "type": "task_collaborator",
                 },
-                Object {
+                {
                   "id": "other-user-assignment-id",
-                  "permissions": Object {
+                  "permissions": {
                     "can_delete": true,
                     "can_update": true,
                   },
                   "role": "ASSIGNEE",
                   "status": "COMPLETED",
-                  "target": Object {
+                  "target": {
                     "id": "3",
                     "name": "Patrick Paul",
                     "type": "user",
@@ -196,33 +196,33 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
     onSubmitError={[Function]}
     onSubmitSuccess={[Function]}
     taskFormProps={
-      Object {
+      {
         "approverSelectorContacts": undefined,
-        "approvers": Array [
-          Object {
+        "approvers": [
+          {
             "id": "current-user-assignment-id",
-            "permissions": Object {
+            "permissions": {
               "can_delete": true,
               "can_update": true,
             },
             "role": "ASSIGNEE",
             "status": "NOT_STARTED",
-            "target": Object {
+            "target": {
               "id": "1",
               "name": "Jake Thomas",
               "type": "user",
             },
             "type": "task_collaborator",
           },
-          Object {
+          {
             "id": "other-user-assignment-id",
-            "permissions": Object {
+            "permissions": {
               "can_delete": true,
               "can_update": true,
             },
             "role": "ASSIGNEE",
             "status": "COMPLETED",
-            "target": Object {
+            "target": {
               "id": "3",
               "name": "Patrick Paul",
               "type": "user",

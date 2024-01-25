@@ -7,14 +7,14 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
 >
   <mockConstructor
     value={
-      Object {
+      {
         "isScrolling": false,
       }
     }
   >
     <Scrollbar
       className="foobar"
-      contentProps={Object {}}
+      contentProps={{}}
       fallbackScrollbarWidth={20}
       minimalThumbSize={30}
       momentum={true}
@@ -23,25 +23,25 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
       onUpdate={[Function]}
       renderer={[Function]}
       scrollDetectionThreshold={100}
-      scrollerProps={Object {}}
+      scrollerProps={{}}
       style={
-        Object {
+        {
           "flexGrow": 1,
           "height": "auto",
           "width": "100%",
         }
       }
-      thumbXProps={Object {}}
+      thumbXProps={{}}
       thumbYProps={
-        Object {
+        {
           "renderer": [Function],
         }
       }
       trackClickBehavior="jump"
-      trackXProps={Object {}}
+      trackXProps={{}}
       trackYProps={
-        Object {
-          "style": Object {
+        {
+          "style": {
             "background": "none",
             "height": "100%",
             "marginRight": "1px",
@@ -50,12 +50,12 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
           },
         }
       }
-      wrapperProps={Object {}}
+      wrapperProps={{}}
     >
       <CollapsibleSidebarNav__StyledScrollContainer
         className="ScrollbarsCustom foobar"
         style={
-          Object {
+          {
             "flexGrow": 1,
             "height": "auto",
             "position": "relative",
@@ -66,7 +66,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
         <div
           className="CollapsibleSidebarNav__StyledScrollContainer-csqupn-1 cFwMnb ScrollbarsCustom foobar"
           style={
-            Object {
+            {
               "flexGrow": 1,
               "height": "auto",
               "position": "relative",
@@ -78,7 +78,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
             className="ScrollbarsCustom-Wrapper"
             key="ScrollbarsCustom-Wrapper"
             style={
-              Object {
+              {
                 "bottom": 0,
                 "left": 0,
                 "overflow": "hidden",
@@ -93,7 +93,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
               key="ScrollbarsCustom-Scroller"
               onScroll={[Function]}
               style={
-                Object {
+                {
                   "WebkitOverflowScrolling": "touch",
                   "bottom": 0,
                   "left": 0,
@@ -113,7 +113,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                 className="ScrollbarsCustom-Content"
                 key="ScrollbarsCustom-Content"
                 style={
-                  Object {
+                  {
                     "boxSizing": "border-box",
                     "minHeight": "100%",
                     "minWidth": "100%",
@@ -144,7 +144,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
             key="ScrollbarsCustom-TrackY"
             onClick={[Function]}
             style={
-              Object {
+              {
                 "background": "none",
                 "borderRadius": 4,
                 "display": "none",
@@ -162,7 +162,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
             <div
               className="ScrollbarsCustom-Track ScrollbarsCustom-TrackY"
               style={
-                Object {
+                {
                   "background": "none",
                   "borderRadius": 4,
                   "display": "none",
@@ -185,7 +185,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                 onDragEnd={[Function]}
                 renderer={[Function]}
                 style={
-                  Object {
+                  {
                     "borderRadius": 4,
                     "cursor": "pointer",
                     "height": 0,
@@ -215,7 +215,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                     onTouchEnd={[Function]}
                     onTouchStart={[Function]}
                     style={
-                      Object {
+                      {
                         "borderRadius": 4,
                         "cursor": "pointer",
                         "height": 0,
@@ -231,7 +231,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                       onTouchEnd={[Function]}
                       onTouchStart={[Function]}
                       style={
-                        Object {
+                        {
                           "borderRadius": 4,
                           "cursor": "pointer",
                           "height": 0,
@@ -251,7 +251,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
             key="ScrollbarsCustom-TrackX"
             onClick={[Function]}
             style={
-              Object {
+              {
                 "background": "rgba(0,0,0,.1)",
                 "borderRadius": 4,
                 "bottom": 0,
@@ -268,7 +268,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
             <div
               className="ScrollbarsCustom-Track ScrollbarsCustom-TrackX"
               style={
-                Object {
+                {
                   "background": "rgba(0,0,0,.1)",
                   "borderRadius": 4,
                   "bottom": 0,
@@ -289,7 +289,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                 onDrag={[Function]}
                 onDragEnd={[Function]}
                 style={
-                  Object {
+                  {
                     "background": "rgba(0,0,0,.4)",
                     "borderRadius": 4,
                     "cursor": "pointer",
@@ -319,7 +319,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebarNav render 1`] = 
                     onTouchEnd={[Function]}
                     onTouchStart={[Function]}
                     style={
-                      Object {
+                      {
                         "background": "rgba(0,0,0,.4)",
                         "borderRadius": 4,
                         "cursor": "pointer",

@@ -7,7 +7,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should render with e
   defaultMessage="People in {enterpriseName}"
   id="boxui.unifiedShare.peopleInEnterpriseName"
   values={
-    Object {
+    {
       "enterpriseName": "Box",
     }
   }
@@ -19,7 +19,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should render withou
   defaultMessage="People in your company"
   id="boxui.unifiedShare.peopleInYourCompany"
   values={
-    Object {
+    {
       "enterpriseName": "",
     }
   }
@@ -31,7 +31,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect item 
   defaultMessage="Invited people only"
   id="boxui.unifiedShare.peopleInThisFile"
   values={
-    Object {
+    {
       "enterpriseName": "ABC, Inc.",
     }
   }
@@ -43,7 +43,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect item 
   defaultMessage="Invited people only"
   id="boxui.unifiedShare.peopleInThisFolder"
   values={
-    Object {
+    {
       "enterpriseName": "ABC, Inc.",
     }
   }
@@ -57,7 +57,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect the a
       defaultMessage="People in {enterpriseName}"
       id="boxui.unifiedShare.peopleInEnterpriseName"
       values={
-        Object {
+        {
           "enterpriseName": "ABC, Inc.",
         }
       }
@@ -78,7 +78,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect the a
       defaultMessage="People with the link"
       id="boxui.unifiedShare.peopleWithTheLinkText"
       values={
-        Object {
+        {
           "enterpriseName": "ABC, Inc.",
         }
       }
@@ -99,7 +99,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect the a
       defaultMessage="Invited people only"
       id="boxui.unifiedShare.peopleInThisFile"
       values={
-        Object {
+        {
           "enterpriseName": "ABC, Inc.",
         }
       }
@@ -118,7 +118,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect the a
   defaultMessage="People in {enterpriseName}"
   id="boxui.unifiedShare.peopleInEnterpriseName"
   values={
-    Object {
+    {
       "enterpriseName": "ABC, Inc.",
     }
   }
@@ -130,7 +130,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect the a
   defaultMessage="People with the link"
   id="boxui.unifiedShare.peopleWithTheLinkText"
   values={
-    Object {
+    {
       "enterpriseName": "ABC, Inc.",
     }
   }
@@ -142,7 +142,7 @@ exports[`features/unified-share-modal/SharedLinkAccessLabel should respect the a
   defaultMessage="Invited people only"
   id="boxui.unifiedShare.peopleInThisFile"
   values={
-    Object {
+    {
       "enterpriseName": "ABC, Inc.",
     }
   }

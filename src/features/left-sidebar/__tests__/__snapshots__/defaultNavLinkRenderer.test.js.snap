@@ -12,7 +12,7 @@ exports[`feature/left-sidebar/defaultNavLinkRenderer should render default NavLi
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"

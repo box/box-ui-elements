@@ -10,18 +10,18 @@ exports[`features/shared-link-modal/SharedLinkAccess should render an AccessDesc
   />
   <AccessMenu
     accessDropdownMenuProps={
-      Object {
+      {
         "constrainToWindow": true,
       }
     }
     accessLevel="peopleWithTheLink"
     accessMenuButtonProps={
-      Object {
+      {
         "data-resin-thing": "menu",
       }
     }
     allowedAccessLevels={
-      Object {
+      {
         "peopleInThisItem": true,
         "peopleInYourCompany": true,
         "peopleWithTheLink": true,
@@ -31,7 +31,7 @@ exports[`features/shared-link-modal/SharedLinkAccess should render an AccessDesc
     itemType="folder"
     removeLink={[Function]}
     removeLinkButtonProps={
-      Object {
+      {
         "data-resin-thing": "remove",
       }
     }

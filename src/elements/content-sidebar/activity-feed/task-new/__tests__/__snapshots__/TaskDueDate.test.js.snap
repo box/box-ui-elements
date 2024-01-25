@@ -24,7 +24,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/TaskDueDate should rende
               defaultMessage="DUE {dateTime}"
               id="be.contentSidebar.activityFeed.taskNew.taskFeedStatusDue"
               values={
-                Object {
+                {
                   "dateTime": <ActivityDatestamp
                     date={987654321000}
                     uppercase={true}

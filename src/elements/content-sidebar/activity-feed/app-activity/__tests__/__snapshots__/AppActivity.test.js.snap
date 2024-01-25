@@ -23,8 +23,8 @@ exports[`elements/content-sidebar/ActivityFeed/app-activity/AppActivity should c
         attachment="top right"
         className="bcs-AppActivity-confirm"
         constraints={
-          Array [
-            Object {
+          [
+            {
               "attachment": "together",
               "to": "scrollParent",
             },

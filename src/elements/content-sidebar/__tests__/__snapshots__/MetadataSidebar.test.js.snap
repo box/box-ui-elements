@@ -19,8 +19,8 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
   >
     <Instances
       editors={
-        Array [
-          Object {},
+        [
+          {},
         ]
       }
       onModification={[Function]}
@@ -62,9 +62,9 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
       hasTemplates={false}
       isDropdownBusy={false}
       onAdd={[Function]}
-      templates={Array []}
+      templates={[]}
       usedTemplates={
-        Array [
+        [
           undefined,
         ]
       }
@@ -86,8 +86,8 @@ exports[`elements/content-sidebar/Metadata/MetadataSidebar should render Metadat
   >
     <Instances
       editors={
-        Array [
-          Object {},
+        [
+          {},
         ]
       }
       onModification={[Function]}

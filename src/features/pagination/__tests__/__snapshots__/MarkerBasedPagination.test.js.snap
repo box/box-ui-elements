@@ -57,8 +57,8 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -304,8 +304,8 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -433,8 +433,8 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -534,8 +534,8 @@ exports[`elements/Pagination/MarkerBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },

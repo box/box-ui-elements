@@ -8,7 +8,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
     defaultMessage="Anyone in your company with the link or people invited to this file can access"
     id="boxui.unifiedShare.peopleInCompanyCanAccessFile"
     values={
-      Object {
+      {
         "company": "",
       }
     }
@@ -24,7 +24,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
     defaultMessage="Anyone at {company} with the link or people invited to this file can access"
     id="boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessFile"
     values={
-      Object {
+      {
         "company": "Box",
       }
     }
@@ -40,7 +40,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
     defaultMessage="Anyone in your company with the link or people invited to this folder can access"
     id="boxui.unifiedShare.peopleInCompanyCanAccessFolder"
     values={
-      Object {
+      {
         "company": "",
       }
     }
@@ -56,7 +56,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
     defaultMessage="Anyone at {company} with the link or people invited to this folder can access"
     id="boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessFolder"
     values={
-      Object {
+      {
         "company": "Box",
       }
     }
@@ -72,7 +72,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
     defaultMessage="Only invited people can access this file"
     id="boxui.unifiedShare.peopleInItemCanAccessFile"
     values={
-      Object {
+      {
         "company": "Box",
       }
     }
@@ -88,7 +88,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
     defaultMessage="Only invited people can access this folder"
     id="boxui.unifiedShare.peopleInItemCanAccessFolder"
     values={
-      Object {
+      {
         "company": "Box",
       }
     }
@@ -104,7 +104,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
     defaultMessage="Publicly accessible and no sign-in required"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
-      Object {
+      {
         "company": "Box",
       }
     }
@@ -120,7 +120,7 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
     defaultMessage="Publicly accessible and no sign-in required"
     id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
-      Object {
+      {
         "company": "Box",
       }
     }

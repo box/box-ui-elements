@@ -355,7 +355,7 @@ describe('api/uploads/BaseUpload', () => {
             upload.preflightErrorHandler({
                 status: 429,
             });
-            clock.runTimersToTime(retryAfterMs + 1);
+            clock.advanceTimersByTime(retryAfterMs + 1);
 
             expect(upload.makePreflightRequest).toHaveBeenCalled();
         });
@@ -368,7 +368,7 @@ describe('api/uploads/BaseUpload', () => {
             upload.preflightErrorHandler({
                 code: 'too_many_requests',
             });
-            clock.runTimersToTime(retryAfterMs + 1);
+            clock.advanceTimersByTime(retryAfterMs + 1);
 
             expect(upload.makePreflightRequest).toHaveBeenCalled();
         });
@@ -385,7 +385,7 @@ describe('api/uploads/BaseUpload', () => {
                     get: getMock,
                 },
             });
-            clock.runTimersToTime(retryAfterMs + 1);
+            clock.advanceTimersByTime(retryAfterMs + 1);
 
             expect(upload.makePreflightRequest).toHaveBeenCalled();
             expect(getMock).toHaveBeenCalledWith('Retry-After');
@@ -415,7 +415,7 @@ describe('api/uploads/BaseUpload', () => {
             upload.makePreflightRequest = jest.fn();
 
             upload.preflightErrorHandler(error);
-            clock.runTimersToTime(retryAfterMs + 1);
+            clock.advanceTimersByTime(retryAfterMs + 1);
 
             expect(upload.makePreflightRequest).toHaveBeenCalled();
         });
@@ -428,7 +428,7 @@ describe('api/uploads/BaseUpload', () => {
             upload.retryCount = retryCount;
 
             upload.preflightErrorHandler(error);
-            clock.runTimersToTime(2 ** retryCount * MS_IN_S - 1);
+            clock.advanceTimersByTime(2 ** retryCount * MS_IN_S - 1);
 
             expect(upload.retryCount).toBe(retryCount + 1);
 
