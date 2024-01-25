@@ -12,12 +12,12 @@
 .docgen-tag-section {
     margin-top: 16px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #e8e8e8;
+    border-bottom: 1px solid $bdl-gray-10;
 }
 
 .docgen-tag-section-header {
     font-weight: normal;
-    font-size: 12px;
+    font-size: $bdl-fontSize-minimum;
     line-height: 14px;
 }
 
@@ -26,11 +26,12 @@
     height: 32px;
     padding: 6px 12px;
     font-weight: bold;
+    font-size: $bdl-fontSize--dejaBlue;
     font-family: 'Lato', sans-serif;
     border-radius: 6px;
 
     &:hover {
-        background: #e8e8e8;
+        background: $bdl-gray-10;
     }
 }
 
