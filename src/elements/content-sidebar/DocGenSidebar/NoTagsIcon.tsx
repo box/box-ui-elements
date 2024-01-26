@@ -1,8 +1,8 @@
 import * as React from 'react';
-import AccessibleSVG from '../../../components/accessible-svg/AccessibleSVG';
+import AccessibleSVG, { SVGProps } from '../../../components/accessible-svg/AccessibleSVG';
 
-const NoTagsIcon = () => (
-    <AccessibleSVG width={141} height={140} viewBox="0 0 141 140">
+const NoTagsIcon = ({ className = '', height = 140, width = 141 }: SVGProps) => (
+    <AccessibleSVG width={width} height={height} viewBox="0 0 141 140" className={className}>
         <g opacity="0.1">
             <path
                 d="M47.6679 25H45.5C43.8431 25 42.5 26.3431 42.5 28V38C42.5 38.0557 42.5015 38.111 42.5045 38.1659C41.2784 38.7024 39.924 39 38.5 39C32.9772 39 28.5 34.5228 28.5 29C28.5 23.4772 32.9772 19 38.5 19C42.6006 19 46.1248 21.4682 47.6679 25Z"

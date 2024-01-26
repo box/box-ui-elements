@@ -12,10 +12,10 @@ import { withAPIContext } from '../../common/api-context';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withErrorBoundary } from '../../common/error-boundary';
+import LoadingIndicator from '../../../components/loading-indicator';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withLogger } from '../../common/logger';
-import Loading from './Loading';
 import Error from './Error';
 import NoTagsAvailable from './NoTagsAvailable';
 // @ts-ignore: no ts definition
@@ -97,7 +97,7 @@ const DocGenSidebar = (props: Props) => {
         <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={props.intl.formatMessage(messages.docgenTags)}>
             <div className={classNames('docgen-sidebar', { center: hasNoTags || hasError || loading })}>
                 {hasError && <Error onClick={loadTags} />}
-                {!hasError && loading && <Loading />}
+                {!hasError && loading && <LoadingIndicator className="docgen-loading" />}
                 {!hasError && !loading && (
                     <>
                         {hasNoTags ? (

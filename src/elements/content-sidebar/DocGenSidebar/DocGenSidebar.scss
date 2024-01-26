@@ -1,4 +1,5 @@
 @import '../../../styles/variables';
+@import '../../common/variables';
 
 .docgen-sidebar {
     padding: 0 24px 0 24px;
@@ -35,18 +36,30 @@
     }
 }
 
+.docgen-loading {
+    margin-top: 16px;
+}
+
 .docgen-empty-state {
     position: absolute;
-    top: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    &--icon {
+        margin-top: 60px;
+        margin-bottom: 15px;
+    }
 }
 
 .docgen-error-state {
     position: absolute;
-    top: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    &--icon {
+        margin-top: 60px;
+        margin-bottom: 15px;
+    }
 }
