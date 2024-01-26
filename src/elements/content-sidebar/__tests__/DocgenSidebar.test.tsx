@@ -42,7 +42,7 @@ const docGenSidebarProps = {
 };
 
 const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
-const errorTagsMock = jest.fn().mockRejectedValue(new Error('Async error message'));
+const errorTagsMock = jest.fn().mockRejectedValue([]);
 
 const defaultProps = {
     ...docGenSidebarProps,
