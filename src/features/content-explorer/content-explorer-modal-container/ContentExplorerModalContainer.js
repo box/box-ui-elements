@@ -204,6 +204,7 @@ class ContentExplorerModalContainer extends Component {
             isCreatingFolder,
             createFolderError,
             initialFoldersPath,
+            shouldNotUsePortal,
             ...rest
         } = this.props;
         const { foldersPath, isNewFolderModalOpen } = this.state;
@@ -219,6 +220,7 @@ class ContentExplorerModalContainer extends Component {
                     isOpen
                     onEnterFolder={this.handleEnterFolder}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
+                    shouldNotUsePortal={shouldNotUsePortal}
                     {...rest}
                 />
                 {isNewFolderModalOpen && (
@@ -230,6 +232,7 @@ class ContentExplorerModalContainer extends Component {
                         onCreateFolderInput={onCreateFolderInput}
                         isCreatingFolder={isCreatingFolder}
                         createFolderError={createFolderError}
+                        shouldNotUsePortal={shouldNotUsePortal}
                     />
                 )}
             </div>
