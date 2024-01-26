@@ -488,7 +488,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
                   </AccessibleSVG>
                 </RereshIcon>
                 <div>
-                  We couldn\`&apost load the tags
+                  We couldn't load the tags
                 </div>
                 <p>
                   Please refresh the list.
