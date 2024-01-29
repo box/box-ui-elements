@@ -145,7 +145,7 @@ class ContentExplorerModalContainer extends Component {
         listHeaderRenderer: PropTypes.func,
         /** Whether the new folder button should be shown */
         showCreateNewFolderButton: PropTypes.bool,
-        /** Whether the modal should be nested in a Portal or in a div */
+        /** Whether the modals should be nested in a Portal or in a div */
         shouldNotUsePortal: PropTypes.bool,
         /** Props for the search input */
         searchInputProps: PropTypes.object,

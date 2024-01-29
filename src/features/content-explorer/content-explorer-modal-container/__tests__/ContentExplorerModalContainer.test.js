@@ -1,4 +1,3 @@
-import { shallow } from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
 
@@ -7,7 +6,7 @@ import ContentExplorerModalContainer from '../ContentExplorerModalContainer';
 describe('features/content-explorer/content-explorer-modal-container/ContentExplorerModalContainer', () => {
     const sandbox = sinon.sandbox.create();
     const initialSelectedItems = { '123': { id: '123', name: 'folder123' } };
-    const renderComponent = (renderer = shallow, props) =>
+    const renderComponent = (props, renderer = shallow) =>
         renderer(
             <ContentExplorerModalContainer
                 onRequestClose={() => {}}
@@ -43,7 +42,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
 
         test('should render component with class when specified', () => {
             const className = 'test';
-            const wrapper = renderComponent(shallow, { className });
+            const wrapper = renderComponent({ className });
 
             expect(wrapper.hasClass('content-explorer-modal-container')).toBe(true);
             expect(wrapper.hasClass(className)).toBe(true);
@@ -59,7 +58,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
         test('should render NewFolderModal when isNewFolderModalOpen is true', () => {
             const initialFoldersPath = [{ id: '0', name: 'folder' }];
             const parentFolderName = initialFoldersPath[0].name;
-            const wrapper = renderComponent(shallow, { initialFoldersPath });
+            const wrapper = renderComponent({ initialFoldersPath });
             wrapper.setState({ isNewFolderModalOpen: true });
 
             expect(wrapper.find('ContentExplorerModal').length).toBe(1);
@@ -72,7 +71,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             const chooseButtonText = 'test';
             const onSelectedClick = () => {};
             const onSelectItem = () => {};
-            const wrapper = renderComponent(shallow, {
+            const wrapper = renderComponent({
                 searchInputProps,
                 chooseButtonText,
                 onSelectedClick,
@@ -86,14 +85,14 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
         });
 
         test('should render ContentExplorerModal and NewFolderModal in Portal by default', () => {
-            const wrapper = renderComponent(mount);
+            const wrapper = renderComponent({}, mount);
             wrapper.setState({ isNewFolderModalOpen: true });
 
             expect(wrapper.find('Portal').length).toBe(4);
         });
 
         test('should not render ContentExplorerModal and NewFolderModal in Portal if shouldNotUsePortal=true', () => {
-            const wrapper = renderComponent(mount, { shouldNotUsePortal: true });
+            const wrapper = renderComponent({ shouldNotUsePortal: true }, mount);
             wrapper.setState({ isNewFolderModalOpen: true });
 
             expect(wrapper.find('Portal').length).toBe(0);
@@ -103,7 +102,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
     describe('onNewFolderModalShown', () => {
         test('should call onNewFolderModalShown when new folder button is clicked', () => {
             const onNewFolderModalShownSpy = sandbox.spy();
-            const wrapper = renderComponent(shallow, {
+            const wrapper = renderComponent({
                 onNewFolderModalShown: onNewFolderModalShownSpy,
             });
             wrapper.find('ContentExplorerModal').prop('onCreateNewFolderButtonClick')();
@@ -115,7 +114,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
     describe('onNewFolderModalClosed', () => {
         test('should call onNewFolderModalClosed when new folder modal is closed', () => {
             const onNewFolderModalClosedSpy = sandbox.spy();
-            const wrapper = renderComponent(shallow, {
+            const wrapper = renderComponent({
                 onNewFolderModalClosed: onNewFolderModalClosedSpy,
             });
             wrapper.setState({ isNewFolderModalOpen: true });
