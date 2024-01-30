@@ -3,7 +3,7 @@
 import { injectIntl } from 'react-intl';
 
 import { ONE_HOUR_MS } from '../../constants';
-import { isToday, isYesterday, isCurrentYear } from '../../utils/datetime';
+import { isCurrentYear, isToday, isYesterday } from '../../utils/datetime';
 
 import messages from './messages';
 
@@ -78,13 +78,7 @@ const ReadableTime = ({
     // print the default time format
     const timeDiff = timestamp - Date.now();
     if (Math.abs(timeDiff) <= relativeThreshold) {
-        if (intl.formatRelativeTime) {
-            // react-intl >= 3
-            output = intl.formatRelativeTime(timeDiff);
-        } else {
-            // react-intl v2
-            output = intl.formatRelative(timestamp);
-        }
+        output = intl.formatRelativeTime(timeDiff);
     }
 
     return shouldUppercase ? output.toLocaleUpperCase(intl.locale) : output;

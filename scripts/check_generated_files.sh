@@ -10,17 +10,13 @@ blue=$"\e[1;34m"
 end=$"\e[0m\n"
 
 check_generated_files() {
-    printf "${blue}--------------------------------------${end}"
-    printf "${blue}Checking react-intl >= 3 usage${end}"
-    printf "${blue}--------------------------------------${end}"
-    ./scripts/findReactIntlViolators.js || return 1
 
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building bundles again, this may update en-US.properties${end}"
     printf "${blue}-------------------------------------------------------------${end}"
     yarn build:i18n || return 1
 
-    if [[ $(git status --porcelain 2>/dev/null| egrep "^(M| M)") != "" ]] ; then
+    if [[ $(git status --porcelain 2>/dev/null | egrep "^(M| M)") != "" ]]; then
         printf "${red}Your PR has uncommitted files!${end}"
         git status --porcelain
         return 1

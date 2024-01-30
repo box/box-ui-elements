@@ -1,6 +1,6 @@
-import * as React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
+import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Avatar from '../../components/avatar';
@@ -13,9 +13,7 @@ import './PresenceCollaborator.scss';
 
 export const renderTimestampMessage = (interactedAt, interactionType, intl) => {
     const lastActionMessage = determineInteractionMessage(interactionType, interactedAt);
-    const timeAgo = intl.formatRelativeTime
-        ? intl.formatRelativeTime(interactedAt - Date.now())
-        : intl.formatRelative(interactedAt);
+    const timeAgo = intl.formatRelativeTime(interactedAt - Date.now());
 
     if (lastActionMessage) {
         return (
