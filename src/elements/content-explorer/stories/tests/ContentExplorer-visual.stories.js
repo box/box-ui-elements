@@ -1,14 +1,12 @@
 // @flow
-import { userEvent, waitFor, within } from '@storybook/testing-library';
-import { defaultVisualConfig, sleep } from '../../../../utils/storybook';
+import { http, HttpResponse } from 'msw';
 
 import ContentExplorer from '../../ContentExplorer';
+import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+import mockRootFolder from '../__mocks__/mockRootFolder';
+import { defaultVisualConfig } from '../../../../utils/storybook';
 
-export const basic = {
-    play: () => {
-        sleep(3250);
-    },
-};
+export const basic = {};
 
 export default {
     title: 'Elements/ContentExplorer/tests/ContentExplorer/visual',
@@ -20,5 +18,12 @@ export default {
     },
     parameters: {
         ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
 };

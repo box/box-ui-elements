@@ -5,7 +5,16 @@ import features from '../examples/src/features';
 import '../src/styles/variables';
 import '../src/styles/base.scss';
 import { reactIntl } from "./reactIntl";
-import { ProjectAnnotations, Renderer } from "@storybook/types";
+
+import {initialize, mswDecorator} from 'msw-storybook-addon';
+
+/*
+ * Initializes MSW
+ * See https://github.com/mswjs/msw-storybook-addon#configuring-msw
+ * to learn how to customize it
+ */
+initialize();
+
 
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;
@@ -14,7 +23,7 @@ global.FOLDER_ID = global.FOLDER_ID || '69083462919';
 // NOTE: The token used is a readonly token accessing public data in a demo enterprise. DO NOT PUT A WRITE TOKEN
 global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 
-const preview: ProjectAnnotations<Renderer> = {
+const preview: any = {
     globals: {
         locale: reactIntl.defaultLocale,
         locales: {
@@ -23,6 +32,7 @@ const preview: ProjectAnnotations<Renderer> = {
         },
     },
     decorators:[
+        mswDecorator,
         (Story) =>
             (
                 <IntlProvider locale='en'>

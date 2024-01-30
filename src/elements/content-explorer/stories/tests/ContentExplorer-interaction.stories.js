@@ -1,10 +1,10 @@
 // @flow
 import { userEvent, waitFor, within } from '@storybook/testing-library';
-
-import rootFolder from '../__mocks__/rootFolder';
-import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+import { http, HttpResponse } from 'msw';
 
 import ContentExplorer from '../../ContentExplorer';
+import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+import mockRootFolder from '../__mocks__/mockRootFolder';
 import { defaultVisualConfig, SLEEP_TIMEOUT } from '../../../../utils/storybook';
 
 export const openFilePreview = {
@@ -47,5 +47,12 @@ export default {
     },
     parameters: {
         ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
 };

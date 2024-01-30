@@ -262,6 +262,8 @@
         "mini-css-extract-plugin": "^0.9.0",
         "mocha": "^6.2.2",
         "mousetrap": "^1.6.3",
+        "msw": "^2.1.5",
+        "msw-storybook-addon": "2.0.0-beta.0",
         "mutationobserver-shim": "^0.3.3",
         "npm-run-all": "^4.1.3",
         "nsp": "^3.2.1",
@@ -309,7 +311,7 @@
         "sinon": "^2.3.7",
         "source-map-loader": "^0.2.4",
         "start-server-and-test": "^1.10.8",
-        "storybook": "^7.5.3",
+        "storybook": "^7.6.10",
         "string-replace-loader": "^2.2.0",
         "style-loader": "^1.0.0",
         "styled-components": "^5.0.0",
@@ -384,5 +386,8 @@
         "ip": "1.1.8"
     },
     "readme": "ERROR: No README data found!",
-    "_id": "box-ui-elements@0.0.0-semantically-released"
+    "_id": "box-ui-elements@0.0.0-semantically-released",
+    "msw": {
+        "workerDirectory": ["public"]
+    }
 }
