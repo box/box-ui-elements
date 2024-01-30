@@ -3,7 +3,7 @@
 exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render an error from the error code 1`] = `
 <Status
   card={
-    Object {
+    {
       "skill_card_type": "status",
     }
   }
@@ -13,7 +13,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render an erro
 exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render face component 1`] = `
 <Faces
   card={
-    Object {
+    {
       "skill_card_type": "face",
     }
   }
@@ -24,7 +24,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render face co
 exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render keywords component 1`] = `
 <Keywords
   card={
-    Object {
+    {
       "skill_card_type": "keyword",
     }
   }
@@ -37,7 +37,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render nothing
 exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render timelines component 1`] = `
 <Faces
   card={
-    Object {
+    {
       "skill_card_type": "timeline",
     }
   }
@@ -48,7 +48,7 @@ exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render timelin
 exports[`elements/content-sidebar/Skills/SidebarSkillsCard should render transcript component 1`] = `
 <Transcript
   card={
-    Object {
+    {
       "skill_card_type": "transcript",
     }
   }

@@ -5,25 +5,25 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
   className="content-explorer-modal"
   isOpen={true}
   style={
-    Object {
-      "backdrop": Object {},
-      "dialog": Object {},
+    {
+      "backdrop": {},
+      "dialog": {},
     }
   }
   title=""
 >
   <ContentExplorer
-    actionButtonsProps={Object {}}
-    breadcrumbProps={Object {}}
-    cancelButtonProps={Object {}}
-    chooseButtonProps={Object {}}
+    actionButtonsProps={{}}
+    breadcrumbProps={{}}
+    cancelButtonProps={{}}
+    chooseButtonProps={{}}
     className=""
     contentExplorerMode="selectFile"
     customInput={[Function]}
     formatMessage={[Function]}
-    initialFoldersPath={Array []}
+    initialFoldersPath={[]}
     isResponsive={false}
-    items={Array []}
+    items={[]}
     listHeight={285}
     listWidth={560}
     numItemsPerPage={100}
@@ -32,7 +32,7 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
     onExitSearch={[Function]}
     onLoadMoreItems={[Function]}
     onSearchSubmit={[Function]}
-    searchInputProps={Object {}}
+    searchInputProps={{}}
   />
 </Modal>
 `;

@@ -75,7 +75,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -117,15 +117,15 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -141,7 +141,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
-          Array [
+          [
             "canViewOnly",
           ]
         }
@@ -149,7 +149,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
         changePermissionLevel={[Function]}
         isSharedLinkEditTooltipShown={false}
         trackingProps={
-          Object {
+          {
             "onChangeSharedLinkPermissionLevel": undefined,
             "sharedLinkPermissionsMenuButtonProps": undefined,
           }
@@ -225,7 +225,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -267,15 +267,15 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -290,12 +290,12 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       title="Collaboration made easy"
     >
       <SharedLinkPermissionMenu
-        allowedPermissionLevels={Array []}
+        allowedPermissionLevels={[]}
         canChangePermissionLevel={false}
         changePermissionLevel={[Function]}
         isSharedLinkEditTooltipShown={false}
         trackingProps={
-          Object {
+          {
             "onChangeSharedLinkPermissionLevel": undefined,
             "sharedLinkPermissionsMenuButtonProps": undefined,
           }
@@ -405,7 +405,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -447,15 +447,15 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -471,7 +471,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
-          Array [
+          [
             "canViewOnly",
           ]
         }
@@ -479,7 +479,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         changePermissionLevel={[Function]}
         isSharedLinkEditTooltipShown={false}
         trackingProps={
-          Object {
+          {
             "onChangeSharedLinkPermissionLevel": undefined,
             "sharedLinkPermissionsMenuButtonProps": undefined,
           }
@@ -638,7 +638,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -679,14 +679,14 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
     className="shared-link-access-row"
   >
     <SharedLinkAccessMenu
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -770,7 +770,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -812,15 +812,15 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -836,7 +836,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
-          Array [
+          [
             "canViewDownload",
             "canViewOnly",
           ]
@@ -845,7 +845,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         changePermissionLevel={[Function]}
         isSharedLinkEditTooltipShown={false}
         trackingProps={
-          Object {
+          {
             "onChangeSharedLinkPermissionLevel": undefined,
             "sharedLinkPermissionsMenuButtonProps": undefined,
           }
@@ -911,7 +911,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -953,15 +953,15 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -977,7 +977,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
-          Array [
+          [
             "canViewOnly",
           ]
         }
@@ -985,7 +985,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         changePermissionLevel={[Function]}
         isSharedLinkEditTooltipShown={false}
         trackingProps={
-          Object {
+          {
             "onChangeSharedLinkPermissionLevel": undefined,
             "sharedLinkPermissionsMenuButtonProps": undefined,
           }
@@ -1051,7 +1051,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -1093,15 +1093,15 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -1117,7 +1117,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
-          Array [
+          [
             "canViewOnly",
           ]
         }
@@ -1125,7 +1125,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         changePermissionLevel={[Function]}
         isSharedLinkEditTooltipShown={false}
         trackingProps={
-          Object {
+          {
             "onChangeSharedLinkPermissionLevel": undefined,
             "sharedLinkPermissionsMenuButtonProps": undefined,
           }
@@ -1191,7 +1191,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -1233,15 +1233,15 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInYourCompany"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,
@@ -1257,7 +1257,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     >
       <SharedLinkPermissionMenu
         allowedPermissionLevels={
-          Array [
+          [
             "canViewOnly",
           ]
         }
@@ -1265,7 +1265,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         changePermissionLevel={[Function]}
         isSharedLinkEditTooltipShown={false}
         trackingProps={
-          Object {
+          {
             "onChangeSharedLinkPermissionLevel": undefined,
             "sharedLinkPermissionsMenuButtonProps": undefined,
           }
@@ -1283,11 +1283,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render settings l
   data-resin-target="settings"
   onClick={
     [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": undefined,
         },
@@ -1358,7 +1358,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
             id="boxui.core.copy"
           />
         }
-        buttonProps={Object {}}
+        buttonProps={{}}
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -1400,15 +1400,15 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
   >
     <SharedLinkAccessMenu
       accessLevel="peopleInThisItem"
-      accessLevelsDisabledReason={Object {}}
-      allowedAccessLevels={Object {}}
+      accessLevelsDisabledReason={{}}
+      allowedAccessLevels={{}}
       changeAccessLevel={[Function]}
       enterpriseName="Box"
       itemType="file"
       onDismissTooltip={[Function]}
       tooltipContent={null}
       trackingProps={
-        Object {
+        {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
           "sharedLinkAccessMenuButtonProps": undefined,

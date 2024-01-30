@@ -28,7 +28,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -37,7 +37,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -75,7 +75,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -84,7 +84,7 @@ exports[`features/unified-share-modal/EmailForm render() should not show inline 
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -100,7 +100,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
   onSubmit={[Function]}
 >
   <CollaboratorAvatars
-    containerAttributes={Object {}}
+    containerAttributes={{}}
     maxAdditionalCollaboratorsNum={99}
     maxDisplayedUserAvatars={3}
   />
@@ -127,7 +127,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -136,7 +136,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -182,7 +182,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           disabled={true}
           error=""
           fieldRef={
-            Object {
+            {
               "current": null,
             }
           }
@@ -191,7 +191,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
           onContactAdd={[Function]}
           onContactRemove={[Function]}
           onInput={[Function]}
-          selectedContacts={Array []}
+          selectedContacts={[]}
           showContactAvatars={true}
           validateForError={[Function]}
           validator={[Function]}
@@ -268,7 +268,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -277,7 +277,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -353,7 +353,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -362,7 +362,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -405,7 +405,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -414,7 +414,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -495,7 +495,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -504,7 +504,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -580,7 +580,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -589,7 +589,7 @@ exports[`features/unified-share-modal/EmailForm render() should render default c
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -672,7 +672,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
           defaultMessage="Based on your usage, we think {fullName} would be interested in this file."
           id="boxui.unifiedShare.recommendedSharingTooltipCalloutText"
           values={
-            Object {
+            {
               "fullName": "Foo Bar",
             }
           }
@@ -684,7 +684,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -693,7 +693,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -731,7 +731,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -740,7 +740,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -778,7 +778,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -787,7 +787,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}
@@ -825,7 +825,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         disabled={false}
         error=""
         fieldRef={
-          Object {
+          {
             "current": null,
           }
         }
@@ -834,7 +834,7 @@ exports[`features/unified-share-modal/EmailForm render() should render tooltip a
         onContactAdd={[Function]}
         onContactRemove={[Function]}
         onInput={[Function]}
-        selectedContacts={Array []}
+        selectedContacts={[]}
         showContactAvatars={true}
         validateForError={[Function]}
         validator={[Function]}

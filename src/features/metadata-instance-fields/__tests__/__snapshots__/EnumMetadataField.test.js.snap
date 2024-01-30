@@ -10,23 +10,23 @@ exports[`features/metadata-instance-editor/fields/EnumMetadataField should corre
       isScrollable={true}
       onChange={[Function]}
       options={
-        Array [
-          Object {
+        [
+          {
             "displayText": undefined,
             "isSelectable": false,
             "value": undefined,
           },
-          Object {
+          {
             "displayText": "foo",
             "isSelectable": true,
             "value": "foo",
           },
-          Object {
+          {
             "displayText": "bar",
             "isSelectable": true,
             "value": "bar",
           },
-          Object {
+          {
             "displayText": "baz",
             "isSelectable": true,
             "value": "baz",
@@ -54,23 +54,23 @@ exports[`features/metadata-instance-editor/fields/EnumMetadataField should corre
       isScrollable={true}
       onChange={[Function]}
       options={
-        Array [
-          Object {
+        [
+          {
             "displayText": undefined,
             "isSelectable": false,
             "value": undefined,
           },
-          Object {
+          {
             "displayText": "foo",
             "isSelectable": true,
             "value": "foo",
           },
-          Object {
+          {
             "displayText": "bar",
             "isSelectable": true,
             "value": "bar",
           },
-          Object {
+          {
             "displayText": "baz",
             "isSelectable": true,
             "value": "baz",

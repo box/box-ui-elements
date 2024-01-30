@@ -6,9 +6,9 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
   isOpen={false}
   onRequestClose={[MockFunction]}
   style={
-    Object {
-      "backdrop": Object {},
-      "dialog": Object {},
+    {
+      "backdrop": {},
+      "dialog": {},
     }
   }
   title={
@@ -16,7 +16,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
       defaultMessage="View Classification for “{itemName}”"
       id="boxui.securityControls.modalTitle"
       values={
-        Object {
+        {
           "itemName": "welcome.pdf",
         }
       }
@@ -53,7 +53,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     <SecurityControlsItem
       key="0"
       message={
-        Object {
+        {
           "defaultMessage": "message1",
           "id": "msg1",
         }
@@ -62,7 +62,7 @@ exports[`features/classification/security-controls/SecurityControlsModal should 
     <SecurityControlsItem
       key="1"
       message={
-        Object {
+        {
           "defaultMessage": "message2",
           "id": "msg2",
         }

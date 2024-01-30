@@ -3,24 +3,24 @@
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 1`] = `
 <Router
   history={
-    Object {
-      "entries": Array [
-        Object {},
+    {
+      "entries": [
+        {},
       ],
       "listen": [MockFunction] {
-        "calls": Array [
-          Array [
+        "calls": [
+          [
             [Function],
           ],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
         ],
       },
-      "location": Object {
+      "location": {
         "hash": "",
         "pathname": "/activity/tasks/1234",
       },
@@ -30,7 +30,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
 >
   <PreviewNavigation
     collection={
-      Array [
+      [
         "a",
         "b",
         "c",
@@ -45,24 +45,24 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
     }
     currentIndex={0}
     history={
-      Object {
-        "entries": Array [
-          Object {},
+      {
+        "entries": [
+          {},
         ],
         "listen": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               [Function],
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
           ],
         },
-        "location": Object {
+        "location": {
           "hash": "",
           "pathname": "/activity/tasks/1234",
         },
@@ -70,18 +70,18 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       }
     }
     intl={
-      Object {
+      {
         "formatMessage": [MockFunction] {
-          "calls": Array [
-            Array [
-              Object {
+          "calls": [
+            [
+              {
                 "defaultMessage": "Next File",
                 "id": "be.nextFile",
               },
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
@@ -94,7 +94,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
   >
     <Route
       path={
-        Array [
+        [
           "/:activeTab/:deeplink",
           "/",
         ]
@@ -151,24 +151,24 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 2`] = `
 <Router
   history={
-    Object {
-      "entries": Array [
-        Object {},
+    {
+      "entries": [
+        {},
       ],
       "listen": [MockFunction] {
-        "calls": Array [
-          Array [
+        "calls": [
+          [
             [Function],
           ],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
         ],
       },
-      "location": Object {
+      "location": {
         "hash": "",
         "pathname": "/activity/tasks/1234",
       },
@@ -178,7 +178,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
 >
   <PreviewNavigation
     collection={
-      Array [
+      [
         "a",
         "b",
         "c",
@@ -193,24 +193,24 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
     }
     currentIndex={1}
     history={
-      Object {
-        "entries": Array [
-          Object {},
+      {
+        "entries": [
+          {},
         ],
         "listen": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               [Function],
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
           ],
         },
-        "location": Object {
+        "location": {
           "hash": "",
           "pathname": "/activity/tasks/1234",
         },
@@ -218,28 +218,28 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       }
     }
     intl={
-      Object {
+      {
         "formatMessage": [MockFunction] {
-          "calls": Array [
-            Array [
-              Object {
+          "calls": [
+            [
+              {
                 "defaultMessage": "Previous File",
                 "id": "be.previousFile",
               },
             ],
-            Array [
-              Object {
+            [
+              {
                 "defaultMessage": "Next File",
                 "id": "be.nextFile",
               },
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
-            Object {
+            {
               "type": "return",
               "value": undefined,
             },
@@ -252,7 +252,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
   >
     <Route
       path={
-        Array [
+        [
           "/:activeTab/:deeplink",
           "/",
         ]
@@ -352,24 +352,24 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 3`] = `
 <Router
   history={
-    Object {
-      "entries": Array [
-        Object {},
+    {
+      "entries": [
+        {},
       ],
       "listen": [MockFunction] {
-        "calls": Array [
-          Array [
+        "calls": [
+          [
             [Function],
           ],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
         ],
       },
-      "location": Object {
+      "location": {
         "hash": "",
         "pathname": "/activity/tasks/1234",
       },
@@ -379,7 +379,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
 >
   <PreviewNavigation
     collection={
-      Array [
+      [
         "a",
         "b",
         "c",
@@ -394,24 +394,24 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
     }
     currentIndex={9}
     history={
-      Object {
-        "entries": Array [
-          Object {},
+      {
+        "entries": [
+          {},
         ],
         "listen": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               [Function],
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
           ],
         },
-        "location": Object {
+        "location": {
           "hash": "",
           "pathname": "/activity/tasks/1234",
         },
@@ -419,18 +419,18 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       }
     }
     intl={
-      Object {
+      {
         "formatMessage": [MockFunction] {
-          "calls": Array [
-            Array [
-              Object {
+          "calls": [
+            [
+              {
                 "defaultMessage": "Previous File",
                 "id": "be.previousFile",
               },
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
@@ -443,7 +443,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
   >
     <Route
       path={
-        Array [
+        [
           "/:activeTab/:deeplink",
           "/",
         ]
@@ -500,24 +500,24 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with an empty collection 1`] = `
 <Router
   history={
-    Object {
-      "entries": Array [
-        Object {},
+    {
+      "entries": [
+        {},
       ],
       "listen": [MockFunction] {
-        "calls": Array [
-          Array [
+        "calls": [
+          [
             [Function],
           ],
         ],
-        "results": Array [
-          Object {
+        "results": [
+          {
             "type": "return",
             "value": undefined,
           },
         ],
       },
-      "location": Object {
+      "location": {
         "hash": "",
         "pathname": "/activity/tasks/1234",
       },
@@ -526,27 +526,27 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
   }
 >
   <PreviewNavigation
-    collection={Array []}
+    collection={[]}
     currentIndex={0}
     history={
-      Object {
-        "entries": Array [
-          Object {},
+      {
+        "entries": [
+          {},
         ],
         "listen": [MockFunction] {
-          "calls": Array [
-            Array [
+          "calls": [
+            [
               [Function],
             ],
           ],
-          "results": Array [
-            Object {
+          "results": [
+            {
               "type": "return",
               "value": undefined,
             },
           ],
         },
-        "location": Object {
+        "location": {
           "hash": "",
           "pathname": "/activity/tasks/1234",
         },
@@ -554,7 +554,7 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       }
     }
     intl={
-      Object {
+      {
         "formatMessage": [MockFunction],
       }
     }

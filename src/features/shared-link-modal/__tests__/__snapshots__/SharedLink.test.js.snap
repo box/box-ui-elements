@@ -3,18 +3,18 @@
 exports[`features/shared-link-modal/SharedLink should render a SharedLinkAccess 1`] = `
 <SharedLinkAccess
   accessDropdownMenuProps={
-    Object {
+    {
       "constrainToWindow": true,
     }
   }
   accessLevel="peopleWithTheLink"
   accessMenuButtonProps={
-    Object {
+    {
       "data-resin-thing": "menu",
     }
   }
   allowedAccessLevels={
-    Object {
+    {
       "peopleInThisItem": true,
       "peopleInYourCompany": true,
       "peopleWithTheLink": true,
@@ -26,7 +26,7 @@ exports[`features/shared-link-modal/SharedLink should render a SharedLinkAccess 
   itemType="folder"
   removeLink={[Function]}
   removeLinkButtonProps={
-    Object {
+    {
       "data-resin-thing": "remove",
     }
   }
@@ -42,7 +42,7 @@ exports[`features/shared-link-modal/SharedLink should render a TextInputWithCopy
     />
   }
   buttonProps={
-    Object {
+    {
       "data-resin-thing": "copy",
     }
   }

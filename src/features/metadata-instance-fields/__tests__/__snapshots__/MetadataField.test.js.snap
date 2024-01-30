@@ -22,7 +22,7 @@ exports[`features/metadata-instance-editor/fields/MetadataField should correctly
 exports[`features/metadata-instance-editor/fields/MetadataField should correctly render a multi-select field 1`] = `
 <MultiSelectMetadataField
   dataValue={
-    Array [
+    [
       "value",
     ]
   }

@@ -6,7 +6,7 @@ exports[`elements/content-sidebar/Skills/Timeline/Timeslice should correctly ren
   data-resin-target="foobar"
   onClick={[Function]}
   style={
-    Object {
+    {
       "left": "284px",
       "width": "6px",
     }
@@ -21,7 +21,7 @@ exports[`elements/content-sidebar/Skills/Timeline/Timeslice should correctly ren
   data-resin-target="foobar"
   onClick={[Function]}
   style={
-    Object {
+    {
       "left": "29px",
       "width": "6px",
     }
@@ -36,7 +36,7 @@ exports[`elements/content-sidebar/Skills/Timeline/Timeslice should correctly ren
   data-resin-target="foobar"
   onClick={[Function]}
   style={
-    Object {
+    {
       "left": "29px",
       "width": "29px",
     }

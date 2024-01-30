@@ -3,7 +3,7 @@
 exports[`components/label/Label should correctly render default element 1`] = `
 <StandardLabel
   labelContent={
-    Array [
+    [
       <span>
         My Label
       </span>,
@@ -20,7 +20,7 @@ exports[`components/label/Label should correctly render default element 1`] = `
 exports[`components/label/Label should render the hidden label when hideLabel is set 1`] = `
 <HiddenLabel
   labelContent={
-    Array [
+    [
       <span>
         My Label
       </span>,

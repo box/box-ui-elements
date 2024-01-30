@@ -32,21 +32,19 @@
     }
 }
 
-.is-responsive-web {
-    @include breakpoint($medium-screen) {
-        .bcs-NavButton {
-            width: $sidebarTabResponsiveSize;
-            height: $sidebarTabResponsiveSize;
-            margin-right: $bdl-grid-unit * 3;
+@include breakpoint($medium-screen) {
+    .bcs .bcs-NavButton {
+        width: $sidebarTabResponsiveSize;
+        height: $sidebarTabResponsiveSize;
+        margin-right: $bdl-grid-unit * 3;
 
-            &::before {
-                top: $sidebarTabResponsiveSize;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                width: auto;
-                height: 2px;
-            }
+        &::before {
+            top: $sidebarTabResponsiveSize;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: auto;
+            height: 2px;
         }
     }
 }

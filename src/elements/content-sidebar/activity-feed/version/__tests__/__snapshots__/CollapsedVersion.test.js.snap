@@ -11,7 +11,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
       defaultMessage="{numberOfCollaborators} collaborators uploaded v{versions}"
       id="be.versionMultipleUsersUploaded"
       values={
-        Object {
+        {
           "numberOfCollaborators": 2,
           "versions": <span
             className="bcs-Version-range"
@@ -48,7 +48,7 @@ exports[`elements/content-sidebar/ActivityFeed/version/CollapsedVersion should c
       defaultMessage="{name} uploaded v{versions}"
       id="be.versionUploadCollapsed"
       values={
-        Object {
+        {
           "name": <strong>
             Person one
           </strong>,

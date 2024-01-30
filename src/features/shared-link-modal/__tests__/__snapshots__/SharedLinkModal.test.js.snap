@@ -4,7 +4,7 @@ exports[`features/shared-link-modal/SharedLinkModal renderSharedLink() should re
 <SharedLink
   accessLevel="peopleWithTheLink"
   allowedAccessLevels={
-    Object {
+    {
       "peopleInThisItem": true,
       "peopleInYourCompany": true,
       "peopleWithTheLink": true,

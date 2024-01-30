@@ -8,7 +8,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
   gridContainerRole=""
   headerHeight={39}
   headerRowRenderer={[Function]}
-  headerStyle={Object {}}
+  headerStyle={{}}
   height={50}
   noRowsRenderer={[Function]}
   onRowsRendered={[Function]}
@@ -20,11 +20,11 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
   rowGetter={[Function]}
   rowHeight={52}
   rowRenderer={[Function]}
-  rowStyle={Object {}}
+  rowStyle={{}}
   scrollToAlignment="auto"
   scrollToIndex={-1}
   sort={[Function]}
-  style={Object {}}
+  style={{}}
   tabIndex={-1}
   width={100}
 >
@@ -39,7 +39,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
     headerRole="columnheader"
     label="Name"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
   <Column
@@ -53,7 +53,7 @@ exports[`features/virtualized-table/BaseVirtualizedTable should successfully ren
     headerRole="columnheader"
     label="Description"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
 </Table>

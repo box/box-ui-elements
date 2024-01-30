@@ -18,7 +18,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
       defaultMessage="{pageNumber} of {pageCount}"
       id="be.pagination.pageStatus"
       values={
-        Object {
+        {
           "pageCount": 1,
           "pageNumber": 1,
         }
@@ -59,7 +59,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
       defaultMessage="{pageNumber} of {pageCount}"
       id="be.pagination.pageStatus"
       values={
-        Object {
+        {
           "pageCount": 5,
           "pageNumber": 1,
         }
@@ -128,7 +128,7 @@ exports[`elements/Pagination/PaginationMenu should render a button and menu with
       defaultMessage="{pageNumber} of {pageCount}"
       id="be.pagination.pageStatus"
       values={
-        Object {
+        {
           "pageCount": 10,
           "pageNumber": 1,
         }

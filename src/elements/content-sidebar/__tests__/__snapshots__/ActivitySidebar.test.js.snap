@@ -8,9 +8,9 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
         isDisabled={false}
         onTaskModalClose={[Function]}
         taskFormProps={
-          Object {
+          {
             "approverSelectorContacts": undefined,
-            "approvers": Array [],
+            "approvers": [],
             "completionRule": "ALL_ASSIGNEES",
             "createTask": [Function],
             "getApproverWithQuery": [Function],
@@ -34,14 +34,14 @@ exports[`elements/content-sidebar/ActivitySidebar render() should render the act
 >
   <ActivityFeed
     currentUser={
-      Object {
+      {
         "id": "123",
         "name": "foo bar",
       }
     }
     file={
-      Object {
-        "file_version": Object {
+      {
+        "file_version": {
           "id": "123",
         },
         "id": "I_AM_A_FILE",

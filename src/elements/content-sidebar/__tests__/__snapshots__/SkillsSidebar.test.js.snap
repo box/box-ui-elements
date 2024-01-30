@@ -29,9 +29,9 @@ exports[`elements/content-sidebar/Skills/SkillsSidebar should render skills side
   }
 >
   <SidebarSkills
-    cards={Array []}
-    errors={Object {}}
-    file={Object {}}
+    cards={[]}
+    errors={{}}
+    file={{}}
     onSkillChange={[Function]}
   />
 </SidebarContent>

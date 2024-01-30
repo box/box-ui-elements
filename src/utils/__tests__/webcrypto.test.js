@@ -4,6 +4,16 @@ import { digest, getRandomValues } from '../webcrypto';
 jest.mock('js-sha1');
 
 describe('util/webcrypto', () => {
+    beforeEach(() => {
+        // eslint-disable-next-line no-undef
+        Object.defineProperty(globalThis, 'window', {
+            value: {
+                ...window,
+            },
+            writable: true,
+        });
+    });
+
     describe('getRandomValues()', () => {
         test('should call getRandomValues() to get an array of random values', () => {
             const getRandomValuesMock = jest.fn();

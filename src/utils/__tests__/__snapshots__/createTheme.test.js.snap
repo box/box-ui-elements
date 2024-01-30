@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/theme should generate accessible palette for dark primary 1`] = `
-Object {
-  "base": Object {
+{
+  "base": {
     "background": "#fff",
     "backgroundActive": "#e8e8e8",
     "backgroundHover": "#f4f4f4",
@@ -19,12 +19,12 @@ Object {
     "progressBarBackground": "#a7a7a7",
     "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
-  "modes": Object {
-    "admin": Object {},
-    "dark": Object {},
+  "modes": {
+    "admin": {},
+    "dark": {},
   },
-  "primary": Object {
-    "_debug": Object {
+  "primary": {
+    "_debug": {
       "colorRange": "vDark",
     },
     "background": "#000000",
@@ -47,8 +47,8 @@ Object {
 `;
 
 exports[`components/theme should generate accessible palette for light primary 1`] = `
-Object {
-  "base": Object {
+{
+  "base": {
     "background": "#fff",
     "backgroundActive": "#e8e8e8",
     "backgroundHover": "#f4f4f4",
@@ -65,12 +65,12 @@ Object {
     "progressBarBackground": "#a7a7a7",
     "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
-  "modes": Object {
-    "admin": Object {},
-    "dark": Object {},
+  "modes": {
+    "admin": {},
+    "dark": {},
   },
-  "primary": Object {
-    "_debug": Object {
+  "primary": {
+    "_debug": {
       "colorRange": "vLight",
     },
     "background": "#ffffff",
@@ -93,8 +93,8 @@ Object {
 `;
 
 exports[`components/theme should generate accessible palette for midtone grey 1`] = `
-Object {
-  "base": Object {
+{
+  "base": {
     "background": "#fff",
     "backgroundActive": "#e8e8e8",
     "backgroundHover": "#f4f4f4",
@@ -111,12 +111,12 @@ Object {
     "progressBarBackground": "#a7a7a7",
     "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
-  "modes": Object {
-    "admin": Object {},
-    "dark": Object {},
+  "modes": {
+    "admin": {},
+    "dark": {},
   },
-  "primary": Object {
-    "_debug": Object {
+  "primary": {
+    "_debug": {
       "colorRange": "midDark",
     },
     "background": "#6a6c6e",
@@ -139,8 +139,8 @@ Object {
 `;
 
 exports[`components/theme should generate accessible palette using color string 1`] = `
-Object {
-  "base": Object {
+{
+  "base": {
     "background": "#fff",
     "backgroundActive": "#e8e8e8",
     "backgroundHover": "#f4f4f4",
@@ -157,12 +157,12 @@ Object {
     "progressBarBackground": "#a7a7a7",
     "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
-  "modes": Object {
-    "admin": Object {},
-    "dark": Object {},
+  "modes": {
+    "admin": {},
+    "dark": {},
   },
-  "primary": Object {
-    "_debug": Object {
+  "primary": {
+    "_debug": {
       "colorRange": "midLight",
     },
     "background": "#ffc0cb",
@@ -185,8 +185,8 @@ Object {
 `;
 
 exports[`components/theme should generate box brand colors and merge into base theme 1`] = `
-Object {
-  "base": Object {
+{
+  "base": {
     "background": "#fff",
     "backgroundActive": "#e8e8e8",
     "backgroundHover": "#f4f4f4",
@@ -203,12 +203,12 @@ Object {
     "progressBarBackground": "#a7a7a7",
     "scrollShadowRgba": "rgba(0, 0, 0, 0.12)",
   },
-  "modes": Object {
-    "admin": Object {},
-    "dark": Object {},
+  "modes": {
+    "admin": {},
+    "dark": {},
   },
-  "primary": Object {
-    "_debug": Object {
+  "primary": {
+    "_debug": {
       "colorRange": "midDark",
     },
     "background": "#0061d5",

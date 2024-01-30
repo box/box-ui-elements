@@ -78,8 +78,8 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
     >
       <Component
         versions={
-          Array [
-            Object {
+          [
+            {
               "id": "12345",
             },
           ]

@@ -7,7 +7,7 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconClose with 
   isDisabled={false}
   position="top-center"
   text={
-    Object {
+    {
       "defaultMessage": "Cancel",
       "id": "be.cancel",
     }
@@ -35,7 +35,7 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconPencil with
   isDisabled={false}
   position="top-center"
   text={
-    Object {
+    {
       "defaultMessage": "Edit",
       "id": "be.editLabel",
     }
@@ -60,7 +60,7 @@ exports[`features/metadata-based-view/IconWithTooltip should get IconSave with T
   isDisabled={false}
   position="top-center"
   text={
-    Object {
+    {
       "defaultMessage": "Save",
       "id": "be.save",
     }

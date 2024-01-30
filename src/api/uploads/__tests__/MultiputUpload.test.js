@@ -654,7 +654,7 @@ describe('api/uploads/MultiputUpload', () => {
             // Execute
             multiputUploadTest.createSessionRetry();
 
-            clock.runTimersToTime(11);
+            clock.advanceTimersByTime(11);
             expect(uploadUtil.getBoundedExpBackoffRetryDelay).toHaveBeenCalledWith(5000, 60000, 5);
             expect(multiputUploadTest.makePreflightRequest).toHaveBeenCalled();
             expect(multiputUploadTest.createSessionNumRetriesPerformed).toBe(6);
