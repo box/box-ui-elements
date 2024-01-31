@@ -5,15 +5,17 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Avatar from '../../components/avatar';
 import Link from '../../components/link/LinkBase';
-import messages from './messages';
+import timeFromNow from '../../utils/relativeTime';
 import PresenceAvatar from './PresenceAvatar';
+import messages from './messages';
 import { determineInteractionMessage } from './utils/presenceUtils';
 
 import './PresenceCollaborator.scss';
 
 export const renderTimestampMessage = (interactedAt, interactionType, intl) => {
     const lastActionMessage = determineInteractionMessage(interactionType, interactedAt);
-    const timeAgo = intl.formatRelativeTime(interactedAt - Date.now());
+    const { value, unit } = timeFromNow(interactedAt);
+    const timeAgo = intl.formatRelativeTime(value, unit);
 
     if (lastActionMessage) {
         return (
