@@ -19,12 +19,12 @@ const timeFromNow = (ms: number) => {
         return { value: Math.trunc(diff / DAY_IN_MS), unit: 'day' };
     }
     if (Math.abs(diff) >= HOUR_IN_MS) {
-        return { value: Math.trunc((diff % DAY_IN_MS) / HOUR_IN_MS), unit: 'hour' };
+        return { value: Math.trunc(diff / HOUR_IN_MS), unit: 'hour' };
     }
     if (Math.abs(diff) >= MIN_IN_MS) {
-        return { value: Math.trunc((diff % HOUR_IN_MS) / MIN_IN_MS), unit: 'minute' };
+        return { value: Math.trunc(diff / MIN_IN_MS), unit: 'minute' };
     }
-    return { value: Math.trunc((diff % MIN_IN_MS) / SEC_IN_MS), unit: 'second' };
+    return { value: Math.trunc(diff / SEC_IN_MS), unit: 'second' };
 };
 
 export default timeFromNow;
