@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+import timeFromNow from '../../utils/relativeTime';
 // @ts-ignore flow import
 import messages from './messages';
 import './PresenceAvatarTooltipContent.scss';
@@ -15,7 +16,8 @@ export type Props = {
 
 function PresenceAvatarTooltipContent({ name, interactedAt, interactionType, intl, isActive }: Props): JSX.Element {
     const lastActionMessage = determineInteractionMessage(interactionType);
-    const timeAgo = intl.formatRelativeTime(interactedAt - Date.now());
+    const { value, unit } = timeFromNow(interactedAt);
+    const timeAgo = intl.formatRelativeTime(value, unit as Intl.RelativeTimeFormatUnit);
 
     return (
         <div className="bdl-PresenceAvatarTooltipContent">
