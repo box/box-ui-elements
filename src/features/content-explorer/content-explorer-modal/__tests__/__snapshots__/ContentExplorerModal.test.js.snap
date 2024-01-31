@@ -4,6 +4,7 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
 <Modal
   className="content-explorer-modal"
   isOpen={true}
+  shouldNotUsePortal={false}
   style={
     {
       "backdrop": {},
