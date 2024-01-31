@@ -12,7 +12,7 @@ exports[`features/shared-link-modal/AccessLabel render() should render correctly
   defaultMessage="People in {enterpriseName}"
   id="boxui.share.peopleInEnterprise"
   values={
-    Object {
+    {
       "enterpriseName": "Box",
     }
   }

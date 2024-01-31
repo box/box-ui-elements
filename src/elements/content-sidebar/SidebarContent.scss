@@ -39,15 +39,13 @@
     }
 }
 
-.is-responsive-web {
-    @include breakpoint($medium-screen) {
-        .bcs-content {
-            flex-basis: 100%;
-            width: auto;
+@include breakpoint($medium-screen) {
+    .bcs-content {
+        flex-basis: 100%;
+        width: auto;
 
-            .bcs-scroll-content {
-                width: auto;
-            }
+        .bcs-scroll-content {
+            width: auto;
         }
     }
 }

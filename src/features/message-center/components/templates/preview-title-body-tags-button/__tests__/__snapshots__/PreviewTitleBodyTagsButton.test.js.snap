@@ -18,14 +18,14 @@ exports[`components/message-center/components/templates/preview-title-body-tags-
     />
     <MessageFooter
       actionItem={
-        Object {
-          "actions": Array [
-            Object {
+        {
+          "actions": [
+            {
               "target": "_blank",
               "type": "openURL",
               "url": "https://support.box.com/hc/en-us",
             },
-            Object {
+            {
               "type": "close",
             },
           ],

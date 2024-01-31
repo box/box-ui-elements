@@ -15,7 +15,7 @@ exports[`elements/content-open-with/OpenWithDropdownMenu should render a button 
   >
     <OpenWithDropdownMenuItem
       integration={
-        Object {
+        {
           "appIntegrationId": 1,
           "displayName": "Google Docs",
         }

@@ -41,8 +41,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
-                Array [
-                  Object {
+                [
+                  {
                     "attachment": "together",
                     "to": "window",
                   },
@@ -81,7 +81,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                       defaultMessage="{pageNumber} of {pageCount}"
                       id="be.pagination.pageStatus"
                       values={
-                        Object {
+                        {
                           "pageCount": 5,
                           "pageNumber": 1,
                         }
@@ -188,8 +188,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -309,8 +309,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
-                Array [
-                  Object {
+                [
+                  {
                     "attachment": "together",
                     "to": "window",
                   },
@@ -349,7 +349,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                       defaultMessage="{pageNumber} of {pageCount}"
                       id="be.pagination.pageStatus"
                       values={
-                        Object {
+                        {
                           "pageCount": 5,
                           "pageNumber": 1,
                         }
@@ -456,8 +456,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -577,8 +577,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
-                Array [
-                  Object {
+                [
+                  {
                     "attachment": "together",
                     "to": "window",
                   },
@@ -617,7 +617,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                       defaultMessage="{pageNumber} of {pageCount}"
                       id="be.pagination.pageStatus"
                       values={
-                        Object {
+                        {
                           "pageCount": 5,
                           "pageNumber": 1,
                         }
@@ -724,8 +724,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -845,8 +845,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
-                Array [
-                  Object {
+                [
+                  {
                     "attachment": "together",
                     "to": "window",
                   },
@@ -885,7 +885,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                       defaultMessage="{pageNumber} of {pageCount}"
                       id="be.pagination.pageStatus"
                       values={
-                        Object {
+                        {
                           "pageCount": 5,
                           "pageNumber": 2,
                         }
@@ -933,8 +933,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -1034,8 +1034,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -1155,8 +1155,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
-                Array [
-                  Object {
+                [
+                  {
                     "attachment": "together",
                     "to": "window",
                   },
@@ -1195,7 +1195,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                       defaultMessage="{pageNumber} of {pageCount}"
                       id="be.pagination.pageStatus"
                       values={
-                        Object {
+                        {
                           "pageCount": 5,
                           "pageNumber": 4,
                         }
@@ -1243,8 +1243,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -1344,8 +1344,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },
@@ -1465,8 +1465,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
               className="bdl-Pagination-dropdown"
               classPrefix="dropdown-menu"
               constraints={
-                Array [
-                  Object {
+                [
+                  {
                     "attachment": "together",
                     "to": "window",
                   },
@@ -1505,7 +1505,7 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                       defaultMessage="{pageNumber} of {pageCount}"
                       id="be.pagination.pageStatus"
                       values={
-                        Object {
+                        {
                           "pageCount": 5,
                           "pageNumber": 5,
                         }
@@ -1553,8 +1553,8 @@ exports[`elements/Pagination/OffsetBasedPagination should render properly with o
                 bodyElement={<body />}
                 classPrefix="tooltip"
                 constraints={
-                  Array [
-                    Object {
+                  [
+                    {
                       "attachment": "together",
                       "to": "window",
                     },

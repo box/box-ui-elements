@@ -13,7 +13,7 @@ exports[`elements/content-sidebar/ActivityFeed/Avatar should set the avatarUrl s
   avatarUrl={null}
   id="foo"
   intl={
-    Object {
+    {
       "formatDate": [Function],
       "formatMessage": [Function],
       "formatNumber": [Function],

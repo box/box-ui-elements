@@ -6,16 +6,16 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
     className="bdl-DraggableVirtualizedTable"
     height={195}
     rowData={
-      Array [
-        Object {
+      [
+        {
           "description": "description1",
           "name": "name1",
         },
-        Object {
+        {
           "description": "description2",
           "name": "name2",
         },
-        Object {
+        {
           "description": "description3",
           "name": "name3",
         },
@@ -36,7 +36,7 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
       headerRenderer={[Function]}
       headerRole="columnheader"
       role="gridcell"
-      style={Object {}}
+      style={{}}
       width={24}
     />
     <Column
@@ -50,7 +50,7 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
       headerRole="columnheader"
       label="Name"
       role="gridcell"
-      style={Object {}}
+      style={{}}
       width={100}
     />
     <Column
@@ -64,7 +64,7 @@ exports[`features/virtualized-table/DraggableVirtualizedTable should render a Dr
       headerRole="columnheader"
       label="Description"
       role="gridcell"
-      style={Object {}}
+      style={{}}
       width={100}
     />
   </VirtualizedTable>

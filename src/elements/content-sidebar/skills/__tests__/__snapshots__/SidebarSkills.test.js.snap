@@ -3,20 +3,20 @@
 exports[`elements/content-sidebar/Skills/SidebarSkills should have no editable permission if can_upload is false 1`] = `
 <SidebarSkills
   cards={
-    Array [
-      Object {
-        "entries": Array [
-          Object {
+    [
+      {
+        "entries": [
+          {
             "title": "bar",
           },
         ],
       },
     ]
   }
-  errors={Object {}}
+  errors={{}}
   file={
-    Object {
-      "permissions": Object {
+    {
+      "permissions": {
         "can_upload": false,
       },
     }
@@ -36,19 +36,19 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should have no editable p
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [
-            Object {
+        {
+          "entries": [
+            {
               "title": "bar",
             },
           ],
         }
       }
       cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {
+        [
+          {
+            "entries": [
+              {
                 "title": "bar",
               },
             ],
@@ -67,11 +67,11 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should have no editable p
 exports[`elements/content-sidebar/Skills/SidebarSkills should render only the valid cards 1`] = `
 <SidebarSkills
   cards={
-    Array [
-      Object {},
-      Object {
-        "entries": Array [
-          Object {
+    [
+      {},
+      {
+        "entries": [
+          {
             "title": "bar",
           },
         ],
@@ -79,13 +79,13 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render only the va
     ]
   }
   errors={
-    Object {
+    {
       "1": true,
     }
   }
   file={
-    Object {
-      "permissions": Object {
+    {
+      "permissions": {
         "can_upload": true,
       },
     }
@@ -105,20 +105,20 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render only the va
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [
-            Object {
+        {
+          "entries": [
+            {
               "title": "bar",
             },
           ],
         }
       }
       cards={
-        Array [
-          Object {},
-          Object {
-            "entries": Array [
-              Object {
+        [
+          {},
+          {
+            "entries": [
+              {
                 "title": "bar",
               },
             ],
@@ -137,60 +137,60 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render only the va
 exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards when there are valid skills 1`] = `
 <SidebarSkills
   cards={
-    Array [
-      Object {
-        "entries": Array [
-          Object {},
+    [
+      {
+        "entries": [
+          {},
         ],
-        "skill_card_title": Object {
+        "skill_card_title": {
           "code": "skills_faces",
         },
       },
-      Object {
-        "entries": Array [],
-        "skill_card_title": Object {
+      {
+        "entries": [],
+        "skill_card_title": {
           "code": "skills_transcript",
         },
       },
-      Object {
-        "entries": Array [],
-        "skill_card_title": Object {
+      {
+        "entries": [],
+        "skill_card_title": {
           "code": "skills_topics",
         },
       },
-      Object {
-        "entries": Array [
-          Object {},
+      {
+        "entries": [
+          {},
         ],
-        "skill_card_title": Object {
+        "skill_card_title": {
           "code": "skills_status",
         },
       },
-      Object {
-        "entries": Array [],
-        "skill_card_title": Object {
+      {
+        "entries": [],
+        "skill_card_title": {
           "code": "skills_error",
         },
       },
-      Object {
-        "entries": Array [
-          Object {},
+      {
+        "entries": [
+          {},
         ],
-        "skill_card_title": Object {
+        "skill_card_title": {
           "message": "title",
         },
       },
     ]
   }
   errors={
-    Object {
+    {
       "3": true,
       "5": true,
     }
   }
   file={
-    Object {
-      "permissions": Object {
+    {
+      "permissions": {
         "can_upload": true,
       },
     }
@@ -210,56 +210,56 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [
-            Object {},
+        {
+          "entries": [
+            {},
           ],
-          "skill_card_title": Object {
+          "skill_card_title": {
             "code": "skills_faces",
           },
         }
       }
       cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {},
+        [
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_faces",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_transcript",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_topics",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_status",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_error",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "message": "title",
             },
           },
@@ -284,54 +284,54 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [],
-          "skill_card_title": Object {
+        {
+          "entries": [],
+          "skill_card_title": {
             "code": "skills_transcript",
           },
         }
       }
       cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {},
+        [
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_faces",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_transcript",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_topics",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_status",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_error",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "message": "title",
             },
           },
@@ -356,54 +356,54 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [],
-          "skill_card_title": Object {
+        {
+          "entries": [],
+          "skill_card_title": {
             "code": "skills_topics",
           },
         }
       }
       cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {},
+        [
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_faces",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_transcript",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_topics",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_status",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_error",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "message": "title",
             },
           },
@@ -428,56 +428,56 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [
-            Object {},
+        {
+          "entries": [
+            {},
           ],
-          "skill_card_title": Object {
+          "skill_card_title": {
             "code": "skills_status",
           },
         }
       }
       cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {},
+        [
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_faces",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_transcript",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_topics",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_status",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_error",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "message": "title",
             },
           },
@@ -502,54 +502,54 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [],
-          "skill_card_title": Object {
+        {
+          "entries": [],
+          "skill_card_title": {
             "code": "skills_error",
           },
         }
       }
       cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {},
+        [
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_faces",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_transcript",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_topics",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_status",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_error",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "message": "title",
             },
           },
@@ -569,56 +569,56 @@ exports[`elements/content-sidebar/Skills/SidebarSkills should render the cards w
   >
     <sidebar-skills-card
       card={
-        Object {
-          "entries": Array [
-            Object {},
+        {
+          "entries": [
+            {},
           ],
-          "skill_card_title": Object {
+          "skill_card_title": {
             "message": "title",
           },
         }
       }
       cards={
-        Array [
-          Object {
-            "entries": Array [
-              Object {},
+        [
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_faces",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_transcript",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_topics",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "code": "skills_status",
             },
           },
-          Object {
-            "entries": Array [],
-            "skill_card_title": Object {
+          {
+            "entries": [],
+            "skill_card_title": {
               "code": "skills_error",
             },
           },
-          Object {
-            "entries": Array [
-              Object {},
+          {
+            "entries": [
+              {},
             ],
-            "skill_card_title": Object {
+            "skill_card_title": {
               "message": "title",
             },
           },

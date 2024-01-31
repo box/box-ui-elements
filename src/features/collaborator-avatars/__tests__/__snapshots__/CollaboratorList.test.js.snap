@@ -28,7 +28,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
   >
     <CollaboratorListItem
       collaborator={
-        Object {
+        {
           "collabID": 1,
           "email": "testa@example.com",
           "hasCustomAvatar": false,
@@ -40,7 +40,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
       index={0}
       key="1-user"
       trackingProps={
-        Object {
+        {
           "emailProps": undefined,
           "usernameProps": undefined,
         }
@@ -48,7 +48,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
     />
     <CollaboratorListItem
       collaborator={
-        Object {
+        {
           "collabID": 2,
           "email": "testb@example.com",
           "name": "test b",
@@ -59,7 +59,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
       index={1}
       key="2-user"
       trackingProps={
-        Object {
+        {
           "emailProps": undefined,
           "usernameProps": undefined,
         }
@@ -67,7 +67,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
     />
     <CollaboratorListItem
       collaborator={
-        Object {
+        {
           "collabID": 3,
           "email": "testc@example.com",
           "hasCustomAvatar": true,
@@ -81,7 +81,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render d
       index={2}
       key="3-user"
       trackingProps={
-        Object {
+        {
           "emailProps": undefined,
           "usernameProps": undefined,
         }
@@ -132,7 +132,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
   >
     <CollaboratorListItem
       collaborator={
-        Object {
+        {
           "collabID": 1,
           "email": "testa@example.com",
           "hasCustomAvatar": false,
@@ -144,7 +144,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
       index={0}
       key="1-user"
       trackingProps={
-        Object {
+        {
           "emailProps": undefined,
           "usernameProps": undefined,
         }
@@ -152,7 +152,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
     />
     <CollaboratorListItem
       collaborator={
-        Object {
+        {
           "collabID": 2,
           "email": "testb@example.com",
           "name": "test b",
@@ -163,7 +163,7 @@ exports[`features/collaborator-avatars/CollaboratorList render() should render e
       index={1}
       key="2-user"
       trackingProps={
-        Object {
+        {
           "emailProps": undefined,
           "usernameProps": undefined,
         }

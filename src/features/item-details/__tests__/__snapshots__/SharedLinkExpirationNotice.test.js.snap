@@ -6,7 +6,7 @@ exports[`features/item-details/SharedLinkExpirationNotice should accept node as 
     defaultMessage="This shared link will be disabled on {expiration}."
     id="boxui.itemDetails.sharedLinkExpiration"
     values={
-      Object {
+      {
         "expiration": <FormattedDate
           value="1517533810845"
         />,
@@ -22,7 +22,7 @@ exports[`features/item-details/SharedLinkExpirationNotice should render default 
     defaultMessage="This shared link will be disabled on {expiration}."
     id="boxui.itemDetails.sharedLinkExpiration"
     values={
-      Object {
+      {
         "expiration": "May 27, 2018",
       }
     }

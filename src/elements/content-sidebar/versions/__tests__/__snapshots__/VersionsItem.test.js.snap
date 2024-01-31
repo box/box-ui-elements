@@ -30,7 +30,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
           defaultMessage="Deleted by {name}"
           id="be.sidebarVersions.deletedBy"
           values={
-            Object {
+            {
               "name": "Test User",
               "versionPromoted": undefined,
             }
@@ -106,7 +106,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
           defaultMessage="Restored by {name}"
           id="be.sidebarVersions.restoredBy"
           values={
-            Object {
+            {
               "name": "Test User",
               "versionPromoted": undefined,
             }
@@ -182,7 +182,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
           defaultMessage="Uploaded by {name}"
           id="be.sidebarVersions.uploadedBy"
           values={
-            Object {
+            {
               "name": "Test User",
               "versionPromoted": undefined,
             }

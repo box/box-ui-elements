@@ -9,7 +9,7 @@ import {
 
 jest.mock('../../Folder');
 jest.mock('../../../utils/uploads', () => ({
-    ...require.requireActual('../../../utils/uploads'),
+    ...jest.requireActual('../../../utils/uploads'),
     getFileFromEntry: jest.fn(entry => entry),
 }));
 

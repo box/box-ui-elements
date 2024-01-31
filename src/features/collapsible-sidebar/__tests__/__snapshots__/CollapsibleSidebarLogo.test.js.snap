@@ -37,7 +37,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 1`] = `
       </span>
     }
     intl={
-      Object {
+      {
         "formatDate": [Function],
         "formatMessage": [Function],
         "formatNumber": [Function],
@@ -199,7 +199,7 @@ exports[`components/core/collapsible-sidebar/CollapsibleSidebar render 2`] = `
   <CollapsibleSidebarLogo
     canEndTrial={true}
     intl={
-      Object {
+      {
         "formatDate": [Function],
         "formatMessage": [Function],
         "formatNumber": [Function],

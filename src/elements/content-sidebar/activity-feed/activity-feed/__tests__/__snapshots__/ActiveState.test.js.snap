@@ -16,12 +16,12 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should c
   <ActiveState
     currentFileVersionId="123"
     currentUser={
-      Object {
+      {
         "id": "user_123445",
         "name": "Rihanna",
       }
     }
-    items={Array []}
+    items={[]}
     onAnnotationSelect={[Function]}
   />
 </Fragment>
@@ -31,12 +31,12 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
 <ActiveState
   currentFileVersionId="123"
   currentUser={
-    Object {
+    {
       "id": "user_123445",
       "name": "Rihanna",
     }
   }
-  items={Array []}
+  items={[]}
   onAnnotationSelect={[Function]}
 />
 `;
@@ -55,7 +55,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
   >
     <ActivityThread
       currentUser={
-        Object {
+        {
           "id": "user_123445",
           "name": "Rihanna",
         }
@@ -72,28 +72,28 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
     >
       <AnnotationActivity
         currentUser={
-          Object {
+          {
             "id": "user_123445",
             "name": "Rihanna",
           }
         }
         isCurrentVersion={true}
         item={
-          Object {
+          {
             "created_at": "2018-07-03T14:43:52-07:00",
-            "created_by": Object {
+            "created_by": {
               "id": "user_123445",
               "name": "Rihanna",
             },
-            "description": Object {
+            "description": {
               "message": "This is an annotation",
             },
-            "file_version": Object {
+            "file_version": {
               "id": "123",
             },
             "id": "anno_123",
-            "target": Object {
-              "location": Object {
+            "target": {
+              "location": {
                 "type": "page",
                 "value": 1,
               },
@@ -115,7 +115,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
   >
     <ActivityThread
       currentUser={
-        Object {
+        {
           "id": "user_123445",
           "name": "Rihanna",
         }
@@ -133,13 +133,13 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       <Comment
         created_at="2018-07-03T14:43:52-07:00"
         created_by={
-          Object {
+          {
             "id": 11,
             "name": "Akon",
           }
         }
         currentUser={
-          Object {
+          {
             "id": "user_123445",
             "name": "Rihanna",
           }
@@ -149,7 +149,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
         onEdit={[Function]}
         onSelect={[Function]}
         permissions={
-          Object {
+          {
             "can_delete": false,
             "can_edit": false,
             "can_reply": false,
@@ -171,7 +171,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       id="f_123"
       modified_at="2018-07-03T14:43:52-07:00"
       modified_by={
-        Object {
+        {
           "id": 11,
           "name": "Akon",
         }
@@ -188,17 +188,17 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
   >
     <ForwardRef
       assigned_to={
-        Object {
-          "entries": Array [
-            Object {
+        {
+          "entries": [
+            {
               "id": "ta_123",
-              "permissions": Object {
+              "permissions": {
                 "can_delete": true,
                 "can_update": true,
               },
               "role": "ASSIGNEE",
               "status": "NOT_STARTED",
-              "target": Object {
+              "target": {
                 "id": 11,
                 "name": "Akon",
               },
@@ -211,15 +211,15 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       created_at="2018-07-03T14:43:52-07:00"
       created_by={
-        Object {
-          "target": Object {
+        {
+          "target": {
             "id": 11,
             "name": "Akon",
           },
         }
       }
       currentUser={
-        Object {
+        {
           "id": "user_123445",
           "name": "Rihanna",
         }
@@ -229,7 +229,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       id="t_345"
       modified_at="2018-07-03T14:43:52-07:00"
       permissions={
-        Object {
+        {
           "can_create_task_collaborator": true,
           "can_create_task_link": true,
           "can_delete": true,
@@ -238,10 +238,10 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       status="NOT_STARTED"
       task_links={
-        Object {
-          "entries": Array [
-            Object {
-              "target": Object {
+        {
+          "entries": [
+            {
+              "target": {
                 "id": "f_123",
                 "type": "file",
               },
@@ -260,12 +260,12 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
   >
     <AppActivity
       activity_template={
-        Object {
+        {
           "id": "template_09887654",
         }
       }
       app={
-        Object {
+        {
           "icon_url": "foo.jpg",
           "id": "app_123456",
           "name": "My App",
@@ -273,19 +273,19 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       }
       created_at="2018-07-03T14:43:52-07:00"
       created_by={
-        Object {
+        {
           "id": "user_12345567",
         }
       }
       currentUser={
-        Object {
+        {
           "id": "user_123445",
           "name": "Rihanna",
         }
       }
       id="app_activity_12344556"
       permissions={
-        Object {
+        {
           "can_delete": true,
         }
       }

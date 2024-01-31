@@ -5,7 +5,7 @@ exports[`elements/content-open-with/BoxToolsInstallMessage render should render 
   defaultMessage="Install {boxTools} to open this file on your desktop"
   id="be.boxToolsInstallMessage"
   values={
-    Object {
+    {
       "boxTools": <a
         href="#"
         onClick={[Function]}
@@ -23,7 +23,7 @@ exports[`elements/content-open-with/BoxToolsInstallMessage render should use pas
   defaultMessage="Install {boxTools} to open this file on your desktop"
   id="be.boxToolsInstallMessage"
   values={
-    Object {
+    {
       "boxTools": <a
         href="#"
         onClick={[Function]}

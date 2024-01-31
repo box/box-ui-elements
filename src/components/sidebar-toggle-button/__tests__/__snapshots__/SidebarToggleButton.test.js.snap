@@ -6,7 +6,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
 >
   <SidebarToggleButton
     intl={
-      Object {
+      {
         "formatDate": [Function],
         "formatMessage": [Function],
         "formatNumber": [Function],
@@ -28,8 +28,8 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         bodyElement={<body />}
         classPrefix="tooltip"
         constraints={
-          Array [
-            Object {
+          [
+            {
               "attachment": "together",
               "to": "window",
             },
@@ -104,7 +104,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
   <SidebarToggleButton
     direction="left"
     intl={
-      Object {
+      {
         "formatDate": [Function],
         "formatMessage": [Function],
         "formatNumber": [Function],
@@ -126,8 +126,8 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         bodyElement={<body />}
         classPrefix="tooltip"
         constraints={
-          Array [
-            Object {
+          [
+            {
               "attachment": "together",
               "to": "window",
             },
@@ -202,7 +202,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
   <SidebarToggleButton
     direction="left"
     intl={
-      Object {
+      {
         "formatDate": [Function],
         "formatMessage": [Function],
         "formatNumber": [Function],
@@ -224,8 +224,8 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         bodyElement={<body />}
         classPrefix="tooltip"
         constraints={
-          Array [
-            Object {
+          [
+            {
               "attachment": "together",
               "to": "window",
             },
@@ -298,7 +298,7 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
 >
   <SidebarToggleButton
     intl={
-      Object {
+      {
         "formatDate": [Function],
         "formatMessage": [Function],
         "formatNumber": [Function],
@@ -320,8 +320,8 @@ exports[`components/sidebar-toggle-button/SidebarToggleButton should render corr
         bodyElement={<body />}
         classPrefix="tooltip"
         constraints={
-          Array [
-            Object {
+          [
+            {
               "attachment": "together",
               "to": "window",
             },

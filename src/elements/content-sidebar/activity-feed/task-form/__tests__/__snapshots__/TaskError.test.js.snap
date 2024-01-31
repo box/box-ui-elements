@@ -4,7 +4,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="CREATE"
   error={
-    Object {
+    {
       "status": 403,
     }
   }
@@ -47,7 +47,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="CREATE"
   error={
-    Object {
+    {
       "status": 404,
     }
   }
@@ -97,7 +97,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="EDIT"
   error={
-    Object {
+    {
       "status": 403,
     }
   }
@@ -140,7 +140,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="EDIT"
   error={
-    Object {
+    {
       "status": 404,
     }
   }
@@ -190,7 +190,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="CREATE"
   error={
-    Object {
+    {
       "code": "group_exceeds_limit",
     }
   }
@@ -221,7 +221,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
           defaultMessage="One or more groups can not receive this task as a group size cannot exceed the limit of {max} assignees per group."
           id="be.api.taskGroupExceedsWarningTitle"
           values={
-            Object {
+            {
               "max": 250,
             }
           }
@@ -238,7 +238,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="CREATE"
   error={
-    Object {
+    {
       "status": 403,
     }
   }
@@ -281,7 +281,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="CREATE"
   error={
-    Object {
+    {
       "status": 404,
     }
   }
@@ -331,7 +331,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="EDIT"
   error={
-    Object {
+    {
       "status": 403,
     }
   }
@@ -374,7 +374,7 @@ exports[`components/content-sidebar/activity-feed/task-form/TaskError when type 
 <TaskError
   editMode="EDIT"
   error={
-    Object {
+    {
       "status": 404,
     }
   }

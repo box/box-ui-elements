@@ -35,7 +35,7 @@ exports[`components/pill-selector-dropdown/PillSelector render() should render d
       placeholder=""
     />
     <SuggestedPillsRow
-      selectedPillsValues={Array []}
+      selectedPillsValues={[]}
     />
     <span
       className="accessibility-hidden"

@@ -10,8 +10,8 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     contentExplorerMode="selectFile"
     customInput={[Function]}
     foldersPath={
-      Array [
-        Object {
+      [
+        {
           "id": "0",
           "name": "folder",
         },
@@ -22,13 +22,13 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     onExitSearch={[Function]}
     onFoldersPathUpdated={[Function]}
     onSearchSubmit={[Function]}
-    searchInputProps={Object {}}
+    searchInputProps={{}}
   />
   <ItemList
     contentExplorerMode="selectFile"
     height={500}
     isResponsive={false}
-    items={Array []}
+    items={[]}
     noItemsRenderer={[Function]}
     numItemsPerPage={100}
     numTotalItems={100}
@@ -36,18 +36,18 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     onItemDoubleClick={[Function]}
     onItemNameClick={[Function]}
     onLoadMoreItems={[Function]}
-    selectedItems={Object {}}
+    selectedItems={{}}
     width={500}
   />
   <ContentExplorerActionButtons
-    actionButtonsProps={Object {}}
+    actionButtonsProps={{}}
     areButtonsDisabled={true}
     canIncludeSubfolders={false}
-    cancelButtonProps={Object {}}
-    chooseButtonProps={Object {}}
+    cancelButtonProps={{}}
+    chooseButtonProps={{}}
     contentExplorerMode="selectFile"
     currentFolder={
-      Object {
+      {
         "id": "0",
         "name": "folder",
       }
@@ -55,7 +55,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorer render() cus
     isNoSelectionAllowed={false}
     isResponsive={false}
     onFoldersPathUpdated={[Function]}
-    selectedItems={Object {}}
+    selectedItems={{}}
   />
 </div>
 `;

@@ -7,7 +7,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   disabled={false}
   error={null}
   inputProps={
-    Object {
+    {
       "name": undefined,
     }
   }
@@ -19,18 +19,18 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onSelect={[Function]}
   parseItems={[Function]}
   placeholder=""
-  selectedOptions={Array []}
+  selectedOptions={[]}
   selectorOptions={
-    Array [
-      Object {
+    [
+      {
         "displayText": "value1",
         "value": "value1",
       },
-      Object {
+      {
         "displayText": "value2",
         "value": "value2",
       },
-      Object {
+      {
         "displayText": "value3",
         "value": "value3",
       },
@@ -65,7 +65,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   disabled={false}
   error={null}
   inputProps={
-    Object {
+    {
       "name": undefined,
     }
   }
@@ -77,8 +77,8 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onSelect={[Function]}
   parseItems={[Function]}
   placeholder=""
-  selectedOptions={Array []}
-  selectorOptions={Array []}
+  selectedOptions={[]}
+  selectorOptions={[]}
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={true}
   validator={[Function]}
@@ -92,7 +92,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   disabled={false}
   error="error"
   inputProps={
-    Object {
+    {
       "name": "pill",
     }
   }
@@ -104,8 +104,8 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdownField should rend
   onSelect={[Function]}
   parseItems={[Function]}
   placeholder=""
-  selectedOptions={Array []}
-  selectorOptions={Array []}
+  selectedOptions={[]}
+  selectorOptions={[]}
   shouldClearUnmatchedInput={false}
   shouldSetActiveItemOnOpen={true}
   validator={[Function]}

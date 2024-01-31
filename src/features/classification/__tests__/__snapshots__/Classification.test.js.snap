@@ -86,8 +86,8 @@ exports[`features/classification/Classification should render a classified badge
   <SecurityControls
     classificationName="Confidential"
     controls={
-      Object {
-        "sharedLink": Object {
+      {
+        "sharedLink": {
           "accessLevel": "collabOnly",
         },
       }
@@ -107,7 +107,7 @@ exports[`features/classification/Classification should render classification las
   defaultMessage="Imported from {modifiedBy} on {modifiedAt}"
   id="boxui.classification.importedBy"
   values={
-    Object {
+    {
       "modifiedAt": <FormattedDate
         day="numeric"
         month="long"
@@ -126,7 +126,7 @@ exports[`features/classification/Classification should render classification las
   defaultMessage="Applied by {modifiedBy} on {modifiedAt}"
   id="boxui.classification.modifiedBy"
   values={
-    Object {
+    {
       "modifiedAt": <FormattedDate
         day="numeric"
         month="long"
@@ -145,7 +145,7 @@ exports[`features/classification/Classification should render classification las
   defaultMessage="Applied by {modifiedBy} on {modifiedAt}"
   id="boxui.classification.modifiedBy"
   values={
-    Object {
+    {
       "modifiedAt": <FormattedDate
         day="numeric"
         month="long"

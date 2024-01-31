@@ -39,6 +39,8 @@ class NewFolderModal extends Component {
         isCreatingFolder: PropTypes.bool,
         /** Message that will be shown when there was an error creating the folder. */
         createFolderError: PropTypes.string,
+        /** Whether the modal should be nested in a Portal or in a div */
+        shouldNotUsePortal: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -47,6 +49,7 @@ class NewFolderModal extends Component {
         parentFolderName: '',
         isCreatingFolder: false,
         createFolderError: null,
+        shouldNotUsePortal: false,
     };
 
     constructor(props) {
@@ -82,6 +85,7 @@ class NewFolderModal extends Component {
             parentFolderName,
             isCreatingFolder,
             createFolderError,
+            shouldNotUsePortal,
         } = this.props;
         const { folderNameInput } = this.state;
 
@@ -93,6 +97,7 @@ class NewFolderModal extends Component {
                 focusElementSelector=".folder-name-input input"
                 isOpen={isOpen}
                 onRequestClose={onRequestClose}
+                shouldNotUsePortal={shouldNotUsePortal}
                 title={
                     <FormattedMessage
                         {...messages.newFolderModalTitle}

@@ -4,18 +4,18 @@ exports[`elements/content-sidebar/Skills/Keywords/ReadOnlyKeywords should correc
 <Fragment>
   <PillCloud
     buttonProps={
-      Object {
+      {
         "data-resin-target": "skill-keywordselect",
       }
     }
     onSelect={[Function]}
     options={
-      Array [
-        Object {
+      [
+        {
           "displayText": "foo",
           "value": 0,
         },
-        Object {
+        {
           "displayText": "bar",
           "value": 1,
         },
@@ -29,18 +29,18 @@ exports[`elements/content-sidebar/Skills/Keywords/ReadOnlyKeywords should correc
 <Fragment>
   <PillCloud
     buttonProps={
-      Object {
+      {
         "data-resin-target": "skill-keywordselect",
       }
     }
     onSelect={[Function]}
     options={
-      Array [
-        Object {
+      [
+        {
           "displayText": "foo",
           "value": 0,
         },
-        Object {
+        {
           "displayText": "bar",
           "value": 1,
         },

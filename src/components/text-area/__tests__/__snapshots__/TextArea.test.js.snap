@@ -21,7 +21,7 @@ exports[`components/text-area/TextArea should not show optional text when hideOp
         aria-errormessage="errorMessage22"
         aria-invalid={false}
         style={
-          Object {
+          {
             "resize": "none",
           }
         }
@@ -64,7 +64,7 @@ exports[`components/text-area/TextArea should render text area with description 
         aria-errormessage="errorMessage26"
         aria-invalid={false}
         style={
-          Object {
+          {
             "resize": "none",
           }
         }
@@ -100,7 +100,7 @@ exports[`components/text-area/TextArea should show optional text when hideOption
         aria-errormessage="errorMessage24"
         aria-invalid={false}
         style={
-          Object {
+          {
             "resize": "none",
           }
         }

@@ -70,8 +70,8 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -90,7 +90,7 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -99,16 +99,16 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -117,14 +117,14 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -134,13 +134,13 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -154,10 +154,10 @@ exports[`features/unified-share-modal/UnifiedShareForm closeEmailSharedLinkForm(
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -180,7 +180,7 @@ exports[`features/unified-share-modal/UnifiedShareForm openEmailSharedLinkForm()
         />
       }
       inlineNotice={
-        Object {
+        {
           "content": undefined,
           "type": "error",
         }
@@ -191,7 +191,7 @@ exports[`features/unified-share-modal/UnifiedShareForm openEmailSharedLinkForm()
       onPillCreate={[Function]}
       onRequestClose={[Function]}
       onSubmit={[Function]}
-      selectedContacts={Array []}
+      selectedContacts={[]}
       showEnterEmailsCallout={false}
       updateSelectedContacts={[Function]}
     />
@@ -270,8 +270,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -290,7 +290,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -299,16 +299,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -317,14 +317,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -334,13 +334,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -354,10 +354,10 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -434,8 +434,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -454,7 +454,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -463,16 +463,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -481,14 +481,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -498,13 +498,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -518,10 +518,10 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should not rende
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -598,8 +598,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -618,7 +618,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -627,16 +627,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -645,14 +645,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -662,13 +662,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={true}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -683,13 +683,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
       sharedLink={
-        Object {
+        {
           "url": "https://foo.com",
         }
       }
       showSharedLinkSettingsCallout={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -767,8 +767,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -787,7 +787,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -796,16 +796,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -814,14 +814,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -831,13 +831,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -851,10 +851,10 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -932,8 +932,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -952,7 +952,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -961,16 +961,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -979,14 +979,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -996,13 +996,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -1016,11 +1016,11 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
       submitting={true}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -1098,8 +1098,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -1118,7 +1118,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -1127,16 +1127,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1145,14 +1145,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -1233,8 +1233,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -1253,7 +1253,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -1263,16 +1263,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1281,14 +1281,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="web_link"
           />
         </EmailForm>
@@ -1298,13 +1298,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -1318,11 +1318,11 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
       submitting={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -1399,8 +1399,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -1419,7 +1419,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -1429,16 +1429,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1447,14 +1447,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="folder"
           />
         </EmailForm>
@@ -1464,13 +1464,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -1484,10 +1484,10 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -1565,8 +1565,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -1585,7 +1585,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "Collaboration invitations can only be sent to people within company.",
               "type": "warning",
             }
@@ -1595,16 +1595,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1613,14 +1613,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={false}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -1630,13 +1630,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -1650,11 +1650,11 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
       submitting={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -1732,8 +1732,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -1752,7 +1752,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "Collaboration invitations can only be sent to people within company.",
               "type": "warning",
             }
@@ -1762,16 +1762,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1780,14 +1780,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={false}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -1806,20 +1806,20 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
   >
     <CollaboratorList
       collaborators={
-        Array [
-          Object {
+        [
+          {
             "hasCustomAvatar": false,
             "name": "test a",
           },
-          Object {
+          {
             "hasCustomAvatar": false,
             "name": "test b",
           },
         ]
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -1909,8 +1909,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -1929,7 +1929,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -1938,16 +1938,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -1956,14 +1956,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -1973,13 +1973,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -1993,11 +1993,11 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
       submitting={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -2074,8 +2074,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -2094,7 +2094,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -2103,16 +2103,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2121,14 +2121,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -2138,13 +2138,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={true}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -2159,13 +2159,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
       sharedLink={
-        Object {
+        {
           "url": "https://foo.com",
         }
       }
       showSharedLinkSettingsCallout={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -2243,8 +2243,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -2263,7 +2263,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -2272,16 +2272,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2290,14 +2290,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={true}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -2307,13 +2307,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -2327,11 +2327,11 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
       submitting={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -2409,8 +2409,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -2429,7 +2429,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": "",
               "type": "warning",
             }
@@ -2439,16 +2439,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           submitting={false}
           updateSelectedContacts={[Function]}
@@ -2458,11 +2458,11 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={false}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
+              [
                 "Editor",
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -2472,13 +2472,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       autoCreateSharedLink={false}
       autofocusSharedLink={false}
       intl={
-        Object {
+        {
           "formatMessage": [MockFunction],
         }
       }
       item={
-        Object {
-          "grantedPermissions": Object {
+        {
+          "grantedPermissions": {
             "itemShare": true,
           },
           "hideCollaborators": false,
@@ -2492,11 +2492,11 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
       onDismissTooltip={[Function]}
       onEmailSharedLinkClick={[Function]}
       onToggleSharedLink={[Function]}
-      sharedLink={Object {}}
+      sharedLink={{}}
       showSharedLinkSettingsCallout={false}
       submitting={false}
-      tooltips={Object {}}
-      trackingProps={Object {}}
+      tooltips={{}}
+      trackingProps={{}}
       triggerCopyOnLoad={false}
     />
   </LoadingIndicatorWrapper>
@@ -2574,8 +2574,8 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
         <EmailForm
           contactsFieldAvatars={
             <CollaboratorAvatars
-              collaborators={Array []}
-              containerAttributes={Object {}}
+              collaborators={[]}
+              containerAttributes={{}}
               maxAdditionalCollaboratorsNum={99}
               maxDisplayedUserAvatars={3}
               onClick={[Function]}
@@ -2594,7 +2594,7 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             />
           }
           inlineNotice={
-            Object {
+            {
               "content": <span>
                 Some Error
               </span>,
@@ -2606,16 +2606,16 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
           isExternalUserSelected={false}
           isFetchingJustificationReasons={false}
           isRestrictionJustificationEnabled={false}
-          justificationReasons={Array []}
+          justificationReasons={[]}
           onContactInput={[Function]}
           onPillCreate={[Function]}
           onRequestClose={[Function]}
           onSubmit={[Function]}
           openInviteCollaboratorsSection={[Function]}
           recommendedSharingTooltipCalloutName={null}
-          restrictedEmails={Array []}
-          restrictedGroups={Array []}
-          selectedContacts={Array []}
+          restrictedEmails={[]}
+          restrictedGroups={[]}
+          selectedContacts={[]}
           showEnterEmailsCallout={false}
           updateSelectedContacts={[Function]}
         >
@@ -2624,14 +2624,14 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render a 
             disabled={false}
             inviteePermissionLevel=""
             inviteePermissions={
-              Array [
-                Object {
+              [
+                {
                   "text": "Editor",
                   "value": "Editor",
                 },
               ]
             }
-            inviteePermissionsButtonProps={Object {}}
+            inviteePermissionsButtonProps={{}}
             itemType="file"
           />
         </EmailForm>
@@ -2652,13 +2652,13 @@ exports[`features/unified-share-modal/UnifiedShareForm render() should render an
 exports[`features/unified-share-modal/UnifiedShareForm renderCollaboratorAvatars() should filter out current user 1`] = `
 <CollaboratorAvatars
   collaborators={
-    Array [
-      Object {
+    [
+      {
         "userID": 5678,
       },
     ]
   }
-  containerAttributes={Object {}}
+  containerAttributes={{}}
   maxAdditionalCollaboratorsNum={99}
   maxDisplayedUserAvatars={3}
   onClick={[Function]}
@@ -2668,13 +2668,13 @@ exports[`features/unified-share-modal/UnifiedShareForm renderCollaboratorAvatars
 exports[`features/unified-share-modal/UnifiedShareForm renderCollaboratorAvatars() should filter out current user 2`] = `
 <CollaboratorAvatars
   collaborators={
-    Array [
-      Object {
+    [
+      {
         "userID": 5678,
       },
     ]
   }
-  containerAttributes={Object {}}
+  containerAttributes={{}}
   maxAdditionalCollaboratorsNum={99}
   maxDisplayedUserAvatars={3}
   onClick={[Function]}

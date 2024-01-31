@@ -15,7 +15,7 @@ exports[`features/content-explorer/content-explorer/ContentExplorerHeaderActions
     />
   </div>
   <ContentExplorerBreadcrumbs
-    foldersPath={Array []}
+    foldersPath={[]}
     isUpButtonDisabled={true}
     onBreadcrumbClick={[Function]}
     onUpButtonClick={[Function]}

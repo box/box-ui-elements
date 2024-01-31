@@ -13,7 +13,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeCountElement 1`
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"
@@ -37,7 +37,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render BadgeElement 1`] = `
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"
@@ -67,7 +67,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render RemoveButton 1`] = `
   >
     <LinkBase
       className=""
-      style={Object {}}
+      style={{}}
     >
       <span
         className="left-sidebar-link-text"
@@ -78,7 +78,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render RemoveButton 1`] = `
   </Tooltip>
   <RemoveButton
     onClickRemove={[Function]}
-    removeButtonHtmlAttributes={Object {}}
+    removeButtonHtmlAttributes={{}}
   />
 </div>
 `;
@@ -96,7 +96,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render a LinkComponent comp
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"
@@ -120,7 +120,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the IconComponent 1`
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <div
       id="its-an-icon"
@@ -148,7 +148,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the router link 1`] 
   <routerLink
     className=""
     isNavLink={true}
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"
@@ -162,7 +162,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should render the router link 1`] 
 exports[`feature/left-sidebar/LeftSidebarLink should render without a tooltip wrapper 1`] = `
 <LinkBase
   className=""
-  style={Object {}}
+  style={{}}
 >
   <span
     className="left-sidebar-link-text"
@@ -185,7 +185,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use a custom className 1`] 
 >
   <LinkBase
     className="custom-className"
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"
@@ -210,7 +210,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   <LinkBase
     className=""
     style={
-      Object {
+      {
         "boxShadow": "inset 2px 0 0 #345678",
       }
     }
@@ -237,7 +237,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"
@@ -262,7 +262,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
   <LinkBase
     className=""
     style={
-      Object {
+      {
         "boxShadow": undefined,
       }
     }
@@ -289,7 +289,7 @@ exports[`feature/left-sidebar/LeftSidebarLink should use custom theme based on s
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"
@@ -313,7 +313,7 @@ exports[`feature/left-sidebar/LeftSidebarLink tooltip should take class from sta
 >
   <LinkBase
     className=""
-    style={Object {}}
+    style={{}}
   >
     <span
       className="left-sidebar-link-text"

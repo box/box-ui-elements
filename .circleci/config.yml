@@ -55,6 +55,7 @@ jobs:
           command: yarn flow check
 
   build-unit-tests:
+    resource_class: large
     <<: *defaults
     steps:
       - checkout
@@ -75,7 +76,7 @@ jobs:
       - run: echo 'export TZ=America/Los_Angeles' >> $BASH_ENV
       - run:
           name: Unit tests
-          command: yarn test --maxWorkers=2
+          command: yarn test --maxWorkers=3
 
   e2e-tests:
     <<: *defaults

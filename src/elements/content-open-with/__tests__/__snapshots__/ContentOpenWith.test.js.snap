@@ -15,9 +15,9 @@ exports[`elements/content-open-with/ContentOpenWith render() should render the E
     />
     <ExecuteForm
       executePostData={
-        Object {
-          "params": Array [
-            Object {
+        {
+          "params": [
+            {
               "foo": "bar",
             },
           ],
@@ -74,7 +74,7 @@ exports[`elements/content-open-with/ContentOpenWith render() should render the O
   >
     <OpenWithDropdownMenu
       integrations={
-        Array [
+        [
           "ABCD",
           "Google Suite",
         ]
@@ -94,7 +94,7 @@ exports[`elements/content-open-with/ContentOpenWith render() should render the P
   >
     <OpenWithDropdownMenu
       integrations={
-        Array [
+        [
           "ABCD",
           "Google Suite",
         ]
@@ -117,7 +117,7 @@ exports[`elements/content-open-with/ContentOpenWith render() should render the P
   >
     <OpenWithDropdownMenu
       integrations={
-        Array [
+        [
           "ABCD",
           "Google Suite",
         ]

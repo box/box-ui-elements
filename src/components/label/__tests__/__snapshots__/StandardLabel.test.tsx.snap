@@ -3,7 +3,7 @@
 exports[`components/label/StandardLabel should correctly render default element 1`] = `
 <LabelPrimitive
   labelContent={
-    Array [
+    [
       "My Label",
     ]
   }

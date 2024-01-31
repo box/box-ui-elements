@@ -15,7 +15,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render butto
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
   shouldDefaultFocus={true}
 >
@@ -79,7 +79,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
   shouldDefaultFocus={true}
 >
@@ -149,7 +149,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render dropd
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
   shouldDefaultFocus={true}
 >
@@ -219,7 +219,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render empty
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
   shouldDefaultFocus={true}
 >
@@ -281,7 +281,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render error
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
   shouldDefaultFocus={true}
 >
@@ -343,7 +343,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render loadi
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
   shouldDefaultFocus={true}
 >
@@ -400,7 +400,7 @@ exports[`features/metadata-instance-editor/fields/ should correctly render plain
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
   shouldDefaultFocus={true}
 >

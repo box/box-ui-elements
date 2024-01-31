@@ -26,7 +26,7 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
   <AnimateHeight
     animateOpacity={false}
     animationStateClasses={
-      Object {
+      {
         "animating": "rah-animating",
         "animatingDown": "rah-animating--down",
         "animatingToHeightAuto": "rah-animating--to-height-auto",
@@ -44,7 +44,7 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
     duration={100}
     easing="ease"
     height="auto"
-    style={Object {}}
+    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -81,7 +81,7 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
   <AnimateHeight
     animateOpacity={false}
     animationStateClasses={
-      Object {
+      {
         "animating": "rah-animating",
         "animatingDown": "rah-animating--down",
         "animatingToHeightAuto": "rah-animating--to-height-auto",
@@ -99,7 +99,7 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
     duration={100}
     easing="ease"
     height="auto"
-    style={Object {}}
+    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -136,7 +136,7 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
   <AnimateHeight
     animateOpacity={false}
     animationStateClasses={
-      Object {
+      {
         "animating": "rah-animating",
         "animatingDown": "rah-animating--down",
         "animatingToHeightAuto": "rah-animating--to-height-auto",
@@ -154,7 +154,7 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
     duration={100}
     easing="ease"
     height={0}
-    style={Object {}}
+    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -191,7 +191,7 @@ exports[`components/collapsible/Collapsible should not render a PlainButton if a
   <AnimateHeight
     animateOpacity={false}
     animationStateClasses={
-      Object {
+      {
         "animating": "rah-animating",
         "animatingDown": "rah-animating--down",
         "animatingToHeightAuto": "rah-animating--to-height-auto",
@@ -209,7 +209,7 @@ exports[`components/collapsible/Collapsible should not render a PlainButton if a
     duration={100}
     easing="ease"
     height="auto"
-    style={Object {}}
+    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -246,7 +246,7 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
   <AnimateHeight
     animateOpacity={false}
     animationStateClasses={
-      Object {
+      {
         "animating": "rah-animating",
         "animatingDown": "rah-animating--down",
         "animatingToHeightAuto": "rah-animating--to-height-auto",
@@ -264,7 +264,7 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
     duration={100}
     easing="ease"
     height="auto"
-    style={Object {}}
+    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -301,7 +301,7 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
   <AnimateHeight
     animateOpacity={false}
     animationStateClasses={
-      Object {
+      {
         "animating": "rah-animating",
         "animatingDown": "rah-animating--down",
         "animatingToHeightAuto": "rah-animating--to-height-auto",
@@ -319,7 +319,7 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
     duration={100}
     easing="ease"
     height="auto"
-    style={Object {}}
+    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -370,7 +370,7 @@ exports[`components/collapsible/Collapsible should render with headerActionItems
   <AnimateHeight
     animateOpacity={false}
     animationStateClasses={
-      Object {
+      {
         "animating": "rah-animating",
         "animatingDown": "rah-animating--down",
         "animatingToHeightAuto": "rah-animating--to-height-auto",
@@ -388,7 +388,7 @@ exports[`components/collapsible/Collapsible should render with headerActionItems
     duration={100}
     easing="ease"
     height={0}
-    style={Object {}}
+    style={{}}
   >
     <div
       className="collapsible-card-content"

@@ -92,7 +92,7 @@ exports[`icons/states/EnvelopeTrophyState should correctly render component with
       fillRule="nonzero"
       opacity=".5"
       style={
-        Object {
+        {
           "mixBlendMode": "multiply",
         }
       }
@@ -103,7 +103,7 @@ exports[`icons/states/EnvelopeTrophyState should correctly render component with
       fillRule="nonzero"
       opacity=".4"
       style={
-        Object {
+        {
           "mixBlendMode": "multiply",
         }
       }
@@ -114,7 +114,7 @@ exports[`icons/states/EnvelopeTrophyState should correctly render component with
       fillRule="nonzero"
       opacity=".2"
       style={
-        Object {
+        {
           "mixBlendMode": "multiply",
         }
       }
@@ -422,7 +422,7 @@ exports[`icons/states/EnvelopeTrophyState should correctly render default compon
       fillRule="nonzero"
       opacity=".5"
       style={
-        Object {
+        {
           "mixBlendMode": "multiply",
         }
       }
@@ -433,7 +433,7 @@ exports[`icons/states/EnvelopeTrophyState should correctly render default compon
       fillRule="nonzero"
       opacity=".4"
       style={
-        Object {
+        {
           "mixBlendMode": "multiply",
         }
       }
@@ -444,7 +444,7 @@ exports[`icons/states/EnvelopeTrophyState should correctly render default compon
       fillRule="nonzero"
       opacity=".2"
       style={
-        Object {
+        {
           "mixBlendMode": "multiply",
         }
       }

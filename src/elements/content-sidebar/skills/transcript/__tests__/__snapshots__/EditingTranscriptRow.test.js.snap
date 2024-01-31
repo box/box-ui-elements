@@ -12,12 +12,8 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
   <div
     className="be-transcript-text"
   >
-    <TextareaAutosize
-      inputRef={[Function]}
+    <ForwardRef(TextareaAutosize)
       maxRows={10}
-      onChange={[Function]}
-      onHeightChange={[Function]}
-      useCacheForDOMMeasurements={false}
       value=""
     />
     <div
@@ -56,12 +52,8 @@ exports[`elements/content-sidebar/Skills/Transcript/TranscriptRow should correct
   <div
     className="be-transcript-text"
   >
-    <TextareaAutosize
-      inputRef={[Function]}
+    <ForwardRef(TextareaAutosize)
       maxRows={10}
-      onChange={[Function]}
-      onHeightChange={[Function]}
-      useCacheForDOMMeasurements={false}
       value=""
     />
     <div

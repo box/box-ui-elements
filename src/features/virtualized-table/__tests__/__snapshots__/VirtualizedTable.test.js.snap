@@ -3,7 +3,7 @@
 exports[`features/virtualized-table/VirtualizedTable should successfully render a VirtualizedTable 1`] = `
 <VirtualizedTable
   intl={
-    Object {
+    {
       "formatDate": [Function],
       "formatMessage": [Function],
       "formatNumber": [Function],
@@ -11,16 +11,16 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     }
   }
   rowData={
-    Array [
-      Object {
+    [
+      {
         "description": "description1",
         "name": "name1",
       },
-      Object {
+      {
         "description": "description2",
         "name": "name2",
       },
-      Object {
+      {
         "description": "description3",
         "name": "name3",
       },
@@ -38,7 +38,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     headerRole="columnheader"
     label="Name"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
   <Column
@@ -52,7 +52,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     headerRole="columnheader"
     label="Description"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
 </VirtualizedTable>
@@ -63,7 +63,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   disableHeight={true}
   disableWidth={false}
   onResize={[Function]}
-  style={Object {}}
+  style={{}}
 >
   <Component />
 </AutoSizer>
@@ -91,7 +91,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   gridContainerRole=""
   headerHeight={39}
   headerRowRenderer={[Function]}
-  headerStyle={Object {}}
+  headerStyle={{}}
   height={768}
   isScrolling={false}
   noRowsRenderer={[Function]}
@@ -104,12 +104,12 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   rowGetter={[Function]}
   rowHeight={52}
   rowRenderer={[Function]}
-  rowStyle={Object {}}
+  rowStyle={{}}
   scrollToAlignment="auto"
   scrollToIndex={-1}
   scrollTop={0}
   sort={[Function]}
-  style={Object {}}
+  style={{}}
   tabIndex={-1}
   width={0}
 >
@@ -124,7 +124,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     headerRole="columnheader"
     label="Name"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
   <Column
@@ -138,7 +138,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     headerRole="columnheader"
     label="Description"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
 </Table>
@@ -150,7 +150,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   disableHeight={true}
   disableWidth={false}
   onResize={[Function]}
-  style={Object {}}
+  style={{}}
 >
   <Component />
 </AutoSizer>
@@ -164,7 +164,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   gridContainerRole=""
   headerHeight={39}
   headerRowRenderer={[Function]}
-  headerStyle={Object {}}
+  headerStyle={{}}
   height={10}
   noRowsRenderer={[Function]}
   onRowsRendered={[Function]}
@@ -176,11 +176,11 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
   rowGetter={[Function]}
   rowHeight={52}
   rowRenderer={[Function]}
-  rowStyle={Object {}}
+  rowStyle={{}}
   scrollToAlignment="auto"
   scrollToIndex={-1}
   sort={[Function]}
-  style={Object {}}
+  style={{}}
   tabIndex={-1}
   width={0}
 >
@@ -195,7 +195,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     headerRole="columnheader"
     label="Name"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
   <Column
@@ -209,7 +209,7 @@ exports[`features/virtualized-table/VirtualizedTable should successfully render 
     headerRole="columnheader"
     label="Description"
     role="gridcell"
-    style={Object {}}
+    style={{}}
     width={100}
   />
 </Table>

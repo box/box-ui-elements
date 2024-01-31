@@ -6,7 +6,7 @@ exports[`features/item-details/ItemExpirationNotice should accept node as expira
     defaultMessage="This file will be deleted on {expiration}."
     id="boxui.itemDetails.fileExpiration"
     values={
-      Object {
+      {
         "expiration": <FormattedDate
           value="1517533810845"
         />,
@@ -22,7 +22,7 @@ exports[`features/item-details/ItemExpirationNotice should render default compon
     defaultMessage="This file will be deleted on {expiration}."
     id="boxui.itemDetails.fileExpiration"
     values={
-      Object {
+      {
         "expiration": "May 27, 2018",
       }
     }
@@ -36,7 +36,7 @@ exports[`features/item-details/ItemExpirationNotice should render default compon
     defaultMessage="This folder will be deleted on {expiration}."
     id="boxui.itemDetails.folderExpiration"
     values={
-      Object {
+      {
         "expiration": "May 27, 2018",
       }
     }
@@ -50,7 +50,7 @@ exports[`features/item-details/ItemExpirationNotice should render default compon
     defaultMessage="This bookmark will be deleted on {expiration}."
     id="boxui.itemDetails.bookmarkExpiration"
     values={
-      Object {
+      {
         "expiration": "May 27, 2018",
       }
     }

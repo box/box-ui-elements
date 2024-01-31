@@ -3,82 +3,6 @@
 @import '../../styles/mixins/overlay';
 @import '../../components/pill-selector-dropdown/mixins';
 
-.is-responsive-web {
-    .collaborator-list {
-        min-width: 0;
-    }
-
-    @include breakpoint($small-screen) {
-        .shared-link-access-row {
-            display: flex;
-            justify-content: space-between;
-
-            .btn-plain {
-                margin-right: 0;
-            }
-        }
-    }
-
-    @include breakpoint($medium-screen) {
-        .usm-menu-description {
-            white-space: normal;
-        }
-
-        .usm-share-access-menu {
-            //can't use just 'min' b/c SASS compiler error
-            width: #{'min(400px, 90%)'};
-        }
-    }
-
-    @include breakpoint($small-medium-screen) {
-        .collaborator-list {
-            height: auto;
-            border: 0;
-            border-radius: 0;
-            box-shadow: none;
-        }
-
-        .shared-link-field-container {
-            height: $bdl-btn-height;
-
-            .btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 60px;
-                min-width: 0;
-                height: $bdl-btn-height;
-            }
-        }
-
-        .email-shared-link-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: $bdl-btn-height;
-            height: $bdl-btn-height;
-        }
-
-        .unified-share-modal {
-            .modal-content {
-                padding-top: $bdl-grid-unit * 3;
-            }
-
-            .shared-link-field-row .email-shared-link-btn {
-                margin-left: $bdl-grid-unit * 4;
-            }
-        }
-
-        .text-input-container {
-            height: $bdl-btn-height;
-
-            input {
-                height: 100%;
-            }
-        }
-    }
-}
-
 // Menus are rendered at the root of the DOM, so this style is not nested
 .usm-menu-description {
     display: block;
@@ -285,9 +209,6 @@
         .shared-link-field-container {
             flex: 1;
             align-items: center;
-        }
-
-        .text-input-with-copy-button-container {
             margin-bottom: 0;
         }
 
@@ -399,6 +320,67 @@
 
         .toggle-simple-label {
             cursor: pointer;
+        }
+    }
+}
+
+@include breakpoint($medium-screen) {
+    .usm-menu-description {
+        white-space: normal;
+    }
+
+    .usm-share-access-menu {
+        width: #{'min(400px, 90%)'};
+    }
+}
+
+@include breakpoint($small-medium-screen) {
+    .unified-share-modal {
+        .modal-content {
+            padding-top: $bdl-grid-unit * 3;
+        }
+
+        .shared-link-field-row {
+            .shared-link-field-container {
+                .btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 60px;
+                    min-width: 0;
+                    height: $bdl-btn-height;
+                }
+            }
+
+            .text-input-container {
+                height: $bdl-btn-height;
+
+                input {
+                    height: 100%;
+                }
+            }
+
+            .email-shared-link-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: $bdl-btn-height;
+                height: $bdl-btn-height;
+                margin-left: $bdl-grid-unit * 4;
+            }
+        }
+    }
+}
+
+@include breakpoint($small-screen) {
+    .unified-share-modal {
+        .shared-link-access-row {
+            display: flex;
+            justify-content: space-between;
+
+            .btn-plain {
+                margin-right: 0;
+            }
         }
     }
 }

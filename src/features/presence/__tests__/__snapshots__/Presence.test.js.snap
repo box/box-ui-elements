@@ -14,15 +14,15 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={
-      Array [
-        Object {
+      [
+        {
           "avatarUrl": "",
           "id": "1",
           "interactedAt": 999,
@@ -30,7 +30,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "e",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "2",
           "interactedAt": 999,
@@ -38,7 +38,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "d",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "3",
           "interactedAt": 999,
@@ -46,7 +46,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "c",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "4",
           "interactedAt": 999,
@@ -54,7 +54,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "b",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "5",
           "interactedAt": 999,
@@ -75,8 +75,8 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   >
     <PresenceCollaboratorsList
       collaborators={
-        Array [
-          Object {
+        [
+          {
             "avatarUrl": "",
             "id": "1",
             "interactedAt": 999,
@@ -84,7 +84,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "e",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "2",
             "interactedAt": 999,
@@ -92,7 +92,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "d",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "3",
             "interactedAt": 999,
@@ -100,7 +100,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "c",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "4",
             "interactedAt": 999,
@@ -108,7 +108,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "b",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "5",
             "interactedAt": 999,
@@ -138,15 +138,15 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={
-      Array [
-        Object {
+      [
+        {
           "avatarUrl": "",
           "id": "1",
           "interactedAt": 999,
@@ -154,7 +154,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "e",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "2",
           "interactedAt": 999,
@@ -162,7 +162,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "d",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "3",
           "interactedAt": 999,
@@ -170,7 +170,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "c",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "4",
           "interactedAt": 999,
@@ -178,7 +178,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "b",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "5",
           "interactedAt": 999,
@@ -199,8 +199,8 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   >
     <PresenceCollaboratorsList
       collaborators={
-        Array [
-          Object {
+        [
+          {
             "avatarUrl": "",
             "id": "1",
             "interactedAt": 999,
@@ -208,7 +208,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "e",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "2",
             "interactedAt": 999,
@@ -216,7 +216,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "d",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "3",
             "interactedAt": 999,
@@ -224,7 +224,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "c",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "4",
             "interactedAt": 999,
@@ -232,7 +232,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "b",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "5",
             "interactedAt": 999,
@@ -262,13 +262,13 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
     aria-label="Recent Activity"
     className="presence-avatar-container"
-    collaborators={Array []}
+    collaborators={[]}
     hideTooltips={false}
     maxAdditionalCollaborators={99}
     maxDisplayedAvatars={3}
@@ -279,7 +279,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
     shouldDefaultFocus={false}
   >
     <PresenceCollaboratorsList
-      collaborators={Array []}
+      collaborators={[]}
       experimentBucket="flyout"
     />
     <a
@@ -309,15 +309,15 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={
-      Array [
-        Object {
+      [
+        {
           "avatarUrl": "",
           "id": "1",
           "interactedAt": 999,
@@ -325,7 +325,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "e",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "2",
           "interactedAt": 999,
@@ -333,7 +333,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "d",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "3",
           "interactedAt": 999,
@@ -341,7 +341,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "c",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "4",
           "interactedAt": 999,
@@ -349,7 +349,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "b",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "5",
           "interactedAt": 999,
@@ -370,8 +370,8 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   >
     <PresenceCollaboratorsList
       collaborators={
-        Array [
-          Object {
+        [
+          {
             "avatarUrl": "",
             "id": "1",
             "interactedAt": 999,
@@ -379,7 +379,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "e",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "2",
             "interactedAt": 999,
@@ -387,7 +387,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "d",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "3",
             "interactedAt": 999,
@@ -395,7 +395,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "c",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "4",
             "interactedAt": 999,
@@ -403,7 +403,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
             "isActive": false,
             "name": "b",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "5",
             "interactedAt": 999,
@@ -442,15 +442,15 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
   onOpen={[Function]}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-left"
 >
   <ForwardRef(PresenceAvatarList)
     aria-label="Recent Activity"
     className="presence-avatar-container"
     collaborators={
-      Array [
-        Object {
+      [
+        {
           "avatarUrl": "",
           "id": "1",
           "interactedAt": 999,
@@ -458,7 +458,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "e",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "2",
           "interactedAt": 999,
@@ -466,7 +466,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "d",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "3",
           "interactedAt": 999,
@@ -474,7 +474,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "c",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "4",
           "interactedAt": 999,
@@ -482,7 +482,7 @@ exports[`features/presence/Presence render() Tests for presence autofly - GROWTH
           "isActive": false,
           "name": "b",
         },
-        Object {
+        {
           "avatarUrl": "",
           "id": "5",
           "interactedAt": 999,

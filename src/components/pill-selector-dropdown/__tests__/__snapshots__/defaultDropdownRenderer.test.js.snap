@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/pill-selector-dropdown/defaultDropdownRenderer should render a list of data list items 1`] = `
-Array [
+[
   <DatalistItem>
     value1
   </DatalistItem>,

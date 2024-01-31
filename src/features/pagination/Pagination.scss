@@ -6,10 +6,6 @@
     .bdl-Pagination-count {
         display: flex;
         align-items: center;
-
-        .be-is-small & {
-            display: none;
-        }
     }
 
     .bdl-Pagination-toggle {

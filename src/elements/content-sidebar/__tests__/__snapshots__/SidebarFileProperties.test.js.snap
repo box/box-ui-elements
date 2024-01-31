@@ -6,14 +6,14 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render I
     createdAt="2018-04-18T16:56:05.352Z"
     description="foo"
     descriptionTextareaProps={
-      Object {
+      {
         "data-resin-target": "description",
       }
     }
     modifiedAt="2018-04-18T16:56:05.352Z"
     onDescriptionChange={[MockFunction]}
     owner="foo"
-    retentionPolicyProps={Object {}}
+    retentionPolicyProps={{}}
     size="1 B"
     uploader="foo"
   />
@@ -26,14 +26,14 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render I
     createdAt="2018-04-18T16:56:05.352Z"
     description="foo"
     descriptionTextareaProps={
-      Object {
+      {
         "data-resin-target": "description",
       }
     }
     modifiedAt="2018-04-18T16:56:05.352Z"
     onDescriptionChange={[MockFunction]}
     owner="foo"
-    retentionPolicyProps={Object {}}
+    retentionPolicyProps={{}}
     size="1 B"
     uploader="File Request"
   />
@@ -59,7 +59,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render a
   </InlineError>
   <SidebarFileProperties
     intl={
-      Object {
+      {
         "formatDate": [Function],
         "formatMessage": [Function],
         "formatNumber": [Function],
@@ -73,19 +73,19 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render a
 exports[`elements/content-sidebar/SidebarFileProperties render() should render retention policy information when given proper props and callback 1`] = `
 <SidebarFileProperties
   file={
-    Object {
+    {
       "size": "1",
     }
   }
   hasRetentionPolicy={true}
   intl={
-    Object {
+    {
       "locale": "en",
     }
   }
   onRetentionPolicyExtendClick={[MockFunction]}
   retentionPolicy={
-    Object {
+    {
       "dispositionTime": 1556317461,
       "policyName": "test policy",
       "policyType": "finite",
@@ -99,12 +99,12 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
     >
       <ItemProperties
         descriptionTextareaProps={
-          Object {
+          {
             "data-resin-target": "description",
           }
         }
         retentionPolicyProps={
-          Object {
+          {
             "dispositionTime": 1556317461,
             "openModal": [MockFunction],
             "policyName": "test policy",

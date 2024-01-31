@@ -12,7 +12,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
   isVisibleByDefault={false}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-right"
 >
   <div
@@ -28,8 +28,8 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
   >
     <PresenceCollaboratorsList
       collaborators={
-        Array [
-          Object {
+        [
+          {
             "avatarUrl": "",
             "id": "1",
             "interactedAt": 999,
@@ -37,7 +37,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
             "isActive": false,
             "name": "e",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "2",
             "interactedAt": 999,
@@ -45,7 +45,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
             "isActive": false,
             "name": "d",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "3",
             "interactedAt": 999,
@@ -53,7 +53,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
             "isActive": false,
             "name": "c",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "4",
             "interactedAt": 999,
@@ -61,7 +61,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
             "isActive": false,
             "name": "b",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "5",
             "interactedAt": 999,
@@ -69,7 +69,7 @@ exports[`features/presence/PresenceLink render() should change the flyoutPositio
             "isActive": false,
             "name": "a",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "6",
             "interactedAt": 999,
@@ -96,7 +96,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
   isVisibleByDefault={false}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-right"
 >
   <div
@@ -111,8 +111,8 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
   >
     <PresenceCollaboratorsList
       collaborators={
-        Array [
-          Object {
+        [
+          {
             "avatarUrl": "",
             "id": "1",
             "interactedAt": 999,
@@ -120,7 +120,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
             "isActive": false,
             "name": "e",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "2",
             "interactedAt": 999,
@@ -128,7 +128,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
             "isActive": false,
             "name": "d",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "3",
             "interactedAt": 999,
@@ -136,7 +136,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
             "isActive": false,
             "name": "c",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "4",
             "interactedAt": 999,
@@ -144,7 +144,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
             "isActive": false,
             "name": "b",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "5",
             "interactedAt": 999,
@@ -152,7 +152,7 @@ exports[`features/presence/PresenceLink render() should correctly render collabo
             "isActive": false,
             "name": "a",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "6",
             "interactedAt": 999,
@@ -181,7 +181,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
   isVisibleByDefault={false}
   openOnHover={false}
   openOnHoverDelayTimeout={300}
-  portaledClasses={Array []}
+  portaledClasses={[]}
   position="bottom-right"
 >
   <div
@@ -197,8 +197,8 @@ exports[`features/presence/PresenceLink render() should pass through additional 
   >
     <PresenceCollaboratorsList
       collaborators={
-        Array [
-          Object {
+        [
+          {
             "avatarUrl": "",
             "id": "1",
             "interactedAt": 999,
@@ -206,7 +206,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
             "isActive": false,
             "name": "e",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "2",
             "interactedAt": 999,
@@ -214,7 +214,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
             "isActive": false,
             "name": "d",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "3",
             "interactedAt": 999,
@@ -222,7 +222,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
             "isActive": false,
             "name": "c",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "4",
             "interactedAt": 999,
@@ -230,7 +230,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
             "isActive": false,
             "name": "b",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "5",
             "interactedAt": 999,
@@ -238,7 +238,7 @@ exports[`features/presence/PresenceLink render() should pass through additional 
             "isActive": false,
             "name": "a",
           },
-          Object {
+          {
             "avatarUrl": "",
             "id": "6",
             "interactedAt": 999,

@@ -9,7 +9,7 @@ exports[`elements/content-sidebar/SidebarNotices render() should render a shared
       <DateField
         date={2018-04-26T07:00:00.000Z}
         dateFormat={
-          Object {
+          {
             "day": "numeric",
             "month": "short",
             "year": "numeric",
@@ -29,7 +29,7 @@ exports[`elements/content-sidebar/SidebarNotices render() should render an item 
       <DateField
         date={2018-04-26T07:00:00.000Z}
         dateFormat={
-          Object {
+          {
             "day": "numeric",
             "month": "short",
             "year": "numeric",

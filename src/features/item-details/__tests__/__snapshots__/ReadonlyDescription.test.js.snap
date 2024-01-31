@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`features/item-details/ReadonlyDescription should render default component 1`] = `
-Array [
-  "Hi\\\\ntesting this link ",
+[
+  "Hi\\ntesting this link ",
   <a
     href="https://box.com"
     key="1"

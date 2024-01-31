@@ -20,7 +20,7 @@ exports[`components/pill-selector-dropdown/PillSelectorDropdown render() should 
       onPaste={[Function]}
       onRemove={[MockFunction]}
       placeholder=""
-      selectedOptions={Array []}
+      selectedOptions={[]}
       validator={[Function]}
       value=""
     />
