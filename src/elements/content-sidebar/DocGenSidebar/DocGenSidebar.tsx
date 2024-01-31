@@ -71,8 +71,8 @@ const DocGenSidebar = (props: Props) => {
                         setSidebarState({
                             ...sidebarState,
                             tags: {
-                                text: response.data.filter(tag => tag.tagType === 'text'),
-                                image: response.data.filter(tag => tag.tagType === 'image'),
+                                text: response.data.filter(tag => tag.tag_type === 'text'),
+                                image: response.data.filter(tag => tag.tag_type === 'image'),
                             },
                             loading: false,
                         });

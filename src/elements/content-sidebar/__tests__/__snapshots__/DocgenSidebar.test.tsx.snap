@@ -66,32 +66,32 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
               tags={
                 Array [
                   Object {
-                    "jsonPaths": Array [
+                    "json_paths": Array [
                       "isActive",
                     ],
-                    "tagContent": "{{ isActive }}",
-                    "tagType": "text",
+                    "tag_content": "{{ isActive }}",
+                    "tag_type": "text",
                   },
                   Object {
-                    "jsonPaths": Array [
+                    "json_paths": Array [
                       "about",
                     ],
-                    "tagContent": "{{ about }}",
-                    "tagType": "text",
+                    "tag_content": "{{ about }}",
+                    "tag_type": "text",
                   },
                   Object {
-                    "jsonPaths": Array [
+                    "json_paths": Array [
                       "phone",
                     ],
-                    "tagContent": "{{ phone }}",
-                    "tagType": "text",
+                    "tag_content": "{{ phone }}",
+                    "tag_type": "text",
                   },
                   Object {
-                    "jsonPaths": Array [
+                    "json_paths": Array [
                       "company",
                     ],
-                    "tagContent": "{{ company }}",
-                    "tagType": "text",
+                    "tag_content": "{{ company }}",
+                    "tag_type": "text",
                   },
                 ]
               }
@@ -113,32 +113,32 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                   tags={
                     Array [
                       Object {
-                        "jsonPaths": Array [
+                        "json_paths": Array [
                           "isActive",
                         ],
-                        "tagContent": "{{ isActive }}",
-                        "tagType": "text",
+                        "tag_content": "{{ isActive }}",
+                        "tag_type": "text",
                       },
                       Object {
-                        "jsonPaths": Array [
+                        "json_paths": Array [
                           "about",
                         ],
-                        "tagContent": "{{ about }}",
-                        "tagType": "text",
+                        "tag_content": "{{ about }}",
+                        "tag_type": "text",
                       },
                       Object {
-                        "jsonPaths": Array [
+                        "json_paths": Array [
                           "phone",
                         ],
-                        "tagContent": "{{ phone }}",
-                        "tagType": "text",
+                        "tag_content": "{{ phone }}",
+                        "tag_type": "text",
                       },
                       Object {
-                        "jsonPaths": Array [
+                        "json_paths": Array [
                           "company",
                         ],
-                        "tagContent": "{{ company }}",
-                        "tagType": "text",
+                        "tag_content": "{{ company }}",
+                        "tag_type": "text",
                       },
                     ]
                   }

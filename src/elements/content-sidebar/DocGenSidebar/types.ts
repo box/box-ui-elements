@@ -1,7 +1,11 @@
+// our apis are in camel case
 export type DocGenTag = {
-    jsonPaths: Array<string>;
-    tagContent: string;
-    tagType: 'text' | 'arithmetic' | 'conditional' | 'for-loop' | 'table-loop' | 'image';
+    /* eslint-disable-next-line camelcase */
+    json_paths: Array<string>;
+    /* eslint-disable-next-line camelcase */
+    tag_content: string;
+    /* eslint-disable-next-line camelcase */
+    tag_type: 'text' | 'arithmetic' | 'conditional' | 'for-loop' | 'table-loop' | 'image';
 };
 
 export type DocGenTemplateTagsResponse = {
