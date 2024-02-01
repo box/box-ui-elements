@@ -1,5 +1,6 @@
 // @flow
 
+import timeFromNow from '../../utils/relativeTime';
 import { formatUser } from './FormattedUser';
 import baseCellRenderer from './baseCellRenderer';
 import type { LastModifiedByCellRendererCellData, LastModifiedByCellRendererParams } from './flowTypes';
@@ -18,10 +19,8 @@ const lastModifiedByCellRenderer = (intl: any, { dateFormat }: LastModifiedByCel
         if (dateFormat) {
             lastModified = intl.formatDate(modified_at, dateFormat);
         } else if (intl.formatRelativeTime) {
-            lastModified = intl.formatRelativeTime(Date.parse(modified_at) - Date.now(), 'day', {
-                style: 'short',
-                numeric: 'auto',
-            });
+            const { value, unit } = timeFromNow(Date.parse(modified_at));
+            lastModified = intl.formatRelativeTime(value, unit);
         }
 
         if (modified_by) {
