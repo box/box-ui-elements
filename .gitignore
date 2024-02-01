@@ -20,3 +20,7 @@ test/videos
 test/dev.html
 yarn-debug.log
 yarn-error.log
+build-storybook.log
+chromatic.log
+chromatic-build-*.xml
+chromatic-diagnostics.json

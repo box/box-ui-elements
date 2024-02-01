@@ -2,7 +2,7 @@ import path from 'path';
 
 const language = process.env.LANGUAGE;
 
-const config: { webpackFinal: (config: any) => Promise<any>; stories: string[]; framework: { name: string }; addons: (string | { name: string; options: { sass: { implementation: any } } })[] } = {
+const config: { webpackFinal: (config: any) => Promise<any>; staticDirs: string[]; stories: string[]; framework: { name: string }; addons: (string | { name: string; options: { sass: { implementation: any } } })[] } = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
     addons: [
         '@storybook/addon-links',
@@ -21,6 +21,7 @@ const config: { webpackFinal: (config: any) => Promise<any>; stories: string[]; 
     framework: {
         name: '@storybook/react-webpack5',
     },
+    staticDirs: ['../public'],
     webpackFinal: async (config: any) => {
         // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
         // You can change the configuration based on that.
@@ -33,6 +34,7 @@ const config: { webpackFinal: (config: any) => Promise<any>; stories: string[]; 
             ...config.resolve.alias,
             'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
             'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
+            'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
         };
 
         return config;
