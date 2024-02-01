@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
+// @ts-ignore flow import
 import timeFromNow from '../../utils/relativeTime';
 // @ts-ignore flow import
 import messages from './messages';
