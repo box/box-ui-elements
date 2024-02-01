@@ -1,8 +1,4 @@
 aliases:
-  - &curl-install
-    name: Install curl
-    command: apt-get update && apt-get install curl -y
-
   - &yarn
     name: Installing dependencies
     command: yarn install --non-interactive --frozen-lockfile --cache-folder ~/.cache/yarn
@@ -29,7 +25,7 @@ aliases:
 defaults: &defaults
   working_directory: ~/buie
   docker:
-    - image: cypress/included:12.13.0
+    - image: cimg/node:18.18
 
 version: 2
 
@@ -43,16 +39,24 @@ jobs:
       - save-cache: *save-yarn-cache
       - run: *clean
       - run: *i18n
-      - run: *curl-install
       - run:
           name: Commit lint
           command: ./scripts/commitlint.sh
       - run:
           name: Code lint
           command: yarn lint
-      - run:
-          name: Flow
-          command: yarn flow check
+
+  flow:
+      <<: *defaults
+      steps:
+        - checkout
+        - restore-cache: *restore-yarn-cache
+        - run: *yarn
+        - save-cache: *save-yarn-cache
+        - run: *clean
+        - run:
+            name: Flow
+            command: yarn flow check
 
   build-unit-tests:
     resource_class: large
@@ -79,7 +83,9 @@ jobs:
           command: yarn test --maxWorkers=3
 
   e2e-tests:
-    <<: *defaults
+    working_directory: ~/buie
+    docker:
+      - image: cypress/included:12.13.0
     steps:
       - checkout
       - restore-cache: *restore-yarn-cache
@@ -94,5 +100,6 @@ workflows:
   lint_test_build:
     jobs:
       - lint
+      - flow
       - build-unit-tests
       - e2e-tests
