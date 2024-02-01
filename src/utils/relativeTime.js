@@ -1,3 +1,4 @@
+// @flow
 // Helper function used to calculate relative time (for use with react-intl)
 
 const WEEK_IN_MS = 6.048e8;
