@@ -6,8 +6,8 @@ import ContentExplorerModalContainer from '../ContentExplorerModalContainer';
 describe('features/content-explorer/content-explorer-modal-container/ContentExplorerModalContainer', () => {
     const sandbox = sinon.sandbox.create();
     const initialSelectedItems = { '123': { id: '123', name: 'folder123' } };
-    const renderComponent = props =>
-        shallow(
+    const renderComponent = (props, renderer = shallow) =>
+        renderer(
             <ContentExplorerModalContainer
                 onRequestClose={() => {}}
                 isOpen
@@ -82,6 +82,20 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             expect(wrapper.find('ContentExplorerModal').prop('chooseButtonText')).toEqual(chooseButtonText);
             expect(wrapper.find('ContentExplorerModal').prop('onSelectedClick')).toEqual(onSelectedClick);
             expect(wrapper.find('ContentExplorerModal').prop('onSelectItem')).toEqual(onSelectItem);
+        });
+
+        test('should render ContentExplorerModal and NewFolderModal in Portal by default', () => {
+            const wrapper = renderComponent({}, mount);
+            wrapper.setState({ isNewFolderModalOpen: true });
+
+            expect(wrapper.find('Portal').length).toBe(4);
+        });
+
+        test('should not render ContentExplorerModal and NewFolderModal in Portal if shouldNotUsePortal=true', () => {
+            const wrapper = renderComponent({ shouldNotUsePortal: true }, mount);
+            wrapper.setState({ isNewFolderModalOpen: true });
+
+            expect(wrapper.find('Portal').length).toBe(0);
         });
     });
 
