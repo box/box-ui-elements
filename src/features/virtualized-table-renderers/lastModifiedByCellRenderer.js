@@ -18,7 +18,7 @@ const lastModifiedByCellRenderer = (intl: any, { dateFormat }: LastModifiedByCel
 
         if (dateFormat) {
             lastModified = intl.formatDate(modified_at, dateFormat);
-        } else if (intl.formatRelativeTime) {
+        } else {
             const { value, unit } = timeFromNow(Date.parse(modified_at));
             lastModified = intl.formatRelativeTime(value, unit);
         }
