@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 // @ts-ignore flow import
-import timeFromNow from '../../utils/relativeTime';
-// @ts-ignore flow import
 import messages from './messages';
-import './PresenceAvatarTooltipContent.scss';
 // @ts-ignore flow import
 import { determineInteractionMessage } from './utils/presenceUtils';
+import './PresenceAvatarTooltipContent.scss';
+// @ts-ignore flow import
+import timeFromNow from '../../utils/relativeTime';
 
 export type Props = {
     name: string;

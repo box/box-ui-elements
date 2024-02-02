@@ -1,14 +1,14 @@
+import * as React from 'react';
 import isEmpty from 'lodash/isEmpty';
 import PropTypes from 'prop-types';
-import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import Avatar from '../../components/avatar';
 import Link from '../../components/link/LinkBase';
-import timeFromNow from '../../utils/relativeTime';
-import PresenceAvatar from './PresenceAvatar';
 import messages from './messages';
+import PresenceAvatar from './PresenceAvatar';
 import { determineInteractionMessage } from './utils/presenceUtils';
+import timeFromNow from '../../utils/relativeTime';
 
 import './PresenceCollaborator.scss';
 

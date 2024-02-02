@@ -1,10 +1,10 @@
 // @flow
 
-import timeFromNow from '../../utils/relativeTime';
 import { formatUser } from './FormattedUser';
 import baseCellRenderer from './baseCellRenderer';
-import type { LastModifiedByCellRendererCellData, LastModifiedByCellRendererParams } from './flowTypes';
 import messages from './messages';
+import type { LastModifiedByCellRendererCellData, LastModifiedByCellRendererParams } from './flowTypes';
+import timeFromNow from '../../utils/relativeTime';
 
 type LastModifiedByCellRendererSettings = {
     dateFormat?: Object,

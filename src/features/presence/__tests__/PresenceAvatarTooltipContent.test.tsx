@@ -1,6 +1,6 @@
-import { shallow, ShallowWrapper } from 'enzyme';
 import React from 'react';
 import { createIntl } from 'react-intl';
+import { shallow, ShallowWrapper } from 'enzyme';
 import collaboratorList from '../__mocks__/collaborators';
 // @ts-ignore flow import
 import messages from '../messages';
