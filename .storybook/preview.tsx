@@ -6,7 +6,7 @@ import '../src/styles/variables';
 import '../src/styles/base.scss';
 import { reactIntl } from "./reactIntl";
 
-import {initialize, mswDecorator} from 'msw-storybook-addon';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
 
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;

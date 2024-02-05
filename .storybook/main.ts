@@ -21,7 +21,7 @@ const config: { webpackFinal: (config: any) => Promise<any>; staticDirs: string[
     framework: {
         name: '@storybook/react-webpack5',
     },
-    staticDirs: ['../public'],
+    staticDirs: ['public'],
     webpackFinal: async (config: any) => {
         // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
         // You can change the configuration based on that.

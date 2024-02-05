@@ -5,6 +5,10 @@
 .idea
 _site
 __diff_output__
+build-storybook.log
+chromatic.log
+chromatic-build-*.xml
+chromatic-diagnostics.json
 dist
 es
 i18n/*.js
@@ -20,7 +24,3 @@ test/videos
 test/dev.html
 yarn-debug.log
 yarn-error.log
-build-storybook.log
-chromatic.log
-chromatic-build-*.xml
-chromatic-diagnostics.json

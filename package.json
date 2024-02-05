@@ -394,6 +394,6 @@
         }
     },
     "msw": {
-        "workerDirectory": ["public"]
+        "workerDirectory": [".storybook/public"]
     }
 }
