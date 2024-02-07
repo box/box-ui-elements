@@ -784,13 +784,13 @@ class MultiputUpload extends BaseMultiput {
                 buffer: ArrayBuffer,
                 readCompleteTimestamp: number,
             } = await this.readFile(reader, blob);
-            const sha256ArrayBuffer = await digest('SHA-256', buffer);
-            const sha256 = btoa(
-                [].reduce.call(new Uint8Array(sha256ArrayBuffer), (data, byte) => data + String.fromCharCode(byte), ''),
+            const sha1ArrayBuffer = await digest('SHA-1', buffer);
+            const sha1 = btoa(
+                [].reduce.call(new Uint8Array(sha1ArrayBuffer), (data, byte) => data + String.fromCharCode(byte), ''),
             );
             this.sendPartToWorker(part, buffer);
 
-            part.sha256 = sha256;
+            part.sha1 = sha1;
             part.state = PART_STATE_DIGEST_READY;
             part.blob = blob;
 
