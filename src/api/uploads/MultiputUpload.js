@@ -795,6 +795,8 @@ class MultiputUpload extends BaseMultiput {
             part.blob = blob;
 
             this.numPartsDigestReady += 1;
+            // This will trigger the next digest computation
+            this.numPartsDigestComputing -= 1;
             const digestCompleteTimestamp = Date.now();
 
             part.timing = {
@@ -823,7 +825,6 @@ class MultiputUpload extends BaseMultiput {
 
         const { data } = event;
         if (data.type === 'partDone') {
-            this.numPartsDigestComputing -= 1;
             const { part } = data;
             this.parts[part.index].timing.fileDigestTime = data.duration;
             this.processNextParts();
