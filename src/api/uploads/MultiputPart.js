@@ -30,7 +30,7 @@ class MultiputPart extends BaseMultiput {
 
     offset: number;
 
-    sha256: string;
+    sha1: string;
 
     partSize: number;
 
@@ -136,7 +136,7 @@ class MultiputPart extends BaseMultiput {
             uploadedBytes: this.uploadedBytes,
             numUploadRetriesPerformed: this.numUploadRetriesPerformed,
             numDigestRetriesPerformed: this.numDigestRetriesPerformed,
-            sha256: this.sha256,
+            sha1: this.sha1,
             timing: this.timing,
         });
 
@@ -157,8 +157,8 @@ class MultiputPart extends BaseMultiput {
             return;
         }
 
-        if (!this.sha256) {
-            throw new Error('Part SHA-256 unavailable');
+        if (!this.sha1) {
+            throw new Error('Part SHA-1 unavailable');
         }
 
         if (!this.blob) {
@@ -174,7 +174,7 @@ class MultiputPart extends BaseMultiput {
 
         const headers = {
             'Content-Type': 'application/octet-stream',
-            Digest: `sha-256=${this.sha256}`,
+            Digest: `sha=${this.sha1}`,
             'Content-Range': `bytes ${this.offset}-${this.rangeEnd}/${this.fileSize}`,
             'X-Box-Client-Event-Info': JSON.stringify(clientEventInfo),
         };

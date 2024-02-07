@@ -889,6 +889,7 @@ describe('api/uploads/MultiputUpload', () => {
         test('should read, compute digest, then send part to worker', async () => {
             webcrypto.digest = jest.fn().mockReturnValueOnce(Promise.resolve());
             multiputUploadTest.sendPartToWorker = jest.fn();
+            multiputUploadTest.numPartsDigestComputing = 1;
             multiputUploadTest.readFile = jest.fn().mockReturnValueOnce({
                 buffer: new ArrayBuffer(),
                 readCompleteTimestamp: 123,
@@ -899,6 +900,7 @@ describe('api/uploads/MultiputUpload', () => {
                 offset: 1,
                 size: 2,
             });
+            expect(multiputUploadTest.numPartsDigestComputing).toBe(0);
             expect(multiputUploadTest.sendPartToWorker).toHaveBeenCalled();
             expect(multiputUploadTest.processNextParts).toHaveBeenCalled();
             expect(multiputUploadTest.readFile).toHaveBeenCalled();
@@ -1050,7 +1052,7 @@ describe('api/uploads/MultiputUpload', () => {
             expect(multiputUploadTest.processNextParts).toHaveBeenCalled();
             expect(multiputUploadTest.sha1Worker.terminate).not.toHaveBeenCalled();
             expect(multiputUploadTest.sessionErrorHandler).not.toHaveBeenCalled();
-            expect(multiputUploadTest.numPartsDigestComputing).toEqual(0);
+            expect(multiputUploadTest.numPartsDigestComputing).toEqual(1);
             expect(multiputUploadTest.parts[0]).toEqual({ timing: { fileDigestTime: 10 } });
         });
 

@@ -41,21 +41,21 @@ describe('api/uploads/MultiputPart', () => {
             expect(MultiputPartTest.xhr.uploadFile).not.toHaveBeenCalled();
         });
 
-        test('should throw error if sha256 is not available', () => {
+        test('should throw error if sha1 is not available', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.isPaused = false;
             MultiputPartTest.blob = {};
 
             MultiputPartTest.xhr.uploadFile = jest.fn();
 
-            expect(MultiputPartTest.upload.bind(MultiputPartTest)).toThrowError(/Part SHA-256 unavailable/);
+            expect(MultiputPartTest.upload.bind(MultiputPartTest)).toThrowError(/Part SHA-1 unavailable/);
             expect(MultiputPartTest.xhr.uploadFile).not.toHaveBeenCalled();
         });
 
         test('should throw error if blob is not available', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.isPaused = false;
-            MultiputPartTest.sha256 = '123';
+            MultiputPartTest.sha1 = '123';
 
             MultiputPartTest.xhr.uploadFile = jest.fn();
 
@@ -66,7 +66,7 @@ describe('api/uploads/MultiputPart', () => {
         test('should upload file properly', () => {
             MultiputPartTest.destroyed = false;
             MultiputPartTest.isPaused = false;
-            MultiputPartTest.sha256 = '123';
+            MultiputPartTest.sha1 = '123';
             MultiputPartTest.blob = {};
             MultiputPartTest.xhr.uploadFile = jest.fn();
 
