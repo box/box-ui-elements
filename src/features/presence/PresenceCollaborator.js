@@ -8,14 +8,14 @@ import Link from '../../components/link/LinkBase';
 import messages from './messages';
 import PresenceAvatar from './PresenceAvatar';
 import { determineInteractionMessage } from './utils/presenceUtils';
+import timeFromNow from '../../utils/relativeTime';
 
 import './PresenceCollaborator.scss';
 
 export const renderTimestampMessage = (interactedAt, interactionType, intl) => {
     const lastActionMessage = determineInteractionMessage(interactionType, interactedAt);
-    const timeAgo = intl.formatRelativeTime
-        ? intl.formatRelativeTime(interactedAt - Date.now())
-        : intl.formatRelative(interactedAt);
+    const { value, unit } = timeFromNow(interactedAt);
+    const timeAgo = intl.formatRelativeTime(value, unit);
 
     if (lastActionMessage) {
         return (

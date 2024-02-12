@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage, injectIntl, type InjectIntlProvidedProps } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from '@box/react-virtualized';
 import debounce from 'lodash/debounce';
@@ -26,6 +27,7 @@ type Props = {|
     apiHost: string,
     contentPreviewProps?: ContentPreviewProps,
     getToken: (fileId: string) => Promise<Token>,
+    intl: IntlShape,
     messages: Array<EligibleMessageCenterMessage> | null | Error,
     onMessageShown: EligibleMessageCenterMessage => void,
     onRequestClose: () => void,
@@ -51,7 +53,7 @@ function MessageCenterModal({
     intl,
     overscanRowCount = 1,
     onMessageShown,
-}: Props & InjectIntlProvidedProps) {
+}: Props) {
     const categories: Array<{ displayText: string, value: string }> | null = React.useMemo(() => {
         if (!Array.isArray(messages)) {
             return null;
