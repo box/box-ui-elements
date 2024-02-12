@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import Pikaday from 'pikaday';
 import range from 'lodash/range';
@@ -122,6 +122,7 @@ type Props = {
     hideOptionalLabel?: boolean,
     /** Props that will be applied on the input element */
     inputProps?: Object,
+    intl: IntlShape,
     /** Is input clearable */
     isClearable?: boolean,
     /** Is input disabled */
@@ -151,7 +152,7 @@ type Props = {
     /** Date to set the input */
     value?: Date,
     yearRange?: number | Array<number>,
-} & InjectIntlProvidedProps;
+};
 
 class DatePicker extends React.Component<Props> {
     static defaultProps = {

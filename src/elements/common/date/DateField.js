@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import { isToday, isYesterday } from '../../../utils/datetime';
 import messages from '../messages';
 import './DateField.scss';
@@ -15,9 +15,10 @@ type Props = {
     capitalize?: boolean,
     date: string,
     dateFormat?: Object,
+    intl: IntlShape,
     omitCommas?: boolean,
     relative?: boolean,
-} & InjectIntlProvidedProps;
+};
 
 const DEFAULT_DATE_FORMAT = {
     weekday: 'short',

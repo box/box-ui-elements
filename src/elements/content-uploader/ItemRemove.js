@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import PlainButton from '../../components/plain-button/PlainButton';
 import Tooltip from '../../components/tooltip';
 import IconClose from '../../icons/general/IconClose';
@@ -15,9 +15,10 @@ import { STATUS_ERROR, STATUS_IN_PROGRESS, STATUS_STAGED } from '../../constants
 import type { UploadItem, UploadStatus } from '../../common/types/upload';
 
 type Props = {
+    intl: IntlShape,
     onClick: (item: UploadItem) => void,
     status: UploadStatus,
-} & InjectIntlProvidedProps;
+};
 
 const ItemRemove = ({ intl, onClick, status }: Props) => {
     const resin = {};

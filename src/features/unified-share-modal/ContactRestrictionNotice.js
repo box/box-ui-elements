@@ -4,7 +4,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import getProp from 'lodash/get';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 
 import Tooltip from '../../components/tooltip';
 import PlainButton from '../../components/plain-button';
@@ -51,6 +51,7 @@ const restrictionNoticeMessageMap = {
 type Props = {
     collabRestrictionType?: CollabRestrictionType,
     error?: React.Node,
+    intl: IntlShape,
     isFetchingJustificationReasons?: boolean,
     isRestrictionJustificationEnabled?: boolean,
     justificationReasons: Array<SelectOptionProp>,
@@ -60,7 +61,7 @@ type Props = {
     restrictedGroups: Array<number>,
     selectedContacts: Array<Contact>,
     selectedJustificationReason: ?SelectOptionProp,
-} & InjectIntlProvidedProps;
+};
 
 const ContactRestrictionNotice = ({
     collabRestrictionType = COLLAB_RESTRICTION_TYPE_ACCESS_POLICY,
