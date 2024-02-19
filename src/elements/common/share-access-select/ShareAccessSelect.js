@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import messages from '../messages';
 import { ACCESS_NONE, ACCESS_OPEN, ACCESS_COLLAB, ACCESS_COMPANY } from '../../../constants';
 import type { BoxItem } from '../../../common/types/core';
@@ -15,9 +15,10 @@ import './ShareAccessSelect.scss';
 type Props = {
     canSetShareAccess: boolean,
     className: string,
+    intl: IntlShape,
     item: BoxItem,
     onChange: Function,
-} & InjectIntlProvidedProps;
+};
 
 const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl }: Props) => {
     const { allowed_shared_link_access_levels: allowedSharedAccessLevels, permissions, shared_link: sharedLink } = item;

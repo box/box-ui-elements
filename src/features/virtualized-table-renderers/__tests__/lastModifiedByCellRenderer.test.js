@@ -1,4 +1,5 @@
 // @flow
+import timeFromNow from '../../../utils/relativeTime';
 import { formatUser } from '../FormattedUser';
 import lastModifiedByCellRenderer from '../lastModifiedByCellRenderer';
 
@@ -22,9 +23,10 @@ describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () =
                 },
             },
         };
+
         intl = {
             formatDate: jest.fn().mockImplementation(value => value),
-            formatRelative: jest.fn().mockImplementation(value => `${value} eons ago`),
+            formatRelativeTime: jest.fn().mockImplementation((value, unit) => `${Math.abs(value)} ${unit}s ago`),
             formatMessage: jest
                 .fn()
                 .mockImplementation((message, { lastModified, user }) => `${lastModified} by ${user}`),
@@ -54,15 +56,17 @@ describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () =
         expect(formatUser).toHaveBeenCalledTimes(1);
         expect(formatUser).toHaveBeenCalledWith({ id, email, name }, intl);
 
-        expect(intl.formatRelative).toHaveBeenCalledTimes(1);
-        expect(intl.formatRelative).toHaveBeenCalledWith(Date.parse(modified_at), {
-            units: 'day-short',
-            style: 'numeric',
-        });
+        expect(intl.formatRelativeTime).toHaveBeenCalledTimes(1);
+        const expectedTimeFromNowResult = timeFromNow(Date.parse(modified_at));
+
+        expect(intl.formatRelativeTime).toHaveBeenCalledWith(
+            expectedTimeFromNowResult.value,
+            expectedTimeFromNowResult.unit,
+        );
 
         expect(intl.formatMessage).toHaveBeenCalledTimes(1);
         expect(intl.formatMessage).toHaveBeenCalledWith(expect.any(Object), {
-            lastModified: `${Date.parse(modified_at)} eons ago`,
+            lastModified: `${Math.abs(expectedTimeFromNowResult.value)} ${expectedTimeFromNowResult.unit}s ago`,
             user: `${id}-${name}-${email}`,
         });
     });
@@ -87,10 +91,11 @@ describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () =
         delete cellData.modified_by;
 
         const result = lastModifiedByCellRenderer(intl)(cellRendererParams);
+        const expectedTimeFromNowResult = timeFromNow(Date.parse(modified_at));
 
         expect(formatUser).toHaveBeenCalledTimes(0);
         expect(intl.formatMessage).toHaveBeenCalledTimes(0);
-        expect(result).toBe(`${Date.parse(modified_at)} eons ago`);
+        expect(result).toBe(`${Math.abs(expectedTimeFromNowResult.value)} ${expectedTimeFromNowResult.unit}s ago`);
     });
 
     test('should call formatDate when dateFormat is provided', () => {
@@ -102,6 +107,6 @@ describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () =
 
         expect(intl.formatDate).toHaveBeenCalledTimes(1);
         expect(intl.formatDate).toHaveBeenCalledWith(modified_at, dateFormat);
-        expect(intl.formatRelative).toHaveBeenCalledTimes(0);
+        expect(intl.formatRelativeTime).toHaveBeenCalledTimes(0);
     });
 });

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import IconPlusThin from '../../icons/general/IconPlusThin';
 import IconMinusThin from '../../icons/general/IconMinusThin';
 import PlainButton from '../plain-button/PlainButton';
@@ -13,9 +13,10 @@ type Props = {
     columnCount: number,
     gridMaxColumns: number,
     gridMinColumns: number,
+    intl: IntlShape,
     maxColumnCount: number,
     onChange: (newSliderValue: number) => void,
-} & InjectIntlProvidedProps;
+};
 
 const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, intl, maxColumnCount, onChange }: Props) => {
     const { formatMessage } = intl;

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 
 import { MenuLinkItem } from '../menu';
@@ -18,6 +18,7 @@ export type BreadcrumbProps = {
     className?: string,
     /** Reverse default overflow breadcrumb ordering to highest to lowest depth */
     hasReverseOverflowOrder?: boolean,
+    intl: IntlShape,
     /** Show number of breadcrumb items before overflow. Default is 1 */
     numItemsBeforeOverflow?: number,
     /** Element to override default overflow menu button */
@@ -26,7 +27,7 @@ export type BreadcrumbProps = {
     threshold?: number,
 };
 
-type Props = BreadcrumbProps & InjectIntlProvidedProps;
+type Props = BreadcrumbProps;
 
 const Breadcrumb = ({
     children,

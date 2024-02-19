@@ -7,7 +7,7 @@
 import React from 'react';
 import isFinite from 'lodash/isFinite';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import type { MessageDescriptor, InjectIntlProvidedProps } from 'react-intl';
+import type { MessageDescriptor, IntlShape } from 'react-intl';
 import AccessStats from '../../features/access-stats/AccessStats';
 import messages from '../common/messages';
 import { INTERACTION_TARGET, SECTION_TARGETS, DETAILS_TARGETS } from '../common/interactionTargets';
@@ -21,8 +21,9 @@ type Props = {
     accessStats?: FileAccessStats,
     error?: MessageDescriptor,
     file: BoxItem,
+    intl: IntlShape,
     onAccessStatsClick?: Function,
-} & InjectIntlProvidedProps;
+};
 
 const SidebarAccessStats = ({
     onAccessStatsClick,

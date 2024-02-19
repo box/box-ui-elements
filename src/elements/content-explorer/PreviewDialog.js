@@ -7,7 +7,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import cloneDeep from 'lodash/cloneDeep';
 import messages from '../common/messages';
 import ContentPreview from '../content-preview';
@@ -23,6 +23,7 @@ type Props = {
     canDownload: boolean,
     contentPreviewProps: ContentPreviewProps,
     currentCollection: Collection,
+    intl: IntlShape,
     isOpen: boolean,
     isTouch: boolean,
     item: BoxItem,
@@ -38,7 +39,7 @@ type Props = {
     staticHost: string,
     staticPath: string,
     token: Token,
-} & InjectIntlProvidedProps;
+};
 
 const PreviewDialog = ({
     item,

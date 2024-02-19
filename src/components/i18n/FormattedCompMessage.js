@@ -1,4 +1,5 @@
 // @flow
+// @deprecated, use FormattedMessage from react-intl v6 instead.
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import isNaN from 'lodash/isNaN';

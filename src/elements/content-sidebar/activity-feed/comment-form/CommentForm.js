@@ -8,7 +8,7 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import Avatar from '../Avatar';
 import CommentFormControls from './CommentFormControls';
 import DraftJSMentionSelector, {
@@ -30,6 +30,7 @@ type Props = {
     entityId?: string,
     getAvatarUrl?: GetAvatarUrlCallback,
     getMentionWithQuery?: Function,
+    intl: IntlShape,
     isDisabled?: boolean,
     isEditing?: boolean,
     isOpen: boolean,
@@ -43,7 +44,7 @@ type Props = {
     tagged_message?: string,
     updateComment?: Function,
     user?: User,
-} & InjectIntlProvidedProps;
+};
 
 const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
     shouldFocusOnOpen

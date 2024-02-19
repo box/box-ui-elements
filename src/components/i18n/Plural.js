@@ -1,5 +1,5 @@
 // @flow
-// @deprecated, use FormattedPlural from react-intl v3 instead
+// @deprecated, use FormattedPlural from react-intl v6 instead.
 import * as React from 'react';
 
 type Props = {
