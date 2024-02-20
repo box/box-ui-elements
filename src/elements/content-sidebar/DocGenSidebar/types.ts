@@ -15,3 +15,7 @@ export type DocGenTemplateTagsResponse = {
         nextMarker?: string;
     };
 };
+
+export interface JsonData {
+    [key: string]: JsonData | string[];
+}

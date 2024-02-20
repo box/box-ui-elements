@@ -29,11 +29,6 @@
     font-weight: bold;
     font-size: $bdl-fontSize--dejaBlue;
     font-family: 'Lato', sans-serif;
-    border-radius: 6px;
-
-    &:hover {
-        background: $bdl-gray-10;
-    }
 }
 
 .docgen-loading {

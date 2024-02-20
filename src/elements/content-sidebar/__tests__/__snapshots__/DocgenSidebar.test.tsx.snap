@@ -4,11 +4,11 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
 <DocGenSidebar
   getDocGenTags={
     [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": Promise {},
         },
@@ -16,12 +16,12 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
     }
   }
   intl={
-    Object {
+    {
       "formatMessage": [Function],
     }
   }
   logger={
-    Object {
+    {
       "onReadyMetric": [MockFunction],
     }
   }
@@ -57,43 +57,35 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
             className="docgen-sidebar"
           >
             <TagsSection
+              data={
+                {
+                  "about": [
+                    "{{ about }}",
+                    "{{ about }}",
+                  ],
+                  "about.name": [
+                    "{{ about }}",
+                  ],
+                  "company": [
+                    "{{ company }}",
+                    "{{ company }}",
+                  ],
+                  "company.name": [
+                    "{{ company }}",
+                  ],
+                  "isActive": [
+                    "{{ isActive }}",
+                  ],
+                  "phone": [
+                    "{{ phone }}",
+                  ],
+                }
+              }
               message={
-                Object {
+                {
                   "defaultMessage": "Text tags",
                   "id": "sidebar.docgen.textTags",
                 }
-              }
-              tags={
-                Array [
-                  Object {
-                    "json_paths": Array [
-                      "isActive",
-                    ],
-                    "tag_content": "{{ isActive }}",
-                    "tag_type": "text",
-                  },
-                  Object {
-                    "json_paths": Array [
-                      "about",
-                    ],
-                    "tag_content": "{{ about }}",
-                    "tag_type": "text",
-                  },
-                  Object {
-                    "json_paths": Array [
-                      "phone",
-                    ],
-                    "tag_content": "{{ phone }}",
-                    "tag_type": "text",
-                  },
-                  Object {
-                    "json_paths": Array [
-                      "company",
-                    ],
-                    "tag_content": "{{ company }}",
-                    "tag_type": "text",
-                  },
-                ]
               }
             >
               <div
@@ -109,77 +101,179 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                     <div />
                   </FormattedMessage>
                 </span>
-                <TagsList
-                  tags={
-                    Array [
-                      Object {
-                        "json_paths": Array [
-                          "isActive",
-                        ],
-                        "tag_content": "{{ isActive }}",
-                        "tag_type": "text",
-                      },
-                      Object {
-                        "json_paths": Array [
-                          "about",
-                        ],
-                        "tag_content": "{{ about }}",
-                        "tag_type": "text",
-                      },
-                      Object {
-                        "json_paths": Array [
-                          "phone",
-                        ],
-                        "tag_content": "{{ phone }}",
-                        "tag_type": "text",
-                      },
-                      Object {
-                        "json_paths": Array [
-                          "company",
-                        ],
-                        "tag_content": "{{ company }}",
-                        "tag_type": "text",
-                      },
-                    ]
+                <TagTree
+                  data={
+                    {
+                      "about": [
+                        "{{ about }}",
+                        "{{ about }}",
+                      ],
+                      "about.name": [
+                        "{{ about }}",
+                      ],
+                      "company": [
+                        "{{ company }}",
+                        "{{ company }}",
+                      ],
+                      "company.name": [
+                        "{{ company }}",
+                      ],
+                      "isActive": [
+                        "{{ isActive }}",
+                      ],
+                      "phone": [
+                        "{{ phone }}",
+                      ],
+                    }
                   }
                 >
                   <div>
-                    <span
-                      className="docgen-tag-path"
-                      key="{{ isActive }}"
+                    <div
+                      key="about-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
                     >
-                      {{ isActive }}
-                    </span>
-                    <span
-                      className="docgen-tag-path"
-                      key="{{ about }}"
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        about
+                      </span>
+                      <TagTree
+                        data={
+                          [
+                            "{{ about }}",
+                            "{{ about }}",
+                          ]
+                        }
+                        level={1}
+                      />
+                    </div>
+                    <div
+                      key="about.name-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
                     >
-                      {{ about }}
-                    </span>
-                    <span
-                      className="docgen-tag-path"
-                      key="{{ phone }}"
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        about.name
+                      </span>
+                      <TagTree
+                        data={
+                          [
+                            "{{ about }}",
+                          ]
+                        }
+                        level={1}
+                      />
+                    </div>
+                    <div
+                      key="company-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
                     >
-                      {{ phone }}
-                    </span>
-                    <span
-                      className="docgen-tag-path"
-                      key="{{ company }}"
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        company
+                      </span>
+                      <TagTree
+                        data={
+                          [
+                            "{{ company }}",
+                            "{{ company }}",
+                          ]
+                        }
+                        level={1}
+                      />
+                    </div>
+                    <div
+                      key="company.name-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
                     >
-                      {{ company }}
-                    </span>
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        company.name
+                      </span>
+                      <TagTree
+                        data={
+                          [
+                            "{{ company }}",
+                          ]
+                        }
+                        level={1}
+                      />
+                    </div>
+                    <div
+                      key="isActive-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    >
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        isActive
+                      </span>
+                      <TagTree
+                        data={
+                          [
+                            "{{ isActive }}",
+                          ]
+                        }
+                        level={1}
+                      />
+                    </div>
+                    <div
+                      key="phone-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    >
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        phone
+                      </span>
+                      <TagTree
+                        data={
+                          [
+                            "{{ phone }}",
+                          ]
+                        }
+                        level={1}
+                      />
+                    </div>
                   </div>
-                </TagsList>
+                </TagTree>
               </div>
             </TagsSection>
             <TagsSection
+              data={{}}
               message={
-                Object {
+                {
                   "defaultMessage": "Image tags",
                   "id": "sidebar.docgen.imageTags",
                 }
               }
-              tags={Array []}
             />
           </div>
         </div>
@@ -193,11 +287,11 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
 <DocGenSidebar
   getDocGenTags={
     [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": Promise {},
         },
@@ -205,12 +299,12 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
     }
   }
   intl={
-    Object {
+    {
       "formatMessage": [Function],
     }
   }
   logger={
-    Object {
+    {
       "onReadyMetric": [MockFunction],
     }
   }
@@ -387,11 +481,11 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
 <DocGenSidebar
   getDocGenTags={
     [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": Promise {},
         },
@@ -399,12 +493,12 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
     }
   }
   intl={
-    Object {
+    {
       "formatMessage": [Function],
     }
   }
   logger={
-    Object {
+    {
       "onReadyMetric": [MockFunction],
     }
   }
@@ -526,11 +620,11 @@ exports[`elements/content-sidebar/DocGenSidebar should render loading state 1`] 
 <DocGenSidebar
   getDocGenTags={
     [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": Promise {},
         },
@@ -538,12 +632,12 @@ exports[`elements/content-sidebar/DocGenSidebar should render loading state 1`] 
     }
   }
   intl={
-    Object {
+    {
       "formatMessage": [Function],
     }
   }
   logger={
-    Object {
+    {
       "onReadyMetric": [MockFunction],
     }
   }
