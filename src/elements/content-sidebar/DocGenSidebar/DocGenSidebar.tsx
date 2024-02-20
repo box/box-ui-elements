@@ -29,7 +29,7 @@ import { ErrorContextProps } from '../../../common/types/api';
 import { WithLoggerProps } from '../../../common/types/logging';
 
 import './DocGenSidebar.scss';
-import { DocGenTag, DocGenTemplateTagsResponse } from './types';
+import { DocGenTag, DocGenTemplateTagsResponse, JsonData } from './types';
 
 type ExternalProps = {
     enabled: boolean;
@@ -49,6 +49,10 @@ type State = {
         image: DocGenTag[];
         text: DocGenTag[];
     };
+    jsonPaths: {
+        textTree: JsonData;
+        imageTree: JsonData;
+    };
 };
 
 const DocGenSidebar = (props: Props) => {
@@ -59,7 +63,36 @@ const DocGenSidebar = (props: Props) => {
             text: [],
             image: [],
         },
+        jsonPaths: {
+            textTree: {},
+            imageTree: {},
+        },
     });
+
+    const tagsToJsonPaths = (tags: DocGenTag[]) => {
+        /* eslint-disable  @typescript-eslint/no-explicit-any */
+        const jsonPathsMap: any = {};
+        tags.forEach(tag => {
+            tag.json_paths.forEach(jsonPath => {
+                const paths = jsonPath.split('.');
+                let currentPath = '';
+                paths.forEach((segment, index) => {
+                    // avoid dot at the beginning of the path
+                    currentPath += (index > 0 ? '.' : '') + segment;
+
+                    // If the currenetPath doesn't exist in the map, initialize it
+
+                    if (!jsonPathsMap[currentPath]) {
+                        jsonPathsMap[currentPath] = [];
+                    }
+
+                    // add the tag content to the array for this path
+                    jsonPathsMap[currentPath].push(tag.tag_content);
+                });
+            });
+        });
+        return jsonPathsMap;
+    };
 
     const loadTags = () => {
         if (props.getDocGenTags) {
@@ -68,13 +101,20 @@ const DocGenSidebar = (props: Props) => {
                 .getDocGenTags()
                 .then((response: DocGenTemplateTagsResponse) => {
                     if (response) {
+                        // anything that is not an image tag for this view is treated as a text ta
+                        const textTags = response.data.filter(tag => tag.tag_type !== 'image');
+                        const imageTags = response.data.filter(tag => tag.tag_type === 'image');
                         setSidebarState({
                             ...sidebarState,
                             tags: {
-                                text: response.data.filter(tag => tag.tag_type === 'text'),
-                                image: response.data.filter(tag => tag.tag_type === 'image'),
+                                text: textTags,
+                                image: imageTags,
                             },
                             loading: false,
+                            jsonPaths: {
+                                textTree: tagsToJsonPaths(textTags),
+                                imageTree: tagsToJsonPaths(imageTags),
+                            },
                         });
                     } else {
                         setSidebarState({ ...sidebarState, loading: false });
@@ -104,8 +144,8 @@ const DocGenSidebar = (props: Props) => {
                             <NoTagsAvailable />
                         ) : (
                             <>
-                                <TagsSection message={messages.textTags} tags={tags.text} />
-                                <TagsSection message={messages.imageTags} tags={tags.image} />
+                                <TagsSection message={messages.textTags} data={sidebarState.jsonPaths.textTree} />
+                                <TagsSection message={messages.imageTags} data={sidebarState.jsonPaths.imageTree} />
                             </>
                         )}
                     </>

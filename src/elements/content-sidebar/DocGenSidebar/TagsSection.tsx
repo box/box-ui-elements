@@ -1,25 +1,25 @@
 import * as React from 'react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 
-import { DocGenTag } from './types';
+import { JsonData } from './types';
 
 import './DocGenSidebar.scss';
-import TagsList from './TagsList';
+import TagTree from './TagTree';
 
 type Props = {
     message: MessageDescriptor;
-    tags: DocGenTag[];
+    data: JsonData | string[];
 };
 
-const TagsSection = ({ tags, message }: Props) => (
+const TagsSection = ({ data, message }: Props) => (
     <>
-        {tags.length > 0 && (
+        {!(typeof data !== 'object' || Array.isArray(data) || Object.keys(data).length === 0) && (
             <div className="docgen-tag-section">
                 <span className="docgen-tag-section-header">
                     <FormattedMessage {...message} />
                 </span>
 
-                <TagsList tags={tags} />
+                <TagTree data={data} />
             </div>
         )}
     </>

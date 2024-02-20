@@ -23,7 +23,7 @@ const docGenSidebarProps = {
                 {
                     tag_content: '{{ about }}',
                     tag_type: 'text',
-                    json_paths: ['about'],
+                    json_paths: ['about', 'about.name'],
                 },
                 {
                     tag_content: '{{ phone }}',
@@ -33,7 +33,7 @@ const docGenSidebarProps = {
                 {
                     tag_content: '{{ company }}',
                     tag_type: 'text',
-                    json_paths: ['company'],
+                    json_paths: ['company', 'company.name'],
                 },
             ],
         }),
@@ -66,7 +66,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         });
         wrapper!.update();
         const tagList = wrapper!.find('span.docgen-tag-path');
-        expect(tagList).toHaveLength(4);
+        expect(tagList).toHaveLength(6);
         expect(wrapper).toMatchSnapshot();
     });
 
