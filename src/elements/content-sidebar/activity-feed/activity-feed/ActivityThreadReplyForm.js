@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../../../components/plain-button';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
@@ -16,6 +16,7 @@ import './ActivityThreadReplyForm.scss';
 
 type ActivityThreadReplyFromProps = {
     getMentionWithQuery?: (searchStr: string) => void,
+    intl: IntlShape,
     isDisabled?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onFocus: () => void,
@@ -24,7 +25,7 @@ type ActivityThreadReplyFromProps = {
     onShow: () => void,
 };
 
-type Props = ActivityThreadReplyFromProps & InjectIntlProvidedProps;
+type Props = ActivityThreadReplyFromProps;
 
 function ActivityThreadReplyForm({
     mentionSelectorContacts,

@@ -7,7 +7,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import PrimaryButton from '../../components/primary-button/PrimaryButton';
 import Button from '../../components/button/Button';
 import messages from '../common/messages';
@@ -23,13 +23,14 @@ import type { BoxItem } from '../../common/types/core';
 type Props = {
     appElement: HTMLElement,
     errorCode: string,
+    intl: IntlShape,
     isLoading: boolean,
     isOpen: boolean,
     item: BoxItem,
     onCancel: Function,
     onRename: Function,
     parentElement: HTMLElement,
-} & InjectIntlProvidedProps;
+};
 
 /* eslint-disable jsx-a11y/label-has-for */
 const RenameDialog = ({

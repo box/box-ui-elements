@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';
 import IconInProgress from './IconInProgress';
@@ -31,12 +31,13 @@ const ICON_CHECK_COLOR = '#26C281';
 
 type Props = {
     error?: Object,
+    intl: IntlShape,
     isFolder?: boolean,
     isResumableUploadsEnabled: boolean,
     onClick: Function,
     onUpgradeCTAClick?: Function,
     status: UploadStatus,
-} & InjectIntlProvidedProps;
+};
 
 const ItemAction = ({
     error = {},

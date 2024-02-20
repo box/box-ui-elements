@@ -1,5 +1,9 @@
 ### Examples
 
+<!-- @deprecated, use [FormattedPlural](https://formatjs.io/docs/react-intl/components#formattedplural) or [FormattedMessage](https://formatjs.io/docs/react-intl/components#rich-text-formatting) with rich-text formatting from react-intl v6 instead. 
+@TODO: remove redundant components/code after react-intl upgrade (confirm unusability).  
+-->
+
 ** Basic **
 
 This can be a drop-in replacement for react-intl's FormattedHTMLMessage component:
