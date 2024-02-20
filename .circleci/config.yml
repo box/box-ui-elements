@@ -23,6 +23,7 @@ aliases:
     key: yarn-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
 
 defaults: &defaults
+  resource_class: large
   working_directory: ~/buie
   docker:
     - image: cimg/node:18.18
@@ -59,7 +60,6 @@ jobs:
             command: yarn flow check
 
   build-unit-tests:
-    resource_class: large
     <<: *defaults
     steps:
       - checkout
@@ -83,7 +83,7 @@ jobs:
           command: yarn test --maxWorkers=3
 
   e2e-tests:
-    working_directory: ~/buie
+    <<: *defaults
     docker:
       - image: cypress/included:12.13.0
     steps:
@@ -95,6 +95,19 @@ jobs:
           name: E2E tests
           command: yarn test:e2e
 
+  chromatic-deploy:
+    <<: *defaults
+    steps:
+        - checkout
+        - restore-cache: *restore-yarn-cache
+        - run: *yarn
+        - save-cache: *save-yarn-cache
+        - run: *clean
+        - run: *i18n
+        - run:
+            name: Chromatic
+            command: yarn chromatic
+
 workflows:
   version: 2
   lint_test_build:
@@ -103,3 +116,4 @@ workflows:
       - flow
       - build-unit-tests
       - e2e-tests
+      - chromatic-deploy
