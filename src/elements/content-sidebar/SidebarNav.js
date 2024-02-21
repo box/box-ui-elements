@@ -39,8 +39,8 @@ type Props = {
     hasDetails: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
-    isDocGenTemplate?: boolean,
     intl: IntlShape,
+    isDocGenTemplate?: boolean,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
 };
