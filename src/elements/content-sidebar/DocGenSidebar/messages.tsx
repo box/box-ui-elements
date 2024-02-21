@@ -16,6 +16,21 @@ const messages = defineMessages({
         description: 'DocGen sidebar header',
         defaultMessage: 'Doc Gen Tags',
     },
+    noTags: {
+        id: 'sidebar.docgen.noTags',
+        defaultMessage: 'This document has no tags',
+        description: 'No tags available',
+    },
+    addTagsInEditor: {
+        id: 'sidebar.docgen.addTagsInEditor',
+        defaultMessage: 'To use tags, please add them in tag editor.',
+        description: 'Add tags in editor',
+    },
+    learnMore: {
+        id: 'sidebar.docgen.learnMore',
+        defaultMessage: 'Find out more how to add tags',
+        description: 'Learn more link',
+    },
 });
 
 export default messages;
