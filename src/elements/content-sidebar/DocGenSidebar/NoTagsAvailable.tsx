@@ -1,12 +1,15 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import NoTagsIcon from './NoTagsIcon';
+// @ts-ignore: no ts definition
+import messages from './messages';
 
 const NoTagsAvailable = () => (
     <div className="docgen-empty-state">
         <NoTagsIcon className="docgen-empty-state--icon" />
-        <div>This document has no tags</div>
-        <p>To use tags, please add them in tag editor.</p>
-        <a href="/">Find out more how to add tags</a>
+        <strong>
+            <FormattedMessage {...messages.noTags} />
+        </strong>
     </div>
 );
 

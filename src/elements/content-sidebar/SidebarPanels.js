@@ -50,7 +50,6 @@ type Props = {
     hasMetadata: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
-    isDocGenTemplate: boolean,
     isOpen: boolean,
     location: Location,
     metadataSidebarProps: MetadataSidebarProps,
@@ -171,7 +170,6 @@ class SidebarPanels extends React.Component<Props, State> {
             hasMetadata,
             hasSkills,
             hasVersions,
-            isDocGenTemplate,
             isOpen,
             metadataSidebarProps,
             onAnnotationSelect,
@@ -275,7 +273,7 @@ class SidebarPanels extends React.Component<Props, State> {
                         )}
                     />
                 )}
-                {isDocGenTemplate && (
+                {docGenSidebarProps?.isDocGenTemplate && (
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_DOCGEN}`}
@@ -309,7 +307,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (isDocGenTemplate) {
+                        if (docGenSidebarProps?.isDocGenTemplate) {
                             redirect = SIDEBAR_VIEW_DOCGEN;
                         } else if (hasSkills) {
                             redirect = SIDEBAR_VIEW_SKILLS;

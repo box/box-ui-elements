@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { FormattedMessage, MessageDescriptor } from 'react-intl';
 
-import { JsonData } from './types';
+import { JsonPathsMap } from './types';
 
 import './DocGenSidebar.scss';
 import TagTree from './TagTree';
 
 type Props = {
     message: MessageDescriptor;
-    data: JsonData | string[];
+    data: JsonPathsMap;
 };
 
 const TagsSection = ({ data, message }: Props) => (

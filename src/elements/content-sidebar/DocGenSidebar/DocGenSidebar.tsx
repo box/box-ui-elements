@@ -29,11 +29,13 @@ import { ErrorContextProps } from '../../../common/types/api';
 import { WithLoggerProps } from '../../../common/types/logging';
 
 import './DocGenSidebar.scss';
-import { DocGenTag, DocGenTemplateTagsResponse, JsonData } from './types';
+import { DocGenTag, DocGenTemplateTagsResponse, JsonPathsMap } from './types';
 
 type ExternalProps = {
     enabled: boolean;
-    getDocGenTags: Function;
+    getDocGenTags: () => Promise<DocGenTemplateTagsResponse>;
+    isDocgenTemplate: boolean;
+    checkDocGenTemplate: void;
 };
 
 type Props = {
@@ -50,12 +52,16 @@ type State = {
         text: DocGenTag[];
     };
     jsonPaths: {
-        textTree: JsonData;
-        imageTree: JsonData;
+        textTree: JsonPathsMap;
+        imageTree: JsonPathsMap;
     };
 };
 
-const DocGenSidebar = (props: Props) => {
+const isJsonPathsMap = (obj: object): obj is JsonPathsMap => {
+    return typeof obj === 'object' && obj !== null;
+};
+
+const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
     const [sidebarState, setSidebarState] = React.useState<State>({
         hasError: false,
         loading: false,
@@ -68,42 +74,35 @@ const DocGenSidebar = (props: Props) => {
             imageTree: {},
         },
     });
-
-    const tagsToJsonPaths = (tags: DocGenTag[]) => {
-        /* eslint-disable  @typescript-eslint/no-explicit-any */
-        const jsonPathsMap: any = {};
+    const tagsToJsonPaths = (tags: DocGenTag[]): JsonPathsMap => {
+        const jsonPathsMap: JsonPathsMap = {};
         tags.forEach(tag => {
             tag.json_paths.forEach(jsonPath => {
                 const paths = jsonPath.split('.');
-                let currentPath = '';
-                paths.forEach((segment, index) => {
-                    // avoid dot at the beginning of the path
-                    currentPath += (index > 0 ? '.' : '') + segment;
-
-                    // If the currenetPath doesn't exist in the map, initialize it
-
-                    if (!jsonPathsMap[currentPath]) {
-                        jsonPathsMap[currentPath] = [];
+                let currentObject: JsonPathsMap | {} = jsonPathsMap;
+                paths.forEach(segment => {
+                    if (isJsonPathsMap(currentObject)) {
+                        if (!(segment in currentObject)) {
+                            (currentObject as JsonPathsMap)[segment] = {};
+                        }
+                        currentObject = (currentObject as JsonPathsMap)[segment];
                     }
-
-                    // add the tag content to the array for this path
-                    jsonPathsMap[currentPath].push(tag.tag_content);
                 });
             });
         });
+
         return jsonPathsMap;
     };
 
     const loadTags = () => {
-        if (props.getDocGenTags) {
+        if (getDocGenTags) {
             setSidebarState({ ...sidebarState, loading: true });
-            props
-                .getDocGenTags()
+            getDocGenTags()
                 .then((response: DocGenTemplateTagsResponse) => {
                     if (response) {
-                        // anything that is not an image tag for this view is treated as a text ta
-                        const textTags = response.data.filter(tag => tag.tag_type !== 'image');
-                        const imageTags = response.data.filter(tag => tag.tag_type === 'image');
+                        // anything that is not an image tag for this view is treated as a text tag
+                        const textTags = response?.data?.filter(tag => tag.tag_type !== 'image') || [];
+                        const imageTags = response?.data?.filter(tag => tag.tag_type === 'image') || [];
                         setSidebarState({
                             ...sidebarState,
                             tags: {
@@ -134,9 +133,9 @@ const DocGenSidebar = (props: Props) => {
     const hasNoTags = tags.image.length + tags.text.length === 0;
 
     return (
-        <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={props.intl.formatMessage(messages.docgenTags)}>
+        <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={intl.formatMessage(messages.docgenTags)}>
             <div className={classNames('docgen-sidebar', { center: hasNoTags || hasError || loading })}>
-                {hasError && <Error onClick={loadTags} />}
+                {!!hasError && <Error onClick={loadTags} />}
                 {!hasError && loading && <LoadingIndicator className="docgen-loading" />}
                 {!hasError && !loading && (
                     <>

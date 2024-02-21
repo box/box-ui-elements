@@ -1,14 +1,14 @@
 import React from 'react';
 import './DocGenSidebar.scss';
-import { JsonData } from './types';
+import { JsonPathsMap } from './types';
 
 interface TagTreeProps {
-    data: JsonData | string[];
+    data: JsonPathsMap;
     level?: number;
 }
 
 const TagTree = ({ data, level = 0 }: TagTreeProps) => {
-    if (Array.isArray(data)) {
+    if (Array.isArray(data) || !data) {
         return null;
     }
 
@@ -19,7 +19,7 @@ const TagTree = ({ data, level = 0 }: TagTreeProps) => {
                 .map(key => (
                     <div key={`${key}-${level}`} style={{ paddingLeft: `${level * 12}px` }}>
                         <span className="docgen-tag-path">{key}</span>
-                        <TagTree data={data[key]} level={level + 1} />
+                        {data[key] && <TagTree data={data[key]} level={level + 1} />}
                     </div>
                 ))}
         </div>
