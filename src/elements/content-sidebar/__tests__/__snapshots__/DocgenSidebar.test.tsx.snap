@@ -456,16 +456,31 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
                     </svg>
                   </AccessibleSVG>
                 </NoTagsIcon>
-                <div>
-                  This document has no tags
-                </div>
+                <strong>
+                  <FormattedMessage
+                    defaultMessage="This document has no tags"
+                    id="sidebar.docgen.noTags"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </strong>
                 <p>
-                  To use tags, please add them in tag editor.
+                  <FormattedMessage
+                    defaultMessage="To use tags, please add them in tag editor."
+                    id="sidebar.docgen.addTagsInEditor"
+                  >
+                    <div />
+                  </FormattedMessage>
                 </p>
                 <a
                   href="/"
                 >
-                  Find out more how to add tags
+                  <FormattedMessage
+                    defaultMessage="Find out more how to add tags"
+                    id="sidebar.docgen.learnMore"
+                  >
+                    <div />
+                  </FormattedMessage>
                 </a>
               </div>
             </NoTagsAvailable>

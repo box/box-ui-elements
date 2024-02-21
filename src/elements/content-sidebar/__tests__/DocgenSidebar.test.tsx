@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import { MessageDescriptor } from 'react-intl';
+import { MessageDescriptor, FormattedMessage } from 'react-intl';
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
 import LoadingIndicator from '../../../components/loading-indicator';
 import Error from '../DocGenSidebar/Error';
@@ -80,7 +80,8 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         });
 
         wrapper!.update();
-        const emptyState = wrapper!.find({ children: 'This document has no tags' });
+        const emptyState = wrapper!.find(FormattedMessage).at(0);
+        expect(emptyState.prop('defaultMessage')).toEqual('This document has no tags');
         expect(emptyState).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
