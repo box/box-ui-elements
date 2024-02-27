@@ -103,7 +103,7 @@ class Sidebar extends React.Component<Props, State> {
     componentDidMount() {
         const { file, api, features, metadataSidebarProps }: Props = this.props;
         // if docgen feature is enabled, load metadata to check whether file is a docgen template
-        if (features.docgen.enabled) {
+        if (features?.docgen?.enabled && features?.docgen?.checkDocGenTemplate) {
             features.docgen.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
     }
@@ -124,12 +124,12 @@ class Sidebar extends React.Component<Props, State> {
             this.setState({ isDirty: true });
         }
         // need to re-check if file is a docgen-template on file change
-        if (file.id !== prevFile.id && features.docgen.enabled) {
+        if (file.id !== prevFile.id && features?.docgen?.enabled && features?.docgen?.checkDocGenTemplate) {
             features.docgen.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
         // if file turns out to be a docgen template
-        if (features.docgen.enabled && prevFeatures.docgen.isDocgenTemplate !== features.docgen.isDocgenTemplate) {
-            if (features.docgen.isDocgenTemplate) {
+        if (features?.docgen?.enabled && prevFeatures?.docgen?.isDocGenTemplate !== features.docgen.isDocGenTemplate) {
+            if (features.docgen.isDocGenTemplate) {
                 // navigate to docgen tab
                 history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
             } else if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
@@ -284,7 +284,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
-                                isDocGenTemplate={features.docgen.isDocgenTemplate}
+                                isDocGenTemplate={features?.docgen?.isDocGenTemplate}
                                 isOpen={isOpen}
                             />
                         )}
@@ -304,7 +304,6 @@ class Sidebar extends React.Component<Props, State> {
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
-                            isDocGenTemplate={features.docgen.isDocgenTemplate}
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
