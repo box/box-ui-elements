@@ -126,14 +126,14 @@ class Sidebar extends React.Component<Props, State> {
         // need to re-check if file is a docgen-template on file change
         if (file.id !== prevFile.id && features.docgen.enabled) {
             features.docgen.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
-        }
-        // if file turns out to be a docgen template
-        if (prevFeatures.docgen.isDocgenTemplate !== features.docgen.isDocgenTemplate) {
-            if (features.docgen.isDocgenTemplate) {
-                // navigate to docgen tab
-                history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
-            } else if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
-                history.push('/');
+            // if file turns out to be a docgen template
+            if (prevFeatures.docgen.isDocgenTemplate !== features.docgen.isDocgenTemplate) {
+                if (features.docgen.isDocgenTemplate) {
+                    // navigate to docgen tab
+                    history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
+                } else if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
+                    history.push('/');
+                }
             }
         }
     }
