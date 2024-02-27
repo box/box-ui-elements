@@ -28,8 +28,8 @@ import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
-import API from '../../api';
 import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
+import API from '../../api';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -64,7 +64,6 @@ type Props = {
 
 type State = {
     isDirty: boolean,
-    isDocGenTemplate?: boolean,
 };
 
 export const DOCGEN_FILE_TYPES = ['docx'];
@@ -96,68 +95,22 @@ class Sidebar extends React.Component<Props, State> {
 
         this.state = {
             isDirty: this.getLocationState('open') || false,
-            isDocGenTemplate: false,
         };
 
         this.setForcedByLocation();
     }
 
-    disableDocgenTab() {
-        const { history, location } = this.props;
-        this.setState({
-            ...this.state,
-            isDocGenTemplate: false,
-        });
-        if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
-            history.push('/');
-        }
-    }
-
-    fetchMetadataSuccessCallback = ({ editors }: { editors: Array<MetadataEditor> }) => {
-        const { history } = this.props;
-        if (editors && editors.length > 0) {
-            const template = editors[0]?.template;
-            const scopeIsGlobal = template.scope === 'global';
-            const templateKeyIsBoxDocGen = template.templateKey === 'boxDocGen';
-            const isDocGenTemplate = scopeIsGlobal && templateKeyIsBoxDocGen;
-
-            if (isDocGenTemplate) {
-                this.setState({ ...this.state, isDocGenTemplate });
-                // navigate to docgen tab by default
-                history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
-            }
-        } else {
-            this.disableDocgenTab();
-        }
-    };
-
-    fetchMetadata(): void {
-        const { api, file }: Props = this.props;
-        this.setState({ ...this.state, isDocGenTemplate: false });
-
-        if (file && DOCGEN_FILE_TYPES.includes(file.extension)) {
-            api.getMetadataAPI(false).getMetadata(
-                file,
-                this.fetchMetadataSuccessCallback,
-                this.disableDocgenTab,
-                this.props.metadataSidebarProps.isFeatureEnabled,
-                { refreshCache: true },
-            );
-        } else {
-            this.disableDocgenTab();
-        }
-    }
-
     componentDidMount() {
+        const { file, api, features, metadataSidebarProps }: Props = this.props;
         // if docgen feature is enabled, load metadata to check whether file is a docgen template
-        if (this.props.features?.docgen?.enabled) {
-            this.fetchMetadata();
+        if (features.docgen.enabled) {
+            features.docgen.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, location, file }: Props = this.props;
-        const { fileId: prevFileId, location: prevLocation, file: prevFile }: Props = prevProps;
+        const { fileId, history, location, file, api, features, metadataSidebarProps }: Props = this.props;
+        const { fileId: prevFileId, location: prevLocation, file: prevFile, features: prevFeatures }: Props = prevProps;
         const { isDirty }: State = this.state;
 
         // User navigated to a different file without ever navigating the sidebar
@@ -170,10 +123,18 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
-
-        // need to re-check if file is a docgen-template
-        if (file.id !== prevFile.id && this.props.features?.docgen?.enabled) {
-            this.fetchMetadata();
+        // need to re-check if file is a docgen-template on file change
+        if (file.id !== prevFile.id && features.docgen.enabled) {
+            features.docgen.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
+        }
+        // if file turns out to be a docgen template
+        if (prevFeatures.docgen.isDocgenTemplate !== features.docgen.isDocgenTemplate) {
+            if (features.docgen.isDocgenTemplate) {
+                // navigate to docgen tab
+                history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
+            } else if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
+                history.push('/');
+            }
         }
     }
 
@@ -323,7 +284,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
-                                isDocGenTemplate={this.state.isDocGenTemplate}
+                                isDocGenTemplate={features.docgen.isDocgenTemplate}
                                 isOpen={isOpen}
                             />
                         )}
@@ -343,7 +304,7 @@ class Sidebar extends React.Component<Props, State> {
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
-                            isDocGenTemplate={this.state.isDocGenTemplate}
+                            isDocGenTemplate={features.docgen.isDocgenTemplate}
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
