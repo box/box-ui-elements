@@ -19,14 +19,14 @@ describe('elements/content-sidebar/Sidebar', () => {
         },
     };
 
-    const features = {
+    const defaultFeatures = {
         docgen: {
             enabled: false,
         },
     };
 
     const getWrapper = props =>
-        shallow(<Sidebar file={file} location={{ pathname: '/' }} features={features} {...props} />);
+        shallow(<Sidebar file={file} location={{ pathname: '/' }} features={defaultFeatures} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();

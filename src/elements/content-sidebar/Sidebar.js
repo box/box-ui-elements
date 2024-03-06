@@ -109,8 +109,8 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, location, file, api, features, metadataSidebarProps }: Props = this.props;
-        const { fileId: prevFileId, location: prevLocation, file: prevFile, features: prevFeatures }: Props = prevProps;
+        const { fileId, history, location }: Props = this.props;
+        const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
 
         // User navigated to a different file without ever navigating the sidebar
@@ -123,6 +123,13 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
+
+        this.handleDocgenTemplateOnUpdate(prevProps);
+    }
+
+    handleDocgenTemplateOnUpdate = (prevProps: Props) => {
+        const { history, location, file, api, features, metadataSidebarProps } = this.props;
+        const { file: prevFile, features: prevFeatures }: Props = prevProps;
         // need to re-check if file is a docgen-template on file change
         if (file.id !== prevFile.id && features?.docgen?.enabled && features?.docgen?.checkDocGenTemplate) {
             features.docgen.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
@@ -136,7 +143,7 @@ class Sidebar extends React.Component<Props, State> {
                 history.push('/');
             }
         }
-    }
+    };
 
     getUrlPrefix = (pathname: string) => {
         const basePath = pathname.substring(1).split('/')[0];
