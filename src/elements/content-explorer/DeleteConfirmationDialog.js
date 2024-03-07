@@ -51,12 +51,12 @@ const DeleteConfirmationDialog = ({
         >
             <FormattedMessage {...message} values={{ name: item.name }} />
             <div className="be-modal-btns">
-                <PrimaryButton isLoading={isLoading} onClick={onDelete} type="button">
-                    <FormattedMessage {...messages.delete} />
-                </PrimaryButton>
                 <Button autoFocus isDisabled={isLoading} onClick={onCancel} type="button">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
+                <PrimaryButton isLoading={isLoading} onClick={onDelete} type="button">
+                    <FormattedMessage {...messages.delete} />
+                </PrimaryButton>
             </div>
         </Modal>
     );
