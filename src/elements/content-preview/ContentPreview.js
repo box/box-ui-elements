@@ -58,7 +58,7 @@ import {
     ERROR_CODE_UNKNOWN,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
-import type { TargetingApi } from '../../features/targeting/types';
+import type { PersistentOnboardingTargetingApi, TargetingApi } from '../../features/targeting/types';
 import type { ErrorType, AdditionalVersionInfo } from '../common/flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { RequestOptions, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
@@ -114,7 +114,8 @@ type Props = {
     onNavigate: Function,
     onVersionChange: VersionChangeCallback,
     previewExperiences?: {
-        [name: string]: TargetingApi,
+        persistentOnboardingBoxEditAnnotations: PersistentOnboardingTargetingApi,
+        tooltipFlowAnnotations: TargetingApi,
     },
     previewLibraryVersion: string,
     requestInterceptor?: Function,
@@ -817,12 +818,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const previewOptions = {
             advancedContentInsights, // will be removed once preview package will be updated to utilize feature flip for ACI
             container: `#${this.id} .bcpr-content`,
+            experiences: previewExperiences,
             enableThumbnailsSidebar,
             features,
             fileOptions: fileOpts,
             header: 'none',
             headerElement: `#${this.id} .bcpr-PreviewHeader`,
-            experiences: previewExperiences,
             showAnnotations: this.canViewAnnotations(),
             showAnnotationsControls,
             showDownload: this.canDownload(),
