@@ -10,12 +10,6 @@ const NoTagsAvailable = () => (
         <strong>
             <FormattedMessage {...messages.noTags} />
         </strong>
-        <p>
-            <FormattedMessage {...messages.addTagsInEditor} />
-        </p>
-        <a href="/">
-            <FormattedMessage {...messages.learnMore} />
-        </a>
     </div>
 );
 
