@@ -161,7 +161,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         });
         wrapper!.update();
         const tagList = wrapper!.find('span.docgen-tag-path');
-        expect(tagList).toHaveLength(6);
+        expect(tagList).toHaveLength(26);
         expect(wrapper).toMatchSnapshot();
     });
 

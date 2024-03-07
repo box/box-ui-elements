@@ -181,24 +181,6 @@ exports[`elements/content-sidebar/DocGenSidebar should handle undefined data  1`
                     <div />
                   </FormattedMessage>
                 </strong>
-                <p>
-                  <FormattedMessage
-                    defaultMessage="To use tags, please add them in tag editor."
-                    id="sidebar.docgen.addTagsInEditor"
-                  >
-                    <div />
-                  </FormattedMessage>
-                </p>
-                <a
-                  href="/"
-                >
-                  <FormattedMessage
-                    defaultMessage="Find out more how to add tags"
-                    id="sidebar.docgen.learnMore"
-                  >
-                    <div />
-                  </FormattedMessage>
-                </a>
               </div>
             </NoTagsAvailable>
           </div>
@@ -268,26 +250,37 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
             <TagsSection
               data={
                 {
-                  "about": [
-                    "{{ about }}",
-                    "{{ about }}",
-                  ],
-                  "about.name": [
-                    "{{ about }}",
-                  ],
-                  "company": [
-                    "{{ company }}",
-                    "{{ company }}",
-                  ],
-                  "company.name": [
-                    "{{ company }}",
-                  ],
-                  "isActive": [
-                    "{{ isActive }}",
-                  ],
-                  "phone": [
-                    "{{ phone }}",
-                  ],
+                  "about": {
+                    "name": {},
+                  },
+                  "company": {
+                    "name": {},
+                  },
+                  "contract": {
+                    "city": {},
+                    "country": {},
+                    "customerAddress": {
+                      "city": {},
+                      "street": {},
+                    },
+                    "customerName": {},
+                  },
+                  "invoice": {
+                    "billingAddress": {
+                      "street": {},
+                    },
+                    "date": {},
+                    "id": {},
+                  },
+                  "isActive": {},
+                  "phone": {},
+                  "products": {
+                    "amount": {},
+                    "description": {},
+                    "name": {},
+                    "price": {},
+                    "quantity": {},
+                  },
                 }
               }
               message={
@@ -313,26 +306,37 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                 <TagTree
                   data={
                     {
-                      "about": [
-                        "{{ about }}",
-                        "{{ about }}",
-                      ],
-                      "about.name": [
-                        "{{ about }}",
-                      ],
-                      "company": [
-                        "{{ company }}",
-                        "{{ company }}",
-                      ],
-                      "company.name": [
-                        "{{ company }}",
-                      ],
-                      "isActive": [
-                        "{{ isActive }}",
-                      ],
-                      "phone": [
-                        "{{ phone }}",
-                      ],
+                      "about": {
+                        "name": {},
+                      },
+                      "company": {
+                        "name": {},
+                      },
+                      "contract": {
+                        "city": {},
+                        "country": {},
+                        "customerAddress": {
+                          "city": {},
+                          "street": {},
+                        },
+                        "customerName": {},
+                      },
+                      "invoice": {
+                        "billingAddress": {
+                          "street": {},
+                        },
+                        "date": {},
+                        "id": {},
+                      },
+                      "isActive": {},
+                      "phone": {},
+                      "products": {
+                        "amount": {},
+                        "description": {},
+                        "name": {},
+                        "price": {},
+                        "quantity": {},
+                      },
                     }
                   }
                 >
@@ -352,35 +356,35 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       </span>
                       <TagTree
                         data={
-                          [
-                            "{{ about }}",
-                            "{{ about }}",
-                          ]
+                          {
+                            "name": {},
+                          }
                         }
                         level={1}
-                      />
-                    </div>
-                    <div
-                      key="about.name-0"
-                      style={
-                        {
-                          "paddingLeft": "0px",
-                        }
-                      }
-                    >
-                      <span
-                        className="docgen-tag-path"
                       >
-                        about.name
-                      </span>
-                      <TagTree
-                        data={
-                          [
-                            "{{ about }}",
-                          ]
-                        }
-                        level={1}
-                      />
+                        <div>
+                          <div
+                            key="name-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              name
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                        </div>
+                      </TagTree>
                     </div>
                     <div
                       key="company-0"
@@ -397,16 +401,38 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       </span>
                       <TagTree
                         data={
-                          [
-                            "{{ company }}",
-                            "{{ company }}",
-                          ]
+                          {
+                            "name": {},
+                          }
                         }
                         level={1}
-                      />
+                      >
+                        <div>
+                          <div
+                            key="name-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              name
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                        </div>
+                      </TagTree>
                     </div>
                     <div
-                      key="company.name-0"
+                      key="contract-0"
                       style={
                         {
                           "paddingLeft": "0px",
@@ -416,16 +442,265 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       <span
                         className="docgen-tag-path"
                       >
-                        company.name
+                        contract
                       </span>
                       <TagTree
                         data={
-                          [
-                            "{{ company }}",
-                          ]
+                          {
+                            "city": {},
+                            "country": {},
+                            "customerAddress": {
+                              "city": {},
+                              "street": {},
+                            },
+                            "customerName": {},
+                          }
                         }
                         level={1}
-                      />
+                      >
+                        <div>
+                          <div
+                            key="city-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              city
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                          <div
+                            key="country-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              country
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                          <div
+                            key="customerAddress-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              customerAddress
+                            </span>
+                            <TagTree
+                              data={
+                                {
+                                  "city": {},
+                                  "street": {},
+                                }
+                              }
+                              level={2}
+                            >
+                              <div>
+                                <div
+                                  key="city-2"
+                                  style={
+                                    {
+                                      "paddingLeft": "24px",
+                                    }
+                                  }
+                                >
+                                  <span
+                                    className="docgen-tag-path"
+                                  >
+                                    city
+                                  </span>
+                                  <TagTree
+                                    data={{}}
+                                    level={3}
+                                  >
+                                    <div />
+                                  </TagTree>
+                                </div>
+                                <div
+                                  key="street-2"
+                                  style={
+                                    {
+                                      "paddingLeft": "24px",
+                                    }
+                                  }
+                                >
+                                  <span
+                                    className="docgen-tag-path"
+                                  >
+                                    street
+                                  </span>
+                                  <TagTree
+                                    data={{}}
+                                    level={3}
+                                  >
+                                    <div />
+                                  </TagTree>
+                                </div>
+                              </div>
+                            </TagTree>
+                          </div>
+                          <div
+                            key="customerName-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              customerName
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                        </div>
+                      </TagTree>
+                    </div>
+                    <div
+                      key="invoice-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    >
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        invoice
+                      </span>
+                      <TagTree
+                        data={
+                          {
+                            "billingAddress": {
+                              "street": {},
+                            },
+                            "date": {},
+                            "id": {},
+                          }
+                        }
+                        level={1}
+                      >
+                        <div>
+                          <div
+                            key="billingAddress-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              billingAddress
+                            </span>
+                            <TagTree
+                              data={
+                                {
+                                  "street": {},
+                                }
+                              }
+                              level={2}
+                            >
+                              <div>
+                                <div
+                                  key="street-2"
+                                  style={
+                                    {
+                                      "paddingLeft": "24px",
+                                    }
+                                  }
+                                >
+                                  <span
+                                    className="docgen-tag-path"
+                                  >
+                                    street
+                                  </span>
+                                  <TagTree
+                                    data={{}}
+                                    level={3}
+                                  >
+                                    <div />
+                                  </TagTree>
+                                </div>
+                              </div>
+                            </TagTree>
+                          </div>
+                          <div
+                            key="date-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              date
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                          <div
+                            key="id-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              id
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                        </div>
+                      </TagTree>
                     </div>
                     <div
                       key="isActive-0"
@@ -441,13 +716,11 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                         isActive
                       </span>
                       <TagTree
-                        data={
-                          [
-                            "{{ isActive }}",
-                          ]
-                        }
+                        data={{}}
                         level={1}
-                      />
+                      >
+                        <div />
+                      </TagTree>
                     </div>
                     <div
                       key="phone-0"
@@ -463,27 +736,232 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                         phone
                       </span>
                       <TagTree
+                        data={{}}
+                        level={1}
+                      >
+                        <div />
+                      </TagTree>
+                    </div>
+                    <div
+                      key="products-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    >
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        products
+                      </span>
+                      <TagTree
                         data={
-                          [
-                            "{{ phone }}",
-                          ]
+                          {
+                            "amount": {},
+                            "description": {},
+                            "name": {},
+                            "price": {},
+                            "quantity": {},
+                          }
                         }
                         level={1}
-                      />
+                      >
+                        <div>
+                          <div
+                            key="amount-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              amount
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                          <div
+                            key="description-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              description
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                          <div
+                            key="name-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              name
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                          <div
+                            key="price-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              price
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                          <div
+                            key="quantity-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              quantity
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                        </div>
+                      </TagTree>
                     </div>
                   </div>
                 </TagTree>
               </div>
             </TagsSection>
             <TagsSection
-              data={{}}
+              data={
+                {
+                  "invoice": {
+                    "image": {},
+                  },
+                }
+              }
               message={
                 {
                   "defaultMessage": "Image tags",
                   "id": "sidebar.docgen.imageTags",
                 }
               }
-            />
+            >
+              <div
+                className="docgen-tag-section"
+              >
+                <span
+                  className="docgen-tag-section-header"
+                >
+                  <FormattedMessage
+                    defaultMessage="Image tags"
+                    id="sidebar.docgen.imageTags"
+                  >
+                    <div />
+                  </FormattedMessage>
+                </span>
+                <TagTree
+                  data={
+                    {
+                      "invoice": {
+                        "image": {},
+                      },
+                    }
+                  }
+                >
+                  <div>
+                    <div
+                      key="invoice-0"
+                      style={
+                        {
+                          "paddingLeft": "0px",
+                        }
+                      }
+                    >
+                      <span
+                        className="docgen-tag-path"
+                      >
+                        invoice
+                      </span>
+                      <TagTree
+                        data={
+                          {
+                            "image": {},
+                          }
+                        }
+                        level={1}
+                      >
+                        <div>
+                          <div
+                            key="image-1"
+                            style={
+                              {
+                                "paddingLeft": "12px",
+                              }
+                            }
+                          >
+                            <span
+                              className="docgen-tag-path"
+                            >
+                              image
+                            </span>
+                            <TagTree
+                              data={{}}
+                              level={2}
+                            >
+                              <div />
+                            </TagTree>
+                          </div>
+                        </div>
+                      </TagTree>
+                    </div>
+                  </div>
+                </TagTree>
+              </div>
+            </TagsSection>
           </div>
         </div>
       </div>
@@ -673,24 +1151,6 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
                     <div />
                   </FormattedMessage>
                 </strong>
-                <p>
-                  <FormattedMessage
-                    defaultMessage="To use tags, please add them in tag editor."
-                    id="sidebar.docgen.addTagsInEditor"
-                  >
-                    <div />
-                  </FormattedMessage>
-                </p>
-                <a
-                  href="/"
-                >
-                  <FormattedMessage
-                    defaultMessage="Find out more how to add tags"
-                    id="sidebar.docgen.learnMore"
-                  >
-                    <div />
-                  </FormattedMessage>
-                </a>
               </div>
             </NoTagsAvailable>
           </div>
