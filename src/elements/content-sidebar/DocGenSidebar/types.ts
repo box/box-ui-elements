@@ -16,6 +16,6 @@ export type DocGenTemplateTagsResponse = {
     };
 };
 
-export interface JsonData {
-    [key: string]: JsonData | string[];
+export interface JsonPathsMap {
+    [key: string]: JsonPathsMap | {};
 }

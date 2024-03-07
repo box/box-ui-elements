@@ -1,9 +1,9 @@
 import React from 'react';
 import './DocGenSidebar.scss';
-import { JsonData } from './types';
+import { JsonPathsMap } from './types';
 
 interface TagTreeProps {
-    data: JsonData | string[];
+    data: JsonPathsMap;
     level?: number;
 }
 
