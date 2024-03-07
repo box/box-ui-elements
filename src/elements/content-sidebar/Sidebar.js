@@ -135,7 +135,10 @@ class Sidebar extends React.Component<Props, State> {
             features.docgen.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
         // if file turns out to be a docgen template
-        if (features?.docgen?.enabled && prevFeatures?.docgen?.isDocGenTemplate !== features.docgen.isDocGenTemplate) {
+        if (
+            features?.docgen?.enabled &&
+            prevFeatures?.docgen?.isDocGenTemplate !== features?.docgen?.isDocGenTemplate
+        ) {
             if (features.docgen.isDocGenTemplate) {
                 // navigate to docgen tab
                 history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
