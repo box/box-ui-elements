@@ -10,6 +10,10 @@ export type DocGenTag = {
 
 export type DocGenTemplateTagsResponse = {
     data?: DocGenTag[];
+    pagination?: {
+        previousMarker?: string;
+        nextMarker?: string;
+    };
 };
 
 export interface JsonData {

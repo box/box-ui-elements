@@ -33,7 +33,8 @@ import { DocGenTag, DocGenTemplateTagsResponse, JsonData } from './types';
 
 type ExternalProps = {
     enabled: boolean;
-    getDocGenTags: Function;
+    getDocGenTags: Promise<DocGenTemplateTagsResponse>;
+    isDocgenTemplate: boolean;
 };
 
 type Props = {
@@ -55,7 +56,7 @@ type State = {
     };
 };
 
-const DocGenSidebar = (props: Props) => {
+const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
     const [sidebarState, setSidebarState] = React.useState<State>({
         hasError: false,
         loading: false,
@@ -95,10 +96,9 @@ const DocGenSidebar = (props: Props) => {
     };
 
     const loadTags = React.useCallback(() => {
-        if (props.getDocGenTags) {
+        if (getDocGenTags) {
             setSidebarState({ ...sidebarState, loading: true });
-            props
-                .getDocGenTags()
+            getDocGenTags()
                 .then((response: DocGenTemplateTagsResponse) => {
                     if (response) {
                         // anything that is not an image tag for this view is treated as a text tag
@@ -122,18 +122,19 @@ const DocGenSidebar = (props: Props) => {
                 })
                 .catch(() => setSidebarState({ ...sidebarState, loading: false, hasError: true }));
         }
-    }, [props, sidebarState]);
+    }, [getDocGenTags, sidebarState]);
 
     React.useEffect(() => {
         loadTags();
-    }, [loadTags]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const { hasError, tags, loading } = sidebarState;
 
     const hasNoTags = tags.image.length + tags.text.length === 0;
 
     return (
-        <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={props.intl.formatMessage(messages.docgenTags)}>
+        <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={intl.formatMessage(messages.docgenTags)}>
             <div className={classNames('docgen-sidebar', { center: hasNoTags || hasError || loading })}>
                 {!!hasError && <Error onClick={loadTags} />}
                 {!hasError && loading && <LoadingIndicator className="docgen-loading" />}

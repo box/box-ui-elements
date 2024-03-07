@@ -43,6 +43,7 @@ const docGenSidebarProps = {
 
 const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
 const errorTagsMock = jest.fn().mockRejectedValue([]);
+const noDataMock = jest.fn().mockReturnValue(Promise.resolve({}));
 
 const defaultProps = {
     ...docGenSidebarProps,
@@ -127,5 +128,19 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         expect(wrapper).toMatchSnapshot();
         const refreshBtn = wrapper!.find('button');
         expect(refreshBtn).toHaveLength(1);
+    });
+    test('should handle undefined data ', async () => {
+        let wrapper;
+        await act(async () => {
+            wrapper = await getWrapper({
+                ...defaultProps,
+                getDocGenTags: noDataMock,
+            });
+        });
+        wrapper!.update();
+        const emptyState = wrapper!.find(FormattedMessage).at(0);
+        expect(emptyState.prop('defaultMessage')).toEqual('This document has no tags');
+        expect(emptyState).toHaveLength(1);
+        expect(wrapper).toMatchSnapshot();
     });
 });
