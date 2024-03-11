@@ -3,21 +3,23 @@ import flow from 'lodash/flow';
 import * as React from 'react';
 import { injectIntl, IntlShape } from 'react-intl';
 
+// @ts-ignore: no ts definition
+// eslint-disable-next-line import/named
 import { ORIGIN_DOCGEN_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../../constants';
+// @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withAPIContext } from '../../common/api-context';
+// @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withErrorBoundary } from '../../common/error-boundary';
 import LoadingIndicator from '../../../components/loading-indicator';
+// @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withLogger } from '../../common/logger';
-// @ts-ignore: no ts definition
 import Error from './Error';
-// @ts-ignore: no ts definition
 import NoTagsAvailable from './NoTagsAvailable';
 // @ts-ignore: no ts definition
 import SidebarContent from '../SidebarContent';
-// @ts-ignore: no ts definition
 import TagsSection from './TagsSection';
 // @ts-ignore: no ts definition
 import messages from './messages';
