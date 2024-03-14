@@ -1,6 +1,6 @@
+import * as React from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
-import * as React from 'react';
 import { injectIntl, IntlShape } from 'react-intl';
 
 // @ts-ignore: no ts definition

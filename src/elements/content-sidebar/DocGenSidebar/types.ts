@@ -1,4 +1,4 @@
-// our apis are in camel case
+// our apis are in snake case
 export type DocGenTag = {
     /* eslint-disable-next-line camelcase */
     tag_type: 'text' | 'arithmetic' | 'conditional' | 'for-loop' | 'table-loop' | 'image';

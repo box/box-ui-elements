@@ -68,7 +68,6 @@ type State = {
     isDirty: boolean,
 };
 
-export const DOCGEN_FILE_TYPES = ['docx'];
 export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
 export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
 export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
