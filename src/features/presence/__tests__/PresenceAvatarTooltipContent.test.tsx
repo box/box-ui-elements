@@ -16,7 +16,7 @@ describe('features/presence/PresenceAvatarTooltipContent', () => {
         shallow(<PresenceAvatarTooltipContent {...getDefaults()} {...props} />);
 
     beforeEach(() => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 1000);
+        jest.spyOn(Date, 'now').mockImplementation(() => 236682000000);
     });
 
     describe('render()', () => {
@@ -38,7 +38,7 @@ describe('features/presence/PresenceAvatarTooltipContent', () => {
 
             expect(wrapper.find('FormattedMessage').props()).toMatchObject({
                 ...messages.timeSinceLastPreviewedText,
-                values: { timeAgo: '1 second ago' },
+                values: { timeAgo: '7 years ago' },
             });
         });
     });

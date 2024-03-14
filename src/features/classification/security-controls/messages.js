@@ -274,7 +274,7 @@ const messages = defineMessages({
         id: 'boxui.securityControls.viewAll',
     },
     modalTitle: {
-        defaultMessage: "View Classification for '{itemName}'",
+        defaultMessage: 'View Classification for “{itemName}”',
         description: 'Title for modal to display classification and security controls details',
         id: 'boxui.securityControls.modalTitle',
     },

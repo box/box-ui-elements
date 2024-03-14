@@ -4,6 +4,7 @@ import { formatUser } from './FormattedUser';
 import baseCellRenderer from './baseCellRenderer';
 import messages from './messages';
 import type { LastModifiedByCellRendererCellData, LastModifiedByCellRendererParams } from './flowTypes';
+import timeFromNow from '../../utils/relativeTime';
 
 type LastModifiedByCellRendererSettings = {
     dateFormat?: Object,
@@ -17,15 +18,9 @@ const lastModifiedByCellRenderer = (intl: any, { dateFormat }: LastModifiedByCel
 
         if (dateFormat) {
             lastModified = intl.formatDate(modified_at, dateFormat);
-        } else if (intl.formatRelativeTime) {
-            // react-intl v3
-            lastModified = intl.formatRelativeTime(Date.parse(modified_at) - Date.now(), 'day', {
-                style: 'short',
-                numeric: 'auto',
-            });
         } else {
-            // react-intl v2
-            lastModified = intl.formatRelative(Date.parse(modified_at), { units: 'day-short', style: 'numeric' });
+            const { value, unit } = timeFromNow(Date.parse(modified_at));
+            lastModified = intl.formatRelativeTime(value, unit);
         }
 
         if (modified_by) {

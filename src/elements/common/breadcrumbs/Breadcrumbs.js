@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import type { InjectIntlProvidedProps } from 'react-intl';
+import type { IntlShape } from 'react-intl';
 import Breadcrumb from './Breadcrumb';
 import BreadcrumbDropdown from './BreadcrumbDropdown';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
@@ -18,10 +18,11 @@ import './Breadcrumbs.scss';
 type Props = {
     crumbs: Crumb[],
     delimiter: Delimiter,
+    intl: IntlShape,
     isSmall?: boolean,
     onCrumbClick: Function,
     rootId: string,
-} & InjectIntlProvidedProps;
+};
 
 /**
  * Filters out ancestors to root from the crumbs.

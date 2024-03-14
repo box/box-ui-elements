@@ -1,0 +1,4 @@
+{
+    "buildScriptName": "build:prod:storybook",
+    "onlyStoryNames": ["Elements/*"]
+}

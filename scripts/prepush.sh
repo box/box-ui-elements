@@ -10,7 +10,7 @@ blue=$"\e[1;34m"
 end=$"\e[0m\n"
 
 check_uncommitted_files() {
-    if [[ $(git status --porcelain 2>/dev/null| egrep "^(M| M)") != "" ]] ; then
+    if [[ $(git status --porcelain 2>/dev/null | egrep "^(M| M)") != "" ]]; then
         printf "${red}Your branch has uncommitted files!${end}"
         return 1
     fi
@@ -37,10 +37,6 @@ check_and_commit_updated_translations() {
 
 # lint, test, and build assets to update translations
 prepush() {
-    printf "${blue}--------------------------------------${end}"
-    printf "${blue}Checking react-intl v3 usage${end}"
-    printf "${blue}--------------------------------------${end}"
-    ./scripts/findReactIntlViolators.js || exit 1
 
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building all sources, this will update i18n/json${end}"
