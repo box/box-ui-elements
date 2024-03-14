@@ -1266,10 +1266,20 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
                   </AccessibleSVG>
                 </RereshIcon>
                 <div>
-                  We couldn't load the tags
+                  <FormattedMessage
+                    defaultMessage="We couldn't load the tags"
+                    id="error.couldNotLoad"
+                  >
+                    <div />
+                  </FormattedMessage>
                 </div>
                 <p>
-                  Please refresh the list.
+                  <FormattedMessage
+                    defaultMessage="Please refresh the list."
+                    id="error.refreshList"
+                  >
+                    <div />
+                  </FormattedMessage>
                 </p>
                 <Button
                   className=""
@@ -1286,7 +1296,12 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
                     <span
                       className="btn-content"
                     >
-                      Refresh
+                      <FormattedMessage
+                        defaultMessage="Refresh"
+                        id="error.refreshButton"
+                      >
+                        <div />
+                      </FormattedMessage>
                     </span>
                   </button>
                 </Button>
