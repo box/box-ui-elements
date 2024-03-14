@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Button from '../../../components/button';
+import messages from './messages';
 import RereshIcon from './RereshIcon';
 
 type Props = {
@@ -10,9 +12,15 @@ type Props = {
 const Error = ({ onClick }: Props) => (
     <div className="docgen-error-state">
         <RereshIcon className="docgen-error-state--icon" />
-        <div>We couldn&apos;t load the tags</div>
-        <p>Please refresh the list.</p>
-        <Button onClick={onClick}>Refresh</Button>
+        <div>
+            <FormattedMessage {...messages.errorCouldNotLoad} />
+        </div>
+        <p>
+            <FormattedMessage {...messages.errorRefreshList} />
+        </p>
+        <Button onClick={onClick}>
+            <FormattedMessage {...messages.errorRefreshButton} />
+        </Button>
     </div>
 );
 

@@ -21,6 +21,21 @@ const messages = defineMessages({
         defaultMessage: 'This document has no tags',
         description: 'No tags available',
     },
+    errorCouldNotLoad: {
+        id: 'error.couldNotLoad',
+        defaultMessage: "We couldn't load the tags",
+        description: 'Error message when tags could not be loaded',
+    },
+    errorRefreshList: {
+        id: 'error.refreshList',
+        defaultMessage: 'Please refresh the list.',
+        description: 'Prompt to refresh the list after an error',
+    },
+    errorRefreshButton: {
+        id: 'error.refreshButton',
+        defaultMessage: 'Refresh',
+        description: 'Label for the refresh button',
+    },
 });
 
 export default messages;
