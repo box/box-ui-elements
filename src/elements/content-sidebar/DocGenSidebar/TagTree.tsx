@@ -3,12 +3,12 @@ import './DocGenSidebar.scss';
 import { JsonPathsMap } from './types';
 
 interface TagTreeProps {
-    data: JsonPathsMap;
+    data?: JsonPathsMap;
     level?: number;
 }
 
 const TagTree = ({ data, level = 0 }: TagTreeProps) => {
-    if (Array.isArray(data) || !data) {
+    if (!data) {
         return null;
     }
 
@@ -18,7 +18,7 @@ const TagTree = ({ data, level = 0 }: TagTreeProps) => {
                 .sort()
                 .map(key => (
                     <div key={`${key}-${level}`} style={{ paddingLeft: `${level * 12}px` }}>
-                        <span className="docgen-tag-path">{key}</span>
+                        <span className="bcs-DocGen-tagPath">{key}</span>
                         {data[key] && <TagTree data={data[key]} level={level + 1} />}
                     </div>
                 ))}

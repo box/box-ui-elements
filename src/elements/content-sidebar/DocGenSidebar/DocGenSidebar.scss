@@ -1,54 +1,49 @@
-@import '../../../styles/variables';
 @import '../../common/variables';
 
-.docgen-sidebar {
+.bcs-DocGenSidebar {
     padding: 0 24px 0 24px;
 }
 
-.center {
+.bcs-DocGen--center {
     display: flex;
     justify-content: center;
 }
 
-.docgen-tag-section {
+.bcs-TagsSection {
     margin-top: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid $bdl-gray-10;
 }
 
-.docgen-tag-section-header {
-    font-weight: normal;
+.bcs-TagsSection-header {
     font-size: $bdl-fontSize-minimum;
     line-height: 14px;
 }
 
-.docgen-tag-path {
+.bcs-DocGen-tagPath {
     display: block;
     height: 32px;
     padding: 6px 12px;
     font-weight: bold;
     font-size: $bdl-fontSize--dejaBlue;
-    font-family: 'Lato', sans-serif;
 }
 
-.docgen-loading {
+.bcs-DocGenSidebar-loading {
     margin-top: 16px;
 }
 
-.docgen-empty-state {
-    position: absolute;
+.bcs-DocGen-emptyState {
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    &--icon {
-        margin-top: 60px;
-        margin-bottom: 15px;
-    }
 }
 
-.docgen-error-state {
-    position: absolute;
+.bcs-DocGen-emptyState--icon {
+    margin-top: 60px;
+    margin-bottom: 15px;
+}
+
+.bcs-DocGen-error-state {
     display: flex;
     flex-direction: column;
     align-items: center;

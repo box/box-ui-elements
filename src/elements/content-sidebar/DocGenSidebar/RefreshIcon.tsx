@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AccessibleSVG, { SVGProps } from '../../../components/accessible-svg/AccessibleSVG';
 
-const RereshIcon = ({ className = '', height = 140, width = 141 }: SVGProps) => (
+const RefreshIcon = ({ className = '', height = 140, width = 141 }: SVGProps) => (
     <AccessibleSVG width={width} height={height} viewBox="0 0 141 140" className={className}>
         <path
             opacity="0.1"
@@ -27,4 +27,4 @@ const RereshIcon = ({ className = '', height = 140, width = 141 }: SVGProps) => 
     </AccessibleSVG>
 );
 
-export default RereshIcon;
+export default RefreshIcon;

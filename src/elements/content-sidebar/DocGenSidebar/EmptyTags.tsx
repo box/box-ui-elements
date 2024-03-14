@@ -4,13 +4,13 @@ import NoTagsIcon from './NoTagsIcon';
 // @ts-ignore: no ts definition
 import messages from './messages';
 
-const NoTagsAvailable = () => (
-    <div className="docgen-empty-state">
-        <NoTagsIcon className="docgen-empty-state--icon" />
+const EmptyTags = () => (
+    <div className="bcs-DocGen-emptyState">
+        <NoTagsIcon className="bcs-DocGen-emptyState--icon" />
         <strong>
             <FormattedMessage {...messages.noTags} />
         </strong>
     </div>
 );
 
-export default NoTagsAvailable;
+export default EmptyTags;

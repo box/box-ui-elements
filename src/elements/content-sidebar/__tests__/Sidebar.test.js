@@ -25,7 +25,19 @@ describe('elements/content-sidebar/Sidebar', () => {
         isDocGenTemplate: false,
     };
 
-    const getWrapper = props => shallow(<Sidebar file={file} location={{ pathname: '/' }} {...props} />);
+    const withOutDocgenFeature = {
+        enabled: false,
+        checkDocGenTemplate: jest.fn(),
+        isDocGenTemplate: false,
+    };
+
+    const defaultProps = {
+        file,
+        location: { pathname: '/' },
+        docGenSidebarProps: withOutDocgenFeature,
+    };
+
+    const getWrapper = props => shallow(<Sidebar {...defaultProps} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
@@ -134,7 +146,7 @@ describe('elements/content-sidebar/Sidebar', () => {
             });
             expect(historyMock.push).toHaveBeenCalledWith('/docgen');
         });
-        test.only('test should redirect to default route if new file is not a docgen template', () => {
+        test('test should redirect to default route if new file is not a docgen template', () => {
             const historyMock = {
                 push: jest.fn(),
                 location: {
@@ -147,7 +159,7 @@ describe('elements/content-sidebar/Sidebar', () => {
                     file={file}
                     history={historyMock}
                     docGenSidebarProps={{
-                        ...withDocgenFeature.docgen,
+                        ...withDocgenFeature,
                         isDocGenTemplate: true,
                     }}
                     metadataSidebarProps={{ isFeatureEnabled: true }}
