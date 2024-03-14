@@ -9,8 +9,8 @@ const YEAR_IN_MS = 3.154e10;
 
 describe('timeFromNow function', () => {
     it('should return correct year difference', () => {
-        const ms = Date.now() + YEAR_IN_MS * 2; // Two years in the future
-        expect(timeFromNow(ms)).toEqual({ value: 2, unit: 'year' });
+        const ms = Date.now() + YEAR_IN_MS * 4; // Four years in the future
+        expect(timeFromNow(ms)).toEqual({ value: 4, unit: 'year' });
     });
 
     it('should return correct week difference', () => {
