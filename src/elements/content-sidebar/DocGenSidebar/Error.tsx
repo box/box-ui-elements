@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Button from '../../../components/button';
 import messages from './messages';
-import RereshIcon from './RereshIcon';
+import RefreshIcon from './RefreshIcon';
 
 type Props = {
     onClick: () => void;
@@ -11,7 +11,7 @@ type Props = {
 
 const Error = ({ onClick }: Props) => (
     <div className="docgen-error-state">
-        <RereshIcon className="docgen-error-state--icon" />
+        <RefreshIcon className="docgen-error-state--icon" />
         <div>
             <FormattedMessage {...messages.errorCouldNotLoad} />
         </div>

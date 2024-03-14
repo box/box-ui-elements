@@ -1223,7 +1223,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
               <div
                 className="docgen-error-state"
               >
-                <RereshIcon
+                <RefreshIcon
                   className="docgen-error-state--icon"
                 >
                   <AccessibleSVG
@@ -1264,7 +1264,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
                       />
                     </svg>
                   </AccessibleSVG>
-                </RereshIcon>
+                </RefreshIcon>
                 <div>
                   <FormattedMessage
                     defaultMessage="We couldn't load the tags"
