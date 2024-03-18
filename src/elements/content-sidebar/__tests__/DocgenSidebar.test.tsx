@@ -160,7 +160,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             wrapper = getWrapper(defaultProps);
         });
         wrapper!.update();
-        const tagList = wrapper!.find('span.bcs-docgen-tag-path');
+        const tagList = wrapper!.find('span.bcs-DocGen-tagPath');
         expect(tagList).toHaveLength(26);
         expect(wrapper).toMatchSnapshot();
     });

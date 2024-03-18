@@ -128,9 +128,9 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
 
     return (
         <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={intl.formatMessage(messages.docgenTags)}>
-            <div className={classNames('bcs-docgen-sidebar', { center: hasNoTags || hasError || loading })}>
+            <div className={classNames('bcs-DocGenSidebar', { center: hasNoTags || hasError || loading })}>
                 {hasError && <Error onClick={loadTags} />}
-                {!hasError && loading && <LoadingIndicator className="bcs-docgen-loading" />}
+                {!hasError && loading && <LoadingIndicator className="bcs-DocGenSidebar-loading" />}
                 {!hasError && !loading && (
                     <>
                         {hasNoTags ? (

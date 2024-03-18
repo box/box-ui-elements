@@ -111,7 +111,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.docGenTooltip)}
                         >
-                            <Tag16 className="bcs-SidebarNavDocGenButton-icon" />
+                            <Tag16 className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                 </SidebarNavTablist>
