@@ -104,7 +104,7 @@ class Sidebar extends React.Component<Props, State> {
     componentDidMount() {
         const { file, api, metadataSidebarProps, docGenSidebarProps }: Props = this.props;
         // if docgen feature is enabled, load metadata to check whether file is a docgen template
-        if (docGenSidebarProps?.enabled && docGenSidebarProps?.checkDocGenTemplate) {
+        if (docGenSidebarProps.enabled) {
             docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
     }
@@ -132,13 +132,13 @@ class Sidebar extends React.Component<Props, State> {
         const { history, location, file, api, metadataSidebarProps, docGenSidebarProps } = this.props;
         const { file: prevFile, docGenSidebarProps: prevDocGenSidebarProps }: Props = prevProps;
         // need to re-check if file is a docgen-template on file change
-        if (file.id !== prevFile.id && docGenSidebarProps?.enabled && docGenSidebarProps?.checkDocGenTemplate) {
+        if (file.id !== prevFile.id && docGenSidebarProps.enabled && docGenSidebarProps.checkDocGenTemplate) {
             docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
         // if file turns out to be a docgen template
         if (
-            docGenSidebarProps?.enabled &&
-            prevDocGenSidebarProps?.isDocGenTemplate !== docGenSidebarProps?.isDocGenTemplate
+            docGenSidebarProps.enabled &&
+            prevDocGenSidebarProps.isDocGenTemplate !== docGenSidebarProps.isDocGenTemplate
         ) {
             if (docGenSidebarProps.isDocGenTemplate) {
                 // navigate to docgen tab
@@ -295,7 +295,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
-                                isDocGenTemplate={docGenSidebarProps?.isDocGenTemplate}
+                                isDocGenTemplate={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
                             />
                         )}
@@ -312,7 +312,7 @@ class Sidebar extends React.Component<Props, State> {
                             getViewer={getViewer}
                             hasActivity={hasActivity}
                             hasDetails={hasDetails}
-                            hasDocGen={docGenSidebarProps?.isDocGenTemplate}
+                            hasDocGen={docGenSidebarProps.isDocGenTemplate}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
