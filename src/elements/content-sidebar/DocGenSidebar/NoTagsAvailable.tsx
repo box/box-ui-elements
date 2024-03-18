@@ -5,8 +5,8 @@ import NoTagsIcon from './NoTagsIcon';
 import messages from './messages';
 
 const NoTagsAvailable = () => (
-    <div className="docgen-empty-state">
-        <NoTagsIcon className="docgen-empty-state--icon" />
+    <div className="bcs-docgen-empty-state">
+        <NoTagsIcon className="bcs-docgen-empty-state--icon" />
         <strong>
             <FormattedMessage {...messages.noTags} />
         </strong>

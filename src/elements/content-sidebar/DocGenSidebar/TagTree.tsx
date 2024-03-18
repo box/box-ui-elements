@@ -18,7 +18,7 @@ const TagTree = ({ data, level = 0 }: TagTreeProps) => {
                 .sort()
                 .map(key => (
                     <div key={`${key}-${level}`} style={{ paddingLeft: `${level * 12}px` }}>
-                        <span className="docgen-tag-path">{key}</span>
+                        <span className="bcs-docgen-tag-path">{key}</span>
                         {data[key] && <TagTree data={data[key]} level={level + 1} />}
                     </div>
                 ))}

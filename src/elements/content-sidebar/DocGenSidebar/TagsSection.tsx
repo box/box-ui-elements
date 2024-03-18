@@ -14,8 +14,8 @@ type Props = {
 const TagsSection = ({ data, message }: Props) => (
     <>
         {!(typeof data !== 'object' || Array.isArray(data) || Object.keys(data).length === 0) && (
-            <div className="docgen-tag-section">
-                <span className="docgen-tag-section-header">
+            <div className="bcs-docgen-tag-section">
+                <span className="bcs-docgen-tag-section-header">
                     <FormattedMessage {...message} />
                 </span>
 

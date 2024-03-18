@@ -54,24 +54,24 @@ exports[`elements/content-sidebar/DocGenSidebar should handle undefined data  1`
           className="bcs-scroll-content"
         >
           <div
-            className="docgen-sidebar center"
+            className="bcs-docgen-sidebar center"
           >
             <NoTagsAvailable>
               <div
-                className="docgen-empty-state"
+                className="bcs-docgen-empty-state"
               >
                 <NoTagsIcon
-                  className="docgen-empty-state--icon"
+                  className="bcs-docgen-empty-state--icon"
                 >
                   <AccessibleSVG
-                    className="docgen-empty-state--icon"
+                    className="bcs-docgen-empty-state--icon"
                     height={140}
                     viewBox="0 0 141 140"
                     width={141}
                   >
                     <svg
                       aria-hidden="true"
-                      className="docgen-empty-state--icon"
+                      className="bcs-docgen-empty-state--icon"
                       focusable="false"
                       height={140}
                       role="presentation"
@@ -245,7 +245,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
           className="bcs-scroll-content"
         >
           <div
-            className="docgen-sidebar"
+            className="bcs-docgen-sidebar"
           >
             <TagsSection
               data={
@@ -291,10 +291,10 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
               }
             >
               <div
-                className="docgen-tag-section"
+                className="bcs-docgen-tag-section"
               >
                 <span
-                  className="docgen-tag-section-header"
+                  className="bcs-docgen-tag-section-header"
                 >
                   <FormattedMessage
                     defaultMessage="Text tags"
@@ -350,7 +350,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         about
                       </span>
@@ -372,7 +372,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               name
                             </span>
@@ -395,7 +395,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         company
                       </span>
@@ -417,7 +417,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               name
                             </span>
@@ -440,7 +440,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         contract
                       </span>
@@ -468,7 +468,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               city
                             </span>
@@ -488,7 +488,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               country
                             </span>
@@ -508,7 +508,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               customerAddress
                             </span>
@@ -531,7 +531,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                                   }
                                 >
                                   <span
-                                    className="docgen-tag-path"
+                                    className="bcs-docgen-tag-path"
                                   >
                                     city
                                   </span>
@@ -551,7 +551,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                                   }
                                 >
                                   <span
-                                    className="docgen-tag-path"
+                                    className="bcs-docgen-tag-path"
                                   >
                                     street
                                   </span>
@@ -574,7 +574,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               customerName
                             </span>
@@ -597,7 +597,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         invoice
                       </span>
@@ -623,7 +623,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               billingAddress
                             </span>
@@ -645,7 +645,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                                   }
                                 >
                                   <span
-                                    className="docgen-tag-path"
+                                    className="bcs-docgen-tag-path"
                                   >
                                     street
                                   </span>
@@ -668,7 +668,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               date
                             </span>
@@ -688,7 +688,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               id
                             </span>
@@ -711,7 +711,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         isActive
                       </span>
@@ -731,7 +731,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         phone
                       </span>
@@ -751,7 +751,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         products
                       </span>
@@ -777,7 +777,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               amount
                             </span>
@@ -797,7 +797,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               description
                             </span>
@@ -817,7 +817,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               name
                             </span>
@@ -837,7 +837,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               price
                             </span>
@@ -857,7 +857,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               quantity
                             </span>
@@ -891,10 +891,10 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
               }
             >
               <div
-                className="docgen-tag-section"
+                className="bcs-docgen-tag-section"
               >
                 <span
-                  className="docgen-tag-section-header"
+                  className="bcs-docgen-tag-section-header"
                 >
                   <FormattedMessage
                     defaultMessage="Image tags"
@@ -922,7 +922,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                       }
                     >
                       <span
-                        className="docgen-tag-path"
+                        className="bcs-docgen-tag-path"
                       >
                         invoice
                       </span>
@@ -944,7 +944,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
                             }
                           >
                             <span
-                              className="docgen-tag-path"
+                              className="bcs-docgen-tag-path"
                             >
                               image
                             </span>
@@ -1024,24 +1024,24 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
           className="bcs-scroll-content"
         >
           <div
-            className="docgen-sidebar center"
+            className="bcs-docgen-sidebar center"
           >
             <NoTagsAvailable>
               <div
-                className="docgen-empty-state"
+                className="bcs-docgen-empty-state"
               >
                 <NoTagsIcon
-                  className="docgen-empty-state--icon"
+                  className="bcs-docgen-empty-state--icon"
                 >
                   <AccessibleSVG
-                    className="docgen-empty-state--icon"
+                    className="bcs-docgen-empty-state--icon"
                     height={140}
                     viewBox="0 0 141 140"
                     width={141}
                   >
                     <svg
                       aria-hidden="true"
-                      className="docgen-empty-state--icon"
+                      className="bcs-docgen-empty-state--icon"
                       focusable="false"
                       height={140}
                       role="presentation"
@@ -1215,7 +1215,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
           className="bcs-scroll-content"
         >
           <div
-            className="docgen-sidebar center"
+            className="bcs-docgen-sidebar center"
           >
             <Error
               onClick={[Function]}
@@ -1369,13 +1369,13 @@ exports[`elements/content-sidebar/DocGenSidebar should render loading state 1`] 
           className="bcs-scroll-content"
         >
           <div
-            className="docgen-sidebar center"
+            className="bcs-docgen-sidebar center"
           >
             <LoadingIndicator
-              className="docgen-loading"
+              className="bcs-docgen-loading"
             >
               <div
-                className="crawler docgen-loading is-default"
+                className="crawler bcs-docgen-loading is-default"
               >
                 <div />
                 <div />
