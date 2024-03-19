@@ -10,8 +10,8 @@ type Props = {
 };
 
 const Error = ({ onClick }: Props) => (
-    <div className="docgen-error-state">
-        <RefreshIcon className="docgen-error-state--icon" />
+    <div className="bcs-DocGen-error-state">
+        <RefreshIcon className="bcs-DocGen-error-state--icon" />
         <div>
             <FormattedMessage {...messages.errorCouldNotLoad} />
         </div>
