@@ -233,7 +233,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         });
         wrapper!.update();
         const emptyState = wrapper!.find(FormattedMessage).at(0);
-        expect(emptyState.prop('defaultMessage')).toEqual('This document has no tags');
+        expect(emptyState.prop('defaultMessage')).toEqual("We couldn't load the tags");
         expect(emptyState).toHaveLength(1);
         expect(wrapper).toMatchSnapshot();
     });
