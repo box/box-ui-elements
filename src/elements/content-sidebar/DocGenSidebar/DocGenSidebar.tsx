@@ -90,32 +90,30 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
         return jsonPathsMap;
     };
 
-    const loadTags = () => {
-        if (getDocGenTags) {
-            setLoading(true);
-            getDocGenTags()
-                .then((response: DocGenTemplateTagsResponse) => {
-                    if (response) {
-                        // anything that is not an image tag for this view is treated as a text tag
-                        const textTags = response?.data?.filter(tag => tag.tag_type !== 'image') || [];
-                        const imageTags = response?.data?.filter(tag => tag.tag_type === 'image') || [];
-                        setTags({
-                            text: textTags,
-                            image: imageTags,
-                        });
-                        setLoading(false);
-                        setJsonPaths({
-                            textTree: tagsToJsonPaths(textTags),
-                            imageTree: tagsToJsonPaths(imageTags),
-                        });
-                    } else {
-                        setLoading(false);
-                    }
-                })
-                .catch(() => {
-                    setLoading(false);
-                    setHasError(true);
+    const loadTags = async () => {
+        setLoading(true);
+        try {
+            const response: DocGenTemplateTagsResponse = await getDocGenTags();
+            if (response && !!response.data) {
+                // anything that is not an image tag for this view is treated as a text tag
+                const textTags = response?.data?.filter(tag => tag.tag_type !== 'image') || [];
+                const imageTags = response?.data?.filter(tag => tag.tag_type === 'image') || [];
+                setTags({
+                    text: textTags,
+                    image: imageTags,
                 });
+                setLoading(false);
+                setJsonPaths({
+                    textTree: tagsToJsonPaths(textTags),
+                    imageTree: tagsToJsonPaths(imageTags),
+                });
+            } else {
+                setLoading(false);
+                setHasError(true);
+            }
+        } catch (error) {
+            setLoading(false);
+            setHasError(true);
         }
     };
 
