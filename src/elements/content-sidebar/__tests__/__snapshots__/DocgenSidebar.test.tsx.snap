@@ -28,14 +28,14 @@ exports[`elements/content-sidebar/DocGenSidebar should handle undefined data  1`
 >
   <SidebarContent
     elementId=""
-    sidebarView="metadata"
+    sidebarView="docgen"
     title="Doc Gen Tags"
   >
     <div
-      aria-labelledby="metadata"
+      aria-labelledby="docgen"
       className="bcs-content"
       data-testid="bcs-content"
-      id="metadata-content"
+      id="docgen-content"
       role="tabpanel"
     >
       <div
@@ -107,7 +107,7 @@ exports[`elements/content-sidebar/DocGenSidebar should handle undefined data  1`
                 <div>
                   <FormattedMessage
                     defaultMessage="We couldn't load the tags"
-                    id="error.couldNotLoad"
+                    id="be.docGenSidebar.errorTags"
                   >
                     <div />
                   </FormattedMessage>
@@ -115,7 +115,7 @@ exports[`elements/content-sidebar/DocGenSidebar should handle undefined data  1`
                 <p>
                   <FormattedMessage
                     defaultMessage="Please refresh the list."
-                    id="error.refreshList"
+                    id="be.docGenSidebar.refreshPrompt"
                   >
                     <div />
                   </FormattedMessage>
@@ -137,7 +137,7 @@ exports[`elements/content-sidebar/DocGenSidebar should handle undefined data  1`
                     >
                       <FormattedMessage
                         defaultMessage="Refresh"
-                        id="error.refreshButton"
+                        id="be.docGenSidebar.refreshButton"
                       >
                         <div />
                       </FormattedMessage>
@@ -182,14 +182,14 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
 >
   <SidebarContent
     elementId=""
-    sidebarView="metadata"
+    sidebarView="docgen"
     title="Doc Gen Tags"
   >
     <div
-      aria-labelledby="metadata"
+      aria-labelledby="docgen"
       className="bcs-content"
       data-testid="bcs-content"
-      id="metadata-content"
+      id="docgen-content"
       role="tabpanel"
     >
       <div
@@ -249,19 +249,19 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
               message={
                 {
                   "defaultMessage": "Text tags",
-                  "id": "sidebar.docgen.textTags",
+                  "id": "be.docGenSidebar.textTags",
                 }
               }
             >
               <div
-                className="bcs-DocGen-tagSection"
+                className="bcs-TagsSection"
               >
                 <span
-                  className="bcs-DocGen-tagSection-header"
+                  className="bcs-TagsSection-header"
                 >
                   <FormattedMessage
                     defaultMessage="Text tags"
-                    id="sidebar.docgen.textTags"
+                    id="be.docGenSidebar.textTags"
                   >
                     <div />
                   </FormattedMessage>
@@ -849,19 +849,19 @@ exports[`elements/content-sidebar/DocGenSidebar should render DocGen sidebar com
               message={
                 {
                   "defaultMessage": "Image tags",
-                  "id": "sidebar.docgen.imageTags",
+                  "id": "be.docGenSidebar.imageTags",
                 }
               }
             >
               <div
-                className="bcs-DocGen-tagSection"
+                className="bcs-TagsSection"
               >
                 <span
-                  className="bcs-DocGen-tagSection-header"
+                  className="bcs-TagsSection-header"
                 >
                   <FormattedMessage
                     defaultMessage="Image tags"
-                    id="sidebar.docgen.imageTags"
+                    id="be.docGenSidebar.imageTags"
                   >
                     <div />
                   </FormattedMessage>
@@ -961,14 +961,14 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
 >
   <SidebarContent
     elementId=""
-    sidebarView="metadata"
+    sidebarView="docgen"
     title="Doc Gen Tags"
   >
     <div
-      aria-labelledby="metadata"
+      aria-labelledby="docgen"
       className="bcs-content"
       data-testid="bcs-content"
-      id="metadata-content"
+      id="docgen-content"
       role="tabpanel"
     >
       <div
@@ -989,7 +989,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
           <div
             className="bcs-DocGenSidebar center"
           >
-            <NoTagsAvailable>
+            <EmptyTags>
               <div
                 className="bcs-DocGen-emptyState"
               >
@@ -1034,13 +1034,13 @@ exports[`elements/content-sidebar/DocGenSidebar should render empty state when t
                 <strong>
                   <FormattedMessage
                     defaultMessage="This document has no tags"
-                    id="sidebar.docgen.noTags"
+                    id="be.docGenSidebar.emptyTags"
                   >
                     <div />
                   </FormattedMessage>
                 </strong>
               </div>
-            </NoTagsAvailable>
+            </EmptyTags>
           </div>
         </div>
       </div>
@@ -1077,14 +1077,14 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
 >
   <SidebarContent
     elementId=""
-    sidebarView="metadata"
+    sidebarView="docgen"
     title="Doc Gen Tags"
   >
     <div
-      aria-labelledby="metadata"
+      aria-labelledby="docgen"
       className="bcs-content"
       data-testid="bcs-content"
-      id="metadata-content"
+      id="docgen-content"
       role="tabpanel"
     >
       <div
@@ -1156,7 +1156,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
                 <div>
                   <FormattedMessage
                     defaultMessage="We couldn't load the tags"
-                    id="error.couldNotLoad"
+                    id="be.docGenSidebar.errorTags"
                   >
                     <div />
                   </FormattedMessage>
@@ -1164,7 +1164,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
                 <p>
                   <FormattedMessage
                     defaultMessage="Please refresh the list."
-                    id="error.refreshList"
+                    id="be.docGenSidebar.refreshPrompt"
                   >
                     <div />
                   </FormattedMessage>
@@ -1186,7 +1186,7 @@ exports[`elements/content-sidebar/DocGenSidebar should render error state 1`] = 
                     >
                       <FormattedMessage
                         defaultMessage="Refresh"
-                        id="error.refreshButton"
+                        id="be.docGenSidebar.refreshButton"
                       >
                         <div />
                       </FormattedMessage>
@@ -1231,14 +1231,14 @@ exports[`elements/content-sidebar/DocGenSidebar should render loading state 1`] 
 >
   <SidebarContent
     elementId=""
-    sidebarView="metadata"
+    sidebarView="docgen"
     title="Doc Gen Tags"
   >
     <div
-      aria-labelledby="metadata"
+      aria-labelledby="docgen"
       className="bcs-content"
       data-testid="bcs-content"
-      id="metadata-content"
+      id="docgen-content"
       role="tabpanel"
     >
       <div

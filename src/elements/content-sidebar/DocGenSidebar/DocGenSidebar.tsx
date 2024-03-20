@@ -5,7 +5,7 @@ import { injectIntl, IntlShape } from 'react-intl';
 
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
-import { ORIGIN_DOCGEN_SIDEBAR, SIDEBAR_VIEW_METADATA } from '../../../constants';
+import { ORIGIN_DOCGEN_SIDEBAR, SIDEBAR_VIEW_DOCGEN } from '../../../constants';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withAPIContext } from '../../common/api-context';
@@ -17,7 +17,7 @@ import LoadingIndicator from '../../../components/loading-indicator';
 // eslint-disable-next-line import/named
 import { withLogger } from '../../common/logger';
 import Error from './Error';
-import NoTagsAvailable from './NoTagsAvailable';
+import EmptyTags from './EmptyTags';
 // @ts-ignore: no ts definition
 import SidebarContent from '../SidebarContent';
 import TagsSection from './TagsSection';
@@ -54,13 +54,9 @@ type JsonPathsState = {
     imageTree: JsonPathsMap;
 };
 
-const isJsonPathsMap = (obj: object): obj is JsonPathsMap => {
-    return typeof obj === 'object' && obj !== null;
-};
-
 const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
     const [hasError, setHasError] = React.useState<boolean>(false);
-    const [loading, setLoading] = React.useState<boolean>(false);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [tags, setTags] = React.useState<TagState>({
         text: [],
         image: [],
@@ -70,20 +66,20 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
         imageTree: {},
     });
 
-    const tagsToJsonPaths = (docgenTags: DocGenTag[]): JsonPathsMap => {
+    const createNestedObject = (base: JsonPathsMap, paths: string[]) => {
+        paths.reduce((obj, path) => {
+            if (!obj[path]) obj[path] = {};
+            return obj[path];
+        }, base);
+    };
+
+    const tagsToJsonPaths = (docGenTags: DocGenTag[]): JsonPathsMap => {
         const jsonPathsMap: JsonPathsMap = {};
-        docgenTags.forEach(tag => {
+
+        docGenTags.forEach(tag => {
             tag.json_paths.forEach(jsonPath => {
                 const paths = jsonPath.split('.');
-                let currentObject: JsonPathsMap | {} = jsonPathsMap;
-                paths.forEach(segment => {
-                    if (isJsonPathsMap(currentObject)) {
-                        if (!(segment in currentObject)) {
-                            (currentObject as JsonPathsMap)[segment] = {};
-                        }
-                        currentObject = (currentObject as JsonPathsMap)[segment];
-                    }
-                });
+                createNestedObject(jsonPathsMap, paths);
             });
         });
 
@@ -91,30 +87,31 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
     };
 
     const loadTags = async () => {
-        setLoading(true);
+        setIsLoading(true);
         try {
             const response: DocGenTemplateTagsResponse = await getDocGenTags();
             if (response && !!response.data) {
+                const { data } = response || [];
+
                 // anything that is not an image tag for this view is treated as a text tag
-                const textTags = response?.data?.filter(tag => tag.tag_type !== 'image') || [];
-                const imageTags = response?.data?.filter(tag => tag.tag_type === 'image') || [];
+                const textTags = data?.filter(tag => tag.tag_type !== 'image') || [];
+                const imageTags = data?.filter(tag => tag.tag_type === 'image') || [];
                 setTags({
                     text: textTags,
                     image: imageTags,
                 });
-                setLoading(false);
                 setJsonPaths({
                     textTree: tagsToJsonPaths(textTags),
                     imageTree: tagsToJsonPaths(imageTags),
                 });
+                setHasError(false);
             } else {
-                setLoading(false);
                 setHasError(true);
             }
         } catch (error) {
-            setLoading(false);
             setHasError(true);
         }
+        setIsLoading(false);
     };
 
     React.useEffect(() => {
@@ -122,23 +119,18 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const hasNoTags = tags.image.length + tags.text.length === 0;
+    const isEmpty = tags.image.length + tags.text.length === 0;
 
     return (
-        <SidebarContent sidebarView={SIDEBAR_VIEW_METADATA} title={intl.formatMessage(messages.docgenTags)}>
-            <div className={classNames('bcs-DocGenSidebar', { center: hasNoTags || hasError || loading })}>
+        <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={intl.formatMessage(messages.docGenTags)}>
+            <div className={classNames('bcs-DocGenSidebar', { center: isEmpty || hasError || isLoading })}>
                 {hasError && <Error onClick={loadTags} />}
-                {!hasError && loading && <LoadingIndicator className="bcs-DocGenSidebar-loading" />}
-                {!hasError && !loading && (
+                {isLoading && <LoadingIndicator className="bcs-DocGenSidebar-loading" />}
+                {!hasError && !isLoading && isEmpty && <EmptyTags />}
+                {!hasError && !isLoading && !isEmpty && (
                     <>
-                        {hasNoTags ? (
-                            <NoTagsAvailable />
-                        ) : (
-                            <>
-                                <TagsSection message={messages.textTags} data={jsonPaths.textTree} />
-                                <TagsSection message={messages.imageTags} data={jsonPaths.imageTree} />
-                            </>
-                        )}
+                        <TagsSection message={messages.textTags} data={jsonPaths.textTree} />
+                        <TagsSection message={messages.imageTags} data={jsonPaths.imageTree} />
                     </>
                 )}
             </div>

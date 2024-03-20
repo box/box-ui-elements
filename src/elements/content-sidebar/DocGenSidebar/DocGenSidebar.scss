@@ -4,18 +4,18 @@
     padding: 0 24px 0 24px;
 }
 
-.center {
+.bcs-DocGen--center {
     display: flex;
     justify-content: center;
 }
 
-.bcs-DocGen-tagSection {
+.bcs-TagsSection {
     margin-top: 16px;
     padding-bottom: 16px;
     border-bottom: 1px solid $bdl-gray-10;
 }
 
-.bcs-DocGen-tagSection-header {
+.bcs-TagsSection-header {
     font-size: $bdl-fontSize-minimum;
     line-height: 14px;
 }

@@ -1010,10 +1010,10 @@ const messages = defineMessages({
         description: 'Icon title for a Box item of type folder that is private and has no collaborators',
         defaultMessage: 'Personal Folder',
     },
-    docGenTooltip: {
-        id: 'be.contentSidebar.docGen',
+    sidebarDocGenTooltip: {
+        id: 'be.sidebarDocGenTooltip',
         defaultMessage: 'Box Doc Gen',
-        description: 'be.contentSidebar.docGenTooltip',
+        description: 'Icon title for a Box file of type DocGen template',
     },
 });
 

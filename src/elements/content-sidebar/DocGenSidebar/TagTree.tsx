@@ -3,12 +3,12 @@ import './DocGenSidebar.scss';
 import { JsonPathsMap } from './types';
 
 interface TagTreeProps {
-    data: JsonPathsMap;
+    data?: JsonPathsMap;
     level?: number;
 }
 
 const TagTree = ({ data, level = 0 }: TagTreeProps) => {
-    if (Array.isArray(data) || !data) {
+    if (!data) {
         return null;
     }
 
