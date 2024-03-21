@@ -37,10 +37,10 @@ type Props = {
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
     hasDetails: boolean,
+    hasDocGen?: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
     intl: IntlShape,
-    isDocGenTemplate?: boolean,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
 };
@@ -54,7 +54,7 @@ const SidebarNav = ({
     hasDetails,
     hasMetadata,
     hasSkills,
-    isDocGenTemplate = false,
+    hasDocGen = false,
     intl,
     isOpen,
     onNavigate,
@@ -105,7 +105,7 @@ const SidebarNav = ({
                             <IconMetadataThick />
                         </SidebarNavButton>
                     )}
-                    {isDocGenTemplate && (
+                    {hasDocGen && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}

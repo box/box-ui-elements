@@ -295,7 +295,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
-                                isDocGenTemplate={docGenSidebarProps.isDocGenTemplate}
+                                hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
                             />
                         )}

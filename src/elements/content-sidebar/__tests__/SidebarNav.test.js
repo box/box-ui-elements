@@ -112,7 +112,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
     test('should render docgen tab', () => {
         const props = {
-            isDocGenTemplate: true,
+            hasDocGen: true,
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
