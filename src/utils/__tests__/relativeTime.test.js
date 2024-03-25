@@ -9,7 +9,7 @@ const YEAR_IN_MS = 3.154e10;
 
 describe('timeFromNow function', () => {
     const originalDateNow = Date.now;
-    const fixedDate = 1629133900000; // Fixed timestamp for testing
+    const fixedDate = 1629133900000; // Fixed timestamp for testing.
     beforeAll(() => {
         Date.now = jest.fn(() => fixedDate);
     });
