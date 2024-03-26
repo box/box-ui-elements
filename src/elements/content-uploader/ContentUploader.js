@@ -62,6 +62,7 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 
 type Props = {
+    allowPrepopulateFiles?: boolean,
     apiHost: string,
     chunked: boolean,
     className: string,
@@ -160,6 +161,7 @@ class ContentUploader extends Component<Props, State> {
         isUploadFallbackLogicEnabled: false,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
+        allowPrepopulateFiles: false,
     };
 
     /**
@@ -191,6 +193,11 @@ class ContentUploader extends Component<Props, State> {
     componentDidMount() {
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = this.rootElement;
+        const { files, allowPrepopulateFiles } = this.props;
+        // allowPrepopulateFiles is a prop used to pre-popluate files without clicking upload button.
+        if (allowPrepopulateFiles && files && files.length > 0) {
+            this.addFilesToUploadQueue(files, this.upload);
+        }
     }
 
     /**
@@ -348,7 +355,14 @@ class ContentUploader extends Component<Props, State> {
                     // webkitRelativePath should be ignored when the upload destination folder is known
                     this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
                 } else {
-                    this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
+                    this.addFilesWithoutRelativePathToQueue(
+                        newFiles,
+                        this.props.allowPrepopulateFiles
+                            ? () => {
+                                  this.upload();
+                              }
+                            : itemUpdateCallback,
+                    );
                 }
             },
         );

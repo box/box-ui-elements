@@ -579,4 +579,32 @@ describe('elements/content-uploader/ContentUploader', () => {
             expectAutoExpandStateToBe(false);
         });
     });
+
+    describe('componentDidMount()', () => {
+        it('adds files to upload queue if allowPrepopulateFiles is true and files are provided', () => {
+            const files = createMockFiles(3);
+            const wrapper = getWrapper({
+                allowPrepopulateFiles: true,
+                files,
+            });
+            const instance = wrapper.instance();
+            instance.addFilesToUploadQueue = jest.fn();
+
+            instance.componentDidMount();
+            // Assert that addFilesToUploadQueue is called with the correct arguments
+            expect(instance.addFilesToUploadQueue).toHaveBeenCalled();
+
+            // Simulate props change where allowPrepopulateFiles is false
+            const wrapperNext = getWrapper({
+                allowPrepopulateFiles: false,
+                files,
+            });
+            const instanceNext = wrapperNext.instance();
+            instanceNext.addFilesToUploadQueue = jest.fn();
+
+            instanceNext.componentDidMount();
+            // Assert that addFilesToUploadQueue is not called when allowPrepopulateFiles is false
+            expect(instanceNext.addFilesToUploadQueue).not.toHaveBeenCalled();
+        });
+    });
 });
