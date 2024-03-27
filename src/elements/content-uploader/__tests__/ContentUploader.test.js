@@ -581,30 +581,52 @@ describe('elements/content-uploader/ContentUploader', () => {
     });
 
     describe('componentDidMount()', () => {
-        it('adds files to upload queue if allowPrepopulateFiles is true and files are provided', () => {
+        test('adds files to upload queue if isPrepopulateFilesEnabled is true and files are provided', () => {
             const files = createMockFiles(3);
+
+            // Simulate props change where isPrepopulateFilesEnabled is false
             const wrapper = getWrapper({
-                allowPrepopulateFiles: true,
+                isPrepopulateFilesEnabled: true,
                 files,
             });
             const instance = wrapper.instance();
             instance.addFilesToUploadQueue = jest.fn();
 
             instance.componentDidMount();
-            // Assert that addFilesToUploadQueue is called with the correct arguments
-            expect(instance.addFilesToUploadQueue).toHaveBeenCalled();
+            // Assert that addFilesToUploadQueue is called
+            expect(instance.addFilesToUploadQueue).toBeCalled();
+        });
 
-            // Simulate props change where allowPrepopulateFiles is false
-            const wrapperNext = getWrapper({
-                allowPrepopulateFiles: false,
+        test('does not add files to upload queue if isPrepopulateFilesEnabled is false', () => {
+            const files = createMockFiles(3);
+
+            // Simulate props change where isPrepopulateFilesEnabled is false
+            const wrapper = getWrapper({
+                isPrepopulateFilesEnabled: false,
                 files,
             });
-            const instanceNext = wrapperNext.instance();
-            instanceNext.addFilesToUploadQueue = jest.fn();
+            const instance = wrapper.instance();
+            instance.addFilesToUploadQueue = jest.fn();
 
-            instanceNext.componentDidMount();
-            // Assert that addFilesToUploadQueue is not called when allowPrepopulateFiles is false
-            expect(instanceNext.addFilesToUploadQueue).not.toHaveBeenCalled();
+            instance.componentDidMount();
+            // Assert that addFilesToUploadQueue is not called when isPrepopulateFilesEnabled is false
+            expect(instance.addFilesToUploadQueue).not.toHaveBeenCalled();
+        });
+
+        test('does not add files to upload queue if isPrepopulateFilesEnabled is true but files are not present', () => {
+            const files = [];
+
+            // Simulate props change where isPrepopulateFilesEnabled is false
+            const wrapper = getWrapper({
+                isPrepopulateFilesEnabled: true,
+                files,
+            });
+            const instance = wrapper.instance();
+            instance.addFilesToUploadQueue = jest.fn();
+
+            instance.componentDidMount();
+            // Assert that addFilesToUploadQueue is not called when isPrepopulateFilesEnabled is false
+            expect(instance.addFilesToUploadQueue).not.toHaveBeenCalled();
         });
     });
 });
