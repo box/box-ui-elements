@@ -1,4 +1,5 @@
 @import '../common/variables';
+@import './mixins';
 
 .bcs {
     .bcs-SidebarNav {
@@ -17,6 +18,10 @@
     .bcs-SidebarNav-main,
     .bcs-SidebarNav-secondary {
         flex: 0 1 auto;
+    }
+
+    .bcs-SidebarNav-icon {
+        @include bdl-SidebarNavIcon;
     }
 
     .bcs-SidebarNav-overflow {

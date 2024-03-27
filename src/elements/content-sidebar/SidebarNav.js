@@ -16,13 +16,15 @@ import SidebarNavButton from './SidebarNavButton';
 import SidebarNavSign from './SidebarNavSign';
 import SidebarNavTablist from './SidebarNavTablist';
 import SidebarToggle from './SidebarToggle';
+import Tag16 from '../../icon/fill/Tag16';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
-    SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
@@ -35,6 +37,7 @@ type Props = {
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
     hasDetails: boolean,
+    hasDocGen?: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
     intl: IntlShape,
@@ -51,6 +54,7 @@ const SidebarNav = ({
     hasDetails,
     hasMetadata,
     hasSkills,
+    hasDocGen = false,
     intl,
     isOpen,
     onNavigate,
@@ -99,6 +103,15 @@ const SidebarNav = ({
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
                             <IconMetadataThick />
+                        </SidebarNavButton>
+                    )}
+                    {hasDocGen && (
+                        <SidebarNavButton
+                            data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
+                            sidebarView={SIDEBAR_VIEW_DOCGEN}
+                            tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
+                        >
+                            <Tag16 className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                 </SidebarNavTablist>

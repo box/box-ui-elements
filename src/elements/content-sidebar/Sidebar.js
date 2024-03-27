@@ -22,20 +22,25 @@ import { withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
+import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
+import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
+import API from '../../api';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
+    api: API,
     className: string,
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
+    docGenSidebarProps: DocGenSidebarProps,
     features: FeatureConfig,
     file: BoxItem,
     fileId: string,
@@ -96,6 +101,14 @@ class Sidebar extends React.Component<Props, State> {
         this.setForcedByLocation();
     }
 
+    componentDidMount() {
+        const { file, api, metadataSidebarProps, docGenSidebarProps }: Props = this.props;
+        // if docgen feature is enabled, load metadata to check whether file is a docgen template
+        if (docGenSidebarProps.enabled) {
+            docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
+        }
+    }
+
     componentDidUpdate(prevProps: Props): void {
         const { fileId, history, location }: Props = this.props;
         const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
@@ -111,7 +124,30 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
+
+        this.handleDocgenTemplateOnUpdate(prevProps);
     }
+
+    handleDocgenTemplateOnUpdate = (prevProps: Props) => {
+        const { history, location, file, api, metadataSidebarProps, docGenSidebarProps } = this.props;
+        const { file: prevFile, docGenSidebarProps: prevDocGenSidebarProps }: Props = prevProps;
+        // need to re-check if file is a docgen-template on file change
+        if (file.id !== prevFile.id && docGenSidebarProps.enabled && docGenSidebarProps.checkDocGenTemplate) {
+            docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
+        }
+        // if file turns out to be a docgen template
+        if (
+            docGenSidebarProps.enabled &&
+            prevDocGenSidebarProps.isDocGenTemplate !== docGenSidebarProps.isDocGenTemplate
+        ) {
+            if (docGenSidebarProps.isDocGenTemplate) {
+                // navigate to docgen tab
+                history.push(`/${SIDEBAR_VIEW_DOCGEN}`);
+            } else if (location.pathname === `/${SIDEBAR_VIEW_DOCGEN}`) {
+                history.push('/');
+            }
+        }
+    };
 
     getUrlPrefix = (pathname: string) => {
         const basePath = pathname.substring(1).split('/')[0];
@@ -215,6 +251,7 @@ class Sidebar extends React.Component<Props, State> {
             currentUser,
             currentUserError,
             detailsSidebarProps,
+            docGenSidebarProps,
             file,
             fileId,
             getPreview,
@@ -258,6 +295,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
+                                hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
                             />
                         )}
@@ -267,12 +305,14 @@ class Sidebar extends React.Component<Props, State> {
                             currentUserError={currentUserError}
                             elementId={this.id}
                             detailsSidebarProps={detailsSidebarProps}
+                            docGenSidebarProps={docGenSidebarProps}
                             file={file}
                             fileId={fileId}
                             getPreview={getPreview}
                             getViewer={getViewer}
                             hasActivity={hasActivity}
                             hasDetails={hasDetails}
+                            hasDocGen={docGenSidebarProps.isDocGenTemplate}
                             hasMetadata={hasMetadata}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
