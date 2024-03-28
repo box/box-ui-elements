@@ -121,7 +121,7 @@ const currentUser = { name: 'Kanye West', id: 10 };
 
 const getWrapper = props => shallow(<ActivityFeed currentUser={currentUser} file={file} {...props} />);
 
-describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
+describe('elements/content-sidebar/activity-feed/activity-feed/ActivityFeed', () => {
     test('should correctly render loading state', () => {
         const wrapper = getWrapper({
             currentUser: undefined,

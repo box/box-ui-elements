@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
+import noop from 'lodash/noop';
 
 import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../../constants';
@@ -28,7 +29,7 @@ export interface BaseCommentMenuProps {
     handleDeleteClick: () => void;
     handleDeleteConfirm: () => void;
     handleEditClick: () => void;
-    handleMenuClose: () => void;
+    handleMenuClose?: Function;
     handleStatusUpdate: (selectedStatus: FeedItemStatus) => void;
     isConfirmingDelete: boolean;
     isResolved: boolean;
@@ -42,7 +43,7 @@ export const BaseCommentMenu = ({
     handleDeleteClick,
     handleDeleteConfirm,
     handleEditClick,
-    handleMenuClose,
+    handleMenuClose = noop,
     handleStatusUpdate,
     isConfirmingDelete,
     isResolved,
@@ -73,6 +74,9 @@ export const BaseCommentMenu = ({
                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                         data-testid="unresolve-comment"
                         onClick={() => handleStatusUpdate(COMMENT_STATUS_OPEN)}
+                        onMouseDown={(event: MouseEvent) => {
+                            event.stopPropagation();
+                        }}
                     >
                         <X16 />
                         <FormattedMessage {...messages.commentUnresolveMenuItem} />
@@ -83,6 +87,9 @@ export const BaseCommentMenu = ({
                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                         data-testid="resolve-comment"
                         onClick={() => handleStatusUpdate(COMMENT_STATUS_RESOLVED)}
+                        onMouseDown={(event: MouseEvent) => {
+                            event.stopPropagation();
+                        }}
                     >
                         <Checkmark16 />
                         <FormattedMessage {...messages.commentResolveMenuItem} />
@@ -93,6 +100,9 @@ export const BaseCommentMenu = ({
                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                         data-testid="edit-comment"
                         onClick={handleEditClick}
+                        onMouseDown={(event: MouseEvent) => {
+                            event.stopPropagation();
+                        }}
                     >
                         <Pencil16 />
                         <FormattedMessage {...messages.commentEditMenuItem} />
@@ -104,6 +114,9 @@ export const BaseCommentMenu = ({
                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_DELETE}
                         data-testid="delete-comment"
                         onClick={handleDeleteClick}
+                        onMouseDown={(event: MouseEvent) => {
+                            event.stopPropagation();
+                        }}
                     >
                         <Trash16 />
                         <FormattedMessage {...messages.commentDeleteMenuItem} />

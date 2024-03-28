@@ -23,6 +23,7 @@ type Props = {
     onEdit?: Function,
     onSelect?: (isSelected: boolean) => void,
     replies: Array<CommentType>,
+    setEditingCommentIds: (editingCommentIds: string[] | ((prevState: string[]) => string[])) => void,
     translations?: Translations,
 };
 
@@ -38,6 +39,7 @@ const ActivityThreadReplies = ({
     onEdit,
     onSelect,
     replies,
+    setEditingCommentIds,
     translations,
 }: Props) => {
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
@@ -70,6 +72,7 @@ const ActivityThreadReplies = ({
                     onCommentEdit={handleOnEdit}
                     onSelect={onSelect}
                     permissions={getReplyPermissions(reply)}
+                    setEditingCommentIds={setEditingCommentIds}
                     translations={translations}
                 />
             );
