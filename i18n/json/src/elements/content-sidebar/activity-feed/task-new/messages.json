@@ -1,0 +1,177 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.taskCollaboratorLoadErrorMessage",
+    "description": "Error message when we failed to load the collaborators when user tries to edit a task",
+    "defaultMessage": "An error has occurred while loading collaborators for this task. Please try again."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.taskShowMoreAssignees",
+    "description": "Button name to expand task assignee list, additionalAssigneeCount is the number of additional task assignees that can be shown.",
+    "defaultMessage": "Show {additionalAssigneeCount} More"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.taskShowMoreAssigneesOverflow",
+    "description": "Button name to expand task assignee list, when there is an unknown number of assignees beyond additionalAssigneeCount.",
+    "defaultMessage": "{additionalAssigneeCount, plural, one {Show #+ More} other {Show #+ More}}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.taskShowLessAssignees",
+    "description": "Button name to hide task assignee list",
+    "defaultMessage": "Show Less"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.taskDueDateLabel",
+    "description": "Label and date for task due date",
+    "defaultMessage": "Due: {date}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedApproveAction",
+    "description": "Approve option for an approval task",
+    "defaultMessage": "Approve"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedCompleteAction",
+    "description": "Completion option for a general task",
+    "defaultMessage": "Mark as Complete"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedRejectAction",
+    "description": "Reject option for an approval task",
+    "defaultMessage": "Reject"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedViewDetailsAction",
+    "description": "View the details for a task",
+    "defaultMessage": "View Task Details"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedLabel",
+    "description": "Label for a completed task",
+    "defaultMessage": "Completed"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedCompletedUppercaseLabel",
+    "description": "Label for an completed task (in upper-case in supported language)",
+    "defaultMessage": "COMPLETED"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedLabel",
+    "description": "Label for an approved task",
+    "defaultMessage": "Approved"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedApprovedUppercaseLabel",
+    "description": "Label for an approved task (in upper-case in supported language)",
+    "defaultMessage": "APPROVED"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedLabel",
+    "description": "Label for a rejected task",
+    "defaultMessage": "Rejected"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedRejectedUppercaseLabel",
+    "description": "Label for a task rejected (in upper-case in supported language)",
+    "defaultMessage": "REJECTED"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressLabel",
+    "description": "Label for a task in progress",
+    "defaultMessage": "In Progress"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedInProgressUppercaseLabel",
+    "description": "Label for a task in progress (in upper-case in supported language)",
+    "defaultMessage": "IN PROGRESS"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineApprovalCurrentUser",
+    "description": "Comment headline for an approval task assigned to the current user",
+    "defaultMessage": "{user} assigned you an Approval Task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineApproval",
+    "description": "Comment headline for an approval task",
+    "defaultMessage": "{user} assigned an Approval Task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneralCurrentUser",
+    "description": "Comment headline for a general task assigned to the current user",
+    "defaultMessage": "{user} assigned you a Task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedHeadlineGeneral",
+    "description": "Comment headline for a general task",
+    "defaultMessage": "{user} assigned a Task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedMoreAssigneesLabel",
+    "description": "Label for button to expand flyout to see all task assignees",
+    "defaultMessage": "See all assignees"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedAssigneeListTitle",
+    "description": "Title for list of all task assignees",
+    "defaultMessage": "Assignees"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedStatusRejected",
+    "description": "Rejected task status, where dateTime is a readable time like \"Today at 2pm\"",
+    "defaultMessage": "Rejected {dateTime}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedStatusApproved",
+    "description": "Approved task status, where dateTime is a readable time like \"Today at 2pm\"",
+    "defaultMessage": "Approved {dateTime}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.tasksFeedStatusCompleted",
+    "description": "Completed task status, where dateTime is a readable time like \"Today at 2pm\"",
+    "defaultMessage": "Completed {dateTime}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.taskFeedStatusDue",
+    "description": "Text for due date description formatted with relative date and relative time. (Upper-case in supported languages)",
+    "defaultMessage": "DUE {dateTime}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskNew.taskAssignmentCompleted",
+    "description": "Title for checkmark icon indicating someone completed a task",
+    "defaultMessage": "Completed"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.task.taskDeleteMenuItem",
+    "description": "Text to show on menu item to delete task",
+    "defaultMessage": "Delete task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.task.taskEditMenuItem",
+    "description": "Text to show on menu item to edit task",
+    "defaultMessage": "Modify task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.task.taskDeletePrompt",
+    "description": "Confirmation prompt text to delete task",
+    "defaultMessage": "Are you sure you want to permanently delete this task?"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.task.taskAnyAffordanceTooltip",
+    "description": "Tooltip text for any task icon, explaining that the task only needs one assignee to complete.",
+    "defaultMessage": "Only one assignee is required to complete this task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.task.taskMultipleFilesAffordanceTooltip",
+    "description": "Tooltip text for multi-file icon, explaining that the task involves multiple files",
+    "defaultMessage": "There are multiple files associated with this task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.task.generalTaskAnnotationIconTitle",
+    "description": "Text for aria label of general task circle type icon",
+    "defaultMessage": "General Task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.task.approvalTaskAnnotationIconTitle",
+    "description": "Text for aria label of approval task circle type icon",
+    "defaultMessage": "Approval Task"
+  }
+]

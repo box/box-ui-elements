@@ -1,0 +1,7 @@
+[
+  {
+    "id": "be.messageCenter.previewError",
+    "description": "Error message for preview not loading an image",
+    "defaultMessage": "Sorry, we're having trouble showing this image. "
+  }
+]
