@@ -19,10 +19,43 @@ describe('elements/content-sidebar/Sidebar', () => {
         },
     };
 
-    const getWrapper = props => shallow(<Sidebar file={file} location={{ pathname: '/' }} {...props} />);
+    const withDocgenFeature = {
+        enabled: true,
+        checkDocGenTemplate: jest.fn(),
+        isDocGenTemplate: false,
+    };
+
+    const withOutDocgenFeature = {
+        enabled: false,
+        checkDocGenTemplate: jest.fn(),
+        isDocGenTemplate: false,
+    };
+
+    const defaultProps = {
+        file,
+        location: { pathname: '/' },
+        docGenSidebarProps: withOutDocgenFeature,
+    };
+
+    const getWrapper = props => shallow(<Sidebar {...defaultProps} {...props} />);
 
     beforeEach(() => {
         LocalStore.mockClear();
+    });
+
+    describe('componentDidMount', () => {
+        test('should call checkDocGenTemplate if docgen is enabeld', () => {
+            const wrapper = shallow(
+                <Sidebar
+                    file={file}
+                    location={{ pathname: '/' }}
+                    docGenSidebarProps={withDocgenFeature}
+                    metadataSidebarProps={{ isFeatureEnabled: true }}
+                />,
+            );
+            wrapper.instance();
+            expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe('componentDidUpdate', () => {
@@ -73,6 +106,71 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             wrapper.setProps({ location: { pathname: '/', state: { open: false } } });
             expect(instance.isForced).toHaveBeenCalledWith(false);
+        });
+        test('should re-check whether a file is docgen template on file change', () => {
+            const wrapper = shallow(
+                <Sidebar
+                    file={file}
+                    location={{ pathname: '/' }}
+                    docGenSidebarProps={withDocgenFeature}
+                    metadataSidebarProps={{ isFeatureEnabled: true }}
+                />,
+            );
+            wrapper.instance();
+            wrapper.setProps({ file: { ...file, id: 'new-file' } });
+            expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(2);
+        });
+        test('should redirect to dogen tab if the new file is a docgen template', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/activity/comments/1234',
+                },
+            };
+            const wrapper = shallow(
+                <Sidebar
+                    location={{ pathname: '/' }}
+                    file={file}
+                    history={historyMock}
+                    docGenSidebarProps={withDocgenFeature}
+                    metadataSidebarProps={{ isFeatureEnabled: true }}
+                />,
+            );
+            wrapper.instance();
+            wrapper.setProps({
+                file: { ...file, id: 'new-file' },
+                docGenSidebarProps: {
+                    ...withDocgenFeature,
+                    isDocGenTemplate: true,
+                },
+            });
+            expect(historyMock.push).toHaveBeenCalledWith('/docgen');
+        });
+        test('test should redirect to default route if new file is not a docgen template', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/activity/comments/1234',
+                },
+            };
+            const wrapper = shallow(
+                <Sidebar
+                    location={{ pathname: '/docgen' }}
+                    file={file}
+                    history={historyMock}
+                    docGenSidebarProps={{
+                        ...withDocgenFeature,
+                        isDocGenTemplate: true,
+                    }}
+                    metadataSidebarProps={{ isFeatureEnabled: true }}
+                />,
+            );
+            wrapper.instance();
+            wrapper.setProps({
+                file: { ...file, id: 'new-file' },
+                docGenSidebarProps: withDocgenFeature,
+            });
+            expect(historyMock.push).toHaveBeenCalledWith('/');
         });
     });
 
