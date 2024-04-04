@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import type { ItemType } from '../../common/types/core';
 
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
+import { ITEM_TYPE_FOLDER, ITEM_TYPE_HUB } from '../../common/constants';
+
 import type { accessLevelType } from './flowTypes';
 import messages from './messages';
 
@@ -15,26 +17,53 @@ type Props = {
 };
 
 const SharedLinkAccessDescription = ({ accessLevel, enterpriseName, itemType }: Props) => {
+    const getDescriptionForAnyoneWithLink = (type: ItemType) => {
+        switch (type) {
+            case ITEM_TYPE_HUB:
+                return messages.peopleWithLinkSignedInRequiredDescription;
+            default:
+                return messages.peopleWithLinkDescription;
+        }
+    };
+    const getDescriptionForAnyoneInCompany = (type: ItemType) => {
+        switch (type) {
+            case ITEM_TYPE_FOLDER:
+                return enterpriseName
+                    ? messages.peopleInSpecifiedCompanyCanAccessFolder
+                    : messages.peopleInCompanyCanAccessFolder;
+            case ITEM_TYPE_HUB:
+                return enterpriseName
+                    ? messages.peopleInSpecifiedCompanyCanAccessHub
+                    : messages.peopleInCompanyCanAccessHub;
+            default:
+                return enterpriseName
+                    ? messages.peopleInSpecifiedCompanyCanAccessFile
+                    : messages.peopleInCompanyCanAccessFile;
+        }
+    };
+
+    const getDescriptionForPeopleInItem = (type: ItemType) => {
+        switch (type) {
+            case ITEM_TYPE_FOLDER:
+                return messages.peopleInItemCanAccessFolder;
+            case ITEM_TYPE_HUB:
+                return messages.peopleInItemCanAccessHub;
+            default:
+                return messages.peopleInItemCanAccessFile;
+        }
+    };
+
     let description;
 
     switch (accessLevel) {
         case ANYONE_WITH_LINK:
-            description = messages.peopleWithLinkDescription;
+            description = getDescriptionForAnyoneWithLink(itemType);
             break;
         case ANYONE_IN_COMPANY:
-            if (itemType === 'folder') {
-                description = enterpriseName
-                    ? messages.peopleInSpecifiedCompanyCanAccessFolder
-                    : messages.peopleInCompanyCanAccessFolder;
-            } else {
-                description = enterpriseName
-                    ? messages.peopleInSpecifiedCompanyCanAccessFile
-                    : messages.peopleInCompanyCanAccessFile;
-            }
+            description = getDescriptionForAnyoneInCompany(itemType);
             break;
         case PEOPLE_IN_ITEM:
-            description =
-                itemType === 'folder' ? messages.peopleInItemCanAccessFolder : messages.peopleInItemCanAccessFile;
+            description = getDescriptionForPeopleInItem(itemType);
             break;
         default:
             return null;

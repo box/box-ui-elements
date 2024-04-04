@@ -1,5 +1,5 @@
 // @flow
-import { ITEM_TYPE_FOLDER, ITEM_TYPE_FILE, ITEM_TYPE_WEBLINK } from '../constants';
+import { ITEM_TYPE_FOLDER, ITEM_TYPE_FILE, ITEM_TYPE_HUB, ITEM_TYPE_WEBLINK } from '../constants';
 import {
     ACCESS_OPEN,
     ACCESS_COLLAB,
@@ -83,7 +83,7 @@ type InlineNoticeType = NoticeType | 'warning' | 'success' | 'generic';
 
 type NotificationType = NoticeType | 'default' | 'warn';
 
-type ItemType = typeof ITEM_TYPE_FOLDER | typeof ITEM_TYPE_FILE | typeof ITEM_TYPE_WEBLINK;
+type ItemType = typeof ITEM_TYPE_FOLDER | typeof ITEM_TYPE_FILE | typeof ITEM_TYPE_HUB | typeof ITEM_TYPE_WEBLINK;
 
 type FileMini = {
     id: string,
