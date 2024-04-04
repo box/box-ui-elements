@@ -7,6 +7,7 @@ import {
     SIDEBAR_VIEW_ACTIVITY,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_DOCGEN,
 } from '../../../constants';
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
@@ -230,13 +231,16 @@ describe('elements/content-sidebar/SidebarUtil', () => {
     });
 
     describe('getTitleForView()', () => {
-        test.each([SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_METADATA, SIDEBAR_VIEW_ACTIVITY])(
-            'should return the title for %s',
-            view => {
-                const title = SidebarUtils.getTitleForView(view);
-                expect(title).toMatchSnapshot();
-            },
-        );
+        test.each([
+            SIDEBAR_VIEW_SKILLS,
+            SIDEBAR_VIEW_DETAILS,
+            SIDEBAR_VIEW_METADATA,
+            SIDEBAR_VIEW_ACTIVITY,
+            SIDEBAR_VIEW_DOCGEN,
+        ])('should return the title for %s', view => {
+            const title = SidebarUtils.getTitleForView(view);
+            expect(title).toMatchSnapshot();
+        });
 
         test('should return null if invalid view', () => {
             const title = SidebarUtils.getTitleForView('foo');
@@ -250,14 +254,18 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             jest.spyOn(performance, 'mark').mockImplementation(noop);
         });
 
-        test.each([SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_METADATA, SIDEBAR_VIEW_ACTIVITY, 'foo'])(
-            'should return the loader for %s',
-            view => {
-                const loader = SidebarUtils.getLoaderForView(view, MARK_NAME);
-                expect(performance.mark).toHaveBeenCalledWith(MARK_NAME);
-                expect(loader).toBeInstanceOf(Promise);
-            },
-        );
+        test.each([
+            SIDEBAR_VIEW_SKILLS,
+            SIDEBAR_VIEW_DETAILS,
+            SIDEBAR_VIEW_METADATA,
+            SIDEBAR_VIEW_ACTIVITY,
+            SIDEBAR_VIEW_DOCGEN,
+            'foo',
+        ])('should return the loader for %s', view => {
+            const loader = SidebarUtils.getLoaderForView(view, MARK_NAME);
+            expect(performance.mark).toHaveBeenCalledWith(MARK_NAME);
+            expect(loader).toBeInstanceOf(Promise);
+        });
     });
 
     describe('getAsyncSidebarContent()', () => {
