@@ -291,6 +291,11 @@ const messages = defineMessages({
         description: 'Description of an open shared link',
         id: 'boxui.unifiedShare.peopleWithLinkDescription',
     },
+    peopleWithLinkSignedInRequiredDescription: {
+        defaultMessage: 'Publicly accessible, sign-in required',
+        description: 'Description of an open shared link with signed required',
+        id: 'boxui.unifiedShare.peopleWithLinkSignedInRequiredDescription',
+    },
     peopleInSpecifiedCompanyCanAccessFolder: {
         defaultMessage: 'Anyone at {company} with the link or people invited to this folder can access',
         description: 'Description of a specific company shared link for a folder. {company} is the company name',
@@ -311,6 +316,16 @@ const messages = defineMessages({
         description: 'Description of a company shared link for a file.',
         id: 'boxui.unifiedShare.peopleInCompanyCanAccessFile',
     },
+    peopleInSpecifiedCompanyCanAccessHub: {
+        defaultMessage: 'Anyone at {company} with the link or people invited to this hub can access',
+        description: 'Description of a specific company shared link for a hub. {company} is the company name',
+        id: 'boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessHub',
+    },
+    peopleInCompanyCanAccessHub: {
+        defaultMessage: 'Anyone in your company with the link or people invited to this hub can access',
+        description: 'Description of a company shared link for a hub.',
+        id: 'boxui.unifiedShare.peopleInCompanyCanAccessHub',
+    },
     peopleInItemCanAccessFolder: {
         defaultMessage: 'Only invited people can access this folder',
         description: 'Description of a collaborator-only shared link for a folder',
@@ -320,6 +335,11 @@ const messages = defineMessages({
         defaultMessage: 'Only invited people can access this file',
         description: 'Description of a collaborator-only shared link for a file',
         id: 'boxui.unifiedShare.peopleInItemCanAccessFile',
+    },
+    peopleInItemCanAccessHub: {
+        defaultMessage: 'Only invited people can access this hub',
+        description: 'Description of a collaborator-only shared link for a hub',
+        id: 'boxui.unifiedShare.peopleInItemCanAccessHub',
     },
 
     // invite collabs levels
