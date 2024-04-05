@@ -8,38 +8,48 @@ const SEC_IN_MS = 1e3;
 const YEAR_IN_MS = 3.154e10;
 
 describe('timeFromNow function', () => {
-    it('should return correct year difference', () => {
-        const ms = Date.now() + YEAR_IN_MS * 4; // Four years in the future
+    const originalDateNow = Date.now;
+    const fixedDate = 1629133900000; // Fixed timestamp for testing.
+    beforeAll(() => {
+        Date.now = jest.fn(() => fixedDate);
+    });
+
+    afterAll(() => {
+        Date.now = originalDateNow;
+    });
+
+    it('should return correct value and unit for time difference greater than a year', () => {
+        const ms = fixedDate + YEAR_IN_MS * 4;
         expect(timeFromNow(ms)).toEqual({ value: 4, unit: 'year' });
     });
 
-    it('should return correct week difference', () => {
-        const ms = Date.now() + WEEK_IN_MS * 2; // Two weeks in the future
+    it('should return correct value and unit for time difference greater than a week', () => {
+        const ms = fixedDate + WEEK_IN_MS * 2;
         expect(timeFromNow(ms)).toEqual({ value: 2, unit: 'week' });
     });
 
-    it('should return correct day difference', () => {
-        const ms = Date.now() + DAY_IN_MS * 2; // Two days in the future
+    it('should return correct value and unit for time difference greater than a day', () => {
+        const ms = fixedDate + DAY_IN_MS * 2;
         expect(timeFromNow(ms)).toEqual({ value: 2, unit: 'day' });
     });
 
-    it('should return correct hour difference', () => {
-        const ms = Date.now() + HOUR_IN_MS * 2; // Two hours in the future
+    it('should return correct value and unit for time difference greater than an hour', () => {
+        const ms = fixedDate + HOUR_IN_MS * 2;
         expect(timeFromNow(ms)).toEqual({ value: 2, unit: 'hour' });
     });
 
-    it('should return correct minute difference', () => {
-        const ms = Date.now() + MIN_IN_MS * 2; // Two minutes in the future
+    it('should return correct value and unit for time difference greater than a minute', () => {
+        const ms = fixedDate + MIN_IN_MS * 2;
         expect(timeFromNow(ms)).toEqual({ value: 2, unit: 'minute' });
     });
 
-    it('should return correct second difference', () => {
-        const ms = Date.now() + SEC_IN_MS * 2; // Two seconds in the future
+    it('should return correct value and unit for time difference greater than a second', () => {
+        const ms = fixedDate + SEC_IN_MS * 2;
         expect(timeFromNow(ms)).toEqual({ value: 2, unit: 'second' });
     });
 
     it('should return correct negative difference', () => {
-        const ms = Date.now() - DAY_IN_MS * 2; // Two days in the past
+        const ms = fixedDate - DAY_IN_MS * 2;
         expect(timeFromNow(ms)).toEqual({ value: -2, unit: 'day' });
     });
 });

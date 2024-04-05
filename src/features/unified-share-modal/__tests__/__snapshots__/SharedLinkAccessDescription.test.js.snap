@@ -64,6 +64,38 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in comp
 </small>
 `;
 
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct description 5`] = `
+<small
+  className="usm-menu-description"
+>
+  <FormattedMessage
+    defaultMessage="Anyone in your company with the link or people invited to this hub can access"
+    id="boxui.unifiedShare.peopleInCompanyCanAccessHub"
+    values={
+      {
+        "company": "",
+      }
+    }
+  />
+</small>
+`;
+
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in company should render correct description 6`] = `
+<small
+  className="usm-menu-description"
+>
+  <FormattedMessage
+    defaultMessage="Anyone at {company} with the link or people invited to this hub can access"
+    id="boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessHub"
+    values={
+      {
+        "company": "Box",
+      }
+    }
+  />
+</small>
+`;
+
 exports[`features/unified-share-modal/SharedLinkAccessDescription people in item should render correct description 1`] = `
 <small
   className="usm-menu-description"
@@ -96,6 +128,22 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people in item
 </small>
 `;
 
+exports[`features/unified-share-modal/SharedLinkAccessDescription people in item should render correct description 3`] = `
+<small
+  className="usm-menu-description"
+>
+  <FormattedMessage
+    defaultMessage="Only invited people can access this hub"
+    id="boxui.unifiedShare.peopleInItemCanAccessHub"
+    values={
+      {
+        "company": "Box",
+      }
+    }
+  />
+</small>
+`;
+
 exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct description 1`] = `
 <small
   className="usm-menu-description"
@@ -119,6 +167,22 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
   <FormattedMessage
     defaultMessage="Publicly accessible and no sign-in required"
     id="boxui.unifiedShare.peopleWithLinkDescription"
+    values={
+      {
+        "company": "Box",
+      }
+    }
+  />
+</small>
+`;
+
+exports[`features/unified-share-modal/SharedLinkAccessDescription people with link should render correct description 3`] = `
+<small
+  className="usm-menu-description"
+>
+  <FormattedMessage
+    defaultMessage="Publicly accessible, sign-in required"
+    id="boxui.unifiedShare.peopleWithLinkSignedInRequiredDescription"
     values={
       {
         "company": "Box",
