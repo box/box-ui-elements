@@ -72,6 +72,7 @@ type Props = {
     isDraggingItemsToUploadsManager?: boolean,
     isFolderUploadEnabled: boolean,
     isLarge: boolean,
+    isPartialUploadEnabled: boolean,
     isResumableUploadsEnabled: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -160,6 +161,7 @@ class ContentUploader extends Component<Props, State> {
         isUploadFallbackLogicEnabled: false,
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
+        isPartialUploadEnabled: false,
     };
 
     /**
@@ -921,7 +923,7 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     updateViewAndCollection(items: UploadItem[], callback?: Function) {
-        const { onComplete, useUploadsManager, isResumableUploadsEnabled }: Props = this.props;
+        const { onComplete, useUploadsManager, isResumableUploadsEnabled, isPartialUploadEnabled }: Props = this.props;
         const someUploadIsInProgress = items.some(uploadItem => uploadItem.status !== STATUS_COMPLETE);
         const someUploadHasFailed = items.some(uploadItem => uploadItem.status === STATUS_ERROR);
         const allItemsArePending = !items.some(uploadItem => uploadItem.status !== STATUS_PENDING);
@@ -936,6 +938,15 @@ class ContentUploader extends Component<Props, State> {
         let view = '';
         if ((items && items.length === 0) || allItemsArePending) {
             view = VIEW_UPLOAD_EMPTY;
+        } else if (isPartialUploadEnabled && areAllItemsFinished) {
+            const filesToBeUploaded = items.filter(item => item.status === STATUS_COMPLETE);
+            view = VIEW_UPLOAD_SUCCESS;
+
+            if (!useUploadsManager) {
+                onComplete(cloneDeep(filesToBeUploaded.map(item => item.boxFile)));
+                // Reset item collection after successful upload
+                items = [];
+            }
         } else if (someUploadHasFailed && useUploadsManager) {
             view = VIEW_ERROR;
         } else if (someUploadIsInProgress) {

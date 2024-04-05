@@ -99,6 +99,26 @@ describe('elements/content-uploader/ContentUploader', () => {
                 expect(onComplete).toHaveBeenCalledTimes(expected);
             },
         );
+        test.each([
+            ['not', true, 'not', STATUS_PENDING, 0],
+            ['', true, '', STATUS_COMPLETE, 1],
+            ['not', false, 'not', STATUS_STAGED, 0],
+        ])(
+            'should %s call onComplete when isPartialUploadEnabled is %s and %s all items are finished',
+            (a, isPartialUploadEnabled, b, status, expected) => {
+                const onComplete = jest.fn();
+                const wrapper = getWrapper({
+                    onComplete,
+                    isPartialUploadEnabled,
+                });
+                const instance = wrapper.instance();
+                const items = [{ status }, { status: STATUS_COMPLETE }, { status: STATUS_ERROR }];
+
+                instance.updateViewAndCollection(items, null);
+
+                expect(onComplete).toHaveBeenCalledTimes(expected);
+            },
+        );
     });
 
     describe('addFilesToUploadQueue()', () => {
