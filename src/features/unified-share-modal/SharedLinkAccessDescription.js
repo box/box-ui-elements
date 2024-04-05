@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import type { ItemType } from '../../common/types/core';
 
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY, PEOPLE_IN_ITEM } from './constants';
-import { ITEM_TYPE_FOLDER, ITEM_TYPE_HUB } from '../../common/constants';
+import { ITEM_TYPE_FOLDER, ITEM_TYPE_HUBS } from '../../common/constants';
 
 import type { accessLevelType } from './flowTypes';
 import messages from './messages';
@@ -19,7 +19,7 @@ type Props = {
 const SharedLinkAccessDescription = ({ accessLevel, enterpriseName, itemType }: Props) => {
     const getDescriptionForAnyoneWithLink = (type: ItemType) => {
         switch (type) {
-            case ITEM_TYPE_HUB:
+            case ITEM_TYPE_HUBS:
                 return messages.peopleWithLinkSignedInRequiredDescription;
             default:
                 return messages.peopleWithLinkDescription;
@@ -31,7 +31,7 @@ const SharedLinkAccessDescription = ({ accessLevel, enterpriseName, itemType }: 
                 return enterpriseName
                     ? messages.peopleInSpecifiedCompanyCanAccessFolder
                     : messages.peopleInCompanyCanAccessFolder;
-            case ITEM_TYPE_HUB:
+            case ITEM_TYPE_HUBS:
                 return enterpriseName
                     ? messages.peopleInSpecifiedCompanyCanAccessHub
                     : messages.peopleInCompanyCanAccessHub;
@@ -46,7 +46,7 @@ const SharedLinkAccessDescription = ({ accessLevel, enterpriseName, itemType }: 
         switch (type) {
             case ITEM_TYPE_FOLDER:
                 return messages.peopleInItemCanAccessFolder;
-            case ITEM_TYPE_HUB:
+            case ITEM_TYPE_HUBS:
                 return messages.peopleInItemCanAccessHub;
             default:
                 return messages.peopleInItemCanAccessFile;
