@@ -5,8 +5,7 @@
 
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import PrimaryButton from '../../components/primary-button/PrimaryButton';
-import Button from '../../components/button/Button';
+import { Button } from '@box/blueprint-web';
 import messages from '../common/messages';
 import { ERROR_CODE_UPLOAD_FILE_LIMIT } from '../../constants';
 import './Footer.scss';
@@ -40,35 +39,25 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
         <div className="bcu-footer">
             <div className="bcu-footer-left">
                 {onClose ? (
-                    <Button
-                        disabled={isCloseButtonDisabled}
-                        isDisabled={isCloseButtonDisabled}
-                        onClick={onClose}
-                        type="button"
-                    >
+                    <Button disabled={isCloseButtonDisabled} onClick={onClose} size="large" variant="secondary">
                         <FormattedMessage {...messages.close} />
                     </Button>
                 ) : null}
             </div>
             {message && <div className="bcu-footer-message">{message}</div>}
             <div className="bcu-footer-right">
-                <Button
-                    disabled={isCancelButtonDisabled}
-                    isDisabled={isCancelButtonDisabled}
-                    onClick={onCancel}
-                    type="button"
-                >
+                <Button disabled={isCancelButtonDisabled} onClick={onCancel} size="large" variant="secondary">
                     <FormattedMessage {...messages.cancel} />
                 </Button>
-                <PrimaryButton
+                <Button
                     disabled={isUploadButtonDisabled}
-                    isDisabled={isUploadButtonDisabled}
-                    isLoading={isLoading}
+                    loading={isLoading}
                     onClick={onUpload}
-                    type="button"
+                    size="large"
+                    variant="primary"
                 >
                     <FormattedMessage {...messages.upload} />
-                </PrimaryButton>
+                </Button>
             </div>
         </div>
     );

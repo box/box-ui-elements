@@ -1,9 +1,7 @@
 import React from 'react';
-import { shallow } from 'enzyme';
 import noop from 'lodash/noop';
-import Button from '../../../components/button/Button';
+import { render, screen } from '../../../test-utils/testing-library';
 import Footer from '../Footer';
-import PrimaryButton from '../../../components/primary-button/PrimaryButton';
 
 describe('elements/content-uploader/Footer', () => {
     const defaultProps = {
@@ -14,46 +12,52 @@ describe('elements/content-uploader/Footer', () => {
         onCancel: noop,
         onUpload: noop,
     };
-    const getWrapper = (props = {}) => shallow(<Footer {...defaultProps} {...props} />);
+    const renderComponent = (props = {}) => render(<Footer {...defaultProps} {...props} />);
 
-    test.each`
-        hasFiles | isDone   | isDisabled
-        ${true}  | ${false} | ${false}
-        ${false} | ${true}  | ${true}
-        ${false} | ${false} | ${true}
-        ${true}  | ${true}  | ${true}
-    `(
-        'cancel button disabled props should be $isDisabled when hasFiles is $hasFiles and isDone is $isDone',
-        ({ hasFiles, isDone, isDisabled }) => {
-            const wrapper = getWrapper({ hasFiles, isDone });
-            const closeButton = wrapper.find(Button);
+    test('cancel button should not be disabled when hasFiles is $hasFiles and isDone is $isDone', () => {
+        renderComponent({ hasFiles: true, isDone: false });
+        const closeButton = screen.getByRole('button', { name: 'Cancel' });
 
-            expect(closeButton.prop('disabled')).toBe(isDisabled);
-            expect(closeButton.prop('isDisabled')).toBe(isDisabled);
-        },
-    );
-
-    test.each`
-        hasFiles | isDisabled
-        ${true}  | ${false}
-        ${false} | ${true}
-    `('upload button disabled props should be $isDisabled when hasFiles is $hasFiles', ({ hasFiles, isDisabled }) => {
-        const wrapper = getWrapper({ hasFiles });
-        const uploadButton = wrapper.find(PrimaryButton);
-
-        expect(uploadButton.prop('disabled')).toBe(isDisabled);
-        expect(uploadButton.prop('isDisabled')).toBe(isDisabled);
+        expect(closeButton).not.toHaveAttribute('aria-disabled');
     });
 
     test.each`
-        hasFiles | isDisabled
-        ${true}  | ${true}
+        hasFiles | isDone
+        ${false} | ${true}
         ${false} | ${false}
-    `('close button disabled props should be $isDisabled when hasFiles is $hasFiles', ({ hasFiles, isDisabled }) => {
-        const wrapper = getWrapper({ hasFiles, onClose: noop });
-        const closeButton = wrapper.find(Button).at(0);
+        ${true}  | ${true}
+    `('cancel button should be disabled when hasFiles is $hasFiles and isDone is $isDone', ({ hasFiles, isDone }) => {
+        renderComponent({ hasFiles, isDone });
+        const closeButton = screen.getByRole('button', { name: 'Cancel' });
 
-        expect(closeButton.prop('disabled')).toBe(isDisabled);
-        expect(closeButton.prop('isDisabled')).toBe(isDisabled);
+        expect(closeButton).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    test('upload button should not be disabled there are files', () => {
+        renderComponent({ hasFiles: true });
+        const uploadButton = screen.getByRole('button', { name: 'Upload' });
+
+        expect(uploadButton).not.toHaveAttribute('aria-disabled');
+    });
+
+    test('upload button should be disabled when there are not any files', () => {
+        renderComponent({ hasFiles: false });
+        const uploadButton = screen.getByRole('button', { name: 'Upload' });
+
+        expect(uploadButton).toHaveAttribute('aria-disabled');
+    });
+
+    test('close button should be disabled when there are files', () => {
+        renderComponent({ hasFiles: true, onClose: noop });
+        const closeButton = screen.getByRole('button', { name: 'Close' });
+
+        expect(closeButton).toHaveAttribute('aria-disabled');
+    });
+
+    test('close button should not be disabled when there are not any files', () => {
+        renderComponent({ hasFiles: false, onClose: noop });
+        const closeButton = screen.getByRole('button', { name: 'Close' });
+
+        expect(closeButton).not.toHaveAttribute('aria-disabled');
     });
 });

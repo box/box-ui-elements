@@ -18,7 +18,8 @@
         text-align: center;
     }
 
-    .bcu-footer-right .btn {
-        margin-left: 8px;
+    .bcu-footer-right {
+        display: flex;
+        gap: 8px;
     }
 }
