@@ -73,6 +73,7 @@ type Props = {
     isFolderUploadEnabled: boolean,
     isLarge: boolean,
     isPartialUploadEnabled: boolean,
+    isPrepopulateFilesEnabled?: boolean,
     isResumableUploadsEnabled: boolean,
     isSmall: boolean,
     isTouch: boolean,
@@ -162,6 +163,7 @@ class ContentUploader extends Component<Props, State> {
         dataTransferItems: [],
         isDraggingItemsToUploadsManager: false,
         isPartialUploadEnabled: false,
+        isPrepopulateFilesEnabled: false,
     };
 
     /**
@@ -193,6 +195,11 @@ class ContentUploader extends Component<Props, State> {
     componentDidMount() {
         this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
         this.appElement = this.rootElement;
+        const { files, isPrepopulateFilesEnabled } = this.props;
+        // isPrepopulateFilesEnabled is a prop used to pre-populate files without clicking upload button.
+        if (isPrepopulateFilesEnabled && files && files.length > 0) {
+            this.addFilesToUploadQueue(files, this.upload);
+        }
     }
 
     /**
@@ -316,7 +323,7 @@ class ContentUploader extends Component<Props, State> {
         itemUpdateCallback: Function,
         isRelativePathIgnored?: boolean = false,
     ) => {
-        const { onBeforeUpload, rootFolderId } = this.props;
+        const { onBeforeUpload, rootFolderId, isPrepopulateFilesEnabled } = this.props;
         if (!files || files.length === 0) {
             return;
         }
@@ -350,7 +357,10 @@ class ContentUploader extends Component<Props, State> {
                     // webkitRelativePath should be ignored when the upload destination folder is known
                     this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
                 } else {
-                    this.addFilesWithoutRelativePathToQueue(newFiles, itemUpdateCallback);
+                    this.addFilesWithoutRelativePathToQueue(
+                        newFiles,
+                        isPrepopulateFilesEnabled ? this.upload : itemUpdateCallback,
+                    );
                 }
             },
         );

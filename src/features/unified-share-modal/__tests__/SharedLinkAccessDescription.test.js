@@ -14,7 +14,7 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
                 itemType: 'folder',
             },
             {
-                itemType: 'hub',
+                itemType: 'hubs',
             },
         ].forEach(({ itemType }) => {
             test('should render correct description', () => {
@@ -50,11 +50,11 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
                 name: 'Box',
             },
             {
-                itemType: 'hub',
+                itemType: 'hubs',
                 name: '',
             },
             {
-                itemType: 'hub',
+                itemType: 'hubs',
                 name: 'Box',
             },
         ].forEach(({ itemType, name }) => {
@@ -81,7 +81,7 @@ describe('features/unified-share-modal/SharedLinkAccessDescription', () => {
                 itemType: 'folder',
             },
             {
-                itemType: 'hub',
+                itemType: 'hubs',
             },
         ].forEach(({ itemType }) => {
             test('should render correct description', () => {
