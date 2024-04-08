@@ -1,7 +1,7 @@
 // @flow
 const ITEM_TYPE_FILE: 'file' = 'file';
 const ITEM_TYPE_FOLDER: 'folder' = 'folder';
-const ITEM_TYPE_HUB: 'hub' = 'hub';
+const ITEM_TYPE_HUBS: 'hubs' = 'hubs';
 const ITEM_TYPE_WEBLINK: 'web_link' = 'web_link';
 
 const JSON_PATCH_OP_ADD: 'add' = 'add';
@@ -15,7 +15,7 @@ const METADATA_FIELD_TYPE_MULTISELECT: 'multiSelect' = 'multiSelect';
 export {
     ITEM_TYPE_FILE,
     ITEM_TYPE_FOLDER,
-    ITEM_TYPE_HUB,
+    ITEM_TYPE_HUBS,
     ITEM_TYPE_WEBLINK,
     JSON_PATCH_OP_ADD,
     JSON_PATCH_OP_REMOVE,
