@@ -19,7 +19,7 @@ module.exports = {
     setupFilesAfterEnv: [
         '<rootDir>/node_modules/regenerator-runtime/runtime.js',
         '<rootDir>/scripts/jest/enzyme-adapter.js',
-        '<rootDir>/scripts/jest/jest-setup.js',
+        '<rootDir>/scripts/jest/jest-setup.ts',
     ],
     snapshotSerializers: ['enzyme-to-json/serializer'],
     testEnvironment: 'jsdom',
