@@ -69,6 +69,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       onReplyEdit={[Function]}
       onReplySelect={[Function]}
       onShowReplies={[Function]}
+      setEditingCommentIds={[Function]}
     >
       <AnnotationActivity
         currentUser={
@@ -129,6 +130,7 @@ exports[`elements/content-sidebar/ActiveState/activity-feed/ActiveState should r
       onReplyEdit={[Function]}
       onReplySelect={[Function]}
       onShowReplies={[Function]}
+      setEditingCommentIds={[Function]}
     >
       <Comment
         created_at="2018-07-03T14:43:52-07:00"

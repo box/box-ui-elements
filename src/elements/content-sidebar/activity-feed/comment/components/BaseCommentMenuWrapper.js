@@ -10,13 +10,12 @@ export interface BaseCommentMenuWrapperProps {
     canEdit: boolean;
     canResolve: boolean;
     id: string;
-    isEditing: boolean;
-    isInputOpen: boolean;
     isResolved: boolean;
     onDelete: ({ id: string, permissions?: BoxCommentPermission }) => any;
     onSelect: (isSelected: boolean) => void;
     onStatusChange?: OnAnnotationStatusChange | OnCommentStatusChange | typeof undefined;
     permissions: BoxCommentPermission;
+    setEditingCommentIds: (editingCommentIds: string[] | ((prevState: string[]) => string[])) => void;
     setIsEditing: ((boolean => boolean) | boolean) => void;
     setIsInputOpen: ((boolean => boolean) | boolean) => void;
 }
@@ -26,14 +25,13 @@ export const BaseCommentMenuWrapper = ({
     canEdit,
     canResolve,
     id,
-    isEditing,
-    isInputOpen,
     isResolved,
     onDelete,
     onSelect,
     onStatusChange,
     permissions,
     setIsEditing,
+    setEditingCommentIds,
     setIsInputOpen,
 }: BaseCommentMenuWrapperProps) => {
     const [isConfirmingDelete, setIsConfirmingDelete] = React.useState<boolean>(false);
@@ -54,16 +52,10 @@ export const BaseCommentMenuWrapper = ({
     };
 
     const handleEditClick = (): void => {
+        setEditingCommentIds((prevState: string[]) => [...prevState, id]);
         setIsEditing(true);
         setIsInputOpen(true);
         onSelect(true);
-    };
-
-    const handleMenuClose = (): void => {
-        if (isConfirmingDelete || isEditing || isInputOpen) {
-            return;
-        }
-        onSelect(false);
     };
 
     const handleStatusUpdate = (selectedStatus: FeedItemStatus): void => {
@@ -81,7 +73,6 @@ export const BaseCommentMenuWrapper = ({
             handleDeleteClick={handleDeleteClick}
             handleDeleteConfirm={handleDeleteConfirm}
             handleEditClick={handleEditClick}
-            handleMenuClose={handleMenuClose}
             handleStatusUpdate={handleStatusUpdate}
             isConfirmingDelete={isConfirmingDelete}
             isResolved={isResolved}

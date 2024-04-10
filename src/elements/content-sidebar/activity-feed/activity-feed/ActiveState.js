@@ -5,6 +5,8 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+
+import useOnOutsideClick from '../../../../utils/useOnOutsideClick';
 import ActivityThread from './ActivityThread';
 import ActivityItem from './ActivityItem';
 import AppActivity from '../app-activity';
@@ -125,6 +127,8 @@ const ActiveState = ({
     shouldUseUAA,
     translations,
 }: Props): React.Node => {
+    const [editingCommentIds, setEditingCommentIds] = React.useState<string[]>([]);
+
     const onCommentSelectHandler = (itemId: string) => (isSelected: boolean) => {
         onCommentSelect(isSelected ? itemId : null);
     };
@@ -161,10 +165,18 @@ const ActiveState = ({
         }
     };
 
+    const handleUnselect = React.useCallback(() => {
+        if (editingCommentIds.length === 0) {
+            onCommentSelect(null);
+        }
+    }, [editingCommentIds, onCommentSelect]);
+
+    const activityFeedRef = useOnOutsideClick(handleUnselect);
+
     const hasMultipleVersions = item => item.versions || (shouldUseUAA && item.version_start !== item.version_end);
 
     return (
-        <ul className="bcs-activity-feed-active-state">
+        <ul className="bcs-activity-feed-active-state" ref={activityFeedRef}>
             {items.map((item: FeedItem) => {
                 const isFocused = item === activeFeedItem;
                 const refValue = isFocused ? activeFeedItemRef : undefined;
@@ -219,6 +231,7 @@ const ActiveState = ({
                                         onReplyDelete={onReplyDeleteHandler(item.id)}
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_COMMENT)}
                                         onStatusChange={onCommentStatusChangeHandler}
+                                        setEditingCommentIds={setEditingCommentIds}
                                     />
                                 ) : (
                                     <ActivityThread
@@ -237,6 +250,7 @@ const ActiveState = ({
                                         onReplyDelete={onReplyDeleteHandler(item.id)}
                                         onReplyEdit={onReplyUpdateHandler(item.id)}
                                         onReplySelect={onCommentSelectHandler(item.id)}
+                                        setEditingCommentIds={setEditingCommentIds}
                                         onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                         repliesTotalCount={item.total_reply_count}
                                         replies={item.replies}
@@ -345,6 +359,7 @@ const ActiveState = ({
                                         }
                                         onShowReplies={() => onShowReplies(item.id, FEED_ITEM_TYPE_ANNOTATION)}
                                         tagged_message={item.description?.message ?? ''}
+                                        setEditingCommentIds={setEditingCommentIds}
                                     />
                                 ) : (
                                     <ActivityThread
@@ -366,6 +381,7 @@ const ActiveState = ({
                                         onShowReplies={onShowRepliesHandler(item.id, item.type)}
                                         repliesTotalCount={item.total_reply_count}
                                         replies={item.replies}
+                                        setEditingCommentIds={setEditingCommentIds}
                                         translations={translations}
                                     >
                                         <AnnotationActivity
