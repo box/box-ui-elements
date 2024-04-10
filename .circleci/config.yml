@@ -13,14 +13,13 @@ aliases:
 
   - &restore-yarn-cache
     keys:
-      - yarn-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+        - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v1-{{ .Branch }}-
 
   - &save-yarn-cache
     paths:
-      - node_modules
-      - ~/.npm
-      - ~/.cache
-    key: yarn-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+      - ~/.cache/yarn
+    key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 defaults: &defaults
   resource_class: large
@@ -37,6 +36,9 @@ jobs:
       - checkout
       - restore-cache: *restore-yarn-cache
       - run: *yarn
+      - run:
+            name: cache dir
+            command: yarn cache dir
       - save-cache: *save-yarn-cache
       - run: *clean
       - run: *i18n
@@ -106,7 +108,14 @@ jobs:
         - run: *i18n
         - run:
             name: Chromatic
-            command: yarn chromatic
+            command: |
+                if [ "{.Environment.CIRCLE_BRANCH}" = "master" ]; then
+                  echo "{.Environment.CIRCLE_BRANCH} branch detected, auto-accepting changes"
+                  yarn chromatic --auto-accept-changes
+                else
+                  echo "Pull request detected, validating changes"
+                  yarn chromatic
+                fi
 
 workflows:
   version: 2
