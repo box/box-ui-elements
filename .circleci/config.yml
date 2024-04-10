@@ -13,14 +13,13 @@ aliases:
 
   - &restore-yarn-cache
     keys:
-      - yarn-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+        - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-v1-{{ .Branch }}-
 
   - &save-yarn-cache
     paths:
-      - node_modules
-      - ~/.npm
-      - ~/.cache
-    key: yarn-{{ arch }}-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+      - ~/.cache/yarn
+    key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
 defaults: &defaults
   resource_class: large
