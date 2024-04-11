@@ -1,3 +1,5 @@
+@use '@box/blueprint-web-assets/tokens/tokens.scss';
+
 @import '../common/variables';
 
 .bcu-footer {
@@ -9,10 +11,6 @@
     background-color: $almost-white;
     border-top: 1px solid $bdl-gray-10;
 
-    .btn {
-        @include bdl-Button--large;
-    }
-
     .bcu-footer-message {
         padding: 0 10px;
         text-align: center;
@@ -20,6 +18,6 @@
 
     .bcu-footer-right {
         display: flex;
-        gap: 8px;
+        gap: tokens.$size-2;
     }
 }
