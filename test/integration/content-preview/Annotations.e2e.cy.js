@@ -1,5 +1,5 @@
 // Specify Annotations version in command line, otherwise defaults to the latest version
-// e.g. CYPRESS_ANNOTATIONS_VERSION=4.0.0-beta.24 yarn test:e2e:open
+// e.g. CYPRESS_ANNOTATIONS_VERSION=4.1.1-beta.5 yarn test:e2e:open
 const ANNOTATIONS_VERSION = Cypress.env('ANNOTATIONS_VERSION') ? `@${Cypress.env('ANNOTATIONS_VERSION')}` : '';
 
 import(`https://unpkg.com/box-annotations${ANNOTATIONS_VERSION}/dist/annotations.js`);

@@ -34,7 +34,6 @@ describe('Create Task', () => {
 
     context('Task Form', () => {
         beforeEach(() => {
-            cy.server();
             cy.contains(l('be.contentSidebar.addTask')).click();
             cy.contains(l('be.contentSidebar.addTask.approval')).click();
         });
@@ -61,7 +60,7 @@ describe('Create Task', () => {
         });
 
         it('shows error state after receiving server error', () => {
-            cy.route('POST', '**/undoc/tasks/with_dependencies').as('createTaskWithDeps');
+            cy.intercept('POST', '**/undoc/tasks/with_dependencies').as('createTaskWithDeps');
             getSubmitButton().should('not.have.class', 'is-loading');
             cy.getByTestId('create-task-modal').within(() => {
                 getAssigneeField()
