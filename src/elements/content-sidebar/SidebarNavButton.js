@@ -7,7 +7,7 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 import NavButton from '../common/nav-button';
-import Tooltip from '../../components/tooltip/Tooltip';
+// import Tooltip from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
 type Props = {
@@ -42,30 +42,28 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
                 return (
-                    <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
-                        <NavButton
-                            activeClassName="bcs-is-selected"
-                            aria-selected={isActiveValue}
-                            aria-controls={`${id}-content`}
-                            aria-label={tooltip}
-                            className="bcs-NavButton"
-                            data-resin-target={dataResinTarget}
-                            data-testid={dataTestId}
-                            getDOMRef={ref}
-                            id={id}
-                            isActive={isActive}
-                            replace={isExactMatch}
-                            role="tab"
-                            tabIndex={isActiveValue ? '0' : '-1'}
-                            to={{
-                                pathname: sidebarPath,
-                                state: { open: true },
-                            }}
-                            type="button"
-                        >
-                            {children}
-                        </NavButton>
-                    </Tooltip>
+                    <NavButton
+                        activeClassName="bcs-is-selected"
+                        aria-selected={isActiveValue}
+                        aria-controls={`${id}-content`}
+                        aria-label={tooltip}
+                        className="bcs-NavButton"
+                        data-resin-target={dataResinTarget}
+                        data-testid={dataTestId}
+                        getDOMRef={ref}
+                        id={id}
+                        isActive={isActive}
+                        replace={isExactMatch}
+                        role="tab"
+                        tabIndex={isActiveValue ? '0' : '-1'}
+                        to={{
+                            pathname: sidebarPath,
+                            state: { open: true },
+                        }}
+                        type="button"
+                    >
+                        {children}
+                    </NavButton>
                 );
             }}
         </Route>

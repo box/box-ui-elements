@@ -2,6 +2,7 @@ import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
+import { act } from 'react-dom/test-utils';
 import DropdownMenu from '../DropdownMenu';
 import { KEYS } from '../../../constants';
 
@@ -526,7 +527,9 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 documentMock.expects('addEventListener').withArgs('click', sinon.match.any, !useBubble);
                 documentMock.expects('addEventListener').withArgs('contextmenu', sinon.match.any, !useBubble);
                 documentMock.expects('removeEventListener').never();
-                instance.openMenuAndSetFocusIndex(0);
+                act(() => {
+                    instance.openMenuAndSetFocusIndex(0);
+                });
             });
             test('should remove click and contextmenu listeners when closing menu', () => {
                 const wrapper = mount(
@@ -536,12 +539,16 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                     </DropdownMenu>,
                 );
                 const instance = wrapper.instance();
-                instance.openMenuAndSetFocusIndex(0);
+                act(() => {
+                    instance.openMenuAndSetFocusIndex(0);
+                });
                 const documentMock = sandbox.mock(document);
                 documentMock.expects('removeEventListener').withArgs('contextmenu', sinon.match.any, !useBubble);
                 documentMock.expects('removeEventListener').withArgs('click', sinon.match.any, !useBubble);
                 documentMock.expects('addEventListener').never();
-                instance.closeMenu();
+                act(() => {
+                    instance.closeMenu();
+                });
             });
             test('should not do anything opening a menu when menu is already open', () => {
                 const wrapper = mount(
@@ -582,7 +589,9 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 );
                 const documentMock = sandbox.mock(document);
                 const instance = wrapper.instance();
-                instance.openMenuAndSetFocusIndex(0);
+                act(() => {
+                    instance.openMenuAndSetFocusIndex(0);
+                });
                 documentMock.expects('removeEventListener').withArgs('contextmenu', sinon.match.any, !useBubble);
                 documentMock.expects('removeEventListener').withArgs('click', sinon.match.any, !useBubble);
                 wrapper.unmount();
@@ -631,7 +640,9 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 );
 
                 const instance = wrapper.instance();
-                instance.openMenuAndSetFocusIndex(0);
+                act(() => {
+                    instance.openMenuAndSetFocusIndex(0);
+                });
                 instance.closeMenu = closeMenuSpy;
                 const handleDocumentClickEvent = {
                     target: document.createElement('div'),
@@ -651,11 +662,16 @@ describe('components/dropdown-menu/DropdownMenu', () => {
                 );
 
                 const instance = wrapper.instance();
-                instance.openMenuAndSetFocusIndex(0);
+                act(() => {
+                    instance.openMenuAndSetFocusIndex(0);
+                });
+
                 const handleDocumentClickEvent = {
                     target: document.createElement('div'),
                 };
-                instance.handleDocumentClick(handleDocumentClickEvent);
+                act(() => {
+                    instance.handleDocumentClick(handleDocumentClickEvent);
+                });
 
                 expect(onMenuCloseSpy).toHaveBeenCalledWith(handleDocumentClickEvent);
             });

@@ -289,7 +289,7 @@ describe('components/flyout/Flyout', () => {
     });
 
     describe('handleOverlayClick()', () => {
-        [
+        test.each([
             {
                 closeOnClick: true,
                 hasClickableAncestor: true,
@@ -310,8 +310,9 @@ describe('components/flyout/Flyout', () => {
                 hasClickableAncestor: false,
                 shouldCloseOverlay: false,
             },
-        ].forEach(({ closeOnClick, hasClickableAncestor, shouldCloseOverlay }) => {
-            test('should handle clicks within overlay properly', () => {
+        ])(
+            'should handle clicks within overlay properly %s',
+            ({ closeOnClick, hasClickableAncestor, shouldCloseOverlay }) => {
                 const wrapper = mount(
                     <Flyout closeOnClick={closeOnClick}>
                         <FakeButton />
@@ -338,10 +339,11 @@ describe('components/flyout/Flyout', () => {
                         .expects('handleOverlayClose')
                         .never();
                 }
-
-                instance.handleOverlayClick(event);
-            });
-        });
+                act(() => {
+                    instance.handleOverlayClick(event);
+                });
+            },
+        );
     });
 
     describe('handleButtonClick()', () => {

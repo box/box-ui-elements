@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import useCallOnce from '../useCallOnce';
 
 describe('components/targeting/utils/useCallOnce', () => {

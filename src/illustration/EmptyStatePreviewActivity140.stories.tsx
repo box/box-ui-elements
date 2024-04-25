@@ -8,7 +8,6 @@ export default {
     title: 'Illustration/EmptyStatePreviewActivity140',
     component: EmptyStatePreviewActivity140,
     parameters: {
-        notes:
-            "`import EmptyStatePreviewActivity140 from 'box-ui-elements/es/illustration/EmptyStatePreviewActivity140';`",
+        notes: "`import EmptyStatePreviewActivity140 from 'box-ui-elements/es/illustration/EmptyStatePreviewActivity140';`",
     },
 };

@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import Media from '../media';
 
 import Ghost from './Ghost';
 import notes from './Ghost.stories.md';
 
-export const regular = () => <Ghost isAnimated={boolean('isAnimated', true)} />;
+export const regular = () => <Ghost isAnimated />;
 
 export const withoutAnimation = () => <Ghost isAnimated={false} />;
 

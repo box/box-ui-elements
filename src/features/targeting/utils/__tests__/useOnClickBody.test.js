@@ -1,4 +1,4 @@
-import { renderHook, cleanup } from '@testing-library/react-hooks';
+import { renderHook, cleanup } from '@testing-library/react';
 import useOnClickBody from '../useOnClickBody';
 
 const addEventListener = jest.fn();
