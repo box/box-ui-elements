@@ -23,28 +23,9 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
       />
     </PlainButton>
   </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
+  <ForwardRef
     duration={100}
-    easing="ease"
     height="auto"
-    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -53,7 +34,7 @@ exports[`components/collapsible/Collapsible should apply buttonProps correctly 1
         foobar
       </span>
     </div>
-  </AnimateHeight>
+  </ForwardRef>
 </div>
 `;
 
@@ -78,28 +59,9 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
       />
     </PlainButton>
   </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
+  <ForwardRef
     duration={100}
-    easing="ease"
     height="auto"
-    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -108,7 +70,7 @@ exports[`components/collapsible/Collapsible should apply correct border class 1`
         foobar
       </span>
     </div>
-  </AnimateHeight>
+  </ForwardRef>
 </div>
 `;
 
@@ -133,28 +95,9 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
       />
     </PlainButton>
   </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
+  <ForwardRef
     duration={100}
-    easing="ease"
     height={0}
-    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -163,7 +106,7 @@ exports[`components/collapsible/Collapsible should apply correct isOpen state 1`
         foobar
       </span>
     </div>
-  </AnimateHeight>
+  </ForwardRef>
 </div>
 `;
 
@@ -188,28 +131,9 @@ exports[`components/collapsible/Collapsible should not render a PlainButton if a
       />
     </PlainButton>
   </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
+  <ForwardRef
     duration={100}
-    easing="ease"
     height="auto"
-    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -218,7 +142,7 @@ exports[`components/collapsible/Collapsible should not render a PlainButton if a
         foobar
       </span>
     </div>
-  </AnimateHeight>
+  </ForwardRef>
 </div>
 `;
 
@@ -243,28 +167,9 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
       />
     </PlainButton>
   </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
+  <ForwardRef
     duration={100}
-    easing="ease"
     height="auto"
-    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -273,7 +178,7 @@ exports[`components/collapsible/Collapsible should render a PlainButton if a but
         foobar
       </span>
     </div>
-  </AnimateHeight>
+  </ForwardRef>
 </div>
 `;
 
@@ -298,28 +203,9 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
       />
     </PlainButton>
   </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
+  <ForwardRef
     duration={100}
-    easing="ease"
     height="auto"
-    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -330,7 +216,7 @@ exports[`components/collapsible/Collapsible should render component correctly 1`
         foobar
       </span>
     </div>
-  </AnimateHeight>
+  </ForwardRef>
 </div>
 `;
 
@@ -367,28 +253,9 @@ exports[`components/collapsible/Collapsible should render with headerActionItems
       </Button>
     </span>
   </div>
-  <AnimateHeight
-    animateOpacity={false}
-    animationStateClasses={
-      {
-        "animating": "rah-animating",
-        "animatingDown": "rah-animating--down",
-        "animatingToHeightAuto": "rah-animating--to-height-auto",
-        "animatingToHeightSpecific": "rah-animating--to-height-specific",
-        "animatingToHeightZero": "rah-animating--to-height-zero",
-        "animatingUp": "rah-animating--up",
-        "static": "rah-static",
-        "staticHeightAuto": "rah-static--height-auto",
-        "staticHeightSpecific": "rah-static--height-specific",
-        "staticHeightZero": "rah-static--height-zero",
-      }
-    }
-    applyInlineTransitions={true}
-    delay={0}
+  <ForwardRef
     duration={100}
-    easing="ease"
     height={0}
-    style={{}}
   >
     <div
       className="collapsible-card-content"
@@ -399,6 +266,6 @@ exports[`components/collapsible/Collapsible should render with headerActionItems
         foobar
       </span>
     </div>
-  </AnimateHeight>
+  </ForwardRef>
 </div>
 `;

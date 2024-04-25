@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { Field, Form, Formik } from 'formik';
-import { boolean } from '@storybook/addon-knobs';
 
 import TextInput from '../../text-input/TextInput';
 import TextArea from '../../text-area/TextAreaField';
@@ -61,7 +60,7 @@ export const basic = () => {
                         <Field name="checkbox" label="Checkbox Field" component={Checkbox} />
                         <Field name="toggle" label="Toggle Field" component={Toggle} />
                         <Field
-                            isRequired={boolean('isRequired', true)}
+                            isRequired
                             label="Text Input Field"
                             name="textinput"
                             type="text"
@@ -69,7 +68,7 @@ export const basic = () => {
                             component={TextInput}
                         />
                         <Field
-                            isRequired={boolean('isRequired', true)}
+                            isRequired
                             label="Text Area Field"
                             name="textarea"
                             placeholder="Text Area Field"

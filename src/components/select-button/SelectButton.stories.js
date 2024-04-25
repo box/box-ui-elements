@@ -1,12 +1,11 @@
 // @flow
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import SelectButton from './SelectButton';
 import notes from './SelectButton.stories.md';
 
 export const regular = () => (
-    <SelectButton className="" isDisabled={boolean('isDisabled', false)}>
+    <SelectButton className="" isDisabled={false}>
         Click Here
     </SelectButton>
 );

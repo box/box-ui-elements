@@ -38,12 +38,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test.each`
-            currentIndex
-            ${0}
-            ${1}
-            ${9}
-        `('should render correctly with a filled collection', ({ currentIndex }) => {
+        test.each([0, 1, 9])('should render correctly with a filled collection %i', ({ currentIndex }) => {
             const collection = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
             const wrapper = getWrapper({ collection, currentIndex });
             expect(wrapper).toMatchSnapshot();

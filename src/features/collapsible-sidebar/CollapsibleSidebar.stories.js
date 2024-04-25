@@ -2,7 +2,6 @@
 import * as React from 'react';
 
 import { ThemeProvider } from 'styled-components';
-import { boolean, color } from '@storybook/addon-knobs';
 import noop from 'lodash/noop';
 
 // eslint-disable-next-line import/named
@@ -39,7 +38,7 @@ const renderFiles = () => {
                             icon={<FileDefault16 height={20} width={20} />}
                         />
                     }
-                    expanded={boolean('isExpanded', true)}
+                    expanded
                     expandedElement={
                         <CollapsibleSidebarMenuItem
                             as={Link}
@@ -57,7 +56,7 @@ const renderFiles = () => {
 };
 
 export const basic = () => {
-    const hexColor = color('Theme Color', '#0061d5');
+    const hexColor = '#0061d5';
     const theme = createTheme(hexColor);
     const linkProps = {
         href: '/?path=/story/components-tooltip--top-center',
@@ -81,13 +80,8 @@ export const basic = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <CollapsibleSidebar expanded={boolean('isExpanded', true)}>
-                <CollapsibleSidebarLogo
-                    canEndTrial={false}
-                    linkProps={linkProps}
-                    onToggle={noop}
-                    expanded={boolean('isExpanded', true)}
-                />
+            <CollapsibleSidebar expanded>
+                <CollapsibleSidebarLogo canEndTrial={false} linkProps={linkProps} onToggle={noop} expanded />
                 <CollapsibleSidebarNav>
                     <ul>
                         <li key="djb-leftnav-menu-item-all-files">
@@ -100,7 +94,7 @@ export const basic = () => {
                                         linkClassName="is-currentPage"
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -122,7 +116,7 @@ export const basic = () => {
                                         icon={<Folder16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -143,7 +137,7 @@ export const basic = () => {
                                         icon={<CheckmarkBadge16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -164,7 +158,7 @@ export const basic = () => {
                                         icon={<Trash16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -185,7 +179,7 @@ export const basic = () => {
                                         icon={<Folder16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -211,7 +205,7 @@ export const basic = () => {
                                         icon={<Folder16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -237,7 +231,7 @@ export const basic = () => {
                                         icon={<Folder16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -264,7 +258,7 @@ export const basic = () => {
                                         icon={<Folder16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -292,7 +286,7 @@ export const basic = () => {
                                         icon={<Folder16 height={20} width={20} />}
                                     />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}
@@ -321,7 +315,7 @@ export const basic = () => {
                                 collapsedElement={
                                     <CollapsibleSidebarMenuItem as={Link} icon={<Code16 height={20} width={20} />} />
                                 }
-                                expanded={boolean('isExpanded', true)}
+                                expanded
                                 expandedElement={
                                     <CollapsibleSidebarMenuItem
                                         as={Link}

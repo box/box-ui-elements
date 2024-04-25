@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { select, boolean, text } from '@storybook/addon-knobs';
 
 import Button from '../button/Button';
 import Tooltip, { TooltipPosition, TooltipTheme } from './Tooltip';
@@ -10,16 +9,16 @@ const addSpacing = (component: JSX.Element) => (
 );
 
 export const positioning = () => {
-    const positions = Object.values(TooltipPosition);
-
     return addSpacing(
-        <Tooltip
-            isShown
-            position={select('Positions', positions, TooltipPosition.TOP_CENTER)}
-            text="tooltips are constrained to window by default so if you scroll until there is no room for this tooltip above the button, it will flip below the button"
-        >
-            <Button>Learn more</Button>
-        </Tooltip>,
+        <div>
+            <Tooltip
+                isShown
+                position={TooltipPosition.TOP_CENTER}
+                text="tooltips are constrained to window by default so if you scroll until there is no room for this tooltip above the button, it will flip below the button"
+            >
+                <Button>top center</Button>
+            </Tooltip>
+        </div>,
     );
 };
 positioning.story = {
@@ -27,16 +26,9 @@ positioning.story = {
 };
 
 export const themes = () => {
-    const themeOptions = Object.values(TooltipTheme);
-
     return addSpacing(
-        <Tooltip
-            isShown
-            position={TooltipPosition.TOP_RIGHT}
-            text="Theme this tooltip"
-            theme={select('Themes', themeOptions, TooltipTheme.DEFAULT)}
-        >
-            <Button>Learn more</Button>
+        <Tooltip isShown position={TooltipPosition.TOP_RIGHT} text="Theme this tooltip" theme={TooltipTheme.CALLOUT}>
+            <Button>Theme Option: callout</Button>
         </Tooltip>,
     );
 };
@@ -45,16 +37,13 @@ themes.story = {
 };
 
 export const withCloseButton = () => {
-    const positions = Object.values(TooltipPosition);
-    const themeOptions = Object.values(TooltipTheme);
-
     return addSpacing(
         <Tooltip
-            isShown={boolean('isShown', true)}
-            position={select('Positions', positions, TooltipPosition.TOP_CENTER)}
-            showCloseButton={boolean('showCloseButton', true)}
+            isShown
+            position={TooltipPosition.TOP_CENTER}
+            showCloseButton
             text="Tooltips can have a close button and still work even if the text is long and wrapping"
-            theme={select('Themes', themeOptions, TooltipTheme.DEFAULT)}
+            theme={TooltipTheme.DEFAULT}
         >
             <Button>Learn more</Button>
         </Tooltip>,
@@ -66,7 +55,7 @@ withCloseButton.story = {
 
 export const isShown = () =>
     addSpacing(
-        <Tooltip isShown={boolean('isShown', true)} text="Force show or hide">
+        <Tooltip isShown text="Force show or hide">
             <Button>Learn more</Button>
         </Tooltip>,
     );
@@ -75,14 +64,8 @@ isShown.story = {
 };
 
 export const withOffset = () => {
-    const positions = Object.values(TooltipPosition);
     return addSpacing(
-        <Tooltip
-            isShown={boolean('isShown', true)}
-            position={select('Positions', positions, TooltipPosition.MIDDLE_LEFT)}
-            text="this tooltip has 20px offset"
-            offset={text('offset', '0 20px')}
-        >
+        <Tooltip isShown position={TooltipPosition.MIDDLE_LEFT} text="this tooltip has 20px offset" offset="0 20px">
             <Button>Learn more</Button>
         </Tooltip>,
     );
@@ -94,7 +77,7 @@ withOffset.story = {
 export const withDisabled = () =>
     addSpacing(
         <Tooltip
-            isDisabled={boolean('isDisabled', true)}
+            isDisabled
             position={TooltipPosition.MIDDLE_RIGHT}
             text="controlled tooltip that is shown based only on the isDisabled prop"
         >

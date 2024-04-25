@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import Link from '../../link/Link';
 import Menu from '../Menu';
@@ -9,7 +8,7 @@ import notes from './SelectMenuLinkItem.stories.md';
 
 export const basic = () => (
     <Menu>
-        <SelectMenuLinkItem isSelected={boolean('isSelected', true)}>
+        <SelectMenuLinkItem isSelected>
             <Link href="http://opensource.box.com/box-ui-elements/storybook">View Profile</Link>
         </SelectMenuLinkItem>
         <SelectMenuLinkItem>

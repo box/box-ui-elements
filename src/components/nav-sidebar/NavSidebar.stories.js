@@ -1,7 +1,6 @@
 /* eslint-disable */
 import * as React from 'react';
 import { action } from '@storybook/addon-actions';
-import { boolean } from '@storybook/addon-knobs';
 import NavSidebar from './NavSidebar';
 import NavListCollapseHeader from './NavListCollapseHeader';
 import NavList from './NavList';
@@ -32,7 +31,7 @@ export const collapsible = () => (
                 </NavListCollapseHeader>
             }
             className="is-collapsible"
-            collapsed={boolean('collapsed', false)}
+            collapsed={false}
         >
             <Link>Item 1-1</Link>
             <Link>Item 1-2</Link>

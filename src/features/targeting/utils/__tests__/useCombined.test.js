@@ -1,5 +1,5 @@
 // @flow
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import useCombined from '../useCombined';
 
 describe('components/targeting/utils/useCombined', () => {

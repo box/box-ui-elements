@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 import { isActivateKey, isFocusableElement, isLeftClick, scrollIntoView, useIsContentOverflowed } from '../dom';
 
