@@ -29,6 +29,7 @@
 .yarnrc
 babel.config.js
 build
+chromatic.config.json
 CODEOWNERS
 commitlint.config.js
 coverage
