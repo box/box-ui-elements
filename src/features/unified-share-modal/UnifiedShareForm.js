@@ -699,6 +699,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             submitting,
             tooltips = {},
             trackingProps,
+            upsellInlineNotice = null,
         } = this.props;
         const { sharedLinkTracking, sharedLinkEmailTracking } = trackingProps;
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
@@ -712,6 +713,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {!hasExpandedSections && allShareRestrictionWarning}
+                    {upsellInlineNotice}
                     {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
