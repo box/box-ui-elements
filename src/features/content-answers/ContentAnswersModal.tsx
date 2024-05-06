@@ -114,7 +114,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestC
                 </>
             }
         >
-            <div className="be bdl-ContentAnswersModal-content">
+            <div className="be">
                 <ContentAnswersModalContent
                     currentUser={currentUser}
                     data-testid="content-answers-modal-content"
