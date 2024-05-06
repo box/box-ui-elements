@@ -1,10 +1,13 @@
 @import '../../styles/variables';
 
 .bdl-ContentAnswersModal {
-    .modal-dialog-container {
+    .bdl-ContentAnswersModal-content {
         display: flex;
-        flex-basis: 0;
-        width: 100%;
+        flex-direction: column;
+        background-color: $bdl-gray-05;
+    }
+
+    .modal-dialog-container {
         height: 100%;
         max-height: 702px;
     }
@@ -12,17 +15,14 @@
     .modal-dialog {
         width: 768px;
         height: 100%;
-        max-height: 702px;
         padding: 0;
-        background-color: $bdl-gray-05;
+        overflow: hidden;
     }
 
     .modal-header-container {
         z-index: 1;
         margin: 0;
         padding: $bdl-grid-unit * 4 $bdl-grid-unit * 5;
-        background-color: white;
-        border-radius: $bdl-border-radius-size-xlarge $bdl-border-radius-size-xlarge 0 0;
         box-shadow: 0 0 8px rgba(0, 0, 0, .05), 0 1px 0 $bdl-gray-10;
 
         .modal-title {
@@ -36,16 +36,9 @@
     }
 
     .modal-content {
-        display: flex;
-        flex-direction: column;
         flex-grow: 1;
-        max-height: 638px;
         margin-top: 0;
         overflow: hidden;
-    }
-
-    .modal-close-button {
-        top: 20px;
     }
 
     .bdl-ContentAnswersModalFooter-submitButton {

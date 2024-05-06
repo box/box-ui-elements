@@ -98,7 +98,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestC
 
     return (
         <Modal
-            className="bdl-ContentAnswersModal"
+            className="be-modal bdl-ContentAnswersModal"
             data-testid="content-answers-modal"
             isOpen={isOpen}
             onRequestClose={onRequestClose}
@@ -114,21 +114,23 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestC
                 </>
             }
         >
-            <ContentAnswersModalContent
-                currentUser={currentUser}
-                data-testid="content-answers-modal-content"
-                fileName={fileName}
-                isLoading={isLoading}
-                questions={questions}
-            />
-            <ContentAnswersModalFooter
-                currentUser={currentUser}
-                data-testid="content-answers-modal-footer"
-                hasError={hasError}
-                isLoading={isLoading}
-                onAsk={handleAsk}
-                onRetry={handleRetry}
-            />
+            <div className="be bdl-ContentAnswersModal-content">
+                <ContentAnswersModalContent
+                    currentUser={currentUser}
+                    data-testid="content-answers-modal-content"
+                    fileName={fileName}
+                    isLoading={isLoading}
+                    questions={questions}
+                />
+                <ContentAnswersModalFooter
+                    currentUser={currentUser}
+                    data-testid="content-answers-modal-footer"
+                    hasError={hasError}
+                    isLoading={isLoading}
+                    onAsk={handleAsk}
+                    onRetry={handleRetry}
+                />
+            </div>
         </Modal>
     );
 };
