@@ -713,7 +713,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {!hasExpandedSections && allShareRestrictionWarning}
-                    {upsellInlineNotice && <div className="upsell-inline-notice">{upsellInlineNotice}</div>}
+                    {!!upsellInlineNotice && <div className="upsell-inline-notice">{upsellInlineNotice}</div>}
                     {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}
