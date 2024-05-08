@@ -74,7 +74,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             />,
         );
     const mockUpsellInlineNotice = (
-        <div className="upsellInlineNotice" data-testid="upsellinlinenotice">
+        <div>
             <div className="title">Upsell Inline Notice</div>
             <div className="body">Lorem Ipsum</div>
         </div>
@@ -233,8 +233,14 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
 
         test('should render the upsell inline notice component when component is passed', () => {
             const wrapper = getWrapper({ upsellInlineNotice: mockUpsellInlineNotice });
-            const upsellInlineNotice = wrapper.find('[data-testid="upsellinlinenotice"]');
+            const upsellInlineNotice = wrapper.find('.upsell-inline-notice');
             expect(upsellInlineNotice).toHaveLength(1);
+        });
+
+        test('should not render the upsell inline notice div when component is passed', () => {
+            const wrapper = getWrapper();
+            const upsellInlineNotice = wrapper.find('.upsell-inline-notice');
+            expect(upsellInlineNotice).toHaveLength(0);
         });
 
         test('should render a default component with correct Focus element and props when focusSharedLinkOnLoad is enabled', () => {
