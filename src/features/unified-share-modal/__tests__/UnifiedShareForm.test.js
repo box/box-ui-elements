@@ -73,6 +73,12 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 {...props}
             />,
         );
+    const mockUpsellInlineNotice = (
+        <div>
+            <div className="upsell-title">Upsell Inline Notice</div>
+            <div className="upsell-body">Lorem Ipsum</div>
+        </div>
+    );
 
     describe('render()', () => {
         test('should render a default component with default props', () => {
@@ -223,6 +229,20 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             });
             expect(wrapper.exists('UpgradeBadge')).toBe(false);
             expect(wrapper.exists('InlineNotice')).toBe(true);
+        });
+
+        test('should render the upsell inline notice component when component is passed', () => {
+            const wrapper = getWrapper({ upsellInlineNotice: mockUpsellInlineNotice });
+            expect(wrapper.exists('.upsell-inline-notice')).toBe(true);
+            expect(wrapper.exists('.upsell-title')).toBe(true);
+            expect(wrapper.exists('.upsell-body')).toBe(true);
+        });
+
+        test('should not render the upsell inline notice div when component is passed', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.exists('.upsell-inline-notice')).toBe(false);
+            expect(wrapper.exists('.upsell-title')).toBe(false);
+            expect(wrapper.exists('.upsell-body')).toBe(false);
         });
 
         test('should render a default component with correct Focus element and props when focusSharedLinkOnLoad is enabled', () => {

@@ -409,8 +409,12 @@ export type USFProps = BaseUnifiedShareProps & {
     sharedLinkLoaded: boolean,
     /** Whether the FTUX tooltip should be rendered */
     shouldRenderFTUXTooltip: boolean,
-    /** Whether the upgrade inline notice should be rendered */
+    /** Whether the upgrade inline notice should be rendered
+     * NOTE (wyehdego): Remove this prop once we refactor legacy inline notice with upsellInlineNotice
+     */
     showUpgradeInlineNotice?: boolean,
+    /** Inline Notice component to render based on user */
+    upsellInlineNotice?: React.Node | null,
 };
 
 export type InviteCollaboratorsRequest = {
