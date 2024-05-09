@@ -1,5 +1,5 @@
 const config = {
-    branches: ['+([1-9])?(.{+([1-9]),x}).x', 'release'],
+    branches: ['+([1-9])?(.{+([1-9]),x}).x', 'release', { name: 'next', prerelease: 'next' }],
     plugins: [
         '@semantic-release/release-notes-generator',
         [
@@ -44,7 +44,7 @@ if (!prerelease && branch !== 'master') {
     throw new Error('Only the master BRANCH can have latest DIST');
 }
 
-config.branches.push({ name: branch, prerelease });
+config.branches.push({ name: 'master', prerelease });
 // eslint-disable-next-line no-console
 console.log(config.branches);
 module.exports = config;
