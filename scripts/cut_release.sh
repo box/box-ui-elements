@@ -241,7 +241,7 @@ push_new_release() {
     check_untracked_files || return 1
 
     # Run the release
-    if ! HUSKY_SKIP_HOOKS=1 BRANCH=$BRANCH DIST=$DIST yarn semantic-release --no-ci; then
+    if ! HUSKY_SKIP_HOOKS=1 BRANCH=$BRANCH DIST=$DIST yarn release:test; then
         printf "${red}Failed semantic release!${end}"
         return 1
     fi

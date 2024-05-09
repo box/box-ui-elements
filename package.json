@@ -68,6 +68,7 @@
         "lint:css": "stylelint \"src/**/*.scss\" --syntax scss",
         "prebuild:es": "npm-run-all copy:styles ts:defs copy:flow",
         "release": "yarn release:beta",
+        "release:test": "yarn semantic-release --no-ci --branches=['+([0-9])?(.{+([0-9]),x}).x', 'release', {name: 'master', prerelease: 'beta'}, {name: 'next', prerelease: 'next'}]",
         "release:beta": "DIST=beta BRANCH=master ./scripts/release.sh",
         "release:hotfix": "DIST=latest HOTFIX=true ./scripts/release.sh",
         "release:latest": "DIST=latest BRANCH=master ./scripts/release.sh",
