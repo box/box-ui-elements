@@ -243,6 +243,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(wrapper.exists('.upsell-inline-notice')).toBe(false);
             expect(wrapper.exists('.upsell-title')).toBe(false);
             expect(wrapper.exists('.upsell-body')).toBe(false);
+            expect(wrapper.exists('UpgradeBadge')).toBe(false);
         });
 
         test('should render a default component with correct Focus element and props when focusSharedLinkOnLoad is enabled', () => {
