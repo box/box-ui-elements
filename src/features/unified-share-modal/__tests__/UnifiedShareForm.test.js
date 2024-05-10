@@ -211,14 +211,30 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render a default component with upgrade CTA when showUpgradeOptions is enabled', () => {
-            const wrapper = getWrapper({
-                canInvite: true,
-                isFetching: false,
-                showUpgradeOptions: true,
-            });
-            expect(wrapper.exists('UpgradeBadge')).toBe(true);
-        });
+        test.each([
+            [true, true, null],
+            [true, false, null],
+            [false, true, null],
+            [false, false, null],
+            [true, true, mockUpsellInlineNotice],
+            [true, false, mockUpsellInlineNotice],
+            [false, true, mockUpsellInlineNotice],
+            [false, false, mockUpsellInlineNotice],
+        ])(
+            'should render a default component with upgrade CTA with respect to showUpgradeInlineNotice, showUpgradeOptions, and upsellInlineNotice props',
+            (showUpgradeInlineNotice, showUpgradeOptions, upsellInlineNotice) => {
+                const wrapper = getWrapper({
+                    canInvite: true,
+                    isFetching: false,
+                    showUpgradeInlineNotice,
+                    showUpgradeOptions,
+                    upsellInlineNotice,
+                });
+                expect(wrapper.exists('UpgradeBadge')).toBe(
+                    showUpgradeOptions && !showUpgradeInlineNotice && !upsellInlineNotice,
+                );
+            },
+        );
 
         test('should render correct upgrade inline notice when showUpgradeInlineNotice and showUpgradeOptions is enabled', () => {
             const wrapper = getWrapper({
