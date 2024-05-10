@@ -212,17 +212,17 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
         });
 
         test.each([
-            [true, true, null],
-            [true, false, null],
-            [false, true, null],
-            [false, false, null],
-            [true, true, mockUpsellInlineNotice],
-            [true, false, mockUpsellInlineNotice],
-            [false, true, mockUpsellInlineNotice],
-            [false, false, mockUpsellInlineNotice],
+            [true, true, 'is not', null],
+            [true, false, 'is not', null],
+            [false, true, 'is not', null],
+            [false, false, 'is not', null],
+            [true, true, 'is', mockUpsellInlineNotice],
+            [true, false, 'is', mockUpsellInlineNotice],
+            [false, true, 'is', mockUpsellInlineNotice],
+            [false, false, 'is', mockUpsellInlineNotice],
         ])(
-            'should render a default component with upgrade CTA when showUpgradeInlineNotice is %s, showUpgradeOptions is %s, and upsellInlineNotice is %s',
-            (showUpgradeInlineNotice, showUpgradeOptions, upsellInlineNotice) => {
+            'should render a default component with upgrade CTA when showUpgradeInlineNotice is %s, showUpgradeOptions is %s, and upsellInlineNotice %s passed in',
+            (showUpgradeInlineNotice, showUpgradeOptions, upsellInlineNoticeDescription, upsellInlineNotice) => {
                 const wrapper = getWrapper({
                     canInvite: true,
                     isFetching: false,
