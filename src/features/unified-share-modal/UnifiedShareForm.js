@@ -438,6 +438,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             submitting,
             suggestedCollaborators,
             trackingProps,
+            upsellInlineNotice,
         } = this.props;
         const { type } = item;
         const { isFetchingJustificationReasons, isInviteSectionExpanded, justificationReasons } = this.state;
@@ -486,6 +487,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             text: ftuxTooltipText,
             theme: 'callout',
         };
+        const showUpsellInlineNotice = !!upsellInlineNotice;
 
         return (
             <>
@@ -523,7 +525,10 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             {...inviteCollabsEmailTracking}
                         >
                             {this.renderInviteePermissionsDropdown()}
-                            {showUpgradeOptions && !showUpgradeInlineNotice && this.renderUpgradeLinkDescription()}
+                            {showUpgradeOptions &&
+                                !showUpgradeInlineNotice &&
+                                !showUpsellInlineNotice &&
+                                this.renderUpgradeLinkDescription()}
                         </EmailForm>
                     </div>
                 </Tooltip>
