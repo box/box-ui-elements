@@ -11,11 +11,18 @@ describe('features/shared-link-settings-modal/ExpirationSection', () => {
     const isExpirationEnabled = true;
     const onCheckboxChange = sandbox.stub();
     const onExpirationDateChange = sandbox.stub();
+    const dateDisplayFormat = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'Europe/Warsaw',
+    };
 
     const getWrapper = (props = {}) =>
         shallow(
             <ExpirationSection
                 canChangeExpiration={canChangeExpiration}
+                dateDisplayFormat={dateDisplayFormat}
                 expirationDate={expirationDate}
                 isExpirationEnabled={isExpirationEnabled}
                 onCheckboxChange={onCheckboxChange}
