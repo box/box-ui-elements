@@ -221,7 +221,7 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             [false, true, mockUpsellInlineNotice],
             [false, false, mockUpsellInlineNotice],
         ])(
-            'should render a default component with upgrade CTA with respect to showUpgradeInlineNotice, showUpgradeOptions, and upsellInlineNotice props',
+            'should render a default component with upgrade CTA when showUpgradeInlineNotice is %s, showUpgradeOptions is %s, and upsellInlineNotice is %s',
             (showUpgradeInlineNotice, showUpgradeOptions, upsellInlineNotice) => {
                 const wrapper = getWrapper({
                     canInvite: true,
