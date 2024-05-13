@@ -8,7 +8,7 @@ import Fieldset from '../../components/fieldset';
 
 import messages from './messages';
 
-const defaultDisplayFormat = {
+export const defaultDisplayFormat = {
     weekday: 'short',
     year: 'numeric',
     month: 'short',
