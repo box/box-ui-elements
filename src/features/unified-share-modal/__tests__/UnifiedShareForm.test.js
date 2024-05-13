@@ -211,14 +211,30 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render a default component with upgrade CTA when showUpgradeOptions is enabled', () => {
-            const wrapper = getWrapper({
-                canInvite: true,
-                isFetching: false,
-                showUpgradeOptions: true,
-            });
-            expect(wrapper.exists('UpgradeBadge')).toBe(true);
-        });
+        test.each([
+            [true, true, 'is not', null],
+            [true, false, 'is not', null],
+            [false, true, 'is not', null],
+            [false, false, 'is not', null],
+            [true, true, 'is', mockUpsellInlineNotice],
+            [true, false, 'is', mockUpsellInlineNotice],
+            [false, true, 'is', mockUpsellInlineNotice],
+            [false, false, 'is', mockUpsellInlineNotice],
+        ])(
+            'should render a default component with upgrade CTA when showUpgradeInlineNotice is %s, showUpgradeOptions is %s, and upsellInlineNotice %s passed in',
+            (showUpgradeInlineNotice, showUpgradeOptions, upsellInlineNoticeDescription, upsellInlineNotice) => {
+                const wrapper = getWrapper({
+                    canInvite: true,
+                    isFetching: false,
+                    showUpgradeInlineNotice,
+                    showUpgradeOptions,
+                    upsellInlineNotice,
+                });
+                expect(wrapper.exists('UpgradeBadge')).toBe(
+                    showUpgradeOptions && !showUpgradeInlineNotice && !upsellInlineNotice,
+                );
+            },
+        );
 
         test('should render correct upgrade inline notice when showUpgradeInlineNotice and showUpgradeOptions is enabled', () => {
             const wrapper = getWrapper({
@@ -227,7 +243,6 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 showUpgradeInlineNotice: true,
                 showUpgradeOptions: true,
             });
-            expect(wrapper.exists('UpgradeBadge')).toBe(false);
             expect(wrapper.exists('InlineNotice')).toBe(true);
         });
 
