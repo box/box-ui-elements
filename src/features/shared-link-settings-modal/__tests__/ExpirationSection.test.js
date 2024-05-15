@@ -1,7 +1,7 @@
 import React from 'react';
 import sinon from 'sinon';
 
-import ExpirationSection from '../ExpirationSection';
+import ExpirationSection, { defaultDisplayFormat } from '../ExpirationSection';
 
 const sandbox = sinon.sandbox.create();
 
@@ -11,6 +11,13 @@ describe('features/shared-link-settings-modal/ExpirationSection', () => {
     const isExpirationEnabled = true;
     const onCheckboxChange = sandbox.stub();
     const onExpirationDateChange = sandbox.stub();
+
+    const dateDisplayFormat = {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'Europe/Warsaw',
+    };
 
     const getWrapper = (props = {}) =>
         shallow(
@@ -103,6 +110,20 @@ describe('features/shared-link-settings-modal/ExpirationSection', () => {
             });
 
             expect(wrapper.prop('dateFormat')).toEqual(dateFormat);
+        });
+
+        test('should use default displayFormat in DatePicker when dateDisplayFormat not defined', () => {
+            const wrapper = getSubsection();
+
+            expect(wrapper.prop('displayFormat')).toEqual(defaultDisplayFormat);
+        });
+
+        test('should pass dateDisplayFormat to DatePicker displayFormat', () => {
+            const wrapper = getSubsection({
+                dateDisplayFormat,
+            });
+
+            expect(wrapper.prop('displayFormat')).toEqual(dateDisplayFormat);
         });
     });
 });

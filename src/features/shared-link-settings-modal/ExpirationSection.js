@@ -8,7 +8,7 @@ import Fieldset from '../../components/fieldset';
 
 import messages from './messages';
 
-const displayFormat = {
+export const defaultDisplayFormat = {
     weekday: 'short',
     year: 'numeric',
     month: 'short',
@@ -18,6 +18,7 @@ const displayFormat = {
 const ExpirationSection = ({
     canChangeExpiration,
     dateFormat,
+    dateDisplayFormat = defaultDisplayFormat,
     error,
     expirationCheckboxProps = {},
     expirationDate,
@@ -31,7 +32,7 @@ const ExpirationSection = ({
         <div>
             <DatePicker
                 dateFormat={dateFormat}
-                displayFormat={displayFormat}
+                displayFormat={dateDisplayFormat}
                 error={error}
                 hideLabel
                 inputProps={expirationInputProps}
@@ -65,6 +66,7 @@ const ExpirationSection = ({
 
 ExpirationSection.propTypes = {
     canChangeExpiration: PropTypes.bool.isRequired,
+    dateDisplayFormat: PropTypes.object,
     /** The format of the date value for form submit */
     dateFormat: PropTypes.string,
     error: PropTypes.string,
