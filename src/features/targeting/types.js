@@ -30,6 +30,10 @@ export type TargetingApi = $ReadOnly<{
     onShow: () => void,
 }>;
 
+export type PersistentOnboardingTargetingApi = TargetingApi & {
+    onPrevious: () => void,
+};
+
 export type UseTargetingApi = () => TargetingApi;
 
 export type TargetedComponentProps = {
