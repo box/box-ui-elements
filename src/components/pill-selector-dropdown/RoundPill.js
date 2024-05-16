@@ -22,6 +22,7 @@ type Props = {
     onRemove: () => any,
     showAvatar?: boolean,
     text: string,
+    type?: string,
 };
 
 type State = {
@@ -82,8 +83,8 @@ class RoundPill extends React.PureComponent<Props, State> {
      * @return {void}
      */
     getAvatarUrl() {
-        const { getPillImageUrl, id } = this.props;
-        Promise.resolve(getPillImageUrl && id ? getPillImageUrl({ id }) : undefined)
+        const { getPillImageUrl, id, type } = this.props;
+        Promise.resolve(getPillImageUrl && id ? getPillImageUrl({ id, type }) : undefined)
             .then(this.getAvatarUrlHandler)
             .catch(() => {
                 // noop
