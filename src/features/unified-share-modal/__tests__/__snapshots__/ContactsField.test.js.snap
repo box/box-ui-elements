@@ -155,6 +155,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="w@example.com"
     title="W User"
+    type="user"
   />
   <ContactDatalistItem
     id="12345"
@@ -164,6 +165,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="x@example.com"
     title="X User"
+    type="group"
   />
   <ContactDatalistItem
     id="23456"
@@ -173,6 +175,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="y@example.com"
     title="Y User"
+    type="user"
   />
   <ContactDatalistItem
     id="34567"
@@ -182,6 +185,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="z@example.com"
     title="Z User"
+    type="user"
   />
   <ContactDatalistItem
     id="12"
@@ -191,6 +195,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="a@example.com"
     title="a b"
+    type="user"
   />
   <ContactDatalistItem
     id="13"
@@ -200,6 +205,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="b@example.com"
     title="a b"
+    type="user"
   />
   <ContactDatalistItem
     id="14"
@@ -209,6 +215,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="c@example.com"
     title="a c"
+    type="user"
   />
   <ContactDatalistItem
     id="14"
@@ -218,6 +225,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="d@example.com"
     title="a d"
+    type="user"
   />
   <ContactDatalistItem
     id="14"
@@ -227,6 +235,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
     showAvatar={false}
     subtitle="e@example.com"
     title="a e"
+    type="user"
   />
 </PillSelectorDropdown>
 `;
