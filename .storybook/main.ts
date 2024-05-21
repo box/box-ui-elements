@@ -3,8 +3,9 @@ import remarkGfm from "remark-gfm";
 
 const language = process.env.LANGUAGE;
 
-const config: { webpackFinal: (config: any) => Promise<any>; staticDirs: string[]; stories: string[]; framework: { name: string }; addons: (string | { name: string; options: { sass: { implementation: any } } } | { name: string; options: { mdxPluginOptions: { mdxCompileOptions: { remarkPlugins: any[] } } } })[] } = {
-    stories: ['../src/**/*.mdx','../src/**/*.stories.@(js|jsx|ts|tsx)'],
+const config: { webpackFinal: (config: any) => Promise<any>; staticDirs: string[]; stories: string[]; framework: { name: string }; docs: { autodocs: boolean }; addons: (string | { name: string; options: { sass: { implementation: any } } } | { name: string; options: { mdxPluginOptions: { mdxCompileOptions: { remarkPlugins: ((options?: (Options | null | undefined)) => undefined)[] } } } })[] } = {
+    stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
+
     addons: [
         '@storybook/addon-links',
         '@storybook/addon-essentials',
@@ -21,20 +22,19 @@ const config: { webpackFinal: (config: any) => Promise<any>; staticDirs: string[
         // tables and some other markdown features do not render correctly without this
         // https://storybook.js.org/docs/writing-docs/mdx#markdown-tables-arent-rendering-correctly
         {
-            name: '@storybook/addon-docs',
-            options: {
-                mdxPluginOptions: {
-                    mdxCompileOptions: {
-                        remarkPlugins: [remarkGfm],
-                    },
-                },
-            },
+            name: '@storybook/addon-docs'
         },
+        '@storybook/addon-webpack5-compiler-babel',
+        '@chromatic-com/storybook',
+        'storybook-react-intl'
     ],
+
     framework: {
         name: '@storybook/react-webpack5',
     },
+
     staticDirs: ['public'],
+
     webpackFinal: async (config: any) => {
         // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
         // You can change the configuration based on that.

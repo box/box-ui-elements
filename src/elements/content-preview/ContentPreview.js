@@ -17,8 +17,7 @@ import setProp from 'lodash/set';
 import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
 import Measure from 'react-measure';
-import { withRouter } from 'react-router-dom';
-import type { ContextRouter } from 'react-router-dom';
+import { useHistory, type ContextRouter } from 'react-router-dom';
 import { decode } from '../../utils/keys';
 import makeResponsive from '../common/makeResponsive';
 import { withNavRouter } from '../common/nav-router';
@@ -130,8 +129,7 @@ type Props = {
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
-    WithAnnotatorContextProps &
-    ContextRouter;
+    WithAnnotatorContextProps;
 
 type State = {
     canPrint?: boolean,
@@ -1273,7 +1271,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             contentOpenWithProps,
             contentSidebarProps,
             hasHeader,
-            history,
             isLarge,
             isVeryLarge,
             logoUrl,
@@ -1284,7 +1281,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor,
         }: Props = this.props;
-
+        const history = useHistory();
         const {
             canPrint,
             currentFileId,
@@ -1402,7 +1399,6 @@ export default flow([
     makeResponsive,
     withAnnotatorContext,
     withAnnotations,
-    withRouter,
     withNavRouter,
     withFeatureConsumer,
     withFeatureProvider,

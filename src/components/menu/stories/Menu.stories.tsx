@@ -69,30 +69,30 @@ export const withSelectMenu = () => (
     </Menu>
 );
 
-export const withChildOnResize = () => {
-    const componentStore = new Store({ isLargeMenu: false });
-
-    const setVisibility = () => {
-        if (window.innerWidth < 700 && !componentStore.get('isLargeMenu')) {
-            componentStore.set({ isLargeMenu: true });
-        }
-    };
-
-    window.addEventListener('resize', setVisibility);
-
-    return (
-        <State store={componentStore}>
-            {state => (
-                <Menu>
-                    <MenuItem>View Profile</MenuItem>
-                    <MenuItem>Help</MenuItem>
-                    {state.isLargeMenu && <MenuItem>Visible on Resize</MenuItem>}
-                    <MenuItem>Last Item</MenuItem>
-                </Menu>
-            )}
-        </State>
-    );
-};
+// export const withChildOnResize = () => {
+//     const componentStore = new Store({ isLargeMenu: false });
+//
+//     const setVisibility = () => {
+//         if (window.innerWidth < 700 && !componentStore.get('isLargeMenu')) {
+//             componentStore.set({ isLargeMenu: true });
+//         }
+//     };
+//
+//     window.addEventListener('resize', setVisibility);
+//
+//     return (
+//         <State store={componentStore}>
+//             {state => (
+//                 <Menu>
+//                     <MenuItem>View Profile</MenuItem>
+//                     <MenuItem>Help</MenuItem>
+//                     {state.isLargeMenu && <MenuItem>Visible on Resize</MenuItem>}
+//                     <MenuItem>Last Item</MenuItem>
+//                 </Menu>
+//             )}
+//         </State>
+//     );
+// };
 
 export default {
     title: 'Components/Menu',

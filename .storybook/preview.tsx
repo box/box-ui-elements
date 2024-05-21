@@ -27,15 +27,8 @@ const preview: any = {
     },
     decorators:[
         mswDecorator,
-        (Story) =>
-            (
-                <IntlProvider locale='en'>
-                    <Story />
-                </IntlProvider>
-            ),
     ],
     parameters: {
-        actions: { argTypesRegex: '^on[A-Z].*' },
         chromatic: { disableSnapshot: true },
         controls: {
             matchers: {

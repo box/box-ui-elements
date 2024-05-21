@@ -15,33 +15,33 @@ export const basic = () => (
     />
 );
 
-export const controlled = () => {
-    const componentStore = new Store({ isChecked: false });
-    const handleChange = () => componentStore.set({ isChecked: !componentStore.get('isChecked') });
-
-    return (
-        <State store={componentStore}>
-            {state => (
-                <div>
-                    <Checkbox
-                        name="checkbox2"
-                        label="Controlled checkbox"
-                        isChecked={state.isChecked}
-                        onChange={handleChange}
-                        description="This is a controlled component."
-                    />
-                    <Checkbox
-                        name="checkbox3"
-                        label="Inverted Controlled checkbox"
-                        isChecked={!state.isChecked}
-                        onChange={handleChange}
-                        description="This is a controlled component, whose value is the inverse of the one above."
-                    />
-                </div>
-            )}
-        </State>
-    );
-};
+// export const controlled = () => {
+//     const componentStore = new Store({ isChecked: false });
+//     const handleChange = () => componentStore.set({ isChecked: !componentStore.get('isChecked') });
+//
+//     return (
+//         <State store={componentStore}>
+//             {state => (
+//                 <div>
+//                     <Checkbox
+//                         name="checkbox2"
+//                         label="Controlled checkbox"
+//                         isChecked={state.isChecked}
+//                         onChange={handleChange}
+//                         description="This is a controlled component."
+//                     />
+//                     <Checkbox
+//                         name="checkbox3"
+//                         label="Inverted Controlled checkbox"
+//                         isChecked={!state.isChecked}
+//                         onChange={handleChange}
+//                         description="This is a controlled component, whose value is the inverse of the one above."
+//                     />
+//                 </div>
+//             )}
+//         </State>
+//     );
+// };
 
 export const disabled = () => (
     <Checkbox
