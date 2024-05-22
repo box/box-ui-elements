@@ -4,7 +4,6 @@
  * @author Box
  */
 import omit from 'lodash/omit';
-
 import TasksBase from './TasksBase';
 import {
     ERROR_CODE_FETCH_TASK_COLLABORATOR,
@@ -64,13 +63,13 @@ class TaskCollaborators extends TasksBase {
         this.post({
             id: file.id,
             url: this.getUrlForTaskCollaboratorCreate(),
-            data: { ...requestData },
+            data: requestData,
             successCallback,
             errorCallback,
         });
     }
 
-    createTaskCollaboratorsforGroup({
+    createTaskCollaboratorsForGroup({
         errorCallback,
         file,
         successCallback,
@@ -101,7 +100,7 @@ class TaskCollaborators extends TasksBase {
         this.post({
             id: file.id,
             url: this.getUrlForTaskGroupCreate(),
-            data: { ...requestData },
+            data: requestData,
             successCallback,
             errorCallback,
         });
@@ -114,7 +113,7 @@ class TaskCollaborators extends TasksBase {
         task,
     }: {
         errorCallback: ElementsErrorCallback,
-        file: { id: string },
+        file: BoxItem,
         successCallback: Function,
         task: { id: string },
     }): void {
@@ -143,7 +142,7 @@ class TaskCollaborators extends TasksBase {
         this.put({
             id: file.id,
             url: this.getUrlForTaskCollaborator(taskCollaborator.id),
-            data: { ...requestData },
+            data: requestData,
             successCallback,
             errorCallback,
         });
@@ -172,3 +171,4 @@ class TaskCollaborators extends TasksBase {
 }
 
 export default TaskCollaborators;
+
