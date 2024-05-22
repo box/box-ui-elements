@@ -92,16 +92,15 @@ const helpers = {
 
 describe('ContentExplorer', () => {
     beforeEach(() => {
-        cy.server();
-        cy.route('GET', '**/folders/*', 'fixture:content-explorer/root-folder.json');
-        cy.route('GET', '**/files/319004423111?fields=allowed_shared_link_access_levels,shared_link', {
+        cy.intercept('GET', '**/folders/*', { fixture: 'content-explorer/root-folder.json' });
+        cy.intercept('GET', '**/files/319004423111?fields=allowed_shared_link_access_levels,shared_link', {
             type: 'file',
             id: '319004423111',
             etag: '4',
             allowed_shared_link_access_levels: ['collaborators', 'open', 'company'],
             shared_link: null,
         });
-        cy.route('PUT', '**/files/319004423111', {
+        cy.intercept('PUT', '**/files/319004423111', {
             type: 'file',
             id: '319004423111',
             etag: '4',

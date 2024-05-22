@@ -44,6 +44,7 @@ describe('ContentUploader', () => {
                     cy.wrap(subject).trigger('change', { force: true });
                 });
 
+                // eslint-disable-next-line cypress/unsafe-to-chain-command
                 cy.get(dropSelector)
                     .first()
                     .trigger('dragenter', {

@@ -29,11 +29,9 @@ describe('ContentPreview', () => {
             cy.get('.bcpr-PreviewHeader--basic').should('be.visible');
         },
         selectVersion(versionName) {
-            cy.getByTestId('versions-item-button').within($versionsItem => {
-                cy.wrap($versionsItem)
-                    .contains(versionName)
-                    .click();
-            });
+            cy.getByTestId('versions-item-button')
+                .contains(versionName)
+                .click();
         },
     };
 
@@ -82,6 +80,15 @@ describe('ContentPreview', () => {
                 [300, 'not.exist'],
             ];
 
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_DOC'),
+                props: {
+                    contentSidebarProps: {
+                        hasActivityFeed: true,
+                    },
+                },
+            });
+
             breakpoints.forEach(([width, assertion]) => {
                 cy.viewport(width, 600);
                 cy.getByTestId('bcs-content').should(assertion);
@@ -89,6 +96,15 @@ describe('ContentPreview', () => {
         });
 
         it('The sidebar should open on a small screen if a user clicks a tab', () => {
+            helpers.load({
+                fileId: Cypress.env('FILE_ID_DOC'),
+                props: {
+                    contentSidebarProps: {
+                        hasActivityFeed: true,
+                    },
+                },
+            });
+
             cy.viewport(800, 600);
             cy.getByTestId('bcs-content').should('not.exist');
             cy.getByTestId('sidebaractivity').click();
