@@ -15,4 +15,6 @@
 .bdl-AdditionalTab-icon {
     @include bdl-openComponentAnimation(.5s);
     @include bdl-SidebarNavIcon;
+
+    border-radius: 5px;
 }
