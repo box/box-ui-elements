@@ -15,7 +15,7 @@ export interface ContactDatalistItemProps {
     name: string | null | undefined;
     showAvatar?: boolean;
     subtitle?: React.ReactNode;
-    type?: string;
+    type?: string | null | undefined;
 }
 
 interface ContactDatalistItemState {

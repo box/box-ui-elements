@@ -1,5 +1,4 @@
 import React from 'react';
-
 import RoundPill from '../RoundPill';
 
 describe('components/RoundPill-selector-dropdown/RoundPill', () => {
@@ -112,5 +111,24 @@ describe('components/RoundPill-selector-dropdown/RoundPill', () => {
 
         expect(wrapper.find('LabelPillIcon').length).toBe(2);
         expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(0);
+    });
+
+    test.each([['user'], [undefined], [null]])('should have avatar URL when the type prop is %s', type => {
+        const contactID = '123';
+        const getPillImageUrlMock = jest.fn().mockImplementation(() => Promise.resolve(`/test?id=${contactID}`));
+        const wrapper = shallow(
+            <RoundPill name="name" id={contactID} type={type} showAvatar getPillImageUrl={getPillImageUrlMock} />,
+        );
+        expect(wrapper.state('avatarUrl')).toBe(undefined);
+        const instance = wrapper.instance();
+
+        instance.componentDidMount();
+
+        setImmediate(() => {
+            wrapper.update();
+            expect(wrapper.find('LabelPillIcon').length).toBe(2);
+            expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(1);
+            expect(getPillImageUrlMock).toHaveBeenCalledWith({ id: contactID, type });
+        });
     });
 });
