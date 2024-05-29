@@ -22,7 +22,7 @@ type Props = {
     onRemove: () => any,
     showAvatar?: boolean,
     text: string,
-    type?: any,
+    type?: string | null,
 };
 
 type State = {
