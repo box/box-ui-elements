@@ -57,15 +57,13 @@ const helpers = {
 
 describe('ContentPicker', () => {
     describe('Pagination', () => {
-        const FIRST_PAGE = 'fixture:content-picker/folder-page-1.json';
-        const SECOND_PAGE = 'fixture:content-picker/folder-page-2.json';
+        const FIRST_PAGE = { fixture: 'content-picker/folder-page-1.json' };
+        const SECOND_PAGE = { fixture: 'content-picker/folder-page-2.json' };
         const FIRST_ITEM_OF_FIRST_PAGE = 'Another Sample Folder';
         const FIRST_ITEM_OF_SECOND_PAGE = 'Sample Audio.mp3';
 
         beforeEach(() => {
-            cy.server();
-
-            cy.route('GET', '**/folders/*', FIRST_PAGE);
+            cy.intercept('GET', '**/folders/*', FIRST_PAGE);
         });
 
         it('Should be able to navigate between pages using arrows', () => {
@@ -75,7 +73,7 @@ describe('ContentPicker', () => {
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
 
             // Stub call to second page
-            cy.route('GET', '**/folders/*', SECOND_PAGE);
+            cy.intercept('GET', '**/folders/*', SECOND_PAGE);
 
             // Click the right arrow
             helpers
@@ -87,7 +85,7 @@ describe('ContentPicker', () => {
             helpers.getRow(0).contains(FIRST_ITEM_OF_SECOND_PAGE);
 
             // Stub call to first page
-            cy.route('GET', '**/folders/*', 'fixture:content-picker/folder-page-1.json');
+            cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/folder-page-1.json' });
 
             // Click the left arrow
             helpers
@@ -109,7 +107,7 @@ describe('ContentPicker', () => {
             helpers.getPaginationCountButton(1).click();
 
             // Stub call to second page
-            cy.route('GET', '**/folders/*', SECOND_PAGE);
+            cy.intercept('GET', '**/folders/*', SECOND_PAGE);
 
             // Click the second option in the dropdown menu
             helpers
@@ -121,7 +119,7 @@ describe('ContentPicker', () => {
             helpers.getRow(0).contains(FIRST_ITEM_OF_SECOND_PAGE);
 
             // Stub call to first page
-            cy.route('GET', '**/folders/*', FIRST_PAGE);
+            cy.intercept('GET', '**/folders/*', FIRST_PAGE);
 
             // Confirm that the pagination count button says "2 of 2", and click it
             helpers.getPaginationCountButton(2).click();
@@ -141,20 +139,18 @@ describe('ContentPicker', () => {
 
     describe('Selection', () => {
         beforeEach(() => {
-            cy.server();
-
-            cy.route('GET', '**/folders/*', 'fixture:content-picker/root-folder.json');
+            cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/root-folder.json' });
 
             ['319004423111', '308566419514', '308409990441'].forEach(fileId => {
                 cy.fixture('content-picker/get-sharedlink.json').then(getSharedLinkJson => {
-                    cy.route('GET', `**/files/${fileId}?fields=allowed_shared_link_access_levels,shared_link`, {
+                    cy.intercept('GET', `**/files/${fileId}?fields=allowed_shared_link_access_levels,shared_link`, {
                         ...getSharedLinkJson,
                         id: fileId,
                     });
                 });
 
                 cy.fixture('content-picker/create-sharedlink.json').then(createSharedLinkJson => {
-                    cy.route('PUT', `**/files/${fileId}`, {
+                    cy.intercept('PUT', `**/files/${fileId}`, {
                         ...createSharedLinkJson,
                         id: fileId,
                     });
@@ -193,7 +189,7 @@ describe('ContentPicker', () => {
             helpers.selectRow(2);
 
             // Override the route stubbing for a sub folder
-            cy.route('GET', '**/folders/*', 'fixture:content-picker/sample-folder.json');
+            cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/sample-folder.json' });
 
             // Explore folder (row 1)
             helpers

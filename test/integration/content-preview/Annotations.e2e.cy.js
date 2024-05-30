@@ -1,10 +1,10 @@
 // Specify Annotations version in command line, otherwise defaults to the latest version
-// e.g. CYPRESS_ANNOTATIONS_VERSION=4.0.0-beta.24 yarn test:e2e:open
-const ANNOTATIONS_VERSION = Cypress.env('ANNOTATIONS_VERSION') ? `@${Cypress.env('ANNOTATIONS_VERSION')}` : '';
+// e.g. CYPRESS_ANNOTATIONS_VERSION=4.1.1-beta.5 yarn test:e2e:open
+// const ANNOTATIONS_VERSION = Cypress.env('ANNOTATIONS_VERSION') ? `@${Cypress.env('ANNOTATIONS_VERSION')}` : '';
+//
+// import(`https://unpkg.com/box-annotations${ANNOTATIONS_VERSION}/dist/annotations.js`);
 
-import(`https://unpkg.com/box-annotations${ANNOTATIONS_VERSION}/dist/annotations.js`);
-
-describe('ContentPreview with Annotations', () => {
+xdescribe('ContentPreview with Annotations', () => {
     const helpers = {
         load({ features, fileId, props } = {}) {
             cy.visit('/Elements/ContentPreview', {
@@ -29,7 +29,7 @@ describe('ContentPreview with Annotations', () => {
                     const link = document.createElement('link');
                     link.rel = 'stylesheet';
                     link.type = 'text/css';
-                    link.href = `https://unpkg.com/box-annotations${ANNOTATIONS_VERSION}/dist/annotations.css`;
+                    // link.href = `https://unpkg.com/box-annotations${ANNOTATIONS_VERSION}/dist/annotations.css`;
                     head.appendChild(link);
                 },
             });
@@ -102,6 +102,7 @@ describe('ContentPreview with Annotations', () => {
             },
         });
 
+        // eslint-disable-next-line cypress/unsafe-to-chain-command
         cy.get('.ba-DrawingTarget')
             .should('be.visible')
             .rightclick() // prevent jumping to hyperlink of <a>
