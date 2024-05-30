@@ -19,6 +19,7 @@ export type RoundOption = {
     hasWarning: boolean,
     id?: number | string,
     isExternalUser: boolean,
+    type?: string,
 } & Option;
 
 export type SelectedRoundOptions = Array<RoundOption> | List<RoundOption>;
