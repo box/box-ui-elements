@@ -35,7 +35,7 @@ const messages = defineMessages({
     previewError: {
         id: 'be.previewError',
         description: 'Error message when Preview fails due to the files call.',
-        defaultMessage: 'We’re sorry, the preview didn’t load. Please refresh the page.',
+        defaultMessage: 'This preview didn’t load. Please try to open or download the file to view.',
     },
     previewErrorBlockedByPolicy: {
         id: 'be.previewErrorBlockedByPolicy',
