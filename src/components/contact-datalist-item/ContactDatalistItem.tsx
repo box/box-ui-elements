@@ -15,6 +15,7 @@ export interface ContactDatalistItemProps {
     name: string | null | undefined;
     showAvatar?: boolean;
     subtitle?: React.ReactNode;
+    type?: string | null | undefined;
 }
 
 interface ContactDatalistItemState {
@@ -48,11 +49,12 @@ class ContactDatalistItem extends React.PureComponent<ContactDatalistItemProps, 
      * @return {void}
      */
     getAvatarUrl() {
-        const { getContactAvatarUrl, id } = this.props;
+        const { getContactAvatarUrl, id, type } = this.props;
         Promise.resolve(
             getContactAvatarUrl && id
                 ? getContactAvatarUrl({
                       id,
+                      type,
                   })
                 : undefined,
         )

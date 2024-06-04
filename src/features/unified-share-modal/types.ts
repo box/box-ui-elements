@@ -4,6 +4,6 @@ export interface ContactType {
     isExternalUser?: boolean;
     name?: string;
     text?: string;
-    type?: string;
+    type?: string | null | undefined;
     value?: string;
 }
