@@ -649,4 +649,57 @@ describe('elements/content-uploader/ContentUploader', () => {
             expect(instance.addFilesToUploadQueue).not.toHaveBeenCalled();
         });
     });
+
+    describe('addFileDataTransferItemsToUploadQueue()', () => {
+        test('should pass multiple files to the upload queue', async () => {
+            jest.spyOn(UploaderUtils, 'getFileFromDataTransferItem').mockResolvedValue(() => 'file');
+
+            const itemsLength = 3;
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.addFilesToUploadQueue = jest.fn();
+
+            const files = createMockFiles(itemsLength);
+            await instance.addFileDataTransferItemsToUploadQueue(files, jest.fn());
+            expect(instance.addFilesToUploadQueue).toBeCalledTimes(1);
+            expect(instance.addFilesToUploadQueue.mock.calls[0][0].length).toBe(itemsLength);
+        });
+    });
+
+    describe('addPackageDataTransferItemsToUploadQueue()', () => {
+        test('should pass multiple packages to the upload queue', async () => {
+            jest.spyOn(UploaderUtils, 'getPackageFileFromDataTransferItem').mockResolvedValue(() => 'package');
+
+            const itemsLength = 3;
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            instance.addFilesToUploadQueue = jest.fn();
+
+            const files = createMockFiles(itemsLength);
+            await instance.addPackageDataTransferItemsToUploadQueue(files, jest.fn());
+            expect(instance.addFilesToUploadQueue).toBeCalledTimes(1);
+            expect(instance.addFilesToUploadQueue.mock.calls[0][0].length).toBe(itemsLength);
+        });
+    });
+
+    describe('addFolderDataTransferItemsToUploadQueue()', () => {
+        test('should pass multiple folders to the upload queue', async () => {
+            jest.spyOn(UploaderUtils, 'getDataTransferItemId').mockResolvedValue(() => 'folder123');
+            jest.spyOn(UploaderUtils, 'getDataTransferItemAPIOptions').mockResolvedValue(() => {});
+
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const mockFoldersList = ['folder1', 'folder2'];
+            const mockFolderUpload = { folder: { name: 'mockFolder' } };
+            mockFolderUpload.buildFolderTreeFromDataTransferItem = jest.fn();
+
+            instance.addToQueue = jest.fn();
+            instance.getFolderUploadAPI = jest.fn().mockReturnValue(mockFolderUpload);
+            instance.getNewDataTransferItems = jest.fn().mockReturnValue(mockFoldersList);
+
+            await instance.addFolderDataTransferItemsToUploadQueue(mockFoldersList, jest.fn());
+            expect(instance.addToQueue).toBeCalledTimes(1);
+            expect(instance.addToQueue.mock.calls[0][0].length).toBe(mockFoldersList.length);
+        });
+    });
 });
