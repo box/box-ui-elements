@@ -378,7 +378,7 @@ class ContentUploader extends Component<Props, State> {
         if (droppedItems.items) {
             this.addDataTransferItemsToUploadQueue(droppedItems.items, itemUpdateCallback);
         } else {
-            this.addFilesToUploadQueue(droppedItems.files, itemUpdateCallback);
+            this.addFilesToUploadQueue(Array.from(droppedItems.files), itemUpdateCallback);
         }
     };
 
@@ -424,14 +424,20 @@ class ContentUploader extends Component<Props, State> {
      * @private
      * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
      * @param {Function} itemUpdateCallback
-     * @returns {void}
+     * @returns {Promise<any>}
      */
     addFileDataTransferItemsToUploadQueue = async (
         dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
         itemUpdateCallback: Function,
-    ): void => {
+    ): Promise<any> => {
         const files = await Promise.all(dataTransferItems.map(async item => getFileFromDataTransferItem(item)));
-        this.addFilesToUploadQueue(files, itemUpdateCallback);
+        const filesArray = [];
+        files.forEach(file => {
+            if (file) {
+                filesArray.push(file);
+            }
+        });
+        this.addFilesToUploadQueue(filesArray, itemUpdateCallback);
     };
 
     /**
@@ -440,14 +446,22 @@ class ContentUploader extends Component<Props, State> {
      * @private
      * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
      * @param {Function} itemUpdateCallback
-     * @returns {void}
+     * @returns {Promise<any>}
      */
     addPackageDataTransferItemsToUploadQueue = async (
         dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
         itemUpdateCallback: Function,
-    ): void => {
-        const files = await Promise.all(dataTransferItems.map(async item => getPackageFileFromDataTransferItem(item)));
-        this.addFilesToUploadQueue(files, itemUpdateCallback);
+    ): Promise<any> => {
+        const packageFiles = await Promise.all(
+            dataTransferItems.map(async item => getPackageFileFromDataTransferItem(item)),
+        );
+        const packageFilesArray = [];
+        packageFiles.forEach(packageFile => {
+            if (packageFile) {
+                packageFilesArray.push(packageFile);
+            }
+        });
+        this.addFilesToUploadQueue(packageFilesArray, itemUpdateCallback);
     };
 
     /**
@@ -483,19 +497,24 @@ class ContentUploader extends Component<Props, State> {
             newItems.map(async item => {
                 const folderUpload = this.getFolderUploadAPI(folderId);
                 await folderUpload.buildFolderTreeFromDataTransferItem(item);
-                return {
-                    api: folderUpload,
-                    extension: '',
-                    isFolder: true,
-                    name: folderUpload.folder.name,
-                    options: fileAPIOptions,
-                    progress: 0,
-                    size: 1,
-                    status: STATUS_PENDING,
-                };
+                return folderUpload;
             }),
         );
-        this.addToQueue(folderUploads, itemUpdateCallback);
+        const folderUploadsArray = [];
+        folderUploads.forEach(folderUpload => {
+            // $FlowFixMe no file property
+            folderUploadsArray.push({
+                api: folderUpload,
+                extension: '',
+                isFolder: true,
+                name: folderUpload.folder.name,
+                options: fileAPIOptions,
+                progress: 0,
+                size: 1,
+                status: STATUS_PENDING,
+            });
+        });
+        this.addToQueue(folderUploadsArray, itemUpdateCallback);
     };
 
     /**
