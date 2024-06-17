@@ -378,9 +378,7 @@ class ContentUploader extends Component<Props, State> {
         if (droppedItems.items) {
             this.addDataTransferItemsToUploadQueue(droppedItems.items, itemUpdateCallback);
         } else {
-            Array.from(droppedItems.files).forEach(file => {
-                this.addFilesToUploadQueue([file], itemUpdateCallback);
-            });
+            this.addFilesToUploadQueue(Array.from(droppedItems.files), itemUpdateCallback);
         }
     };
 
@@ -426,20 +424,20 @@ class ContentUploader extends Component<Props, State> {
      * @private
      * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
      * @param {Function} itemUpdateCallback
-     * @returns {void}
+     * @returns {Promise<any>}
      */
-    addFileDataTransferItemsToUploadQueue = (
+    addFileDataTransferItemsToUploadQueue = async (
         dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
         itemUpdateCallback: Function,
-    ): void => {
-        dataTransferItems.forEach(async item => {
-            const file = await getFileFromDataTransferItem(item);
-            if (!file) {
-                return;
+    ): Promise<any> => {
+        const files = await Promise.all(dataTransferItems.map(async item => getFileFromDataTransferItem(item)));
+        const filesArray = [];
+        files.forEach(file => {
+            if (file) {
+                filesArray.push(file);
             }
-
-            this.addFilesToUploadQueue([file], itemUpdateCallback);
         });
+        this.addFilesToUploadQueue(filesArray, itemUpdateCallback);
     };
 
     /**
@@ -448,21 +446,22 @@ class ContentUploader extends Component<Props, State> {
      * @private
      * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
      * @param {Function} itemUpdateCallback
-     * @returns {void}
+     * @returns {Promise<any>}
      */
-    addPackageDataTransferItemsToUploadQueue = (
+    addPackageDataTransferItemsToUploadQueue = async (
         dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
         itemUpdateCallback: Function,
-    ): void => {
-        dataTransferItems.forEach(item => {
-            const file = getPackageFileFromDataTransferItem(item);
-
-            if (!file) {
-                return;
+    ): Promise<any> => {
+        const packageFiles = await Promise.all(
+            dataTransferItems.map(async item => getPackageFileFromDataTransferItem(item)),
+        );
+        const packageFilesArray = [];
+        packageFiles.forEach(packageFile => {
+            if (packageFile) {
+                packageFilesArray.push(packageFile);
             }
-
-            this.addFilesToUploadQueue([file], itemUpdateCallback);
         });
+        this.addFilesToUploadQueue(packageFilesArray, itemUpdateCallback);
     };
 
     /**
@@ -494,11 +493,28 @@ class ContentUploader extends Component<Props, State> {
 
         const fileAPIOptions: Object = getDataTransferItemAPIOptions(newItems[0]);
         const { folderId = rootFolderId } = fileAPIOptions;
-        newItems.forEach(async item => {
-            const folderUpload = this.getFolderUploadAPI(folderId);
-            await folderUpload.buildFolderTreeFromDataTransferItem(item);
-            this.addFolderToUploadQueue(folderUpload, itemUpdateCallback, fileAPIOptions);
+        const folderUploads = await Promise.all(
+            newItems.map(async item => {
+                const folderUpload = this.getFolderUploadAPI(folderId);
+                await folderUpload.buildFolderTreeFromDataTransferItem(item);
+                return folderUpload;
+            }),
+        );
+        const folderUploadsArray = [];
+        folderUploads.forEach(folderUpload => {
+            // $FlowFixMe no file property
+            folderUploadsArray.push({
+                api: folderUpload,
+                extension: '',
+                isFolder: true,
+                name: folderUpload.folder.name,
+                options: fileAPIOptions,
+                progress: 0,
+                size: 1,
+                status: STATUS_PENDING,
+            });
         });
+        this.addToQueue(folderUploadsArray, itemUpdateCallback);
     };
 
     /**
