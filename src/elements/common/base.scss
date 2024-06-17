@@ -12,7 +12,6 @@
     line-height: 20px;
     letter-spacing: .3px;
 
-    // TODO: Remove when border-color in src/styles/_inputs.scss is accessible
     input[type='text'],
     input[type='date'],
     input[type='password'],
@@ -23,7 +22,8 @@
     input[type='number'],
     div[contentEditable='true'],
     textarea {
-        border-color: $bdl-gray-50;
+        width: 100%;
+        border-color: $bdl-gray-50; // TODO: Remove when border-color in src/styles/_inputs.scss is accessible
     }
 
     /* stylelint-disable */
