@@ -1,0 +1,37 @@
+[
+  {
+    "id": "be.docGenSidebar.textTags",
+    "description": "Text tags section header",
+    "defaultMessage": "Text tags"
+  },
+  {
+    "id": "be.docGenSidebar.imageTags",
+    "description": "Image tags section header",
+    "defaultMessage": "Image tags"
+  },
+  {
+    "id": "be.docGenSidebar.docGenTags",
+    "description": "DocGen sidebar header",
+    "defaultMessage": "Doc Gen Tags"
+  },
+  {
+    "id": "be.docGenSidebar.emptyTags",
+    "description": "No tags available",
+    "defaultMessage": "This document has no tags"
+  },
+  {
+    "id": "be.docGenSidebar.errorTags",
+    "description": "Error message when tags could not be loaded",
+    "defaultMessage": "We couldn't load the tags"
+  },
+  {
+    "id": "be.docGenSidebar.refreshPrompt",
+    "description": "Prompt to refresh the list after an error",
+    "defaultMessage": "Please refresh the list."
+  },
+  {
+    "id": "be.docGenSidebar.refreshButton",
+    "description": "Label for the refresh button",
+    "defaultMessage": "Refresh"
+  }
+]

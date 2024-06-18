@@ -1,0 +1,12 @@
+[
+  {
+    "id": "boxui.collapsiblesidebar.expandBtnLabel",
+    "description": "Aria label for toggle button that expands/collapses sidebar (collapsed state)",
+    "defaultMessage": "Expand"
+  },
+  {
+    "id": "boxui.collapsiblesidebar.collapseBtnLabel",
+    "description": "Aria label for toggle button that expands/collapses sidebar (expanded state)",
+    "defaultMessage": "Collapse"
+  }
+]

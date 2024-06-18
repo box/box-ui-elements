@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`elements/content-sidebar/SidebarLoading should render the component 1`] = `
-<div
-  className="bcs-loading-error"
->
-  <DefaultError />
-</div>
-`;

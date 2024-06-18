@@ -1,0 +1,112 @@
+[
+  {
+    "id": "be.activitySidebarFilter.status.allActivity",
+    "description": "Dropdown option for filtering all activity from activity list",
+    "defaultMessage": "All Activity"
+  },
+  {
+    "id": "be.activitySidebarFilter.status.allComments",
+    "description": "Dropdown option for filtering all comments from comments list",
+    "defaultMessage": "All Comments"
+  },
+  {
+    "id": "be.activitySidebarFilter.status.open",
+    "description": "Dropdown option for filtering unresolved comments from activity or comments list",
+    "defaultMessage": "Unresolved Comments"
+  },
+  {
+    "id": "be.activitySidebarFilter.status.resolved",
+    "description": "Dropdown option for filtering resolved comments from activity or comments list",
+    "defaultMessage": "Resolved Comments"
+  },
+  {
+    "id": "be.activitySidebarFilter.status.tasks",
+    "description": "Dropdown option for filtering tasks from activity list",
+    "defaultMessage": "Tasks"
+  },
+  {
+    "id": "be.contentSidebar.boxSignFtuxBody",
+    "description": "body for first-time user experience tooltip shown to new users of Box Sign",
+    "defaultMessage": "Sign documents or send signature requests, right from where your content lives"
+  },
+  {
+    "id": "be.contentSidebar.boxSignFtuxTitle",
+    "description": "title for first-time user experience tooltip shown to new users of Box Sign",
+    "defaultMessage": "Box Sign - Secure, seamless e-signatures in Box"
+  },
+  {
+    "id": "be.contentSidebar.boxSignRequest",
+    "description": "label for button that opens a Box Sign signature request experience",
+    "defaultMessage": "Request Signature"
+  },
+  {
+    "id": "be.contentSidebar.boxSignRequestSignature",
+    "description": "One of the dropdown options that opens a Box Sign request signature experience",
+    "defaultMessage": "Request Signature"
+  },
+  {
+    "id": "be.contentSidebar.boxSignSignMyself",
+    "description": "One of the dropdown options that opens a Box Sign sign myself experience",
+    "defaultMessage": "Sign Myself"
+  },
+  {
+    "id": "be.contentSidebar.boxSignSignature",
+    "description": "label for button that opens a Box Sign signature fulfillment experience",
+    "defaultMessage": "Sign"
+  },
+  {
+    "id": "be.contentSidebar.boxSignSecurityBlockedTooltip",
+    "description": "Tooltip text for when Box Sign is blocked due to a security policy",
+    "defaultMessage": "This action is unavailable due to a security policy."
+  },
+  {
+    "id": "be.contentSidebar.boxSignWatermarkBlockedTooltip",
+    "description": "Tooltip text for when Box Sign is blocked due to an item being watermarked",
+    "defaultMessage": "This action is unavailable, because the file is watermarked."
+  },
+  {
+    "id": "be.contentSidebar.addTask",
+    "description": "label for button that opens task popup",
+    "defaultMessage": "Add Task"
+  },
+  {
+    "id": "be.contentSidebar.addTask.general",
+    "description": "label for menu item that opens general task popup",
+    "defaultMessage": "General Task"
+  },
+  {
+    "id": "be.contentSidebar.addTask.general.description",
+    "description": "description for menu item that opens general task popup",
+    "defaultMessage": "Assignees will be responsible for marking tasks as complete"
+  },
+  {
+    "id": "be.contentSidebar.addTask.approval",
+    "description": "label for menu item that opens approval task popup",
+    "defaultMessage": "Approval Task"
+  },
+  {
+    "id": "be.contentSidebar.addTask.approval.description",
+    "description": "description for menu item that opens approval task popup",
+    "defaultMessage": "Assignees will be responsible for approving or rejecting tasks"
+  },
+  {
+    "id": "be.contentSidebar.addTask.general.title",
+    "description": "title for general task popup",
+    "defaultMessage": "Create General Task"
+  },
+  {
+    "id": "be.contentSidebar.addTask.approval.title",
+    "description": "title for approval task popup",
+    "defaultMessage": "Create Approval Task"
+  },
+  {
+    "id": "be.contentSidebar.editTask.approval.title",
+    "description": "title for when editing an existing approval task",
+    "defaultMessage": "Modify Approval Task"
+  },
+  {
+    "id": "be.contentSidebar.editTask.general.title",
+    "description": "modal title for when editing an existing general task",
+    "defaultMessage": "Modify General Task"
+  }
+]
