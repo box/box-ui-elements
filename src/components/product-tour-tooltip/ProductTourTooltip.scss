@@ -1,0 +1,92 @@
+@import '../../styles/variables';
+
+$bdl-product-tour-tooltip-max-width: $bdl-grid-unit * 124;
+$bdl-product-tour-tooltip-image-max-width: $bdl-grid-unit * 37;
+
+.bdl-ProductTourTooltip {
+    display: flex;
+}
+
+.bdl-ProductTourTooltip.bdl-Tooltip {
+    max-width: $bdl-product-tour-tooltip-max-width;
+    padding: 2px 0 2px 2px;
+    border-radius: $bdl-border-radius-size-med;
+}
+
+.bdl-ProductTourTooltip-content {
+    padding: ($bdl-grid-unit * 6) ($bdl-grid-unit * 8) ($bdl-grid-unit * 6) ($bdl-grid-unit * 6);
+}
+
+.bdl-ProductTourTooltip-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: ($bdl-grid-unit * 6);
+}
+
+.bdl-ProductTourTooltip-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $bdl-box-blue-10;
+    border-radius: $bdl-border-radius-size 0 0 $bdl-border-radius-size;
+
+    img {
+        max-width: $bdl-product-tour-tooltip-image-max-width;
+    }
+}
+
+.bdl-ProductTourTooltip-body {
+    font-size: $bdl-fontSize--dejaBlue;
+    line-height: $bdl-line-height;
+    border-radius: 0 $bdl-border-radius-size $bdl-border-radius-size 0;
+}
+
+.bdl-ProductTourTooltip-body {
+    letter-spacing: .3px;
+}
+
+button.bdl-ProductTourTooltip-previousButton,
+button.bdl-ProductTourTooltip-previousButton:not(.is-disabled):hover,
+button.bdl-ProductTourTooltip-previousButton:not(.is-disabled):active {
+    color: $white;
+    background-color: transparent;
+}
+
+button.bdl-ProductTourTooltip-previousButton {
+    border: 1px solid $white;
+}
+
+button.bdl-ProductTourTooltip-previousButton:not(.is-disabled):hover {
+    border: 1px solid $bdl-dark-blue-20;
+}
+
+button.bdl-ProductTourTooltip-previousButton:not(.is-disabled):active {
+    border: 1px solid $bdl-dark-blue-50;
+}
+
+button.bdl-ProductTourTooltip-nextButton {
+    color: $bdl-gray;
+    background-color: $white;
+    border: 1px solid $bdl-gray-30;
+}
+
+button.bdl-ProductTourTooltip-nextButton:not(.is-disabled):hover {
+    background-color: $bdl-dark-blue-10;
+    border: 1px solid $bdl-dark-blue-10;
+}
+
+button.bdl-ProductTourTooltip-nextButton:not(.is-disabled):active {
+    background-color: $bdl-dark-blue-20;
+    border: 1px solid $bdl-dark-blue-20;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #4c4c4c;
+    opacity: .5;
+}
