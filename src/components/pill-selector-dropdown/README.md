@@ -17,11 +17,11 @@ const users = [
     { id: 7, name: 'ccc@foo.bar' },
 ];
 
-initialState = {
+const [state, setState] = React.useState({
     error: '',
     selectedOptions: [],
     selectorOptions: [],
-};
+});
 
 const handleInput = value => {
     const selectorOptions = [];
@@ -39,7 +39,7 @@ const handleInput = value => {
     }
 
     // As user is typing, reset error and update selectorOptions
-    setState({ selectorOptions, error: '' });
+    setState(prevState => ({ ...prevState, selectorOptions, error: '' }));
 };
 
 const handleSelect = pills => {
@@ -52,7 +52,7 @@ const handleRemove = (option, index) => {
     setState(prevState => {
         const selectedOptions = prevState.selectedOptions.slice();
         selectedOptions.splice(index, 1);
-        return { selectedOptions };
+        return { ...prevState, selectedOptions };
     });
 };
 
@@ -67,7 +67,7 @@ const validateForError = text => {
         error = 'Invalid Email Address';
     }
 
-    setState({ error });
+    setState(prevState => ({ ...prevState, error }));
 };
 
 const validator = text => {

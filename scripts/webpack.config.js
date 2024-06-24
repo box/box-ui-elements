@@ -77,7 +77,6 @@ function getConfig(isReactExternalized) {
         },
         devServer: {
             host: '0.0.0.0',
-            stats,
         },
         resolveLoader: {
             modules: [path.resolve('src'), path.resolve('node_modules')],

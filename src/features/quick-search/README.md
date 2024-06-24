@@ -1,14 +1,15 @@
 ### Examples
 ```
-initialState = {
+const [state, setState] = React.useState({
     errorMessage: '',
     isLoading: false,
     noItemsMessage: '',
     showQuickSearchResult: false,
-};
+});
 
 const handleInput = ({ target }) => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         errorMessage: target.value === 'error'
             ? 'There was a problem searching. Please try again later.'
             : '',
@@ -17,7 +18,7 @@ const handleInput = ({ target }) => {
             ? 'No items were found matching your query'
             : '',
         showQuickSearchResult: target.value === 'test',
-    });
+    }));
 };
 
 const handleSelect = index => {

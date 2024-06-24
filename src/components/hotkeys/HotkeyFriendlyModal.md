@@ -5,12 +5,14 @@ If you're using hotkeys in your app, you should use this component instead of th
 This version wraps `Modal` with a `HotkeyLayer`, which stops shortcuts registered underneath from being triggered while the modal is open.
 
 ```
-const onRequestClose = () => setState({ isOpen: false });
+const [state, setState] = React.useState({ isOpen: false });
+
+const onRequestClose = () => setState(prevState => ({ ...prevState, isOpen: false }));
 
 // @NOTE: the demo hotkeys are actually being registered in SelectableTableExamples
 
 <div>
-    <PrimaryButton onClick={ () => setState({ isOpen: true }) }>
+    <PrimaryButton onClick={ () => setState(prevState => ({ ...prevState, isOpen: true })) }>
         Open modal
     </PrimaryButton>
     <HotkeyFriendlyModal

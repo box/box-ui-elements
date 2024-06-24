@@ -27,25 +27,26 @@ const contacts = [
   },
 ];
 
-initialState = {
+const [state, setState] = React.useState({
   isOpen: false,
   accessLevel: 'peopleInYourCompany',
   permissionLevel: 'canView',
   selectorOptions: [],
-};
+});
 
 const closeModal = () => {
-  setState({
+  setState(prevState => ({
+    ...prevState,
     isOpen: false,
-  });
+  }));
 };
 
 const fakeRequest = () => {
-  setState({ submitting: true });
+  setState(prevState => ({ ...prevState, submitting: true }));
   return new Promise(resolve => {
     setTimeout(() => {
       console.log('Request succeeded!');
-      setState({ submitting: false });
+      setState(prevState => ({ ...prevState, submitting: false }));
       resolve();
     }, 500);
   });
@@ -63,7 +64,7 @@ const getContacts = searchString => {
       isSubstring(name, searchString) || isSubstring(email, searchString),
   );
 
-  setState({ selectorOptions: filteredContacts });
+  setState(prevState => ({ ...prevState, selectorOptions: filteredContacts }));
 };
 
 <div>
@@ -78,10 +79,14 @@ const getContacts = searchString => {
       }}
       canRemoveLink
       changeAccessLevel={newLevel =>
-        fakeRequest().then(() => setState({ accessLevel: newLevel }))
+        fakeRequest().then(() =>
+          setState(prevState => ({ ...prevState, accessLevel: newLevel })),
+        )
       }
       changePermissionLevel={newLevel =>
-        fakeRequest().then(() => setState({ permissionLevel: newLevel }))
+        fakeRequest().then(() =>
+          setState(prevState => ({ ...prevState, permissionLevel: newLevel })),
+        )
       }
       contacts={state.selectorOptions}
       copyButtonProps={{ 'data-resin-target': 'copy' }}
@@ -113,9 +118,10 @@ const getContacts = searchString => {
   )}
   <Button
     onClick={() =>
-      setState({
+      setState(prevState => ({
+        ...prevState,
         isOpen: true,
-      })
+      }))
     }
   >
     Shared Link Modal

@@ -14,35 +14,36 @@ const customValidFn = function customFn(value) {
     return null;
 };
 
-initialState = {
+const [state, setState] = React.useState({
     formData: {
         showtextareatoggle: '',
     },
     formValidityState: {},
-};
+});
 
-<Form
+<FormElement
     onChange={ formData => {
-        setState({ formValidityState: {}, formData });
+        setState(prevState => ({ ...prevState, formValidityState: {}, formData }));
     } }
     onValidSubmit={ () => {
         // On a server validation error, set formValidityState to
         // push error states to child inputs
-        setState({
+        setState(prevState => ({
+            ...prevState,
             formValidityState: {
                 username: {
                     code: 'usernametaken',
                     message: 'Username already taken.',
                 },
             },
-        });
+        }));
     } }
     onInvalidSubmit={ formValidityState =>
         console.log(formValidityState) }
     formValidityState={ state.formValidityState }
 >
     <div>
-        <TextInput
+        <TextInputElement
             name="username"
             label="Username"
             placeholder="swagmaster6"
@@ -51,7 +52,7 @@ initialState = {
         />
     </div>
     <div>
-        <TextInput
+        <TextInputElement
             name="email"
             label="Email Address"
             placeholder="user@example.com"
@@ -59,7 +60,7 @@ initialState = {
         />
     </div>
     <div>
-        <TextInput
+        <TextInputElement
             label="Must Say Box"
             name="customValidationFunc"
             placeholder="Not Box"
@@ -93,7 +94,7 @@ initialState = {
             />
         </div>
         {state.formData.showtextareatoggle === 'on'
-            ? <TextArea
+            ? <TextAreaElement
                     name="textarea"
                     label="Your story"
                     placeholder="Once upon a time"
@@ -102,5 +103,5 @@ initialState = {
     </div>
 
     <Button type="submit">Submit</Button>
-</Form>
+</FormElement>
 ```
