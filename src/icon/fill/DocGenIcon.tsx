@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import AccessibleSVG, { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 
