@@ -8,6 +8,7 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import AdditionalTabs from './additional-tabs';
+import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
 import IconDocInfo from '../../icons/general/IconDocInfo';
 import IconMagicWand from '../../icons/general/IconMagicWand';
@@ -16,7 +17,6 @@ import SidebarNavButton from './SidebarNavButton';
 import SidebarNavSign from './SidebarNavSign';
 import SidebarNavTablist from './SidebarNavTablist';
 import SidebarToggle from './SidebarToggle';
-import Tag16 from '../../icon/fill/Tag16';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
@@ -111,7 +111,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
                         >
-                            <Tag16 className="bcs-SidebarNav-icon" />
+                            <DocGenIcon className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                 </SidebarNavTablist>
