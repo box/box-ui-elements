@@ -378,7 +378,6 @@
     },
     "resolutions": {
         "ip": "1.1.8",
-        "terser-webpack-plugin": "^4.2.3",
         "**/react-intl/**/@types/react": "^16.9.18"
     },
     "overrides": {
