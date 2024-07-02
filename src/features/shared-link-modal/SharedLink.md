@@ -5,17 +5,17 @@ const Button = require('box-ui-elements/es/components/button').default;
 const Flyout = require('box-ui-elements/es/components/flyout/Flyout').default;
 const Overlay = require('box-ui-elements/es/components/flyout/Overlay').default;
 
-initialState = {
+const [state, setState] = React.useState({
   accessLevel: 'peopleInYourCompany',
   submitting: false,
-};
+});
 
 const fakeRequest = () => {
-  setState({ submitting: true });
+  setState(prevState => ({ ...prevState, submitting: true }));
   return new Promise(resolve => {
     setTimeout(() => {
       console.log('Request succeeded!');
-      setState({ submitting: false });
+      setState(prevState => ({ ...prevState, submitting: false }));
       resolve();
     }, 500);
   });
@@ -42,7 +42,9 @@ const fakeRequest = () => {
       }}
       canRemoveLink
       changeAccessLevel={newLevel =>
-        fakeRequest().then(() => setState({ accessLevel: newLevel }))
+        fakeRequest().then(() =>
+          setState(prevState => ({ ...prevState, accessLevel: newLevel })),
+        )
       }
       copyButtonProps={{ 'data-resin-target': 'copy' }}
       enterpriseName="Box"

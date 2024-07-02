@@ -19,13 +19,13 @@ const getFileSize = require('utils/getFileSize').default;
 Editable description:
 
 ```js
-initialState = { description: '' };
+const [state, setState] = React.useState({ description: '' });
 
 <div style={{ maxWidth: 220 }}>
   <button
     className="mbl"
     onClick={() => {
-      setState({ description: 'reset' });
+      setState(prevState => ({ ...prevState, description: 'reset' }));
     }}
   >
     Reset description programmatically
@@ -37,7 +37,7 @@ initialState = { description: '' };
       'data-resin-target': 'description',
     }}
     onDescriptionChange={value => {
-      setState({ description: value });
+      setState(prevState => ({ ...prevState, description: value }));
     }}
     owner="Test Owner"
   />
@@ -62,13 +62,13 @@ Show retentionPolicy:
 Editable url:
 
 ```js
-initialState = { url: 'https://box.com' };
+const [state, setState] = React.useState({ url: 'https://box.com' });
 
 <div style={{ maxWidth: 220 }}>
   <button
     className="mbl"
     onClick={() => {
-      setState({ url: 'app.box.com' });
+      setState(prevState => ({ ...prevState, url: 'app.box.com' }));
     }}
   >
     Reset url programmatically
@@ -77,7 +77,7 @@ initialState = { url: 'https://box.com' };
     createdAt="2012-12-12T11:04:26-08:00"
     description="This is the description."
     onValidURLChange={value => {
-      setState({ url: value });
+      setState(prevState => ({ ...prevState, url: value }));
     }}
     owner="Test Owner"
     url={state.url}

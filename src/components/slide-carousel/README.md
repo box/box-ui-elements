@@ -2,7 +2,6 @@
 
 #### SlideCarousel
 ```
-const SlideCarousel = require('./SlideCarousel').default;
 const Slide = require('./Slide').default;
 
 <div style={ { width: "700px" } }>

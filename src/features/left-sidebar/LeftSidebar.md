@@ -71,9 +71,7 @@ const leftSidebarProps = {
   isDragging: true,
 };
 
-initialState = {
-  collapsed: {},
-};
+const [state, setState] = React.useState({ collapsed: {} });
 
 const menuItems = [
   {

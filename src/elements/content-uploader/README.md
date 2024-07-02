@@ -1,7 +1,5 @@
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-uploader))
 ```jsx
-var ContentUploader = require('./ContentUploader').default;
-
 <IntlProvider locale="en">
     <ContentUploader
         features={FEATURES}

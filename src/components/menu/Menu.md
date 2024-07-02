@@ -14,7 +14,6 @@ Following the following standards: [WAI-ARIA Menu](https://www.w3.org/TR/wai-ari
 **Basic Menu**
 
 ```js
-const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 const MenuSeparator = require('box-ui-elements/es/components/menu')
   .MenuSeparator;
@@ -28,7 +27,7 @@ const MenuSectionHeader = require('box-ui-elements/es/components/menu')
   <MenuSeparator />
   <MenuSectionHeader>Menu Section</MenuSectionHeader>
   <MenuLinkItem>
-    <Link href="/#">Awesome Link</Link>
+    <a href="/#">Awesome Link</a>
   </MenuLinkItem>
 </Menu>;
 ```
@@ -79,17 +78,12 @@ const SubmenuItem = require('box-ui-elements/es/components/menu').SubmenuItem;
 **Select Menu**
 
 ```
-const Menu = require('box-ui-elements/es/components/menu').Menu;
-const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
-const MenuSeparator = require('box-ui-elements/es/components/menu').MenuSeparator;
-const MenuLinkItem = require('box-ui-elements/es/components/menu').MenuLinkItem;
-
 <Menu>
     <SelectMenuLinkItem isSelected>
-        <Link href="#">View Profile</Link>
+        <a href="#">View Profile</a>
     </SelectMenuLinkItem>
     <SelectMenuLinkItem>
-        <Link href="#">Awesome Link</Link>
+        <a href="#">Awesome Link</a>
     </SelectMenuLinkItem>
 </Menu>
 ```
@@ -97,7 +91,6 @@ const MenuLinkItem = require('box-ui-elements/es/components/menu').MenuLinkItem;
 **Menu with new child when window is resized to < 700px**
 
 ```js
-const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 
 class MenuWithChildOnResize extends React.Component {

@@ -7,9 +7,6 @@ which have documentation on parameters used by this component (e.g., `offset`).
 **Bottom Right**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout closeOnClickOutside={ false } className="hellooo">
     <Button>Nothing to see here</Button>
     <Overlay>
@@ -26,9 +23,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Bottom Left**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout position="bottom-left">
     <Button>Bottom Left</Button>
     <Overlay>
@@ -42,9 +36,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Bottom Center**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout position="bottom-center">
     <Button>Bottom Center</Button>
     <Overlay>
@@ -58,9 +49,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Top Left**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout position="top-left">
     <Button>Top Left</Button>
     <Overlay>
@@ -74,9 +62,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Top Right**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout position="top-right">
     <Button>Top Right</Button>
     <Overlay>
@@ -90,9 +75,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Top Center**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout position="top-center">
     <Button>Top Center</Button>
     <Overlay>
@@ -106,9 +88,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Middle Right**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout position="middle-right">
     <Button>Middle Right</Button>
     <Overlay>
@@ -122,9 +101,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Middle Left**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout position="middle-left">
     <Button>Middle Left</Button>
     <Overlay>
@@ -138,9 +114,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Open on Hover**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-
 <Flyout openOnHover>
     <Button>Open on Hover</Button>
     <Overlay>
@@ -157,10 +130,6 @@ const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
 **Complex**
 
 ```
-const Flyout = require('box-ui-elements/es/components/flyout').Flyout;
-const Overlay = require('box-ui-elements/es/components/flyout').Overlay;
-const IconHelp = require('box-ui-elements/es/icons/general/IconHelp').default;
-
 <Flyout className="amsterdam-survey-overlay" offset="0 0">
     <PlainButton className="amsterdam-survey-button">
         <IconHelp />

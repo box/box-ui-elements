@@ -1,7 +1,5 @@
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-picker))
 ```jsx
-var ContentPicker = require('./ContentPicker').default;
-
 <IntlProvider locale="en">
     <ContentPicker
         features={FEATURES}

@@ -1,7 +1,5 @@
 ### Demo ([Documentation](https://developer.box.com/docs/box-content-sidebar))
 ```jsx
-var ContentSidebar = require('./ContentSidebar').default;
-
 <IntlProvider locale="en">
     <ContentSidebar
         detailsSidebarProps={{

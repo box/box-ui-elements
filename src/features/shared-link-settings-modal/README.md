@@ -5,17 +5,17 @@ Modal to edit Shared Link Settings for an item.
 ```js
 const Button = require('box-ui-elements/es/components/button').default;
 
-initialState = {
+const [state, setState] = React.useState({ 
     isOpen: false,
     submitting: false,
-};
+ });
 
 const fakeRequest = val => {
-    setState({ submitting: true });
+    setState(prevState => ({ ...prevState, submitting: true }));
     return new Promise(resolve => {
         setTimeout(() => {
             console.log(`Request succeeded! Sent: ${JSON.stringify(val)}`);
-            setState({ submitting: false });
+            setState(prevState => ({ ...prevState, submitting: false }));
             resolve();
         }, 500)
     });
@@ -41,7 +41,7 @@ const fakeRequest = val => {
                 typedID: 'd_12345'
             }}
             isOpen
-            onRequestClose={ () => setState({ isOpen: false })}
+            onRequestClose={ () => setState(prevState => ({ ...prevState, isOpen: false }))}
             onSubmit={ fakeRequest }
             serverURL="https://box.com/v/"
             submitting={ state.submitting }
@@ -70,7 +70,7 @@ const fakeRequest = val => {
             warnOnPublic={state.isPublic}
         />}
     <Button
-        onClick={ () => setState({ isOpen: true })}
+        onClick={ () => setState(prevState => ({ ...prevState, isOpen: true }))}
     >
         Shared Link Settings Modal
     </Button>

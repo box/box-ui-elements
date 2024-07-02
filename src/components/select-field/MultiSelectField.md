@@ -1,9 +1,7 @@
 ### Examples
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [state, setState] = React.useState({ selectedValues: [2, 3] });
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -12,9 +10,10 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValues: selectedOptions.map(option => option.value),
-    });
+    }));
 };
 
 <MultiSelectField
@@ -28,9 +27,7 @@ const handleChange = selectedOptions => {
 Clear Option Enabled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [state, setState] = React.useState({ selectedValues: [2, 3] });
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -39,9 +36,10 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValues: selectedOptions.map(option => option.value),
-    });
+    }));
 };
 
 <MultiSelectField
@@ -56,9 +54,7 @@ const handleChange = selectedOptions => {
 Search Input Enabled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [state, setState] = React.useState({ selectedValues: [2, 3] });
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -67,9 +63,10 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValues: selectedOptions.map(option => option.value),
-    });
+    }));
 };
 
 <MultiSelectField
@@ -84,9 +81,7 @@ const handleChange = selectedOptions => {
 Search Input and Clear Option Enabled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [state, setState] = React.useState({ selectedValues: [2, 3] });
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -95,9 +90,10 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValues: selectedOptions.map(option => option.value),
-    });
+    }));
 };
 
 <MultiSelectField
@@ -113,9 +109,7 @@ const handleChange = selectedOptions => {
 Labeled
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [state, setState] = React.useState({ selectedValues: [2, 3] });
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -124,9 +118,10 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValues: selectedOptions.map(option => option.value),
-    });
+    }));
 };
 
 <Label text="Multi select field">
@@ -142,9 +137,7 @@ const handleChange = selectedOptions => {
 Header Content
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [state, setState] = React.useState({ selectedValues: [2, 3] });
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -153,9 +146,10 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValues: selectedOptions.map(option => option.value),
-    });
+    }));
 };
 
 <MultiSelectField
@@ -170,9 +164,7 @@ const handleChange = selectedOptions => {
 Invalid
 
 ```
-initialState = {
-    selectedValues: [2, 3],
-};
+const [state, setState] = React.useState({ selectedValues: [2, 3] });
 
 const options = [
     { displayText: 'Option 1', value: 1 },
@@ -181,9 +173,10 @@ const options = [
 ];
 
 const handleChange = selectedOptions => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValues: selectedOptions.map(option => option.value),
-    });
+    }));
 };
 
 <Label text="Multi select field">
