@@ -18,6 +18,7 @@ import {
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
+    SIDEBAR_VIEW_METADATA_REDESIGN,
 } from '../../constants';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { MetadataEditor } from '../../common/types/metadata';
@@ -178,6 +179,11 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_METADATA:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "metadata-sidebar" */ './MetadataSidebar');
+                break;
+            case SIDEBAR_VIEW_METADATA_REDESIGN:
+                importFn = import(
+                    /* webpackMode: "lazy", webpackChunkName: "metadata-sidebar-redesigned" */ './MetadataSidebarRedesigned'
+                );
                 break;
             case SIDEBAR_VIEW_ACTIVITY:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "activity-sidebar" */ './ActivitySidebar');

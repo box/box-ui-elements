@@ -15,6 +15,11 @@ export default {
                     return <div data-testid="metadata-sidebar" />;
                 }
             },
+            metadata_redesigned: class MetadataSidebarRedesigned extends React.Component {
+                render() {
+                    return <div data-testid="metadata-sidebar-redesigned" />;
+                }
+            },
             skills: class SkillsSidebar extends React.Component {
                 render() {
                     return <div data-testid="skills-sidebar" />;
