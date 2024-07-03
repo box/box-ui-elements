@@ -45,12 +45,12 @@ function generateClickHandler(message) {
         </MenuItem>
         <MenuSeparator />
         <MenuLinkItem>
-            <a
+            <Link
                 href="/logout-example-link"
                 onClick={ generateClickHandler('Log Out') }
             >
                 Log Out
-            </a>
+            </Link>
         </MenuLinkItem>
     </Menu>
 </DropdownMenu>
