@@ -5,7 +5,7 @@ const IconHome = require('box-ui-elements/es/icons/general/IconHome').default;
 
 <Breadcrumb label="Breadcrumb">
     <IconHome />
-    <a>Box Engineering</a>
+    <Link>Box Engineering</Link>
 </Breadcrumb>
 ```
 
@@ -15,10 +15,10 @@ const IconHome = require('box-ui-elements/es/icons/general/IconHome').default;
 
 <Breadcrumb label="Breadcrumb">
     <IconHome />
-    <a>Box Engineering</a>
-    <a>Frameworks</a>
-    <a>Front End</a>
-    <a>React</a>
-    <a>Box React UI</a>
+    <Link>Box Engineering</Link>
+    <Link>Frameworks</Link>
+    <Link>Front End</Link>
+    <Link>React</Link>
+    <Link>Box React UI</Link>
 </Breadcrumb>
 ```
