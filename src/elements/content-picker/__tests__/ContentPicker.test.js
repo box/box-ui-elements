@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount } from 'enzyme';
 import { ContentPickerComponent as ContentPicker } from '../ContentPicker';
 import UploadDialog from '../../common/upload-dialog';
@@ -28,10 +28,12 @@ describe('elements/content-picker/ContentPicker', () => {
         test('should reload the files list', () => {
             const wrapper = getWrapper({});
             const instance = wrapper.instance();
-            instance.setState({
-                currentCollection: {
-                    id: '123',
-                },
+            act(() => {
+                instance.setState({
+                    currentCollection: {
+                        id: '123',
+                    },
+                });
             });
             instance.fetchFolder = jest.fn();
             instance.uploadSuccessHandler();
@@ -46,12 +48,14 @@ describe('elements/content-picker/ContentPicker', () => {
                 chunked: false,
             };
             const wrapper = getWrapper({ canUpload: true, contentUploaderProps });
-            wrapper.setState({
-                currentCollection: {
-                    permissions: {
-                        can_upload: true,
+            act(() => {
+                wrapper.setState({
+                    currentCollection: {
+                        permissions: {
+                            can_upload: true,
+                        },
                     },
-                },
+                });
             });
             const uploadDialogElement = wrapper.find(UploadDialog);
             expect(uploadDialogElement.length).toBe(1);
@@ -71,10 +75,11 @@ describe('elements/content-picker/ContentPicker', () => {
                 },
             ];
             const collection = { id: '222', name: 'Collection' };
+            act(() => {
+                wrapper.instance().setState({ selected: selectedItems });
 
-            wrapper.instance().setState({ selected: selectedItems });
-            wrapper.instance().fetchFolderSuccessCallback(collection, true);
-
+                wrapper.instance().fetchFolderSuccessCallback(collection, true);
+            });
             expect(wrapper.instance().state.selected).toEqual({});
         });
     });

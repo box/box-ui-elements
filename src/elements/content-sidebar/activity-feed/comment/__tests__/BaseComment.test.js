@@ -108,10 +108,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
         const getUserProfileUrl = jest.fn().mockResolvedValue('https://www.test.com/');
         await act(async () => {
             getWrapper({ getUserProfileUrl });
-            screen.debug();
-            await expect(screen.getByText(comment.created_by.name)).toBeInTheDocument();
-            await expect(screen.getByRole('link')).toHaveAttribute('href', 'https://www.test.com/');
         });
+        await expect(screen.getByText(comment.created_by.name)).toBeInTheDocument();
+        await expect(screen.getByRole('link')).toHaveAttribute('href', 'https://www.test.com/');
     });
 
     test.each`
