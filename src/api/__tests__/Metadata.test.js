@@ -12,6 +12,9 @@ import {
     ERROR_CODE_FETCH_SKILLS,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_FETCH_METADATA,
+    TYPE_FILE,
+    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+    ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
 } from '../../constants';
 
 let metadata;
@@ -2010,6 +2013,165 @@ describe('api/Metadata', () => {
                 editors: [priorMetadata],
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
+        });
+    });
+
+    describe.only('getMetadataSuggestions()', () => {
+        test('should return metadata suggestions when called with valid parameters', async () => {
+            const suggestionsFromServer = {
+                stringFieldKey: 'fieldVal1',
+                floatFieldKey: 124.0,
+                enumFieldKey: 'EnumOptionKey',
+                multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'],
+            };
+            metadata.getMetadataSuggestionsUrl = jest.fn().mockReturnValueOnce('suggestions_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    $scope: 'enterprise',
+                    $templateKey: 'templateKey',
+                    suggestions: suggestionsFromServer,
+                },
+            });
+
+            const suggestions = await metadata.getMetadataSuggestions(
+                'id',
+                TYPE_FILE,
+                'enterprise',
+                'templateKey',
+                METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+            );
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+            expect(suggestions).toEqual(suggestionsFromServer);
+            expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'suggestions_url',
+                id: 'file_id',
+                params: {
+                    item: `file_id`,
+                    scope: 'enterprise',
+                    template_key: 'templateKey',
+                    confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                },
+            });
+        });
+
+        test('should throw an error if id is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    '',
+                    TYPE_FILE,
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(ErrorUtil.getBadItemError());
+        });
+
+        test('should throw an error if type is not "file"', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    'id',
+                    'folder',
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(ErrorUtil.getBadItemError());
+        });
+
+        test('should throw an error if scope is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    '',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(new Error('Missing scope'));
+        });
+
+        test('should throw an error if templateKey is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    'enterprise',
+                    '',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(new Error('Missing templateKey'));
+        });
+
+        test('should throw an error if confidence level is missing or invalid', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions('id', TYPE_FILE, 'enterprise', 'templateKey', 'high'),
+            ).rejects.toThrow(new Error(`Invalid confidence level: "high"`));
+        });
+
+        test('should return empty array of suggestions when error is 400', async () => {
+            const error = new Error();
+            error.status = 400;
+            metadata.getMetadataSuggestionsUrl = jest.fn().mockReturnValueOnce('suggestions_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            let suggestions;
+            try {
+                suggestions = await metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                );
+            } catch (e) {
+                expect(e.status).toEqual(400);
+            }
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+            expect(suggestions).toEqual([]);
+            expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'suggestions_url',
+                id: 'file_id',
+                params: {
+                    item: `file_id`,
+                    scope: 'enterprise',
+                    template_key: 'templateKey',
+                    confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                },
+            });
+        });
+
+        test('should throw error when error is not 400', async () => {
+            const error = new Error();
+            error.status = 401;
+            metadata.getMetadataSuggestionsUrl = jest.fn().mockReturnValueOnce('suggestions_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            let suggestions;
+            try {
+                suggestions = await metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                );
+            } catch (e) {
+                expect(e.status).toEqual(401);
+            }
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+            expect(suggestions).toBeUndefined();
+            expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'suggestions_url',
+                id: 'file_id',
+                params: {
+                    item: `file_id`,
+                    scope: 'enterprise',
+                    template_key: 'templateKey',
+                    confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                },
+            });
         });
     });
 });
