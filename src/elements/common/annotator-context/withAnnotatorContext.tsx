@@ -20,7 +20,7 @@ export interface WithAnnotatorContextProps {
 }
 
 export default function withAnnotatorContext<P extends {}>(WrappedComponent: React.ComponentType<P>) {
-    return React.forwardRef<React.RefForwardingComponent<React.ComponentType<P>>, P>((props, ref) => (
+    return React.forwardRef<React.ComponentType<P>, P>((props, ref) => (
         <AnnotatorContext.Consumer>
             {({
                 emitActiveAnnotationChangeEvent,

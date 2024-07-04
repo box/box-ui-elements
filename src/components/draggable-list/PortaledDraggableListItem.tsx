@@ -29,6 +29,8 @@ const PortaledDraggableListItem = ({
                 );
 
                 if (draggableSnapshot.isDragging) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     return <Portal className={className}>{listItem}</Portal>;
                 }
                 return listItem;

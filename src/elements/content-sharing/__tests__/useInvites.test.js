@@ -1,5 +1,5 @@
 // @flow
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 
 import API from '../../../api';
 import useInvites from '../hooks/useInvites';

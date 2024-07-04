@@ -859,6 +859,7 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
+
             let response;
             await act(async () => {
                 response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
