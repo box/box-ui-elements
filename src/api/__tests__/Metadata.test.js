@@ -2016,7 +2016,7 @@ describe('api/Metadata', () => {
         });
     });
 
-    describe.only('getMetadataSuggestions()', () => {
+    describe('getMetadataSuggestions()', () => {
         test('should return metadata suggestions when called with valid parameters', async () => {
             const suggestionsFromServer = {
                 stringFieldKey: 'fieldVal1',
