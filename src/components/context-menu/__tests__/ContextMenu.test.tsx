@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount, shallow, ReactWrapper } from 'enzyme';
 import sinon from 'sinon';
 
@@ -202,7 +202,9 @@ describe('components/context-menu/ContextMenu', () => {
                 </ContextMenu>,
             );
             document.addEventListener = jest.fn();
-            wrapper.setState({ isOpen: true });
+            act(() => {
+                wrapper.setState({ isOpen: true });
+            });
             expect(document.addEventListener).toHaveBeenCalledWith('click', expect.anything(), expect.anything());
             expect(document.addEventListener).toHaveBeenCalledWith('contextmenu', expect.anything(), expect.anything());
         });
@@ -214,10 +216,14 @@ describe('components/context-menu/ContextMenu', () => {
                     <FakeMenu />
                 </ContextMenu>,
             );
-            wrapper.setState({ isOpen: true });
+            act(() => {
+                wrapper.setState({ isOpen: true });
+            });
             const instance = wrapper.instance();
             document.removeEventListener = jest.fn();
-            instance.closeMenu();
+            act(() => {
+                instance.closeMenu();
+            });
             expect(document.removeEventListener).toHaveBeenCalledWith(
                 'contextmenu',
                 expect.anything(),
@@ -233,7 +239,9 @@ describe('components/context-menu/ContextMenu', () => {
                     <FakeMenu />
                 </ContextMenu>,
             );
-            wrapper.setState({ isOpen: true });
+            act(() => {
+                wrapper.setState({ isOpen: true });
+            });
             const instance = wrapper.instance();
             document.addEventListener = jest.fn();
             document.removeEventListener = jest.fn();
@@ -299,7 +307,9 @@ describe('components/context-menu/ContextMenu', () => {
                     <FakeMenu />
                 </ContextMenu>,
             );
-            wrapper.setState({ isOpen: true });
+            act(() => {
+                wrapper.setState({ isOpen: true });
+            });
 
             const documentMock = sandbox.mock(document);
             documentMock.expects('removeEventListener').withArgs('contextmenu');
@@ -404,7 +414,9 @@ describe('components/context-menu/ContextMenu', () => {
                     clientY: 15,
                     preventDefault: preventDefaultSpy,
                 } as unknown) as MouseEvent;
-                instance.handleContextMenu(handleContextMenuEvent);
+                act(() => {
+                    instance.handleContextMenu(handleContextMenuEvent);
+                });
 
                 const documentClickEvent = ({
                     target: document.createElement('div'),
@@ -429,7 +441,9 @@ describe('components/context-menu/ContextMenu', () => {
                     clientY: 15,
                     preventDefault: preventDefaultSpy,
                 } as unknown) as MouseEvent;
-                instance.handleContextMenu(handleContextMenuEvent);
+                act(() => {
+                    instance.handleContextMenu(handleContextMenuEvent);
+                });
 
                 const documentClickEvent = ({
                     target: document.getElementById(instance.menuID),

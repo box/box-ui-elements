@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
 import { List, Record } from 'immutable';
 import sinon from 'sinon';
@@ -197,7 +197,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = shallow(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
-            wrapper.setState({ selectedIndex: 0 });
+            act(() => {
+                wrapper.setState({ selectedIndex: 0 });
+            });
 
             expect(
                 wrapper
@@ -301,7 +303,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
             const instance = wrapper.instance();
-            wrapper.setState({ selectedIndex: 0 });
+            act(() => {
+                wrapper.setState({ selectedIndex: 0 });
+            });
 
             sandbox.mock(instance).expects('resetSelectedIndex');
             sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
@@ -368,7 +372,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
     describe('onKeyDown - ArrowLeft', () => {
         test('should select previous pill when left arrow is pressed and pill is selected', () => {
             const wrapper = mount(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
-            wrapper.setState({ selectedIndex: 1 });
+            act(() => {
+                wrapper.setState({ selectedIndex: 1 });
+            });
 
             wrapper.simulate('keyDown', {
                 key: 'ArrowLeft',
@@ -381,7 +387,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
 
         test('should keep first pill selected when left arrow is pressed and first pill is selected', () => {
             const wrapper = mount(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
-            wrapper.setState({ selectedIndex: 0 });
+            act(() => {
+                wrapper.setState({ selectedIndex: 0 });
+            });
 
             wrapper.simulate('keyDown', {
                 key: 'ArrowLeft',
@@ -434,7 +442,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
             const instance = wrapper.instance();
-            wrapper.setState({ selectedIndex: 1 });
+            act(() => {
+                wrapper.setState({ selectedIndex: 1 });
+            });
 
             sandbox.mock(instance).expects('resetSelectedIndex');
             sandbox.mock(wrapper.find('textarea').getDOMNode()).expects('focus');
@@ -454,7 +464,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
             const wrapper = mount(
                 <PillSelector onInput={onInputStub} onRemove={onRemoveStub} selectedOptions={options} />,
             );
-            wrapper.setState({ selectedIndex: 0 });
+            act(() => {
+                wrapper.setState({ selectedIndex: 0 });
+            });
 
             wrapper.simulate('keyDown', {
                 key: 'ArrowRight',
@@ -507,7 +519,9 @@ describe('components/pill-selector-dropdown/PillSelector', () => {
         test('should reset selected index when called', () => {
             const wrapper = shallow(<PillSelector onInput={onInputStub} onRemove={onRemoveStub} />);
             const instance = wrapper.instance();
-            wrapper.setState({ selectedIndex: 1 });
+            act(() => {
+                wrapper.setState({ selectedIndex: 1 });
+            });
 
             instance.resetSelectedIndex();
 

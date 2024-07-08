@@ -1,8 +1,7 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
-import { act } from 'react-dom/test-utils';
 import DropdownMenu from '../DropdownMenu';
 import { KEYS } from '../../../constants';
 
