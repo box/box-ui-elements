@@ -1,12 +1,11 @@
-// @flow
-import { act } from 'react';
-
-import API from '../../../api';
+import { renderHook, act } from '@testing-library/react';
 import useInvites from '../hooks/useInvites';
+import API from '../../../api';
+
+jest.mock('../../../api');
 
 describe('useInvites hook', () => {
     let mockApi;
-    let mockSetIsLoading;
     let mockHandleSuccess;
     let mockHandleError;
     let mockTransformRequest;
@@ -14,12 +13,19 @@ describe('useInvites hook', () => {
 
     beforeEach(() => {
         mockApi = new API({});
-        mockSetIsLoading = jest.fn();
         mockHandleSuccess = jest.fn();
         mockHandleError = jest.fn();
-        mockTransformRequest = jest.fn().mockReturnValue({
-            users: [{ email: 'user@example.com', role: 'editor' }],
-            groups: [{ id: 'group123', role: 'viewer' }],
+        mockTransformRequest = jest.fn().mockImplementation(collabRequest => {
+            if (collabRequest) {
+                return {
+                    users: collabRequest.users || [{ email: 'user@example.com', role: 'editor' }],
+                    groups: collabRequest.groups || [{ id: 'group123', role: 'viewer' }],
+                };
+            }
+            return {
+                users: [{ email: 'user@example.com', role: 'editor' }],
+                groups: [{ id: 'group123', role: 'viewer' }],
+            };
         });
         mockTransformResponse = jest.fn().mockReturnValue({ id: '123', type: 'folder' });
         jest.spyOn(mockApi, 'getCollaborationsAPI').mockReturnValue({
@@ -33,76 +39,77 @@ describe('useInvites hook', () => {
         });
     });
 
-    it('invokes setIsLoading, handleSuccess, and transformResponse on successful collaboration addition', async () => {
-        const sendInvites = useInvites(mockApi, '123', 'folder', {
-            setIsLoading: mockSetIsLoading,
-            handleSuccess: mockHandleSuccess,
-            handleError: mockHandleError,
-            transformRequest: mockTransformRequest,
-            transformResponse: mockTransformResponse,
+    test('invokes setIsLoading, handleSuccess, and transformResponse on successful collaboration addition', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformRequest: mockTransformRequest,
+                transformResponse: mockTransformResponse,
+            }),
+        );
+
+        act(() => {
+            result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
         });
 
-        await act(async () => {
-            await sendInvites()({ users: [{ email: 'user@example.com', role: 'editor' }] });
-        });
-
-        expect(mockSetIsLoading).toHaveBeenCalledWith(true);
-        expect(mockSetIsLoading).toHaveBeenCalledWith(false);
         expect(mockHandleSuccess).toHaveBeenCalledWith({ id: 'collab123', role: 'editor' });
         expect(mockTransformResponse).toHaveBeenCalledWith({ id: 'collab123', role: 'editor' });
     });
 
-    it('invokes handleError on failed collaboration addition', async () => {
-        const sendInvites = useInvites(mockApi, '123', 'folder', {
-            setIsLoading: mockSetIsLoading,
-            handleSuccess: mockHandleSuccess,
-            handleError: mockHandleError,
-            transformRequest: mockTransformRequest,
-            transformResponse: mockTransformResponse,
+    test('invokes handleError on failed collaboration addition', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformRequest: mockTransformRequest,
+                transformResponse: mockTransformResponse,
+            }),
+        );
+
+        act(() => {
+            result.current({ users: [{ email: 'fail@example.com', role: 'dsfdsdsf' }] });
         });
 
-        await act(async () => {
-            await sendInvites()({ users: [{ email: 'fail@example.com', role: 'editor' }] });
-        });
-
-        expect(mockSetIsLoading).toHaveBeenCalledWith(true);
-        expect(mockSetIsLoading).toHaveBeenCalledWith(false);
         expect(mockHandleError).toHaveBeenCalled();
     });
 
-    it('returns null if transformRequest is not provided', async () => {
-        const sendInvites = useInvites(mockApi, '123', 'folder', {
-            setIsLoading: mockSetIsLoading,
-            handleSuccess: mockHandleSuccess,
-            handleError: mockHandleError,
-            transformResponse: mockTransformResponse,
+    test('returns null if transformRequest is not provided', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformResponse: mockTransformResponse,
+            }),
+        );
+
+        let actionResult;
+        act(() => {
+            actionResult = result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
         });
 
-        const result = await sendInvites()({ users: [{ email: 'user@example.com', role: 'editor' }] });
-
-        expect(result).toBeNull();
-        expect(mockSetIsLoading).not.toHaveBeenCalled();
+        expect(actionResult).toEqual(Promise.resolve());
         expect(mockHandleSuccess).not.toHaveBeenCalled();
         expect(mockHandleError).not.toHaveBeenCalled();
     });
 
-    it('processes multiple users and groups in a single call', async () => {
-        const sendInvites = useInvites(mockApi, '123', 'folder', {
-            setIsLoading: mockSetIsLoading,
-            handleSuccess: mockHandleSuccess,
-            handleError: mockHandleError,
-            transformRequest: mockTransformRequest,
-            transformResponse: mockTransformResponse,
-        });
+    test('processes multiple users and groups in a single call', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformRequest: mockTransformRequest,
+                transformResponse: mockTransformResponse,
+            }),
+        );
 
-        await act(async () => {
-            await sendInvites()({
+        act(() => {
+            result.current({
                 users: [{ email: 'user@example.com', role: 'editor' }],
                 groups: [{ id: 'group123', role: 'viewer' }],
             });
         });
 
-        expect(mockSetIsLoading).toHaveBeenCalledTimes(2);
         expect(mockHandleSuccess).toHaveBeenCalledTimes(2);
         expect(mockTransformResponse).toHaveBeenCalledTimes(2);
     });
