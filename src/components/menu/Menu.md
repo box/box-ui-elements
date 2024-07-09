@@ -27,7 +27,7 @@ const MenuSectionHeader = require('box-ui-elements/es/components/menu')
   <MenuSeparator />
   <MenuSectionHeader>Menu Section</MenuSectionHeader>
   <MenuLinkItem>
-    <a href="/#">Awesome Link</a>
+    <Link href="/#">Awesome Link</Link>
   </MenuLinkItem>
 </Menu>;
 ```
@@ -77,14 +77,14 @@ const SubmenuItem = require('box-ui-elements/es/components/menu').SubmenuItem;
 
 **Select Menu**
 
-```
+```js
 <Menu>
-    <SelectMenuLinkItem isSelected>
-        <a href="#">View Profile</a>
-    </SelectMenuLinkItem>
-    <SelectMenuLinkItem>
-        <a href="#">Awesome Link</a>
-    </SelectMenuLinkItem>
+  <SelectMenuLinkItem isSelected>
+    <Link href="#">View Profile</Link>
+  </SelectMenuLinkItem>
+  <SelectMenuLinkItem>
+    <Link href="#">Awesome Link</Link>
+  </SelectMenuLinkItem>
 </Menu>
 ```
 
