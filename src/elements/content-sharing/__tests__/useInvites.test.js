@@ -68,7 +68,7 @@ describe('useInvites hook', () => {
         );
 
         act(() => {
-            result.current({ users: [{ email: 'fail@example.com', role: 'dsfdsdsf' }] });
+            result.current({ users: [{ email: 'fail@example.com', role: 'editor' }] });
         });
 
         expect(mockHandleError).toHaveBeenCalled();
