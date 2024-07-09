@@ -106,16 +106,11 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
                     textTree: tagsToJsonPaths(textTags),
                     imageTree: tagsToJsonPaths(imageTags),
                 });
-                console.log('error', false);
                 setHasError(false);
             } else {
-                setHasError(prevState => {
-                    console.log(prevState);
-                    return true;
-                });
+                setHasError(true);
             }
         } catch (error) {
-            console.log('error', 'catch');
             setHasError(true);
         }
         setIsLoading(false);
@@ -124,11 +119,10 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
     React.useEffect(() => {
         loadTags();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [getDocGenTags]);
-
-    console.log(hasError);
+    }, []);
 
     const isEmpty = tags.image.length + tags.text.length === 0;
+
     return (
         <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={intl.formatMessage(messages.docGenTags)}>
             <div className={classNames('bcs-DocGenSidebar', { center: isEmpty || hasError || isLoading })}>

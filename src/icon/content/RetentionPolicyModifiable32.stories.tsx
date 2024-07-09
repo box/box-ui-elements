@@ -8,6 +8,7 @@ export default {
     title: 'Icon/Content/RetentionPolicyModifiable32',
     component: RetentionPolicyModifiable32,
     parameters: {
-        notes: "`import RetentionPolicyModifiable32 from 'box-ui-elements/es/icon/content/RetentionPolicyModifiable32';`",
+        notes:
+            "`import RetentionPolicyModifiable32 from 'box-ui-elements/es/icon/content/RetentionPolicyModifiable32';`",
     },
 };

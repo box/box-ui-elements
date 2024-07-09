@@ -4,22 +4,6 @@ import Shield16 from '../../icon/line/Shield16';
 import LabelPill, { LabelPillStatus, LabelPillSize } from './LabelPill';
 import notes from './LabelPill.stories.md';
 
-const typeLabel = '"type" Prop';
-const sizeLabel = '"size" Prop';
-
-const typeOptions: LabelPillStatus[] = [
-    LabelPillStatus.DEFAULT,
-    LabelPillStatus.ALERT,
-    LabelPillStatus.ERROR,
-    LabelPillStatus.FTUX,
-    LabelPillStatus.HIGHLIGHT,
-    LabelPillStatus.INFO,
-    LabelPillStatus.SUCCESS,
-    LabelPillStatus.WARNING,
-];
-
-const sizeOptions: LabelPillSize[] = [LabelPillSize.REGULAR, LabelPillSize.LARGE];
-
 export const withText = () => (
     <LabelPill.Pill type={LabelPillStatus.DEFAULT} size={LabelPillSize.REGULAR}>
         <LabelPill.Text>TEST TEXT</LabelPill.Text>

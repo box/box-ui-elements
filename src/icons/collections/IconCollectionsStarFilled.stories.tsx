@@ -8,6 +8,7 @@ export default {
     title: 'Icons/Collections/StarFilled',
     component: IconCollectionsStarFilled,
     parameters: {
-        notes: "`import IconCollectionsStarFilled from 'box-ui-elements/es/icons/collection/IconCollectionsStarFilled';`",
+        notes:
+            "`import IconCollectionsStarFilled from 'box-ui-elements/es/icons/collection/IconCollectionsStarFilled';`",
     },
 };
