@@ -3,11 +3,12 @@ import path from 'path';
 const language = process.env.LANGUAGE;
 
 const config: {
-    webpackFinal: (config: any) => Promise<any>;
-    staticDirs: string[];
     stories: string[];
+    addons: (string | { name: string; options: { sass: { implementation: any } } })[],
     framework: { name: string };
-    addons: (string | { name: string; options: { sass: { implementation: any } } })[]
+    staticDirs: string[];
+    webpackFinal: (config: any) => Promise<any>;
+    typescript: any
 } = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
 
@@ -53,9 +54,6 @@ const config: {
 
         return config;
     },
-
-    docs: {},
-
     typescript: {
         reactDocgen: 'react-docgen-typescript'
     }
