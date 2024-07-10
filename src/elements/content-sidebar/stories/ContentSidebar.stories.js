@@ -21,8 +21,5 @@ export default {
         hasSkills: true,
         hasVersions: true,
         token: global.TOKEN,
-        docGenSidebarProps: {
-            enabled: true,
-        },
     },
 };

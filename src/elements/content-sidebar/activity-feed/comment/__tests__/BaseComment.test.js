@@ -1,8 +1,8 @@
 // @flow
 
-import * as React from 'react';
+import React, { act } from 'react';
 import { IntlProvider } from 'react-intl';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { ContentState, EditorState } from 'draft-js';
 import { BaseComment } from '../BaseComment';
 
