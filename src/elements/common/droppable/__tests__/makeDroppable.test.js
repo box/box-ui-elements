@@ -1,61 +1,79 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import ReactDOM from 'react-dom';
+import { shallow } from 'enzyme';
 
 import makeDroppable from '../makeDroppable';
 
-const MockComponent = React.forwardRef((props, ref) => (
-    <div ref={ref} {...props}>
-        Drop here
-    </div>
-));
+jest.mock('react-dom', () => ({
+    findDOMNode: jest.fn(),
+}));
 
-describe('makeDroppable HOC with react-testing-library', () => {
-    const dropValidator = jest.fn();
-    const onDrop = jest.fn();
-    const DroppableComponent = makeDroppable({ dropValidator, onDrop })(MockComponent);
-    const eventOptions = { preventDefault: () => {} };
+describe('elements/common/droppable/makeDroppable', () => {
+    const WrappedComponent = () => <div />;
+    const MakeDroppableComponent = makeDroppable({
+        dropValidator: jest.fn(),
+        onDrop: jest.fn(),
+    })(WrappedComponent);
+
+    const addEventListenerMock = jest.fn();
+    const testElement = document.createElement('div');
+    testElement.addEventListener = addEventListenerMock;
+
+    const getWrapper = (props = {}) => shallow(<MakeDroppableComponent className="test" {...props} />);
 
     beforeEach(() => {
-        // Reset mocks before each test
-        dropValidator.mockClear();
-        onDrop.mockClear();
+        ReactDOM.findDOMNode.mockImplementation(() => testElement);
     });
 
-    test('should call onDrop when drop is valid', () => {
-        dropValidator.mockReturnValue(true);
-        const { getByText } = render(<DroppableComponent />);
-        const component = getByText('Drop here');
-        fireEvent.dragEnter(component, eventOptions);
-        fireEvent.drop(component, eventOptions);
-
-        expect(onDrop).toHaveBeenCalled();
+    afterEach(() => {
+        jest.resetAllMocks();
     });
 
-    test('should not call onDrop when drop is invalid', () => {
-        dropValidator.mockReturnValue(false);
-        const { getByText } = render(<DroppableComponent />);
-        const component = getByText('Drop here');
-        fireEvent.dragEnter(component, eventOptions);
-        fireEvent.drop(component, eventOptions);
+    describe('removeEventListeners()', () => {
+        test('should remove 4 of event listeners on the element', () => {
+            const wrapper = getWrapper();
+            const removeEventListener = jest.fn();
+            const element = {
+                foo: 'bar',
+                removeEventListener,
+            };
 
-        expect(onDrop).not.toHaveBeenCalled();
+            wrapper.instance().removeEventListeners(element);
+
+            expect(removeEventListener).toBeCalledTimes(4);
+        });
     });
 
-    test('should update class to indicate droppable state on drag enter and leave', () => {
-        const { getByText } = render(<DroppableComponent />);
-        const component = getByText('Drop here');
-        fireEvent.dragEnter(component, eventOptions);
-        expect(component).toHaveClass('is-over');
+    describe('componentDidMount()', () => {
+        test('should add 4 event listeners on the test element when the wrapped droppable element is not null for the first time', () => {
+            getWrapper();
 
-        fireEvent.dragLeave(component, eventOptions);
-        expect(component).not.toHaveClass('is-over');
+            expect(addEventListenerMock).toBeCalledTimes(4);
+        });
     });
 
-    test('should reset class to indicate not droppable after drop', () => {
-        const { getByText } = render(<DroppableComponent />);
-        const component = getByText('Drop here');
-        fireEvent.dragEnter(component, eventOptions);
-        fireEvent.drop(component, eventOptions);
-        expect(component).not.toHaveClass('is-over');
+    describe('componentDidUpdate()', () => {
+        test('should verify the instance attritute droppableEl is assigned when the wrapped element is not null', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.componentDidUpdate();
+
+            expect(instance.droppableEl).toEqual(testElement);
+        });
+
+        test('should remove all event listeners on previous droppable element and assign the new droppable element to the instance after the wrapped element is changed', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const spanElement = document.createElement('span');
+            const spanRemoveEventListenerMock = jest.fn();
+            spanElement.removeEventListener = spanRemoveEventListenerMock;
+
+            instance.droppableEl = spanElement;
+            instance.componentDidUpdate();
+
+            expect(spanRemoveEventListenerMock).toBeCalledTimes(4);
+            expect(instance.droppableEl).toEqual(testElement);
+        });
     });
 });
