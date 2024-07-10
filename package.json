@@ -391,5 +391,8 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
+    },
+    "dependencies": {
+        "@storybook/test": "^8.1.11"
     }
 }
