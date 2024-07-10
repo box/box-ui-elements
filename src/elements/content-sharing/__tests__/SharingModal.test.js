@@ -286,8 +286,8 @@ describe('elements/content-sharing/SharingModal', () => {
             await act(async () => {
                 wrapper = getWrapper({ api: mockApi, itemType: TYPE_FILE });
             });
-            wrapper.update();
 
+            wrapper.update();
             expect(wrapper.exists(LoadingIndicator)).toBe(true);
         });
 
@@ -396,7 +396,6 @@ describe('elements/content-sharing/SharingModal', () => {
             });
 
             wrapper.update();
-
             expect(wrapper.exists(LoadingIndicator)).toBe(true);
         });
 
@@ -468,6 +467,7 @@ describe('elements/content-sharing/SharingModal', () => {
             await act(async () => {
                 wrapper = getWrapper({ api: mockApi, itemType: TYPE_FOLDER });
             });
+
             wrapper.update();
             expect(wrapper.exists(LoadingIndicator)).toBe(true);
         });
@@ -828,10 +828,8 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
-            let response;
-            await act(async () => {
-                response = usm.invoke('getCollaboratorContacts')(MOCK_FILTER);
-            });
+            const response = usm.invoke('getCollaboratorContacts')(MOCK_FILTER);
+
             wrapper.update();
 
             expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
@@ -859,11 +857,8 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
+            const response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
 
-            let response;
-            await act(async () => {
-                response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
-            });
             wrapper.update();
 
             expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
