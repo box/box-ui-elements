@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react';
 import useOnClickBody from '../useOnClickBody';
 
-describe('useOnClickBody', () => {
+describe('components/targeting/utils/useOnClickBody', () => {
     let addEventListenerSpy;
     let removeEventListenerSpy;
 

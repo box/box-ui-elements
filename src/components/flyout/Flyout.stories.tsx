@@ -14,17 +14,6 @@ import { Flyout, Overlay } from '.';
 import notes from './Flyout.stories.md';
 
 export const Basic = () => {
-    // const positions = {
-    //     'bottom-center': 'bottom-center',
-    //     'bottom-left': 'bottom-left',
-    //     'bottom-right': 'bottom-right',
-    //     'middle-left': 'middle-left',
-    //     'middle-right': 'middle-right',
-    //     'top-center': 'top-left',
-    //     'top-left': 'top-left',
-    //     'top-right': 'top-right',
-    // };
-
     const position = 'bottom-center';
 
     return (
