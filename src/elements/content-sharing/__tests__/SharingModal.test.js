@@ -289,7 +289,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(wrapper.exists(LoadingIndicator)).toBe(true);
 
             wrapper.update();
-            console.log(wrapper.debug());
+
             expect(wrapper.exists(LoadingIndicator)).toBe(false);
             expect(wrapper.exists(UnifiedShareModal)).toBe(true);
         });
