@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import { PreviewLoading, PreviewLoadingRing, getIcon } from '..';
 import { bdlBoxBlue } from '../../../styles/variables';

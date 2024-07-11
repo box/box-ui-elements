@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import InfoBadge16 from '../../icon/fill/InfoBadge16';

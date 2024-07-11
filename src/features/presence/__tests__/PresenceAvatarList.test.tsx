@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import collaboratorList from '../__mocks__/collaborators';
 // @ts-ignore flow import
