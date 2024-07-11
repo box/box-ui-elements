@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import MenuItem from '../../../components/menu/MenuItem';
 import PaginationMenu from '../PaginationMenu';

@@ -3,7 +3,7 @@
  * @file Overall uploads progress bar
  */
 
-import React from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../common/messages';
 import ProgressBar from './ProgressBar';

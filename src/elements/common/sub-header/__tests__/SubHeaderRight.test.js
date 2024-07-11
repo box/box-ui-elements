@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import Add from '../Add';
 import GridViewSlider from '../../../../components/grid-view/GridViewSlider';

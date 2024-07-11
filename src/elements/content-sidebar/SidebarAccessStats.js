@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import isFinite from 'lodash/isFinite';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type { MessageDescriptor, IntlShape } from 'react-intl';

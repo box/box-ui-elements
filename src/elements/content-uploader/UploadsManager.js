@@ -3,7 +3,7 @@
  * @file Uploads manager
  */
 
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import ItemList from './ItemList';
 import OverallUploadsProgressBar from './OverallUploadsProgressBar';

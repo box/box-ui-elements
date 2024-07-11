@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import AccessStats from '../../../features/access-stats/AccessStats';
 import ErrorMask from '../../../components/error-mask/ErrorMask';

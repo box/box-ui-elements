@@ -3,7 +3,7 @@
  * @file Function to render the name table cell
  */
 
-import React from 'react';
+import * as React from 'react';
 import IconName from './IconName';
 import type { UploadItem } from '../../common/types/upload';
 

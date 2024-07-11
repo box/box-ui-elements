@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { createIntl } from 'react-intl';
 import collaboratorList from '../__mocks__/collaborators';
 import PresenceCollaborator from '../PresenceCollaborator';

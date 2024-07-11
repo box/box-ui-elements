@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { mount } from 'enzyme';
 import noop from 'lodash/noop';

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import Status from './status';
 import Transcript from './transcript';
 import Keywords from './keywords';

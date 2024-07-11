@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { EditableURLBase as EditableURL, VALUE_MISSING, TYPE_MISMATCH } from '../EditableURL';
 

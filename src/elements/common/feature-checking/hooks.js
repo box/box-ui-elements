@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import FeatureContext from './FeatureContext';
 import { getFeatureConfig, isFeatureEnabled } from './util';
 

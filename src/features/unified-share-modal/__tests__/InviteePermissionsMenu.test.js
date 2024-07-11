@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { ITEM_TYPE_WEBLINK, ITEM_TYPE_FOLDER } from '../../../common/constants';
 

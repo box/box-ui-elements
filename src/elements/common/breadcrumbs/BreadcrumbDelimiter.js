@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import IconChevron from '../../../icons/general/IconChevron';
 import { DELIMITER_CARET, COLOR_999 } from '../../../constants';
 import type { Delimiter } from '../../../common/types/core';

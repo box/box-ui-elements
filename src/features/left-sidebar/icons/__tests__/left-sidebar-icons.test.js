@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 import IconAdminConsole from '../IconAdminConsole';
 import IconAllFiles from '../IconAllFiles';

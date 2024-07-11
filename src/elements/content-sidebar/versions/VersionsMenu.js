@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import last from 'lodash/last';
 import { injectIntl } from 'react-intl';
 import * as util from '../../../utils/datetime';

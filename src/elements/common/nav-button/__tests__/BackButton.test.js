@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
 import { mount } from 'enzyme';
 import { BackButton } from '..';

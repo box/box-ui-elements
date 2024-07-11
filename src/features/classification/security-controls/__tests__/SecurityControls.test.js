@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import SecurityControlsItem from '../SecurityControlsItem';
 import SecurityControls from '../SecurityControls';

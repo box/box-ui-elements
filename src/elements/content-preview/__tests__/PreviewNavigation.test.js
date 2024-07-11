@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Router } from 'react-router-dom';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';

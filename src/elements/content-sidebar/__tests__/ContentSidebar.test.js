@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';

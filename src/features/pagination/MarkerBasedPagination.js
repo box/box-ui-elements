@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import noop from 'lodash/noop';
 import PaginationControls from './PaginationControls';
 

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import Checkbox from '../../components/checkbox/Checkbox';
 import isRowSelectable from './cellRendererHelper';
 import type { BoxItem } from '../../common/types/core';

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme/build';
 import { SidebarToggleComponent as SidebarToggle } from '../SidebarToggle';
 
