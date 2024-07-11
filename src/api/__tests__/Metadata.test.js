@@ -1,3 +1,7 @@
+/**
+ * @flow
+ */
+
 import Cache from '../../utils/Cache';
 import * as ErrorUtil from '../../utils/error';
 import Metadata from '../Metadata';
@@ -17,11 +21,12 @@ import {
     ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
 } from '../../constants';
 
-let metadata;
+let metadata: Metadata;
 
 describe('api/Metadata', () => {
     beforeEach(() => {
         metadata = new Metadata({});
+        jest.resetAllMocks();
     });
 
     describe('getCacheKey()', () => {
@@ -535,7 +540,7 @@ describe('api/Metadata', () => {
 
     describe('getMetadata()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             metadata.errorHandler = jest.fn();
             metadata.successHandler = jest.fn();
             metadata.getMetadata({}, jest.fn(), jest.fn(), true);
@@ -545,7 +550,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions object', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             metadata.errorHandler = jest.fn();
             metadata.successHandler = jest.fn();
             metadata.getMetadata({ id: 'id' }, jest.fn(), jest.fn(), true);
@@ -896,7 +901,7 @@ describe('api/Metadata', () => {
 
     describe('getSkills()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.getSkills({}, successCallback, errorCallback);
@@ -1094,7 +1099,7 @@ describe('api/Metadata', () => {
 
     describe('updateSkills()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({}, {}, successCallback, errorCallback);
@@ -1103,7 +1108,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({ id: 'id' }, {}, successCallback, errorCallback);
@@ -1256,7 +1261,7 @@ describe('api/Metadata', () => {
 
     describe('updateMetadata()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({}, {}, {}, successCallback, errorCallback);
@@ -1265,7 +1270,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({ id: 'id' }, {}, {}, successCallback, errorCallback);
@@ -1501,7 +1506,7 @@ describe('api/Metadata', () => {
 
     describe('createMetadata()', () => {
         test('should call error callback with a bad item error when no file', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata(undefined, {}, successCallback, errorCallback);
@@ -1510,7 +1515,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no template', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({}, undefined, successCallback, errorCallback);
@@ -1519,7 +1524,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({}, {}, successCallback, errorCallback);
@@ -1528,7 +1533,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({ id: 'id' }, {}, successCallback, errorCallback);
@@ -1794,7 +1799,7 @@ describe('api/Metadata', () => {
 
     describe('deleteMetadata()', () => {
         test('should call error callback with a bad item error when no file', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata(undefined, {}, successCallback, errorCallback);
@@ -1803,7 +1808,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no template', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({}, undefined, successCallback, errorCallback);
@@ -1812,7 +1817,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({}, {}, successCallback, errorCallback);
@@ -1821,7 +1826,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({ id: 'id' }, {}, successCallback, errorCallback);
