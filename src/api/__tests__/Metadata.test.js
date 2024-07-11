@@ -1,24 +1,22 @@
-/**
- * @flow
- */
+// @flow
 
 import Cache from '../../utils/Cache';
 import * as ErrorUtil from '../../utils/error';
 import Metadata from '../Metadata';
 import {
-    METADATA_TEMPLATE_CLASSIFICATION,
-    METADATA_SCOPE_GLOBAL,
-    METADATA_TEMPLATE_PROPERTIES,
-    ERROR_CODE_DELETE_METADATA,
     ERROR_CODE_CREATE_METADATA,
-    ERROR_CODE_UPDATE_METADATA,
-    ERROR_CODE_UPDATE_SKILLS,
-    ERROR_CODE_FETCH_SKILLS,
+    ERROR_CODE_DELETE_METADATA,
+    ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_FETCH_METADATA,
-    TYPE_FILE,
+    ERROR_CODE_FETCH_SKILLS,
+    ERROR_CODE_UPDATE_METADATA,
+    ERROR_CODE_UPDATE_SKILLS,
+    METADATA_SCOPE_GLOBAL,
     METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
-    ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+    METADATA_TEMPLATE_CLASSIFICATION,
+    METADATA_TEMPLATE_PROPERTIES,
+    TYPE_FILE,
 } from '../../constants';
 
 let metadata: Metadata;
@@ -2038,13 +2036,7 @@ describe('api/Metadata', () => {
                 },
             });
 
-            const suggestions = await metadata.getMetadataSuggestions(
-                'id',
-                TYPE_FILE,
-                'enterprise',
-                'templateKey',
-                METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
-            );
+            const suggestions = await metadata.getMetadataSuggestions('id', TYPE_FILE, 'enterprise', 'templateKey');
 
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
             expect(suggestions).toEqual(suggestionsFromServer);

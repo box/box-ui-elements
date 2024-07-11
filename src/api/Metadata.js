@@ -748,7 +748,7 @@ class Metadata extends File {
         type: typeof TYPE_FILE,
         scope: string,
         templateKey: string,
-        confidence: typeof METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+        confidence: typeof METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL = METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
     ): Promise<Array<MetadataSuggestion>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA_SUGGESTIONS;
 
@@ -768,11 +768,10 @@ class Metadata extends File {
             throw new Error(`Invalid confidence level: "${confidence}"`);
         }
 
-        const url = this.getMetadataSuggestionsUrl();
-        let suggestions = {};
+        let suggestionsResponse = {};
         try {
-            suggestions = await this.xhr.get({
-                url,
+            suggestionsResponse = await this.xhr.get({
+                url: this.getMetadataSuggestionsUrl(),
                 id: getTypedFileId(id),
                 params: {
                     item: `${type}_${id}`,
@@ -787,7 +786,7 @@ class Metadata extends File {
                 throw e;
             }
         }
-        return getProp(suggestions, 'data.suggestions', []);
+        return getProp(suggestionsResponse, 'data.suggestions', []);
     }
 }
 
