@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { FormattedMessage, injectIntl, WrappedComponentProps } from 'react-intl';
 // @ts-ignore flow import
 import messages from './messages';

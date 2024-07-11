@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 // @ts-ignore: no ts definition
 import messages from '../messages';
 // @ts-ignore: no ts definition

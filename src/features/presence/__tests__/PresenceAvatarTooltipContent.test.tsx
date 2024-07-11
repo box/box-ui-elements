@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { createIntl } from 'react-intl';
 import { shallow, ShallowWrapper } from 'enzyme';
 import collaboratorList from '../__mocks__/collaborators';
