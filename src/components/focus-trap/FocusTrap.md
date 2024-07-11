@@ -7,9 +7,7 @@ Traps tab focus within the children of the focus. Should be used for overlays, m
 **With focusable children**
 
 ```js
-initialState = {
-  isVisible: false,
-};
+const [state, setState] = React.useState({ isVisible: false });
 
 <div>
   {state.isVisible && (
@@ -22,12 +20,20 @@ initialState = {
         <a href="#">focusable el</a>
       </p>
       <p>non-focusable el</p>
-      <Button onClick={() => setState({ isVisible: false })}>
+      <Button
+        onClick={() =>
+          setState(prevState => ({ ...prevState, isVisible: false }))
+        }
+      >
         Close example and return focus
       </Button>
     </FocusTrap>
   )}
-  <Button onClick={() => setState({ isVisible: !state.isVisible })}>
+  <Button
+    onClick={() =>
+      setState(prevState => ({ ...prevState, isVisible: !state.isVisible }))
+    }
+  >
     Toggle example
   </Button>
 </div>;
@@ -36,9 +42,7 @@ initialState = {
 **Without focusable children**
 
 ```js
-initialState = {
-  isVisible: false,
-};
+const [state, setState] = React.useState({ isVisible: false });
 
 <div>
   {state.isVisible && (
@@ -50,7 +54,11 @@ initialState = {
       </p>
     </FocusTrap>
   )}
-  <Button onClick={() => setState({ isVisible: !state.isVisible })}>
+  <Button
+    onClick={() =>
+      setState(prevState => ({ ...prevState, isVisible: !state.isVisible }))
+    }
+  >
     Toggle example
   </Button>
 </div>;

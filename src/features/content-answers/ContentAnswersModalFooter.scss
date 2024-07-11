@@ -5,7 +5,7 @@
         position: relative;
         z-index: 1;
         display: flex;
-        align-items: end;
+        align-items: flex-end;
         padding: $bdl-grid-unit * 4 $bdl-grid-unit * 5;
         background: $white;
         border-radius: 0 0 $bdl-border-radius-size-xlarge $bdl-border-radius-size-xlarge;

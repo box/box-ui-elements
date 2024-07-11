@@ -13,7 +13,7 @@ The `messages` property is a map of message keys and translated strings. All the
 If you are using the CDNs, the i18n messages are included in the bundle.
 
 Example of using the `language` and `messages` properties:
-```jsx
+```jsx static
 import messages from 'box-ui-elements/i18n/ja-JP';
 
 <ContentExplorer language="ja-JP" messages={messages} {...PROPS} />
@@ -22,7 +22,7 @@ import messages from 'box-ui-elements/i18n/ja-JP';
 _ContentExplorer will show in Japanese._
 
 Example `IntlProvider` with multiple elements
-```jsx
+```jsx static
 import messages from 'box-ui-elements/i18n/ja-JP';
 
 <IntlProvider locale="ja-JP" messages={messages}>
@@ -35,7 +35,7 @@ _Both ContentExplorer and ContentPicker will show in Japanese._
 
 Example of using different `language` and `messages` properties:
 
-```jsx
+```jsx static
 import jaMessages from 'box-ui-elements/i18n/ja-JP';
 import deMessages from 'box-ui-elements/i18n/de-DE';
 

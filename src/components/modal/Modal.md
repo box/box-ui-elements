@@ -9,6 +9,8 @@ close the modal, but this can be overridden.
 **Basic**
 
 ```
+const [state, setState] = React.useState({ isModalOpen: false });
+
 const SimpleModal = ({ isOpen, onRequestClose }) => (
     <Modal
         title="Box: Sharing is simple"
@@ -30,10 +32,11 @@ const SimpleModal = ({ isOpen, onRequestClose }) => (
     </Modal>
 );
 openModal = () =>
-    setState({
+    setState(prevState => ({
+        ...prevState,
         isModalOpen: true,
-    });
-closeModal = () => setState({ isModalOpen: false });
+    }));
+closeModal = () => setState(prevState => ({ ...prevState, isModalOpen: false }));
 
 <div>
     <SimpleModal
@@ -49,6 +52,8 @@ closeModal = () => setState({ isModalOpen: false });
 **Include a custom backdrop click handler, which overrides the default behavior**
 
 ```
+const [state, setState] = React.useState({ isModalOpen: false });
+
 const SimpleModal = ({ isOpen, onRequestClose }) => (
     <Modal
         title="Box: Sharing is simple"
@@ -71,10 +76,11 @@ const SimpleModal = ({ isOpen, onRequestClose }) => (
     </Modal>
 );
 openModal = () =>
-    setState({
+    setState(prevState => ({
+        ...prevState,
         isModalOpen: true,
-    });
-closeModal = () => setState({ isModalOpen: false });
+    }));
+closeModal = () => setState(prevState => ({ ...prevState, isModalOpen: false }));
 
 confirmBackdropClose = () => {
     // We can call the defined `closeModal` message after any custom processing,

@@ -5,14 +5,13 @@ Renders a modal to invite collaborators to an item.
 ```js
 const Button = require('box-ui-elements/es/components/button').default;
 
-initialState = {
-    isOpen: false,
-};
+const [state, setState] = React.useState({ isOpen: false });
 
 const closeModal = () => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         isOpen: false,
-    });
+    }))
 
     return Promise.resolve();
 };
@@ -54,10 +53,7 @@ const contacts = [
         }
     />
     <Button
-        onClick={ () =>
-            setState({
-                isOpen: true,
-            }) }
+        onClick={ () => setState(prevState => ({ ...prevState, isOpen: true })) }
     >
         Folder Invite Collab
     </Button>
@@ -68,14 +64,13 @@ const contacts = [
 ```js
 const Button = require('box-ui-elements/es/components/button').default;
 
-initialState = {
-    isOpen: false,
-};
+const [state, setState] = React.useState({ isOpen: false });
 
 const closeModal = () => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         isOpen: false,
-    });
+    }))
 
     return Promise.resolve();
 };
@@ -107,10 +102,7 @@ const contacts = [
         sendInvites={ closeModal }
     />
     <Button
-        onClick={ () =>
-            setState({
-                isOpen: true,
-            }) }
+        onClick={ () => setState(prevState => ({ ...prevState, isOpen: true })) }
     >
         File Invite Collab
     </Button>
