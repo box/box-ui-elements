@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ExecuteForm from '../ExecuteForm';
 
-describe('ExecuteForm', () => {
+describe('elements/content-open-with/ExecuteForm', () => {
     const executePostData = {
         url: 'http://example.com',
         params: [
