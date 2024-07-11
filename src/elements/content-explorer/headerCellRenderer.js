@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import IconChevron from '../../icons/general/IconChevron';
 import { SORT_ASC, COLOR_999 } from '../../constants';
 import type { SortBy, SortDirection } from '../../common/types/core';

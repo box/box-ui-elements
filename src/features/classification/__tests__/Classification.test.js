@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import Classification from '../Classification';
 import ClassifiedBadge from '../ClassifiedBadge';

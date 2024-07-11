@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import PreviewError from '../PreviewError';
 import { ERROR_CODE_FETCH_FILE_DUE_TO_POLICY } from '../../../constants';

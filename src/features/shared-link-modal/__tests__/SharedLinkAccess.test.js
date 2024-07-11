@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import SharedLinkAccess from '../SharedLinkAccess';
 import { CAN_VIEW, PEOPLE_WITH_LINK, PEOPLE_IN_COMPANY, PEOPLE_IN_ITEM } from '../constants';

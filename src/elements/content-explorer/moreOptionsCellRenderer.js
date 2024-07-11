@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import MoreOptions from './MoreOptions';
 import type { BoxItem } from '../../common/types/core';
 

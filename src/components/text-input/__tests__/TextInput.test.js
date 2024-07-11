@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import ClockBadge16 from '../../../icon/line/ClockBadge16';
 import IconVerified from '../../../icons/general/IconVerified';

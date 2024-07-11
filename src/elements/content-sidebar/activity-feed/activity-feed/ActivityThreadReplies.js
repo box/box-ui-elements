@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import Comment from '../comment';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import { BaseComment } from '../comment/BaseComment';

@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 import { ContentState, EditorState } from 'draft-js';
 import { fireEvent, render, screen, within } from '@testing-library/react';

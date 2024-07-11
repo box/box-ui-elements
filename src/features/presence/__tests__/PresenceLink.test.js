@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import defaultCollaborators from '../__mocks__/collaborators';
 import PresenceLink from '../PresenceLink';
 

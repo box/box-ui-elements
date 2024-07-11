@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Scrollbar from 'react-scrollbars-custom';
 import { act } from 'react-dom/test-utils';
 

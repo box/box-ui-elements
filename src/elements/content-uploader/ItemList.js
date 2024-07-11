@@ -3,7 +3,7 @@
  * @file Item list component
  */
 
-import React from 'react';
+import * as React from 'react';
 import noop from 'lodash/noop';
 import { Table, Column } from '@box/react-virtualized/dist/es/Table';
 import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';

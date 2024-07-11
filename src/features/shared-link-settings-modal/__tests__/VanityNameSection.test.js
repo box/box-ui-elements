@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import sinon from 'sinon';
 import Checkbox from '../../../components/checkbox';
 import TextInput from '../../../components/text-input';

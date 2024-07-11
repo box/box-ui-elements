@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import ErrorEmptyState from '../../../icons/states/ErrorEmptyState';
 import FolderEmptyState from '../../../icons/states/FolderEmptyState';

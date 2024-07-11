@@ -3,7 +3,7 @@
  * @file Function to render the remove table cell
  */
 
-import React from 'react';
+import * as React from 'react';
 import ItemRemove from './ItemRemove';
 import type { UploadItem } from '../../common/types/upload';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { ANYONE_WITH_LINK, ANYONE_IN_COMPANY } from '../constants';
 import SharedLinkAccessMenu from '../SharedLinkAccessMenu';

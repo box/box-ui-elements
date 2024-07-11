@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../../components/menu/Menu';

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { Route } from 'react-router-dom';
 import VersionsItem from './VersionsItem';
 import type { BoxItemVersion } from '../../../common/types/core';

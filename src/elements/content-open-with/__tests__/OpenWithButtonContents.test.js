@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import IconOpenWith from '../../../icons/general/IconOpenWith';
 import OpenWithButtonContents from '../OpenWithButtonContents';

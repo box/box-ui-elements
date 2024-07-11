@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import Modal from 'react-modal';
 import noop from 'lodash/noop';
 import { injectIntl, FormattedMessage } from 'react-intl';

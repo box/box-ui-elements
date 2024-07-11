@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import merge from 'lodash/merge';

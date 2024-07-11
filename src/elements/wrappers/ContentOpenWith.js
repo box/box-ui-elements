@@ -5,7 +5,7 @@
  */
 
 import 'regenerator-runtime/runtime';
-import React from 'react';
+import * as React from 'react';
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentOpenWithReactComponent from '../content-open-with';

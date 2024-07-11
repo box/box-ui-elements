@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import type { Node } from 'react';
 
