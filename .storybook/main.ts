@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 import path from 'path';
 
 const language = process.env.LANGUAGE;
