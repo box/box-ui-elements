@@ -1,6 +1,6 @@
 // @flow
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
 import type { SendInvitesFnType, UseInvitesOptions } from '../types';
@@ -16,7 +16,7 @@ import type { ItemType } from '../../../common/types/core';
  * @param {UseInvitesOptions} options
  */
 function useInvites(api: API, itemID: string, itemType: ItemType, options: UseInvitesOptions) {
-    const [sendInvites, setSendInvites] = React.useState<null | SendInvitesFnType>(null);
+    const [sendInvites, setSendInvites] = useState<null | SendInvitesFnType>(null);
     const {
         handleSuccess = noop,
         handleError = noop,

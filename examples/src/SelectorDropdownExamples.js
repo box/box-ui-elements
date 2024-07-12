@@ -68,6 +68,7 @@ class SelectorDropdownContainer extends Component {
 
         return (
             <div style={{ paddingBottom: '330px' }}>
+                {/* eslint-disable-next-line react/no-unknown-property */}
                 <label labelFor="title-check">
                     <input
                         type="checkbox"

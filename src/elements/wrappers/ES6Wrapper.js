@@ -84,6 +84,8 @@ class ES6Wrapper extends EventEmitter {
      */
     hide(): void {
         this.removeAllListeners();
+        // TODO replace when upgrading to React 18
+        // eslint-disable-next-line react/no-deprecated
         ReactDOM.unmountComponentAtNode(this.container);
         if (this.container) {
             this.container.innerHTML = '';

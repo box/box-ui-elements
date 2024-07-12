@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import Scrollbar from 'react-scrollbars-custom';
 import { mountConnected } from '../../../test-utils/enzyme';
 
@@ -77,7 +77,9 @@ describe('components/core/collapsible-sidebar/CollapsibleSidebarNav', () => {
             className: 'foo',
         });
 
-        sidebar.find(Scrollbar).prop('onScroll')();
+        act(() => {
+            sidebar.find(Scrollbar).prop('onScroll')();
+        });
 
         expect(sidebar.state().isScrolling).toBe(true);
         expect(sidebar.state().scrollShadowClassName).toBe('foobar');

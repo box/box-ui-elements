@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import Scrollbar from 'react-scrollbars-custom';
-import { act } from 'react-dom/test-utils';
 
 import { mountConnected } from '../../../../../test-utils/enzyme';
 import { getScrollShadowClassName } from '../../../../collapsible-sidebar/utils/scrollShadow';

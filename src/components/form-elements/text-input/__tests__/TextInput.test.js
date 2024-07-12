@@ -1,5 +1,5 @@
+import React, { act } from 'react';
 import PropTypes from 'prop-types';
-import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
@@ -76,7 +76,9 @@ describe('components/form-elements/text-input/TextInput', () => {
         const wrapper = mount(<TextInput label="label" name="input" type="url" value="bob" />);
         const instance = wrapper.instance();
         instance.input = { validity: { typeMismatch: true } };
-        instance.checkValidity();
+        act(() => {
+            instance.checkValidity();
+        });
         wrapper.update();
 
         expect(wrapper.find('.text-input-container').hasClass('show-error')).toBeTruthy();
@@ -86,7 +88,9 @@ describe('components/form-elements/text-input/TextInput', () => {
         const wrapper = mount(<TextInput label="label" name="input" type="url" value="http://bob.com" />);
         const instance = wrapper.instance();
         instance.input = { validity: { valid: true } };
-        instance.checkValidity();
+        act(() => {
+            instance.checkValidity();
+        });
         wrapper.update();
 
         expect(wrapper.find('.text-input-container').hasClass('show-error')).toBeFalsy();
@@ -234,7 +238,9 @@ describe('components/form-elements/text-input/TextInput', () => {
 
         const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
 
-        validityStateHandlerSpy.callArgWith(1, error);
+        act(() => {
+            validityStateHandlerSpy.callArgWith(1, error);
+        });
 
         expect(component.state('error')).toEqual(error);
     });
@@ -257,7 +263,9 @@ describe('components/form-elements/text-input/TextInput', () => {
 
         const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
 
-        validityStateHandlerSpy.callArgWith(1, error);
+        act(() => {
+            validityStateHandlerSpy.callArgWith(1, error);
+        });
         expect(component.state('error').code).toEqual('badInput');
     });
 
@@ -283,11 +291,13 @@ describe('components/form-elements/text-input/TextInput', () => {
 
         const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
 
-        validityStateHandlerSpy.callArgWith(1, error);
+        act(() => {
+            validityStateHandlerSpy.callArgWith(1, error);
+        });
         expect(component.state('error').code).toEqual('patternMismatch');
     });
 
-    test('should correctly validate tooShort', () => {
+    test('should correctly validate tooLong', () => {
         const validityStateHandlerSpy = sinon.spy();
         const context = {
             form: {
@@ -308,7 +318,9 @@ describe('components/form-elements/text-input/TextInput', () => {
             childContextTypes,
         });
 
-        validityStateHandlerSpy.callArgWith(1, error);
+        act(() => {
+            validityStateHandlerSpy.callArgWith(1, error);
+        });
         expect(component.state('error').code).toEqual('tooLong');
     });
 
@@ -335,7 +347,9 @@ describe('components/form-elements/text-input/TextInput', () => {
             childContextTypes,
         });
 
-        validityStateHandlerSpy.callArgWith(1, error);
+        act(() => {
+            validityStateHandlerSpy.callArgWith(1, error);
+        });
         expect(component.state('error').code).toEqual('tooShort');
     });
 });

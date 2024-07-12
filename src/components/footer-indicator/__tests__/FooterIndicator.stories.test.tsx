@@ -1,4 +1,6 @@
+// tslint:disable
 jest.retryTimes(3);
+// tslint:enable
 describe('components/footer-indicator/FooterIndicator', () => {
     const STORIES = [['components-footerindicator--regular'], ['components-footerindicator--with-truncated-text']];
     test.each(STORIES)('looks visually correct when using story %s', async id => {

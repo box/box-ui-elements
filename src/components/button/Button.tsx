@@ -1,3 +1,5 @@
+/* eslint-disable react/button-has-type */
+
 import * as React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
@@ -90,7 +92,6 @@ class Button extends React.Component<ButtonProps> {
         );
 
         let button = (
-            // eslint-disable-next-line react/button-has-type
             <button
                 ref={element => {
                     this.btnElement = element;

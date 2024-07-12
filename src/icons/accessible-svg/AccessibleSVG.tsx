@@ -6,6 +6,8 @@ import { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 export interface AccessibleSVGIconProps extends SVGProps {
     'aria-hidden'?: boolean | 'false' | 'true' | undefined;
     'aria-labelledby'?: string;
+    /** SVG dom elements for the component */
+    children?: React.ReactNode | Array<React.ReactNode>;
     focusable?: boolean | 'false' | 'true' | 'auto' | undefined;
     opacity?: number;
 }

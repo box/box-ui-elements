@@ -174,17 +174,15 @@ describe('components/infinite-scroll/InfiniteScroll', () => {
         });
 
         it('should not call onLoadMore if isLoading', () => {
-            component.setProps({ isLoading: true }, () => {
-                window.dispatchEvent(new Event('scroll'));
-                expect(mockOnLoadMore).not.toBeCalled();
-            });
+            component.setProps({ isLoading: true });
+            window.dispatchEvent(new Event('scroll'));
+            expect(mockOnLoadMore).not.toBeCalled();
         });
 
         it('should not call onLoadMore if !hasMore', () => {
-            component.setProps({ hasMore: false }, () => {
-                window.dispatchEvent(new Event('scroll'));
-                expect(mockOnLoadMore).not.toBeCalled();
-            });
+            component.setProps({ hasMore: false });
+            window.dispatchEvent(new Event('scroll'));
+            expect(mockOnLoadMore).not.toBeCalled();
         });
     });
 

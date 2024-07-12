@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import Avatar from '../avatar/Avatar';
 import Button from '../button/Button';
@@ -45,10 +44,7 @@ export const basic = () => (
         <Menu>
             <MenuItem onClick={generateClickHandler('View Profile')}>View Profile</MenuItem>
             <MenuItem onClick={generateClickHandler('Help')}>Help</MenuItem>
-            <MenuItem
-                onClick={generateClickHandler('Should Not Fire This Handler')}
-                isDisabled={boolean('isDisabled', true)}
-            >
+            <MenuItem onClick={generateClickHandler('Should Not Fire This Handler')} isDisabled>
                 Disabled Option
             </MenuItem>
             <MenuSeparator />
@@ -88,7 +84,7 @@ export const responsiveWithHeader = () => (
         <Menu>
             <MenuHeader title="Optional Title" subtitle="Subtitle" /> <MenuItem>View Profile</MenuItem>
             <MenuItem>Help</MenuItem>
-            <MenuItem isDisabled={boolean('isDisabled', true)}>Disabled Option</MenuItem>
+            <MenuItem isDisabled>Disabled Option</MenuItem>
             <MenuSeparator />
             <SubmenuItem>
                 Submenu

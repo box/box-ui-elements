@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { select } from '@storybook/addon-knobs';
 
 import Button from '../button';
 import IconHelp from '../../icons/general/IconHelp';
@@ -15,18 +14,7 @@ import { Flyout, Overlay } from '.';
 import notes from './Flyout.stories.md';
 
 export const Basic = () => {
-    const positions = {
-        'bottom-center': 'bottom-center',
-        'bottom-left': 'bottom-left',
-        'bottom-right': 'bottom-right',
-        'middle-left': 'middle-left',
-        'middle-right': 'middle-right',
-        'top-center': 'top-left',
-        'top-left': 'top-left',
-        'top-right': 'top-right',
-    };
-
-    const position = select('Position', positions, 'bottom-center');
+    const position = 'bottom-center';
 
     return (
         <div style={{ marginTop: 200, marginLeft: 200 }}>

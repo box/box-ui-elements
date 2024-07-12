@@ -1,3 +1,6 @@
+/* eslint-disable */
+// @ts-nocheck
+
 declare module '*.md' {
     const content: string;
     export = content;

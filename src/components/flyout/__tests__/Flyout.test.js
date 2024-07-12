@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
@@ -289,7 +289,7 @@ describe('components/flyout/Flyout', () => {
     });
 
     describe('handleOverlayClick()', () => {
-        [
+        test.each([
             {
                 closeOnClick: true,
                 hasClickableAncestor: true,
@@ -310,8 +310,9 @@ describe('components/flyout/Flyout', () => {
                 hasClickableAncestor: false,
                 shouldCloseOverlay: false,
             },
-        ].forEach(({ closeOnClick, hasClickableAncestor, shouldCloseOverlay }) => {
-            test('should handle clicks within overlay properly', () => {
+        ])(
+            'should handle clicks within overlay properly %s',
+            ({ closeOnClick, hasClickableAncestor, shouldCloseOverlay }) => {
                 const wrapper = mount(
                     <Flyout closeOnClick={closeOnClick}>
                         <FakeButton />
@@ -319,8 +320,10 @@ describe('components/flyout/Flyout', () => {
                     </Flyout>,
                 );
                 const instance = wrapper.instance();
-                instance.setState({
-                    isVisible: true,
+                act(() => {
+                    instance.setState({
+                        isVisible: true,
+                    });
                 });
 
                 const event = {};
@@ -338,10 +341,11 @@ describe('components/flyout/Flyout', () => {
                         .expects('handleOverlayClose')
                         .never();
                 }
-
-                instance.handleOverlayClick(event);
-            });
-        });
+                act(() => {
+                    instance.handleOverlayClick(event);
+                });
+            },
+        );
     });
 
     describe('handleButtonClick()', () => {
@@ -379,10 +383,14 @@ describe('components/flyout/Flyout', () => {
                 const event = {
                     preventDefault: sandbox.stub(),
                 };
-                instance.setState({
-                    isVisible: currentIsVisible,
+                act(() => {
+                    instance.setState({
+                        isVisible: currentIsVisible,
+                    });
                 });
-                instance.handleButtonClick(event);
+                act(() => {
+                    instance.handleButtonClick(event);
+                });
                 expect(instance.state.isVisible).toEqual(isVisibleAfterToggle);
             });
         });
@@ -545,10 +553,14 @@ describe('components/flyout/Flyout', () => {
                 const event = {
                     preventDefault: sandbox.stub(),
                 };
-                instance.setState({
-                    isVisible: currentIsVisible,
+                act(() => {
+                    instance.setState({
+                        isVisible: currentIsVisible,
+                    });
                 });
-                instance.openOverlay(event);
+                act(() => {
+                    instance.openOverlay(event);
+                });
                 expect(instance.state.isVisible).toEqual(isVisibleAfterOverlayOpened);
             });
         });
@@ -782,8 +794,10 @@ describe('components/flyout/Flyout', () => {
                         const instance = wrapper.instance();
                         const event = {};
 
-                        instance.setState({
-                            isVisible,
+                        act(() => {
+                            instance.setState({
+                                isVisible,
+                            });
                         });
 
                         if (shouldCallCloseOverlay) {
@@ -894,8 +908,10 @@ describe('components/flyout/Flyout', () => {
                     documentMock.expects('addEventListener').never();
                 }
 
-                instance.setState({
-                    isVisible: currIsVisible,
+                act(() => {
+                    instance.setState({
+                        isVisible: currIsVisible,
+                    });
                 });
             });
         });
@@ -922,8 +938,10 @@ describe('components/flyout/Flyout', () => {
                 const instance = wrapper.instance();
                 const documentMock = sandbox.mock(document);
 
-                instance.setState({
-                    isVisible,
+                act(() => {
+                    instance.setState({
+                        isVisible,
+                    });
                 });
 
                 if (shouldRemoveEventListener) {

@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
-import { select } from '@storybook/addon-knobs';
 
 import LinkPrimaryButton from '../LinkPrimaryButton';
 import notes from './LinkPrimaryButton.stories.md';
 
 export const basic = () => (
-    <LinkPrimaryButton
-        href="https://www.box.com/platform"
-        size={select('size', { None: undefined, Large: 'large' }, undefined)}
-    >
-        A link that looks like a PrimaryButton
-    </LinkPrimaryButton>
+    <LinkPrimaryButton href="https://www.box.com/platform">A link that looks like a PrimaryButton</LinkPrimaryButton>
 );
 
 export const large = () => (
@@ -32,6 +26,8 @@ export const withCustomComponent = () => {
     );
 
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Router>
             <LinkPrimaryButton href="/" component={CustomRouterLink}>
                 A link

@@ -1,5 +1,5 @@
 // @flow
-
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 

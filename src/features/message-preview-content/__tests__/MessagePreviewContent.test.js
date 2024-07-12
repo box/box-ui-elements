@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
 
 import MessagePreviewContent from '../MessagePreviewContent';
 
