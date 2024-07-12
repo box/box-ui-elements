@@ -91,6 +91,8 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
         try {
             const response: DocGenTemplateTagsResponse = await getDocGenTags();
             if (response && !!response.data) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 const { data } = response || [];
 
                 // anything that is not an image tag for this view is treated as a text tag
