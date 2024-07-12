@@ -66,8 +66,7 @@ export default [{
             BoxVisualTestUtils: true,
             shallow: true,
             mount: true,
-        },
-        parser: babelParser
+        }
     },
 }, {
     files: ["**/*.ts", "**/*.tsx"],
