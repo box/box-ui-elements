@@ -12,8 +12,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
+          [
+            [Function],
+          ],
         ],
         "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
           {
             "type": "return",
             "value": undefined,
@@ -54,8 +61,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
+            [
+              [Function],
+            ],
           ],
           "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
             {
               "type": "return",
               "value": undefined,
@@ -160,8 +174,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
+          [
+            [Function],
+          ],
         ],
         "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
           {
             "type": "return",
             "value": undefined,
@@ -202,8 +223,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
+            [
+              [Function],
+            ],
           ],
           "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
             {
               "type": "return",
               "value": undefined,
@@ -361,8 +389,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
+          [
+            [Function],
+          ],
         ],
         "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
           {
             "type": "return",
             "value": undefined,
@@ -403,8 +438,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
+            [
+              [Function],
+            ],
           ],
           "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
             {
               "type": "return",
               "value": undefined,
@@ -509,8 +551,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
+          [
+            [Function],
+          ],
         ],
         "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
           {
             "type": "return",
             "value": undefined,
@@ -538,8 +587,15 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
+            [
+              [Function],
+            ],
           ],
           "results": [
+            {
+              "type": "return",
+              "value": undefined,
+            },
             {
               "type": "return",
               "value": undefined,
