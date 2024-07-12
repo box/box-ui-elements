@@ -84,7 +84,7 @@ export const responsiveWithHeader = () => (
         <Menu>
             <MenuHeader title="Optional Title" subtitle="Subtitle" /> <MenuItem>View Profile</MenuItem>
             <MenuItem>Help</MenuItem>
-            <MenuItem>Disabled Option</MenuItem>
+            <MenuItem isDisabled>Disabled Option</MenuItem>
             <MenuSeparator />
             <SubmenuItem>
                 Submenu
