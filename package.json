@@ -391,9 +391,5 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
-    },
-    "dependencies": {
-        "@babel/eslint-parser": "^7.24.8",
-        "@storybook/test": "^8.1.11"
     }
 }
