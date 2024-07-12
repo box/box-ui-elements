@@ -9,7 +9,8 @@
         "checkJs": false,
         "rootDir": ".",
         "paths": {
-            "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"]
+            "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"],
+            "react": ["node_modules/@types/react"]
         },
         "noImplicitAny": false,
         "strict": false
