@@ -1,6 +1,6 @@
 // @flow
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
-import { State, Store } from '@sambego/storybook-state';
 
 import TextInput from './TextInput';
 import notes from './TextInput.stories.md';
@@ -50,27 +50,21 @@ export const valid = () => (
 );
 
 export const requiredWithOnChange = () => {
-    const componentStore = new Store({
+    const [input, setInput] = React.useState({
         error: 'required',
         value: '',
     });
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <TextInput
-                    label="Email"
-                    name="textinput"
-                    type="email"
-                    placeholder="Enter email here"
-                    value={state.value}
-                    error={state.error}
-                    onChange={e =>
-                        componentStore.set({ error: e.target.value ? '' : 'required', value: e.target.value })
-                    }
-                />
-            )}
-        </State>
+        <TextInput
+            label="Email"
+            name="textinput"
+            type="email"
+            placeholder="Enter email here"
+            value={input.value}
+            error={input.error}
+            onChange={e => setInput({ error: e.target.value ? '' : 'required', value: e.target.value })}
+        />
     );
 };
 

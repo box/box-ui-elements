@@ -1,5 +1,4 @@
 import path from 'path';
-import remarkGfm from "remark-gfm";
 
 const language = process.env.LANGUAGE;
 
@@ -18,18 +17,6 @@ const config: { webpackFinal: (config: any) => Promise<any>; staticDirs: string[
             },
         },
         '@storybook/addon-styling-webpack',
-        // tables and some other markdown features do not render correctly without this
-        // https://storybook.js.org/docs/writing-docs/mdx#markdown-tables-arent-rendering-correctly
-        {
-            name: '@storybook/addon-docs',
-            options: {
-                mdxPluginOptions: {
-                    mdxCompileOptions: {
-                        remarkPlugins: [remarkGfm],
-                    },
-                },
-            },
-        },
     ],
     framework: {
         name: '@storybook/react-webpack5',

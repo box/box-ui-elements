@@ -1,53 +1,55 @@
 // @flow
 /* eslint-disable no-console */
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
-import { State, Store } from '@sambego/storybook-state';
 
 import Button from '../../../components/button/Button';
 
 import UnifiedShareModal from '../UnifiedShareModal';
-import notes from './UnifiedShareModal.stories.md';
-import type { contactType, collaboratorType } from '../flowTypes';
+import type { contactType, collaboratorType, collaboratorsListType, item, sharedLinkType } from '../flowTypes';
 import * as constants from '../constants';
 
 // Base Example. Extend for different initial loads or to demonstrate different interactions
-const DEFAULT_SHARED_LINK_STATE = {
-    accessLevel: '',
+const DEFAULT_SHARED_LINK_STATE: sharedLinkType = {
+    accessLevel: constants.ANYONE_WITH_LINK,
     allowedAccessLevels: {},
     canChangeAccessLevel: true,
     enterpriseName: '',
     expirationTimestamp: null,
+    isDownloadAllowed: true,
     isDownloadSettingAvailable: true,
+    isEditAllowed: true,
+    isEditSettingAvailable: true,
+    isPreviewAllowed: true,
     isNewSharedLink: false,
-    permissionLevel: '',
+    permissionLevel: constants.CAN_VIEW_ONLY,
     url: '',
 };
 
 const INITIAL_STATE = {
-    isConfirmModalOpen: false,
     isOpen: false,
-    item: {
-        bannerPolicy: {
-            body: 'test',
-        },
-        canUserSeeClassification: true,
-        classification: 'internal',
-        grantedPermissions: {
-            itemShare: true,
-        },
-        hideCollaborators: false,
-        id: 12345,
-        name: 'My Example Folder',
-        type: 'folder',
-        typedID: 'd_12345',
-    },
     collaboratorsList: {
         collaborators: [],
     },
-    selectorOptions: [],
     sharedLink: DEFAULT_SHARED_LINK_STATE,
-    submitting: false,
+};
+
+const ITEM: item = {
+    bannerPolicy: {
+        body: 'test',
+    },
+    canUserSeeClassification: true,
+    classification: 'internal',
+    description: '',
+    extension: '',
+    grantedPermissions: {
+        itemShare: true,
+    },
+    hideCollaborators: false,
+    id: '12345',
+    name: 'My Example Folder',
+    type: 'folder',
+    typedID: 'd_12345',
 };
 
 const contacts: Array<contactType> = [
@@ -165,27 +167,26 @@ const contacts: Array<contactType> = [
     },
 ];
 
-const createComponentStore = () => new Store(INITIAL_STATE);
-
 export const basic = () => {
-    const componentStore = createComponentStore();
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [sharedLink, setSharedLink] = React.useState<sharedLinkType>(DEFAULT_SHARED_LINK_STATE);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType>(
+        INITIAL_STATE.collaboratorsList,
+    );
 
     const closeModal = () => {
-        componentStore.set({
-            isOpen: false,
-            sharedLink: DEFAULT_SHARED_LINK_STATE,
-            collaboratorsList: {
-                collaborators: [],
-            },
-        });
+        setIsOpen(false);
+        setSharedLink(DEFAULT_SHARED_LINK_STATE);
+        setCollaboratorsList({ collaborators: [] });
     };
 
     const fakeRequest = () => {
         // submitting is used to disable input fields, and not to show the loading indicator
-        componentStore.set({ submitting: true });
+        setIsSubmitting(true);
         return new Promise(resolve => {
             setTimeout(() => {
-                componentStore.set({ submitting: false });
+                setIsSubmitting(false);
                 resolve();
             }, 500);
         });
@@ -213,10 +214,9 @@ export const basic = () => {
                     return collaborator;
                 });
 
-                const collaboratorsList = {
+                setCollaboratorsList({
                     collaborators,
-                };
-                componentStore.set({ collaboratorsList });
+                });
                 resolved();
             }, 1000);
         });
@@ -224,174 +224,161 @@ export const basic = () => {
     };
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en">
-                    <div>
-                        {state.isOpen && (
-                            <UnifiedShareModal
-                                canInvite
-                                changeSharedLinkAccessLevel={newLevel => {
-                                    return fakeRequest().then(() => {
-                                        return componentStore.set({
-                                            sharedLink: {
-                                                ...state.sharedLink,
-                                                accessLevel: newLevel,
-                                            },
-                                        });
-                                    });
-                                }}
-                                changeSharedLinkPermissionLevel={newLevel => {
-                                    return fakeRequest().then(() => {
-                                        return componentStore.set({
-                                            sharedLink: {
-                                                ...state.sharedLink,
-                                                permissionLevel: newLevel,
-                                            },
-                                        });
-                                    });
-                                }}
-                                collaboratorsList={state.collaboratorsList}
-                                collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
-                                currentUserID="0"
-                                getCollaboratorContacts={() => {
-                                    return Promise.resolve(contacts);
-                                }}
-                                getSharedLinkContacts={() => {
-                                    return Promise.resolve(contacts);
-                                }}
-                                getInitialData={getInitialData}
-                                inviteePermissions={[
-                                    { default: false, text: 'Co-owner', value: 'Co-owner' },
-                                    { default: true, text: 'Editor', value: 'Editor' },
-                                    { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
-                                    { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
-                                    { default: false, text: 'Viewer', value: 'Viewer' },
-                                    { default: false, text: 'Previewer', value: 'Previewer' },
-                                    { default: false, text: 'Uploader', value: 'Uploader' },
-                                ]}
-                                isOpen={state.isOpen}
-                                isToggleEnabled
-                                item={state.item}
-                                onAddLink={() => {
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
-                                            sharedLink: {
-                                                accessLevel: 'peopleInYourCompany',
-                                                allowedAccessLevels: {
-                                                    peopleWithTheLink: true,
-                                                    peopleInYourCompany: true,
-                                                    peopleInThisItem: true,
-                                                },
-                                                canChangeAccessLevel: true,
-                                                enterpriseName: 'Box',
-                                                expirationTimestamp: 1509173940,
-                                                isDownloadSettingAvailable: true,
-                                                isNewSharedLink: true,
-                                                permissionLevel: 'canViewDownload',
-                                                url: 'https://box.com/s/abcdefg',
-                                            },
-                                        });
-                                    });
-                                }}
-                                onRemoveLink={() => {
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
-                                            sharedLink: DEFAULT_SHARED_LINK_STATE,
-                                        });
-                                        closeModal();
-                                    });
-                                }}
-                                onRequestClose={closeModal}
-                                /* eslint-disable-next-line no-alert */
-                                onSettingsClick={() => alert('hi!')}
-                                recommendedSharingTooltipCalloutName=""
-                                sendInvites={() =>
-                                    fakeRequest().then(() => {
-                                        closeModal();
-                                    })
-                                }
-                                sendInvitesError=""
-                                sendSharedLink={() =>
-                                    fakeRequest().then(() => {
-                                        closeModal();
-                                    })
-                                }
-                                sendSharedLinkError=""
-                                sharedLink={state.sharedLink}
-                                showCalloutForUser
-                                showUpgradeOptions
-                                submitting={state.submitting}
-                                suggestedCollaborators={{
-                                    '2': {
-                                        id: '2',
-                                        userScore: 0.1,
-                                        name: 'David',
-                                        email: 'dt@example.com',
-                                        type: 'user',
-                                    },
-                                    '5': {
-                                        id: '5',
-                                        userScore: 0.2,
-                                        name: 'Will',
-                                        email: 'wy@example.com',
-                                        type: 'user',
-                                    },
-                                    '1': {
-                                        id: '1',
-                                        userScore: 0.5,
-                                        name: 'Jeff',
-                                        email: 'jt@example.com',
-                                        type: 'user',
-                                    },
-                                    '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
-                                }}
-                                trackingProps={{
-                                    collaboratorListTracking: {},
-                                    inviteCollabsEmailTracking: {},
-                                    inviteCollabTracking: {},
-                                    modalTracking: {},
-                                    removeLinkConfirmModalTracking: {},
-                                    sharedLinkEmailTracking: {},
-                                    sharedLinkTracking: {},
-                                }}
-                            />
-                        )}
-                        <Button
-                            onClick={() =>
-                                componentStore.set({
-                                    isOpen: true,
-                                })
-                            }
-                        >
-                            Open USM Modal
-                        </Button>
-                    </div>
-                </IntlProvider>
+        <div>
+            {isOpen && (
+                <UnifiedShareModal
+                    canInvite
+                    changeSharedLinkAccessLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                accessLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    changeSharedLinkPermissionLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                permissionLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    collaboratorsList={collaboratorsList}
+                    collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                    currentUserID="0"
+                    getCollaboratorContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getSharedLinkContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getInitialData={getInitialData}
+                    inviteePermissions={[
+                        { default: false, text: 'Co-owner', value: 'Co-owner' },
+                        { default: true, text: 'Editor', value: 'Editor' },
+                        { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                        { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                        { default: false, text: 'Viewer', value: 'Viewer' },
+                        { default: false, text: 'Previewer', value: 'Previewer' },
+                        { default: false, text: 'Uploader', value: 'Uploader' },
+                    ]}
+                    isOpen={isOpen}
+                    isToggleEnabled
+                    item={ITEM}
+                    onAddLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink({
+                                accessLevel: 'peopleInYourCompany',
+                                allowedAccessLevels: {
+                                    peopleWithTheLink: true,
+                                    peopleInYourCompany: true,
+                                    peopleInThisItem: true,
+                                },
+                                canChangeAccessLevel: true,
+                                enterpriseName: 'Box',
+                                expirationTimestamp: 1509173940,
+                                isDownloadAllowed: true,
+                                isDownloadSettingAvailable: true,
+                                isEditAllowed: true,
+                                isEditSettingAvailable: true,
+                                isNewSharedLink: true,
+                                isPreviewAllowed: true,
+                                permissionLevel: 'canViewDownload',
+                                url: 'https://box.com/s/abcdefg',
+                            });
+                        });
+                    }}
+                    onRemoveLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink(DEFAULT_SHARED_LINK_STATE);
+                            closeModal();
+                        });
+                    }}
+                    onRequestClose={closeModal}
+                    /* eslint-disable-next-line no-alert */
+                    onSettingsClick={() => alert('hi!')}
+                    recommendedSharingTooltipCalloutName=""
+                    sendInvites={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendInvitesError=""
+                    sendSharedLink={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendSharedLinkError=""
+                    sharedLink={sharedLink}
+                    showCalloutForUser
+                    showUpgradeOptions
+                    submitting={isSubmitting}
+                    suggestedCollaborators={{
+                        '2': {
+                            id: '2',
+                            userScore: 0.1,
+                            name: 'David',
+                            email: 'dt@example.com',
+                            type: 'user',
+                        },
+                        '5': {
+                            id: '5',
+                            userScore: 0.2,
+                            name: 'Will',
+                            email: 'wy@example.com',
+                            type: 'user',
+                        },
+                        '1': {
+                            id: '1',
+                            userScore: 0.5,
+                            name: 'Jeff',
+                            email: 'jt@example.com',
+                            type: 'user',
+                        },
+                        '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
+                    }}
+                    trackingProps={{
+                        collaboratorListTracking: {},
+                        inviteCollabsEmailTracking: {},
+                        inviteCollabTracking: {},
+                        modalTracking: {},
+                        removeLinkConfirmModalTracking: {},
+                        sharedLinkEmailTracking: {},
+                        sharedLinkTracking: {},
+                    }}
+                />
             )}
-        </State>
+            <Button onClick={() => setIsOpen(true)}>Open USM Modal</Button>
+        </div>
     );
 };
 
 export const withSharedLink = () => {
-    const componentStore = createComponentStore();
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [sharedLink, setSharedLink] = React.useState<sharedLinkType>(DEFAULT_SHARED_LINK_STATE);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType>(
+        INITIAL_STATE.collaboratorsList,
+    );
 
     const closeModal = () => {
-        componentStore.set({
-            isOpen: false,
-            sharedLink: DEFAULT_SHARED_LINK_STATE,
-            collaboratorsList: {
-                collaborators: [],
-            },
-        });
+        setIsOpen(false);
+        setSharedLink(DEFAULT_SHARED_LINK_STATE);
+        setCollaboratorsList({ collaborators: [] });
     };
 
     const fakeRequest = () => {
         // submitting is used to disable input fields, and not to show the loading indicator
-        componentStore.set({ submitting: true });
+        setIsSubmitting(true);
         return new Promise(resolve => {
             setTimeout(() => {
-                componentStore.set({ submitting: false });
+                setIsSubmitting(false);
                 resolve();
             }, 500);
         });
@@ -400,21 +387,24 @@ export const withSharedLink = () => {
     const getInitialData = () => {
         const resolveSharedLink = new Promise(resolved => {
             setTimeout(() => {
-                componentStore.set({
-                    sharedLink: {
-                        accessLevel: 'peopleInYourCompany',
-                        allowedAccessLevels: {
-                            peopleWithTheLink: true,
-                            peopleInYourCompany: true,
-                            peopleInThisItem: true,
-                        },
-                        canChangeAccessLevel: true,
-                        enterpriseName: 'Box',
-                        expirationTimestamp: 1509173940,
-                        isDownloadSettingAvailable: true,
-                        permissionLevel: 'canViewDownload',
-                        url: 'https://box.com/s/abcdefg',
+                setSharedLink({
+                    accessLevel: 'peopleInYourCompany',
+                    allowedAccessLevels: {
+                        peopleWithTheLink: true,
+                        peopleInYourCompany: true,
+                        peopleInThisItem: true,
                     },
+                    canChangeAccessLevel: true,
+                    enterpriseName: 'Box',
+                    expirationTimestamp: 1509173940,
+                    isDownloadAllowed: true,
+                    isDownloadSettingAvailable: true,
+                    isEditAllowed: true,
+                    isEditSettingAvailable: true,
+                    isNewSharedLink: true,
+                    isPreviewAllowed: true,
+                    permissionLevel: 'canViewDownload',
+                    url: 'https://box.com/s/abcdefg',
                 });
                 resolved();
             }, 400);
@@ -424,175 +414,162 @@ export const withSharedLink = () => {
     };
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en">
-                    <div>
-                        {state.isOpen && (
-                            <UnifiedShareModal
-                                canInvite
-                                changeSharedLinkAccessLevel={newLevel => {
-                                    return fakeRequest().then(() => {
-                                        return componentStore.set({
-                                            sharedLink: {
-                                                ...state.sharedLink,
-                                                accessLevel: newLevel,
-                                            },
-                                        });
-                                    });
-                                }}
-                                changeSharedLinkPermissionLevel={newLevel => {
-                                    return fakeRequest().then(() => {
-                                        return componentStore.set({
-                                            sharedLink: {
-                                                ...state.sharedLink,
-                                                permissionLevel: newLevel,
-                                            },
-                                        });
-                                    });
-                                }}
-                                collaboratorsList={state.collaboratorsList}
-                                collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
-                                currentUserID="0"
-                                focusSharedLinkOnLoad={false}
-                                getCollaboratorContacts={() => {
-                                    return Promise.resolve(contacts);
-                                }}
-                                getSharedLinkContacts={() => {
-                                    return Promise.resolve(contacts);
-                                }}
-                                getInitialData={getInitialData}
-                                inviteePermissions={[
-                                    { default: false, text: 'Co-owner', value: 'Co-owner' },
-                                    { default: true, text: 'Editor', value: 'Editor' },
-                                    { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
-                                    { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
-                                    { default: false, text: 'Viewer', value: 'Viewer' },
-                                    { default: false, text: 'Previewer', value: 'Previewer' },
-                                    { default: false, text: 'Uploader', value: 'Uploader' },
-                                ]}
-                                isOpen={state.isOpen}
-                                isToggleEnabled
-                                item={state.item}
-                                onAddLink={() => {
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
-                                            sharedLink: {
-                                                accessLevel: 'peopleInYourCompany',
-                                                allowedAccessLevels: {
-                                                    peopleWithTheLink: true,
-                                                    peopleInYourCompany: true,
-                                                    peopleInThisItem: true,
-                                                },
-                                                canChangeAccessLevel: true,
-                                                enterpriseName: 'Box',
-                                                expirationTimestamp: 1509173940,
-                                                isDownloadSettingAvailable: true,
-                                                isNewSharedLink: true,
-                                                permissionLevel: 'canViewDownload',
-                                                url: 'https://box.com/s/abcdefg',
-                                            },
-                                        });
-                                    });
-                                }}
-                                onRemoveLink={() => {
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
-                                            sharedLink: DEFAULT_SHARED_LINK_STATE,
-                                        });
-                                        closeModal();
-                                    });
-                                }}
-                                onRequestClose={closeModal}
-                                /* eslint-disable-next-line no-alert */
-                                onSettingsClick={() => alert('hi!')}
-                                recommendedSharingTooltipCalloutName=""
-                                sendInvites={() =>
-                                    fakeRequest().then(() => {
-                                        closeModal();
-                                    })
-                                }
-                                sendInvitesError=""
-                                sendSharedLink={() =>
-                                    fakeRequest().then(() => {
-                                        closeModal();
-                                    })
-                                }
-                                sendSharedLinkError=""
-                                sharedLink={state.sharedLink}
-                                showCalloutForUser
-                                showUpgradeOptions
-                                submitting={state.submitting}
-                                suggestedCollaborators={{
-                                    '2': {
-                                        id: '2',
-                                        userScore: 0.1,
-                                        name: 'David',
-                                        email: 'dt@example.com',
-                                        type: 'user',
-                                    },
-                                    '5': {
-                                        id: '5',
-                                        userScore: 0.2,
-                                        name: 'Will',
-                                        email: 'wy@example.com',
-                                        type: 'user',
-                                    },
-                                    '1': {
-                                        id: '1',
-                                        userScore: 0.5,
-                                        name: 'Jeff',
-                                        email: 'jt@example.com',
-                                        type: 'user',
-                                    },
-                                    '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
-                                }}
-                                trackingProps={{
-                                    collaboratorListTracking: {},
-                                    inviteCollabsEmailTracking: {},
-                                    inviteCollabTracking: {},
-                                    modalTracking: {},
-                                    removeLinkConfirmModalTracking: {},
-                                    sharedLinkEmailTracking: {},
-                                    sharedLinkTracking: {},
-                                }}
-                            />
-                        )}
-                        <Button
-                            onClick={() =>
-                                componentStore.set({
-                                    isOpen: true,
-                                })
-                            }
-                        >
-                            Open USM Modal
-                        </Button>
-                    </div>
-                </IntlProvider>
+        <div>
+            {isOpen && (
+                <UnifiedShareModal
+                    canInvite
+                    changeSharedLinkAccessLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                accessLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    changeSharedLinkPermissionLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                permissionLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    collaboratorsList={collaboratorsList}
+                    collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                    currentUserID="0"
+                    focusSharedLinkOnLoad={false}
+                    getCollaboratorContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getSharedLinkContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getInitialData={getInitialData}
+                    inviteePermissions={[
+                        { default: false, text: 'Co-owner', value: 'Co-owner' },
+                        { default: true, text: 'Editor', value: 'Editor' },
+                        { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                        { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                        { default: false, text: 'Viewer', value: 'Viewer' },
+                        { default: false, text: 'Previewer', value: 'Previewer' },
+                        { default: false, text: 'Uploader', value: 'Uploader' },
+                    ]}
+                    isOpen={isOpen}
+                    isToggleEnabled
+                    item={ITEM}
+                    onAddLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink({
+                                accessLevel: 'peopleInYourCompany',
+                                allowedAccessLevels: {
+                                    peopleWithTheLink: true,
+                                    peopleInYourCompany: true,
+                                    peopleInThisItem: true,
+                                },
+                                canChangeAccessLevel: true,
+                                enterpriseName: 'Box',
+                                expirationTimestamp: 1509173940,
+                                isDownloadAllowed: true,
+                                isDownloadSettingAvailable: true,
+                                isEditAllowed: true,
+                                isEditSettingAvailable: true,
+                                isNewSharedLink: true,
+                                isPreviewAllowed: true,
+                                permissionLevel: 'canViewDownload',
+                                url: 'https://box.com/s/abcdefg',
+                            });
+                        });
+                    }}
+                    onRemoveLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink(DEFAULT_SHARED_LINK_STATE);
+                            closeModal();
+                        });
+                    }}
+                    onRequestClose={closeModal}
+                    /* eslint-disable-next-line no-alert */
+                    onSettingsClick={() => alert('hi!')}
+                    recommendedSharingTooltipCalloutName=""
+                    sendInvites={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendInvitesError=""
+                    sendSharedLink={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendSharedLinkError=""
+                    sharedLink={sharedLink}
+                    showCalloutForUser
+                    showUpgradeOptions
+                    submitting={isSubmitting}
+                    suggestedCollaborators={{
+                        '2': {
+                            id: '2',
+                            userScore: 0.1,
+                            name: 'David',
+                            email: 'dt@example.com',
+                            type: 'user',
+                        },
+                        '5': {
+                            id: '5',
+                            userScore: 0.2,
+                            name: 'Will',
+                            email: 'wy@example.com',
+                            type: 'user',
+                        },
+                        '1': {
+                            id: '1',
+                            userScore: 0.5,
+                            name: 'Jeff',
+                            email: 'jt@example.com',
+                            type: 'user',
+                        },
+                        '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
+                    }}
+                    trackingProps={{
+                        collaboratorListTracking: {},
+                        inviteCollabsEmailTracking: {},
+                        inviteCollabTracking: {},
+                        modalTracking: {},
+                        removeLinkConfirmModalTracking: {},
+                        sharedLinkEmailTracking: {},
+                        sharedLinkTracking: {},
+                    }}
+                />
             )}
-        </State>
+            <Button onClick={() => setIsOpen(true)}>Open USM Modal</Button>
+        </div>
     );
 };
 
 export const withAutofocusedSharedLink = () => {
-    const componentStore = createComponentStore();
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [sharedLink, setSharedLink] = React.useState<sharedLinkType>(DEFAULT_SHARED_LINK_STATE);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType>(
+        INITIAL_STATE.collaboratorsList,
+    );
 
     const closeModal = () => {
-        componentStore.set({
-            isOpen: false,
-            sharedLink: DEFAULT_SHARED_LINK_STATE,
-            collaboratorsList: {
-                collaborators: [],
-            },
-        });
+        setIsOpen(false);
+        setSharedLink(DEFAULT_SHARED_LINK_STATE);
+        setCollaboratorsList({ collaborators: [] });
     };
 
     const fakeRequest = () => {
         // submitting is used to disable input fields, and not to show the loading indicator
-        componentStore.set({ submitting: true });
+        setIsSubmitting(true);
         return new Promise(resolve => {
             setTimeout(() => {
-                componentStore.set({ submitting: false });
+                setIsSubmitting(false);
                 resolve();
             }, 500);
         });
@@ -601,21 +578,24 @@ export const withAutofocusedSharedLink = () => {
     const getInitialData = () => {
         const resolveSharedLink = new Promise(resolved => {
             setTimeout(() => {
-                componentStore.set({
-                    sharedLink: {
-                        accessLevel: 'peopleInYourCompany',
-                        allowedAccessLevels: {
-                            peopleWithTheLink: true,
-                            peopleInYourCompany: true,
-                            peopleInThisItem: true,
-                        },
-                        canChangeAccessLevel: true,
-                        enterpriseName: 'Box',
-                        expirationTimestamp: 1509173940,
-                        isDownloadSettingAvailable: true,
-                        permissionLevel: 'canViewDownload',
-                        url: 'https://box.com/s/abcdefg',
+                setSharedLink({
+                    accessLevel: 'peopleInYourCompany',
+                    allowedAccessLevels: {
+                        peopleWithTheLink: true,
+                        peopleInYourCompany: true,
+                        peopleInThisItem: true,
                     },
+                    canChangeAccessLevel: true,
+                    enterpriseName: 'Box',
+                    expirationTimestamp: 1509173940,
+                    isDownloadAllowed: true,
+                    isDownloadSettingAvailable: true,
+                    isEditAllowed: true,
+                    isEditSettingAvailable: true,
+                    isNewSharedLink: true,
+                    isPreviewAllowed: true,
+                    permissionLevel: 'canViewDownload',
+                    url: 'https://box.com/s/abcdefg',
                 });
                 resolved();
             }, 400);
@@ -625,164 +605,155 @@ export const withAutofocusedSharedLink = () => {
     };
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en">
-                    <div>
-                        {state.isOpen && (
-                            <UnifiedShareModal
-                                canInvite
-                                changeSharedLinkAccessLevel={newLevel => {
-                                    return fakeRequest().then(() => {
-                                        return componentStore.set({
-                                            sharedLink: {
-                                                ...state.sharedLink,
-                                                accessLevel: newLevel,
-                                            },
-                                        });
-                                    });
-                                }}
-                                changeSharedLinkPermissionLevel={newLevel => {
-                                    return fakeRequest().then(() => {
-                                        return componentStore.set({
-                                            sharedLink: {
-                                                ...state.sharedLink,
-                                                permissionLevel: newLevel,
-                                            },
-                                        });
-                                    });
-                                }}
-                                collaboratorsList={state.collaboratorsList}
-                                collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
-                                currentUserID="0"
-                                focusSharedLinkOnLoad
-                                getCollaboratorContacts={() => {
-                                    return Promise.resolve(contacts);
-                                }}
-                                getSharedLinkContacts={() => {
-                                    return Promise.resolve(contacts);
-                                }}
-                                getInitialData={getInitialData}
-                                inviteePermissions={[
-                                    { default: false, text: 'Co-owner', value: 'Co-owner' },
-                                    { default: true, text: 'Editor', value: 'Editor' },
-                                    { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
-                                    { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
-                                    { default: false, text: 'Viewer', value: 'Viewer' },
-                                    { default: false, text: 'Previewer', value: 'Previewer' },
-                                    { default: false, text: 'Uploader', value: 'Uploader' },
-                                ]}
-                                isOpen={state.isOpen}
-                                isToggleEnabled
-                                item={state.item}
-                                onAddLink={() => {
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
-                                            sharedLink: {
-                                                accessLevel: 'peopleInYourCompany',
-                                                allowedAccessLevels: {
-                                                    peopleWithTheLink: true,
-                                                    peopleInYourCompany: true,
-                                                    peopleInThisItem: true,
-                                                },
-                                                canChangeAccessLevel: true,
-                                                enterpriseName: 'Box',
-                                                expirationTimestamp: 1509173940,
-                                                isDownloadSettingAvailable: true,
-                                                isNewSharedLink: true,
-                                                permissionLevel: 'canViewDownload',
-                                                url: 'https://box.com/s/abcdefg',
-                                            },
-                                        });
-                                    });
-                                }}
-                                onRemoveLink={() => {
-                                    fakeRequest().then(() => {
-                                        componentStore.set({
-                                            sharedLink: DEFAULT_SHARED_LINK_STATE,
-                                        });
-                                        closeModal();
-                                    });
-                                }}
-                                onRequestClose={closeModal}
-                                /* eslint-disable-next-line no-alert */
-                                onSettingsClick={() => alert('hi!')}
-                                recommendedSharingTooltipCalloutName=""
-                                sendInvites={() =>
-                                    fakeRequest().then(() => {
-                                        closeModal();
-                                    })
-                                }
-                                sendInvitesError=""
-                                sendSharedLink={() =>
-                                    fakeRequest().then(() => {
-                                        closeModal();
-                                    })
-                                }
-                                sendSharedLinkError=""
-                                sharedLink={state.sharedLink}
-                                showCalloutForUser
-                                showUpgradeOptions
-                                submitting={state.submitting}
-                                suggestedCollaborators={{
-                                    '2': {
-                                        id: '2',
-                                        userScore: 0.1,
-                                        name: 'David',
-                                        email: 'dt@example.com',
-                                        type: 'user',
-                                    },
-                                    '5': {
-                                        id: '5',
-                                        userScore: 0.2,
-                                        name: 'Will',
-                                        email: 'wy@example.com',
-                                        type: 'user',
-                                    },
-                                    '1': {
-                                        id: '1',
-                                        userScore: 0.5,
-                                        name: 'Jeff',
-                                        email: 'jt@example.com',
-                                        type: 'user',
-                                    },
-                                    '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
-                                }}
-                                trackingProps={{
-                                    collaboratorListTracking: {},
-                                    inviteCollabsEmailTracking: {},
-                                    inviteCollabTracking: {},
-                                    modalTracking: {},
-                                    removeLinkConfirmModalTracking: {},
-                                    sharedLinkEmailTracking: {},
-                                    sharedLinkTracking: {},
-                                }}
-                            />
-                        )}
-                        <Button
-                            onClick={() =>
-                                componentStore.set({
-                                    isOpen: true,
-                                })
-                            }
-                        >
-                            Open USM Modal
-                        </Button>
-                    </div>
-                </IntlProvider>
+        <div>
+            {isOpen && (
+                <UnifiedShareModal
+                    canInvite
+                    changeSharedLinkAccessLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                accessLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    changeSharedLinkPermissionLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                permissionLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    collaboratorsList={collaboratorsList}
+                    collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                    currentUserID="0"
+                    focusSharedLinkOnLoad
+                    getCollaboratorContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getSharedLinkContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getInitialData={getInitialData}
+                    inviteePermissions={[
+                        { default: false, text: 'Co-owner', value: 'Co-owner' },
+                        { default: true, text: 'Editor', value: 'Editor' },
+                        { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                        { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                        { default: false, text: 'Viewer', value: 'Viewer' },
+                        { default: false, text: 'Previewer', value: 'Previewer' },
+                        { default: false, text: 'Uploader', value: 'Uploader' },
+                    ]}
+                    isOpen={isOpen}
+                    isToggleEnabled
+                    item={ITEM}
+                    onAddLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink({
+                                accessLevel: 'peopleInYourCompany',
+                                allowedAccessLevels: {
+                                    peopleWithTheLink: true,
+                                    peopleInYourCompany: true,
+                                    peopleInThisItem: true,
+                                },
+                                canChangeAccessLevel: true,
+                                enterpriseName: 'Box',
+                                expirationTimestamp: 1509173940,
+                                isDownloadAllowed: true,
+                                isDownloadSettingAvailable: true,
+                                isEditAllowed: true,
+                                isEditSettingAvailable: true,
+                                isNewSharedLink: true,
+                                isPreviewAllowed: true,
+                                permissionLevel: 'canViewDownload',
+                                url: 'https://box.com/s/abcdefg',
+                            });
+                        });
+                    }}
+                    onRemoveLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink(DEFAULT_SHARED_LINK_STATE);
+                            closeModal();
+                        });
+                    }}
+                    onRequestClose={closeModal}
+                    /* eslint-disable-next-line no-alert */
+                    onSettingsClick={() => alert('hi!')}
+                    recommendedSharingTooltipCalloutName=""
+                    sendInvites={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendInvitesError=""
+                    sendSharedLink={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendSharedLinkError=""
+                    sharedLink={sharedLink}
+                    showCalloutForUser
+                    showUpgradeOptions
+                    submitting={isSubmitting}
+                    suggestedCollaborators={{
+                        '2': {
+                            id: '2',
+                            userScore: 0.1,
+                            name: 'David',
+                            email: 'dt@example.com',
+                            type: 'user',
+                        },
+                        '5': {
+                            id: '5',
+                            userScore: 0.2,
+                            name: 'Will',
+                            email: 'wy@example.com',
+                            type: 'user',
+                        },
+                        '1': {
+                            id: '1',
+                            userScore: 0.5,
+                            name: 'Jeff',
+                            email: 'jt@example.com',
+                            type: 'user',
+                        },
+                        '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
+                    }}
+                    trackingProps={{
+                        collaboratorListTracking: {},
+                        inviteCollabsEmailTracking: {},
+                        inviteCollabTracking: {},
+                        modalTracking: {},
+                        removeLinkConfirmModalTracking: {},
+                        sharedLinkEmailTracking: {},
+                        sharedLinkTracking: {},
+                    }}
+                />
             )}
-        </State>
+            <Button onClick={() => setIsOpen(true)}>Open USM Modal</Button>
+        </div>
     );
 };
 
 export const withFormOnly = () => {
-    const componentStore = createComponentStore();
+    const [sharedLink, setSharedLink] = React.useState<sharedLinkType>(DEFAULT_SHARED_LINK_STATE);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType>(
+        INITIAL_STATE.collaboratorsList,
+    );
+
     const fakeRequest = () => {
         // submitting is used to disable input fields, and not to show the loading indicator
-        componentStore.set({ submitting: true });
+        setIsSubmitting(true);
         return new Promise(resolve => {
             setTimeout(() => {
-                componentStore.set({ submitting: false });
+                setIsSubmitting(false);
                 resolve();
             }, 500);
         });
@@ -792,12 +763,25 @@ export const withFormOnly = () => {
         const initialPromise = fakeRequest();
         const fetchCollaborators = new Promise(resolved => {
             setTimeout(() => {
-                const collaborators = contacts.slice();
+                const collaborators: Array<collaboratorType> = contacts.slice().map(contact => {
+                    // convert the existing contact entries to compatible collaborator entries in this example
+                    const collaborator: collaboratorType = {
+                        collabID: 1234,
+                        email: contact.email,
+                        expiration: { executeAt: contact.isExternalUser ? 'November 27, 2022' : '' },
+                        imageURL: null,
+                        isExternalCollab: contact.isExternalUser || false,
+                        hasCustomAvatar: false,
+                        name: contact.name || '',
+                        type: contact.type !== 'group' ? constants.COLLAB_USER_TYPE : constants.COLLAB_GROUP_TYPE,
+                        userID: parseInt(contact.id, 10),
+                    };
 
-                const collaboratorsList = {
+                    return collaborator;
+                });
+                setCollaboratorsList({
                     collaborators,
-                };
-                componentStore.set({ collaboratorsList });
+                });
                 resolved();
             }, 1000);
         });
@@ -805,147 +789,138 @@ export const withFormOnly = () => {
     };
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en">
-                    <UnifiedShareModal
-                        canInvite
-                        changeSharedLinkAccessLevel={newLevel => {
-                            return fakeRequest().then(() => {
-                                return componentStore.set({
-                                    sharedLink: {
-                                        ...state.sharedLink,
-                                        accessLevel: newLevel,
-                                    },
-                                });
-                            });
-                        }}
-                        changeSharedLinkPermissionLevel={newLevel => {
-                            return fakeRequest().then(() => {
-                                return componentStore.set({
-                                    sharedLink: {
-                                        ...state.sharedLink,
-                                        permissionLevel: newLevel,
-                                    },
-                                });
-                            });
-                        }}
-                        collaboratorsList={state.collaboratorsList}
-                        collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
-                        currentUserID="0"
-                        displayInModal={false}
-                        getCollaboratorContacts={() => {
-                            return Promise.resolve(contacts);
-                        }}
-                        getSharedLinkContacts={() => {
-                            return Promise.resolve(contacts);
-                        }}
-                        getInitialData={getInitialData}
-                        inviteePermissions={[
-                            { default: false, text: 'Co-owner', value: 'Co-owner' },
-                            { default: true, text: 'Editor', value: 'Editor' },
-                            { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
-                            { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
-                            { default: false, text: 'Viewer', value: 'Viewer' },
-                            { default: false, text: 'Previewer', value: 'Previewer' },
-                            { default: false, text: 'Uploader', value: 'Uploader' },
-                        ]}
-                        isOpen={state.isOpen}
-                        isToggleEnabled
-                        item={state.item}
-                        onAddLink={() => {
-                            fakeRequest().then(() => {
-                                componentStore.set({
-                                    sharedLink: {
-                                        accessLevel: 'peopleInYourCompany',
-                                        allowedAccessLevels: {
-                                            peopleWithTheLink: true,
-                                            peopleInYourCompany: true,
-                                            peopleInThisItem: true,
-                                        },
-                                        canChangeAccessLevel: true,
-                                        enterpriseName: 'Box',
-                                        expirationTimestamp: 1509173940,
-                                        isDownloadSettingAvailable: true,
-                                        isNewSharedLink: true,
-                                        permissionLevel: 'canViewDownload',
-                                        url: 'https://box.com/s/abcdefg',
-                                    },
-                                });
-                            });
-                        }}
-                        onRemoveLink={() => {
-                            fakeRequest().then(() => {
-                                componentStore.set({
-                                    sharedLink: DEFAULT_SHARED_LINK_STATE,
-                                });
-                                console.log('removed link');
-                            });
-                        }}
-                        /* eslint-disable-next-line no-alert */
-                        onSettingsClick={() => alert('hi!')}
-                        recommendedSharingTooltipCalloutName=""
-                        sendInvites={() =>
-                            fakeRequest().then(() => {
-                                console.log('sent invites');
-                            })
-                        }
-                        sendInvitesError=""
-                        sendSharedLink={() =>
-                            fakeRequest().then(() => {
-                                console.log('sent shared link');
-                            })
-                        }
-                        sendSharedLinkError=""
-                        sharedLink={state.sharedLink}
-                        showCalloutForUser
-                        showFormOnly
-                        showUpgradeOptions
-                        submitting={state.submitting}
-                        suggestedCollaborators={{
-                            '2': {
-                                id: '2',
-                                userScore: 0.1,
-                                name: 'David',
-                                email: 'dt@example.com',
-                                type: 'user',
-                            },
-                            '5': {
-                                id: '5',
-                                userScore: 0.2,
-                                name: 'Will',
-                                email: 'wy@example.com',
-                                type: 'user',
-                            },
-                            '1': {
-                                id: '1',
-                                userScore: 0.5,
-                                name: 'Jeff',
-                                email: 'jt@example.com',
-                                type: 'user',
-                            },
-                            '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
-                        }}
-                        trackingProps={{
-                            collaboratorListTracking: {},
-                            inviteCollabsEmailTracking: {},
-                            inviteCollabTracking: {},
-                            modalTracking: {},
-                            removeLinkConfirmModalTracking: {},
-                            sharedLinkEmailTracking: {},
-                            sharedLinkTracking: {},
-                        }}
-                    />
-                </IntlProvider>
-            )}
-        </State>
+        <UnifiedShareModal
+            canInvite
+            changeSharedLinkAccessLevel={newLevel => {
+                return fakeRequest().then(() => {
+                    const newSharedLink = {
+                        ...sharedLink,
+                        accessLevel: newLevel,
+                    };
+                    setSharedLink(newSharedLink);
+                    return newSharedLink;
+                });
+            }}
+            changeSharedLinkPermissionLevel={newLevel => {
+                return fakeRequest().then(() => {
+                    const newSharedLink = {
+                        ...sharedLink,
+                        permissionLevel: newLevel,
+                    };
+                    setSharedLink(newSharedLink);
+                    return newSharedLink;
+                });
+            }}
+            collaboratorsList={collaboratorsList}
+            collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+            currentUserID="0"
+            displayInModal={false}
+            getCollaboratorContacts={() => {
+                return Promise.resolve(contacts);
+            }}
+            getSharedLinkContacts={() => {
+                return Promise.resolve(contacts);
+            }}
+            getInitialData={getInitialData}
+            inviteePermissions={[
+                { default: false, text: 'Co-owner', value: 'Co-owner' },
+                { default: true, text: 'Editor', value: 'Editor' },
+                { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                { default: false, text: 'Viewer', value: 'Viewer' },
+                { default: false, text: 'Previewer', value: 'Previewer' },
+                { default: false, text: 'Uploader', value: 'Uploader' },
+            ]}
+            isOpen={false}
+            isToggleEnabled
+            item={ITEM}
+            onAddLink={() => {
+                fakeRequest().then(() => {
+                    setSharedLink({
+                        accessLevel: 'peopleInYourCompany',
+                        allowedAccessLevels: {
+                            peopleWithTheLink: true,
+                            peopleInYourCompany: true,
+                            peopleInThisItem: true,
+                        },
+                        canChangeAccessLevel: true,
+                        enterpriseName: 'Box',
+                        expirationTimestamp: 1509173940,
+                        isDownloadAllowed: true,
+                        isDownloadSettingAvailable: true,
+                        isEditAllowed: true,
+                        isEditSettingAvailable: true,
+                        isNewSharedLink: true,
+                        isPreviewAllowed: true,
+                        permissionLevel: 'canViewDownload',
+                        url: 'https://box.com/s/abcdefg',
+                    });
+                });
+            }}
+            onRemoveLink={() => {
+                fakeRequest().then(() => {
+                    setSharedLink(DEFAULT_SHARED_LINK_STATE);
+                    console.log('removed link');
+                });
+            }}
+            /* eslint-disable-next-line no-alert */
+            onSettingsClick={() => alert('hi!')}
+            recommendedSharingTooltipCalloutName=""
+            sendInvites={() =>
+                fakeRequest().then(() => {
+                    console.log('sent invites');
+                })
+            }
+            sendInvitesError=""
+            sendSharedLink={() =>
+                fakeRequest().then(() => {
+                    console.log('sent shared link');
+                })
+            }
+            sendSharedLinkError=""
+            sharedLink={sharedLink}
+            showCalloutForUser
+            showFormOnly
+            showUpgradeOptions
+            submitting={isSubmitting}
+            suggestedCollaborators={{
+                '2': {
+                    id: '2',
+                    userScore: 0.1,
+                    name: 'David',
+                    email: 'dt@example.com',
+                    type: 'user',
+                },
+                '5': {
+                    id: '5',
+                    userScore: 0.2,
+                    name: 'Will',
+                    email: 'wy@example.com',
+                    type: 'user',
+                },
+                '1': {
+                    id: '1',
+                    userScore: 0.5,
+                    name: 'Jeff',
+                    email: 'jt@example.com',
+                    type: 'user',
+                },
+                '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
+            }}
+            trackingProps={{
+                collaboratorListTracking: {},
+                inviteCollabsEmailTracking: {},
+                inviteCollabTracking: {},
+                modalTracking: {},
+                removeLinkConfirmModalTracking: {},
+                sharedLinkEmailTracking: {},
+                sharedLinkTracking: {},
+            }}
+        />
     );
 };
 
 export default {
     title: 'Features/UnifiedShareModal',
     component: UnifiedShareModal,
-    parameters: {
-        notes,
-    },
 };

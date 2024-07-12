@@ -1,8 +1,6 @@
 // @flow
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
-import { State, Store } from '@sambego/storybook-state';
-import { boolean } from '@storybook/addon-knobs';
 
 import Button from '../../../components/button/Button';
 
@@ -28,24 +26,21 @@ export const basic = () => {
         },
     ];
 
-    const componentStore = new Store({
-        isOpen: false,
-        accessLevel: 'peopleInYourCompany',
-        permissionLevel: 'canView',
-        selectorOptions: [],
-    });
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [accessLevel, setAccessLevel] = React.useState('peopleInYourCompany');
+    const [permissionLevel, setPermissionLevel] = React.useState('canView');
+    const [selectorOptions, setSelectorOptions] = React.useState([]);
+    const [submitting, setSubmitting] = React.useState(false);
 
     const closeModal = () => {
-        componentStore.set({
-            isOpen: false,
-        });
+        setIsOpen(false);
     };
 
     const fakeRequest = () => {
-        componentStore.set({ submitting: true });
+        setSubmitting(true);
         return new Promise(resolve => {
             setTimeout(() => {
-                componentStore.set({ submitting: false });
+                setSubmitting(false);
                 resolve();
             }, 500);
         });
@@ -60,68 +55,50 @@ export const basic = () => {
             ({ name, email }) => isSubstring(name, searchString) || isSubstring(email, searchString),
         );
 
-        componentStore.set({ selectorOptions: filteredContacts });
+        setSelectorOptions(filteredContacts);
     };
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en">
-                    <div>
-                        {state.isOpen && (
-                            <SharedLinkModal
-                                accessLevel={state.accessLevel}
-                                accessMenuButtonProps={{ 'data-resin-target': 'changepermissions' }}
-                                allowedAccessLevels={{
-                                    peopleWithTheLink: true,
-                                    peopleInYourCompany: true,
-                                    peopleInThisItem: true,
-                                }}
-                                canRemoveLink={boolean('canRemoveLink', true)}
-                                changeAccessLevel={newLevel =>
-                                    fakeRequest().then(() => componentStore.set({ accessLevel: newLevel }))
-                                }
-                                changePermissionLevel={newLevel =>
-                                    fakeRequest().then(() => componentStore.set({ permissionLevel: newLevel }))
-                                }
-                                contacts={state.selectorOptions}
-                                copyButtonProps={{ 'data-resin-target': 'copy' }}
-                                defaultEmailMessage="I want to share this file with you.\n\n-me"
-                                emailMessageProps={{ 'data-resin-target': 'message' }}
-                                expiration={1509173940}
-                                getContacts={getContacts}
-                                isOpen={state.isOpen}
-                                itemName="somefile.gif"
-                                itemType="file"
-                                isEditAllowed={state.permissionLevel === 'canEdit'}
-                                isPreviewAllowed={state.permissionLevel === 'canView'}
-                                onRequestClose={closeModal}
-                                onSettingsClick={() => null}
-                                permissionLevel={state.permissionLevel}
-                                removeLink={() => fakeRequest().then(closeModal)}
-                                removeLinkButtonProps={{ 'data-resin-target': 'remove' }}
-                                sendEmail={() =>
-                                    fakeRequest().then(() => {
-                                        closeModal();
-                                    })
-                                }
-                                sharedLink="http://box.com/s/abcdefg"
-                                submitting={state.submitting}
-                            />
-                        )}
-                        <Button
-                            onClick={() =>
-                                componentStore.set({
-                                    isOpen: true,
-                                })
-                            }
-                        >
-                            Shared Link Modal
-                        </Button>
-                    </div>
-                </IntlProvider>
+        <div>
+            {isOpen && (
+                <SharedLinkModal
+                    accessLevel={accessLevel}
+                    accessMenuButtonProps={{ 'data-resin-target': 'changepermissions' }}
+                    allowedAccessLevels={{
+                        peopleWithTheLink: true,
+                        peopleInYourCompany: true,
+                        peopleInThisItem: true,
+                    }}
+                    canRemoveLink
+                    changeAccessLevel={newLevel => fakeRequest().then(() => setAccessLevel(newLevel))}
+                    changePermissionLevel={newLevel => fakeRequest().then(() => setPermissionLevel(newLevel))}
+                    contacts={selectorOptions}
+                    copyButtonProps={{ 'data-resin-target': 'copy' }}
+                    defaultEmailMessage="I want to share this file with you.\n\n-me"
+                    emailMessageProps={{ 'data-resin-target': 'message' }}
+                    expiration={1509173940}
+                    getContacts={getContacts}
+                    isOpen={isOpen}
+                    itemName="somefile.gif"
+                    itemType="file"
+                    isEditAllowed={permissionLevel === 'canEdit'}
+                    isPreviewAllowed={permissionLevel === 'canView'}
+                    onRequestClose={closeModal}
+                    onSettingsClick={() => null}
+                    permissionLevel={permissionLevel}
+                    removeLink={() => fakeRequest().then(closeModal)}
+                    removeLinkButtonProps={{ 'data-resin-target': 'remove' }}
+                    sendEmail={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sharedLink="http://box.com/s/abcdefg"
+                    submitting={submitting}
+                />
             )}
-        </State>
+            <Button onClick={() => setIsOpen(true)}>Shared Link Modal</Button>
+        </div>
     );
 };
 
