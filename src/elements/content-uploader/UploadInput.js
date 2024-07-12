@@ -4,6 +4,7 @@
  * @author Box
  */
 
+/* eslint-disable */
 import * as React from 'react';
 
 type Props = {

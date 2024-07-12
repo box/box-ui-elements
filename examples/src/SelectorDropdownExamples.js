@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import PropTypes from 'prop-types';
 import React, { Children, Component } from 'react';
 

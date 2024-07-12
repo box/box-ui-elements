@@ -1,4 +1,3 @@
-/* eslint-disable */
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
@@ -25,7 +24,9 @@ export default [{
         "**/reports/",
         "**/styleguide/",
         "**/__tests__/**/*",
-        "**/test/"
+        "**/test/",
+        ".storybook",
+        "eslint.config.mjs",
     ],
 }, ...compat.extends(
     "./node_modules/@box/frontend/eslint/base.js",

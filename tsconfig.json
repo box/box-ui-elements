@@ -1,6 +1,8 @@
 {
-    "extends": "@box/frontend/ts/tsconfig",
+    "extends": "./node_modules/@box/frontend/ts/tsconfig",
     "compilerOptions": {
+        "esModuleInterop": true,
+        "jsx": "react",
         "baseUrl": ".",
         "outDir": "es",
         "allowJs": false, // https://github.com/microsoft/TypeScript/issues/35470
@@ -8,7 +10,9 @@
         "rootDir": ".",
         "paths": {
             "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"]
-        }
+        },
+        "noImplicitAny": false,
+        "strict": false
     },
     "files": [".storybook/typings.d.ts"],
     "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"]

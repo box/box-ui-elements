@@ -96,7 +96,7 @@
         "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
     },
     "lint-staged": {
-        "*.js|ts|tsx": ["eslint --fix", "git add"],
+        "*.{js,ts,tsx}": ["eslint --fix", "git add"],
         "*.md": ["prettier --write --parser=markdown", "git add"],
         "*.json": ["prettier --write --parser=json", "git add"],
         "*.html": ["prettier --write --parser=html", "git add"],
@@ -138,6 +138,8 @@
         "@box/react-virtualized": "9.22.3-rc-box.7",
         "@commitlint/cli": "^8.3.5",
         "@commitlint/config-conventional": "^8.3.4",
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.6.0",
         "@formatjs/intl-pluralrules": "^1.5.2",
         "@formatjs/intl-relativetimeformat": "^4.5.9",
         "@formatjs/intl-unified-numberformat": "^3.2.0",
@@ -391,8 +393,5 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
-    },
-    "dependencies": {
-        "eslint-plugin-ft-flow": "^3.0.7"
     }
 }
