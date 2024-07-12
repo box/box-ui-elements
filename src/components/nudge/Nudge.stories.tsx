@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { State, Store } from '@sambego/storybook-state';
 
 import BoxMobile140 from '../../illustration/BoxMobile140';
 
@@ -12,30 +11,23 @@ const onButtonClick = () => {
 };
 
 export const regular = () => {
-    const componentStore = new Store({
-        isShown: true,
-    });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isShown, setIsShown] = React.useState(true);
 
-    const onNudgeClose = () => componentStore.set({ isShown: false });
+    const onNudgeClose = () => setIsShown(false);
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <Nudge
-                    buttonText={<span>Pellentesque port</span>}
-                    content={
-                        <span>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis rutrum turpis.
-                        </span>
-                    }
-                    illustration={<BoxMobile140 height={140} width={140} />}
-                    isShown={state.isShown}
-                    header={<span>Heading goes here</span>}
-                    onButtonClick={onButtonClick}
-                    onCloseButtonClick={onNudgeClose}
-                />
-            )}
-        </State>
+        <Nudge
+            buttonText={<span>Pellentesque port</span>}
+            content={
+                <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque quis rutrum turpis.</span>
+            }
+            illustration={<BoxMobile140 height={140} width={140} />}
+            isShown={isShown}
+            header={<span>Heading goes here</span>}
+            onButtonClick={onButtonClick}
+            onCloseButtonClick={onNudgeClose}
+        />
     );
 };
 
