@@ -3,7 +3,7 @@ import { IntlProvider } from 'react-intl';
 
 import { screen, render } from '@testing-library/react';
 
-import { MetadataSidebarRedesignedComponent as MetadataSidebar } from '../MetadataSidebarRedesigned';
+import { MetadataSidebarRedesignComponent as MetadataSidebar } from '../MetadataSidebarRedesign';
 
 jest.unmock('react-intl');
 

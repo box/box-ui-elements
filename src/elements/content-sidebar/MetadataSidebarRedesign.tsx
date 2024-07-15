@@ -11,9 +11,9 @@ import { withLogger } from '../common/logger';
 import { ORIGIN_METADATA_SIDEBAR_REDESIGN } from '../../constants';
 import messages from '../common/messages';
 
-import './MetadataSidebarRedesigned.scss';
+import './MetadataSidebarRedesign.scss';
 
-function MetadataSidebarRedesigned() {
+function MetadataSidebarRedesign() {
     return (
         <div className="bcs-metadata-redesign">
             <h3>
@@ -25,9 +25,9 @@ function MetadataSidebarRedesigned() {
     );
 }
 
-export { MetadataSidebarRedesigned as MetadataSidebarRedesignedComponent };
+export { MetadataSidebarRedesign as MetadataSidebarRedesignComponent };
 export default flow([
     withLogger(ORIGIN_METADATA_SIDEBAR_REDESIGN),
     withErrorBoundary(ORIGIN_METADATA_SIDEBAR_REDESIGN),
     withAPIContext,
-])(MetadataSidebarRedesigned);
+])(MetadataSidebarRedesign);

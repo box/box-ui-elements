@@ -182,7 +182,7 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_METADATA_REDESIGN:
                 importFn = import(
-                    /* webpackMode: "lazy", webpackChunkName: "metadata-sidebar-redesigned" */ './MetadataSidebarRedesigned'
+                    /* webpackMode: "lazy", webpackChunkName: "metadata-sidebar-redesigned" */ './MetadataSidebarRedesign'
                 );
                 break;
             case SIDEBAR_VIEW_ACTIVITY:
