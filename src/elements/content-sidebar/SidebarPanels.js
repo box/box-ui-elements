@@ -11,7 +11,7 @@ import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
-import { withFeatureConsumer } from '../common/feature-checking';
+import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -200,7 +200,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const { isInitialized } = this.state;
 
-        const isMetadataSidebarRedesignEnabled = features?.metadata?.redesign?.enabled ?? false;
+        const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
 
         if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
