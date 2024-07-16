@@ -388,10 +388,6 @@
         "react-tether": {
             "react": "$react",
             "react-dom": "$react-dom"
-        },
-        "react-popper": {
-            "react": "$react",
-            "react-dom": "$react-dom"
         }
     },
     "msw": {
