@@ -145,7 +145,7 @@
         "@formatjs/intl-pluralrules": "^1.5.2",
         "@formatjs/intl-relativetimeformat": "^4.5.9",
         "@formatjs/intl-unified-numberformat": "^3.2.0",
-        "@hapi/address": "2.1.1",
+        "@hapi/address": "^2.1.4",
         "@storybook/addon-actions": "^8.1.11",
         "@storybook/addon-docs": "^8.1.11",
         "@storybook/addon-essentials": "^8.1.11",
@@ -329,7 +329,7 @@
     "peerDependencies": {
         "@box/cldr-data": "^34.2.0",
         "@box/react-virtualized": "9.22.3-rc-box.9",
-        "@hapi/address": ">=2.0.0 <2.1.2",
+        "@hapi/address": "^2.1.4",
         "axios": "^0.25.0",
         "classnames": "^2.2.5",
         "color": "^3.1.2",
@@ -372,7 +372,6 @@
     },
     "comments": {
         "dependencies": {
-            "@hapi/address": "Version 2.1.2+ requires a polyfill for TextEncoder. Pinning to version 2.1.1 prevents IE11 from breaking.",
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
         }
     },
