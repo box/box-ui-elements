@@ -148,6 +148,10 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
+                        if (this.isQuickFilter(event)) {
+                            return;
+                        }
+
                         const { data } = this.props;
                         const { focusedIndex } = this.state;
 
@@ -163,6 +167,10 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
+                        if (this.isQuickFilter(event)) {
+                            return;
+                        }
+
                         const { focusedIndex = 0 } = this.state;
 
                         event.preventDefault();
@@ -213,7 +221,7 @@ function makeSelectable(BaseTable) {
                     key: 'right',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event)) {
+                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
                             return;
                         }
 
@@ -232,7 +240,7 @@ function makeSelectable(BaseTable) {
                     key: 'left',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event)) {
+                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
                             return;
                         }
 
@@ -249,7 +257,7 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event)) {
+                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
                             return;
                         }
 
@@ -268,7 +276,7 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event)) {
+                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
                             return;
                         }
 
@@ -603,6 +611,9 @@ function makeSelectable(BaseTable) {
         };
 
         isTargetSlider = event => event.target?.role === 'slider';
+
+        // Workaround for focus conflicting with Blueprint components in Search Quick Filters, not needed once Blueprint table is integrated
+        isQuickFilter = event => 'radixCollectionItem' in event.target.dataset;
 
         render() {
             const { className, data } = this.props;
