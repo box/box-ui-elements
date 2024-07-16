@@ -1,4 +1,6 @@
+// @flow
 import * as React from 'react';
+// $FlowFixMe
 import type { PopperArrowProps, PopperProps } from 'react-popper';
 
 export type PopperChildrenProps = {
