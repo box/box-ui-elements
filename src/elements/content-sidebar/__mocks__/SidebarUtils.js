@@ -2,6 +2,8 @@
 /* eslint-disable max-classes-per-file */
 import * as React from 'react';
 
+import { SIDEBAR_VIEW_METADATA_REDESIGN } from '../../../constants';
+
 export default {
     getAsyncSidebarContent: jest.fn(panelName => {
         return {
@@ -15,7 +17,7 @@ export default {
                     return <div data-testid="metadata-sidebar" />;
                 }
             },
-            metadata_redesigned: class MetadataSidebarRedesigned extends React.Component {
+            [SIDEBAR_VIEW_METADATA_REDESIGN]: class MetadataSidebarRedesigned extends React.Component {
                 render() {
                     return <div data-testid="metadata-sidebar-redesigned" />;
                 }
