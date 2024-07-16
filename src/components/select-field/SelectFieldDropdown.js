@@ -18,9 +18,9 @@ type Props = {
 
 class SelectFieldDropdown extends React.Component<Props> {
     componentDidUpdate({ selectedValues: prevSelectedValues }) {
-        const { multiple, scheduleUpdate, selectedValues } = this.props;
-        if (multiple && scheduleUpdate && prevSelectedValues !== selectedValues) {
-            scheduleUpdate();
+        const { multiple, update, selectedValues } = this.props;
+        if (multiple && update && prevSelectedValues !== selectedValues) {
+            update();
         }
     }
 
