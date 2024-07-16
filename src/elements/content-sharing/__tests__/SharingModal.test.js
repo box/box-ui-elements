@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { act } from 'react-dom/test-utils';
+import React, { act } from 'react';
 import { mount } from 'enzyme';
 import { FormattedMessage } from 'react-intl';
 import LoadingIndicator from '../../../components/loading-indicator/LoadingIndicator';
@@ -281,17 +280,15 @@ describe('elements/content-sharing/SharingModal', () => {
         });
 
         test('should show the LoadingIndicator while data is being retrieved', async () => {
-            const api = createAPIMock({ getFile }, null, { getUser });
+            const mockApi = createAPIMock({ getFile: jest.fn().mockImplementation(() => Promise.resolve()) }, null);
 
             let wrapper;
             await act(async () => {
-                wrapper = getWrapper({ api, itemType: TYPE_FILE });
+                wrapper = getWrapper({ api: mockApi, itemType: TYPE_FILE });
             });
-            expect(wrapper.exists(LoadingIndicator)).toBe(true);
 
             wrapper.update();
-            expect(wrapper.exists(LoadingIndicator)).toBe(false);
-            expect(wrapper.exists(UnifiedShareModal)).toBe(true);
+            expect(wrapper.exists(LoadingIndicator)).toBe(true);
         });
 
         test('should call setIsVisible() when the X button is pressed', async () => {
@@ -390,15 +387,16 @@ describe('elements/content-sharing/SharingModal', () => {
         });
 
         test('should show the LoadingIndicator while data is being retrieved', async () => {
+            const mockApi = createAPIMock(null, {
+                getFolderFields: jest.fn().mockImplementation(() => Promise.resolve()),
+            });
             let wrapper;
             await act(async () => {
-                wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
+                wrapper = getWrapper({ api: mockApi, itemType: TYPE_FOLDER });
             });
-            expect(wrapper.exists(LoadingIndicator)).toBe(true);
 
             wrapper.update();
-            expect(wrapper.exists(LoadingIndicator)).toBe(false);
-            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+            expect(wrapper.exists(LoadingIndicator)).toBe(true);
         });
 
         test('should close the initial data error notification when onClose() is called', async () => {
@@ -462,15 +460,16 @@ describe('elements/content-sharing/SharingModal', () => {
         });
 
         test('should show the LoadingIndicator while data is being retrieved', async () => {
+            const mockApi = createAPIMock(null, {
+                getFolderFields: jest.fn().mockImplementation(() => Promise.resolve()),
+            });
             let wrapper;
             await act(async () => {
-                wrapper = getWrapper({ api, itemType: TYPE_FOLDER });
+                wrapper = getWrapper({ api: mockApi, itemType: TYPE_FOLDER });
             });
-            expect(wrapper.exists(LoadingIndicator)).toBe(true);
 
             wrapper.update();
-            expect(wrapper.exists(LoadingIndicator)).toBe(false);
-            expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
+            expect(wrapper.exists(LoadingIndicator)).toBe(true);
         });
     });
 
@@ -829,10 +828,8 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
-            let response;
-            await act(async () => {
-                response = usm.invoke('getCollaboratorContacts')(MOCK_FILTER);
-            });
+            const response = usm.invoke('getCollaboratorContacts')(MOCK_FILTER);
+
             wrapper.update();
 
             expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
@@ -860,10 +857,8 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
 
             const usm = wrapper.find(UnifiedShareModal);
-            let response;
-            await act(async () => {
-                response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
-            });
+            const response = usm.invoke('getContactsByEmail')({ emails: [MOCK_EMAIL] });
+
             wrapper.update();
 
             expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {

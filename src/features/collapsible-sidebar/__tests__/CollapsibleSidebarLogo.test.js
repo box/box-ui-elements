@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { mountConnected } from '../../../test-utils/enzyme';
 
 import CollapsibleSidebarLogo from '../CollapsibleSidebarLogo';

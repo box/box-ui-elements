@@ -108,7 +108,7 @@ const API_TO_USM_CLASSIFICATION_COLORS_MAP = {
     [bdlGray20]: CLASSIFICATION_COLOR_ID_7,
 };
 
-const APP_USERS_DOMAIN_REGEXP = new RegExp('boxdevedition.com');
+const APP_USERS_DOMAIN_REGEXP = /boxdevedition.com/;
 
 /**
  * Convert access levels disabled reasons into USM format.

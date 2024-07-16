@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Button from '../../../../components/button';
 import IconSort from '../../../../icons/general/IconSort';
 import { SortButtonBase } from '../SortButton';

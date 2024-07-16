@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import IconClose from '../../icons/general/IconClose';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import noop from 'lodash/noop';
 import { shallow } from 'enzyme';
 import messages from '../../common/messages';

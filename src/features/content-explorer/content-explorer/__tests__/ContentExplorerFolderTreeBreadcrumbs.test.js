@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { ContentExplorerFolderTreeBreadcrumbsBase as ContentExplorerFolderTreeBreadcrumbs } from '../ContentExplorerFolderTreeBreadcrumbs';
 
 describe('features/content-explorer/content-explorer/ContentExplorerFolderTreeBreadcrumbs', () => {

@@ -138,7 +138,7 @@ Most hooks can be tested with `shallow` rendering except for lifecycle hooks suc
 To test a `useEffect` hook, you must use `act()` from `react-dom/test-utils` and `mount()` from `enzyme`.
 
 ```jsx
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 
 test('something happens', () => {
     let wrapper;
@@ -164,7 +164,7 @@ test('something happens', () => {
 
     // Assert
     expect(wrapper...);
-}
+})
 ```
 
 See [React Testing Recipes](https://reactjs.org/docs/testing-recipes.html) for more examples.

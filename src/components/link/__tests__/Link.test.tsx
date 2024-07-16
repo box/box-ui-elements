@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 

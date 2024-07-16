@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import Label from './Label';
 import notes from './Label.stories.md';
@@ -11,7 +10,7 @@ export const basic = () => (
 );
 
 export const withOptionalText = () => (
-    <Label text="Input Label" showOptionalText={boolean('showOptionalText', true)}>
+    <Label text="Input Label" showOptionalText>
         <input type="text" />
     </Label>
 );

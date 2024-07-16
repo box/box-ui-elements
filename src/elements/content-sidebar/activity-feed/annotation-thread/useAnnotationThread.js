@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import uniqueId from 'lodash/uniqueId';
 import type EventEmitter from 'events';
 import commonMessages from '../../../common/messages';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
 import { EditorState } from 'draft-js';
 import sinon from 'sinon';
@@ -67,7 +67,9 @@ describe('components/form-elements/draft-js-mention-selector/DraftJSMentionSelec
         ].forEach(({ onMention, isFocused, activeMention, shouldShowMentionStartState }) => {
             const wrapper = mount(<DraftJSMentionSelector {...requiredProps} onMention={onMention} />);
 
-            wrapper.setState({ activeMention, isFocused });
+            act(() => {
+                wrapper.setState({ activeMention, isFocused });
+            });
 
             if (shouldShowMentionStartState) {
                 test('should show MentionStartState', () => {

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { formatTime } from '../../../../utils/datetime';
 import ReadOnlyTranscriptRow from './ReadOnlyTranscriptRow';
 import EditingTranscriptRow from './EditingTranscriptRow';

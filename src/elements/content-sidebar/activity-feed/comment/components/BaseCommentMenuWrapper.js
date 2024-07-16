@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import type { BoxCommentPermission, FeedItemStatus } from '../../../../../common/types/feed';
 
 import { BaseCommentMenu } from './BaseCommentMenu';

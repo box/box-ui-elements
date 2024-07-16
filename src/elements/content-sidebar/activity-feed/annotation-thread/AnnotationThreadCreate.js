@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import CommentForm from '../comment-form';
 import type { SelectorItems, User } from '../../../../common/types/core';

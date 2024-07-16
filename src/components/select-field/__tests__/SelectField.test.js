@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import * as React from 'react';
 import SelectField, { onSelect } from '../SelectField';
 
 describe('components/select-feild/SelectField', () => {

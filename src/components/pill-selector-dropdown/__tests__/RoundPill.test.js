@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import RoundPill from '../RoundPill';
 
 describe('components/RoundPill-selector-dropdown/RoundPill', () => {

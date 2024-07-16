@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 // @ts-nocheck
-import React from 'react';
+import * as React from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
 import { color, text } from '@storybook/addon-knobs';
 

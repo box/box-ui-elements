@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import IconName from '../IconName';
 import { STATUS_ERROR, STATUS_IN_PROGRESS } from '../../../constants';

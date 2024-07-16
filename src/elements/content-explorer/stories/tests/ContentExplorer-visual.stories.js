@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 
-import { userEvent, waitFor, within } from '@storybook/testing-library';
+import { userEvent, waitFor, within } from '@storybook/test';
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 import mockRootFolder from '../__mocks__/mockRootFolder';

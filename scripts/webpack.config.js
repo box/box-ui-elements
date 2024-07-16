@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin.js');
+const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -86,7 +86,7 @@ function getConfig(isReactExternalized) {
                 {
                     test: /\.(js|mjs|ts|tsx)$/,
                     loader: 'babel-loader',
-                    // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
+                    // For webpack dev build perf we want to exclude node_modules unless we want to support legacy browsers like IE11
                     exclude: shouldIncludeAllSupportedBrowsers
                         ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
                         : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for styleguidist

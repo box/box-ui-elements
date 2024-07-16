@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
@@ -209,7 +209,9 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             });
 
             wrapper = getWrapper({ metadataSidebarProps: { isFeatureEnabled: false } });
-            wrapper.setState({ file });
+            act(() => {
+                wrapper.setState({ file });
+            });
             instance = wrapper.instance();
             instance.api = { getMetadataAPI };
 

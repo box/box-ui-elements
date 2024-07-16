@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import getProp from 'lodash/get';
 import { FormattedMessage } from 'react-intl';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { fireEvent, render, RenderResult } from '@testing-library/react';
 import BarChart from '../BarChart';
 

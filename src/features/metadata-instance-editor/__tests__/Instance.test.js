@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import TEMPLATE_CUSTOM_PROPERTIES from '../constants';
 import { InstanceBase as Instance } from '../Instance';

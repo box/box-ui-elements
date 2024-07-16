@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import Select from './Select';
 import notes from './Select.stories.md';
@@ -20,7 +19,7 @@ export const basic = () => (
 );
 
 export const disabled = () => (
-    <Select name="select" label="Disabled Select" isDisabled={boolean('isDisabled', true)}>
+    <Select name="select" label="Disabled Select" isDisabled>
         <option>Straight Outta Compton</option>
     </Select>
 );
@@ -40,7 +39,7 @@ export const withErrorMessage = () => (
 );
 
 export const withErrorOutline = () => (
-    <Select name="select" label="Album" showErrorOutline={boolean('showErrorOutline', true)}>
+    <Select name="select" label="Album" showErrorOutline>
         <option>Illmatic</option>
         <option>The Marshall Mathers LP</option>
         <option>All Eyez on Me</option>

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
 import noop from 'lodash/noop';
 
@@ -271,7 +271,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/Comment', () => {
         expect(wrapper.state('isInputOpen')).toBe(true);
 
         const updateMessagePayload = { id: '000', hasMention: true, text: 'updated message' };
-        instance.handleMessageUpdate(updateMessagePayload);
+        act(() => {
+            instance.handleMessageUpdate(updateMessagePayload);
+        });
         expect(wrapper.state('isEditing')).toBe(false);
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(mockOnEdit).toHaveBeenCalledWith({

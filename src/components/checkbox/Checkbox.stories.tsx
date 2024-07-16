@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
-
-import { State, Store } from '@sambego/storybook-state';
 import Checkbox from './Checkbox';
 import notes from './Checkbox.stories.md';
 
@@ -16,41 +13,31 @@ export const basic = () => (
 );
 
 export const controlled = () => {
-    const componentStore = new Store({ isChecked: false });
-    const handleChange = () => componentStore.set({ isChecked: !componentStore.get('isChecked') });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isChecked, setIsChecked] = React.useState(false);
+    const handleChange = () => setIsChecked(!isChecked);
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <div>
-                    <Checkbox
-                        name="checkbox2"
-                        label="Controlled checkbox"
-                        isChecked={state.isChecked}
-                        onChange={handleChange}
-                        description="This is a controlled component."
-                    />
-                    <Checkbox
-                        name="checkbox3"
-                        label="Inverted Controlled checkbox"
-                        isChecked={!state.isChecked}
-                        onChange={handleChange}
-                        description="This is a controlled component, whose value is the inverse of the one above."
-                    />
-                </div>
-            )}
-        </State>
+        <div>
+            <Checkbox
+                name="checkbox2"
+                label="Controlled checkbox"
+                isChecked={isChecked}
+                onChange={handleChange}
+                description="This is a controlled component."
+            />
+            <Checkbox
+                name="checkbox3"
+                label="Inverted Controlled checkbox"
+                isChecked={!isChecked}
+                onChange={handleChange}
+                description="This is a controlled component, whose value is the inverse of the one above."
+            />
+        </div>
     );
 };
 
-export const disabled = () => (
-    <Checkbox
-        name="checkbox5"
-        label="Disabled"
-        isChecked={boolean('isChecked', true)}
-        isDisabled={boolean('isDisabled', true)}
-    />
-);
+export const disabled = () => <Checkbox name="checkbox5" label="Disabled" isChecked isDisabled />;
 
 export const withTooltip = () => (
     <Checkbox name="checkbox6" label="I have a tooltip" tooltip="See? Isn’t this great??" />

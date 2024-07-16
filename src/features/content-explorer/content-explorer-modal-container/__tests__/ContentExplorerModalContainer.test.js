@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import sinon from 'sinon';
 
 import ContentExplorerModalContainer from '../ContentExplorerModalContainer';
@@ -88,7 +88,7 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             const wrapper = renderComponent({}, mount);
             wrapper.setState({ isNewFolderModalOpen: true });
 
-            expect(wrapper.find('Portal').length).toBe(4);
+            expect(wrapper.find('Portal').length).toBe(2);
         });
 
         test('should not render ContentExplorerModal and NewFolderModal in Portal if shouldNotUsePortal=true', () => {

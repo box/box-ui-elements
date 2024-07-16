@@ -12,9 +12,7 @@ import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import Overlay from '../../../../components/flyout/Overlay';
 import MessagePreviewContent from '../../../message-preview-content/MessagePreviewContent';
 import type { Token } from '../../../../common/types/core';
-import type { MessageActions } from '../../types';
-
-import { type PreviewTitleBodyTwoButtonsParams } from '../../types';
+import type { MessageActions, PreviewTitleBodyTwoButtonsParams} from '../../types';
 
 import './styles/PreviewTitleBodyTwoButtonsPopoutTemplate.scss';
 

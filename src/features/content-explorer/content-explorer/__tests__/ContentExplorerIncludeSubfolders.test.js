@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { ContentExplorerIncludeSubfoldersBase as ContentExplorerIncludeSubfolders } from '../ContentExplorerIncludeSubfolders';
 

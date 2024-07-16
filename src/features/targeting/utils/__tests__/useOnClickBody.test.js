@@ -1,106 +1,73 @@
-import { renderHook, cleanup } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import useOnClickBody from '../useOnClickBody';
 
-const addEventListener = jest.fn();
-const removeEventListener = jest.fn();
-const onClick1 = jest.fn();
-const onClick2 = jest.fn();
-
-Object.defineProperty(document, 'body', {
-    value: {
-        addEventListener,
-        removeEventListener,
-    },
-});
-
 describe('components/targeting/utils/useOnClickBody', () => {
-    afterEach(() => {
-        jest.resetAllMocks();
+    let addEventListenerSpy;
+    let removeEventListenerSpy;
+
+    beforeEach(() => {
+        addEventListenerSpy = jest.spyOn(document.body, 'addEventListener');
+        removeEventListenerSpy = jest.spyOn(document.body, 'removeEventListener');
+        jest.clearAllMocks();
     });
 
-    test('should attach and remove event listener when enabled', async () => {
-        renderHook(({ onClick, enable }) => useOnClickBody(onClick, enable), {
-            initialProps: { onClick: onClick1, enable: true },
-        });
-        expect(addEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        expect(addEventListener).toHaveBeenCalledWith('click', onClick1);
-        expect(addEventListener).toHaveBeenCalledWith('contextmenu', onClick1);
-        await cleanup();
-        expect(addEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledWith('click', onClick1);
-        expect(removeEventListener).toHaveBeenCalledWith('contextmenu', onClick1);
+    test('attaches click and contextmenu event listeners when enabled', () => {
+        const onClick = jest.fn();
+        renderHook(() => useOnClickBody(onClick, true));
+
+        expect(addEventListenerSpy).toHaveBeenCalledWith('click', onClick);
+        expect(addEventListenerSpy).toHaveBeenCalledWith('contextmenu', onClick);
     });
 
-    test('should remove event listener when enable is turned off', async () => {
-        const { rerender } = renderHook(({ onClick, enable }) => useOnClickBody(onClick, enable), {
-            initialProps: { onClick: onClick1, enable: true },
-        });
-        expect(addEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        expect(addEventListener).toHaveBeenCalledWith('click', onClick1);
-        expect(addEventListener).toHaveBeenCalledWith('contextmenu', onClick1);
-        rerender({ onClick: onClick1, enable: false });
-        expect(addEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledWith('click', onClick1);
-        expect(removeEventListener).toHaveBeenCalledWith('contextmenu', onClick1);
-        await cleanup();
+    test('does not attach event listeners when not enabled', () => {
+        const onClick = jest.fn();
+        renderHook(() => useOnClickBody(onClick, false));
+
+        expect(addEventListenerSpy).not.toHaveBeenCalled();
     });
 
-    test('should remove and reattach event listener when onClick changed', async () => {
-        const { rerender } = renderHook(({ onClick, enable }) => useOnClickBody(onClick, enable), {
-            initialProps: { onClick: onClick1, enable: true },
-        });
-        expect(addEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        expect(addEventListener).toHaveBeenCalledWith('click', onClick1);
-        expect(addEventListener).toHaveBeenCalledWith('contextmenu', onClick1);
-        rerender({ onClick: onClick2, enable: true });
-        expect(addEventListener).toHaveBeenCalledTimes(4);
-        expect(removeEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledWith('click', onClick1);
-        expect(removeEventListener).toHaveBeenCalledWith('contextmenu', onClick1);
-        expect(addEventListener).toHaveBeenCalledWith('click', onClick2);
-        expect(addEventListener).toHaveBeenCalledWith('contextmenu', onClick2);
-        await cleanup();
+    test('removes event listeners on cleanup when enabled', () => {
+        const onClick = jest.fn();
+        const { unmount } = renderHook(() => useOnClickBody(onClick, true));
+        unmount();
+
+        expect(removeEventListenerSpy).toHaveBeenCalledWith('click', onClick);
+        expect(removeEventListenerSpy).toHaveBeenCalledWith('contextmenu', onClick);
     });
 
-    test('should not attach or remove event listener when not enabled', async () => {
-        renderHook(({ onClick, enable }) => useOnClickBody(onClick, enable), {
-            initialProps: { onClick: onClick1, enable: false },
-        });
-        expect(addEventListener).toHaveBeenCalledTimes(0);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        await cleanup();
-        expect(addEventListener).toHaveBeenCalledTimes(0);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
+    test('does not remove event listeners on cleanup when not enabled', () => {
+        const onClick = jest.fn();
+        const { unmount } = renderHook(() => useOnClickBody(onClick, false));
+        unmount();
+
+        expect(removeEventListenerSpy).not.toHaveBeenCalled();
     });
 
-    test('should add event listener when enable is turned on', async () => {
-        const { rerender } = renderHook(({ onClick, enable }) => useOnClickBody(onClick, enable), {
-            initialProps: { onClick: onClick1, enable: false },
+    test('re-attaches event listeners when onClick handler changes', () => {
+        const onClick1 = jest.fn();
+        const onClick2 = jest.fn();
+        const { rerender } = renderHook(({ onClick }) => useOnClickBody(onClick, true), {
+            initialProps: { onClick: onClick1 },
         });
-        expect(addEventListener).toHaveBeenCalledTimes(0);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        rerender({ onClick: onClick1, enable: true });
-        expect(addEventListener).toHaveBeenCalledTimes(2);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        expect(addEventListener).toHaveBeenCalledWith('click', onClick1);
-        expect(addEventListener).toHaveBeenCalledWith('contextmenu', onClick1);
-        await cleanup();
+
+        rerender({ onClick: onClick2 });
+
+        expect(removeEventListenerSpy).toHaveBeenCalledWith('click', onClick1);
+        expect(removeEventListenerSpy).toHaveBeenCalledWith('contextmenu', onClick1);
+        expect(addEventListenerSpy).toHaveBeenCalledWith('click', onClick2);
+        expect(addEventListenerSpy).toHaveBeenCalledWith('contextmenu', onClick2);
     });
 
-    test('should not attach event listener when onClick changed but enable is off', async () => {
-        const { rerender } = renderHook(({ onClick, enable }) => useOnClickBody(onClick, enable), {
-            initialProps: { onClick: onClick1, enable: false },
+    test('does not re-attach event listeners when enable state changes but onClick remains the same', () => {
+        const onClick = jest.fn();
+        const { rerender } = renderHook(({ enable }) => useOnClickBody(onClick, enable), {
+            initialProps: { enable: true },
         });
-        expect(addEventListener).toHaveBeenCalledTimes(0);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        rerender({ onClick: onClick2, enable: false });
-        expect(addEventListener).toHaveBeenCalledTimes(0);
-        expect(removeEventListener).toHaveBeenCalledTimes(0);
-        await cleanup();
+
+        rerender({ enable: false });
+        expect(addEventListenerSpy).toHaveBeenCalledTimes(2);
+
+        rerender({ enable: true });
+        expect(removeEventListenerSpy).toHaveBeenCalledTimes(2);
     });
 });

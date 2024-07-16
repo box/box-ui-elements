@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { EDITOR, CO_OWNER, PREVIEWER, PREVIEWER_UPLOADER, VIEWER, VIEWER_UPLOADER, UPLOADER } from '../constants';
 import InviteePermissionsLabel from '../InviteePermissionsLabel';

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import DropdownMenu from '../../../../components/dropdown-menu/DropdownMenu';
 import Menu from '../../../../components/menu/Menu';
 import SelectMenuItem from '../../../../components/menu/SelectMenuItem';

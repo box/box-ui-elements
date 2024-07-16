@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import MarkerBasedPagination from './MarkerBasedPagination';
 import OffsetBasedPagination from './OffsetBasedPagination';
 import './Pagination.scss';

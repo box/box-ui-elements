@@ -3,7 +3,7 @@
  * @file Droppable area containing upload item list
  */
 
-import React from 'react';
+import * as React from 'react';
 import makeDroppable from '../common/droppable';
 import ItemList from './ItemList';
 import UploadState from './UploadState';

@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
-import { State, Store } from '@sambego/storybook-state';
 
 import Link from '../../link/Link';
 import MenuItem from '../MenuItem';
@@ -60,7 +58,7 @@ export const withSubmenuFlip = () => (
 
 export const withSelectMenu = () => (
     <Menu>
-        <SelectMenuLinkItem isSelected={boolean('isSelected', true)}>
+        <SelectMenuLinkItem isSelected>
             <Link href="http://opensource.box.com/box-ui-elements/storybook">View Profile</Link>
         </SelectMenuLinkItem>
         <SelectMenuLinkItem>
@@ -70,27 +68,23 @@ export const withSelectMenu = () => (
 );
 
 export const withChildOnResize = () => {
-    const componentStore = new Store({ isLargeMenu: false });
-
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isLargeMenu, setIsLargeMenu] = React.useState(true);
     const setVisibility = () => {
-        if (window.innerWidth < 700 && !componentStore.get('isLargeMenu')) {
-            componentStore.set({ isLargeMenu: true });
+        if (window.innerWidth < 700 && !isLargeMenu) {
+            setIsLargeMenu(true);
         }
     };
 
     window.addEventListener('resize', setVisibility);
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <Menu>
-                    <MenuItem>View Profile</MenuItem>
-                    <MenuItem>Help</MenuItem>
-                    {state.isLargeMenu && <MenuItem>Visible on Resize</MenuItem>}
-                    <MenuItem>Last Item</MenuItem>
-                </Menu>
-            )}
-        </State>
+        <Menu>
+            <MenuItem>View Profile</MenuItem>
+            <MenuItem>Help</MenuItem>
+            {isLargeMenu && <MenuItem>Visible on Resize</MenuItem>}
+            <MenuItem>Last Item</MenuItem>
+        </Menu>
     );
 };
 

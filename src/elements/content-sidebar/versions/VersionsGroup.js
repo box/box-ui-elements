@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import VersionsList from './VersionsList';
 import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsGroup.scss';

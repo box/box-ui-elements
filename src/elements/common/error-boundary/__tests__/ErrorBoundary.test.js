@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import ErrorBoundary from '../ErrorBoundary';
 import { ERROR_CODE_UNEXPECTED_EXCEPTION } from '../../../../constants';

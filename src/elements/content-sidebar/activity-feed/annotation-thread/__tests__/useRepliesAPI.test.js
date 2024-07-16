@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { annotation } from '../../../../../__mocks__/annotations';
 import { threadedCommentsFormatted as replies } from '../../../../../api/fixtures';
 import useRepliesAPI from '../useRepliesAPI';

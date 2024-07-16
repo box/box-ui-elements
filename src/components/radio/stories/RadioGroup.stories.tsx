@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import { bdlGray20, bdlPurpleRain } from '../../../styles/variables';
 import RadioButton, { RadioButtonProps } from '../RadioButton';
@@ -12,7 +11,7 @@ export const basic = () => (
         <RadioButton label="Radio Button 2" value="radio2" description="I also have a description" />
         <RadioButton label="Radio Button 3" value="radio3" />
         <RadioButton label="Radio Button 4" value="radio4" />
-        <RadioButton label="Disabled Radio Button" value="radio5" isDisabled={boolean('isDisabled', true)} />
+        <RadioButton label="Disabled Radio Button" value="radio5" isDisabled />
     </RadioGroup>
 );
 

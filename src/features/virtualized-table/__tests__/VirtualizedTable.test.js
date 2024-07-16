@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 import { AutoSizer } from '@box/react-virtualized/dist/es/AutoSizer';
 import { WindowScroller } from '@box/react-virtualized/dist/es/WindowScroller';

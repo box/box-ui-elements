@@ -18,6 +18,8 @@ export const withCustomComponent = () => {
     );
 
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Router>
             <Link component={CustomRouterLink} href="/">
                 A link

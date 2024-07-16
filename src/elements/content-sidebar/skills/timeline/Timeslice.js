@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import './Timeslice.scss';
 
