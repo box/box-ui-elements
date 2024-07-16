@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
 
 import { ActivityMessage } from '../ActivityMessage';
@@ -126,8 +126,9 @@ describe('elements/content-sidebar/ActivityFeed/common/activity-message', () => 
         };
 
         const wrapper = mount(<ActivityMessage id="123" {...commentText} {...translations} />);
-        wrapper.setState({ isTranslation: true });
-
+        act(() => {
+            wrapper.setState({ isTranslation: true });
+        });
         const showOriginalBtn = wrapper.find('PlainButton.bcs-ActivityMessage-translate');
         showOriginalBtn.simulate('click');
 

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import getProp from 'lodash/get';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';

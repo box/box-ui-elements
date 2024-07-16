@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import ContactDatalistItem from '../ContactDatalistItem';
@@ -78,6 +78,35 @@ describe('components/contact-datalist-item/ContactDatalistItem', () => {
 
             expect(wrapper.find(Avatar).length).toBe(1);
             expect(wrapper.find(Avatar).props().avatarUrl).toBeUndefined();
+        });
+
+        test.each([['user'], [undefined], [null]])('should have avatar URL when the type prop is %s', type => {
+            const contactID = '123';
+            const getContactAvatarUrlMock = jest
+                .fn()
+                .mockImplementation(() => Promise.resolve(`/test?id=${contactID}`));
+            const wrapper = shallow(
+                <ContactDatalistItem
+                    name="name"
+                    id={contactID}
+                    type={type}
+                    showAvatar
+                    getContactAvatarUrl={getContactAvatarUrlMock}
+                />,
+            );
+            expect(wrapper.state('avatarUrl')).toBe(undefined);
+            const instance = wrapper.instance();
+
+            if (instance.componentDidMount) {
+                instance.componentDidMount();
+            }
+
+            setImmediate(() => {
+                wrapper.update();
+                expect(wrapper.find('LabelPillIcon').length).toBe(2);
+                expect(wrapper.find('LabelPillIcon[avatarUrl]').length).toBe(1);
+                expect(getContactAvatarUrlMock).toHaveBeenCalledWith({ id: contactID, type });
+            });
         });
     });
 });

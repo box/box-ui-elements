@@ -59,6 +59,7 @@ class BoxEdit {
             BoxEditInstance = this;
         }
         this.extensionRequestQueue = new Map();
+        // eslint-disable-next-line no-constructor-return
         return BoxEditInstance;
     }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
@@ -197,7 +197,9 @@ describe('components/tab-view/TabView', () => {
         });
 
         test('should set show outline state to false when tabpanel does not have focus and outlet was set to true', () => {
-            component.setState({ showOutline: true });
+            act(() => {
+                component.setState({ showOutline: true });
+            });
             expect(component.state('showOutline')).toBeTruthy();
 
             component.instance().setState = sandbox.mock();

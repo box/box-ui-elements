@@ -215,11 +215,12 @@ class ContactsField extends React.Component<Props, State> {
                 validateForError={validateForError}
                 validator={validator}
             >
-                {contacts.map(({ email, isExternalUser, text = null, id }) => (
+                {contacts.map(({ email, isExternalUser, text = null, id, type }) => (
                     <ContactDatalistItem
                         getContactAvatarUrl={getContactAvatarUrl}
                         key={id}
                         id={id}
+                        type={type}
                         isExternal={isExternalUser}
                         name={text}
                         subtitle={email || groupLabel}

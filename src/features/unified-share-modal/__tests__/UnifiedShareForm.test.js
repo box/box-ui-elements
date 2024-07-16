@@ -73,6 +73,12 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 {...props}
             />,
         );
+    const mockUpsellInlineNotice = (
+        <div>
+            <div className="upsell-title">Upsell Inline Notice</div>
+            <div className="upsell-body">Lorem Ipsum</div>
+        </div>
+    );
 
     describe('render()', () => {
         test('should render a default component with default props', () => {
@@ -205,14 +211,30 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should render a default component with upgrade CTA when showUpgradeOptions is enabled', () => {
-            const wrapper = getWrapper({
-                canInvite: true,
-                isFetching: false,
-                showUpgradeOptions: true,
-            });
-            expect(wrapper.exists('UpgradeBadge')).toBe(true);
-        });
+        test.each([
+            [true, true, 'is not', null],
+            [true, false, 'is not', null],
+            [false, true, 'is not', null],
+            [false, false, 'is not', null],
+            [true, true, 'is', mockUpsellInlineNotice],
+            [true, false, 'is', mockUpsellInlineNotice],
+            [false, true, 'is', mockUpsellInlineNotice],
+            [false, false, 'is', mockUpsellInlineNotice],
+        ])(
+            'should render a default component with upgrade CTA when showUpgradeInlineNotice is %s, showUpgradeOptions is %s, and upsellInlineNotice %s passed in',
+            (showUpgradeInlineNotice, showUpgradeOptions, upsellInlineNoticeDescription, upsellInlineNotice) => {
+                const wrapper = getWrapper({
+                    canInvite: true,
+                    isFetching: false,
+                    showUpgradeInlineNotice,
+                    showUpgradeOptions,
+                    upsellInlineNotice,
+                });
+                expect(wrapper.exists('UpgradeBadge')).toBe(
+                    showUpgradeOptions && !showUpgradeInlineNotice && !upsellInlineNotice,
+                );
+            },
+        );
 
         test('should render correct upgrade inline notice when showUpgradeInlineNotice and showUpgradeOptions is enabled', () => {
             const wrapper = getWrapper({
@@ -221,8 +243,21 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
                 showUpgradeInlineNotice: true,
                 showUpgradeOptions: true,
             });
-            expect(wrapper.exists('UpgradeBadge')).toBe(false);
             expect(wrapper.exists('InlineNotice')).toBe(true);
+        });
+
+        test('should render the upsell inline notice component when component is passed', () => {
+            const wrapper = getWrapper({ upsellInlineNotice: mockUpsellInlineNotice });
+            expect(wrapper.exists('.upsell-inline-notice')).toBe(true);
+            expect(wrapper.exists('.upsell-title')).toBe(true);
+            expect(wrapper.exists('.upsell-body')).toBe(true);
+        });
+
+        test('should not render the upsell inline notice div when component is passed', () => {
+            const wrapper = getWrapper();
+            expect(wrapper.exists('.upsell-inline-notice')).toBe(false);
+            expect(wrapper.exists('.upsell-title')).toBe(false);
+            expect(wrapper.exists('.upsell-body')).toBe(false);
         });
 
         test('should render a default component with correct Focus element and props when focusSharedLinkOnLoad is enabled', () => {

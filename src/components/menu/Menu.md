@@ -7,14 +7,13 @@ The component handles adding aria attributes, keyboard navigation, and focus.
 The `<MenuLinkItem>` component is required to wrap anchor tags since there are special ARIA rules for those.
 The `<SelectMenuLinkItem>` component is for items that can be selected with a checkmark.
 
-Following the following standards: [WAI-ARIA Menu](https://www.w3.org/TR/wai-aria-practices-1.1/#menu)
+Following the following standards: [WAI-ARIA Menu](https://www.w3.org/TR/wai-aria-1.1/#menu)
 
 ### Examples
 
 **Basic Menu**
 
 ```js
-const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 const MenuSeparator = require('box-ui-elements/es/components/menu')
   .MenuSeparator;
@@ -78,26 +77,20 @@ const SubmenuItem = require('box-ui-elements/es/components/menu').SubmenuItem;
 
 **Select Menu**
 
-```
-const Menu = require('box-ui-elements/es/components/menu').Menu;
-const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
-const MenuSeparator = require('box-ui-elements/es/components/menu').MenuSeparator;
-const MenuLinkItem = require('box-ui-elements/es/components/menu').MenuLinkItem;
-
+```js
 <Menu>
-    <SelectMenuLinkItem isSelected>
-        <Link href="#">View Profile</Link>
-    </SelectMenuLinkItem>
-    <SelectMenuLinkItem>
-        <Link href="#">Awesome Link</Link>
-    </SelectMenuLinkItem>
+  <SelectMenuLinkItem isSelected>
+    <Link href="#">View Profile</Link>
+  </SelectMenuLinkItem>
+  <SelectMenuLinkItem>
+    <Link href="#">Awesome Link</Link>
+  </SelectMenuLinkItem>
 </Menu>
 ```
 
 **Menu with new child when window is resized to < 700px**
 
 ```js
-const Menu = require('box-ui-elements/es/components/menu').Menu;
 const MenuItem = require('box-ui-elements/es/components/menu').MenuItem;
 
 class MenuWithChildOnResize extends React.Component {

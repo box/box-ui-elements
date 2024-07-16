@@ -1,6 +1,6 @@
 // @flow
 
-import React from 'react';
+import React, { act } from 'react';
 import { IntlProvider } from 'react-intl';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { ContentState, EditorState } from 'draft-js';
@@ -106,9 +106,9 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseComment', () => {
 
     test('should render commenter as a link', async () => {
         const getUserProfileUrl = jest.fn().mockResolvedValue('https://www.test.com/');
-
-        getWrapper({ getUserProfileUrl });
-
+        await act(async () => {
+            getWrapper({ getUserProfileUrl });
+        });
         await expect(screen.getByText(comment.created_by.name)).toBeInTheDocument();
         await expect(screen.getByRole('link')).toHaveAttribute('href', 'https://www.test.com/');
     });

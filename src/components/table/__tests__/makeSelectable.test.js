@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Set } from 'immutable';
 import sinon from 'sinon';
 

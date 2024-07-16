@@ -258,6 +258,7 @@ class PillSelectorBase extends React.Component<Props, State> {
                                       id={option.id}
                                       hasWarning={option.hasWarning}
                                       isExternal={option.isExternalUser}
+                                      type={option.type}
                                   />
                               );
                           })

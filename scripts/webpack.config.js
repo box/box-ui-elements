@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin.js');
+const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const RsyncPlugin = require('@box/frontend/webpack/RsyncPlugin');
-const safeParser = require('postcss-safe-parser');
 const packageJSON = require('../package.json');
 const rsyncConf = fs.existsSync('scripts/rsync.json') ? require('./rsync.json') : {}; // eslint-disable-line
 const license = require('./license');
@@ -78,7 +77,6 @@ function getConfig(isReactExternalized) {
         },
         devServer: {
             host: '0.0.0.0',
-            stats,
         },
         resolveLoader: {
             modules: [path.resolve('src'), path.resolve('node_modules')],
@@ -88,7 +86,7 @@ function getConfig(isReactExternalized) {
                 {
                     test: /\.(js|mjs|ts|tsx)$/,
                     loader: 'babel-loader',
-                    // For webpack dev build perf we want to exlcude node_modules unless we want to support legacy browsers like IE11
+                    // For webpack dev build perf we want to exclude node_modules unless we want to support legacy browsers like IE11
                     exclude: shouldIncludeAllSupportedBrowsers
                         ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
                         : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for styleguidist
@@ -98,6 +96,9 @@ function getConfig(isReactExternalized) {
                     use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
                 },
             ],
+        },
+        optimization: {
+            minimizer: [new CssMinimizerPlugin()],
         },
         performance: {
             maxAssetSize: 2000000,
@@ -117,12 +118,7 @@ function getConfig(isReactExternalized) {
             }),
             new MiniCssExtractPlugin({
                 filename: '[name].css',
-            }),
-            new OptimizeCssAssetsPlugin({
-                cssProcessorOptions: {
-                    discardComments: { removeAll: true },
-                    parser: safeParser,
-                },
+                ignoreOrder: true,
             }),
             new BannerPlugin(license),
             new IgnorePlugin({

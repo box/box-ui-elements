@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
 import './FileInfo.scss';

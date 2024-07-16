@@ -60,7 +60,7 @@ describe('additional-tabs', () => {
     it('should display nothing when additional tabs are disabled', () => {
         helpers.load({ hasAdditionalTabs: false });
 
-        cy.getByTestId('additionaltabplaceholder').should('not.be.visible');
+        cy.getByTestId('additionaltabplaceholder').should('not.exist');
     });
 
     it('should display the loading state', () => {
@@ -71,7 +71,7 @@ describe('additional-tabs', () => {
     it('should render the provided icons and tooltips', () => {
         helpers.load({ hasAdditionalTabs: true, additionalTabs: tabData });
 
-        cy.getByTestId('additionaltabplaceholder').should('not.be.visible');
+        cy.getByTestId('additionaltabplaceholder').should('not.exist');
 
         helpers
             .getTabs()

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import sinon from 'sinon';
 
 import ShareMenu, { OWNER_COOWNER_ONLY, INSUFFICIENT_PERMISSIONS } from '../ShareMenu';

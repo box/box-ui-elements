@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import IconTrackNext from '../../../../icons/general/IconTrackNext';

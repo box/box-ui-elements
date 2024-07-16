@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { createIntl } from 'react-intl';
 import { PresenceCollaboratorComponent as PresenceCollaborator, renderTimestampMessage } from '../PresenceCollaborator';
 

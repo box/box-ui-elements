@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
@@ -491,8 +491,10 @@ describe('components/tab-view/TabViewPrimitive', () => {
 
                 test('should make hidden if last element is inside the viewport', () => {
                     const instance = component.instance();
-                    instance.setState({
-                        tabsContainerOffsetLeft: 100,
+                    act(() => {
+                        instance.setState({
+                            tabsContainerOffsetLeft: 100,
+                        });
                     });
 
                     const lastElementIsInsideOfTabsContainer = {
@@ -510,8 +512,10 @@ describe('components/tab-view/TabViewPrimitive', () => {
 
                 test('should make visible if the last element is outside the viewport', () => {
                     const instance = component.instance();
-                    instance.setState({
-                        tabsContainerOffsetLeft: 100,
+                    act(() => {
+                        instance.setState({
+                            tabsContainerOffsetLeft: 100,
+                        });
                     });
 
                     const lastElementIsOutsideOfTabsContainer = {
@@ -539,7 +543,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     instance.tabsContainer = {};
                     component.setProps({ focusedIndex: 0 });
                     component.setProps({ selectedIndex: 0 });
-                    component.setState({ tabsContainerOffsetLeft: 0 });
+                    act(() => {
+                        component.setState({ tabsContainerOffsetLeft: 0 });
+                    });
 
                     expect(instance.isLeftArrowVisible()).toBeFalsy();
                 });
@@ -548,7 +554,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const instance = component.instance();
                     instance.tabsContainer = {};
                     component.setProps({ focusedIndex: 1 });
-                    component.setState({ tabsContainerOffsetLeft: 0 });
+                    act(() => {
+                        component.setState({ tabsContainerOffsetLeft: 0 });
+                    });
 
                     expect(instance.isLeftArrowVisible()).toBeFalsy();
                 });
@@ -556,7 +564,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const instance = component.instance();
                     instance.tabsContainer = {};
                     component.setProps({ selectedIndex: 1 });
-                    component.setState({ tabsContainerOffsetLeft: 0 });
+                    act(() => {
+                        component.setState({ tabsContainerOffsetLeft: 0 });
+                    });
 
                     expect(instance.isLeftArrowVisible()).toBeFalsy();
                 });
@@ -565,7 +575,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const instance = component.instance();
                     instance.tabsContainer = {};
                     component.setProps({ focusedIndex: 1 });
-                    component.setState({ tabsContainerOffsetLeft: 1 });
+                    act(() => {
+                        component.setState({ tabsContainerOffsetLeft: 1 });
+                    });
 
                     expect(instance.isLeftArrowVisible()).toBeTruthy();
                 });
@@ -574,7 +586,9 @@ describe('components/tab-view/TabViewPrimitive', () => {
                     const instance = component.instance();
                     instance.tabsContainer = {};
                     component.setProps({ selectedIndex: 1 });
-                    component.setState({ tabsContainerOffsetLeft: 1 });
+                    act(() => {
+                        component.setState({ tabsContainerOffsetLeft: 1 });
+                    });
 
                     expect(instance.isLeftArrowVisible()).toBeTruthy();
                 });

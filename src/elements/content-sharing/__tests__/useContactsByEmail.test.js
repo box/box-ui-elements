@@ -1,7 +1,6 @@
 // @flow
 
-import * as React from 'react';
-import { act } from 'react-dom/test-utils';
+import React, { act } from 'react';
 import { mount } from 'enzyme';
 import API from '../../../api';
 import useContactsByEmail from '../hooks/useContactsByEmail';

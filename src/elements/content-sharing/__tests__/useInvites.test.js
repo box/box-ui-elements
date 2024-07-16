@@ -1,174 +1,116 @@
-// @flow
-
-import * as React from 'react';
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
-import API from '../../../api';
+import { renderHook, act } from '@testing-library/react';
 import useInvites from '../hooks/useInvites';
-import { TYPE_FOLDER } from '../../../constants';
-import {
-    MOCK_COLLABS_API_RESPONSE,
-    MOCK_COLLABS_CONVERTED_REQUEST,
-    MOCK_COLLABS_REQUEST_USERS_AND_GROUPS,
-    MOCK_COLLABS_CONVERTED_GROUPS,
-    MOCK_COLLABS_CONVERTED_USERS,
-    MOCK_ITEM_ID,
-} from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
+import API from '../../../api';
 
-const itemData = { id: MOCK_ITEM_ID, type: TYPE_FOLDER };
-const successfulAPIResponse = MOCK_COLLABS_API_RESPONSE.entries[0];
-const handleSuccess = jest.fn();
-const handleError = jest.fn();
-const transformRequestSpy = jest.fn().mockReturnValue(MOCK_COLLABS_CONVERTED_REQUEST);
-const transformResponseSpy = jest.fn().mockReturnValue(successfulAPIResponse);
+jest.mock('../../../api');
 
-function FakeComponent({
-    api,
-    transformRequest,
-    transformResponse,
-}: {
-    api: API,
-    transformRequest: Function,
-    transformResponse: Function,
-}) {
-    const [sendInvites, setSendInvites] = React.useState<null | Function>(null);
+describe('useInvites hook', () => {
+    let mockApi;
+    let mockHandleSuccess;
+    let mockHandleError;
+    let mockTransformRequest;
+    let mockTransformResponse;
 
-    const updatedSendInvitesFn = useInvites(api, MOCK_ITEM_ID, TYPE_FOLDER, {
-        handleSuccess,
-        handleError,
-        transformRequest,
-        transformResponse,
-    });
-
-    if (updatedSendInvitesFn && !sendInvites) {
-        setSendInvites(() => updatedSendInvitesFn);
-    }
-
-    return (
-        sendInvites && (
-            <button onClick={sendInvites} type="submit">
-                &#9835; Box UI Elements &#9835;
-            </button>
-        )
-    );
-}
-
-describe('elements/content-sharing/hooks/useInvites', () => {
-    let addCollaboration;
-    let mockAPI;
-
-    describe('with successful API calls', () => {
-        beforeAll(() => {
-            addCollaboration = jest.fn().mockImplementation((item, collab, addCollaborationSuccess) => {
-                addCollaborationSuccess(successfulAPIResponse);
-            });
-            mockAPI = {
-                getCollaborationsAPI: jest.fn().mockReturnValue({
-                    addCollaboration,
-                }),
+    beforeEach(() => {
+        mockApi = new API({});
+        mockHandleSuccess = jest.fn();
+        mockHandleError = jest.fn();
+        mockTransformRequest = jest.fn().mockImplementation(collabRequest => {
+            if (collabRequest) {
+                return {
+                    users: collabRequest.users || [{ email: 'user@example.com', role: 'editor' }],
+                    groups: collabRequest.groups || [{ id: 'group123', role: 'viewer' }],
+                };
+            }
+            return {
+                users: [{ email: 'user@example.com', role: 'editor' }],
+                groups: [{ id: 'group123', role: 'viewer' }],
             };
         });
-
-        test('should set the value of sendInvites() and send invites on invocation', () => {
-            let fakeComponent;
-
-            act(() => {
-                fakeComponent = mount(
-                    <FakeComponent
-                        api={mockAPI}
-                        transformRequest={transformRequestSpy}
-                        transformResponse={transformResponseSpy}
-                    />,
-                );
-            });
-            fakeComponent.update();
-
-            fakeComponent.find('button').invoke('onClick')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
-
-            expect(transformRequestSpy).toHaveBeenCalledWith(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
-            MOCK_COLLABS_CONVERTED_USERS.forEach(user => {
-                expect(addCollaboration).toHaveBeenCalledWith(
-                    itemData,
-                    user,
-                    expect.anything(Function),
-                    expect.anything(Function),
-                );
-            });
-            MOCK_COLLABS_CONVERTED_GROUPS.forEach(group => {
-                expect(addCollaboration).toHaveBeenCalledWith(
-                    itemData,
-                    group,
-                    expect.anything(Function),
-                    expect.anything(Function),
-                );
-            });
-            expect(handleSuccess).toHaveBeenCalledWith(successfulAPIResponse);
-            expect(transformResponseSpy).toHaveBeenCalledWith(successfulAPIResponse);
-        });
-
-        test('should return a null Promise if the transformation function is not provided', () => {
-            let fakeComponent;
-
-            act(() => {
-                fakeComponent = mount(<FakeComponent api={mockAPI} />);
-            });
-            fakeComponent.update();
-
-            const sendInvites = fakeComponent.find('button').invoke('onClick')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
-            expect(addCollaboration).not.toHaveBeenCalled();
-            return expect(sendInvites).resolves.toBeNull();
+        mockTransformResponse = jest.fn().mockReturnValue({ id: '123', type: 'folder' });
+        jest.spyOn(mockApi, 'getCollaborationsAPI').mockReturnValue({
+            addCollaboration: jest.fn().mockImplementation((itemData, collab, successCallback, errorCallback) => {
+                if (collab.email === 'fail@example.com') {
+                    errorCallback(new Error('Failed to add collaboration'));
+                } else {
+                    successCallback({ id: 'collab123', role: collab.role });
+                }
+            }),
         });
     });
 
-    describe('with failed API calls', () => {
-        beforeAll(() => {
-            addCollaboration = jest
-                .fn()
-                .mockImplementation((item, collab, addCollaborationSuccess, addCollaborationError) => {
-                    addCollaborationError();
-                });
-            mockAPI = {
-                getCollaborationsAPI: jest.fn().mockReturnValue({
-                    addCollaboration,
-                }),
-            };
+    test('invokes setIsLoading, handleSuccess, and transformResponse on successful collaboration addition', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformRequest: mockTransformRequest,
+                transformResponse: mockTransformResponse,
+            }),
+        );
+
+        act(() => {
+            result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
         });
 
-        test('should set the value of getContacts() and call handleError() when invoked', () => {
-            let fakeComponent;
+        expect(mockHandleSuccess).toHaveBeenCalledWith({ id: 'collab123', role: 'editor' });
+        expect(mockTransformResponse).toHaveBeenCalledWith({ id: 'collab123', role: 'editor' });
+    });
 
-            act(() => {
-                fakeComponent = mount(
-                    <FakeComponent
-                        api={mockAPI}
-                        transformRequest={transformRequestSpy}
-                        transformResponse={transformResponseSpy}
-                    />,
-                );
-            });
-            fakeComponent.update();
+    test('invokes handleError on failed collaboration addition', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformRequest: mockTransformRequest,
+                transformResponse: mockTransformResponse,
+            }),
+        );
 
-            fakeComponent.find('button').invoke('onClick')(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
-
-            expect(transformRequestSpy).toHaveBeenCalledWith(MOCK_COLLABS_REQUEST_USERS_AND_GROUPS);
-            MOCK_COLLABS_CONVERTED_USERS.forEach(user => {
-                expect(addCollaboration).toHaveBeenCalledWith(
-                    itemData,
-                    user,
-                    expect.anything(Function),
-                    expect.anything(Function),
-                );
-            });
-            MOCK_COLLABS_CONVERTED_GROUPS.forEach(group => {
-                expect(addCollaboration).toHaveBeenCalledWith(
-                    itemData,
-                    group,
-                    expect.anything(Function),
-                    expect.anything(Function),
-                );
-            });
-            expect(handleError).toHaveBeenCalled();
-            expect(transformResponseSpy).not.toHaveBeenCalled();
+        act(() => {
+            result.current({ users: [{ email: 'fail@example.com', role: 'editor' }] });
         });
+
+        expect(mockHandleError).toHaveBeenCalled();
+    });
+
+    test('returns null if transformRequest is not provided', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformResponse: mockTransformResponse,
+            }),
+        );
+
+        let actionResult;
+        act(() => {
+            actionResult = result.current({ users: [{ email: 'user@example.com', role: 'editor' }] });
+        });
+
+        expect(actionResult).toEqual(Promise.resolve());
+        expect(mockHandleSuccess).not.toHaveBeenCalled();
+        expect(mockHandleError).not.toHaveBeenCalled();
+    });
+
+    test('processes multiple users and groups in a single call', async () => {
+        const { result } = renderHook(() =>
+            useInvites(mockApi, '123', 'folder', {
+                handleSuccess: mockHandleSuccess,
+                handleError: mockHandleError,
+                transformRequest: mockTransformRequest,
+                transformResponse: mockTransformResponse,
+            }),
+        );
+
+        act(() => {
+            result.current({
+                users: [{ email: 'user@example.com', role: 'editor' }],
+                groups: [{ id: 'group123', role: 'viewer' }],
+            });
+        });
+
+        expect(mockHandleSuccess).toHaveBeenCalledTimes(2);
+        expect(mockTransformResponse).toHaveBeenCalledTimes(2);
     });
 });

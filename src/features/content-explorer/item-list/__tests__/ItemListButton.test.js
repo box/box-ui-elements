@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import ItemListButton from '../ItemListButton';
 import ContentExplorerMode from '../../modes';

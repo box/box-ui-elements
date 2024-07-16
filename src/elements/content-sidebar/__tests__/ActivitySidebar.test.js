@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';

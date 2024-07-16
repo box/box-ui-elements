@@ -1,7 +1,7 @@
 /*
  * Utility class for the FormattedCompMessage component.
  */
-import React from 'react';
+import * as React from 'react';
 import { JSTYPE_BOOLEAN, JSTYPE_NUMBER, JSTYPE_OBJECT, JSTYPE_STRING } from './constants';
 
 const MessageAccumulator = require('message-accumulator').default; // ES5 CommonJS module

@@ -1,7 +1,6 @@
 // @flow
+/* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
-import { State, Store } from '@sambego/storybook-state';
 
 import Button from '../../button/Button';
 import PrimaryButton from '../../primary-button/PrimaryButton';
@@ -12,47 +11,41 @@ import notes from './NotificationsWrapper.stories.md';
 
 export const example = () => {
     const DATE = new Date('May 13, 2002 23:15:30').toTimeString();
-    const componentStore = new Store({
+
+    const [notificationData, setNotificationData] = React.useState({
         id: 0,
         notifications: new Map(),
     });
 
     const closeNotification = id => {
-        const notifications = componentStore.get('notifications');
+        const notifications = new Map(notificationData.notifications);
         notifications.delete(id);
-        componentStore.set({ notifications });
+        setNotificationData({ ...notificationData, notifications });
     };
 
     const addNotification = (duration, type) => {
-        const id = componentStore.get('id');
-        const notifications = componentStore.get('notifications');
+        const { id } = notificationData;
+        const { notifications } = notificationData;
         const notification = (
             <Notification key={id} duration={duration} onClose={() => closeNotification(id)} type={type}>
                 <span>Hello world! I was made at {DATE}</span>
                 <Button>Okay</Button>
             </Notification>
         );
-
-        componentStore.set({
+        setNotificationData({
             notifications: notifications.set(id, notification),
             id: id + 1,
         });
     };
 
     return (
-        <State store={componentStore}>
-            {state => (
-                <IntlProvider locale="en">
-                    <div>
-                        <NotificationsWrapper>{[...state.notifications.values()]}</NotificationsWrapper>
-                        <Button onClick={() => addNotification('short', 'info')}>Display timed notification</Button>
-                        <PrimaryButton onClick={() => addNotification(undefined, 'warn')}>
-                            Display persistent notification
-                        </PrimaryButton>
-                    </div>
-                </IntlProvider>
-            )}
-        </State>
+        <div>
+            <NotificationsWrapper>{[...notificationData.notifications.values()]}</NotificationsWrapper>
+            <Button onClick={() => addNotification('short', 'info')}>Display timed notification</Button>
+            <PrimaryButton onClick={() => addNotification(undefined, 'warn')}>
+                Display persistent notification
+            </PrimaryButton>
+        </div>
     );
 };
 

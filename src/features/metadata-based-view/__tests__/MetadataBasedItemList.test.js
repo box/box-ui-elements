@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { FormattedMessage } from 'react-intl';
 import FileIcon from '../../../icons/file-icon';
 import IconPencil from '../../../icons/general/IconPencil';
@@ -223,8 +223,10 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             const editableColumnIndex = 3; // amount field is editable
 
             if (columnIndex === editableColumnIndex) {
-                // Set state reflecting mouse-over action for every cell in editable column
-                instance.handleMouseEnter(columnIndex, rowIndex);
+                act(() => {
+                    // Set state reflecting mouse-over action for every cell in editable column
+                    instance.handleMouseEnter(columnIndex, rowIndex);
+                });
             }
 
             const data = instance.getGridCellData(columnIndex, rowIndex);
@@ -293,7 +295,9 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     describe('handleMouseEnter()', () => {
         test('should handle mouse over event by setting state accordingly', () => {
-            instance.handleMouseEnter(5, 8);
+            act(() => {
+                instance.handleMouseEnter(5, 8);
+            });
             expect(instance.state.hoveredColumnIndex).toBe(5);
             expect(instance.state.hoveredRowIndex).toBe(8);
         });
@@ -301,7 +305,9 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
 
     describe('handleMouseLeave()', () => {
         test('should handle mouse leave event by setting state accordingly', () => {
-            instance.handleMouseLeave();
+            act(() => {
+                instance.handleMouseLeave();
+            });
             expect(instance.state.hoveredRowIndex).toBe(-1);
         });
     });
@@ -356,8 +362,9 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
         test('should have hovered class for adding background color on row hover', () => {
             const hoverRowIndex = 1;
             const hoverColumnIndex = 5;
-            instance.handleMouseEnter(hoverColumnIndex, hoverRowIndex); // Hover over row
-
+            act(() => {
+                instance.handleMouseEnter(hoverColumnIndex, hoverRowIndex); // Hover over row
+            });
             const cell = shallow(
                 instance.cellRenderer({ columnIndex: 0, rowIndex: hoverRowIndex, key: 'key', style: {} }),
             );
@@ -375,7 +382,9 @@ describe('features/metadata-based-view/MetadataBasedItemList', () => {
             'should return correct classes when content is scrolled $desc',
             ({ scrollLeftOffset, scrollRightOffset, scrolledLeft, scrolledRight, scrolledMiddle }) => {
                 instance.calculateContentWidth = jest.fn().mockReturnValue(600);
-                wrapper.setState({ scrollLeftOffset, scrollRightOffset });
+                act(() => {
+                    wrapper.setState({ scrollLeftOffset, scrollRightOffset });
+                });
                 const classes = instance.getScrollPositionClasses(500);
                 expect(classes['is-scrolledLeft']).toBe(scrolledLeft);
                 expect(classes['is-scrolledRight']).toBe(scrolledRight);

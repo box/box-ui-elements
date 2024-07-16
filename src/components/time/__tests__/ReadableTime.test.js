@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import sinon from 'sinon';
 import { createIntl } from 'react-intl';
 import russianMessages from '../../../../i18n/ru-RU.js';

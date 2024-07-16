@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount } from 'enzyme';
 import DatePicker from '../../../../../components/date-picker/DatePicker'; // eslint-disable-line no-unused-vars
 import { TASK_EDIT_MODE_EDIT } from '../../../../../constants';
@@ -79,15 +79,15 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         ];
         const message = 'hey';
         const dueDate = new Date('2019-04-12');
-
-        // Warning: bypass user interactions to populate form
-        wrapper.setState({
-            approvers,
-            message,
-            dueDate,
-            isValid: true,
+        act(() => {
+            // Warning: bypass user interactions to populate form
+            wrapper.setState({
+                approvers,
+                message,
+                dueDate,
+                isValid: true,
+            });
         });
-
         // Clicks should cause form submit but Enzyme doesn't do it
         const submitButton = wrapper.find('[data-testid="task-form-submit-button"]').hostNodes();
         submitButton.simulate('submit', {
@@ -109,13 +109,13 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
         });
         const instance = wrapper.instance();
         const description = 'hey';
-
-        // Set form state to reflect updated data
-        wrapper.setState({
-            message: description,
-            isValid: true,
+        act(() => {
+            // Set form state to reflect updated data
+            wrapper.setState({
+                message: description,
+                isValid: true,
+            });
         });
-
         const submitButton = wrapper.find('[data-testid="task-form-submit-button"]').hostNodes();
         submitButton.simulate('submit', {
             target: {
@@ -166,21 +166,23 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             ],
             createTask: jest.fn(),
         });
-        wrapper.setState({
-            approvers: [
-                {
-                    id: '',
-                    target: {
-                        id: 123,
-                        name: 'abc',
-                        type: 'user',
+        act(() => {
+            wrapper.setState({
+                approvers: [
+                    {
+                        id: '',
+                        target: {
+                            id: 123,
+                            name: 'abc',
+                            type: 'user',
+                        },
+                        role: 'ASSIGNEE',
+                        type: 'task_collaborator',
+                        status: 'NOT_STARTED',
+                        permissions: { can_delete: false, can_update: false },
                     },
-                    role: 'ASSIGNEE',
-                    type: 'task_collaborator',
-                    status: 'NOT_STARTED',
-                    permissions: { can_delete: false, can_update: false },
-                },
-            ],
+                ],
+            });
         });
         expect(wrapper.find('PillSelectorDropdown').prop('selectorOptions').length).toBe(1);
     });
@@ -209,9 +211,10 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             const getApproverWithQuery = jest.fn();
             const wrapper = render({ getApproverWithQuery });
             let input = wrapper.find('PillSelector[data-testid="task-form-assignee-input"]');
-
-            input.prop('onInput')({ target: { value } });
-            input.prop('onBlur')();
+            act(() => {
+                input.prop('onInput')({ target: { value } });
+                input.prop('onBlur')();
+            });
             wrapper.update();
 
             input = wrapper.find('PillSelector[data-testid="task-form-assignee-input"]');
@@ -229,9 +232,9 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             const wrapper = render({});
 
             wrapper.instance().validateForm = validateFormMock;
-
-            wrapper.instance().handleDueDateChange(date);
-
+            act(() => {
+                wrapper.instance().handleDueDateChange(date);
+            });
             expect(wrapper.state('dueDate')).toEqual(lastMillisecondOfDate);
             expect(validateFormMock).toHaveBeenCalled();
         });
@@ -242,11 +245,13 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
             // 11:59:59:999 on December 3rd GMT
             const lastMillisecondOfDate = new Date('2018-12-03T23:59:59.999');
             const wrapper = render({});
-
-            wrapper.instance().handleDueDateChange(date);
+            act(() => {
+                wrapper.instance().handleDueDateChange(date);
+            });
             expect(wrapper.state('dueDate')).toEqual(lastMillisecondOfDate);
-
-            wrapper.instance().handleDueDateChange(null);
+            act(() => {
+                wrapper.instance().handleDueDateChange(null);
+            });
             expect(wrapper.state('dueDate')).toEqual(null);
         });
     });
@@ -298,8 +303,12 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
                 permissions: { can_delete: false, can_update: false },
             };
             const wrapper = render();
-            wrapper.setState({ approvers: [approver] });
-            wrapper.instance().handleApproverSelectorSelect([newApprover]);
+            act(() => {
+                wrapper.setState({ approvers: [approver] });
+            });
+            act(() => {
+                wrapper.instance().handleApproverSelectorSelect([newApprover]);
+            });
             expect(wrapper.state('approvers')).toEqual([approver, expectedNewApprover]);
         });
     });
@@ -333,9 +342,12 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
                 },
             ];
             const wrapper = render();
-
-            wrapper.setState({ approvers });
-            wrapper.instance().handleApproverSelectorRemove(approvers[0], 0);
+            act(() => {
+                wrapper.setState({ approvers });
+            });
+            act(() => {
+                wrapper.instance().handleApproverSelectorRemove(approvers[0], 0);
+            });
             expect(wrapper.state('approvers')).toEqual([approvers[1]]);
         });
     });
@@ -489,22 +501,27 @@ describe('components/ContentSidebar/ActivityFeed/task-form/TaskForm', () => {
                 permissions: { can_delete: false, can_update: false },
             }));
 
-            wrapper.find(TaskForm).setState({
-                approvers,
-                message,
-                dueDate,
-                completionRule: 'ANY_ASSIGNEE',
-                isValid: true,
+            act(() => {
+                wrapper.find(TaskForm).setState({
+                    approvers,
+                    message,
+                    dueDate,
+                    completionRule: 'ANY_ASSIGNEE',
+                    isValid: true,
+                });
             });
 
             const container = wrapper.render();
             const checkbox = container.find('[data-testid="task-form-completion-rule-checkbox"]');
 
             const submitButton = wrapper.find('[data-testid="task-form-submit-button"]').hostNodes();
-            submitButton.simulate('submit', {
-                target: {
-                    checkValidity: () => true,
-                },
+
+            act(() => {
+                submitButton.simulate('submit', {
+                    target: {
+                        checkValidity: () => true,
+                    },
+                });
             });
 
             expect(checkbox.length).toBe(1);

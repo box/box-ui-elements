@@ -35,10 +35,6 @@ type Props = {
  */
 const Param = ({ value }: Props) => {
     switch (typeof value) {
-        default:
-        case JSTYPE_UNDEFINED:
-            return '';
-
         case JSTYPE_BOOLEAN:
         case JSTYPE_NUMBER:
             return String(value);
@@ -57,6 +53,9 @@ const Param = ({ value }: Props) => {
                 return value;
             }
             return value.toString();
+        case JSTYPE_UNDEFINED:
+        default:
+            return '';
     }
 };
 

@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import { IntlProvider } from 'react-intl';

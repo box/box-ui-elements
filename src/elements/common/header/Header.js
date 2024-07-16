@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import Logo from './Logo';
 import messages from '../messages';

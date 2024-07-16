@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import sinon from 'sinon';
 
 import classificationColorsMap from '../../classification/classificationColorsMap';
@@ -26,6 +26,7 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
     const isDirectLinkAvailable = true;
     const isDirectLinkUnavailableDueToDownloadSettings = true;
     const isDirectLinkUnavailableDueToAccessPolicy = true;
+    const isDirectLinkUnavailableDueToMaliciousContent = false;
 
     const getWrapper = (props = {}) =>
         shallow(
@@ -59,6 +60,7 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
                 isDirectLinkAvailable={isDirectLinkAvailable}
                 isDirectLinkUnavailableDueToDownloadSettings={isDirectLinkUnavailableDueToDownloadSettings}
                 isDirectLinkUnavailableDueToAccessPolicy={isDirectLinkUnavailableDueToAccessPolicy}
+                isDirectLinkUnavailableDueToMaliciousContent={isDirectLinkUnavailableDueToMaliciousContent}
                 {...props}
             />,
         );
@@ -244,9 +246,16 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
         test('should render an ExpirationSection', () => {
             const dateFormat = 'utcTime';
             const expirationDate = new Date('11/7/17');
+            const dateDisplayFormat = {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                timeZone: 'Europe/Warsaw',
+            };
 
             const wrapper = getWrapper({
                 dateFormat,
+                dateDisplayFormat,
                 expirationTimestamp: 123,
             });
 
@@ -260,6 +269,7 @@ describe('features/shared-link-settings-modal/SharedLinkSettingsModal', () => {
             expect(section.length).toBe(1);
             expect(section.prop('canChangeExpiration')).toEqual(canChangeExpiration);
             expect(section.prop('dateFormat')).toEqual(dateFormat);
+            expect(section.prop('dateDisplayFormat')).toEqual(dateDisplayFormat);
             expect(section.prop('expirationDate')).toEqual(expirationDate);
             expect(section.prop('isExpirationEnabled')).toBe(true);
             expect(section.prop('onCheckboxChange')).toEqual(wrapper.instance().onExpirationCheckboxChange);

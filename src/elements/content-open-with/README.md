@@ -3,8 +3,6 @@
 For more information on this element, see this [documentation](https://developer.box.com/docs/box-content-open-with).
 
 ```jsx
-var ContentOpenWith = require('./ContentOpenWith').default;
-
 <IntlProvider locale="en">
     <ContentOpenWith
         features={FEATURES}

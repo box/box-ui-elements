@@ -107,6 +107,8 @@ describe('components/portal/Portal', () => {
 
     test('should used a passed in document if provided', () => {
         const newDoc = document.implementation.createHTMLDocument('doc');
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         mountToBody(<Portal container={newDoc.body}>text</Portal>);
         const portal = newDoc.querySelector('[data-portal]');
         expect(portal && portal.ownerDocument && portal.ownerDocument.title).toEqual('doc');

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import ItemName from './ItemName';
 import ItemDetails from './ItemDetails';
 import { VIEW_SEARCH } from '../../../constants';

@@ -1,5 +1,5 @@
 import set from 'lodash/set';
-import React from 'react';
+import * as React from 'react';
 import { shallow, mount } from 'enzyme';
 import ItemProperties from '../../../features/item-details/ItemProperties';
 import InlineError from '../../../components/inline-error/InlineError';

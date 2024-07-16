@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { mount } from 'enzyme';
 import noop from 'lodash/noop';
@@ -36,13 +36,21 @@ describe('elements/content-explorer/ContentExplorer', () => {
         test('should force reload the files list', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
-            instance.setState({
-                currentCollection: {
-                    id: '123',
-                },
+
+            act(() => {
+                instance.setState({
+                    currentCollection: {
+                        id: '123',
+                    },
+                });
             });
+
             instance.fetchFolder = jest.fn();
-            instance.uploadSuccessHandler();
+
+            act(() => {
+                instance.uploadSuccessHandler();
+            });
+
             expect(instance.fetchFolder).toHaveBeenCalledWith('123', false);
         });
     });
@@ -397,19 +405,25 @@ describe('elements/content-explorer/ContentExplorer', () => {
             beforeEach(() => {
                 wrapper = getWrapper();
                 instance = wrapper.instance();
-                instance.setState({ currentCollection: baseCollection });
+                act(() => {
+                    instance.setState({ currentCollection: baseCollection });
+                });
                 instance.setState = jest.fn();
             });
 
             test('should not update collection if matching id is not present in collection', () => {
                 const item3 = { id: '3', updated: true };
-                instance.updateItemInCollection(item3);
+                act(() => {
+                    instance.updateItemInCollection(item3);
+                });
                 expect(instance.setState).toHaveBeenCalledWith({ currentCollection: baseCollection });
             });
 
             test('should update collection if matching id is present in collection', () => {
                 const newItem2 = { id: '2', updated: true };
-                instance.updateItemInCollection(newItem2);
+                act(() => {
+                    instance.updateItemInCollection(newItem2);
+                });
                 expect(instance.setState).toHaveBeenCalledWith({
                     currentCollection: { ...baseCollection, items: [item1, newItem2] },
                 });
@@ -544,11 +558,15 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
             const updatedItems = [collectionItem1, clonedCollectionItem2];
 
-            wrapper.setState({ currentCollection });
+            act(() => {
+                wrapper.setState({ currentCollection });
+            });
+
             const instance = wrapper.instance();
             instance.setState = jest.fn();
-
-            instance.updateMetadataSuccessCallback(boxItem, field, newValue);
+            act(() => {
+                instance.updateMetadataSuccessCallback(boxItem, field, newValue);
+            });
             expect(instance.setState).toHaveBeenCalledWith({
                 currentCollection: {
                     items: updatedItems,
@@ -613,12 +631,14 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 chunked: false,
             };
             const wrapper = getWrapper({ canUpload: true, contentUploaderProps });
-            wrapper.setState({
-                currentCollection: {
-                    permissions: {
-                        can_upload: true,
+            act(() => {
+                wrapper.setState({
+                    currentCollection: {
+                        permissions: {
+                            can_upload: true,
+                        },
                     },
-                },
+                });
             });
             const uploadDialogElement = wrapper.find(UploadDialog);
             expect(uploadDialogElement.length).toBe(1);
@@ -658,9 +678,11 @@ describe('elements/content-explorer/ContentExplorer', () => {
             instance = wrapper.instance();
             instance.api = { getAPI: getApiMock, getCache: jest.fn() };
             instance.refreshCollection = refreshCollectionMock;
-            instance.setState({
-                selected: boxItem,
-                isDeleteModalOpen: true,
+            act(() => {
+                instance.setState({
+                    selected: boxItem,
+                    isDeleteModalOpen: true,
+                });
             });
         });
 
@@ -672,8 +694,9 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
         test('should call refreshCollection and onDelete callback on success', async () => {
             getApiDeleteMock.mockImplementation((item, successCallback) => successCallback());
-            instance.deleteCallback();
-
+            act(() => {
+                instance.deleteCallback();
+            });
             expect(getApiMock).toBeCalledTimes(1);
             expect(getApiDeleteMock).toBeCalledTimes(1);
             expect(onDeleteMock).toBeCalledTimes(1);
@@ -682,7 +705,9 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
         test('should call refreshCollection on error', async () => {
             getApiDeleteMock.mockImplementation((item, successCallback, errorCallback) => errorCallback());
-            instance.deleteCallback();
+            act(() => {
+                instance.deleteCallback();
+            });
 
             expect(getApiMock).toBeCalledTimes(1);
             expect(getApiDeleteMock).toBeCalledTimes(1);

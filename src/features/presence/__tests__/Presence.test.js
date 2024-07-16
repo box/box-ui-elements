@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React from 'react';
+import * as React from 'react';
 import { createIntl } from 'react-intl';
 import collaboratorList from '../__mocks__/collaborators';
 import { PresenceComponent as Presence } from '../Presence';

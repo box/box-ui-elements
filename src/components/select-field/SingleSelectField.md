@@ -1,9 +1,7 @@
 ### Examples
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -16,9 +14,10 @@ const options = [
 const separatorIndices = [2, 4];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <SingleSelectField
@@ -33,9 +32,7 @@ const handleChange = selectedOption => {
 Clear Option Enabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -46,9 +43,10 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <SingleSelectField
@@ -62,9 +60,7 @@ const handleChange = selectedOption => {
 Search Input Enabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -75,9 +71,10 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <SingleSelectField
@@ -91,9 +88,7 @@ const handleChange = selectedOption => {
 Search Input and Clear Option Enabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -104,9 +99,10 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <SingleSelectField
@@ -121,9 +117,7 @@ const handleChange = selectedOption => {
 Disabled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -144,9 +138,7 @@ const options = [
 Labeled
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -157,9 +149,10 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <Label text="Single select field">
@@ -174,9 +167,7 @@ const handleChange = selectedOption => {
 Header Content
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -187,9 +178,10 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <SingleSelectField
@@ -203,9 +195,7 @@ const handleChange = selectedOption => {
 Invalid
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -216,9 +206,10 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <Label text="Single select field">
@@ -234,9 +225,7 @@ const handleChange = selectedOption => {
 Search Input
 
 ```
-initialState = {
-    selectedValue: 'b',
-};
+const [state, setState] = React.useState({ selectedValue: 'b' });
 
 const options = [
     { displayText: 'Option A', value: 'a' },
@@ -247,9 +236,10 @@ const options = [
 ];
 
 const handleChange = selectedOption => {
-    setState({
+    setState(prevState => ({
+        ...prevState,
         selectedValue: selectedOption.value,
-    });
+    }));
 };
 
 <Label text="Single select field">

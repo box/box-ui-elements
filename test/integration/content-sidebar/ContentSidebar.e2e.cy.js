@@ -88,8 +88,7 @@ describe('ContentSidebar', () => {
 
     describe('version history', () => {
         beforeEach(() => {
-            cy.server();
-            cy.route('GET', '**/files/*', 'fixture:content-sidebar/restored-file.json');
+            cy.intercept('GET', '**/files/*', { fixture: 'content-sidebar/restored-file.json' });
 
             helpers.load({
                 fileId: Cypress.env('FILE_ID_DOC_VERSIONED'),
@@ -101,12 +100,13 @@ describe('ContentSidebar', () => {
             cy.getByTestId('versionhistory').click();
             cy.contains('[data-testid="bcs-content"]', 'Version History').as('versionHistory');
 
-            cy.getByTestId('versions-item-button').within($versionsItem => {
-                cy.wrap($versionsItem)
-                    .contains('V2')
-                    .click();
-                cy.wrap($versionsItem).should('have.class', 'bcs-is-selected');
-            });
+            cy.getByTestId('versions-item-button')
+                .contains('V2')
+                .click();
+
+            cy.getByTestId('versions-item-button')
+                .eq(-2)
+                .should('have.class', 'bcs-is-selected');
 
             cy.get('@versionHistory')
                 .contains('Back')
@@ -115,9 +115,8 @@ describe('ContentSidebar', () => {
         });
 
         it('should display the current version as restored', () => {
-            cy.getByTestId('version').within($versionItem => {
-                cy.wrap($versionItem).contains('promoted v6 to v10');
-            });
+            cy.getByTestId('version').contains('promoted v6 to v10');
+
             cy.getByTestId('sidebardetails').click();
             cy.getByTestId('versionhistory').click();
 

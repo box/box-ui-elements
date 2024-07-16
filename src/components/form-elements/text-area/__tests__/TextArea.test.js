@@ -1,5 +1,5 @@
+import React, { act } from 'react';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { shallow, mount } from 'enzyme';
 import sinon from 'sinon';
 
@@ -195,7 +195,9 @@ describe('components/form-elements/text-area/TextArea', () => {
 
         const component = mount(<TextArea label="label" name="textarea" value="" />, { context, childContextTypes });
 
-        validityStateHandlerSpy.callArgWith(1, error);
+        act(() => {
+            validityStateHandlerSpy.callArgWith(1, error);
+        });
 
         expect(component.state('error')).toEqual(error);
     });
@@ -218,7 +220,9 @@ describe('components/form-elements/text-area/TextArea', () => {
 
         const component = mount(<TextArea label="label" name="textarea" value="" />, { context, childContextTypes });
 
-        validityStateHandlerSpy.callArgWith(1, error);
+        act(() => {
+            validityStateHandlerSpy.callArgWith(1, error);
+        });
         expect(component.state('error').code).toEqual('badInput');
     });
 });

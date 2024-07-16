@@ -3,7 +3,7 @@
  * @file Item remove component
  */
 
-import React from 'react';
+import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import PlainButton from '../../components/plain-button/PlainButton';

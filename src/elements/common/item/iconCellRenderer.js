@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 
 import IconCell from './IconCell';
 import type { BoxItem } from '../../../common/types/core';

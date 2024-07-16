@@ -3,7 +3,7 @@
  * @file Component for file icon and name
  */
 
-import React from 'react';
+import * as React from 'react';
 import Badgeable from '../../components/badgeable';
 import FileIcon from '../../icons/file-icon/FileIcon';
 import IconAlertDefault from '../../icons/general/IconAlertDefault';

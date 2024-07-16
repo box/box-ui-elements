@@ -17,7 +17,13 @@
 <PROJECT_ROOT>/node_modules/jest-puppeteer*
 <PROJECT_ROOT>/node_modules/start-server-and-test*
 <PROJECT_ROOT>/node_modules/jest-image-snapshot*
+<PROJECT_ROOT>/node_modules/react-styleguidist*
+<PROJECT_ROOT>/node_modules/immer*
 <PROJECT_ROOT>/.*/__tests__/.*
+<PROJECT_ROOT>/.*/*.stories.*
+# ignoring the flow check for this component specifically because it increased the scope too much when we are planning to switch to typescript anyways
+<PROJECT_ROOT>/src/components/pill-selector-dropdown/PillSelectorDropdown.stories.js
+
 
 [options]
 sharedmemory.hash_table_pow=21

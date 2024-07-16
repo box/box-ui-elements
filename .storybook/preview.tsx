@@ -1,12 +1,13 @@
+import * as React from "react";
 import { IntlProvider } from 'react-intl';
+import { initialize, mswDecorator } from 'msw-storybook-addon';
 
 import features from '../examples/src/features';
 
 import '../src/styles/variables';
 import '../src/styles/base.scss';
-import { reactIntl } from "./reactIntl";
 
-import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { reactIntl } from "./reactIntl";
 
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;
@@ -17,25 +18,17 @@ global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 
 initialize();
 
-const preview: any = {
-    globals: {
-        locale: reactIntl.defaultLocale,
-        locales: {
-            en: 'English',
-            de: 'Deutsche',
-        },
-    },
+const preview = {
     decorators:[
         mswDecorator,
-        (Story) =>
-            (
-                <IntlProvider locale='en'>
-                    <Story />
-                </IntlProvider>
-            ),
+        (Story) => (
+            <IntlProvider locale="en">
+                <Story />
+            </IntlProvider>
+        )
     ],
+
     parameters: {
-        actions: { argTypesRegex: '^on[A-Z].*' },
         chromatic: { disableSnapshot: true },
         controls: {
             matchers: {
@@ -50,6 +43,16 @@ const preview: any = {
         },
         reactIntl,
     },
+
+    tags: ['autodocs'],
+
+    initialGlobals: {
+        locale: reactIntl.defaultLocale,
+        locales: {
+            en: 'English',
+            de: 'Deutsche',
+        },
+    }
 };
 
 export default preview;

@@ -1,5 +1,5 @@
 /* @flow */
-import React from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 

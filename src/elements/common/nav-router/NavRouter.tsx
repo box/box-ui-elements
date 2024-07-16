@@ -10,6 +10,8 @@ type Props = {
 
 const NavRouter = ({ children, history, ...rest }: Props) => {
     if (history) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         return <Router history={history}>{children}</Router>;
     }
 

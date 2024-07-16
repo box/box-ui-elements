@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import ContentPreview from '../ContentPreview';
 
 export const basic = {};
@@ -56,7 +57,11 @@ export const withBoxAI = {
 export default {
     title: 'Elements/ContentPreview',
     component: ContentPreview,
-    render: ({ ...args }: any) => <ContentPreview key={`${args.fileId}-${args.token}`} {...args} />,
+    render: ({ ...args }: any) => (
+        <Router>
+            <ContentPreview key={`${args.fileId}-${args.token}`} {...args} />
+        </Router>
+    ),
     args: {
         features: global.FEATURE_FLAGS,
         fileId: global.FILE_ID,

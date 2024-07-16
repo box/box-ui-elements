@@ -18,8 +18,9 @@
 ```
 **Controlled**
 ```js
-initialState = { isOn: false };
-const onToggle = () => setState({ isOn: !state.isOn });
+const [state, setState] = React.useState({ isOn: false });
+
+const onToggle = () => setState(prevState => ({ ...prevState, isOn: !state.isOn }));
 
 <div>
     <Toggle

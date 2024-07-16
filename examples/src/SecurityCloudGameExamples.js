@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import Section from '../../src/components/section';
 import SecurityCloudGame from '../../src/features/security-cloud-game';

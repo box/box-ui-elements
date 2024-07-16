@@ -3,7 +3,7 @@
  * @file Upload item progress component
  */
 
-import React from 'react';
+import * as React from 'react';
 import ProgressBar from './ProgressBar';
 import './ItemProgress.scss';
 

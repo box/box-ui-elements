@@ -438,6 +438,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             submitting,
             suggestedCollaborators,
             trackingProps,
+            upsellInlineNotice,
         } = this.props;
         const { type } = item;
         const { isFetchingJustificationReasons, isInviteSectionExpanded, justificationReasons } = this.state;
@@ -486,6 +487,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             text: ftuxTooltipText,
             theme: 'callout',
         };
+        const showUpsellInlineNotice = !!upsellInlineNotice;
 
         return (
             <>
@@ -523,7 +525,10 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                             {...inviteCollabsEmailTracking}
                         >
                             {this.renderInviteePermissionsDropdown()}
-                            {showUpgradeOptions && !showUpgradeInlineNotice && this.renderUpgradeLinkDescription()}
+                            {showUpgradeOptions &&
+                                !showUpgradeInlineNotice &&
+                                !showUpsellInlineNotice &&
+                                this.renderUpgradeLinkDescription()}
                         </EmailForm>
                     </div>
                 </Tooltip>
@@ -699,6 +704,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             submitting,
             tooltips = {},
             trackingProps,
+            upsellInlineNotice = null,
         } = this.props;
         const { sharedLinkTracking, sharedLinkEmailTracking } = trackingProps;
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
@@ -712,6 +718,9 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             <div className={displayInModal ? '' : 'be bdl-UnifiedShareForm'}>
                 <LoadingIndicatorWrapper isLoading={isFetching} hideContent>
                     {!hasExpandedSections && allShareRestrictionWarning}
+
+                    {!!upsellInlineNotice && <div className="upsell-inline-notice">{upsellInlineNotice}</div>}
+
                     {showUpgradeOptions && showUpgradeInlineNotice && this.renderUpgradeInlineNotice()}
 
                     {!isEmailLinkSectionExpanded && !showCollaboratorList && this.renderInviteSection()}

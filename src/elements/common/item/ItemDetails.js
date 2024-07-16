@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import React from 'react';
+import * as React from 'react';
 import { InlineBreadcrumbs } from '../breadcrumbs';
 import { VIEW_SEARCH, VIEW_SELECTED } from '../../../constants';
 import ItemSubDetails from './ItemSubDetails';

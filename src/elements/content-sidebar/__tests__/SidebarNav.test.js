@@ -1,11 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
 import AdditionalTabs from '../additional-tabs';
 import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
-import Tag16 from '../../../icon/fill/Tag16';
+import DocGenIcon from '../../../icon/fill/DocGenIcon';
 import IconChatRound from '../../../icons/general/IconChatRound';
 import IconDocInfo from '../../../icons/general/IconDocInfo';
 import IconMagicWand from '../../../icons/general/IconMagicWand';
@@ -119,6 +119,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
-        expect(wrapper.find(Tag16)).toHaveLength(1);
+        expect(wrapper.find(DocGenIcon)).toHaveLength(1);
     });
 });

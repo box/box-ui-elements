@@ -1,7 +1,6 @@
 // @flow
-import * as React from 'react';
+import React, { act } from 'react';
 import { mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
 
 import { MessageContextProvider, useMessage, type MessageApi } from '..';
 

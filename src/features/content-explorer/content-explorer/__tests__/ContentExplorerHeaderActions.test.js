@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 
@@ -156,7 +156,9 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             );
 
             // Submit search
-            wrapper.setState({ searchInput });
+            act(() => {
+                wrapper.setState({ searchInput });
+            });
             wrapper.find('form').simulate('submit', { preventDefault: () => {} });
             // Click search results breadcrumb
             wrapper.instance().handleBreadcrumbClick(0);

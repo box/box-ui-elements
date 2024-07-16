@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { annotationsWithFormattedReplies as annotations } from '../../../../../api/fixtures';
 import { useAnnotatorEvents } from '../../../../common/annotator-context';
 import useAnnotationThread from '../useAnnotationThread';

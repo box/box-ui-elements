@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import NotificationsWrapper from '../NotificationsWrapper';
 import Notification from '../Notification';
