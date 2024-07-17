@@ -15,7 +15,7 @@ import './MetadataSidebarRedesign.scss';
 
 function MetadataSidebarRedesign() {
     return (
-        <div className="bcs-metadata-redesign">
+        <div className="bcs-MetadataSidebarRedesign">
             <h3>
                 <FormattedMessage {...messages.sidebarMetadataTitle} />
             </h3>
