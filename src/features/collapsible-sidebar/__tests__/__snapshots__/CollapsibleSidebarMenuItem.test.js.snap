@@ -20,19 +20,19 @@ exports[`components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIte
       className="bdl-CollapsibleSidebar-menuItem foo"
     >
       <div
-        className="CollapsibleSidebarMenuItem__StyledMenuItem-sc-1fmdq8m-0 dwaTBv bdl-CollapsibleSidebar-menuItem foo"
+        className="CollapsibleSidebarMenuItem__StyledMenuItem-sc-1fmdq8m-0 cQLRdi bdl-CollapsibleSidebar-menuItem foo"
       >
         <CollapsibleSidebarMenuItem__StyledLink
           className="bdl-CollapsibleSidebar-menuItemLink show-overflowAction"
         >
           <a
-            className="CollapsibleSidebarMenuItem__StyledLink-sc-1fmdq8m-3 dYIxaj bdl-CollapsibleSidebar-menuItemLink show-overflowAction"
+            className="CollapsibleSidebarMenuItem__StyledLink-sc-1fmdq8m-3 OZzby bdl-CollapsibleSidebar-menuItemLink show-overflowAction"
           >
             <CollapsibleSidebarMenuItem__StyledIconWrapper
               className="bdl-CollapsibleSidebar-menuItemIcon"
             >
               <span
-                className="CollapsibleSidebarMenuItem__StyledIconWrapper-sc-1fmdq8m-1 fOsjGa bdl-CollapsibleSidebar-menuItemIcon"
+                className="CollapsibleSidebarMenuItem__StyledIconWrapper-sc-1fmdq8m-1 ivMWNp bdl-CollapsibleSidebar-menuItemIcon"
               >
                 bold
               </span>
@@ -41,7 +41,7 @@ exports[`components/core/collapsible-sidebar/__tests__/CollapsibleSidebarMenuIte
               className="bdl-CollapsibleSidebar-menuItemLabel"
             >
               <span
-                className="CollapsibleSidebarMenuItem__StyledMenuItemLabel-sc-1fmdq8m-2 hLhKCy bdl-CollapsibleSidebar-menuItemLabel"
+                className="CollapsibleSidebarMenuItem__StyledMenuItemLabel-sc-1fmdq8m-2 khOLhH bdl-CollapsibleSidebar-menuItemLabel"
               >
                 bar
               </span>
