@@ -45,6 +45,4 @@ if (!prerelease && branch !== 'master') {
 }
 
 config.branches.push({ name: branch, prerelease });
-// eslint-disable-next-line no-console
-console.log(config.branches);
 module.exports = config;

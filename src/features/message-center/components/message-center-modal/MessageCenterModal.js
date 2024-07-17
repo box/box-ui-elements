@@ -217,6 +217,7 @@ function MessageCenterModal({
         setDimensions(resizeDimensions);
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handlOnResize = React.useCallback(debounce(handleResize, 300), []);
 
     function renderMessages(width: number, height: number): React.Node {
