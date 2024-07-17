@@ -97,7 +97,7 @@ const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
 );
 const LoadableMetadataSidebarRedesigned = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA_REDESIGN,
-    MARK_NAME_JS_LOADING_METADATA_REDESIGNED,
+    MARK_NAME_JS_LOADING_METADATA,
 );
 const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
 const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
@@ -113,8 +113,6 @@ class SidebarPanels extends React.Component<Props, State> {
     detailsSidebar: ElementRefType = React.createRef();
 
     metadataSidebar: ElementRefType = React.createRef();
-
-    metadataSidebarRedesigned: ElementRefType = React.createRef();
 
     state: State = { isInitialized: false };
 
@@ -147,7 +145,6 @@ class SidebarPanels extends React.Component<Props, State> {
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
         const { current: metadataSidebar } = this.metadataSidebar;
-        const { current: metadataSidebarRedesigned } = this.metadataSidebarRedesigned;
         const { current: versionsSidebar } = this.versionsSidebar;
 
         if (activitySidebar) {
@@ -160,10 +157,6 @@ class SidebarPanels extends React.Component<Props, State> {
 
         if (metadataSidebar) {
             metadataSidebar.refresh();
-        }
-
-        if (metadataSidebarRedesigned) {
-            metadataSidebarRedesigned.refresh();
         }
 
         if (versionsSidebar) {
@@ -289,7 +282,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     elementId={elementId}
                                     fileId={fileId}
                                     hasSidebarInitialized={isInitialized}
-                                    ref={this.metadataSidebarRedesigned}
+                                    ref={this.metadataSidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_METADATA_REDESIGNED}
                                     {...metadataSidebarProps}
                                 />
