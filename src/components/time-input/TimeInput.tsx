@@ -107,6 +107,7 @@ const TimeInput = ({
      * useCallback() memoizes the debounced function, so that the debounced function
      * is not recreated on every re-render triggered by handleChange().
      */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedFormatDisplayTime = React.useCallback(
         debounce((latestValue: string) => formatDisplayTime(latestValue), DEFAULT_FORMAT_DEBOUNCE),
         [],

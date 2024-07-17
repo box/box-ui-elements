@@ -48,9 +48,9 @@ class DropdownMenu extends React.Component<Props, State> {
         isRightAligned: false,
     };
 
-    menuID = uniqueId('menu');
+    menuID: string = uniqueId('menu');
 
-    menuButtonID = uniqueId('menubutton');
+    menuButtonID: string = uniqueId('menubutton');
 
     state = {
         initialFocusIndex: null,
@@ -83,10 +83,6 @@ class DropdownMenu extends React.Component<Props, State> {
             document.removeEventListener('click', this.handleDocumentClick, !useBubble);
         }
     }
-
-    menuID: string;
-
-    menuButtonID: string;
 
     openMenuAndSetFocusIndex = (initialFocusIndex: ?number) => {
         this.setState({

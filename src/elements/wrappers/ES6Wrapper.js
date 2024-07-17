@@ -84,7 +84,6 @@ class ES6Wrapper extends EventEmitter {
      */
     hide(): void {
         this.removeAllListeners();
-        // TODO replace when upgrading to React 18
         // eslint-disable-next-line react/no-deprecated
         ReactDOM.unmountComponentAtNode(this.container);
         if (this.container) {
@@ -154,6 +153,7 @@ class ES6Wrapper extends EventEmitter {
      * @param {Object} data - event data
      * @return {boolean} true if the event had listeners, false otherwise.
      */
+    // eslint-disable-next-line no-dupe-class-members
     emit(eventName: string, data: any): boolean {
         try {
             return super.emit(eventName, data);

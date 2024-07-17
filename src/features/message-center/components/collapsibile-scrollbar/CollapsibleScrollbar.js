@@ -68,6 +68,7 @@ function CollapsibleScrollbar(
     };
 
     // If there hasn't been an update to isScrolling in 100ms, it'll be set to false.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedTurnOffScrollingState = React.useCallback(debounce(turnOffScrollingState, 100), []);
 
     const onScrollHandler = (scrollValues, prevScrollValues) => {

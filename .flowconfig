@@ -19,7 +19,6 @@
 <PROJECT_ROOT>/node_modules/jest-image-snapshot*
 <PROJECT_ROOT>/node_modules/react-styleguidist*
 <PROJECT_ROOT>/node_modules/immer*
-<PROJECT_ROOT>/node_modules/react-popper*
 <PROJECT_ROOT>/.*/__tests__/.*
 <PROJECT_ROOT>/.*/*.stories.*
 # ignoring the flow check for this component specifically because it increased the scope too much when we are planning to switch to typescript anyways

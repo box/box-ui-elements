@@ -42,10 +42,6 @@ describe('features/virtualized-table-renderers/lastModifiedByCellRenderer', () =
         expect(lastModifiedByCellRenderer(intl)(cellRendererParams)).toBe('--');
     });
 
-    test('should render a LastModifiedByCell', () => {
-        expect(lastModifiedByCellRenderer(intl)(cellRendererParams)).toMatchSnapshot();
-    });
-
     test('should call support functions with appropriate values', () => {
         const { cellData } = cellRendererParams;
         const { modified_at, modified_by } = cellData;

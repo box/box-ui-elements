@@ -1,18 +1,15 @@
 // @flow
 import * as React from 'react';
-// $FlowFixMe
-import { Manager, Popper, Reference } from 'react-popper';
-// $FlowFixMe
-import type { PopperProps } from 'react-popper';
-
+import { Manager, Reference, Popper } from 'react-popper';
+import type { Modifiers, Placement } from 'popper.js';
 import { PLACEMENT_AUTO } from './constants';
 
 type Props = {
     children: React.Node,
     isOpen?: boolean,
     isPositionDynamic?: boolean,
-    modifiers?: PopperProps.modifiers,
-    placement: PopperProps.placement,
+    modifiers?: Modifiers,
+    placement: Placement,
 };
 
 const PopperComponent = (props: Props) => {
@@ -30,13 +27,13 @@ const PopperComponent = (props: Props) => {
             <Reference>{({ ref }) => React.cloneElement(reference, { ref })}</Reference>
             {isOpen && (
                 <Popper placement={popperPlacement} modifiers={modifiers}>
-                    {({ ref, style, placement, update }) => {
+                    {({ ref, style, placement, scheduleUpdate }) => {
                         const { style: contentStyles } = popperContent.props;
                         return React.cloneElement(popperContent, {
                             ref,
                             style: { ...contentStyles, ...(isPositionDynamic && style) },
                             placement,
-                            update,
+                            scheduleUpdate,
                         });
                     }}
                 </Popper>
