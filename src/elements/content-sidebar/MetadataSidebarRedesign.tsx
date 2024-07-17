@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
-import { ORIGIN_METADATA_SIDEBAR_REDESIGN } from '../../constants';
+import { ORIGIN_METADATA_SIDEBAR } from '../../constants';
 import messages from '../common/messages';
 
 import './MetadataSidebarRedesign.scss';
@@ -27,7 +27,7 @@ function MetadataSidebarRedesign() {
 
 export { MetadataSidebarRedesign as MetadataSidebarRedesignComponent };
 export default flow([
-    withLogger(ORIGIN_METADATA_SIDEBAR_REDESIGN),
-    withErrorBoundary(ORIGIN_METADATA_SIDEBAR_REDESIGN),
+    withLogger(ORIGIN_METADATA_SIDEBAR),
+    withErrorBoundary(ORIGIN_METADATA_SIDEBAR),
     withAPIContext,
 ])(MetadataSidebarRedesign);
