@@ -99,7 +99,7 @@
         "hooks": {
             "pre-commit": "lint-staged -c scripts/lint-staged.config.js",
             "pre-push": "scripts/prepush.sh",
-            "commit-msg": "commitlint -g scripts/commitlint.config.js -e"
+            "commit-msg": "commitlint -e"
         }
     },
     "engines": {
