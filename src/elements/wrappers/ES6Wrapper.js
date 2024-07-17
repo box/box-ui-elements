@@ -14,6 +14,11 @@ declare var __VERSION__: string;
 
 class ES6Wrapper extends EventEmitter {
     /**
+     * @property {Function}
+     */
+    emit: Function;
+
+    /**
      * @property {HTMLElement}
      */
     container: HTMLElement;
@@ -148,6 +153,7 @@ class ES6Wrapper extends EventEmitter {
      * @param {Object} data - event data
      * @return {boolean} true if the event had listeners, false otherwise.
      */
+    // eslint-disable-next-line no-dupe-class-members
     emit(eventName: string, data: any): boolean {
         try {
             return super.emit(eventName, data);
