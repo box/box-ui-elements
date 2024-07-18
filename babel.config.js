@@ -33,9 +33,9 @@ module.exports = {
     plugins: [
         '@babel/plugin-syntax-dynamic-import',
         '@babel/plugin-transform-flow-strip-types',
+        '@babel/plugin-transform-class-properties', // Order matters: `transform-class-properties` must come after `transform-flow-strip-types`
         '@babel/plugin-transform-object-assign',
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-proposal-object-rest-spread',
+        '@babel/plugin-transform-object-rest-spread',
         'babel-plugin-styled-components',
         [
             'react-intl',
