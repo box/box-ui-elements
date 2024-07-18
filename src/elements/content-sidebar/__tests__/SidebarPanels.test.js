@@ -54,6 +54,11 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             expect(wrapper.exists(sidebar)).toBe(true);
         });
 
+        test('should render redesigned metadata sidebar if it is enabled', () => {
+            const wrapper = getWrapper({ path: '/metadata', features: { metadata: { redesign: { enabled: true } } } });
+            expect(wrapper.exists('MetadataSidebarRedesigned')).toBe(true);
+        });
+
         test('should render nothing if the sidebar is closed', () => {
             const wrapper = getWrapper({
                 isOpen: false,

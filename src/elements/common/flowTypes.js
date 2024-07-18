@@ -10,6 +10,7 @@ import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
+    ORIGIN_METADATA_SIDEBAR_REDESIGN,
     ORIGIN_OPEN_WITH,
 } from '../../constants';
 
@@ -44,6 +45,7 @@ type ElementOrigin =
     | typeof ORIGIN_ACTIVITY_SIDEBAR
     | typeof ORIGIN_SKILLS_SIDEBAR
     | typeof ORIGIN_METADATA_SIDEBAR
+    | typeof ORIGIN_METADATA_SIDEBAR_REDESIGN
     | typeof ORIGIN_OPEN_WITH;
 
 type Alignment = 'left' | 'right';

@@ -11,12 +11,14 @@ import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
+import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
     ORIGIN_DOCGEN_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
+    ORIGIN_METADATA_SIDEBAR_REDESIGN,
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_VERSIONS_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
@@ -25,6 +27,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
+    SIDEBAR_VIEW_METADATA_REDESIGN,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
@@ -33,6 +36,7 @@ import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { User, BoxItem } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
+import type { FeatureConfig } from '../common/feature-checking';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -41,6 +45,7 @@ type Props = {
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
+    features: FeatureConfig,
     file: BoxItem,
     fileId: string,
     getPreview: Function,
@@ -74,6 +79,7 @@ const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME
 const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_METADATA_REDESIGNED = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
@@ -87,6 +93,10 @@ const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
 const LoadableSkillsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_SKILLS, MARK_NAME_JS_LOADING_SKILLS);
 const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
+    MARK_NAME_JS_LOADING_METADATA,
+);
+const LoadableMetadataSidebarRedesigned = SidebarUtils.getAsyncSidebarContent(
+    SIDEBAR_VIEW_METADATA_REDESIGN,
     MARK_NAME_JS_LOADING_METADATA,
 );
 const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
@@ -162,6 +172,7 @@ class SidebarPanels extends React.Component<Props, State> {
             detailsSidebarProps,
             docGenSidebarProps,
             elementId,
+            features,
             file,
             fileId,
             getPreview,
@@ -181,6 +192,8 @@ class SidebarPanels extends React.Component<Props, State> {
         }: Props = this.props;
 
         const { isInitialized } = this.state;
+
+        const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
 
         if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
@@ -263,16 +276,27 @@ class SidebarPanels extends React.Component<Props, State> {
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_METADATA}`}
-                        render={() => (
-                            <LoadableMetadataSidebar
-                                elementId={elementId}
-                                fileId={fileId}
-                                hasSidebarInitialized={isInitialized}
-                                ref={this.metadataSidebar}
-                                startMarkName={MARK_NAME_JS_LOADING_METADATA}
-                                {...metadataSidebarProps}
-                            />
-                        )}
+                        render={() =>
+                            isMetadataSidebarRedesignEnabled ? (
+                                <LoadableMetadataSidebarRedesigned
+                                    elementId={elementId}
+                                    fileId={fileId}
+                                    hasSidebarInitialized={isInitialized}
+                                    ref={this.metadataSidebar}
+                                    startMarkName={MARK_NAME_JS_LOADING_METADATA_REDESIGNED}
+                                    {...metadataSidebarProps}
+                                />
+                            ) : (
+                                <LoadableMetadataSidebar
+                                    elementId={elementId}
+                                    fileId={fileId}
+                                    hasSidebarInitialized={isInitialized}
+                                    ref={this.metadataSidebar}
+                                    startMarkName={MARK_NAME_JS_LOADING_METADATA}
+                                    {...metadataSidebarProps}
+                                />
+                            )
+                        }
                     />
                 )}
                 {hasDocGen && (
@@ -330,4 +354,10 @@ class SidebarPanels extends React.Component<Props, State> {
 }
 
 export { SidebarPanels as SidebarPanelsComponent };
-export default flow([withSidebarAnnotations, withAPIContext, withAnnotatorContext, withRouterAndRef])(SidebarPanels);
+export default flow([
+    withFeatureConsumer,
+    withSidebarAnnotations,
+    withAPIContext,
+    withAnnotatorContext,
+    withRouterAndRef,
+])(SidebarPanels);
