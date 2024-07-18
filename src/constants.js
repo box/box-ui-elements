@@ -315,6 +315,7 @@ export const ORIGIN_ACTIVITY_SIDEBAR: 'activity_sidebar' = 'activity_sidebar';
 export const ORIGIN_DETAILS_SIDEBAR: 'details_sidebar' = 'details_sidebar';
 export const ORIGIN_DOCGEN_SIDEBAR: 'docgen_sidebar' = 'docgen_sidebar';
 export const ORIGIN_METADATA_SIDEBAR: 'metadata_sidebar' = 'metadata_sidebar';
+export const ORIGIN_METADATA_SIDEBAR_REDESIGN: 'metadata_sidebar_redesign' = 'metadata_sidebar_redesign';
 export const ORIGIN_SKILLS_SIDEBAR: 'skills_sidebar' = 'skills_sidebar';
 export const ORIGIN_VERSIONS_SIDEBAR: 'versions_sidebar' = 'versions_sidebar';
 export const ORIGIN_PREVIEW: 'preview' = 'preview';
