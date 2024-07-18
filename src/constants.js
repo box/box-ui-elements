@@ -83,6 +83,7 @@ export const METADATA_TEMPLATE_PROPERTIES = 'properties';
 export const METADATA_SCOPE_GLOBAL = 'global';
 export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
 export const METADATA_TEMPLATE_FETCH_LIMIT = API_PAGE_LIMIT;
+export const METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL = 'experimental';
 
 /* ----------------------- Fields --------------------------- */
 export const FIELD_ID = 'id';
@@ -269,6 +270,7 @@ export const ERROR_CODE_FETCH_METADATA_TEMPLATES = 'fetch_metadata_templates_err
 export const ERROR_CODE_FETCH_ACCESS_STATS = 'fetch_access_stats_error';
 export const ERROR_CODE_FETCH_SKILLS = 'fetch_skills_error';
 export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
+export const ERROR_CODE_FETCH_METADATA_SUGGESTIONS = 'fetch_metadata_suggestions_error';
 export const ERROR_CODE_EXECUTE_INTEGRATION = 'execute_integrations_error';
 export const ERROR_CODE_CREATE_ANNOTATION = 'create_annotation_error';
 export const ERROR_CODE_CREATE_COMMENT = 'create_comment_error';
