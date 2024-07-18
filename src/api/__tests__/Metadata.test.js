@@ -1,24 +1,30 @@
+// @flow
+
 import Cache from '../../utils/Cache';
 import * as ErrorUtil from '../../utils/error';
 import Metadata from '../Metadata';
 import {
-    METADATA_TEMPLATE_CLASSIFICATION,
-    METADATA_SCOPE_GLOBAL,
-    METADATA_TEMPLATE_PROPERTIES,
-    ERROR_CODE_DELETE_METADATA,
     ERROR_CODE_CREATE_METADATA,
-    ERROR_CODE_UPDATE_METADATA,
-    ERROR_CODE_UPDATE_SKILLS,
-    ERROR_CODE_FETCH_SKILLS,
+    ERROR_CODE_DELETE_METADATA,
+    ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_FETCH_METADATA,
+    ERROR_CODE_FETCH_SKILLS,
+    ERROR_CODE_UPDATE_METADATA,
+    ERROR_CODE_UPDATE_SKILLS,
+    METADATA_SCOPE_GLOBAL,
+    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+    METADATA_TEMPLATE_CLASSIFICATION,
+    METADATA_TEMPLATE_PROPERTIES,
+    TYPE_FILE,
 } from '../../constants';
 
-let metadata;
+let metadata: Metadata;
 
 describe('api/Metadata', () => {
     beforeEach(() => {
         metadata = new Metadata({});
+        jest.resetAllMocks();
     });
 
     describe('getCacheKey()', () => {
@@ -532,7 +538,7 @@ describe('api/Metadata', () => {
 
     describe('getMetadata()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             metadata.errorHandler = jest.fn();
             metadata.successHandler = jest.fn();
             metadata.getMetadata({}, jest.fn(), jest.fn(), true);
@@ -542,7 +548,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions object', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             metadata.errorHandler = jest.fn();
             metadata.successHandler = jest.fn();
             metadata.getMetadata({ id: 'id' }, jest.fn(), jest.fn(), true);
@@ -893,7 +899,7 @@ describe('api/Metadata', () => {
 
     describe('getSkills()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.getSkills({}, successCallback, errorCallback);
@@ -1091,7 +1097,7 @@ describe('api/Metadata', () => {
 
     describe('updateSkills()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({}, {}, successCallback, errorCallback);
@@ -1100,7 +1106,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateSkills({ id: 'id' }, {}, successCallback, errorCallback);
@@ -1253,7 +1259,7 @@ describe('api/Metadata', () => {
 
     describe('updateMetadata()', () => {
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({}, {}, {}, successCallback, errorCallback);
@@ -1262,7 +1268,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.updateMetadata({ id: 'id' }, {}, {}, successCallback, errorCallback);
@@ -1498,7 +1504,7 @@ describe('api/Metadata', () => {
 
     describe('createMetadata()', () => {
         test('should call error callback with a bad item error when no file', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata(undefined, {}, successCallback, errorCallback);
@@ -1507,7 +1513,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no template', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({}, undefined, successCallback, errorCallback);
@@ -1516,7 +1522,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({}, {}, successCallback, errorCallback);
@@ -1525,7 +1531,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.createMetadata({ id: 'id' }, {}, successCallback, errorCallback);
@@ -1791,7 +1797,7 @@ describe('api/Metadata', () => {
 
     describe('deleteMetadata()', () => {
         test('should call error callback with a bad item error when no file', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata(undefined, {}, successCallback, errorCallback);
@@ -1800,7 +1806,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no template', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({}, undefined, successCallback, errorCallback);
@@ -1809,7 +1815,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no id', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({}, {}, successCallback, errorCallback);
@@ -1818,7 +1824,7 @@ describe('api/Metadata', () => {
             expect(ErrorUtil.getBadItemError).toBeCalled();
         });
         test('should call error callback with a bad item error when no permissions', () => {
-            ErrorUtil.getBadItemError = jest.fn().mockReturnValueOnce('error');
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
             const successCallback = jest.fn();
             const errorCallback = jest.fn();
             metadata.deleteMetadata({ id: 'id' }, {}, successCallback, errorCallback);
@@ -2010,6 +2016,159 @@ describe('api/Metadata', () => {
                 editors: [priorMetadata],
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
+        });
+    });
+
+    describe('getMetadataSuggestions()', () => {
+        test('should return metadata suggestions when called with valid parameters', async () => {
+            const suggestionsFromServer = {
+                stringFieldKey: 'fieldVal1',
+                floatFieldKey: 124.0,
+                enumFieldKey: 'EnumOptionKey',
+                multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'],
+            };
+            metadata.getMetadataSuggestionsUrl = jest.fn().mockReturnValueOnce('suggestions_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    $scope: 'enterprise',
+                    $templateKey: 'templateKey',
+                    suggestions: suggestionsFromServer,
+                },
+            });
+
+            const suggestions = await metadata.getMetadataSuggestions('id', TYPE_FILE, 'enterprise', 'templateKey');
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+            expect(suggestions).toEqual(suggestionsFromServer);
+            expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'suggestions_url',
+                id: 'file_id',
+                params: {
+                    item: `file_id`,
+                    scope: 'enterprise',
+                    template_key: 'templateKey',
+                    confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                },
+            });
+        });
+
+        test('should throw an error if id is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    '',
+                    TYPE_FILE,
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(ErrorUtil.getBadItemError());
+        });
+
+        test('should throw an error if type is not "file"', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    'id',
+                    'folder',
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(ErrorUtil.getBadItemError());
+        });
+
+        test('should throw an error if scope is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    '',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(new Error('Missing scope'));
+        });
+
+        test('should throw an error if templateKey is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    'enterprise',
+                    '',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                ),
+            ).rejects.toThrow(new Error('Missing templateKey'));
+        });
+
+        test('should throw an error if confidence level is missing or invalid', async () => {
+            await expect(() =>
+                metadata.getMetadataSuggestions('id', TYPE_FILE, 'enterprise', 'templateKey', 'high'),
+            ).rejects.toThrow(new Error(`Invalid confidence level: "high"`));
+        });
+
+        test('should return empty array of suggestions when error is 400', async () => {
+            const error = new Error();
+            error.status = 400;
+            metadata.getMetadataSuggestionsUrl = jest.fn().mockReturnValueOnce('suggestions_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            let suggestions;
+            try {
+                suggestions = await metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                );
+            } catch (e) {
+                expect(e.status).toEqual(400);
+            }
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+            expect(suggestions).toEqual([]);
+            expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'suggestions_url',
+                id: 'file_id',
+                params: {
+                    item: `file_id`,
+                    scope: 'enterprise',
+                    template_key: 'templateKey',
+                    confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                },
+            });
+        });
+
+        test('should throw error when error is not 400', async () => {
+            const error = new Error();
+            error.status = 401;
+            metadata.getMetadataSuggestionsUrl = jest.fn().mockReturnValueOnce('suggestions_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            let suggestions;
+            try {
+                suggestions = await metadata.getMetadataSuggestions(
+                    'id',
+                    TYPE_FILE,
+                    'enterprise',
+                    'templateKey',
+                    METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                );
+            } catch (e) {
+                expect(e.status).toEqual(401);
+            }
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+            expect(suggestions).toBeUndefined();
+            expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'suggestions_url',
+                id: 'file_id',
+                params: {
+                    item: `file_id`,
+                    scope: 'enterprise',
+                    template_key: 'templateKey',
+                    confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                },
+            });
         });
     });
 });

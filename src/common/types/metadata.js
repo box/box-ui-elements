@@ -108,6 +108,12 @@ type MetadataEditor = {
     template: MetadataTemplate,
 };
 
+type MetadataSuggestion = {
+    $scope: string,
+    $templateKey: string,
+    suggestions: { [key: string]: string | number | string[] },
+};
+
 export type {
     MetadataFieldType,
     MetadataTemplateFieldOption,
@@ -122,4 +128,5 @@ export type {
     MetadataCascadingPolicyData,
     MetadataInstanceV2,
     MetadataEditor,
+    MetadataSuggestion,
 };
