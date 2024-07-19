@@ -63,6 +63,7 @@ function getConfig(isReactExternalized) {
             path: outputPath,
             filename: `[name]${isReactExternalized ? noReactSuffix : ''}.js`,
             publicPath: `/${version}/${language}/`,
+            hashFunction: 'xxhash64',
         },
         resolve: {
             modules: ['src', 'node_modules'],
@@ -97,9 +98,6 @@ function getConfig(isReactExternalized) {
                 },
             ],
         },
-        optimization: {
-            minimizer: [new CssMinimizerPlugin()],
-        },
         performance: {
             maxAssetSize: 2000000,
             maxEntrypointSize: 2000000,
@@ -119,6 +117,19 @@ function getConfig(isReactExternalized) {
             new MiniCssExtractPlugin({
                 filename: '[name].css',
                 ignoreOrder: true,
+            }),
+            new CssMinimizerPlugin({
+                minimizerOptions: {
+                    preset: [
+                        'default',
+                        {
+                            discardComments: { removeAll: true },
+                        },
+                    ],
+                    processorOptions: {
+                        safe: true,
+                    },
+                },
             }),
             new BannerPlugin(license),
             new IgnorePlugin({
