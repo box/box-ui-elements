@@ -63,6 +63,7 @@ function getConfig(isReactExternalized) {
             path: outputPath,
             filename: `[name]${isReactExternalized ? noReactSuffix : ''}.js`,
             publicPath: `/${version}/${language}/`,
+            hashFunction: 'xxhash64',
         },
         resolve: {
             modules: ['src', 'node_modules'],
