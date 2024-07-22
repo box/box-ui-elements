@@ -1,8 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import 'core-js/es/map';
-import 'core-js/es/set';
-import 'raf/polyfill';
-import 'mutationobserver-shim';
 import Enzyme, { mount, shallow } from 'enzyme';
 import Adapter from '@cfaester/enzyme-adapter-react-18';
 

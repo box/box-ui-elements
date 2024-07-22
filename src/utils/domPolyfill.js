@@ -1,5 +1,5 @@
 /**
- * Polyfills the .closest method for ELement
+ * Polyfills the .closest method for Element
  * Currently being used for scrollIntoView
  * For reference: https://github.com/zloirock/core-js/issues/317
  */

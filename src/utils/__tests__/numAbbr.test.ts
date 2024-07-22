@@ -6,30 +6,11 @@
 import germanLocaleData from '@box/cldr-data/locale-data/de-DE';
 import russianLocaleData from '@box/cldr-data/locale-data/ru-RU';
 import japaneseLocaleData from '@box/cldr-data/locale-data/ja-JP';
-import { UnifiedNumberFormat } from '@formatjs/intl-unified-numberformat';
 import numAbbr, { Lengths } from '../numAbbr';
 
 const germanNumbersData = germanLocaleData.numbers;
 const russianNumbersData = russianLocaleData.numbers;
 const japaneseNumbersData = japaneseLocaleData.numbers;
-
-const { node } = process.versions;
-if (!node || Number(node.replace(/\..*/g, '')) < 12) {
-    // need to polyfill the number formatter in Intl.NumberFormat, because it
-    // doesn't work properly on versions of node before 12
-    /* eslint-disable global-require */
-    /* eslint-disable no-underscore-dangle */
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    require('@formatjs/intl-unified-numberformat/polyfill');
-    if (typeof UnifiedNumberFormat.__addLocaleData === 'function') {
-        UnifiedNumberFormat.__addLocaleData(require('@formatjs/intl-unified-numberformat/dist/locale-data/de.json'));
-        UnifiedNumberFormat.__addLocaleData(require('@formatjs/intl-unified-numberformat/dist/locale-data/ru.json'));
-        UnifiedNumberFormat.__addLocaleData(require('@formatjs/intl-unified-numberformat/dist/locale-data/ja.json'));
-    }
-    /* eslint-enable global-require */
-    /* eslint-enable no-underscore-dangle */
-    /* eslint-enable @typescript-eslint/no-var-requires */
-}
 
 describe('util/num', () => {
     test('should work in English 1', () => {
