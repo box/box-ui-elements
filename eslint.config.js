@@ -2,7 +2,7 @@ const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 
 // Plugins
-const cypress = require('eslint-plugin-cypress/flat')
+const cypress = require('eslint-plugin-cypress/flat');
 
 const compat = new FlatCompat({ recommendedConfig: js.configs.recommended });
 
