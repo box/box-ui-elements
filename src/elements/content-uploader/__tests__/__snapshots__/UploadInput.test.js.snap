@@ -8,6 +8,7 @@ exports[`elements/content-uploader/UploadInput should render correctly when inpu
 >
   yo
   <input
+    data-testid="upload-input"
     multiple={true}
     onChange={[Function]}
     type="file"
@@ -25,6 +26,7 @@ exports[`elements/content-uploader/UploadInput should render correctly when isFo
 >
   yo
   <input
+    data-testid="upload-input"
     directory=""
     multiple={true}
     onChange={[Function]}

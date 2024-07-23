@@ -36,10 +36,11 @@ const UploadInput = ({
         <label className={inputLabelClass} onKeyDown={onKeyDown} tabIndex={0}>
             {inputLabel}
             <input
-                ref={inputRef}
+                data-testid="upload-input"
                 directory={isFolderUpload ? '' : undefined}
                 multiple={isMultiple}
                 onChange={handleChange}
+                ref={inputRef}
                 type="file"
                 webkitdirectory={isFolderUpload ? '' : undefined}
             />

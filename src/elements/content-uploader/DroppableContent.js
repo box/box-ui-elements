@@ -52,26 +52,33 @@ const dropDefinition = {
     },
 };
 
-const DroppableContent = makeDroppable(dropDefinition)(
-    ({ canDrop, isOver, isTouch, view, items, addFiles, onClick, isFolderUploadEnabled }: Props) => {
-        const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
-        const hasItems = items.length > 0;
+const DroppableContent = makeDroppable(dropDefinition)(({
+    addFiles,
+    canDrop,
+    isFolderUploadEnabled,
+    isOver,
+    isTouch,
+    items,
+    onClick,
+    view,
+}: Props) => {
+    const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
+    const hasItems = items.length > 0;
 
-        return (
-            <div className="bcu-droppable-content">
-                <ItemList items={items} onClick={onClick} view={view} />
-                <UploadState
-                    canDrop={canDrop}
-                    hasItems={hasItems}
-                    isFolderUploadEnabled={isFolderUploadEnabled}
-                    isOver={isOver}
-                    isTouch={isTouch}
-                    onSelect={handleSelectFiles}
-                    view={view}
-                />
-            </div>
-        );
-    },
-);
+    return (
+        <div className="bcu-droppable-content">
+            <ItemList items={items} onClick={onClick} view={view} />
+            <UploadState
+                canDrop={canDrop}
+                hasItems={hasItems}
+                isFolderUploadEnabled={isFolderUploadEnabled}
+                isOver={isOver}
+                isTouch={isTouch}
+                onSelect={handleSelectFiles}
+                view={view}
+            />
+        </div>
+    );
+});
 
 export default DroppableContent;
