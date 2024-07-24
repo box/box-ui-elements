@@ -157,7 +157,6 @@
         "@svgr/plugin-svgo": "^5.1.0",
         "@testing-library/jest-dom": "^6.4.6",
         "@testing-library/react": "^16.0.0",
-        "@testing-library/react-hooks": "^8.0.1",
         "@types/classnames": "^2.2.9",
         "@types/color": "^3.0.2",
         "@types/enzyme": "^3.10.18",
