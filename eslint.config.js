@@ -1,6 +1,9 @@
 const { FlatCompat } = require('@eslint/eslintrc');
 const js = require('@eslint/js');
 
+// Plugins
+const cypress = require('eslint-plugin-cypress/flat');
+
 const compat = new FlatCompat({ recommendedConfig: js.configs.recommended });
 
 module.exports = [
@@ -16,7 +19,6 @@ module.exports = [
             'reports/',
             'styleguide/',
             '**/__snapshots__/',
-            '**/*.e2e.cy.js', // fixme
             '**/*.json',
             '**/*.png',
         ],
@@ -27,6 +29,7 @@ module.exports = [
         require.resolve('@box/frontend/eslint/typescript'),
         require.resolve('@box/frontend/eslint/flow'),
     ),
+    cypress.configs.recommended,
     {
         rules: {
             camelcase: 'off',

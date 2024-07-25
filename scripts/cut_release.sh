@@ -111,7 +111,6 @@ lint_and_test() {
 
     # Tests
     printf "${blue}Running tests...${end}"
-    unset OPENSSL_FORCE_FIPS_MODE
     yarn test || return 1
     printf "${green}Tests done!${end}"
 }
@@ -247,7 +246,7 @@ push_new_release() {
     fi
 
     # Get the latest version from uncommitted package.json
-    VERSION=$(./node_modules/@box/frontend/shell/version.sh)
+    VERSION=$(source ./scripts/version.sh)
 
     # Make sure the version doesn't match the placeholder
     if [[ $VERSION == "0.0.0-semantically-released" ]] ; then
