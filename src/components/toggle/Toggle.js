@@ -6,6 +6,8 @@ import './Toggle.scss';
 
 type Props = {
     className?: string,
+    /** Optional attribute used for targeting */
+    'data-target-id'?: string,
     /** Description of the input */
     description?: React.Node,
     isDisabled?: boolean, // @TODO: eventually call this `disabled`
@@ -35,6 +37,7 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
     (
         {
             className = '',
+            'data-target-id': dataTargetId,
             description,
             isDisabled,
             isOn,
@@ -64,8 +67,6 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
             toggleElements.reverse();
         }
 
-        const { 'data-target-id': dataTargetId, ...inputProps } = rest;
-
         return (
             <div className={classes} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
@@ -81,7 +82,7 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
                         ref={ref}
                         role="switch"
                         type="checkbox"
-                        {...inputProps}
+                        {...rest}
                     />
                     {toggleElements}
                 </label>
