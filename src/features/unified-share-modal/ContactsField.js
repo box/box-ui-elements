@@ -197,6 +197,7 @@ class ContactsField extends React.Component<Props, State> {
                 getPillImageUrl={getContactAvatarUrl}
                 inputProps={{
                     autoFocus: true,
+                    'data-target-id': 'PillSelectorDropdown-AddNamesOrEmailAddresses',
                     onChange: noop,
                 }}
                 label={label}

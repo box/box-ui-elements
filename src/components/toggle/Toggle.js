@@ -64,10 +64,12 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
             toggleElements.reverse();
         }
 
+        const { 'data-target-id': dataTargetId, ...inputProps } = rest;
+
         return (
             <div className={classes} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 {/* eslint-disable-next-line jsx-a11y/label-has-for */}
-                <label className="toggle-simple">
+                <label className="toggle-simple" data-target-id={dataTargetId}>
                     <input
                         checked={isOn}
                         className="toggle-simple-input"
@@ -79,7 +81,7 @@ const Toggle = React.forwardRef<Props, HTMLInputElement>(
                         ref={ref}
                         role="switch"
                         type="checkbox"
-                        {...rest}
+                        {...inputProps}
                     />
                     {toggleElements}
                 </label>
