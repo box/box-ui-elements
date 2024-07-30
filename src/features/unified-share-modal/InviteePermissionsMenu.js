@@ -92,6 +92,7 @@ class InviteePermissionsMenu extends Component<Props> {
                     'is-disabled': disabled,
                     'bdl-is-disabled': disabled,
                 })}
+                data-target-id="PlainButton-InviteePermissionsMenuToggle"
                 disabled={disabled}
                 type="button"
                 {...inviteePermissionsButtonProps}

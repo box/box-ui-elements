@@ -21,6 +21,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={false}
       isOn={true}
       label={
@@ -75,7 +76,11 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -104,6 +109,7 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -128,7 +134,9 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -151,7 +159,9 @@ exports[`features/unified-share-modal/SharedLinkSection should match snapshot wh
         trackingProps={
           {
             "onChangeSharedLinkPermissionLevel": undefined,
-            "sharedLinkPermissionsMenuButtonProps": undefined,
+            "sharedLinkPermissionsMenuButtonProps": {
+              "data-target-id": "Button-SharedLinkPermissionsMenuLabel",
+            },
           }
         }
       />
@@ -190,6 +200,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       theme="default"
     >
       <Toggle
+        data-target-id="Toggle-CreateSharedLink"
         isDisabled={true}
         isOn={true}
         label={
@@ -225,7 +236,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -254,6 +269,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -278,7 +294,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -297,7 +315,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render a default 
         trackingProps={
           {
             "onChangeSharedLinkPermissionLevel": undefined,
-            "sharedLinkPermissionsMenuButtonProps": undefined,
+            "sharedLinkPermissionsMenuButtonProps": {
+              "data-target-id": "Button-SharedLinkPermissionsMenuLabel",
+            },
           }
         }
       />
@@ -335,6 +355,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       theme="default"
     >
       <Toggle
+        data-target-id="Toggle-CreateSharedLink"
         isDisabled={false}
         isOn={false}
         label={
@@ -371,6 +392,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={false}
       isOn={true}
       label={
@@ -405,7 +427,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -434,6 +460,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -458,7 +485,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -481,7 +510,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
         trackingProps={
           {
             "onChangeSharedLinkPermissionLevel": undefined,
-            "sharedLinkPermissionsMenuButtonProps": undefined,
+            "sharedLinkPermissionsMenuButtonProps": {
+              "data-target-id": "Button-SharedLinkPermissionsMenuLabel",
+            },
           }
         }
       />
@@ -511,6 +542,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render default co
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={true}
       isOn={false}
       label={
@@ -536,6 +568,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled c
   theme="default"
 >
   <Toggle
+    data-target-id="Toggle-CreateSharedLink"
     isDisabled={true}
     isOn={false}
     label={
@@ -560,6 +593,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render disabled r
   theme="default"
 >
   <Toggle
+    data-target-id="Toggle-CreateSharedLink"
     isDisabled={true}
     isOn={true}
     label={
@@ -603,6 +637,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       theme="default"
     >
       <Toggle
+        data-target-id="Toggle-CreateSharedLink"
         isDisabled={true}
         isOn={true}
         label={
@@ -638,7 +673,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -667,6 +706,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -689,7 +729,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper dro
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -736,6 +778,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={false}
       isOn={true}
       label={
@@ -770,7 +813,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -799,6 +846,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -823,7 +871,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -847,7 +897,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         trackingProps={
           {
             "onChangeSharedLinkPermissionLevel": undefined,
-            "sharedLinkPermissionsMenuButtonProps": undefined,
+            "sharedLinkPermissionsMenuButtonProps": {
+              "data-target-id": "Button-SharedLinkPermissionsMenuLabel",
+            },
           }
         }
       />
@@ -877,6 +929,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={false}
       isOn={true}
       label={
@@ -911,7 +964,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -940,6 +997,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -964,7 +1022,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -987,7 +1047,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         trackingProps={
           {
             "onChangeSharedLinkPermissionLevel": undefined,
-            "sharedLinkPermissionsMenuButtonProps": undefined,
+            "sharedLinkPermissionsMenuButtonProps": {
+              "data-target-id": "Button-SharedLinkPermissionsMenuLabel",
+            },
           }
         }
       />
@@ -1017,6 +1079,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={false}
       isOn={true}
       label={
@@ -1051,7 +1114,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -1080,6 +1147,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -1104,7 +1172,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -1127,7 +1197,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         trackingProps={
           {
             "onChangeSharedLinkPermissionLevel": undefined,
-            "sharedLinkPermissionsMenuButtonProps": undefined,
+            "sharedLinkPermissionsMenuButtonProps": {
+              "data-target-id": "Button-SharedLinkPermissionsMenuLabel",
+            },
           }
         }
       />
@@ -1157,6 +1229,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={false}
       isOn={true}
       label={
@@ -1191,7 +1264,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -1220,6 +1297,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -1244,7 +1322,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
@@ -1267,7 +1347,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render proper lis
         trackingProps={
           {
             "onChangeSharedLinkPermissionLevel": undefined,
-            "sharedLinkPermissionsMenuButtonProps": undefined,
+            "sharedLinkPermissionsMenuButtonProps": {
+              "data-target-id": "Button-SharedLinkPermissionsMenuLabel",
+            },
           }
         }
       />
@@ -1281,6 +1363,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render settings l
   aria-haspopup="dialog"
   className="shared-link-settings-btn"
   data-resin-target="settings"
+  data-target-id="PlainButton-SharedLinkSettings"
   onClick={
     [MockFunction] {
       "calls": [
@@ -1324,6 +1407,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
     className="shared-link-toggle-row"
   >
     <Toggle
+      data-target-id="Toggle-CreateSharedLink"
       isDisabled={false}
       isOn={true}
       label={
@@ -1358,7 +1442,11 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
             id="boxui.core.copy"
           />
         }
-        buttonProps={{}}
+        buttonProps={
+          {
+            "data-target-id": "Button-CopySharedLink",
+          }
+        }
         buttonSuccessText={
           <FormattedMessage
             defaultMessage="Copied"
@@ -1387,6 +1475,7 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
       <Button
         aria-label="Send Shared Link"
         className="email-shared-link-btn"
+        data-target-id="Button-SendSharedLink"
         isLoading={false}
         showRadar={false}
         type="button"
@@ -1411,7 +1500,9 @@ exports[`features/unified-share-modal/SharedLinkSection should render without Sh
         {
           "onChangeSharedLinkAccessLevel": undefined,
           "onSharedLinkAccessMenuOpen": undefined,
-          "sharedLinkAccessMenuButtonProps": undefined,
+          "sharedLinkAccessMenuButtonProps": {
+            "data-target-id": "Button-SharedLinkAccessMenuLabel",
+          },
         }
       }
     />
