@@ -159,7 +159,6 @@
         "@svgr/plugin-svgo": "^5.1.0",
         "@testing-library/jest-dom": "^6.4.6",
         "@testing-library/react": "^16.0.0",
-        "@testing-library/react-hooks": "^8.0.1",
         "@types/classnames": "^2.2.9",
         "@types/color": "^3.0.2",
         "@types/enzyme": "^3.10.18",
@@ -213,18 +212,14 @@
         "eslint": "^8.57.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-babel": "^5.3.1",
         "eslint-plugin-cypress": "^3.3.0",
         "eslint-plugin-formatjs": "^4.13.3",
         "eslint-plugin-ft-flow": "^3.0.7",
         "eslint-plugin-import": "^2.29.1",
-        "eslint-plugin-jest": "^28.6.0",
         "eslint-plugin-jsx-a11y": "^6.9.0",
         "eslint-plugin-lodash": "^7.4.0",
-        "eslint-plugin-prettier": "^5.1.3",
         "eslint-plugin-react": "^7.34.3",
         "eslint-plugin-react-hooks": "^4.6.2",
-        "eslint-plugin-storybook": "^0.8.0",
         "filesize": "^4.1.2",
         "flow-bin": "^0.95.1",
         "flow-copy-source": "^2.0.9",
@@ -368,10 +363,6 @@
         "ip": "1.1.8"
     },
     "overrides": {
-        "draft-js": {
-            "react": "$react",
-            "react-dom": "$react-dom"
-        },
         "react-tether": {
             "react": "$react",
             "react-dom": "$react-dom"
