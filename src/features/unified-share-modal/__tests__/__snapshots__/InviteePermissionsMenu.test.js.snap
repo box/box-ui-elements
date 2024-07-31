@@ -28,6 +28,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       >
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
+          data-target-id="PlainButton-InviteePermissionsMenuToggle"
           disabled={true}
           type="button"
         >
@@ -139,6 +140,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   >
     <PlainButton
       className="lnk"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={false}
       type="button"
     >
@@ -264,6 +266,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       >
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
+          data-target-id="PlainButton-InviteePermissionsMenuToggle"
           disabled={true}
           type="button"
         >
@@ -375,6 +378,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   >
     <PlainButton
       className="lnk"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={false}
       type="button"
     >
@@ -500,6 +504,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       >
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
+          data-target-id="PlainButton-InviteePermissionsMenuToggle"
           disabled={true}
           type="button"
         >
@@ -611,6 +616,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   >
     <PlainButton
       className="lnk"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={false}
       type="button"
     >
@@ -736,6 +742,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       >
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
+          data-target-id="PlainButton-InviteePermissionsMenuToggle"
           disabled={true}
           type="button"
         >
@@ -847,6 +854,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   >
     <PlainButton
       className="lnk"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={false}
       type="button"
     >
@@ -972,6 +980,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       >
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
+          data-target-id="PlainButton-InviteePermissionsMenuToggle"
           disabled={true}
           type="button"
         >
@@ -1083,6 +1092,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   >
     <PlainButton
       className="lnk"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={false}
       type="button"
     >
@@ -1208,6 +1218,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       >
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
+          data-target-id="PlainButton-InviteePermissionsMenuToggle"
           disabled={true}
           type="button"
         >
@@ -1319,6 +1330,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   >
     <PlainButton
       className="lnk"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={false}
       type="button"
     >
@@ -1428,6 +1440,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
   >
     <PlainButton
       className="lnk"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={false}
       type="button"
     >
@@ -1553,6 +1566,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() it should 
       >
         <PlainButton
           className="lnk is-disabled bdl-is-disabled"
+          data-target-id="PlainButton-InviteePermissionsMenuToggle"
           disabled={true}
           type="button"
         >
@@ -1671,6 +1685,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
   >
     <PlainButton
       className="lnk is-disabled bdl-is-disabled"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={true}
       type="button"
     >
@@ -1705,6 +1720,7 @@ exports[`features/unified-share-modal/InviteePermissionsMenu render() should ren
   >
     <PlainButton
       className="lnk is-disabled bdl-is-disabled"
+      data-target-id="PlainButton-InviteePermissionsMenuToggle"
       disabled={true}
       type="button"
     >

@@ -47,6 +47,7 @@ exports[`features/unified-share-modal/ContactsField render should have scrollabl
   inputProps={
     {
       "autoFocus": true,
+      "data-target-id": "PillSelectorDropdown-AddNamesOrEmailAddresses",
       "onChange": [Function],
     }
   }
@@ -250,6 +251,7 @@ exports[`features/unified-share-modal/ContactsField render should render default
   inputProps={
     {
       "autoFocus": true,
+      "data-target-id": "PillSelectorDropdown-AddNamesOrEmailAddresses",
       "onChange": [Function],
     }
   }

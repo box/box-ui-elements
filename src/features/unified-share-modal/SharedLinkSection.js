@@ -261,14 +261,14 @@ class SharedLinkSection extends React.Component<Props, State> {
         } = sharedLink;
 
         const {
-            copyButtonProps,
+            copyButtonProps: copyButtonTrackingProps,
             onChangeSharedLinkAccessLevel,
             onChangeSharedLinkPermissionLevel,
             onSharedLinkAccessMenuOpen,
             onSharedLinkCopy = noop,
             sendSharedLinkButtonProps,
-            sharedLinkAccessMenuButtonProps,
-            sharedLinkPermissionsMenuButtonProps,
+            sharedLinkAccessMenuButtonProps: sharedLinkAccessMenuButtonTrackingProps,
+            sharedLinkPermissionsMenuButtonProps: sharedLinkPermissionsMenuButtonTrackingProps,
         } = trackingProps;
 
         const shouldTriggerCopyOnLoad = !!triggerCopyOnLoad && !!isCopySuccessful;
@@ -281,6 +281,21 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         const allowedPermissionLevels = this.getAllowedPermissionLevels();
+
+        const copyButtonProps = {
+            ...copyButtonTrackingProps,
+            'data-target-id': 'Button-CopySharedLink',
+        };
+
+        const sharedLinkAccessMenuButtonProps = {
+            ...sharedLinkAccessMenuButtonTrackingProps,
+            'data-target-id': 'Button-SharedLinkAccessMenuLabel',
+        };
+
+        const sharedLinkPermissionsMenuButtonProps = {
+            ...sharedLinkPermissionsMenuButtonTrackingProps,
+            'data-target-id': 'Button-SharedLinkPermissionsMenuLabel',
+        };
 
         return (
             <>
@@ -312,6 +327,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                             <Button
                                 aria-label={intl.formatMessage(messages.sendSharedLink)}
                                 className="email-shared-link-btn"
+                                data-target-id="Button-SendSharedLink"
                                 isDisabled={submitting}
                                 onClick={onEmailSharedLinkClick}
                                 type="button"
@@ -441,6 +457,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                         {...sharedLinkSettingsButtonProps}
                         aria-haspopup="dialog"
                         className="shared-link-settings-btn"
+                        data-target-id="PlainButton-SharedLinkSettings"
                         onClick={onSettingsClick}
                         type="button"
                     >
@@ -489,6 +506,7 @@ class SharedLinkSection extends React.Component<Props, State> {
 
         const toggleComponent = (
             <Toggle
+                data-target-id="Toggle-CreateSharedLink"
                 isDisabled={!isToggleEnabled}
                 isOn={isSharedLinkEnabled}
                 label={linkText}
