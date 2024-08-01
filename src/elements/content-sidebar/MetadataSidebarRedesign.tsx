@@ -5,6 +5,10 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
+
+import { Text } from '@box/blueprint-web';
+import { AddMetadataTemplateDropdown } from '@box/metadata-editor';
+
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
@@ -21,11 +25,20 @@ mark(MARK_NAME_JS_READY);
 
 function MetadataSidebarRedesign() {
     return (
-        <div className="bcs-MetadataSidebarRedesign">
-            <h3>
-                <FormattedMessage {...messages.sidebarMetadataTitle} />
-            </h3>
-            <hr />
+        <div className="bcs-MetadataSidebarRedesign bcs-content">
+            <div className="bcs-MetadataSidebarRedesign-header">
+                <Text as="h3" variant="titleLarge">
+                    <FormattedMessage {...messages.sidebarMetadataTitle} />
+                </Text>
+
+                <AddMetadataTemplateDropdown
+                    availableTemplates={[]}
+                    selectedTemplates={[]}
+                    onSelect={(): void => {
+                        // nothing here yet
+                    }}
+                />
+            </div>
             <p>Hello from Metadata Sidebar redesign</p>
         </div>
     );

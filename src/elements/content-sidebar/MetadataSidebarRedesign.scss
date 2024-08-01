@@ -1,5 +1,13 @@
-@import '../common/variables';
+@import '~@box/blueprint-web-assets/tokens/tokens.scss';
 
 .bcs-MetadataSidebarRedesign {
-    padding-inline: 10px;
+    border-left: 1px solid $gray-10;
+
+    &-header {
+        display: flex;
+        justify-content: space-between;
+        padding-block: $space-6 $space-5;
+        padding-inline: $space-4;
+        border-bottom: 1px solid $gray-10;
+    }
 }
