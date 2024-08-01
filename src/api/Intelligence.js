@@ -4,8 +4,13 @@
  * @author Box
  */
 
-import Base from './Base';
+import getProp from 'lodash/get';
 import type { BoxItem } from '../common/types/core';
+import { isUserCorrectableError } from '../utils/error.js';
+import Base from './Base';
+import { AiExtractResponse } from './schemas/AiExtractResponse.js';
+import { AiExtractStructured } from './schemas/AiExtractStructured.js';
+import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
 
 class Intelligence extends Base {
     /**
@@ -41,6 +46,88 @@ class Intelligence extends Base {
                 items,
             },
         });
+    }
+
+    // /**
+    //  * Gets suggestions for possible metadata key-value pairs for the given item
+    //  *
+    //  * @param {string} id - Id of the item to pull metadata from
+    //  * @param {string} type - Type of item. Only "file” is supported.
+    //  * @param {string} scope - The metadata template scope
+    //  * @param {string} templateKey - The metadata template key to apply
+    //  * @param {string} confidence - The confidence level the suggestion must surpass. Only “experimental” is supported.
+    //  * @return {Array<MetadataSuggestion>} array of metadata templates
+    //  */
+    // async getMetadataSuggestions(
+    //     id: string,
+    //     type: typeof TYPE_FILE,
+    //     scope: string,
+    //     templateKey: string,
+    //     confidence: typeof METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL = METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+    // ): Promise<Array<MetadataSuggestion>> {
+    //     this.errorCode = ERROR_CODE_FETCH_METADATA_SUGGESTIONS;
+
+    //     if (!id || type !== TYPE_FILE) {
+    //         throw getBadItemError();
+    //     }
+
+    //     if (!scope) {
+    //         throw new Error('Missing scope');
+    //     }
+
+    //     if (!templateKey) {
+    //         throw new Error('Missing templateKey');
+    //     }
+
+    //     if (confidence !== METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL) {
+    //         throw new Error(`Invalid confidence level: "${confidence}"`);
+    //     }
+
+    //     let suggestionsResponse = {};
+    //     try {
+    //         suggestionsResponse = await this.xhr.get({
+    //             url: this.getMetadataSuggestionsUrl(),
+    //             id: getTypedFileId(id),
+    //             params: {
+    //                 item: `${type}_${id}`,
+    //                 scope,
+    //                 template_key: templateKey,
+    //                 confidence,
+    //             },
+    //         });
+    //     } catch (e) {
+    //         const { status } = e;
+    //         if (isUserCorrectableError(status)) {
+    //             throw e;
+    //         }
+    //     }
+    //     return getProp(suggestionsResponse, 'data.suggestions', []);
+    // }
+
+    /**
+     * Sends an AI request to supported LLMs and returns extracted key pairs and values.
+     *
+     * @param {AiExtractStructured} request - AI Extract Structured Request
+     * @return A successful response including the answer from the LLM.
+     */
+    async extractStructured(request: AiExtractStructured): Promise<AiExtractResponse> {
+        this.errorCode = ERROR_CODE_EXTRACT_STRUCTURED;
+
+        const url = `${this.getBaseApiUrl()}/ai/extract_structured`;
+
+        let suggestionsResponse = {};
+        try {
+            suggestionsResponse = await this.xhr.post({
+                url,
+                data: request,
+            });
+        } catch (e) {
+            const { status } = e;
+            if (isUserCorrectableError(status)) {
+                throw e;
+            }
+        }
+        return getProp(suggestionsResponse, 'data', {});
     }
 }
 
