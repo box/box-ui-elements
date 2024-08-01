@@ -4,7 +4,7 @@ import { type MessageDescriptor } from 'react-intl';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
-import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
+import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD, IS_ERROR_DISPLAYED} from '../../../constants';
 
 import messages from '../../common/messages';
 
@@ -19,9 +19,10 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
-    status: STATUS;
+    editors: Array<MetadataEditor>;
     file: BoxItem | null;
     errorMessage: MessageDescriptor | null;
+    status: STATUS;
     templates: Array<MetadataTemplate>;
 }
 
@@ -35,6 +36,7 @@ function useSidebarMetadataFetcher(
     const [file, setFile] = React.useState<BoxItem>(null);
     const [templates, setTemplates] = React.useState(null);
     const [errorMessage, setErrorMessage] = React.useState<MessageDescriptor | null>(null);
+    const [editors, setEditors] = React.useState<Array<MetadataEditor>>([]);
 
     const onApiError = React.useCallback(
         (error: ElementsXhrError, code: string, message: MessageDescriptor) => {
@@ -51,7 +53,8 @@ function useSidebarMetadataFetcher(
     );
 
     const fetchMetadataSuccessCallback = React.useCallback(
-        ({ templates: fetchedTemplates }: { editors: Array<MetadataEditor>; templates: Array<MetadataTemplate> }) => {
+        ({ editors: fetchedEditors, templates: fetchedTemplates }: { editors: Array<MetadataEditor>; templates: Array<MetadataTemplate> }) => {
+            setEditors(fetchedEditors);
             setErrorMessage(null);
             setStatus(STATUS.SUCCESS);
             setTemplates(fetchedTemplates);
@@ -61,6 +64,7 @@ function useSidebarMetadataFetcher(
 
     const fetchMetadataErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string) => {
+            setEditors(null);
             setTemplates(null);
             onApiError(e, code, messages.sidebarMetadataFetchingErrorContent);
         },
@@ -115,9 +119,10 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
-        status,
         file,
+        editors,
         errorMessage,
+        status,
         templates,
     };
 }
