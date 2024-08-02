@@ -11,6 +11,7 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import cloneDeep from 'lodash/cloneDeep';
+import { TooltipProvider } from '@box/blueprint-web';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
 import Browser from '../../utils/Browser';
 
@@ -1269,46 +1270,48 @@ class ContentUploader extends Component<Props, State> {
 
         return (
             <Internationalize language={language} messages={messages}>
-                {useUploadsManager ? (
-                    <div ref={measureRef} className={styleClassName} id={this.id}>
-                        <UploadsManager
-                            isDragging={isDraggingItemsToUploadsManager}
-                            isExpanded={isUploadsManagerExpanded}
-                            isResumableUploadsEnabled={isResumableUploadsEnabled}
-                            isVisible={isVisible}
-                            items={items}
-                            onItemActionClick={this.onClick}
-                            onRemoveActionClick={this.removeFileFromUploadQueue}
-                            onUpgradeCTAClick={onUpgradeCTAClick}
-                            onUploadsManagerActionClick={this.clickAllWithStatus}
-                            toggleUploadsManager={this.toggleUploadsManager}
-                            view={view}
-                        />
-                    </div>
-                ) : (
-                    <div ref={measureRef} className={styleClassName} id={this.id}>
-                        <DroppableContent
-                            addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
-                            addFiles={this.addFilesToUploadQueue}
-                            allowedTypes={['Files']}
-                            isFolderUploadEnabled={isFolderUploadEnabled}
-                            isTouch={isTouch}
-                            items={items}
-                            onClick={this.onClick}
-                            view={view}
-                        />
-                        <Footer
-                            errorCode={errorCode}
-                            fileLimit={fileLimit}
-                            hasFiles={hasFiles}
-                            isLoading={isLoading}
-                            onCancel={this.cancel}
-                            onClose={onClose}
-                            onUpload={this.upload}
-                            isDone={isDone}
-                        />
-                    </div>
-                )}
+                <TooltipProvider>
+                    {useUploadsManager ? (
+                        <div ref={measureRef} className={styleClassName} id={this.id}>
+                            <UploadsManager
+                                isDragging={isDraggingItemsToUploadsManager}
+                                isExpanded={isUploadsManagerExpanded}
+                                isResumableUploadsEnabled={isResumableUploadsEnabled}
+                                isVisible={isVisible}
+                                items={items}
+                                onItemActionClick={this.onClick}
+                                onRemoveActionClick={this.removeFileFromUploadQueue}
+                                onUpgradeCTAClick={onUpgradeCTAClick}
+                                onUploadsManagerActionClick={this.clickAllWithStatus}
+                                toggleUploadsManager={this.toggleUploadsManager}
+                                view={view}
+                            />
+                        </div>
+                    ) : (
+                        <div ref={measureRef} className={styleClassName} id={this.id}>
+                            <DroppableContent
+                                addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
+                                addFiles={this.addFilesToUploadQueue}
+                                allowedTypes={['Files']}
+                                isFolderUploadEnabled={isFolderUploadEnabled}
+                                isTouch={isTouch}
+                                items={items}
+                                onClick={this.onClick}
+                                view={view}
+                            />
+                            <Footer
+                                errorCode={errorCode}
+                                fileLimit={fileLimit}
+                                hasFiles={hasFiles}
+                                isLoading={isLoading}
+                                onCancel={this.cancel}
+                                onClose={onClose}
+                                onUpload={this.upload}
+                                isDone={isDone}
+                            />
+                        </div>
+                    )}
+                </TooltipProvider>
             </Internationalize>
         );
     }
