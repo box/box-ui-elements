@@ -1,3 +1,4 @@
+import { ERROR_CODE_EXTRACT_STRUCTURED } from '../../constants';
 import Intelligence from '../Intelligence';
 
 describe('api/Intelligence', () => {
@@ -77,5 +78,70 @@ describe('api/Intelligence', () => {
         } catch (e) {
             expect(e.message).toEqual('Missing items!');
         }
+    });
+
+    describe('extractStructured()', () => {
+        const request = {
+            metadata_template: {
+                type: 'metadata_template',
+                scope: 'global',
+                template_key: 'myTestTemplate',
+            },
+        };
+
+        test('should return a successful response including the answer from the LLM', async () => {
+            const suggestionsFromServer = {
+                stringFieldKey: 'fieldVal1',
+                floatFieldKey: 124.0,
+                enumFieldKey: 'EnumOptionKey',
+                multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'],
+            };
+            intelligence.xhr.post = jest.fn().mockReturnValueOnce({
+                data: suggestionsFromServer,
+            });
+
+            const suggestions = await intelligence.extractStructured(request);
+            expect(suggestions).toEqual(suggestionsFromServer);
+            expect(intelligence.xhr.post).toHaveBeenCalledWith({
+                url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
+                data: request,
+            });
+        });
+
+        test('should return empty map of suggestions when error is 400', async () => {
+            const error = new Error();
+            error.status = 400;
+            intelligence.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            let suggestions;
+            try {
+                suggestions = await intelligence.extractStructured(request);
+            } catch (e) {
+                expect(e.status).toEqual(400);
+            }
+            expect(intelligence.errorCode).toBe(ERROR_CODE_EXTRACT_STRUCTURED);
+            expect(suggestions).toEqual({});
+            expect(intelligence.xhr.post).toHaveBeenCalledWith({
+                url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
+                data: request,
+            });
+        });
+
+        test('should throw error when error is not 400', async () => {
+            const error = new Error();
+            error.status = 401;
+            intelligence.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            let suggestions;
+            try {
+                suggestions = await intelligence.extractStructured(request);
+            } catch (e) {
+                expect(e.status).toEqual(401);
+            }
+            expect(intelligence.errorCode).toBe(ERROR_CODE_EXTRACT_STRUCTURED);
+            expect(suggestions).toBeUndefined();
+            expect(intelligence.xhr.post).toHaveBeenCalledWith({
+                url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
+                data: request,
+            });
+        });
     });
 });
