@@ -3,7 +3,7 @@
  * @author Box
  */
 
-import type { AiLlmEndpointParamsGoogleOrAiLlmEndpointParamsOpenAi } from './AiLlmEndpointParamsGoogleOrAiLlmEndpointParamsOpenAi.js';
+import type { AiLlmEndpointParamsGoogleOrAiLlmEndpointParamsOpenAi } from './AiLlmEndpointParamsGoogleOrAiLlmEndpointParamsOpenAi';
 
 export interface AiAgentBasicTextTool {
     /**

@@ -3,8 +3,8 @@
  * @author Box
  */
 
-import { AiLlmEndpointParamsGoogle } from './AiLlmEndpointParamsGoogle.js';
-import { AiLlmEndpointParamsOpenAi } from './AiLlmEndpointParamsOpenAi.js';
+import { AiLlmEndpointParamsGoogle } from './AiLlmEndpointParamsGoogle';
+import { AiLlmEndpointParamsOpenAi } from './AiLlmEndpointParamsOpenAi';
 
 export type AiLlmEndpointParamsGoogleOrAiLlmEndpointParamsOpenAi =
     | AiLlmEndpointParamsGoogle

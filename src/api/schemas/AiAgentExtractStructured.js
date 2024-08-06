@@ -3,8 +3,8 @@
  * @author Box
  */
 
-import { AiAgentBasicTextTool } from './AiAgentBasicTextTool.js';
-import type { AiAgentLongTextTool } from './AiAgentLongTextTool.js';
+import { AiAgentBasicTextTool } from './AiAgentBasicTextTool';
+import type { AiAgentLongTextTool } from './AiAgentLongTextTool';
 
 export type AiAgentExtractStructuredTypeField = 'ai_agent_extract_structured';
 

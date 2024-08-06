@@ -3,8 +3,8 @@
  * @author Box
  */
 
-import { AiAgentExtractStructured } from './AiAgentExtractStructured.js';
-import { AiItemBase } from './AiItemBase.js';
+import { AiAgentExtractStructured } from './AiAgentExtractStructured';
+import { AiItemBase } from './AiItemBase';
 
 export type AiExtractStructuredMetadataTemplateTypeField = 'metadata_template';
 

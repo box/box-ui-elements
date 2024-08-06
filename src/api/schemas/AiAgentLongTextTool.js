@@ -3,7 +3,7 @@
  * @author Box
  */
 
-import { AiAgentBasicTextTool } from './AiAgentBasicTextTool.js';
+import { AiAgentBasicTextTool } from './AiAgentBasicTextTool';
 
 export interface AiAgentLongTextToolEmbeddingsStrategyField {
     /**
