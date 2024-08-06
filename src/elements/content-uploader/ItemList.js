@@ -36,6 +36,7 @@ const ItemList = ({
             const progressCell = progressCellRenderer(!!onUpgradeCTAClick);
             const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, onUpgradeCTAClick);
             const removeCell = removeCellRenderer(onRemoveClick);
+            const baseIconWidth = 32;
 
             return (
                 <Table
@@ -63,7 +64,7 @@ const ItemList = ({
                         cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
-                        width={onUpgradeCTAClick ? 100 : 25}
+                        width={onUpgradeCTAClick ? 100 : baseIconWidth}
                     />
                     {isResumableUploadsEnabled && (
                         <Column
@@ -71,7 +72,7 @@ const ItemList = ({
                             cellRenderer={removeCell}
                             dataKey="remove"
                             flexShrink={0}
-                            width={25}
+                            width={baseIconWidth}
                         />
                     )}
                 </Table>
