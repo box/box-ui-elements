@@ -6,10 +6,10 @@
 
 import getProp from 'lodash/get';
 import type { BoxItem } from '../common/types/core';
-import { isUserCorrectableError } from '../utils/error.js';
+import { isUserCorrectableError } from '../utils/error';
 import Base from './Base';
-import { AiExtractResponse } from './schemas/AiExtractResponse.js';
-import { AiExtractStructured } from './schemas/AiExtractStructured.js';
+import { AiExtractResponse } from './schemas/AiExtractResponse';
+import { AiExtractStructured } from './schemas/AiExtractStructured';
 import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
 
 class Intelligence extends Base {
