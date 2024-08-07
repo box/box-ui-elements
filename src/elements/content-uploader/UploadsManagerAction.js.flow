@@ -1,22 +1,27 @@
-/**
- * @flow
- * @file Uploads Manager action component
- */
-
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from '../common/messages';
-import PrimaryButton from '../../components/primary-button';
-import { STATUS_ERROR } from '../../constants';
+import { injectIntl, IntlShape } from 'react-intl';
+
+import { Button } from '@box/blueprint-web';
+
 import { RESIN_TAG_TARGET } from '../../common/variables';
+
+import { STATUS_ERROR } from '../../constants';
+
+import messages from '../common/messages';
+
 import './UploadsManagerAction.scss';
 
 type Props = {
     hasMultipleFailedUploads: boolean,
+    intl: IntlShape,
     onClick: Function,
 };
 
-const UploadsManagerAction = ({ onClick, hasMultipleFailedUploads }: Props) => {
+const UploadsManagerAction = ({
+    hasMultipleFailedUploads,
+    intl,
+    onClick,
+}: Props) => {
     const handleResumeClick = event => {
         event.stopPropagation();
         onClick(STATUS_ERROR);
@@ -28,11 +33,11 @@ const UploadsManagerAction = ({ onClick, hasMultipleFailedUploads }: Props) => {
 
     return (
         <div className="bcu-uploads-manager-action">
-            <PrimaryButton onClick={handleResumeClick} type="button" {...resin}>
-                <FormattedMessage {...resumeMessage} />
-            </PrimaryButton>
+            <Button onClick={handleResumeClick} size="small" variant="primary" {...resin}>
+                {intl.formatMessage(resumeMessage)}
+            </Button>
         </div>
     );
 };
 
-export default UploadsManagerAction;
+export default injectIntl(UploadsManagerAction);
