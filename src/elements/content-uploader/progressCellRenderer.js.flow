@@ -1,8 +1,3 @@
-/**
- * @flow
- * @file Function to render the progress table cell
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Browser from '../../utils/Browser';
@@ -25,7 +20,7 @@ import {
 import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
-    rowData: UploadItem,
+    rowData: UploadItem
 };
 
 /**
@@ -35,7 +30,7 @@ type Props = {
  * @param {string} [itemName]
  * @returns {FormattedMessage}
  */
-const getErrorMessage = (errorCode: ?string, itemName: ?string, shouldShowUpgradeCTAMessage?: boolean) => {
+const getErrorMessage = (errorCode?: string | null, itemName?: string | null, shouldShowUpgradeCTAMessage?: boolean) => {
     switch (errorCode) {
         case ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED:
             return <FormattedMessage {...messages.uploadsOneOrMoreChildFoldersFailedToUploadMessage} />;
@@ -61,7 +56,9 @@ const getErrorMessage = (errorCode: ?string, itemName: ?string, shouldShowUpgrad
     }
 };
 
-export default (shouldShowUpgradeCTAMessage?: boolean) => ({ rowData }: Props) => {
+export default (shouldShowUpgradeCTAMessage?: boolean) => ({
+    rowData,
+}: Props) => {
     const { status, error = {}, name, isFolder, file } = rowData;
     const { code } = error;
 
