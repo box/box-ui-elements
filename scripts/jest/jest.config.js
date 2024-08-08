@@ -25,5 +25,7 @@ module.exports = {
     testEnvironment: 'jsdom',
     testMatch: ['**/__tests__/**/*.test.+(js|jsx|ts|tsx)'],
     testPathIgnorePatterns: ['stories.test.js$', 'stories.test.tsx$', 'stories.test.d.ts'],
-    transformIgnorePatterns: ['node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data|@box/blueprint-web|@box/blueprint-web-assets)/)'],
+    transformIgnorePatterns: [
+        'node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data|@box/blueprint-web|@box/blueprint-web-assets|@box/metadata-editor)/)',
+    ],
 };

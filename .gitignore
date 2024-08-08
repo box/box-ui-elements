@@ -24,3 +24,10 @@ test/videos
 test/dev.html
 yarn-debug.log
 yarn-error.log
+
+# temporary files
+.npmrc
+.yarnrc
+package-lock.json
+yarn.lock
+package.json
