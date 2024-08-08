@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
+const path = require('path');
 const colors = require('colors/safe');
-const { promisify } = require('util');
+const {promisify} = require('util');
 const invert = require('lodash/invert');
 const trimStart = require('lodash/trimStart');
 
@@ -99,7 +100,7 @@ async function handleWriteFile(fileContentsToParse, fileName, isVerbose, matches
     }
 }
 
-async function processFileContents({ fileContentsToParse, fileName, isVerbose, sourceNameRegex }, handleMatch) {
+async function processFileContents({fileContentsToParse, fileName, isVerbose, sourceNameRegex}, handleMatch) {
     const matches = [...new Set(fileContentsToParse.match(sourceNameRegex))];
 
     if (isVerbose) {
@@ -111,7 +112,7 @@ async function processFileContents({ fileContentsToParse, fileName, isVerbose, s
     await handleWriteFile(fileContentsToParse, fileName, isVerbose, matches);
 }
 
-async function swap({ currentConversionMap, fileType, ...operationParams }) {
+async function swap({currentConversionMap, fileType, ...operationParams}) {
     processFileContents(operationParams, (fileContents, match) => {
         if (fileType === 'scss') {
             fileContents = findAndReplaceSCSS(
@@ -137,7 +138,7 @@ async function swap({ currentConversionMap, fileType, ...operationParams }) {
     });
 }
 
-async function append({ currentConversionMap, fileType, ...operationParams }) {
+async function append({currentConversionMap, fileType, ...operationParams}) {
     processFileContents(operationParams, (fileContents, match) => {
         if (fileType === 'scss') {
             fileContents = findAndReplaceSCSS(
@@ -163,7 +164,7 @@ async function append({ currentConversionMap, fileType, ...operationParams }) {
     });
 }
 
-async function extend({ currentConversionMap, fileType, ...operationParams }) {
+async function extend({currentConversionMap, fileType, ...operationParams}) {
     processFileContents(operationParams, (fileContents, match, index) => {
         if (fileType === 'scss') {
             const matchReplace = match.replace('.', '');
@@ -185,22 +186,7 @@ async function extend({ currentConversionMap, fileType, ...operationParams }) {
     });
 }
 
-async function main() {
-    // argv 0 and 1 are the node instance and the script name respectively.
-    // argv 2 is the operation: check, swap, append, extend
-    const operation = process.argv[2];
-
-    // argv 3 is the file (and extension)
-    const fileName = process.argv[3];
-
-    if (!fileName) {
-        console.error(colors.red('Missing parameter:'), colors.white('fileName'));
-        process.exit(1);
-    }
-    if (!Object.keys(conversionMap).length) {
-        console.error(colors.red('Missing values in: '), colors.white('conversionMap'));
-        process.exit(1);
-    }
+async function execute(fileName, operation) {
     const fileType = fileName.split('.').pop();
     const isVerbose = process.argv[4] === '--verbose';
     const isExtend = operation === 'extend';
@@ -230,11 +216,11 @@ async function main() {
         );
     } else {
         console.error(colors.yellow('Unrecognized file type for this tool. Skipping', fileName, '...'));
-        process.exit(0);
+        return;
     }
 
     try {
-        const fileContentsToParse = await readFile(fileName, { encoding: 'utf8' });
+        const fileContentsToParse = await readFile(fileName, {encoding: 'utf8'});
         const operationParams = {
             currentConversionMap,
             fileContentsToParse,
@@ -253,7 +239,6 @@ async function main() {
                     if (isVerbose) {
                         console.error(colors.red('Bad BDL class name found in', fileName));
                     }
-                    process.exit(1);
                 }
 
                 break;
@@ -277,7 +262,6 @@ async function main() {
                         'use "swap" to replace names, "append" to add new classes, "extend" to add @extend property, or "check" to verify if a file contains deprecated values',
                     ),
                 );
-                process.exit(1);
                 break;
         }
     } catch (error) {
@@ -285,8 +269,55 @@ async function main() {
             colors.red('Cannot read file, because it does not exist or the wrong path is specified\n'),
             error,
         );
+    }
+}
+
+async function loopThroughDirectory(dirPath, operation) {
+    fs.readdir(dirPath, (err, files) => {
+        if (err) {
+            console.error(`Error reading directory: ${dirPath}`);
+            return;
+        }
+
+        files.forEach((file) => {
+            const filePath = path.join(dirPath, file);
+            // Check if it's a file or a directory
+            fs.stat(filePath, (err, stats) => {
+                if (err) {
+                    console.error(`Error checking file stats: ${filePath}`);
+                    process.exit(0);
+                }
+
+                if (stats.isDirectory()) {
+                    const directoryPath = path.dirname(filePath);
+                    if (!directoryPath.startsWith('__') && !directoryPath.endsWith('__')){
+                        loopThroughDirectory(filePath,operation);
+                    }
+                } else {
+                    execute(filePath, operation)
+                }
+            });
+        });
+    });
+}
+
+async function main() {
+    // argv 0 and 1 are the node instance and the script name respectively.
+    // argv 2 is the operation: check, swap, append, extend
+    const operation = process.argv[2];
+
+    // argv 3 is the file (and extension)
+    const dirPath = process.argv[3];
+    if (!dirPath) {
+        console.error(colors.red('Missing parameter:'), colors.white('path'));
         process.exit(1);
     }
+    if (!Object.keys(conversionMap).length) {
+        console.error(colors.red('Missing values in: '), colors.white('conversionMap'));
+        process.exit(1);
+    }
+
+    loopThroughDirectory(dirPath, operation);
 }
 
 if (process.argv.length < 3) {
