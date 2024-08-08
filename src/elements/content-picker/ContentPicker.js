@@ -131,6 +131,7 @@ type State = {
     rootName: string,
     searchQuery: string,
     selected: { [string]: BoxItem },
+    selectedArray: Set,
     sortBy: SortBy,
     sortDirection: SortDirection,
     view: View,
@@ -233,6 +234,7 @@ class ContentPicker extends Component<Props, State> {
             currentOffset: initialPageSize * (initialPage - 1),
             currentPageSize: initialPageSize,
             selected: {},
+            selectedArray: new Set(),
             searchQuery: '',
             view: VIEW_FOLDER,
             isCreateFolderModalOpen: false,
@@ -345,10 +347,11 @@ class ContentPicker extends Component<Props, State> {
      * @return {void}
      */
     deleteSelectedKeys = (): void => {
-        const { selected }: State = this.state;
+        const { selected, selectedArray }: State = this.state;
 
         // Clear out the selected field
         Object.keys(selected).forEach(key => delete selected[key].selected);
+        selectedArray.clear();
     };
 
     /**
@@ -835,6 +838,7 @@ class ContentPicker extends Component<Props, State> {
         const {
             view,
             selected,
+            selectedArray,
             currentCollection: { items = [] },
         }: State = this.state;
         const { id, type }: BoxItem = item;
@@ -859,6 +863,7 @@ class ContentPicker extends Component<Props, State> {
             // selected. Unselect it in this case. Toggle case.
             delete existing.selected;
             delete selected[cacheKey];
+            selectedArray.delete(id);
         } else {
             // We are selecting a new item that was never
             // selected before. However if we are in a single
@@ -877,11 +882,13 @@ class ContentPicker extends Component<Props, State> {
                 const prior = selectedKeys[0]; // only one item
                 delete selected[prior].selected;
                 delete selected[prior];
+                selectedArray.clear();
             }
 
             // Select the new item
             item.selected = true;
             selected[cacheKey] = item;
+            selectedArray.add(id);
 
             // If can set share access, fetch the shared link properties of the item
             // In the case where another item is selected, any in flight XHR will get
@@ -892,11 +899,20 @@ class ContentPicker extends Component<Props, State> {
         }
 
         const focusedRow = items.findIndex((i: BoxItem) => i.id === item.id);
-        this.setState({ selected, focusedRow }, () => {
+        this.setState({ selected, selectedArray, focusedRow }, () => {
             if (view === VIEW_SELECTED) {
                 // Need to refresh the selected view
                 this.showSelected();
             }
+        });
+
+        this.state.currentCollection.items.map(collectionItem => {
+            if (selectedArray.has(collectionItem.id)) {
+                collectionItem.selected = true;
+            } else if (collectionItem.selected) {
+                delete collectionItem.selected;
+            }
+            return collectionItem;
         });
     };
 
