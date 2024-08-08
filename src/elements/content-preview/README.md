@@ -41,7 +41,7 @@
 | collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
 | contentOpenWithProps | Object | `{}` | Props that can be forwarded to the Content Open With UI Element. *See them in the props section of [Content Open With UI Element](#content-open-with-documentation)* |
 | contentSidebarProps | Object | `{}` | Props that can be forwarded to the Content Sidebar UI Element. *See them in the props section of [Content Sidebar UI Element](#content-sidebar-documentation)* |
-| hasHeader | boolean | `true` | Visually hides the preview header if this is set to `false`. |
+| hasHeader | boolean | `false` | Visually hides the preview header if this is set to `false`. |
 | language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
 | messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
 | onClose | function |  | Callback function for when the file preview closes. If absent, the close button will not render in the header. |
