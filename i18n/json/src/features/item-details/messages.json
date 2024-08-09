@@ -1,0 +1,97 @@
+[
+  {
+    "id": "boxui.itemDetails.bookmarkExpiration",
+    "description": "Warning message in the sidebar that this bookmark will be automatically deleted on a certain date, {expiration} is the date",
+    "defaultMessage": "This bookmark will be deleted on {expiration}."
+  },
+  {
+    "id": "boxui.itemDetails.created",
+    "description": "Label for created date under item properties in the sidebar",
+    "defaultMessage": "Created"
+  },
+  {
+    "id": "boxui.itemDetails.deleted",
+    "description": "Label for deletion date under item properties in the sidebar",
+    "defaultMessage": "Deleted"
+  },
+  {
+    "id": "boxui.itemDetails.description",
+    "description": "Label for description under item properties in the sidebar",
+    "defaultMessage": "Description"
+  },
+  {
+    "id": "boxui.itemDetails.descriptionPlaceholder",
+    "description": "Placeholder for textarea to enter a description under item properties in the sidebar",
+    "defaultMessage": "Enter a description"
+  },
+  {
+    "id": "boxui.itemDetails.enterpriseOwner",
+    "description": "Label for name of enterprise owner under item properties in the sidebar",
+    "defaultMessage": "Enterprise Owner"
+  },
+  {
+    "id": "boxui.itemDetails.fileExpiration",
+    "description": "Warning message in the sidebar that this file will be automatically deleted on a certain date, {expiration} is the date",
+    "defaultMessage": "This file will be deleted on {expiration}."
+  },
+  {
+    "id": "boxui.itemDetails.folderExpiration",
+    "description": "Warning message in the sidebar that this folder will be automatically deleted on a certain date, {expiration} is the date",
+    "defaultMessage": "This folder will be deleted on {expiration}."
+  },
+  {
+    "id": "boxui.itemDetails.modified",
+    "description": "Label for modified date under item properties in the sidebar",
+    "defaultMessage": "Modified"
+  },
+  {
+    "id": "boxui.itemDetails.owner",
+    "description": "Label for name of owner under item properties in the sidebar",
+    "defaultMessage": "Owner"
+  },
+  {
+    "id": "boxui.itemDetails.retentionPolicyDescription",
+    "description": "Label for description of the retention policy under item properties in the sidebar",
+    "defaultMessage": "Policy"
+  },
+  {
+    "id": "boxui.itemDetails.retentionPolicyExpiration",
+    "description": "Label for the expiration date of the retention policy under item properties in the sidebar",
+    "defaultMessage": "Policy Expiration"
+  },
+  {
+    "id": "boxui.itemDetails.retentionPolicyExtend",
+    "description": "Button to extend the expiration date of the retention policy under item properties in the sidebar",
+    "defaultMessage": "Extend"
+  },
+  {
+    "id": "boxui.itemDetails.savedVersions",
+    "description": "Text for button in the sidebar to open the version history popup, {versionCount} is the number of saved file versions",
+    "defaultMessage": "{versionCount, number} Saved Versions"
+  },
+  {
+    "id": "boxui.itemDetails.sharedLinkExpiration",
+    "description": "Warning message in the sidebar that this shared link will expire on a certain date, {expiration} is the date",
+    "defaultMessage": "This shared link will be disabled on {expiration}."
+  },
+  {
+    "id": "boxui.itemDetails.size",
+    "description": "Label for human-readable filesize under item properties in the sidebar",
+    "defaultMessage": "Size"
+  },
+  {
+    "id": "boxui.itemDetails.uploader",
+    "description": "Label for name of uploader under item properties in the sidebar",
+    "defaultMessage": "Uploader"
+  },
+  {
+    "id": "boxui.itemDetails.url",
+    "description": "Label for a weblink url under item properties in the sidebar",
+    "defaultMessage": "URL"
+  },
+  {
+    "id": "boxui.itemDetails.urlPlaceholder",
+    "description": "Placeholder for a weblink url text area in the right sidebar",
+    "defaultMessage": "Enter a valid url"
+  }
+]

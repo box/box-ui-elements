@@ -1,6 +1,6 @@
 {
     "name": "box-ui-elements",
-    "version": "0.0.0-semantically-released",
+    "version": "21.1.0-beta.5",
     "description": "Box UI Elements",
     "author": "Box (https://www.box.com/)",
     "license": "SEE LICENSE IN LICENSE",
@@ -93,7 +93,11 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
+        "development": [
+            "last 1 Chrome versions",
+            "last 1 Firefox versions",
+            "last 1 Safari versions"
+        ]
     },
     "husky": {
         "hooks": {
@@ -369,6 +373,8 @@
         }
     },
     "msw": {
-        "workerDirectory": [".storybook/public"]
+        "workerDirectory": [
+            ".storybook/public"
+        ]
     }
 }

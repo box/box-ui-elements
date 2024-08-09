@@ -1,0 +1,82 @@
+[
+  {
+    "id": "boxui.contentAnswers.ask",
+    "description": "Content Answers submit input button text",
+    "defaultMessage": "Ask"
+  },
+  {
+    "id": "boxui.contentAnswers.askDisabledTooltip",
+    "description": "Content Answers submit input button disabled tooltip text when answer is generating",
+    "defaultMessage": "You can submit another question once Box AI has finished responding"
+  },
+  {
+    "id": "boxui.contentAnswers.askQuestionPlaceholder",
+    "description": "Content Answers modal input placeholder",
+    "defaultMessage": "Ask anything about this document"
+  },
+  {
+    "id": "boxui.contentAnswers.contentAnswersTitle",
+    "description": "Content Answers feature name shown on menu item and modal title",
+    "defaultMessage": "Box AI"
+  },
+  {
+    "id": "boxui.contentAnswers.defaultTooltip",
+    "description": "Default tooltip message for Content Answers entry point button",
+    "defaultMessage": "Get instant answers about this document using Box AI"
+  },
+  {
+    "id": "boxui.contentAnswers.disabledTooltipFileNotCompatible",
+    "description": "Disabled tooltip message for Content Answers entry point button when the file type is not supported",
+    "defaultMessage": "Box AI is not currently supported for this file type"
+  },
+  {
+    "id": "boxui.contentAnswers.hasQuestionsTooltip",
+    "description": "Existing questions tooltip message for Content Answers entry point button",
+    "defaultMessage": "Return to Box AI"
+  },
+  {
+    "id": "boxui.contentAnswers.inlineErrorText",
+    "description": "Content Answers error message when the service fails",
+    "defaultMessage": "The Box AI service was unavailable."
+  },
+  {
+    "id": "boxui.contentAnswers.intelligenceUnavailableDescription",
+    "description": "Box AI Q&A service unavailable error description",
+    "defaultMessage": "The Box AI service is not responding."
+  },
+  {
+    "id": "boxui.contentAnswers.intelligenceUnavailableHeading",
+    "description": "Box AI Q&A service unavailable error title",
+    "defaultMessage": "Box AI is unavailable"
+  },
+  {
+    "id": "boxui.contentAnswers.intelligenceUnavailableTryAgain",
+    "description": "Box AI Q&A service unavailable error try again later description",
+    "defaultMessage": "Please try again later."
+  },
+  {
+    "id": "boxui.contentAnswers.maxCharactersReachedError",
+    "description": "Error tooltip to show inside text area if the user reached the character limit",
+    "defaultMessage": "Maximum of {characterLimit} characters reached"
+  },
+  {
+    "id": "boxui.contentAnswers.retryResponse",
+    "description": "Retry button label to send again the question to the service",
+    "defaultMessage": "Retry"
+  },
+  {
+    "id": "boxui.contentAnswers.welcomeAskQuestionText",
+    "description": "Content Answers welcome message for asking questions",
+    "defaultMessage": "Ask questions about {name}"
+  },
+  {
+    "id": "boxui.contentAnswers.welcomeClearChatText",
+    "description": "Content Answers welcome message for clearing the chat",
+    "defaultMessage": "This chat will be cleared when you close this document"
+  },
+  {
+    "id": "boxui.contentAnswers.welcomeMessageTitle",
+    "description": "Content Answers welcome message title",
+    "defaultMessage": "Welcome to Box AI"
+  }
+]
