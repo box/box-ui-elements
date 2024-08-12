@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { IconButton, Tooltip } from '@box/blueprint-web';
 import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
 import { XMark } from '@box/blueprint-web-assets/icons/Fill';
@@ -11,12 +11,11 @@ import { STATUS_ERROR, STATUS_IN_PROGRESS, STATUS_STAGED } from '../../constants
 import messages from '../common/messages';
 
 export interface ItemRemoveProps {
-    intl: IntlShape;
     onClick: (item: UploadItem) => void;
     status: UploadStatus;
 }
 
-const ItemRemove = ({ intl, onClick, status }: ItemRemoveProps) => {
+const ItemRemove = ({ onClick, status }: ItemRemoveProps) => {
     const resin: Record<string, string> = {};
     let target = null;
 
@@ -30,6 +29,7 @@ const ItemRemove = ({ intl, onClick, status }: ItemRemoveProps) => {
         resin['data-resin-target'] = target;
     }
 
+    const intl = useIntl();
     const isDisabled = status === STATUS_STAGED;
     const tooltipText = intl.formatMessage(messages.remove);
 
@@ -49,4 +49,4 @@ const ItemRemove = ({ intl, onClick, status }: ItemRemoveProps) => {
 };
 
 export { ItemRemove as ItemRemoveBase };
-export default injectIntl(ItemRemove);
+export default ItemRemove;
