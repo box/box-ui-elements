@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Button } from '@box/blueprint-web';
 
 import { RESIN_TAG_TARGET } from '../../common/variables';
@@ -10,20 +10,18 @@ import type { UploadStatus } from '../../common/types/upload';
 
 import './UploadsManagerAction.scss';
 
-export interface UploadsManagerActionProps {
+type Props = {
     hasMultipleFailedUploads: boolean;
-    intl: IntlShape;
     onClick: (status: UploadStatus) => void;
 }
 
-const UploadsManagerAction = ({ hasMultipleFailedUploads, intl, onClick }: UploadsManagerActionProps) => {
+const UploadsManagerAction = ({ hasMultipleFailedUploads, onClick }: Props) => {
     const handleResumeClick = event => {
         event.stopPropagation();
         onClick(STATUS_ERROR);
     };
-
+    const intl = useIntl();
     const resumeMessage = hasMultipleFailedUploads ? messages.resumeAll : messages.resume;
-
     const resin = { [RESIN_TAG_TARGET]: 'uploadresumeheader' };
 
     return (
@@ -35,4 +33,4 @@ const UploadsManagerAction = ({ hasMultipleFailedUploads, intl, onClick }: Uploa
     );
 };
 
-export default injectIntl(UploadsManagerAction);
+export default UploadsManagerAction;
