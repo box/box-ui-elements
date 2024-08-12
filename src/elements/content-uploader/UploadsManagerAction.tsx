@@ -6,13 +6,14 @@ import { RESIN_TAG_TARGET } from '../../common/variables';
 import { STATUS_ERROR } from '../../constants';
 
 import messages from '../common/messages';
+import type { UploadStatus } from '../../common/types/upload';
 
 import './UploadsManagerAction.scss';
 
 export interface UploadsManagerActionProps {
     hasMultipleFailedUploads: boolean;
     intl: IntlShape;
-    onClick: Function;
+    onClick: (status: UploadStatus) => void;
 }
 
 const UploadsManagerAction = ({ hasMultipleFailedUploads, intl, onClick }: UploadsManagerActionProps) => {
