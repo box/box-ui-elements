@@ -271,6 +271,7 @@ export const ERROR_CODE_FETCH_ACCESS_STATS = 'fetch_access_stats_error';
 export const ERROR_CODE_FETCH_SKILLS = 'fetch_skills_error';
 export const ERROR_CODE_FETCH_RECENTS = 'fetch_recents_error';
 export const ERROR_CODE_FETCH_METADATA_SUGGESTIONS = 'fetch_metadata_suggestions_error';
+export const ERROR_CODE_EMPTY_METADATA_SUGGESTIONS = 'empty_metadata_suggestions_error';
 export const ERROR_CODE_EXECUTE_INTEGRATION = 'execute_integrations_error';
 export const ERROR_CODE_EXTRACT_STRUCTURED = 'extract_structured_error';
 export const ERROR_CODE_CREATE_ANNOTATION = 'create_annotation_error';
