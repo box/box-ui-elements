@@ -1,23 +1,21 @@
 import * as React from 'react';
 import { injectIntl, IntlShape } from 'react-intl';
-
 import { Button } from '@box/blueprint-web';
 
 import { RESIN_TAG_TARGET } from '../../common/variables';
-
 import { STATUS_ERROR } from '../../constants';
 
 import messages from '../common/messages';
 
 import './UploadsManagerAction.scss';
 
-type Props = {
+export interface UploadsManagerActionProps {
     hasMultipleFailedUploads: boolean;
     intl: IntlShape;
     onClick: Function;
-};
+}
 
-const UploadsManagerAction = ({ hasMultipleFailedUploads, intl, onClick }: Props) => {
+const UploadsManagerAction = ({ hasMultipleFailedUploads, intl, onClick }: UploadsManagerActionProps) => {
     const handleResumeClick = event => {
         event.stopPropagation();
         onClick(STATUS_ERROR);
