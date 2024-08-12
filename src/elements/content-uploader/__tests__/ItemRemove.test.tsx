@@ -1,0 +1,40 @@
+import * as React from 'react';
+import { IntlShape } from 'react-intl';
+import { render, screen, fireEvent } from '../../../test-utils/testing-library';
+
+import { ItemRemoveBase as ItemRemove, ItemRemoveProps } from '../ItemRemove';
+
+import { STATUS_IN_PROGRESS, STATUS_STAGED } from '../../../constants';
+
+describe('elements/content-uploader/ItemRemove', () => {
+    const getWrapper = (props: Partial<ItemRemoveProps>) =>
+        render(
+            <ItemRemove
+                intl={{ formatMessage: data => data.defaultMessage } as IntlShape}
+                onClick={jest.fn()}
+                status={STATUS_IN_PROGRESS}
+                {...props}
+            />,
+        );
+
+    test('should have aria-label "Remove" and no aria-describedby', () => {
+        getWrapper({});
+        const button = screen.getByRole('button');
+        expect(button).toHaveAttribute('aria-label', 'Remove');
+        expect(button).not.toHaveAttribute('aria-describedby');
+    });
+
+    test('should render disabled button when status is STATUS_STAGED', () => {
+        getWrapper({ status: STATUS_STAGED });
+        const button = screen.getByRole('button');
+        expect(button).toBeDisabled();
+    });
+
+    test('should call onClick when button is clicked', () => {
+        const mockOnClick = jest.fn();
+        getWrapper({ onClick: mockOnClick });
+
+        fireEvent.click(screen.getByRole('button'));
+        expect(mockOnClick).toHaveBeenCalledTimes(1);
+    });
+});

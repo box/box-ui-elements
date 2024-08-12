@@ -1,0 +1,52 @@
+import * as React from 'react';
+import { injectIntl, IntlShape } from 'react-intl';
+import { IconButton, Tooltip } from '@box/blueprint-web';
+import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
+import { XMark } from '@box/blueprint-web-assets/icons/Fill';
+
+import type { UploadItem, UploadStatus } from '../../common/types/upload';
+
+import { STATUS_ERROR, STATUS_IN_PROGRESS, STATUS_STAGED } from '../../constants';
+
+import messages from '../common/messages';
+
+export interface ItemRemoveProps {
+    intl: IntlShape;
+    onClick: (item: UploadItem) => void;
+    status: UploadStatus;
+}
+
+const ItemRemove = ({ intl, onClick, status }: ItemRemoveProps) => {
+    const resin: Record<string, string> = {};
+    let target = null;
+
+    if (status === STATUS_IN_PROGRESS) {
+        target = 'uploadcancel';
+    } else if (status === STATUS_ERROR) {
+        target = 'remove-failed';
+    }
+
+    if (target) {
+        resin['data-resin-target'] = target;
+    }
+
+    const isDisabled = status === STATUS_STAGED;
+    const tooltipText = intl.formatMessage(messages.remove);
+
+    return (
+        <div className="bcu-item-action">
+            <Tooltip content={tooltipText} variant="standard">
+                <IconButton
+                    aria-label={tooltipText}
+                    disabled={isDisabled}
+                    onClick={onClick}
+                    icon={() => <XMark color="black" height={Size5} width={Size5} />}
+                    {...resin}
+                />
+            </Tooltip>
+        </div>
+    );
+};
+
+export { ItemRemove as ItemRemoveBase };
+export default injectIntl(ItemRemove);
