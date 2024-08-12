@@ -1015,6 +1015,11 @@ const messages = defineMessages({
         defaultMessage: 'Box Doc Gen',
         description: 'Icon title for a Box file of type DocGen template',
     },
+    loading: {
+        id: 'be.loading',
+        description: 'Loading aria label.',
+        defaultMessage: 'loading',
+    },
 });
 
 export default messages;
