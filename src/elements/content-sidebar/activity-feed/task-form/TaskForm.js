@@ -382,7 +382,10 @@ class TaskForm extends React.Component<Props, State> {
                             className={pillSelectorOverlayClasses}
                             error={this.getErrorByFieldname('taskAssignees')}
                             disabled={isForbiddenErrorOnEdit}
-                            inputProps={{ 'data-testid': 'task-form-assignee-input' }}
+                            inputProps={{
+                                'data-testid': 'task-form-assignee-input',
+                                'data-target-id': 'CreateTaskModal-selectassigneesinput',
+                            }}
                             isRequired
                             label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}
                             name="taskAssignees"
@@ -443,6 +446,7 @@ class TaskForm extends React.Component<Props, State> {
                         <TextArea
                             className="bcs-task-name-input"
                             data-testid="task-form-name-input"
+                            data-target-id="CreateTaskModal-messageinput"
                             disabled={isDisabled || isForbiddenErrorOnEdit}
                             error={this.getErrorByFieldname('taskName')}
                             isRequired
@@ -460,6 +464,7 @@ class TaskForm extends React.Component<Props, State> {
                             inputProps={{
                                 [INTERACTION_TARGET]: ACTIVITY_TARGETS.TASK_DATE_PICKER,
                                 'data-testid': 'task-form-date-input',
+                                'data-target-id': 'CreateTaskModal-dateinput',
                             }}
                             isAccessible
                             isDisabled={isForbiddenErrorOnEdit}
@@ -477,6 +482,7 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-cancel-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_CANCEL}
                                 data-testid="task-form-cancel-button"
+                                data-target-id="CreateTaskModal-cancelbutton"
                                 onClick={this.handleCancelClick}
                                 isDisabled={isLoading}
                                 type="button"
@@ -488,6 +494,7 @@ class TaskForm extends React.Component<Props, State> {
                                 className="bcs-task-input-submit-btn"
                                 data-resin-target={ACTIVITY_TARGETS.APPROVAL_FORM_POST}
                                 data-testid="task-form-submit-button"
+                                data-target-id="CreateTaskModal-submitbutton"
                                 isDisabled={isForbiddenErrorOnEdit}
                                 isLoading={isLoading}
                                 {...this.addResinInfo()}
