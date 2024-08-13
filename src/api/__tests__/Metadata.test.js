@@ -17,7 +17,7 @@ import {
     METADATA_TEMPLATE_CLASSIFICATION,
     METADATA_TEMPLATE_PROPERTIES,
     TYPE_FILE,
-    ERROR_CODE_EMPTY_METADATA_SUGGESTION,
+    ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
 } from '../../constants';
 
 let metadata: Metadata;
@@ -2103,7 +2103,7 @@ describe('api/Metadata', () => {
                 metadata.getMetadataSuggestions('id', TYPE_FILE, 'enterprise', 'templateKey'),
             ).rejects.toThrow(new Error('No suggestions found.'));
 
-            expect(metadata.errorCode).toBe(ERROR_CODE_EMPTY_METADATA_SUGGESTION);
+            expect(metadata.errorCode).toBe(ERROR_CODE_EMPTY_METADATA_SUGGESTIONS);
             expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'suggestions_url',

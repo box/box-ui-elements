@@ -29,7 +29,7 @@ import {
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_FETCH_SKILLS,
     ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
-    ERROR_CODE_EMPTY_METADATA_SUGGESTION,
+    ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     TYPE_FILE,
 } from '../constants';
 
@@ -790,7 +790,7 @@ class Metadata extends File {
         }
 
         if (!isEmpty(suggestionsResponse) && getProp(suggestionsResponse, 'data.suggestions').length === 0) {
-            this.errorCode = ERROR_CODE_EMPTY_METADATA_SUGGESTION;
+            this.errorCode = ERROR_CODE_EMPTY_METADATA_SUGGESTIONS;
             throw new Error('No suggestions found.');
         }
 
