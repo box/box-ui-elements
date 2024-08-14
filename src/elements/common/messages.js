@@ -52,6 +52,11 @@ const messages = defineMessages({
         description: 'Message when new preview is available.',
         defaultMessage: 'A new version of this file is available.',
     },
+    loading: {
+        id: 'be.loading',
+        description: 'Label for loading state.',
+        defaultMessage: 'Loading',
+    },
     reload: {
         id: 'be.reload',
         description: 'Label for reload button.',
@@ -421,6 +426,11 @@ const messages = defineMessages({
         id: 'be.sidebarDocGenTitle',
         description: 'Title for the DocGen sidebar tab.',
         defaultMessage: 'Doc Gen Tags',
+    },
+    sidebarDocGenTooltip: {
+        id: 'be.sidebarDocGenTooltip',
+        defaultMessage: 'Box Doc Gen',
+        description: 'Icon title for a Box file of type DocGen template',
     },
     sidebarMetadataTitle: {
         id: 'be.sidebarMetadataTitle',
@@ -1005,20 +1015,15 @@ const messages = defineMessages({
         description: 'Icon title for a Box item of type file',
         defaultMessage: 'File',
     },
+    folder: {
+        id: 'be.folder',
+        description: 'Icon title for a Box item of type folder',
+        defaultMessage: 'Folder',
+    },
     personalFolder: {
         id: 'be.personalFolder',
         description: 'Icon title for a Box item of type folder that is private and has no collaborators',
         defaultMessage: 'Personal Folder',
-    },
-    sidebarDocGenTooltip: {
-        id: 'be.sidebarDocGenTooltip',
-        defaultMessage: 'Box Doc Gen',
-        description: 'Icon title for a Box file of type DocGen template',
-    },
-    loading: {
-        id: 'be.loading',
-        description: 'Loading aria label.',
-        defaultMessage: 'loading',
     },
 });
 
