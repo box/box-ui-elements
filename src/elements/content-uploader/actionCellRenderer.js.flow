@@ -1,17 +1,12 @@
-/**
- * @flow
- * @file Function to render the action table cell
- */
-
 import * as React from 'react';
 import ItemAction from './ItemAction';
 import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
-    rowData: UploadItem,
+    rowData: UploadItem
 };
 
-export default (isResumableUploadsEnabled: boolean, onClick: Function, onUpgradeCTAClick?: Function) => ({
+export default (isResumableUploadsEnabled: boolean, onClick: any, onUpgradeCTAClick?: any) => ({
     rowData,
 }: Props) => (
     <ItemAction

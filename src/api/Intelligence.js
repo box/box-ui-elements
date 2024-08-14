@@ -4,8 +4,13 @@
  * @author Box
  */
 
-import Base from './Base';
+import getProp from 'lodash/get';
 import type { BoxItem } from '../common/types/core';
+import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
+import { isUserCorrectableError } from '../utils/error';
+import Base from './Base';
+import { AiExtractResponse } from './schemas/AiExtractResponse';
+import { AiExtractStructured } from './schemas/AiExtractStructured';
 
 class Intelligence extends Base {
     /**
@@ -41,6 +46,32 @@ class Intelligence extends Base {
                 items,
             },
         });
+    }
+
+    /**
+     * Sends an AI request to supported LLMs and returns extracted key pairs and values.
+     *
+     * @param {AiExtractStructured} request - AI Extract Structured Request
+     * @return A successful response including the answer from the LLM.
+     */
+    async extractStructured(request: AiExtractStructured): Promise<AiExtractResponse> {
+        this.errorCode = ERROR_CODE_EXTRACT_STRUCTURED;
+
+        const url = `${this.getBaseApiUrl()}/ai/extract_structured`;
+
+        let suggestionsResponse = {};
+        try {
+            suggestionsResponse = await this.xhr.post({
+                url,
+                data: request,
+            });
+        } catch (e) {
+            const { status } = e;
+            if (isUserCorrectableError(status)) {
+                throw e;
+            }
+        }
+        return getProp(suggestionsResponse, 'data', {});
     }
 }
 
