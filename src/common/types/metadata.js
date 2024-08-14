@@ -126,20 +126,17 @@ type MetadataInstanceTemplateField = {
     value: string,
 };
 
-type MetadataInstanceTemplateFields = { [string]: MetadataInstanceTemplateField };
-
 type MetadataTemplateInstance = {
     displayName?: string,
     hidden?: boolean,
     id: string,
-    metadataFields: MetadataInstanceTemplateFields,
+    metadataFields: MetadataInstanceTemplateField[],
     scope: string,
     templateKey: string,
 };
 
 export type {
     MetadataInstanceTemplateField,
-    MetadataInstanceTemplateFields,
     MetadataTemplateInstance,
     MetadataFieldType,
     MetadataTemplateFieldOption,

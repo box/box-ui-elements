@@ -197,16 +197,8 @@ describe('api/Metadata', () => {
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
-                metadataFields: {
-                    testFloatField: {
-                        description: 'Test description',
-                        displayName: 'Test float field',
-                        id: '456',
-                        key: 'testFloatField',
-                        type: 'float',
-                        value: '2.1',
-                    },
-                    testStringField: {
+                metadataFields: [
+                    {
                         description: 'Test description',
                         displayName: 'Test string field',
                         id: '123',
@@ -214,7 +206,16 @@ describe('api/Metadata', () => {
                         type: 'string',
                         value: 'This is string',
                     },
-                },
+                    {
+                        description: 'Test description',
+                        displayName: 'Test float field',
+                        id: '456',
+                        key: 'testFloatField',
+                        type: 'float',
+                        value: '2.1',
+                    },
+                ],
+                scope: undefined,
                 templateKey: 'instance_from_template',
             });
         });
@@ -238,13 +239,13 @@ describe('api/Metadata', () => {
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
-                metadataFields: {
-                    testCustomField: {
+                metadataFields: [
+                    {
                         key: 'testCustomField',
                         type: 'string',
                         value: 'This is string',
                     },
-                },
+                ],
                 templateKey: 'properties',
             });
         });

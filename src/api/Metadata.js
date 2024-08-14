@@ -42,7 +42,6 @@ import type {
     MetadataFields,
     MetadataSuggestion,
     MetadataTemplateInstance,
-    MetadataInstanceTemplateFields,
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
@@ -364,13 +363,13 @@ class Metadata extends File {
      * @return {Object} metadata template instance
      */
     createTemplateInstance(instance: MetadataInstanceV2, template: MetadataTemplate): MetadataTemplateInstance {
-        const metadataFields: MetadataInstanceTemplateFields = {};
+        const metadataFields: MetadataInstanceTemplateField[] = [];
 
         if (template.templateKey !== METADATA_TEMPLATE_PROPERTIES) {
             // Get Metadata Fields for Instances created from predefinied template
             const templateFields = template.fields || [];
             templateFields.map(async field => {
-                metadataFields[field.key] = {
+                metadataFields.push({
                     description: field.description,
                     displayName: field.displayName,
                     hidden: field.hidden || field.isHidden,
@@ -379,18 +378,18 @@ class Metadata extends File {
                     options: field.options,
                     type: field.type,
                     value: instance[field.key],
-                };
+                });
             });
         } else {
             // Get Metadata Fields for Custom Instances
             Object.keys(instance).forEach(key => {
                 if (!key.startsWith('$')) {
                     // $FlowFixMe
-                    metadataFields[key] = {
+                    metadataFields.push({
                         key,
                         type: 'string',
                         value: instance[key],
-                    };
+                    });
                 }
             });
         }
