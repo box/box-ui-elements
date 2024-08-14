@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, screen, fireEvent } from '../../../test-utils/testing-library';
 
-import { ItemRemoveBase as ItemRemove, ItemRemoveProps } from '../ItemRemove';
+import ItemRemove, { ItemRemoveProps } from '../ItemRemove';
 
 import { STATUS_IN_PROGRESS, STATUS_STAGED } from '../../../constants';
 

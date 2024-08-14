@@ -48,5 +48,4 @@ const ItemRemove = ({ onClick, status }: ItemRemoveProps) => {
     );
 };
 
-export { ItemRemove as ItemRemoveBase };
 export default ItemRemove;
