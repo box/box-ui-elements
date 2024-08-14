@@ -849,7 +849,7 @@ describe('api/Metadata', () => {
                 .mockResolvedValueOnce('global')
                 .mockResolvedValueOnce('enterprise');
 
-            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, true);
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {}, true);
 
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
