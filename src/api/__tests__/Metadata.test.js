@@ -813,11 +813,13 @@ describe('api/Metadata', () => {
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('cache_id_metadata')).toEqual({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
         });
@@ -865,12 +867,14 @@ describe('api/Metadata', () => {
             );
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
             expect(metadata.successHandler).toHaveBeenCalledWith({
-                editors: 'editors',
+                editors: [],
+                templateInstances: 'templateInstances',
                 templates: 'templates',
             });
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('cache_id_metadata')).toEqual({
-                editors: 'editors',
+                editors: [],
+                templateInstances: 'templateInstances',
                 templates: 'templates',
             });
         });
@@ -921,11 +925,13 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).toHaveBeenCalledWith('cached_metadata');
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('cache_id_metadata')).toEqual({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
         });
@@ -975,11 +981,13 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).not.toHaveBeenCalledWith('cached_metadata');
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('cache_id_metadata')).toEqual({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
         });
@@ -1020,11 +1028,13 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).toHaveBeenCalledTimes(1);
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('cache_id_metadata')).toEqual({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
         });
@@ -1112,6 +1122,7 @@ describe('api/Metadata', () => {
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('cache_id_metadata')).toEqual({
                 editors: 'editors',
+                templateInstances: [],
                 templates: 'templates',
             });
         });
