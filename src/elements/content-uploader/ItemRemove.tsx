@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { IconButton, Tooltip } from '@box/blueprint-web';
-import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
+import { GrayBlack, Size5 } from '@box/blueprint-web-assets/tokens/tokens';
 import { XMark } from '@box/blueprint-web-assets/icons/Fill';
 
 import type { UploadItem, UploadStatus } from '../../common/types/upload';
@@ -40,7 +40,7 @@ const ItemRemove = ({ onClick, status }: ItemRemoveProps) => {
                     aria-label={tooltipText}
                     disabled={isDisabled}
                     onClick={onClick}
-                    icon={() => <XMark color="black" height={Size5} width={Size5} />}
+                    icon={() => <XMark color={GrayBlack} height={Size5} width={Size5} />}
                     {...resin}
                 />
             </Tooltip>
