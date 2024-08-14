@@ -368,7 +368,7 @@ class Metadata extends File {
 
         if (template.templateKey !== METADATA_TEMPLATE_PROPERTIES) {
             // Get Metadata Fields for Instances created from predefinied template
-            const templateFields = template.fields;
+            const templateFields = template.fields || [];
             templateFields.map(async field => {
                 metadataFields[field.key] = {
                     description: field.description,
