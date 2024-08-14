@@ -17,6 +17,7 @@ import {
     METADATA_TEMPLATE_CLASSIFICATION,
     METADATA_TEMPLATE_PROPERTIES,
     TYPE_FILE,
+    ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
 } from '../../constants';
 
 let metadata: Metadata;
@@ -578,10 +579,7 @@ describe('api/Metadata', () => {
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { refreshCache: false });
 
@@ -618,10 +616,7 @@ describe('api/Metadata', () => {
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true);
 
@@ -671,10 +666,7 @@ describe('api/Metadata', () => {
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { refreshCache: true });
 
@@ -726,10 +718,7 @@ describe('api/Metadata', () => {
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { forceFetch: true });
 
@@ -780,10 +769,7 @@ describe('api/Metadata', () => {
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), false);
 
@@ -826,10 +812,7 @@ describe('api/Metadata', () => {
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true);
 
@@ -866,10 +849,7 @@ describe('api/Metadata', () => {
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { forceFetch: true });
 
@@ -2105,6 +2085,36 @@ describe('api/Metadata', () => {
             await expect(() =>
                 metadata.getMetadataSuggestions('id', TYPE_FILE, 'enterprise', 'templateKey', 'high'),
             ).rejects.toThrow(new Error(`Invalid confidence level: "high"`));
+        });
+
+        test('should throw an error if no suggestions were found', async () => {
+            const suggestionsFromServer = [];
+
+            metadata.getMetadataSuggestionsUrl = jest.fn().mockReturnValueOnce('suggestions_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    $scope: 'enterprise',
+                    $templateKey: 'templateKey',
+                    suggestions: suggestionsFromServer,
+                },
+            });
+
+            await expect(() =>
+                metadata.getMetadataSuggestions('id', TYPE_FILE, 'enterprise', 'templateKey'),
+            ).rejects.toThrow(new Error('No suggestions found.'));
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_EMPTY_METADATA_SUGGESTIONS);
+            expect(metadata.getMetadataSuggestionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'suggestions_url',
+                id: 'file_id',
+                params: {
+                    item: `file_id`,
+                    scope: 'enterprise',
+                    template_key: 'templateKey',
+                    confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
+                },
+            });
         });
 
         test('should return empty array of suggestions when error is 400', async () => {

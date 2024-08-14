@@ -6,6 +6,7 @@
 
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
+import isEmpty from 'lodash/isEmpty';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
 import File from './File';
@@ -28,6 +29,7 @@ import {
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_FETCH_SKILLS,
     ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+    ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     TYPE_FILE,
 } from '../constants';
 
@@ -786,6 +788,12 @@ class Metadata extends File {
                 throw e;
             }
         }
+
+        if (!isEmpty(suggestionsResponse) && getProp(suggestionsResponse, 'data.suggestions').length === 0) {
+            this.errorCode = ERROR_CODE_EMPTY_METADATA_SUGGESTIONS;
+            throw new Error('No suggestions found.');
+        }
+
         return getProp(suggestionsResponse, 'data.suggestions', []);
     }
 }
