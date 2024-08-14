@@ -4,11 +4,11 @@ import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
 
 import {
-    MetadataSidebarRedesignComponent as MetadataSidebar,
+    MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
 } from '../MetadataSidebarRedesign';
 
-describe('elements/content-sidebar/Metadata/MetadataSidebarRedesigned', () => {
+describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     const mockAPI = {
         getFile: jest.fn((id, successCallback) => {
             successCallback({ id, [FIELD_PERMISSIONS_CAN_UPLOAD]: true });
@@ -42,7 +42,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesigned', () => {
 
     const renderComponent = (props: Partial<MetadataSidebarRedesignProps> = {}) => {
         const ps = { ...defaultProps, ...props } as MetadataSidebarRedesignProps;
-        return render(<MetadataSidebar {...ps} />);
+        return render(<MetadataSidebarRedesign {...ps} />);
     };
 
     test('should render title', () => {
