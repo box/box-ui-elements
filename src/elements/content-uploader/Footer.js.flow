@@ -1,12 +1,6 @@
-/**
- * @flow
- * @file Footer component
- */
-
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import PrimaryButton from '../../components/primary-button/PrimaryButton';
-import Button from '../../components/button/Button';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { Button } from '@box/blueprint-web';
 import messages from '../common/messages';
 import { ERROR_CODE_UPLOAD_FILE_LIMIT } from '../../constants';
 import './Footer.scss';
@@ -17,12 +11,13 @@ type Props = {
     hasFiles: boolean,
     isDone: boolean,
     isLoading: boolean,
-    onCancel: Function,
-    onClose?: Function,
-    onUpload: Function,
+    onCancel: any,
+    onClose?: any,
+    onUpload: any,
 };
 
 const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, fileLimit, isDone }: Props) => {
+    const intl = useIntl();
     const isCloseButtonDisabled = hasFiles;
     const isCancelButtonDisabled = !hasFiles || isDone;
     const isUploadButtonDisabled = !hasFiles;
@@ -40,35 +35,26 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
         <div className="bcu-footer">
             <div className="bcu-footer-left">
                 {onClose ? (
-                    <Button
-                        disabled={isCloseButtonDisabled}
-                        isDisabled={isCloseButtonDisabled}
-                        onClick={onClose}
-                        type="button"
-                    >
-                        <FormattedMessage {...messages.close} />
+                    <Button disabled={isCloseButtonDisabled} onClick={onClose} size="large" variant="secondary">
+                        {intl.formatMessage(messages.close)}
                     </Button>
                 ) : null}
             </div>
             {message && <div className="bcu-footer-message">{message}</div>}
             <div className="bcu-footer-right">
-                <Button
-                    disabled={isCancelButtonDisabled}
-                    isDisabled={isCancelButtonDisabled}
-                    onClick={onCancel}
-                    type="button"
-                >
-                    <FormattedMessage {...messages.cancel} />
+                <Button disabled={isCancelButtonDisabled} onClick={onCancel} size="large" variant="secondary">
+                    {intl.formatMessage(messages.cancel)}
                 </Button>
-                <PrimaryButton
+                <Button
                     disabled={isUploadButtonDisabled}
-                    isDisabled={isUploadButtonDisabled}
-                    isLoading={isLoading}
+                    loading={isLoading}
+                    loadingAriaLabel={intl.formatMessage(messages.loading)}
                     onClick={onUpload}
-                    type="button"
+                    size="large"
+                    variant="primary"
                 >
-                    <FormattedMessage {...messages.upload} />
-                </PrimaryButton>
+                    {intl.formatMessage(messages.upload)}
+                </Button>
             </div>
         </div>
     );
