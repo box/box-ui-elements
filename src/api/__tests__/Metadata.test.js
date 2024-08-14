@@ -858,7 +858,7 @@ describe('api/Metadata', () => {
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.getEditors).not.toHaveBeenCalled();
-            expect(metadata.getTemplateInstances).toHaveBeenCalled(
+            expect(metadata.getTemplateInstances).toHaveBeenCalledWith(
                 file.id,
                 'instances',
                 'custom',
