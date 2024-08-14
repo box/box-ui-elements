@@ -41,6 +41,8 @@ import type {
     MetadataEditor,
     MetadataFields,
     MetadataSuggestion,
+    MetadataTemplateInstance,
+    MetadataInstanceTemplateFields,
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
@@ -355,6 +357,96 @@ class Metadata extends File {
     }
 
     /**
+     * Utility to concat instance and template into one entity.
+     *
+     * @param {Object} instance - metadata instance
+     * @param {Object} template - metadata template
+     * @return {Object} metadata template instance
+     */
+    createTemplateInstance(instance: MetadataInstanceV2, template: MetadataTemplate): MetadataTemplateInstance {
+        const metadataFields: MetadataInstanceTemplateFields = {};
+
+        if (template.templateKey !== METADATA_TEMPLATE_PROPERTIES) {
+            // Get Metadata Fields for Instances created from predefinied template
+            const templateFields = template.fields;
+            templateFields.map(async field => {
+                metadataFields[field.key] = {
+                    description: field.description,
+                    displayName: field.displayName,
+                    hidden: field.hidden || field.isHidden,
+                    id: field.id,
+                    key: field.key,
+                    options: field.options,
+                    type: field.type,
+                    value: instance[field.key],
+                };
+            });
+        } else {
+            // Get Metadata Fields for Custom Instances
+            Object.keys(instance).forEach(key => {
+                if (!key.startsWith('$')) {
+                    // $FlowFixMe
+                    metadataFields[key] = {
+                        key,
+                        type: 'string',
+                        value: instance[key],
+                    };
+                }
+            });
+        }
+
+        return {
+            displayName: template.displayName,
+            hidden: template.hidden || template.isHidden,
+            id: template.id,
+            metadataFields,
+            scope: template.scope,
+            templateKey: template.templateKey,
+        };
+    }
+
+    /**
+     * Creates and returns metadata entities.
+     *
+     * @param {string} id - Box file id
+     * @param {Array} instances - metadata instances
+     * @param {Object} customPropertiesTemplate - custom properties template
+     * @param {Array} enterpriseTemplates - enterprise templates
+     * @param {Array} globalTemplates - global templates
+     * @return {Array} metadata editors
+     */
+    async getTemplateInstances(
+        id: string,
+        instances: Array<MetadataInstanceV2>,
+        customPropertiesTemplate: MetadataTemplate,
+        enterpriseTemplates: Array<MetadataTemplate>,
+        globalTemplates: Array<MetadataTemplate>,
+    ): Promise<Array<MetadataTemplateInstance>> {
+        // Get all usable templates for metadata instances
+        const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
+            enterpriseTemplates,
+            globalTemplates,
+        );
+
+        // Filter out classification
+        const filteredInstances = this.extractClassification(id, instances);
+
+        // Create Metadata Tmplate Instance from each instance
+        const templateInstances: Array<MetadataTemplateInstance> = [];
+
+        await Promise.all(
+            filteredInstances.map(async instance => {
+                const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
+                if (template) {
+                    templateInstances.push(this.createTemplateInstance(instance, template));
+                }
+            }),
+        );
+
+        return templateInstances;
+    }
+
+    /**
      * API for getting metadata editors
      *
      * @param {string} fileId - Box file id
@@ -370,6 +462,7 @@ class Metadata extends File {
         errorCallback: ElementsErrorCallback,
         hasMetadataFeature: boolean,
         options: RequestOptions = {},
+        isMetadataRedesign: boolean = false,
     ): Promise<void> {
         const { id, permissions, is_externally_owned }: BoxItem = file;
         this.errorCode = ERROR_CODE_FETCH_METADATA;
@@ -407,17 +500,29 @@ class Metadata extends File {
                 hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
             ]);
 
-            const editors = await this.getEditors(
-                id,
-                instances,
-                customPropertiesTemplate,
-                enterpriseTemplates,
-                globalTemplates,
-                !!permissions.can_upload,
-            );
+            const templateInstances = isMetadataRedesign
+                ? await this.getTemplateInstances(
+                      id,
+                      instances,
+                      customPropertiesTemplate,
+                      enterpriseTemplates,
+                      globalTemplates,
+                  )
+                : [];
+            const editors = !isMetadataRedesign
+                ? await this.getEditors(
+                      id,
+                      instances,
+                      customPropertiesTemplate,
+                      enterpriseTemplates,
+                      globalTemplates,
+                      !!permissions.can_upload,
+                  )
+                : [];
 
             const metadata = {
                 editors,
+                templateInstances,
                 templates: this.getUserAddableTemplates(
                     customPropertiesTemplate,
                     enterpriseTemplates,

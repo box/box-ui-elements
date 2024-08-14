@@ -161,6 +161,95 @@ describe('api/Metadata', () => {
         });
     });
 
+    describe('createTemplateInstance()', () => {
+        test('should return Metadata Template Instance', () => {
+            expect(
+                metadata.createTemplateInstance(
+                    {
+                        $id: '321',
+                        $template: '',
+                        testStringField: 'This is string',
+                        testFloatField: '2.1',
+                    },
+                    {
+                        displayName: 'Test template',
+                        fields: [
+                            {
+                                description: 'Test description',
+                                displayName: 'Test string field',
+                                id: '123',
+                                key: 'testStringField',
+                                type: 'string',
+                            },
+                            {
+                                description: 'Test description',
+                                displayName: 'Test float field',
+                                id: '456',
+                                key: 'testFloatField',
+                                type: 'float',
+                            },
+                        ],
+                        id: '123456',
+                        templateKey: 'instance_from_template',
+                    },
+                ),
+            ).toEqual({
+                displayName: 'Test template',
+                hidden: undefined,
+                id: '123456',
+                metadataFields: {
+                    testFloatField: {
+                        description: 'Test description',
+                        displayName: 'Test float field',
+                        id: '456',
+                        key: 'testFloatField',
+                        type: 'float',
+                        value: '2.1',
+                    },
+                    testStringField: {
+                        description: 'Test description',
+                        displayName: 'Test string field',
+                        id: '123',
+                        key: 'testStringField',
+                        type: 'string',
+                        value: 'This is string',
+                    },
+                },
+                templateKey: 'instance_from_template',
+            });
+        });
+
+        test('should return Metadata Template Instance for Custom Metadata', () => {
+            expect(
+                metadata.createTemplateInstance(
+                    {
+                        $id: '321',
+                        $template: '',
+                        testCustomField: 'This is string',
+                    },
+                    {
+                        displayName: 'Test template',
+                        fields: [],
+                        id: '123456',
+                        templateKey: 'properties',
+                    },
+                ),
+            ).toEqual({
+                displayName: 'Test template',
+                hidden: undefined,
+                id: '123456',
+                metadataFields: {
+                    testCustomField: {
+                        key: 'testCustomField',
+                        type: 'string',
+                        value: 'This is string',
+                    },
+                },
+                templateKey: 'properties',
+            });
+        });
+    });
+
     describe('getTemplates()', () => {
         test('should return templates with enterprise scope', async () => {
             const templatesFromServer = [
@@ -537,6 +626,89 @@ describe('api/Metadata', () => {
         });
     });
 
+    describe('getTemplateInstances()', () => {
+        test('should build and return Metadata Template Instances with valid data', async () => {
+            const instances = [
+                {
+                    $id: '1',
+                    $scope: 'global',
+                    $template: 'global1',
+                },
+                {
+                    $id: '2',
+                    $scope: 'enterprise',
+                    $template: 'enterprise2',
+                },
+                {
+                    $id: '3',
+                    $scope: 'enterprise',
+                    $template: 'enterprise3',
+                },
+                {
+                    $id: '4',
+                    $scope: 'global',
+                    $template: 'custom',
+                },
+                {
+                    $id: '5',
+                    $scope: 'global',
+                    $template: 'bogus',
+                },
+            ];
+
+            metadata.extractClassification = jest.fn().mockReturnValueOnce(instances);
+            metadata.createTemplateInstance = jest
+                .fn()
+                .mockReturnValueOnce('templateInstance1')
+                .mockReturnValueOnce('templateInstance2')
+                .mockReturnValueOnce('templateInstance3')
+                .mockReturnValueOnce('templateInstance4');
+            metadata.getTemplateForInstance = jest
+                .fn()
+                .mockResolvedValueOnce('template1')
+                .mockResolvedValueOnce('template2')
+                .mockResolvedValueOnce('template3')
+                .mockResolvedValueOnce('template4')
+                .mockResolvedValueOnce();
+
+            const templateInstances = await metadata.getTemplateInstances('id', instances, {}, [], []);
+            expect(templateInstances).toEqual([
+                'templateInstance1',
+                'templateInstance2',
+                'templateInstance3',
+                'templateInstance4',
+            ]);
+            expect(metadata.extractClassification).toBeCalledWith('id', instances);
+
+            expect(metadata.createTemplateInstance).toBeCalledTimes(4);
+            expect(metadata.createTemplateInstance.mock.calls[0][0]).toBe(instances[0]);
+            expect(metadata.createTemplateInstance.mock.calls[0][1]).toBe('template1');
+            expect(metadata.createTemplateInstance.mock.calls[1][0]).toBe(instances[1]);
+            expect(metadata.createTemplateInstance.mock.calls[1][1]).toBe('template2');
+            expect(metadata.createTemplateInstance.mock.calls[2][0]).toBe(instances[2]);
+            expect(metadata.createTemplateInstance.mock.calls[2][1]).toBe('template3');
+            expect(metadata.createTemplateInstance.mock.calls[3][0]).toBe(instances[3]);
+            expect(metadata.createTemplateInstance.mock.calls[3][1]).toBe('template4');
+
+            expect(metadata.getTemplateForInstance).toBeCalledTimes(5);
+            expect(metadata.getTemplateForInstance.mock.calls[0][0]).toBe('id');
+            expect(metadata.getTemplateForInstance.mock.calls[0][1]).toBe(instances[0]);
+            expect(metadata.getTemplateForInstance.mock.calls[0][2]).toEqual([{}]);
+            expect(metadata.getTemplateForInstance.mock.calls[1][0]).toBe('id');
+            expect(metadata.getTemplateForInstance.mock.calls[1][1]).toBe(instances[1]);
+            expect(metadata.getTemplateForInstance.mock.calls[1][2]).toEqual([{}]);
+            expect(metadata.getTemplateForInstance.mock.calls[2][0]).toBe('id');
+            expect(metadata.getTemplateForInstance.mock.calls[2][1]).toBe(instances[2]);
+            expect(metadata.getTemplateForInstance.mock.calls[2][2]).toEqual([{}]);
+            expect(metadata.getTemplateForInstance.mock.calls[3][0]).toBe('id');
+            expect(metadata.getTemplateForInstance.mock.calls[3][1]).toBe(instances[3]);
+            expect(metadata.getTemplateForInstance.mock.calls[3][2]).toEqual([{}]);
+            expect(metadata.getTemplateForInstance.mock.calls[4][0]).toBe('id');
+            expect(metadata.getTemplateForInstance.mock.calls[4][1]).toBe(instances[4]);
+            expect(metadata.getTemplateForInstance.mock.calls[4][2]).toEqual([{}]);
+        });
+    });
+
     describe('getMetadata()', () => {
         test('should call error callback with a bad item error when no id', () => {
             jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
@@ -577,6 +749,7 @@ describe('api/Metadata', () => {
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
             metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
@@ -590,6 +763,7 @@ describe('api/Metadata', () => {
             expect(metadata.getTemplates).not.toHaveBeenCalledWith();
             expect(metadata.getTemplates).not.toHaveBeenCalledWith();
             expect(metadata.getEditors).not.toHaveBeenCalledWith();
+            expect(metadata.getTemplateInstances).not.toHaveBeenCalledWith();
             expect(metadata.getUserAddableTemplates).not.toHaveBeenCalledWith();
             expect(metadata.successHandler).toHaveBeenCalledWith('cached_metadata');
             expect(metadata.successHandler).toHaveBeenCalledTimes(1);
@@ -614,6 +788,7 @@ describe('api/Metadata', () => {
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
             metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
@@ -634,6 +809,7 @@ describe('api/Metadata', () => {
                 'global',
                 true,
             );
+            expect(metadata.getTemplateInstances).not.toHaveBeenCalled();
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
             expect(metadata.successHandler).toHaveBeenCalledWith({
                 editors: 'editors',
@@ -645,6 +821,60 @@ describe('api/Metadata', () => {
                 templates: 'templates',
             });
         });
+        test('should make request and update cache and call success handler for Metadata Redesign', async () => {
+            const file = {
+                id: 'id',
+                is_externally_owned: true,
+                permissions: {
+                    can_upload: true,
+                },
+            };
+
+            const cache = new Cache();
+
+            metadata.errorHandler = jest.fn();
+            metadata.successHandler = jest.fn();
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
+            metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
+            metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
+            metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
+            metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
+            metadata.getTemplates = jest
+                .fn()
+                .mockResolvedValueOnce('global')
+                .mockResolvedValueOnce('enterprise');
+
+            await metadata.getMetadata(file, jest.fn(), jest.fn(), true, true);
+
+            expect(metadata.isDestroyed).toHaveBeenCalled();
+            expect(metadata.getCache).toHaveBeenCalled();
+            expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
+            expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
+            expect(metadata.getEditors).not.toHaveBeenCalled();
+            expect(metadata.getTemplateInstances).toHaveBeenCalled(
+                file.id,
+                'instances',
+                'custom',
+                'enterprise',
+                'global',
+            );
+            expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
+            expect(metadata.successHandler).toHaveBeenCalledWith({
+                editors: 'editors',
+                templates: 'templates',
+            });
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+            expect(cache.get('cache_id_metadata')).toEqual({
+                editors: 'editors',
+                templates: 'templates',
+            });
+        });
+
         test('should make request and update cache and call success handler after returning cached value when refreshCache is true', async () => {
             const file = {
                 id: 'id',
@@ -664,6 +894,7 @@ describe('api/Metadata', () => {
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
             metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
@@ -684,6 +915,7 @@ describe('api/Metadata', () => {
                 'global',
                 true,
             );
+            expect(metadata.getTemplateInstances).not.toHaveBeenCalled();
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
             expect(metadata.successHandler).toHaveBeenCalledTimes(2);
             expect(metadata.successHandler).toHaveBeenCalledWith('cached_metadata');
@@ -716,6 +948,7 @@ describe('api/Metadata', () => {
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
             metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
@@ -736,6 +969,7 @@ describe('api/Metadata', () => {
                 'global',
                 true,
             );
+            expect(metadata.getTemplateInstances).not.toHaveBeenCalled();
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
             expect(metadata.successHandler).toHaveBeenCalledTimes(1);
             expect(metadata.successHandler).not.toHaveBeenCalledWith('cached_metadata');
@@ -767,6 +1001,7 @@ describe('api/Metadata', () => {
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
             metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
@@ -780,6 +1015,7 @@ describe('api/Metadata', () => {
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).not.toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.getEditors).toHaveBeenCalledWith(file.id, 'instances', 'custom', [], 'global', true);
+            expect(metadata.getTemplateInstances).not.toHaveBeenCalled();
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', [], false, true);
             expect(metadata.successHandler).toHaveBeenCalledTimes(1);
             expect(metadata.successHandler).toHaveBeenCalledWith({
@@ -810,6 +1046,7 @@ describe('api/Metadata', () => {
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
             metadata.getInstances = jest.fn().mockRejectedValueOnce('error');
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
@@ -823,6 +1060,7 @@ describe('api/Metadata', () => {
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.getEditors).not.toHaveBeenCalled();
+            expect(metadata.getTemplateInstances).not.toHaveBeenCalled();
             expect(metadata.getUserAddableTemplates).not.toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(metadata.errorHandler).toHaveBeenCalledWith('error');
@@ -847,6 +1085,7 @@ describe('api/Metadata', () => {
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('cache_id_metadata');
             metadata.getInstances = jest.fn().mockResolvedValueOnce('instances');
             metadata.getEditors = jest.fn().mockResolvedValueOnce('editors');
+            metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
             metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
@@ -867,6 +1106,7 @@ describe('api/Metadata', () => {
                 'global',
                 true,
             );
+            expect(metadata.getTemplateInstances).not.toHaveBeenCalled();
             expect(metadata.getUserAddableTemplates).toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(metadata.errorHandler).not.toHaveBeenCalled();
