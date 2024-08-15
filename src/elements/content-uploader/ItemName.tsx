@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './ItemName.scss';
 
-interface ItemNameProps {
+export interface ItemNameProps {
     name: string;
 }
 

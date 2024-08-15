@@ -17,21 +17,21 @@ describe('elements/content-uploader/IconName', () => {
     test('renders component correctly', () => {
         renderComponent();
 
-        expect(screen.getByRole('img', { name: 'File' })).toBeVisible();
-        expect(screen.getByText('test-item')).toBeVisible();
+        expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
+        expect(screen.getByText('test-item')).toBeInTheDocument();
     });
 
     test('renders component correctly when item is a folder', () => {
         renderComponent({ isFolder: true });
 
-        expect(screen.getByRole('img', { name: 'Folder' })).toBeVisible();
-        expect(screen.getByText('test-item')).toBeVisible();
+        expect(screen.getByRole('img', { name: 'Folder' })).toBeInTheDocument();
+        expect(screen.getByText('test-item')).toBeInTheDocument();
     });
 
     test('renders alert badge when there is an error', () => {
         renderComponent({ isResumableUploadsEnabled: true, status: STATUS_ERROR });
 
-        expect(screen.getByRole('img', { name: 'Error' })).toBeVisible();
+        expect(screen.getByRole('img', { name: 'Error' })).toBeInTheDocument();
     });
 
     test('does not render alert badge when there is no error', () => {

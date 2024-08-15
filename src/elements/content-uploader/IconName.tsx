@@ -11,7 +11,7 @@ import messages from '../common/messages';
 import type { UploadStatus } from '../../common/types/upload';
 import './IconName.scss';
 
-interface IconNameProps {
+export interface IconNameProps {
     extension: string;
     isFolder?: boolean;
     isResumableUploadsEnabled: boolean;
