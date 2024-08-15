@@ -1,8 +1,3 @@
-/**
- * @flow
- * @file Overall uploads progress bar
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../common/messages';
@@ -53,17 +48,21 @@ const getPercent = (view: string, percent: number): number => {
 };
 
 type Props = {
-    customPrompt?: { defaultMessage: string, description: string, id: string },
+    customPrompt?: {
+        defaultMessage: string,
+        description: string,
+        id: string
+    },
     hasMultipleFailedUploads: boolean,
     isDragging: boolean,
     isExpanded: boolean,
     isResumeVisible: boolean,
     isVisible: boolean,
-    onClick: Function,
-    onKeyDown: Function,
-    onUploadsManagerActionClick: Function,
+    onClick: any,
+    onKeyDown: any,
+    onUploadsManagerActionClick: any,
     percent: number,
-    view: View,
+    view: View
 };
 
 const OverallUploadsProgressBar = ({

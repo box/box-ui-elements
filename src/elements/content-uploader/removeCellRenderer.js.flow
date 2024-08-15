@@ -1,17 +1,14 @@
-/**
- * @flow
- * @file Function to render the remove table cell
- */
-
 import * as React from 'react';
 import ItemRemove from './ItemRemove';
 import type { UploadItem } from '../../common/types/upload';
 
 type Props = {
-    rowData: UploadItem,
+    rowData: UploadItem
 };
 
-export default (onClick: (item: UploadItem) => void) => ({ rowData }: Props) => {
+export default (onClick: (item: UploadItem) => void) => ({
+    rowData,
+}: Props) => {
     if (rowData.isFolder) {
         return null;
     }
