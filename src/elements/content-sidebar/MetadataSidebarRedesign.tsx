@@ -27,7 +27,7 @@ import { MetadataTemplate } from '../../common/types/metadata';
 import { type WithLoggerProps } from '../../common/types/logging';
 
 import './MetadataSidebarRedesign.scss';
-import useSidebarMetadataFetcher from './hooks/useSidebarMetadataFetcher';
+import useSidebarMetadataFetcher, { Status } from './hooks/useSidebarMetadataFetcher';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -56,7 +56,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
 
     const { templates, errorMessage, status } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
-    const renderMetadataDropdown = status === 'success' && templates && (
+    const renderMetadataDropdown = status === Status.Success && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates}
@@ -66,7 +66,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
         />
     );
 
-    const renderErrorMessage = status === 'error' && errorMessage && (
+    const renderErrorMessage = status === Status.Error && errorMessage && (
         <InlineError title={<FormattedMessage {...messages.error} />}>
             <FormattedMessage {...errorMessage} />
         </InlineError>
@@ -82,7 +82,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
             </div>
             <div className="bcs-MetadataSidebarRedesign-content">
                 {renderErrorMessage}
-                {status === 'loading' && <LoadingIndicator />}
+                {status === Status.Loading && <LoadingIndicator />}
             </div>
         </div>
     );

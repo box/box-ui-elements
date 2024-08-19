@@ -17,8 +17,12 @@ import { type BoxItem } from '../../../common/types/core';
 import { MetadataTemplate, type MetadataEditor } from '../../../common/types/metadata';
 import { type ErrorContextProps, type ExternalProps } from '../MetadataSidebarRedesign';
 
-type Status = 'idle' | 'loading' | 'error' | 'success';
-
+export enum Status {
+    Idle = 'idle',
+    Loading = 'loading',
+    Error = 'error',
+    Success = 'success',
+}
 interface DataFetcher {
     status: Status;
     file: BoxItem | null;
@@ -32,7 +36,7 @@ function useSidebarMetadataFetcher(
     onError: ErrorContextProps['onError'],
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
 ): DataFetcher {
-    const [status, setStatus] = React.useState<Status>('idle');
+    const [status, setStatus] = React.useState<Status>(Status.Idle);
     const [file, setFile] = React.useState<BoxItem>(null);
     const [templates, setTemplates] = React.useState(null);
     const [errorMessage, setErrorMessage] = React.useState<MessageDescriptor | null>(null);
@@ -41,7 +45,7 @@ function useSidebarMetadataFetcher(
         (error: ElementsXhrError, code: string, message: MessageDescriptor) => {
             const { status: errorStatus } = error;
             const isValidError = isUserCorrectableError(errorStatus);
-            setStatus('error');
+            setStatus(Status.Error);
             setErrorMessage(message);
             onError(error, code, {
                 error,
@@ -54,7 +58,7 @@ function useSidebarMetadataFetcher(
     const fetchMetadataSuccessCallback = React.useCallback(
         ({ templates: fetchedTemplates }: { editors: Array<MetadataEditor>; templates: Array<MetadataTemplate> }) => {
             setErrorMessage(null);
-            setStatus('success');
+            setStatus(Status.Success);
             setTemplates(fetchedTemplates);
         },
         [],
@@ -91,7 +95,7 @@ function useSidebarMetadataFetcher(
             if (shouldFetchMetadata && fetchedFile) {
                 fetchMetadata(fetchedFile);
             } else {
-                setStatus('success');
+                setStatus(Status.Success);
             }
         },
         [fetchMetadata, file],
@@ -106,8 +110,8 @@ function useSidebarMetadataFetcher(
     );
 
     React.useEffect(() => {
-        if (status === 'idle') {
-            setStatus('loading');
+        if (status === Status.Idle) {
+            setStatus(Status.Loading);
             api.getFileAPI().getFile(fileId, fetchFileSuccessCallback, fetchFileErrorCallback, {
                 fields: [FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS],
                 refreshCache: true,
