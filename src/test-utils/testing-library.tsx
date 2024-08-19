@@ -1,26 +1,19 @@
 import React from 'react';
-import { render as rtlRender } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
-import { TooltipProvider } from '@box/blueprint-web';
+import { render } from '@testing-library/react';
 
-// Unmock translation framework to allow content-based DOM traversal (in default locale)
-// Functional stub for lib/intl format functions (works, but only in default locale)
+// Data Providers
+import { TooltipProvider } from '@box/blueprint-web';
+import { IntlProvider } from 'react-intl';
+
 jest.unmock('react-intl');
 
-function renderConnected(ui, { locale = 'en', ...renderOptions } = {}) {
-    // eslint-disable-next-line react/prop-types
-    function Wrapper({ children }) {
-        return (
-            <IntlProvider locale={locale}>
-                <TooltipProvider>{children}</TooltipProvider>
-            </IntlProvider>
-        );
-    }
-    return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
-}
+const Wrapper = ({ children }) => (
+    <TooltipProvider>
+        <IntlProvider locale="en">{children}</IntlProvider>
+    </TooltipProvider>
+);
 
-// re-export everything
+const renderConnected = (element, options = {}) => render(element, { wrapper: Wrapper, ...options });
+
 export * from '@testing-library/react';
-
-// override render method
 export { renderConnected as render };
