@@ -1,7 +1,7 @@
 import { type StoryObj } from '@storybook/react';
 import { type ComponentProps } from 'react';
 import React from 'react';
-import MetadataSidebarRedesign, { MetadataSidebarRedesignProps } from '../MetadataSidebarRedesign';
+import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 
 const fileIdWithMetadata = '415542803939'; // global.FILE_ID should be used here but throws error in tsx file
@@ -15,38 +15,25 @@ const mockLogger = {
     },
 };
 
-const defaultArgs: ComponentProps<typeof MetadataSidebarRedesign> = {
-    fileId: fileIdWithMetadata,
+const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
     isFeatureEnabled: true,
     onError: (error, code, context) => console.error('Error:', error, code, context),
 };
 
 export default {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign',
-    component: MetadataSidebarRedesign,
-    args: defaultArgs,
+    component: ContentSidebar,
+    args: {
+        fileId: fileIdWithMetadata,
+        features: mockFeatures,
+        logger: mockLogger,
+        hasMetadata: true,
+        token,
+        metadataSidebarProps: defaultMetadataSidebarProps,
+    },
+    render: args => {
+        return <ContentSidebar {...args} />;
+    },
 };
 
-const Template = (args: MetadataSidebarRedesignProps) => {
-    return (
-        <ContentSidebar
-            token={token}
-            metadataSidebarProps={{
-                ...args,
-            }}
-            hasMetadata={true}
-            features={mockFeatures}
-            fileId={fileIdWithMetadata}
-            logger={mockLogger}
-        />
-    );
-};
-
-const Default: StoryObj<typeof MetadataSidebarRedesign> = {
-    render: Template,
-    args: { ...defaultArgs },
-};
-
-export const AddTemplateDropdownMenu: StoryObj<typeof MetadataSidebarRedesign> = {
-    ...Default,
-};
+export const AddTemplateDropdownMenu: StoryObj<typeof MetadataSidebarRedesign> = {};
