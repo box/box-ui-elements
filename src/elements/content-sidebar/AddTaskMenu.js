@@ -30,7 +30,7 @@ const AddTaskMenu = (props: Props) => (
         <Menu className="bcs-AddTaskMenu">
             <MenuItem
                 className="bcs-AddTaskMenu-menuItem"
-                data-target-id="MenuItem-generaltask"
+                data-target-id="MenuItem-generalTask"
                 onClick={() => props.onMenuItemClick(TASK_TYPE_GENERAL)}
             >
                 <div className="bcs-AddTaskMenu-icon">
@@ -47,7 +47,7 @@ const AddTaskMenu = (props: Props) => (
             </MenuItem>
             <MenuItem
                 className="bcs-AddTaskMenu-menuItem"
-                data-target-id="MenuItem-approvaltask"
+                data-target-id="MenuItem-approvalTask"
                 onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}
             >
                 <div className="bcs-AddTaskMenu-icon">
