@@ -56,7 +56,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
 
     const { templates, errorMessage, status } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
-    const renderMetadataDropdown = status === Status.Success && templates && (
+    const renderMetadataDropdown = status === Status.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates}
@@ -66,7 +66,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
         />
     );
 
-    const renderErrorMessage = status === Status.Error && errorMessage && (
+    const renderErrorMessage = status === Status.ERROR && errorMessage && (
         <InlineError title={<FormattedMessage {...messages.error} />}>
             <FormattedMessage {...errorMessage} />
         </InlineError>
@@ -82,7 +82,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
             </div>
             <div className="bcs-MetadataSidebarRedesign-content">
                 {renderErrorMessage}
-                {status === Status.Loading && <LoadingIndicator />}
+                {status === Status.LOADING && <LoadingIndicator />}
             </div>
         </div>
     );

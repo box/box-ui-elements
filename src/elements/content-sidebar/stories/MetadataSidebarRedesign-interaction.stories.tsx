@@ -16,8 +16,8 @@ export const basic = {
     },
 };
 
-const fileIdWithMetadata = '415542803939'; // global.FILE_ID should be used here but throws error in tsx file and can't be pushed to PR
-const token = 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz'; // global.TOKEN should be used here but throws error in tsx file and can't be pushed to PR
+const fileIdWithMetadata = global.FILE_ID;
+const token = global.TOKEN;
 const mockFeatures = {
     'metadata.redesign.enabled': true,
 };
