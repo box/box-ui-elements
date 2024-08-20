@@ -31,14 +31,22 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     };
 
     const mockAPI = {
-        getFile: jest.fn((id, successCallback) => {
-            successCallback(mockFile);
+        getFile: jest.fn((id, successCallback, errorCallback) => {
+            try {
+                successCallback(mockFile);
+            } catch (error) {
+                errorCallback(error);
+            }
         }),
-        getMetadata: jest.fn((_file, successCallback) => {
-            successCallback({
-                editors: [],
-                templates: mockTemplates,
-            });
+        getMetadata: jest.fn((_file, successCallback, errorCallback) => {
+            try {
+                successCallback({
+                    editors: [],
+                    templates: mockTemplates,
+                });
+            } catch (error) {
+                errorCallback(error);
+            }
         }),
     };
     const api = {
