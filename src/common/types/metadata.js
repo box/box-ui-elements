@@ -119,7 +119,6 @@ type MetadataInstanceTemplateField = {
     displayName: string,
     hidden?: boolean,
     id: string,
-    isHidden?: boolean,
     key: string, // V2
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,

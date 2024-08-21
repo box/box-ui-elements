@@ -42,6 +42,7 @@ import type {
     MetadataFields,
     MetadataSuggestion,
     MetadataTemplateInstance,
+    MetadataInstanceTemplateField,
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
@@ -365,14 +366,17 @@ class Metadata extends File {
     createTemplateInstance(instance: MetadataInstanceV2, template: MetadataTemplate): MetadataTemplateInstance {
         const metadataFields: MetadataInstanceTemplateField[] = [];
 
-        if (template.templateKey !== METADATA_TEMPLATE_PROPERTIES) {
+        // templateKey is unique identifier for the template,
+        // but its value is set to 'properties' if instance was created using Custom Metadata option instead of template
+        const isCustomMetadataInstance = template.templateKey !== METADATA_TEMPLATE_PROPERTIES;
+        if (isCustomMetadataInstance) {
             // Get Metadata Fields for Instances created from predefinied template
             const templateFields = template.fields || [];
-            templateFields.map(async field => {
+            templateFields.forEach(async field => {
                 metadataFields.push({
                     description: field.description,
                     displayName: field.displayName,
-                    hidden: field.hidden || field.isHidden,
+                    hidden: field.hidden,
                     id: field.id,
                     key: field.key,
                     options: field.options,
@@ -396,7 +400,7 @@ class Metadata extends File {
 
         return {
             displayName: template.displayName,
-            hidden: template.hidden || template.isHidden,
+            hidden: template.hidden,
             id: template.id,
             metadataFields,
             scope: template.scope,
@@ -430,7 +434,7 @@ class Metadata extends File {
         // Filter out classification
         const filteredInstances = this.extractClassification(id, instances);
 
-        // Create Metadata Tmplate Instance from each instance
+        // Create Metadata Template Instance from each instance
         const templateInstances: Array<MetadataTemplateInstance> = [];
 
         await Promise.all(
@@ -448,11 +452,12 @@ class Metadata extends File {
     /**
      * API for getting metadata editors
      *
-     * @param {string} fileId - Box file id
+     * @param file
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {boolean} hasMetadataFeature - metadata feature check
      * @param {Object} options - fetch options
+     * @param {boolean} isMetadataRedesign - is Metadata Sidebar redesigned
      * @return {Promise}
      */
     async getMetadata(
