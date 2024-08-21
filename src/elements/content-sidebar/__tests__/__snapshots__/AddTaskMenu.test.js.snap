@@ -27,6 +27,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
   >
     <MenuItem
       className="bcs-AddTaskMenu-menuItem"
+      data-target-id="MenuItem-generalTask"
       onClick={[Function]}
     >
       <div
@@ -58,6 +59,7 @@ exports[`elements/content-sidebar/AddTaskMenu render should render a default com
     </MenuItem>
     <MenuItem
       className="bcs-AddTaskMenu-menuItem"
+      data-target-id="MenuItem-approvalTask"
       onClick={[Function]}
     >
       <div
