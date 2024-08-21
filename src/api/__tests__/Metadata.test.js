@@ -575,7 +575,6 @@ describe('api/Metadata', () => {
                 },
             ];
 
-            metadata.extractClassification = jest.fn().mockReturnValueOnce(instances);
             metadata.createEditor = jest
                 .fn()
                 .mockReturnValueOnce('editor1')
@@ -592,7 +591,6 @@ describe('api/Metadata', () => {
 
             const editors = await metadata.getEditors('id', instances, {}, [], [], true);
             expect(editors).toEqual(['editor1', 'editor2', 'editor3', 'editor4']);
-            expect(metadata.extractClassification).toBeCalledWith('id', instances);
 
             expect(metadata.createEditor).toBeCalledTimes(4);
             expect(metadata.createEditor.mock.calls[0][0]).toBe(instances[0]);
@@ -657,7 +655,6 @@ describe('api/Metadata', () => {
                 },
             ];
 
-            metadata.extractClassification = jest.fn().mockReturnValueOnce(instances);
             metadata.createTemplateInstance = jest
                 .fn()
                 .mockReturnValueOnce('templateInstance1')
@@ -679,7 +676,6 @@ describe('api/Metadata', () => {
                 'templateInstance3',
                 'templateInstance4',
             ]);
-            expect(metadata.extractClassification).toBeCalledWith('id', instances);
 
             expect(metadata.createTemplateInstance).toBeCalledTimes(4);
             expect(metadata.createTemplateInstance.mock.calls[0][0]).toBe(instances[0]);
@@ -792,7 +788,11 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest
+                .fn()
+                .mockResolvedValueOnce('global')
+                .mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true);
 
@@ -802,9 +802,10 @@ describe('api/Metadata', () => {
             expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
+            expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
             expect(metadata.getEditors).toHaveBeenCalledWith(
                 file.id,
-                'instances',
+                'filteredInstances',
                 'custom',
                 'enterprise',
                 'global',
@@ -849,6 +850,7 @@ describe('api/Metadata', () => {
                 .fn()
                 .mockResolvedValueOnce('global')
                 .mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {}, true);
 
@@ -858,10 +860,11 @@ describe('api/Metadata', () => {
             expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
+            expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
             expect(metadata.getEditors).not.toHaveBeenCalled();
             expect(metadata.getTemplateInstances).toHaveBeenCalledWith(
                 file.id,
-                'instances',
+                'filteredInstances',
                 'custom',
                 'enterprise',
                 'global',
@@ -902,7 +905,11 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest
+                .fn()
+                .mockResolvedValueOnce('global')
+                .mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { refreshCache: true });
 
@@ -912,9 +919,10 @@ describe('api/Metadata', () => {
             expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
+            expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
             expect(metadata.getEditors).toHaveBeenCalledWith(
                 file.id,
-                'instances',
+                'filteredInstances',
                 'custom',
                 'enterprise',
                 'global',
@@ -958,7 +966,11 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest
+                .fn()
+                .mockResolvedValueOnce('global')
+                .mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { forceFetch: true });
 
@@ -968,9 +980,10 @@ describe('api/Metadata', () => {
             expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
+            expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
             expect(metadata.getEditors).toHaveBeenCalledWith(
                 file.id,
-                'instances',
+                'filteredInstances',
                 'custom',
                 'enterprise',
                 'global',
@@ -1013,7 +1026,11 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest
+                .fn()
+                .mockResolvedValueOnce('global')
+                .mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), false);
 
@@ -1023,7 +1040,15 @@ describe('api/Metadata', () => {
             expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).not.toHaveBeenCalledWith(file.id, 'enterprise');
-            expect(metadata.getEditors).toHaveBeenCalledWith(file.id, 'instances', 'custom', [], 'global', true);
+            expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
+            expect(metadata.getEditors).toHaveBeenCalledWith(
+                file.id,
+                'filteredInstances',
+                'custom',
+                [],
+                'global',
+                true,
+            );
             expect(metadata.getTemplateInstances).not.toHaveBeenCalled();
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', [], false, true);
             expect(metadata.successHandler).toHaveBeenCalledTimes(1);
@@ -1099,7 +1124,11 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest
+                .fn()
+                .mockResolvedValueOnce('global')
+                .mockResolvedValueOnce('enterprise');
+            metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { forceFetch: true });
 
@@ -1109,9 +1138,10 @@ describe('api/Metadata', () => {
             expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
+            expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
             expect(metadata.getEditors).toHaveBeenCalledWith(
                 file.id,
-                'instances',
+                'filteredInstances',
                 'custom',
                 'enterprise',
                 'global',

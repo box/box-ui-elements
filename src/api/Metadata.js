@@ -339,14 +339,10 @@ class Metadata extends File {
             globalTemplates,
         );
 
-        // Filter out skills and classification
-        // let filteredInstances = this.extractSkills(id, instances);
-        const filteredInstances = this.extractClassification(id, instances);
-
         // Create editors from each instance
         const editors: Array<MetadataEditor> = [];
         await Promise.all(
-            filteredInstances.map(async instance => {
+            instances.map(async instance => {
                 const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
                 if (template) {
                     editors.push(this.createEditor(instance, template, canEdit));
@@ -431,14 +427,11 @@ class Metadata extends File {
             globalTemplates,
         );
 
-        // Filter out classification
-        const filteredInstances = this.extractClassification(id, instances);
-
         // Create Metadata Template Instance from each instance
         const templateInstances: Array<MetadataTemplateInstance> = [];
 
         await Promise.all(
-            filteredInstances.map(async instance => {
+            instances.map(async instance => {
                 const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
                 if (template) {
                     templateInstances.push(this.createTemplateInstance(instance, template));
@@ -504,10 +497,13 @@ class Metadata extends File {
                 hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
             ]);
 
+            // Filter out classification
+            const filteredInstances = this.extractClassification(id, instances);
+
             const templateInstances = isMetadataRedesign
                 ? await this.getTemplateInstances(
                       id,
-                      instances,
+                      filteredInstances,
                       customPropertiesTemplate,
                       enterpriseTemplates,
                       globalTemplates,
@@ -516,7 +512,7 @@ class Metadata extends File {
             const editors = !isMetadataRedesign
                 ? await this.getEditors(
                       id,
-                      instances,
+                      filteredInstances,
                       customPropertiesTemplate,
                       enterpriseTemplates,
                       globalTemplates,
