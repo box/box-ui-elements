@@ -455,7 +455,11 @@ class Metadata extends File {
      */
     async getMetadata(
         file: BoxItem,
-        successCallback: ({ editors: Array<MetadataEditor>, templates: Array<MetadataTemplate> }) => void,
+        successCallback: ({
+            editors: Array<MetadataEditor>,
+            templateInstances: Array<MetadataTemplateInstance>,
+            templates: Array<MetadataTemplate>,
+        }) => void,
         errorCallback: ElementsErrorCallback,
         hasMetadataFeature: boolean,
         options: RequestOptions = {},
