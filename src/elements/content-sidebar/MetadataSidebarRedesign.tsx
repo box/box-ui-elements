@@ -6,7 +6,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 
-import { Text } from '@box/blueprint-web';
+import { Text, InlineError, LoadingIndicator } from '@box/blueprint-web';
 import { AddMetadataTemplateDropdown } from '@box/metadata-editor';
 
 import API from '../../api';
@@ -18,8 +18,6 @@ import { withLogger } from '../common/logger';
 import { ORIGIN_METADATA_SIDEBAR_REDESIGN } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
-import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
-import InlineError from '../../components/inline-error/InlineError';
 
 import messages from '../common/messages';
 
@@ -27,7 +25,7 @@ import { MetadataTemplate } from '../../common/types/metadata';
 import { type WithLoggerProps } from '../../common/types/logging';
 
 import './MetadataSidebarRedesign.scss';
-import useSidebarMetadataFetcher, { Status } from './hooks/useSidebarMetadataFetcher';
+import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -56,7 +54,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
 
     const { templates, errorMessage, status } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
-    const renderMetadataDropdown = status === Status.SUCCESS && templates && (
+    const renderMetadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates}
@@ -66,8 +64,8 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
         />
     );
 
-    const renderErrorMessage = status === Status.ERROR && errorMessage && (
-        <InlineError title={<FormattedMessage {...messages.error} />}>
+    const renderErrorMessage = status === STATUS.ERROR && errorMessage && (
+        <InlineError>
             <FormattedMessage {...errorMessage} />
         </InlineError>
     );
@@ -82,7 +80,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
             </div>
             <div className="bcs-MetadataSidebarRedesign-content">
                 {renderErrorMessage}
-                {status === Status.LOADING && <LoadingIndicator />}
+                {status === STATUS.LOADING && <LoadingIndicator aria-label="Loading..." />}
             </div>
         </div>
     );

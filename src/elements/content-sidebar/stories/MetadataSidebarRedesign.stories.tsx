@@ -5,7 +5,6 @@ import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 
 const fileIdWithMetadata = global.FILE_ID;
-const token = global.TOKEN;
 const mockFeatures = {
     'metadata.redesign.enabled': true,
 };
@@ -28,7 +27,7 @@ export default {
         features: mockFeatures,
         logger: mockLogger,
         hasMetadata: true,
-        token,
+        token: global.TOKEN,
         metadataSidebarProps: defaultMetadataSidebarProps,
     },
     render: args => {

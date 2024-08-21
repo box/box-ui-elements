@@ -1,17 +1,17 @@
 import { expect, userEvent, within } from '@storybook/test';
-import { defaultVisualConfig } from '../../../utils/storybook';
-import ContentSidebar from '../ContentSidebar';
+import { defaultVisualConfig } from '../../../../utils/storybook';
+import ContentSidebar from '../../ContentSidebar';
 
 export const basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: /Metadata/i });
-        const addTemplateButton = await canvas.findByRole('button', { name: /Add template/i });
+        await canvas.findByRole('heading', { name: 'Metadata' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
 
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: /Custom Metadata/i });
+        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
         expect(customMetadataOption).toBeInTheDocument();
     },
 };
@@ -27,19 +27,19 @@ const mockLogger = {
     },
 };
 
-const defualtMetadataArgs = {
+const defaultMetadataArgs = {
     fileId: fileIdWithMetadata,
     isFeatureEnabled: true,
     onError: (error, code, context) => console.error('Error:', error, code, context),
 };
 
 export default {
-    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/interaction-tests',
+    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
         token,
         metadataSidebarProps: {
-            ...defualtMetadataArgs,
+            ...defaultMetadataArgs,
         },
         hasMetadata: true,
         features: mockFeatures,
