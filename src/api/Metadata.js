@@ -357,9 +357,14 @@ class Metadata extends File {
      *
      * @param {Object} instance - metadata instance
      * @param {Object} template - metadata template
+     * @param {boolean} canEdit - can user edit item
      * @return {Object} metadata template instance
      */
-    createTemplateInstance(instance: MetadataInstanceV2, template: MetadataTemplate): MetadataTemplateInstance {
+    createTemplateInstance(
+        instance: MetadataInstanceV2,
+        template: MetadataTemplate,
+        canEdit: boolean,
+    ): MetadataTemplateInstance {
         const fields: MetadataTemplateInstanceField[] = [];
 
         // templateKey is unique identifier for the template,
@@ -389,6 +394,7 @@ class Metadata extends File {
 
         return {
             ...template,
+            canEdit: instance.$canEdit && canEdit,
             fields,
         };
     }
@@ -401,6 +407,7 @@ class Metadata extends File {
      * @param {Object} customPropertiesTemplate - custom properties template
      * @param {Array} enterpriseTemplates - enterprise templates
      * @param {Array} globalTemplates - global templates
+     * @param {boolean} canEdit
      * @return {Array} metadata editors
      */
     async getTemplateInstances(
@@ -409,6 +416,7 @@ class Metadata extends File {
         customPropertiesTemplate: MetadataTemplate,
         enterpriseTemplates: Array<MetadataTemplate>,
         globalTemplates: Array<MetadataTemplate>,
+        canEdit: boolean,
     ): Promise<Array<MetadataTemplateInstance>> {
         // Get all usable templates for metadata instances
         const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
@@ -423,7 +431,7 @@ class Metadata extends File {
             instances.map(async instance => {
                 const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
                 if (template) {
-                    templateInstances.push(this.createTemplateInstance(instance, template));
+                    templateInstances.push(this.createTemplateInstance(instance, template, canEdit));
                 }
             }),
         );
@@ -500,6 +508,7 @@ class Metadata extends File {
                       customPropertiesTemplate,
                       enterpriseTemplates,
                       globalTemplates,
+                      !!permissions.can_upload,
                   )
                 : [];
             const editors = !isMetadataRedesign

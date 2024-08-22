@@ -168,6 +168,7 @@ describe('api/Metadata', () => {
                     {
                         $id: '321',
                         $template: '',
+                        $canEdit: true,
                         testStringField: 'This is string',
                         testFloatField: '2.1',
                     },
@@ -192,8 +193,10 @@ describe('api/Metadata', () => {
                         id: '123456',
                         templateKey: 'instance_from_template',
                     },
+                    true,
                 ),
             ).toEqual({
+                canEdit: true,
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
@@ -224,6 +227,7 @@ describe('api/Metadata', () => {
             expect(
                 metadata.createTemplateInstance(
                     {
+                        $canEdit: true,
                         $id: '321',
                         $template: '',
                         testCustomField: 'This is string',
@@ -234,8 +238,10 @@ describe('api/Metadata', () => {
                         id: '123456',
                         templateKey: 'properties',
                     },
+                    false,
                 ),
             ).toEqual({
+                canEdit: false,
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
@@ -669,7 +675,7 @@ describe('api/Metadata', () => {
                 .mockResolvedValueOnce('template4')
                 .mockResolvedValueOnce();
 
-            const templateInstances = await metadata.getTemplateInstances('id', instances, {}, [], []);
+            const templateInstances = await metadata.getTemplateInstances('id', instances, {}, [], [], true);
             expect(templateInstances).toEqual([
                 'templateInstance1',
                 'templateInstance2',
@@ -862,6 +868,7 @@ describe('api/Metadata', () => {
                 'custom',
                 'enterprise',
                 'global',
+                true,
             );
             expect(metadata.getUserAddableTemplates).toHaveBeenCalledWith('custom', 'enterprise', true, true);
             expect(metadata.successHandler).toHaveBeenCalledWith({

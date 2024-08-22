@@ -126,6 +126,7 @@ type MetadataTemplateInstanceField = {
 };
 
 type MetadataTemplateInstance = {
+    canEdit: boolean,
     displayName?: string,
     hidden?: boolean,
     id: string,
