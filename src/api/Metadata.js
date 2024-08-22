@@ -400,6 +400,7 @@ class Metadata extends File {
             fields,
             scope: template.scope,
             templateKey: template.templateKey,
+            type: instance.$type,
         };
     }
 

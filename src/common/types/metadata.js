@@ -133,6 +133,7 @@ type MetadataTemplateInstance = {
     fields: MetadataTemplateInstanceField[],
     scope: string,
     templateKey: string,
+    type: string,
 };
 
 export type {
