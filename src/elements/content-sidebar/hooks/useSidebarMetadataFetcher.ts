@@ -4,12 +4,7 @@ import { type MessageDescriptor } from 'react-intl';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
-import {
-    FIELD_IS_EXTERNALLY_OWNED,
-    FIELD_PERMISSIONS,
-    FIELD_PERMISSIONS_CAN_UPLOAD,
-    IS_ERROR_DISPLAYED,
-} from '../../../constants';
+import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 
 import messages from '../../common/messages';
 
@@ -49,7 +44,7 @@ function useSidebarMetadataFetcher(
             setErrorMessage(message);
             onError(error, code, {
                 error,
-                [IS_ERROR_DISPLAYED]: isValidError,
+                isErrorDisplayed: isValidError,
             });
         },
         [onError],

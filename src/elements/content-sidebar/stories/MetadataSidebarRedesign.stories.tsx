@@ -1,4 +1,5 @@
 import { type StoryObj } from '@storybook/react';
+import { fn } from '@storybook/test';
 import { type ComponentProps } from 'react';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
@@ -15,7 +16,7 @@ const mockLogger = {
 
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
     isFeatureEnabled: true,
-    onError: (error, code, context) => console.error('Error:', error, code, context),
+    onError: fn,
 };
 
 export default {

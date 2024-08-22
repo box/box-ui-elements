@@ -1,19 +1,19 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
-import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
+import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
 } from '../MetadataSidebarRedesign';
-import { STATUS } from '../hooks/useSidebarMetadataFetcher';
+import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
+
+jest.mock('../hooks/useSidebarMetadataFetcher');
+const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFunction<
+    typeof useSidebarMetadataFetcher
+>;
 
 describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
-    const mockFile = {
-        id: '123',
-        permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
-    };
-
     const mockTemplates = [
         {
             id: 'metadata_template_custom_1',
@@ -23,57 +23,46 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         },
     ];
 
-    const mockAPI = {
-        getFile: jest.fn((id, successCallback, errorCallback) => {
-            try {
-                successCallback(mockFile);
-            } catch (error) {
-                errorCallback(error);
-            }
-        }),
-        getMetadata: jest.fn((_file, successCallback, errorCallback) => {
-            try {
-                successCallback({
-                    editors: [],
-                    templates: mockTemplates,
-                });
-            } catch (error) {
-                errorCallback(error);
-            }
-        }),
-    };
-    const api = {
-        getFileAPI: jest.fn().mockReturnValue(mockAPI),
-        getMetadataAPI: jest.fn().mockReturnValue(mockAPI),
+    const mockFile = {
+        id: '123',
+        permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
     };
 
     const defaultProps = {
-        api,
+        api: {},
         fileId: 'test-file-id-1',
         elementId: 'element-1',
         isFeatureEnabled: true,
         onError: jest.fn(),
     } satisfies MetadataSidebarRedesignProps;
 
-    const renderComponent = (props: Partial<MetadataSidebarRedesignProps> = {}) => {
-        const ps = { ...defaultProps, ...props } as MetadataSidebarRedesignProps;
-        return render(<MetadataSidebarRedesign {...ps} />);
-    };
+    beforeEach(() => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
 
     test('should render title', () => {
-        renderComponent();
+        render(<MetadataSidebarRedesign {...defaultProps} />);
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
     });
 
     test('should have accessible "Add template" button', () => {
-        renderComponent();
+        render(<MetadataSidebarRedesign {...defaultProps} />);
 
         expect(screen.getByRole('button', { name: 'Add template' })).toBeInTheDocument();
     });
 
     test('should have selectable "Custom Metadata" template in dropdown', async () => {
-        renderComponent();
+        render(<MetadataSidebarRedesign {...defaultProps} />);
 
         const addTemplateButton = screen.getByRole('button', { name: 'Add template' });
         await userEvent.click(addTemplateButton);
@@ -88,23 +77,35 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(customMetadataOption).toHaveAttribute('aria-disabled', 'true');
     });
 
-    test('should display loading indicator when loading', async () => {
-        jest.mock('../hooks/useSidebarMetadataFetcher', () => ({
-            __esModule: true,
-            default: jest.fn(),
-        }));
-        const intl = { formatMessage: jest.fn(() => 'Loading...') };
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        jest.spyOn(require('react-intl'), 'useIntl').mockReturnValue(intl);
-        (jest.requireMock('../hooks/useSidebarMetadataFetcher').default as jest.Mock).mockReturnValue({
-            status: STATUS.LOADING,
-            templates: null,
-            errorMessage: null,
+    test('should render metadata sidebar with error', async () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            templates: [],
+            errorMessage: {
+                id: 'error',
+                defaultMessage: 'error message',
+            },
+            status: STATUS.ERROR,
+            file: mockFile,
         });
 
-        renderComponent();
+        const errorMessage = { id: 'error', defaultMessage: 'error message' };
+        render(<MetadataSidebarRedesign {...defaultProps} />);
 
-        const loadingIndicator = screen.getByRole('button', { name: 'Loading...' });
-        expect(loadingIndicator).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByText(errorMessage.defaultMessage)).toBeInTheDocument();
+    });
+
+    test('should render metadata sidebar with loading indicator', async () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            templates: [],
+            errorMessage: null,
+            status: STATUS.LOADING,
+            file: mockFile,
+        });
+
+        render(<MetadataSidebarRedesign {...defaultProps} />);
+
+        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByTestId('loading')).toBeInTheDocument();
     });
 });

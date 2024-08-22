@@ -1,8 +1,8 @@
-import { expect, userEvent, within } from '@storybook/test';
+import { expect, userEvent, within, fn } from '@storybook/test';
 import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
 
-export const basic = {
+export const Basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await canvas.findByRole('heading', { name: 'Metadata' });
@@ -30,7 +30,7 @@ const mockLogger = {
 const defaultMetadataArgs = {
     fileId: fileIdWithMetadata,
     isFeatureEnabled: true,
-    onError: (error, code, context) => console.error('Error:', error, code, context),
+    onError: fn,
 };
 
 export default {
