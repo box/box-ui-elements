@@ -114,11 +114,11 @@ type MetadataSuggestion = {
     suggestions: { [key: string]: string | number | string[] },
 };
 
-type MetadataInstanceTemplateField = {
+type MetadataTemplateInstanceField = {
     description?: string,
-    displayName: string,
+    displayName?: string,
     hidden?: boolean,
-    id: string,
+    id?: string,
     key: string, // V2
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
@@ -129,13 +129,13 @@ type MetadataTemplateInstance = {
     displayName?: string,
     hidden?: boolean,
     id: string,
-    metadataFields: MetadataInstanceTemplateField[],
+    fields: MetadataTemplateInstanceField[],
     scope: string,
     templateKey: string,
 };
 
 export type {
-    MetadataInstanceTemplateField,
+    MetadataTemplateInstanceField,
     MetadataTemplateInstance,
     MetadataFieldType,
     MetadataTemplateFieldOption,

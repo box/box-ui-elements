@@ -197,7 +197,7 @@ describe('api/Metadata', () => {
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
-                metadataFields: [
+                fields: [
                     {
                         description: 'Test description',
                         displayName: 'Test string field',
@@ -239,7 +239,7 @@ describe('api/Metadata', () => {
                 displayName: 'Test template',
                 hidden: undefined,
                 id: '123456',
-                metadataFields: [
+                fields: [
                     {
                         key: 'testCustomField',
                         type: 'string',
@@ -788,10 +788,7 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
             metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true);
@@ -846,10 +843,7 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
             metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, {}, true);
@@ -905,10 +899,7 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
             metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { refreshCache: true });
@@ -966,10 +957,7 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
             metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { forceFetch: true });
@@ -1026,10 +1014,7 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
             metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), false);
@@ -1124,10 +1109,7 @@ describe('api/Metadata', () => {
             metadata.getTemplateInstances = jest.fn().mockResolvedValueOnce('templateInstances');
             metadata.getCustomPropertiesTemplate = jest.fn().mockReturnValueOnce('custom');
             metadata.getUserAddableTemplates = jest.fn().mockReturnValueOnce('templates');
-            metadata.getTemplates = jest
-                .fn()
-                .mockResolvedValueOnce('global')
-                .mockResolvedValueOnce('enterprise');
+            metadata.getTemplates = jest.fn().mockResolvedValueOnce('global').mockResolvedValueOnce('enterprise');
             metadata.extractClassification = jest.fn().mockReturnValueOnce('filteredInstances');
 
             await metadata.getMetadata(file, jest.fn(), jest.fn(), true, { forceFetch: true });

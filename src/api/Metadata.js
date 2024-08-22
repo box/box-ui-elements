@@ -42,7 +42,7 @@ import type {
     MetadataFields,
     MetadataSuggestion,
     MetadataTemplateInstance,
-    MetadataInstanceTemplateField,
+    MetadataTemplateInstanceField,
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
@@ -360,23 +360,17 @@ class Metadata extends File {
      * @return {Object} metadata template instance
      */
     createTemplateInstance(instance: MetadataInstanceV2, template: MetadataTemplate): MetadataTemplateInstance {
-        const metadataFields: MetadataInstanceTemplateField[] = [];
+        const fields: MetadataTemplateInstanceField[] = [];
 
         // templateKey is unique identifier for the template,
         // but its value is set to 'properties' if instance was created using Custom Metadata option instead of template
-        const isCustomMetadataInstance = template.templateKey !== METADATA_TEMPLATE_PROPERTIES;
-        if (isCustomMetadataInstance) {
-            // Get Metadata Fields for Instances created from predefinied template
+        const isInstanceFromTemplate = template.templateKey !== METADATA_TEMPLATE_PROPERTIES;
+        if (isInstanceFromTemplate) {
+            // Get Metadata Fields for Instances created from predefined template
             const templateFields = template.fields || [];
-            templateFields.forEach(async field => {
-                metadataFields.push({
-                    description: field.description,
-                    displayName: field.displayName,
-                    hidden: field.hidden,
-                    id: field.id,
-                    key: field.key,
-                    options: field.options,
-                    type: field.type,
+            templateFields.forEach(field => {
+                fields.push({
+                    ...field,
                     value: instance[field.key],
                 });
             });
@@ -384,8 +378,7 @@ class Metadata extends File {
             // Get Metadata Fields for Custom Instances
             Object.keys(instance).forEach(key => {
                 if (!key.startsWith('$')) {
-                    // $FlowFixMe
-                    metadataFields.push({
+                    fields.push({
                         key,
                         type: 'string',
                         value: instance[key],
@@ -395,12 +388,8 @@ class Metadata extends File {
         }
 
         return {
-            displayName: template.displayName,
-            hidden: template.hidden,
-            id: template.id,
-            metadataFields,
-            scope: template.scope,
-            templateKey: template.templateKey,
+            ...template,
+            fields,
         };
     }
 
@@ -445,7 +434,7 @@ class Metadata extends File {
     /**
      * API for getting metadata editors
      *
-     * @param file
+     * @param {Object} file
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {boolean} hasMetadataFeature - metadata feature check
