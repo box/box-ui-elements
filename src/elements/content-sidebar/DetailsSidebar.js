@@ -42,6 +42,7 @@ import type { BoxItem } from '../../common/types/core';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
+    archivedAt?: string,
     classification?: ClassificationInfo,
     contentInsights?: ContentInsights,
     elementId: string,
@@ -334,6 +335,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
     render() {
         const {
+            archivedAt,
             classification,
             contentInsights,
             elementId,
@@ -391,6 +393,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                     >
                         {hasVersions && <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />}
                         <SidebarFileProperties
+                            archivedAt={archivedAt}
                             file={file}
                             onDescriptionChange={this.onDescriptionChange}
                             {...fileError}

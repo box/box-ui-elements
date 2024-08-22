@@ -18,6 +18,7 @@ import type { BoxItem } from '../../common/types/core';
 import { PLACEHOLDER_USER } from '../../constants';
 
 type Props = {
+    archivedAt?: string,
     classification?: ClassificationInfo,
     file: BoxItem,
     hasClassification: boolean,
@@ -30,6 +31,7 @@ type Props = {
 };
 
 const SidebarFileProperties = ({
+    archivedAt,
     file,
     onDescriptionChange,
     hasRetentionPolicy,
@@ -40,6 +42,7 @@ const SidebarFileProperties = ({
 }: Props) => (
     <LoadingIndicatorWrapper isLoading={isLoading}>
         <ItemProperties
+            archivedAt={archivedAt}
             createdAt={file.content_created_at}
             description={file.description}
             descriptionTextareaProps={{
