@@ -4,7 +4,7 @@
  */
 import * as React from 'react';
 import flow from 'lodash/flow';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { Text, InlineError, LoadingIndicator } from '@box/blueprint-web';
 import { AddMetadataTemplateDropdown } from '@box/metadata-editor';
@@ -50,11 +50,13 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
 }
 
 function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
+    const intl = useIntl();
+
     const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
 
     const { templates, errorMessage, status } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
-    const renderMetadataDropdown = status === STATUS.SUCCESS && templates && (
+    const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates}
@@ -64,7 +66,7 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
         />
     );
 
-    const renderErrorMessage = status === STATUS.ERROR && errorMessage && (
+    const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
         <InlineError>
             <FormattedMessage {...errorMessage} />
         </InlineError>
@@ -76,11 +78,11 @@ function MetadataSidebarRedesign({ api, fileId, onError, isFeatureEnabled }: Met
                 <Text as="h3" variant="titleLarge">
                     <FormattedMessage {...messages.sidebarMetadataTitle} />
                 </Text>
-                {renderMetadataDropdown}
+                {metadataDropdown}
             </div>
             <div className="bcs-MetadataSidebarRedesign-content">
-                {renderErrorMessage}
-                {status === STATUS.LOADING && <LoadingIndicator aria-label="Loading..." />}
+                {errorMessageDisplay}
+                {status === STATUS.LOADING && <LoadingIndicator aria-label={intl.formatMessage(messages.loading)} />}
             </div>
         </div>
     );

@@ -4,7 +4,7 @@
     background-color: $gray-02;
     border-left: 1px solid $gray-10;
 
-    &-header {
+    .bcs-MetadataSidebarRedesign-header {
         display: flex;
         justify-content: space-between;
         background-color: $gray-white;
@@ -13,7 +13,7 @@
         border-bottom: 1px solid $gray-10;
     }
 
-    &-content {
+    .bcs-MetadataSidebarRedesign-content {
         padding: $space-2;
     }
 }

@@ -1,6 +1,5 @@
 import { type StoryObj } from '@storybook/react';
 import { type ComponentProps } from 'react';
-import React from 'react';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 
@@ -29,9 +28,6 @@ export default {
         hasMetadata: true,
         token: global.TOKEN,
         metadataSidebarProps: defaultMetadataSidebarProps,
-    },
-    render: args => {
-        return <ContentSidebar {...args} />;
     },
 };
 

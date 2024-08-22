@@ -53,7 +53,7 @@ describe('useSidebarMetadataFetcher', () => {
     const setupHook = (fileId = '123') =>
         renderHook(() => useSidebarMetadataFetcher(api, fileId, onErrorMock, isFeatureEnabledMock));
 
-    it('should fetch the file and metadata successfully', async () => {
+    test('should fetch the file and metadata successfully', async () => {
         const { result } = setupHook();
 
         await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
@@ -63,7 +63,7 @@ describe('useSidebarMetadataFetcher', () => {
         expect(result.current.errorMessage).toBeNull();
     });
 
-    it('should handle file fetching error', async () => {
+    test('should handle file fetching error', async () => {
         mockAPI.getFile.mockImplementation((id, successCallback, errorCallback) =>
             errorCallback(mockError, 'file_fetch_error'),
         );
@@ -84,7 +84,7 @@ describe('useSidebarMetadataFetcher', () => {
         );
     });
 
-    it('should handle metadata fetching error', async () => {
+    test('should handle metadata fetching error', async () => {
         mockAPI.getFile.mockImplementation((id, successCallback) => {
             successCallback(mockFile);
         });
