@@ -2,11 +2,11 @@ import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
-
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
 } from '../MetadataSidebarRedesign';
+import { STATUS } from '../hooks/useSidebarMetadataFetcher';
 
 describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     const mockFile = {
@@ -86,5 +86,25 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         await userEvent.click(addTemplateButton);
 
         expect(customMetadataOption).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    test('should display loading indicator when loading', async () => {
+        jest.mock('../hooks/useSidebarMetadataFetcher', () => ({
+            __esModule: true,
+            default: jest.fn(),
+        }));
+        const intl = { formatMessage: jest.fn(() => 'Loading...') };
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        jest.spyOn(require('react-intl'), 'useIntl').mockReturnValue(intl);
+        (jest.requireMock('../hooks/useSidebarMetadataFetcher').default as jest.Mock).mockReturnValue({
+            status: STATUS.LOADING,
+            templates: null,
+            errorMessage: null,
+        });
+
+        renderComponent();
+
+        const loadingIndicator = screen.getByRole('button', { name: 'Loading...' });
+        expect(loadingIndicator).toBeInTheDocument();
     });
 });
