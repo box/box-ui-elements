@@ -393,9 +393,13 @@ class Metadata extends File {
         }
 
         return {
-            ...template,
             canEdit: instance.$canEdit && canEdit,
+            displayName: template.displayName,
+            hidden: template.hidden,
+            id: template.id,
             fields,
+            scope: template.scope,
+            templateKey: template.templateKey,
         };
     }
 

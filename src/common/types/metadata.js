@@ -122,7 +122,7 @@ type MetadataTemplateInstanceField = {
     key: string, // V2
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
-    value: string,
+    value: MetadataFieldValue,
 };
 
 type MetadataTemplateInstance = {
