@@ -616,14 +616,23 @@ function makeSelectable(BaseTable) {
 
             const { className, dataset } = event.target;
 
-            if (
-                className &&
-                (className.includes('quickSearchRecentItem') || className.includes('quickSearchResultItem'))
-            ) {
+            // QuickSearch Recent Item
+            if (className?.includes('quickSearchRecentItem')) {
                 return true;
             }
 
-            if (dataset && ('radixCollectionItem' in dataset || 'bpSmallListItem' in dataset)) {
+            // Quick Search Result Item
+            if (className?.includes('quickSearchResultItem')) {
+                return true;
+            }
+
+            // Blueprint's <FilterChip>
+            if (dataset && 'radixCollectionItem' in dataset) {
+                return true;
+            }
+
+            // Blueprint's <SmallList>
+            if (dataset && 'bpSmallListItem' in dataset) {
                 return true;
             }
 
