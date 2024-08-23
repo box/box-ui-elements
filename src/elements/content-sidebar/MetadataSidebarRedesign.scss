@@ -1,5 +1,10 @@
-@import '../common/variables';
+@import '~@box/blueprint-web-assets/tokens/tokens.scss';
 
 .bcs-MetadataSidebarRedesign {
-    padding-inline: 10px;
+    border-left: 1px solid $gray-10;
+
+    .bcs-MetadataSidebarRedesign-content {
+        padding: $space-2;
+        background-color: $gray-02;
+    }
 }
