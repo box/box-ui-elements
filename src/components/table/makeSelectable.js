@@ -257,7 +257,6 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        console.log('DOWN', event);
                         if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
                             return;
                         }
@@ -277,7 +276,6 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        console.log('UP', event);
                         if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
                             return;
                         }
