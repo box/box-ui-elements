@@ -829,12 +829,12 @@ describe('components/table/makeSelectable', () => {
                         wrapper.setState({ focusedIndex: undefined });
                         const instance = wrapper.instance();
                         const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
-                        shortcut.handler({ target: { class: targetClass } });
+                        shortcut.handler({ target: { className: targetClass } });
                         expect(wrapper.state('focusedIndex')).toEqual(undefined);
                     },
                 );
 
-                test.each([['bpSmallList'], ['radixCollectionItem']])(
+                test.each([['bpSmallListItem'], ['radixCollectionItem']])(
                     'should not set focus if dataset contains %s',
                     datasetKey => {
                         const wrapper = getWrapper({
