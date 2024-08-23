@@ -41,6 +41,8 @@ import type {
     MetadataEditor,
     MetadataFields,
     MetadataSuggestion,
+    MetadataTemplateInstance,
+    MetadataTemplateInstanceField,
 } from '../common/types/metadata';
 import type { BoxItem } from '../common/types/core';
 import type APICache from '../utils/Cache';
@@ -337,14 +339,10 @@ class Metadata extends File {
             globalTemplates,
         );
 
-        // Filter out skills and classification
-        // let filteredInstances = this.extractSkills(id, instances);
-        const filteredInstances = this.extractClassification(id, instances);
-
         // Create editors from each instance
         const editors: Array<MetadataEditor> = [];
         await Promise.all(
-            filteredInstances.map(async instance => {
+            instances.map(async instance => {
                 const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
                 if (template) {
                     editors.push(this.createEditor(instance, template, canEdit));
@@ -355,21 +353,119 @@ class Metadata extends File {
     }
 
     /**
+     * Utility to concat instance and template into one entity.
+     *
+     * @param {Object} instance - metadata instance
+     * @param {Object} template - metadata template
+     * @param {boolean} canEdit - can user edit item
+     * @return {Object} metadata template instance
+     */
+    createTemplateInstance(
+        instance: MetadataInstanceV2,
+        template: MetadataTemplate,
+        canEdit: boolean,
+    ): MetadataTemplateInstance {
+        const fields: MetadataTemplateInstanceField[] = [];
+
+        // templateKey is unique identifier for the template,
+        // but its value is set to 'properties' if instance was created using Custom Metadata option instead of template
+        const isInstanceFromTemplate = template.templateKey !== METADATA_TEMPLATE_PROPERTIES;
+        if (isInstanceFromTemplate) {
+            // Get Metadata Fields for Instances created from predefined template
+            const templateFields = template.fields || [];
+            templateFields.forEach(field => {
+                fields.push({
+                    ...field,
+                    value: instance[field.key],
+                });
+            });
+        } else {
+            // Get Metadata Fields for Custom Instances
+            Object.keys(instance).forEach(key => {
+                if (!key.startsWith('$')) {
+                    fields.push({
+                        key,
+                        type: 'string',
+                        value: instance[key],
+                    });
+                }
+            });
+        }
+
+        return {
+            canEdit: instance.$canEdit && canEdit,
+            displayName: template.displayName,
+            hidden: template.hidden,
+            id: template.id,
+            fields,
+            scope: template.scope,
+            templateKey: template.templateKey,
+            type: instance.$type,
+        };
+    }
+
+    /**
+     * Creates and returns metadata entities.
+     *
+     * @param {string} id - Box file id
+     * @param {Array} instances - metadata instances
+     * @param {Object} customPropertiesTemplate - custom properties template
+     * @param {Array} enterpriseTemplates - enterprise templates
+     * @param {Array} globalTemplates - global templates
+     * @param {boolean} canEdit
+     * @return {Array} metadata editors
+     */
+    async getTemplateInstances(
+        id: string,
+        instances: Array<MetadataInstanceV2>,
+        customPropertiesTemplate: MetadataTemplate,
+        enterpriseTemplates: Array<MetadataTemplate>,
+        globalTemplates: Array<MetadataTemplate>,
+        canEdit: boolean,
+    ): Promise<Array<MetadataTemplateInstance>> {
+        // Get all usable templates for metadata instances
+        const templates: Array<MetadataTemplate> = [customPropertiesTemplate].concat(
+            enterpriseTemplates,
+            globalTemplates,
+        );
+
+        // Create Metadata Template Instance from each instance
+        const templateInstances: Array<MetadataTemplateInstance> = [];
+
+        await Promise.all(
+            instances.map(async instance => {
+                const template: ?MetadataTemplate = await this.getTemplateForInstance(id, instance, templates);
+                if (template) {
+                    templateInstances.push(this.createTemplateInstance(instance, template, canEdit));
+                }
+            }),
+        );
+
+        return templateInstances;
+    }
+
+    /**
      * API for getting metadata editors
      *
-     * @param {string} fileId - Box file id
+     * @param {Object} file
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
      * @param {boolean} hasMetadataFeature - metadata feature check
      * @param {Object} options - fetch options
+     * @param {boolean} isMetadataRedesign - is Metadata Sidebar redesigned
      * @return {Promise}
      */
     async getMetadata(
         file: BoxItem,
-        successCallback: ({ editors: Array<MetadataEditor>, templates: Array<MetadataTemplate> }) => void,
+        successCallback: ({
+            editors: Array<MetadataEditor>,
+            templateInstances: Array<MetadataTemplateInstance>,
+            templates: Array<MetadataTemplate>,
+        }) => void,
         errorCallback: ElementsErrorCallback,
         hasMetadataFeature: boolean,
         options: RequestOptions = {},
+        isMetadataRedesign: boolean = false,
     ): Promise<void> {
         const { id, permissions, is_externally_owned }: BoxItem = file;
         this.errorCode = ERROR_CODE_FETCH_METADATA;
@@ -407,17 +503,33 @@ class Metadata extends File {
                 hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
             ]);
 
-            const editors = await this.getEditors(
-                id,
-                instances,
-                customPropertiesTemplate,
-                enterpriseTemplates,
-                globalTemplates,
-                !!permissions.can_upload,
-            );
+            // Filter out classification
+            const filteredInstances = this.extractClassification(id, instances);
+
+            const templateInstances = isMetadataRedesign
+                ? await this.getTemplateInstances(
+                      id,
+                      filteredInstances,
+                      customPropertiesTemplate,
+                      enterpriseTemplates,
+                      globalTemplates,
+                      !!permissions.can_upload,
+                  )
+                : [];
+            const editors = !isMetadataRedesign
+                ? await this.getEditors(
+                      id,
+                      filteredInstances,
+                      customPropertiesTemplate,
+                      enterpriseTemplates,
+                      globalTemplates,
+                      !!permissions.can_upload,
+                  )
+                : [];
 
             const metadata = {
                 editors,
+                templateInstances,
                 templates: this.getUserAddableTemplates(
                     customPropertiesTemplate,
                     enterpriseTemplates,
