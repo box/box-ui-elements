@@ -608,14 +608,27 @@ function makeSelectable(BaseTable) {
 
         isTargetSlider = event => event.target?.role === 'slider';
 
-        // Workaround for focus conflicting with Blueprint components in
-        // QuickSearch result, recent items and Quick Filters
-        isTargetQuickSearch = event =>
-            (event.target?.className &&
-                (event.target.className?.contains('quickSearchRecentItem') ||
-                    event.target.className?.contains('quickSearchResultItem'))) ||
-            (event.target?.dataset &&
-                ('radixCollectionItem' in event.target.dataset || 'bpSmallListItem' in event.target.dataset));
+        // Workaround for focus conflicting with Blueprint components for QuickSearch result, recent items and Quick Filters
+        isTargetQuickSearch = event => {
+            if (!event.target) {
+                return false;
+            }
+
+            const { className, dataset } = event.target;
+
+            if (
+                className &&
+                (className.includes('quickSearchRecentItem') || className.includes('quickSearchResultItem'))
+            ) {
+                return true;
+            }
+
+            if (dataset && ('radixCollectionItem' in dataset || 'bpSmallListItem' in dataset)) {
+                return true;
+            }
+
+            return false;
+        };
 
         render() {
             const { className, data } = this.props;
