@@ -612,8 +612,8 @@ function makeSelectable(BaseTable) {
         // QuickSearch result, recent items and Quick Filters
         isTargetQuickSearch = event =>
             (event.target?.className &&
-                (event.target.className.contains('quickSearchRecentItem') ||
-                    event.target.className.contains('quickSearchResultItem'))) ||
+                (event.target.className?.contains('quickSearchRecentItem') ||
+                    event.target.className?.contains('quickSearchResultItem'))) ||
             (event.target?.dataset &&
                 ('radixCollectionItem' in event.target.dataset || 'bpSmallListItem' in event.target.dataset));
 
