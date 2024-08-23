@@ -843,7 +843,7 @@ describe('components/table/makeSelectable', () => {
                         wrapper.setState({ focusedIndex: undefined });
                         const instance = wrapper.instance();
                         const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
-                        const event = { target: { dataset: { [datasetKey]: true }, className: '' } };
+                        const event = { target: { dataset: { [datasetKey]: true } } };
                         shortcut.handler(event);
                         expect(wrapper.state('focusedIndex')).toEqual(undefined);
                     },
