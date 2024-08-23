@@ -608,7 +608,8 @@ function makeSelectable(BaseTable) {
 
         isTargetSlider = event => event.target?.role === 'slider';
 
-        // Workaround for focus conflicting with Blueprint components in Search Quick Filters, not needed once Blueprint table is integrated
+        // Workaround for focus conflicting with Blueprint components in
+        // QuickSearch result, recent items and Quick Filters
         isTargetQuickSearch = event =>
             (event.target?.className &&
                 (event.target.className.contains('quickSearchRecentItem') ||
