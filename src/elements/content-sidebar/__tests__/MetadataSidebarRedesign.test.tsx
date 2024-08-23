@@ -1,7 +1,7 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
-import { screen, render } from '../../../test-utils/testing-library';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
+import { screen, render } from '../../../test-utils/testing-library';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
@@ -28,13 +28,17 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
     };
 
-    const defaultProps = {
-        api: {},
-        fileId: 'test-file-id-1',
-        elementId: 'element-1',
-        isFeatureEnabled: true,
-        onError: jest.fn(),
-    } satisfies MetadataSidebarRedesignProps;
+    const renderComponent = (props = {}) => {
+        const defaultProps = {
+            api: {},
+            fileId: 'test-file-id-1',
+            elementId: 'element-1',
+            isFeatureEnabled: true,
+            onError: jest.fn(),
+        } satisfies MetadataSidebarRedesignProps;
+
+        render(<MetadataSidebarRedesign {...defaultProps} {...props} />);
+    };
 
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
@@ -50,19 +54,19 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     });
 
     test('should render title', () => {
-        render(<MetadataSidebarRedesign {...defaultProps} />);
+        renderComponent();
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
     });
 
     test('should have accessible "Add template" button', () => {
-        render(<MetadataSidebarRedesign {...defaultProps} />);
+        renderComponent();
 
         expect(screen.getByRole('button', { name: 'Add template' })).toBeInTheDocument();
     });
 
     test('should have selectable "Custom Metadata" template in dropdown', async () => {
-        render(<MetadataSidebarRedesign {...defaultProps} />);
+        renderComponent();
 
         const addTemplateButton = screen.getByRole('button', { name: 'Add template' });
         await userEvent.click(addTemplateButton);
@@ -89,7 +93,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         });
 
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
-        render(<MetadataSidebarRedesign {...defaultProps} />);
+        renderComponent();
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByText(errorMessage.defaultMessage)).toBeInTheDocument();
@@ -103,9 +107,10 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             file: mockFile,
         });
 
-        render(<MetadataSidebarRedesign {...defaultProps} />);
+        renderComponent();
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByTestId('loading')).toBeInTheDocument();
+        expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
     });
 });

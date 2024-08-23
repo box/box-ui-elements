@@ -54,7 +54,7 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
 }
 
 function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
-    const intl = useIntl();
+    const { formatMessage } = useIntl();
 
     const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
 
@@ -70,8 +70,6 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         />
     );
 
-    const sidebarTitle = <FormattedMessage {...messages.sidebarMetadataTitle} />;
-
     const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
         <InlineError>
             <FormattedMessage {...errorMessage} />
@@ -84,12 +82,12 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
             className={'bcs-MetadataSidebarRedesign'}
             elementId={elementId}
             sidebarView={SIDEBAR_VIEW_METADATA}
-            title={sidebarTitle}
+            title={formatMessage(messages.sidebarMetadataTitle)}
         >
             <div className="bcs-MetadataSidebarRedesign-content">
                 {errorMessageDisplay}
                 {status === STATUS.LOADING && (
-                    <LoadingIndicator aria-label={intl.formatMessage(messages.loading)} data-testid="loading" />
+                    <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
                 )}
             </div>
         </SidebarContent>
