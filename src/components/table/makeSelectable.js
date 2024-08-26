@@ -615,7 +615,6 @@ function makeSelectable(BaseTable) {
             }
 
             const { className, dataset } = event.target;
-            console.log('className', className, className?.includes('quickSearchResultItem'));
 
             // Quick Search Button (See All etc)
             if (className?.includes('bp_text_button_module')) {
