@@ -4,6 +4,11 @@
     border-left: 1px solid $gray-10;
 
     .bcs-MetadataSidebarRedesign-content {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
         padding: $space-2;
         background-color: $gray-02;
     }

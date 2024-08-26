@@ -6,11 +6,10 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
-import { AddMetadataTemplateDropdown } from '@box/metadata-editor';
+import { AddMetadataTemplateDropdown , MetadataEmptyState } from '@box/metadata-editor';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
-import { MetadataEmptyState } from '@box/metadata-editor';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
@@ -55,12 +54,24 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
     api: API;
 }
 
-function MetadataSidebarRedesign({ api, elementId, fileId,isBoxAiSuggestionsEnabled, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
+function MetadataSidebarRedesign({
+    api,
+    elementId,
+    fileId,
+    isBoxAiSuggestionsEnabled,
+    onError,
+    isFeatureEnabled,
+}: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
 
     const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
 
-    const {editors, file, templates, errorMessage, status } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+    const { editors, file, templates, errorMessage, status } = useSidebarMetadataFetcher(
+        api,
+        fileId,
+        onError,
+        isFeatureEnabled,
+    );
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
@@ -94,12 +105,11 @@ function MetadataSidebarRedesign({ api, elementId, fileId,isBoxAiSuggestionsEnab
                 {status === STATUS.LOADING && (
                     <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
                 )}
+                {showEmptyState && (
+                    <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
+                )}
             </div>
-            {showEmptyState && (
-                <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
-            )}
         </SidebarContent>
-
     );
 }
 
