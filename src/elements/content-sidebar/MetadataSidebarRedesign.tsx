@@ -6,7 +6,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
-import { AddMetadataTemplateDropdown } from '@box/metadata-editor';
+import { AddMetadataTemplateDropdown , MetadataEmptyState } from '@box/metadata-editor';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -31,6 +31,7 @@ const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY
 mark(MARK_NAME_JS_READY);
 
 export interface ExternalProps {
+    isBoxAiSuggestionsEnabled: boolean;
     isFeatureEnabled: boolean;
 }
 
@@ -53,12 +54,24 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
     api: API;
 }
 
-function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
+function MetadataSidebarRedesign({
+    api,
+    elementId,
+    fileId,
+    isBoxAiSuggestionsEnabled,
+    onError,
+    isFeatureEnabled,
+}: MetadataSidebarRedesignProps) {
     const { formatMessage } = useIntl();
 
     const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
 
-    const { templates, errorMessage, status } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+    const { editors, file, templates, errorMessage, status } = useSidebarMetadataFetcher(
+        api,
+        fileId,
+        onError,
+        isFeatureEnabled,
+    );
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
@@ -76,6 +89,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         </InlineError>
     );
 
+    const showEditor = file && templates && editors;
+    const showEmptyState = showEditor && editors.length === 0;
+
     return (
         <SidebarContent
             actions={metadataDropdown}
@@ -88,6 +104,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                 {errorMessageDisplay}
                 {status === STATUS.LOADING && (
                     <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
+                )}
+                {showEmptyState && (
+                    <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
                 )}
             </div>
         </SidebarContent>
