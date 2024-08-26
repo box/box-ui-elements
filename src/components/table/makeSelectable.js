@@ -615,6 +615,12 @@ function makeSelectable(BaseTable) {
             }
 
             const { className, dataset } = event.target;
+            console.log('className', className, className?.includes('quickSearchResultItem'));
+
+            // Quick Search Button (See All etc)
+            if (className?.includes('bp_text_button_module')) {
+                return true;
+            }
 
             // QuickSearch Recent Item
             if (className?.includes('quickSearchRecentItem')) {
@@ -622,7 +628,7 @@ function makeSelectable(BaseTable) {
             }
 
             // Quick Search Result Item
-            if (className?.includes('quickSearchResultItem')) {
+            if (className?.includes('quickSearchResultItem') || className?.includes('quickSearchQueryFooter')) {
                 return true;
             }
 
