@@ -1,37 +1,43 @@
-/**
- * @flow
- * @file Upload state component
- */
-
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import ErrorEmptyState from '../../icons/states/ErrorEmptyState';
+import { HatWand } from '@box/blueprint-web-assets/illustrations/Medium';
+
 import UploadEmptyState from '../../icons/states/UploadEmptyState';
 import UploadSuccessState from '../../icons/states/UploadSuccessState';
-import messages from '../common/messages';
 import UploadStateContent from './UploadStateContent';
-import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
 import type { View } from '../../common/types/core';
+
+import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
+
+import messages from '../common/messages';
 
 import './UploadState.scss';
 
-type Props = {
-    canDrop: boolean,
-    hasItems: boolean,
-    isFolderUploadEnabled: boolean,
-    isOver: boolean,
-    isTouch: boolean,
-    onSelect: Function,
-    view: View,
-};
+export interface UploadStateProps {
+    canDrop: boolean;
+    hasItems: boolean;
+    isFolderUploadEnabled: boolean;
+    isOver: boolean;
+    isTouch: boolean;
+    onSelect: () => void;
+    view: View;
+}
 
-const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFolderUploadEnabled }: Props) => {
+const UploadState = ({
+    canDrop,
+    hasItems,
+    isOver,
+    isTouch,
+    view,
+    onSelect,
+    isFolderUploadEnabled,
+}: UploadStateProps) => {
     let icon;
     let content;
     switch (view) {
         case VIEW_ERROR:
-            icon = <ErrorEmptyState />;
+            icon = <HatWand className="upload-error-state" height={126} width={130} />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
             break;
         case VIEW_UPLOAD_EMPTY:
