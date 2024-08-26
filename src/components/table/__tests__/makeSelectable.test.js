@@ -820,19 +820,21 @@ describe('components/table/makeSelectable', () => {
 
             describe('QuickSearch specific', () => {
                 const hotKey = 'down';
-                test.each([['quickSearchResultItemFooBar'], ['quickSearchRecentItemFooBar']])(
-                    'should not set focus if target is %s',
-                    targetClass => {
-                        const wrapper = getWrapper({
-                            selectedItems: ['a'],
-                        });
-                        wrapper.setState({ focusedIndex: undefined });
-                        const instance = wrapper.instance();
-                        const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
-                        shortcut.handler({ target: { className: targetClass } });
-                        expect(wrapper.state('focusedIndex')).toEqual(undefined);
-                    },
-                );
+                test.each([
+                    ['quickSearchResultItemFooBar'],
+                    ['quickSearchRecentItemFooBar'],
+                    ['quickSearchQueryFooter'],
+                    ['bp_text_button_module'],
+                ])('should not set focus if target is %s', targetClass => {
+                    const wrapper = getWrapper({
+                        selectedItems: ['a'],
+                    });
+                    wrapper.setState({ focusedIndex: undefined });
+                    const instance = wrapper.instance();
+                    const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+                    shortcut.handler({ target: { className: targetClass } });
+                    expect(wrapper.state('focusedIndex')).toEqual(undefined);
+                });
 
                 test.each([['bpSmallListItem'], ['radixCollectionItem']])(
                     'should not set focus if dataset contains %s',
