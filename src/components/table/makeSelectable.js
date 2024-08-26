@@ -627,7 +627,7 @@ function makeSelectable(BaseTable) {
                 return true;
             }
 
-            // Quick Search Result Item
+            // Quick Search Result Item and Footer
             if (className?.includes('quickSearchResultItem') || className?.includes('quickSearchQueryFooter')) {
                 return true;
             }
