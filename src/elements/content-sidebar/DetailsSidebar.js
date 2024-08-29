@@ -26,6 +26,7 @@ import { mark } from '../../utils/performance';
 import { SECTION_TARGETS } from '../common/interactionTargets';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
 import { withAPIContext } from '../common/api-context';
+import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import {
@@ -39,6 +40,7 @@ import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flo
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';
+import type { FeatureConfig } from '../common/feature-checking';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
@@ -66,6 +68,7 @@ type ExternalProps = {
     WithLoggerProps;
 type Props = {
     api: API,
+    features: FeatureConfig,
 } & ExternalProps &
     ErrorContextProps &
     WithLoggerProps;
@@ -339,6 +342,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
             classification,
             contentInsights,
             elementId,
+            features,
             hasProperties,
             hasNotices,
             hasAccessStats,
@@ -355,6 +359,8 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         }: Props = this.props;
 
         const { accessStats, accessStatsError, file, fileError, isLoadingAccessStats }: State = this.state;
+
+        const shouldShowArchivedAt = isFeatureEnabled(features, 'details.archivedAt.enabled');
 
         // TODO: Add loading indicator and handle errors once file call is split out
         return (
@@ -393,7 +399,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                     >
                         {hasVersions && <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />}
                         <SidebarFileProperties
-                            archivedAt={archivedAt}
+                            archivedAt={shouldShowArchivedAt ? archivedAt : undefined}
                             file={file}
                             onDescriptionChange={this.onDescriptionChange}
                             {...fileError}
@@ -411,6 +417,9 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default flow([withLogger(ORIGIN_DETAILS_SIDEBAR), withErrorBoundary(ORIGIN_DETAILS_SIDEBAR), withAPIContext])(
-    DetailsSidebar,
-);
+export default flow([
+    withLogger(ORIGIN_DETAILS_SIDEBAR),
+    withErrorBoundary(ORIGIN_DETAILS_SIDEBAR),
+    withAPIContext,
+    withFeatureConsumer,
+])(DetailsSidebar);
