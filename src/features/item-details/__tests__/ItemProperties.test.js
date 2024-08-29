@@ -13,6 +13,7 @@ describe('features/item-details/ItemProperties', () => {
 
     test('should render properties when specified', () => {
         const wrapper = getWrapper({
+            archivedAt: '2014-12-12T11:04:26-08:00',
             createdAt: '2012-12-12T11:04:26-08:00',
             description: 'Hi\ntesting this link http://box.com',
             enterpriseOwner: 'Test Enterprise Owner',
