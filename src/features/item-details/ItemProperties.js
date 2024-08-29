@@ -101,7 +101,7 @@ const ItemProperties = ({
                 <>
                     <FormattedMessage tagName="dt" {...messages.archived} />
                     <dd>
-                        <FormattedDate value={archivedAt} {...datetimeOptions} />
+                        <FormattedDate value={new Date(archivedAt)} {...datetimeOptions} />
                     </dd>
                 </>
             ) : null}
