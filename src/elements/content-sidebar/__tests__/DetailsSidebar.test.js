@@ -72,7 +72,15 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should render DetailsSidebar with all components', () => {
             const wrapper = getWrapper(
                 {
+                    archivedAt: '2012-12-12T11:04:26-08:00',
                     classification: { definition: 'message', name: 'name' },
+                    features: {
+                        details: {
+                            archivedAt: {
+                                enabled: true,
+                            },
+                        },
+                    },
                     hasProperties: true,
                     hasNotices: true,
                     hasAccessStats: true,
@@ -90,6 +98,78 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should render DetailsSidebar with properties', () => {
             const wrapper = getWrapper(
                 {
+                    hasProperties: true,
+                },
+                { disableLifecycleMethods: true },
+            );
+            wrapper.setState({ file });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render DetailsSidebar with archived date when feature details.archivedAt is enabled', () => {
+            const wrapper = getWrapper(
+                {
+                    archivedAt: '2012-12-12T11:04:26-08:00',
+                    features: {
+                        details: {
+                            archivedAt: {
+                                enabled: true,
+                            },
+                        },
+                    },
+                    hasProperties: true,
+                },
+                { disableLifecycleMethods: true },
+            );
+            wrapper.setState({ file });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render DetailsSidebar without archived date when feature details.archivedAt is disabled', () => {
+            const wrapper = getWrapper(
+                {
+                    archivedAt: '2012-12-12T11:04:26-08:00',
+                    features: {
+                        details: {
+                            archivedAt: {
+                                enabled: false,
+                            },
+                        },
+                    },
+                    hasProperties: true,
+                },
+                { disableLifecycleMethods: true },
+            );
+            wrapper.setState({ file });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render DetailsSidebar without archived date when feature details.archivedAt is undefined', () => {
+            const wrapper = getWrapper(
+                {
+                    archivedAt: '2012-12-12T11:04:26-08:00',
+                    hasProperties: true,
+                },
+                { disableLifecycleMethods: true },
+            );
+            wrapper.setState({ file });
+
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render DetailsSidebar without archived date when feature details.archivedAt is enabled and date is not set', () => {
+            const wrapper = getWrapper(
+                {
+                    features: {
+                        details: {
+                            archivedAt: {
+                                enabled: true,
+                            },
+                        },
+                    },
                     hasProperties: true,
                 },
                 { disableLifecycleMethods: true },
