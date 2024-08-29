@@ -3,6 +3,7 @@
 exports[`elements/content-sidebar/SidebarFileProperties render() should render ItemProperties 1`] = `
 <LoadingIndicatorWrapper>
   <ItemProperties
+    archivedAt="2018-04-18T16:56:05.352Z"
     createdAt="2018-04-18T16:56:05.352Z"
     description="foo"
     descriptionTextareaProps={
@@ -23,6 +24,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render I
 exports[`elements/content-sidebar/SidebarFileProperties render() should render ItemProperties for anonymous uploaders 1`] = `
 <LoadingIndicatorWrapper>
   <ItemProperties
+    archivedAt="2018-04-18T16:56:05.352Z"
     createdAt="2018-04-18T16:56:05.352Z"
     description="foo"
     descriptionTextareaProps={
