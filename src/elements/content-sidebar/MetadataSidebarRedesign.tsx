@@ -6,7 +6,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
-import { AddMetadataTemplateDropdown , MetadataEmptyState } from '@box/metadata-editor';
+import { AddMetadataTemplateDropdown, MetadataEmptyState } from '@box/metadata-editor';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -25,6 +25,7 @@ import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
+import MetadataInstanceEditor from './MetadataInstanceEditor';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -65,20 +66,31 @@ function MetadataSidebarRedesign({
     const { formatMessage } = useIntl();
 
     const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
+    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplate | null>(null);
 
-    const { editors, file, templates, errorMessage, status } = useSidebarMetadataFetcher(
+    const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
         api,
         fileId,
         onError,
         isFeatureEnabled,
     );
 
+    const isAiLoading = false; // TODO when ADOPT-4544 is merged
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const handleUnsavedChanges = () => {}; // TODO when ADOPT-4667 is merged
+
+    const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
+        setSelectedTemplates([...selectedTemplates, selectedTemplate]);
+        setEditingTemplate(selectedTemplate);
+    };
+
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates}
             onSelect={(selectedTemplate): void => {
-                setSelectedTemplates([...selectedTemplates, selectedTemplate]);
+                editingTemplate ? handleUnsavedChanges() : handleTemplateSelect(selectedTemplate);
             }}
         />
     );
@@ -89,8 +101,8 @@ function MetadataSidebarRedesign({
         </InlineError>
     );
 
-    const showEditor = file && templates && editors;
-    const showEmptyState = showEditor && editors.length === 0;
+    const showTemplateInstances = file && templates && templateInstances;
+    const showEmptyState = showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
 
     return (
         <SidebarContent
@@ -105,8 +117,16 @@ function MetadataSidebarRedesign({
                 {status === STATUS.LOADING && (
                     <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
                 )}
-                {showEmptyState && (
+                {showEmptyState ? (
                     <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
+                ) : (
+                    editingTemplate && (
+                        <MetadataInstanceEditor
+                            isAiLoading={isAiLoading}
+                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                            template={editingTemplate}
+                        />
+                    )
                 )}
             </div>
         </SidebarContent>

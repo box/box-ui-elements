@@ -45,11 +45,22 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
         },
-    },};
+    },
+};
 
 export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
         fileId: fileIdWithNoMetadata,
+        metadataSidebarProps: {
+            ...defaultMetadataSidebarProps,
+            isBoxAiSuggestionsEnabled: false,
+        },
+    },
+};
+
+export const MetadataInstanceEditor: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: fileIdWithMetadata,
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
             isBoxAiSuggestionsEnabled: false,

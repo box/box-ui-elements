@@ -44,7 +44,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             templates: mockTemplates,
-            editors: [],
+            templateInstances: [],
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
@@ -85,7 +85,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
-            editors: [],
+            templateInstances: [],
             templates: [],
             errorMessage: {
                 id: 'error',
@@ -104,7 +104,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with loading indicator', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
-            editors: [],
+            templateInstances: [],
             templates: [],
             errorMessage: null,
             status: STATUS.LOADING,
