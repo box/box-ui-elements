@@ -30,8 +30,8 @@ const defaultProps = {
     ...docGenSidebarProps,
 };
 
-// TODO renable when development returns to normal
-xdescribe('elements/content-sidebar/DocGenSidebar', () => {
+describe('elements/content-sidebar/DocGenSidebar', () => {
+
     const getWrapper = (props = defaultProps, options = {}) =>
         mount(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, options);
 
@@ -49,7 +49,7 @@ xdescribe('elements/content-sidebar/DocGenSidebar', () => {
         });
         wrapper!.update();
         const tagList = wrapper!.find('span.bcs-DocGen-tagPath');
-        expect(tagList).toHaveLength(26);
+        expect(tagList).toHaveLength(2);
         expect(wrapper).toMatchSnapshot();
     });
 
@@ -88,6 +88,9 @@ xdescribe('elements/content-sidebar/DocGenSidebar', () => {
             });
         });
         wrapper!.update();
+        const loadingState = wrapper!.find(Error);
+        expect(loadingState).toHaveLength(1);
+        expect(wrapper).toMatchSnapshot();
 
         const refreshBtn = wrapper!.find('button');
         refreshBtn.simulate('click');
@@ -95,24 +98,10 @@ xdescribe('elements/content-sidebar/DocGenSidebar', () => {
         expect(errorTagsMock).toBeCalledTimes(2);
     });
 
-    test('should render error state', async () => {
-        let wrapper;
-        await act(async () => {
-            wrapper = await getWrapper({
-                ...defaultProps,
-                getDocGenTags: errorTagsMock,
-            });
-        });
-        wrapper!.update();
-
-        const loadingState = wrapper!.find(Error);
-        expect(loadingState).toHaveLength(1);
-        expect(wrapper).toMatchSnapshot();
-        const refreshBtn = wrapper!.find('button');
-        expect(refreshBtn).toHaveLength(1);
-    });
 
     test('should handle undefined data ', async () => {
+        // jest.resetAllMocks(); // or jest.clearAllMocks();
+
         let wrapper;
         await act(async () => {
             wrapper = await getWrapper({

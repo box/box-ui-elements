@@ -20,13 +20,30 @@
     line-height: 14px;
 }
 
-.bcs-DocGen-tagPath {
-    display: block;
-    height: 32px;
-    padding: 6px 12px;
-    font-weight: bold;
-    font-size: $bdl-fontSize--dejaBlue;
+.bcs-DocGen-accordion {
+    padding: 0;
+
+    &:first-child {
+        padding: 0;
+    }
 }
+
+.bcs-DocGen-accordion * {
+    padding: 0;
+
+    .bcs-DocGen-tagPath {
+        padding-left: 0;
+        font-weight: bold;
+        font-size: $bdl-fontSize--dejaBlue;
+    }
+}
+
+.bcs-DocGen-collapsible {
+    padding-top: 14px;
+    padding-right: 24px;
+    border: none;
+}
+
 
 .bcs-DocGenSidebar-loading {
     margin-top: 16px;
