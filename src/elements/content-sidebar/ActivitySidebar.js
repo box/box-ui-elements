@@ -773,7 +773,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Array} feedItems - the feed items
      * @return {void}
      */
-    fetchFeedItemsSuccessCallback = (feedItems: FeedItems): void => {
+    fetchFeedItemsSuccessCallback = (
+        feedItems: FeedItems,
+        uaaParityData?: { responseParity: {}[], parsedDataParity: {}[] } = null,
+    ): void => {
         const {
             file: { id: fileId },
             logger,
@@ -787,6 +790,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 {
                     endMarkName: MARK_NAME_DATA_READY,
                     startMarkName: MARK_NAME_DATA_LOADING,
+                    uaaParityData,
                 },
                 fileId,
             );

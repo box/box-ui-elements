@@ -117,6 +117,78 @@ const parseReplies = (replies: Comment[]): Comment[] => {
     });
 };
 
+const getResponseParity = (uaaData, v2ShadowItems) => {
+    const { versions, currentVersion, comments, tasks, appActivity, annotations } = v2ShadowItems;
+    const responseParityData = [];
+
+    if (!uaaData || !uaaData.entries || !uaaData.entries.length) {
+        return null;
+    }
+
+    const uaaItems = uaaData.entries;
+    uaaItems.forEach(item => {
+        if (!item.source) {
+            return;
+        }
+
+        const source = { ...item.source };
+
+        switch (item.activity_type) {
+            case FILE_ACTIVITY_TYPE_TASK: {
+                const uaaTask = { ...source[FILE_ACTIVITY_TYPE_TASK] };
+
+                if (tasks?.entries && tasks.entries.find(task => task.id === uaaTask.id)) {
+                    responseParityData.push({ v2: task, uaa: uaaTask });
+                }
+                break;
+            }
+            case FILE_ACTIVITY_TYPE_COMMENT: {
+                const uaaComment = { ...source[FILE_ACTIVITY_TYPE_COMMENT] };
+
+                if (comments?.entries && comments.entries.find(comment => comment.id === uaaComment.id)) {
+                    responseParityData.push({ v2: comment, uaa: uaaComment });
+                }
+                break;
+            }
+            case FILE_ACTIVITY_TYPE_ANNOTATION: {
+                const uaaAnnotation = { ...source[FILE_ACTIVITY_TYPE_ANNOTATION] };
+
+                if (
+                    annotations?.entries &&
+                    annotations.entries.find(annotation => annotation.id === uaaAnnotation.id)
+                ) {
+                    responseParityData.push({ v2: annotation, uaa: uaaAnnotation });
+                }
+                break;
+            }
+            case FILE_ACTIVITY_TYPE_APP_ACTIVITY: {
+                const uaaAppActivity = { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
+
+                if (appActivity?.entries && appActivity.find(activity => activity.id === uaaAppActivity.id)) {
+                    responseParityData.push({ v2: appActivity, uaa: uaaAppActivity });
+                }
+                break;
+            }
+
+            case FILE_ACTIVITY_TYPE_VERSION: {
+                const uaaVersions = { ...source[FILE_ACTIVITY_TYPE_VERSION] };
+
+                if (currentVersion.id === uaaVersions?.start.id) {
+                    responseParityData.push({ v2: currentVersion, uaa: uaaVersions });
+                }
+                if (versions.find(version => version.id === uaaVersions?.start.id)) {
+                    responseParityData.push({ v2: version, uaa: uaaVersions });
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    });
+
+    return responseParityData;
+};
+
 export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
     if (!response || !response.entries || !response.entries.length) {
         return [];
@@ -571,23 +643,16 @@ class Feed extends Base {
         this.errorCallback = onError;
 
         // Using the UAA File Activities endpoint replaces the need for these calls
-        const annotationsPromise =
-            !shouldUseUAA && shouldShowAnnotations
-                ? this.fetchAnnotations(permissions, shouldShowReplies)
-                : Promise.resolve();
+        const annotationsPromise = shouldShowAnnotations
+            ? this.fetchAnnotations(permissions, shouldShowReplies)
+            : Promise.resolve();
         const commentsPromise = () => {
-            if (shouldUseUAA) {
-                return Promise.resolve();
-            }
-
             return shouldShowReplies ? this.fetchThreadedComments(permissions) : this.fetchComments(permissions);
         };
-        const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
-        const appActivityPromise =
-            !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
-        const versionsPromise = !shouldUseUAA && shouldShowVersions ? this.fetchVersions() : Promise.resolve();
-        const currentVersionPromise =
-            !shouldUseUAA && shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
+        const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
+        const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
+        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
 
         const annotationActivityType =
             shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
@@ -611,13 +676,13 @@ class Feed extends Base {
                 ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
                 : Promise.resolve();
 
-        const handleFeedItems = (feedItems: FeedItems) => {
+        const handleFeedItems = (feedItems: FeedItems, uaaParityData?: {}) => {
             if (!this.isDestroyed()) {
                 this.setCachedItems(id, feedItems);
                 if (this.errors.length) {
                     errorCallback(feedItems, this.errors);
                 } else {
-                    successCallback(feedItems);
+                    successCallback(feedItems, uaaParityData);
                 }
             }
         };
@@ -628,8 +693,41 @@ class Feed extends Base {
                     return;
                 }
 
-                const parsedFeedItems = getParsedFileActivitiesResponse(response);
-                handleFeedItems(parsedFeedItems);
+                Promise.all([
+                    versionsPromise,
+                    currentVersionPromise,
+                    commentsPromise(),
+                    tasksPromise,
+                    appActivityPromise,
+                    annotationsPromise,
+                ]).then(
+                    ([
+                        versions: ?FileVersions,
+                        currentVersion: ?BoxItemVersion,
+                        comments,
+                        tasks,
+                        appActivity,
+                        annotations,
+                    ]) => {
+                        // Get parity data between V2 and UAA
+                        const v2ShadowItems = { versions, currentVersion, comments, tasks, appActivity, annotations };
+                        const versionsWithCurrent = currentVersion
+                            ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                            : undefined;
+                        const sortedFeedItems = sortFeedItems(
+                            versionsWithCurrent,
+                            comments,
+                            tasks,
+                            appActivity,
+                            annotations,
+                        );
+                        const responseParity = getResponseParity(response, v2ShadowItems);
+
+                        const parsedFeedItems = getParsedFileActivitiesResponse(response);
+                        const parsedDataParity = { v2: sortedFeedItems, uaa: parsedFeedItems };
+                        handleFeedItems(parsedFeedItems, { responseParity, parsedDataParity });
+                    },
+                );
             });
         } else {
             Promise.all([
