@@ -775,7 +775,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      */
     fetchFeedItemsSuccessCallback = (
         feedItems: FeedItems,
-        uaaParityData?: { responseParity: {}[], parsedDataParity: {}[] } = null,
+        uaaParityData?: { responseParity: {}[], parsedDataParity: {}[] },
     ): void => {
         const {
             file: { id: fileId },
