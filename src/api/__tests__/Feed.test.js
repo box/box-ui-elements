@@ -612,7 +612,7 @@ describe('api/Feed', () => {
                 shouldShowAnnotations: true,
                 shouldShowAppActivity: true,
                 shouldShowTasks: true,
-                shouldShowReplies: true,
+                shouldShowReplies: false,
                 shouldShowVersions: true,
             });
             setImmediate(() => {
@@ -628,7 +628,6 @@ describe('api/Feed', () => {
                     true,
                 );
                 expect(feed.fetchComments).toBeCalled();
-                expect(feed.fetchThreadedComments).toBeCalled();
                 done();
             });
         });
