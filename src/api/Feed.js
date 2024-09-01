@@ -693,8 +693,10 @@ class Feed extends Base {
                 this.setCachedItems(id, feedItems);
                 if (this.errors.length) {
                     errorCallback(feedItems, this.errors);
-                } else {
+                } else if (uaaParityData) {
                     successCallback(feedItems, uaaParityData);
+                } else {
+                    successCallback(feedItems);
                 }
             }
         };
