@@ -137,35 +137,44 @@ const getResponseParity = (uaaData, v2ShadowItems) => {
             case FILE_ACTIVITY_TYPE_TASK: {
                 const uaaTask = { ...source[FILE_ACTIVITY_TYPE_TASK] };
 
-                if (tasks?.entries && tasks.entries.find(task => task.id === uaaTask.id)) {
-                    responseParityData.push({ v2: task, uaa: uaaTask });
+                if (tasks?.entries) {
+                    const v2Task = tasks.entries.find(task => task.id === uaaTask.id);
+                    if (v2Task) {
+                        responseParityData.push({ v2: v2Task, uaa: uaaTask });
+                    }
                 }
                 break;
             }
             case FILE_ACTIVITY_TYPE_COMMENT: {
                 const uaaComment = { ...source[FILE_ACTIVITY_TYPE_COMMENT] };
 
-                if (comments?.entries && comments.entries.find(comment => comment.id === uaaComment.id)) {
-                    responseParityData.push({ v2: comment, uaa: uaaComment });
+                if (comments?.entries) {
+                    const v2Comment = comments.entries.find(comment => comment.id === uaaComment.id);
+                    if (v2Comment) {
+                        responseParityData.push({ v2: v2Comment, uaa: uaaComment });
+                    }
                 }
                 break;
             }
             case FILE_ACTIVITY_TYPE_ANNOTATION: {
                 const uaaAnnotation = { ...source[FILE_ACTIVITY_TYPE_ANNOTATION] };
 
-                if (
-                    annotations?.entries &&
-                    annotations.entries.find(annotation => annotation.id === uaaAnnotation.id)
-                ) {
-                    responseParityData.push({ v2: annotation, uaa: uaaAnnotation });
+                if (annotations?.entries) {
+                    const v2Annotation = annotations.entries.find(annotation => annotation.id === uaaAnnotation.id);
+                    if (v2Annotation) {
+                        responseParityData.push({ v2: v2Annotation, uaa: uaaAnnotation });
+                    }
                 }
                 break;
             }
             case FILE_ACTIVITY_TYPE_APP_ACTIVITY: {
                 const uaaAppActivity = { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
 
-                if (appActivity?.entries && appActivity.find(activity => activity.id === uaaAppActivity.id)) {
-                    responseParityData.push({ v2: appActivity, uaa: uaaAppActivity });
+                if (appActivity?.entries) {
+                    const v2Activity = appActivity.find(activity => activity.id === uaaAppActivity.id);
+                    if (v2Activity) {
+                        responseParityData.push({ v2: v2Activity, uaa: uaaAppActivity });
+                    }
                 }
                 break;
             }
@@ -173,11 +182,14 @@ const getResponseParity = (uaaData, v2ShadowItems) => {
             case FILE_ACTIVITY_TYPE_VERSION: {
                 const uaaVersions = { ...source[FILE_ACTIVITY_TYPE_VERSION] };
 
-                if (currentVersion.id === uaaVersions?.start.id) {
+                if (currentVersion?.id === uaaVersions?.start.id) {
                     responseParityData.push({ v2: currentVersion, uaa: uaaVersions });
                 }
-                if (versions.find(version => version.id === uaaVersions?.start.id)) {
-                    responseParityData.push({ v2: version, uaa: uaaVersions });
+                if (versions?.entries) {
+                    const v2Version = versions.find(version => version.id === uaaVersions?.start.id);
+                    if (v2Version) {
+                        responseParityData.push({ v2: v2Version, uaa: uaaVersions });
+                    }
                 }
                 break;
             }
