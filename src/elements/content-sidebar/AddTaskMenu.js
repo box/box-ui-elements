@@ -28,7 +28,11 @@ const AddTaskMenu = (props: Props) => (
             </MenuToggle>
         </Button>
         <Menu className="bcs-AddTaskMenu">
-            <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_GENERAL)}>
+            <MenuItem
+                className="bcs-AddTaskMenu-menuItem"
+                data-target-id="MenuItem-generalTask"
+                onClick={() => props.onMenuItemClick(TASK_TYPE_GENERAL)}
+            >
                 <div className="bcs-AddTaskMenu-icon">
                     <IconTaskGeneral width={30} height={30} />
                 </div>
@@ -41,7 +45,11 @@ const AddTaskMenu = (props: Props) => (
                     </div>
                 </div>
             </MenuItem>
-            <MenuItem className="bcs-AddTaskMenu-menuItem" onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}>
+            <MenuItem
+                className="bcs-AddTaskMenu-menuItem"
+                data-target-id="MenuItem-approvalTask"
+                onClick={() => props.onMenuItemClick(TASK_TYPE_APPROVAL)}
+            >
                 <div className="bcs-AddTaskMenu-icon">
                     <IconTaskApproval width={30} height={30} />
                 </div>

@@ -148,7 +148,7 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isQuickFilter(event)) {
+                        if (this.isTargetQuickSearch(event)) {
                             return;
                         }
 
@@ -167,7 +167,7 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isQuickFilter(event)) {
+                        if (this.isTargetQuickSearch(event)) {
                             return;
                         }
 
@@ -221,7 +221,7 @@ function makeSelectable(BaseTable) {
                     key: 'right',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
+                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
                             return;
                         }
 
@@ -240,7 +240,7 @@ function makeSelectable(BaseTable) {
                     key: 'left',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
+                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
                             return;
                         }
 
@@ -257,7 +257,7 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
+                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
                             return;
                         }
 
@@ -276,7 +276,7 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isQuickFilter(event)) {
+                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
                             return;
                         }
 
@@ -590,11 +590,7 @@ function makeSelectable(BaseTable) {
             }, SEARCH_TIMER_DURATION);
 
             const index = searchStrings.findIndex(
-                string =>
-                    string
-                        .trim()
-                        .toLowerCase()
-                        .indexOf(this.searchString) === 0,
+                string => string.trim().toLowerCase().indexOf(this.searchString) === 0,
             );
 
             if (index !== -1) {
@@ -612,8 +608,41 @@ function makeSelectable(BaseTable) {
 
         isTargetSlider = event => event.target?.role === 'slider';
 
-        // Workaround for focus conflicting with Blueprint components in Search Quick Filters, not needed once Blueprint table is integrated
-        isQuickFilter = event => event.target?.dataset && 'radixCollectionItem' in event.target.dataset;
+        // Workaround for focus conflicting with Blueprint components for QuickSearch result, recent items and Quick Filters
+        isTargetQuickSearch = event => {
+            if (!event.target) {
+                return false;
+            }
+
+            const { className, dataset } = event.target;
+
+            // Quick Search Button (See All etc)
+            if (className?.includes('bp_text_button_module')) {
+                return true;
+            }
+
+            // QuickSearch Recent Item
+            if (className?.includes('quickSearchRecentItem')) {
+                return true;
+            }
+
+            // Quick Search Result Item and Footer
+            if (className?.includes('quickSearchResultItem') || className?.includes('quickSearchQueryFooter')) {
+                return true;
+            }
+
+            // Blueprint's <FilterChip>
+            if (dataset && 'radixCollectionItem' in dataset) {
+                return true;
+            }
+
+            // Blueprint's <SmallList>
+            if (dataset && 'bpSmallListItem' in dataset) {
+                return true;
+            }
+
+            return false;
+        };
 
         render() {
             const { className, data } = this.props;
