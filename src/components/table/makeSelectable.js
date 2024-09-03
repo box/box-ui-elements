@@ -616,13 +616,18 @@ function makeSelectable(BaseTable) {
 
             const { className, dataset } = event.target;
 
+            // Quick Search Button (See All etc)
+            if (className?.includes('bp_text_button_module')) {
+                return true;
+            }
+
             // QuickSearch Recent Item
             if (className?.includes('quickSearchRecentItem')) {
                 return true;
             }
 
-            // Quick Search Result Item
-            if (className?.includes('quickSearchResultItem')) {
+            // Quick Search Result Item and Footer
+            if (className?.includes('quickSearchResultItem') || className?.includes('quickSearchQueryFooter')) {
                 return true;
             }
 
