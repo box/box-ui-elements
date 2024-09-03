@@ -1,28 +1,30 @@
-/**
- * @flow
- * @file Droppable area containing upload item list
- */
-
 import * as React from 'react';
-import makeDroppable from '../common/droppable';
+
 import ItemList from './ItemList';
 import UploadState from './UploadState';
-import type { UploadItem } from '../../common/types/upload';
-import type { View, DOMStringList } from '../../common/types/core';
+
+import makeDroppable from '../common/droppable';
+import type { UploadFile, UploadFileWithAPIOptions, UploadItem } from '../../common/types/upload';
+import type { DOMStringList, View } from '../../common/types/core';
 
 import './DroppableContent.scss';
 
-type Props = {
-    addDataTransferItemsToUploadQueue: Function,
-    addFiles: Function,
-    canDrop: boolean,
-    isFolderUploadEnabled: boolean,
-    isOver: boolean,
-    isTouch: boolean,
-    items: UploadItem[],
-    onClick: Function,
-    view: View,
-};
+export interface DroppableContentProps {
+    addDataTransferItemsToUploadQueue: (droppedItems: DataTransfer, itemUpdateCallback?: Function) => void;
+    addFiles: (
+        files?: Array<UploadFileWithAPIOptions | UploadFile>,
+        itemUpdateCallback?: Function,
+        isRelativePathIgnored?: boolean,
+    ) => void;
+    allowedTypes: Array<string>;
+    canDrop: boolean;
+    isFolderUploadEnabled: boolean;
+    isOver: boolean;
+    isTouch: boolean;
+    items: UploadItem[];
+    onClick: (item: UploadItem) => void;
+    view: View;
+}
 
 /**
  * Definition for drag and drop behavior.
@@ -32,8 +34,16 @@ const dropDefinition = {
      * Validates whether a file can be dropped or not.
      */
     dropValidator: (
-        { allowedTypes }: { allowedTypes: Array<string> },
-        { types }: { types: Array<string> | DOMStringList },
+        {
+            allowedTypes,
+        }: {
+            allowedTypes: Array<string>;
+        },
+        {
+            types,
+        }: {
+            types: Array<string> | DOMStringList;
+        },
     ) => {
         if (types instanceof Array) {
             return Array.from(types).some(type => allowedTypes.indexOf(type) > -1);
@@ -46,11 +56,11 @@ const dropDefinition = {
     /**
      * Determines what happens after a file is dropped
      */
-    onDrop: (event, { addDataTransferItemsToUploadQueue }: Props) => {
+    onDrop: (event, { addDataTransferItemsToUploadQueue }: DroppableContentProps) => {
         const { dataTransfer } = event;
         addDataTransferItemsToUploadQueue(dataTransfer);
     },
-};
+} as const;
 
 const DroppableContent = makeDroppable(dropDefinition)(({
     addFiles,
@@ -61,13 +71,13 @@ const DroppableContent = makeDroppable(dropDefinition)(({
     items,
     onClick,
     view,
-}: Props) => {
-    const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
+}: DroppableContentProps) => {
+    const handleSelectFiles = ({ target: { files } }) => addFiles(files);
     const hasItems = items.length > 0;
 
     return (
-        <div className="bcu-droppable-content">
-            <ItemList items={items} onClick={onClick} view={view} />
+        <div className="bcu-droppable-content" data-testid="bcu-droppable-content">
+            <ItemList items={items} onClick={onClick} />
             <UploadState
                 canDrop={canDrop}
                 hasItems={hasItems}
