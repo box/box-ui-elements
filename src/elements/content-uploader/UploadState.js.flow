@@ -37,7 +37,7 @@ const UploadState = ({
     let content;
     switch (view) {
         case VIEW_ERROR:
-            icon = <HatWand className='upload-error-state' height={126} width={130} />;
+            icon = <HatWand aria-label="upload-error-state" height={126} width={130} />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
             break;
         case VIEW_UPLOAD_EMPTY:
