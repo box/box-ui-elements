@@ -1,12 +1,12 @@
 import * as React from 'react';
 import './ProgressBar.scss';
 
-type Props = {
+export interface ProgressBarProps {
     percent?: number;
-};
+}
 
-const ProgressBar = ({ percent }: Props) => {
-    const clampedPercentage = Math.max(0, Math.min(100, percent || 0));
+const ProgressBar = ({ percent = 0 }: ProgressBarProps) => {
+    const clampedPercentage = Math.max(0, Math.min(100, percent));
 
     const containerStyle = {
         transitionDelay: clampedPercentage > 0 && clampedPercentage < 100 ? '0' : '0.4s',

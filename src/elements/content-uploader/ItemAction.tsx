@@ -2,17 +2,17 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { AxiosError } from 'axios';
 import { Button, IconButton, LoadingIndicator, Tooltip } from '@box/blueprint-web';
-import { ArrowCurveForward, Checkmark } from '@box/blueprint-web-assets/icons/Line';
-import { EllipsisBadge, XMark } from '@box/blueprint-web-assets/icons/Fill';
+import { ArrowCurveForward, Checkmark, XMark } from '@box/blueprint-web-assets/icons/Fill';
 import { Size5, SurfaceStatusSurfaceSuccess } from '@box/blueprint-web-assets/tokens/tokens';
+import IconInProgress from './IconInProgress';
 
 import {
     ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
-    STATUS_PENDING,
-    STATUS_IN_PROGRESS,
-    STATUS_STAGED,
     STATUS_COMPLETE,
     STATUS_ERROR,
+    STATUS_IN_PROGRESS,
+    STATUS_PENDING,
+    STATUS_STAGED,
 } from '../../constants';
 
 import messages from '../common/messages';
@@ -30,29 +30,6 @@ export interface ItemActionProps {
     status: UploadStatus;
 }
 
-const getIconWithTooltip = (
-    icon: React.ReactNode,
-    isDisabled: boolean,
-    isLoading: boolean,
-    onClick: React.MouseEventHandler<HTMLButtonElement>,
-    tooltip: boolean,
-    tooltipText: string,
-) => {
-    if (isLoading) {
-        return <LoadingIndicator aria-label="loading" />;
-    }
-
-    if (tooltip) {
-        return (
-            <Tooltip content={tooltipText}>
-                <IconButton aria-label={tooltipText} disabled={isDisabled} onClick={onClick} icon={() => icon} />
-            </Tooltip>
-        );
-    }
-
-    return <>{icon}</>;
-};
-
 const ItemAction = ({
     error,
     isFolder = false,
@@ -61,12 +38,11 @@ const ItemAction = ({
     onUpgradeCTAClick,
     status,
 }: ItemActionProps) => {
-    const intl = useIntl();
-    let icon: React.ReactNode = <XMark color="black" height={Size5} width={Size5} />;
-    let tooltip;
-    let isLoading = false;
+    const { formatMessage } = useIntl();
     const { code } = error || {};
-    const { formatMessage } = intl;
+
+    let Icon = XMark;
+    let tooltip;
 
     if (isFolder && status !== STATUS_PENDING) {
         return null;
@@ -74,28 +50,39 @@ const ItemAction = ({
 
     switch (status) {
         case STATUS_COMPLETE:
-            icon = <Checkmark aria-label="complete" color={SurfaceStatusSurfaceSuccess} height={Size5} width={Size5} />;
+            Icon = () => (
+                <Checkmark
+                    aria-label={formatMessage(messages.complete)}
+                    color={SurfaceStatusSurfaceSuccess}
+                    height={Size5}
+                    width={Size5}
+                />
+            );
             if (!isResumableUploadsEnabled) {
                 tooltip = messages.remove;
             }
             break;
         case STATUS_ERROR:
-            icon = <ArrowCurveForward aria-label="error" color="black" height={Size5} width={Size5} />;
+            Icon = ArrowCurveForward;
             tooltip = isResumableUploadsEnabled ? messages.resume : messages.retry;
             break;
         case STATUS_IN_PROGRESS:
         case STATUS_STAGED:
             if (isResumableUploadsEnabled) {
-                isLoading = true;
+                Icon = () => (
+                    <LoadingIndicator aria-label={formatMessage(messages.loading)} className="bcu-ItemAction-loading" />
+                );
             } else {
-                icon = <EllipsisBadge aria-label="staged" color="black" height={Size5} width={Size5} />;
+                Icon = IconInProgress;
                 tooltip = messages.uploadsCancelButtonTooltip;
             }
             break;
         case STATUS_PENDING:
         default:
             if (isResumableUploadsEnabled) {
-                isLoading = true;
+                Icon = () => (
+                    <LoadingIndicator aria-label={formatMessage(messages.loading)} className="bcu-ItemAction-loading" />
+                );
             } else {
                 tooltip = messages.uploadsCancelButtonTooltip;
             }
@@ -109,16 +96,23 @@ const ItemAction = ({
                 data-resin-target="large_version_error_inline_upgrade_cta"
                 variant="primary"
             >
-                {intl.formatMessage(messages.uploadsFileSizeLimitExceededUpgradeMessageForUpgradeCta)}
+                {formatMessage(messages.uploadsFileSizeLimitExceededUpgradeMessageForUpgradeCta)}
             </Button>
         );
     }
+
     const isDisabled = status === STATUS_STAGED;
     const tooltipText = tooltip && formatMessage(tooltip);
 
     return (
         <div className="bcu-item-action">
-            {getIconWithTooltip(icon, isDisabled, isLoading, onClick, tooltip, tooltipText)}
+            {tooltip ? (
+                <Tooltip content={tooltipText}>
+                    <IconButton aria-label={tooltipText} disabled={isDisabled} icon={Icon} onClick={onClick} />
+                </Tooltip>
+            ) : (
+                <Icon />
+            )}
         </div>
     );
 };
