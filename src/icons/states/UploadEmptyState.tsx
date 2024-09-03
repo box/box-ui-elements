@@ -7,7 +7,6 @@ import { Icon } from '../iconTypes';
 
 const UploadEmptyState = ({ className = '', color = bdlBoxBlue, height = 55, title, width = 46 }: Icon) => (
     <AccessibleSVG
-        aria-label="upload-empty-state"
         className={`upload-empty-state ${className}`}
         height={height}
         title={title}

@@ -2,7 +2,6 @@
 
 exports[`icons/state/UploadEmptyState should correctly render default icon 1`] = `
 <AccessibleSVG
-  aria-label="upload-empty-state"
   className="upload-empty-state "
   height={55}
   viewBox="0 0 46 55"
@@ -36,7 +35,6 @@ exports[`icons/state/UploadEmptyState should correctly render default icon 1`] =
 
 exports[`icons/state/UploadEmptyState should correctly render icon with specified props 1`] = `
 <AccessibleSVG
-  aria-label="upload-empty-state"
   className="upload-empty-state test"
   height={150}
   title="title"

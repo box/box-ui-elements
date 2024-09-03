@@ -21,14 +21,14 @@ describe('elements/content-uploader/UploadState', () => {
         );
 
     test.each`
-        view                       | iconAriaLabel
-        ${VIEW_ERROR}              | ${'upload-error-state'}
-        ${VIEW_UPLOAD_EMPTY}       | ${'upload-empty-state'}
-        ${VIEW_UPLOAD_IN_PROGRESS} | ${'upload-empty-state'}
-        ${VIEW_UPLOAD_SUCCESS}     | ${'upload-success-state'}
-    `('should render icon correctly based on the view', ({ view, iconAriaLabel }) => {
+        view                       | iconName
+        ${VIEW_ERROR}              | ${'Error state'}
+        ${VIEW_UPLOAD_EMPTY}       | ${'Empty state'}
+        ${VIEW_UPLOAD_IN_PROGRESS} | ${'Empty state'}
+        ${VIEW_UPLOAD_SUCCESS}     | ${'Success state'}
+    `('should render icon correctly based on the view', ({ view, iconName }) => {
         getWrapper({ view });
-        expect(screen.getByLabelText(iconAriaLabel)).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: iconName })).toBeInTheDocument();
     });
 
     test('should render upload_empty view correctly when canDrop and hasItems set to true', () => {

@@ -7,7 +7,6 @@ import { Icon } from '../iconTypes';
 
 const UploadSuccessState = ({ className = '', color = bdlBoxBlue, height = 49, title, width = 50 }: Icon) => (
     <AccessibleSVG
-        aria-label="upload-success-state"
         className={`upload-success-state ${className}`}
         height={height}
         title={title}

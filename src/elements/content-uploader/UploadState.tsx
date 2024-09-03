@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { FormattedMessage } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { HatWand } from '@box/blueprint-web-assets/illustrations/Medium';
 
 import UploadEmptyState from '../../icons/states/UploadEmptyState';
@@ -33,15 +33,16 @@ const UploadState = ({
     onSelect,
     isFolderUploadEnabled,
 }: UploadStateProps) => {
+    const intl = useIntl();
     let icon;
     let content;
     switch (view) {
         case VIEW_ERROR:
-            icon = <HatWand aria-label="upload-error-state" height={126} width={130} />;
+            icon = <HatWand aria-label={intl.formatMessage(messages.uploadErrorState)} height={126} width={130} />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
             break;
         case VIEW_UPLOAD_EMPTY:
-            icon = <UploadEmptyState />;
+            icon = <UploadEmptyState title={<FormattedMessage {...messages.uploadEmptyState} />} />;
             /* eslint-disable no-nested-ternary */
             content =
                 canDrop && hasItems ? (
@@ -71,11 +72,11 @@ const UploadState = ({
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:
-            icon = <UploadEmptyState />;
+            icon = <UploadEmptyState title={<FormattedMessage {...messages.uploadEmptyState} />} />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />;
             break;
         case VIEW_UPLOAD_SUCCESS:
-            icon = <UploadSuccessState />;
+            icon = <UploadSuccessState title={<FormattedMessage {...messages.uploadSuccessState} />} />;
             content = (
                 <UploadStateContent
                     fileInputLabel={<FormattedMessage {...messages.uploadSuccessFileInput} />}
