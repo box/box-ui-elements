@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { HatWand } from '@box/blueprint-web-assets/illustrations/Medium';
 
 import UploadEmptyState from '../../icons/states/UploadEmptyState';
@@ -33,38 +33,34 @@ const UploadState = ({
     onSelect,
     isFolderUploadEnabled,
 }: UploadStateProps) => {
-    const intl = useIntl();
+    const { formatMessage } = useIntl();
     let icon;
     let content;
     switch (view) {
         case VIEW_ERROR:
-            icon = <HatWand aria-label={intl.formatMessage(messages.uploadErrorState)} height={126} width={130} />;
-            content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
+            icon = <HatWand aria-label={formatMessage(messages.uploadErrorState)} height={126} width={130} />;
+            content = <UploadStateContent message={formatMessage(messages.uploadError)} />;
             break;
         case VIEW_UPLOAD_EMPTY:
-            icon = <UploadEmptyState title={<FormattedMessage {...messages.uploadEmptyState} />} />;
+            icon = <UploadEmptyState title={formatMessage(messages.uploadEmptyState)} />;
             /* eslint-disable no-nested-ternary */
             content =
                 canDrop && hasItems ? (
-                    <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />
+                    <UploadStateContent message={formatMessage(messages.uploadInProgress)} />
                 ) : isTouch ? (
                     <UploadStateContent
-                        fileInputLabel={<FormattedMessage {...messages.uploadNoDragDrop} />}
+                        fileInputLabel={formatMessage(messages.uploadNoDragDrop)}
                         onChange={onSelect}
                         useButton
                     />
                 ) : (
                     <UploadStateContent
-                        fileInputLabel={<FormattedMessage {...messages.uploadEmptyFileInput} />}
-                        folderInputLabel={
-                            isFolderUploadEnabled && <FormattedMessage {...messages.uploadEmptyFolderInput} />
-                        }
+                        fileInputLabel={formatMessage(messages.uploadEmptyFileInput)}
+                        folderInputLabel={isFolderUploadEnabled && formatMessage(messages.uploadEmptyFolderInput)}
                         message={
-                            isFolderUploadEnabled ? (
-                                <FormattedMessage {...messages.uploadEmptyWithFolderUploadEnabled} />
-                            ) : (
-                                <FormattedMessage {...messages.uploadEmptyWithFolderUploadDisabled} />
-                            )
+                            isFolderUploadEnabled
+                                ? formatMessage(messages.uploadEmptyWithFolderUploadEnabled)
+                                : formatMessage(messages.uploadEmptyWithFolderUploadDisabled)
                         }
                         onChange={onSelect}
                     />
@@ -72,18 +68,16 @@ const UploadState = ({
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:
-            icon = <UploadEmptyState title={<FormattedMessage {...messages.uploadEmptyState} />} />;
-            content = <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />;
+            icon = <UploadEmptyState title={formatMessage(messages.uploadEmptyState)} />;
+            content = <UploadStateContent message={formatMessage(messages.uploadInProgress)} />;
             break;
         case VIEW_UPLOAD_SUCCESS:
-            icon = <UploadSuccessState title={<FormattedMessage {...messages.uploadSuccessState} />} />;
+            icon = <UploadSuccessState title={formatMessage(messages.uploadSuccessState)} />;
             content = (
                 <UploadStateContent
-                    fileInputLabel={<FormattedMessage {...messages.uploadSuccessFileInput} />}
-                    folderInputLabel={
-                        isFolderUploadEnabled && <FormattedMessage {...messages.uploadSuccessFolderInput} />
-                    }
-                    message={<FormattedMessage {...messages.uploadSuccess} />}
+                    fileInputLabel={formatMessage(messages.uploadSuccessFileInput)}
+                    folderInputLabel={isFolderUploadEnabled && formatMessage(messages.uploadSuccessFolderInput)}
+                    message={formatMessage(messages.uploadSuccess)}
                     onChange={onSelect}
                     useButton={isTouch}
                 />
@@ -91,7 +85,6 @@ const UploadState = ({
             break;
         default:
             break;
-        /* eslint-enable jsx-a11y/label-has-for */
     }
 
     const className = classNames('bcu-upload-state', {

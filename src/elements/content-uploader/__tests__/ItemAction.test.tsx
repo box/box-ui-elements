@@ -30,7 +30,7 @@ describe('elements/content-uploader/ItemAction', () => {
         onUpgradeCTAClick: jest.fn(),
     };
 
-    const getWrapper = (props: Partial<ItemActionProps>) => render(<ItemAction {...defaultProps} {...props} />);
+    const renderComponent = (props: Partial<ItemActionProps>) => render(<ItemAction {...defaultProps} {...props} />);
 
     test.each`
         status
@@ -40,7 +40,7 @@ describe('elements/content-uploader/ItemAction', () => {
         ${STATUS_ERROR}
         ${STATUS_PENDING}
     `('should render correctly with $status', ({ status }: Pick<ItemActionProps, 'status'>) => {
-        getWrapper({ status });
+        renderComponent({ status });
         expect(screen.getByRole('button')).toBeInTheDocument();
     });
 
@@ -51,7 +51,7 @@ describe('elements/content-uploader/ItemAction', () => {
     `(
         'should render correctly with $status and resumable uploads enabled',
         ({ status, label }: Pick<ItemActionProps, 'status'> & { label: string }) => {
-            getWrapper({ status, isResumableUploadsEnabled: true });
+            renderComponent({ status, isResumableUploadsEnabled: true });
             expect(screen.getByRole('img', { name: label })).toBeInTheDocument();
         },
     );
@@ -64,7 +64,7 @@ describe('elements/content-uploader/ItemAction', () => {
     `(
         'should render correctly with $status and resumable uploads enabled',
         ({ status }: Pick<ItemActionProps, 'status'>) => {
-            getWrapper({ status, isResumableUploadsEnabled: true });
+            renderComponent({ status, isResumableUploadsEnabled: true });
             expect(screen.getByRole('status', { name: 'loading' })).toBeInTheDocument();
         },
     );
@@ -76,23 +76,23 @@ describe('elements/content-uploader/ItemAction', () => {
     `(
         'should render correctly with $status and resumable uploads disabled',
         ({ status, label }: Pick<ItemActionProps, 'status'> & { label: string }) => {
-            getWrapper({ status, isResumableUploadsEnabled: false });
+            renderComponent({ status, isResumableUploadsEnabled: false });
             expect(screen.getByRole('img', { name: label })).toBeInTheDocument();
         },
     );
 
     test('should render correctly with STATUS_PENDING and resumable uploads disabled', () => {
-        getWrapper({ status: STATUS_PENDING, isResumableUploadsEnabled: false });
+        renderComponent({ status: STATUS_PENDING, isResumableUploadsEnabled: false });
         expect(screen.getByRole('button', { name: 'Cancel this upload' })).toBeInTheDocument();
     });
 
     test('should render correctly with STATUS_ERROR and item is folder', () => {
-        getWrapper({ status: STATUS_ERROR, isFolder: true });
+        renderComponent({ status: STATUS_ERROR, isFolder: true });
         expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
 
     test('should render CTA button to upgrade when upload file size exceeded error is received', () => {
-        getWrapper({
+        renderComponent({
             status: STATUS_ERROR,
             error: { ...defaultError, code: ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED },
             onUpgradeCTAClick: jest.fn(),
