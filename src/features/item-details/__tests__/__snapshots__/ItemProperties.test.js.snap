@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`features/item-details/ItemProperties should not render archived date when feature is disabled 1`] = `
+<dl
+  className="item-properties"
+>
+  <RetentionPolicy />
+</dl>
+`;
+
+exports[`features/item-details/ItemProperties should not render archived date when feature is not set 1`] = `
+<dl
+  className="item-properties"
+>
+  <RetentionPolicy />
+</dl>
+`;
+
 exports[`features/item-details/ItemProperties should not render properties when not specified 1`] = `
 <dl
   className="item-properties"
@@ -12,6 +28,29 @@ exports[`features/item-details/ItemProperties should pass classification props t
 <dl
   className="item-properties"
 >
+  <RetentionPolicy />
+</dl>
+`;
+
+exports[`features/item-details/ItemProperties should render archived date when feature is enabled 1`] = `
+<dl
+  className="item-properties"
+>
+  <FormattedMessage
+    defaultMessage="Archived"
+    id="boxui.itemDetails.archived"
+    tagName="dt"
+  />
+  <dd>
+    <FormattedDate
+      day="numeric"
+      hour="numeric"
+      minute="numeric"
+      month="short"
+      value={2014-12-12T19:04:26.000Z}
+      year="numeric"
+    />
+  </dd>
   <RetentionPolicy />
 </dl>
 `;
@@ -83,6 +122,20 @@ exports[`features/item-details/ItemProperties should render editable url when ur
       value="box.com"
     />
   </dd>
+  <RetentionPolicy />
+</dl>
+`;
+
+exports[`features/item-details/ItemProperties should render empty archived date when feature is enabled 1`] = `
+<dl
+  className="item-properties"
+>
+  <FormattedMessage
+    defaultMessage="Archived"
+    id="boxui.itemDetails.archived"
+    tagName="dt"
+  />
+  <dd />
   <RetentionPolicy />
 </dl>
 `;

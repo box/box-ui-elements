@@ -2,7 +2,7 @@
 
 exports[`elements/content-sidebar/SidebarFileProperties render() should render ItemProperties 1`] = `
 <LoadingIndicatorWrapper>
-  <ItemProperties
+  <ForwardRef(withFeatureConsumer(ItemProperties))
     archivedAt="2018-04-18T16:56:05.352Z"
     createdAt="2018-04-18T16:56:05.352Z"
     description="foo"
@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render I
 
 exports[`elements/content-sidebar/SidebarFileProperties render() should render ItemProperties for anonymous uploaders 1`] = `
 <LoadingIndicatorWrapper>
-  <ItemProperties
+  <ForwardRef(withFeatureConsumer(ItemProperties))
     archivedAt="2018-04-18T16:56:05.352Z"
     createdAt="2018-04-18T16:56:05.352Z"
     description="foo"
@@ -99,7 +99,7 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
     <div
       className="loading-indicator-wrapper "
     >
-      <ItemProperties
+      <ForwardRef(withFeatureConsumer(ItemProperties))
         descriptionTextareaProps={
           {
             "data-resin-target": "description",
@@ -116,73 +116,92 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
         }
         size="1 B"
       >
-        <dl
-          className="item-properties"
+        <ItemProperties
+          descriptionTextareaProps={
+            {
+              "data-resin-target": "description",
+            }
+          }
+          features={{}}
+          retentionPolicyProps={
+            {
+              "dispositionTime": 1556317461,
+              "openModal": [MockFunction],
+              "policyName": "test policy",
+              "policyType": "finite",
+              "retentionPolicyDescription": "test policy (1 year retention & auto-deletion",
+            }
+          }
+          size="1 B"
         >
-          <FormattedMessage
-            defaultMessage="Size"
-            id="boxui.itemDetails.size"
-            tagName="dt"
-          >
-            <div />
-          </FormattedMessage>
-          <dd>
-            1 B
-          </dd>
-          <RetentionPolicy
-            dispositionTime={1556317461}
-            openModal={[MockFunction]}
-            policyName="test policy"
-            policyType="finite"
-            retentionPolicyDescription="test policy (1 year retention & auto-deletion"
+          <dl
+            className="item-properties"
           >
             <FormattedMessage
-              defaultMessage="Policy"
-              id="boxui.itemDetails.retentionPolicyDescription"
+              defaultMessage="Size"
+              id="boxui.itemDetails.size"
               tagName="dt"
             >
               <div />
             </FormattedMessage>
             <dd>
-              test policy (1 year retention & auto-deletion
+              1 B
             </dd>
-            <FormattedMessage
-              defaultMessage="Policy Expiration"
-              id="boxui.itemDetails.retentionPolicyExpiration"
-              tagName="dt"
+            <RetentionPolicy
+              dispositionTime={1556317461}
+              openModal={[MockFunction]}
+              policyName="test policy"
+              policyType="finite"
+              retentionPolicyDescription="test policy (1 year retention & auto-deletion"
             >
-              <div />
-            </FormattedMessage>
-            <dd>
-              <FormattedDate
-                day="numeric"
-                month="short"
-                value={1970-01-19T00:18:37.461Z}
-                year="numeric"
+              <FormattedMessage
+                defaultMessage="Policy"
+                id="boxui.itemDetails.retentionPolicyDescription"
+                tagName="dt"
               >
                 <div />
-              </FormattedDate>
-              <PlainButton
-                className="lnk bdl-RetentionLink"
-                onClick={[MockFunction]}
+              </FormattedMessage>
+              <dd>
+                test policy (1 year retention & auto-deletion
+              </dd>
+              <FormattedMessage
+                defaultMessage="Policy Expiration"
+                id="boxui.itemDetails.retentionPolicyExpiration"
+                tagName="dt"
               >
-                <button
-                  className="btn-plain lnk bdl-RetentionLink"
-                  onClick={[MockFunction]}
-                  type="submit"
+                <div />
+              </FormattedMessage>
+              <dd>
+                <FormattedDate
+                  day="numeric"
+                  month="short"
+                  value={1970-01-19T00:18:37.461Z}
+                  year="numeric"
                 >
-                  <FormattedMessage
-                    defaultMessage="Extend"
-                    id="boxui.itemDetails.retentionPolicyExtend"
+                  <div />
+                </FormattedDate>
+                <PlainButton
+                  className="lnk bdl-RetentionLink"
+                  onClick={[MockFunction]}
+                >
+                  <button
+                    className="btn-plain lnk bdl-RetentionLink"
+                    onClick={[MockFunction]}
+                    type="submit"
                   >
-                    <div />
-                  </FormattedMessage>
-                </button>
-              </PlainButton>
-            </dd>
-          </RetentionPolicy>
-        </dl>
-      </ItemProperties>
+                    <FormattedMessage
+                      defaultMessage="Extend"
+                      id="boxui.itemDetails.retentionPolicyExtend"
+                    >
+                      <div />
+                    </FormattedMessage>
+                  </button>
+                </PlainButton>
+              </dd>
+            </RetentionPolicy>
+          </dl>
+        </ItemProperties>
+      </ForwardRef(withFeatureConsumer(ItemProperties))>
     </div>
   </LoadingIndicatorWrapper>
 </SidebarFileProperties>

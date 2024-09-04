@@ -156,4 +156,5 @@ ItemProperties.propTypes = {
     url: PropTypes.string,
 };
 
+export { ItemProperties as ItemPropertiesComponent };
 export default withFeatureConsumer(ItemProperties);
