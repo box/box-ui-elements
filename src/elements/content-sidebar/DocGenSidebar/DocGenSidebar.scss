@@ -14,11 +14,11 @@
 .bcs-TagsSection {
     margin-top: tokens.$space-6;
     padding-bottom: tokens.$space-6;
-    border-bottom: tokens.$border-1 solid $bdl-gray-10;
+    border-bottom: tokens.$border-1 solid tokens.$gray-10;
 }
 
 .bcs-TagsSection-header {
-    font-size: $bdl-fontSize-minimum;
+    font-size: tokens.$caption-default-font-size;
     line-height: tokens.$caption-default-line-height;
 }
 
