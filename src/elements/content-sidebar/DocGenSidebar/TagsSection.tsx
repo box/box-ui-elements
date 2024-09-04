@@ -21,8 +21,9 @@ const TagsSection = ({ data, message }: Props) => {
             <span className="bcs-TagsSection-header">
                 <FormattedMessage {...message} />
             </span>
-
-            <TagTree data={data} />
+            <div className="bcs-TagsSection-accordion-wrapper">
+                <TagTree data={data} />
+            </div>
         </div>
     );
 };

@@ -28,7 +28,16 @@
     }
 }
 
+.bcs-TagsSection-accordion-wrapper {
+    width: '100%';
+    min-width: 'fit-content';
+    height: '100%';
+    overflow-x: 'auto';
+    overflow-y: 'auto';
+}
+
 .bcs-DocGen-accordion * {
+    width: auto;
     padding: 0;
 
     .bcs-DocGen-tagPath {
@@ -43,7 +52,6 @@
     padding-right: 24px;
     border: none;
 }
-
 
 .bcs-DocGenSidebar-loading {
     margin-top: 16px;
