@@ -22,7 +22,7 @@ import type { UploadStatus } from '../../common/types/upload';
 import './ItemAction.scss';
 
 export interface ItemActionProps {
-    error?: AxiosError;
+    error?: Partial<AxiosError>;
     isFolder?: boolean;
     isResumableUploadsEnabled: boolean;
     onClick: React.MouseEventHandler<HTMLButtonElement>;
