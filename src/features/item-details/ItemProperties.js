@@ -8,6 +8,7 @@ import EditableURL from './EditableURL';
 import RetentionPolicy from './RetentionPolicy';
 import ReadonlyDescription from './ReadonlyDescription';
 import messages from './messages';
+import { withFeatureConsumer, isFeatureEnabled } from '../../elements/common/feature-checking';
 
 import './ItemProperties.scss';
 
@@ -24,6 +25,7 @@ const ItemProperties = ({
     createdAt,
     description,
     descriptionTextareaProps = {},
+    features,
     enterpriseOwner,
     modifiedAt,
     onDescriptionChange,
@@ -36,6 +38,7 @@ const ItemProperties = ({
     url,
 }) => {
     const descriptionId = uniqueid('description_');
+    const shouldShowArchivedAt = isFeatureEnabled(features, 'details.archivedAt.enabled');
 
     return (
         <dl className="item-properties">
@@ -97,12 +100,10 @@ const ItemProperties = ({
                     </dd>
                 </>
             ) : null}
-            {archivedAt ? (
+            {shouldShowArchivedAt ? (
                 <>
                     <FormattedMessage tagName="dt" {...messages.archived} />
-                    <dd>
-                        <FormattedDate value={new Date(archivedAt)} {...datetimeOptions} />
-                    </dd>
+                    <dd>{archivedAt && <FormattedDate value={new Date(archivedAt)} {...datetimeOptions} />}</dd>
                 </>
             ) : null}
             {size ? (
@@ -155,4 +156,4 @@ ItemProperties.propTypes = {
     url: PropTypes.string,
 };
 
-export default ItemProperties;
+export default withFeatureConsumer(ItemProperties);
