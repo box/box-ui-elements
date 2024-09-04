@@ -1,7 +1,11 @@
 import { type StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import React, { type ComponentProps } from 'react';
-import { AddMetadataTemplateDropdown, MetadataTemplateFieldType } from '@box/metadata-editor';
+import {
+    AddMetadataTemplateDropdown,
+    type MetadataTemplateInstance,
+    type MetadataTemplateFieldType,
+} from '@box/metadata-editor';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 import SidebarContent from '../SidebarContent';
@@ -36,7 +40,7 @@ const mockTemplateFields = [
     },
 ];
 
-const mockCustomMetadata = {
+const mockCustomMetadata: MetadataTemplateInstance = {
     id: 'template-id',
     canEdit: true,
     fields: [],

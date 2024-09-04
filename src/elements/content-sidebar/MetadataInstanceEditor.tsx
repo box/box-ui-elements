@@ -1,4 +1,4 @@
-import { MetadataInstanceForm, MetadataTemplateInstance, UnsavedChangesModal } from '@box/metadata-editor';
+import { MetadataInstanceForm, type MetadataTemplateInstance, UnsavedChangesModal } from '@box/metadata-editor';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {

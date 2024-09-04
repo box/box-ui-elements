@@ -1,7 +1,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
-import { MetadataTemplateInstance } from '@box/metadata-editor';
+import { MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
@@ -10,7 +10,6 @@ import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPL
 import messages from '../../common/messages';
 
 import { type BoxItem } from '../../../common/types/core';
-import { MetadataTemplate } from '../../../common/types/metadata';
 import { type ErrorContextProps, type ExternalProps } from '../MetadataSidebarRedesign';
 
 export enum STATUS {

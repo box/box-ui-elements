@@ -6,7 +6,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
-import { AddMetadataTemplateDropdown, MetadataEmptyState } from '@box/metadata-editor';
+import { AddMetadataTemplateDropdown, MetadataEmptyState, type MetadataTemplateInstance } from '@box/metadata-editor';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -20,7 +20,7 @@ import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFet
 
 import { type ElementsXhrError } from '../../common/types/api';
 import { type ElementOrigin } from '../common/flowTypes';
-import { MetadataTemplate, MetadataTemplateInstance } from '../../common/types/metadata';
+import { MetadataTemplate } from '../../common/types/metadata';
 import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
@@ -82,9 +82,7 @@ function MetadataSidebarRedesign({
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
-        selectedTemplate.fields
-            ? setEditingTemplate(selectedTemplate)
-            : setEditingTemplate({ ...selectedTemplate, fields: [] });
+        setEditingTemplate(selectedTemplate);
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (

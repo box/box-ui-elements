@@ -1,19 +1,9 @@
 import React from 'react';
-import { MetadataTemplateInstance } from '@box/metadata-editor';
+import { type MetadataTemplateInstance } from '@box/metadata-editor';
 import { screen, render } from '../../../test-utils/testing-library';
 import MetadataInstanceEditor, { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
 
 describe('MetadataInstanceEditor', () => {
-    // const mockTemplate: MetadataTemplateInstance = {
-    //     id: 'template-id',
-    //     displayName: 'Template Name',
-    //     canEdit: true,
-    //     fields: [],
-    //     scope: 'global',
-    //     templateKey: 'template-id',
-    //     type: 'template-id',
-    // };
-
     const mockCustomMetadata: MetadataTemplateInstance = {
         id: 'template-id',
         canEdit: true,
