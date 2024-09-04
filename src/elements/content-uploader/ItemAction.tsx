@@ -41,6 +41,10 @@ const ItemAction = ({
     const { formatMessage } = useIntl();
     const { code } = error || {};
 
+    const LoadingIndicatorIcon = () => (
+        <LoadingIndicator aria-label={formatMessage(messages.loading)} className="bcu-ItemAction-loading" />
+    );
+
     let Icon = XMark;
     let tooltip;
 
@@ -69,9 +73,7 @@ const ItemAction = ({
         case STATUS_IN_PROGRESS:
         case STATUS_STAGED:
             if (isResumableUploadsEnabled) {
-                Icon = () => (
-                    <LoadingIndicator aria-label={formatMessage(messages.loading)} className="bcu-ItemAction-loading" />
-                );
+                Icon = LoadingIndicatorIcon;
             } else {
                 Icon = IconInProgress;
                 tooltip = messages.uploadsCancelButtonTooltip;
@@ -80,9 +82,7 @@ const ItemAction = ({
         case STATUS_PENDING:
         default:
             if (isResumableUploadsEnabled) {
-                Icon = () => (
-                    <LoadingIndicator aria-label={formatMessage(messages.loading)} className="bcu-ItemAction-loading" />
-                );
+                Icon = LoadingIndicatorIcon;
             } else {
                 tooltip = messages.uploadsCancelButtonTooltip;
             }
