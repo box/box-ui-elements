@@ -20,6 +20,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             scope: 'global',
             templateKey: 'properties',
             hidden: false,
+            fields: [],
         },
     ];
 

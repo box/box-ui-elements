@@ -20,7 +20,7 @@ import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFet
 
 import { type ElementsXhrError } from '../../common/types/api';
 import { type ElementOrigin } from '../common/flowTypes';
-import { MetadataTemplate } from '../../common/types/metadata';
+import { MetadataTemplate, MetadataTemplateInstance } from '../../common/types/metadata';
 import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
@@ -66,7 +66,8 @@ function MetadataSidebarRedesign({
     const { formatMessage } = useIntl();
 
     const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
-    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplate | null>(null);
+    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
+    const [isDismissModalOpen, setIsDismissModalOpen] = React.useState<boolean>(false);
 
     const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
         api,
@@ -77,12 +78,15 @@ function MetadataSidebarRedesign({
 
     const isAiLoading = false; // TODO when ADOPT-4544 is merged
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const handleUnsavedChanges = () => {}; // TODO when ADOPT-4667 is merged
+    const handleUnsavedChanges = () => {
+        setIsDismissModalOpen(true);
+    };
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
-        setEditingTemplate(selectedTemplate);
+        selectedTemplate.fields
+            ? setEditingTemplate(selectedTemplate)
+            : setEditingTemplate({ ...selectedTemplate, fields: [] });
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
@@ -124,6 +128,7 @@ function MetadataSidebarRedesign({
                         <MetadataInstanceEditor
                             isAiLoading={isAiLoading}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                            isDismissModalOpen={isDismissModalOpen}
                             template={editingTemplate}
                         />
                     )

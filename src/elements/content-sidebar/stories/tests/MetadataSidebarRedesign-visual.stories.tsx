@@ -1,6 +1,8 @@
 import { expect, userEvent, within, fn } from '@storybook/test';
+import { type StoryObj } from '@storybook/react';
 import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
+import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 
 export const Basic = {
     play: async ({ canvasElement }) => {
@@ -48,5 +50,55 @@ export default {
     },
     parameters: {
         ...defaultVisualConfig.parameters,
+    },
+};
+
+export const MetadataInstanceEditorWithCustomMetadata: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await canvas.findByRole('heading', { name: 'Metadata' });
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        expect(addTemplateButton).toBeInTheDocument();
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        expect(customMetadataOption).toBeInTheDocument();
+        await userEvent.click(customMetadataOption);
+    },
+};
+
+export const MetadataInstanceEditorWithTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await canvas.findByRole('heading', { name: 'Metadata' });
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        expect(addTemplateButton).toBeInTheDocument();
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'My Template' });
+        expect(customMetadataOption).toBeInTheDocument();
+        await userEvent.click(customMetadataOption);
+    },
+};
+
+export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await canvas.findByRole('heading', { name: 'Metadata' });
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        expect(addTemplateButton).toBeInTheDocument();
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        expect(customMetadataOption).toBeInTheDocument();
+        await userEvent.click(customMetadataOption);
+
+        await userEvent.click(addTemplateButton);
+        const myTemplateOption = canvas.getByRole('option', { name: 'My Template' });
+        expect(myTemplateOption).toBeInTheDocument();
+        await userEvent.click(myTemplateOption);
     },
 };
