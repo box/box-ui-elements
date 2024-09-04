@@ -114,7 +114,7 @@ describe('features/item-details/ItemProperties', () => {
 
     test('should not render archived date when feature is disabled', () => {
         const wrapper = getWrapper({
-            archivedAt: null,
+            archivedAt: '2014-12-12T11:04:26-08:00',
             features: {
                 details: {
                     archivedAt: {
@@ -129,7 +129,7 @@ describe('features/item-details/ItemProperties', () => {
 
     test('should not render archived date when feature is not set', () => {
         const wrapper = getWrapper({
-            archivedAt: null,
+            archivedAt: '2014-12-12T11:04:26-08:00',
         });
 
         expect(wrapper).toMatchSnapshot();

@@ -127,7 +127,7 @@ const ItemProperties = ({
 
 ItemProperties.propTypes = {
     /** the datetime this item was archived, accepts any value that can be passed to the Date() constructor */
-    archivedAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    archivedAt: PropTypes.string,
     /** the datetime this item was created, accepts any value that can be passed to the Date() constructor */
     createdAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** a description for the item */
