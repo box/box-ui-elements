@@ -76,8 +76,6 @@ function MetadataSidebarRedesign({
         isFeatureEnabled,
     );
 
-    const isAiLoading = false; // TODO when ADOPT-4544 is merged
-
     const handleUnsavedChanges = () => {
         setIsDismissModalOpen(true);
     };
@@ -126,7 +124,6 @@ function MetadataSidebarRedesign({
                 ) : (
                     editingTemplate && (
                         <MetadataInstanceEditor
-                            isAiLoading={isAiLoading}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDismissModalOpen={isDismissModalOpen}
                             template={editingTemplate}

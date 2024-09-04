@@ -26,7 +26,6 @@ describe('MetadataInstanceEditor', () => {
     const mockDefinedTemplate: MetadataTemplateInstance = { ...mockCustomMetadata, displayName: 'Template Name' };
 
     const defaultProps: MetadataInstanceEditorProps = {
-        isAiLoading: false,
         isBoxAiSuggestionsEnabled: true,
         isDismissModalOpen: false,
         template: mockDefinedTemplate,

@@ -2,30 +2,28 @@ import { MetadataInstanceForm, MetadataTemplateInstance, UnsavedChangesModal } f
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
-    isAiLoading: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDismissModalOpen: boolean;
     template: MetadataTemplateInstance;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
-    isAiLoading,
     isBoxAiSuggestionsEnabled,
     isDismissModalOpen,
     template,
 }) => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const handleSave = () => {}; // ADOPT-4412
+    const handleSave = () => {}; // TODO in a future PR
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onCancel = () => {}; // ADOPT-4413
+    const onCancel = () => {}; // TODO in a future PR
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onDelete = () => {}; // ADOPT-4416
+    const onDelete = () => {}; // TODO in a future PR
 
     return (
         <>
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isLoading={isAiLoading}
+                isLoading={false}
                 selectedTemplateInstance={template}
                 onCancel={onCancel}
                 onDelete={onDelete}

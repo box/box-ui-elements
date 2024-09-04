@@ -56,7 +56,6 @@ const renderWithEditor = template => (
         >
             <div className="bcs-MetadataSidebarRedesign-content">
                 <MetadataInstanceEditor
-                    isAiLoading={false}
                     isBoxAiSuggestionsEnabled={true}
                     isDismissModalOpen={false}
                     template={template}
