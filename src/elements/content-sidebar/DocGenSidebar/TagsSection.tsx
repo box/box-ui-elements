@@ -17,7 +17,7 @@ const TagsSection = ({ data, message }: Props) => {
     }
 
     return (
-        <div className="bcs-TagsSection">
+        <div className="bcs-TagsSection" data-testid="bcs-TagsSection">
             <span className="bcs-TagsSection-header">
                 <FormattedMessage {...message} />
             </span>
