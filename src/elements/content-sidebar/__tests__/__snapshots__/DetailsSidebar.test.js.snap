@@ -90,7 +90,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
       }
     />
     <SidebarFileProperties
-      archivedAt="2012-12-12T11:04:26-08:00"
       file={
         {
           "description": "bar",
@@ -98,45 +97,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
         }
       }
       hasRetentionPolicy={true}
-      isLoading={false}
-      onDescriptionChange={[Function]}
-    />
-  </SidebarSection>
-</SidebarContent>
-`;
-
-exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar with archived date when feature details.archivedAt is enabled 1`] = `
-<SidebarContent
-  className="bcs-details"
-  elementId=""
-  sidebarView="details"
-  title={
-    <FormattedMessage
-      defaultMessage="Details"
-      id="be.sidebarDetailsTitle"
-    />
-  }
->
-  <SidebarSection
-    className=""
-    interactionTarget="fileproperties"
-    isOpen={true}
-    title={
-      <FormattedMessage
-        defaultMessage="File Properties"
-        id="be.sidebarProperties"
-      />
-    }
-  >
-    <SidebarFileProperties
-      archivedAt="2012-12-12T11:04:26-08:00"
-      file={
-        {
-          "description": "bar",
-          "id": "foo",
-        }
-      }
-      hasRetentionPolicy={false}
       isLoading={false}
       onDescriptionChange={[Function]}
     />
@@ -221,120 +181,6 @@ exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsS
     />
   }
 />
-`;
-
-exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar without archived date when feature details.archivedAt is disabled 1`] = `
-<SidebarContent
-  className="bcs-details"
-  elementId=""
-  sidebarView="details"
-  title={
-    <FormattedMessage
-      defaultMessage="Details"
-      id="be.sidebarDetailsTitle"
-    />
-  }
->
-  <SidebarSection
-    className=""
-    interactionTarget="fileproperties"
-    isOpen={true}
-    title={
-      <FormattedMessage
-        defaultMessage="File Properties"
-        id="be.sidebarProperties"
-      />
-    }
-  >
-    <SidebarFileProperties
-      file={
-        {
-          "description": "bar",
-          "id": "foo",
-        }
-      }
-      hasRetentionPolicy={false}
-      isLoading={false}
-      onDescriptionChange={[Function]}
-    />
-  </SidebarSection>
-</SidebarContent>
-`;
-
-exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar without archived date when feature details.archivedAt is enabled and date is not set 1`] = `
-<SidebarContent
-  className="bcs-details"
-  elementId=""
-  sidebarView="details"
-  title={
-    <FormattedMessage
-      defaultMessage="Details"
-      id="be.sidebarDetailsTitle"
-    />
-  }
->
-  <SidebarSection
-    className=""
-    interactionTarget="fileproperties"
-    isOpen={true}
-    title={
-      <FormattedMessage
-        defaultMessage="File Properties"
-        id="be.sidebarProperties"
-      />
-    }
-  >
-    <SidebarFileProperties
-      file={
-        {
-          "description": "bar",
-          "id": "foo",
-        }
-      }
-      hasRetentionPolicy={false}
-      isLoading={false}
-      onDescriptionChange={[Function]}
-    />
-  </SidebarSection>
-</SidebarContent>
-`;
-
-exports[`elements/content-sidebar/DetailsSidebar render() should render DetailsSidebar without archived date when feature details.archivedAt is undefined 1`] = `
-<SidebarContent
-  className="bcs-details"
-  elementId=""
-  sidebarView="details"
-  title={
-    <FormattedMessage
-      defaultMessage="Details"
-      id="be.sidebarDetailsTitle"
-    />
-  }
->
-  <SidebarSection
-    className=""
-    interactionTarget="fileproperties"
-    isOpen={true}
-    title={
-      <FormattedMessage
-        defaultMessage="File Properties"
-        id="be.sidebarProperties"
-      />
-    }
-  >
-    <SidebarFileProperties
-      file={
-        {
-          "description": "bar",
-          "id": "foo",
-        }
-      }
-      hasRetentionPolicy={false}
-      isLoading={false}
-      onDescriptionChange={[Function]}
-    />
-  </SidebarSection>
-</SidebarContent>
 `;
 
 exports[`elements/content-sidebar/DetailsSidebar render() should render an empty container if there is no file information 1`] = `
