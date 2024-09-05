@@ -1,4 +1,4 @@
-import { expect, userEvent, within, fn } from '@storybook/test';
+import { expect, userEvent, within, fn, screen } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
 import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
@@ -106,5 +106,8 @@ export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof M
         const myTemplateOption = canvas.getByRole('option', { name: 'My Template' });
         expect(myTemplateOption).toBeInTheDocument();
         await userEvent.click(myTemplateOption);
+
+        const unsavedChangesModal = screen.getByText('Unsaved Changes');
+        expect(unsavedChangesModal).toBeInTheDocument();
     },
 };
