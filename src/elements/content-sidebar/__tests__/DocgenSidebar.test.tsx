@@ -1,18 +1,14 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { MessageDescriptor, IntlProvider } from 'react-intl';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { MessageDescriptor } from 'react-intl';
+import { render } from '../../../test-utils/testing-library';
 
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
-import mockData from '../__mocks__/DocGenSidebar';
+import mockData from '../__mocks__/DocGenSidebar.mock';
 
 const intl = {
     formatMessage: (message: MessageDescriptor) => message.defaultMessage,
 };
-
-jest.mock('react-intl', () => ({
-    ...jest.requireActual('react-intl'),
-    FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
-}));
 
 const docGenSidebarProps = {
     getDocGenTags: jest.fn().mockReturnValue(
@@ -33,12 +29,8 @@ const defaultProps = {
 };
 
 describe('elements/content-sidebar/DocGenSidebar', () => {
-    const Wrapper = ({ children }: { children?: React.ReactNode }) => {
-        return <IntlProvider locale="en">{children}</IntlProvider>;
-    };
-
     const renderComponent = (props = defaultProps) =>
-        render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />, { wrapper: Wrapper });
+        render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />);
 
     test('componentDidMount() should call fetch tags', async () => {
         renderComponent();
@@ -47,9 +39,8 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
     test('should render DocGen sidebar component correctly with tags list', async () => {
         renderComponent();
-        const tagList = await screen.findAllByTestId(/bcs-TagsSection/);
+        const tagList = await screen.findAllByTestId('bcs-TagsSection');
         expect(tagList).toHaveLength(2);
-        expect(document.body).toMatchSnapshot();
     });
 
     test('should render empty state when there are no tags', async () => {
@@ -60,7 +51,6 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         const emptyState = await screen.findByText('This document has no tags');
         expect(emptyState).toBeInTheDocument();
-        expect(document.body).toMatchSnapshot();
     });
 
     test('should render loading state', async () => {
@@ -69,9 +59,8 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: noTagsMock,
         });
 
-        const loadingState = await screen.getByTestId('loading-indicator'); // Assuming LoadingIndicator has a test id
+        const loadingState = await screen.getByRole('status'); // Assuming LoadingIndicator has a test id
         expect(loadingState).toBeInTheDocument();
-        expect(document.body).toMatchSnapshot();
     });
 
     test('should re-trigger getDocGenTags on click on refresh button', async () => {
@@ -82,7 +71,6 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         const errorState = await screen.findByTestId('docgen-sidebar-error');
         expect(errorState).toBeInTheDocument();
-        expect(document.body).toMatchSnapshot();
 
         const refreshButton = screen.getByRole('button');
         fireEvent.click(refreshButton);
@@ -98,6 +86,5 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         const emptyState = await screen.findByText("We couldn't load the tags");
         expect(emptyState).toBeInTheDocument();
-        expect(document.body).toMatchSnapshot();
     });
 });

@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import flow from 'lodash/flow';
 import { injectIntl, IntlShape } from 'react-intl';
 
+import { LoadingIndicator } from '@box/blueprint-web';
+
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { ORIGIN_DOCGEN_SIDEBAR, SIDEBAR_VIEW_DOCGEN } from '../../../constants';
@@ -12,7 +14,6 @@ import { withAPIContext } from '../../common/api-context';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withErrorBoundary } from '../../common/error-boundary';
-import LoadingIndicator from '../../../components/loading-indicator';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withLogger } from '../../common/logger';
@@ -127,7 +128,14 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
         <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={intl.formatMessage(messages.docGenTags)}>
             <div className={classNames('bcs-DocGenSidebar', { center: isEmpty || hasError || isLoading })}>
                 {hasError && <Error onClick={loadTags} />}
-                {isLoading && <LoadingIndicator className="bcs-DocGenSidebar-loading" />}
+                {isLoading && (
+                    <LoadingIndicator
+                        aria-label="Loading..."
+                        aria-live="polite"
+                        variant="default"
+                        className="bcs-DocGenSidebar-loading"
+                    />
+                )}
                 {!hasError && !isLoading && isEmpty && <EmptyTags />}
                 {!hasError && !isLoading && !isEmpty && (
                     <>
