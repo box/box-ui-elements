@@ -1,5 +1,6 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
+import { type MetadataTemplate } from '@box/metadata-editor';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
 import {
@@ -14,13 +15,14 @@ const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFu
 >;
 
 describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
-    const mockTemplates = [
+    const mockTemplates: MetadataTemplate[] = [
         {
             id: 'metadata_template_custom_1',
             scope: 'global',
             templateKey: 'properties',
             hidden: false,
             fields: [],
+            type: 'metadata_template',
         },
     ];
 

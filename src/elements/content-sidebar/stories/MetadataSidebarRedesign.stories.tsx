@@ -1,11 +1,7 @@
 import { type StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 import React, { type ComponentProps } from 'react';
-import {
-    AddMetadataTemplateDropdown,
-    type MetadataTemplateInstance,
-    type MetadataTemplateFieldType,
-} from '@box/metadata-editor';
+import { AddMetadataTemplateDropdown, type MetadataTemplate, type MetadataTemplateField } from '@box/metadata-editor';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 import SidebarContent from '../SidebarContent';
@@ -29,27 +25,27 @@ const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign
     onError: fn,
 };
 
-const mockTemplateFields = [
+const mockTemplateFields: MetadataTemplateField[] = [
     {
         description: 'My Value',
         displayName: 'My Attribute',
         hidden: false,
         id: '4fc86fb1-43cd-4aa2-a585-5e94ec445d90',
         key: 'myAttribute',
-        type: 'string' as MetadataTemplateFieldType,
+        type: 'string',
     },
 ];
 
-const mockCustomMetadata: MetadataTemplateInstance = {
+const mockCustomMetadataTemplate: MetadataTemplate = {
     id: 'template-id',
-    canEdit: true,
     fields: [],
     scope: 'global',
-    templateKey: 'template-id',
+    templateKey: 'properties',
     type: 'template-id',
+    hidden: false,
 };
 
-const renderWithEditor = template => (
+const renderWithEditor = (template: MetadataTemplate) => (
     <div style={{ display: 'flex', height: '500px' }}>
         <SidebarContent
             actions={<AddMetadataTemplateDropdown availableTemplates={[]} selectedTemplates={[]} onSelect={fn()} />}
@@ -61,7 +57,7 @@ const renderWithEditor = template => (
             <div className="bcs-MetadataSidebarRedesign-content">
                 <MetadataInstanceEditor
                     isBoxAiSuggestionsEnabled={true}
-                    isDismissModalOpen={false}
+                    isUnsavedChangesModalOpen={false}
                     template={template}
                 />
             </div>
@@ -108,14 +104,18 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
 
 export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     render: () => {
-        const mockDefinedTemplate = { ...mockCustomMetadata, displayName: 'Template Name', fields: mockTemplateFields };
+        const mockMetadataTemplate = {
+            ...mockCustomMetadataTemplate,
+            displayName: 'Template Name',
+            fields: mockTemplateFields,
+        };
 
-        return renderWithEditor(mockDefinedTemplate);
+        return renderWithEditor(mockMetadataTemplate);
     },
 };
 
 export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     render: () => {
-        return renderWithEditor(mockCustomMetadata);
+        return renderWithEditor(mockCustomMetadataTemplate);
     },
 };

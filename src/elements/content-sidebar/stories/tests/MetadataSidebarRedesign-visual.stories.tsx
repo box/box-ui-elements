@@ -65,6 +65,9 @@ export const MetadataInstanceEditorWithCustomMetadata: StoryObj<typeof MetadataS
         const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
         expect(customMetadataOption).toBeInTheDocument();
         await userEvent.click(customMetadataOption);
+
+        const templateHeader = await canvas.findByRole('heading', { name: 'Custom Metadata' });
+        expect(templateHeader).toBeInTheDocument();
     },
 };
 
@@ -80,6 +83,9 @@ export const MetadataInstanceEditorWithTemplate: StoryObj<typeof MetadataSidebar
         const customMetadataOption = canvas.getByRole('option', { name: 'My Template' });
         expect(customMetadataOption).toBeInTheDocument();
         await userEvent.click(customMetadataOption);
+
+        const templateHeader = await canvas.findByRole('heading', { name: 'My Template' });
+        expect(templateHeader).toBeInTheDocument();
     },
 };
 

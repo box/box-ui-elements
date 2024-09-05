@@ -1,23 +1,28 @@
-import { MetadataInstanceForm, type MetadataTemplateInstance, UnsavedChangesModal } from '@box/metadata-editor';
+import {
+    MetadataInstanceForm,
+    type MetadataTemplateInstance,
+    UnsavedChangesModal,
+    type MetadataTemplate,
+} from '@box/metadata-editor';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
-    isDismissModalOpen: boolean;
-    template: MetadataTemplateInstance;
+    isUnsavedChangesModalOpen: boolean;
+    template: MetadataTemplateInstance | MetadataTemplate;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
-    isDismissModalOpen,
+    isUnsavedChangesModalOpen,
     template,
 }) => {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const handleSave = () => {}; // TODO in a future PR
+    const handleSubmit = () => {}; // TODO in a future PR
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onCancel = () => {}; // TODO in a future PR
+    const handleCancel = () => {}; // TODO in a future PR
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const onDelete = () => {}; // TODO in a future PR
+    const handleDelete = () => {}; // TODO in a future PR
 
     return (
         <>
@@ -25,11 +30,13 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                 isLoading={false}
                 selectedTemplateInstance={template}
-                onCancel={onCancel}
-                onDelete={onDelete}
-                onSubmit={handleSave}
+                onCancel={handleCancel}
+                onDelete={handleDelete}
+                onSubmit={handleSubmit}
             />
-            {isDismissModalOpen && <UnsavedChangesModal onDismiss={onCancel} onSaveAndContinue={handleSave} />}
+            {isUnsavedChangesModalOpen && (
+                <UnsavedChangesModal onDismiss={handleCancel} onSaveAndContinue={handleSubmit} />
+            )}
         </>
     );
 };

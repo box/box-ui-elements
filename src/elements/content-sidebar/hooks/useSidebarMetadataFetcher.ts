@@ -1,7 +1,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
-import { MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
+import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
@@ -55,14 +55,14 @@ function useSidebarMetadataFetcher(
     const fetchMetadataSuccessCallback = React.useCallback(
         ({
             templates: fetchedTemplates,
-            templateInstances: fetchedtemplateInstances,
+            templateInstances: fetchedTemplateInstances,
         }: {
             templates: Array<MetadataTemplate>;
             templateInstances: Array<MetadataTemplateInstance>;
         }) => {
             setErrorMessage(null);
             setStatus(STATUS.SUCCESS);
-            setTemplateInstances(fetchedtemplateInstances);
+            setTemplateInstances(fetchedTemplateInstances);
             setTemplates(fetchedTemplates);
         },
         [],
