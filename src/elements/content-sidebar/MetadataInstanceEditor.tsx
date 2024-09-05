@@ -34,9 +34,11 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 onDelete={handleDelete}
                 onSubmit={handleSubmit}
             />
-            {isUnsavedChangesModalOpen && (
-                <UnsavedChangesModal onDismiss={handleCancel} onSaveAndContinue={handleSubmit} />
-            )}
+            <UnsavedChangesModal
+                onDismiss={handleCancel}
+                onSaveAndContinue={handleSubmit}
+                open={isUnsavedChangesModalOpen}
+            />
         </>
     );
 };
