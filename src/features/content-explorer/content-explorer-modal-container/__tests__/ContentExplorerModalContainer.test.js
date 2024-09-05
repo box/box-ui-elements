@@ -5,7 +5,7 @@ import ContentExplorerModalContainer from '../ContentExplorerModalContainer';
 
 describe('features/content-explorer/content-explorer-modal-container/ContentExplorerModalContainer', () => {
     const sandbox = sinon.sandbox.create();
-    const initialSelectedItems = { '123': { id: '123', name: 'folder123' } };
+    const initialSelectedItems = { 123: { id: '123', name: 'folder123' } };
     const renderComponent = (props, renderer = shallow) =>
         renderer(
             <ContentExplorerModalContainer
@@ -96,6 +96,14 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             wrapper.setState({ isNewFolderModalOpen: true });
 
             expect(wrapper.find('Portal').length).toBe(0);
+        });
+
+        test('should pass isInfoNoticeVisible and infoNoticeText to ContentExplorerModal', () => {
+            const isInfoNoticeVisible = true;
+            const infoNoticeText = 'info notice text';
+            const wrapper = renderComponent({ isInfoNoticeVisible, infoNoticeText });
+            expect(wrapper.find('ContentExplorerModal').prop('isInfoNoticeVisible')).toEqual(isInfoNoticeVisible);
+            expect(wrapper.find('ContentExplorerModal').prop('infoNoticeText')).toEqual(infoNoticeText);
         });
     });
 

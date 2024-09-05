@@ -1,6 +1,27 @@
 @import '../../../styles/variables';
 
 .content-explorer {
+    .content-explorer-info-notice {
+        border: none;
+
+        .content-explorer-info-notice-flex-container {
+            display: flex;
+
+            .content-explorer-info-notice-icon {
+                flex-shrink: 0;
+                width: 17.5px;
+                height: 17.5px;
+                margin: 1.25px;
+            }
+
+            p {
+                margin-bottom: 0;
+                margin-left: 10px;
+                font-size: 14px;
+            }
+        }
+    }
+
     .content-explorer-search-new-folder-container {
         display: flex;
         align-items: center;

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`features/content-explorer/content-explorer/ContentExplorerInfoNotice should render correctly 1`] = `
+<InlineNotice
+  className="content-explorer-info-notice"
+  type="info"
+>
+  <div
+    className="content-explorer-info-notice-flex-container"
+  >
+    <SvgInfoBadge
+      className="content-explorer-info-notice-icon"
+    />
+    <p>
+      This is an info notice
+    </p>
+  </div>
+</InlineNotice>
+`;

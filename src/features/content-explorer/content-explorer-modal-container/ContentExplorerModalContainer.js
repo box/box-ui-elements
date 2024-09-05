@@ -151,6 +151,10 @@ class ContentExplorerModalContainer extends Component {
         searchInputProps: PropTypes.object,
         /** Custom text for the choose button */
         chooseButtonText: PropTypes.node,
+        /** Whether the informational notice is visible */
+        isInfoNoticeVisible: PropTypes.bool,
+        /** Text for the informational notice */
+        infoNoticeText: PropTypes.string,
     };
 
     static defaultProps = {
@@ -207,6 +211,8 @@ class ContentExplorerModalContainer extends Component {
             createFolderError,
             initialFoldersPath,
             shouldNotUsePortal,
+            isInfoNoticeVisible = false,
+            infoNoticeText,
             ...rest
         } = this.props;
         const { foldersPath, isNewFolderModalOpen } = this.state;
@@ -223,6 +229,8 @@ class ContentExplorerModalContainer extends Component {
                     onEnterFolder={this.handleEnterFolder}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
                     shouldNotUsePortal={shouldNotUsePortal}
+                    isInfoNoticeVisible={isInfoNoticeVisible}
+                    infoNoticeText={infoNoticeText}
                     {...rest}
                 />
                 {isNewFolderModalOpen && (

@@ -70,5 +70,13 @@ describe('features/content-explorer/content-explorer-modal/ContentExplorerModal'
             expect(wrapper.find('ContentExplorer').prop('onSelectedClick')).toEqual(onSelectedClick);
             expect(wrapper.find('ContentExplorer').prop('onSelectItem')).toEqual(onSelectItem);
         });
+
+        test('should pass isInfoNoticeVisible and infoNoticeText to ContentExplorer', () => {
+            const isInfoNoticeVisible = true;
+            const infoNoticeText = 'info notice text';
+            const wrapper = renderComponent({ isInfoNoticeVisible, infoNoticeText });
+            expect(wrapper.find('ContentExplorer').prop('isInfoNoticeVisible')).toEqual(isInfoNoticeVisible);
+            expect(wrapper.find('ContentExplorer').prop('infoNoticeText')).toEqual(infoNoticeText);
+        });
     });
 });
