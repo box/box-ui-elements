@@ -30,7 +30,7 @@ const UploadStateContent = ({
 
         onChange(event);
 
-        const {currentTarget} = event;
+        const { currentTarget } = event;
         currentTarget.value = ''; // Reset the file input selection
     };
 
