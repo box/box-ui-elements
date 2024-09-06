@@ -249,8 +249,11 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${{ can_delete: false, can_download: true, can_preview: true, can_upload: true }}
             ${{ can_delete: true, can_download: true, can_preview: false, can_upload: false }}
             ${{ can_delete: true, can_download: false, can_preview: true, can_upload: false }}
+            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: false }}
             ${{ can_delete: false, can_download: true, can_preview: false, can_upload: true }}
             ${{ can_delete: false, can_download: false, can_preview: true, can_upload: true }}
+            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: false }}
+            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: false }}
         `(
             'should disable the correct menu items based on permissions when unchangeableVersions feature is enabled',
             ({ permissions }) => {
@@ -282,6 +285,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${{ can_delete: true, can_download: false, can_preview: false, can_upload: true }}
             ${{ can_delete: true, can_download: false, can_preview: false, can_upload: false }}
             ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
+            ${{ can_delete: false, can_download: false, can_preview: false, can_upload: false }}
         `(
             'should not render actions based on permissions when unchangeableVersions feature is enabled',
             ({ permissions }) => {
@@ -319,6 +323,9 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${{ can_delete: true, can_download: false, can_preview: false, can_upload: true }}
             ${{ can_delete: true, can_download: false, can_preview: false, can_upload: false }}
             ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
+            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: false }}
+            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: false }}
+            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: false }}
         `(
             'should show the correct menu items based on permissions when unchangeableVersions feature is disabled',
             ({ permissions }) => {
@@ -344,5 +351,25 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
                 expect(wrapper.find(ReadableTime)).toBeTruthy();
             },
         );
+        test('should not render actions on all false permissions when unchangeableVersions feature is disabled', () => {
+            const permissions = { can_delete: false, can_download: false, can_preview: false, can_upload: false };
+            const unchangeableVersionsFeature = {
+                versionsItem: {
+                    unchangeableVersions: {
+                        enabled: false,
+                    },
+                },
+            };
+            const wrapper = getWrapper({
+                version: getVersion({ permissions }),
+                features: unchangeableVersionsFeature,
+            });
+            const actions = wrapper.exists(VersionsItemActions);
+            const button = wrapper.find(VersionsItemButton);
+
+            expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
+            expect(actions).toBeFalsy();
+            expect(wrapper.find(ReadableTime)).toBeTruthy();
+        });
     });
 });
