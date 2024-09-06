@@ -5,13 +5,15 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { InlineError, LoadingIndicator } from '@box/blueprint-web';
+import { InlineError, LoadingIndicator, TooltipProvider } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
     MetadataEmptyState,
+    MetadataInstanceList,
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
+import noop from 'lodash/noop';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -109,33 +111,44 @@ function MetadataSidebarRedesign({
 
     const showTemplateInstances = file && templates && templateInstances;
     const showEmptyState = showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
+    const showList = templateInstances.length > 0;
 
     return (
-        <SidebarContent
-            actions={metadataDropdown}
-            className={'bcs-MetadataSidebarRedesign'}
-            elementId={elementId}
-            sidebarView={SIDEBAR_VIEW_METADATA}
-            title={formatMessage(messages.sidebarMetadataTitle)}
-        >
-            <div className="bcs-MetadataSidebarRedesign-content">
-                {errorMessageDisplay}
-                {status === STATUS.LOADING && (
-                    <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
-                )}
-                {showEmptyState ? (
-                    <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
-                ) : (
-                    editingTemplate && (
-                        <MetadataInstanceEditor
-                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                            template={editingTemplate}
+        <TooltipProvider>
+            <SidebarContent
+                actions={metadataDropdown}
+                className={'bcs-MetadataSidebarRedesign'}
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_METADATA}
+                title={formatMessage(messages.sidebarMetadataTitle)}
+            >
+                <div className="bcs-MetadataSidebarRedesign-content">
+                    {errorMessageDisplay}
+                    {status === STATUS.LOADING && (
+                        <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
+                    )}
+                    {showEmptyState ? (
+                        <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
+                    ) : (
+                        editingTemplate && (
+                            <MetadataInstanceEditor
+                                isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                                template={editingTemplate}
+                            />
+                        )
+                    )}
+                    {showList && (
+                        <MetadataInstanceList
+                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                            onEdit={noop}
+                            onEditWithAutofill={noop}
+                            templateInstances={templateInstances}
                         />
-                    )
-                )}
-            </div>
-        </SidebarContent>
+                    )}
+                </div>
+            </SidebarContent>
+        </TooltipProvider>
     );
 }
 
