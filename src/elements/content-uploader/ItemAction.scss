@@ -1,23 +1,20 @@
 .bcu-item-action {
-    .crawler {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .bcu-ItemAction-loading,
+    .bcu-IconInProgress-loading {
+        position: relative; // Override default Blueprint position: `absolute`
     }
 
     button {
-        display: flex;
-
         // Vertically center icon
         svg {
             display: block;
         }
 
-        .be-icon-in-progress {
-            width: 24px;
-            height: 24px;
-
+        .bcu-IconInProgress {
             // Hide cross icon without hover
             svg {
                 display: none;
@@ -25,12 +22,12 @@
         }
 
         // Display cross icon on hover and hide loading indicator
-        &:hover .be-icon-in-progress {
+        &:hover .bcu-IconInProgress {
             svg {
                 display: block;
             }
 
-            .crawler {
+            .bcu-IconInProgress-loading {
                 display: none;
             }
         }

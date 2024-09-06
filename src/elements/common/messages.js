@@ -52,6 +52,11 @@ const messages = defineMessages({
         description: 'Message when new preview is available.',
         defaultMessage: 'A new version of this file is available.',
     },
+    complete: {
+        id: 'be.complete',
+        description: 'Label for complete state.',
+        defaultMessage: 'Complete',
+    },
     loading: {
         id: 'be.loading',
         description: 'Label for loading state.',
