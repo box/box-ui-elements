@@ -371,5 +371,76 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             expect(actions).toBeFalsy();
             expect(wrapper.find(ReadableTime)).toBeTruthy();
         });
+
+        test.each`
+            action       | showDelete | showDownload | showPreview | showPromote | showRestore
+            ${'restore'} | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
+            ${'upload'}  | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
+        `(
+            "should show actions correctly when the version's action is $action and unchangeableVersions feature is disabled",
+            ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
+                const unchangeableVersionsFeature = {
+                    versionsItem: {
+                        unchangeableVersions: {
+                            enabled: true,
+                        },
+                    },
+                };
+                selectors.getVersionAction.mockReturnValueOnce(action);
+
+                const wrapper = getWrapper({
+                    version: getVersion({
+                        permissions: {
+                            can_delete: true,
+                            can_download: true,
+                            can_preview: true,
+                            can_upload: true,
+                        },
+                    }),
+                    features: unchangeableVersionsFeature,
+                });
+                const actions = wrapper.find(VersionsItemActions);
+                const button = wrapper.find(VersionsItemButton);
+
+                expect(button.prop('isDisabled')).toBe(!showPreview);
+                expect(actions.prop('showDelete')).toBe(showDelete);
+                expect(actions.prop('showDownload')).toBe(showDownload);
+                expect(actions.prop('showPromote')).toBe(showPromote);
+                expect(actions.prop('showPreview')).toBe(showPreview);
+                expect(actions.prop('showRestore')).toBe(showRestore);
+                expect(wrapper.find(ReadableTime)).toBeTruthy();
+                expect(wrapper).toMatchSnapshot();
+            },
+        );
+
+        test("should show actions correctly when the version's action is $action and unchangeableVersions feature is disabled", () => {
+            const unchangeableVersionsFeature = {
+                versionsItem: {
+                    unchangeableVersions: {
+                        enabled: true,
+                    },
+                },
+            };
+            selectors.getVersionAction.mockReturnValueOnce('delete');
+
+            const wrapper = getWrapper({
+                version: getVersion({
+                    permissions: {
+                        can_delete: true,
+                        can_download: true,
+                        can_preview: true,
+                        can_upload: true,
+                    },
+                }),
+                features: unchangeableVersionsFeature,
+            });
+            const actions = wrapper.exists(VersionsItemActions);
+            const button = wrapper.find(VersionsItemButton);
+
+            expect(button.prop('isDisabled')).toBe(true);
+            expect(actions).toBeFalsy();
+            expect(wrapper.find(ReadableTime)).toBeTruthy();
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 });
