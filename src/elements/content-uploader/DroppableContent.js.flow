@@ -10,15 +10,15 @@ import type { DOMStringList, View } from '../../common/types/core';
 import './DroppableContent.scss';
 
 type Props = {
-    addDataTransferItemsToUploadQueue: any,
-    addFiles: any,
+    addDataTransferItemsToUploadQueue: (droppedItems: DataTransfer) => void,
+    addFiles: (files?: Array<UploadFileWithAPIOptions | UploadFile>) => void,
     allowedTypes: Array<string>;
     canDrop: boolean,
     isFolderUploadEnabled: boolean,
     isOver: boolean,
     isTouch: boolean,
     items: UploadItem[],
-    onClick: any,
+    onClick: (item: UploadItem) => void,
     view: View,
 };
 
