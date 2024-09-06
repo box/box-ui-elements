@@ -16,7 +16,7 @@ export interface LoadingIndicatorProps {
 }
 
 const LoadingIndicator = ({ className = '', size = LoadingIndicatorSize.DEFAULT }: LoadingIndicatorProps) => (
-    <div className={`crawler ${className} is-${size}`} data-testid="loading-indicator">
+    <div className={`crawler ${className} is-${size}`}>
         <div />
         <div />
         <div />

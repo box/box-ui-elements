@@ -59,7 +59,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: noTagsMock,
         });
 
-        const loadingState = await screen.getByRole('status'); // Assuming LoadingIndicator has a test id
+        const loadingState = await screen.getByRole('status', { name: 'Loading' }); // Assuming LoadingIndicator has a test id
         expect(loadingState).toBeInTheDocument();
     });
 
@@ -72,7 +72,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         const errorState = await screen.findByTestId('docgen-sidebar-error');
         expect(errorState).toBeInTheDocument();
 
-        const refreshButton = screen.getByRole('button');
+        const refreshButton = screen.getByRole('button', { name: 'Refresh' });
         fireEvent.click(refreshButton);
 
         await waitFor(() => expect(errorTagsMock).toBeCalledTimes(2));

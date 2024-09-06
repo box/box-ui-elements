@@ -130,9 +130,7 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
                 {hasError && <Error onClick={loadTags} />}
                 {isLoading && (
                     <LoadingIndicator
-                        aria-label="Loading..."
-                        aria-live="polite"
-                        variant="default"
+                        aria-label={intl.formatMessage(messages.loadingAriaLabel)}
                         className="bcs-DocGenSidebar-loading"
                     />
                 )}
