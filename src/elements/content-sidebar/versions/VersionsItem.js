@@ -196,4 +196,5 @@ const VersionsItem = ({
         </div>
     );
 };
+export { VersionsItem as VersionsItemComponent };
 export default withFeatureConsumer(VersionsItem);

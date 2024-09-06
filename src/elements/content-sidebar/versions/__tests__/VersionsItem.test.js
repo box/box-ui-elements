@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { shallow } from 'enzyme/build';
 import messages from '../messages';
 import selectors from '../../../common/selectors/version';
-import VersionsItem from '../VersionsItem';
+import { VersionsItemComponent } from '../VersionsItem';
 import VersionsItemActions from '../VersionsItemActions';
 import VersionsItemButton from '../VersionsItemButton';
 import VersionsItemRetention from '../VersionsItemRetention';
@@ -42,7 +42,8 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         ...defaults,
         ...overrides,
     });
-    const getWrapper = (props = {}) => shallow(<VersionsItem fileId="123" version={defaults} {...props} />);
+    const getWrapper = (props = {}) =>
+        shallow(<VersionsItemComponent fileId="123" version={defaults} features={{}} {...props} />);
 
     beforeEach(() => {
         selectors.getVersionAction = jest.fn().mockReturnValue(VERSION_UPLOAD_ACTION);
@@ -238,5 +239,110 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             expect(wrapper.exists(VersionsItemRetention)).toBe(true);
             expect(wrapper.find(VersionsItemActions).prop('isRetained')).toBe(true);
         });
+
+        test.each`
+            permissions
+            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: true }}
+            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: false }}
+            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: true }}
+            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: true }}
+            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: true }}
+            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: false }}
+            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: false }}
+            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: true }}
+            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: true }}
+        `(
+            'should disable the correct menu items based on permissions when unchangeableVersions feature is enabled',
+            ({ permissions }) => {
+                const unchangeableVersionsFeature = {
+                    versionsItem: {
+                        unchangeableVersions: {
+                            enabled: true,
+                        },
+                    },
+                };
+                const wrapper = getWrapper({
+                    version: getVersion({ permissions }),
+                    features: unchangeableVersionsFeature,
+                });
+                const actions = wrapper.find(VersionsItemActions);
+                const button = wrapper.find(VersionsItemButton);
+
+                expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
+                expect(actions.prop('showDelete')).toBe(false);
+                expect(actions.prop('showDownload')).toBe(permissions.can_download);
+                expect(actions.prop('showPromote')).toBe(false);
+                expect(actions.prop('showPreview')).toBe(permissions.can_preview);
+                expect(wrapper.find(ReadableTime)).toBeTruthy();
+            },
+        );
+
+        test.each`
+            permissions
+            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: true }}
+            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: false }}
+            ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
+        `(
+            'should not render actions based on permissions when unchangeableVersions feature is enabled',
+            ({ permissions }) => {
+                const unchangeableVersionsFeature = {
+                    versionsItem: {
+                        unchangeableVersions: {
+                            enabled: true,
+                        },
+                    },
+                };
+                const wrapper = getWrapper({
+                    version: getVersion({ permissions }),
+                    features: unchangeableVersionsFeature,
+                });
+                const actions = wrapper.exists(VersionsItemActions);
+                const button = wrapper.find(VersionsItemButton);
+
+                expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
+                expect(actions).toBeFalsy();
+                expect(wrapper.find(ReadableTime)).toBeTruthy();
+            },
+        );
+
+        test.each`
+            permissions
+            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: true }}
+            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: false }}
+            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: true }}
+            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: true }}
+            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: true }}
+            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: false }}
+            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: false }}
+            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: true }}
+            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: true }}
+            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: true }}
+            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: false }}
+            ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
+        `(
+            'should show the correct menu items based on permissions when unchangeableVersions feature is disabled',
+            ({ permissions }) => {
+                const unchangeableVersionsFeature = {
+                    versionsItem: {
+                        unchangeableVersions: {
+                            enabled: false,
+                        },
+                    },
+                };
+                const wrapper = getWrapper({
+                    version: getVersion({ permissions }),
+                    features: unchangeableVersionsFeature,
+                });
+                const actions = wrapper.find(VersionsItemActions);
+                const button = wrapper.find(VersionsItemButton);
+
+                expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
+                expect(actions.prop('showDelete')).toBe(permissions.can_delete);
+                expect(actions.prop('showDownload')).toBe(permissions.can_download);
+                expect(actions.prop('showPromote')).toBe(permissions.can_upload);
+                expect(actions.prop('showPreview')).toBe(permissions.can_preview);
+                expect(wrapper.find(ReadableTime)).toBeTruthy();
+            },
+        );
     });
 });
