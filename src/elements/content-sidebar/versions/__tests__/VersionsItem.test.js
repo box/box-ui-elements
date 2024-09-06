@@ -377,7 +377,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${'restore'} | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
             ${'upload'}  | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
         `(
-            "should show actions correctly when the version's action is $action and unchangeableVersions feature is disabled",
+            "should show actions correctly when the version's action is $action and unchangeableVersions feature is enabled",
             ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
                 const unchangeableVersionsFeature = {
                     versionsItem: {
@@ -413,7 +413,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             },
         );
 
-        test("should show actions correctly when the version's action is $action and unchangeableVersions feature is disabled", () => {
+        test("should not show actions when the version's action is delete and unchangeableVersions feature is enabled", () => {
             const unchangeableVersionsFeature = {
                 versionsItem: {
                     unchangeableVersions: {
