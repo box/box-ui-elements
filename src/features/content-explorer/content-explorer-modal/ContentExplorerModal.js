@@ -35,7 +35,6 @@ type Props = {
     onViewSelectedClick?: Function,
     shouldNotUsePortal?: boolean,
     title?: string,
-    isInfoNoticeVisible?: boolean,
     infoNoticeText?: string,
 };
 
@@ -51,7 +50,6 @@ const ContentExplorerModal = ({
     onSelectedClick,
     onSelectItem,
     shouldNotUsePortal = false,
-    isInfoNoticeVisible = false,
     infoNoticeText = '',
     ...rest
 }: Props) => (
@@ -74,7 +72,6 @@ const ContentExplorerModal = ({
             onSelectItem={onSelectItem}
             listWidth={560}
             listHeight={285}
-            isInfoNoticeVisible={isInfoNoticeVisible}
             infoNoticeText={infoNoticeText}
             {...rest}
         />

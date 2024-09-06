@@ -159,9 +159,7 @@ class ContentExplorer extends Component {
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
-        /** Whether the informational notice is visible */
-        isInfoNoticeVisible: PropTypes.bool,
-        /** Text for the informational notice */
+        /** Text for the informational notice, defaults to empty string, which makes notice not visible */
         infoNoticeText: PropTypes.string,
     };
 
@@ -501,7 +499,6 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
-            isInfoNoticeVisible = false,
             infoNoticeText,
             ...rest
         } = this.props;
@@ -559,7 +556,7 @@ class ContentExplorer extends Component {
                 }}
                 {...contentExplorerProps}
             >
-                {isInfoNoticeVisible && <ContentExplorerInfoNotice infoNoticeText={infoNoticeText} />}
+                {infoNoticeText && <ContentExplorerInfoNotice infoNoticeText={infoNoticeText} />}
                 <ContentExplorerHeaderActions
                     breadcrumbProps={breadcrumbProps}
                     contentExplorerMode={contentExplorerMode}

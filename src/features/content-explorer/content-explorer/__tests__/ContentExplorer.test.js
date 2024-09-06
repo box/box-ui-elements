@@ -285,14 +285,14 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(false);
         });
 
-        test('should render ContentExplorerInfoNotice when flag is not set', () => {
-            const wrapper = renderComponent({ isInfoNoticeVisible: false });
+        test('should render ContentExplorerInfoNotice when info notice text is empty', () => {
+            const wrapper = renderComponent({ infoNoticeText: '' });
 
             expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(false);
         });
 
-        test('should render ContentExplorerInfoNotice when flag is set', () => {
-            const wrapper = renderComponent({ isInfoNoticeVisible: true });
+        test('should render ContentExplorerInfoNotice when info notice text is not empty', () => {
+            const wrapper = renderComponent({ infoNoticeText: 'text' });
 
             expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(true);
         });

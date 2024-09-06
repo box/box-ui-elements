@@ -71,11 +71,9 @@ describe('features/content-explorer/content-explorer-modal/ContentExplorerModal'
             expect(wrapper.find('ContentExplorer').prop('onSelectItem')).toEqual(onSelectItem);
         });
 
-        test('should pass isInfoNoticeVisible and infoNoticeText to ContentExplorer', () => {
-            const isInfoNoticeVisible = true;
+        test('should pass infoNoticeText to ContentExplorer', () => {
             const infoNoticeText = 'info notice text';
-            const wrapper = renderComponent({ isInfoNoticeVisible, infoNoticeText });
-            expect(wrapper.find('ContentExplorer').prop('isInfoNoticeVisible')).toEqual(isInfoNoticeVisible);
+            const wrapper = renderComponent({ infoNoticeText });
             expect(wrapper.find('ContentExplorer').prop('infoNoticeText')).toEqual(infoNoticeText);
         });
     });

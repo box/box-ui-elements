@@ -1,16 +1,18 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 
-import { InfoBadge } from '@box/blueprint-web-assets/icons/Line';
+import { InlineNotice } from '@box/blueprint-web';
 
-import InlineNotice from '../../../components/inline-notice';
+import messages from '../messages';
 
-const ContentExplorerInfoNotice = ({ infoNoticeText }) => (
-    <InlineNotice type="info" className="content-explorer-info-notice">
-        <div className="content-explorer-info-notice-flex-container">
-            <InfoBadge className="content-explorer-info-notice-icon" />
-            <p>{infoNoticeText}</p>
-        </div>
+const ContentExplorerInfoNotice = ({ infoNoticeText, intl }) => (
+    <InlineNotice
+        variant="info"
+        variantIconAriaLabel={intl.formatMessage(messages.infoNoticeIconAriaLabel)}
+        className="content-explorer-info-notice"
+    >
+        {infoNoticeText}
     </InlineNotice>
 );
 
@@ -18,4 +20,5 @@ ContentExplorerInfoNotice.propTypes = {
     infoNoticeText: PropTypes.string.isRequired,
 };
 
-export default ContentExplorerInfoNotice;
+export { ContentExplorerInfoNotice as ContentExplorerInfoNoticeBase };
+export default injectIntl(ContentExplorerInfoNotice);

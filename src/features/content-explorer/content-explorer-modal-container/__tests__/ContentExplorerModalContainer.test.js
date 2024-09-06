@@ -98,11 +98,9 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             expect(wrapper.find('Portal').length).toBe(0);
         });
 
-        test('should pass isInfoNoticeVisible and infoNoticeText to ContentExplorerModal', () => {
-            const isInfoNoticeVisible = true;
+        test('should pass infoNoticeText to ContentExplorerModal', () => {
             const infoNoticeText = 'info notice text';
-            const wrapper = renderComponent({ isInfoNoticeVisible, infoNoticeText });
-            expect(wrapper.find('ContentExplorerModal').prop('isInfoNoticeVisible')).toEqual(isInfoNoticeVisible);
+            const wrapper = renderComponent({ infoNoticeText });
             expect(wrapper.find('ContentExplorerModal').prop('infoNoticeText')).toEqual(infoNoticeText);
         });
     });
