@@ -10,12 +10,8 @@ import type { DOMStringList, View } from '../../common/types/core';
 import './DroppableContent.scss';
 
 export interface DroppableContentProps {
-    addDataTransferItemsToUploadQueue: (droppedItems: DataTransfer, itemUpdateCallback?: Function) => void;
-    addFiles: (
-        files?: Array<UploadFileWithAPIOptions | UploadFile>,
-        itemUpdateCallback?: Function,
-        isRelativePathIgnored?: boolean,
-    ) => void;
+    addDataTransferItemsToUploadQueue: (droppedItems: DataTransfer) => void;
+    addFiles: (files?: Array<UploadFileWithAPIOptions | UploadFile>) => void;
     allowedTypes: Array<string>;
     canDrop: boolean;
     isFolderUploadEnabled: boolean;
