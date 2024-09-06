@@ -18,6 +18,7 @@ const ContentExplorerInfoNotice = ({ infoNoticeText, intl }) => (
 
 ContentExplorerInfoNotice.propTypes = {
     infoNoticeText: PropTypes.string.isRequired,
+    intl: PropTypes.any,
 };
 
 export { ContentExplorerInfoNotice as ContentExplorerInfoNoticeBase };

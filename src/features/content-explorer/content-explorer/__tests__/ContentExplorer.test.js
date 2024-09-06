@@ -285,7 +285,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(false);
         });
 
-        test('should render ContentExplorerInfoNotice when info notice text is empty', () => {
+        test('should not render ContentExplorerInfoNotice when info notice text is empty', () => {
             const wrapper = renderComponent({ infoNoticeText: '' });
 
             expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(false);
