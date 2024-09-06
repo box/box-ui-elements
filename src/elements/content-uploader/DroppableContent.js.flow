@@ -19,7 +19,7 @@ type Props = {
     isTouch: boolean,
     items: UploadItem[],
     onClick: any,
-    view: View
+    view: View,
 };
 
 /**
@@ -30,16 +30,8 @@ const dropDefinition = {
      * Validates whether a file can be dropped or not.
      */
     dropValidator: (
-        {
-            allowedTypes,
-        }: {
-            allowedTypes: Array<string>
-        },
-        {
-            types,
-        }: {
-            types: Array<string> | DOMStringList
-        },
+        { allowedTypes }: { allowedTypes: Array<string> },
+        { types }: { types: Array<string> | DOMStringList },
     ) => {
         if (types instanceof Array) {
             return Array.from(types).some(type => allowedTypes.indexOf(type) > -1);
@@ -52,13 +44,11 @@ const dropDefinition = {
     /**
      * Determines what happens after a file is dropped
      */
-    onDrop: (event, {
-        addDataTransferItemsToUploadQueue,
-    }: Props) => {
+    onDrop: (event, { addDataTransferItemsToUploadQueue }: Props) => {
         const { dataTransfer } = event;
         addDataTransferItemsToUploadQueue(dataTransfer);
     },
-} as const;
+};
 
 const DroppableContent = makeDroppable(dropDefinition)(({
     addFiles,
@@ -70,9 +60,7 @@ const DroppableContent = makeDroppable(dropDefinition)(({
     onClick,
     view,
 }: Props) => {
-    const handleSelectFiles = ({
-        target: { files }
-    }) => addFiles(files);
+    const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
     const hasItems = items.length > 0;
 
     return (

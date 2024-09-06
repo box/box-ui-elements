@@ -34,16 +34,8 @@ const dropDefinition = {
      * Validates whether a file can be dropped or not.
      */
     dropValidator: (
-        {
-            allowedTypes,
-        }: {
-            allowedTypes: Array<string>;
-        },
-        {
-            types,
-        }: {
-            types: Array<string> | DOMStringList;
-        },
+        { allowedTypes }: { allowedTypes: Array<string> },
+        { types }: { types: Array<string> | DOMStringList },
     ) => {
         if (types instanceof Array) {
             return Array.from(types).some(type => allowedTypes.indexOf(type) > -1);
