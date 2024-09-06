@@ -1,7 +1,6 @@
 import React from 'react';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { MessageDescriptor } from 'react-intl';
-import { render } from '../../../test-utils/testing-library';
+import { render, screen, waitFor, fireEvent } from '../../../test-utils/testing-library';
 
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
 import mockData from '../__mocks__/DocGenSidebar.mock';
