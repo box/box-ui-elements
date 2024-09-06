@@ -7,7 +7,7 @@ export interface UploadStateContentProps {
     fileInputLabel?: React.ReactNode;
     folderInputLabel?: React.ReactNode;
     message?: string;
-    onChange?: Function;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     useButton?: boolean;
 }
 
