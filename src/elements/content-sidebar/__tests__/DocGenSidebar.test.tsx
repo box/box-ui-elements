@@ -58,7 +58,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: noTagsMock,
         });
 
-        const loadingState = await screen.getByRole('status', { name: 'Loading' }); // Assuming LoadingIndicator has a test id
+        const loadingState = await screen.getByRole('status', { name: 'Loading' });
         expect(loadingState).toBeInTheDocument();
     });
 
