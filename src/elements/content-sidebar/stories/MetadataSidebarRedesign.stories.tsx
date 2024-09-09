@@ -38,7 +38,15 @@ export default {
     },
 };
 
-export const AddTemplateDropdownMenu: StoryObj<typeof MetadataSidebarRedesign> = {};
+export const AddTemplateDropdownMenu: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await canvas.findAllByRole('heading', { name: 'Metadata' });
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        await userEvent.click(addTemplateButton);
+    },
+};
 
 export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {

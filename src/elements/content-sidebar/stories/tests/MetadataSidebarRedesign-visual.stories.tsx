@@ -15,6 +15,32 @@ export const Basic = {
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
         expect(customMetadataOption).toBeInTheDocument();
+        expect(customMetadataOption).toHaveAttribute('aria-disabled');
+    },
+};
+
+export const AddTemplateDropdownMenuOnEmpty = {
+    args: {
+        fileId: '416047501580',
+        metadataSidebarProps: {
+            isBoxAiSuggestionsEnabled: true,
+            isFeatureEnabled: true,
+            onError: fn,
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await canvas.findByRole('heading', { name: 'Metadata' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+
+        expect(addTemplateButton).toBeInTheDocument();
+        await userEvent.click(addTemplateButton);
+
+        const options = canvas.getAllByRole('option');
+        expect(options).toHaveLength(4);
+        options.forEach(option => {
+            expect(option).not.toHaveAttribute('disabled');
+        });
     },
 };
 
