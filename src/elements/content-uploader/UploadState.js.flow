@@ -1,18 +1,16 @@
-/**
- * @flow
- * @file Upload state component
- */
-
 import * as React from 'react';
 import classNames from 'classnames';
-import { FormattedMessage } from 'react-intl';
-import ErrorEmptyState from '../../icons/states/ErrorEmptyState';
+import { useIntl, FormattedMessage } from 'react-intl';
+import { HatWand } from '@box/blueprint-web-assets/illustrations/Medium';
+
 import UploadEmptyState from '../../icons/states/UploadEmptyState';
 import UploadSuccessState from '../../icons/states/UploadSuccessState';
-import messages from '../common/messages';
 import UploadStateContent from './UploadStateContent';
-import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
 import type { View } from '../../common/types/core';
+
+import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS } from '../../constants';
+
+import messages from '../common/messages';
 
 import './UploadState.scss';
 
@@ -22,20 +20,29 @@ type Props = {
     isFolderUploadEnabled: boolean,
     isOver: boolean,
     isTouch: boolean,
-    onSelect: Function,
-    view: View,
+    onSelect: () => void,
+    view: View
 };
 
-const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFolderUploadEnabled }: Props) => {
+const UploadState = ({
+    canDrop,
+    hasItems,
+    isOver,
+    isTouch,
+    view,
+    onSelect,
+    isFolderUploadEnabled,
+}: Props) => {
+    const intl = useIntl();
     let icon;
     let content;
     switch (view) {
         case VIEW_ERROR:
-            icon = <ErrorEmptyState />;
+            icon = <HatWand aria-label={intl.formatMessage(messages.uploadErrorState)} height={126} width={130} />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadError} />} />;
             break;
         case VIEW_UPLOAD_EMPTY:
-            icon = <UploadEmptyState />;
+            icon = <UploadEmptyState title={<FormattedMessage {...messages.uploadEmptyState} />} />;
             /* eslint-disable no-nested-ternary */
             content =
                 canDrop && hasItems ? (
@@ -65,11 +72,11 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:
-            icon = <UploadEmptyState />;
+            icon = <UploadEmptyState title={<FormattedMessage {...messages.uploadEmptyState} />} />;
             content = <UploadStateContent message={<FormattedMessage {...messages.uploadInProgress} />} />;
             break;
         case VIEW_UPLOAD_SUCCESS:
-            icon = <UploadSuccessState />;
+            icon = <UploadSuccessState title={<FormattedMessage {...messages.uploadSuccessState} />} />;
             content = (
                 <UploadStateContent
                     fileInputLabel={<FormattedMessage {...messages.uploadSuccessFileInput} />}

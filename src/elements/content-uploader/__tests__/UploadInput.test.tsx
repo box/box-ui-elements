@@ -5,10 +5,10 @@ import { render, screen } from '@testing-library/react';
 import UploadInput from '../UploadInput';
 
 describe('elements/content-uploader/UploadInput', () => {
-    const getWrapper = props => render(<UploadInput handleChange={jest.fn()} {...props} />);
+    const renderComponent = props => render(<UploadInput handleChange={jest.fn()} {...props} />);
 
     test('should render correctly when inputLabel is available', () => {
-        getWrapper({
+        renderComponent({
             inputLabelClass: 'inputLabelClass',
             inputLabel: 'yo',
         });
@@ -18,12 +18,12 @@ describe('elements/content-uploader/UploadInput', () => {
     });
 
     test('should render correctly when inputLabel is not available', () => {
-        const { container } = getWrapper({});
+        const { container } = renderComponent({});
         expect(container).toBeEmptyDOMElement();
     });
 
     test('should render correctly when isFolderUpload is true', () => {
-        getWrapper({
+        renderComponent({
             inputLabel: 'yo',
             isFolderUpload: true,
         });
@@ -33,7 +33,7 @@ describe('elements/content-uploader/UploadInput', () => {
     });
 
     test('should render correctly when isFolderUpload is false', () => {
-        getWrapper({
+        renderComponent({
             inputLabel: 'yo',
             isFolderUpload: false,
         });
@@ -43,7 +43,7 @@ describe('elements/content-uploader/UploadInput', () => {
     });
 
     test('should render correctly when isMultiple is true', () => {
-        getWrapper({
+        renderComponent({
             inputLabel: 'yo',
             isMultiple: true,
         });
@@ -53,7 +53,7 @@ describe('elements/content-uploader/UploadInput', () => {
     });
 
     test('should render correctly when isMultiple is false', () => {
-        getWrapper({
+        renderComponent({
             inputLabel: 'yo',
             isMultiple: false,
         });
