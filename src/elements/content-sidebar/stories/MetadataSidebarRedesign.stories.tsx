@@ -1,12 +1,8 @@
 import { type StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, userEvent, within } from '@storybook/test';
 import React, { type ComponentProps } from 'react';
-import { AddMetadataTemplateDropdown, type MetadataTemplate, type MetadataTemplateField } from '@box/metadata-editor';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
-import SidebarContent from '../SidebarContent';
-import { SIDEBAR_VIEW_METADATA } from '../../../constants';
-import MetadataInstanceEditor from '../MetadataInstanceEditor';
 
 const fileIdWithMetadata = global.FILE_ID;
 const fileIdWithNoMetadata = '416047501580';
@@ -24,46 +20,6 @@ const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign
     isFeatureEnabled: true,
     onError: fn,
 };
-
-const mockTemplateFields: MetadataTemplateField[] = [
-    {
-        description: 'My Value',
-        displayName: 'My Attribute',
-        hidden: false,
-        id: '4fc86fb1-43cd-4aa2-a585-5e94ec445d90',
-        key: 'myAttribute',
-        type: 'string',
-    },
-];
-
-const mockCustomMetadataTemplate: MetadataTemplate = {
-    id: 'template-id',
-    fields: [],
-    scope: 'global',
-    templateKey: 'properties',
-    type: 'template-id',
-    hidden: false,
-};
-
-const renderWithEditor = (template: MetadataTemplate) => (
-    <div style={{ display: 'flex', height: '500px' }}>
-        <SidebarContent
-            actions={<AddMetadataTemplateDropdown availableTemplates={[]} selectedTemplates={[]} onSelect={fn()} />}
-            className="bcs-MetadataSidebarRedesign"
-            elementId="bcs_120"
-            sidebarView={SIDEBAR_VIEW_METADATA}
-            title="Metadata"
-        >
-            <div className="bcs-MetadataSidebarRedesign-content">
-                <MetadataInstanceEditor
-                    isBoxAiSuggestionsEnabled={true}
-                    isUnsavedChangesModalOpen={false}
-                    template={template}
-                />
-            </div>
-        </SidebarContent>
-    </div>
-);
 
 export default {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign',
@@ -103,19 +59,27 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
 };
 
 export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
-    render: () => {
-        const mockMetadataTemplate = {
-            ...mockCustomMetadataTemplate,
-            displayName: 'Template Name',
-            fields: mockTemplateFields,
-        };
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await canvas.findByRole('heading', { name: 'Metadata' });
 
-        return renderWithEditor(mockMetadataTemplate);
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
+        await userEvent.click(customMetadataOption);
     },
 };
 
 export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
-    render: () => {
-        return renderWithEditor(mockCustomMetadataTemplate);
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await canvas.findByRole('heading', { name: 'Metadata' });
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        await userEvent.click(customMetadataOption);
     },
 };
