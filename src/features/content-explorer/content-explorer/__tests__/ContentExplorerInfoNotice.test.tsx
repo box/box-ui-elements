@@ -1,10 +1,12 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+
+import { render } from '../../../../test-utils/testing-library';
 
 import ContentExplorerInfoNotice from '../ContentExplorerInfoNotice';
 
 describe('features/content-explorer/content-explorer/ContentExplorerInfoNotice', () => {
-    const renderComponent = infoNoticeText => render(<ContentExplorerInfoNotice infoNoticeText={infoNoticeText} />);
+    const renderComponent = (infoNoticeText: string) =>
+        render(<ContentExplorerInfoNotice infoNoticeText={infoNoticeText} />);
 
     test('should render correctly', () => {
         const infoNoticeText = 'This is an info notice';
