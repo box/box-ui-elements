@@ -20,7 +20,7 @@ export interface UploadStateProps {
     isFolderUploadEnabled: boolean;
     isOver: boolean;
     isTouch: boolean;
-    onSelect: () => void;
+    onSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
     view: View;
 }
 
