@@ -83,7 +83,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: noDataMock,
         });
 
-        const emptyState = await screen.findByText("We couldn't load the tags");
+        const emptyState = await screen.findByText('We couldn't load the tags');
         expect(emptyState).toBeInTheDocument();
     });
 });
