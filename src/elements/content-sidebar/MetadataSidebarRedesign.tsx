@@ -69,20 +69,23 @@ function MetadataSidebarRedesign({
     onError,
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
-    const { formatMessage } = useIntl();
-
-    const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
-    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | MetadataTemplate | null>(
-        null,
-    );
-    const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
-
     const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
         api,
         fileId,
         onError,
         isFeatureEnabled,
     );
+    const { formatMessage } = useIntl();
+    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | MetadataTemplate | null>(
+        null,
+    );
+    const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
+    const [selectedTemplates, setSelectedTemplates] =
+        React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
+
+    React.useEffect(() => {
+        setSelectedTemplates(templateInstances);
+    }, [templateInstances]);
 
     const handleUnsavedChanges = () => {
         setIsUnsavedChangesModalOpen(true);
@@ -96,7 +99,7 @@ function MetadataSidebarRedesign({
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
-            selectedTemplates={selectedTemplates}
+            selectedTemplates={selectedTemplates as MetadataTemplate[]}
             onSelect={(selectedTemplate): void => {
                 editingTemplate ? handleUnsavedChanges() : handleTemplateSelect(selectedTemplate);
             }}
@@ -128,7 +131,10 @@ function MetadataSidebarRedesign({
                         <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
                     )}
                     {showEmptyState ? (
-                        <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
+                        <MetadataEmptyState
+                            level={'file'}
+                            isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                        />
                     ) : (
                         editingTemplate && (
                             <MetadataInstanceEditor
