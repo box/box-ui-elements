@@ -1,13 +1,8 @@
 import React from 'react';
-import { MessageDescriptor } from 'react-intl';
 import { render, screen, waitFor, fireEvent } from '../../../test-utils/testing-library';
 
 import { DocGenSidebarComponent as DocGenSidebar } from '../DocGenSidebar/DocGenSidebar';
 import mockData from '../__mocks__/DocGenSidebar.mock';
-
-const intl = {
-    formatMessage: (message: MessageDescriptor) => message.defaultMessage,
-};
 
 const docGenSidebarProps = {
     getDocGenTags: jest.fn().mockReturnValue(
@@ -16,7 +11,6 @@ const docGenSidebarProps = {
             data: mockData,
         }),
     ),
-    intl,
 };
 
 const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
@@ -83,7 +77,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: noDataMock,
         });
 
-        const emptyState = await screen.findByText('We couldn't load the tags');
+        const emptyState = await screen.findByText("We couldn't load the tags");
         expect(emptyState).toBeInTheDocument();
     });
 });

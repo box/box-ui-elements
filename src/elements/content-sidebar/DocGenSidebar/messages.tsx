@@ -36,11 +36,6 @@ const messages = defineMessages({
         defaultMessage: 'Refresh',
         description: 'Label for the refresh button',
     },
-    loadingAriaLabel: {
-        id: 'be.docGenSidebar.loadingAriaLabel',
-        defaultMessage: 'Loading',
-        description: 'Label for the loader',
-    },
 });
 
 export default messages;
