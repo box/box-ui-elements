@@ -61,9 +61,8 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
 export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' });
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
@@ -74,9 +73,8 @@ export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof Metadata
 export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' });
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });

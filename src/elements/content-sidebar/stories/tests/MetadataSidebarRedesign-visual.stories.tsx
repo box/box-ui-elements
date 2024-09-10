@@ -56,7 +56,8 @@ export default {
 export const MetadataInstanceEditorWithCustomMetadata: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' });
+        const heading = await canvas.findByRole('heading', { name: 'Metadata' });
+        expect(heading).toBeInTheDocument();
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
         expect(addTemplateButton).toBeInTheDocument();
@@ -74,7 +75,8 @@ export const MetadataInstanceEditorWithCustomMetadata: StoryObj<typeof MetadataS
 export const MetadataInstanceEditorWithTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' });
+        const heading = await canvas.findByRole('heading', { name: 'Metadata' });
+        expect(heading).toBeInTheDocument();
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
         expect(addTemplateButton).toBeInTheDocument();
@@ -92,7 +94,8 @@ export const MetadataInstanceEditorWithTemplate: StoryObj<typeof MetadataSidebar
 export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' });
+        const heading = await canvas.findByRole('heading', { name: 'Metadata' });
+        expect(heading).toBeInTheDocument();
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
         expect(addTemplateButton).toBeInTheDocument();
