@@ -5,7 +5,7 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { InlineError, LoadingIndicator, TooltipProvider } from '@box/blueprint-web';
+import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
     MetadataEmptyState,
@@ -117,44 +117,39 @@ function MetadataSidebarRedesign({
     const showList = templateInstances.length > 0;
 
     return (
-        <TooltipProvider>
-            <SidebarContent
-                actions={metadataDropdown}
-                className={'bcs-MetadataSidebarRedesign'}
-                elementId={elementId}
-                sidebarView={SIDEBAR_VIEW_METADATA}
-                title={formatMessage(messages.sidebarMetadataTitle)}
-            >
-                <div className="bcs-MetadataSidebarRedesign-content">
-                    {errorMessageDisplay}
-                    {status === STATUS.LOADING && (
-                        <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
-                    )}
-                    {showEmptyState ? (
-                        <MetadataEmptyState
-                            level={'file'}
-                            isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+        <SidebarContent
+            actions={metadataDropdown}
+            className={'bcs-MetadataSidebarRedesign'}
+            elementId={elementId}
+            sidebarView={SIDEBAR_VIEW_METADATA}
+            title={formatMessage(messages.sidebarMetadataTitle)}
+        >
+            <div className="bcs-MetadataSidebarRedesign-content">
+                {errorMessageDisplay}
+                {status === STATUS.LOADING && (
+                    <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
+                )}
+                {showEmptyState ? (
+                    <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
+                ) : (
+                    editingTemplate && (
+                        <MetadataInstanceEditor
+                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                            template={editingTemplate}
                         />
-                    ) : (
-                        editingTemplate && (
-                            <MetadataInstanceEditor
-                                isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                                template={editingTemplate}
-                            />
-                        )
-                    )}
-                    {showList && (
-                        <MetadataInstanceList
-                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                            onEdit={noop}
-                            onEditWithAutofill={noop}
-                            templateInstances={templateInstances}
-                        />
-                    )}
-                </div>
-            </SidebarContent>
-        </TooltipProvider>
+                    )
+                )}
+                {showList && (
+                    <MetadataInstanceList
+                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                        onEdit={noop}
+                        onEditWithAutofill={noop}
+                        templateInstances={templateInstances}
+                    />
+                )}
+            </div>
+        </SidebarContent>
     );
 }
 

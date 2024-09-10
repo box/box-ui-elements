@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
+import { TooltipProvider } from '@box/blueprint-web';
 import type { RouterHistory } from 'react-router-dom';
 import API from '../../api';
 import APIContext from '../common/api-context';
@@ -359,35 +360,37 @@ class ContentSidebar extends React.Component<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: any)}>
                     <NavRouter history={history} initialEntries={[initialPath]}>
-                        <Sidebar
-                            activitySidebarProps={activitySidebarProps}
-                            additionalTabs={additionalTabs}
-                            className={className}
-                            currentUser={currentUser}
-                            detailsSidebarProps={detailsSidebarProps}
-                            docGenSidebarProps={docGenSidebarProps}
-                            file={file}
-                            fileId={fileId}
-                            getPreview={getPreview}
-                            getViewer={getViewer}
-                            hasActivityFeed={hasActivityFeed}
-                            hasAdditionalTabs={hasAdditionalTabs}
-                            hasNav={hasNav}
-                            hasMetadata={hasMetadata}
-                            hasSkills={hasSkills}
-                            hasVersions={hasVersions}
-                            isDefaultOpen={isDefaultOpen}
-                            isLoading={isLoading}
-                            metadataEditors={metadataEditors}
-                            metadataSidebarProps={metadataSidebarProps}
-                            onAnnotationSelect={onAnnotationSelect}
-                            onVersionChange={onVersionChange}
-                            onVersionHistoryClick={onVersionHistoryClick}
-                            versionsSidebarProps={versionsSidebarProps}
-                            wrappedComponentRef={ref => {
-                                this.sidebarRef = ref;
-                            }}
-                        />
+                        <TooltipProvider>
+                            <Sidebar
+                                activitySidebarProps={activitySidebarProps}
+                                additionalTabs={additionalTabs}
+                                className={className}
+                                currentUser={currentUser}
+                                detailsSidebarProps={detailsSidebarProps}
+                                docGenSidebarProps={docGenSidebarProps}
+                                file={file}
+                                fileId={fileId}
+                                getPreview={getPreview}
+                                getViewer={getViewer}
+                                hasActivityFeed={hasActivityFeed}
+                                hasAdditionalTabs={hasAdditionalTabs}
+                                hasNav={hasNav}
+                                hasMetadata={hasMetadata}
+                                hasSkills={hasSkills}
+                                hasVersions={hasVersions}
+                                isDefaultOpen={isDefaultOpen}
+                                isLoading={isLoading}
+                                metadataEditors={metadataEditors}
+                                metadataSidebarProps={metadataSidebarProps}
+                                onAnnotationSelect={onAnnotationSelect}
+                                onVersionChange={onVersionChange}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                versionsSidebarProps={versionsSidebarProps}
+                                wrappedComponentRef={ref => {
+                                    this.sidebarRef = ref;
+                                }}
+                            />
+                        </TooltipProvider>
                     </NavRouter>
                 </APIContext.Provider>
             </Internationalize>
