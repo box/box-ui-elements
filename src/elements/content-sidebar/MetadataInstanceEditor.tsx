@@ -17,12 +17,15 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isUnsavedChangesModalOpen,
     template,
 }) => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const handleSubmit = () => {}; // TODO in a future PR
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const handleCancel = () => {}; // TODO in a future PR
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    const handleDelete = () => {}; // TODO in a future PR
+    const handleSubmit = () => {
+        // TODO in a future PR
+    };
+    const handleCancel = () => {
+        // TODO in a future PR
+    };
+    const handleDelete = () => {
+        // TODO in a future PR
+    };
 
     return (
         <>
