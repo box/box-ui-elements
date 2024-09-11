@@ -29,11 +29,11 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                 isLoading={false}
+                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 selectedTemplateInstance={template}
                 onCancel={handleCancel}
                 onDelete={onDelete}
                 onSubmit={handleSubmit}
-                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 setIsUnsavedChangesModalOpen={noop}
             />
         </AutofillContextProvider>

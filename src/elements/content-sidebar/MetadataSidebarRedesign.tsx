@@ -15,6 +15,7 @@ import {
 } from '@box/metadata-editor';
 import noop from 'lodash/noop';
 
+import { JSONPatchOperations } from '@box/metadata-editor/types/lib/components/metadata-instance-editor/subcomponents/metadata-instance-form/types';
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -71,6 +72,7 @@ function MetadataSidebarRedesign({
 }: MetadataSidebarRedesignProps) {
     const { handleDeleteMetadataInstance, file, templates, errorMessage, status, templateInstances } =
         useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+
     const { formatMessage } = useIntl();
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
