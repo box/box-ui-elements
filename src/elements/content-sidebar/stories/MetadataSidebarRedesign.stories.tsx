@@ -1,5 +1,5 @@
 import { type StoryObj } from '@storybook/react';
-import { fn } from '@storybook/test';
+import { fn, userEvent, within } from '@storybook/test';
 import React, { type ComponentProps } from 'react';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
@@ -45,7 +45,8 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
         },
-    },};
+    },
+};
 
 export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
@@ -54,5 +55,29 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
             ...defaultMetadataSidebarProps,
             isBoxAiSuggestionsEnabled: false,
         },
+    },
+};
+
+export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
+        await userEvent.click(customMetadataOption);
+    },
+};
+
+export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        await userEvent.click(customMetadataOption);
     },
 };

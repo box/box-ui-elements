@@ -144,6 +144,7 @@ class Metadata extends File {
             scope: METADATA_SCOPE_GLOBAL,
             templateKey: METADATA_TEMPLATE_PROPERTIES,
             hidden: false,
+            fields: [],
         };
     }
 
