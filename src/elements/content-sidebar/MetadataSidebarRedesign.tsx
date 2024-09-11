@@ -69,7 +69,7 @@ function MetadataSidebarRedesign({
     onError,
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
-    const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
+    const { deleteMetadataInstance, file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
         api,
         fileId,
         onError,
@@ -92,6 +92,11 @@ function MetadataSidebarRedesign({
     const handleTemplateSelect = (selectedTemplate: MetadataTemplateInstance) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
         setEditingTemplate(selectedTemplate);
+    };
+
+    const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
+        deleteMetadataInstance(metadataInstance);
+        setEditingTemplate(null);
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
@@ -139,6 +144,7 @@ function MetadataSidebarRedesign({
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         template={editingTemplate}
                         onCancel={() => setEditingTemplate(null)}
+                        onDelete={handleDeleteInstance}
                     />
                 )}
                 {showList && (

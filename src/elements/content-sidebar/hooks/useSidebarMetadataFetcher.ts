@@ -19,6 +19,7 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
+    deleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
     file: BoxItem | null;
     errorMessage: MessageDescriptor | null;
     status: STATUS;
@@ -115,6 +116,30 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
+    const deleteMetadataInstanceSuccessCallback = (metadataInstance: MetadataTemplateInstance) => {
+        const updatedInstances = templateInstances.filter(
+            templateInstance => templateInstance.id !== metadataInstance.id,
+        );
+        console.log('updatedInstances', updatedInstances);
+        setTemplateInstances(updatedInstances);
+    };
+
+    const deleteMetadataInstance = React.useCallback(
+        (metadataInstance: MetadataTemplateInstance) => {
+            if (!file || !metadataInstance) {
+                return;
+            }
+
+            api.getMetadataAPI(false).deleteMetadata(
+                file,
+                metadataInstance,
+                deleteMetadataInstanceSuccessCallback,
+                onApiError,
+            );
+        },
+        [api, templateInstances, onApiError],
+    );
+
     React.useEffect(() => {
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
@@ -126,11 +151,12 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
-        file,
+        deleteMetadataInstance,
         errorMessage,
-        status,
+        file,
         templateInstances,
         templates,
+        status,
     };
 }
 

@@ -24,6 +24,7 @@ describe('MetadataInstanceEditor', () => {
         isUnsavedChangesModalOpen: false,
         template: mockMetadataTemplateInstance,
         onCancel: jest.fn(),
+        onDelete: jest.fn(),
     };
 
     test('should render MetadataInstanceForm with correct props', () => {
