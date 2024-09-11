@@ -746,6 +746,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowVersions: expectedVersions,
                         shouldUseUAA: expectedUseUAA,
                     },
+                    undefined,
                 );
             },
         );
@@ -779,6 +780,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     shouldShowVersions: true,
                     shouldUseUAA: false,
                 },
+                undefined,
             );
         });
     });
@@ -1519,14 +1521,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         `(
             'should filter feed items of type "comment" or "annotation" based on status equal to $status',
             ({ status, expected }) => {
-                const {
-                    annotationOpen,
-                    annotationResolved,
-                    commentOpen,
-                    commentResolved,
-                    taskItem,
-                    versionItem,
-                } = cloneDeep(filterableActivityFeedItems);
+                const { annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem, versionItem } =
+                    cloneDeep(filterableActivityFeedItems);
                 const wrapper = getWrapper();
                 const instance = wrapper.instance();
                 instance.setState({
