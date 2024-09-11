@@ -75,12 +75,8 @@ function MetadataSidebarRedesign({
     );
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
 
-    const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
-        api,
-        fileId,
-        onError,
-        isFeatureEnabled,
-    );
+    const { deleteMetadataInstance, errorMessage, file, templateInstances, templates, status } =
+        useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
     const handleUnsavedChanges = () => {
         setIsUnsavedChangesModalOpen(true);
@@ -89,6 +85,11 @@ function MetadataSidebarRedesign({
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
         setEditingTemplate(selectedTemplate);
+    };
+
+    const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
+        deleteMetadataInstance(metadataInstance);
+        setEditingTemplate(null);
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
@@ -131,6 +132,7 @@ function MetadataSidebarRedesign({
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                             template={editingTemplate}
+                            onDelete={handleDeleteInstance}
                         />
                     )
                 )}
