@@ -634,6 +634,7 @@ class Feed extends Base {
             shouldShowVersions?: boolean,
             shouldUseUAA?: boolean,
         } = {},
+        logAPIParity?: Function,
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -688,13 +689,11 @@ class Feed extends Base {
                 ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
                 : Promise.resolve();
 
-        const handleFeedItems = (feedItems: FeedItems, uaaParityData?: {}) => {
+        const handleFeedItems = (feedItems: FeedItems) => {
             if (!this.isDestroyed()) {
                 this.setCachedItems(id, feedItems);
                 if (this.errors.length) {
                     errorCallback(feedItems, this.errors);
-                } else if (uaaParityData) {
-                    successCallback(feedItems, uaaParityData);
                 } else {
                     successCallback(feedItems);
                 }
@@ -706,6 +705,9 @@ class Feed extends Base {
                 if (!response) {
                     return;
                 }
+
+                const parsedFeedItems = getParsedFileActivitiesResponse(response);
+                handleFeedItems(parsedFeedItems);
 
                 Promise.all([
                     versionsPromise,
@@ -736,10 +738,11 @@ class Feed extends Base {
                             annotations,
                         );
                         const responseParity = getResponseParity(response, v2ShadowItems);
-
-                        const parsedFeedItems = getParsedFileActivitiesResponse(response);
                         const parsedDataParity = { v2: sortedFeedItems, uaa: parsedFeedItems };
-                        handleFeedItems(parsedFeedItems, { responseParity, parsedDataParity });
+
+                        if (logAPIParity) {
+                            logAPIParity(responseParity, parsedDataParity);
+                        }
                     },
                 );
             });

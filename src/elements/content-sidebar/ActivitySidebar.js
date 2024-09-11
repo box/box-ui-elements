@@ -736,6 +736,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowVersions,
                 shouldUseUAA,
             },
+            shouldUseUAA ? this.logAPIParity : undefined,
         );
     }
 
@@ -773,10 +774,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {Array} feedItems - the feed items
      * @return {void}
      */
-    fetchFeedItemsSuccessCallback = (
-        feedItems: FeedItems,
-        uaaParityData?: { responseParity: {}[], parsedDataParity: {}[] },
-    ): void => {
+    fetchFeedItemsSuccessCallback = (feedItems: FeedItems): void => {
         const {
             file: { id: fileId },
             logger,
@@ -790,13 +788,34 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 {
                     endMarkName: MARK_NAME_DATA_READY,
                     startMarkName: MARK_NAME_DATA_LOADING,
-                    uaaParityData,
                 },
                 fileId,
             );
         }
 
         this.setState({ feedItems, activityFeedError: undefined });
+    };
+
+    /**
+     * Logs diff between UAA and v2 API data
+     *
+     * @param {{}[]} responseParity array of aggragated responses from UAA and v2
+     * @param {{}} parsedDataParity parsed data from UAA and v2
+     * @return {void}
+     */
+    logAPIParity = (responseParity: {}[], parsedDataParity: {}): void => {
+        const {
+            file: { id: fileId },
+            logger,
+        } = this.props;
+
+        logger.onDataReadyMetric(
+            {
+                responseParity,
+                parsedDataParity,
+            },
+            fileId,
+        );
     };
 
     /**
