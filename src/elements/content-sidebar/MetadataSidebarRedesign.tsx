@@ -13,6 +13,7 @@ import {
     type MetadataTemplate,
 } from '@box/metadata-editor';
 
+import { JSONPatchOperations } from '@box/metadata-editor/types/lib/components/metadata-instance-editor/subcomponents/metadata-instance-form/types';
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -75,12 +76,8 @@ function MetadataSidebarRedesign({
     );
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
 
-    const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
-        api,
-        fileId,
-        onError,
-        isFeatureEnabled,
-    );
+    const { addTemplateInstance, file, templates, errorMessage, status, templateInstances, updateTemplateInstance } =
+        useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
     const handleUnsavedChanges = () => {
         setIsUnsavedChangesModalOpen(true);
@@ -89,6 +86,17 @@ function MetadataSidebarRedesign({
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
         setEditingTemplate(selectedTemplate);
+    };
+
+    const checkIfTemplateInstanceExists = (id: string): MetadataTemplateInstance => {
+        return templateInstances.find(templateInstance => templateInstance.id === id);
+    };
+
+    const handleSubmitInstance = (id: string, operations: JSONPatchOperations) => {
+        const existingTemplateInstance = checkIfTemplateInstanceExists(id);
+        existingTemplateInstance
+            ? updateTemplateInstance(existingTemplateInstance, operations)
+            : addTemplateInstance(editingTemplate as MetadataTemplate, operations);
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
@@ -130,6 +138,7 @@ function MetadataSidebarRedesign({
                         <MetadataInstanceEditor
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                            onSubmit={handleSubmitInstance}
                             template={editingTemplate}
                         />
                     )

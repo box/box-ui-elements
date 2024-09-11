@@ -7,6 +7,7 @@
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
+import { type MetadataTemplate as MetadataTemplateRedesign } from '@box/metadata-editor';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
 import File from './File';
@@ -666,14 +667,16 @@ class Metadata extends File {
      * @param {Array} operations - Array of JSON patch operations
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param {boolean} isMetadataRedesign - is Metadata Sidebar redesigned
      * @return {Promise}
      */
     async updateMetadata(
         file: BoxItem,
-        template: MetadataTemplate,
+        template: MetadataTemplate | MetadataTemplateInstance,
         operations: JSONPatchOperations,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        isMetadataRedesign: boolean = false,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_UPDATE_METADATA;
         this.successCallback = successCallback;
@@ -693,6 +696,7 @@ class Metadata extends File {
         }
 
         try {
+            // here is something wrong for Instance from Template, it crashes here
             const metadata = await this.xhr.put({
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),
                 headers: {
@@ -705,15 +709,28 @@ class Metadata extends File {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
-                const editor = this.createEditor(metadata.data, template, canEdit);
-                if (cachedMetadata && cachedMetadata.editors) {
-                    cachedMetadata.editors.splice(
-                        cachedMetadata.editors.findIndex(({ instance }) => instance.id === editor.instance.id),
-                        1,
-                        editor,
-                    );
+
+                if (isMetadataRedesign) {
+                    const templateInstance = this.createTemplateInstance(metadata.data, template, canEdit);
+                    if (cachedMetadata && cachedMetadata.templateInstances) {
+                        cachedMetadata.templateInstances.splice(
+                            cachedMetadata.templateInstances.findIndex(instance => instance.id === templateInstance.id),
+                            1,
+                            templateInstance,
+                        );
+                    }
+                    this.successHandler(templateInstance);
+                } else {
+                    const editor = this.createEditor(metadata.data, template, canEdit);
+                    if (cachedMetadata && cachedMetadata.editors) {
+                        cachedMetadata.editors.splice(
+                            cachedMetadata.editors.findIndex(({ instance }) => instance.id === editor.instance.id),
+                            1,
+                            editor,
+                        );
+                    }
+                    this.successHandler(editor);
                 }
-                this.successHandler(editor);
             }
         } catch (e) {
             this.errorHandler(e);
@@ -727,13 +744,17 @@ class Metadata extends File {
      * @param {Object} template - Metadata template
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param {boolean} isMetadataRedesign - is Metadata Sidebar redesigned
+     * @param {Object} operations - Array of JSON patch operations for MetadataSidebarRedesign
      * @return {Promise}
      */
     async createMetadata(
         file: BoxItem,
-        template: MetadataTemplate,
+        template: MetadataTemplate | MetadataTemplateRedesign,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        isMetadataRedesign: boolean = false,
+        operations?: JSONPatchOperations,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_CREATE_METADATA;
         if (!file || !template) {
@@ -756,8 +777,7 @@ class Metadata extends File {
             errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
-
-        this.successCallback = successCallback;
+        !isMetadataRedesign && (this.successCallback = successCallback);
         this.errorCallback = errorCallback;
 
         try {
@@ -770,9 +790,17 @@ class Metadata extends File {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
-                const editor = this.createEditor(metadata.data, template, canEdit);
-                cachedMetadata.editors.push(editor);
-                this.successHandler(editor);
+
+                if (isMetadataRedesign) {
+                    const templateInstance = this.createTemplateInstance(metadata.data, template, canEdit);
+                    cachedMetadata.templateInstances.push(templateInstance);
+
+                    this.updateMetadata(file, templateInstance, operations, successCallback, errorCallback, true);
+                } else {
+                    const editor = this.createEditor(metadata.data, template, canEdit);
+                    cachedMetadata.editors.push(editor);
+                    this.successHandler(editor);
+                }
             }
         } catch (e) {
             this.errorHandler(e);
