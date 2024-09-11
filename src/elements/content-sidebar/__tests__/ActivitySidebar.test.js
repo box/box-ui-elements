@@ -730,6 +730,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.errorCallback = jest.fn();
                 instance.fetchFeedItemsErrorCallback = jest.fn();
                 instance.fetchFeedItemsSuccessCallback = jest.fn();
+                instance.logAPIParity = jest.fn();
 
                 instance.fetchFeedItems();
                 expect(feedAPI.feedItems).toHaveBeenCalledWith(
@@ -746,7 +747,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         shouldShowVersions: expectedVersions,
                         shouldUseUAA: expectedUseUAA,
                     },
-                    undefined,
+                    expectedUseUAA ? instance.logAPIParity : undefined,
                 );
             },
         );
