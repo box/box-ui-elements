@@ -1,6 +1,6 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
-import { type MetadataTemplate } from '@box/metadata-editor';
+import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
 import {
@@ -25,6 +25,29 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             type: 'metadata_template',
         },
     ];
+
+    const mockCustomTemplateInstance = {
+        canEdit: true,
+        hidden: false,
+        id: 'metadata_template_42',
+        fields: [
+            {
+                key: 'Another testing key',
+                type: 'string',
+                value: '42',
+                hidden: false,
+            },
+            {
+                key: 'Test key',
+                type: 'string',
+                value: 'Some test value',
+                hidden: false,
+            },
+        ],
+        scope: 'global',
+        templateKey: 'properties',
+        type: 'properties',
+    } satisfies MetadataTemplateInstance;
 
     const mockFile = {
         id: '123',
@@ -137,5 +160,22 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(
             screen.getByText('Add Metadata to your file to support business operations, workflows, and more!'),
         ).toBeInTheDocument();
+    });
+
+    test('should render metadata instance list when templates are present', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            templateInstances: [mockCustomTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        renderComponent();
+
+        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 1, name: 'Custom Metadata' })).toBeInTheDocument();
+        expect(screen.getByText(mockCustomTemplateInstance.fields[0].key)).toBeInTheDocument();
+        expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeInTheDocument();
     });
 });
