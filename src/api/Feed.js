@@ -571,23 +571,17 @@ class Feed extends Base {
         this.errorCallback = onError;
 
         // Using the UAA File Activities endpoint replaces the need for these calls
-        const annotationsPromise =
-            !shouldUseUAA && shouldShowAnnotations
-                ? this.fetchAnnotations(permissions, shouldShowReplies)
-                : Promise.resolve();
+        const annotationsPromise = shouldShowAnnotations
+            ? this.fetchAnnotations(permissions, shouldShowReplies)
+            : Promise.resolve();
         const commentsPromise = () => {
-            if (shouldUseUAA) {
-                return Promise.resolve();
-            }
-
             return shouldShowReplies ? this.fetchThreadedComments(permissions) : this.fetchComments(permissions);
         };
-        const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
-        const appActivityPromise =
-            !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
-        const versionsPromise = !shouldUseUAA && shouldShowVersions ? this.fetchVersions() : Promise.resolve();
-        const currentVersionPromise =
-            !shouldUseUAA && shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
+
+        const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
+        const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
+        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
 
         const annotationActivityType =
             shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
@@ -607,7 +601,7 @@ class Feed extends Base {
 
         const fileActivitiesPromise =
             // Only fetch when activity types are explicitly stated
-            shouldUseUAA && filteredActivityTypes.length
+            filteredActivityTypes.length
                 ? this.fetchFileActivities(permissions, filteredActivityTypes, shouldShowReplies)
                 : Promise.resolve();
 
@@ -622,29 +616,51 @@ class Feed extends Base {
             }
         };
 
+        const v2Promises = [
+            versionsPromise,
+            currentVersionPromise,
+            commentsPromise(),
+            tasksPromise,
+            appActivityPromise,
+            annotationsPromise,
+        ];
+
+        const fetchV2FeedItems = async (promises: Promise[]) => {
+            return await Promise.all(promises).then(
+                ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                    const versionsWithCurrent = currentVersion
+                        ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                        : undefined;
+                    return sortFeedItems(versionsWithCurrent, ...feedItems);
+                },
+            );
+        };
+
+        const compareV2AndUaaFeedItems = async uaaFeedItems => {
+            fetchV2FeedItems(v2Promises).then(v2FeedItems => {
+                // Do comparison here
+                console.log({
+                    v2FeedItems,
+                    uaaFeedItems,
+                });
+            });
+        };
+
         if (shouldUseUAA) {
             fileActivitiesPromise.then(response => {
                 if (!response) {
                     return;
                 }
 
-                const parsedFeedItems = getParsedFileActivitiesResponse(response);
-                handleFeedItems(parsedFeedItems);
+                const uaaFeedItems = getParsedFileActivitiesResponse(response);
+
+                compareV2AndUaaFeedItems(uaaFeedItems);
+
+                handleFeedItems(uaaFeedItems);
             });
         } else {
-            Promise.all([
-                versionsPromise,
-                currentVersionPromise,
-                commentsPromise(),
-                tasksPromise,
-                appActivityPromise,
-                annotationsPromise,
-            ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                const versionsWithCurrent = currentVersion
-                    ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
-                    : undefined;
-                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
-                handleFeedItems(sortedFeedItems);
+            fetchV2FeedItems(v2Promises).then(v2FeedItems => {
+                handleFeedItems(v2FeedItems);
             });
         }
     }
