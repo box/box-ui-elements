@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import ItemList from './ItemList';
 import OverallUploadsProgressBar from './OverallUploadsProgressBar';
+import { isActivateKey } from '../../utils/dom';
 import { STATUS_ERROR } from '../../constants';
 import type { View } from '../../common/types/core';
 import type { UploadItem, UploadStatus } from '../../common/types/upload';
@@ -23,10 +24,10 @@ export interface UploadsManagerProps {
 }
 
 const UploadsManager = ({
-    isExpanded,
-    isVisible,
-    isResumableUploadsEnabled,
     isDragging,
+    isExpanded,
+    isResumableUploadsEnabled,
+    isVisible,
     items,
     onItemActionClick,
     onRemoveActionClick,
@@ -42,13 +43,8 @@ const UploadsManager = ({
      * @return {void}
      */
     const handleProgressBarKeyDown = (event: React.KeyboardEvent) => {
-        switch (event.key) {
-            case 'Enter':
-            case 'Space':
-                toggleUploadsManager();
-                break;
-            default:
-            // noop
+        if (isActivateKey(event)) {
+            toggleUploadsManager();
         }
     };
 
