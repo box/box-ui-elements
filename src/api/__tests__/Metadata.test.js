@@ -2161,6 +2161,50 @@ describe('api/Metadata', () => {
                 editors: [],
             });
         });
+        test('should make request and update metadataInstances cache if isMetadataRedesign', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = { id: '123', scope: 'scope', templateKey: 'templateKey' };
+
+            cache.set('metadata_id', {
+                templateInstances: [{ ...template }],
+            });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.delete = jest.fn().mockReturnValueOnce({ data: 'foo' });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.merge = jest.fn().mockReturnValueOnce('file');
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.deleteMetadata(file, template, success, error, true);
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'scope', 'templateKey');
+            expect(metadata.xhr.delete).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+            });
+            expect(metadata.isDestroyed).toHaveBeenCalled();
+            expect(metadata.getCache).toHaveBeenCalled();
+            expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.successHandler).toHaveBeenCalled();
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+            expect(cache.get('metadata_id')).toEqual({
+                templateInstances: [],
+            });
+        });
         test('should make request but not update cache or call success handler when destroyed', async () => {
             const success = jest.fn();
             const error = jest.fn();

@@ -827,12 +827,19 @@ class Metadata extends File {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const metadata = cache.get(key);
-                metadata.editors.splice(
-                    metadata.editors.findIndex(
-                        editor => eiditor.template.scope === scope && editor.template.templateKey === templateKey,
-                    ),
-                    1,
-                );
+                if (isMetadataRedesign) {
+                    metadata.templateInstances.splice(
+                        metadata.templateInstances.findIndex(instance => instance.id === template.id),
+                        1,
+                    );
+                } else {
+                    metadata.editors.splice(
+                        metadata.editors.findIndex(
+                            editor => editor.template.scope === scope && editor.template.templateKey === templateKey,
+                        ),
+                        1,
+                    );
+                }
                 this.successHandler();
             }
         } catch (e) {
