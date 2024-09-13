@@ -120,7 +120,6 @@ function useSidebarMetadataFetcher(
         const updatedInstances = templateInstances.filter(
             templateInstance => templateInstance.id !== metadataInstance.id,
         );
-        console.log('updatedInstances', updatedInstances);
         setTemplateInstances(updatedInstances);
     };
 
@@ -135,6 +134,7 @@ function useSidebarMetadataFetcher(
                 metadataInstance,
                 deleteMetadataInstanceSuccessCallback,
                 onApiError,
+                true,
             );
         },
         [api, templateInstances, onApiError],
