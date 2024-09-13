@@ -359,5 +359,8 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
+    },
+    "dependencies": {
+        "@box/metadata-editor": "^0.45.0"
     }
 }
