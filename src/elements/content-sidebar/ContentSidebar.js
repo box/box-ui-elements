@@ -9,6 +9,7 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
 import type { RouterHistory } from 'react-router-dom';
+import data from 'box-metadata-editor-locale-data';
 import API from '../../api';
 import APIContext from '../common/api-context';
 import Internationalize from '../common/Internationalize';
@@ -35,6 +36,7 @@ import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import type APICache from '../../utils/Cache';
+
 
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -355,8 +357,10 @@ class ContentSidebar extends React.Component<Props, State> {
             return null;
         }
 
+        const moreMessages = { ...messages, ...data };
+
         return (
-            <Internationalize language={language} messages={messages}>
+            <Internationalize language={language} messages={moreMessages}>
                 <APIContext.Provider value={(this.api: any)}>
                     <NavRouter history={history} initialEntries={[initialPath]}>
                         <Sidebar

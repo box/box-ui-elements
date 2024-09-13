@@ -52,6 +52,7 @@ const config: {
             ...config.resolve.alias,
             'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
             'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
+            'box-metadata-editor-locale-data': path.resolve(`node_modules/@box/metadata-editor/i18n/${language}`),
             'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
         };
 

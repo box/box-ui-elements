@@ -10,6 +10,7 @@
         "rootDir": ".",
         "paths": {
             "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"],
+            "box-metadata-editor-locale-data": ["node_modules/@box/metadata-editor/i18n/en-US"],
             "react": ["node_modules/@types/react"]
         },
         "strict": false
