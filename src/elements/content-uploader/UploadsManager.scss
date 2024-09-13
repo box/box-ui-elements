@@ -1,3 +1,5 @@
+@use '@box/blueprint-web-assets/tokens/tokens.scss';
+
 @import '../common/variables';
 
 .be.bcu-uploads-manager-container {
@@ -5,6 +7,8 @@
     bottom: 0;
     width: 100%;
     max-height: 0;
+    border-top-left-radius: tokens.$radius-3;
+    border-top-right-radius: tokens.$radius-3;
     transition: max-height .5s;
 
     .bcu-progress-container {
@@ -116,10 +120,6 @@
 
     .bcu-item-row {
         padding-right: 5px;
-    }
-
-    .bcu-item-icon-name {
-        padding-left: 5px;
     }
 
     .bcu-progress {

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Text } from '@box/blueprint-web';
 import ProgressBar from './ProgressBar';
-import UploadsManagerItemAction from './UploadsManagerAction';
+import UploadsManagerAction from './UploadsManagerAction';
 import { VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUCCESS, VIEW_ERROR, VIEW_UPLOAD_EMPTY } from '../../constants';
 import type { View } from '../../common/types/core';
+import type { UploadStatus } from '../../common/types/upload';
 
 import messages from '../common/messages';
 
@@ -61,7 +63,7 @@ export interface OverallUploadsProgressBarProps {
     isVisible: boolean;
     onClick: React.MouseEventHandler<HTMLDivElement>;
     onKeyDown: React.KeyboardEventHandler<HTMLDivElement>;
-    onUploadsManagerActionClick: () => void;
+    onUploadsManagerActionClick: (status: UploadStatus) => void;
     percent: number;
     view: View;
 }
@@ -98,10 +100,12 @@ const OverallUploadsProgressBar = ({
             // @ts-ignore
             tabIndex={isVisible ? '0' : '-1'}
         >
-            <span className="bcu-upload-status">{status}</span>
+            <Text as="span" className="bcu-upload-status" color="textOnDarkDefault" variant="bodyDefaultBold">
+                {status}
+            </Text>
             <ProgressBar percent={updatedPercent} />
             {isResumeVisible && (
-                <UploadsManagerItemAction
+                <UploadsManagerAction
                     hasMultipleFailedUploads={hasMultipleFailedUploads}
                     onClick={onUploadsManagerActionClick}
                 />
