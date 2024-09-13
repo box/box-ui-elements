@@ -19,6 +19,7 @@ describe('MetadataInstanceEditor', () => {
         isBoxAiSuggestionsEnabled: true,
         isUnsavedChangesModalOpen: false,
         template: mockMetadataTemplate,
+        onSubmit: jest.fn(),
     };
 
     test('should render MetadataInstanceForm with correct props', () => {

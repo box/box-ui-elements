@@ -51,6 +51,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            addTemplateInstance: jest.fn(),
+            updateTemplateInstance: jest.fn(),
         });
     });
 
@@ -96,6 +98,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             },
             status: STATUS.ERROR,
             file: mockFile,
+            addTemplateInstance: jest.fn(),
+            updateTemplateInstance: jest.fn(),
         });
 
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
@@ -112,6 +116,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.LOADING,
             file: mockFile,
+            addTemplateInstance: jest.fn(),
+            updateTemplateInstance: jest.fn(),
         });
 
         renderComponent();
