@@ -7,6 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const RsyncPlugin = require('@box/frontend/webpack/RsyncPlugin');
+const { translationDependencies } = require('../i18n.config');
 const packageJSON = require('../package.json');
 const rsyncConf = fs.existsSync('scripts/rsync.json') ? require('./rsync.json') : {}; // eslint-disable-line
 const license = require('./license');
@@ -27,7 +28,10 @@ const fileId = process.env.FILEID; // used for examples only
 const outputDir = process.env.OUTPUT;
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
-const Translations = new TranslationsPlugin();
+const Translations = new TranslationsPlugin({
+    generateBundles: true,
+    additionalMessageData: translationDependencies.map(pkg => `${pkg}/i18n/[language]`),
+});
 const entries = {
     picker: path.resolve('src/elements/wrappers/ContentPickers.js'),
     uploader: path.resolve('src/elements/wrappers/ContentUploader.js'),
@@ -145,10 +149,10 @@ function getConfig(isReactExternalized) {
         stats,
     };
 
+    config.plugins.push(Translations);
+
     if (isDev) {
         config.devtool = 'source-map';
-        config.plugins.push(Translations);
-
         if (!examples) {
             config.plugins.push(
                 new CircularDependencyPlugin({
