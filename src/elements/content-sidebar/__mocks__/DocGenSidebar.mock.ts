@@ -1,3 +1,16 @@
+const smallTestCase = [
+    {
+        tag_content: '{{ phone }}',
+        tag_type: 'text',
+        json_paths: ['phone'],
+    },
+    {
+        tag_content: '{{ company }}',
+        tag_type: 'text',
+        json_paths: ['company', 'company.name'],
+    },
+]
+
 const mockData = [
     {
         tag_content: '{{ isActive }}',

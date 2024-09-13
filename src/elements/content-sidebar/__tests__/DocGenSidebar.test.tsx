@@ -17,13 +17,10 @@ const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
 const errorTagsMock = jest.fn().mockRejectedValue([]);
 const noDataMock = jest.fn().mockReturnValue(Promise.resolve({}));
 
-const defaultProps = {
-    ...docGenSidebarProps,
-};
 
 describe('elements/content-sidebar/DocGenSidebar', () => {
-    const renderComponent = (props = defaultProps) =>
-        render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...props} />);
+    const renderComponent = (props = {}) =>
+        render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }}  {...docGenSidebarProps} {...props} />);
 
     test('componentDidMount() should call fetch tags', async () => {
         renderComponent();
@@ -36,9 +33,22 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         expect(tagList).toHaveLength(2);
     });
 
+    test('should render DocGen sidebar component correctly with tags list', async () => {
+        renderComponent();
+        const parentTag = await screen.findByText('about');
+        let nestedTag = await screen.queryByText('name');
+
+        expect(parentTag).toBeInTheDocument();
+        expect(nestedTag).not.toBeInTheDocument();
+
+        fireEvent.click(parentTag);
+
+        nestedTag = await screen.findByText('name');
+        expect(nestedTag).toBeInTheDocument();
+    });
+
     test('should render empty state when there are no tags', async () => {
         renderComponent({
-            ...defaultProps,
             getDocGenTags: noTagsMock,
         });
 
@@ -47,18 +57,31 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
     });
 
     test('should render loading state', async () => {
+        const mockGetDocGenTags = jest.fn().mockReturnValue(
+            new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        data: mockData,
+                    });
+                }, 1000);
+            })
+        );
+
         renderComponent({
-            ...defaultProps,
-            getDocGenTags: noTagsMock,
+            getDocGenTags: mockGetDocGenTags,
         });
 
-        const loadingState = await screen.getByRole('status', { name: 'Loading' });
-        expect(loadingState).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.queryByRole('status', { name: 'Loading' })).not.toBeInTheDocument();
+        });
     });
 
     test('should re-trigger getDocGenTags on click on refresh button', async () => {
         renderComponent({
-            ...defaultProps,
             getDocGenTags: errorTagsMock,
         });
 
@@ -73,7 +96,6 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
     test('should handle undefined data', async () => {
         renderComponent({
-            ...defaultProps,
             getDocGenTags: noDataMock,
         });
 
