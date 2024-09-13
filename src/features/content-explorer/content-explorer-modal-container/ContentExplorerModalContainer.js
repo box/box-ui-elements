@@ -151,6 +151,8 @@ class ContentExplorerModalContainer extends Component {
         searchInputProps: PropTypes.object,
         /** Custom text for the choose button */
         chooseButtonText: PropTypes.node,
+        /** Text for the informational notice, defaults to empty string, which makes notice not visible */
+        infoNoticeText: PropTypes.string,
     };
 
     static defaultProps = {
@@ -207,6 +209,7 @@ class ContentExplorerModalContainer extends Component {
             createFolderError,
             initialFoldersPath,
             shouldNotUsePortal,
+            infoNoticeText,
             ...rest
         } = this.props;
         const { foldersPath, isNewFolderModalOpen } = this.state;
@@ -223,6 +226,7 @@ class ContentExplorerModalContainer extends Component {
                     onEnterFolder={this.handleEnterFolder}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
                     shouldNotUsePortal={shouldNotUsePortal}
+                    infoNoticeText={infoNoticeText}
                     {...rest}
                 />
                 {isNewFolderModalOpen && (
