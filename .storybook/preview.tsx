@@ -1,13 +1,13 @@
-import * as React from "react";
+import * as React from 'react';
 import { IntlProvider } from 'react-intl';
-import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import features from '../examples/src/features';
 
 import '../src/styles/variables';
 import '../src/styles/base.scss';
 
-import { reactIntl } from "./reactIntl";
+import { reactIntl } from './reactIntl';
 
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;
@@ -19,13 +19,12 @@ global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 initialize();
 
 const preview = {
-    decorators:[
-        mswDecorator,
-        (Story) => (
+    decorators: [
+        Story => (
             <IntlProvider locale="en">
                 <Story />
             </IntlProvider>
-        )
+        ),
     ],
 
     parameters: {
@@ -44,6 +43,8 @@ const preview = {
         reactIntl,
     },
 
+    loaders: [mswLoader],
+
     tags: ['autodocs'],
 
     initialGlobals: {
@@ -52,7 +53,7 @@ const preview = {
             en: 'English',
             de: 'Deutsche',
         },
-    }
+    },
 };
 
 export default preview;
