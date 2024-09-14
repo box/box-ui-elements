@@ -1564,6 +1564,11 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
+"@box/metadata-editor@^0.46.1":
+  version "0.46.1"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.46.1.tgz#ea37ca31dbcbb163c2018be30755098e6a0542c9"
+  integrity sha512-Jw2Lp+wS1iBxt1ZNH7RP4oWfDdrPU37rr/+W0XceG1Vqqtt/kk0pDcHJoy0aoX641pQGvkYuHKu9jAH3FedVtA==
+
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"
   resolved "https://registry.npmjs.org/@box/react-virtualized/-/react-virtualized-9.22.3-rc-box.9.tgz#1c68916a5a63b70f5f0fc0e2f7ed12df641dc803"
