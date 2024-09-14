@@ -11,6 +11,10 @@ aliases:
     name: Building locales
     command: yarn build:i18n
 
+  - &build
+    name: Building project
+    command: yarn build:prod:npm
+
   - &restore-yarn-cache
     keys:
         - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
@@ -103,6 +107,7 @@ jobs:
         - save-cache: *save-yarn-cache
         - run: *clean
         - run: *i18n
+        - run: *build
         - run:
             name: Chromatic
             command: ./scripts/chromatic.sh
