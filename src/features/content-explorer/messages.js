@@ -160,6 +160,11 @@ const messages = defineMessages({
         description: 'Label text shown next to the Include Subfolders toggle',
         id: 'boxui.contentExplorer.includeSubfolders',
     },
+    infoNoticeIconAriaLabel: {
+        defaultMessage: 'Info icon',
+        description: 'Aria label for the info icon',
+        id: 'boxui.contentExplorer.infoNoticeIconAriaLabel',
+    },
 });
 
 export default messages;

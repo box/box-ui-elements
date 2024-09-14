@@ -22,6 +22,7 @@ exports[`features/content-explorer/content-explorer-modal/ContentExplorerModal r
     contentExplorerMode="selectFile"
     customInput={[Function]}
     formatMessage={[Function]}
+    infoNoticeText=""
     initialFoldersPath={[]}
     isResponsive={false}
     items={[]}

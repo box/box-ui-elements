@@ -183,7 +183,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
                 wrapper.setState({
                     selectedItems: {
-                        '1': {
+                        1: {
                             id: '1',
                             isActionDisabled: true,
                             name: 'name',
@@ -216,7 +216,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                     { id: '3', name: 'item3' },
                 ];
 
-                const selectedItems = { '1': items[0] };
+                const selectedItems = { 1: items[0] };
                 const wrapper = renderComponent({
                     contentExplorerMode,
                     items,
@@ -271,12 +271,30 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
         test('should render all items from both selectedItems state and controlledSelectedItems prop', () => {
             const wrapper = renderComponent({
-                controlledSelectedItems: { '2': { id: '2', name: 'item2' } },
+                controlledSelectedItems: { 2: { id: '2', name: 'item2' } },
             });
-            const selectedItems = { '1': { id: '1', name: 'item1' } };
+            const selectedItems = { 1: { id: '1', name: 'item1' } };
             wrapper.setState({ selectedItems });
             expect(Object.keys(wrapper.find('ItemList').prop('selectedItems')).length).toBe(2);
             expect(Object.keys(wrapper.find('ContentExplorerActionButtons').prop('selectedItems')).length).toBe(2);
+        });
+
+        test('should not render ContentExplorerInfoNotice by default', () => {
+            const wrapper = renderComponent();
+
+            expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(false);
+        });
+
+        test('should not render ContentExplorerInfoNotice when info notice text is empty', () => {
+            const wrapper = renderComponent({ infoNoticeText: '' });
+
+            expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(false);
+        });
+
+        test('should render ContentExplorerInfoNotice when info notice text is not empty', () => {
+            const wrapper = renderComponent({ infoNoticeText: 'text' });
+
+            expect(wrapper.exists('ContentExplorerInfoNotice')).toBe(true);
         });
     });
 
@@ -312,10 +330,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const clickedFolder = items[clickedFolderIndex];
             const newFoldersPath = initialFoldersPath.concat([clickedFolder]);
 
-            wrapper
-                .find('.item-list-name')
-                .first()
-                .simulate('click');
+            wrapper.find('.item-list-name').first().simulate('click');
 
             expect(onEnterFolderSpy.withArgs(clickedFolder, newFoldersPath).calledOnce).toBe(true);
         });
@@ -325,10 +340,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const clickedFolder = items[clickedFolderIndex];
             const newFoldersPath = initialFoldersPath.concat([clickedFolder]);
 
-            wrapper
-                .find('.item-list-name')
-                .first()
-                .simulate('doubleClick');
+            wrapper.find('.item-list-name').first().simulate('doubleClick');
 
             expect(onEnterFolderSpy.withArgs(clickedFolder, newFoldersPath).calledOnce).toBe(true);
         });
@@ -348,10 +360,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const clickedFolder = items[clickedFolderIndex];
             const newFoldersPath = initialFoldersPath.concat([clickedFolder]);
 
-            wrapper
-                .find('.item-list-name')
-                .first()
-                .simulate('click');
+            wrapper.find('.item-list-name').first().simulate('click');
 
             expect(onEnterFolderSpy.withArgs(clickedFolder, newFoldersPath).calledOnce).toBe(false);
         });
@@ -373,10 +382,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             ];
             const wrapper = renderComponent({ items, onSelectItem: onSelectItemSpy }, true);
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex).simulate('click');
 
             expect(onSelectItemSpy.withArgs(items[clickedItemIndex], clickedItemIndex).calledOnce).toBe(true);
         });
@@ -391,15 +397,9 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             ];
             const wrapper = renderComponent({ items, onSelectItem: onSelectItemSpy }, true);
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex).simulate('click');
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex2)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex2).simulate('click');
 
             expect(onSelectItemSpy.withArgs(items[clickedItemIndex], clickedItemIndex).calledOnce).toBe(true);
 
@@ -426,15 +426,9 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 true,
             );
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex).simulate('click');
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex2)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex2).simulate('click');
 
             expect(onSelectItemSpy.withArgs(items[clickedItemIndex], clickedItemIndex).calledOnce).toBe(true);
 
@@ -483,20 +477,11 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 true,
             );
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex).simulate('click');
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex2)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex2).simulate('click');
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex3)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex3).simulate('click');
 
             expect(Object.keys(wrapper.state('selectedItems')).length).toBe(3);
             expect(wrapper.state('isSelectAllChecked')).toBe(true);
@@ -509,7 +494,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 { id: '1', name: 'item1' },
                 { id: '2', name: 'item2' },
             ];
-            const selectedItems = { '1': items[clickedItemIndex], '2': items[clickedItemIndex2] };
+            const selectedItems = { 1: items[clickedItemIndex], 2: items[clickedItemIndex2] };
             const wrapper = renderComponent(
                 {
                     items,
@@ -521,10 +506,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             );
             wrapper.setState({ selectedItems, isSelectAllChecked: true });
 
-            wrapper
-                .find('.table-row')
-                .at(clickedItemIndex)
-                .simulate('click');
+            wrapper.find('.table-row').at(clickedItemIndex).simulate('click');
 
             expect(Object.keys(wrapper.state('selectedItems')).length).toBe(1);
             expect(wrapper.state('isSelectAllChecked')).toBe(false);
@@ -540,7 +522,7 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
         test('should call onChooseItems with the clicked file when double clicking a file', () => {
             const items = [{ id: '1', name: 'item1', type: 'file' }];
-            const selectedItems = { '1': items[0] };
+            const selectedItems = { 1: items[0] };
             const wrapper = renderComponent({ items, onChooseItems: onChooseItemsSpy }, true);
 
             // Need to make the item selected first because simulating a double click doesn't actually click anything

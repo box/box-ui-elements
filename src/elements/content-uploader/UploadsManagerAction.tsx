@@ -16,18 +16,21 @@ export interface UploadsManagerActionProps {
 }
 
 const UploadsManagerAction = ({ hasMultipleFailedUploads, onClick }: UploadsManagerActionProps) => {
+    const { formatMessage } = useIntl();
+
     const handleResumeClick = event => {
         event.stopPropagation();
         onClick(STATUS_ERROR);
     };
-    const intl = useIntl();
-    const resumeMessage = hasMultipleFailedUploads ? messages.resumeAll : messages.resume;
-    const resin = { [RESIN_TAG_TARGET]: 'uploadresumeheader' };
 
     return (
         <div className="bcu-uploads-manager-action">
-            <Button onClick={handleResumeClick} size="small" variant="primary" {...resin}>
-                {intl.formatMessage(resumeMessage)}
+            <Button
+                className="bcu-UploadsManagerAction-button"
+                onClick={handleResumeClick}
+                {...{ [RESIN_TAG_TARGET]: 'uploadresumeheader' }}
+            >
+                {formatMessage(hasMultipleFailedUploads ? messages.resumeAll : messages.resume)}
             </Button>
         </div>
     );

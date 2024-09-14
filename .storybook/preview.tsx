@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { IntlProvider } from 'react-intl';
+import { boxLanguages } from '@box/languages';
 import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import features from '../examples/src/features';
@@ -19,14 +18,6 @@ global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 initialize();
 
 const preview = {
-    decorators: [
-        Story => (
-            <IntlProvider locale="en">
-                <Story />
-            </IntlProvider>
-        ),
-    ],
-
     parameters: {
         chromatic: { disableSnapshot: true },
         controls: {
@@ -49,10 +40,10 @@ const preview = {
 
     initialGlobals: {
         locale: reactIntl.defaultLocale,
-        locales: {
-            en: 'English',
-            de: 'Deutsche',
-        },
+        locales: Object.keys(boxLanguages).reduce((acc, key) => {
+            acc[key] = boxLanguages[key].name;
+            return acc;
+        }, {}),
     },
 };
 

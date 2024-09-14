@@ -6,8 +6,8 @@
     align-items: center;
     width: 100%;
     height: 60px;
-    padding-right: 65px;
-    padding-left: 30px;
+    padding-right: 60px;
+    padding-left: 24px;
     color: $white;
     line-height: 60px;
     background: $blue;
@@ -28,6 +28,5 @@
     .bcu-upload-status {
         flex: none;
         margin-right: 20px;
-        font-size: 16px;
     }
 }

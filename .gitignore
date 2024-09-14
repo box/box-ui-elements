@@ -13,6 +13,7 @@ dist
 es
 i18n/*.js
 i18n/json
+i18n/bundles
 node_modules
 npm-debug.log
 npm-error.log

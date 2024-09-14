@@ -8,13 +8,13 @@ The UI Elements use [react-intl](https://formatjs.io/docs/react-intl/) for inter
 
 The `language` property is a string that can be one of `en-AU`, `en-CA`, `en-GB`, `en-US`, `bn-IN`, `da-DK`, `de-DE`, `es-419`, `es-ES`, `fi-FI`, `fr-CA`, `fr-FR`, `hi-IN`, `it-IT`, `ja-JP`, `ko-KR`, `nb-NO`, `nl-NL`, `pl-PL`, `pt-BR`, `ru-RU`, `sv-SE`, `tr-TR`, `zh-CN`, `zh-TW`.
 
-The `messages` property is a map of message keys and translated strings. All the messages that the UI elements use can be found under the [i18n](https://github.com/box/box-ui-elements/tree/master/i18n) folder. We distribute them as JS modules within the `box-ui-elements` npm package and they can be imported like any other module - `import box-ui-elements/i18n/[LANGUAGE FROM ABOVE]`. The code examples for each of the UI Elements assume `en-US` and show how the US english messages are imported in.
+The `messages` property is a map of message keys and translated strings. All the messages that the UI elements use can be found under the [i18n](https://github.com/box/box-ui-elements/tree/master/i18n) folder. We distribute them as JS modules within the `box-ui-elements` npm package and they can be imported like any other module - `import box-ui-elements/i18n/bundles/[LANGUAGE FROM ABOVE]`. The code examples for each of the UI Elements assume `en-US` and show how the US english messages are imported in.
 
 If you are using the CDNs, the i18n messages are included in the bundle.
 
 Example of using the `language` and `messages` properties:
 ```jsx static
-import messages from 'box-ui-elements/i18n/ja-JP';
+import messages from 'box-ui-elements/i18n/bundles/ja-JP';
 
 <ContentExplorer language="ja-JP" messages={messages} {...PROPS} />
 ```
@@ -23,7 +23,7 @@ _ContentExplorer will show in Japanese._
 
 Example `IntlProvider` with multiple elements
 ```jsx static
-import messages from 'box-ui-elements/i18n/ja-JP';
+import messages from 'box-ui-elements/i18n/bundles/ja-JP';
 
 <IntlProvider locale="ja-JP" messages={messages}>
     <ContentExplorer {...PROPS} />
@@ -36,8 +36,8 @@ _Both ContentExplorer and ContentPicker will show in Japanese._
 Example of using different `language` and `messages` properties:
 
 ```jsx static
-import jaMessages from 'box-ui-elements/i18n/ja-JP';
-import deMessages from 'box-ui-elements/i18n/de-DE';
+import jaMessages from 'box-ui-elements/i18n/bundles/ja-JP';
+import deMessages from 'box-ui-elements/i18n/bundles/de-DE';
 
 <ContentExplorer language="ja-JP" messages={jaMessages} {...PROPS} />
 <ContentPicker language="de-DE" messages={deMessages} {...PROPS} />
