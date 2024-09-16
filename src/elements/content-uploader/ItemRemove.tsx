@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { IconButton, Tooltip } from '@box/blueprint-web';
-import { GrayBlack, Size5 } from '@box/blueprint-web-assets/tokens/tokens';
 import { XMark } from '@box/blueprint-web-assets/icons/Fill';
 
 import type { UploadItem, UploadStatus } from '../../common/types/upload';
@@ -16,6 +15,8 @@ export interface ItemRemoveProps {
 }
 
 const ItemRemove = ({ onClick, status }: ItemRemoveProps) => {
+    const { formatMessage } = useIntl();
+
     const resin: Record<string, string> = {};
     let target = null;
 
@@ -29,20 +30,13 @@ const ItemRemove = ({ onClick, status }: ItemRemoveProps) => {
         resin['data-resin-target'] = target;
     }
 
-    const intl = useIntl();
     const isDisabled = status === STATUS_STAGED;
-    const tooltipText = intl.formatMessage(messages.remove);
+    const tooltipText = formatMessage(messages.remove);
 
     return (
         <div className="bcu-item-action">
-            <Tooltip content={tooltipText} variant="standard">
-                <IconButton
-                    aria-label={tooltipText}
-                    disabled={isDisabled}
-                    onClick={onClick}
-                    icon={() => <XMark color={GrayBlack} height={Size5} width={Size5} />}
-                    {...resin}
-                />
+            <Tooltip content={tooltipText}>
+                <IconButton aria-label={tooltipText} disabled={isDisabled} onClick={onClick} icon={XMark} {...resin} />
             </Tooltip>
         </div>
     );

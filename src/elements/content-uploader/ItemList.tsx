@@ -13,6 +13,8 @@ import type { UploadItem } from '../../common/types/upload';
 import '@box/react-virtualized/styles.css';
 import './ItemList.scss';
 
+const ACTION_CELL_WIDTH = 32;
+
 export interface ItemListProps {
     isResumableUploadsEnabled?: boolean;
     items: UploadItem[];
@@ -38,7 +40,6 @@ const ItemList = ({
             const progressCell = progressCellRenderer(!!onUpgradeCTAClick);
             const actionCell = actionCellRenderer(isResumableUploadsEnabled, onClick, onUpgradeCTAClick);
             const removeCell = removeCellRenderer(onRemoveClick);
-            const baseIconWidth = 32;
 
             return (
                 <Table
@@ -66,7 +67,7 @@ const ItemList = ({
                         cellRenderer={actionCell}
                         dataKey="status"
                         flexShrink={0}
-                        width={onUpgradeCTAClick ? 100 : baseIconWidth}
+                        width={onUpgradeCTAClick ? 100 : ACTION_CELL_WIDTH}
                     />
                     {isResumableUploadsEnabled && (
                         <Column
@@ -74,7 +75,7 @@ const ItemList = ({
                             cellRenderer={removeCell}
                             dataKey="remove"
                             flexShrink={0}
-                            width={baseIconWidth}
+                            width={ACTION_CELL_WIDTH}
                         />
                     )}
                 </Table>

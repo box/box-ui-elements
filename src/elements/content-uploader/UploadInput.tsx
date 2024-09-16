@@ -10,19 +10,19 @@ declare module 'react' {
 }
 
 export interface UploadInputProps {
-    handleChange: React.ChangeEventHandler<HTMLInputElement>;
     inputLabel?: React.ReactNode;
     inputLabelClass?: string;
     isFolderUpload?: boolean;
     isMultiple?: boolean;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 const UploadInput = ({
-    handleChange,
     inputLabel,
     inputLabelClass = '',
     isFolderUpload = false,
     isMultiple = true,
+    onChange,
 }: UploadInputProps) => {
     const inputRef = React.useRef(null);
 
@@ -42,7 +42,7 @@ const UploadInput = ({
                 data-testid="upload-input"
                 directory={isFolderUpload ? '' : undefined}
                 multiple={isMultiple}
-                onChange={handleChange}
+                onChange={onChange}
                 ref={inputRef}
                 type="file"
                 webkitdirectory={isFolderUpload ? '' : undefined}

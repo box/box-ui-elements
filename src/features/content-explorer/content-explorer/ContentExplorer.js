@@ -8,6 +8,7 @@ import ContentExplorerEmptyState from './ContentExplorerEmptyState';
 import ContentExplorerActionButtons from './ContentExplorerActionButtons';
 import ContentExplorerSelectAll from './ContentExplorerSelectAll';
 import ContentExplorerIncludeSubfolders from './ContentExplorerIncludeSubfolders';
+import ContentExplorerInfoNotice from './ContentExplorerInfoNotice';
 
 import ItemList from '../item-list';
 import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
@@ -158,6 +159,8 @@ class ContentExplorer extends Component {
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
         searchInputProps: PropTypes.object,
+        /** Text for the informational notice, defaults to empty string, which makes notice not visible */
+        infoNoticeText: PropTypes.string,
     };
 
     static defaultProps = {
@@ -496,6 +499,7 @@ class ContentExplorer extends Component {
             listWidth,
             listHeight,
             searchInputProps,
+            infoNoticeText,
             ...rest
         } = this.props;
         const { isInSearchMode, foldersPath, isSelectAllChecked } = this.state;
@@ -552,6 +556,7 @@ class ContentExplorer extends Component {
                 }}
                 {...contentExplorerProps}
             >
+                {infoNoticeText && <ContentExplorerInfoNotice infoNoticeText={infoNoticeText} />}
                 <ContentExplorerHeaderActions
                     breadcrumbProps={breadcrumbProps}
                     contentExplorerMode={contentExplorerMode}

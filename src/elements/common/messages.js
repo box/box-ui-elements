@@ -52,6 +52,11 @@ const messages = defineMessages({
         description: 'Message when new preview is available.',
         defaultMessage: 'A new version of this file is available.',
     },
+    complete: {
+        id: 'be.complete',
+        description: 'Label for complete state.',
+        defaultMessage: 'Complete',
+    },
     loading: {
         id: 'be.loading',
         description: 'Label for loading state.',
@@ -141,6 +146,21 @@ const messages = defineMessages({
         id: 'be.upload',
         description: 'Label for upload action.',
         defaultMessage: 'Upload',
+    },
+    uploadEmptyState: {
+        id: 'be.uploadEmptyState',
+        description: 'Label for upload empty state.',
+        defaultMessage: 'Empty state',
+    },
+    uploadErrorState: {
+        id: 'be.uploadErrorState',
+        description: 'Label for upload error state.',
+        defaultMessage: 'Error state',
+    },
+    uploadSuccessState: {
+        id: 'be.uploadSuccessState',
+        description: 'Label for upload success state.',
+        defaultMessage: 'Success state',
     },
     add: {
         id: 'be.add',

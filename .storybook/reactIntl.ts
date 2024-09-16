@@ -1,21 +1,16 @@
-import enUS from '../i18n/en-US';
-import deDE from '../i18n/de-DE';
-import frFR from '../i18n/fr-FR';
-import jaJP from '../i18n/ja-JP';
-import zhCN from '../i18n/zh-CN';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const boxLanguages = require('@box/languages');
 
-const locales = ['en', 'de', 'fr', 'jp', 'zh'];
-
-const messages = {
-    'en': { ...enUS },
-    'de': { ...deDE },
-    'fr': { ...frFR },
-    'jp': { ...jaJP },
-    'zh': { ...zhCN },
-};
+const messages = boxLanguages.reduce(
+    (acc, lang) => ({
+        ...acc,
+        // eslint-disable-next-line global-require,import/no-dynamic-require,@typescript-eslint/no-var-requires
+        [lang]: require(`../i18n/bundles/${lang}`).messages, // whatever the relative path to your messages json is
+    }),
+    {},
+);
 
 export const reactIntl = {
-    defaultLocale: 'en',
-    locales,
+    defaultLocale: 'en-US',
     messages,
 };
