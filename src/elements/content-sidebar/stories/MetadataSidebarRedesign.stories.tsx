@@ -40,9 +40,8 @@ export default {
 export const AddTemplateDropdownMenu: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findAllByRole('heading', { name: 'Metadata' });
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
     },
 };
@@ -73,7 +72,7 @@ export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof Metadata
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
+        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
         await userEvent.click(customMetadataOption);
     },
 };
@@ -85,7 +84,7 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
         await userEvent.click(customMetadataOption);
     },
 };

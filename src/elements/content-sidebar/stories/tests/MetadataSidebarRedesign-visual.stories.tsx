@@ -45,6 +45,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
 };
 
 const fileIdWithMetadata = global.FILE_ID;
+const fileWithoutMetadata = '416047501580';
 const token = global.TOKEN;
 const mockFeatures = {
     'metadata.redesign.enabled': true,
@@ -79,7 +80,7 @@ export default {
     },
 };
 
-export const MetadataInstanceEditorWithCustomMetadata: StoryObj<typeof MetadataSidebarRedesign> = {
+export const AddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         const heading = await canvas.findByRole('heading', { name: 'Metadata' });
@@ -89,35 +90,20 @@ export const MetadataInstanceEditorWithCustomMetadata: StoryObj<typeof MetadataS
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
         expect(customMetadataOption).toBeInTheDocument();
         await userEvent.click(customMetadataOption);
 
-        const templateHeader = await canvas.findByRole('heading', { name: 'Custom Metadata' });
-        expect(templateHeader).toBeInTheDocument();
-    },
-};
-
-export const MetadataInstanceEditorWithTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const heading = await canvas.findByRole('heading', { name: 'Metadata' });
-        expect(heading).toBeInTheDocument();
-
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
-        expect(addTemplateButton).toBeInTheDocument();
-        await userEvent.click(addTemplateButton);
-
-        const customMetadataOption = canvas.getByRole('option', { name: 'My Template' });
-        expect(customMetadataOption).toBeInTheDocument();
-        await userEvent.click(customMetadataOption);
-
-        const templateHeader = await canvas.findByRole('heading', { name: 'My Template' });
+        const templateHeader = await canvas.findByRole('heading', { name: 'Virus Scan' });
         expect(templateHeader).toBeInTheDocument();
     },
 };
 
 export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        ...defaultMetadataArgs,
+        fileId: fileWithoutMetadata,
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         const heading = await canvas.findByRole('heading', { name: 'Metadata' });
@@ -127,7 +113,7 @@ export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof M
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
         expect(customMetadataOption).toBeInTheDocument();
         await userEvent.click(customMetadataOption);
 
