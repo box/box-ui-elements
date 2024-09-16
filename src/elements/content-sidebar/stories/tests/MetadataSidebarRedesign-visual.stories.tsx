@@ -25,6 +25,7 @@ const mockFeatures = {
 };
 const mockLogger = {
     onReadyMetric: ({ endMarkName }) => {
+        // eslint-disable-next-line no-console
         console.log(`Logger: onReadyMetric called with endMarkName: ${endMarkName}`);
     },
 };
