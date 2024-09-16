@@ -1,5 +1,5 @@
 import { boxLanguages } from '@box/languages';
-import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import features from '../examples/src/features';
 
@@ -15,11 +15,23 @@ global.FOLDER_ID = global.FOLDER_ID || '69083462919';
 // NOTE: The token used is a readonly token accessing public data in a demo enterprise. DO NOT PUT A WRITE TOKEN
 global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 
-initialize();
+const determineScope = () => {
+    if (window.location.pathname.includes('/storybook')) {
+        return '/storybook';
+    }
+    return '/';
+};
+
+initialize({
+    serviceWorker: {
+        url: '/mockServiceWorker.js',
+        options: {
+            scope: determineScope(),
+        },
+    },
+});
 
 const preview = {
-    decorators: [mswDecorator],
-
     parameters: {
         chromatic: { disableSnapshot: true },
         controls: {
@@ -35,6 +47,8 @@ const preview = {
         },
         reactIntl,
     },
+
+    loaders: [mswLoader],
 
     tags: ['autodocs'],
 
