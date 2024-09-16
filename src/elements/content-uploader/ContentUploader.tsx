@@ -425,7 +425,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
         itemUpdateCallback: Function,
     ): Promise<void> => {
-        const files = await Promise.all(dataTransferItems.map(async item => getFileFromDataTransferItem(item)));
+        const files = await Promise.all(dataTransferItems.map(item => getFileFromDataTransferItem(item)));
         this.addFilesToUploadQueue(
             files.filter(file => file),
             itemUpdateCallback,
@@ -457,12 +457,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @private
      * @param {Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>} dataTransferItems
      * @param {Function} itemUpdateCallback
-     * @returns {Promise<void>}
+     * @returns {void}
      */
-    addFolderDataTransferItemsToUploadQueue = async (
+    addFolderDataTransferItemsToUploadQueue = (
         dataTransferItems: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
         itemUpdateCallback: Function,
-    ): Promise<void> => {
+    ): void => {
         const { rootFolderId } = this.props;
         const { itemIds } = this.state;
 

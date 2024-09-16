@@ -121,11 +121,11 @@ describe('api/uploads/FolderUpload', () => {
     });
 
     describe('buildFolderTreeFromDataTransferItem()', () => {
-        test('should construct folders correctly', async () => {
+        test('should construct folders correctly', () => {
             const createFolderUploadNodeMock = jest.fn();
             folderUploadInstance.createFolderUploadNode = createFolderUploadNodeMock;
 
-            await folderUploadInstance.buildFolderTreeFromDataTransferItem([
+            folderUploadInstance.buildFolderTreeFromDataTransferItem([
                 {
                     item: { name: 'f1', webkitRelativePath: 'a/f1' },
                     options: {},
