@@ -16,7 +16,7 @@ export const addRootElement = () => {
     return { appElement, rootElement };
 };
 
-export const SLEEP_TIMEOUT = 1000;
+export const SLEEP_TIMEOUT = 500;
 
 export const enableSnapshotsParams = {
     chromatic: { disableSnapshot: false },
