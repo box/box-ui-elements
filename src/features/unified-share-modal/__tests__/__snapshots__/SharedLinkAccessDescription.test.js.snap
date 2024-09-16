@@ -181,8 +181,8 @@ exports[`features/unified-share-modal/SharedLinkAccessDescription people with li
   className="usm-menu-description"
 >
   <FormattedMessage
-    defaultMessage="Publicly accessible, sign-in required"
-    id="boxui.unifiedShare.peopleWithLinkSignedInRequiredDescription"
+    defaultMessage="Publicly accessible and no sign-in required"
+    id="boxui.unifiedShare.peopleWithLinkDescription"
     values={
       {
         "company": "Box",
