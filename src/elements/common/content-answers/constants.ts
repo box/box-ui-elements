@@ -1,9 +1,3 @@
-export const MOCK_LONG_PROMPT =
-    'What is the significance of the character limit in the text area, and why is it important to ensure that users are notified when they exceed it? Additionally, what steps can be taken to prevent users from exceeding the character limit, and how can errors related to the character limit be handled in a user-friendly manner?';
-
-export const TEXT_AREA = {
-    MAX_LENGTH: 300,
-};
 /* ------------------ Allowable file extensions ------------------ */
 export const CODE_FILE_EXTENSIONS = [
     'as',
@@ -131,4 +125,27 @@ export const TEXT_FILE_EXTENSIONS = [
     'vim',
     'webdoc',
     'yaml',
+];
+
+export const DOCUMENT_SUGGESTED_QUESTIONS = [
+    {
+        id: 'suggested-question-1',
+        labelId: 'documentSuggestedQuestionLabel1',
+        promptId: 'documentSuggestedQuestionPrompt1',
+    },
+    {
+        id: 'suggested-question-2',
+        labelId: 'documentSuggestedQuestionLabel2',
+        promptId: 'documentSuggestedQuestionPrompt2',
+    },
+    {
+        id: 'suggested-question-3',
+        labelId: 'documentSuggestedQuestionLabel3',
+        promptId: 'documentSuggestedQuestionPrompt3',
+    },
+    {
+        id: 'suggested-question-4',
+        labelId: 'documentSuggestedQuestionLabel4',
+        promptId: 'documentSuggestedQuestionPrompt4',
+    },
 ];

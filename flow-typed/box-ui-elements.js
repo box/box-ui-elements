@@ -12,7 +12,6 @@ import type FileAPI from '../src/api/File';
 import type WebLinkAPI from '../src/api/WebLink';
 import type MultiputUploadAPI from '../src/api/uploads/MultiputUpload';
 import type PlainUploadAPI from '../src/api/uploads/PlainUpload';
-import type { ContentAnswersProps } from '../src/features/content-answers';
 import type { ContentSidebarProps } from '../src/elements/content-sidebar';
 import type { ContentOpenWithProps } from '../src/elements/content-open-with';
 import type { ContentPreviewProps } from '../src/elements/content-preview';

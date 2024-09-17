@@ -1,49 +1,44 @@
 import React, { useState, useCallback } from 'react';
-import { FormattedMessage } from 'react-intl';
 
-import withCurrentUser from '../../elements/common/current-user';
-import BoxAiLogo from '../../icon/logo/BoxAiLogo';
-import ContentAnswersModalContent from './ContentAnswersModalContent';
-import ContentAnswersModalFooter from './ContentAnswersModalFooter';
-// @ts-ignore flow import
-import Modal from '../../components/modal/Modal';
+import { IntelligenceModal, QuestionType, SuggestedQuestionType } from '@box/box-ai-content-answers';
+import { useIntl } from 'react-intl';
+import { DOCUMENT_SUGGESTED_QUESTIONS } from './constants';
+import withCurrentUser from '../current-user';
+
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { BoxItem, User } from '../../../common/types/core';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
-import { withAPIContext } from '../../elements/common/api-context';
+import { withAPIContext } from '../api-context';
 // @ts-ignore: no ts definition
 import APIFactory from '../../api';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { ElementsXhrError } from '../../common/types/api';
-
 import messages from './messages';
 
-import './ContentAnswersModal.scss';
-
-export type QuestionType = {
-    answer?: string;
-    createdAt?: string;
-    error?: ElementsXhrError;
-    prompt: string;
-};
-
-type Props = {
+interface ContentAnswersModalProps {
     api: APIFactory;
     currentUser?: User;
     file: BoxItem;
     isOpen: boolean;
     onAsk: () => void;
     onRequestClose: () => void;
-};
+}
 
-const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestClose }: Props) => {
+const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestClose }: ContentAnswersModalProps) => {
+    const { formatMessage } = useIntl();
     const fileName = file && file.name;
     const [hasError, setHasError] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [questions, setQuestions] = useState<QuestionType[]>([]);
+
+    const localizedQuestions: SuggestedQuestionType[] = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
+        id: question.id,
+        label: formatMessage(messages[question.labelId]),
+        prompt: formatMessage(messages[question.promptId]),
+    }));
 
     const handleSuccessCallback = useCallback((response): void => {
         const question = {
@@ -66,7 +61,7 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestC
     }, []);
 
     const handleAsk = useCallback(
-        async (prompt: string, isRetry = false) => {
+        async (question: QuestionType, isRetry = false) => {
             setHasError(false);
             onAsk();
             const id = file && file.id;
@@ -78,11 +73,11 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestC
             ];
 
             const nextQuestions = [...(isRetry ? questions.slice(0, -1) : questions)];
-            setQuestions([...nextQuestions, { prompt }]);
+            setQuestions([...nextQuestions, question]);
 
             setIsLoading(true);
             try {
-                const response = await api.getIntelligenceAPI(true).ask(prompt, items);
+                const response = await api.getIntelligenceAPI(true).ask(question.prompt, items);
                 handleSuccessCallback(response);
             } catch (e) {
                 handleErrorCallback(e);
@@ -93,45 +88,25 @@ const ContentAnswersModal = ({ api, currentUser, file, isOpen, onAsk, onRequestC
     );
 
     const handleRetry = useCallback(() => {
-        handleAsk(questions[questions.length - 1].prompt, true);
+        handleAsk(questions[questions.length - 1], true);
     }, [handleAsk, questions]);
 
+    const currentFileExtension = file && file.extension;
+    const userInfo = { name: currentUser?.name || '', avatarURL: currentUser?.avatarUrl || '' };
     return (
-        <Modal
-            className="be-modal bdl-ContentAnswersModal"
-            data-testid="content-answers-modal"
-            isOpen={isOpen}
-            onRequestClose={onRequestClose}
-            title={
-                <>
-                    <BoxAiLogo
-                        className="bdl-BoxAiLogo"
-                        data-testid="content-answers-icon-color"
-                        width={32}
-                        height={32}
-                    />
-                    <FormattedMessage {...messages.contentAnswersTitle} />
-                </>
-            }
-        >
-            <div className="be">
-                <ContentAnswersModalContent
-                    currentUser={currentUser}
-                    data-testid="content-answers-modal-content"
-                    fileName={fileName}
-                    isLoading={isLoading}
-                    questions={questions}
-                />
-                <ContentAnswersModalFooter
-                    currentUser={currentUser}
-                    data-testid="content-answers-modal-footer"
-                    hasError={hasError}
-                    isLoading={isLoading}
-                    onAsk={handleAsk}
-                    onRetry={handleRetry}
-                />
-            </div>
-        </Modal>
+        <IntelligenceModal
+            contentName={fileName}
+            contentType={currentFileExtension}
+            userInfo={userInfo}
+            submitQuestion={handleAsk}
+            retryQuestion={handleRetry}
+            questions={questions}
+            onModalClose={onRequestClose}
+            showLoadingIndicator={isLoading}
+            open={isOpen}
+            onOpenChange={onRequestClose}
+            suggestedQuestions={localizedQuestions}
+        />
     );
 };
 

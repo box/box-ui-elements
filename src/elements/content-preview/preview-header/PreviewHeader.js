@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
 // $FlowFixMe typescript component
-import ContentAnswers from '../../../features/content-answers';
+import ContentAnswers from '../../common/content-answers';
 import FileInfo from './FileInfo';
 import IconClose from '../../../icons/general/IconClose';
 import IconDownload from '../../../icons/general/IconDownloadSolid';
@@ -25,6 +25,7 @@ import { bdlGray50 } from '../../../styles/variables';
 import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
 
 import './PreviewHeader.scss';
+import { ContentAnswersProps } from '../../common/content-answers/ContentAnswers';
 
 type Props = {
     canAnnotate: boolean,

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen, waitFor } from '../../../../test-utils/testing-library';
 
 import ContentAnswersModal from '../ContentAnswersModal';
 import {
@@ -11,9 +12,9 @@ import {
     mockQuestionsWithError,
 } from '../__mocks__/mocks';
 // @ts-ignore: no ts definition
-import APIContext from '../../../elements/common/api-context';
+import APIContext from '../../api-context';
 
-describe('features/content-answers/ContentAnswersModal', () => {
+describe('common/content-answers/ContentAnswersModal', () => {
     const renderComponent = (api = mockApi, props?: {}) => {
         render(
             <APIContext.Provider value={api}>
@@ -60,24 +61,24 @@ describe('features/content-answers/ContentAnswersModal', () => {
         const { prompt } = mockQuestionsWithError[0];
         renderComponent(mockApiReturnError);
 
-        const textArea = screen.getByTestId('content-answers-question-input');
+        const textArea = await screen.findByTestId('content-answers-question-input');
         fireEvent.change(textArea, { target: { value: prompt } });
 
-        const submitButton = screen.getByTestId('content-answers-submit-button');
-        fireEvent.click(submitButton);
+        const submitButton = await screen.findByTestId('content-answers-submit-button');
+        await userEvent.click(submitButton);
 
-        expect(screen.getByTestId('InlineError')).toBeInTheDocument();
+        expect(await screen.findByTestId('InlineError')).toBeInTheDocument();
     });
 
     test('should render retry button when ask request fails', async () => {
         const { prompt } = mockQuestionsWithError[0];
         renderComponent(mockApiReturnError);
 
-        const textArea = screen.getByTestId('content-answers-question-input');
+        const textArea = await screen.findByTestId('content-answers-question-input');
         fireEvent.change(textArea, { target: { value: prompt } });
 
         const submitButton = screen.getByTestId('content-answers-submit-button');
-        fireEvent.click(submitButton);
+        userEvent.click(submitButton);
 
         expect(screen.getByTestId('content-answers-retry-button')).toBeInTheDocument();
     });

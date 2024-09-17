@@ -1,4 +1,4 @@
-@import '../../styles/variables';
+@import '../../../styles/variables';
 
 @mixin BackgroundGradient {
     background: linear-gradient(135deg, #fe01da 0%, $bdl-light-blue 100%);
@@ -44,7 +44,9 @@
         &:not(.bdl-is-disabled):focus {
             @include BackgroundGradientHover;
 
-            box-shadow: 0 0 0 1px $white, 0 0 0 3px $bdl-light-blue;
+            box-shadow:
+                0 0 0 1px $white,
+                0 0 0 3px $bdl-light-blue;
         }
     }
 

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { injectIntl, IntlShape } from 'react-intl';
 import classNames from 'classnames';
 
-import BoxAiLogo from '../../icon/logo/BoxAiLogo';
-import Button from '../../components/button';
-import Tooltip from '../../components/tooltip';
+import BoxAiLogo from '../../../icon/logo/BoxAiLogo';
+import Button from '../../../components/button';
+import Tooltip from '../../../components/tooltip';
 import { CODE_FILE_EXTENSIONS, DOCUMENT_FILE_EXTENSIONS, TEXT_FILE_EXTENSIONS } from './constants';
 
 import messages from './messages';

@@ -5,7 +5,7 @@ import ContentAnswersOpenButton from '../ContentAnswersOpenButton';
 
 import messages from '../messages';
 
-describe('features/content-answers/ContentAnswersOpenButton', () => {
+describe('common/content-answers/ContentAnswersOpenButton', () => {
     const renderComponent = (props?: {}) =>
         render(
             <ContentAnswersOpenButton
