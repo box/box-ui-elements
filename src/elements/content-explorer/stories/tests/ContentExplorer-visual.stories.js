@@ -13,10 +13,10 @@ export const basic = {
         const canvas = within(canvasElement);
 
         expect(await canvas.findByText('An Ordered Folder')).toBeInTheDocument();
-        expect(canvas.getByText('Tue Apr 16 2019 by Jeremy Press')).toBeInTheDocument();
+        expect(canvas.getByText('Tue Apr 16 2019 by Preview')).toBeInTheDocument();
 
         expect(canvas.getByText('Book Sample.pdf')).toBeInTheDocument();
-        expect(canvas.getByText('Thu Dec 8 2022 by Jeremy Press')).toBeInTheDocument();
+        expect(canvas.getByText('Thu Dec 8 2022 by Preview')).toBeInTheDocument();
     },
 };
 
@@ -35,7 +35,7 @@ export const openDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findByTestId('bce-btn-more-options');
+        const moreOptionsButton = await canvas.findByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');
@@ -51,7 +51,7 @@ export const closeDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findByTestId('bce-btn-more-options');
+        const moreOptionsButton = await canvas.findByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');
@@ -73,7 +73,7 @@ export const openRenameDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findByTestId('bce-btn-more-options');
+        const moreOptionsButton = await canvas.findByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');
@@ -89,7 +89,7 @@ export const closeRenameDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findByTestId('bce-btn-more-options');
+        const moreOptionsButton = await canvas.findByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');
@@ -111,7 +111,7 @@ export const openShareDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findByTestId('bce-btn-more-options');
+        const moreOptionsButton = await canvas.findByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');
@@ -130,7 +130,7 @@ export const closeShareDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findByTestId('bce-btn-more-options');
+        const moreOptionsButton = await canvas.findByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');

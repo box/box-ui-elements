@@ -31,8 +31,8 @@ const mockRootFolder = {
     modified_by: {
         type: 'user',
         id: '7505500060',
-        name: 'Jared Stoffan',
-        login: 'jstoffan@boxdemo.com',
+        name: 'Preview',
+        login: 'preview@boxdemo.com',
     },
     has_collaborations: true,
     is_externally_owned: false,
@@ -89,8 +89,8 @@ const mockRootFolder = {
                 modified_by: {
                     type: 'user',
                     id: '7503712462',
-                    name: 'Jeremy Press',
-                    login: 'jpress@boxdemo.com',
+                    name: 'Preview',
+                    login: 'preview@boxdemo.com',
                 },
                 has_collaborations: true,
                 is_externally_owned: false,
@@ -153,8 +153,8 @@ const mockRootFolder = {
                 modified_by: {
                     type: 'user',
                     id: '7503712462',
-                    name: 'Jeremy Press',
-                    login: 'jpress@boxdemo.com',
+                    name: 'Preview',
+                    login: 'preview@boxdemo.com',
                 },
                 has_collaborations: true,
                 is_externally_owned: false,
