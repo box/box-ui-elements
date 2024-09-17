@@ -107,15 +107,15 @@ export const AddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign>
 
 export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
-        ...defaultMetadataArgs,
-        fileId: fileWithoutMetadata,
+        fileId: '416047501580',
+        metadataSidebarProps: defaultMetadataSidebarProps,
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         const heading = await canvas.findByRole('heading', { name: 'Metadata' });
         expect(heading).toBeInTheDocument();
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
@@ -153,25 +153,64 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
 };
 
 export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: '416047501580',
+        metadataSidebarProps: defaultMetadataSidebarProps,
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
+        const customMetadataOption = canvas.getByRole('option', { name: 'My Template' });
         await userEvent.click(customMetadataOption);
     },
 };
 
 export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: '416047501580',
+        metadataSidebarProps: defaultMetadataSidebarProps,
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
+        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
         await userEvent.click(customMetadataOption);
+    },
+};
+
+export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const editButtons = await canvas.findAllByRole('button', { name: 'Edit' }, { timeout: 5000 });
+
+        let headlines = await canvas.findAllByRole('heading', { level: 1 });
+        expect(headlines).toHaveLength(3);
+        expect(headlines.map(heading => heading.textContent)).toEqual(
+            expect.arrayContaining(['My Template', 'Select Dropdowns', 'Custom Metadata']),
+        );
+
+        // go to edit mode - only edited template is visible
+        await userEvent.click(editButtons[0]);
+
+        headlines = await canvas.findAllByRole('heading', { level: 1 });
+        expect(headlines).toHaveLength(1);
+        expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['My Template']));
+
+        // cancel editing - back to list view
+        const cancelButton = await canvas.findByRole('button', { name: 'Cancel' }, { timeout: 5000 });
+        await userEvent.click(cancelButton);
+
+        headlines = await canvas.findAllByRole('heading', { level: 1 });
+        expect(headlines).toHaveLength(3);
+        expect(headlines.map(heading => heading.textContent)).toEqual(
+            expect.arrayContaining(['My Template', 'Select Dropdowns', 'Custom Metadata']),
+        );
     },
 };

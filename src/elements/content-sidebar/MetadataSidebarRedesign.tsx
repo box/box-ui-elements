@@ -137,6 +137,9 @@ function MetadataSidebarRedesign({
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                             template={editingTemplate}
+                            onCancel={() => {
+                                setEditingTemplate(null);
+                            }}
                         />
                     )
                 )}

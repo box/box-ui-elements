@@ -10,18 +10,20 @@ export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
     isUnsavedChangesModalOpen: boolean;
     template: MetadataTemplateInstance | MetadataTemplate;
+    onCancel: () => void;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
     isUnsavedChangesModalOpen,
     template,
+    onCancel,
 }) => {
     const handleSubmit = () => {
         // TODO in a future PR
     };
     const handleCancel = () => {
-        // TODO in a future PR
+        onCancel();
     };
     const handleDelete = () => {
         // TODO in a future PR
