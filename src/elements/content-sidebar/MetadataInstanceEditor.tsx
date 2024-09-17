@@ -1,15 +1,11 @@
-import {
-    MetadataInstanceForm,
-    type MetadataTemplateInstance,
-    UnsavedChangesModal,
-    type MetadataTemplate,
-} from '@box/metadata-editor';
+import { MetadataInstanceForm, type MetadataTemplateInstance, UnsavedChangesModal } from '@box/metadata-editor';
+import noop from 'lodash/noop';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
     isUnsavedChangesModalOpen: boolean;
-    template: MetadataTemplateInstance | MetadataTemplate;
+    template: MetadataTemplateInstance;
     onCancel: () => void;
 }
 
@@ -38,6 +34,8 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 onCancel={handleCancel}
                 onDelete={handleDelete}
                 onSubmit={handleSubmit}
+                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                setIsUnsavedChangesModalOpen={noop}
             />
             <UnsavedChangesModal
                 onDismiss={handleCancel}

@@ -1,30 +1,35 @@
 import React from 'react';
-import { type MetadataTemplate } from '@box/metadata-editor';
+import { type MetadataTemplateInstance } from '@box/metadata-editor';
 import { screen, render } from '../../../test-utils/testing-library';
 import MetadataInstanceEditor, { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
 
 describe('MetadataInstanceEditor', () => {
-    const mockCustomMetadataTemplate: MetadataTemplate = {
+    const mockCustomMetadataTemplate: MetadataTemplateInstance = {
         id: 'template-id',
         fields: [],
         scope: 'global',
         templateKey: 'properties',
         type: 'template-id',
         hidden: false,
+        canEdit: true,
     };
 
-    const mockMetadataTemplate: MetadataTemplate = { ...mockCustomMetadataTemplate, displayName: 'Template Name' };
+    const mockMetadataTemplateInstance: MetadataTemplateInstance = {
+        ...mockCustomMetadataTemplate,
+        displayName: 'Template Name',
+    };
 
     const defaultProps: MetadataInstanceEditorProps = {
         isBoxAiSuggestionsEnabled: true,
         isUnsavedChangesModalOpen: false,
-        template: mockMetadataTemplate,
+        template: mockMetadataTemplateInstance,
+        onCancel: jest.fn(),
     };
 
     test('should render MetadataInstanceForm with correct props', () => {
         render(<MetadataInstanceEditor {...defaultProps} />);
 
-        const templateHeader = screen.getByText(mockMetadataTemplate.displayName);
+        const templateHeader = screen.getByText(mockMetadataTemplateInstance.displayName);
         expect(templateHeader).toBeInTheDocument();
     });
 
