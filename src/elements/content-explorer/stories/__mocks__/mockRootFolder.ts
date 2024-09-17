@@ -31,8 +31,8 @@ const mockRootFolder = {
     modified_by: {
         type: 'user',
         id: '7505500060',
-        name: 'Jared Stoffan',
-        login: 'jstoffan@boxdemo.com',
+        name: 'Preview',
+        login: 'preview@boxdemo.com',
     },
     has_collaborations: true,
     is_externally_owned: false,
@@ -89,8 +89,8 @@ const mockRootFolder = {
                 modified_by: {
                     type: 'user',
                     id: '7503712462',
-                    name: 'Jeremy Press',
-                    login: 'jpress@boxdemo.com',
+                    name: 'Preview',
+                    login: 'preview@boxdemo.com',
                 },
                 has_collaborations: true,
                 is_externally_owned: false,
@@ -118,9 +118,9 @@ const mockRootFolder = {
                     can_preview: true,
                     can_upload: false,
                     can_comment: true,
-                    can_rename: false,
-                    can_delete: false,
-                    can_share: false,
+                    can_rename: true,
+                    can_delete: true,
+                    can_share: true,
                     can_set_share_access: false,
                     can_invite_collaborator: false,
                     can_annotate: false,
@@ -153,8 +153,8 @@ const mockRootFolder = {
                 modified_by: {
                     type: 'user',
                     id: '7503712462',
-                    name: 'Jeremy Press',
-                    login: 'jpress@boxdemo.com',
+                    name: 'Preview',
+                    login: 'preview@boxdemo.com',
                 },
                 has_collaborations: true,
                 is_externally_owned: false,
@@ -170,8 +170,7 @@ const mockRootFolder = {
                                 thumb: 'false',
                             },
                             info: {
-                                url:
-                                    'https://api.box.com/2.0/internal_files/416044542013/versions/439751948413/representations/jpg_1024x1024',
+                                url: 'https://api.box.com/2.0/internal_files/416044542013/versions/439751948413/representations/jpg_1024x1024',
                             },
                             status: {
                                 state: 'success',
@@ -189,7 +188,14 @@ const mockRootFolder = {
                     sha1: '81fa3796742c6d194ddc54e9424f855f78009cf1',
                 },
                 sha1: '81fa3796742c6d194ddc54e9424f855f78009cf1',
-                shared_link: null,
+                shared_link: {
+                    url: 'https://example.com/share-link',
+                    permissions: {
+                        can_preview: true,
+                        can_download: true,
+                        can_edit: false,
+                    },
+                },
                 watermark_info: {
                     is_watermarked: false,
                 },

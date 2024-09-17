@@ -1,5 +1,5 @@
 import { boxLanguages } from '@box/languages';
-import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 
 import features from '../examples/src/features';
 
@@ -18,8 +18,6 @@ global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 initialize();
 
 const preview = {
-    decorators: [mswDecorator],
-
     parameters: {
         chromatic: { disableSnapshot: true },
         controls: {
@@ -35,6 +33,8 @@ const preview = {
         },
         reactIntl,
     },
+
+    loaders: [mswLoader],
 
     tags: ['autodocs'],
 
