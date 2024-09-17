@@ -1,6 +1,6 @@
 import * as React from 'react';
 import userEvent from '@testing-library/user-event';
-import { fireEvent, render, screen, waitFor } from '../../../../test-utils/testing-library';
+import { fireEvent, render, screen } from '../../../../test-utils/testing-library';
 
 import ContentAnswersModal from '../ContentAnswersModal';
 import {
@@ -15,6 +15,7 @@ import {
 import APIContext from '../../api-context';
 
 describe('common/content-answers/ContentAnswersModal', () => {
+    const mockQuestion = { isCompleted: false, isLoading: true, prompt: 'summarize another question' };
     const renderComponent = (api = mockApi, props?: {}) => {
         render(
             <APIContext.Provider value={api}>
@@ -42,18 +43,15 @@ describe('common/content-answers/ContentAnswersModal', () => {
         const { answer = '', prompt } = mockQuestionsWithAnswer[0];
         renderComponent(mockApi, { onAsk: onAskMock });
 
-        const textArea = screen.getByTestId('content-answers-question-input');
+        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
         fireEvent.change(textArea, { target: { value: prompt } });
 
-        const submitButton = screen.getByTestId('content-answers-submit-button');
-        fireEvent.click(submitButton);
+        const submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
 
-        await waitFor(() =>
-            expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(prompt, [{ id: mockFile.id, type: 'file' }]),
-        );
+        expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(mockQuestion, [{ id: mockFile.id, type: 'file' }]);
 
         expect(onAskMock).toBeCalled();
-        expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
         expect(screen.getByText(answer)).toBeInTheDocument();
     });
 
@@ -61,26 +59,13 @@ describe('common/content-answers/ContentAnswersModal', () => {
         const { prompt } = mockQuestionsWithError[0];
         renderComponent(mockApiReturnError);
 
-        const textArea = await screen.findByTestId('content-answers-question-input');
+        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
         fireEvent.change(textArea, { target: { value: prompt } });
 
-        const submitButton = await screen.findByTestId('content-answers-submit-button');
+        const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
 
-        expect(await screen.findByTestId('InlineError')).toBeInTheDocument();
-    });
-
-    test('should render retry button when ask request fails', async () => {
-        const { prompt } = mockQuestionsWithError[0];
-        renderComponent(mockApiReturnError);
-
-        const textArea = await screen.findByTestId('content-answers-question-input');
-        fireEvent.change(textArea, { target: { value: prompt } });
-
-        const submitButton = screen.getByTestId('content-answers-submit-button');
-        userEvent.click(submitButton);
-
-        expect(screen.getByTestId('content-answers-retry-button')).toBeInTheDocument();
+        expect(screen.getByText('The Box AI service was unavailable.')).toBeInTheDocument();
     });
 
     test('should render retry button when ask request fails', async () => {
@@ -100,19 +85,17 @@ describe('common/content-answers/ContentAnswersModal', () => {
         };
         renderComponent(apiMock);
 
-        const textArea = screen.getByTestId('content-answers-question-input');
+        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
         fireEvent.change(textArea, { target: { value: prompt } });
 
-        const submitButton = screen.getByTestId('content-answers-submit-button');
-        fireEvent.click(submitButton);
+        const submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
 
-        const retryButton = screen.getByTestId('content-answers-retry-button');
-        fireEvent.click(retryButton);
+        const retryButton = screen.getByRole('button', { name: 'Retry' });
+        await userEvent.click(retryButton);
 
-        await waitFor(() => {
-            expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            expect(screen.getByText(mockQuestionsWithAnswer[0].answer!)).toBeInTheDocument();
-        });
+        expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expect(screen.getByText(mockQuestionsWithAnswer[0].answer!)).toBeInTheDocument();
     });
 });

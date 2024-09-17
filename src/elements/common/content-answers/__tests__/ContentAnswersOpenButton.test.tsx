@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '../../../../test-utils/testing-library';
 
 import ContentAnswersOpenButton from '../ContentAnswersOpenButton';
 
@@ -17,57 +18,57 @@ describe('common/content-answers/ContentAnswersOpenButton', () => {
             />,
         );
 
-    test('should call the onClick callback', () => {
+    test('should call the onClick callback', async () => {
         const onClick = jest.fn();
         renderComponent({ onClick });
         expect(onClick).toBeCalledTimes(0);
 
-        fireEvent.click(screen.getByTestId('content-answers-open-button'));
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        await userEvent.click(button);
         expect(onClick).toBeCalledTimes(1);
     });
 
     test('should display correct tooltip', () => {
         renderComponent();
-        fireEvent.mouseOver(screen.getByTestId('content-answers-open-button'));
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        fireEvent.mouseOver(button);
         expect(screen.getByText(messages.defaultTooltip.defaultMessage)).toBeInTheDocument();
     });
 
     test('should display not allowed tooltip', () => {
         renderComponent({ fileExtension: 'invalid' });
-        fireEvent.mouseOver(screen.getByTestId('content-answers-open-button'));
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        fireEvent.mouseOver(button);
         expect(screen.getByText(messages.disabledTooltipFileNotCompatible.defaultMessage)).toBeInTheDocument();
     });
 
     test('should display return to box ai when highlighted', () => {
         renderComponent({ isHighlighted: true });
-        fireEvent.mouseOver(screen.getByTestId('content-answers-open-button'));
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        fireEvent.mouseOver(button);
         expect(screen.getByText(messages.hasQuestionsTooltip.defaultMessage)).toBeInTheDocument();
     });
 
-    test('should not call onclick callback when filetype is not allowed', () => {
+    test('should not call onclick callback when filetype is not allowed', async () => {
         const onClick = jest.fn();
         renderComponent({ fileExtension: 'invalid', onClick });
         expect(onClick).toBeCalledTimes(0);
-
-        fireEvent.click(screen.getByTestId('content-answers-open-button'));
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        await userEvent.click(button);
         expect(onClick).toBeCalledTimes(0);
     });
 
     test('should highlight button if isHighlight is true', () => {
         renderComponent({ isHighlighted: false });
-
-        expect(screen.getByTestId('content-answers-open-button')).not.toHaveClass(
-            'bdl-ContentAnswersOpenButton--hasQuestions',
-        );
-        expect(screen.getByTestId('content-answers-open-button').matches(':focus')).toBe(false);
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        expect(button).not.toHaveClass('bdl-ContentAnswersOpenButton--hasQuestions');
+        expect(button.matches(':focus')).toBe(false);
     });
 
     test('should focus button when button is already highlighted and modal is closed', () => {
         renderComponent({ isHighlighted: true });
-
-        expect(screen.getByTestId('content-answers-open-button')).toHaveClass(
-            'bdl-ContentAnswersOpenButton--hasQuestions',
-        );
-        expect(screen.getByTestId('content-answers-open-button').matches(':focus')).toBe(true);
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        expect(button).toHaveClass('bdl-ContentAnswersOpenButton--hasQuestions');
+        expect(button.matches(':focus')).toBe(true);
     });
 });

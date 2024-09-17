@@ -58,7 +58,6 @@ const ContentAnswersOpenButton = ({
             <Button
                 aria-label={formatMessage(messages.contentAnswersTitle)}
                 className={openButtonClassNames}
-                data-testid="content-answers-open-button"
                 isDisabled={!isAllowedFileType(fileExtension)}
                 onClick={onClick}
                 setRef={(ref: HTMLButtonElement) => {

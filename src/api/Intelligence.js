@@ -5,6 +5,7 @@
  */
 
 import getProp from 'lodash/get';
+import { QuestionType } from '@box/box-ai-content-answers';
 import type { BoxItem } from '../common/types/core';
 import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
 import { isUserCorrectableError } from '../utils/error';
@@ -20,7 +21,8 @@ class Intelligence extends Base {
      * @param {Array<object>} items - Array of items to ask about
      * @return {Promise}
      */
-    async ask(prompt: string, items: Array<BoxItem>) {
+    async ask(question: QuestionType, items: Array<BoxItem>) {
+        const { prompt } = question;
         if (!prompt) {
             throw new Error('Missing prompt!');
         }
@@ -44,6 +46,7 @@ class Intelligence extends Base {
                 mode: 'single_item_qa',
                 prompt,
                 items,
+                include_citations: true,
             },
         });
     }

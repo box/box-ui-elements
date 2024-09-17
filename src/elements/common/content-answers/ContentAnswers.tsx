@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import getProp from 'lodash/get';
+import { SuggestedQuestionType } from '@box/box-ai-content-answers';
 import ContentAnswersModal from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 // @ts-ignore: no ts definition
@@ -9,13 +10,18 @@ import { BoxItem } from '../../common/types/core';
 
 type ExternalProps = {
     show?: boolean;
+    isCitationsEnabled?: boolean;
+    isMarkdownEnabled?: boolean;
+    suggestedQuestions?: SuggestedQuestionType[];
 };
 
 type Props = {
     file: BoxItem;
 };
 
-const ContentAnswers = ({ file }: Props) => {
+export type ContentAnswersProps = ExternalProps & Props;
+
+const ContentAnswers = ({ file, ...rest }: Omit<ContentAnswersProps, 'show'>) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hasQuestions, setHasQuestions] = useState(false);
     const [isHighlighted, setIsHighlighted] = useState(false);
@@ -39,22 +45,20 @@ const ContentAnswers = ({ file }: Props) => {
     return (
         <div className="bdl-ContentAnswers">
             <ContentAnswersOpenButton
-                data-testid="content-answers-open-button"
                 fileExtension={currentExtension}
                 isHighlighted={isHighlighted}
                 isModalOpen={isModalOpen}
                 onClick={handleClick}
             />
             <ContentAnswersModal
-                data-testid="content-answers-modal"
                 file={file}
                 isOpen={isModalOpen}
                 onAsk={handleAsk}
                 onRequestClose={handleClose}
+                {...rest}
             />
         </div>
     );
 };
 
-export type ContentAnswersProps = ExternalProps;
 export default ContentAnswers;
