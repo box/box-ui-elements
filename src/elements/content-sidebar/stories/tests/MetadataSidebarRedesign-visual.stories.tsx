@@ -1,8 +1,32 @@
+import { type ComponentProps } from 'react';
 import { expect, userEvent, within, fn, screen } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
 import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
+
+const fileIdWithMetadata = global.FILE_ID;
+const fileWithoutMetadata = '416047501580';
+const token = global.TOKEN;
+
+const defaultMetadataArgs = {
+    fileId: fileIdWithMetadata,
+    isFeatureEnabled: true,
+    onError: fn,
+};
+const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
+    isBoxAiSuggestionsEnabled: true,
+    isFeatureEnabled: true,
+    onError: fn,
+};
+const mockFeatures = {
+    'metadata.redesign.enabled': true,
+};
+const mockLogger = {
+    onReadyMetric: ({ endMarkName }) => {
+        console.log(`Logger: onReadyMetric called with endMarkName: ${endMarkName}`);
+    },
+};
 
 export const Basic = {
     play: async ({ canvasElement }) => {
@@ -42,24 +66,6 @@ export const AddTemplateDropdownMenuOnEmpty = {
             expect(option).not.toHaveAttribute('disabled');
         });
     },
-};
-
-const fileIdWithMetadata = global.FILE_ID;
-const fileWithoutMetadata = '416047501580';
-const token = global.TOKEN;
-const mockFeatures = {
-    'metadata.redesign.enabled': true,
-};
-const mockLogger = {
-    onReadyMetric: ({ endMarkName }) => {
-        console.log(`Logger: onReadyMetric called with endMarkName: ${endMarkName}`);
-    },
-};
-
-const defaultMetadataArgs = {
-    fileId: fileIdWithMetadata,
-    isFeatureEnabled: true,
-    onError: fn,
 };
 
 export default {
@@ -124,5 +130,48 @@ export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof M
 
         const unsavedChangesModal = screen.getByText('Unsaved Changes');
         expect(unsavedChangesModal).toBeInTheDocument();
+    },
+};
+
+export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: fileWithoutMetadata,
+        metadataSidebarProps: {
+            ...defaultMetadataSidebarProps,
+        },
+    },
+};
+
+export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: fileWithoutMetadata,
+        metadataSidebarProps: {
+            ...defaultMetadataSidebarProps,
+            isBoxAiSuggestionsEnabled: false,
+        },
+    },
+};
+
+export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
+        await userEvent.click(customMetadataOption);
+    },
+};
+
+export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
+        await userEvent.click(customMetadataOption);
     },
 };

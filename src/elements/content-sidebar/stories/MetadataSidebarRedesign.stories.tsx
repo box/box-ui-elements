@@ -5,7 +5,6 @@ import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 
 const fileIdWithMetadata = global.FILE_ID;
-const fileIdWithNoMetadata = '416047501580';
 const mockFeatures = {
     'metadata.redesign.enabled': true,
 };
@@ -37,54 +36,11 @@ export default {
     },
 };
 
-export const AddTemplateDropdownMenu: StoryObj<typeof MetadataSidebarRedesign> = {
+export const Basic: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         await userEvent.click(addTemplateButton);
-    },
-};
-
-export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
-    args: {
-        fileId: fileIdWithNoMetadata,
-        metadataSidebarProps: {
-            ...defaultMetadataSidebarProps,
-        },
-    },
-};
-
-export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesign> = {
-    args: {
-        fileId: fileIdWithNoMetadata,
-        metadataSidebarProps: {
-            ...defaultMetadataSidebarProps,
-            isBoxAiSuggestionsEnabled: false,
-        },
-    },
-};
-
-export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
-        await userEvent.click(addTemplateButton);
-
-        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
-        await userEvent.click(customMetadataOption);
-    },
-};
-
-export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
-        await userEvent.click(addTemplateButton);
-
-        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
-        await userEvent.click(customMetadataOption);
     },
 };
