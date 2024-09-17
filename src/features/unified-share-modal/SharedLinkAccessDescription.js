@@ -17,14 +17,6 @@ type Props = {
 };
 
 const SharedLinkAccessDescription = ({ accessLevel, enterpriseName, itemType }: Props) => {
-    const getDescriptionForAnyoneWithLink = (type: ItemType) => {
-        switch (type) {
-            case ITEM_TYPE_HUBS:
-                return messages.peopleWithLinkSignedInRequiredDescription;
-            default:
-                return messages.peopleWithLinkDescription;
-        }
-    };
     const getDescriptionForAnyoneInCompany = (type: ItemType) => {
         switch (type) {
             case ITEM_TYPE_FOLDER:
@@ -57,7 +49,7 @@ const SharedLinkAccessDescription = ({ accessLevel, enterpriseName, itemType }: 
 
     switch (accessLevel) {
         case ANYONE_WITH_LINK:
-            description = getDescriptionForAnyoneWithLink(itemType);
+            description = messages.peopleWithLinkDescription;
             break;
         case ANYONE_IN_COMPANY:
             description = getDescriptionForAnyoneInCompany(itemType);

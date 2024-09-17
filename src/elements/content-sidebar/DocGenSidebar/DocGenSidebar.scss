@@ -1,7 +1,9 @@
+@use '@box/blueprint-web-assets/tokens/tokens.scss';
+
 @import '../../common/variables';
 
 .bcs-DocGenSidebar {
-    padding: 0 24px 0 24px;
+    padding: 0 tokens.$space-6 0 tokens.$space-6;
 }
 
 .bcs-DocGen--center {
@@ -10,26 +12,51 @@
 }
 
 .bcs-TagsSection {
-    margin-top: 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid $bdl-gray-10;
+    margin-top: tokens.$space-6;
+    padding-bottom: tokens.$space-6;
+    border-bottom: tokens.$border-1 solid tokens.$gray-10;
 }
 
 .bcs-TagsSection-header {
-    font-size: $bdl-fontSize-minimum;
-    line-height: 14px;
+    font-size: tokens.$caption-default-font-size;
+    line-height: tokens.$caption-default-line-height;
 }
 
-.bcs-DocGen-tagPath {
-    display: block;
-    height: 32px;
-    padding: 6px 12px;
-    font-weight: bold;
-    font-size: $bdl-fontSize--dejaBlue;
+.bcs-DocGen-accordion {
+    padding: 0;
+
+    &:first-child {
+        padding: 0;
+    }
+}
+
+.bcs-TagsSection-accordion-wrapper {
+    width: '100%';
+    min-width: 'fit-content';
+    height: '100%';
+    overflow-x: 'auto';
+    overflow-y: 'auto';
+}
+
+.bcs-DocGen-accordion * {
+    width: auto;
+    padding: 0;
+    font-size: tokens.$body-default-bold-font-size;
+
+    .bcs-DocGen-tagPath {
+        padding-left: 0;
+        font-weight: bold;
+    }
+}
+
+.bcs-DocGen-collapsible {
+    padding-top: tokens.$space-3;
+    padding-right: tokens.$space-6;
+    border: none;
 }
 
 .bcs-DocGenSidebar-loading {
-    margin-top: 16px;
+    margin-top: tokens.$space-4;
 }
 
 .bcs-DocGen-emptyState {
@@ -39,8 +66,8 @@
 }
 
 .bcs-DocGen-emptyState--icon {
-    margin-top: 60px;
-    margin-bottom: 15px;
+    margin-top: tokens.$space-15;
+    margin-bottom: tokens.$space-4;
 }
 
 .bcs-DocGen-error-state {
@@ -49,7 +76,7 @@
     align-items: center;
 
     &--icon {
-        margin-top: 60px;
-        margin-bottom: 15px;
+        margin-top: tokens.$space-15;
+        margin-bottom: tokens.$space-4;
     }
 }
