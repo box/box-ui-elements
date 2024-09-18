@@ -78,6 +78,21 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             expect(instance.fetchFile).not.toBeCalled();
             expect(instance.setState).not.toBeCalled();
         });
+
+        test('should not fetch the file data if the id has not changed', () => {
+            const wrapper = getWrapper({ fileId: '123' });
+            const instance = wrapper.instance();
+            const newProps = { fileId: '123' };
+
+            instance.fetchFile = jest.fn();
+            instance.setState({ view: 'activityFeed' });
+            instance.setState = jest.fn();
+
+            instance.componentDidUpdate(newProps);
+
+            expect(instance.fetchFile).not.toBeCalled();
+            expect(instance.setState).not.toBeCalled();
+        });
     });
 
     describe('fetchFile()', () => {
