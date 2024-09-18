@@ -758,6 +758,7 @@ class Metadata extends File {
             errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
+        this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
         const convertFieldsToKeyValueObject = (template.fields || []).reduce((acc, obj) => {
