@@ -70,13 +70,13 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             handleDeleteMetadataInstance: jest.fn(),
+            addTemplateInstance: jest.fn(),
             templates: mockTemplates,
             templateInstances: [],
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
-            addTemplateInstance: jest.fn(),
-            updateTemplateInstance: jest.fn(),
+            updateMetadataInstance: jest.fn(),
         });
     });
 
@@ -115,6 +115,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             handleDeleteMetadataInstance: jest.fn(),
+            addTemplateInstance: jest.fn(),
             templateInstances: [],
             templates: [],
             errorMessage: {
@@ -123,8 +124,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             },
             status: STATUS.ERROR,
             file: mockFile,
-            addTemplateInstance: jest.fn(),
-            updateTemplateInstance: jest.fn(),
+            updateMetadataInstance: jest.fn(),
         });
 
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
@@ -136,14 +136,14 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with loading indicator', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            addTemplateInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             templateInstances: [],
             templates: [],
             errorMessage: null,
             status: STATUS.LOADING,
             file: mockFile,
-            addTemplateInstance: jest.fn(),
-            updateTemplateInstance: jest.fn(),
+            updateMetadataInstance: jest.fn(),
         });
 
         renderComponent();
@@ -179,6 +179,8 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            addTemplateInstance: jest.fn(),
+            updateMetadataInstance: jest.fn(),
         });
 
         renderComponent();

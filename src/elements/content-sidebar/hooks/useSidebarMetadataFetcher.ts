@@ -2,7 +2,6 @@ import * as React from 'react';
 import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
-import { JSONPatchOperations } from '@box/metadata-editor/types/lib/components/metadata-instance-editor/subcomponents/metadata-instance-form/types';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
@@ -20,14 +19,14 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
-    addTemplateInstance: (template: MetadataTemplate, operations: JSONPatchOperations) => void;
+    createMetadataInstance: (templateInstance: MetadataTemplateInstance) => void;
     errorMessage: MessageDescriptor | null;
     file: BoxItem | null;
     handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
-    updateTemplateInstance: (templateInstance: MetadataTemplateInstance, operations: JSONPatchOperations) => void;
+    updateMetadataInstance: () => void;
 }
 
 function useSidebarMetadataFetcher(
@@ -149,59 +148,33 @@ function useSidebarMetadataFetcher(
         },
         [api, onApiError, file, deleteMetadataInstanceSuccessCallback],
     );
-    const onUpdateSuccessHandler = React.useCallback(
-        (oldInstance: MetadataTemplateInstance, newInstance: MetadataTemplateInstance): void => {
-            setTemplateInstances(prevTemplateInstances => [
-                ...prevTemplateInstances.splice(templateInstances.indexOf(oldInstance), 1, newInstance),
-            ]);
-        },
-        [templateInstances],
-    );
 
-    const onUpdateErrorHandler = React.useCallback(
-        (error: ElementsXhrError, code: string): void => {
-            onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
-        },
-        [onApiError],
-    );
+    const updateMetadataInstance = () => {
+        // to be implemented in next ticket
+    };
 
-    const updateTemplateInstance = React.useCallback(
-        (existingTemplateInstance, operations): void => {
-            api.getMetadataAPI(false).updateMetadata(
-                file,
-                existingTemplateInstance,
-                operations,
-                newInstance => onUpdateSuccessHandler(existingTemplateInstance, newInstance),
-                (error: ElementsXhrError, code: string) => onUpdateErrorHandler(error, code),
-                true,
-            );
-        },
-        [api, file, onUpdateErrorHandler, onUpdateSuccessHandler],
-    );
-
-    const onAddSuccessHandler = React.useCallback((templateInstance: MetadataTemplateInstance): void => {
+    const onCreateSuccessHandler = React.useCallback((templateInstance: MetadataTemplateInstance): void => {
         setTemplateInstances(prevTemplateInstances => [...prevTemplateInstances, templateInstance]);
     }, []);
 
-    const onAddErrorHandler = React.useCallback(
+    const onCreateErrorHandler = React.useCallback(
         (error: ElementsXhrError, code: string): void => {
             onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
         },
         [onApiError],
     );
 
-    const addTemplateInstance = React.useCallback(
-        (template: MetadataTemplate, operations: JSONPatchOperations): void => {
+    const createMetadataInstance = React.useCallback(
+        (template: MetadataTemplateInstance): void => {
             api.getMetadataAPI(false).createMetadata(
                 file,
                 template,
-                onAddSuccessHandler,
-                (error: ElementsXhrError, code: string) => onAddErrorHandler(error, code),
+                onCreateSuccessHandler,
+                (error: ElementsXhrError, code: string) => onCreateErrorHandler(error, code),
                 true,
-                operations,
             );
         },
-        [api, file, onAddErrorHandler, onAddSuccessHandler],
+        [api, file, onCreateErrorHandler, onCreateSuccessHandler],
     );
 
     React.useEffect(() => {
@@ -215,14 +188,14 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
-        addTemplateInstance,
+        createMetadataInstance,
         errorMessage,
         file,
         handleDeleteMetadataInstance,
         status,
         templateInstances,
         templates,
-        updateTemplateInstance,
+        updateMetadataInstance,
     };
 }
 

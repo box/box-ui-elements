@@ -32,7 +32,26 @@ const mockTemplateInstances = [
         type: 'properties',
         hidden: false,
     },
+    {
+        canEdit: true,
+        id: 'metadata_template_instance_2',
+        fields: [],
+        scope: 'global',
+        templateKey: 'properties',
+        type: 'properties',
+        hidden: false,
+    },
 ];
+
+const newTemplateInstance = {
+    canEdit: true,
+    id: 'metadata_template_instance_3',
+    fields: [],
+    scope: 'global',
+    templateKey: 'properties',
+    type: 'properties',
+    hidden: false,
+};
 
 const mockAPI = {
     getFile: jest.fn((id, successCallback, errorCallback) => {
@@ -54,6 +73,13 @@ const mockAPI = {
         }
     }),
     deleteMetadata: jest.fn((_file, template, successCallback, errorCallback) => {
+        try {
+            successCallback(template);
+        } catch (error) {
+            errorCallback(error);
+        }
+    }),
+    createMetadata: jest.fn((_file, template, successCallback, errorCallback, isMetadataRedesign) => {
         try {
             successCallback(template);
         } catch (error) {
@@ -174,5 +200,23 @@ describe('useSidebarMetadataFetcher', () => {
                 isErrorDisplayed: true,
             }),
         );
+    });
+
+    test('should handle metadata instance creation', async () => {
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
+        });
+        mockAPI.createMetadata.mockImplementation((file, template, successCallback) => {
+            successCallback(newTemplateInstance);
+        });
+
+        const { result } = setupHook();
+
+        await waitFor(() => expect(result.current.templateInstances).toEqual(mockTemplateInstances));
+        await waitFor(() => result.current.createMetadataInstance(newTemplateInstance));
+
+        expect(result.current.templates).toEqual(mockTemplates);
+        expect(result.current.templateInstances).toEqual([...mockTemplateInstances, newTemplateInstance]);
+        expect(result.current.errorMessage).toBeNull();
     });
 });
