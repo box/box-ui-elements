@@ -400,7 +400,6 @@ class Metadata extends File {
             id: instance.$id,
             fields,
             scope: template.scope,
-            templateId: template.id,
             templateKey: template.templateKey,
             type: instance.$type,
         };
@@ -830,7 +829,9 @@ class Metadata extends File {
                 const metadata = cache.get(key);
                 if (isMetadataRedesign) {
                     metadata.templateInstances.splice(
-                        metadata.templateInstances.findIndex(instance => instance.templateId === template.id),
+                        metadata.templateInstances.findIndex(
+                            instance => instance.scope === scope && instance.templateKey === templateKey,
+                        ),
                         1,
                     );
                 } else {

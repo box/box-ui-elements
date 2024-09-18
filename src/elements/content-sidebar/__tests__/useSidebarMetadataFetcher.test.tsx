@@ -30,7 +30,7 @@ const mockTemplateInstances = [
         scope: 'global',
         templateKey: 'properties',
         type: 'properties',
-        hidden: false
+        hidden: false,
     },
 ];
 
@@ -53,13 +53,13 @@ const mockAPI = {
             errorCallback(error);
         }
     }),
-    deleteMetadata: jest.fn((_file, template, successCallback, errorCallback, isMetadataRedesign) => {
+    deleteMetadata: jest.fn((_file, template, successCallback, errorCallback) => {
         try {
             successCallback(template);
         } catch (error) {
             errorCallback(error);
         }
-    })
+    }),
 };
 const api = {
     getFileAPI: jest.fn().mockReturnValue(mockAPI),
@@ -135,10 +135,10 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should handle metadata instance removal', async () => {
-        mockAPI.getMetadata.mockImplementation((file, successCallback, errorCallback) => {
-            successCallback({templateInstances: mockTemplateInstances, templates: mockTemplates });
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
         });
-        mockAPI.deleteMetadata.mockImplementation((file, template, successCallback, errorCallback) => {
+        mockAPI.deleteMetadata.mockImplementation((file, template, successCallback) => {
             successCallback(mockTemplateInstances[0]);
         });
 
@@ -153,8 +153,8 @@ describe('useSidebarMetadataFetcher', () => {
     });
 
     test('should handle metadata instance removal error', async () => {
-        mockAPI.getMetadata.mockImplementation((file, successCallback, errorCallback) => {
-            successCallback({templateInstances: mockTemplateInstances, templates: mockTemplates });
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
         });
         mockAPI.deleteMetadata.mockImplementation((file, template, successCallback, errorCallback) => {
             errorCallback(mockError, 'metadata_remove_error');
@@ -174,6 +174,5 @@ describe('useSidebarMetadataFetcher', () => {
                 isErrorDisplayed: true,
             }),
         );
-
     });
 });

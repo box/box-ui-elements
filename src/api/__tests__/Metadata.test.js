@@ -193,6 +193,7 @@ describe('api/Metadata', () => {
                         ],
                         id: '123456',
                         templateKey: 'instance_from_template',
+                        scope: 'enterprise',
                     },
                     true,
                 ),
@@ -219,8 +220,7 @@ describe('api/Metadata', () => {
                         value: '2.1',
                     },
                 ],
-                scope: undefined,
-                templateId: '123456',
+                scope: 'enterprise',
                 templateKey: 'instance_from_template',
             });
         });
@@ -254,7 +254,6 @@ describe('api/Metadata', () => {
                         value: 'This is string',
                     },
                 ],
-                templateId: '123456',
                 templateKey: 'properties',
             });
         });
