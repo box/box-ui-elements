@@ -1,4 +1,4 @@
-import { MetadataInstanceForm, type MetadataTemplateInstance, UnsavedChangesModal } from '@box/metadata-editor';
+import { MetadataInstanceForm, type MetadataTemplateInstance } from '@box/metadata-editor';
 import noop from 'lodash/noop';
 import React from 'react';
 
@@ -36,11 +36,6 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 onSubmit={handleSubmit}
                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 setIsUnsavedChangesModalOpen={noop}
-            />
-            <UnsavedChangesModal
-                onDismiss={handleCancel}
-                onSaveAndContinue={handleSubmit}
-                open={isUnsavedChangesModalOpen}
             />
         </>
     );
