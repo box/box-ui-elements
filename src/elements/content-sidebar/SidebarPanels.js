@@ -283,9 +283,9 @@ class SidebarPanels extends React.Component<Props, State> {
                                     elementId={elementId}
                                     fileId={fileId}
                                     hasSidebarInitialized={isInitialized}
+                                    isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                                     ref={this.metadataSidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_METADATA_REDESIGNED}
-                                    isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                                     {...metadataSidebarProps}
                                 />
                             ) : (
