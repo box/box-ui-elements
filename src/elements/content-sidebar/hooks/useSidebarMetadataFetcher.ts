@@ -89,7 +89,6 @@ function useSidebarMetadataFetcher(
                 isFeatureEnabled,
                 { refreshCache: true },
                 true,
-                true,
             );
         },
         [api, fetchMetadataErrorCallback, fetchMetadataSuccessCallback, isFeatureEnabled],
