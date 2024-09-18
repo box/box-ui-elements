@@ -194,6 +194,7 @@ class SidebarPanels extends React.Component<Props, State> {
         const { isInitialized } = this.state;
 
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
+        const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
 
         if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
@@ -284,6 +285,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     hasSidebarInitialized={isInitialized}
                                     ref={this.metadataSidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_METADATA_REDESIGNED}
+                                    isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                                     {...metadataSidebarProps}
                                 />
                             ) : (
