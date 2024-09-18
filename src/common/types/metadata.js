@@ -132,6 +132,7 @@ type MetadataTemplateInstance = {
     id: string,
     fields: MetadataTemplateInstanceField[],
     scope: string,
+    templateId?: string,
     templateKey: string,
     type: string,
 };

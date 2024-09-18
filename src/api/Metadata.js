@@ -397,9 +397,10 @@ class Metadata extends File {
             canEdit: instance.$canEdit && canEdit,
             displayName: template.displayName,
             hidden: template.hidden,
-            id: template.id,
+            id: instance.$id,
             fields,
             scope: template.scope,
+            templateId: template.id,
             templateKey: template.templateKey,
             type: instance.$type,
         };
@@ -829,7 +830,7 @@ class Metadata extends File {
                 const metadata = cache.get(key);
                 if (isMetadataRedesign) {
                     metadata.templateInstances.splice(
-                        metadata.templateInstances.findIndex(instance => instance.id === template.id),
+                        metadata.templateInstances.findIndex(instance => instance.templateId === template.id),
                         1,
                     );
                 } else {

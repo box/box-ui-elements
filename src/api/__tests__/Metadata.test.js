@@ -200,7 +200,7 @@ describe('api/Metadata', () => {
                 canEdit: true,
                 displayName: 'Test template',
                 hidden: undefined,
-                id: '123456',
+                id: '321',
                 fields: [
                     {
                         description: 'Test description',
@@ -220,6 +220,7 @@ describe('api/Metadata', () => {
                     },
                 ],
                 scope: undefined,
+                templateId: '123456',
                 templateKey: 'instance_from_template',
             });
         });
@@ -245,7 +246,7 @@ describe('api/Metadata', () => {
                 canEdit: false,
                 displayName: 'Test template',
                 hidden: undefined,
-                id: '123456',
+                id: '321',
                 fields: [
                     {
                         key: 'testCustomField',
@@ -253,6 +254,7 @@ describe('api/Metadata', () => {
                         value: 'This is string',
                     },
                 ],
+                templateId: '123456',
                 templateKey: 'properties',
             });
         });
@@ -2174,7 +2176,7 @@ describe('api/Metadata', () => {
             const template = { id: '123', scope: 'scope', templateKey: 'templateKey' };
 
             cache.set('metadata_id', {
-                templateInstances: [{ ...template }],
+                templateInstances: [{ ...template, templateId: '123' }],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
