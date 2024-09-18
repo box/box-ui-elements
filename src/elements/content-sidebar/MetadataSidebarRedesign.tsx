@@ -9,9 +9,11 @@ import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
     MetadataEmptyState,
+    MetadataInstanceList,
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
+import noop from 'lodash/noop';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -67,26 +69,27 @@ function MetadataSidebarRedesign({
     onError,
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
-    const { formatMessage } = useIntl();
-
-    const [selectedTemplates, setSelectedTemplates] = React.useState<Array<MetadataTemplate>>([]);
-    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | MetadataTemplate | null>(
-        null,
-    );
-    const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
-
     const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
         api,
         fileId,
         onError,
         isFeatureEnabled,
     );
+    const { formatMessage } = useIntl();
+    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
+    const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
+    const [selectedTemplates, setSelectedTemplates] =
+        React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
+
+    React.useEffect(() => {
+        setSelectedTemplates(templateInstances);
+    }, [templateInstances]);
 
     const handleUnsavedChanges = () => {
         setIsUnsavedChangesModalOpen(true);
     };
 
-    const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
+    const handleTemplateSelect = (selectedTemplate: MetadataTemplateInstance) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
         setEditingTemplate(selectedTemplate);
     };
@@ -94,9 +97,11 @@ function MetadataSidebarRedesign({
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
-            selectedTemplates={selectedTemplates}
+            selectedTemplates={selectedTemplates as MetadataTemplate[]}
             onSelect={(selectedTemplate): void => {
-                editingTemplate ? handleUnsavedChanges() : handleTemplateSelect(selectedTemplate);
+                editingTemplate
+                    ? handleUnsavedChanges()
+                    : handleTemplateSelect(selectedTemplate as MetadataTemplateInstance);
             }}
         />
     );
@@ -108,7 +113,11 @@ function MetadataSidebarRedesign({
     );
 
     const showTemplateInstances = file && templates && templateInstances;
-    const showEmptyState = showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
+
+    const showLoading = status === STATUS.LOADING;
+    const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
+    const showEditor = !showEmptyState && editingTemplate;
+    const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
 
     return (
         <SidebarContent
@@ -120,19 +129,27 @@ function MetadataSidebarRedesign({
         >
             <div className="bcs-MetadataSidebarRedesign-content">
                 {errorMessageDisplay}
-                {status === STATUS.LOADING && (
-                    <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
-                )}
-                {showEmptyState ? (
+                {showLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
+                {showEmptyState && (
                     <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
-                ) : (
-                    editingTemplate && (
-                        <MetadataInstanceEditor
-                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                            template={editingTemplate}
-                        />
-                    )
+                )}
+                {editingTemplate && (
+                    <MetadataInstanceEditor
+                        isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                        isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                        template={editingTemplate}
+                        onCancel={() => setEditingTemplate(null)}
+                    />
+                )}
+                {showList && (
+                    <MetadataInstanceList
+                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                        onEdit={templateInstance => {
+                            setEditingTemplate(templateInstance);
+                        }}
+                        onEditWithAutofill={noop}
+                        templateInstances={templateInstances}
+                    />
                 )}
             </div>
         </SidebarContent>
