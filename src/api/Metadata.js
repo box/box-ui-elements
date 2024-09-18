@@ -363,7 +363,7 @@ class Metadata extends File {
      */
     createTemplateInstance(
         instance: MetadataInstanceV2,
-        template: MetadataTemplate,
+        template: MetadataTemplate | MetadataTemplateInstance,
         canEdit: boolean,
     ): MetadataTemplateInstance {
         const fields: MetadataTemplateInstanceField[] = [];
@@ -761,7 +761,9 @@ class Metadata extends File {
         this.errorCallback = errorCallback;
 
         const convertFieldsToKeyValueObject = (template.fields || []).reduce((acc, obj) => {
-            acc[obj.key] = obj.value;
+            if (obj.value !== undefined) {
+                acc[obj.key] = obj.value;
+            }
             return acc;
         }, {});
 

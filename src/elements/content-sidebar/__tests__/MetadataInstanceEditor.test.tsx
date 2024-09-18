@@ -14,6 +14,11 @@ describe('MetadataInstanceEditor', () => {
         canEdit: true,
     };
 
+    const mockMetadataTemplate: MetadataTemplateInstance = {
+        ...mockCustomMetadataTemplate,
+        displayName: 'Template Name',
+        canEdit: true,
+    };
     const mockMetadataTemplateInstance: MetadataTemplateInstance = {
         ...mockCustomMetadataTemplate,
         displayName: 'Template Name',
@@ -22,9 +27,11 @@ describe('MetadataInstanceEditor', () => {
     const defaultProps: MetadataInstanceEditorProps = {
         isBoxAiSuggestionsEnabled: true,
         isUnsavedChangesModalOpen: false,
-        template: mockMetadataTemplateInstance,
+        template: mockMetadataTemplate,
         onCancel: jest.fn(),
         onDelete: jest.fn(),
+        onSubmit: jest.fn(),
+        setIsUnsavedChangesModalOpen: jest.fn(),
     };
 
     test('should render MetadataInstanceForm with correct props', () => {

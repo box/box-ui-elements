@@ -75,7 +75,6 @@ function useSidebarMetadataFetcher(
         (e: ElementsXhrError, code: string) => {
             setTemplates(null);
             setTemplateInstances(null);
-            setTemplateInstances(null);
             onApiError(e, code, messages.sidebarMetadataFetchingErrorContent);
         },
         [onApiError],
@@ -150,7 +149,7 @@ function useSidebarMetadataFetcher(
     );
 
     const updateMetadataInstance = () => {
-        // to be implemented in next ticket
+        // to be implemented in the next ticket
     };
 
     const onCreateSuccessHandler = React.useCallback((templateInstance: MetadataTemplateInstance): void => {
