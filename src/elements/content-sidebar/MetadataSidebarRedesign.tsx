@@ -8,7 +8,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
-    AutofillContextProvider,
     MetadataEmptyState,
     MetadataInstanceList,
     type MetadataTemplateInstance,
@@ -114,8 +113,11 @@ function MetadataSidebarRedesign({
     );
 
     const showTemplateInstances = file && templates && templateInstances;
-    const showEmptyState = showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
-    const showList = templateInstances.length > 0;
+
+    const showLoading = status === STATUS.LOADING;
+    const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
+    const showEditor = !showEmptyState && editingTemplate;
+    const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
 
     return (
         <SidebarContent
@@ -125,39 +127,31 @@ function MetadataSidebarRedesign({
             sidebarView={SIDEBAR_VIEW_METADATA}
             title={formatMessage(messages.sidebarMetadataTitle)}
         >
-            <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
-                <div className="bcs-MetadataSidebarRedesign-content">
-                    {errorMessageDisplay}
-                    {status === STATUS.LOADING && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
-                    {showEmptyState ? (
-                        <MetadataEmptyState
-                            level={'file'}
-                            isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                        />
-                    ) : (
-                        editingTemplate && (
-                            <MetadataInstanceEditor
-                                isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                                template={editingTemplate}
-                                onCancel={() => {
-                                    setEditingTemplate(null);
-                                }}
-                            />
-                        )
-                    )}
-                    {showList && !editingTemplate && (
-                        <MetadataInstanceList
-                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                            onEdit={templateInstance => {
-                                setEditingTemplate(templateInstance);
-                            }}
-                            onEditWithAutofill={noop}
-                            templateInstances={templateInstances}
-                        />
-                    )}
-                </div>
-            </AutofillContextProvider>
+            <div className="bcs-MetadataSidebarRedesign-content">
+                {errorMessageDisplay}
+                {showLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
+                {showEmptyState && (
+                    <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
+                )}
+                {editingTemplate && (
+                    <MetadataInstanceEditor
+                        isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                        isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                        template={editingTemplate}
+                        onCancel={() => setEditingTemplate(null)}
+                    />
+                )}
+                {showList && (
+                    <MetadataInstanceList
+                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                        onEdit={templateInstance => {
+                            setEditingTemplate(templateInstance);
+                        }}
+                        onEditWithAutofill={noop}
+                        templateInstances={templateInstances}
+                    />
+                )}
+            </div>
         </SidebarContent>
     );
 }

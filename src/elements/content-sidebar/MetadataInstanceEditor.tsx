@@ -1,4 +1,4 @@
-import { MetadataInstanceForm, type MetadataTemplateInstance } from '@box/metadata-editor';
+import { AutofillContextProvider, MetadataInstanceForm, type MetadataTemplateInstance } from '@box/metadata-editor';
 import noop from 'lodash/noop';
 import React from 'react';
 
@@ -26,7 +26,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     };
 
     return (
-        <>
+        <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                 isLoading={false}
@@ -37,7 +37,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 setIsUnsavedChangesModalOpen={noop}
             />
-        </>
+        </AutofillContextProvider>
     );
 };
 
