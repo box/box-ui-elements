@@ -140,7 +140,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         renderComponent();
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
-        expect(screen.getByLabelText('Loading')).toBeInTheDocument();
+        expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
         expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
     });
 
