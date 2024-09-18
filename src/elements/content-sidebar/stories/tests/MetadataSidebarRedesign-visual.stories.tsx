@@ -129,7 +129,11 @@ export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof M
         expect(myTemplateOption).toBeInTheDocument();
         await userEvent.click(myTemplateOption);
 
-        const unsavedChangesModal = screen.getByText('Unsaved Changes');
+        const unsavedChangesModal = await screen.findByRole(
+            'heading',
+            { level: 2, name: 'Unsaved Changes' },
+            { timeout: 5000 },
+        );
         expect(unsavedChangesModal).toBeInTheDocument();
     },
 };
@@ -188,7 +192,7 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
 export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-
+        await canvas.findByRole('heading', { name: 'Metadata' }, { timeout: 5000 });
         const editButtons = await canvas.findAllByRole('button', { name: 'Edit' }, { timeout: 5000 });
 
         let headlines = await canvas.findAllByRole('heading', { level: 1 });

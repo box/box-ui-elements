@@ -148,7 +148,7 @@ function MetadataSidebarRedesign({
                             />
                         )
                     )}
-                    {showList && (
+                    {showList && !editingTemplate && (
                         <MetadataInstanceList
                             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                             onEdit={templateInstance => {
