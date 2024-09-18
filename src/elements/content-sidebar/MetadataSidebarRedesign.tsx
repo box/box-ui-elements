@@ -128,9 +128,7 @@ function MetadataSidebarRedesign({
             <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
                 <div className="bcs-MetadataSidebarRedesign-content">
                     {errorMessageDisplay}
-                    {status === STATUS.LOADING && (
-                        <LoadingIndicator aria-label={formatMessage(messages.loading)} data-testid="loading" />
-                    )}
+                    {status === STATUS.LOADING && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
                     {showEmptyState ? (
                         <MetadataEmptyState
                             level={'file'}

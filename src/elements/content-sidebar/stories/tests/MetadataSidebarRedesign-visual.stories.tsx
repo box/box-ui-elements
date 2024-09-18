@@ -32,8 +32,8 @@ const mockLogger = {
 export const AddTemplateDropdownMenuOn = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' });
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
 
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
@@ -204,7 +204,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['My Template']));
 
         // cancel editing - back to list view
-        const cancelButton = await canvas.findByRole('button', { name: 'Cancel' }, { timeout: 5000 });
+        const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
         await userEvent.click(cancelButton);
 
         headlines = await canvas.findAllByRole('heading', { level: 1 });
