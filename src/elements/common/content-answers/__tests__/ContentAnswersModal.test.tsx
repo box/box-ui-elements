@@ -1,5 +1,7 @@
 import * as React from 'react';
-import userEvent from '@testing-library/user-event';
+
+import { Notification } from '@box/blueprint-web';
+import { userEvent } from '@testing-library/user-event';
 import { fireEvent, render, screen } from '../../../../test-utils/testing-library';
 
 import ContentAnswersModal from '../ContentAnswersModal';
@@ -18,16 +20,19 @@ describe('common/content-answers/ContentAnswersModal', () => {
     const mockQuestion = { isCompleted: false, isLoading: true, prompt: 'summarize another question' };
     const renderComponent = (api = mockApi, props?: {}) => {
         render(
-            <APIContext.Provider value={api}>
-                <ContentAnswersModal
-                    currentUser={mockCurrentUser}
-                    file={mockFile}
-                    isOpen
-                    onRequestClose={jest.fn()}
-                    onAsk={jest.fn()}
-                    {...props}
-                />
-            </APIContext.Provider>,
+            <Notification.Provider>
+                <Notification.Viewport />
+                <APIContext.Provider value={api}>
+                    <ContentAnswersModal
+                        currentUser={mockCurrentUser}
+                        file={mockFile}
+                        isOpen
+                        onRequestClose={jest.fn()}
+                        onAsk={jest.fn()}
+                        {...props}
+                    />
+                </APIContext.Provider>
+            </Notification.Provider>,
         );
     };
 
@@ -49,7 +54,9 @@ describe('common/content-answers/ContentAnswersModal', () => {
         const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
 
-        expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(mockQuestion, [{ id: mockFile.id, type: 'file' }]);
+        expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(mockQuestion, [{ id: mockFile.id, type: 'file' }], [], {
+            include_citations: true,
+        });
 
         expect(onAskMock).toBeCalled();
         expect(screen.getByText(answer)).toBeInTheDocument();
@@ -97,5 +104,36 @@ describe('common/content-answers/ContentAnswersModal', () => {
         expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         expect(screen.getByText(mockQuestionsWithAnswer[0].answer!)).toBeInTheDocument();
+    });
+
+    test('should ask with dialogue history when prompt is submitted', async () => {
+        const onAskMock = jest.fn();
+        const { prompt } = mockQuestionsWithAnswer[0];
+
+        renderComponent(mockApi, { onAsk: onAskMock });
+
+        let textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        fireEvent.change(textArea, { target: { value: prompt } });
+
+        let submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
+
+        expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(mockQuestion, [{ id: mockFile.id, type: 'file' }], [], {
+            include_citations: true,
+        });
+
+        textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        fireEvent.change(textArea, { target: { value: 'Another question?' } });
+        submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
+
+        expect(mockApi.getIntelligenceAPI().ask).lastCalledWith(
+            { isCompleted: false, isLoading: true, prompt: 'Another question?' },
+            [{ id: mockFile.id, type: 'file' }],
+            [{ answer: 'summarize answer', created_at: '', prompt: 'summarize another question' }],
+            {
+                include_citations: true,
+            },
+        );
     });
 });

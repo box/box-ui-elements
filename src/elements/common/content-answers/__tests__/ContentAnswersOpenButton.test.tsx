@@ -1,6 +1,6 @@
 import * as React from 'react';
 import userEvent from '@testing-library/user-event';
-import { fireEvent, render, screen } from '../../../../test-utils/testing-library';
+import { render, screen } from '../../../../test-utils/testing-library';
 
 import ContentAnswersOpenButton from '../ContentAnswersOpenButton';
 
@@ -28,33 +28,40 @@ describe('common/content-answers/ContentAnswersOpenButton', () => {
         expect(onClick).toBeCalledTimes(1);
     });
 
-    test('should display correct tooltip', () => {
+    test('should display correct tooltip', async () => {
         renderComponent();
         const button = screen.getByRole('button', { name: 'Box AI' });
-        fireEvent.mouseOver(button);
-        expect(screen.getByText(messages.defaultTooltip.defaultMessage)).toBeInTheDocument();
+        await userEvent.hover(button);
+        const tooltip = await screen.findByRole('tooltip', { name: messages.defaultTooltip.defaultMessage });
+        expect(tooltip).toBeInTheDocument();
     });
 
-    test('should display not allowed tooltip', () => {
+    test('should display not allowed tooltip', async () => {
         renderComponent({ fileExtension: 'invalid' });
         const button = screen.getByRole('button', { name: 'Box AI' });
-        fireEvent.mouseOver(button);
-        expect(screen.getByText(messages.disabledTooltipFileNotCompatible.defaultMessage)).toBeInTheDocument();
+        await userEvent.hover(button, { pointerEventsCheck: 0 });
+        const tooltip = await screen.findByRole('tooltip', {
+            name: messages.disabledTooltipFileNotCompatible.defaultMessage,
+        });
+        expect(tooltip).toBeInTheDocument();
     });
 
-    test('should display return to box ai when highlighted', () => {
+    test('should display return to box ai when highlighted', async () => {
         renderComponent({ isHighlighted: true });
         const button = screen.getByRole('button', { name: 'Box AI' });
-        fireEvent.mouseOver(button);
-        expect(screen.getByText(messages.hasQuestionsTooltip.defaultMessage)).toBeInTheDocument();
+        await userEvent.hover(button);
+        const tooltip = await screen.findByRole('tooltip', {
+            name: messages.hasQuestionsTooltip.defaultMessage,
+        });
+        expect(tooltip).toBeInTheDocument();
     });
 
     test('should not call onclick callback when filetype is not allowed', async () => {
         const onClick = jest.fn();
         renderComponent({ fileExtension: 'invalid', onClick });
         expect(onClick).toBeCalledTimes(0);
-        const button = screen.getByRole('button', { name: 'Box AI' });
-        await userEvent.click(button);
+        const button = screen.getByRole('button');
+        await userEvent.click(button, { pointerEventsCheck: 0 });
         expect(onClick).toBeCalledTimes(0);
     });
 

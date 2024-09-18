@@ -127,6 +127,8 @@ export const TEXT_FILE_EXTENSIONS = [
     'yaml',
 ];
 
+export const SPREADSHEET_FILE_EXTENSIONS = ['xls', 'xlsx', 'xlsm', 'xlsb', 'csv', 'ods', 'gsheet'];
+
 export const DOCUMENT_SUGGESTED_QUESTIONS = [
     {
         id: 'suggested-question-1',

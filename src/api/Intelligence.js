@@ -17,11 +17,18 @@ class Intelligence extends Base {
     /**
      * API endpoint to ask ai a question
      *
-     * @param {string} prompt - Question
+     * @param question
+     * @param dialogueHistory
      * @param {Array<object>} items - Array of items to ask about
+     * @param options
      * @return {Promise}
      */
-    async ask(question: QuestionType, items: Array<BoxItem>) {
+    async ask(
+        question: QuestionType,
+        items: Array<BoxItem>,
+        dialogueHistory: Array<QuestionType> = [],
+        options: { include_citations: boolean } = {},
+    ): Promise<any> {
         const { prompt } = question;
         if (!prompt) {
             throw new Error('Missing prompt!');
@@ -46,7 +53,8 @@ class Intelligence extends Base {
                 mode: 'single_item_qa',
                 prompt,
                 items,
-                include_citations: true,
+                dialogue_history: dialogueHistory,
+                ...options,
             },
         });
     }

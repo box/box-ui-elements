@@ -10,7 +10,7 @@
     border: 1px solid #2222224d;
 }
 
-.btn.bdl-ContentAnswersOpenButton {
+button.bdl-ContentAnswersOpenButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,7 +31,7 @@
     &.bdl-ContentAnswersOpenButton--hasQuestions {
         @include BackgroundGradient;
 
-        .bdl-ContentAnswersOpenButton-icon {
+        svg {
             path {
                 fill: $white;
             }

@@ -1,4 +1,6 @@
 import React, { useState, useCallback } from 'react';
+import { useIntl } from 'react-intl';
+import getProp from 'lodash/get';
 
 import {
     AgentType,
@@ -7,9 +9,9 @@ import {
     QuestionType,
     SuggestedQuestionType,
 } from '@box/box-ai-content-answers';
-import { useIntl } from 'react-intl';
-import getProp from 'lodash/get';
-import { DOCUMENT_SUGGESTED_QUESTIONS } from './constants';
+
+import { AxiosResponse } from 'axios';
+import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from './constants';
 import withCurrentUser from '../current-user';
 
 // @ts-ignore: no ts definition
@@ -26,16 +28,21 @@ import { ElementsXhrError } from '../../common/types/api';
 
 import messages from './messages';
 
-interface ContentAnswersModalProps {
+export interface ContentAnswersModalExternalProps {
+    isCitationsEnabled?: boolean;
+    isMarkdownEnabled?: boolean;
+    isResetChatEnabled?: boolean;
+    onAsk?: () => void;
+    onClearConversation?: () => void;
+    onRequestClose?: () => void;
+    suggestedQuestions?: SuggestedQuestionType[];
+}
+
+interface ContentAnswersModalProps extends ContentAnswersModalExternalProps {
     api: APIFactory;
     currentUser?: User;
     file: BoxItem;
-    isCitationsEnabled?: boolean;
-    isMarkdownEnabled?: boolean;
     isOpen: boolean;
-    onAsk: () => void;
-    onRequestClose: () => void;
-    suggestedQuestions?: SuggestedQuestionType[];
 }
 
 const ContentAnswersModal = ({
@@ -44,25 +51,30 @@ const ContentAnswersModal = ({
     file,
     isOpen,
     onAsk,
+    onClearConversation,
     onRequestClose,
     suggestedQuestions,
     isCitationsEnabled = true,
     isMarkdownEnabled = true,
+    isResetChatEnabled = true,
 }: ContentAnswersModalProps) => {
     const { formatMessage } = useIntl();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [questions, setQuestions] = useState<QuestionType[]>([]);
+    let localizedQuestions: SuggestedQuestionType[] = [];
 
-    const localizedQuestions: SuggestedQuestionType[] = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
-        id: question.id,
-        label: formatMessage(messages[question.labelId]),
-        prompt: formatMessage(messages[question.promptId]),
-    }));
+    if (!suggestedQuestions) {
+        localizedQuestions = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
+            id: question.id,
+            label: formatMessage(messages[question.labelId]),
+            prompt: formatMessage(messages[question.promptId]),
+        }));
+    }
 
-    const handleSuccessCallback = useCallback((response): void => {
+    const handleSuccessCallback = useCallback((response: AxiosResponse): void => {
         const question = {
             answer: response.data.answer,
-            createdAt: response.data.created_at,
+            created_at: response.data.created_at,
             citations: response.data.citations,
             error: null,
             isCompleted: true,
@@ -105,31 +117,52 @@ const ContentAnswersModal = ({
             ];
             question.isCompleted = false;
             question.isLoading = true;
+
+            const dialogueHistory = questions.map(q => ({
+                prompt: q.prompt,
+                answer: q.answer,
+                created_at: q.created_at,
+            }));
+
             const nextQuestions = [...(isRetry ? questions.slice(0, -1) : questions)];
             setQuestions([...nextQuestions, question]);
 
             setIsLoading(true);
             try {
-                const response = await api.getIntelligenceAPI(true).ask(question, items);
+                const response = await api
+                    .getIntelligenceAPI(true)
+                    .ask(question, items, dialogueHistory, { include_citations: isCitationsEnabled });
                 handleSuccessCallback(response);
             } catch (e) {
                 handleErrorCallback(e, question);
             }
             setIsLoading(false);
         },
-        [api, file, handleErrorCallback, handleSuccessCallback, onAsk, questions],
+        [api, file, handleErrorCallback, handleSuccessCallback, isCitationsEnabled, onAsk, questions],
     );
 
     const handleRetry = useCallback(
         (question: QuestionType) => {
+            setQuestions(prevState => {
+                delete question.error;
+                return [...prevState.slice(0, -1), question];
+            });
             handleAsk(question, null, true);
         },
         [handleAsk],
     );
 
+    const handleClearConversation = useCallback(() => {
+        onClearConversation();
+        setQuestions([]);
+    }, [onClearConversation]);
+
     const fileName = getProp(file, 'name');
     const currentFileExtension = getProp(file, 'extension');
     const userInfo = { name: getProp(currentUser, 'name') || '', avatarURL: getProp(currentUser, 'avatarURL') || '' };
+
+    const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(currentFileExtension);
+    const spreadsheetNotice = isSpreadsheet ? formatMessage(messages.welcomeMessageSpreadsheetNotice) : '';
 
     return (
         <IntelligenceModal
@@ -138,13 +171,17 @@ const ContentAnswersModal = ({
             hasRequestInProgress={isLoading}
             isCitationsEnabled={isCitationsEnabled}
             isMarkdownEnabled={isMarkdownEnabled}
+            isResetChatEnabled={isResetChatEnabled}
             onModalClose={onRequestClose}
             open={isOpen}
             onOpenChange={onRequestClose}
+            onClearAction={handleClearConversation}
             questions={questions}
             retryQuestion={handleRetry}
             submitQuestion={handleAsk}
             suggestedQuestions={suggestedQuestions || localizedQuestions}
+            warningNotice={spreadsheetNotice}
+            warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
             userInfo={userInfo}
         />
     );

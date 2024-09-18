@@ -1,18 +1,14 @@
 import React, { useCallback, useState } from 'react';
-
 import getProp from 'lodash/get';
-import { SuggestedQuestionType } from '@box/box-ai-content-answers';
-import ContentAnswersModal from './ContentAnswersModal';
+
+import ContentAnswersModal, { ContentAnswersModalExternalProps } from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { BoxItem } from '../../common/types/core';
 
-type ExternalProps = {
+type ExternalProps = ContentAnswersModalExternalProps & {
     show?: boolean;
-    isCitationsEnabled?: boolean;
-    isMarkdownEnabled?: boolean;
-    suggestedQuestions?: SuggestedQuestionType[];
 };
 
 type Props = {
@@ -21,7 +17,7 @@ type Props = {
 
 export type ContentAnswersProps = ExternalProps & Props;
 
-const ContentAnswers = ({ file, ...rest }: Omit<ContentAnswersProps, 'show'>) => {
+const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: Omit<ContentAnswersProps, 'show'>) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hasQuestions, setHasQuestions] = useState(false);
     const [isHighlighted, setIsHighlighted] = useState(false);
@@ -35,11 +31,13 @@ const ContentAnswers = ({ file, ...rest }: Omit<ContentAnswersProps, 'show'>) =>
         if (hasQuestions) {
             setIsHighlighted(true);
         }
-    }, [hasQuestions]);
+        !!onRequestClose && onRequestClose();
+    }, [hasQuestions, onRequestClose]);
 
     const handleAsk = useCallback(() => {
         setHasQuestions(true);
-    }, []);
+        !!onAsk && onAsk();
+    }, [onAsk]);
 
     const currentExtension = getProp(file, 'extension');
     return (

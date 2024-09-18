@@ -1,7 +1,7 @@
 // @flow
-
 import * as React from 'react';
 import { mount } from 'enzyme';
+
 import useMediaQuery from '../useMediaQuery';
 
 const WIDTH = 999;

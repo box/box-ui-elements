@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Notification } from '@box/blueprint-web';
 import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen } from '../../../../test-utils/testing-library';
 
@@ -10,9 +11,12 @@ import APIContext from '../../api-context';
 describe('common/content-answers/ContentAnswers', () => {
     const renderComponent = (props?: {}) =>
         render(
-            <APIContext.Provider value={mockApi}>
-                <ContentAnswers file={mockFile} {...props} />
-            </APIContext.Provider>,
+            <Notification.Provider>
+                <Notification.Viewport />
+                <APIContext.Provider value={mockApi}>
+                    <ContentAnswers file={mockFile} {...props} />
+                </APIContext.Provider>
+            </Notification.Provider>,
         );
 
     test('should render the content answers', async () => {

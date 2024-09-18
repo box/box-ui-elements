@@ -1540,10 +1540,10 @@
     tabbable "^4.0.0"
     type-fest "^3.2.0"
 
-"@box/box-ai-content-answers@^0.49.1":
-  version "0.49.1"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.49.1.tgz#e5db564e68971793c629f00f469cfbd92d8a2bbb"
-  integrity sha512-TbZEU1QhlCU3p+iQdgStY5LQ7mzORt4bExHfCWRQpjI+8DdW4apLxo1gZOsQ5E7XWokg+mGbhl+ff3fkXG1Fhw==
+"@box/box-ai-content-answers@^0.50.5":
+  version "0.50.5"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.50.5.tgz#54ff37f553f1574d66477bc6bc2b8dfe3d14688e"
+  integrity sha512-2hONEOH1iJyrmrqQmfu2fdCiQwer0MRevVjBGJVGBByrGO7ZqfzlGNSQkdD05LXBKvFPzrECLwqGZJVQH7FZtg==
 
 "@box/cldr-data@^34.2.0":
   version "34.8.0"
