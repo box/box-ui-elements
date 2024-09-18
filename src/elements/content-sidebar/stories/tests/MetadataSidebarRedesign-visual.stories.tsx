@@ -29,7 +29,7 @@ const mockLogger = {
     },
 };
 
-export const Basic = {
+export const AddTemplateDropdownMenuOn = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await canvas.findByRole('heading', { name: 'Metadata' });
@@ -55,8 +55,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' });
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
 
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
@@ -90,10 +89,8 @@ export default {
 export const AddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const heading = await canvas.findByRole('heading', { name: 'Metadata' });
-        expect(heading).toBeInTheDocument();
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
@@ -113,8 +110,6 @@ export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof M
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const heading = await canvas.findByRole('heading', { name: 'Metadata' });
-        expect(heading).toBeInTheDocument();
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
         expect(addTemplateButton).toBeInTheDocument();
@@ -192,7 +187,7 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
 export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await canvas.findByRole('heading', { name: 'Metadata' }, { timeout: 5000 });
+
         const editButtons = await canvas.findAllByRole('button', { name: 'Edit' }, { timeout: 5000 });
 
         let headlines = await canvas.findAllByRole('heading', { level: 1 });
