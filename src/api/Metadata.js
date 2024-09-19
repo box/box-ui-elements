@@ -761,15 +761,10 @@ class Metadata extends File {
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
-        const convertFieldsToKeyValueObject = (template.fields || []).reduce((acc, obj) => {
-            if (obj.value !== undefined) {
-                acc[obj.key] = obj.value;
-            }
-            return acc;
-        }, {});
-
         try {
-            const fieldsValues = isMetadataRedesign ? convertFieldsToKeyValueObject : {};
+            const fieldsValues = isMetadataRedesign
+                ? Object.fromEntries(template.fields.map(obj => [obj.key, obj.value])) || []
+                : {};
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),
                 id: getTypedFileId(id),

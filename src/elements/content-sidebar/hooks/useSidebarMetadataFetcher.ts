@@ -155,24 +155,18 @@ function useSidebarMetadataFetcher(
         setTemplateInstances(prevTemplateInstances => [...prevTemplateInstances, templateInstance]);
     }, []);
 
-    const onCreateErrorHandler = React.useCallback(
-        (error: ElementsXhrError, code: string): void => {
-            onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
-        },
-        [onApiError],
-    );
-
     const createMetadataInstance = React.useCallback(
         (template: MetadataTemplateInstance): void => {
             api.getMetadataAPI(false).createMetadata(
                 file,
                 template,
                 onCreateSuccessHandler,
-                (error: ElementsXhrError, code: string) => onCreateErrorHandler(error, code),
+                (error: ElementsXhrError, code: string) =>
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
                 true,
             );
         },
-        [api, file, onCreateErrorHandler, onCreateSuccessHandler],
+        [api, file, onApiError, onCreateSuccessHandler],
     );
 
     React.useEffect(() => {

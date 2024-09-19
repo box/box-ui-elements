@@ -212,7 +212,7 @@ describe('useSidebarMetadataFetcher', () => {
 
         const { result } = setupHook();
 
-        await waitFor(() => expect(result.current.templateInstances).toEqual(mockTemplateInstances));
+        expect(result.current.templateInstances).toEqual(mockTemplateInstances);
         await waitFor(() => result.current.createMetadataInstance(newTemplateInstance));
 
         expect(result.current.templates).toEqual(mockTemplates);
@@ -229,11 +229,11 @@ describe('useSidebarMetadataFetcher', () => {
         });
 
         const { result } = setupHook();
-        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+        expect(result.current.status).toBe(STATUS.SUCCESS);
 
         await waitFor(() => result.current.createMetadataInstance(newTemplateInstance));
 
-        await waitFor(() => expect(result.current.status).toBe(STATUS.ERROR));
+        expect(result.current.status).toBe(STATUS.ERROR);
         expect(onErrorMock).toHaveBeenCalledWith(
             mockError,
             'metadata_creation_error',

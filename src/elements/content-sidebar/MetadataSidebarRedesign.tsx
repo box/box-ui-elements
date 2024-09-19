@@ -16,6 +16,7 @@ import {
 import noop from 'lodash/noop';
 
 import { FormValues } from '@box/metadata-editor/types/lib/components/metadata-instance-editor/types';
+import uniqueId from 'lodash/uniqueId';
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -102,7 +103,7 @@ function MetadataSidebarRedesign({
             canEdit: !!file.permissions.can_upload,
             displayName: template.displayName,
             hidden: template.hidden,
-            id: template.id,
+            id: uniqueId('metadata_template_'),
             fields: template.fields,
             scope: template.scope,
             templateKey: template.templateKey,
@@ -123,9 +124,8 @@ function MetadataSidebarRedesign({
         return templateInstances.find(templateInstance => templateInstance.id === id);
     };
 
-    const handleSubmitInstance = (values: FormValues) => {
-        const existingTemplateInstance = checkIfTemplateInstanceExists(editingTemplate?.id);
-        existingTemplateInstance
+    const handleSubmit = (values: FormValues) => {
+        checkIfTemplateInstanceExists(editingTemplate?.id)
             ? updateMetadataInstance()
             : createMetadataInstance(values.metadata as MetadataTemplateInstance);
     };
@@ -172,8 +172,8 @@ function MetadataSidebarRedesign({
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         onCancel={() => setEditingTemplate(null)}
+                        onSubmit={handleSubmit}
                         onDelete={handleDeleteInstance}
-                        onSubmit={handleSubmitInstance}
                         template={editingTemplate}
                         setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                     />
