@@ -11,6 +11,7 @@ import {
     MetadataEmptyState,
     MetadataInstanceList,
     type FormValues,
+    type JSONPatchOperations,
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
@@ -72,9 +73,10 @@ function MetadataSidebarRedesign({
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
     const {
+        file,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
-        file,
+        handleUpdateMetadataInstance,
         templates,
         errorMessage,
         status,
@@ -113,9 +115,12 @@ function MetadataSidebarRedesign({
         );
     };
 
-    const handleSubmit = async (values: FormValues) => {
-        !isExistingMetadataInstance() &&
-            handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
+    const handleSubmit = async (values: FormValues, operations: JSONPatchOperations) => {
+        isExistingMetadataInstance()
+            ? handleUpdateMetadataInstance(values.metadata as MetadataTemplateInstance, operations, () =>
+                  setEditingTemplate(null),
+              )
+            : handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (

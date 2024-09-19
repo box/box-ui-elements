@@ -721,6 +721,71 @@ class Metadata extends File {
     }
 
     /**
+     * API for patching metadata on file
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {Object} templateInstance - Metadata template instance
+     * @param {Array} operations - Array of JSON patch operations
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    async updateMetadataRedesign(
+        file: BoxItem,
+        templateInstance: MetadataTemplateInstance,
+        operations: JSONPatchOperations,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.errorCode = ERROR_CODE_UPDATE_METADATA;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        const { id, permissions } = file;
+        if (!id || !permissions) {
+            this.errorHandler(getBadItemError());
+            return;
+        }
+
+        const canEdit = !!permissions.can_upload;
+
+        if (!canEdit) {
+            this.errorHandler(getBadPermissionsError());
+            return;
+        }
+
+        try {
+            await this.xhr.put({
+                url: this.getMetadataUrl(id, templateInstance.scope, templateInstance.templateKey),
+                headers: {
+                    [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
+                },
+                id: getTypedFileId(id),
+                data: operations,
+            });
+            if (!this.isDestroyed()) {
+                const cache: APICache = this.getCache();
+                const key = this.getMetadataCacheKey(id);
+                const cachedMetadata = cache.get(key);
+                if (cachedMetadata && cachedMetadata.templateInstances) {
+                    cachedMetadata.templateInstances.splice(
+                        cachedMetadata.templateInstances.findIndex(
+                            instance =>
+                                instance.scope === templateInstance.scope &&
+                                instance.templateKey === templateInstance.templateKey,
+                        ),
+                        1,
+                        templateInstance,
+                    );
+                }
+                this.successHandler();
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
      * API for creating metadata on file
      *
      * @param {BoxItem} file - File object for which we are changing the description
