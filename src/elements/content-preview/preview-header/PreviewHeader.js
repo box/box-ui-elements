@@ -25,7 +25,6 @@ import { bdlGray50 } from '../../../styles/variables';
 import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
 
 import './PreviewHeader.scss';
-import { ContentAnswersProps } from '../../common/content-answers/ContentAnswers';
 
 type Props = {
     canAnnotate: boolean,

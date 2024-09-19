@@ -99,7 +99,7 @@ const ContentAnswersModal = ({
             isCompleted: true,
             isLoading: false,
         };
-        setIsLoading(false);
+
         setQuestions(prevState => {
             return [...prevState.slice(0, -1), errorQuestion];
         });
@@ -107,7 +107,7 @@ const ContentAnswersModal = ({
 
     const handleAsk = useCallback(
         async (question: QuestionType, aiAgent: AgentType, isRetry = false) => {
-            onAsk();
+            !!onAsk && onAsk();
             const id = file && file.id;
             const items = [
                 {
@@ -124,10 +124,11 @@ const ContentAnswersModal = ({
                 created_at: q.created_at,
             }));
 
-            const nextQuestions = [...(isRetry ? questions.slice(0, -1) : questions)];
-            setQuestions([...nextQuestions, question]);
-
+            setQuestions(prevQuestions => {
+                return [...(isRetry ? prevQuestions.slice(0, -1) : prevQuestions), question];
+            });
             setIsLoading(true);
+
             try {
                 const response = await api
                     .getIntelligenceAPI(true)
@@ -153,9 +154,13 @@ const ContentAnswersModal = ({
     );
 
     const handleClearConversation = useCallback(() => {
-        onClearConversation();
+        !!onClearConversation && onClearConversation();
         setQuestions([]);
     }, [onClearConversation]);
+
+    const handleOnRequestClose = useCallback(() => {
+        !!onRequestClose && onRequestClose();
+    }, [onRequestClose]);
 
     const fileName = getProp(file, 'name');
     const currentFileExtension = getProp(file, 'extension');
@@ -172,9 +177,9 @@ const ContentAnswersModal = ({
             isCitationsEnabled={isCitationsEnabled}
             isMarkdownEnabled={isMarkdownEnabled}
             isResetChatEnabled={isResetChatEnabled}
-            onModalClose={onRequestClose}
+            onModalClose={handleOnRequestClose}
             open={isOpen}
-            onOpenChange={onRequestClose}
+            onOpenChange={handleOnRequestClose}
             onClearAction={handleClearConversation}
             questions={questions}
             retryQuestion={handleRetry}
