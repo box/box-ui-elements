@@ -201,7 +201,7 @@ describe('api/Metadata', () => {
                 canEdit: true,
                 displayName: 'Test template',
                 hidden: undefined,
-                id: '321',
+                id: '123456',
                 fields: [
                     {
                         description: 'Test description',
@@ -246,7 +246,7 @@ describe('api/Metadata', () => {
                 canEdit: false,
                 displayName: 'Test template',
                 hidden: undefined,
-                id: '321',
+                id: '123456',
                 fields: [
                     {
                         key: 'testCustomField',

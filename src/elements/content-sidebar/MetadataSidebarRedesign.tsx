@@ -69,12 +69,8 @@ function MetadataSidebarRedesign({
     onError,
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
-    const { deleteMetadataInstance, file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
-        api,
-        fileId,
-        onError,
-        isFeatureEnabled,
-    );
+    const { handleDeleteMetadataInstance, file, templates, errorMessage, status, templateInstances } =
+        useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
     const { formatMessage } = useIntl();
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
@@ -95,7 +91,7 @@ function MetadataSidebarRedesign({
     };
 
     const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
-        deleteMetadataInstance(metadataInstance);
+        handleDeleteMetadataInstance(metadataInstance);
         setEditingTemplate(null);
     };
 

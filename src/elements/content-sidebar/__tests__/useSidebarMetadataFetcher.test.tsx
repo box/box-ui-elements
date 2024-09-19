@@ -143,9 +143,9 @@ describe('useSidebarMetadataFetcher', () => {
         });
 
         const { result } = setupHook();
-        await waitFor(() => expect(result.current.templateInstances).toEqual(mockTemplateInstances));
+        expect(result.current.templateInstances).toEqual(mockTemplateInstances);
 
-        await waitFor(() => result.current.deleteMetadataInstance(mockTemplateInstances[0]));
+        await waitFor(() => result.current.handleDeleteMetadataInstance(mockTemplateInstances[0]));
 
         expect(result.current.templates).toEqual(mockTemplates);
         expect(result.current.templateInstances).toEqual([]);
@@ -161,11 +161,11 @@ describe('useSidebarMetadataFetcher', () => {
         });
 
         const { result } = setupHook();
-        await waitFor(() => expect(result.current.status).toBe(STATUS.SUCCESS));
+        expect(result.current.status).toEqual(STATUS.SUCCESS);
 
-        await waitFor(() => result.current.deleteMetadataInstance(mockTemplateInstances[0]));
+        await waitFor(() => result.current.handleDeleteMetadataInstance(mockTemplateInstances[0]));
 
-        await waitFor(() => expect(result.current.status).toBe(STATUS.ERROR));
+        expect(result.current.status).toEqual(STATUS.ERROR);
         expect(onErrorMock).toHaveBeenCalledWith(
             mockError,
             'metadata_remove_error',
