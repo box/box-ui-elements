@@ -70,7 +70,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             handleDeleteMetadataInstance: jest.fn(),
-            addTemplateInstance: jest.fn(),
+            createMetadataInstance: jest.fn(),
             templates: mockTemplates,
             templateInstances: [],
             errorMessage: null,
@@ -115,7 +115,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             handleDeleteMetadataInstance: jest.fn(),
-            addTemplateInstance: jest.fn(),
+            createMetadataInstance: jest.fn(),
             templateInstances: [],
             templates: [],
             errorMessage: {
@@ -136,7 +136,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with loading indicator', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
-            addTemplateInstance: jest.fn(),
+            createMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             templateInstances: [],
             templates: [],
@@ -179,7 +179,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
-            addTemplateInstance: jest.fn(),
+            createMetadataInstance: jest.fn(),
             updateMetadataInstance: jest.fn(),
         });
 
