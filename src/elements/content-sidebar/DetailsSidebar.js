@@ -33,16 +33,18 @@ import {
     ORIGIN_DETAILS_SIDEBAR,
     IS_ERROR_DISPLAYED,
     SIDEBAR_VIEW_DETAILS,
+    FIELD_METADATA_ARCHIVE,
 } from '../../constants';
 import type { Errors } from '../common/flowTypes';
 import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flowTypes';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';
+import type { FeatureConfig } from '../common/feature-checking';
 import './DetailsSidebar.scss';
+import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 
 type ExternalProps = {
-    archivedAt?: string,
     classification?: ClassificationInfo,
     contentInsights?: ContentInsights,
     elementId: string,
@@ -66,6 +68,7 @@ type ExternalProps = {
     WithLoggerProps;
 type Props = {
     api: API,
+    features: FeatureConfig,
 } & ExternalProps &
     ErrorContextProps &
     WithLoggerProps;
@@ -162,9 +165,16 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         successCallback: (file: BoxItem) => void = this.fetchFileSuccessCallback,
         errorCallback: ElementsErrorCallback = this.fetchFileErrorCallback,
     ): void {
-        const { api, fileId }: Props = this.props;
+        const { api, features, fileId }: Props = this.props;
+        const archiveEnabled = isFeatureEnabled(features, 'contentSidebar.archive.enabled');
+
+        // TODO: replace this with DETAILS_SIDEBAR_FIELDS_TO_FETCH as we do not need all the sidebar fields
+        const fields = archiveEnabled
+            ? SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE)
+            : SIDEBAR_FIELDS_TO_FETCH;
+
         api.getFileAPI().getFile(fileId, successCallback, errorCallback, {
-            fields: SIDEBAR_FIELDS_TO_FETCH, // TODO: replace this with DETAILS_SIDEBAR_FIELDS_TO_FETCH as we do not need all the sidebar fields
+            fields,
         });
     }
 
@@ -411,6 +421,9 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default flow([withLogger(ORIGIN_DETAILS_SIDEBAR), withErrorBoundary(ORIGIN_DETAILS_SIDEBAR), withAPIContext])(
-    DetailsSidebar,
-);
+export default flow([
+    withLogger(ORIGIN_DETAILS_SIDEBAR),
+    withErrorBoundary(ORIGIN_DETAILS_SIDEBAR),
+    withAPIContext,
+    withFeatureConsumer,
+])(DetailsSidebar);

@@ -15,10 +15,9 @@ import { INTERACTION_TARGET, DETAILS_TARGETS } from '../common/interactionTarget
 import withErrorHandling from './withErrorHandling';
 import type { ClassificationInfo } from './flowTypes';
 import type { BoxItem } from '../../common/types/core';
-import { PLACEHOLDER_USER } from '../../constants';
+import { FIELD_METADATA_ARCHIVE, PLACEHOLDER_USER } from '../../constants';
 
 type Props = {
-    archivedAt?: string,
     classification?: ClassificationInfo,
     file: BoxItem,
     hasClassification: boolean,
@@ -31,7 +30,6 @@ type Props = {
 };
 
 const SidebarFileProperties = ({
-    archivedAt,
     file,
     onDescriptionChange,
     hasRetentionPolicy,
@@ -42,7 +40,7 @@ const SidebarFileProperties = ({
 }: Props) => (
     <LoadingIndicatorWrapper isLoading={isLoading}>
         <ItemProperties
-            archivedAt={archivedAt}
+            archivedAt={Number(getProp(file, FIELD_METADATA_ARCHIVE)?.archiveDate) * 1000}
             createdAt={file.content_created_at}
             description={file.description}
             descriptionTextareaProps={{

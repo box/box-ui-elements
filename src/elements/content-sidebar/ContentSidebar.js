@@ -16,12 +16,21 @@ import Internationalize from '../common/Internationalize';
 import Sidebar from './Sidebar';
 import NavRouter from '../common/nav-router';
 import SidebarUtils from './SidebarUtils';
-import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
+import {
+    DEFAULT_HOSTNAME_API,
+    CLIENT_NAME_CONTENT_SIDEBAR,
+    ORIGIN_CONTENT_SIDEBAR,
+    FIELD_METADATA_ARCHIVE,
+} from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
 import { withErrorBoundary } from '../common/error-boundary';
-import { withFeatureProvider } from '../common/feature-checking';
+import {
+    isFeatureEnabled as isFeatureEnabledInContext,
+    withFeatureConsumer,
+    withFeatureProvider,
+} from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -294,12 +303,18 @@ class ContentSidebar extends React.Component<Props, State> {
      * @return {void}
      */
     fetchFile(fetchOptions: RequestOptions = {}): void {
-        const { fileId }: Props = this.props;
+        const { fileId, features }: Props = this.props;
+        const archiveEnabled = isFeatureEnabledInContext(features, 'contentSidebar.archive.enabled');
+        const fields = archiveEnabled
+            ? SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE)
+            : SIDEBAR_FIELDS_TO_FETCH;
+
         this.setState({ isLoading: true });
+
         if (fileId && SidebarUtils.canHaveSidebar(this.props)) {
             this.api.getFileAPI().getFile(fileId, this.fetchFileSuccessCallback, this.errorCallback, {
                 ...fetchOptions,
-                fields: SIDEBAR_FIELDS_TO_FETCH,
+                fields,
             });
         }
     }
@@ -401,6 +416,7 @@ class ContentSidebar extends React.Component<Props, State> {
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
 export default flow([
+    withFeatureConsumer,
     withFeatureProvider,
     withLogger(ORIGIN_CONTENT_SIDEBAR),
     withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),

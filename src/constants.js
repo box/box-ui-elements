@@ -77,6 +77,7 @@ export const HEADER_ACCEPT_LANGUAGE = 'Accept-Language';
 
 /* ------------------ Metadata ---------------------- */
 export const KEY_CLASSIFICATION_TYPE = 'Box__Security__Classification__Key';
+export const METADATA_TEMPLATE_ARCHIVE = 'archivedItemTemplate';
 export const METADATA_TEMPLATE_CLASSIFICATION = 'securityClassification-6VMVochwUWo';
 export const METADATA_TEMPLATE_SKILLS = 'boxSkillsCards';
 export const METADATA_TEMPLATE_PROPERTIES = 'properties';
@@ -135,6 +136,7 @@ export const FIELD_IS_DOWNLOAD_AVAILABLE = 'is_download_available';
 export const FIELD_VERSION_LIMIT = 'version_limit';
 export const FIELD_VERSION_NUMBER = 'version_number';
 export const FIELD_METADATA = 'metadata';
+export const FIELD_METADATA_ARCHIVE = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_ARCHIVE}`;
 export const FIELD_METADATA_SKILLS = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_SKILLS}`;
 export const FIELD_METADATA_PROPERTIES = `${FIELD_METADATA}.${METADATA_SCOPE_GLOBAL}.${METADATA_TEMPLATE_PROPERTIES}`;
 export const FIELD_METADATA_CLASSIFICATION = `${FIELD_METADATA}.${METADATA_SCOPE_ENTERPRISE}.${METADATA_TEMPLATE_CLASSIFICATION}`;

@@ -8,7 +8,6 @@ import EditableURL from './EditableURL';
 import RetentionPolicy from './RetentionPolicy';
 import ReadonlyDescription from './ReadonlyDescription';
 import messages from './messages';
-import { withFeatureConsumer, isFeatureEnabled } from '../../elements/common/feature-checking';
 
 import './ItemProperties.scss';
 
@@ -25,7 +24,6 @@ const ItemProperties = ({
     createdAt,
     description,
     descriptionTextareaProps = {},
-    features,
     enterpriseOwner,
     modifiedAt,
     onDescriptionChange,
@@ -38,7 +36,6 @@ const ItemProperties = ({
     url,
 }) => {
     const descriptionId = uniqueid('description_');
-    const shouldShowArchivedAt = isFeatureEnabled(features, 'details.archivedAt.enabled');
 
     return (
         <dl className="item-properties">
@@ -100,10 +97,12 @@ const ItemProperties = ({
                     </dd>
                 </>
             ) : null}
-            {shouldShowArchivedAt ? (
+            {archivedAt ? (
                 <>
                     <FormattedMessage tagName="dt" {...messages.archived} />
-                    <dd>{archivedAt && <FormattedDate value={new Date(archivedAt)} {...datetimeOptions} />}</dd>
+                    <dd>
+                        <FormattedDate value={new Date(archivedAt)} {...datetimeOptions} />
+                    </dd>
                 </>
             ) : null}
             {size ? (
@@ -127,7 +126,7 @@ const ItemProperties = ({
 
 ItemProperties.propTypes = {
     /** the datetime this item was archived, accepts any value that can be passed to the Date() constructor */
-    archivedAt: PropTypes.string,
+    archivedAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** the datetime this item was created, accepts any value that can be passed to the Date() constructor */
     createdAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** a description for the item */
@@ -156,5 +155,4 @@ ItemProperties.propTypes = {
     url: PropTypes.string,
 };
 
-export { ItemProperties as ItemPropertiesComponent };
-export default withFeatureConsumer(ItemProperties);
+export default ItemProperties;
