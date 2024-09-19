@@ -42,6 +42,7 @@ import {
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
+    METRIC_TYPE_UAA_PARITY_METRIC,
 } from '../../constants';
 import type {
     TaskCompletionRule,

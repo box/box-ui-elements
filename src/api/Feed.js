@@ -89,6 +89,7 @@ import type {
     Tasks,
     ThreadedComments as ThreadedCommentsType,
 } from '../common/types/feed';
+import { collapseFeedState } from '../elements/content-sidebar/activity-feed/activity-feed/activityFeedUtils';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 
@@ -625,7 +626,7 @@ class Feed extends Base {
             annotationsPromise,
         ];
 
-        const fetchV2FeedItems = async (promises: Promise[]) => {
+        const fetchV2FeedItems = async (promises: Promise<FeedItems>[]) => {
             return Promise.all(promises).then(
                 ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
                     const versionsWithCurrent = currentVersion
@@ -636,10 +637,17 @@ class Feed extends Base {
             );
         };
 
-        const compareV2AndUaaFeedItems = async uaaFeedItems => {
+        const compareV2AndUaaFeedItems = async (uaaFeedItems, uaaResponse) => {
             fetchV2FeedItems(v2Promises).then(v2FeedItems => {
+                const transformedV2FeedItems = collapseFeedState(v2FeedItems);
+                const transformedUAAFeedItems = collapseFeedState(uaaFeedItems);
+
                 if (logAPIParity) {
-                    logAPIParity({ uaaFeedItems, v2FeedItems });
+                    logAPIParity({
+                        uaaResponse,
+                        uaaFeedItems: transformedUAAFeedItems,
+                        v2FeedItems: transformedV2FeedItems,
+                    });
                 }
             });
         };
@@ -651,7 +659,8 @@ class Feed extends Base {
                 }
 
                 const uaaFeedItems = getParsedFileActivitiesResponse(response);
-                compareV2AndUaaFeedItems(uaaFeedItems);
+                compareV2AndUaaFeedItems(uaaFeedItems, response);
+                handleFeedItems(uaaFeedItems);
             });
         } else {
             fetchV2FeedItems(v2Promises).then(v2FeedItems => {
