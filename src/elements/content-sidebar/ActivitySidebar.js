@@ -803,19 +803,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @param {{}} parsedDataParity parsed data from UAA and v2
      * @return {void}
      */
-    logAPIParity = (responseParity: {}[], parsedDataParity: {}): void => {
-        const {
-            file: { id: fileId },
-            logger,
-        } = this.props;
+    logAPIParity = (parityData: { uaaFeedItems: FeedItems, v2FeedItems: FeedItems }): void => {
+        const { logger } = this.props;
 
-        logger.onDataReadyMetric(
-            {
-                responseParity,
-                parsedDataParity,
-            },
-            fileId,
-        );
+        logger.onPreviewMetric({
+            parityData,
+            type: METRIC_TYPE_UAA_PARITY_METRIC,
+        });
     };
 
     /**
