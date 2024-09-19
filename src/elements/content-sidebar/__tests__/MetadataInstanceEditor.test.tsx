@@ -33,6 +33,7 @@ describe('MetadataInstanceEditor', () => {
         onDelete: jest.fn(),
         onSubmit: jest.fn(),
         setIsUnsavedChangesModalOpen: jest.fn(),
+        onUnsavedChangesModalCancel: jest.fn(),
     };
 
     test('should render MetadataInstanceForm with correct props', () => {
