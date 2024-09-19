@@ -19,7 +19,7 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
-    createMetadataInstance: (templateInstance: MetadataTemplateInstance) => void;
+    createMetadataInstance: (templateInstance: MetadataTemplateInstance, successCallback: () => void) => void;
     errorMessage: MessageDescriptor | null;
     file: BoxItem | null;
     handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
@@ -151,22 +151,18 @@ function useSidebarMetadataFetcher(
         // to be implemented in the next ticket
     };
 
-    const onCreateSuccessHandler = React.useCallback((templateInstance: MetadataTemplateInstance): void => {
-        setTemplateInstances(prevTemplateInstances => [...prevTemplateInstances, templateInstance]);
-    }, []);
-
     const createMetadataInstance = React.useCallback(
-        (template: MetadataTemplateInstance): void => {
+        (template: MetadataTemplateInstance, successCallback): void => {
             api.getMetadataAPI(false).createMetadata(
                 file,
                 template,
-                onCreateSuccessHandler,
+                successCallback,
                 (error: ElementsXhrError, code: string) =>
                     onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
                 true,
             );
         },
-        [api, file, onApiError, onCreateSuccessHandler],
+        [api, file, onApiError],
     );
 
     React.useEffect(() => {

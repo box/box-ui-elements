@@ -763,7 +763,16 @@ class Metadata extends File {
 
         try {
             const fieldsValues = isMetadataRedesign
-                ? Object.fromEntries(template.fields.map(obj => [obj.key, obj.value])) || []
+                ? Object.fromEntries(
+                      template.fields.map(obj => {
+                          let { value } = obj;
+                          // API does not accept string for float type
+                          if (obj.type === 'float' && value) value = parseFloat(obj.value);
+                          // API does not accept empty string for enum type
+                          if (obj.type === 'enum' && value.length === 0) value = undefined;
+                          return [obj.key, value];
+                      }),
+                  )
                 : {};
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),

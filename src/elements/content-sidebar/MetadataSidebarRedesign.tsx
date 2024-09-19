@@ -127,7 +127,7 @@ function MetadataSidebarRedesign({
     const handleSubmit = (values: FormValues) => {
         checkIfTemplateInstanceExists(editingTemplate?.id)
             ? updateMetadataInstance()
-            : createMetadataInstance(values.metadata as MetadataTemplateInstance);
+            : createMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
