@@ -113,11 +113,9 @@ class FolderUpload {
      * Build folder tree from dataTransferItem, which can only represent 1 folder tree
      *
      * @param {DataTransferItem | UploadDataTransferItemWithAPIOptions} dataTransferItem
-     * @returns {Promise<any>}
+     * @returns {void}
      */
-    async buildFolderTreeFromDataTransferItem(
-        dataTransferItem: DataTransferItem | UploadDataTransferItemWithAPIOptions,
-    ) {
+    buildFolderTreeFromDataTransferItem(dataTransferItem: DataTransferItem | UploadDataTransferItemWithAPIOptions) {
         const item = getDataTransferItem(dataTransferItem);
         const apiOptions = getDataTransferItemAPIOptions(dataTransferItem);
         const entry = getEntryFromDataTransferItem(item);
