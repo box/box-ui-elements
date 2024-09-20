@@ -16,15 +16,10 @@ import Internationalize from '../common/Internationalize';
 import Sidebar from './Sidebar';
 import NavRouter from '../common/nav-router';
 import SidebarUtils from './SidebarUtils';
-import {
-    DEFAULT_HOSTNAME_API,
-    CLIENT_NAME_CONTENT_SIDEBAR,
-    ORIGIN_CONTENT_SIDEBAR,
-    FIELD_METADATA_ARCHIVE,
-} from '../../constants';
+import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
 import { withErrorBoundary } from '../common/error-boundary';
 import {
     isFeatureEnabled as isFeatureEnabledInContext,
@@ -305,9 +300,7 @@ class ContentSidebar extends React.Component<Props, State> {
     fetchFile(fetchOptions: RequestOptions = {}): void {
         const { fileId, features }: Props = this.props;
         const archiveEnabled = isFeatureEnabledInContext(features, 'contentSidebar.archive.enabled');
-        const fields = archiveEnabled
-            ? SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE)
-            : SIDEBAR_FIELDS_TO_FETCH;
+        const fields = archiveEnabled ? SIDEBAR_FIELDS_TO_FETCH_ARCHIVE : SIDEBAR_FIELDS_TO_FETCH;
 
         this.setState({ isLoading: true });
 

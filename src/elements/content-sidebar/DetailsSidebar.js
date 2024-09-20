@@ -24,7 +24,7 @@ import { EVENT_JS_READY } from '../common/logger/constants';
 import { getBadItemError } from '../../utils/error';
 import { mark } from '../../utils/performance';
 import { SECTION_TARGETS } from '../common/interactionTargets';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
@@ -33,7 +33,6 @@ import {
     ORIGIN_DETAILS_SIDEBAR,
     IS_ERROR_DISPLAYED,
     SIDEBAR_VIEW_DETAILS,
-    FIELD_METADATA_ARCHIVE,
 } from '../../constants';
 import type { Errors } from '../common/flowTypes';
 import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flowTypes';
@@ -169,9 +168,7 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         const archiveEnabled = isFeatureEnabled(features, 'contentSidebar.archive.enabled');
 
         // TODO: replace this with DETAILS_SIDEBAR_FIELDS_TO_FETCH as we do not need all the sidebar fields
-        const fields = archiveEnabled
-            ? SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE)
-            : SIDEBAR_FIELDS_TO_FETCH;
+        const fields = archiveEnabled ? SIDEBAR_FIELDS_TO_FETCH_ARCHIVE : SIDEBAR_FIELDS_TO_FETCH;
 
         api.getFileAPI().getFile(fileId, successCallback, errorCallback, {
             fields,

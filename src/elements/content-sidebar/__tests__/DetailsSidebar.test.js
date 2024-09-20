@@ -2,10 +2,9 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import messages from '../../common/messages';
 import { getBadItemError } from '../../../utils/error';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
 import { isFeatureEnabled } from '../../common/feature-checking';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
-import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
@@ -434,7 +433,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 instance.fetchFileSuccessCallback,
                 instance.fetchFileErrorCallback,
                 {
-                    fields: SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE),
+                    fields: SIDEBAR_FIELDS_TO_FETCH_ARCHIVE,
                 },
             );
         });

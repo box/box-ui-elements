@@ -1,11 +1,10 @@
 import React, { act } from 'react';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
 import { ContentSidebarComponent as ContentSidebar } from '../ContentSidebar';
 import SidebarUtils from '../SidebarUtils';
 import { isFeatureEnabled } from '../../common/feature-checking';
-import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
@@ -144,7 +143,7 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             instance.fetchFile();
             expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
             expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, instance.errorCallback, {
-                fields: SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE),
+                fields: SIDEBAR_FIELDS_TO_FETCH_ARCHIVE,
             });
             expect(instance.setState).toBeCalled();
         });
