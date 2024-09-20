@@ -10,7 +10,6 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
     const getWrapper = props => shallow(<SidebarFilePropertiesComponent {...props} />);
     const getMountWrapper = props => mount(<SidebarFilePropertiesComponent {...props} />);
     const props = {
-        archivedAt: '2018-04-18T16:56:05.352Z',
         file: {
             content_created_at: '2018-04-18T16:56:05.352Z',
             content_modified_at: '2018-04-18T16:56:05.352Z',
