@@ -345,7 +345,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            archivedAt,
             classification,
             contentInsights,
             elementId,
@@ -403,7 +402,6 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
                     >
                         {hasVersions && <SidebarVersions file={file} onVersionHistoryClick={onVersionHistoryClick} />}
                         <SidebarFileProperties
-                            archivedAt={archivedAt}
                             file={file}
                             onDescriptionChange={this.onDescriptionChange}
                             {...fileError}
