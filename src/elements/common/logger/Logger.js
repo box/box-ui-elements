@@ -133,13 +133,12 @@ class Logger extends React.Component<Props> {
                 ...data,
                 type: METRIC_TYPE_UAA_PARITY_METRIC,
             });
-            return;
+        } else {
+            onMetric({
+                ...data,
+                type: METRIC_TYPE_PREVIEW,
+            });
         }
-
-        onMetric({
-            ...data,
-            type: METRIC_TYPE_PREVIEW,
-        });
     };
 
     /**

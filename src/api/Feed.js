@@ -626,7 +626,7 @@ class Feed extends Base {
             annotationsPromise,
         ];
 
-        const fetchV2FeedItems = async (promises: Promise<FeedItems>[]) => {
+        const fetchV2FeedItems = async promises => {
             return Promise.all(promises).then(
                 ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
                     const versionsWithCurrent = currentVersion
