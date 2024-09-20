@@ -1,17 +1,14 @@
 import React, { act } from 'react';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
-import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
 import { ContentSidebarComponent as ContentSidebar } from '../ContentSidebar';
-import SidebarUtils from '../SidebarUtils';
 import { isFeatureEnabled } from '../../common/feature-checking';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
+import SidebarUtils from '../SidebarUtils';
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
-jest.mock('../../common/feature-checking', () => ({
-    ...jest.requireActual('../../common/feature-checking'),
-    isFeatureEnabled: jest.fn(),
-}));
+jest.mock('../../common/feature-checking');
 
 const file = {
     id: 'I_AM_A_FILE',

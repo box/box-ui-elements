@@ -22,6 +22,7 @@ import SidebarSection from './SidebarSection';
 import SidebarVersions from './SidebarVersions';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { getBadItemError } from '../../utils/error';
+import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import { mark } from '../../utils/performance';
 import { SECTION_TARGETS } from '../common/interactionTargets';
 import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
@@ -41,7 +42,6 @@ import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from 
 import type { BoxItem } from '../../common/types/core';
 import type { FeatureConfig } from '../common/feature-checking';
 import './DetailsSidebar.scss';
-import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 
 type ExternalProps = {
     classification?: ClassificationInfo,

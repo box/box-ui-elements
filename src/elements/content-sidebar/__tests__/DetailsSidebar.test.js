@@ -10,10 +10,7 @@ jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
 jest.mock('../SidebarClassification', () => 'SidebarClassification');
 jest.mock('../SidebarContentInsights', () => 'SidebarContentInsights');
-jest.mock('../../common/feature-checking', () => ({
-    ...jest.requireActual('../../common/feature-checking'),
-    isFeatureEnabled: jest.fn(),
-}));
+jest.mock('../../common/feature-checking');
 
 const file = {
     id: 'foo',
