@@ -3,12 +3,18 @@ import * as React from 'react';
 import messages from '../../common/messages';
 import { getBadItemError } from '../../../utils/error';
 import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
+import { isFeatureEnabled } from '../../common/feature-checking';
 import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
+import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
 jest.mock('../SidebarClassification', () => 'SidebarClassification');
 jest.mock('../SidebarContentInsights', () => 'SidebarContentInsights');
+jest.mock('../../common/feature-checking', () => ({
+    ...jest.requireActual('../../common/feature-checking'),
+    isFeatureEnabled: jest.fn(),
+}));
 
 const file = {
     id: 'foo',
@@ -416,6 +422,19 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 instance.fetchFileErrorCallback,
                 {
                     fields: SIDEBAR_FIELDS_TO_FETCH,
+                },
+            );
+        });
+
+        test('should fetch the file info with archive metadata field when feature is enabled', () => {
+            isFeatureEnabled.mockReturnValueOnce(true);
+            instance.fetchFile();
+            expect(getFile).toHaveBeenCalledWith(
+                file.id,
+                instance.fetchFileSuccessCallback,
+                instance.fetchFileErrorCallback,
+                {
+                    fields: SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE),
                 },
             );
         });

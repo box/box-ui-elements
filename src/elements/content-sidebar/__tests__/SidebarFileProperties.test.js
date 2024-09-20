@@ -20,6 +20,13 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
             created_by: {
                 name: 'foo',
             },
+            metadata: {
+                global: {
+                    archivedItemTemplate: {
+                        archiveDate: '1726832355',
+                    },
+                },
+            },
             size: '1',
             permissions: {
                 can_rename: true,
