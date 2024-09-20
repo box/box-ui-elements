@@ -291,11 +291,6 @@ const messages = defineMessages({
         description: 'Description of an open shared link',
         id: 'boxui.unifiedShare.peopleWithLinkDescription',
     },
-    peopleWithLinkSignedInRequiredDescription: {
-        defaultMessage: 'Publicly accessible, sign-in required',
-        description: 'Description of an open shared link with signed required',
-        id: 'boxui.unifiedShare.peopleWithLinkSignedInRequiredDescription',
-    },
     peopleInSpecifiedCompanyCanAccessFolder: {
         defaultMessage: 'Anyone at {company} with the link or people invited to this folder can access',
         description: 'Description of a specific company shared link for a folder. {company} is the company name',

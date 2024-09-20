@@ -13,6 +13,10 @@
     height: 0; /* allows elements around notifications to be clickable */
 }
 
+.notification-container {
+    height: 0;
+}
+
 .notification {
     display: flex;
     align-items: center;

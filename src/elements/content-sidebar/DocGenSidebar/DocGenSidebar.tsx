@@ -1,7 +1,9 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
-import { injectIntl, IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
+
+import { LoadingIndicator } from '@box/blueprint-web';
 
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
@@ -12,7 +14,6 @@ import { withAPIContext } from '../../common/api-context';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withErrorBoundary } from '../../common/error-boundary';
-import LoadingIndicator from '../../../components/loading-indicator';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { withLogger } from '../../common/logger';
@@ -27,6 +28,7 @@ import messages from './messages';
 import { ErrorContextProps } from '../../../common/types/api';
 // @ts-ignore: no ts definition
 import { WithLoggerProps } from '../../../common/types/logging';
+import commonMessages from '../../common/messages';
 
 import './DocGenSidebar.scss';
 import { DocGenTag, DocGenTemplateTagsResponse, JsonPathsMap } from './types';
@@ -38,11 +40,7 @@ type ExternalProps = {
     checkDocGenTemplate: void;
 };
 
-type Props = {
-    intl: IntlShape;
-} & ExternalProps &
-    ErrorContextProps &
-    WithLoggerProps;
+type Props = ExternalProps & ErrorContextProps & WithLoggerProps;
 
 type TagState = {
     text: DocGenTag[];
@@ -54,7 +52,9 @@ type JsonPathsState = {
     imageTree: JsonPathsMap;
 };
 
-const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
+const DocGenSidebar = ({ getDocGenTags }: Props) => {
+    const { formatMessage } = useIntl();
+
     const [hasError, setHasError] = React.useState<boolean>(false);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [tags, setTags] = React.useState<TagState>({
@@ -124,10 +124,15 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
     const isEmpty = tags.image.length + tags.text.length === 0;
 
     return (
-        <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={intl.formatMessage(messages.docGenTags)}>
+        <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={formatMessage(messages.docGenTags)}>
             <div className={classNames('bcs-DocGenSidebar', { center: isEmpty || hasError || isLoading })}>
                 {hasError && <Error onClick={loadTags} />}
-                {isLoading && <LoadingIndicator className="bcs-DocGenSidebar-loading" />}
+                {isLoading && (
+                    <LoadingIndicator
+                        aria-label={formatMessage(commonMessages.loading)}
+                        className="bcs-DocGenSidebar-loading"
+                    />
+                )}
                 {!hasError && !isLoading && isEmpty && <EmptyTags />}
                 {!hasError && !isLoading && !isEmpty && (
                     <>
@@ -142,6 +147,6 @@ const DocGenSidebar = ({ intl, getDocGenTags }: Props) => {
 
 export type DocGenSidebarProps = ExternalProps;
 export { DocGenSidebar as DocGenSidebarComponent };
-export default injectIntl(
-    flow([withLogger(ORIGIN_DOCGEN_SIDEBAR), withErrorBoundary(ORIGIN_DOCGEN_SIDEBAR), withAPIContext])(DocGenSidebar),
+export default flow([withLogger(ORIGIN_DOCGEN_SIDEBAR), withErrorBoundary(ORIGIN_DOCGEN_SIDEBAR), withAPIContext])(
+    DocGenSidebar,
 );

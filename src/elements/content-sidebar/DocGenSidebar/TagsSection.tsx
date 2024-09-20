@@ -17,12 +17,13 @@ const TagsSection = ({ data, message }: Props) => {
     }
 
     return (
-        <div className="bcs-TagsSection">
+        <div className="bcs-TagsSection" data-testid="bcs-TagsSection">
             <span className="bcs-TagsSection-header">
                 <FormattedMessage {...message} />
             </span>
-
-            <TagTree data={data} />
+            <div className="bcs-TagsSection-accordion-wrapper">
+                <TagTree data={data} />
+            </div>
         </div>
     );
 };
