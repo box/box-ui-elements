@@ -112,6 +112,7 @@ const SIDEBAR_FIELDS_TO_FETCH: Array<string> = [
     FIELD_UPLOADER_DISPLAY_NAME,
 ];
 
+// Fields needed for sidebar of file in archive
 const SIDEBAR_FIELDS_TO_FETCH_ARCHIVE: Array<string> = SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE);
 
 // Fields needed for preview
