@@ -4,13 +4,17 @@ import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import ActivitySidebarFilter from '../ActivitySidebarFilter';
 import { filterableActivityFeedItems, formattedReplies } from '../fixtures';
-import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
+import {
+    FEED_ITEM_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_ANNOTATION,
+    FILE_ACTIVITY_TYPE_APP_ACTIVITY,
+    FILE_ACTIVITY_TYPE_COMMENT,
+    FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
+} from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
-
-// const mockReplace = jest.fn();
-// jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const userError = 'Bad box user!';
 
@@ -26,6 +30,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         deleteTaskNew: jest.fn(),
         deleteThreadedComment: jest.fn(),
         feedItems: jest.fn(),
+        fetchFileActivities: jest.fn(),
         fetchReplies: jest.fn(),
         fetchThreadedComment: jest.fn(),
         updateAnnotation: jest.fn(),
@@ -1500,35 +1505,58 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         });
     });
 
-    describe('getFilteredFeedItems()', () => {
-        const {
-            annotationOpen: expectedAnnotationOpen,
-            annotationResolved: expectedAnnotationResolved,
-            commentOpen: expectedCommentOpen,
-            commentResolved: expectedCommentResolved,
-            taskItem: expectedTaskItem,
-            versionItem: expectedVersionItem,
-        } = filterableActivityFeedItems;
-
+    describe('getFilters()', () => {
         test.each`
             status        | expected
-            ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
-            ${'open'}     | ${[expectedAnnotationOpen, expectedCommentOpen, expectedVersionItem]}
-            ${'resolved'} | ${[expectedAnnotationResolved, expectedCommentResolved, expectedVersionItem]}
-            ${'task'}     | ${[expectedTaskItem, expectedVersionItem]}
+            ${undefined}  | ${[FILE_ACTIVITY_TYPE_ANNOTATION, FILE_ACTIVITY_TYPE_APP_ACTIVITY, FILE_ACTIVITY_TYPE_COMMENT, FILE_ACTIVITY_TYPE_TASK, FILE_ACTIVITY_TYPE_VERSION]}
+            ${'open'}     | ${[FILE_ACTIVITY_TYPE_ANNOTATION, FILE_ACTIVITY_TYPE_COMMENT, FILE_ACTIVITY_TYPE_VERSION]}
+            ${'resolved'} | ${[FILE_ACTIVITY_TYPE_ANNOTATION, FILE_ACTIVITY_TYPE_COMMENT, FILE_ACTIVITY_TYPE_VERSION]}
+            ${'task'}     | ${[FILE_ACTIVITY_TYPE_TASK, FILE_ACTIVITY_TYPE_VERSION]}
+        `('should return the correct filters when status equals to $status', ({ status, expected }) => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+
+            instance.setState({
+                feedItemsStatusFilter: status,
+            });
+
+            expect(instance.getFilters(status)).toMatchObject(expected);
+        });
+    });
+
+    describe('getFilteredFeedItems()', () => {
+        const {
+            annotationOpen,
+            annotationResolved,
+            commentOpen,
+            commentResolved,
+            taskItem,
+            versionItem,
+        } = filterableActivityFeedItems;
+
+        const expectedAnnotationOpen = cloneDeep(annotationOpen.source.annotation);
+        const expectedAnnotationResolved = cloneDeep(annotationResolved.source.annotation);
+        const expectedCommentOpen = cloneDeep(commentOpen.source.comment);
+        const expectedCommentResolved = cloneDeep(commentResolved.source.comment);
+        const expectedTaskItem = { assigned_to: cloneDeep(taskItem.source.task.assigned_to) };
+        const expectedVersionItem = cloneDeep(versionItem.source.versions);
+
+        test.each`
+            status        | entries                                                                                      | expected
+            ${undefined}  | ${[annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem, versionItem]} | ${[expectedVersionItem, expectedTaskItem, expectedCommentResolved, expectedCommentOpen, expectedAnnotationResolved, expectedAnnotationOpen]}
+            ${'open'}     | ${[annotationOpen, annotationResolved, commentOpen, commentResolved, versionItem]}           | ${[expectedVersionItem, expectedCommentOpen, expectedAnnotationOpen]}
+            ${'resolved'} | ${[annotationOpen, annotationResolved, commentOpen, commentResolved, versionItem]}           | ${[expectedVersionItem, expectedCommentResolved, expectedAnnotationResolved]}
+            ${'task'}     | ${[taskItem, versionItem]}                                                                   | ${[expectedVersionItem, expectedTaskItem]}
         `(
-            'should filter feed items of type "comment" or "annotation" based on status equal to $status',
-            ({ status, expected }) => {
-                const {
-                    annotationOpen,
-                    annotationResolved,
-                    commentOpen,
-                    commentResolved,
-                    taskItem,
-                    versionItem,
-                } = cloneDeep(filterableActivityFeedItems);
+            'should correctly filter feed items when status is equal to $status',
+            async ({ status, entries, expected }) => {
                 const wrapper = getWrapper();
                 const instance = wrapper.instance();
+
+                api.getFeedAPI().fetchFileActivities = jest
+                    .fn()
+                    .mockImplementationOnce(() => Promise.resolve({ entries }));
+
                 instance.setState({
                     feedItems: [
                         annotationOpen,
@@ -1542,7 +1570,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 instance.setState({
                     feedItemsStatusFilter: status,
                 });
-                expect(instance.getFilteredFeedItems()).toMatchObject(expected);
+
+                await instance.getFilteredFeedItems();
+
+                expect(instance.state.feedItems).toMatchObject(expected);
             },
         );
     });
@@ -1561,8 +1592,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const wrapper = getWrapper({ onFilterChange: mockOnFilterChange });
                 const instance = wrapper.instance();
                 instance.setState = jest.fn();
+                instance.getFilteredFeedItems = jest.fn();
                 instance.handleItemsFiltered(status);
-                expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
+                expect(instance.setState).toBeCalledWith(
+                    { feedItemsStatusFilter: expected },
+                    instance.getFilteredFeedItems,
+                );
                 expect(mockOnFilterChange).toBeCalledWith(expected);
             },
         );
