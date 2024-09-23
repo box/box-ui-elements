@@ -85,7 +85,7 @@ const FOLDER_FIELDS_TO_FETCH = [
 ];
 
 // Fields needed for the sidebar
-const SIDEBAR_FIELDS_TO_FETCH: Array<string> = [
+const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_ID,
     FIELD_NAME,
     FIELD_SIZE,
@@ -113,7 +113,7 @@ const SIDEBAR_FIELDS_TO_FETCH: Array<string> = [
 ];
 
 // Fields needed for sidebar of file in archive
-const SIDEBAR_FIELDS_TO_FETCH_ARCHIVE: Array<string> = SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE);
+const SIDEBAR_FIELDS_TO_FETCH_ARCHIVE = SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE);
 
 // Fields needed for preview
 const PREVIEW_FIELDS_TO_FETCH = [
