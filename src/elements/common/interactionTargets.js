@@ -1,5 +1,6 @@
 // @flow strict
 export const SIDEBAR_NAV_TARGETS = {
+    BOXAI: 'sidebarboxai',
     ACTIVITY: 'sidebaractivity',
     DETAILS: 'sidebardetails',
     SIGN: 'sidebarsign',

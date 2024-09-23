@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
+import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
 import AdditionalTabs from '../additional-tabs';
 import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
@@ -31,6 +32,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             hasSkills: true,
         };
         const wrapper = getWrapper(props);
+        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
         expect(wrapper.find(IconMagicWand)).toHaveLength(1);
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
@@ -42,6 +44,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             hasDetails: true,
         };
         const wrapper = getWrapper(props);
+        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(1);
@@ -53,6 +56,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             hasActivity: true,
         };
         const wrapper = getWrapper(props);
+        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
@@ -64,8 +68,21 @@ describe('elements/content-sidebar/SidebarNav', () => {
             hasMetadata: true,
         };
         const wrapper = getWrapper(props);
+        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
         expect(wrapper.find(IconMagicWand)).toHaveLength(0);
         expect(wrapper.find(IconMetadataThick)).toHaveLength(1);
+        expect(wrapper.find(IconDocInfo)).toHaveLength(0);
+        expect(wrapper.find(IconChatRound)).toHaveLength(0);
+    });
+
+    test('should render box ai tab', () => {
+        const props = {
+            hasBoxAI: true,
+        };
+        const wrapper = getWrapper(props);
+        expect(wrapper.find(BoxAiLogo)).toHaveLength(1);
+        expect(wrapper.find(IconMagicWand)).toHaveLength(0);
+        expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
     });
@@ -75,13 +92,15 @@ describe('elements/content-sidebar/SidebarNav', () => {
             hasActivity: true,
             hasMetadata: true,
             hasSkills: true,
+            hasBoxAI: true,
         };
         const wrapper = getWrapper(props, 'activity');
         expect(wrapper.find(IconMagicWand)).toHaveLength(1);
         expect(wrapper.find(IconMetadataThick)).toHaveLength(1);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(1);
-        expect(wrapper.find(SidebarNavButton)).toHaveLength(3);
+        expect(wrapper.find(BoxAiLogo)).toHaveLength(1);
+        expect(wrapper.find(SidebarNavButton)).toHaveLength(4);
     });
 
     test('should render the additional tabs loading state', () => {
@@ -119,6 +138,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
+        expect(wrapper.find(BoxAiLogo)).toHaveLength(0);
         expect(wrapper.find(DocGenIcon)).toHaveLength(1);
     });
 });

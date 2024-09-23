@@ -7,6 +7,8 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
+import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -25,6 +27,7 @@ import {
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
@@ -34,6 +37,7 @@ type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
     elementId: string,
     fileId: string,
+    hasBoxAI: boolean,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
     hasDetails: boolean,
@@ -49,6 +53,7 @@ const SidebarNav = ({
     additionalTabs,
     elementId,
     fileId,
+    hasBoxAI,
     hasActivity,
     hasAdditionalTabs,
     hasDetails,
@@ -65,6 +70,16 @@ const SidebarNav = ({
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
             <div className="bcs-SidebarNav-tabs">
                 <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
+                    {hasBoxAI && (
+                        <SidebarNavButton
+                            data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
+                            data-testid="sidebarboxai"
+                            sidebarView={SIDEBAR_VIEW_BOXAI}
+                            tooltip={intl.formatMessage(messages.sidebarBoxAITitle)}
+                        >
+                            <BoxAiLogo height={Size5} width={Size5} />
+                        </SidebarNavButton>
+                    )}
                     {hasActivity && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}

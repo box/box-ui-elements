@@ -24,6 +24,7 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
+import type { BoxAISidebarProps } from './BoxAISidebarProps';
 import type { VersionsSidebarProps } from './versions';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
@@ -46,6 +47,7 @@ type Props = {
     fileId: string,
     getPreview: Function,
     getViewer: Function,
+    hasBoxAI: boolean,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
@@ -57,6 +59,7 @@ type Props = {
     isLoading?: boolean,
     location: Location,
     metadataEditors?: Array<MetadataEditor>,
+    boxAISidebarProps: BoxAISidebarProps,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
     onVersionChange?: Function,
@@ -257,6 +260,7 @@ class Sidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasAdditionalTabs,
+            boxAISidebarProps,
             hasNav,
             hasVersions,
             isDefaultOpen,
@@ -268,6 +272,7 @@ class Sidebar extends React.Component<Props, State> {
             versionsSidebarProps,
         }: Props = this.props;
         const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
+        const hasBoxAI = SidebarUtils.canHaveBoxAISidebar(this.props);
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
@@ -290,6 +295,7 @@ class Sidebar extends React.Component<Props, State> {
                                 additionalTabs={additionalTabs}
                                 elementId={this.id}
                                 fileId={fileId}
+                                hasBoxAI={hasBoxAI}
                                 hasActivity={hasActivity}
                                 hasAdditionalTabs={hasAdditionalTabs}
                                 hasDetails={hasDetails}
@@ -310,6 +316,7 @@ class Sidebar extends React.Component<Props, State> {
                             fileId={fileId}
                             getPreview={getPreview}
                             getViewer={getViewer}
+                            hasBoxAI={hasBoxAI}
                             hasActivity={hasActivity}
                             hasDetails={hasDetails}
                             hasDocGen={docGenSidebarProps.isDocGenTemplate}
@@ -319,6 +326,7 @@ class Sidebar extends React.Component<Props, State> {
                             isOpen={isOpen}
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
+                            boxAISidebarProps={boxAISidebarProps}
                             onAnnotationSelect={onAnnotationSelect}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}

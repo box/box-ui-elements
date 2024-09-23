@@ -452,6 +452,11 @@ const messages = defineMessages({
         description: 'Generic error content for skills editing.',
         defaultMessage: 'An error has occurred while updating skills. Please refresh the page and try again.',
     },
+    sidebarBoxAITitle: {
+        id: 'be.sidebarBoxAITitle',
+        description: 'Title for the preview Box AI feed.',
+        defaultMessage: 'Box AI',
+    },
     sidebarActivityTitle: {
         id: 'be.sidebarActivityTitle',
         description: 'Title for the preview activity feed.',

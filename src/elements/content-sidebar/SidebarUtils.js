@@ -19,6 +19,7 @@ import {
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA_REDESIGN,
+    SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { MetadataEditor } from '../../common/types/metadata';
@@ -46,6 +47,17 @@ class SidebarUtils {
      */
     static canHaveMetadataSidebar(props: ContentSidebarProps): boolean {
         return !!props.hasMetadata;
+    }
+
+    /**
+     * Determines if we can render the Box AI sidebar.
+     * Only relies on props.
+     *
+     * @param {ContentSidebarProps} props - User passed in props
+     * @return {Boolean} true if we should render
+     */
+    static canHaveBoxAISidebar(props: ContentSidebarProps): boolean {
+        return !!props.hasBoxAI;
     }
 
     /**
@@ -81,6 +93,7 @@ class SidebarUtils {
         return (
             SidebarUtils.canHaveDetailsSidebar(props) ||
             SidebarUtils.canHaveActivitySidebar(props) ||
+            SidebarUtils.canHaveBoxAISidebar(props) ||
             SidebarUtils.canHaveSkillsSidebar(props) ||
             SidebarUtils.canHaveMetadataSidebar(props)
         );
@@ -133,6 +146,7 @@ class SidebarUtils {
             (SidebarUtils.canHaveDetailsSidebar(props) ||
                 SidebarUtils.shouldRenderSkillsSidebar(props, file) ||
                 SidebarUtils.canHaveActivitySidebar(props) ||
+                SidebarUtils.canHaveBoxAISidebar(props) ||
                 SidebarUtils.shouldRenderMetadataSidebar(props, editors))
         );
     }
@@ -151,6 +165,8 @@ class SidebarUtils {
                 return <FormattedMessage {...messages.sidebarDetailsTitle} />;
             case SIDEBAR_VIEW_METADATA:
                 return <FormattedMessage {...messages.sidebarMetadataTitle} />;
+            case SIDEBAR_VIEW_BOXAI:
+                return <FormattedMessage {...messages.sidebarBoxAITitle} />;
             case SIDEBAR_VIEW_ACTIVITY:
                 return <FormattedMessage {...messages.sidebarActivityTitle} />;
             case SIDEBAR_VIEW_DOCGEN:
@@ -187,6 +203,9 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_ACTIVITY:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "activity-sidebar" */ './ActivitySidebar');
+                break;
+            case SIDEBAR_VIEW_BOXAI:
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "boxai-sidebar" */ './BoxAISidebar');
                 break;
             case SIDEBAR_VIEW_VERSIONS:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "versions-sidebar" */ './versions');

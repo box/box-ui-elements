@@ -17,6 +17,7 @@ export default {
         features: global.FEATURES,
         fileId: global.FILE_ID,
         hasActivityFeed: true,
+        hasBoxAI: true,
         hasMetadata: true,
         hasSkills: true,
         hasVersions: true,
