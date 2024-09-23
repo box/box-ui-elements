@@ -5,13 +5,15 @@ import React from 'react';
 export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
     isUnsavedChangesModalOpen: boolean;
-    template: MetadataTemplateInstance;
     onCancel: () => void;
+    onDelete: (metadataInstance: MetadataTemplateInstance) => void;
+    template: MetadataTemplateInstance;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
     isUnsavedChangesModalOpen,
+    onDelete,
     template,
     onCancel,
 }) => {
@@ -21,9 +23,6 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     const handleCancel = () => {
         onCancel();
     };
-    const handleDelete = () => {
-        // TODO in a future PR
-    };
 
     return (
         <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
@@ -32,7 +31,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 isLoading={false}
                 selectedTemplateInstance={template}
                 onCancel={handleCancel}
-                onDelete={handleDelete}
+                onDelete={onDelete}
                 onSubmit={handleSubmit}
                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 setIsUnsavedChangesModalOpen={noop}

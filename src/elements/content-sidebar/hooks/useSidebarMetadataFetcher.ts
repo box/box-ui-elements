@@ -5,7 +5,7 @@ import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metad
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
-import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD} from '../../../constants';
+import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 
 import messages from '../../common/messages';
 
@@ -19,8 +19,9 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
-    file: BoxItem | null;
     errorMessage: MessageDescriptor | null;
+    file: BoxItem | null;
+    handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
@@ -115,6 +116,35 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
+    const deleteMetadataInstanceSuccessCallback = React.useCallback(
+        (metadataInstance: MetadataTemplateInstance) => {
+            const updatedInstances = templateInstances.filter(
+                templateInstance =>
+                    templateInstance.scope !== metadataInstance.scope &&
+                    templateInstance.templateKey !== metadataInstance.templateKey,
+            );
+            setTemplateInstances(updatedInstances);
+        },
+        [templateInstances],
+    );
+
+    const handleDeleteMetadataInstance = React.useCallback(
+        (metadataInstance: MetadataTemplateInstance) => {
+            if (!file || !metadataInstance) {
+                return;
+            }
+
+            api.getMetadataAPI(false).deleteMetadata(
+                file,
+                metadataInstance,
+                deleteMetadataInstanceSuccessCallback,
+                onApiError,
+                true,
+            );
+        },
+        [api, onApiError, file, deleteMetadataInstanceSuccessCallback],
+    );
+
     React.useEffect(() => {
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
@@ -126,8 +156,9 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
-        file,
         errorMessage,
+        file,
+        handleDeleteMetadataInstance,
         status,
         templateInstances,
         templates,
