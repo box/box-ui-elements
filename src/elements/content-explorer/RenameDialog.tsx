@@ -102,6 +102,9 @@ const RenameDialog = ({ errorCode, isLoading, isOpen, item, onCancel, onRename, 
                     />
                 </Modal.Body>
                 <Modal.Footer>
+                    <Modal.Footer.SecondaryButton disabled={isLoading} onClick={onCancel}>
+                        {formatMessage(messages.cancel)}
+                    </Modal.Footer.SecondaryButton>
                     <Modal.Footer.PrimaryButton
                         loading={isLoading}
                         loadingAriaLabel={formatMessage(messages.loading)}
@@ -109,9 +112,6 @@ const RenameDialog = ({ errorCode, isLoading, isOpen, item, onCancel, onRename, 
                     >
                         {formatMessage(messages.rename)}
                     </Modal.Footer.PrimaryButton>
-                    <Modal.Footer.SecondaryButton disabled={isLoading} onClick={onCancel}>
-                        {formatMessage(messages.cancel)}
-                    </Modal.Footer.SecondaryButton>
                 </Modal.Footer>
                 <Modal.Close aria-label="Close" />
             </Modal.Content>
