@@ -46,6 +46,7 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentSidebar.scss';
+import type { BoxAISidebarProps } from './BoxAISidebar';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -63,6 +64,8 @@ type Props = {
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
+    hasBoxAI: boolean,
+    boxAISidebarProps: BoxAISidebarProps,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
@@ -117,6 +120,8 @@ class ContentSidebar extends React.Component<Props, State> {
         docGenSidebarProps: { enabled: false },
         getPreview: noop,
         getViewer: noop,
+        hasBoxAI: false,
+        boxAISidebarProps: {},
         hasActivityFeed: false,
         hasAdditionalTabs: false,
         hasMetadata: false,
@@ -346,6 +351,8 @@ class ContentSidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasAdditionalTabs,
+            hasBoxAI,
+            boxAISidebarProps,
             hasActivityFeed,
             hasMetadata,
             hasNav,
@@ -385,6 +392,8 @@ class ContentSidebar extends React.Component<Props, State> {
                                 fileId={fileId}
                                 getPreview={getPreview}
                                 getViewer={getViewer}
+                                hasBoxAI={hasBoxAI}
+                                boxAISidebarProps={boxAISidebarProps}
                                 hasActivityFeed={hasActivityFeed}
                                 hasAdditionalTabs={hasAdditionalTabs}
                                 hasNav={hasNav}

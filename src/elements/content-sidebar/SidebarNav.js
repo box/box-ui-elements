@@ -28,6 +28,7 @@ import {
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
+    SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
@@ -37,6 +38,7 @@ type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
     elementId: string,
     fileId: string,
+    hasBoxAI: boolean,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
     hasBoxAI: boolean,
@@ -53,6 +55,7 @@ const SidebarNav = ({
     additionalTabs,
     elementId,
     fileId,
+    hasBoxAI,
     hasActivity,
     hasAdditionalTabs,
     hasBoxAI,
