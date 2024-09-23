@@ -363,7 +363,7 @@ class Metadata extends File {
      */
     createTemplateInstance(
         instance: MetadataInstanceV2,
-        template: MetadataTemplate | MetadataTemplateInstance,
+        template: MetadataTemplate,
         canEdit: boolean,
     ): MetadataTemplateInstance {
         const fields: MetadataTemplateInstanceField[] = [];
@@ -393,6 +393,57 @@ class Metadata extends File {
             });
         }
 
+        return {
+            canEdit: instance.$canEdit && canEdit,
+            displayName: template.displayName,
+            hidden: template.hidden,
+            id: template.id,
+            fields,
+            scope: template.scope,
+            templateKey: template.templateKey,
+            type: instance.$type,
+        };
+    }
+
+    /**
+     * Utility to concat instance and template into one entity.
+     *
+     * @param {Object} instance - metadata instance
+     * @param {Object} template - metadata template
+     * @param {boolean} canEdit - can user edit item
+     * @return {Object} metadata template instance
+     */
+    createTemplateInstanceFromInstance(
+        instance: MetadataInstanceV2,
+        template: MetadataTemplateInstance,
+        canEdit: boolean,
+    ): MetadataTemplateInstance {
+        const fields: MetadataTemplateInstanceField[] = [];
+
+        // templateKey is unique identifier for the template,
+        // but its value is set to 'properties' if instance was created using Custom Metadata option instead of template
+        const isInstanceFromTemplate = template.templateKey !== METADATA_TEMPLATE_PROPERTIES;
+        if (isInstanceFromTemplate) {
+            // Get Metadata Fields for Instances created from predefined template
+            const templateFields = template.fields || [];
+            templateFields.forEach(field => {
+                fields.push({
+                    ...field,
+                    value: instance[field.key],
+                });
+            });
+        } else {
+            // Get Metadata Fields for Custom Instances
+            Object.keys(instance).forEach(key => {
+                if (!key.startsWith('$')) {
+                    fields.push({
+                        key,
+                        type: 'string',
+                        value: instance[key],
+                    });
+                }
+            });
+        }
         return {
             canEdit: instance.$canEdit && canEdit,
             displayName: template.displayName,
@@ -727,15 +778,13 @@ class Metadata extends File {
      * @param {Object} template - Metadata template
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
-     * @param {boolean} isMetadataRedesign - is Metadata Sidebar redesigned
      * @return {Promise}
      */
     async createMetadata(
         file: BoxItem,
-        template: MetadataTemplate | MetadataTemplateInstance,
+        template: MetadataTemplate,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
-        isMetadataRedesign: boolean = false,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_CREATE_METADATA;
         if (!file || !template) {
@@ -762,18 +811,76 @@ class Metadata extends File {
         this.errorCallback = errorCallback;
 
         try {
-            const fieldsValues = isMetadataRedesign
-                ? Object.fromEntries(
-                      template.fields.map(obj => {
-                          let { value } = obj;
-                          // API does not accept string for float type
-                          if (obj.type === 'float' && value) value = parseFloat(obj.value);
-                          // API does not accept empty string for enum type
-                          if (obj.type === 'enum' && value && value.length === 0) value = undefined;
-                          return [obj.key, value];
-                      }),
-                  )
-                : {};
+            const metadata = await this.xhr.post({
+                url: this.getMetadataUrl(id, template.scope, template.templateKey),
+                id: getTypedFileId(id),
+                data: {},
+            });
+
+            if (!this.isDestroyed()) {
+                const cache: APICache = this.getCache();
+                const key = this.getMetadataCacheKey(id);
+                const cachedMetadata = cache.get(key);
+
+                const editor = this.createEditor(metadata.data, template, canEdit);
+                cachedMetadata.editors.push(editor);
+                this.successHandler(editor);
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
+     * API for creating metadata on file
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {Object} template - Metadata Redesign template
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    async createMetadataRedesign(
+        file: BoxItem,
+        template: MetadataTemplateInstance,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.errorCode = ERROR_CODE_CREATE_METADATA;
+        if (!file || !template) {
+            errorCallback(getBadItemError(), this.errorCode);
+            return;
+        }
+
+        const { id, permissions, is_externally_owned }: BoxItem = file;
+
+        if (!id || !permissions) {
+            errorCallback(getBadItemError(), this.errorCode);
+            return;
+        }
+
+        const canEdit = !!permissions.can_upload;
+        const isProperties =
+            template.templateKey === METADATA_TEMPLATE_PROPERTIES && template.scope === METADATA_SCOPE_GLOBAL;
+
+        if (!canEdit || (is_externally_owned && !isProperties)) {
+            errorCallback(getBadPermissionsError(), this.errorCode);
+            return;
+        }
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        try {
+            const fieldsValues = template.fields.reduce((acc, obj) => {
+                let { value } = obj;
+                // API does not accept string for float type
+                if (obj.type === 'float' && value) value = parseFloat(obj.value);
+                // API does not accept empty string for enum type
+                if (obj.type === 'enum' && value && value.length === 0) value = undefined;
+                acc[obj.key] = value;
+                return acc;
+            }, {});
+
             const metadata = await this.xhr.post({
                 url: this.getMetadataUrl(id, template.scope, template.templateKey),
                 id: getTypedFileId(id),
@@ -785,15 +892,9 @@ class Metadata extends File {
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
 
-                if (isMetadataRedesign) {
-                    const templateInstance = this.createTemplateInstance(metadata.data, template, canEdit);
-                    cachedMetadata.templateInstances.push(templateInstance);
-                    this.successHandler(templateInstance);
-                } else {
-                    const editor = this.createEditor(metadata.data, template, canEdit);
-                    cachedMetadata.editors.push(editor);
-                    this.successHandler(editor);
-                }
+                const templateInstance = this.createTemplateInstanceFromInstance(metadata.data, template, canEdit);
+                cachedMetadata.templateInstances.push(templateInstance);
+                this.successHandler(templateInstance);
             }
         } catch (e) {
             this.errorHandler(e);

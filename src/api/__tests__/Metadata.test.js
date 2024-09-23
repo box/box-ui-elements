@@ -259,6 +259,102 @@ describe('api/Metadata', () => {
         });
     });
 
+    describe('createTemplateInstanceFromInstance()', () => {
+        test('should return Metadata Template Instance', () => {
+            expect(
+                metadata.createTemplateInstanceFromInstance(
+                    {
+                        $canEdit: true,
+                        $id: '70700b4a-aec6-4d32-8ba8-61e6246510aa',
+                        $parent: 'file_12756731826',
+                        $scope: 'enterprise_1169370034',
+                        $template: 'testTemplate',
+                        $type: 'testTemplate-1e81f566-5e9d-4793-b094-de16a3477cda',
+                        $typeVersion: 0,
+                        $version: 0,
+                        name: 'Test name',
+                    },
+                    {
+                        displayName: 'Test template',
+                        fields: [
+                            {
+                                displayName: 'Name',
+                                hidden: false,
+                                id: '78bff5ca-2f19-4f14-ac6f-0a17f0037099',
+                                key: 'name',
+                                type: 'string',
+                                value: 'Test name',
+                            },
+                        ],
+                        hidden: false,
+                        id: 'metadata_template_45',
+                        scope: 'enterprise_1169370034',
+                        templateKey: 'testTemplate',
+                        type: 'metadata_template',
+                        canEdit: true,
+                    },
+                    true,
+                ),
+            ).toEqual({
+                canEdit: true,
+                displayName: 'Test template',
+                hidden: false,
+                id: 'metadata_template_45',
+                scope: 'enterprise_1169370034',
+                templateKey: 'testTemplate',
+                type: 'testTemplate-1e81f566-5e9d-4793-b094-de16a3477cda',
+                fields: [
+                    {
+                        displayName: 'Name',
+                        hidden: false,
+                        id: '78bff5ca-2f19-4f14-ac6f-0a17f0037099',
+                        key: 'name',
+                        type: 'string',
+                        value: 'Test name',
+                    },
+                ],
+            });
+        });
+
+        test('should return Metadata Template Instance for Custom Metadata', () => {
+            expect(
+                metadata.createTemplateInstanceFromInstance(
+                    {
+                        $canEdit: true,
+                        $id: 'd0c3d5c7-1a67-4925-85dc-62cc8828369f',
+                        $parent: 'file_12756731826',
+                        $scope: 'global',
+                        $template: 'properties',
+                        $type: 'properties',
+                        $typeVersion: 13,
+                        $version: 0,
+                        testCustomField: 'This is string',
+                    },
+                    {
+                        canEdit: true,
+                        displayName: undefined,
+                        fields: [{ key: 'testCustomField', value: 'This is string' }],
+                        hidden: false,
+                        id: 'metadata_template_47',
+                        scope: 'global',
+                        templateKey: 'properties',
+                        type: undefined,
+                    },
+                    true,
+                ),
+            ).toEqual({
+                canEdit: true,
+                displayName: undefined,
+                fields: [{ key: 'testCustomField', type: 'string', value: 'This is string' }],
+                hidden: false,
+                id: 'metadata_template_47',
+                scope: 'global',
+                templateKey: 'properties',
+                type: 'properties',
+            });
+        });
+    });
+
     describe('getTemplates()', () => {
         test('should return templates with enterprise scope', async () => {
             const templatesFromServer = [
@@ -2043,6 +2139,299 @@ describe('api/Metadata', () => {
             expect(metadata.successHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
                 editors: [priorMetadata],
+            });
+            expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
+        });
+    });
+
+    describe('createMetadataRedesign()', () => {
+        test('should call error callback with a bad item error when no file', () => {
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign(undefined, {}, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
+        test('should call error callback with a bad item error when no template', () => {
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign({}, undefined, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
+        test('should call error callback with a bad item error when no id', () => {
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign({}, {}, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
+        test('should call error callback with a bad item error when no permissions', () => {
+            jest.spyOn(ErrorUtil, 'getBadItemError').mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign({ id: 'id' }, {}, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadItemError).toBeCalled();
+        });
+        test('should call error callback with a bad permissions error', () => {
+            ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign({ id: 'id', permissions: {} }, {}, successCallback, errorCallback);
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadPermissionsError).toBeCalled();
+        });
+        test('should call error callback with a bad permissions error when can upload is false', () => {
+            ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign(
+                { id: 'id', permissions: { can_upload: false } },
+                {},
+                successCallback,
+                errorCallback,
+            );
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadPermissionsError).toBeCalled();
+        });
+        test('should call error callback when file is externally owned and template isnt global', () => {
+            ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign(
+                {
+                    id: 'id',
+                    permissions: { can_upload: true },
+                    is_externally_owned: true,
+                },
+                { scope: 'global', template: 'foo' },
+                successCallback,
+                errorCallback,
+            );
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadPermissionsError).toBeCalled();
+        });
+        test('should call error callback when file is externally owned and template isnt properties', () => {
+            ErrorUtil.getBadPermissionsError = jest.fn().mockReturnValueOnce('error');
+            const successCallback = jest.fn();
+            const errorCallback = jest.fn();
+            metadata.createMetadataRedesign(
+                {
+                    id: 'id',
+                    permissions: { can_upload: true },
+                    is_externally_owned: true,
+                },
+                { scope: 'blah', template: 'properties' },
+                successCallback,
+                errorCallback,
+            );
+            expect(errorCallback).toBeCalledWith('error', ERROR_CODE_CREATE_METADATA);
+            expect(successCallback).not.toBeCalled();
+            expect(ErrorUtil.getBadPermissionsError).toBeCalled();
+        });
+        test('should make request and update cache and call success handler', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = { scope: 'scope', templateKey: 'templateKey', fields: [] };
+
+            const priorMetadata = {
+                instance: {
+                    id: 'instance_id',
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+            };
+
+            const updatedMetadata = {
+                instance: {
+                    id: 'instance_id',
+                    data: {
+                        foo: 'baz',
+                    },
+                },
+            };
+
+            cache.set('metadata_id', {
+                templateInstances: [priorMetadata],
+            });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: 'foo' });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.merge = jest.fn().mockReturnValueOnce('file');
+            metadata.createTemplateInstanceFromInstance = jest.fn().mockReturnValueOnce(updatedMetadata);
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+            await metadata.createMetadataRedesign(file, template, success, error);
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'scope', 'templateKey');
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {},
+            });
+            expect(metadata.isDestroyed).toHaveBeenCalled();
+            expect(metadata.createTemplateInstanceFromInstance).toHaveBeenCalledWith('foo', template, true);
+            expect(metadata.getCache).toHaveBeenCalled();
+            expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
+            expect(metadata.successHandler).toHaveBeenCalledWith(updatedMetadata);
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+            expect(cache.get('metadata_id')).toEqual({
+                templateInstances: [priorMetadata, updatedMetadata],
+            });
+        });
+        test('should make request but not update cache or call success handler when destroyed', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = { scope: 'scope', templateKey: 'templateKey', fields: [] };
+
+            const priorMetadata = {
+                instance: {
+                    id: 'instance_id',
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+            };
+
+            const updatedMetadata = {
+                instance: {
+                    id: 'instance_id',
+                    data: {
+                        foo: 'baz',
+                    },
+                },
+            };
+
+            cache.set('metadata_id', {
+                templateInstances: [priorMetadata],
+            });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce({ data: 'foo' });
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(true);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.merge = jest.fn().mockReturnValueOnce('file');
+            metadata.createTemplateInstanceFromInstance = jest.fn().mockReturnValueOnce(updatedMetadata);
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error);
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'scope', 'templateKey');
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {},
+            });
+            expect(metadata.isDestroyed).toHaveBeenCalled();
+            expect(metadata.createTemplateInstanceFromInstance).not.toHaveBeenCalled();
+            expect(metadata.getCache).not.toHaveBeenCalled();
+            expect(metadata.getMetadataCacheKey).not.toHaveBeenCalled();
+            expect(metadata.successHandler).not.toHaveBeenCalled();
+            expect(metadata.errorHandler).not.toHaveBeenCalled();
+            expect(cache.get('metadata_id')).toEqual({
+                templateInstances: [priorMetadata],
+            });
+        });
+        test('should make request and call error handler for error', async () => {
+            const success = jest.fn();
+            const error = jest.fn();
+            const file = {
+                id: 'id',
+                permissions: {
+                    can_upload: true,
+                },
+            };
+            const cache = new Cache();
+            const template = { scope: 'scope', templateKey: 'templateKey', fields: [] };
+            const xhrError = new Error('error');
+            const priorMetadata = {
+                instance: {
+                    id: 'instance_id',
+                    data: {
+                        foo: 'bar',
+                    },
+                },
+            };
+
+            const updatedMetadata = {
+                instance: {
+                    id: 'instance_id',
+                    data: {
+                        foo: 'baz',
+                    },
+                    fields: [],
+                },
+            };
+
+            cache.set('metadata_id', {
+                templateInstances: [priorMetadata],
+            });
+
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
+            metadata.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(xhrError));
+            metadata.isDestroyed = jest.fn().mockReturnValueOnce(false);
+            metadata.getCache = jest.fn().mockReturnValueOnce(cache);
+            metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
+            metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
+            metadata.merge = jest.fn().mockReturnValueOnce('file');
+            metadata.createTemplateInstanceFromInstance = jest.fn().mockReturnValueOnce(updatedMetadata);
+            metadata.successHandler = jest.fn();
+            metadata.errorHandler = jest.fn();
+
+            await metadata.createMetadataRedesign(file, template, success, error);
+
+            expect(metadata.successCallback).toBe(success);
+            expect(metadata.errorCallback).toBe(error);
+            expect(metadata.getMetadataUrl).toHaveBeenCalledWith(file.id, 'scope', 'templateKey');
+            expect(metadata.xhr.post).toHaveBeenCalledWith({
+                url: 'url',
+                id: 'file_id',
+                data: {},
+            });
+            expect(metadata.isDestroyed).not.toHaveBeenCalled();
+            expect(metadata.createTemplateInstanceFromInstance).not.toHaveBeenCalled();
+            expect(metadata.getCache).not.toHaveBeenCalled();
+            expect(metadata.getMetadataCacheKey).not.toHaveBeenCalled();
+            expect(metadata.successHandler).not.toHaveBeenCalled();
+            expect(cache.get('metadata_id')).toEqual({
+                templateInstances: [priorMetadata],
             });
             expect(metadata.errorHandler).toHaveBeenCalledWith(xhrError);
         });

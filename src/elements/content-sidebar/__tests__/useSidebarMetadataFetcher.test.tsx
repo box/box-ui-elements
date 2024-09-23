@@ -79,7 +79,7 @@ const mockAPI = {
             errorCallback(error);
         }
     }),
-    createMetadata: jest.fn((_file, template, successCallback, errorCallback) => {
+    createMetadataRedesign: jest.fn((_file, template, successCallback, errorCallback) => {
         try {
             successCallback();
         } catch (error) {
@@ -206,7 +206,7 @@ describe('useSidebarMetadataFetcher', () => {
         mockAPI.getMetadata.mockImplementation((file, successCallback) => {
             successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
         });
-        mockAPI.createMetadata.mockImplementation((file, template, successCallback) => {
+        mockAPI.createMetadataRedesign.mockImplementation((file, template, successCallback) => {
             successCallback();
         });
 
@@ -224,7 +224,7 @@ describe('useSidebarMetadataFetcher', () => {
         mockAPI.getMetadata.mockImplementation((file, successCallback) => {
             successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
         });
-        mockAPI.createMetadata.mockImplementation((file, template, successCallback, errorCallback) => {
+        mockAPI.createMetadataRedesign.mockImplementation((file, template, successCallback, errorCallback) => {
             errorCallback(mockError, 'metadata_creation_error');
         });
 

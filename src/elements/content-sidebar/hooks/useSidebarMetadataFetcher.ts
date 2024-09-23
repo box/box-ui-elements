@@ -153,13 +153,12 @@ function useSidebarMetadataFetcher(
 
     const createMetadataInstance = React.useCallback(
         (template: MetadataTemplateInstance, successCallback): void => {
-            api.getMetadataAPI(false).createMetadata(
+            api.getMetadataAPI(false).createMetadataRedesign(
                 file,
                 template,
                 successCallback,
                 (error: ElementsXhrError, code: string) =>
                     onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
-                true,
             );
         },
         [api, file, onApiError],
