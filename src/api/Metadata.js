@@ -769,7 +769,7 @@ class Metadata extends File {
                           // API does not accept string for float type
                           if (obj.type === 'float' && value) value = parseFloat(obj.value);
                           // API does not accept empty string for enum type
-                          if (obj.type === 'enum' && value.length === 0) value = undefined;
+                          if (obj.type === 'enum' && value && value.length === 0) value = undefined;
                           return [obj.key, value];
                       }),
                   )

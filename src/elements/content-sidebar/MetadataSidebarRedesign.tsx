@@ -120,12 +120,15 @@ function MetadataSidebarRedesign({
         handleDeleteMetadataInstance(metadataInstance);
         setEditingTemplate(null);
     };
-    const checkIfTemplateInstanceExists = (id: string): MetadataTemplateInstance => {
-        return templateInstances.find(templateInstance => templateInstance.id === id);
+
+    const isExistingMetadataInstance = (): boolean => {
+        return (
+            editingTemplate && !!templateInstances.find(templateInstance => templateInstance.id === editingTemplate.id)
+        );
     };
 
     const handleSubmit = (values: FormValues) => {
-        checkIfTemplateInstanceExists(editingTemplate?.id)
+        isExistingMetadataInstance()
             ? updateMetadataInstance()
             : createMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
     };

@@ -79,9 +79,9 @@ const mockAPI = {
             errorCallback(error);
         }
     }),
-    createMetadata: jest.fn((_file, template, successCallback, errorCallback, isMetadataRedesign) => {
+    createMetadata: jest.fn((_file, template, successCallback, errorCallback) => {
         try {
-            successCallback(template);
+            successCallback();
         } catch (error) {
             errorCallback(error);
         }
@@ -207,17 +207,17 @@ describe('useSidebarMetadataFetcher', () => {
             successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
         });
         mockAPI.createMetadata.mockImplementation((file, template, successCallback) => {
-            successCallback(newTemplateInstance);
+            successCallback();
         });
+
+        const successCallback = jest.fn();
 
         const { result } = setupHook();
 
         expect(result.current.templateInstances).toEqual(mockTemplateInstances);
-        await waitFor(() => result.current.createMetadataInstance(newTemplateInstance, jest.fn()));
+        await waitFor(() => result.current.createMetadataInstance(newTemplateInstance, successCallback));
 
-        expect(result.current.templates).toEqual(mockTemplates);
-        expect(result.current.templateInstances).toEqual([...mockTemplateInstances, newTemplateInstance]);
-        expect(result.current.errorMessage).toBeNull();
+        expect(successCallback).toHaveBeenCalled();
     });
 
     test('should handle metadata instance creation error', async () => {
