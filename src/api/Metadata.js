@@ -783,10 +783,10 @@ class Metadata extends File {
      * API for deleting metadata on file
      *
      * @param {BoxItem} file - File object for which we are changing the description
-     * @param {string} scope - Metadata instance scope
      * @param {string} template - Metadata template key
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param isMetadataRedesign
      * @return {Promise}
      */
     async deleteMetadata(
@@ -794,6 +794,7 @@ class Metadata extends File {
         template: MetadataTemplate,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        isMetadataRedesign: boolean = false,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_DELETE_METADATA;
         if (!file || !template) {
@@ -826,12 +827,21 @@ class Metadata extends File {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const metadata = cache.get(key);
-                metadata.editors.splice(
-                    metadata.editors.findIndex(
-                        editor => editor.template.scope === scope && editor.template.templateKey === templateKey,
-                    ),
-                    1,
-                );
+                if (isMetadataRedesign) {
+                    metadata.templateInstances.splice(
+                        metadata.templateInstances.findIndex(
+                            instance => instance.scope === scope && instance.templateKey === templateKey,
+                        ),
+                        1,
+                    );
+                } else {
+                    metadata.editors.splice(
+                        metadata.editors.findIndex(
+                            editor => editor.template.scope === scope && editor.template.templateKey === templateKey,
+                        ),
+                        1,
+                    );
+                }
                 this.successHandler();
             }
         } catch (e) {

@@ -22,6 +22,18 @@ const mockTemplates = [
     },
 ];
 
+const mockTemplateInstances = [
+    {
+        canEdit: true,
+        id: 'metadata_template_instance_1',
+        fields: [],
+        scope: 'global',
+        templateKey: 'properties',
+        type: 'properties',
+        hidden: false,
+    },
+];
+
 const mockAPI = {
     getFile: jest.fn((id, successCallback, errorCallback) => {
         try {
@@ -35,7 +47,15 @@ const mockAPI = {
             successCallback({
                 editors: [],
                 templates: mockTemplates,
+                templateInstances: mockTemplateInstances,
             });
+        } catch (error) {
+            errorCallback(error);
+        }
+    }),
+    deleteMetadata: jest.fn((_file, template, successCallback, errorCallback) => {
+        try {
+            successCallback(template);
         } catch (error) {
             errorCallback(error);
         }
@@ -52,6 +72,13 @@ describe('useSidebarMetadataFetcher', () => {
 
     const setupHook = (fileId = '123') =>
         renderHook(() => useSidebarMetadataFetcher(api, fileId, onErrorMock, isFeatureEnabledMock));
+
+    beforeEach(() => {
+        onErrorMock.mockClear();
+        mockAPI.getFile.mockClear();
+        mockAPI.getMetadata.mockClear();
+        mockAPI.deleteMetadata.mockClear();
+    });
 
     test('should fetch the file and metadata successfully', async () => {
         const { result } = setupHook();
@@ -100,6 +127,48 @@ describe('useSidebarMetadataFetcher', () => {
         expect(onErrorMock).toHaveBeenCalledWith(
             mockError,
             'metadata_fetch_error',
+            expect.objectContaining({
+                error: mockError,
+                isErrorDisplayed: true,
+            }),
+        );
+    });
+
+    test('should handle metadata instance removal', async () => {
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
+        });
+        mockAPI.deleteMetadata.mockImplementation((file, template, successCallback) => {
+            successCallback(mockTemplateInstances[0]);
+        });
+
+        const { result } = setupHook();
+        expect(result.current.templateInstances).toEqual(mockTemplateInstances);
+
+        await waitFor(() => result.current.handleDeleteMetadataInstance(mockTemplateInstances[0]));
+
+        expect(result.current.templates).toEqual(mockTemplates);
+        expect(result.current.templateInstances).toEqual([]);
+        expect(result.current.errorMessage).toBeNull();
+    });
+
+    test('should handle metadata instance removal error', async () => {
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
+        });
+        mockAPI.deleteMetadata.mockImplementation((file, template, successCallback, errorCallback) => {
+            errorCallback(mockError, 'metadata_remove_error');
+        });
+
+        const { result } = setupHook();
+        expect(result.current.status).toEqual(STATUS.SUCCESS);
+
+        await waitFor(() => result.current.handleDeleteMetadataInstance(mockTemplateInstances[0]));
+
+        expect(result.current.status).toEqual(STATUS.ERROR);
+        expect(onErrorMock).toHaveBeenCalledWith(
+            mockError,
+            'metadata_remove_error',
             expect.objectContaining({
                 error: mockError,
                 isErrorDisplayed: true,
