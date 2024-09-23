@@ -215,7 +215,7 @@ describe('useSidebarMetadataFetcher', () => {
         const { result } = setupHook();
 
         expect(result.current.templateInstances).toEqual(mockTemplateInstances);
-        await waitFor(() => result.current.createMetadataInstance(newTemplateInstance, successCallback));
+        await waitFor(() => result.current.handleCreateMetadataInstance(newTemplateInstance, successCallback));
 
         expect(successCallback).toHaveBeenCalled();
     });
@@ -231,7 +231,7 @@ describe('useSidebarMetadataFetcher', () => {
         const { result } = setupHook();
         expect(result.current.status).toBe(STATUS.SUCCESS);
 
-        await waitFor(() => result.current.createMetadataInstance(newTemplateInstance, jest.fn()));
+        await waitFor(() => result.current.handleCreateMetadataInstance(newTemplateInstance, jest.fn()));
 
         expect(result.current.status).toBe(STATUS.ERROR);
         expect(onErrorMock).toHaveBeenCalledWith(

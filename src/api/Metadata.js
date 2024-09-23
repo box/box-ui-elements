@@ -816,12 +816,10 @@ class Metadata extends File {
                 id: getTypedFileId(id),
                 data: {},
             });
-
             if (!this.isDestroyed()) {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
-
                 const editor = this.createEditor(metadata.data, template, canEdit);
                 cachedMetadata.editors.push(editor);
                 this.successHandler(editor);

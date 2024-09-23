@@ -19,7 +19,7 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
-    createMetadataInstance: (templateInstance: MetadataTemplateInstance, successCallback: () => void) => void;
+    handleCreateMetadataInstance: (templateInstance: MetadataTemplateInstance, successCallback: () => void) => void;
     errorMessage: MessageDescriptor | null;
     file: BoxItem | null;
     handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
@@ -151,7 +151,7 @@ function useSidebarMetadataFetcher(
         // to be implemented in the next ticket
     };
 
-    const createMetadataInstance = React.useCallback(
+    const handleCreateMetadataInstance = React.useCallback(
         (template: MetadataTemplateInstance, successCallback): void => {
             api.getMetadataAPI(false).createMetadataRedesign(
                 file,
@@ -175,7 +175,7 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
-        createMetadataInstance,
+        handleCreateMetadataInstance,
         errorMessage,
         file,
         handleDeleteMetadataInstance,

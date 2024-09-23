@@ -72,7 +72,7 @@ function MetadataSidebarRedesign({
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
     const {
-        createMetadataInstance,
+        handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         file,
         templates,
@@ -130,7 +130,7 @@ function MetadataSidebarRedesign({
     const handleSubmit = (values: FormValues) => {
         isExistingMetadataInstance()
             ? updateMetadataInstance()
-            : createMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
+            : handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
