@@ -9,7 +9,7 @@ export interface MetadataInstanceEditorProps {
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
     template: MetadataTemplateInstance;
-    onSubmit: (values: FormValues, operations: JSONPatchOperations) => void;
+    onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
 }
 
