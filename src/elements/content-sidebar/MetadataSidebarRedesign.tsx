@@ -127,7 +127,7 @@ function MetadataSidebarRedesign({
         );
     };
 
-    const handleSubmit = (values: FormValues) => {
+    const handleSubmit = async (values: FormValues) => {
         isExistingMetadataInstance()
             ? updateMetadataInstance()
             : handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
