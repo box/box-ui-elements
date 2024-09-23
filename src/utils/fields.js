@@ -113,7 +113,7 @@ const SIDEBAR_FIELDS_TO_FETCH = [
 ];
 
 // Fields needed for sidebar of file in archive
-const SIDEBAR_FIELDS_TO_FETCH_ARCHIVE = SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE);
+const SIDEBAR_FIELDS_TO_FETCH_ARCHIVE: Array<string> = SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE);
 
 // Fields needed for preview
 const PREVIEW_FIELDS_TO_FETCH = [
