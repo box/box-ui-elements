@@ -37,36 +37,40 @@ const SidebarFileProperties = ({
     onRetentionPolicyExtendClick,
     isLoading,
     intl,
-}: Props) => (
-    <LoadingIndicatorWrapper isLoading={isLoading}>
-        <ItemProperties
-            archivedAt={Number(getProp(file, FIELD_METADATA_ARCHIVE)?.archiveDate) * 1000}
-            createdAt={file.content_created_at}
-            description={file.description}
-            descriptionTextareaProps={{
-                [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION,
-            }}
-            modifiedAt={file.content_modified_at}
-            onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
-            owner={getProp(file, 'owned_by.name')}
-            retentionPolicyProps={
-                hasRetentionPolicy
-                    ? {
-                          ...retentionPolicy,
-                          openModal: onRetentionPolicyExtendClick,
-                      }
-                    : {}
-            }
-            size={getFileSize(file.size, intl.locale)}
-            // use uploader_display_name if uploaded anonymously
-            uploader={
-                getProp(file, 'created_by.id') === PLACEHOLDER_USER.id
-                    ? getProp(file, 'uploader_display_name')
-                    : getProp(file, 'created_by.name')
-            }
-        />
-    </LoadingIndicatorWrapper>
-);
+}: Props) => {
+    const archiveDate = getProp(file, FIELD_METADATA_ARCHIVE)?.archiveDate;
+
+    return (
+        <LoadingIndicatorWrapper isLoading={isLoading}>
+            <ItemProperties
+                archivedAt={archiveDate && archiveDate * 1000}
+                createdAt={file.content_created_at}
+                description={file.description}
+                descriptionTextareaProps={{
+                    [INTERACTION_TARGET]: DETAILS_TARGETS.DESCRIPTION,
+                }}
+                modifiedAt={file.content_modified_at}
+                onDescriptionChange={getProp(file, 'permissions.can_rename') ? onDescriptionChange : undefined}
+                owner={getProp(file, 'owned_by.name')}
+                retentionPolicyProps={
+                    hasRetentionPolicy
+                        ? {
+                              ...retentionPolicy,
+                              openModal: onRetentionPolicyExtendClick,
+                          }
+                        : {}
+                }
+                size={getFileSize(file.size, intl.locale)}
+                // use uploader_display_name if uploaded anonymously
+                uploader={
+                    getProp(file, 'created_by.id') === PLACEHOLDER_USER.id
+                        ? getProp(file, 'uploader_display_name')
+                        : getProp(file, 'created_by.name')
+                }
+            />
+        </LoadingIndicatorWrapper>
+    );
+};
 
 export { SidebarFileProperties as SidebarFilePropertiesComponent };
 export default injectIntl(withErrorHandling(SidebarFileProperties));

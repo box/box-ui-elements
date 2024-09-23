@@ -100,7 +100,6 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
       className="loading-indicator-wrapper "
     >
       <ItemProperties
-        archivedAt={NaN}
         descriptionTextareaProps={
           {
             "data-resin-target": "description",
