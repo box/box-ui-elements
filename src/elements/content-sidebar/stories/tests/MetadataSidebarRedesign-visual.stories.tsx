@@ -267,12 +267,14 @@ export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof 
 
         // Check if currently open template is disabled in dropdown
         await userEvent.click(addTemplateButton);
-        expect(templateMetadataOption).toHaveStyle('pointer-events: none;');
+        const templateMetadataOptionDisabled = canvas.getByRole('option', { name: 'My Template' });
+        expect(templateMetadataOptionDisabled).toHaveStyle('pointer-events: none;');
 
         // Check if template available again after cancelling
         const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
         await userEvent.click(cancelButton);
         await userEvent.click(addTemplateButton);
-        expect(templateMetadataOption).not.toHaveStyle('pointer-events: none;');
+        const templateMetadataOptionEnabled = canvas.getByRole('option', { name: 'My Template' });
+        expect(templateMetadataOptionEnabled).not.toHaveStyle('pointer-events: none;');
     },
 };

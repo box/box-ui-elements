@@ -137,6 +137,7 @@ describe('MetadataInstanceEditor', () => {
 
         rerender(<MetadataInstanceEditor {...props} isUnsavedChangesModalOpen={true} />);
         const unsavedChangesModal = screen.getByText('Unsaved Changes');
+
         expect(unsavedChangesModal).toBeInTheDocument();
 
         act(() => {
