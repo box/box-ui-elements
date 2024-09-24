@@ -10,13 +10,12 @@ import {
     AddMetadataTemplateDropdown,
     MetadataEmptyState,
     MetadataInstanceList,
+    type FormValues,
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
 import noop from 'lodash/noop';
 
-import { FormValues } from '@box/metadata-editor/types/lib/components/metadata-instance-editor/types';
-import uniqueId from 'lodash/uniqueId';
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -34,6 +33,7 @@ import { type WithLoggerProps } from '../../common/types/logging';
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
+import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -98,22 +98,9 @@ function MetadataSidebarRedesign({
         setIsUnsavedChangesModalOpen(true);
     };
 
-    const convertToInstance = (template: MetadataTemplate): MetadataTemplateInstance => {
-        return {
-            canEdit: !!file.permissions.can_upload,
-            displayName: template.displayName,
-            hidden: template.hidden,
-            id: uniqueId('metadata_template_'),
-            fields: template.fields,
-            scope: template.scope,
-            templateKey: template.templateKey,
-            type: template.type,
-        };
-    };
-
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
-        setEditingTemplate(convertToInstance(selectedTemplate));
+        setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
     };
 
     const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {

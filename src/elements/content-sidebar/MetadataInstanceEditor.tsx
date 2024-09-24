@@ -1,6 +1,10 @@
-import { AutofillContextProvider, MetadataInstanceForm, type MetadataTemplateInstance } from '@box/metadata-editor';
-import { JSONPatchOperations } from '@box/metadata-editor/types/lib/components/metadata-instance-editor/subcomponents/metadata-instance-form/types';
-import { FormValues } from '@box/metadata-editor/types/lib/components/metadata-instance-editor/types';
+import {
+    AutofillContextProvider,
+    MetadataInstanceForm,
+    type FormValues,
+    type JSONPatchOperations,
+    type MetadataTemplateInstance,
+} from '@box/metadata-editor';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
