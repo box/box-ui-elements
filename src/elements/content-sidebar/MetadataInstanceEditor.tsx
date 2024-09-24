@@ -34,7 +34,6 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
         <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isLoading={false}
                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 selectedTemplateInstance={template}
                 onCancel={handleCancel}
