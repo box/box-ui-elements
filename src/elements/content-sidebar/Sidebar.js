@@ -24,7 +24,7 @@ import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
-import type { BoxAISidebarProps } from './BoxAISidebarProps';
+import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
@@ -47,7 +47,6 @@ type Props = {
     fileId: string,
     getPreview: Function,
     getViewer: Function,
-    hasBoxAI: boolean,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,

@@ -49,8 +49,8 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/metadata'}                       | ${'MetadataSidebar'}
             ${'/skills'}                         | ${'SkillsSidebar'}
             ${'/boxai'}                          | ${'BoxAISidebar'}
-            ${'/nonsense'}                       | ${'SkillsSidebar'}
-            ${'/'}                               | ${'SkillsSidebar'}
+            ${'/nonsense'}                       | ${'BoxAISidebar'}
+            ${'/'}                               | ${'BoxAISidebar'}
         `('should render $sidebar given the path $path', ({ path, sidebar }) => {
             const wrapper = getWrapper({ path });
             expect(wrapper.exists(sidebar)).toBe(true);
