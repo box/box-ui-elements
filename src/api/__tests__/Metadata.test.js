@@ -259,102 +259,6 @@ describe('api/Metadata', () => {
         });
     });
 
-    describe('createTemplateInstanceFromInstance()', () => {
-        test('should return Metadata Template Instance', () => {
-            expect(
-                metadata.createTemplateInstanceFromInstance(
-                    {
-                        $canEdit: true,
-                        $id: '70700b4a-aec6-4d32-8ba8-61e6246510aa',
-                        $parent: 'file_12756731826',
-                        $scope: 'enterprise_1169370034',
-                        $template: 'testTemplate',
-                        $type: 'testTemplate-1e81f566-5e9d-4793-b094-de16a3477cda',
-                        $typeVersion: 0,
-                        $version: 0,
-                        name: 'Test name',
-                    },
-                    {
-                        displayName: 'Test template',
-                        fields: [
-                            {
-                                displayName: 'Name',
-                                hidden: false,
-                                id: '78bff5ca-2f19-4f14-ac6f-0a17f0037099',
-                                key: 'name',
-                                type: 'string',
-                                value: 'Test name',
-                            },
-                        ],
-                        hidden: false,
-                        id: 'metadata_template_45',
-                        scope: 'enterprise_1169370034',
-                        templateKey: 'testTemplate',
-                        type: 'metadata_template',
-                        canEdit: true,
-                    },
-                    true,
-                ),
-            ).toEqual({
-                canEdit: true,
-                displayName: 'Test template',
-                hidden: false,
-                id: 'metadata_template_45',
-                scope: 'enterprise_1169370034',
-                templateKey: 'testTemplate',
-                type: 'testTemplate-1e81f566-5e9d-4793-b094-de16a3477cda',
-                fields: [
-                    {
-                        displayName: 'Name',
-                        hidden: false,
-                        id: '78bff5ca-2f19-4f14-ac6f-0a17f0037099',
-                        key: 'name',
-                        type: 'string',
-                        value: 'Test name',
-                    },
-                ],
-            });
-        });
-
-        test('should return Metadata Template Instance for Custom Metadata', () => {
-            expect(
-                metadata.createTemplateInstanceFromInstance(
-                    {
-                        $canEdit: true,
-                        $id: 'd0c3d5c7-1a67-4925-85dc-62cc8828369f',
-                        $parent: 'file_12756731826',
-                        $scope: 'global',
-                        $template: 'properties',
-                        $type: 'properties',
-                        $typeVersion: 13,
-                        $version: 0,
-                        testCustomField: 'This is string',
-                    },
-                    {
-                        canEdit: true,
-                        displayName: undefined,
-                        fields: [{ key: 'testCustomField', value: 'This is string' }],
-                        hidden: false,
-                        id: 'metadata_template_47',
-                        scope: 'global',
-                        templateKey: 'properties',
-                        type: undefined,
-                    },
-                    true,
-                ),
-            ).toEqual({
-                canEdit: true,
-                displayName: undefined,
-                fields: [{ key: 'testCustomField', type: 'string', value: 'This is string' }],
-                hidden: false,
-                id: 'metadata_template_47',
-                scope: 'global',
-                templateKey: 'properties',
-                type: 'properties',
-            });
-        });
-    });
-
     describe('getTemplates()', () => {
         test('should return templates with enterprise scope', async () => {
             const templatesFromServer = [
@@ -2262,12 +2166,8 @@ describe('api/Metadata', () => {
             };
 
             const updatedMetadata = {
-                instance: {
-                    id: 'instance_id',
-                    data: {
-                        foo: 'baz',
-                    },
-                },
+                ...template,
+                type: undefined,
             };
 
             cache.set('metadata_id', {
@@ -2281,7 +2181,6 @@ describe('api/Metadata', () => {
             metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
             metadata.merge = jest.fn().mockReturnValueOnce('file');
-            metadata.createTemplateInstanceFromInstance = jest.fn().mockReturnValueOnce(updatedMetadata);
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
             await metadata.createMetadataRedesign(file, template, success, error);
@@ -2295,7 +2194,6 @@ describe('api/Metadata', () => {
                 data: {},
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
-            expect(metadata.createTemplateInstanceFromInstance).toHaveBeenCalledWith('foo', template, true);
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
             expect(metadata.successHandler).toHaveBeenCalledWith(updatedMetadata);
@@ -2325,15 +2223,6 @@ describe('api/Metadata', () => {
                 },
             };
 
-            const updatedMetadata = {
-                instance: {
-                    id: 'instance_id',
-                    data: {
-                        foo: 'baz',
-                    },
-                },
-            };
-
             cache.set('metadata_id', {
                 templateInstances: [priorMetadata],
             });
@@ -2345,7 +2234,6 @@ describe('api/Metadata', () => {
             metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
             metadata.merge = jest.fn().mockReturnValueOnce('file');
-            metadata.createTemplateInstanceFromInstance = jest.fn().mockReturnValueOnce(updatedMetadata);
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
@@ -2360,7 +2248,6 @@ describe('api/Metadata', () => {
                 data: {},
             });
             expect(metadata.isDestroyed).toHaveBeenCalled();
-            expect(metadata.createTemplateInstanceFromInstance).not.toHaveBeenCalled();
             expect(metadata.getCache).not.toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).not.toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();
@@ -2390,16 +2277,6 @@ describe('api/Metadata', () => {
                 },
             };
 
-            const updatedMetadata = {
-                instance: {
-                    id: 'instance_id',
-                    data: {
-                        foo: 'baz',
-                    },
-                    fields: [],
-                },
-            };
-
             cache.set('metadata_id', {
                 templateInstances: [priorMetadata],
             });
@@ -2411,7 +2288,6 @@ describe('api/Metadata', () => {
             metadata.getCacheKey = jest.fn().mockReturnValueOnce('cache_id');
             metadata.getMetadataCacheKey = jest.fn().mockReturnValueOnce('metadata_id');
             metadata.merge = jest.fn().mockReturnValueOnce('file');
-            metadata.createTemplateInstanceFromInstance = jest.fn().mockReturnValueOnce(updatedMetadata);
             metadata.successHandler = jest.fn();
             metadata.errorHandler = jest.fn();
 
@@ -2426,7 +2302,6 @@ describe('api/Metadata', () => {
                 data: {},
             });
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
-            expect(metadata.createTemplateInstanceFromInstance).not.toHaveBeenCalled();
             expect(metadata.getCache).not.toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).not.toHaveBeenCalled();
             expect(metadata.successHandler).not.toHaveBeenCalled();

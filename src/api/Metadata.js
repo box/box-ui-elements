@@ -406,57 +406,6 @@ class Metadata extends File {
     }
 
     /**
-     * Utility to concat instance and template into one entity.
-     *
-     * @param {Object} instance - metadata instance
-     * @param {Object} template - metadata template
-     * @param {boolean} canEdit - can user edit item
-     * @return {Object} metadata template instance
-     */
-    createTemplateInstanceFromInstance(
-        instance: MetadataInstanceV2,
-        template: MetadataTemplateInstance,
-        canEdit: boolean,
-    ): MetadataTemplateInstance {
-        const fields: MetadataTemplateInstanceField[] = [];
-
-        // templateKey is unique identifier for the template,
-        // but its value is set to 'properties' if instance was created using Custom Metadata option instead of template
-        const isInstanceFromTemplate = template.templateKey !== METADATA_TEMPLATE_PROPERTIES;
-        if (isInstanceFromTemplate) {
-            // Get Metadata Fields for Instances created from predefined template
-            const templateFields = template.fields || [];
-            templateFields.forEach(field => {
-                fields.push({
-                    ...field,
-                    value: instance[field.key],
-                });
-            });
-        } else {
-            // Get Metadata Fields for Custom Instances
-            Object.keys(instance).forEach(key => {
-                if (!key.startsWith('$')) {
-                    fields.push({
-                        key,
-                        type: 'string',
-                        value: instance[key],
-                    });
-                }
-            });
-        }
-        return {
-            canEdit: instance.$canEdit && canEdit,
-            displayName: template.displayName,
-            hidden: template.hidden,
-            id: template.id,
-            fields,
-            scope: template.scope,
-            templateKey: template.templateKey,
-            type: instance.$type,
-        };
-    }
-
-    /**
      * Creates and returns metadata entities.
      *
      * @param {string} id - Box file id
@@ -890,7 +839,7 @@ class Metadata extends File {
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
 
-                const templateInstance = this.createTemplateInstanceFromInstance(metadata.data, template, canEdit);
+                const templateInstance = { ...template, type: metadata.data.$type };
                 cachedMetadata.templateInstances.push(templateInstance);
                 this.successHandler(templateInstance);
             }
