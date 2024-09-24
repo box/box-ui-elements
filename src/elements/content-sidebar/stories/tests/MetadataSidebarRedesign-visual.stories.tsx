@@ -262,19 +262,19 @@ export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof 
         await userEvent.click(addTemplateButton);
 
         const templateMetadataOption = canvas.getByRole('option', { name: 'My Template' });
-        expect(templateMetadataOption).not.toHaveStyle('pointer-events: none;');
+        expect(templateMetadataOption).not.toHaveAttribute('aria-disabled');
         await userEvent.click(templateMetadataOption);
 
         // Check if currently open template is disabled in dropdown
         await userEvent.click(addTemplateButton);
         const templateMetadataOptionDisabled = canvas.getByRole('option', { name: 'My Template' });
-        expect(templateMetadataOptionDisabled).toHaveStyle('pointer-events: none;');
+        expect(templateMetadataOptionDisabled).toHaveAttribute('aria-disabled');
 
         // Check if template available again after cancelling
         const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
         await userEvent.click(cancelButton);
         await userEvent.click(addTemplateButton);
         const templateMetadataOptionEnabled = canvas.getByRole('option', { name: 'My Template' });
-        expect(templateMetadataOptionEnabled).not.toHaveStyle('pointer-events: none;');
+        expect(templateMetadataOptionEnabled).not.toHaveAttribute('aria-disabled');
     },
 };
