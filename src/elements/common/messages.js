@@ -332,16 +332,6 @@ const messages = defineMessages({
         description: 'Header for rename web link dialog',
         defaultMessage: 'Rename Link',
     },
-    fileRenameHeading: {
-        id: 'be.fileRenameHeading',
-        description: 'Heading for rename file dialog',
-        defaultMessage: 'Rename File',
-    },
-    folderRenameHeading: {
-        id: 'be.folderRenameHeading',
-        description: 'Heading for rename folder dialog',
-        defaultMessage: 'Rename Folder',
-    },
     createDialogLabel: {
         id: 'be.createDialogLabel',
         description: 'Label for create folder dialog',

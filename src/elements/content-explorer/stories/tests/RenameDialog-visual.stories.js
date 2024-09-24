@@ -9,8 +9,6 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
 } from '../../../../constants';
 
-import '../../../common/modal.scss';
-
 const item = {
     id: '123456',
     name: 'mockItem',

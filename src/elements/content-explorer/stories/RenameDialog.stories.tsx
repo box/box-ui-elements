@@ -1,17 +1,13 @@
-// @flow
 import * as React from 'react';
 import { useArgs } from '@storybook/preview-api';
 
-import PrimaryButton from '../../../components/primary-button/PrimaryButton';
+import { Button } from '@box/blueprint-web';
 import { addRootElement } from '../../../utils/storybook';
 
 import RenameDialog from '../RenameDialog';
 
-// need to import this into the story because it's usually in ContentExplorer
-import '../../common/modal.scss';
-
 export const renameDialog = {
-    // eslint-disable-next-line react/prop-types
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     render: (args: any) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const [, setArgs] = useArgs();
@@ -37,7 +33,9 @@ export const renameDialog = {
                     {...args}
                 />
 
-                <PrimaryButton onClick={handleOpenModal}>Launch RenameDialog</PrimaryButton>
+                <Button onClick={handleOpenModal} variant="primary">
+                    Launch RenameDialog
+                </Button>
             </div>
         );
     },
