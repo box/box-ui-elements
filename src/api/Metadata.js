@@ -756,7 +756,6 @@ class Metadata extends File {
             errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
-
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
@@ -773,6 +772,76 @@ class Metadata extends File {
                 const editor = this.createEditor(metadata.data, template, canEdit);
                 cachedMetadata.editors.push(editor);
                 this.successHandler(editor);
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
+     * API for creating metadata on file
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {Object} template - Metadata Redesign template
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    async createMetadataRedesign(
+        file: BoxItem,
+        template: MetadataTemplateInstance,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.errorCode = ERROR_CODE_CREATE_METADATA;
+        if (!file || !template) {
+            errorCallback(getBadItemError(), this.errorCode);
+            return;
+        }
+
+        const { id, permissions, is_externally_owned }: BoxItem = file;
+
+        if (!id || !permissions) {
+            errorCallback(getBadItemError(), this.errorCode);
+            return;
+        }
+
+        const canEdit = !!permissions.can_upload;
+        const isProperties =
+            template.templateKey === METADATA_TEMPLATE_PROPERTIES && template.scope === METADATA_SCOPE_GLOBAL;
+
+        if (!canEdit || (is_externally_owned && !isProperties)) {
+            errorCallback(getBadPermissionsError(), this.errorCode);
+            return;
+        }
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        try {
+            const fieldsValues = template.fields.reduce((acc, obj) => {
+                let { value } = obj;
+                // API does not accept string for float type
+                if (obj.type === 'float' && value) value = parseFloat(obj.value);
+                // API does not accept empty string for enum type
+                if (obj.type === 'enum' && value && value.length === 0) value = undefined;
+                acc[obj.key] = value;
+                return acc;
+            }, {});
+
+            const metadata = await this.xhr.post({
+                url: this.getMetadataUrl(id, template.scope, template.templateKey),
+                id: getTypedFileId(id),
+                data: fieldsValues,
+            });
+
+            if (!this.isDestroyed()) {
+                const cache: APICache = this.getCache();
+                const key = this.getMetadataCacheKey(id);
+                const cachedMetadata = cache.get(key);
+
+                const templateInstance = { ...template, type: metadata.data.$type };
+                cachedMetadata.templateInstances.push(templateInstance);
+                this.successHandler(templateInstance);
             }
         } catch (e) {
             this.errorHandler(e);

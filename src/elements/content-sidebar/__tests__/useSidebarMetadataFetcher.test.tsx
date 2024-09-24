@@ -32,7 +32,26 @@ const mockTemplateInstances = [
         type: 'properties',
         hidden: false,
     },
+    {
+        canEdit: true,
+        id: 'metadata_template_instance_2',
+        fields: [],
+        scope: 'global',
+        templateKey: 'properties',
+        type: 'properties',
+        hidden: false,
+    },
 ];
+
+const newTemplateInstance = {
+    canEdit: true,
+    id: 'metadata_template_instance_3',
+    fields: [],
+    scope: 'global',
+    templateKey: 'properties',
+    type: 'properties',
+    hidden: false,
+};
 
 const mockAPI = {
     getFile: jest.fn((id, successCallback, errorCallback) => {
@@ -56,6 +75,13 @@ const mockAPI = {
     deleteMetadata: jest.fn((_file, template, successCallback, errorCallback) => {
         try {
             successCallback(template);
+        } catch (error) {
+            errorCallback(error);
+        }
+    }),
+    createMetadataRedesign: jest.fn((_file, template, successCallback, errorCallback) => {
+        try {
+            successCallback();
         } catch (error) {
             errorCallback(error);
         }
@@ -169,6 +195,48 @@ describe('useSidebarMetadataFetcher', () => {
         expect(onErrorMock).toHaveBeenCalledWith(
             mockError,
             'metadata_remove_error',
+            expect.objectContaining({
+                error: mockError,
+                isErrorDisplayed: true,
+            }),
+        );
+    });
+
+    test('should handle metadata instance creation', async () => {
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
+        });
+        mockAPI.createMetadataRedesign.mockImplementation((file, template, successCallback) => {
+            successCallback();
+        });
+
+        const successCallback = jest.fn();
+
+        const { result } = setupHook();
+
+        expect(result.current.templateInstances).toEqual(mockTemplateInstances);
+        await waitFor(() => result.current.handleCreateMetadataInstance(newTemplateInstance, successCallback));
+
+        expect(successCallback).toHaveBeenCalled();
+    });
+
+    test('should handle metadata instance creation error', async () => {
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
+        });
+        mockAPI.createMetadataRedesign.mockImplementation((file, template, successCallback, errorCallback) => {
+            errorCallback(mockError, 'metadata_creation_error');
+        });
+
+        const { result } = setupHook();
+        expect(result.current.status).toBe(STATUS.SUCCESS);
+
+        await waitFor(() => result.current.handleCreateMetadataInstance(newTemplateInstance, jest.fn()));
+
+        expect(result.current.status).toBe(STATUS.ERROR);
+        expect(onErrorMock).toHaveBeenCalledWith(
+            mockError,
+            'metadata_creation_error',
             expect.objectContaining({
                 error: mockError,
                 isErrorDisplayed: true,

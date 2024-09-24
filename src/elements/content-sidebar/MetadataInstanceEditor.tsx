@@ -1,5 +1,10 @@
-import { AutofillContextProvider, MetadataInstanceForm, type MetadataTemplateInstance } from '@box/metadata-editor';
-import noop from 'lodash/noop';
+import {
+    AutofillContextProvider,
+    MetadataInstanceForm,
+    type FormValues,
+    type JSONPatchOperations,
+    type MetadataTemplateInstance,
+} from '@box/metadata-editor';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
@@ -8,18 +13,19 @@ export interface MetadataInstanceEditorProps {
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
     template: MetadataTemplateInstance;
+    onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
+    setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
     isUnsavedChangesModalOpen,
     onDelete,
+    onSubmit,
+    setIsUnsavedChangesModalOpen,
     template,
     onCancel,
 }) => {
-    const handleSubmit = () => {
-        // TODO in a future PR
-    };
     const handleCancel = () => {
         onCancel();
     };
@@ -28,13 +34,12 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
         <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isLoading={false}
+                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 selectedTemplateInstance={template}
                 onCancel={handleCancel}
+                onSubmit={onSubmit}
+                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                 onDelete={onDelete}
-                onSubmit={handleSubmit}
-                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                setIsUnsavedChangesModalOpen={noop}
             />
         </AutofillContextProvider>
     );
