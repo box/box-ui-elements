@@ -331,6 +331,7 @@ export const ORIGIN_OPEN_WITH: 'open_with' = 'open_with';
 export const METRIC_TYPE_PREVIEW: 'preview_metric' = 'preview_metric';
 export const METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC: 'elements_performance_metric' = 'elements_performance_metric';
 export const METRIC_TYPE_ELEMENTS_LOAD_METRIC: 'elements_load_metric' = 'elements_load_metric';
+export const METRIC_TYPE_UAA_PARITY_METRIC = 'uaa_parity_metric';
 
 /* ------------------ Error Keys ---------------------- */
 export const IS_ERROR_DISPLAYED = 'isErrorDisplayed'; // used to determine if user will see some error state or message
