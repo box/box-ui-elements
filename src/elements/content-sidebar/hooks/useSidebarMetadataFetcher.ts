@@ -1,7 +1,7 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
-import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
+import { type JSONPatchOperations, type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
@@ -19,10 +19,15 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
-    handleCreateMetadataInstance: (templateInstance: MetadataTemplateInstance, successCallback: () => void) => void;
     errorMessage: MessageDescriptor | null;
     file: BoxItem | null;
+    handleCreateMetadataInstance: (templateInstance: MetadataTemplateInstance, successCallback: () => void) => void;
     handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
+    handleUpdateMetadataInstance: (
+        metadataTemplateInstance: MetadataTemplateInstance,
+        JSONPatch: Array<Object>,
+        successCallback: () => void,
+    ) => void;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
@@ -159,6 +164,21 @@ function useSidebarMetadataFetcher(
         [api, file, onApiError],
     );
 
+    const handleUpdateMetadataInstance = React.useCallback(
+        (metadataInstance: MetadataTemplateInstance, JSONPatch: JSONPatchOperations, successCallback: () => void) => {
+            api.getMetadataAPI(false).updateMetadataRedesign(
+                file,
+                metadataInstance,
+                JSONPatch,
+                successCallback,
+                (error: ElementsXhrError, code: string) => {
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
+                },
+            );
+        },
+        [api, file, onApiError],
+    );
+
     React.useEffect(() => {
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
@@ -171,9 +191,10 @@ function useSidebarMetadataFetcher(
 
     return {
         handleCreateMetadataInstance,
+        handleDeleteMetadataInstance,
+        handleUpdateMetadataInstance,
         errorMessage,
         file,
-        handleDeleteMetadataInstance,
         status,
         templateInstances,
         templates,

@@ -86,6 +86,13 @@ const mockAPI = {
             errorCallback(error);
         }
     }),
+    updateMetadataRedesign: jest.fn((_file, _metadataInstance, _JSONPatch, successCallback, errorCallback) => {
+        try {
+            successCallback();
+        } catch (error) {
+            errorCallback(error);
+        }
+    }),
 };
 const api = {
     getFileAPI: jest.fn().mockReturnValue(mockAPI),
@@ -104,6 +111,7 @@ describe('useSidebarMetadataFetcher', () => {
         mockAPI.getFile.mockClear();
         mockAPI.getMetadata.mockClear();
         mockAPI.deleteMetadata.mockClear();
+        mockAPI.updateMetadataRedesign.mockClear();
     });
 
     test('should fetch the file and metadata successfully', async () => {
@@ -237,6 +245,56 @@ describe('useSidebarMetadataFetcher', () => {
         expect(onErrorMock).toHaveBeenCalledWith(
             mockError,
             'metadata_creation_error',
+            expect.objectContaining({
+                error: mockError,
+                isErrorDisplayed: true,
+            }),
+        );
+    });
+
+    test('should handle metadata update', async () => {
+        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
+            successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
+        });
+        mockAPI.updateMetadataRedesign.mockImplementation((_file, _metadataInstance, _JSONPatch, successCallback) => {
+            successCallback();
+        });
+        const ops = [{ op: 'add', path: '/foo', value: 'bar' }];
+        const successCallback = jest.fn();
+
+        const { result } = setupHook();
+        expect(result.current.templateInstances).toEqual(mockTemplateInstances);
+
+        await waitFor(() =>
+            result.current.handleUpdateMetadataInstance(mockTemplateInstances[0], ops, successCallback),
+        );
+        expect(successCallback).toHaveBeenCalled();
+    });
+
+    test('should handle metadata update error', async () => {
+        mockAPI.updateMetadataRedesign.mockImplementation(
+            (_file, _metadataInstance, _JSONPatch, successCallback, errorCallback) => {
+                errorCallback(mockError, 'metadata_update_error');
+            },
+        );
+        const ops = [{ op: 'add', path: '/foo', value: 'bar' }];
+        const successCallback = jest.fn();
+        const { result } = setupHook();
+
+        expect(result.current.templateInstances).toEqual(mockTemplateInstances);
+
+        await waitFor(() =>
+            result.current.handleUpdateMetadataInstance(mockTemplateInstances[0], ops, successCallback),
+        );
+
+        expect(successCallback).not.toHaveBeenCalled();
+
+        expect(result.current.status).toEqual(STATUS.ERROR);
+        expect(result.current.templates).toEqual(mockTemplates);
+        expect(result.current.errorMessage).toEqual(messages.sidebarMetadataEditingErrorContent);
+        expect(onErrorMock).toHaveBeenCalledWith(
+            mockError,
+            'metadata_update_error',
             expect.objectContaining({
                 error: mockError,
                 isErrorDisplayed: true,
