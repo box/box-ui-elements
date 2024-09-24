@@ -144,6 +144,7 @@ class Metadata extends File {
             scope: METADATA_SCOPE_GLOBAL,
             templateKey: METADATA_TEMPLATE_PROPERTIES,
             hidden: false,
+            fields: [],
         };
     }
 
@@ -720,6 +721,71 @@ class Metadata extends File {
     }
 
     /**
+     * API for patching metadata on file
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {Object} templateInstance - Metadata template instance
+     * @param {Array} operations - Array of JSON patch operations
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    async updateMetadataRedesign(
+        file: BoxItem,
+        templateInstance: MetadataTemplateInstance,
+        operations: JSONPatchOperations,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.errorCode = ERROR_CODE_UPDATE_METADATA;
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        const { id, permissions } = file;
+        if (!id || !permissions) {
+            this.errorHandler(getBadItemError());
+            return;
+        }
+
+        const canEdit = !!permissions.can_upload;
+
+        if (!canEdit) {
+            this.errorHandler(getBadPermissionsError());
+            return;
+        }
+
+        try {
+            await this.xhr.put({
+                url: this.getMetadataUrl(id, templateInstance.scope, templateInstance.templateKey),
+                headers: {
+                    [HEADER_CONTENT_TYPE]: 'application/json-patch+json',
+                },
+                id: getTypedFileId(id),
+                data: operations,
+            });
+            if (!this.isDestroyed()) {
+                const cache: APICache = this.getCache();
+                const key = this.getMetadataCacheKey(id);
+                const cachedMetadata = cache.get(key);
+                if (cachedMetadata && cachedMetadata.templateInstances) {
+                    cachedMetadata.templateInstances.splice(
+                        cachedMetadata.templateInstances.findIndex(
+                            instance =>
+                                instance.scope === templateInstance.scope &&
+                                instance.templateKey === templateInstance.templateKey,
+                        ),
+                        1,
+                        templateInstance,
+                    );
+                }
+                this.successHandler();
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
      * API for creating metadata on file
      *
      * @param {BoxItem} file - File object for which we are changing the description
@@ -755,7 +821,6 @@ class Metadata extends File {
             errorCallback(getBadPermissionsError(), this.errorCode);
             return;
         }
-
         this.successCallback = successCallback;
         this.errorCallback = errorCallback;
 
@@ -779,13 +844,83 @@ class Metadata extends File {
     }
 
     /**
+     * API for creating metadata on file
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {Object} template - Metadata Redesign template
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     * @return {Promise}
+     */
+    async createMetadataRedesign(
+        file: BoxItem,
+        template: MetadataTemplateInstance,
+        successCallback: Function,
+        errorCallback: ElementsErrorCallback,
+    ): Promise<void> {
+        this.errorCode = ERROR_CODE_CREATE_METADATA;
+        if (!file || !template) {
+            errorCallback(getBadItemError(), this.errorCode);
+            return;
+        }
+
+        const { id, permissions, is_externally_owned }: BoxItem = file;
+
+        if (!id || !permissions) {
+            errorCallback(getBadItemError(), this.errorCode);
+            return;
+        }
+
+        const canEdit = !!permissions.can_upload;
+        const isProperties =
+            template.templateKey === METADATA_TEMPLATE_PROPERTIES && template.scope === METADATA_SCOPE_GLOBAL;
+
+        if (!canEdit || (is_externally_owned && !isProperties)) {
+            errorCallback(getBadPermissionsError(), this.errorCode);
+            return;
+        }
+        this.successCallback = successCallback;
+        this.errorCallback = errorCallback;
+
+        try {
+            const fieldsValues = template.fields.reduce((acc, obj) => {
+                let { value } = obj;
+                // API does not accept string for float type
+                if (obj.type === 'float' && value) value = parseFloat(obj.value);
+                // API does not accept empty string for enum type
+                if (obj.type === 'enum' && value && value.length === 0) value = undefined;
+                acc[obj.key] = value;
+                return acc;
+            }, {});
+
+            const metadata = await this.xhr.post({
+                url: this.getMetadataUrl(id, template.scope, template.templateKey),
+                id: getTypedFileId(id),
+                data: fieldsValues,
+            });
+
+            if (!this.isDestroyed()) {
+                const cache: APICache = this.getCache();
+                const key = this.getMetadataCacheKey(id);
+                const cachedMetadata = cache.get(key);
+
+                const templateInstance = { ...template, type: metadata.data.$type };
+                cachedMetadata.templateInstances.push(templateInstance);
+                this.successHandler(templateInstance);
+            }
+        } catch (e) {
+            this.errorHandler(e);
+        }
+    }
+
+    /**
      * API for deleting metadata on file
      *
      * @param {BoxItem} file - File object for which we are changing the description
-     * @param {string} scope - Metadata instance scope
      * @param {string} template - Metadata template key
      * @param {Function} successCallback - Success callback
      * @param {Function} errorCallback - Error callback
+     * @param isMetadataRedesign
      * @return {Promise}
      */
     async deleteMetadata(
@@ -793,6 +928,7 @@ class Metadata extends File {
         template: MetadataTemplate,
         successCallback: Function,
         errorCallback: ElementsErrorCallback,
+        isMetadataRedesign: boolean = false,
     ): Promise<void> {
         this.errorCode = ERROR_CODE_DELETE_METADATA;
         if (!file || !template) {
@@ -825,12 +961,21 @@ class Metadata extends File {
                 const cache: APICache = this.getCache();
                 const key = this.getMetadataCacheKey(id);
                 const metadata = cache.get(key);
-                metadata.editors.splice(
-                    metadata.editors.findIndex(
-                        editor => editor.template.scope === scope && editor.template.templateKey === templateKey,
-                    ),
-                    1,
-                );
+                if (isMetadataRedesign) {
+                    metadata.templateInstances.splice(
+                        metadata.templateInstances.findIndex(
+                            instance => instance.scope === scope && instance.templateKey === templateKey,
+                        ),
+                        1,
+                    );
+                } else {
+                    metadata.editors.splice(
+                        metadata.editors.findIndex(
+                            editor => editor.template.scope === scope && editor.template.templateKey === templateKey,
+                        ),
+                        1,
+                    );
+                }
                 this.successHandler();
             }
         } catch (e) {
