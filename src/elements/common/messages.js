@@ -317,6 +317,21 @@ const messages = defineMessages({
         description: 'Error text for rename dialog when name is too long',
         defaultMessage: 'This name is too long.',
     },
+    renameDialogFileHeader: {
+        id: 'be.renameDialogFileHeader',
+        description: 'Header for rename file dialog',
+        defaultMessage: 'Rename File',
+    },
+    renameDialogFolderHeader: {
+        id: 'be.renameDialogFolderHeader',
+        description: 'Header for rename folder dialog',
+        defaultMessage: 'Rename Folder',
+    },
+    renameDialogWebLinkHeader: {
+        id: 'be.renameDialogWebLinkHeader',
+        description: 'Header for rename web link dialog',
+        defaultMessage: 'Rename Link',
+    },
     fileRenameHeading: {
         id: 'be.fileRenameHeading',
         description: 'Heading for rename file dialog',
@@ -326,16 +341,6 @@ const messages = defineMessages({
         id: 'be.folderRenameHeading',
         description: 'Heading for rename folder dialog',
         defaultMessage: 'Rename Folder',
-    },
-    hubsRenameHeading: {
-        id: 'be.hubsRenameHeading',
-        description: 'Heading for rename hubs dialog',
-        defaultMessage: 'Rename Hub',
-    },
-    webLinkRenameHeading: {
-        id: 'be.webLinkRenameHeading',
-        description: 'Heading for rename web link dialog',
-        defaultMessage: 'Rename Web Link',
     },
     createDialogLabel: {
         id: 'be.createDialogLabel',

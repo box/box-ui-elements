@@ -1,9 +1,15 @@
 import * as React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Modal, TextInput } from '@box/blueprint-web';
 import type { BoxItem } from '../../common/types/core';
 
-import { ERROR_CODE_ITEM_NAME_TOO_LONG, ERROR_CODE_ITEM_NAME_IN_USE } from '../../constants';
+import {
+    ERROR_CODE_ITEM_NAME_IN_USE,
+    ERROR_CODE_ITEM_NAME_TOO_LONG,
+    TYPE_FILE,
+    TYPE_FOLDER,
+    TYPE_WEBLINK,
+} from '../../constants';
 
 import messages from '../common/messages';
 
@@ -19,7 +25,6 @@ export interface RenameDialogProps {
     parentElement: HTMLElement;
 }
 
-/* eslint-disable jsx-a11y/label-has-for */
 const RenameDialog = ({ errorCode, isLoading, isOpen, item, onCancel, onRename, parentElement }: RenameDialogProps) => {
     const { formatMessage } = useIntl();
 
@@ -29,7 +34,12 @@ const RenameDialog = ({ errorCode, isLoading, isOpen, item, onCancel, onRename, 
     const { name = '', extension, type } = item;
     const ext = extension ? `.${extension}` : '';
     const nameWithoutExt = extension ? name.replace(ext, '') : name;
-    const itemType = type === 'web_link' ? 'webLink' : type;
+
+    const headerMessages = {
+        [TYPE_FILE]: messages.renameDialogFileHeader,
+        [TYPE_FOLDER]: messages.renameDialogFolderHeader,
+        [TYPE_WEBLINK]: messages.renameDialogWebLinkHeader,
+    };
 
     /**
      * Appends the extension and calls rename function
@@ -84,13 +94,11 @@ const RenameDialog = ({ errorCode, isLoading, isOpen, item, onCancel, onRename, 
         <Modal onOpenChange={onCancel} open={isOpen}>
             <Modal.Content
                 aria-label={formatMessage(messages.renameDialogLabel)}
-                className="be-modal-rename"
+                className="bce-RenameDialog"
                 container={parentElement}
-                size="medium"
+                size="small"
             >
-                <Modal.Header>
-                    <FormattedMessage {...messages[`${itemType}RenameHeading`]} />
-                </Modal.Header>
+                <Modal.Header>{formatMessage(headerMessages[type])}</Modal.Header>
                 <Modal.Body>
                     <TextInput
                         defaultValue={nameWithoutExt}
@@ -113,7 +121,7 @@ const RenameDialog = ({ errorCode, isLoading, isOpen, item, onCancel, onRename, 
                         {formatMessage(messages.rename)}
                     </Modal.Footer.PrimaryButton>
                 </Modal.Footer>
-                <Modal.Close aria-label="Close" />
+                <Modal.Close aria-label={formatMessage(messages.close)} />
             </Modal.Content>
         </Modal>
     );

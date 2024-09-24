@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { render, screen, fireEvent } from '../../../test-utils/testing-library';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../../test-utils/testing-library';
 
 import RenameDialog, { RenameDialogProps } from '../RenameDialog';
 
@@ -51,51 +52,53 @@ describe('elements/content-explorer/RenameDialog', () => {
         expect(renameButton).not.toBeInTheDocument();
     });
 
-    test('call onRename with input value and extension when rename button is clicked', () => {
+    test('call onRename with input value and extension when rename button is clicked', async () => {
         const mockRenameFunction = jest.fn();
         renderComponent({ isOpen: true, item: mockItem, onRename: mockRenameFunction });
 
         const textInput = screen.getByLabelText('Name');
-        fireEvent.change(textInput, { target: { value: 'newFileName' } });
+        await userEvent.clear(textInput);
+        await userEvent.type(textInput, 'newFileName');
+        await userEvent.click(screen.getByRole('button', { name: 'Rename' }));
 
-        fireEvent.click(screen.getByRole('button', { name: 'Rename' }));
         expect(mockRenameFunction).toHaveBeenCalledTimes(1);
         expect(mockRenameFunction).toHaveBeenCalledWith('newFileName', '.txt');
     });
 
-    test('call onRename with input value and extension when enter key is pressed', () => {
+    test('call onRename with input value and extension when enter key is pressed', async () => {
         const mockRenameFunction = jest.fn();
         renderComponent({ isOpen: true, item: mockItem, onRename: mockRenameFunction });
 
         const textInput = screen.getByLabelText('Name');
-        fireEvent.change(textInput, { target: { value: 'newFileName' } });
+        await userEvent.clear(textInput);
+        await userEvent.type(textInput, 'newFileName');
+        await userEvent.keyboard('{Enter}');
 
-        fireEvent.keyDown(textInput, { key: 'Enter', code: 'Enter' });
         expect(mockRenameFunction).toHaveBeenCalledTimes(1);
         expect(mockRenameFunction).toHaveBeenCalledWith('newFileName', '.txt');
     });
 
-    test('call onCancel when cancel button is clicked', () => {
+    test('call onCancel when cancel button is clicked', async () => {
         const mockCancelFunction = jest.fn();
         renderComponent({ isOpen: true, onCancel: mockCancelFunction });
 
-        fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
         expect(mockCancelFunction).toHaveBeenCalledTimes(1);
     });
 
-    test('call onCancel when close icon is clicked', () => {
+    test('call onCancel when close icon is clicked', async () => {
         const mockCancelFunction = jest.fn();
         renderComponent({ isOpen: true, onCancel: mockCancelFunction });
 
-        fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Close' }));
         expect(mockCancelFunction).toHaveBeenCalledTimes(1);
     });
 
-    test('call onCancel when text value is not changed and rename button is clicked', () => {
+    test('call onCancel when text value is not changed and rename button is clicked', async () => {
         const mockCancelFunction = jest.fn();
         renderComponent({ isOpen: true, onCancel: mockCancelFunction });
 
-        fireEvent.click(screen.getByRole('button', { name: 'Rename' }));
+        await userEvent.click(screen.getByRole('button', { name: 'Rename' }));
         expect(mockCancelFunction).toHaveBeenCalledTimes(1);
     });
 
