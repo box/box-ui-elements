@@ -79,7 +79,6 @@ function MetadataSidebarRedesign({
         errorMessage,
         status,
         templateInstances,
-        updateMetadataInstance,
     } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
     const { formatMessage } = useIntl();
@@ -115,9 +114,8 @@ function MetadataSidebarRedesign({
     };
 
     const handleSubmit = async (values: FormValues) => {
-        isExistingMetadataInstance()
-            ? updateMetadataInstance()
-            : handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
+        !isExistingMetadataInstance() &&
+            handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (

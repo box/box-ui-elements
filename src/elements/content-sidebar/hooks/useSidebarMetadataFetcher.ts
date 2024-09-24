@@ -26,7 +26,6 @@ interface DataFetcher {
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
-    updateMetadataInstance: () => void;
 }
 
 function useSidebarMetadataFetcher(
@@ -147,10 +146,6 @@ function useSidebarMetadataFetcher(
         [api, onApiError, file, deleteMetadataInstanceSuccessCallback],
     );
 
-    const updateMetadataInstance = () => {
-        // to be implemented in the next ticket
-    };
-
     const handleCreateMetadataInstance = React.useCallback(
         (templateInstance: MetadataTemplateInstance, successCallback): void => {
             api.getMetadataAPI(false).createMetadataRedesign(
@@ -182,7 +177,6 @@ function useSidebarMetadataFetcher(
         status,
         templateInstances,
         templates,
-        updateMetadataInstance,
     };
 }
 
