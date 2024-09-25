@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import getProp from 'lodash/get';
 
-import ContentAnswersModal, { ContentAnswersModalExternalProps } from './ContentAnswersModal';
+import ContentAnswersModal, { ExternalProps as ContentAnswersModalExternalProps } from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
@@ -15,9 +15,12 @@ type Props = {
     file: BoxItem;
 };
 
-export type ContentAnswersProps = ExternalProps & Props;
-
-const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: Omit<ContentAnswersProps, 'show'>) => {
+const ContentAnswers = ({
+    file,
+    onAsk,
+    onRequestClose,
+    ...rest
+}: Omit<ContentAnswersModalExternalProps & Props, 'show'>) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hasQuestions, setHasQuestions] = useState(false);
     const [isHighlighted, setIsHighlighted] = useState(false);
@@ -31,12 +34,17 @@ const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: Omit<ContentAn
         if (hasQuestions) {
             setIsHighlighted(true);
         }
-        !!onRequestClose && onRequestClose();
+
+        if (onRequestClose) {
+            onRequestClose();
+        }
     }, [hasQuestions, onRequestClose]);
 
     const handleAsk = useCallback(() => {
         setHasQuestions(true);
-        !!onAsk && onAsk();
+        if (onAsk) {
+            onAsk();
+        }
     }, [onAsk]);
 
     const currentExtension = getProp(file, 'extension');
@@ -59,4 +67,5 @@ const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: Omit<ContentAn
     );
 };
 
+export type ContentAnswersProps = ExternalProps;
 export default ContentAnswers;

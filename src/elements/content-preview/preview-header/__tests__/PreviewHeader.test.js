@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 
-import PreviewHeader from '..';
 import ContentAnswers from '../../../common/content-answers';
+import PreviewHeader from '..';
 
 describe('elements/content-preview/preview-header/PreviewHeader', () => {
     const getWrapper = (props = {}) => shallow(<PreviewHeader {...props} />).dive();

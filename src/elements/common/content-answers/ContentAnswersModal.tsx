@@ -12,7 +12,6 @@ import {
 
 import { AxiosResponse } from 'axios';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from './constants';
-import withCurrentUser from '../current-user';
 
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
@@ -28,7 +27,7 @@ import { ElementsXhrError } from '../../common/types/api';
 
 import messages from './messages';
 
-export interface ContentAnswersModalExternalProps {
+export interface ExternalProps {
     isCitationsEnabled?: boolean;
     isMarkdownEnabled?: boolean;
     isResetChatEnabled?: boolean;
@@ -38,7 +37,7 @@ export interface ContentAnswersModalExternalProps {
     suggestedQuestions?: SuggestedQuestionType[];
 }
 
-interface ContentAnswersModalProps extends ContentAnswersModalExternalProps {
+export interface ContentAnswersModalProps extends ExternalProps {
     api: APIFactory;
     currentUser?: User;
     file: BoxItem;
@@ -83,15 +82,16 @@ const ContentAnswersModal = ({
 
         setQuestions(prevState => {
             const lastQuestion = prevState[prevState.length - 1];
-            return [...prevState.slice(0, -1), { ...lastQuestion, ...question }];
+            const updatedLastQuestion = { ...lastQuestion, ...question };
+            return [...prevState.slice(0, -1), updatedLastQuestion];
         });
     }, []);
 
     const handleErrorCallback = useCallback((error: ElementsXhrError, question: QuestionType): void => {
         const rateLimitingRegex = /Too Many Requests/i;
-        const errorMessage = error ? error.message || '' : '';
-        const isRateLimitingError =
-            (error && error.response && error.response.status === 429) || rateLimitingRegex.test(errorMessage);
+
+        const errorMessage = error?.message || '';
+        const isRateLimitingError = error?.response?.status === 429 || rateLimitingRegex.test(errorMessage);
 
         const errorQuestion = {
             ...question,
@@ -107,8 +107,10 @@ const ContentAnswersModal = ({
 
     const handleAsk = useCallback(
         async (question: QuestionType, aiAgent: AgentType, isRetry = false) => {
-            !!onAsk && onAsk();
-            const id = file && file.id;
+            if (onAsk) {
+                onAsk();
+            }
+            const { id } = file;
             const items = [
                 {
                     id,
@@ -154,12 +156,16 @@ const ContentAnswersModal = ({
     );
 
     const handleClearConversation = useCallback(() => {
-        !!onClearConversation && onClearConversation();
+        if (onClearConversation) {
+            onClearConversation();
+        }
         setQuestions([]);
     }, [onClearConversation]);
 
     const handleOnRequestClose = useCallback(() => {
-        !!onRequestClose && onRequestClose();
+        if (onRequestClose) {
+            onRequestClose();
+        }
     }, [onRequestClose]);
 
     const fileName = getProp(file, 'name');
@@ -177,10 +183,10 @@ const ContentAnswersModal = ({
             isCitationsEnabled={isCitationsEnabled}
             isMarkdownEnabled={isMarkdownEnabled}
             isResetChatEnabled={isResetChatEnabled}
+            onClearAction={handleClearConversation}
+            onOpenChange={handleOnRequestClose}
             onModalClose={handleOnRequestClose}
             open={isOpen}
-            onOpenChange={handleOnRequestClose}
-            onClearAction={handleClearConversation}
             questions={questions}
             retryQuestion={handleRetry}
             submitQuestion={handleAsk}
@@ -192,4 +198,4 @@ const ContentAnswersModal = ({
     );
 };
 
-export default withAPIContext(withCurrentUser(ContentAnswersModal));
+export default withAPIContext(ContentAnswersModal);

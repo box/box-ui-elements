@@ -18,8 +18,8 @@ class Intelligence extends Base {
      * API endpoint to ask ai a question
      *
      * @param question
-     * @param dialogueHistory
      * @param {Array<object>} items - Array of items to ask about
+     * @param dialogueHistory
      * @param options
      * @return {Promise}
      */
@@ -27,7 +27,7 @@ class Intelligence extends Base {
         question: QuestionType,
         items: Array<BoxItem>,
         dialogueHistory: Array<QuestionType> = [],
-        options: { include_citations: boolean } = {},
+        options: { include_citations?: boolean } = {},
     ): Promise<any> {
         const { prompt } = question;
         if (!prompt) {
