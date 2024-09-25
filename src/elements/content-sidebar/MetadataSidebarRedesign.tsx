@@ -146,7 +146,7 @@ function MetadataSidebarRedesign({
     const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
-    console.log('isDeleteButtonDisabled', isDeleteButtonDisabled);
+
     return (
         <SidebarContent
             actions={metadataDropdown}

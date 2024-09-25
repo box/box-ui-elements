@@ -31,7 +31,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     const handleCancel = () => {
         onCancel();
     };
-    console.log(isDeleteButtonDisabled);
+
     return (
         <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
