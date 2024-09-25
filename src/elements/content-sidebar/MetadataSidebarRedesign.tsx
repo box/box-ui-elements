@@ -90,6 +90,7 @@ function MetadataSidebarRedesign({
 
     const [selectedTemplates, setSelectedTemplates] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
+    const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         setSelectedTemplates(templateInstances);
@@ -102,6 +103,7 @@ function MetadataSidebarRedesign({
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
         setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
+        setIsDeleteButtonDisabled(true);
     };
 
     const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
@@ -163,6 +165,7 @@ function MetadataSidebarRedesign({
                 {editingTemplate && (
                     <MetadataInstanceEditor
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                        isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         onCancel={() => setEditingTemplate(null)}
                         onSubmit={handleSubmit}
@@ -176,6 +179,7 @@ function MetadataSidebarRedesign({
                         isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                         onEdit={templateInstance => {
                             setEditingTemplate(templateInstance);
+                            setIsDeleteButtonDisabled(false);
                         }}
                         onEditWithAutofill={noop}
                         templateInstances={templateInstances}

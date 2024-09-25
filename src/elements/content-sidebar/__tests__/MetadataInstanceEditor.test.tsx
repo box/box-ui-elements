@@ -26,6 +26,7 @@ describe('MetadataInstanceEditor', () => {
 
     const defaultProps: MetadataInstanceEditorProps = {
         isBoxAiSuggestionsEnabled: true,
+        isDeleteButtonDisabled: false,
         isUnsavedChangesModalOpen: false,
         template: mockMetadataTemplate,
         onCancel: jest.fn(),
