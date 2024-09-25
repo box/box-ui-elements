@@ -87,7 +87,7 @@ function MetadataSidebarRedesign({
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
-
+    const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
     const [selectedTemplates, setSelectedTemplates] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
 
@@ -102,6 +102,7 @@ function MetadataSidebarRedesign({
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
         setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
+        setIsDeleteButtonDisabled(true);
     };
 
     const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
@@ -145,7 +146,7 @@ function MetadataSidebarRedesign({
     const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
-
+    console.log('isDeleteButtonDisabled', isDeleteButtonDisabled);
     return (
         <SidebarContent
             actions={metadataDropdown}
@@ -163,6 +164,7 @@ function MetadataSidebarRedesign({
                 {editingTemplate && (
                     <MetadataInstanceEditor
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                        isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         onCancel={() => setEditingTemplate(null)}
                         onSubmit={handleSubmit}
@@ -176,6 +178,7 @@ function MetadataSidebarRedesign({
                         isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                         onEdit={templateInstance => {
                             setEditingTemplate(templateInstance);
+                            setIsDeleteButtonDisabled(false);
                         }}
                         onEditWithAutofill={noop}
                         templateInstances={templateInstances}

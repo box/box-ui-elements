@@ -9,6 +9,7 @@ import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
+    isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
@@ -19,6 +20,7 @@ export interface MetadataInstanceEditorProps {
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
+    isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
     onDelete,
     onSubmit,
@@ -29,11 +31,12 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     const handleCancel = () => {
         onCancel();
     };
-
+    console.log(isDeleteButtonDisabled);
     return (
         <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                isDeleteButtonDisabled={isDeleteButtonDisabled}
                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 selectedTemplateInstance={template}
                 onCancel={handleCancel}
