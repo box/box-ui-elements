@@ -1104,8 +1104,8 @@ class Metadata extends File {
         const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
         const { marker, searchInput, signal } = options;
         const params = {
-            ...(marker && { marker }),
-            ...(searchInput && { searchInput }),
+            ...(marker ? { marker } : {}),
+            ...(searchInput ? { searchInput } : {}),
         };
 
         if (signal?.aborted) {
