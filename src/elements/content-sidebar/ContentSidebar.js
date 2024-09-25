@@ -51,6 +51,7 @@ type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
     apiHost: string,
+    boxAISidebarProps: BoxAISidebarProps,
     cache?: APICache,
     className: string,
     clientName: string,
@@ -62,8 +63,6 @@ type Props = {
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
-    hasBoxAI: boolean,
-    boxAISidebarProps: BoxAISidebarProps,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
@@ -110,6 +109,7 @@ class ContentSidebar extends React.Component<Props, State> {
     static defaultProps = {
         activitySidebarProps: {},
         apiHost: DEFAULT_HOSTNAME_API,
+        boxAISidebarProps: {},
         className: '',
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         defaultView: '',
@@ -117,10 +117,9 @@ class ContentSidebar extends React.Component<Props, State> {
         docGenSidebarProps: { enabled: false },
         getPreview: noop,
         getViewer: noop,
-        hasBoxAI: false,
-        boxAISidebarProps: {},
         hasActivityFeed: false,
         hasAdditionalTabs: false,
+        hasBoxAI: false,
         hasMetadata: false,
         hasNav: true,
         hasSkills: false,
@@ -259,6 +258,7 @@ class ContentSidebar extends React.Component<Props, State> {
     fetchMetadata(): void {
         const { file }: State = this.state;
         const { metadataSidebarProps }: Props = this.props;
+        // eslint-disable-next-line no-shadow
         const { isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
 
         // Only fetch metadata if we think that the file may have metadata on it
@@ -338,6 +338,7 @@ class ContentSidebar extends React.Component<Props, State> {
         const {
             activitySidebarProps,
             additionalTabs,
+            boxAISidebarProps,
             className,
             currentUser,
             defaultView,
@@ -347,8 +348,6 @@ class ContentSidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasAdditionalTabs,
-            hasBoxAI,
-            boxAISidebarProps,
             hasActivityFeed,
             hasMetadata,
             hasNav,
@@ -379,6 +378,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             <Sidebar
                                 activitySidebarProps={activitySidebarProps}
                                 additionalTabs={additionalTabs}
+                                boxAISidebarProps={boxAISidebarProps}
                                 className={className}
                                 currentUser={currentUser}
                                 detailsSidebarProps={detailsSidebarProps}
@@ -387,10 +387,9 @@ class ContentSidebar extends React.Component<Props, State> {
                                 fileId={fileId}
                                 getPreview={getPreview}
                                 getViewer={getViewer}
-                                hasBoxAI={hasBoxAI}
-                                boxAISidebarProps={boxAISidebarProps}
                                 hasActivityFeed={hasActivityFeed}
                                 hasAdditionalTabs={hasAdditionalTabs}
+                                hasBoxAI={isFeatureEnabled(props.features, 'boxai.sidebar.enabled')}
                                 hasNav={hasNav}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}

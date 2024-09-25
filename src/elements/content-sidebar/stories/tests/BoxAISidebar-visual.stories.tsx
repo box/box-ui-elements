@@ -3,13 +3,16 @@ import { type StoryObj } from '@storybook/react';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
 
+const mockFeatures = {
+    'boxai.sidebar.enabled': true,
+};
+
 export default {
     title: 'Elements/ContentSidebar/BoxAISidebar/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
-        features: global.FEATURES,
+        features: mockFeatures,
         fileId: global.FILE_ID,
-        hasBoxAI: true,
         token: global.TOKEN,
     },
 };

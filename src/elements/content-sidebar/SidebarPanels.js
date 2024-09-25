@@ -43,6 +43,7 @@ import type { FeatureConfig } from '../common/feature-checking';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
+    boxAISidebarProps: BoxAISidebarProps,
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
@@ -53,8 +54,8 @@ type Props = {
     fileId: string,
     getPreview: Function,
     getViewer: Function,
-    hasBoxAI: boolean,
     hasActivity: boolean,
+    hasBoxAI: boolean,
     hasDetails: boolean,
     hasDocGen: boolean,
     hasMetadata: boolean,
@@ -62,7 +63,6 @@ type Props = {
     hasVersions: boolean,
     isOpen: boolean,
     location: Location,
-    boxAISidebarProps: BoxAISidebarProps,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
     onVersionChange?: Function,
@@ -181,6 +181,7 @@ class SidebarPanels extends React.Component<Props, State> {
     render() {
         const {
             activitySidebarProps,
+            boxAISidebarProps,
             currentUser,
             currentUserError,
             detailsSidebarProps,
@@ -191,8 +192,8 @@ class SidebarPanels extends React.Component<Props, State> {
             fileId,
             getPreview,
             getViewer,
-            hasBoxAI,
             hasActivity,
+            hasBoxAI,
             hasDetails,
             hasDocGen,
             hasMetadata,
@@ -200,7 +201,6 @@ class SidebarPanels extends React.Component<Props, State> {
             hasVersions,
             isOpen,
             metadataSidebarProps,
-            boxAISidebarProps,
             onAnnotationSelect,
             onVersionChange,
             onVersionHistoryClick,
