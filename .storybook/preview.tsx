@@ -7,6 +7,7 @@ import '../src/styles/variables';
 import '../src/styles/base.scss';
 
 import { reactIntl } from './reactIntl';
+import { allModes } from './modes';
 
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;
@@ -19,7 +20,13 @@ initialize();
 
 const preview = {
     parameters: {
-        chromatic: { disableSnapshot: true },
+        chromatic: {
+            disableSnapshot: true,
+            cropToViewport: true,
+            modes: {
+                specific: allModes.specific,
+            },
+        },
         controls: {
             matchers: {
                 color: /(background|color)$/i,

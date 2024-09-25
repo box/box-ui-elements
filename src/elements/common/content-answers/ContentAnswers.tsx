@@ -7,13 +7,13 @@ import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 // eslint-disable-next-line import/named
 import { BoxItem } from '../../common/types/core';
 
-type ExternalProps = ContentAnswersModalExternalProps & {
+interface ExternalProps extends ContentAnswersModalExternalProps {
     show?: boolean;
-};
+}
 
-type Props = {
+interface Props {
     file: BoxItem;
-};
+}
 
 const ContentAnswers = ({
     file,
