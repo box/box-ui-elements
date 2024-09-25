@@ -1,6 +1,7 @@
 import React from 'react';
 import { type MetadataTemplateInstance } from '@box/metadata-editor';
-import { screen, render, fireEvent, act } from '../../../test-utils/testing-library';
+import userEvent from '@testing-library/user-event';
+import { screen, render } from '../../../test-utils/testing-library';
 import MetadataInstanceEditor, { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
 
 const mockOnCancel = jest.fn();
@@ -59,6 +60,21 @@ describe('MetadataInstanceEditor', () => {
         onUnsavedChangesModalCancel: mockOnUnsavedChangesModalCancel,
     };
 
+    // Mock window.matchMedia to simulate media query behavior for tests
+    // in which UnsavedChangesModal component relies on it.
+    const mockMatchMedia = () =>
+        Object.defineProperty(window, 'matchMedia', {
+            writable: true,
+            value: jest.fn().mockImplementation(query => ({
+                matches: false,
+                media: query,
+                onchange: null,
+                addEventListener: jest.fn(),
+                removeEventListener: jest.fn(),
+                dispatchEvent: jest.fn(),
+            })),
+        });
+
     test('should render MetadataInstanceForm with correct props', () => {
         render(<MetadataInstanceEditor {...defaultProps} />);
 
@@ -74,25 +90,13 @@ describe('MetadataInstanceEditor', () => {
         expect(templateHeader).toBeInTheDocument();
     });
 
-    test('should render UnsavedChangesModal if isUnsavedChangesModalOpen is true', () => {
-        // Mock window.matchMedia to simulate media query behavior for this test,
-        // as the UnsavedChangesModal component relies on it.
-        Object.defineProperty(window, 'matchMedia', {
-            writable: true,
-            value: jest.fn().mockImplementation(query => ({
-                matches: false,
-                media: query,
-                onchange: null,
-                addEventListener: jest.fn(),
-                removeEventListener: jest.fn(),
-                dispatchEvent: jest.fn(),
-            })),
-        });
+    test('should render UnsavedChangesModal if isUnsavedChangesModalOpen is true', async () => {
+        mockMatchMedia();
 
         const props = { ...defaultProps, isUnsavedChangesModalOpen: true };
-        render(<MetadataInstanceEditor {...props} />);
+        const { findByText } = render(<MetadataInstanceEditor {...props} />);
 
-        const unsavedChangesModal = screen.getByText('Unsaved Changes');
+        const unsavedChangesModal = await findByText('Unsaved Changes');
         expect(unsavedChangesModal).toBeInTheDocument();
     });
 
@@ -111,38 +115,41 @@ describe('MetadataInstanceEditor', () => {
         expect(deleteButton).toBeEnabled();
     });
 
-    test('Should call onCancel when canceling editing', () => {
+    test('Should call onCancel when canceling editing', async () => {
         const props: MetadataInstanceEditorProps = { ...defaultProps, template: mockCustomMetadataTemplate };
-        const { getByRole } = render(<MetadataInstanceEditor {...props} />);
+        const { findByRole } = render(<MetadataInstanceEditor {...props} />);
+        const cancelButton = await findByRole('button', { name: 'Cancel' });
 
-        act(() => {
-            fireEvent.click(getByRole('button', { name: 'Cancel' }));
-        });
+        await userEvent.click(cancelButton);
 
         expect(mockOnCancel).toHaveBeenCalled();
     });
 
-    test('Should call onUnsavedChangesModalCancel instead onCancel when canceling through UnsavedChangesModal', () => {
-        const props: MetadataInstanceEditorProps = { ...defaultProps, template: mockCustomMetadataTemplateWithField };
-        const { getByRole, rerender } = render(<MetadataInstanceEditor {...props} />);
-        const input = getByRole('textbox');
+    test('Should call onUnsavedChangesModalCancel instead onCancel when canceling through UnsavedChangesModal', async () => {
+        mockMatchMedia();
 
-        act(() => {
-            fireEvent.change(input, { target: { value: 'Lorem ipsum dolor.' } });
-            fireEvent.click(getByRole('button', { name: 'Cancel' }));
-        });
+        const props: MetadataInstanceEditorProps = {
+            ...defaultProps,
+            template: mockCustomMetadataTemplateWithField,
+        };
+        const { rerender, findByRole, findByText } = render(<MetadataInstanceEditor {...props} />);
+        const input = await findByRole('textbox');
+        const cancelButton = await findByRole('button', { name: 'Cancel' });
+
+        await userEvent.type(input, 'Lorem ipsum dolor.');
+        await userEvent.click(cancelButton);
 
         expect(mockOnCancel).not.toHaveBeenCalled();
         expect(mockSetIsUnsavedChangesModalOpen).toHaveBeenCalledWith(true);
 
         rerender(<MetadataInstanceEditor {...props} isUnsavedChangesModalOpen={true} />);
-        const unsavedChangesModal = screen.getByText('Unsaved Changes');
+        const unsavedChangesModal = await findByText('Unsaved Changes');
 
         expect(unsavedChangesModal).toBeInTheDocument();
+        const unsavedChangesModalCancelButton = await findByRole('button', { name: 'Cancel' });
 
-        act(() => {
-            fireEvent.click(getByRole('button', { name: 'Cancel' }));
-        });
+        await userEvent.click(unsavedChangesModalCancelButton);
+
         expect(mockOnUnsavedChangesModalCancel).toHaveBeenCalled();
     });
 });
