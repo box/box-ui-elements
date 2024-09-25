@@ -120,7 +120,6 @@ class ContentSidebar extends React.Component<Props, State> {
         getViewer: noop,
         hasActivityFeed: false,
         hasAdditionalTabs: false,
-        hasBoxAI: false,
         hasMetadata: false,
         hasNav: true,
         hasSkills: false,
