@@ -64,8 +64,6 @@ type Props = {
     fileId?: string,
     getPreview: Function,
     getViewer: Function,
-    hasBoxAI: boolean,
-    boxAISidebarProps: BoxAISidebarProps,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
@@ -120,10 +118,9 @@ class ContentSidebar extends React.Component<Props, State> {
         docGenSidebarProps: { enabled: false },
         getPreview: noop,
         getViewer: noop,
-        hasBoxAI: false,
-        boxAISidebarProps: {},
         hasActivityFeed: false,
         hasAdditionalTabs: false,
+        hasBoxAI: false,
         hasMetadata: false,
         hasNav: true,
         hasSkills: false,
@@ -351,8 +348,6 @@ class ContentSidebar extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasAdditionalTabs,
-            hasBoxAI,
-            boxAISidebarProps,
             hasActivityFeed,
             hasMetadata,
             hasNav,
@@ -392,10 +387,9 @@ class ContentSidebar extends React.Component<Props, State> {
                                 fileId={fileId}
                                 getPreview={getPreview}
                                 getViewer={getViewer}
-                                hasBoxAI={hasBoxAI}
-                                boxAISidebarProps={boxAISidebarProps}
                                 hasActivityFeed={hasActivityFeed}
                                 hasAdditionalTabs={hasAdditionalTabs}
+                                hasBoxAI={isFeatureEnabled(props.features, 'boxai.sidebar.enabled')}
                                 hasNav={hasNav}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}

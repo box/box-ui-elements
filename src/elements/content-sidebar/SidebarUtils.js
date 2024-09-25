@@ -58,7 +58,7 @@ class SidebarUtils {
      * @return {Boolean} true if we should render
      */
     static canHaveBoxAISidebar(props: ContentSidebarProps): boolean {
-        return isFeatureEnabled(props.features, 'boxai.sidebar.enabled');
+        return !!props.hasBoxAI;
     }
 
     /**

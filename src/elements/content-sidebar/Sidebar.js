@@ -50,6 +50,7 @@ type Props = {
     getViewer: Function,
     hasActivityFeed: boolean,
     hasAdditionalTabs: boolean,
+    hasBoxAI: boolean,
     hasMetadata: boolean,
     hasNav: boolean,
     hasSkills: boolean,
