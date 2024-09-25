@@ -118,7 +118,10 @@ const parseReplies = (replies: Comment[]): Comment[] => {
     });
 };
 
-export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
+export const getParsedFileActivitiesResponse = (
+    response?: { entries: FileActivity[] },
+    permissions: BoxItemPermission = {},
+) => {
     if (!response || !response.entries || !response.entries.length) {
         return [];
     }
@@ -189,8 +192,10 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                 }
                 case FILE_ACTIVITY_TYPE_APP_ACTIVITY: {
                     const appActivityItem = { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
+                    const { can_delete } = permissions;
 
                     appActivityItem.created_at = appActivityItem.occurred_at;
+                    appActivityItem.permissions = { can_delete };
 
                     return appActivityItem;
                 }
@@ -658,7 +663,7 @@ class Feed extends Base {
                     return;
                 }
 
-                const uaaFeedItems = getParsedFileActivitiesResponse(response);
+                const uaaFeedItems = getParsedFileActivitiesResponse(response, permissions);
                 compareV2AndUaaFeedItems(uaaFeedItems, response);
                 handleFeedItems(uaaFeedItems);
             });
