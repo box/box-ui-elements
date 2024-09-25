@@ -18,6 +18,7 @@ import {
     METADATA_TEMPLATE_PROPERTIES,
     TYPE_FILE,
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
+    ERROR_CODE_FETCH_METADATA_OPTIONS,
 } from '../../constants';
 
 let metadata: Metadata;
@@ -2876,6 +2877,98 @@ describe('api/Metadata', () => {
                     confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
                 },
             });
+        });
+    });
+
+    describe('getMetadataOptions()', () => {
+        test('should return metadata options when called with valid parameters', async () => {
+            const response = {
+                entries: [
+                    {
+                        id: '1',
+                        display_name: 'Foo',
+                        level: 0,
+                        ancestors: [{ id: '2', display_name: 'Bar', level: 1 }],
+                        deprecated: false,
+                        selectable: true,
+                    },
+                ],
+                next_marker: 'next_marker',
+                result_count: 1,
+            };
+
+            metadata.getMetadataOptionsUrl = jest.fn().mockReturnValueOnce('options_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: response });
+
+            const options = {
+                marker: null,
+                signal: AbortController,
+                searchInput: 'search_term',
+            };
+
+            const metadataOptions = await metadata.getMetadataOptions(
+                'id',
+                'enterprise',
+                'templateKey',
+                'fieldKey',
+                0,
+                options,
+            );
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_OPTIONS);
+            expect(metadataOptions).toEqual(response);
+            expect(metadata.getMetadataOptionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'options_url',
+                id: 'file_id',
+                params: {
+                    searchInput: 'search_term',
+                },
+            });
+        });
+
+        test('should abort metadata options when abort controller signal is called', async () => {
+            const options = {
+                marker: null,
+                signal: { aborted: true },
+                searchInput: '',
+            };
+
+            metadata.xhr.abort = jest.fn();
+
+            await metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', 0, options);
+
+            expect(metadata.xhr.abort).toHaveBeenCalled();
+        });
+
+        test('should throw an error if id is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('', 'enterprise', 'templateKey', 'fieldKey', 'level', {}),
+            ).rejects.toThrow(ErrorUtil.getBadItemError());
+        });
+
+        test('should throw an error if scope is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', '', 'templateKey', 'fieldKey', 'level', {}),
+            ).rejects.toThrow(new Error('Missing scope'));
+        });
+
+        test('should throw an error if templateKey is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', 'enterprise', '', 'fieldKey', 'level', {}),
+            ).rejects.toThrow(new Error('Missing templateKey'));
+        });
+
+        test('should throw an error if fieldKey is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', 'enterprise', 'templateKey', '', 'level', {}),
+            ).rejects.toThrow(new Error('Missing fieldKey'));
+        });
+
+        test('should throw an error if level is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', '', {}),
+            ).rejects.toThrow(new Error('Missing level'));
         });
     });
 });
