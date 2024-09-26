@@ -225,7 +225,7 @@ function MetadataSidebarRedesign({
     const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
-    const areBoxAiSuggestionsEnabled = SUPPORTED_FILE_EXTENSIONS.has(file?.extension);
+    const areAiSuggestionsAvailable = SUPPORTED_FILE_EXTENSIONS.has(file?.extension);
 
     return (
         <SidebarContent
@@ -243,7 +243,7 @@ function MetadataSidebarRedesign({
                 )}
                 {editingTemplate && (
                     <MetadataInstanceEditor
-                        areBoxAiSuggestionsEnabled={areBoxAiSuggestionsEnabled}
+                        areAiSuggestionsAvailable={areAiSuggestionsAvailable}
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         onCancel={() => setEditingTemplate(null)}
