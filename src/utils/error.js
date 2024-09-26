@@ -35,4 +35,15 @@ function isUserCorrectableError(status: number) {
     );
 }
 
-export { getBadItemError, getBadPermissionsError, getBadUserError, getMissingItemTextOrStatus, isUserCorrectableError };
+function getAbortError() {
+    return new DOMException('Aborted', 'AbortError');
+}
+
+export {
+    getAbortError,
+    getBadItemError,
+    getBadPermissionsError,
+    getBadUserError,
+    getMissingItemTextOrStatus,
+    isUserCorrectableError,
+};

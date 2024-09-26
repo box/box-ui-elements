@@ -2937,7 +2937,9 @@ describe('api/Metadata', () => {
 
             metadata.xhr.abort = jest.fn();
 
-            await metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', 0, options);
+            await expect(() =>
+                metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', 0, options),
+            ).rejects.toThrow(ErrorUtil.getAbortError());
 
             expect(metadata.xhr.abort).toHaveBeenCalled();
         });

@@ -7,7 +7,7 @@
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
-import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
+import { getAbortError, getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
 import File from './File';
 import {
@@ -1119,7 +1119,7 @@ class Metadata extends File {
         if (signal?.aborted) {
             this.xhr.abort();
 
-            return {};
+            throw getAbortError();
         }
 
         const metadataOptions = this.xhr.get({
