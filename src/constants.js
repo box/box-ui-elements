@@ -56,7 +56,6 @@ export const CACHE_PREFIX_SEARCH = 'search_';
 export const CACHE_PREFIX_RECENTS = 'recents_';
 export const CACHE_PREFIX_METADATA = 'metadata_';
 export const CACHE_PREFIX_METADATA_QUERY = 'metadata_query_';
-export const CACHE_PREFIX_METADATA_OPTIONS = 'metadata_options_';
 
 /* ----------------------- Sorts ---------------------------- */
 export const SORT_ASC: 'ASC' = 'ASC';
