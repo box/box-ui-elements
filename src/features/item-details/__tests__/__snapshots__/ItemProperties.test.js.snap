@@ -158,6 +158,21 @@ testing this link http://box.com"
     />
   </dd>
   <FormattedMessage
+    defaultMessage="Archived"
+    id="boxui.itemDetails.archived"
+    tagName="dt"
+  />
+  <dd>
+    <FormattedDate
+      day="numeric"
+      hour="numeric"
+      minute="numeric"
+      month="short"
+      value={2024-09-20T11:39:15.000Z}
+      year="numeric"
+    />
+  </dd>
+  <FormattedMessage
     defaultMessage="Size"
     id="boxui.itemDetails.size"
     tagName="dt"
