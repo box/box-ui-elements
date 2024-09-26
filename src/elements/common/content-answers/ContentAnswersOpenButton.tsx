@@ -50,8 +50,8 @@ const ContentAnswersOpenButton = ({
         return formatMessage(messages.defaultTooltip);
     };
 
-    const openButtonClassNames = classNames('bdl-ContentAnswersOpenButton', {
-        'bdl-ContentAnswersOpenButton--hasQuestions': isHighlighted,
+    const openButtonClassNames = classNames('be-ContentAnswersOpenButton', {
+        'be-ContentAnswersOpenButton--hasQuestions': isHighlighted,
     });
     return (
         <Tooltip content={getTooltipText()}>

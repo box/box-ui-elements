@@ -68,14 +68,14 @@ describe('common/content-answers/ContentAnswersOpenButton', () => {
     test('should highlight button if isHighlight is true', () => {
         renderComponent({ isHighlighted: false });
         const button = screen.getByRole('button', { name: 'Box AI' });
-        expect(button).not.toHaveClass('bdl-ContentAnswersOpenButton--hasQuestions');
+        expect(button).not.toHaveClass('be-ContentAnswersOpenButton--hasQuestions');
         expect(button.matches(':focus')).toBe(false);
     });
 
     test('should focus button when button is already highlighted and modal is closed', () => {
         renderComponent({ isHighlighted: true });
         const button = screen.getByRole('button', { name: 'Box AI' });
-        expect(button).toHaveClass('bdl-ContentAnswersOpenButton--hasQuestions');
+        expect(button).toHaveClass('be-ContentAnswersOpenButton--hasQuestions');
         expect(button.matches(':focus')).toBe(true);
     });
 });

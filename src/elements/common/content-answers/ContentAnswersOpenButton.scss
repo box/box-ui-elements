@@ -10,7 +10,7 @@
     border: 1px solid #2222224d;
 }
 
-.bdl-ContentAnswersOpenButton {
+.be-ContentAnswersOpenButton {
     width: tokens.$size-20;
     height: tokens.$size-20;
     background-color: tokens.$gray-02;
@@ -20,7 +20,7 @@
         background-color: tokens.$gray-10;
     }
 
-    &.bdl-ContentAnswersOpenButton--hasQuestions {
+    &.be-ContentAnswersOpenButton--hasQuestions {
         @include BackgroundGradient;
 
         svg {
@@ -40,9 +40,5 @@
                 0 0 0 1px tokens.$gray-white,
                 0 0 0 3px tokens.$light-blue-100;
         }
-    }
-
-    .bdl-ContentAnswersOpenButton-tooltip {
-        text-align: center;
     }
 }
