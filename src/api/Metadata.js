@@ -1055,6 +1055,14 @@ class Metadata extends File {
         return getProp(suggestionsResponse, 'data.suggestions', []);
     }
 
+    /**
+     * Build URL for metadata options associated to a taxonomy field.
+     *
+     * @param scope
+     * @param templateKey
+     * @param fieldKey
+     * @returns {`${string}/metadata_templates/${string}/${string}/fields/${string}/options`}
+     */
     getMetadataOptionsUrl(scope: string, templateKey: string, fieldKey: string): string {
         return `${this.getBaseApiUrl()}/metadata_templates/${scope}/${templateKey}/fields/${fieldKey}/options`;
     }
