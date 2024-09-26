@@ -2941,6 +2941,14 @@ describe('api/Metadata', () => {
             expect(metadata.xhr.abort).toHaveBeenCalled();
         });
 
+        test('should build getMetadataOptionsUrl correctly', async () => {
+            const url = metadata.getMetadataOptionsUrl('enterprise', 'templateKey', 'fieldKey');
+
+            expect(url).toBe(
+                'https://api.box.com/2.0/metadata_templates/enterprise/templateKey/fields/fieldKey/options',
+            );
+        });
+
         test('should throw an error if id is missing', async () => {
             await expect(() =>
                 metadata.getMetadataOptions('', 'enterprise', 'templateKey', 'fieldKey', 'level', {}),
