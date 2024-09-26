@@ -20,6 +20,7 @@ const datetimeOptions = {
 };
 
 const ItemProperties = ({
+    archivedAt,
     createdAt,
     description,
     descriptionTextareaProps = {},
@@ -96,6 +97,14 @@ const ItemProperties = ({
                     </dd>
                 </>
             ) : null}
+            {archivedAt ? (
+                <>
+                    <FormattedMessage tagName="dt" {...messages.archived} />
+                    <dd>
+                        <FormattedDate value={new Date(archivedAt)} {...datetimeOptions} />
+                    </dd>
+                </>
+            ) : null}
             {size ? (
                 <>
                     <FormattedMessage tagName="dt" {...messages.size} />
@@ -116,6 +125,8 @@ const ItemProperties = ({
 };
 
 ItemProperties.propTypes = {
+    /** the datetime this item was archived, accepts any value that can be passed to the Date() constructor */
+    archivedAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** the datetime this item was created, accepts any value that can be passed to the Date() constructor */
     createdAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** a description for the item */

@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
+import { TooltipProvider } from '@box/blueprint-web';
 import type { RouterHistory } from 'react-router-dom';
 import API from '../../api';
 import APIContext from '../common/api-context';
@@ -18,9 +19,13 @@ import SidebarUtils from './SidebarUtils';
 import { DEFAULT_HOSTNAME_API, CLIENT_NAME_CONTENT_SIDEBAR, ORIGIN_CONTENT_SIDEBAR } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
 import { withErrorBoundary } from '../common/error-boundary';
-import { withFeatureProvider } from '../common/feature-checking';
+import {
+    isFeatureEnabled as isFeatureEnabledInContext,
+    withFeatureConsumer,
+    withFeatureProvider,
+} from '../common/feature-checking';
 import { withLogger } from '../common/logger';
 
 import type { ActivitySidebarProps } from './ActivitySidebar';
@@ -293,12 +298,16 @@ class ContentSidebar extends React.Component<Props, State> {
      * @return {void}
      */
     fetchFile(fetchOptions: RequestOptions = {}): void {
-        const { fileId }: Props = this.props;
+        const { fileId, features }: Props = this.props;
+        const archiveEnabled = isFeatureEnabledInContext(features, 'contentSidebar.archive.enabled');
+        const fields = archiveEnabled ? SIDEBAR_FIELDS_TO_FETCH_ARCHIVE : SIDEBAR_FIELDS_TO_FETCH;
+
         this.setState({ isLoading: true });
+
         if (fileId && SidebarUtils.canHaveSidebar(this.props)) {
             this.api.getFileAPI().getFile(fileId, this.fetchFileSuccessCallback, this.errorCallback, {
                 ...fetchOptions,
-                fields: SIDEBAR_FIELDS_TO_FETCH,
+                fields,
             });
         }
     }
@@ -359,35 +368,37 @@ class ContentSidebar extends React.Component<Props, State> {
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: any)}>
                     <NavRouter history={history} initialEntries={[initialPath]}>
-                        <Sidebar
-                            activitySidebarProps={activitySidebarProps}
-                            additionalTabs={additionalTabs}
-                            className={className}
-                            currentUser={currentUser}
-                            detailsSidebarProps={detailsSidebarProps}
-                            docGenSidebarProps={docGenSidebarProps}
-                            file={file}
-                            fileId={fileId}
-                            getPreview={getPreview}
-                            getViewer={getViewer}
-                            hasActivityFeed={hasActivityFeed}
-                            hasAdditionalTabs={hasAdditionalTabs}
-                            hasNav={hasNav}
-                            hasMetadata={hasMetadata}
-                            hasSkills={hasSkills}
-                            hasVersions={hasVersions}
-                            isDefaultOpen={isDefaultOpen}
-                            isLoading={isLoading}
-                            metadataEditors={metadataEditors}
-                            metadataSidebarProps={metadataSidebarProps}
-                            onAnnotationSelect={onAnnotationSelect}
-                            onVersionChange={onVersionChange}
-                            onVersionHistoryClick={onVersionHistoryClick}
-                            versionsSidebarProps={versionsSidebarProps}
-                            wrappedComponentRef={ref => {
-                                this.sidebarRef = ref;
-                            }}
-                        />
+                        <TooltipProvider>
+                            <Sidebar
+                                activitySidebarProps={activitySidebarProps}
+                                additionalTabs={additionalTabs}
+                                className={className}
+                                currentUser={currentUser}
+                                detailsSidebarProps={detailsSidebarProps}
+                                docGenSidebarProps={docGenSidebarProps}
+                                file={file}
+                                fileId={fileId}
+                                getPreview={getPreview}
+                                getViewer={getViewer}
+                                hasActivityFeed={hasActivityFeed}
+                                hasAdditionalTabs={hasAdditionalTabs}
+                                hasNav={hasNav}
+                                hasMetadata={hasMetadata}
+                                hasSkills={hasSkills}
+                                hasVersions={hasVersions}
+                                isDefaultOpen={isDefaultOpen}
+                                isLoading={isLoading}
+                                metadataEditors={metadataEditors}
+                                metadataSidebarProps={metadataSidebarProps}
+                                onAnnotationSelect={onAnnotationSelect}
+                                onVersionChange={onVersionChange}
+                                onVersionHistoryClick={onVersionHistoryClick}
+                                versionsSidebarProps={versionsSidebarProps}
+                                wrappedComponentRef={ref => {
+                                    this.sidebarRef = ref;
+                                }}
+                            />
+                        </TooltipProvider>
                     </NavRouter>
                 </APIContext.Provider>
             </Internationalize>
@@ -398,6 +409,7 @@ class ContentSidebar extends React.Component<Props, State> {
 export type ContentSidebarProps = Props;
 export { ContentSidebar as ContentSidebarComponent };
 export default flow([
+    withFeatureConsumer,
     withFeatureProvider,
     withLogger(ORIGIN_CONTENT_SIDEBAR),
     withErrorBoundary(ORIGIN_CONTENT_SIDEBAR),

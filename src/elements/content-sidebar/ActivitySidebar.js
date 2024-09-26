@@ -42,6 +42,7 @@ import {
     ORIGIN_ACTIVITY_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
     TASK_COMPLETION_RULE_ALL,
+    METRIC_TYPE_UAA_PARITY_METRIC,
 } from '../../constants';
 import type {
     TaskCompletionRule,
@@ -736,6 +737,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                 shouldShowVersions,
                 shouldUseUAA,
             },
+            shouldUseUAA ? this.logAPIParity : undefined,
         );
     }
 
@@ -793,6 +795,22 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         }
 
         this.setState({ feedItems, activityFeedError: undefined });
+    };
+
+    /**
+     * Logs diff between UAA and v2 API data
+     *
+     * @param {{}[]} responseParity array of aggragated responses from UAA and v2
+     * @param {{}} parsedDataParity parsed data from UAA and v2
+     * @return {void}
+     */
+    logAPIParity = (parityData: { uaaFeedItems: FeedItems, v2FeedItems: FeedItems }): void => {
+        const { logger } = this.props;
+
+        logger.onPreviewMetric({
+            parityData,
+            type: METRIC_TYPE_UAA_PARITY_METRIC,
+        });
     };
 
     /**

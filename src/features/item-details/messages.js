@@ -2,6 +2,11 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    archived: {
+        defaultMessage: 'Archived',
+        description: 'Label for archivization date under item properties in the sidebar',
+        id: 'boxui.itemDetails.archived',
+    },
     bookmarkExpiration: {
         defaultMessage: 'This bookmark will be deleted on {expiration}.',
         description:

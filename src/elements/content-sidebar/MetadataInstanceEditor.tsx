@@ -1,48 +1,47 @@
 import {
+    AutofillContextProvider,
     MetadataInstanceForm,
+    type FormValues,
+    type JSONPatchOperations,
     type MetadataTemplateInstance,
-    UnsavedChangesModal,
-    type MetadataTemplate,
 } from '@box/metadata-editor';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
     isUnsavedChangesModalOpen: boolean;
-    template: MetadataTemplateInstance | MetadataTemplate;
+    onCancel: () => void;
+    onDelete: (metadataInstance: MetadataTemplateInstance) => void;
+    template: MetadataTemplateInstance;
+    onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
+    setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
     isUnsavedChangesModalOpen,
+    onDelete,
+    onSubmit,
+    setIsUnsavedChangesModalOpen,
     template,
+    onCancel,
 }) => {
-    const handleSubmit = () => {
-        // TODO in a future PR
-    };
     const handleCancel = () => {
-        // TODO in a future PR
-    };
-    const handleDelete = () => {
-        // TODO in a future PR
+        onCancel();
     };
 
     return (
-        <>
+        <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isLoading={false}
+                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 selectedTemplateInstance={template}
                 onCancel={handleCancel}
-                onDelete={handleDelete}
-                onSubmit={handleSubmit}
+                onSubmit={onSubmit}
+                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                onDelete={onDelete}
             />
-            <UnsavedChangesModal
-                onDismiss={handleCancel}
-                onSaveAndContinue={handleSubmit}
-                open={isUnsavedChangesModalOpen}
-            />
-        </>
+        </AutofillContextProvider>
     );
 };
 
