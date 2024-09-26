@@ -1,12 +1,14 @@
 import React, { act } from 'react';
 import noop from 'lodash/noop';
 import { mount } from 'enzyme';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../../utils/fields';
 import { ContentSidebarComponent as ContentSidebar } from '../ContentSidebar';
+import { isFeatureEnabled } from '../../common/feature-checking';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
 import SidebarUtils from '../SidebarUtils';
 
 jest.mock('../SidebarUtils');
 jest.mock('../Sidebar', () => 'sidebar');
+jest.mock('../../common/feature-checking');
 
 const file = {
     id: 'I_AM_A_FILE',
@@ -128,6 +130,17 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
             expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, instance.errorCallback, {
                 fields: SIDEBAR_FIELDS_TO_FETCH,
+            });
+            expect(instance.setState).toBeCalled();
+        });
+
+        test('should fetch the file with archive metadata field when feature is enabled', () => {
+            SidebarUtils.canHaveSidebar = jest.fn().mockReturnValueOnce(true);
+            isFeatureEnabled.mockReturnValueOnce(true);
+            instance.fetchFile();
+            expect(SidebarUtils.canHaveSidebar).toBeCalledWith(instance.props);
+            expect(fileStub).toBeCalledWith(file.id, fetchFileSuccessCallback, instance.errorCallback, {
+                fields: SIDEBAR_FIELDS_TO_FETCH_ARCHIVE,
             });
             expect(instance.setState).toBeCalled();
         });
