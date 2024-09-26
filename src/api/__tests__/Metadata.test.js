@@ -2901,7 +2901,7 @@ describe('api/Metadata', () => {
             metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: response });
 
             const options = {
-                marker: null,
+                marker: 'current_marker',
                 signal: AbortController,
                 searchInput: 'search_term',
             };
@@ -2922,6 +2922,7 @@ describe('api/Metadata', () => {
                 url: 'options_url',
                 id: 'file_id',
                 params: {
+                    marker: 'current_marker',
                     searchInput: 'search_term',
                 },
             });
