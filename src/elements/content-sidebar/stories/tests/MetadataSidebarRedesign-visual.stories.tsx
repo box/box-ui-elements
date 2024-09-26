@@ -139,7 +139,7 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
             ...defaultMetadataSidebarProps,
         },
         features: {
-            'metadata.redesign.enabled': true,
+           ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
         },
     },
@@ -344,7 +344,7 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
 export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
         features: {
-            'metadata.redesign.enabled': true,
+            ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
         },
     },
