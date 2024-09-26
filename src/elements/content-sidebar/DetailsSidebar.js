@@ -22,9 +22,10 @@ import SidebarSection from './SidebarSection';
 import SidebarVersions from './SidebarVersions';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { getBadItemError } from '../../utils/error';
+import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import { mark } from '../../utils/performance';
 import { SECTION_TARGETS } from '../common/interactionTargets';
-import { SIDEBAR_FIELDS_TO_FETCH } from '../../utils/fields';
+import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
@@ -39,6 +40,7 @@ import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flo
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
 import type { BoxItem } from '../../common/types/core';
+import type { FeatureConfig } from '../common/feature-checking';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
@@ -65,6 +67,7 @@ type ExternalProps = {
     WithLoggerProps;
 type Props = {
     api: API,
+    features: FeatureConfig,
 } & ExternalProps &
     ErrorContextProps &
     WithLoggerProps;
@@ -161,9 +164,14 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         successCallback: (file: BoxItem) => void = this.fetchFileSuccessCallback,
         errorCallback: ElementsErrorCallback = this.fetchFileErrorCallback,
     ): void {
-        const { api, fileId }: Props = this.props;
+        const { api, features, fileId }: Props = this.props;
+        const archiveEnabled = isFeatureEnabled(features, 'contentSidebar.archive.enabled');
+
+        // TODO: replace this with DETAILS_SIDEBAR_FIELDS_TO_FETCH as we do not need all the sidebar fields
+        const fields = archiveEnabled ? SIDEBAR_FIELDS_TO_FETCH_ARCHIVE : SIDEBAR_FIELDS_TO_FETCH;
+
         api.getFileAPI().getFile(fileId, successCallback, errorCallback, {
-            fields: SIDEBAR_FIELDS_TO_FETCH, // TODO: replace this with DETAILS_SIDEBAR_FIELDS_TO_FETCH as we do not need all the sidebar fields
+            fields,
         });
     }
 
@@ -408,6 +416,9 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
 
 export type DetailsSidebarProps = ExternalProps;
 export { DetailsSidebar as DetailsSidebarComponent };
-export default flow([withLogger(ORIGIN_DETAILS_SIDEBAR), withErrorBoundary(ORIGIN_DETAILS_SIDEBAR), withAPIContext])(
-    DetailsSidebar,
-);
+export default flow([
+    withLogger(ORIGIN_DETAILS_SIDEBAR),
+    withErrorBoundary(ORIGIN_DETAILS_SIDEBAR),
+    withAPIContext,
+    withFeatureConsumer,
+])(DetailsSidebar);
