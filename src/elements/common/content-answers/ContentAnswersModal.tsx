@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import getProp from 'lodash/get';
+import { AxiosResponse } from 'axios';
 
 import {
     AgentType,
@@ -10,8 +11,8 @@ import {
     SuggestedQuestionType,
 } from '@box/box-ai-content-answers';
 
-import { AxiosResponse } from 'axios';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from './constants';
+import withCurrentUser from '../current-user';
 
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
@@ -198,4 +199,4 @@ const ContentAnswersModal = ({
     );
 };
 
-export default withAPIContext(ContentAnswersModal);
+export default withAPIContext(withCurrentUser(ContentAnswersModal));

@@ -44,11 +44,11 @@ describe('common/content-answers/ContentAnswers', () => {
         const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
 
-        expect(button).not.toHaveClass('bdl-ContentAnswersOpenButton--hasQuestions');
+        expect(button).not.toHaveClass('be-ContentAnswersOpenButton--hasQuestions');
 
         const modalCloseButton = screen.getByLabelText('Close Modal');
         await userEvent.click(modalCloseButton);
 
-        expect(button).toHaveClass('bdl-ContentAnswersOpenButton--hasQuestions');
+        expect(button).toHaveClass('be-ContentAnswersOpenButton--hasQuestions');
     });
 });

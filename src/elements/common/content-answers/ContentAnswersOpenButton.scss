@@ -1,13 +1,13 @@
 @use '@box/blueprint-web-assets/tokens/tokens.scss';
 
 @mixin BackgroundGradient {
-    background: tokens.$border-cta-border-ai;
-    border: 1px solid tokens.$white-opacity-30;
+    background: linear-gradient(135deg, #fe01da 0%, tokens.$light-blue-100 100%);
+    border: tokens.$border-1 solid tokens.$white-opacity-30;
 }
 
 @mixin BackgroundGradientHover {
     background: linear-gradient(0deg, #2223, #2223), linear-gradient(135deg, #fe01da 0%, tokens.$light-blue-100 100%);
-    border: 1px solid #2222224d;
+    border: tokens.$border-1 solid #2222224d;
 }
 
 .be-ContentAnswersOpenButton {

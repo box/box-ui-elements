@@ -11,7 +11,7 @@ interface ExternalProps extends ContentAnswersModalExternalProps {
     show?: boolean;
 }
 
-export interface Props {
+interface Props {
     file: BoxItem;
 }
 
@@ -67,5 +67,5 @@ const ContentAnswers = ({
     );
 };
 
-export type ContentAnswersProps = ExternalProps;
+export type ContentAnswers = ExternalProps & Props;
 export default ContentAnswers;
