@@ -36,7 +36,14 @@ function isUserCorrectableError(status: number) {
 }
 
 function getAbortError() {
-    return new DOMException('Aborted', 'AbortError');
+    class AbortError extends Error {
+        constructor(message: string) {
+            super(message);
+            this.name = 'AbortError';
+        }
+    }
+
+    return new AbortError('Aborted');
 }
 
 export {
