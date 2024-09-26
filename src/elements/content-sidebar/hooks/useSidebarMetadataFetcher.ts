@@ -21,13 +21,16 @@ export enum STATUS {
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
     file: BoxItem | null;
-    handleCreateMetadataInstance: (templateInstance: MetadataTemplateInstance, successCallback: () => void) => void;
-    handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
+    handleCreateMetadataInstance: (
+        templateInstance: MetadataTemplateInstance,
+        successCallback: () => void,
+    ) => Promise<void>;
+    handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => Promise<void>;
     handleUpdateMetadataInstance: (
         metadataTemplateInstance: MetadataTemplateInstance,
         JSONPatch: Array<Object>,
         successCallback: () => void,
-    ) => void;
+    ) => Promise<void>;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
@@ -122,59 +125,52 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
-    const deleteMetadataInstanceSuccessCallback = React.useCallback(
-        (metadataInstance: MetadataTemplateInstance) => {
-            const updatedInstances = templateInstances.filter(
-                templateInstance =>
-                    templateInstance.scope !== metadataInstance.scope &&
-                    templateInstance.templateKey !== metadataInstance.templateKey,
-            );
-            setTemplateInstances(updatedInstances);
-        },
-        [templateInstances],
-    );
-
     const handleDeleteMetadataInstance = React.useCallback(
-        (metadataInstance: MetadataTemplateInstance) => {
+        async (metadataInstance: MetadataTemplateInstance): Promise<void> => {
+            setStatus(STATUS.LOADING);
             if (!file || !metadataInstance) {
                 return;
             }
 
-            api.getMetadataAPI(false).deleteMetadata(
-                file,
-                metadataInstance,
-                deleteMetadataInstanceSuccessCallback,
-                onApiError,
-                true,
-            );
+            await api
+                .getMetadataAPI(false)
+                .deleteMetadata(file, metadataInstance, () => setStatus(STATUS.SUCCESS), onApiError, true);
         },
-        [api, onApiError, file, deleteMetadataInstanceSuccessCallback],
+        [api, onApiError, file],
     );
 
     const handleCreateMetadataInstance = React.useCallback(
-        (templateInstance: MetadataTemplateInstance, successCallback): void => {
-            api.getMetadataAPI(false).createMetadataRedesign(
-                file,
-                templateInstance,
-                successCallback,
-                (error: ElementsXhrError, code: string) =>
-                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
-            );
+        async (templateInstance: MetadataTemplateInstance, successCallback: () => void): Promise<void> => {
+            await api
+                .getMetadataAPI(false)
+                .createMetadataRedesign(
+                    file,
+                    templateInstance,
+                    successCallback,
+                    (error: ElementsXhrError, code: string) =>
+                        onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
+                );
         },
         [api, file, onApiError],
     );
 
     const handleUpdateMetadataInstance = React.useCallback(
-        (metadataInstance: MetadataTemplateInstance, JSONPatch: JSONPatchOperations, successCallback: () => void) => {
-            api.getMetadataAPI(false).updateMetadataRedesign(
-                file,
-                metadataInstance,
-                JSONPatch,
-                successCallback,
-                (error: ElementsXhrError, code: string) => {
-                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
-                },
-            );
+        async (
+            metadataInstance: MetadataTemplateInstance,
+            JSONPatch: JSONPatchOperations,
+            successCallback: () => void,
+        ) => {
+            await api
+                .getMetadataAPI(false)
+                .updateMetadataRedesign(
+                    file,
+                    metadataInstance,
+                    JSONPatch,
+                    successCallback,
+                    (error: ElementsXhrError, code: string) => {
+                        onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
+                    },
+                );
         },
         [api, file, onApiError],
     );
