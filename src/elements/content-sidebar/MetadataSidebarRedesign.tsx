@@ -24,6 +24,7 @@ import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { ORIGIN_METADATA_SIDEBAR_REDESIGN, SIDEBAR_VIEW_METADATA } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
+import { useFeatureEnabled } from '../common/feature-checking';
 import { mark } from '../../utils/performance';
 import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
 
@@ -41,7 +42,6 @@ const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY
 mark(MARK_NAME_JS_READY);
 
 export interface ExternalProps {
-    isBoxAiSuggestionsEnabled: boolean;
     isFeatureEnabled: boolean;
 }
 
@@ -64,14 +64,7 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
     api: API;
 }
 
-function MetadataSidebarRedesign({
-    api,
-    elementId,
-    fileId,
-    isBoxAiSuggestionsEnabled,
-    onError,
-    isFeatureEnabled,
-}: MetadataSidebarRedesignProps) {
+function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
     const {
         file,
         handleCreateMetadataInstance,
@@ -84,6 +77,7 @@ function MetadataSidebarRedesign({
     } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
     const { formatMessage } = useIntl();
+    const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);

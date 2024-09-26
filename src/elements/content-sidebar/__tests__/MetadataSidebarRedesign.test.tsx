@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
+import { FeatureProvider } from '../../common/feature-checking';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
@@ -54,17 +55,20 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
     };
 
-    const renderComponent = (props = {}) => {
+    const renderComponent = (props = {}, features = {}) => {
         const defaultProps = {
             api: {},
             fileId: 'test-file-id-1',
             elementId: 'element-1',
-            isBoxAiSuggestionsEnabled: true,
             isFeatureEnabled: true,
             onError: jest.fn(),
         } satisfies MetadataSidebarRedesignProps;
 
-        render(<MetadataSidebarRedesign {...defaultProps} {...props} />);
+        render(
+            <FeatureProvider features={features}>
+                <MetadataSidebarRedesign {...defaultProps} {...props} />
+            </FeatureProvider>,
+        );
     };
 
     beforeEach(() => {
@@ -154,7 +158,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     });
 
     test('should correctly render empty state when AI feature is enabled', () => {
-        renderComponent();
+        renderComponent({}, { 'metadata.aiSuggestions.enabled': true });
         expect(screen.getByRole('heading', { level: 2, name: 'Autofill Metadata with Box AI' })).toBeInTheDocument();
         expect(
             screen.getByText(

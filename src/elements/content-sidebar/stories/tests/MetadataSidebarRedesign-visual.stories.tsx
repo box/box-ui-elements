@@ -15,7 +15,6 @@ const defaultMetadataArgs = {
     onError: fn,
 };
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
-    isBoxAiSuggestionsEnabled: true,
     isFeatureEnabled: true,
     onError: fn,
 };
@@ -138,6 +137,10 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
         fileId: fileWithoutMetadata,
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
+        },
+        features: {
+            'metadata.redesign.enabled': true,
+            'metadata.aiSuggestions.enabled': true,
         },
     },
 };
@@ -286,7 +289,6 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-
         // open and edit a new template
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
 
@@ -333,5 +335,30 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
 
         expect(templateMetadataOptionAAfterSwitch).not.toHaveAttribute('aria-disabled');
         expect(templateMetadataOptionBAfterSwitch).toHaveAttribute('aria-disabled');
+    },
+};
+    
+export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            'metadata.redesign.enabled': true,
+            'metadata.aiSuggestions.enabled': true,
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillWithBoxAI = await canvas.findAllByRole(
+            'button',
+            { name: /Autofill .+ with Box AI/ },
+            { timeout: 5000 },
+        );
+        expect(autofillWithBoxAI).toHaveLength(2);
+
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' });
+        userEvent.click(editButton);
+
+        const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
+        expect(autofillButton).toBeInTheDocument();
     },
 };
