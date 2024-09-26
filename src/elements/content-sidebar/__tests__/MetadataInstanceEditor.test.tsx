@@ -71,4 +71,19 @@ describe('MetadataInstanceEditor', () => {
         const unsavedChangesModal = screen.getByText('Unsaved Changes');
         expect(unsavedChangesModal).toBeInTheDocument();
     });
+
+    test('should render MetadataInstanceForm with Delete button disabled', () => {
+        const props = { ...defaultProps, isDeleteButtonDisabled: true };
+        render(<MetadataInstanceEditor {...props} />);
+
+        const deleteButton = screen.getByRole('button', { name: 'Delete' });
+        expect(deleteButton).toBeDisabled();
+    });
+
+    test('should render MetadataInstanceForm with Delete button enabled', () => {
+        render(<MetadataInstanceEditor {...defaultProps} />);
+
+        const deleteButton = screen.getByRole('button', { name: 'Delete' });
+        expect(deleteButton).toBeEnabled();
+    });
 });
