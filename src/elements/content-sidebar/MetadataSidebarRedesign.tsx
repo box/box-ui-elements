@@ -10,6 +10,8 @@ import {
     AddMetadataTemplateDropdown,
     MetadataEmptyState,
     MetadataInstanceList,
+    type FormValues,
+    type JSONPatchOperations,
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
@@ -32,6 +34,7 @@ import { type WithLoggerProps } from '../../common/types/logging';
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
+import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -69,11 +72,22 @@ function MetadataSidebarRedesign({
     onError,
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
-    const { handleDeleteMetadataInstance, file, templates, errorMessage, status, templateInstances } =
-        useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+    const {
+        file,
+        handleCreateMetadataInstance,
+        handleDeleteMetadataInstance,
+        handleUpdateMetadataInstance,
+        templates,
+        errorMessage,
+        status,
+        templateInstances,
+    } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+
     const { formatMessage } = useIntl();
+
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
+
     const [selectedTemplates, setSelectedTemplates] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
 
@@ -85,9 +99,9 @@ function MetadataSidebarRedesign({
         setIsUnsavedChangesModalOpen(true);
     };
 
-    const handleTemplateSelect = (selectedTemplate: MetadataTemplateInstance) => {
+    const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         setSelectedTemplates([...selectedTemplates, selectedTemplate]);
-        setEditingTemplate(selectedTemplate);
+        setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
     };
 
     const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
@@ -95,14 +109,26 @@ function MetadataSidebarRedesign({
         setEditingTemplate(null);
     };
 
+    const isExistingMetadataInstance = (): boolean => {
+        return (
+            editingTemplate && !!templateInstances.find(templateInstance => templateInstance.id === editingTemplate.id)
+        );
+    };
+
+    const handleSubmit = async (values: FormValues, operations: JSONPatchOperations) => {
+        isExistingMetadataInstance()
+            ? handleUpdateMetadataInstance(values.metadata as MetadataTemplateInstance, operations, () =>
+                  setEditingTemplate(null),
+              )
+            : handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
+    };
+
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates as MetadataTemplate[]}
             onSelect={(selectedTemplate): void => {
-                editingTemplate
-                    ? handleUnsavedChanges()
-                    : handleTemplateSelect(selectedTemplate as MetadataTemplateInstance);
+                editingTemplate ? handleUnsavedChanges() : handleTemplateSelect(selectedTemplate);
             }}
         />
     );
@@ -138,9 +164,11 @@ function MetadataSidebarRedesign({
                     <MetadataInstanceEditor
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                        template={editingTemplate}
                         onCancel={() => setEditingTemplate(null)}
+                        onSubmit={handleSubmit}
                         onDelete={handleDeleteInstance}
+                        template={editingTemplate}
+                        setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                     />
                 )}
                 {showList && (

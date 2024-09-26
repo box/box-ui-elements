@@ -3,12 +3,14 @@ import {
     METRIC_TYPE_PREVIEW,
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
     METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC,
+    METRIC_TYPE_UAA_PARITY_METRIC,
 } from '../../constants';
 
 type MetricType =
     | typeof METRIC_TYPE_PREVIEW
     | typeof METRIC_TYPE_ELEMENTS_LOAD_METRIC
-    | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC;
+    | typeof METRIC_TYPE_ELEMENTS_PERFORMANCE_METRIC
+    | typeof METRIC_TYPE_UAA_PARITY_METRIC;
 
 type ElementsLoadMetricData = {
     endMarkName: string,

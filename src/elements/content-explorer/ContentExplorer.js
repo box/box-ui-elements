@@ -1783,7 +1783,6 @@ class ContentExplorer extends Component<Props, State> {
                             isLoading={isLoading}
                             errorCode={errorCode}
                             parentElement={this.rootElement}
-                            appElement={this.appElement}
                         />
                     ) : null}
                     {canShare && selected && !!this.appElement ? (
