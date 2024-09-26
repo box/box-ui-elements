@@ -60,21 +60,6 @@ describe('MetadataInstanceEditor', () => {
         onUnsavedChangesModalCancel: mockOnUnsavedChangesModalCancel,
     };
 
-    // Mock window.matchMedia to simulate media query behavior for tests
-    // in which UnsavedChangesModal component relies on it.
-    const mockMatchMedia = () =>
-        Object.defineProperty(window, 'matchMedia', {
-            writable: true,
-            value: jest.fn().mockImplementation(query => ({
-                matches: false,
-                media: query,
-                onchange: null,
-                addEventListener: jest.fn(),
-                removeEventListener: jest.fn(),
-                dispatchEvent: jest.fn(),
-            })),
-        });
-
     test('should render MetadataInstanceForm with correct props', () => {
         render(<MetadataInstanceEditor {...defaultProps} />);
 
@@ -91,8 +76,6 @@ describe('MetadataInstanceEditor', () => {
     });
 
     test('should render UnsavedChangesModal if isUnsavedChangesModalOpen is true', async () => {
-        mockMatchMedia();
-
         const props = { ...defaultProps, isUnsavedChangesModalOpen: true };
         const { findByText } = render(<MetadataInstanceEditor {...props} />);
 
@@ -126,8 +109,6 @@ describe('MetadataInstanceEditor', () => {
     });
 
     test('Should call onUnsavedChangesModalCancel instead onCancel when canceling through UnsavedChangesModal', async () => {
-        mockMatchMedia();
-
         const props: MetadataInstanceEditorProps = {
             ...defaultProps,
             template: mockCustomMetadataTemplateWithField,
