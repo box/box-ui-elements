@@ -191,7 +191,9 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const editButtons = await canvas.findAllByRole('button', { name: 'Edit' }, { timeout: 5000 });
+        // Edit buttons contains also template name
+        const editButtons = await canvas.findAllByRole('button', { name: /^edit/i }, { timeout: 5000 });
+        expect(editButtons).toHaveLength(3);
 
         let headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(3);
@@ -199,6 +201,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
             expect.arrayContaining(['My Template', 'Select Dropdowns', 'Custom Metadata']),
         );
 
+        expect(editButtons[0].ariaLabel).toBe('Edit My Template');
         // go to edit mode - only edited template is visible
         await userEvent.click(editButtons[0]);
 
