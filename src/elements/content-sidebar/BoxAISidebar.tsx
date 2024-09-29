@@ -24,7 +24,7 @@ export interface BoxAISidebarProps {
     onExpandPressed: () => void;
 }
 
-function BoxAISideBar() {
+function BoxAISidebar() {
     const { formatMessage } = useIntl();
 
     return (
@@ -38,7 +38,7 @@ function BoxAISideBar() {
     );
 }
 
-export { BoxAISideBar as BoxAISidebarComponent };
+export { BoxAISidebar as BoxAISideBarComponent };
 export default flow([withLogger(ORIGIN_BOXAI_SIDEBAR), withErrorBoundary(ORIGIN_BOXAI_SIDEBAR), withAPIContext])(
-    BoxAISideBar,
+    BoxAISidebar,
 );

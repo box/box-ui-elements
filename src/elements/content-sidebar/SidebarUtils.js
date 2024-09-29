@@ -24,6 +24,7 @@ import {
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem } from '../../common/types/core';
+import { isFeatureEnabled } from '../common/feature-checking';
 
 class SidebarUtils {
     /**
@@ -57,7 +58,7 @@ class SidebarUtils {
      * @return {Boolean} true if we should render
      */
     static canHaveBoxAISidebar(props: ContentSidebarProps): boolean {
-        return !!props.hasBoxAI;
+        return isFeatureEnabled(props.features, 'boxai.sidebar.enabled');
     }
 
     /**

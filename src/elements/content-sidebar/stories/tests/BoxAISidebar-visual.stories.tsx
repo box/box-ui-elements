@@ -17,7 +17,7 @@ export default {
     },
 };
 
-export const SimpleBoxAISidebarCheck: StoryObj<typeof BoxAISidebar> = {
+export const BoxAIInSidebar: StoryObj<typeof BoxAISidebar> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         const sidebar = await canvas.findByRole('heading', { name: 'Box AI' }, { timeout: 5000 });
