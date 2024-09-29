@@ -4,8 +4,6 @@ const mockFeatures = {
     'boxai.sidebar.enabled': true,
 };
 
-export const basic = {};
-
 export default {
     title: 'Elements/ContentSidebar/BoxAISidebar',
     component: ContentSidebar,
@@ -15,3 +13,5 @@ export default {
         token: global.TOKEN,
     },
 };
+
+export const basic = {};

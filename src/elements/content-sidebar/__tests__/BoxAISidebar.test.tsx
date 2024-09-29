@@ -16,4 +16,10 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
         expect(screen.getByRole('heading', { level: 3, name: 'Box AI' })).toBeInTheDocument();
     });
+
+    test('should have accessible "Expand" button', () => {
+        renderComponent();
+
+        expect(screen.getByRole('button', { name: 'Expand' })).toBeInTheDocument();
+    });
 });
