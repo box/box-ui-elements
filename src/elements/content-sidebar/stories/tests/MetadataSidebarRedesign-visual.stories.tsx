@@ -214,3 +214,37 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         );
     },
 };
+
+export const DeleteButtonIsDisabledWhenAddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        expect(addTemplateButton).toBeInTheDocument();
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
+        expect(customMetadataOption).toBeInTheDocument();
+        await userEvent.click(customMetadataOption);
+
+        const deleteButton = await canvas.findByRole('button', { name: 'Delete' });
+        expect(deleteButton).toBeDisabled();
+    },
+};
+
+export const DeleteButtonIsEnabledWhenEditingMetadataTemplateInstance: StoryObj<typeof MetadataSidebarRedesign> = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const editMetadataInstanceButton = await canvas.findByRole(
+            'button',
+            { name: 'Edit My Template' },
+            { timeout: 5000 },
+        );
+        expect(editMetadataInstanceButton).toBeInTheDocument();
+        await userEvent.click(editMetadataInstanceButton);
+
+        const deleteButton = await canvas.findByRole('button', { name: 'Delete' });
+        expect(deleteButton).toBeEnabled();
+    },
+};
