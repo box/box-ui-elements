@@ -44,7 +44,7 @@ const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: ContentAnswers
 
     const currentExtension = getProp(file, 'extension');
     return (
-        <div className="bdl-ContentAnswers">
+        <div className="be-ContentAnswers">
             <ContentAnswersOpenButton
                 fileExtension={currentExtension}
                 isHighlighted={isHighlighted}

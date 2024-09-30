@@ -11,10 +11,6 @@
 }
 
 .be-ContentAnswersOpenButton {
-    width: tokens.$size-20;
-    height: tokens.$size-20;
-    background-color: tokens.$gray-02;
-
     &:not(:disabled):focus,
     &:not(:disabled):hover {
         background-color: tokens.$gray-10;

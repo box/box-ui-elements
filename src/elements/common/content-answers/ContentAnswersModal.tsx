@@ -18,9 +18,6 @@ import withCurrentUser from '../current-user';
 // eslint-disable-next-line import/named
 import { BoxItem, User } from '../../../common/types/core';
 // @ts-ignore: no ts definition
-// eslint-disable-next-line import/named
-import { withAPIContext } from '../api-context';
-// @ts-ignore: no ts definition
 import APIFactory from '../../../api';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
@@ -63,7 +60,7 @@ const ContentAnswersModal = ({
     const [questions, setQuestions] = useState<QuestionType[]>([]);
     let localizedQuestions: SuggestedQuestionType[] = [];
 
-    if (!suggestedQuestions) {
+    if (!suggestedQuestions || suggestedQuestions.length === 0) {
         localizedQuestions = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
             id: question.id,
             label: formatMessage(messages[question.labelId]),
@@ -171,7 +168,7 @@ const ContentAnswersModal = ({
 
     const fileName = getProp(file, 'name');
     const currentFileExtension = getProp(file, 'extension');
-    const userInfo = { name: getProp(currentUser, 'name') || '', avatarURL: getProp(currentUser, 'avatarURL') || '' };
+    const userInfo = { name: getProp(currentUser, 'name', ''), avatarURL: getProp(currentUser, 'avatarURL', '') };
 
     const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(currentFileExtension);
     const spreadsheetNotice = isSpreadsheet ? formatMessage(messages.welcomeMessageSpreadsheetNotice) : '';
@@ -199,4 +196,4 @@ const ContentAnswersModal = ({
     );
 };
 
-export default withAPIContext(withCurrentUser(ContentAnswersModal));
+export default withCurrentUser(ContentAnswersModal);

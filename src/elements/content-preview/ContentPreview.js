@@ -122,7 +122,7 @@ type Props = {
     responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    shouldProvide?: boolean,
+    hasProviders?: boolean,
     showAnnotations?: boolean,
     showAnnotationsControls?: boolean,
     staticHost: string,
@@ -1275,6 +1275,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             contentOpenWithProps,
             contentSidebarProps,
             hasHeader,
+            hasProviders,
             history,
             isLarge,
             isVeryLarge,
@@ -1283,7 +1284,6 @@ class ContentPreview extends React.PureComponent<Props, State> {
             measureRef,
             sharedLink,
             sharedLinkPassword,
-            shouldProvide,
             requestInterceptor,
             responseInterceptor,
         }: Props = this.props;
@@ -1322,7 +1322,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: API)}>
-                    <Provide shouldProvide={shouldProvide}>
+                    <Provide hasProviders={hasProviders}>
                         <div
                             id={this.id}
                             className={styleClassName}

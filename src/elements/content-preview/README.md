@@ -51,6 +51,6 @@
 | sharedLink           | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
 | sharedLinkPassword   | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
 | showAnnotations      | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
-| shouldProvide        | boolean | `true` | Decide if it should wrap the element with the `Notification` and `Tooltip` Provider. Set this to false if you already wrap your app with both of these providers.                       |
+| hasProviders         | boolean | `true` | Decide if it should wrap the element with the `Notification` and `Tooltip` Provider. Set this to false if you already wrap your app with both of these providers.                       |
 
 ***Note***: Any other option listed here https://github.com/box/box-content-preview#parameters--options, which is also not listed or overriden above as a prop, will be passed on as-is to the Preview Library.

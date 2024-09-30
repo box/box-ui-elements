@@ -17,10 +17,10 @@ class Intelligence extends Base {
     /**
      * API endpoint to ask ai a question
      *
-     * @param question
+     * @param {QuestionType} question - Object should at least contain the prompt, which is the question to ask
      * @param {Array<object>} items - Array of items to ask about
-     * @param dialogueHistory
-     * @param options
+     * @param {Array<QuestionType>} dialogueHistory - Array of previous questions object that already have answers
+     * @param {{ include_citations?: boolean }} options - Optional parameters
      * @return {Promise}
      */
     async ask(

@@ -62,8 +62,7 @@ const PreviewHeader = ({
     token,
 }: Props) => {
     const fileId = file && file.id;
-    const { show: showContentAnswers, ...restContentAnswersProps } = contentAnswersProps;
-    const shouldRenderAnswers = fileId && showContentAnswers;
+    const shouldRenderAnswers = fileId && contentAnswersProps.show;
     const shouldRenderOpenWith = fileId && contentOpenWithProps.show;
     const currentVersionId = getProp(file, 'file_version.id');
     const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
@@ -102,7 +101,7 @@ const PreviewHeader = ({
                                     {...contentOpenWithProps}
                                 />
                             )}
-                            {shouldRenderAnswers && <ContentAnswers file={file} {...restContentAnswersProps} />}
+                            {shouldRenderAnswers && <ContentAnswers file={file} {...contentAnswersProps} />}
                             {canAnnotate && (
                                 <>
                                     <PlainButton
