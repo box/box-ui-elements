@@ -10,9 +10,11 @@ import {
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_BOXAI,
 } from '../../../constants';
+import { isFeatureEnabled } from '../../common/feature-checking';
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../SidebarLoadingError', () => 'sidebar-loading-error');
+jest.mock('../../common/feature-checking');
 
 describe('elements/content-sidebar/SidebarUtil', () => {
     describe('canHaveSidebar()', () => {
@@ -50,7 +52,8 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             expect(SidebarUtils.canHaveSidebar({ hasActivityFeed: true })).toBeTruthy();
         });
         test('should return true when box ai feed should render', () => {
-            expect(SidebarUtils.canHaveSidebar({ hasBoxAI: true })).toBeTruthy();
+            isFeatureEnabled.mockReturnValueOnce(true);
+            expect(SidebarUtils.canHaveSidebar({})).toBeTruthy();
         });
         test('should return true when notices should render', () => {
             expect(
@@ -126,8 +129,9 @@ describe('elements/content-sidebar/SidebarUtil', () => {
         test('should return false when hasBoxAI is false', () => {
             expect(SidebarUtils.canHaveBoxAISidebar({ hasBoxAI: false })).toBeFalsy();
         });
-        test('should return true when hasBoxAI is true', () => {
-            expect(SidebarUtils.canHaveBoxAISidebar({ hasBoxAI: true }, {})).toBeTruthy();
+        test('should return true when isFeatureEnabled returns true', () => {
+            isFeatureEnabled.mockReturnValueOnce(true);
+            expect(SidebarUtils.canHaveBoxAISidebar({})).toBeTruthy();
         });
     });
     describe('canHaveMetadataSidebar()', () => {
