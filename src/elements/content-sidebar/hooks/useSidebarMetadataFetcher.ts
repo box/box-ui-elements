@@ -127,11 +127,10 @@ function useSidebarMetadataFetcher(
 
     const handleDeleteMetadataInstance = React.useCallback(
         async (metadataInstance: MetadataTemplateInstance): Promise<void> => {
-            setStatus(STATUS.LOADING);
             if (!file || !metadataInstance) {
                 return;
             }
-
+            setStatus(STATUS.LOADING);
             await api
                 .getMetadataAPI(false)
                 .deleteMetadata(file, metadataInstance, () => setStatus(STATUS.SUCCESS), onApiError, true);
