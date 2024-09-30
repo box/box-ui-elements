@@ -4,11 +4,11 @@ import { Notification, TooltipProvider } from '@box/blueprint-web';
 
 export interface ProvideProps {
     children: React.Node;
-    shouldProvide: ?boolean;
+    hasProviders: ?boolean;
 }
 
-const Provide = ({ children, shouldProvide }: ProvideProps) => {
-    if (!!shouldProvide) {
+const Provide = ({ children, hasProviders }: ProvideProps) => {
+    if (!!hasProviders) {
         return (
             <Notification.Provider>
                 <Notification.Viewport />

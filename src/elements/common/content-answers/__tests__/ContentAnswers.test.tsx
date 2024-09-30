@@ -51,4 +51,33 @@ describe('common/content-answers/ContentAnswers', () => {
 
         expect(button).toHaveClass('be-ContentAnswersOpenButton--hasQuestions');
     });
+
+    test('should call onAsk when a question is asked', async () => {
+        const onAskMock = jest.fn();
+        renderComponent({ onAsk: onAskMock });
+
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        await userEvent.click(button);
+
+        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        fireEvent.change(textArea, { target: { value: 'Sample question?' } });
+
+        const submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
+
+        expect(onAskMock).toHaveBeenCalled();
+    });
+
+    test('should call onRequestClose when the modal is closed', async () => {
+        const onRequestCloseMock = jest.fn();
+        renderComponent({ onRequestClose: onRequestCloseMock });
+
+        const button = screen.getByRole('button', { name: 'Box AI' });
+        await userEvent.click(button);
+
+        const modalCloseButton = screen.getByLabelText('Close Modal');
+        await userEvent.click(modalCloseButton);
+
+        expect(onRequestCloseMock).toHaveBeenCalled();
+    });
 });

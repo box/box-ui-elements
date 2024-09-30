@@ -5,7 +5,7 @@ import Provide from '../Provide';
 describe('Provide component', () => {
     test('renders children within Notification and TooltipProvider when shouldProvide is true', () => {
         const screen = render(
-            <Provide shouldProvide={true}>
+            <Provide hasProviders={true}>
                 <div>Child Content</div>
             </Provide>,
         );
@@ -16,7 +16,7 @@ describe('Provide component', () => {
 
     test('renders only children when shouldProvide is false', () => {
         const screen = render(
-            <Provide shouldProvide={false}>
+            <Provide hasProviders={false}>
                 <div>Child Content</div>
             </Provide>,
         );
@@ -27,7 +27,7 @@ describe('Provide component', () => {
     test('throws an error if more than one child is provided when shouldProvide is false', () => {
         expect(() =>
             render(
-                <Provide shouldProvide={false}>
+                <Provide hasProviders={false}>
                     <div>Child 1</div>
                     <div>Child 2</div>
                 </Provide>,

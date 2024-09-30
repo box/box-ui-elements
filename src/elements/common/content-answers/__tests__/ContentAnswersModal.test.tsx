@@ -136,4 +136,37 @@ describe('common/content-answers/ContentAnswersModal', () => {
             },
         );
     });
+
+    test('renders suggested questions when provided', () => {
+        const suggestedQuestions = [{ id: '1', label: 'Suggested Question 1', prompt: 'Prompt 1' }];
+        renderComponent(mockApi, { suggestedQuestions });
+
+        expect(screen.getByText('Suggested Question 1')).toBeInTheDocument();
+    });
+
+    test('renders localized questions when suggestedQuestions is not provided', () => {
+        renderComponent();
+
+        expect(screen.getByText('Summarize this document')).toBeInTheDocument();
+    });
+
+    test('should call onClearConversation when the conversation is cleared', async () => {
+        const onClearConversationMock = jest.fn();
+        renderComponent(mockApi, { onClearConversation: onClearConversationMock });
+
+        const clearButton = screen.getByRole('button', { name: 'Clear conversation' });
+        await userEvent.click(clearButton);
+
+        expect(onClearConversationMock).toHaveBeenCalled();
+    });
+
+    test('should call onRequestClose when the modal is closed', async () => {
+        const onRequestCloseMock = jest.fn();
+        renderComponent(mockApi, { onRequestClose: onRequestCloseMock });
+
+        const closeButton = screen.getByLabelText('Close Modal');
+        await userEvent.click(closeButton);
+
+        expect(onRequestCloseMock).toHaveBeenCalled();
+    });
 });
