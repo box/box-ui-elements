@@ -15,12 +15,7 @@ interface Props {
     file: BoxItem;
 }
 
-const ContentAnswers = ({
-    file,
-    onAsk,
-    onRequestClose,
-    ...rest
-}: Omit<ContentAnswersModalExternalProps & Props, 'show'>) => {
+const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: ContentAnswersModalExternalProps & Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hasQuestions, setHasQuestions] = useState(false);
     const [isHighlighted, setIsHighlighted] = useState(false);
@@ -67,5 +62,5 @@ const ContentAnswers = ({
     );
 };
 
-export type ContentAnswers = ExternalProps & Props;
+export type ContentAnswersProps = ExternalProps & Props;
 export default ContentAnswers;
