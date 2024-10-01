@@ -137,12 +137,14 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     };
 
     renderUSF = () => {
-        const { sharedLinkEditTagTargetingApi, sharedLinkEditTooltipTargetingApi } = this.props;
+        const { onCollaboratorAvatarsClick, sharedLinkEditTagTargetingApi, sharedLinkEditTooltipTargetingApi } =
+            this.props;
         const { isFetching, sharedLinkLoaded, shouldRenderFTUXTooltip } = this.state;
 
         return (
             <UnifiedShareForm
                 {...this.props}
+                onCollaboratorAvatarsClick={onCollaboratorAvatarsClick}
                 handleFtuxCloseClick={this.handleFtuxCloseClick}
                 isFetching={isFetching}
                 openConfirmModal={this.openConfirmModal}
