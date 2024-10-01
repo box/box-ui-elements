@@ -9,14 +9,54 @@ on:
 
 jobs:
     coverage:
-        permissions:
-            checks: write
-            pull-requests: write
-            contents: write
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v3
-            -   uses: ArtiomTr/jest-coverage-report-action@v2
-                with:
-                    package-manager: yarn
-                    test-script: yarn test
+            - name: Install jq
+              run: sudo apt-get install -y jq
+            - name: Read coverage data
+              id: coverage
+              run: |
+                echo "::set-output name=lines::$(jq '.total.lines.pct' coverage/coverage-summary.json)"
+                echo "::set-output name=statements::$(jq '.total.statements.pct' coverage/coverage-summary.json)"
+                echo "::set-output name=functions::$(jq '.total.functions.pct' coverage/coverage-summary.json)"
+                echo "::set-output name=branches::$(jq '.total.branches.pct' coverage/coverage-summary.json)"
+            - name: Post coverage comment
+              uses: actions/github-script@v6
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  script: |
+                    const lines = ${{ steps.coverage.outputs.lines }};
+                    const statements = ${{ steps.coverage.outputs.statements }};
+                    const functions = ${{ steps.coverage.outputs.functions }};
+                    const branches = ${{ steps.coverage.outputs.branches }};
+                    const comment = `Coverage: ${lines}% lines, ${statements}% statements, ${functions}% functions, ${branches}% branches`;
+                      const commentBody = `
+                      ### Jest Coverage Report 📊
+                      |Metric      | Coverage (%)   |
+                      |------------|----------------|
+                      | Lines      | ${lines}%      |
+                      | Statements | ${statements}% |
+                      | Functions  | ${functions}%  |
+                      | Branches  | ${branches}%    |
+                      `;
+                    const { context, github } = require('@actions/github');
+
+                    const { data: comments } = await github.issues.listComments({
+                        ...context.repo,
+                        issue_number: context.issue.number,
+                    });
+                    const existingComment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('### Jest Coverage Report 📊'));
+
+                    if (existingComment) {
+                        await github.issues.updateComment({
+                            ...context.repo,
+                            comment_id: existingComment.id,
+                            body: commentBody,
+                        });
+                    } else {
+                        await github.issues.createComment({
+                            ...context.repo,
+                            issue_number: context.issue.number,
+                            body: commentBody,
+                        });
+                    }
