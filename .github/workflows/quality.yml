@@ -29,12 +29,12 @@ jobs:
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   script: |
-                    const lines = ${{ steps.coverage.outputs.lines }};
-                    const statements = ${{ steps.coverage.outputs.statements }};
-                    const functions = ${{ steps.coverage.outputs.functions }};
-                    const branches = ${{ steps.coverage.outputs.branches }};
-                    const comment = `Coverage: ${lines}% lines, ${statements}% statements, ${functions}% functions, ${branches}% branches`;
-                      const commentBody = `
+                    const lines = process.env.lines;
+                    const statements = process.env.statements;
+                    const functions = process.env.functions;
+                    const branches = process.env.branches;
+
+                    const commentBody = `
                       ### Jest Coverage Report 📊
                       |Metric      | Coverage (%)   |
                       |------------|----------------|
@@ -42,13 +42,14 @@ jobs:
                       | Statements | ${statements}% |
                       | Functions  | ${functions}%  |
                       | Branches  | ${branches}%    |
-                      `;
+                    `;
                     const { context, github } = require('@actions/github');
 
                     const { data: comments } = await github.issues.listComments({
                         ...context.repo,
                         issue_number: context.issue.number,
                     });
+
                     const existingComment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('### Jest Coverage Report 📊'));
 
                     if (existingComment) {
