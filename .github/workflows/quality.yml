@@ -15,24 +15,33 @@ jobs:
     coverage:
         runs-on: ubuntu-latest
         steps:
-            - name: Install jq
-              run: sudo apt-get install -y jq
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+                  cache: 'yarn'
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+            - name: Run tests
+              run: yarn test --coverage
             - name: Read coverage data
               id: coverage
               run: |
-                echo "::set-output name=lines::$(jq '.total.lines.pct' coverage/coverage-summary.json)"
-                echo "::set-output name=statements::$(jq '.total.statements.pct' coverage/coverage-summary.json)"
-                echo "::set-output name=functions::$(jq '.total.functions.pct' coverage/coverage-summary.json)"
-                echo "::set-output name=branches::$(jq '.total.branches.pct' coverage/coverage-summary.json)"
+                echo "lines=$(jq '.total.lines.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
+                echo "statements=$(jq '.total.statements.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
+                echo "functions=$(jq '.total.functions.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
+                echo "branches=$(jq '.total.branches.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
             - name: Post coverage comment
               uses: actions/github-script@v6
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   script: |
-                    const lines = process.env.lines;
-                    const statements = process.env.statements;
-                    const functions = process.env.functions;
-                    const branches = process.env.branches;
+                    const lines = `${{ steps.coverage.outputs.lines }}`.trim();
+                    const statements = `${{ steps.coverage.outputs.statements }}`.trim();
+                    const functions = `${{ steps.coverage.outputs.functions }}`.trim();
+                    const branches = `${{ steps.coverage.outputs.branches }}`.trim();
 
                     const commentBody = `
                       ### Jest Coverage Report 📊
@@ -43,10 +52,10 @@ jobs:
                       | Functions  | ${functions}%  |
                       | Branches  | ${branches}%    |
                     `;
-                    const { context, github } = require('@actions/github');
 
                     const { data: comments } = await github.rest.issues.listComments({
-                        ...context.repo,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
                         issue_number: context.issue.number,
                     });
 
@@ -54,13 +63,15 @@ jobs:
 
                     if (existingComment) {
                         await github.rest.issues.updateComment({
-                            ...context.repo,
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
                             comment_id: existingComment.id,
                             body: commentBody,
                         });
                     } else {
                         await github.rest.issues.createComment({
-                            ...context.repo,
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
                             issue_number: context.issue.number,
                             body: commentBody,
                         });
