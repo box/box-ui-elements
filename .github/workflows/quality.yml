@@ -45,7 +45,7 @@ jobs:
                     `;
                     const { context, github } = require('@actions/github');
 
-                    const { data: comments } = await github.issues.listComments({
+                    const { data: comments } = await github.rest.issues.listComments({
                         ...context.repo,
                         issue_number: context.issue.number,
                     });
@@ -53,13 +53,13 @@ jobs:
                     const existingComment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('### Jest Coverage Report 📊'));
 
                     if (existingComment) {
-                        await github.issues.updateComment({
+                        await github.rest.issues.updateComment({
                             ...context.repo,
                             comment_id: existingComment.id,
                             body: commentBody,
                         });
                     } else {
-                        await github.issues.createComment({
+                        await github.rest.issues.createComment({
                             ...context.repo,
                             issue_number: context.issue.number,
                             body: commentBody,
