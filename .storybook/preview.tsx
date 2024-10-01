@@ -7,7 +7,6 @@ import '../src/styles/variables';
 import '../src/styles/base.scss';
 
 import { reactIntl } from './reactIntl';
-import { allModes } from './modes';
 
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;
@@ -24,7 +23,12 @@ const preview = {
             disableSnapshot: true,
             cropToViewport: true,
             modes: {
-                specific: allModes.specific,
+                specific: {
+                    viewport: {
+                        height: 1000,
+                        width: 1200,
+                    },
+                },
             },
         },
         controls: {

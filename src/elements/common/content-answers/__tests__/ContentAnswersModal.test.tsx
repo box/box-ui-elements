@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Notification } from '@box/blueprint-web';
 import { userEvent } from '@testing-library/user-event';
-import { fireEvent, render, screen } from '../../../../test-utils/testing-library';
+import { render, screen } from '../../../../test-utils/testing-library';
 
 import ContentAnswersModal from '../ContentAnswersModal';
 import {
@@ -16,7 +16,7 @@ import {
 // @ts-ignore: no ts definition
 import APIContext from '../../api-context';
 
-describe('common/content-answers/ContentAnswersModal', () => {
+describe('elements/common/content-answers/ContentAnswersModal', () => {
     const mockQuestion = { isCompleted: false, isLoading: true, prompt: 'summarize another question' };
     const renderComponent = (api = mockApi, props?: {}) => {
         render(
@@ -49,7 +49,7 @@ describe('common/content-answers/ContentAnswersModal', () => {
         renderComponent(mockApi, { onAsk: onAskMock });
 
         const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
-        fireEvent.change(textArea, { target: { value: prompt } });
+        await userEvent.type(textArea, prompt);
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
@@ -67,7 +67,7 @@ describe('common/content-answers/ContentAnswersModal', () => {
         renderComponent(mockApiReturnError);
 
         const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
-        fireEvent.change(textArea, { target: { value: prompt } });
+        await userEvent.type(textArea, prompt);
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
@@ -93,7 +93,7 @@ describe('common/content-answers/ContentAnswersModal', () => {
         renderComponent(apiMock);
 
         const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
-        fireEvent.change(textArea, { target: { value: prompt } });
+        await userEvent.type(textArea, prompt);
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
@@ -113,7 +113,7 @@ describe('common/content-answers/ContentAnswersModal', () => {
         renderComponent(mockApi, { onAsk: onAskMock });
 
         let textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
-        fireEvent.change(textArea, { target: { value: prompt } });
+        await userEvent.type(textArea, prompt);
 
         let submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
@@ -123,7 +123,8 @@ describe('common/content-answers/ContentAnswersModal', () => {
         });
 
         textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
-        fireEvent.change(textArea, { target: { value: 'Another question?' } });
+
+        await userEvent.type(textArea, 'Another question?');
         submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
 

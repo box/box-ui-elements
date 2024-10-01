@@ -6,7 +6,7 @@ export interface ProvideProps {
     hasProviders?: boolean;
 }
 
-const Provide = ({ children, hasProviders = true }: ProvideProps) => {
+const Providers = ({ children, hasProviders = true }: ProvideProps) => {
     if (hasProviders) {
         return (
             <Notification.Provider>
@@ -19,4 +19,4 @@ const Provide = ({ children, hasProviders = true }: ProvideProps) => {
     return Children.only(children);
 };
 
-export default Provide;
+export default Providers;

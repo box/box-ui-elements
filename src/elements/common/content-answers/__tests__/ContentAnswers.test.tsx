@@ -8,7 +8,7 @@ import { mockApi, mockFile } from '../__mocks__/mocks';
 // @ts-ignore: no ts definition
 import APIContext from '../../api-context';
 
-describe('common/content-answers/ContentAnswers', () => {
+describe('elements/common/content-answers/ContentAnswers', () => {
     const renderComponent = (props?: {}) =>
         render(
             <Notification.Provider>

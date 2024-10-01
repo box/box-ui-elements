@@ -167,16 +167,16 @@ const ContentAnswersModal = ({
     }, [onRequestClose]);
 
     const fileName = getProp(file, 'name');
-    const currentFileExtension = getProp(file, 'extension');
+    const fileExtension = getProp(file, 'extension');
     const userInfo = { name: getProp(currentUser, 'name', ''), avatarURL: getProp(currentUser, 'avatarURL', '') };
 
-    const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(currentFileExtension);
+    const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(fileExtension);
     const spreadsheetNotice = isSpreadsheet ? formatMessage(messages.welcomeMessageSpreadsheetNotice) : '';
 
     return (
         <IntelligenceModal
             contentName={fileName}
-            contentType={currentFileExtension}
+            contentType={fileExtension}
             hasRequestInProgress={isLoading}
             isCitationsEnabled={isCitationsEnabled}
             isMarkdownEnabled={isMarkdownEnabled}

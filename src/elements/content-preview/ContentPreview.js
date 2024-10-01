@@ -39,7 +39,7 @@ import APIContext from '../common/api-context';
 import PreviewHeader from './preview-header';
 import PreviewMask from './PreviewMask';
 import PreviewNavigation from './PreviewNavigation';
-import Provide from '../common/Provide';
+import Providers from '../common/Providers';
 import {
     withAnnotations,
     WithAnnotationsProps,
@@ -100,6 +100,7 @@ type Props = {
     fileOptions?: Object,
     getInnerRef: () => ?HTMLElement,
     hasHeader?: boolean,
+    hasProviders?: boolean,
     isLarge: boolean,
     isVeryLarge?: boolean,
     language: string,
@@ -122,7 +123,6 @@ type Props = {
     responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
-    hasProviders?: boolean,
     showAnnotations?: boolean,
     showAnnotationsControls?: boolean,
     staticHost: string,
@@ -1322,7 +1322,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: API)}>
-                    <Provide hasProviders={hasProviders}>
+                    <Providers hasProviders={hasProviders}>
                         <div
                             id={this.id}
                             className={styleClassName}
@@ -1396,7 +1396,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 />
                             )}
                         </div>
-                    </Provide>
+                    </Providers>
                 </APIContext.Provider>
             </Internationalize>
         );
