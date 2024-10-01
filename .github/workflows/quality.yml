@@ -5,6 +5,10 @@ on:
         branches:
             - master
             - main
+        types:
+            - opened
+            - edited
+            - synchronize
 
 jobs:
     coverage:
