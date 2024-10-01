@@ -1,6 +1,10 @@
 name: "Quality"
 
 on:
+    pull_request:
+        branches:
+            - main
+            - master
     pull_request_target:
         types:
             - opened
