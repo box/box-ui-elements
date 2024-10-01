@@ -2,10 +2,9 @@ name: "Quality"
 
 on:
     pull_request_target:
-        types:
-            - opened
-            - edited
-            - synchronize
+        branches:
+            - master
+            - main
 
 jobs:
     coverage:
