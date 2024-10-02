@@ -89,6 +89,7 @@ import type {
     Tasks,
     ThreadedComments as ThreadedCommentsType,
 } from '../common/types/feed';
+import { collapseFeedState } from '../elements/content-sidebar/activity-feed/activity-feed/activityFeedUtils';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 
@@ -117,7 +118,10 @@ const parseReplies = (replies: Comment[]): Comment[] => {
     });
 };
 
-export const getParsedFileActivitiesResponse = (response?: { entries: FileActivity[] }) => {
+export const getParsedFileActivitiesResponse = (
+    response?: { entries: FileActivity[] },
+    permissions: BoxItemPermission = {},
+) => {
     if (!response || !response.entries || !response.entries.length) {
         return [];
     }
@@ -188,8 +192,10 @@ export const getParsedFileActivitiesResponse = (response?: { entries: FileActivi
                 }
                 case FILE_ACTIVITY_TYPE_APP_ACTIVITY: {
                     const appActivityItem = { ...source[FILE_ACTIVITY_TYPE_APP_ACTIVITY] };
+                    const { can_delete } = permissions;
 
                     appActivityItem.created_at = appActivityItem.occurred_at;
+                    appActivityItem.permissions = { can_delete };
 
                     return appActivityItem;
                 }
@@ -550,6 +556,7 @@ class Feed extends Base {
             shouldShowVersions?: boolean,
             shouldUseUAA?: boolean,
         } = {},
+        logAPIParity?: Function,
     ): void {
         const { id, permissions = {} } = file;
         const cachedItems = this.getCachedItems(id);
@@ -571,23 +578,16 @@ class Feed extends Base {
         this.errorCallback = onError;
 
         // Using the UAA File Activities endpoint replaces the need for these calls
-        const annotationsPromise =
-            !shouldUseUAA && shouldShowAnnotations
-                ? this.fetchAnnotations(permissions, shouldShowReplies)
-                : Promise.resolve();
+        const annotationsPromise = shouldShowAnnotations
+            ? this.fetchAnnotations(permissions, shouldShowReplies)
+            : Promise.resolve();
         const commentsPromise = () => {
-            if (shouldUseUAA) {
-                return Promise.resolve();
-            }
-
             return shouldShowReplies ? this.fetchThreadedComments(permissions) : this.fetchComments(permissions);
         };
-        const tasksPromise = !shouldUseUAA && shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
-        const appActivityPromise =
-            !shouldUseUAA && shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
-        const versionsPromise = !shouldUseUAA && shouldShowVersions ? this.fetchVersions() : Promise.resolve();
-        const currentVersionPromise =
-            !shouldUseUAA && shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
+        const tasksPromise = shouldShowTasks ? this.fetchTasksNew() : Promise.resolve();
+        const appActivityPromise = shouldShowAppActivity ? this.fetchAppActivity(permissions) : Promise.resolve();
+        const versionsPromise = shouldShowVersions ? this.fetchVersions() : Promise.resolve();
+        const currentVersionPromise = shouldShowVersions ? this.fetchCurrentVersion() : Promise.resolve();
 
         const annotationActivityType =
             shouldShowAnnotations && permissions[PERMISSION_CAN_VIEW_ANNOTATIONS]
@@ -622,29 +622,54 @@ class Feed extends Base {
             }
         };
 
+        const v2Promises = [
+            versionsPromise,
+            currentVersionPromise,
+            commentsPromise(),
+            tasksPromise,
+            appActivityPromise,
+            annotationsPromise,
+        ];
+
+        const fetchV2FeedItems = async promises => {
+            return Promise.all(promises).then(
+                ([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
+                    const versionsWithCurrent = currentVersion
+                        ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
+                        : undefined;
+                    return sortFeedItems(versionsWithCurrent, ...feedItems);
+                },
+            );
+        };
+
+        const compareV2AndUaaFeedItems = async (uaaFeedItems, uaaResponse) => {
+            fetchV2FeedItems(v2Promises).then(v2FeedItems => {
+                const transformedV2FeedItems = collapseFeedState(v2FeedItems);
+                const transformedUAAFeedItems = collapseFeedState(uaaFeedItems);
+
+                if (logAPIParity) {
+                    logAPIParity({
+                        uaaResponse,
+                        uaaFeedItems: transformedUAAFeedItems,
+                        v2FeedItems: transformedV2FeedItems,
+                    });
+                }
+            });
+        };
+
         if (shouldUseUAA) {
             fileActivitiesPromise.then(response => {
                 if (!response) {
                     return;
                 }
 
-                const parsedFeedItems = getParsedFileActivitiesResponse(response);
-                handleFeedItems(parsedFeedItems);
+                const uaaFeedItems = getParsedFileActivitiesResponse(response, permissions);
+                compareV2AndUaaFeedItems(uaaFeedItems, response);
+                handleFeedItems(uaaFeedItems);
             });
         } else {
-            Promise.all([
-                versionsPromise,
-                currentVersionPromise,
-                commentsPromise(),
-                tasksPromise,
-                appActivityPromise,
-                annotationsPromise,
-            ]).then(([versions: ?FileVersions, currentVersion: ?BoxItemVersion, ...feedItems]) => {
-                const versionsWithCurrent = currentVersion
-                    ? this.versionsAPI.addCurrentVersion(currentVersion, versions, this.file)
-                    : undefined;
-                const sortedFeedItems = sortFeedItems(versionsWithCurrent, ...feedItems);
-                handleFeedItems(sortedFeedItems);
+            fetchV2FeedItems(v2Promises).then(v2FeedItems => {
+                handleFeedItems(v2FeedItems);
             });
         }
     }

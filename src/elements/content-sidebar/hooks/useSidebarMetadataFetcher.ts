@@ -1,11 +1,11 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
-import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
+import { type JSONPatchOperations, type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
-import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD} from '../../../constants';
+import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 
 import messages from '../../common/messages';
 
@@ -19,8 +19,15 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 interface DataFetcher {
-    file: BoxItem | null;
     errorMessage: MessageDescriptor | null;
+    file: BoxItem | null;
+    handleCreateMetadataInstance: (templateInstance: MetadataTemplateInstance, successCallback: () => void) => void;
+    handleDeleteMetadataInstance: (metadataInstance: MetadataTemplateInstance) => void;
+    handleUpdateMetadataInstance: (
+        metadataTemplateInstance: MetadataTemplateInstance,
+        JSONPatch: Array<Object>,
+        successCallback: () => void,
+    ) => void;
     status: STATUS;
     templateInstances: Array<MetadataTemplateInstance>;
     templates: Array<MetadataTemplate>;
@@ -115,6 +122,63 @@ function useSidebarMetadataFetcher(
         [onApiError],
     );
 
+    const deleteMetadataInstanceSuccessCallback = React.useCallback(
+        (metadataInstance: MetadataTemplateInstance) => {
+            const updatedInstances = templateInstances.filter(
+                templateInstance =>
+                    templateInstance.scope !== metadataInstance.scope &&
+                    templateInstance.templateKey !== metadataInstance.templateKey,
+            );
+            setTemplateInstances(updatedInstances);
+        },
+        [templateInstances],
+    );
+
+    const handleDeleteMetadataInstance = React.useCallback(
+        (metadataInstance: MetadataTemplateInstance) => {
+            if (!file || !metadataInstance) {
+                return;
+            }
+
+            api.getMetadataAPI(false).deleteMetadata(
+                file,
+                metadataInstance,
+                deleteMetadataInstanceSuccessCallback,
+                onApiError,
+                true,
+            );
+        },
+        [api, onApiError, file, deleteMetadataInstanceSuccessCallback],
+    );
+
+    const handleCreateMetadataInstance = React.useCallback(
+        (templateInstance: MetadataTemplateInstance, successCallback): void => {
+            api.getMetadataAPI(false).createMetadataRedesign(
+                file,
+                templateInstance,
+                successCallback,
+                (error: ElementsXhrError, code: string) =>
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent),
+            );
+        },
+        [api, file, onApiError],
+    );
+
+    const handleUpdateMetadataInstance = React.useCallback(
+        (metadataInstance: MetadataTemplateInstance, JSONPatch: JSONPatchOperations, successCallback: () => void) => {
+            api.getMetadataAPI(false).updateMetadataRedesign(
+                file,
+                metadataInstance,
+                JSONPatch,
+                successCallback,
+                (error: ElementsXhrError, code: string) => {
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
+                },
+            );
+        },
+        [api, file, onApiError],
+    );
+
     React.useEffect(() => {
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
@@ -126,8 +190,11 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
-        file,
+        handleCreateMetadataInstance,
+        handleDeleteMetadataInstance,
+        handleUpdateMetadataInstance,
         errorMessage,
+        file,
         status,
         templateInstances,
         templates,

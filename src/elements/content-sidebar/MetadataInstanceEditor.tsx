@@ -1,41 +1,51 @@
-import { AutofillContextProvider, MetadataInstanceForm, type MetadataTemplateInstance } from '@box/metadata-editor';
-import noop from 'lodash/noop';
+import {
+    AutofillContextProvider,
+    MetadataInstanceForm,
+    type FormValues,
+    type JSONPatchOperations,
+    type MetadataTemplateInstance,
+} from '@box/metadata-editor';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
+    isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
-    template: MetadataTemplateInstance;
     onCancel: () => void;
+    onDelete: (metadataInstance: MetadataTemplateInstance) => void;
+    template: MetadataTemplateInstance;
+    onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
+    setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
+    onUnsavedChangesModalCancel: () => void;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
+    isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
+    onDelete,
+    onSubmit,
+    setIsUnsavedChangesModalOpen,
     template,
     onCancel,
+    onUnsavedChangesModalCancel,
 }) => {
-    const handleSubmit = () => {
-        // TODO in a future PR
-    };
     const handleCancel = () => {
         onCancel();
-    };
-    const handleDelete = () => {
-        // TODO in a future PR
     };
 
     return (
         <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isLoading={false}
+                isDeleteButtonDisabled={isDeleteButtonDisabled}
+                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                 selectedTemplateInstance={template}
                 onCancel={handleCancel}
-                onDelete={handleDelete}
-                onSubmit={handleSubmit}
-                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                setIsUnsavedChangesModalOpen={noop}
+                onSubmit={onSubmit}
+                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                onDelete={onDelete}
+                onUnsavedChangesModalCancel={onUnsavedChangesModalCancel}
             />
         </AutofillContextProvider>
     );

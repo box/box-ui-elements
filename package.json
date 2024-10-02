@@ -92,11 +92,7 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": [
-            "last 1 Chrome versions",
-            "last 1 Firefox versions",
-            "last 1 Safari versions"
-        ]
+        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
     },
     "husky": {
         "hooks": {
@@ -126,13 +122,13 @@
         "@babel/preset-typescript": "^7.24.7",
         "@babel/template": "^7.24.7",
         "@babel/types": "^7.24.7",
-        "@box/blueprint-web": "^7.19.8",
+        "@box/blueprint-web": "^7.30.1",
         "@box/blueprint-web-assets": "^4.21.0",
         "@box/box-ai-content-answers": "^0.50.5",
         "@box/cldr-data": "^34.2.0",
         "@box/frontend": "^10.0.0",
         "@box/languages": "^1.0.0",
-        "@box/metadata-editor": "^0.50.5",
+        "@box/metadata-editor": "^0.54.0",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@chromatic-com/storybook": "^1.6.1",
@@ -306,11 +302,11 @@
         "worker-farm": "^1.7.0"
     },
     "peerDependencies": {
-        "@box/blueprint-web": "^7.19.8",
+        "@box/blueprint-web": "^7.30.1",
         "@box/blueprint-web-assets": "^4.21.0",
         "@box/box-ai-content-answers": "^0.50.5",
         "@box/cldr-data": ">=34.2.0",
-        "@box/metadata-editor": "^0.50.5",
+        "@box/metadata-editor": "^0.54.0",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@hapi/address": "^2.1.4",
         "axios": "^0.25.0",
@@ -370,8 +366,6 @@
         }
     },
     "msw": {
-        "workerDirectory": [
-            ".storybook/public"
-        ]
+        "workerDirectory": [".storybook/public"]
     }
 }

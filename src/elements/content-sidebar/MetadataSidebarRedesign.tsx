@@ -10,6 +10,8 @@ import {
     AddMetadataTemplateDropdown,
     MetadataEmptyState,
     MetadataInstanceList,
+    type FormValues,
+    type JSONPatchOperations,
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
@@ -32,6 +34,7 @@ import { type WithLoggerProps } from '../../common/types/logging';
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
+import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -69,40 +72,84 @@ function MetadataSidebarRedesign({
     onError,
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
-    const { file, templates, errorMessage, status, templateInstances } = useSidebarMetadataFetcher(
-        api,
-        fileId,
-        onError,
-        isFeatureEnabled,
-    );
+    const {
+        file,
+        handleCreateMetadataInstance,
+        handleDeleteMetadataInstance,
+        handleUpdateMetadataInstance,
+        templates,
+        errorMessage,
+        status,
+        templateInstances,
+    } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+
     const { formatMessage } = useIntl();
+
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
+    const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
     const [selectedTemplates, setSelectedTemplates] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
+    const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
     React.useEffect(() => {
         setSelectedTemplates(templateInstances);
     }, [templateInstances]);
 
-    const handleUnsavedChanges = () => {
-        setIsUnsavedChangesModalOpen(true);
+    const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
+        if (editingTemplate) {
+            setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
+            setIsUnsavedChangesModalOpen(true);
+        } else {
+            setSelectedTemplates([...selectedTemplates, selectedTemplate]);
+            setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
+            setIsDeleteButtonDisabled(true);
+        }
     };
 
-    const handleTemplateSelect = (selectedTemplate: MetadataTemplateInstance) => {
-        setSelectedTemplates([...selectedTemplates, selectedTemplate]);
-        setEditingTemplate(selectedTemplate);
+    const handleCancel = () => {
+        setEditingTemplate(null);
+        setSelectedTemplates(templateInstances);
+    };
+
+    const handleCancelUnsavedChanges = () => {
+        // check if user tried to edit another template before unsaved changes modal
+        if (pendingTemplateToEdit) {
+            setEditingTemplate(pendingTemplateToEdit);
+            setSelectedTemplates([...templateInstances, pendingTemplateToEdit]);
+            setIsDeleteButtonDisabled(true);
+
+            setPendingTemplateToEdit(null);
+            setIsUnsavedChangesModalOpen(false);
+        } else {
+            handleCancel();
+        }
+    };
+
+    const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
+        handleDeleteMetadataInstance(metadataInstance);
+        setEditingTemplate(null);
+    };
+
+    const isExistingMetadataInstance = (): boolean => {
+        return (
+            editingTemplate && !!templateInstances.find(templateInstance => templateInstance.id === editingTemplate.id)
+        );
+    };
+
+    const handleSubmit = async (values: FormValues, operations: JSONPatchOperations) => {
+        isExistingMetadataInstance()
+            ? handleUpdateMetadataInstance(values.metadata as MetadataTemplateInstance, operations, () =>
+                  setEditingTemplate(null),
+              )
+            : handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates as MetadataTemplate[]}
-            onSelect={(selectedTemplate): void => {
-                editingTemplate
-                    ? handleUnsavedChanges()
-                    : handleTemplateSelect(selectedTemplate as MetadataTemplateInstance);
-            }}
+            onSelect={handleTemplateSelect}
         />
     );
 
@@ -136,9 +183,14 @@ function MetadataSidebarRedesign({
                 {editingTemplate && (
                     <MetadataInstanceEditor
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                        isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                        onCancel={handleCancel}
+                        onUnsavedChangesModalCancel={handleCancelUnsavedChanges}
+                        onSubmit={handleSubmit}
+                        onDelete={handleDeleteInstance}
                         template={editingTemplate}
-                        onCancel={() => setEditingTemplate(null)}
+                        setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                     />
                 )}
                 {showList && (
@@ -146,6 +198,7 @@ function MetadataSidebarRedesign({
                         isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                         onEdit={templateInstance => {
                             setEditingTemplate(templateInstance);
+                            setIsDeleteButtonDisabled(false);
                         }}
                         onEditWithAutofill={noop}
                         templateInstances={templateInstances}

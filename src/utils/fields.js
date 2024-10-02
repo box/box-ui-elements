@@ -59,6 +59,7 @@ import {
     FIELD_RETENTION,
     FIELD_URL,
     PLACEHOLDER_USER,
+    FIELD_METADATA_ARCHIVE,
 } from '../constants';
 
 // Minimum set of fields needed for folder requests
@@ -110,6 +111,9 @@ const SIDEBAR_FIELDS_TO_FETCH = [
     FIELD_IS_DOWNLOAD_AVAILABLE,
     FIELD_UPLOADER_DISPLAY_NAME,
 ];
+
+// Fields needed for sidebar of file in archive
+const SIDEBAR_FIELDS_TO_FETCH_ARCHIVE: Array<string> = SIDEBAR_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE);
 
 // Fields needed for preview
 const PREVIEW_FIELDS_TO_FETCH = [
@@ -285,6 +289,7 @@ export {
     FOLDER_FIELDS_TO_FETCH,
     PREVIEW_FIELDS_TO_FETCH,
     SIDEBAR_FIELDS_TO_FETCH,
+    SIDEBAR_FIELDS_TO_FETCH_ARCHIVE,
     TASK_ASSIGNMENTS_FIELDS_TO_FETCH,
     TASKS_FIELDS_TO_FETCH,
     USER_FIELDS,

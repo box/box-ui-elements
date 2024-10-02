@@ -69,6 +69,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            handleDeleteMetadataInstance: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
             templates: mockTemplates,
             templateInstances: [],
             errorMessage: null,
@@ -111,6 +114,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            handleDeleteMetadataInstance: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
             templateInstances: [],
             templates: [],
             errorMessage: {
@@ -130,6 +136,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with loading indicator', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
             templateInstances: [],
             templates: [],
             errorMessage: null,
@@ -164,6 +173,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata instance list when templates are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            handleDeleteMetadataInstance: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
             templateInstances: [mockCustomTemplateInstance],
             templates: mockTemplates,
             errorMessage: null,
