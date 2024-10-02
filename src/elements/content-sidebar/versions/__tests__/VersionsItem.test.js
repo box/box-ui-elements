@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { shallow } from 'enzyme/build';
 import messages from '../messages';
 import selectors from '../../../common/selectors/version';
-import { VersionsItemComponent } from '../VersionsItem';
+import VersionsItem from '../VersionsItem';
 import VersionsItemActions from '../VersionsItemActions';
 import VersionsItemButton from '../VersionsItemButton';
 import VersionsItemRetention from '../VersionsItemRetention';
@@ -42,8 +42,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         ...defaults,
         ...overrides,
     });
-    const getWrapper = (props = {}) =>
-        shallow(<VersionsItemComponent fileId="123" version={defaults} features={{}} {...props} />);
+    const getWrapper = (props = {}) => shallow(<VersionsItem fileId="123" version={defaults} {...props} />);
 
     beforeEach(() => {
         selectors.getVersionAction = jest.fn().mockReturnValue(VERSION_UPLOAD_ACTION);
@@ -254,31 +253,21 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${{ can_delete: false, can_download: false, can_preview: true, can_upload: true }}
             ${{ can_delete: false, can_download: true, can_preview: false, can_upload: false }}
             ${{ can_delete: false, can_download: false, can_preview: true, can_upload: false }}
-        `(
-            'should disable the correct menu items based on permissions when unchangeableVersions feature is enabled',
-            ({ permissions }) => {
-                const unchangeableVersionsFeature = {
-                    versionsItem: {
-                        unchangeableVersions: {
-                            enabled: true,
-                        },
-                    },
-                };
-                const wrapper = getWrapper({
-                    version: getVersion({ permissions }),
-                    features: unchangeableVersionsFeature,
-                });
-                const actions = wrapper.find(VersionsItemActions);
-                const button = wrapper.find(VersionsItemButton);
+        `('should disable the correct menu items based on permissions when is archive file', ({ permissions }) => {
+            const wrapper = getWrapper({
+                version: getVersion({ permissions }),
+                isArchiveFile: true,
+            });
+            const actions = wrapper.find(VersionsItemActions);
+            const button = wrapper.find(VersionsItemButton);
 
-                expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
-                expect(actions.prop('showDelete')).toBe(false);
-                expect(actions.prop('showDownload')).toBe(permissions.can_download);
-                expect(actions.prop('showPromote')).toBe(false);
-                expect(actions.prop('showPreview')).toBe(permissions.can_preview);
-                expect(wrapper.find(ReadableTime)).toBeTruthy();
-            },
-        );
+            expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
+            expect(actions.prop('showDelete')).toBe(false);
+            expect(actions.prop('showDownload')).toBe(permissions.can_download);
+            expect(actions.prop('showPromote')).toBe(false);
+            expect(actions.prop('showPreview')).toBe(permissions.can_preview);
+            expect(wrapper.find(ReadableTime)).toBeTruthy();
+        });
 
         test.each`
             permissions
@@ -286,83 +275,10 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${{ can_delete: true, can_download: false, can_preview: false, can_upload: false }}
             ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
             ${{ can_delete: false, can_download: false, can_preview: false, can_upload: false }}
-        `(
-            'should not render actions based on permissions when unchangeableVersions feature is enabled',
-            ({ permissions }) => {
-                const unchangeableVersionsFeature = {
-                    versionsItem: {
-                        unchangeableVersions: {
-                            enabled: true,
-                        },
-                    },
-                };
-                const wrapper = getWrapper({
-                    version: getVersion({ permissions }),
-                    features: unchangeableVersionsFeature,
-                });
-                const actions = wrapper.exists(VersionsItemActions);
-                const button = wrapper.find(VersionsItemButton);
-
-                expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
-                expect(actions).toBeFalsy();
-                expect(wrapper.find(ReadableTime)).toBeTruthy();
-            },
-        );
-
-        test.each`
-            permissions
-            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: true }}
-            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: false }}
-            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: true }}
-            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: true }}
-            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: true }}
-            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: false }}
-            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: false }}
-            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: true }}
-            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: true }}
-            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: true }}
-            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: false }}
-            ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
-            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: false }}
-            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: false }}
-            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: false }}
-        `(
-            'should show the correct menu items based on permissions when unchangeableVersions feature is disabled',
-            ({ permissions }) => {
-                const unchangeableVersionsFeature = {
-                    versionsItem: {
-                        unchangeableVersions: {
-                            enabled: false,
-                        },
-                    },
-                };
-                const wrapper = getWrapper({
-                    version: getVersion({ permissions }),
-                    features: unchangeableVersionsFeature,
-                });
-                const actions = wrapper.find(VersionsItemActions);
-                const button = wrapper.find(VersionsItemButton);
-
-                expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
-                expect(actions.prop('showDelete')).toBe(permissions.can_delete);
-                expect(actions.prop('showDownload')).toBe(permissions.can_download);
-                expect(actions.prop('showPromote')).toBe(permissions.can_upload);
-                expect(actions.prop('showPreview')).toBe(permissions.can_preview);
-                expect(wrapper.find(ReadableTime)).toBeTruthy();
-            },
-        );
-        test('should not render actions on all false permissions when unchangeableVersions feature is disabled', () => {
-            const permissions = { can_delete: false, can_download: false, can_preview: false, can_upload: false };
-            const unchangeableVersionsFeature = {
-                versionsItem: {
-                    unchangeableVersions: {
-                        enabled: false,
-                    },
-                },
-            };
+        `('should not render actions based on permissions when is archive file', ({ permissions }) => {
             const wrapper = getWrapper({
                 version: getVersion({ permissions }),
-                features: unchangeableVersionsFeature,
+                isArchiveFile: true,
             });
             const actions = wrapper.exists(VersionsItemActions);
             const button = wrapper.find(VersionsItemButton);
@@ -377,15 +293,8 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${'restore'} | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
             ${'upload'}  | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
         `(
-            "should show actions correctly when the version's action is $action and unchangeableVersions feature is enabled",
+            "should show actions correctly when the version's action is $action and is archive file",
             ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
-                const unchangeableVersionsFeature = {
-                    versionsItem: {
-                        unchangeableVersions: {
-                            enabled: true,
-                        },
-                    },
-                };
                 selectors.getVersionAction.mockReturnValueOnce(action);
 
                 const wrapper = getWrapper({
@@ -397,7 +306,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
                             can_upload: true,
                         },
                     }),
-                    features: unchangeableVersionsFeature,
+                    isArchiveFile: true,
                 });
                 const actions = wrapper.find(VersionsItemActions);
                 const button = wrapper.find(VersionsItemButton);
@@ -414,13 +323,6 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         );
 
         test("should not show actions when the version's action is delete and unchangeableVersions feature is enabled", () => {
-            const unchangeableVersionsFeature = {
-                versionsItem: {
-                    unchangeableVersions: {
-                        enabled: true,
-                    },
-                },
-            };
             selectors.getVersionAction.mockReturnValueOnce('delete');
 
             const wrapper = getWrapper({
@@ -432,7 +334,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
                         can_upload: true,
                     },
                 }),
-                features: unchangeableVersionsFeature,
+                isArchiveFile: true,
             });
             const actions = wrapper.exists(VersionsItemActions);
             const button = wrapper.find(VersionsItemButton);

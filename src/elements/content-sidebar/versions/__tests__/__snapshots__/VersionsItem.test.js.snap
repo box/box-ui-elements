@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is $action and unchangeableVersions feature is disabled 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should not show actions when the version's action is delete and unchangeableVersions feature is enabled 1`] = `
 <div
   className="bcs-VersionsItem"
 >
@@ -213,7 +213,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
 </div>
 `;
 
-exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is restore and unchangeableVersions feature is disabled 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is restore and is archive file 1`] = `
 <div
   className="bcs-VersionsItem"
 >
@@ -365,7 +365,7 @@ exports[`elements/content-sidebar/versions/VersionsItem render should show actio
 </div>
 `;
 
-exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is upload and unchangeableVersions feature is disabled 1`] = `
+exports[`elements/content-sidebar/versions/VersionsItem render should show actions correctly when the version's action is upload and is archive file 1`] = `
 <div
   className="bcs-VersionsItem"
 >

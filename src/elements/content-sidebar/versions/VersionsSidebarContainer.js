@@ -13,6 +13,7 @@ import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
 import type { MessageDescriptor } from 'react-intl';
 import API from '../../../api';
+import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 import messages from './messages';
 import openUrlInsideIframe from '../../../utils/iframe';
 import StaticVersionsSidebar from './StaticVersionSidebar';
@@ -43,6 +44,7 @@ type Props = {
 type State = {
     error?: MessageDescriptor,
     isLoading: boolean,
+    isArchiveFile: boolean,
     isWatermarked: boolean,
     versionCount: number,
     versionLimit: number,
@@ -66,6 +68,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     props: Props;
 
     state: State = {
+        isArchiveFile: false,
         isLoading: true,
         isWatermarked: false,
         versionCount: Infinity,
@@ -168,6 +171,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchError = (): void => {
         this.setState({
             error: messages.versionFetchError,
+            isArchiveFile: false,
             isLoading: false,
             isWatermarked: false,
             versionCount: 0,
@@ -178,6 +182,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
         const { api } = this.props;
         const { version_limit } = fileResponse;
+        const isArchiveFile = !!getProp(fileResponse, FIELD_METADATA_ARCHIVE);
         const isWatermarked = getProp(fileResponse, 'watermark_info.is_watermarked', false);
         const versionLimit = version_limit !== null && version_limit !== undefined ? version_limit : Infinity;
         const versionsWithPermissions = api.getVersionsAPI(false).addPermissions(versionsResponse, fileResponse) || {};
@@ -186,6 +191,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState(
             {
                 error: undefined,
+                isArchiveFile,
                 isLoading: false,
                 isWatermarked,
                 versionCount,
@@ -211,10 +217,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     fetchData = (): Promise<?[BoxItem, FileVersions]> => {
-        return this.api
-            .fetchData()
-            .then(this.handleFetchSuccess)
-            .catch(this.handleFetchError);
+        return this.api.fetchData().then(this.handleFetchSuccess).catch(this.handleFetchError);
     };
 
     findVersion = (versionId: ?string): ?BoxItemVersion => {
