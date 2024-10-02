@@ -8,6 +8,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
       "id": "be.sidebarVersions.fetchError",
     }
   }
+  isArchiveFile={false}
   isLoading={false}
   isWatermarked={false}
   onUpgradeClick={[Function]}
@@ -27,6 +28,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
     }
   }
   fileId="12345"
+  isArchiveFile={false}
   isLoading={false}
   isWatermarked={false}
   onDelete={[Function]}
@@ -44,6 +46,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer render should match its snapshot 1`] = `
 <VersionsSidebar
   fileId="12345"
+  isArchiveFile={false}
   isLoading={true}
   isWatermarked={false}
   onDelete={[Function]}

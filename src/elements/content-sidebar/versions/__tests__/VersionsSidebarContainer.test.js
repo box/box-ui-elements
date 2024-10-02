@@ -2,7 +2,7 @@ import * as React from 'react';
 import { shallow } from 'enzyme/build';
 import messages from '../messages';
 import openUrlInsideIframe from '../../../../utils/iframe';
-import VersionsSidebar from '../VersionsSidebarContainer';
+import { VersionsSidebarContainerComponent } from '../VersionsSidebarContainer';
 
 jest.mock('react-router-dom', () => ({
     ...jest.requireActual('react-router-dom'),
@@ -32,7 +32,8 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     const api = {
         getVersionsAPI: () => versionsAPI,
     };
-    const getWrapper = ({ ...props } = {}) => shallow(<VersionsSidebar api={api} fileId="12345" {...props} />);
+    const getWrapper = ({ ...props } = {}) =>
+        shallow(<VersionsSidebarContainerComponent api={api} fileId="12345" {...props} />);
 
     describe('componentDidUpdate', () => {
         let onVersionChange;
@@ -245,6 +246,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             expect(instance.sortVersions).toBeCalledWith(versionsWithCurrent.entries);
             expect(wrapper.state()).toMatchObject({
                 error: undefined,
+                isArchiveFile: false,
                 isLoading: false,
                 isWatermarked: false,
                 versionCount: 2,
@@ -262,6 +264,17 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
             instance.handleFetchSuccess([testFile, versionsWithCurrent]);
 
             expect(wrapper.state('isWatermarked')).toBe(true);
+        });
+
+        test('should set state with isArchiveFile if file is archive file', () => {
+            const wrapper = getWrapper();
+            const instance = wrapper.instance();
+            const testFile = { ...file, metadata: { global: { archivedItemTemplate: { archiveDate: '1726832355' } } } };
+
+            instance.verifyVersion = jest.fn();
+            instance.handleFetchSuccess([testFile, versionsWithCurrent]);
+
+            expect(wrapper.state('isArchiveFile')).toBe(true);
         });
     });
 

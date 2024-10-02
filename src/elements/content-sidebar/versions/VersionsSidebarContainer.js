@@ -12,6 +12,7 @@ import noop from 'lodash/noop';
 import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
 import type { MessageDescriptor } from 'react-intl';
+import { withFeatureConsumer, isFeatureEnabled } from '../../common/feature-checking';
 import API from '../../../api';
 import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 import messages from './messages';
@@ -20,11 +21,13 @@ import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
+import type { FeatureConfig } from '../../common/feature-checking';
 import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 
 type Props = {
     api: API,
+    features: FeatureConfig,
     fileId: string,
     hasSidebarInitialized?: boolean,
     history: RouterHistory,
@@ -213,7 +216,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     initialize = (): void => {
-        this.api = new VersionsSidebarAPI(this.props);
+        const { api, features, fileId }: Props = this.props;
+        const isArchiveFeatureEnabled = isFeatureEnabled(features, 'contentSidebar.archive.enabled');
+
+        this.api = new VersionsSidebarAPI({ api, fileId, isArchiveFeatureEnabled });
     };
 
     fetchData = (): Promise<?[BoxItem, FileVersions]> => {
@@ -302,4 +308,5 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 }
 
 export type VersionsSidebarProps = Props;
-export default flow([withRouter, withAPIContext])(VersionsSidebarContainer);
+export { VersionsSidebarContainer as VersionsSidebarContainerComponent };
+export default flow([withRouter, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);
