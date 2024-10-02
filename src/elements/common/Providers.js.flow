@@ -8,7 +8,7 @@ export interface ProvideProps {
 }
 
 const Provide = ({ children, hasProviders }: ProvideProps) => {
-    if (!!hasProviders) {
+    if (hasProviders) {
         return (
             <Notification.Provider>
                 <Notification.Viewport />
