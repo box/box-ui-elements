@@ -25,7 +25,7 @@ import { handleOnAbort } from '../utils';
 let metadata: Metadata;
 
 jest.mock('../utils', () => ({
-    handleOnAbort: jest.fn(), // Mock the specific function
+    handleOnAbort: jest.fn(),
 }));
 
 describe('api/Metadata', () => {
@@ -2901,13 +2901,14 @@ describe('api/Metadata', () => {
                 next_marker: 'next_marker',
                 result_count: 1,
             };
+            const abortController = new AbortController();
 
             metadata.getMetadataOptionsUrl = jest.fn().mockReturnValueOnce('options_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: response });
 
             const options = {
                 marker: 'current_marker',
-                signal: AbortController,
+                signal: abortController.signal,
                 searchInput: 'search_term',
             };
 
