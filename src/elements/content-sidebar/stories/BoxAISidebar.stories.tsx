@@ -1,4 +1,3 @@
-// @flow
 import ContentSidebar from '../ContentSidebar';
 
 const mockFeatures = {
