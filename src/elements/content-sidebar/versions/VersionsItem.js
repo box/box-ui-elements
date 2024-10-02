@@ -22,12 +22,10 @@ import {
     VERSION_UPLOAD_ACTION,
 } from '../../../constants';
 import type { BoxItemVersion } from '../../../common/types/core';
-import { withFeatureConsumer, isFeatureEnabled, type FeatureConfig } from '../../common/feature-checking';
 import type { VersionActionCallback } from './flowTypes';
 import './VersionsItem.scss';
 
 type Props = {
-    features: FeatureConfig,
     fileId: string,
     isCurrent?: boolean,
     isSelected?: boolean,
@@ -52,7 +50,6 @@ const FILE_EXTENSIONS_OFFICE = ['xlsb', 'xlsm', 'xlsx'];
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const VersionsItem = ({
-    features,
     fileId,
     isCurrent = false,
     isSelected = false,
@@ -80,7 +77,6 @@ const VersionsItem = ({
         version_promoted: versionPromoted,
     } = version;
     const { can_delete, can_download, can_preview, can_upload } = permissions;
-    const shouldDisableVersionChanges = isFeatureEnabled(features, 'versionsItem.unchangeableVersions.enabled');
     const { applied_at: retentionAppliedAt, disposition_at: retentionDispositionAt } = retention || {};
     const retentionDispositionAtDate = retentionDispositionAt && new Date(retentionDispositionAt);
 
@@ -108,10 +104,10 @@ const VersionsItem = ({
 
     // Version action helpers
     const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
-    const showDelete = can_delete && !shouldDisableVersionChanges && !isDeleted && !isCurrent;
+    const showDelete = can_delete && !isDeleted && !isCurrent;
     const showDownload = can_download && !isDeleted && isDownloadable;
-    const showPromote = can_upload && !shouldDisableVersionChanges && !isDeleted && !isCurrent;
-    const showRestore = can_delete && !shouldDisableVersionChanges && isDeleted;
+    const showPromote = can_upload && !isDeleted && !isCurrent;
+    const showRestore = can_delete && isDeleted;
     const showPreview = canPreview && !isSelected;
     const hasActions = showDelete || showDownload || showPreview || showPromote || showRestore;
 
@@ -196,5 +192,4 @@ const VersionsItem = ({
         </div>
     );
 };
-export { VersionsItem as VersionsItemComponent };
-export default withFeatureConsumer(VersionsItem);
+export default VersionsItem;
