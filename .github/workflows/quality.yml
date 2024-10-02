@@ -23,8 +23,6 @@ jobs:
               uses: actions/checkout@v3
             - name: Set up Node.js
               uses: actions/setup-node@v3
-              with:
-                  node-version: 18
             - name: Read coverage data
               id: coverage
               run: |
@@ -36,5 +34,5 @@ jobs:
               id: generate_token
               uses: actions/create-github-app-token@v1.11.0
               with:
-                  app-id: ${{ vars.APP_ID }}
-                  private-key: ${{ secrets.APP_PRIVATE_KEY }}
+                app-id: ${{ vars.APP_ID }}
+                private-key: ${{ secrets.APP_PRIVATE_KEY }}
