@@ -182,7 +182,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
-    handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
+    handleFetchSuccess = ([fileResponse, versionsResponse]: [BoxItem, FileVersions]): [BoxItem, FileVersions] => {
         const { api } = this.props;
         const { version_limit } = fileResponse;
         const isArchiveFile = !!getProp(fileResponse, FIELD_METADATA_ARCHIVE);
