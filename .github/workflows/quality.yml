@@ -25,28 +25,6 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: 18
-#            - name: Cache dependencies
-#              uses: actions/cache@v3
-#              with:
-#                  path: |
-#                      ~/.cache/yarn
-#                      node_modules
-#                  key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-#                  restore-keys: |
-#                    ${{ runner.os }}-yarn-
-#            - name: Install dependencies
-#              run: yarn install --frozen-lockfile
-#            - name: Build
-#              run: yarn build
-#            - name: Run tests
-#              run: yarn test --coverage || true
-#        -   name: Read coverage data
-#            id: coverage
-#            run: |
-#                echo "lines=$(jq '.total.lines.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
-#                echo "statements=$(jq '.total.statements.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
-#                echo "functions=$(jq '.total.functions.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
-#                echo "branches=$(jq '.total.branches.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
             - name: Read coverage data
               id: coverage
               run: |
@@ -60,46 +38,3 @@ jobs:
               with:
                   app_id: ${{ secrets.APP_ID }}
                   private_key: ${{ secrets.APP_PRIVATE_KEY }}
-            - name: Post coverage comment
-              uses: actions/github-script@v6
-              with:
-                  github-token: ${{ steps.generate_token.outputs.token }}
-                  script: |
-                    const lines = `${{ steps.coverage.outputs.lines }}`.trim();
-                    const statements = `${{ steps.coverage.outputs.statements }}`.trim();
-                    const functions = `${{ steps.coverage.outputs.functions }}`.trim();
-                    const branches = `${{ steps.coverage.outputs.branches }}`.trim();
-
-                    const commentBody = `
-                      ### Jest Coverage Report 📊
-                      |Metric      | Coverage (%)   |
-                      |------------|----------------|
-                      | Lines      | ${lines}%      |
-                      | Statements | ${statements}% |
-                      | Functions  | ${functions}%  |
-                      | Branches  | ${branches}%    |
-                    `;
-
-                    const { data: comments } = await github.rest.issues.listComments({
-                        owner: context.repo.owner,
-                        repo: context.repo.repo,
-                        issue_number: context.issue.number,
-                    });
-
-                    const existingComment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('### Jest Coverage Report'));
-
-                    if (existingComment) {
-                        await github.rest.issues.updateComment({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            comment_id: existingComment.id,
-                            body: commentBody,
-                        });
-                    } else {
-                        await github.rest.issues.createComment({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: context.issue.number,
-                            body: commentBody,
-                        });
-                    }
