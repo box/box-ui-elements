@@ -167,21 +167,43 @@ function MetadataSidebarRedesign({
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
-
+    const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
     const [selectedTemplates, setSelectedTemplates] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
+    const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
     React.useEffect(() => {
         setSelectedTemplates(templateInstances);
     }, [templateInstances]);
 
-    const handleUnsavedChanges = () => {
-        setIsUnsavedChangesModalOpen(true);
+    const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
+        if (editingTemplate) {
+            setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
+            setIsUnsavedChangesModalOpen(true);
+        } else {
+            setSelectedTemplates([...selectedTemplates, selectedTemplate]);
+            setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
+            setIsDeleteButtonDisabled(true);
+        }
     };
 
-    const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
-        setSelectedTemplates([...selectedTemplates, selectedTemplate]);
-        setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
+    const handleCancel = () => {
+        setEditingTemplate(null);
+        setSelectedTemplates(templateInstances);
+    };
+
+    const handleCancelUnsavedChanges = () => {
+        // check if user tried to edit another template before unsaved changes modal
+        if (pendingTemplateToEdit) {
+            setEditingTemplate(pendingTemplateToEdit);
+            setSelectedTemplates([...templateInstances, pendingTemplateToEdit]);
+            setIsDeleteButtonDisabled(true);
+
+            setPendingTemplateToEdit(null);
+            setIsUnsavedChangesModalOpen(false);
+        } else {
+            handleCancel();
+        }
     };
 
     const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
@@ -207,9 +229,7 @@ function MetadataSidebarRedesign({
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={selectedTemplates as MetadataTemplate[]}
-            onSelect={(selectedTemplate): void => {
-                editingTemplate ? handleUnsavedChanges() : handleTemplateSelect(selectedTemplate);
-            }}
+            onSelect={handleTemplateSelect}
         />
     );
 
@@ -245,8 +265,10 @@ function MetadataSidebarRedesign({
                     <MetadataInstanceEditor
                         areAiSuggestionsAvailable={areAiSuggestionsAvailable}
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                        isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                        onCancel={() => setEditingTemplate(null)}
+                        onCancel={handleCancel}
+                        onUnsavedChangesModalCancel={handleCancelUnsavedChanges}
                         onSubmit={handleSubmit}
                         onDelete={handleDeleteInstance}
                         template={editingTemplate}
@@ -258,6 +280,7 @@ function MetadataSidebarRedesign({
                         isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                         onEdit={templateInstance => {
                             setEditingTemplate(templateInstance);
+                            setIsDeleteButtonDisabled(false);
                         }}
                         onEditWithAutofill={noop}
                         templateInstances={templateInstances}

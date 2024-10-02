@@ -46,6 +46,9 @@ type MetadataTemplateSchemaResponse = {
 };
 
 type MetadataSkillsTemplate = {
+    archivedItemTemplate?: {
+        archiveDate: string,
+    },
     boxSkillsCards?: SkillCards,
 };
 

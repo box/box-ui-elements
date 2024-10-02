@@ -312,6 +312,61 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should render a collaborator list when onCollaboratorAvatarsClick prop is undefined and showCollaboratorList is invoked', () => {
+            const collaborators = [
+                {
+                    name: 'test a',
+                    hasCustomAvatar: false,
+                },
+                {
+                    name: 'test b',
+                    hasCustomAvatar: false,
+                },
+            ];
+
+            const wrapper = getWrapper({
+                collaboratorsList: {
+                    ...collaboratorsList,
+                    collaborators,
+                },
+                onCollaboratorAvatarsClick: undefined,
+            });
+
+            wrapper.setState({ showCollaboratorList: false });
+            wrapper.instance().showCollaboratorList();
+
+            expect(wrapper.exists('CollaboratorList')).toBe(true);
+        });
+
+        test('should not render a collaborator list and invoke onCollaboratorAvatarsClick prop when onCollaboratorAvatarsClick prop is defined and showCollaboratorList is invoked', () => {
+            const collaborators = [
+                {
+                    name: 'test a',
+                    hasCustomAvatar: false,
+                },
+                {
+                    name: 'test b',
+                    hasCustomAvatar: false,
+                },
+            ];
+
+            const onCollaboratorAvatarsClickMock = jest.fn();
+
+            const wrapper = getWrapper({
+                collaboratorsList: {
+                    ...collaboratorsList,
+                    collaborators,
+                },
+                onCollaboratorAvatarsClick: onCollaboratorAvatarsClickMock,
+            });
+
+            wrapper.setState({ showCollaboratorList: false });
+            wrapper.instance().showCollaboratorList();
+
+            expect(wrapper.exists('CollaboratorList')).toBe(false);
+            expect(onCollaboratorAvatarsClickMock).toHaveBeenCalledTimes(1);
+        });
+
         test('should render a default component with ACI toggle if enabled ', () => {
             const wrapper = getWrapper({ onAdvancedContentInsightsToggle: jest.fn() });
             expect(wrapper.exists('AdvancedContentInsightsToggle')).toBe(true);

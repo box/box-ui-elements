@@ -379,6 +379,8 @@ export type USMProps = BaseUnifiedShareProps & {
     isAllowEditSharedLinkForFileEnabled?: boolean,
     /** Whether the USM is open */
     isOpen?: boolean,
+    /** A custom action to be invoked instead of default behavior when collaborators avatars are clicked */
+    onCollaboratorAvatarsClick?: () => void,
     /** Handler function that removes the shared link, used in the Remove Link Confirm Modal */
     onRemoveLink: () => void,
     /** Handler function for when the USM is closed */
@@ -397,6 +399,8 @@ export type USFProps = BaseUnifiedShareProps & {
     isAllowEditSharedLinkForFileEnabled: boolean,
     /** Whether the data for the USM/USF is being fetched */
     isFetching: boolean,
+    /** A custom action to be invoked instead of default behavior when collaborators avatars are clicked */
+    onCollaboratorAvatarsClick?: () => void,
     /** Function for opening the Remove Link Confirm Modal */
     openConfirmModal: () => void,
     /** Function for opening the Upgrade Plan Modal */

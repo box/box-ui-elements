@@ -150,13 +150,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
     onToggleSharedLink = (event: SyntheticInputEvent<HTMLInputElement>) => {
         const { target } = event;
-        const {
-            handleFtuxCloseClick,
-            onAddLink,
-            openConfirmModal,
-            shouldRenderFTUXTooltip,
-            trackingProps,
-        } = this.props;
+        const { handleFtuxCloseClick, onAddLink, openConfirmModal, shouldRenderFTUXTooltip, trackingProps } =
+            this.props;
         const { sharedLinkTracking } = trackingProps;
         const { onToggleLink } = sharedLinkTracking;
 
@@ -178,7 +173,13 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     };
 
     showCollaboratorList = () => {
-        this.setState({ showCollaboratorList: true });
+        const { onCollaboratorAvatarsClick } = this.props;
+
+        if (onCollaboratorAvatarsClick) {
+            onCollaboratorAvatarsClick();
+        } else {
+            this.setState({ showCollaboratorList: true });
+        }
     };
 
     closeCollaboratorList = () => {

@@ -1,0 +1,6 @@
+.bce-RenameDialog {
+    // override the textinput width inside _forms.scss
+    input[type='text'] {
+        width: 100%;
+    }
+}
