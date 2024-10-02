@@ -16,7 +16,7 @@ import { mark } from '../../utils/performance';
 
 import messages from '../common/messages';
 
-const MARK_NAME_JS_READY = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
+const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
@@ -39,6 +39,11 @@ function BoxAISidebar() {
 }
 
 export { BoxAISidebar as BoxAISideBarComponent };
-export default flow([withLogger(ORIGIN_BOXAI_SIDEBAR), withErrorBoundary(ORIGIN_BOXAI_SIDEBAR), withAPIContext])(
-    BoxAISidebar,
-);
+
+const flowFn: Function = flow([
+    withLogger(ORIGIN_BOXAI_SIDEBAR),
+    withErrorBoundary(ORIGIN_BOXAI_SIDEBAR),
+    withAPIContext,
+]);
+
+export default flowFn;
