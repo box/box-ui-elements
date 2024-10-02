@@ -16,7 +16,7 @@ export interface MetadataInstanceEditorProps {
     template: MetadataTemplateInstance;
     onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
-    onUnsavedChangesModalCancel: () => void;
+    onDiscardUnsavedChanges: () => void;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
@@ -28,7 +28,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     setIsUnsavedChangesModalOpen,
     template,
     onCancel,
-    onUnsavedChangesModalCancel,
+    onDiscardUnsavedChanges,
 }) => {
     const handleCancel = () => {
         onCancel();
@@ -45,7 +45,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 onSubmit={onSubmit}
                 setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                 onDelete={onDelete}
-                onUnsavedChangesModalCancel={onUnsavedChangesModalCancel}
+                onDiscardUnsavedChanges={onDiscardUnsavedChanges}
             />
         </AutofillContextProvider>
     );

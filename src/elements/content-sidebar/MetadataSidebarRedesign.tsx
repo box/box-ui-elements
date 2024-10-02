@@ -112,7 +112,7 @@ function MetadataSidebarRedesign({
         setSelectedTemplates(templateInstances);
     };
 
-    const handleCancelUnsavedChanges = () => {
+    const handleDiscardUnsavedChanges = () => {
         // check if user tried to edit another template before unsaved changes modal
         if (pendingTemplateToEdit) {
             setEditingTemplate(pendingTemplateToEdit);
@@ -120,10 +120,11 @@ function MetadataSidebarRedesign({
             setIsDeleteButtonDisabled(true);
 
             setPendingTemplateToEdit(null);
-            setIsUnsavedChangesModalOpen(false);
         } else {
             handleCancel();
         }
+
+        setIsUnsavedChangesModalOpen(false);
     };
 
     const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {
@@ -190,7 +191,7 @@ function MetadataSidebarRedesign({
                         isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         onCancel={handleCancel}
-                        onUnsavedChangesModalCancel={handleCancelUnsavedChanges}
+                        onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
                         onSubmit={handleSubmit}
                         onDelete={handleDeleteInstance}
                         template={editingTemplate}
