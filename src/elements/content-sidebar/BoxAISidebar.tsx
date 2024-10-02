@@ -38,12 +38,12 @@ function BoxAISidebar() {
     );
 }
 
-export { BoxAISidebar as BoxAISideBarComponent };
+export { BoxAISidebar as BoxAISidebarComponent };
 
-const flowFn: Function = flow([
+const BoxAISidebarDefaultExport: typeof withAPIContext = flow([
     withLogger(ORIGIN_BOXAI_SIDEBAR),
     withErrorBoundary(ORIGIN_BOXAI_SIDEBAR),
     withAPIContext,
-]);
+])(BoxAISidebar);
 
-export default flowFn;
+export default BoxAISidebarDefaultExport;

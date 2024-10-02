@@ -20,6 +20,6 @@ export interface BoxAISidebarProps {
   onExpandPressed: () => void;
 }
 declare function BoxAISidebar(): void;
-declare export { BoxAISidebar as BoxAISideBarComponent };
-declare var flowFn: Function;
-declare export default typeof flowFn;
+declare export { BoxAISidebar as BoxAISidebarComponent };
+declare var BoxAISidebarDefaultExport: typeof withAPIContext;
+declare export default typeof BoxAISidebarDefaultExport;
