@@ -278,3 +278,60 @@ export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof 
         expect(templateMetadataOptionEnabled).not.toHaveAttribute('aria-disabled');
     },
 };
+
+export const SwitchEditingTemplateIntances: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: '416047501580',
+        metadataSidebarProps: defaultMetadataSidebarProps,
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        // open and edit a new template
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+
+        await userEvent.click(addTemplateButton);
+
+        const templateMetadataOption = canvas.getByRole('option', { name: 'My Template' });
+
+        await userEvent.click(templateMetadataOption);
+
+        const input = await canvas.findByRole('textbox');
+
+        await userEvent.type(input, 'Lorem ipsum dolor.');
+
+        // open another template while editing the first one (with discarding changes)
+        await userEvent.click(addTemplateButton);
+
+        const templateMetadataOptionA = canvas.getByRole('option', { name: 'My Template' });
+        const templateMetadataOptionB = canvas.getByRole('option', { name: 'Virus Scan' });
+
+        expect(templateMetadataOptionA).toHaveAttribute('aria-disabled');
+        expect(templateMetadataOptionB).not.toHaveAttribute('aria-disabled');
+
+        await userEvent.click(templateMetadataOptionB);
+
+        const unsavedChangesModal = await screen.findByRole(
+            'heading',
+            { level: 2, name: 'Unsaved Changes' },
+            { timeout: 5000 },
+        );
+        expect(unsavedChangesModal).toBeInTheDocument();
+
+        const unsavedChangesModalDiscardButton = await screen.findByRole('button', { name: 'Discard Changes' });
+
+        await userEvent.click(unsavedChangesModalDiscardButton);
+
+        const newTemplateHeader = await canvas.findByRole('heading', { name: 'Virus Scan' });
+        expect(newTemplateHeader).toBeInTheDocument();
+
+        // check if template buttons disabled correctly after switching editors
+        await userEvent.click(addTemplateButton);
+
+        const templateMetadataOptionAAfterSwitch = canvas.getByRole('option', { name: 'My Template' });
+        const templateMetadataOptionBAfterSwitch = canvas.getByRole('option', { name: 'Virus Scan' });
+
+        expect(templateMetadataOptionAAfterSwitch).not.toHaveAttribute('aria-disabled');
+        expect(templateMetadataOptionBAfterSwitch).toHaveAttribute('aria-disabled');
+    },
+};

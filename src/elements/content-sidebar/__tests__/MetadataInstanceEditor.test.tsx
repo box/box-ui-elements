@@ -132,30 +132,5 @@ describe('MetadataInstanceEditor', () => {
         await userEvent.click(unsavedChangesModalDiscardButton);
 
         expect(mockOnDiscardUnsavedChanges).toHaveBeenCalled();
-
-    test('Should switch editing templates onDiscardUnsavedChanges instead onCancel when canceling through UnsavedChangesModal', async () => {
-        const props: MetadataInstanceEditorProps = {
-            ...defaultProps,
-            template: mockCustomMetadataTemplateWithField,
-        };
-        const { rerender, findByRole, findByText } = render(<MetadataInstanceEditor {...props} />);
-        const input = await findByRole('textbox');
-        const cancelButton = await findByRole('button', { name: 'Cancel' });
-
-        await userEvent.type(input, 'Lorem ipsum dolor.');
-        await userEvent.click(cancelButton);
-
-        expect(mockOnCancel).not.toHaveBeenCalled();
-        expect(mockSetIsUnsavedChangesModalOpen).toHaveBeenCalledWith(true);
-
-        rerender(<MetadataInstanceEditor {...props} isUnsavedChangesModalOpen={true} />);
-        const unsavedChangesModal = await findByText('Unsaved Changes');
-
-        expect(unsavedChangesModal).toBeInTheDocument();
-        const unsavedChangesModalDiscardButton = await findByRole('button', { name: 'Discard Changes' });
-
-        await userEvent.click(unsavedChangesModalDiscardButton);
-
-        expect(mockOnDiscardUnsavedChanges).toHaveBeenCalled();
     });
 });
