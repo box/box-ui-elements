@@ -17,10 +17,9 @@ const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
 const errorTagsMock = jest.fn().mockRejectedValue([]);
 const noDataMock = jest.fn().mockReturnValue(Promise.resolve({}));
 
-
 describe('elements/content-sidebar/DocGenSidebar', () => {
     const renderComponent = (props = {}) =>
-        render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }}  {...docGenSidebarProps} {...props} />);
+        render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...docGenSidebarProps} {...props} />);
 
     test('componentDidMount() should call fetch tags', async () => {
         renderComponent();
@@ -58,22 +57,20 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
     test('should render loading state', async () => {
         const mockGetDocGenTags = jest.fn().mockReturnValue(
-            new Promise((resolve) => {
+            new Promise(resolve => {
                 setTimeout(() => {
                     resolve({
                         data: mockData,
                     });
                 }, 1000);
-            })
+            }),
         );
 
         renderComponent({
             getDocGenTags: mockGetDocGenTags,
         });
 
-        await waitFor(() => {
-            expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
-        });
+        expect(await screen.findByRole('status', { name: 'Loading' })).toBeInTheDocument();
 
         await waitFor(() => {
             expect(screen.queryByRole('status', { name: 'Loading' })).not.toBeInTheDocument();
