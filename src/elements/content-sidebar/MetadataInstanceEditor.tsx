@@ -37,6 +37,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     return (
         <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
             <MetadataInstanceForm
+                areAiSuggestionsAvailable={true}
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                 isDeleteButtonDisabled={isDeleteButtonDisabled}
                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
