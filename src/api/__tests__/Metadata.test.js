@@ -20,8 +20,13 @@ import {
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     ERROR_CODE_FETCH_METADATA_OPTIONS,
 } from '../../constants';
+import { handleOnAbort } from '../utils';
 
 let metadata: Metadata;
+
+jest.mock('../utils', () => ({
+    handleOnAbort: jest.fn(), // Mock the specific function
+}));
 
 describe('api/Metadata', () => {
     beforeEach(() => {
@@ -2928,22 +2933,6 @@ describe('api/Metadata', () => {
             });
         });
 
-        test('should abort metadata options when abort controller signal is called', async () => {
-            const options = {
-                marker: null,
-                signal: { aborted: true },
-                searchInput: '',
-            };
-
-            metadata.xhr.abort = jest.fn();
-
-            await expect(() =>
-                metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', 0, options),
-            ).rejects.toThrow(ErrorUtil.getAbortError());
-
-            expect(metadata.xhr.abort).toHaveBeenCalled();
-        });
-
         test('should build getMetadataOptionsUrl correctly', async () => {
             const url = metadata.getMetadataOptionsUrl('enterprise', 'templateKey', 'fieldKey');
 
@@ -2980,6 +2969,24 @@ describe('api/Metadata', () => {
             await expect(() =>
                 metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', '', {}),
             ).rejects.toThrow(new Error('Missing level'));
+        });
+
+        test('should abort when onabort is called', async () => {
+            const abortController = new AbortController();
+
+            const options = {
+                marker: null,
+                signal: abortController.signal,
+                searchInput: '',
+            };
+
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(new Promise(() => {}));
+
+            metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', 0, options);
+
+            abortController.abort();
+
+            expect(handleOnAbort).toHaveBeenCalled();
         });
     });
 });
