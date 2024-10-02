@@ -128,7 +128,7 @@ describe('MetadataInstanceEditor', () => {
         const unsavedChangesModal = await findByText('Unsaved Changes');
 
         expect(unsavedChangesModal).toBeInTheDocument();
-        const unsavedChangesModalCancelButton = await findByRole('button', { name: 'Cancel' });
+        const unsavedChangesModalCancelButton = await findByRole('button', { name: 'Discard Changes' });
 
         await userEvent.click(unsavedChangesModalCancelButton);
 
