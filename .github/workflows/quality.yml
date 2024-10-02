@@ -47,10 +47,16 @@ jobs:
                 echo "statements=$(jq '.total.statements.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
                 echo "functions=$(jq '.total.functions.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
                 echo "branches=$(jq '.total.branches.pct' reports/coverage-summary.json)" >> $GITHUB_OUTPUT
+            - name: Generate GitHub App Token
+              id: generate_token
+              uses: tibdex/github-app-token@v2.1.0
+              with:
+                  app_id: ${{ secrets.APP_ID }}
+                  private_key: ${{ secrets.APP_PRIVATE_KEY }}
             - name: Post coverage comment
               uses: actions/github-script@v6
               with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  github-token: ${{ steps.generate_token.outputs.token }}
                   script: |
                     const lines = `${{ steps.coverage.outputs.lines }}`.trim();
                     const statements = `${{ steps.coverage.outputs.statements }}`.trim();
