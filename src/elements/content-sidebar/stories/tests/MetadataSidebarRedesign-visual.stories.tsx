@@ -292,7 +292,7 @@ export const SwitchEditingTemplateIntances: StoryObj<typeof MetadataSidebarRedes
 
         await userEvent.click(addTemplateButton);
 
-        const templateMetadataOption = canvas.getByRole('option', { name: 'My Template' });
+        const templateMetadataOption = await canvas.findByRole('option', { name: 'My Template' });
 
         await userEvent.click(templateMetadataOption);
 
@@ -303,12 +303,12 @@ export const SwitchEditingTemplateIntances: StoryObj<typeof MetadataSidebarRedes
         // open another template while editing the first one (with discarding changes)
         await userEvent.click(addTemplateButton);
 
-        const templateMetadataOptionA = canvas.getByRole('option', { name: 'My Template' });
-        const templateMetadataOptionB = canvas.getByRole('option', { name: 'Virus Scan' });
+        const templateDropdown = await screen.findByRole('dialog');
 
-        expect(templateMetadataOptionA).toHaveAttribute('aria-disabled');
-        expect(templateMetadataOptionB).not.toHaveAttribute('aria-disabled');
+        expect(await within(templateDropdown).findByText('My Template')).toHaveAttribute('aria-disabled');
+        expect(await within(templateDropdown).findByText('Virus Scan')).not.toHaveAttribute('aria-disabled');
 
+        const templateMetadataOptionB = await within(templateDropdown).findByText('Virus Scan');
         await userEvent.click(templateMetadataOptionB);
 
         const unsavedChangesModal = await screen.findByRole(
@@ -322,16 +322,16 @@ export const SwitchEditingTemplateIntances: StoryObj<typeof MetadataSidebarRedes
 
         await userEvent.click(unsavedChangesModalDiscardButton);
 
-        const newTemplateHeader = await canvas.findByRole('heading', { name: 'Virus Scan' });
+        const newTemplateHeader = await screen.findByRole('heading', { name: 'Virus Scan' });
         expect(newTemplateHeader).toBeInTheDocument();
 
         // check if template buttons disabled correctly after switching editors
         await userEvent.click(addTemplateButton);
+        const templateDropdownAfterSwitch = await screen.findByRole('dialog');
 
-        const templateMetadataOptionAAfterSwitch = canvas.getByRole('option', { name: 'My Template' });
-        const templateMetadataOptionBAfterSwitch = canvas.getByRole('option', { name: 'Virus Scan' });
-
-        expect(templateMetadataOptionAAfterSwitch).not.toHaveAttribute('aria-disabled');
-        expect(templateMetadataOptionBAfterSwitch).toHaveAttribute('aria-disabled');
+        expect(await within(templateDropdownAfterSwitch).findByText('My Template')).not.toHaveAttribute(
+            'aria-disabled',
+        );
+        expect(await within(templateDropdownAfterSwitch).findByText('Virus Scan')).toHaveAttribute('aria-disabled');
     },
 };
