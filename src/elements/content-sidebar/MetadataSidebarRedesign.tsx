@@ -35,86 +35,7 @@ import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
-
-const SUPPORTED_FILE_EXTENSIONS = new Set([
-    // Text-Based Documents
-    'as',
-    'as3',
-    'asm',
-    'bat',
-    'c',
-    'cc',
-    'cmake',
-    'cpp',
-    'cs',
-    'css',
-    'csv',
-    'cxx',
-    'diff',
-    'doc',
-    'docx',
-    'erb',
-    'gdoc',
-    'groovy',
-    'gsheet',
-    'h',
-    'haml',
-    'hh',
-    'htm',
-    'html',
-    'java',
-    'js',
-    'json',
-    'less',
-    'log',
-    'm',
-    'make',
-    'md',
-    'ml',
-    'mm',
-    'msg',
-    'ods',
-    'odt',
-    'pages',
-    'pdf',
-    'php',
-    'pl',
-    'properties',
-    'py',
-    'rb',
-    'rst',
-    'rtf',
-    'sass',
-    'scala',
-    'scm',
-    'script',
-    'sh',
-    'sml',
-    'sql',
-    'txt',
-    'vi',
-    'vim',
-    'webdoc',
-    'wpd',
-    'xhtml',
-    'xls',
-    'xlsb',
-    'xlsm',
-    'xlsx',
-    'xml',
-    'xsd',
-    'xsl',
-    'xbd',
-    'xdw',
-    'yaml',
-    // Presentations
-    'gslide',
-    'gslides',
-    'key',
-    'odp',
-    'ppt',
-    'pptx',
-]);
+import { isExtensionSupportedForMetadataSuggestions } from './isExtensionSupportedForMetadataSuggestions';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -245,7 +166,7 @@ function MetadataSidebarRedesign({
     const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
-    const areAiSuggestionsAvailable = SUPPORTED_FILE_EXTENSIONS.has(file?.extension);
+    const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
     return (
         <SidebarContent
@@ -268,11 +189,11 @@ function MetadataSidebarRedesign({
                         isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         onCancel={handleCancel}
-                        onUnsavedChangesModalCancel={handleCancelUnsavedChanges}
-                        onSubmit={handleSubmit}
                         onDelete={handleDeleteInstance}
-                        template={editingTemplate}
+                        onDiscardUnsavedChanges={handleCancelUnsavedChanges}
+                        onSubmit={handleSubmit}
                         setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                        template={editingTemplate}
                     />
                 )}
                 {showList && (
