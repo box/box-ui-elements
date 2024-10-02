@@ -4,7 +4,9 @@
  * @author Box
  */
 
+import type Xhr from '../utils/Xhr';
 import type { Comment } from '../common/types/feed';
+import { getAbortError } from '../utils/error';
 
 /**
  * Formats comment data (including replies) for use in components.
@@ -23,6 +25,12 @@ export const formatComment = (comment: Comment): Comment => {
     }
 
     return formattedComment;
+};
+
+export const handleOnAbort = (xhr: Xhr) => {
+    xhr.abort();
+
+    throw getAbortError();
 };
 
 export default {

@@ -7,8 +7,9 @@
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
-import { getAbortError, getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
+import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
+import { handleOnAbort } from './utils';
 import File from './File';
 import {
     HEADER_CONTENT_TYPE,
@@ -1116,13 +1117,13 @@ class Metadata extends File {
             ...(searchInput ? { searchInput } : {}),
         };
 
-        if (signal?.aborted) {
-            this.xhr.abort();
-
-            throw getAbortError();
+        if (signal) {
+            signal.onabort = () => {
+                handleOnAbort(this.xhr);
+            };
         }
 
-        const metadataOptions = this.xhr.get({
+        const metadataOptions = await this.xhr.get({
             url,
             id: getTypedFileId(id),
             params,
