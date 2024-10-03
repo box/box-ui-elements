@@ -29,6 +29,7 @@ import {
 import { withLogger } from '../common/logger';
 
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
@@ -45,7 +46,6 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentSidebar.scss';
-import type { BoxAISidebarProps } from './BoxAISidebar';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -257,7 +257,6 @@ class ContentSidebar extends React.Component<Props, State> {
     fetchMetadata(): void {
         const { file }: State = this.state;
         const { metadataSidebarProps }: Props = this.props;
-        // eslint-disable-next-line no-shadow
         const { isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
 
         // Only fetch metadata if we think that the file may have metadata on it

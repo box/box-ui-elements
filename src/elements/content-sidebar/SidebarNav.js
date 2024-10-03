@@ -22,12 +22,12 @@ import SidebarToggle from './SidebarToggle';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
-    SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_BOXAI,
     SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
-    SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';

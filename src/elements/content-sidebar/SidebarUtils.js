@@ -21,10 +21,10 @@ import {
     SIDEBAR_VIEW_METADATA_REDESIGN,
     SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
+import { isFeatureEnabled } from '../common/feature-checking';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem } from '../../common/types/core';
-import { isFeatureEnabled } from '../common/feature-checking';
 
 class SidebarUtils {
     /**
@@ -124,12 +124,12 @@ class SidebarUtils {
      */
     static shouldRenderMetadataSidebar(props: ContentSidebarProps, editors?: Array<MetadataEditor>): boolean {
         const { metadataSidebarProps = {} }: ContentSidebarProps = props;
-        // eslint-disable-next-line no-shadow
-        const { isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
+        const { isFeatureEnabled: isFeatureEnabledMetadataSidebarProp = true }: MetadataSidebarProps =
+            metadataSidebarProps;
 
         return (
             SidebarUtils.canHaveMetadataSidebar(props) &&
-            (isFeatureEnabled || (Array.isArray(editors) && editors.length > 0))
+            (isFeatureEnabledMetadataSidebarProp || (Array.isArray(editors) && editors.length > 0))
         );
     }
 

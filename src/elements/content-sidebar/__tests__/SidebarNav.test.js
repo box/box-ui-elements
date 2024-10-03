@@ -90,9 +90,9 @@ describe('elements/content-sidebar/SidebarNav', () => {
     test('should have multiple tabs', () => {
         const props = {
             hasActivity: true,
+            hasBoxAI: true,
             hasMetadata: true,
             hasSkills: true,
-            hasBoxAI: true,
         };
         const wrapper = getWrapper(props, 'activity');
         expect(wrapper.find(IconMagicWand)).toHaveLength(1);
