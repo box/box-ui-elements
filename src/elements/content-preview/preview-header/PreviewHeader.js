@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
 // $FlowFixMe typescript component
-import ContentAnswers from '../../../features/content-answers';
+import ContentAnswers from '../../common/content-answers';
 import FileInfo from './FileInfo';
 import IconClose from '../../../icons/general/IconClose';
 import IconDownload from '../../../icons/general/IconDownloadSolid';
@@ -101,7 +101,7 @@ const PreviewHeader = ({
                                     {...contentOpenWithProps}
                                 />
                             )}
-                            {shouldRenderAnswers && <ContentAnswers file={file} />}
+                            {shouldRenderAnswers && <ContentAnswers file={file} {...contentAnswersProps} />}
                             {canAnnotate && (
                                 <>
                                     <PlainButton

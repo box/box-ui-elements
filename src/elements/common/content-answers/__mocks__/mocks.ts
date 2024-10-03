@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
-import { QuestionType } from '../ContentAnswersModal';
+import { ANSWER_ERROR, QuestionType } from '@box/box-ai-content-answers';
 
 export const mockCurrentUser = {
     id: '123',
@@ -22,7 +21,7 @@ export const mockQuestionsWithAnswer: QuestionType[] = [
     {
         prompt: 'summarize another question',
         answer: 'summarize answer',
-        createdAt: '',
+        created_at: '',
     },
 ];
 
@@ -30,7 +29,7 @@ export const mockQuestionsWithError: QuestionType[] = [
     {
         prompt: 'summarize',
         answer: '',
-        error: new Error('error'),
+        error: ANSWER_ERROR.GENERAL,
     },
 ];
 

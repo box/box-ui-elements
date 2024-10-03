@@ -1,0 +1,23 @@
+// @flow
+import * as React from 'react';
+import { Notification, TooltipProvider } from '@box/blueprint-web';
+
+export interface ProvideProps {
+    children: React.Node;
+    hasProviders: ?boolean;
+}
+
+const Provide = ({ children, hasProviders }: ProvideProps) => {
+    if (hasProviders) {
+        return (
+            <Notification.Provider>
+                <Notification.Viewport />
+                <TooltipProvider>{children}</TooltipProvider>
+            </Notification.Provider>
+        );
+    }
+
+    return React.Children.only(children);
+};
+
+export default Provide;
