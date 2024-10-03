@@ -1118,9 +1118,7 @@ class Metadata extends File {
         };
 
         if (signal) {
-            signal.onabort = () => {
-                handleOnAbort(this.xhr);
-            };
+            signal.onabort = () => handleOnAbort(this.xhr);
         }
 
         const metadataOptions = await this.xhr.get({
