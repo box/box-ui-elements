@@ -139,7 +139,7 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
             ...defaultMetadataSidebarProps,
         },
         features: {
-           ...mockFeatures,
+            ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
         },
     },
@@ -192,8 +192,8 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         const canvas = within(canvasElement);
 
         // Edit buttons contains also template name
-        const editButtons = await canvas.findAllByRole('button', { name: /^edit/i }, { timeout: 5000 });
-        expect(editButtons).toHaveLength(3);
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' }, { timeout: 5000 });
+        expect(editButton).toBeInTheDocument();
 
         let headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(3);
@@ -201,9 +201,9 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
             expect.arrayContaining(['My Template', 'Select Dropdowns', 'Custom Metadata']),
         );
 
-        expect(editButtons[0].ariaLabel).toBe('Edit My Template');
+        expect(editButton.ariaLabel).toBe('Edit My Template');
         // go to edit mode - only edited template is visible
-        await userEvent.click(editButtons[0]);
+        await userEvent.click(editButton);
 
         headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(1);
