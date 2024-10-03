@@ -248,3 +248,33 @@ export const DeleteButtonIsEnabledWhenEditingMetadataTemplateInstance: StoryObj<
         expect(deleteButton).toBeEnabled();
     },
 };
+
+export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: '416047501580',
+        metadataSidebarProps: defaultMetadataSidebarProps,
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+
+        await userEvent.click(addTemplateButton);
+
+        const templateMetadataOption = canvas.getByRole('option', { name: 'My Template' });
+        expect(templateMetadataOption).not.toHaveAttribute('aria-disabled');
+        await userEvent.click(templateMetadataOption);
+
+        // Check if currently open template is disabled in dropdown
+        await userEvent.click(addTemplateButton);
+        const templateMetadataOptionDisabled = canvas.getByRole('option', { name: 'My Template' });
+        expect(templateMetadataOptionDisabled).toHaveAttribute('aria-disabled');
+
+        // Check if template available again after cancelling
+        const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
+        await userEvent.click(cancelButton);
+        await userEvent.click(addTemplateButton);
+        const templateMetadataOptionEnabled = canvas.getByRole('option', { name: 'My Template' });
+        expect(templateMetadataOptionEnabled).not.toHaveAttribute('aria-disabled');
+    },
+};

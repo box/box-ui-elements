@@ -50,6 +50,8 @@ export const withBoxAI = {
     args: {
         contentAnswersProps: {
             show: true,
+            isCitationsEnabled: true,
+            isMarkdownEnabled: true,
         },
     },
 };

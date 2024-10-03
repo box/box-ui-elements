@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { injectIntl, IntlShape } from 'react-intl';
 import classNames from 'classnames';
 
-import BoxAiLogo from '../../icon/logo/BoxAiLogo';
-import Button from '../../components/button';
-import Tooltip from '../../components/tooltip';
+import { IconButton, Tooltip } from '@box/blueprint-web';
+import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
+
 import { CODE_FILE_EXTENSIONS, DOCUMENT_FILE_EXTENSIONS, TEXT_FILE_EXTENSIONS } from './constants';
 
 import messages from './messages';
@@ -50,23 +50,20 @@ const ContentAnswersOpenButton = ({
         return formatMessage(messages.defaultTooltip);
     };
 
-    const openButtonClassNames = classNames('bdl-ContentAnswersOpenButton', {
-        'bdl-ContentAnswersOpenButton--hasQuestions': isHighlighted,
+    const openButtonClassNames = classNames('be-ContentAnswersOpenButton', {
+        'be-ContentAnswersOpenButton--hasQuestions': isHighlighted,
     });
     return (
-        <Tooltip className="bdl-ContentAnswersOpenButton-tooltip" text={getTooltipText()}>
-            <Button
+        <Tooltip content={getTooltipText()}>
+            <IconButton
                 aria-label={formatMessage(messages.contentAnswersTitle)}
                 className={openButtonClassNames}
-                data-testid="content-answers-open-button"
-                isDisabled={!isAllowedFileType(fileExtension)}
+                disabled={!isAllowedFileType(fileExtension)}
                 onClick={onClick}
-                setRef={(ref: HTMLButtonElement) => {
-                    buttonRef.current = ref;
-                }}
-            >
-                <BoxAiLogo className="bdl-ContentAnswersOpenButton-icon" width={20} height={20} />
-            </Button>
+                ref={buttonRef}
+                icon={BoxAiLogo}
+                variant="icon-logo"
+            />
         </Tooltip>
     );
 };
