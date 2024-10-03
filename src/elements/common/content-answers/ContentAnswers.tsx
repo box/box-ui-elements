@@ -1,21 +1,21 @@
 import React, { useCallback, useState } from 'react';
-
 import getProp from 'lodash/get';
-import ContentAnswersModal from './ContentAnswersModal';
+
+import ContentAnswersModal, { ExternalProps as ContentAnswersModalExternalProps } from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 // @ts-ignore: no ts definition
 // eslint-disable-next-line import/named
 import { BoxItem } from '../../common/types/core';
 
-type ExternalProps = {
+interface ExternalProps extends ContentAnswersModalExternalProps {
     show?: boolean;
-};
+}
 
-type Props = {
+interface Props {
     file: BoxItem;
-};
+}
 
-const ContentAnswers = ({ file }: Props) => {
+const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: ContentAnswersModalExternalProps & Props) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hasQuestions, setHasQuestions] = useState(false);
     const [isHighlighted, setIsHighlighted] = useState(false);
@@ -29,32 +29,38 @@ const ContentAnswers = ({ file }: Props) => {
         if (hasQuestions) {
             setIsHighlighted(true);
         }
-    }, [hasQuestions]);
+
+        if (onRequestClose) {
+            onRequestClose();
+        }
+    }, [hasQuestions, onRequestClose]);
 
     const handleAsk = useCallback(() => {
         setHasQuestions(true);
-    }, []);
+        if (onAsk) {
+            onAsk();
+        }
+    }, [onAsk]);
 
     const currentExtension = getProp(file, 'extension');
     return (
-        <div className="bdl-ContentAnswers">
+        <div className="be-ContentAnswers">
             <ContentAnswersOpenButton
-                data-testid="content-answers-open-button"
                 fileExtension={currentExtension}
                 isHighlighted={isHighlighted}
                 isModalOpen={isModalOpen}
                 onClick={handleClick}
             />
             <ContentAnswersModal
-                data-testid="content-answers-modal"
                 file={file}
                 isOpen={isModalOpen}
                 onAsk={handleAsk}
                 onRequestClose={handleClose}
+                {...rest}
             />
         </div>
     );
 };
 
-export type ContentAnswersProps = ExternalProps;
+export type ContentAnswersProps = ExternalProps & Props;
 export default ContentAnswers;

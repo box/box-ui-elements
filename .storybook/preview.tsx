@@ -19,7 +19,18 @@ initialize();
 
 const preview = {
     parameters: {
-        chromatic: { disableSnapshot: true },
+        chromatic: {
+            disableSnapshot: true,
+            cropToViewport: true,
+            modes: {
+                specific: {
+                    viewport: {
+                        height: 1000,
+                        width: 1200,
+                    },
+                },
+            },
+        },
         controls: {
             matchers: {
                 color: /(background|color)$/i,
