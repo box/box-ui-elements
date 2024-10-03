@@ -93,8 +93,12 @@ function MetadataSidebarRedesign({
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
     React.useEffect(() => {
-        setSelectedTemplates(templateInstances);
-    }, [templateInstances, templateInstances.length]);
+        if (editingTemplate) {
+            setSelectedTemplates([...templateInstances, editingTemplate]);
+        } else {
+            setSelectedTemplates(templateInstances);
+        }
+    }, [templateInstances, editingTemplate, templateInstances.length]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         if (editingTemplate) {
