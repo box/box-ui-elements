@@ -387,7 +387,6 @@ class ContentSidebar extends React.Component<Props, State> {
                                 getViewer={getViewer}
                                 hasActivityFeed={hasActivityFeed}
                                 hasAdditionalTabs={hasAdditionalTabs}
-                                hasBoxAI={isFeatureEnabledInContext(this.props.features, 'boxai.sidebar.enabled')}
                                 hasNav={hasNav}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
