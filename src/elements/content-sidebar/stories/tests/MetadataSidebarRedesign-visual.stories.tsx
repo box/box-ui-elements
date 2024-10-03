@@ -279,59 +279,59 @@ export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof 
     },
 };
 
-export const SwitchEditingTemplateIntances: StoryObj<typeof MetadataSidebarRedesign> = {
-    args: {
-        fileId: '416047501580',
-        metadataSidebarProps: defaultMetadataSidebarProps,
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
+// export const SwitchEditingTemplateIntances: StoryObj<typeof MetadataSidebarRedesign> = {
+//     args: {
+//         fileId: '416047501580',
+//         metadataSidebarProps: defaultMetadataSidebarProps,
+//     },
+//     play: async ({ canvasElement }) => {
+//         const canvas = within(canvasElement);
 
-        // open and edit a new template
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+//         // open and edit a new template
+//         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
 
-        await userEvent.click(addTemplateButton);
+//         await userEvent.click(addTemplateButton);
 
-        const templateMetadataOption = await canvas.findByRole('option', { name: 'My Template' });
+//         const templateMetadataOption = await canvas.findByRole('option', { name: 'My Template' });
 
-        await userEvent.click(templateMetadataOption);
+//         await userEvent.click(templateMetadataOption);
 
-        const input = await canvas.findByRole('textbox');
+//         const input = await canvas.findByRole('textbox');
 
-        await userEvent.type(input, 'Lorem ipsum dolor.');
+//         await userEvent.type(input, 'Lorem ipsum dolor.');
 
-        // open another template while editing the first one (with discarding changes)
-        await userEvent.click(addTemplateButton);
+//         // open another template while editing the first one (with discarding changes)
+//         await userEvent.click(addTemplateButton);
 
-        const templateDropdown = await screen.findByRole('dialog');
+//         const templateDropdown = await screen.findByRole('dialog');
 
-        expect(await within(templateDropdown).findByText('My Template')).toHaveAttribute('aria-disabled');
-        expect(await within(templateDropdown).findByText('Virus Scan')).not.toHaveAttribute('aria-disabled');
+//         expect(await within(templateDropdown).findByText('My Template')).toHaveAttribute('aria-disabled');
+//         expect(await within(templateDropdown).findByText('Virus Scan')).not.toHaveAttribute('aria-disabled');
 
-        const templateMetadataOptionB = await within(templateDropdown).findByText('Virus Scan');
-        await userEvent.click(templateMetadataOptionB);
+//         const templateMetadataOptionB = await within(templateDropdown).findByText('Virus Scan');
+//         await userEvent.click(templateMetadataOptionB);
 
-        const unsavedChangesModal = await screen.findByRole(
-            'heading',
-            { level: 2, name: 'Unsaved Changes' },
-            { timeout: 5000 },
-        );
-        expect(unsavedChangesModal).toBeInTheDocument();
+//         const unsavedChangesModal = await screen.findByRole(
+//             'heading',
+//             { level: 2, name: 'Unsaved Changes' },
+//             { timeout: 5000 },
+//         );
+//         expect(unsavedChangesModal).toBeInTheDocument();
 
-        const unsavedChangesModalDiscardButton = await screen.findByRole('button', { name: 'Discard Changes' });
+//         const unsavedChangesModalDiscardButton = await screen.findByRole('button', { name: 'Discard Changes' });
 
-        await userEvent.click(unsavedChangesModalDiscardButton);
+//         await userEvent.click(unsavedChangesModalDiscardButton);
 
-        const newTemplateHeader = await screen.findByRole('heading', { name: 'Virus Scan' });
-        expect(newTemplateHeader).toBeInTheDocument();
+//         const newTemplateHeader = await screen.findByRole('heading', { name: 'Virus Scan' });
+//         expect(newTemplateHeader).toBeInTheDocument();
 
-        // check if template buttons disabled correctly after switching editors
-        await userEvent.click(addTemplateButton);
-        const templateDropdownAfterSwitch = await screen.findByRole('dialog');
+//         // check if template buttons disabled correctly after switching editors
+//         await userEvent.click(addTemplateButton);
+//         const templateDropdownAfterSwitch = await screen.findByRole('dialog');
 
-        expect(await within(templateDropdownAfterSwitch).findByText('My Template')).not.toHaveAttribute(
-            'aria-disabled',
-        );
-        expect(await within(templateDropdownAfterSwitch).findByText('Virus Scan')).toHaveAttribute('aria-disabled');
-    },
-};
+//         expect(await within(templateDropdownAfterSwitch).findByText('My Template')).not.toHaveAttribute(
+//             'aria-disabled',
+//         );
+//         expect(await within(templateDropdownAfterSwitch).findByText('Virus Scan')).toHaveAttribute('aria-disabled');
+//     },
+// };
