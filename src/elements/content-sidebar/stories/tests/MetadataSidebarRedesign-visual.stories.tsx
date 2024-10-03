@@ -201,7 +201,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
 
         headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(1);
-        expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['My Template']));
+        expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['Custom Metadata']));
 
         // cancel editing - back to list view
         const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
