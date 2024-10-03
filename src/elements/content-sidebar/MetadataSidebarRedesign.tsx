@@ -99,7 +99,7 @@ function MetadataSidebarRedesign({
         } else {
             setSelectedTemplates([...templateInstances, editingTemplate]);
         }
-    }, [selectedTemplates, editingTemplate, templateInstances, templateInstances.length]);
+    }, [editingTemplate, templateInstances, templateInstances.length]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         if (editingTemplate) {
