@@ -2930,6 +2930,7 @@ describe('api/Metadata', () => {
                 params: {
                     marker: 'current_marker',
                     searchInput: 'search_term',
+                    level: 0,
                 },
             });
         });

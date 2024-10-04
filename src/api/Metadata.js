@@ -1115,7 +1115,7 @@ class Metadata extends File {
         const params = {
             ...(marker ? { marker } : {}),
             ...(searchInput ? { searchInput } : {}),
-            ...(level ? { level } : {}),
+            ...(level || level === 0 ? { level } : {}),
         };
 
         if (signal) {
