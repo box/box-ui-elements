@@ -18,9 +18,15 @@ import {
     METADATA_TEMPLATE_PROPERTIES,
     TYPE_FILE,
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
+    ERROR_CODE_FETCH_METADATA_OPTIONS,
 } from '../../constants';
+import { handleOnAbort } from '../utils';
 
 let metadata: Metadata;
+
+jest.mock('../utils', () => ({
+    handleOnAbort: jest.fn(),
+}));
 
 describe('api/Metadata', () => {
     beforeEach(() => {
@@ -2876,6 +2882,113 @@ describe('api/Metadata', () => {
                     confidence: METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL,
                 },
             });
+        });
+    });
+
+    describe('getMetadataOptions()', () => {
+        test('should return metadata options when called with valid parameters', async () => {
+            const response = {
+                entries: [
+                    {
+                        id: '1',
+                        display_name: 'Foo',
+                        level: 0,
+                        ancestors: [{ id: '2', display_name: 'Bar', level: 1 }],
+                        deprecated: false,
+                        selectable: true,
+                    },
+                ],
+                next_marker: 'next_marker',
+                result_count: 1,
+            };
+            const abortController = new AbortController();
+
+            metadata.getMetadataOptionsUrl = jest.fn().mockReturnValueOnce('options_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: response });
+
+            const options = {
+                marker: 'current_marker',
+                signal: abortController.signal,
+                searchInput: 'search_term',
+            };
+
+            const metadataOptions = await metadata.getMetadataOptions(
+                'id',
+                'enterprise',
+                'templateKey',
+                'fieldKey',
+                0,
+                options,
+            );
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_OPTIONS);
+            expect(metadataOptions).toEqual(response);
+            expect(metadata.getMetadataOptionsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'options_url',
+                id: 'file_id',
+                params: {
+                    marker: 'current_marker',
+                    searchInput: 'search_term',
+                    level: 0,
+                },
+            });
+        });
+
+        test('should build getMetadataOptionsUrl correctly', async () => {
+            const url = metadata.getMetadataOptionsUrl('enterprise', 'templateKey', 'fieldKey');
+
+            expect(url).toBe(
+                'https://api.box.com/2.0/metadata_templates/enterprise/templateKey/fields/fieldKey/options',
+            );
+        });
+
+        test('should throw an error if id is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('', 'enterprise', 'templateKey', 'fieldKey', 'level', {}),
+            ).rejects.toThrow(ErrorUtil.getBadItemError());
+        });
+
+        test('should throw an error if scope is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', '', 'templateKey', 'fieldKey', 'level', {}),
+            ).rejects.toThrow(new Error('Missing scope'));
+        });
+
+        test('should throw an error if templateKey is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', 'enterprise', '', 'fieldKey', 'level', {}),
+            ).rejects.toThrow(new Error('Missing templateKey'));
+        });
+
+        test('should throw an error if fieldKey is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', 'enterprise', 'templateKey', '', 'level', {}),
+            ).rejects.toThrow(new Error('Missing fieldKey'));
+        });
+
+        test('should throw an error if level is missing', async () => {
+            await expect(() =>
+                metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', '', {}),
+            ).rejects.toThrow(new Error('Missing level'));
+        });
+
+        test('should abort when onabort is called', async () => {
+            const abortController = new AbortController();
+
+            const options = {
+                marker: null,
+                signal: abortController.signal,
+                searchInput: '',
+            };
+
+            metadata.xhr.get = jest.fn().mockReturnValueOnce(new Promise(() => {}));
+
+            metadata.getMetadataOptions('id', 'enterprise', 'templateKey', 'fieldKey', 0, options);
+
+            abortController.abort();
+
+            expect(handleOnAbort).toHaveBeenCalled();
         });
     });
 });

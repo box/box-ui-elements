@@ -9,6 +9,7 @@ import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
+import { handleOnAbort } from './utils';
 import File from './File';
 import {
     HEADER_CONTENT_TYPE,
@@ -28,6 +29,7 @@ import {
     ERROR_CODE_FETCH_METADATA,
     ERROR_CODE_FETCH_METADATA_TEMPLATES,
     ERROR_CODE_FETCH_SKILLS,
+    ERROR_CODE_FETCH_METADATA_OPTIONS,
     ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     TYPE_FILE,
@@ -1052,6 +1054,81 @@ class Metadata extends File {
         }
 
         return getProp(suggestionsResponse, 'data.suggestions', []);
+    }
+
+    /**
+     * Build URL for metadata options associated to a taxonomy field.
+     *
+     * @param scope
+     * @param templateKey
+     * @param fieldKey
+     * @returns {`${string}/metadata_templates/${string}/${string}/fields/${string}/options`}
+     */
+    getMetadataOptionsUrl(scope: string, templateKey: string, fieldKey: string): string {
+        return `${this.getBaseApiUrl()}/metadata_templates/${scope}/${templateKey}/fields/${fieldKey}/options`;
+    }
+
+    /**
+     * Gets options associated with a taxonomy field.
+     *
+     * @param id
+     * @param scope
+     * @param templateKey
+     * @param fieldKey
+     * @param level
+     * @param options
+     * @returns {Promise<MetadataOptions>}
+     */
+    async getMetadataOptions(
+        id: string,
+        scope: string,
+        templateKey: string,
+        fieldKey: string,
+        level: number,
+        options: { marker?: string, searchInput?: string, signal?: AbortSignal },
+    ) {
+        this.errorCode = ERROR_CODE_FETCH_METADATA_OPTIONS;
+
+        if (!id) {
+            throw getBadItemError();
+        }
+
+        if (!scope) {
+            throw new Error('Missing scope');
+        }
+
+        if (!templateKey) {
+            throw new Error('Missing templateKey');
+        }
+
+        if (!fieldKey) {
+            throw new Error('Missing fieldKey');
+        }
+
+        // 0 is a valid level value
+        if (!level && level !== 0) {
+            throw new Error('Missing level');
+        }
+
+        const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
+        const { marker, searchInput, signal } = options;
+        const params = {
+            ...(marker ? { marker } : {}),
+            ...(searchInput ? { searchInput } : {}),
+            ...(level || level === 0 ? { level } : {}),
+        };
+
+        if (signal) {
+            signal.onabort = () => handleOnAbort(this.xhr);
+        }
+
+        const metadataOptions = await this.xhr.get({
+            url,
+            id: getTypedFileId(id),
+            params,
+        });
+
+        return getProp(metadataOptions, 'data', {});
     }
 }
 
