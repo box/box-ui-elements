@@ -277,6 +277,11 @@ const messages = defineMessages({
         description: 'Label for item size attribute.',
         defaultMessage: 'Size',
     },
+    deleteDialogHeader: {
+        id: 'be.deleteDialogHeader',
+        description: 'Header for delete confirmation dialog',
+        defaultMessage: 'Delete Item',
+    },
     deleteDialogLabel: {
         id: 'be.deleteDialogLabel',
         description: 'Label for delete confirmation dialog',
