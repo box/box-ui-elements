@@ -39,7 +39,7 @@ export const openDeleteConfirmationDialog = {
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');
-        const deleteButton = within(dropdown).getByText('Delete');
+        const deleteButton = within(dropdown).findByText('Delete');
         expect(deleteButton).toBeInTheDocument();
         await userEvent.click(deleteButton);
 
