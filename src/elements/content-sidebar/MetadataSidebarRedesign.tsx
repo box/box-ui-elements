@@ -94,7 +94,12 @@ function MetadataSidebarRedesign({
 
     React.useEffect(() => {
         // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
-        if (!editingTemplate || templateInstances.some(t => t.templateKey === editingTemplate.templateKey)) {
+        if (
+            !editingTemplate ||
+            templateInstances.some(
+                t => t.templateKey === editingTemplate.templateKey && t.scope === editingTemplate.scope,
+            )
+        ) {
             setSelectedTemplates(templateInstances);
         } else {
             setSelectedTemplates([...templateInstances, editingTemplate]);
