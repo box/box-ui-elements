@@ -13,6 +13,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         mount(
             <SidebarPanels
                 file={{ id: '1234' }}
+                hasBoxAI
                 hasActivity
                 hasDetails
                 hasMetadata
@@ -47,8 +48,9 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/details/versions/1234'}          | ${'VersionsSidebar'}
             ${'/metadata'}                       | ${'MetadataSidebar'}
             ${'/skills'}                         | ${'SkillsSidebar'}
-            ${'/nonsense'}                       | ${'SkillsSidebar'}
-            ${'/'}                               | ${'SkillsSidebar'}
+            ${'/boxai'}                          | ${'BoxAISidebar'}
+            ${'/nonsense'}                       | ${'BoxAISidebar'}
+            ${'/'}                               | ${'BoxAISidebar'}
         `('should render $sidebar given the path $path', ({ path, sidebar }) => {
             const wrapper = getWrapper({ path });
             expect(wrapper.exists(sidebar)).toBe(true);
@@ -68,6 +70,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
 
         test('should render nothing if all sidebars are disabled', () => {
             const wrapper = getWrapper({
+                hasBoxAI: false,
                 hasActivity: false,
                 hasDetails: false,
                 hasMetadata: false,
@@ -138,17 +141,18 @@ describe('elements/content-sidebar/SidebarPanels', () => {
 
     describe('refresh()', () => {
         test.each([true, false])('should call the sidebars with the appropriate argument', shouldRefreshCache => {
-            const instance = getWrapper()
-                .find(SidebarPanels)
-                .instance();
+            const instance = getWrapper().find(SidebarPanels).instance();
 
-            ['activitySidebar', 'detailsSidebar', 'metadataSidebar', 'versionsSidebar'].forEach(sidebar => {
-                instance[sidebar] = { current: { refresh: jest.fn() } };
-            });
+            ['boxAISidebar', 'activitySidebar', 'detailsSidebar', 'metadataSidebar', 'versionsSidebar'].forEach(
+                sidebar => {
+                    instance[sidebar] = { current: { refresh: jest.fn() } };
+                },
+            );
 
             instance.refresh(shouldRefreshCache);
 
             expect(instance.activitySidebar.current.refresh).toHaveBeenCalledWith(shouldRefreshCache);
+            expect(instance.boxAISidebar.current.refresh).toHaveBeenCalledWith();
             expect(instance.detailsSidebar.current.refresh).toHaveBeenCalledWith();
             expect(instance.metadataSidebar.current.refresh).toHaveBeenCalledWith();
             expect(instance.versionsSidebar.current.refresh).toHaveBeenCalledWith();

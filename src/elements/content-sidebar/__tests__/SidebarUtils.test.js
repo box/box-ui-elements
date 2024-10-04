@@ -8,10 +8,13 @@ import {
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_DOCGEN,
+    SIDEBAR_VIEW_BOXAI,
 } from '../../../constants';
+import { isFeatureEnabled } from '../../common/feature-checking';
 
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../SidebarLoadingError', () => 'sidebar-loading-error');
+jest.mock('../../common/feature-checking');
 
 describe('elements/content-sidebar/SidebarUtil', () => {
     describe('canHaveSidebar()', () => {
@@ -47,6 +50,10 @@ describe('elements/content-sidebar/SidebarUtil', () => {
         });
         test('should return true when activity feed should render', () => {
             expect(SidebarUtils.canHaveSidebar({ hasActivityFeed: true })).toBeTruthy();
+        });
+        test('should return true when box ai feed should render', () => {
+            isFeatureEnabled.mockReturnValueOnce(true);
+            expect(SidebarUtils.canHaveSidebar({})).toBeTruthy();
         });
         test('should return true when notices should render', () => {
             expect(
@@ -116,6 +123,15 @@ describe('elements/content-sidebar/SidebarUtil', () => {
         });
         test('should return true when hasActivityFeed is true', () => {
             expect(SidebarUtils.canHaveActivitySidebar({ hasActivityFeed: true }, {})).toBeTruthy();
+        });
+    });
+    describe('canHaveBoxAISidebar()', () => {
+        test('should return false when hasBoxAI is false', () => {
+            expect(SidebarUtils.canHaveBoxAISidebar({ hasBoxAI: false })).toBeFalsy();
+        });
+        test('should return true when isFeatureEnabled returns true', () => {
+            isFeatureEnabled.mockReturnValueOnce(true);
+            expect(SidebarUtils.canHaveBoxAISidebar({})).toBeTruthy();
         });
     });
     describe('canHaveMetadataSidebar()', () => {
@@ -196,10 +212,19 @@ describe('elements/content-sidebar/SidebarUtil', () => {
         test('should return false when no file', () => {
             expect(SidebarUtils.shouldRenderSidebar({ hasSkills: true })).toBeFalsy();
         });
+        test('should return true when we can render box ai sidebar', () => {
+            SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveBoxAISidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(false);
+            expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
+        });
         test('should return true when we can render details sidebar', () => {
             SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveBoxAISidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(false);
             expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
             expect(SidebarUtils.canHaveDetailsSidebar).toHaveBeenCalledWith('props');
@@ -208,6 +233,7 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveBoxAISidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(true);
             expect(SidebarUtils.shouldRenderSidebar('props', 'file', 'editors')).toBeTruthy();
             expect(SidebarUtils.shouldRenderMetadataSidebar).toHaveBeenCalledWith('props', 'editors');
@@ -216,6 +242,7 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(true);
+            SidebarUtils.canHaveBoxAISidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(false);
             expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
             expect(SidebarUtils.canHaveActivitySidebar).toHaveBeenCalledWith('props');
@@ -224,6 +251,7 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             SidebarUtils.canHaveDetailsSidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderSkillsSidebar = jest.fn().mockReturnValueOnce(true);
             SidebarUtils.canHaveActivitySidebar = jest.fn().mockReturnValueOnce(false);
+            SidebarUtils.canHaveBoxAISidebar = jest.fn().mockReturnValueOnce(false);
             SidebarUtils.shouldRenderMetadataSidebar = jest.fn().mockReturnValueOnce(false);
             expect(SidebarUtils.shouldRenderSidebar('props', 'file')).toBeTruthy();
             expect(SidebarUtils.shouldRenderSkillsSidebar).toHaveBeenCalledWith('props', 'file');
@@ -236,6 +264,7 @@ describe('elements/content-sidebar/SidebarUtil', () => {
             SIDEBAR_VIEW_DETAILS,
             SIDEBAR_VIEW_METADATA,
             SIDEBAR_VIEW_ACTIVITY,
+            SIDEBAR_VIEW_BOXAI,
             SIDEBAR_VIEW_DOCGEN,
         ])('should return the title for %s', view => {
             const title = SidebarUtils.getTitleForView(view);
