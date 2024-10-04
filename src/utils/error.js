@@ -35,4 +35,22 @@ function isUserCorrectableError(status: number) {
     );
 }
 
-export { getBadItemError, getBadPermissionsError, getBadUserError, getMissingItemTextOrStatus, isUserCorrectableError };
+function getAbortError() {
+    class AbortError extends Error {
+        constructor(message: string) {
+            super(message);
+            this.name = 'AbortError';
+        }
+    }
+
+    return new AbortError('Aborted');
+}
+
+export {
+    getAbortError,
+    getBadItemError,
+    getBadPermissionsError,
+    getBadUserError,
+    getMissingItemTextOrStatus,
+    isUserCorrectableError,
+};

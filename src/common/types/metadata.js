@@ -5,6 +5,7 @@ import {
     FIELD_TYPE_FLOAT,
     FIELD_TYPE_MULTISELECT,
     FIELD_TYPE_STRING,
+    FIELD_TYPE_TAXONOMY,
 } from '../../features/metadata-instance-fields/constants';
 import type { SkillCards } from './skills';
 
@@ -13,7 +14,8 @@ type MetadataFieldType =
     | typeof FIELD_TYPE_ENUM
     | typeof FIELD_TYPE_FLOAT
     | typeof FIELD_TYPE_MULTISELECT
-    | typeof FIELD_TYPE_STRING;
+    | typeof FIELD_TYPE_STRING
+    | typeof FIELD_TYPE_TAXONOMY;
 
 type MetadataTemplateFieldOption = {
     id?: string,
@@ -117,6 +119,27 @@ type MetadataSuggestion = {
     suggestions: { [key: string]: string | number | string[] },
 };
 
+type MetadataOptionEntryAncestor = {
+    id: string,
+    display_name: string,
+    level: string,
+};
+
+type MetadataOptionEntry = {
+    id: string,
+    display_name: string,
+    level: string,
+    ancestors: MetadataOptionEntryAncestor[],
+    deprecated: boolean,
+    selectable: boolean,
+};
+
+type MetadataOptions = {
+    entries: MetadataOptionEntry[],
+    next_marker: string | null,
+    result_count: number,
+};
+
 type MetadataTemplateInstanceField = {
     description?: string,
     displayName?: string,
@@ -156,4 +179,5 @@ export type {
     MetadataInstanceV2,
     MetadataEditor,
     MetadataSuggestion,
+    MetadataOptions,
 };
