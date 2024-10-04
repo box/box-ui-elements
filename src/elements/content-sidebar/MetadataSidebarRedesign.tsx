@@ -94,7 +94,7 @@ function MetadataSidebarRedesign({
 
     React.useEffect(() => {
         setSelectedTemplates(templateInstances);
-    }, [templateInstances]);
+    }, [templateInstances, templateInstances.length]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         if (editingTemplate) {
@@ -126,8 +126,8 @@ function MetadataSidebarRedesign({
         }
     };
 
-    const handleDeleteInstance = (metadataInstance: MetadataTemplateInstance) => {
-        handleDeleteMetadataInstance(metadataInstance);
+    const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {
+        await handleDeleteMetadataInstance(metadataInstance);
         setEditingTemplate(null);
     };
 
@@ -138,11 +138,15 @@ function MetadataSidebarRedesign({
     };
 
     const handleSubmit = async (values: FormValues, operations: JSONPatchOperations) => {
-        isExistingMetadataInstance()
-            ? handleUpdateMetadataInstance(values.metadata as MetadataTemplateInstance, operations, () =>
-                  setEditingTemplate(null),
-              )
-            : handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () => setEditingTemplate(null));
+        if (isExistingMetadataInstance()) {
+            await handleUpdateMetadataInstance(values.metadata as MetadataTemplateInstance, operations, () =>
+                setEditingTemplate(null),
+            );
+        } else {
+            await handleCreateMetadataInstance(values.metadata as MetadataTemplateInstance, () =>
+                setEditingTemplate(null),
+            );
+        }
     };
 
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
