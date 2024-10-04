@@ -81,7 +81,7 @@ export const openRenameDialog = {
         expect(renameButton).toBeInTheDocument();
         await userEvent.click(renameButton);
 
-        expect(await screen.findByText('Please enter a new name for Book Sample:')).toBeInTheDocument();
+        expect(await screen.findByText('Rename File')).toBeInTheDocument();
     },
 };
 
@@ -97,12 +97,12 @@ export const closeRenameDialog = {
         expect(renameButton).toBeInTheDocument();
         await userEvent.click(renameButton);
 
-        expect(await screen.findByText('Please enter a new name for Book Sample:')).toBeInTheDocument();
+        expect(await screen.findByText('Rename File')).toBeInTheDocument();
         const cancelButton = screen.getByText('Cancel');
         await userEvent.click(cancelButton);
 
         await waitFor(() => {
-            expect(screen.queryByText('Please enter a new name for Book Sample:')).not.toBeInTheDocument();
+            expect(screen.queryByText('Rename File')).not.toBeInTheDocument();
         });
     },
 };
