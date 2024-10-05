@@ -15,6 +15,7 @@ import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checkin
 import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
+    ORIGIN_BOXAI_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
     ORIGIN_DOCGEN_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
@@ -22,14 +23,13 @@ import {
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_VERSIONS_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_BOXAI,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA_REDESIGN,
-    SIDEBAR_VIEW_BOXAI,
-    ORIGIN_BOXAI_SIDEBAR,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';

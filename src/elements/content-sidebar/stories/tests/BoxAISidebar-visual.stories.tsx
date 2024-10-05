@@ -1,7 +1,7 @@
 import { expect, userEvent, within } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
-import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
+import ContentSidebar from '../../ContentSidebar';
 
 const mockFeatures = {
     'boxai.sidebar.enabled': true,

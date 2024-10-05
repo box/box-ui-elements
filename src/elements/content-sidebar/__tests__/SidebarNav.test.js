@@ -93,7 +93,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
             hasBoxAI: true,
             hasMetadata: true,
             hasSkills: true,
-            hasBoxAI: true,
         };
         const wrapper = getWrapper(props, 'activity');
         expect(wrapper.find(IconMagicWand)).toHaveLength(1);

@@ -28,7 +28,6 @@ import {
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
-    SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';

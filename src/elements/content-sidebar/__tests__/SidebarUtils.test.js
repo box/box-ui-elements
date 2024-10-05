@@ -3,12 +3,12 @@ import * as performance from '../../../utils/performance';
 import SidebarUtils from '../SidebarUtils';
 import * as skillUtils from '../skills/skillUtils';
 import {
-    SIDEBAR_VIEW_SKILLS,
     SIDEBAR_VIEW_ACTIVITY,
-    SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_BOXAI,
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_DOCGEN,
-    SIDEBAR_VIEW_BOXAI,
+    SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_SKILLS,
 } from '../../../constants';
 import { isFeatureEnabled } from '../../common/feature-checking';
 

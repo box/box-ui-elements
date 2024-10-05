@@ -13,8 +13,8 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         mount(
             <SidebarPanels
                 file={{ id: '1234' }}
-                hasBoxAI
                 hasActivity
+                hasBoxAI
                 hasDetails
                 hasMetadata
                 hasSkills
