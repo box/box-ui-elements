@@ -46,7 +46,6 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentSidebar.scss';
-import type { BoxAISidebarProps } from './BoxAISidebar';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -388,7 +387,6 @@ class ContentSidebar extends React.Component<Props, State> {
                                 getViewer={getViewer}
                                 hasActivityFeed={hasActivityFeed}
                                 hasAdditionalTabs={hasAdditionalTabs}
-                                hasBoxAI={isFeatureEnabled(this.props.features, 'boxai.sidebar.enabled')}
                                 hasNav={hasNav}
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
