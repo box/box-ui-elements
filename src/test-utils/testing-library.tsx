@@ -9,7 +9,7 @@ import { AutofillContextProvider } from '@box/metadata-editor';
 jest.unmock('react-intl');
 
 const Wrapper = ({ children }) => (
-    <AutofillContextProvider isAiSuggestionsFeatureEnabled={false}>
+    <AutofillContextProvider isAiSuggestionsFeatureEnabled={false} fetchSuggestions={() => Promise.resolve([])}>
         <TooltipProvider>
             <IntlProvider locale="en">{children}</IntlProvider>
         </TooltipProvider>

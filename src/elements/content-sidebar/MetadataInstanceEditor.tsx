@@ -35,7 +35,10 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     };
 
     return (
-        <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
+        <AutofillContextProvider
+            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+            fetchSuggestions={() => Promise.resolve([])}
+        >
             <MetadataInstanceForm
                 areAiSuggestionsAvailable={true}
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
