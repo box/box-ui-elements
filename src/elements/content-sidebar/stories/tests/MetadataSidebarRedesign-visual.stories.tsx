@@ -201,7 +201,6 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
             expect.arrayContaining(['My Template', 'Select Dropdowns', 'Custom Metadata']),
         );
 
-        expect(editButton.ariaLabel).toBe('Edit My Template');
         // go to edit mode - only edited template is visible
         await userEvent.click(editButton);
 

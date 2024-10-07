@@ -3,7 +3,6 @@ import { userEvent } from '@testing-library/user-event';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
-import { FeatureProvider } from '../../common/feature-checking';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
@@ -64,11 +63,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             onError: jest.fn(),
         } satisfies MetadataSidebarRedesignProps;
 
-        render(
-            <FeatureProvider features={features}>
-                <MetadataSidebarRedesign {...defaultProps} {...props} />
-            </FeatureProvider>,
-        );
+        render(<MetadataSidebarRedesign {...defaultProps} {...props} />, { wrapperProps: { features } });
     };
 
     beforeEach(() => {
