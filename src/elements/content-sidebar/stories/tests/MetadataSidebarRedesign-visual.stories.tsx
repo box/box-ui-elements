@@ -15,7 +15,6 @@ const defaultMetadataArgs = {
     onError: fn,
 };
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
-    isBoxAiSuggestionsEnabled: true,
     isFeatureEnabled: true,
     onError: fn,
 };
@@ -139,6 +138,10 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
         },
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
     },
 };
 
@@ -188,7 +191,9 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const editButtons = await canvas.findAllByRole('button', { name: 'Edit' }, { timeout: 5000 });
+        // Edit buttons contains also template name
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' }, { timeout: 5000 });
+        expect(editButton).toBeInTheDocument();
 
         let headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(3);
@@ -197,7 +202,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         );
 
         // go to edit mode - only edited template is visible
-        await userEvent.click(editButtons[0]);
+        await userEvent.click(editButton);
 
         headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(1);
@@ -286,7 +291,6 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-
         // open and edit a new template
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
 
@@ -333,5 +337,30 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
 
         expect(templateMetadataOptionAAfterSwitch).not.toHaveAttribute('aria-disabled');
         expect(templateMetadataOptionBAfterSwitch).toHaveAttribute('aria-disabled');
+    },
+};
+    
+export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillWithBoxAI = await canvas.findAllByRole(
+            'button',
+            { name: /Autofill .+ with Box AI/ },
+            { timeout: 5000 },
+        );
+        expect(autofillWithBoxAI).toHaveLength(2);
+
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' });
+        userEvent.click(editButton);
+
+        const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
+        expect(autofillButton).toBeInTheDocument();
     },
 };
