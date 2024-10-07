@@ -35,9 +35,16 @@ function BoxAISidebar({ onExpandPressed }: BoxAISidebarProps) {
             className={'bcs-BoxAISidebar'}
             sidebarView={SIDEBAR_VIEW_BOXAI}
             title={formatMessage(messages.sidebarBoxAITitle)}
-            actions={<IconButton onClick={onExpandPressed} icon={ArrowsExpand} aria-label="Expand" size="x-small" />}
+            actions={
+                <IconButton
+                    onClick={onExpandPressed}
+                    icon={ArrowsExpand}
+                    aria-label={formatMessage(messages.expand)}
+                    size="x-small"
+                />
+            }
         >
-            <div className="bcs-BoxAISidebar-content"></div>
+            <div className="bcs-BoxAISidebar-content" />
         </SidebarContent>
     );
 }
