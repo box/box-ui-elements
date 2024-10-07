@@ -117,6 +117,11 @@ const messages = defineMessages({
         defaultMessage: 'Modify General Task',
         description: 'modal title for when editing an existing general task',
     },
+    expandBoxAI: {
+        id: 'be.expandBoxAI',
+        description: 'Default message for Box AI expand button in sidebar header',
+        defaultMessage: 'Expand',
+    },
 });
 
 export default messages;
