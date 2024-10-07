@@ -23,3 +23,9 @@ global.setImmediate = cb => {
 Object.defineProperty(global, 'TextEncoder', {
     value: util.TextEncoder,
 });
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+}));

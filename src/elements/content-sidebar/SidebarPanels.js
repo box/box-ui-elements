@@ -28,10 +28,13 @@ import {
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA_REDESIGN,
+    SIDEBAR_VIEW_BOXAI,
+    ORIGIN_BOXAI_SIDEBAR,
 } from '../../constants';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
 import type { User, BoxItem } from '../../common/types/core';
@@ -40,6 +43,7 @@ import type { FeatureConfig } from '../common/feature-checking';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
+    boxAISidebarProps: BoxAISidebarProps,
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
@@ -51,6 +55,7 @@ type Props = {
     getPreview: Function,
     getViewer: Function,
     hasActivity: boolean,
+    hasBoxAI: boolean,
     hasDetails: boolean,
     hasDocGen: boolean,
     hasMetadata: boolean,
@@ -77,6 +82,7 @@ type ElementRefType = {
 const BASE_EVENT_NAME = '_JS_LOADING';
 const MARK_NAME_JS_LOADING_DETAILS = `${ORIGIN_DETAILS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_ACTIVITY = `${ORIGIN_ACTIVITY_SIDEBAR}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_BOXAI = `${ORIGIN_BOXAI_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA_REDESIGNED = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}${BASE_EVENT_NAME}`;
@@ -90,6 +96,7 @@ const LoadableActivitySidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_ACTIVITY,
     MARK_NAME_JS_LOADING_ACTIVITY,
 );
+const LoadableBoxAISidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_BOXAI, MARK_NAME_JS_LOADING_BOXAI);
 const LoadableSkillsSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_SKILLS, MARK_NAME_JS_LOADING_SKILLS);
 const LoadableMetadataSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA,
@@ -108,6 +115,8 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
 const SIDEBAR_PATH_VERSIONS = '/:sidebar(activity|details)/versions/:versionId?';
 
 class SidebarPanels extends React.Component<Props, State> {
+    boxAISidebar: ElementRefType = React.createRef();
+
     activitySidebar: ElementRefType = React.createRef();
 
     detailsSidebar: ElementRefType = React.createRef();
@@ -142,10 +151,15 @@ class SidebarPanels extends React.Component<Props, State> {
      * @returns {void}
      */
     refresh(shouldRefreshCache: boolean = true): void {
+        const { current: boxAISidebar } = this.boxAISidebar;
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
         const { current: metadataSidebar } = this.metadataSidebar;
         const { current: versionsSidebar } = this.versionsSidebar;
+
+        if (boxAISidebar) {
+            boxAISidebar.refresh();
+        }
 
         if (activitySidebar) {
             activitySidebar.refresh(shouldRefreshCache);
@@ -167,6 +181,7 @@ class SidebarPanels extends React.Component<Props, State> {
     render() {
         const {
             activitySidebarProps,
+            boxAISidebarProps,
             currentUser,
             currentUserError,
             detailsSidebarProps,
@@ -178,6 +193,7 @@ class SidebarPanels extends React.Component<Props, State> {
             getPreview,
             getViewer,
             hasActivity,
+            hasBoxAI,
             hasDetails,
             hasDocGen,
             hasMetadata,
@@ -194,13 +210,32 @@ class SidebarPanels extends React.Component<Props, State> {
         const { isInitialized } = this.state;
 
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
+        const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
 
-        if (!isOpen || (!hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
+        if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
         }
 
         return (
             <Switch>
+                {hasBoxAI && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_BOXAI}`}
+                        render={() => {
+                            return (
+                                <LoadableBoxAISidebar
+                                    elementId={elementId}
+                                    file={file}
+                                    hasSidebarInitialized={isInitialized}
+                                    ref={this.boxAISidebar}
+                                    startMarkName={MARK_NAME_JS_LOADING_BOXAI}
+                                    {...boxAISidebarProps}
+                                />
+                            );
+                        }}
+                    />
+                )}
                 {hasSkills && (
                     <Route
                         exact
@@ -282,6 +317,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     elementId={elementId}
                                     fileId={fileId}
                                     hasSidebarInitialized={isInitialized}
+                                    isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                                     ref={this.metadataSidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_METADATA_REDESIGNED}
                                     {...metadataSidebarProps}
@@ -333,7 +369,9 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (hasDocGen) {
+                        if (hasBoxAI) {
+                            redirect = SIDEBAR_VIEW_BOXAI;
+                        } else if (hasDocGen) {
                             redirect = SIDEBAR_VIEW_DOCGEN;
                         } else if (hasSkills) {
                             redirect = SIDEBAR_VIEW_SKILLS;

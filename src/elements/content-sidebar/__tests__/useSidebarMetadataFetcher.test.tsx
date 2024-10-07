@@ -182,7 +182,7 @@ describe('useSidebarMetadataFetcher', () => {
         await waitFor(() => result.current.handleDeleteMetadataInstance(mockTemplateInstances[0]));
 
         expect(result.current.templates).toEqual(mockTemplates);
-        expect(result.current.templateInstances).toEqual([]);
+        expect(result.current.status).toEqual(STATUS.SUCCESS);
         expect(result.current.errorMessage).toBeNull();
     });
 

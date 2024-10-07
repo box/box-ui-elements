@@ -33,23 +33,25 @@
 ---
 
 ### Props
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| fileId* | string | | The id of the file to preview. |
-| token* | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| canDownload | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |
-| collection | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| contentOpenWithProps | Object | `{}` | Props that can be forwarded to the Content Open With UI Element. *See them in the props section of [Content Open With UI Element](#content-open-with-documentation)* |
-| contentSidebarProps | Object | `{}` | Props that can be forwarded to the Content Sidebar UI Element. *See them in the props section of [Content Sidebar UI Element](#content-sidebar-documentation)* |
-| hasHeader | boolean | `true` | Visually hides the preview header if this is set to `false`. |
-| language | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section* |
-| messages | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section* |
-| onClose | function |  | Callback function for when the file preview closes. If absent, the close button will not render in the header. |
-| onLoad | function |  | Callback function for when a file preview loads. |
-| requestInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| responseInterceptor | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| sharedLink | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| sharedLinkPassword | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
-| showAnnotations | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).* |
+| Prop                 | Type | Default | Description                                                                                                                                                                         |
+|----------------------| --- | --- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| fileId*              | string | | The id of the file to preview.                                                                                                                                                      |
+| token*               | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
+| canDownload          | boolean | `true` | Visually hides the download and print buttons in the preview header if this is set to `false`. *This prop has no effect when the file permission `can_download` is set to `false`.* |
+| collection           | Array&lt;string&gt; | `[]` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
+| contentOpenWithProps | Object | `{}` | Props that can be forwarded to the Content Open With UI Element. *See them in the props section of [Content Open With UI Element](#content-open-with-documentation)*                |
+| contentSidebarProps  | Object | `{}` | Props that can be forwarded to the Content Sidebar UI Element. *See them in the props section of [Content Sidebar UI Element](#content-sidebar-documentation)*                      |
+| hasHeader            | boolean | `true` | Visually hides the preview header if this is set to `false`.                                                                                                                        |
+| hasProviders         | boolean | `true` | Decide if it should wrap the element with the `Notification` and `Tooltip` Provider. Set this to false if you already wrap your app with both of these providers.                       |
+| language             | string | `en-US` | *See the [Internationalization](../README.md#internationalization) section*                                                                                                         |
+| messages             | Map<string, string> |  | *See the [Internationalization](../README.md#internationalization) section*                                                                                                         |
+| onClose              | function |  | Callback function for when the file preview closes. If absent, the close button will not render in the header.                                                                      |
+| onLoad               | function |  | Callback function for when a file preview loads.                                                                                                                                    |
+| requestInterceptor   | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
+| responseInterceptor  | function | | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
+| sharedLink           | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
+| sharedLinkPassword   | string |  | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
+| showAnnotations      | boolean | `true` | *See the [developer docs](https://developer.box.com/docs/box-content-preview#section-options).*                                                                                     |
+
 
 ***Note***: Any other option listed here https://github.com/box/box-content-preview#parameters--options, which is also not listed or overriden above as a prop, will be passed on as-is to the Preview Library.

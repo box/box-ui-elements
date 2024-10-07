@@ -19,7 +19,9 @@ import {
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA_REDESIGN,
+    SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
+import { isFeatureEnabled } from '../common/feature-checking';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem } from '../../common/types/core';
@@ -46,6 +48,17 @@ class SidebarUtils {
      */
     static canHaveMetadataSidebar(props: ContentSidebarProps): boolean {
         return !!props.hasMetadata;
+    }
+
+    /**
+     * Determines if we can render the Box AI sidebar.
+     * Only relies on props.
+     *
+     * @param {ContentSidebarProps} props - User passed in props
+     * @return {Boolean} true if we should render
+     */
+    static canHaveBoxAISidebar(props: ContentSidebarProps): boolean {
+        return isFeatureEnabled(props.features, 'boxai.sidebar.enabled');
     }
 
     /**
@@ -81,6 +94,7 @@ class SidebarUtils {
         return (
             SidebarUtils.canHaveDetailsSidebar(props) ||
             SidebarUtils.canHaveActivitySidebar(props) ||
+            SidebarUtils.canHaveBoxAISidebar(props) ||
             SidebarUtils.canHaveSkillsSidebar(props) ||
             SidebarUtils.canHaveMetadataSidebar(props)
         );
@@ -110,11 +124,12 @@ class SidebarUtils {
      */
     static shouldRenderMetadataSidebar(props: ContentSidebarProps, editors?: Array<MetadataEditor>): boolean {
         const { metadataSidebarProps = {} }: ContentSidebarProps = props;
-        const { isFeatureEnabled = true }: MetadataSidebarProps = metadataSidebarProps;
+        const { isFeatureEnabled: isFeatureEnabledMetadataSidebarProp = true }: MetadataSidebarProps =
+            metadataSidebarProps;
 
         return (
             SidebarUtils.canHaveMetadataSidebar(props) &&
-            (isFeatureEnabled || (Array.isArray(editors) && editors.length > 0))
+            (isFeatureEnabledMetadataSidebarProp || (Array.isArray(editors) && editors.length > 0))
         );
     }
 
@@ -133,6 +148,7 @@ class SidebarUtils {
             (SidebarUtils.canHaveDetailsSidebar(props) ||
                 SidebarUtils.shouldRenderSkillsSidebar(props, file) ||
                 SidebarUtils.canHaveActivitySidebar(props) ||
+                SidebarUtils.canHaveBoxAISidebar(props) ||
                 SidebarUtils.shouldRenderMetadataSidebar(props, editors))
         );
     }
@@ -151,6 +167,8 @@ class SidebarUtils {
                 return <FormattedMessage {...messages.sidebarDetailsTitle} />;
             case SIDEBAR_VIEW_METADATA:
                 return <FormattedMessage {...messages.sidebarMetadataTitle} />;
+            case SIDEBAR_VIEW_BOXAI:
+                return <FormattedMessage {...messages.sidebarBoxAITitle} />;
             case SIDEBAR_VIEW_ACTIVITY:
                 return <FormattedMessage {...messages.sidebarActivityTitle} />;
             case SIDEBAR_VIEW_DOCGEN:
@@ -187,6 +205,9 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_ACTIVITY:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "activity-sidebar" */ './ActivitySidebar');
+                break;
+            case SIDEBAR_VIEW_BOXAI:
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "boxai-sidebar" */ './BoxAISidebar');
                 break;
             case SIDEBAR_VIEW_VERSIONS:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "versions-sidebar" */ './versions');

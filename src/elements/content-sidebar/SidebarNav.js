@@ -7,6 +7,8 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
+import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -20,9 +22,10 @@ import SidebarToggle from './SidebarToggle';
 import messages from '../common/messages';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 import {
-    SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_ACTIVITY,
+    SIDEBAR_VIEW_BOXAI,
     SIDEBAR_VIEW_DETAILS,
+    SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA,
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
@@ -36,6 +39,7 @@ type Props = {
     fileId: string,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
+    hasBoxAI: boolean,
     hasDetails: boolean,
     hasDocGen?: boolean,
     hasMetadata: boolean,
@@ -51,6 +55,7 @@ const SidebarNav = ({
     fileId,
     hasActivity,
     hasAdditionalTabs,
+    hasBoxAI,
     hasDetails,
     hasMetadata,
     hasSkills,
@@ -65,6 +70,16 @@ const SidebarNav = ({
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
             <div className="bcs-SidebarNav-tabs">
                 <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
+                    {hasBoxAI && (
+                        <SidebarNavButton
+                            data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
+                            data-testid="sidebarboxai"
+                            sidebarView={SIDEBAR_VIEW_BOXAI}
+                            tooltip={intl.formatMessage(messages.sidebarBoxAITitle)}
+                        >
+                            <BoxAiLogo height={Size5} width={Size5} />
+                        </SidebarNavButton>
+                    )}
                     {hasActivity && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}

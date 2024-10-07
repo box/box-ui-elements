@@ -12,6 +12,11 @@ export default {
                     return <div data-testid="details-sidebar" />;
                 }
             },
+            boxai: class BoxAISidebar extends React.Component {
+                render() {
+                    return <div data-testid="boxai-sidebar" />;
+                }
+            },
             metadata: class MetadataSidebar extends React.Component {
                 render() {
                     return <div data-testid="metadata-sidebar" />;
