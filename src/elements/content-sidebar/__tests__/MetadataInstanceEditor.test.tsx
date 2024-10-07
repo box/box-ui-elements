@@ -50,6 +50,7 @@ describe('MetadataInstanceEditor', () => {
 
     const defaultProps: MetadataInstanceEditorProps = {
         areAiSuggestionsAvailable: true,
+        fetchSuggestions: jest.fn(),
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
         isUnsavedChangesModalOpen: false,
