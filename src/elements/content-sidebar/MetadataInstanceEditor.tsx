@@ -1,7 +1,6 @@
 import {
-    AutofillContextProvider,
-    AutofillContextProviderProps,
     MetadataInstanceForm,
+    withApiWrapper,
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
@@ -10,7 +9,6 @@ import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
-    fetchSuggestions: AutofillContextProviderProps['fetchSuggestions'];
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
@@ -22,9 +20,8 @@ export interface MetadataInstanceEditorProps {
     template: MetadataTemplateInstance;
 }
 
-const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
+export const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
-    fetchSuggestions,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
@@ -35,29 +32,20 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     setIsUnsavedChangesModalOpen,
     template,
 }) => {
-    const handleCancel = () => {
-        onCancel();
-    };
-
     return (
-        <AutofillContextProvider
-            fetchSuggestions={fetchSuggestions}
+        <MetadataInstanceForm
+            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-        >
-            <MetadataInstanceForm
-                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isDeleteButtonDisabled={isDeleteButtonDisabled}
-                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                onCancel={handleCancel}
-                onDelete={onDelete}
-                onDiscardUnsavedChanges={onDiscardUnsavedChanges}
-                onSubmit={onSubmit}
-                selectedTemplateInstance={template}
-                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
-            />
-        </AutofillContextProvider>
+            isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+            onCancel={onCancel}
+            onDelete={onDelete}
+            onDiscardUnsavedChanges={onDiscardUnsavedChanges}
+            onSubmit={onSubmit}
+            selectedTemplateInstance={template}
+            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+        />
     );
 };
 
-export default MetadataInstanceEditor;
+export default withApiWrapper(MetadataInstanceEditor);

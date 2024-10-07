@@ -1,7 +1,12 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
-import { type JSONPatchOperations, type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
+import {
+    type JSONPatchOperations,
+    type MetadataTemplate,
+    type MetadataTemplateInstance,
+    type MetadataTemplateField,
+} from '@box/metadata-editor';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
@@ -20,6 +25,7 @@ export enum STATUS {
 }
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
+    extractSuggestions: (templateKey: string, fields: MetadataTemplateField[]) => Promise<MetadataTemplateField[]>;
     file: BoxItem | null;
     handleCreateMetadataInstance: (
         templateInstance: MetadataTemplateInstance,
@@ -174,6 +180,37 @@ function useSidebarMetadataFetcher(
         [api, file, onApiError],
     );
 
+    const extractSuggestions = React.useCallback(
+        async (templateKey: string, fields: MetadataTemplateField[]) => {
+            const aiAPI = api.getIntelligenceAPI();
+            let answer = {};
+            try {
+                answer = await aiAPI.extractStructured({
+                    items: [file],
+                    metadata_template: {
+                        scope: 'enterprise',
+                        template_key: templateKey,
+                        type: 'metadata_template',
+                    },
+                });
+            } catch (e) {
+                // eslint-disable-next-line no-console
+            }
+
+            return fields.map(field => {
+                const value = answer[field.key];
+                if (!value) {
+                    return field;
+                }
+                return {
+                    ...field,
+                    aiSuggestion: value,
+                };
+            });
+        },
+        [api, file],
+    );
+
     React.useEffect(() => {
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
@@ -185,6 +222,7 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
+        extractSuggestions,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,

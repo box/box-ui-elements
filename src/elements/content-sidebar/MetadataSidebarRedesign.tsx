@@ -15,16 +15,15 @@ import {
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
-import noop from 'lodash/noop';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
+import { useFeatureEnabled } from '../common/feature-checking';
 import { ORIGIN_METADATA_SIDEBAR_REDESIGN, SIDEBAR_VIEW_METADATA } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
-import { useFeatureEnabled } from '../common/feature-checking';
 import { mark } from '../../utils/performance';
 import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
 
@@ -34,7 +33,7 @@ import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
-import MetadataInstanceEditor, { MetadataInstanceEditorProps } from './MetadataInstanceEditor';
+import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 
@@ -67,6 +66,7 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
 
 function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
     const {
+        extractSuggestions,
         file,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
@@ -174,13 +174,6 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
-    const fetchSuggestions = React.useCallback<MetadataInstanceEditorProps['fetchSuggestions']>(
-        async (templateKey, fields) => {
-            // should use getIntelligenceAPI().extractStructured
-            return fields;
-        },
-        [],
-    );
 
     return (
         <SidebarContent
@@ -199,10 +192,11 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                 {editingTemplate && (
                     <MetadataInstanceEditor
                         areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                        fetchSuggestions={fetchSuggestions}
+                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                         isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                        fetchSuggestions={extractSuggestions}
                         onCancel={handleCancel}
                         onDelete={handleDeleteInstance}
                         onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
@@ -218,7 +212,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                             setEditingTemplate(templateInstance);
                             setIsDeleteButtonDisabled(false);
                         }}
-                        onEditWithAutofill={noop}
+                        onEditWithAutofill={templateInstance => {
+                            setEditingTemplate(templateInstance);
+                        }}
                         templateInstances={templateInstances}
                     />
                 )}

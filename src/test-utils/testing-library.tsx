@@ -4,7 +4,8 @@ import { render, type RenderOptions } from '@testing-library/react';
 // Data Providers
 import { TooltipProvider } from '@box/blueprint-web';
 import { IntlProvider } from 'react-intl';
-import { AutofillContextProvider } from '@box/metadata-editor';
+import { AutofillContextProvider, MetadataTemplateField } from '@box/metadata-editor';
+
 import { FeatureProvider } from '../elements/common/feature-checking';
 
 jest.unmock('react-intl');
@@ -12,12 +13,12 @@ jest.unmock('react-intl');
 const Wrapper = ({
     children,
     features = {},
-    isAiSuggestionsFeatureEnabled = false,
     fetchSuggestions = () => Promise.resolve([]),
+    isAiSuggestionsFeatureEnabled = false,
 }) => (
     <AutofillContextProvider
-        isAiSuggestionsFeatureEnabled={isAiSuggestionsFeatureEnabled}
         fetchSuggestions={fetchSuggestions}
+        isAiSuggestionsFeatureEnabled={isAiSuggestionsFeatureEnabled}
     >
         <FeatureProvider features={features}>
             <TooltipProvider>
