@@ -93,15 +93,25 @@ function MetadataSidebarRedesign({
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
     React.useEffect(() => {
-        setSelectedTemplates(templateInstances);
-    }, [templateInstances, templateInstances.length]);
+        // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
+        const isEditingTemplateAlreadyExisting =
+            editingTemplate &&
+            templateInstances.some(
+                t => t.templateKey === editingTemplate.templateKey && t.scope === editingTemplate.scope,
+            );
+
+        if (!editingTemplate || isEditingTemplateAlreadyExisting) {
+            setSelectedTemplates(templateInstances);
+        } else {
+            setSelectedTemplates([...templateInstances, editingTemplate]);
+        }
+    }, [editingTemplate, templateInstances, templateInstances.length]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         if (editingTemplate) {
             setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
             setIsUnsavedChangesModalOpen(true);
         } else {
-            setSelectedTemplates([...selectedTemplates, selectedTemplate]);
             setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
             setIsDeleteButtonDisabled(true);
         }
@@ -109,21 +119,20 @@ function MetadataSidebarRedesign({
 
     const handleCancel = () => {
         setEditingTemplate(null);
-        setSelectedTemplates(templateInstances);
     };
 
-    const handleCancelUnsavedChanges = () => {
+    const handleDiscardUnsavedChanges = () => {
         // check if user tried to edit another template before unsaved changes modal
         if (pendingTemplateToEdit) {
             setEditingTemplate(pendingTemplateToEdit);
-            setSelectedTemplates([...templateInstances, pendingTemplateToEdit]);
             setIsDeleteButtonDisabled(true);
 
             setPendingTemplateToEdit(null);
-            setIsUnsavedChangesModalOpen(false);
         } else {
             handleCancel();
         }
+
+        setIsUnsavedChangesModalOpen(false);
     };
 
     const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {
@@ -190,7 +199,7 @@ function MetadataSidebarRedesign({
                         isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                         onCancel={handleCancel}
-                        onUnsavedChangesModalCancel={handleCancelUnsavedChanges}
+                        onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
                         onSubmit={handleSubmit}
                         onDelete={handleDeleteInstance}
                         template={editingTemplate}
