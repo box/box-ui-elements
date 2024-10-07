@@ -1,11 +1,12 @@
 import React from 'react';
 import { screen, render } from '../../../test-utils/testing-library';
 import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebar';
+import messages from '../../common/messages';
 
 describe('elements/content-sidebar/BoxAISidebar', () => {
     const renderComponent = (props = {}) => {
         const defaultProps = {
-            onExpandPressed: jest.fn(),
+            onExpandClicked: jest.fn(),
         } satisfies BoxAISidebarProps;
 
         render(<BoxAISidebarComponent {...defaultProps} {...props} />);
@@ -20,6 +21,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     test('should have accessible "Expand" button', () => {
         renderComponent();
 
-        expect(screen.getByRole('button', { name: 'Expand' })).toBeInTheDocument();
+        expect(screen.getByRole('button', messages.expandBoxAI)).toBeInTheDocument();
     });
 });

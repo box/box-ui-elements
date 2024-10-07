@@ -517,6 +517,11 @@ const messages = defineMessages({
         description: 'Label for transcript skill section in the preview sidebar',
         defaultMessage: 'Transcript',
     },
+    expandBoxAI: {
+        id: 'be.expandBoxAI',
+        description: 'Default message for Box AI expand button in sidebar header',
+        defaultMessage: 'Expand',
+    },
     skillPendingStatus: {
         id: 'be.skillPendingStatus',
         description: 'Default message when skills are still running',

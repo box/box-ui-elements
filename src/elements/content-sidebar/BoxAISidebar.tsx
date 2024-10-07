@@ -24,10 +24,10 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 export interface BoxAISidebarProps {
-    onExpandPressed: () => void;
+    onExpandClicked: () => void;
 }
 
-function BoxAISidebar({ onExpandPressed }: BoxAISidebarProps) {
+function BoxAISidebar({ onExpandClicked }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
 
     return (
@@ -37,9 +37,9 @@ function BoxAISidebar({ onExpandPressed }: BoxAISidebarProps) {
             title={formatMessage(messages.sidebarBoxAITitle)}
             actions={
                 <IconButton
-                    onClick={onExpandPressed}
+                    onClick={onExpandClicked}
                     icon={ArrowsExpand}
-                    aria-label={formatMessage(messages.expand)}
+                    aria-label={formatMessage(messages.expandBoxAI)}
                     size="x-small"
                 />
             }
