@@ -17,6 +17,7 @@ import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 
 import messages from '../common/messages';
+import sidebarMessages from './messages';
 import './BoxAISidebar.scss';
 
 const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
@@ -24,10 +25,10 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 export interface BoxAISidebarProps {
-    onExpandClicked: () => void;
+    onExpandClick: () => void;
 }
 
-function BoxAISidebar({ onExpandClicked }: BoxAISidebarProps) {
+function BoxAISidebar({ onExpandClick }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
 
     return (
@@ -37,9 +38,9 @@ function BoxAISidebar({ onExpandClicked }: BoxAISidebarProps) {
             title={formatMessage(messages.sidebarBoxAITitle)}
             actions={
                 <IconButton
-                    onClick={onExpandClicked}
+                    onClick={onExpandClick}
                     icon={ArrowsExpand}
-                    aria-label={formatMessage(messages.expandBoxAI)}
+                    aria-label={formatMessage(sidebarMessages.expandBoxAI)}
                     size="x-small"
                 />
             }
