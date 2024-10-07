@@ -279,7 +279,7 @@ export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof 
     },
 };
 
-export const SwitchEditingTemplateIntances: StoryObj<typeof MetadataSidebarRedesign> = {
+export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
         fileId: '416047501580',
         metadataSidebarProps: defaultMetadataSidebarProps,
