@@ -33,7 +33,7 @@ import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
-import MetadataInstanceEditor from './MetadataInstanceEditor';
+import MetadataInstanceEditor, { MetadataInstanceEditorProps } from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 
@@ -171,6 +171,13 @@ function MetadataSidebarRedesign({
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
+    const fetchSuggestions = React.useCallback<MetadataInstanceEditorProps['fetchSuggestions']>(
+        async (templateKey, fields) => {
+            // should use getIntelligenceAPI().extractStructured
+            return fields;
+        },
+        [],
+    );
 
     return (
         <SidebarContent
@@ -189,6 +196,7 @@ function MetadataSidebarRedesign({
                 {editingTemplate && (
                     <MetadataInstanceEditor
                         areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                        fetchSuggestions={fetchSuggestions}
                         isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                         isDeleteButtonDisabled={isDeleteButtonDisabled}
                         isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}

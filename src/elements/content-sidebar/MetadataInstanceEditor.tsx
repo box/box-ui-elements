@@ -1,5 +1,6 @@
 import {
     AutofillContextProvider,
+    AutofillContextProviderProps,
     MetadataInstanceForm,
     type FormValues,
     type JSONPatchOperations,
@@ -9,6 +10,7 @@ import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
+    fetchSuggestions: AutofillContextProviderProps['fetchSuggestions'];
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
@@ -22,6 +24,7 @@ export interface MetadataInstanceEditorProps {
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
+    fetchSuggestions,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
@@ -37,7 +40,10 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     };
 
     return (
-        <AutofillContextProvider isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}>
+        <AutofillContextProvider
+            fetchSuggestions={fetchSuggestions}
+            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+        >
             <MetadataInstanceForm
                 areAiSuggestionsAvailable={areAiSuggestionsAvailable}
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
