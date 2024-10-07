@@ -1,4 +1,5 @@
-const fileId = '415542803939';
+export const fileId = '415542803939';
+export const fileIdWithoutMetadata = '416047501580';
 
 export const mockFileRequest = {
     url: `https://api.box.com/2.0/files/${fileId}?fields=is_externally_owned,permissions`,
@@ -23,6 +24,39 @@ export const mockFileRequest = {
             can_create_annotations: true,
             can_view_annotations: true,
         },
+    },
+};
+
+export const mockFileRequestWithoutMetadata = {
+    url: `https://api.box.com/2.0/files/${fileIdWithoutMetadata}?fields=is_externally_owned,permissions`,
+    response: {
+        type: 'file',
+        id: fileIdWithoutMetadata,
+        etag: '3',
+        is_externally_owned: false,
+        permissions: {
+            can_download: true,
+            can_preview: true,
+            can_upload: false,
+            can_comment: true,
+            can_rename: false,
+            can_delete: false,
+            can_share: false,
+            can_set_share_access: false,
+            can_invite_collaborator: false,
+            can_annotate: false,
+            can_view_annotations_all: true,
+            can_view_annotations_self: true,
+            can_create_annotations: true,
+            can_view_annotations: true,
+        },
+    },
+};
+
+export const mockEmptyMetadataInstances = {
+    url: `https://api.box.com/2.0/files/${fileIdWithoutMetadata}/metadata`,
+    response: {
+        entries: [],
     },
 };
 
