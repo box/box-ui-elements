@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/prefer-default-export
 export const addRootElement = () => {
-    let appElement = document.getElementById('appElement');
+    let appElement = document.getElementById('rootElement');
     let rootElement = document.getElementById('rootElement');
 
     if (document.body && rootElement === null) {

@@ -21,6 +21,7 @@ import {
 import type { BoxItem } from '../../common/types/core';
 
 type Props = {
+    appElement: HTMLElement,
     errorCode: string,
     intl: IntlShape,
     isLoading: boolean,
@@ -101,6 +102,7 @@ const RenameDialog = ({
 
     return (
         <Modal
+            appElement={appElement}
             className={CLASS_MODAL_CONTENT}
             contentLabel={intl.formatMessage(messages.renameDialogLabel)}
             isOpen={isOpen}
