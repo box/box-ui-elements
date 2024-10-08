@@ -54,17 +54,16 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
     };
 
-    const renderComponent = (props = {}) => {
+    const renderComponent = (props = {}, features = {}) => {
         const defaultProps = {
             api: {},
             fileId: 'test-file-id-1',
             elementId: 'element-1',
-            isBoxAiSuggestionsEnabled: true,
             isFeatureEnabled: true,
             onError: jest.fn(),
         } satisfies MetadataSidebarRedesignProps;
 
-        render(<MetadataSidebarRedesign {...defaultProps} {...props} />);
+        render(<MetadataSidebarRedesign {...defaultProps} {...props} />, { wrapperProps: { features } });
     };
 
     beforeEach(() => {
@@ -154,7 +153,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     });
 
     test('should correctly render empty state when AI feature is enabled', () => {
-        renderComponent();
+        renderComponent({}, { 'metadata.aiSuggestions.enabled': true });
         expect(screen.getByRole('heading', { level: 2, name: 'Autofill Metadata with Box AI' })).toBeInTheDocument();
         expect(
             screen.getByText(
