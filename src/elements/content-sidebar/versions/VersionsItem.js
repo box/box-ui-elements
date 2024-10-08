@@ -147,7 +147,7 @@ const VersionsItem = ({
                         />
                     </div>
 
-                    <div className="bcs-VersionsItem-info">
+                    <div className="bcs-VersionsItem-info" data-testid="bcs-VersionsItem-info">
                         {versionTimestamp && (
                             <time className="bcs-VersionsItem-date" dateTime={versionTime}>
                                 <ReadableTime
@@ -161,7 +161,7 @@ const VersionsItem = ({
                     </div>
 
                     {isRetained && (
-                        <div className="bcs-VersionsItem-retention">
+                        <div className="bcs-VersionsItem-retention" data-testid="bcs-VersionsItem-retention">
                             <VersionsItemRetention retention={retention} />
                         </div>
                     )}
