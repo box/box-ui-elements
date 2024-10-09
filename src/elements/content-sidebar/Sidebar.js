@@ -30,7 +30,7 @@ import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
-import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
+import { SIDEBAR_VIEW_BOXAI, SIDEBAR_VIEW_DOCGEN } from '../../constants';
 import API from '../../api';
 
 type Props = {
@@ -112,7 +112,7 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, location }: Props = this.props;
+        const { boxAISidebarProps, fileId, history, location }: Props = this.props;
         const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
 
@@ -125,6 +125,13 @@ class Sidebar extends React.Component<Props, State> {
         if (location !== prevLocation && !this.getLocationState('silent')) {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
+        }
+
+        if (boxAISidebarProps && boxAISidebarProps.shouldOpenBoxAISidebar) {
+            // navigate to boxai tab and open sidebar
+            history.push(`/${SIDEBAR_VIEW_BOXAI}`);
+            this.isForced(true);
+            boxAISidebarProps.onBoxAISidebarOpened();
         }
 
         this.handleDocgenTemplateOnUpdate(prevProps);

@@ -17,7 +17,9 @@ import { mark } from "../../utils/performance";
 import messages from "../common/messages";
 declare var MARK_NAME_JS_READY: string;
 export interface BoxAISidebarProps {
+  onBoxAISidebarOpened: () => void;
   onExpandPressed: () => void;
+  shouldOpenBoxAISidebar: boolean;
 }
 declare function BoxAISidebar(): void;
 declare export { BoxAISidebar as BoxAISidebarComponent };

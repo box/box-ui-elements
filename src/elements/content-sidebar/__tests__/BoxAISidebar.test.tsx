@@ -5,7 +5,9 @@ import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebar';
 describe('elements/content-sidebar/BoxAISidebar', () => {
     const renderComponent = (props = {}) => {
         const defaultProps = {
+            onBoxAISidebarOpened: jest.fn(),
             onExpandPressed: jest.fn(),
+            shouldOpenBoxAISidebar: false,
         } satisfies BoxAISidebarProps;
 
         render(<BoxAISidebarComponent {...defaultProps} {...props} />);

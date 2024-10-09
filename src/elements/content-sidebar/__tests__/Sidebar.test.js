@@ -172,6 +172,28 @@ describe('elements/content-sidebar/Sidebar', () => {
             });
             expect(historyMock.push).toHaveBeenCalledWith('/');
         });
+
+        test('should redirect to Box AI sidebar', () => {
+            const historyMock = {
+                push: jest.fn(),
+                location: {
+                    pathname: '/activity/comments/1234',
+                },
+            };
+            const onBoxAISidebarOpened = jest.fn();
+            const wrapper = getWrapper({
+                boxAISidebarProps: {
+                    shouldOpenBoxAISidebar: false,
+                    onBoxAISidebarOpened,
+                },
+                features: { boxai: { sidebar: { enabled: true } } },
+                history: historyMock,
+            });
+            wrapper.instance();
+            wrapper.setProps({ boxAISidebarProps: { shouldOpenBoxAISidebar: true, onBoxAISidebarOpened } });
+            expect(historyMock.push).toHaveBeenCalledWith('/boxai');
+            expect(onBoxAISidebarOpened).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe('handleVersionHistoryClick', () => {

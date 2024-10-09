@@ -21,7 +21,9 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 export interface BoxAISidebarProps {
+    onBoxAISidebarOpened: () => void;
     onExpandPressed: () => void;
+    shouldOpenBoxAISidebar: boolean;
 }
 
 function BoxAISidebar() {
