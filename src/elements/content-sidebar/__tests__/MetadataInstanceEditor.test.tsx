@@ -58,6 +58,7 @@ describe('MetadataInstanceEditor', () => {
         onSubmit: jest.fn(),
         setIsUnsavedChangesModalOpen: mockSetIsUnsavedChangesModalOpen,
         onDiscardUnsavedChanges: mockOnDiscardUnsavedChanges,
+        taxonomyOptionsFetcher: jest.fn(),
     };
 
     test('should render MetadataInstanceForm with correct props', () => {
