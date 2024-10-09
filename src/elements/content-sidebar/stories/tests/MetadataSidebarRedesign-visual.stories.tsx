@@ -339,7 +339,7 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
         expect(templateMetadataOptionBAfterSwitch).toHaveAttribute('aria-disabled');
     },
 };
-    
+
 export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
         features: {
