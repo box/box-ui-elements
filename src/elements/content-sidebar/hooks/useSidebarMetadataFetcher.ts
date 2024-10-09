@@ -7,10 +7,17 @@ import {
     type MetadataTemplateInstance,
     type MetadataTemplateField,
 } from '@box/metadata-editor';
+import isEmpty from 'lodash/isEmpty';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
-import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
+import {
+    ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
+    ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+    FIELD_IS_EXTERNALLY_OWNED,
+    FIELD_PERMISSIONS_CAN_UPLOAD,
+    FIELD_PERMISSIONS,
+} from '../../../constants';
 
 import messages from '../../common/messages';
 
@@ -23,6 +30,24 @@ export enum STATUS {
     ERROR = 'error',
     SUCCESS = 'success',
 }
+
+class ElementsError extends Error {
+    code: string;
+
+    type: 'error';
+
+    constructor(message: string, errorCode: string) {
+        super(message);
+        this.name = 'ElementsError';
+        this.code = errorCode;
+        this.message = message;
+        this.type = 'error';
+
+        // Set the prototype explicitly to maintain the instanceof check
+        Object.setPrototypeOf(this, ElementsError.prototype);
+    }
+}
+
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
     extractSuggestions: (templateKey: string, fields: MetadataTemplateField[]) => Promise<MetadataTemplateField[]>;
@@ -187,14 +212,14 @@ function useSidebarMetadataFetcher(
             try {
                 answer = await aiAPI.extractStructured({
                     items: [file],
-                    metadata_template: {
-                        scope: 'enterprise',
-                        template_key: templateKey,
-                        type: 'metadata_template',
-                    },
+                    fields,
                 });
-            } catch (e) {
-                // eslint-disable-next-line no-console
+            } catch (error) {
+                throw new ElementsError(error.message, ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+            }
+
+            if (isEmpty(answer)) {
+                throw new ElementsError('No suggestions found.', ERROR_CODE_EMPTY_METADATA_SUGGESTIONS);
             }
 
             return fields.map(field => {
