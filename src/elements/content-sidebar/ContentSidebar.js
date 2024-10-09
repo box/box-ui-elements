@@ -29,6 +29,7 @@ import {
 import { withLogger } from '../common/logger';
 
 import type { ActivitySidebarProps } from './ActivitySidebar';
+import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
@@ -50,6 +51,7 @@ type Props = {
     activitySidebarProps: ActivitySidebarProps,
     additionalTabs?: Array<AdditionalSidebarTab>,
     apiHost: string,
+    boxAISidebarProps: BoxAISidebarProps,
     cache?: APICache,
     className: string,
     clientName: string,
@@ -107,6 +109,7 @@ class ContentSidebar extends React.Component<Props, State> {
     static defaultProps = {
         activitySidebarProps: {},
         apiHost: DEFAULT_HOSTNAME_API,
+        boxAISidebarProps: {},
         className: '',
         clientName: CLIENT_NAME_CONTENT_SIDEBAR,
         defaultView: '',
@@ -333,6 +336,7 @@ class ContentSidebar extends React.Component<Props, State> {
         const {
             activitySidebarProps,
             additionalTabs,
+            boxAISidebarProps,
             className,
             currentUser,
             defaultView,
@@ -372,6 +376,7 @@ class ContentSidebar extends React.Component<Props, State> {
                             <Sidebar
                                 activitySidebarProps={activitySidebarProps}
                                 additionalTabs={additionalTabs}
+                                boxAISidebarProps={boxAISidebarProps}
                                 className={className}
                                 currentUser={currentUser}
                                 detailsSidebarProps={detailsSidebarProps}

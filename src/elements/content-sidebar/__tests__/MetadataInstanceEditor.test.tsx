@@ -5,7 +5,7 @@ import { screen, render } from '../../../test-utils/testing-library';
 import MetadataInstanceEditor, { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
 
 const mockOnCancel = jest.fn();
-const mockOnUnsavedChangesModalCancel = jest.fn();
+const mockOnDiscardUnsavedChanges = jest.fn();
 const mockSetIsUnsavedChangesModalOpen = jest.fn();
 
 describe('MetadataInstanceEditor', () => {
@@ -49,15 +49,17 @@ describe('MetadataInstanceEditor', () => {
     };
 
     const defaultProps: MetadataInstanceEditorProps = {
+        areAiSuggestionsAvailable: true,
+        fetchSuggestions: jest.fn(),
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
         isUnsavedChangesModalOpen: false,
-        template: mockMetadataTemplate,
         onCancel: mockOnCancel,
         onDelete: jest.fn(),
+        onDiscardUnsavedChanges: mockOnDiscardUnsavedChanges,
         onSubmit: jest.fn(),
         setIsUnsavedChangesModalOpen: mockSetIsUnsavedChangesModalOpen,
-        onUnsavedChangesModalCancel: mockOnUnsavedChangesModalCancel,
+        template: mockMetadataTemplate,
     };
 
     test('should render MetadataInstanceForm with correct props', () => {
@@ -108,7 +110,7 @@ describe('MetadataInstanceEditor', () => {
         expect(mockOnCancel).toHaveBeenCalled();
     });
 
-    test('Should call onUnsavedChangesModalCancel instead onCancel when canceling through UnsavedChangesModal', async () => {
+    test('Should call onDiscardUnsavedChanges instead onCancel when canceling through UnsavedChangesModal', async () => {
         const props: MetadataInstanceEditorProps = {
             ...defaultProps,
             template: mockCustomMetadataTemplateWithField,
@@ -127,10 +129,10 @@ describe('MetadataInstanceEditor', () => {
         const unsavedChangesModal = await findByText('Unsaved Changes');
 
         expect(unsavedChangesModal).toBeInTheDocument();
-        const unsavedChangesModalCancelButton = await findByRole('button', { name: 'Cancel' });
+        const unsavedChangesModalDiscardButton = await findByRole('button', { name: 'Discard Changes' });
 
-        await userEvent.click(unsavedChangesModalCancelButton);
+        await userEvent.click(unsavedChangesModalDiscardButton);
 
-        expect(mockOnUnsavedChangesModalCancel).toHaveBeenCalled();
+        expect(mockOnDiscardUnsavedChanges).toHaveBeenCalled();
     });
 });

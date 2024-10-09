@@ -317,21 +317,6 @@ const messages = defineMessages({
         description: 'Error text for rename dialog when name is too long',
         defaultMessage: 'This name is too long.',
     },
-    renameDialogFileHeader: {
-        id: 'be.renameDialogFileHeader',
-        description: 'Header for rename file dialog',
-        defaultMessage: 'Rename File',
-    },
-    renameDialogFolderHeader: {
-        id: 'be.renameDialogFolderHeader',
-        description: 'Header for rename folder dialog',
-        defaultMessage: 'Rename Folder',
-    },
-    renameDialogWebLinkHeader: {
-        id: 'be.renameDialogWebLinkHeader',
-        description: 'Header for rename web link dialog',
-        defaultMessage: 'Rename Link',
-    },
     createDialogLabel: {
         id: 'be.createDialogLabel',
         description: 'Label for create folder dialog',
@@ -451,6 +436,11 @@ const messages = defineMessages({
         id: 'be.sidebarSkillsErrorContent',
         description: 'Generic error content for skills editing.',
         defaultMessage: 'An error has occurred while updating skills. Please refresh the page and try again.',
+    },
+    sidebarBoxAITitle: {
+        id: 'be.sidebarBoxAITitle',
+        description: 'Title for the preview Box AI feed.',
+        defaultMessage: 'Box AI',
     },
     sidebarActivityTitle: {
         id: 'be.sidebarActivityTitle',

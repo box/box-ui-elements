@@ -117,6 +117,27 @@ type MetadataSuggestion = {
     suggestions: { [key: string]: string | number | string[] },
 };
 
+type MetadataOptionEntryAncestor = {
+    id: string,
+    display_name: string,
+    level: string,
+};
+
+type MetadataOptionEntry = {
+    id: string,
+    display_name: string,
+    level: string,
+    ancestors: MetadataOptionEntryAncestor[],
+    deprecated: boolean,
+    selectable: boolean,
+};
+
+type MetadataOptions = {
+    entries: MetadataOptionEntry[],
+    next_marker: string | null,
+    result_count: number,
+};
+
 type MetadataTemplateInstanceField = {
     description?: string,
     displayName?: string,
@@ -156,4 +177,5 @@ export type {
     MetadataInstanceV2,
     MetadataEditor,
     MetadataSuggestion,
+    MetadataOptions,
 };
