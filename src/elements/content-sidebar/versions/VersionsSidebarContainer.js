@@ -46,8 +46,8 @@ type Props = {
 
 type State = {
     error?: MessageDescriptor,
+    isArchived: boolean,
     isLoading: boolean,
-    isArchiveFile: boolean,
     isWatermarked: boolean,
     versionCount: number,
     versionLimit: number,
@@ -71,7 +71,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     props: Props;
 
     state: State = {
-        isArchiveFile: false,
+        isArchived: false,
         isLoading: true,
         isWatermarked: false,
         versionCount: Infinity,
@@ -174,7 +174,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchError = (): void => {
         this.setState({
             error: messages.versionFetchError,
-            isArchiveFile: false,
+            isArchived: false,
             isLoading: false,
             isWatermarked: false,
             versionCount: 0,
@@ -185,7 +185,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchSuccess = ([fileResponse, versionsResponse]: [BoxItem, FileVersions]): [BoxItem, FileVersions] => {
         const { api } = this.props;
         const { version_limit } = fileResponse;
-        const isArchiveFile = !!getProp(fileResponse, FIELD_METADATA_ARCHIVE);
+        const isArchived = !!getProp(fileResponse, FIELD_METADATA_ARCHIVE);
         const isWatermarked = getProp(fileResponse, 'watermark_info.is_watermarked', false);
         const versionLimit = version_limit !== null && version_limit !== undefined ? version_limit : Infinity;
         const versionsWithPermissions = api.getVersionsAPI(false).addPermissions(versionsResponse, fileResponse) || {};
@@ -194,7 +194,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState(
             {
                 error: undefined,
-                isArchiveFile,
+                isArchived,
                 isLoading: false,
                 isWatermarked,
                 versionCount,

@@ -27,7 +27,7 @@ import './VersionsItem.scss';
 
 type Props = {
     fileId: string,
-    isArchiveFile?: boolean,
+    isArchived?: boolean,
     isCurrent?: boolean,
     isSelected?: boolean,
     isWatermarked?: boolean,
@@ -52,7 +52,7 @@ const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const VersionsItem = ({
     fileId,
-    isArchiveFile = false,
+    isArchived = false,
     isCurrent = false,
     isSelected = false,
     isWatermarked = false,
@@ -106,10 +106,10 @@ const VersionsItem = ({
 
     // Version action helpers
     const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
-    const showDelete = can_delete && !isDeleted && !isArchiveFile && !isCurrent;
+    const showDelete = can_delete && !isDeleted && !isArchived && !isCurrent;
     const showDownload = can_download && !isDeleted && isDownloadable;
-    const showPromote = can_upload && !isDeleted && !isArchiveFile && !isCurrent;
-    const showRestore = can_delete && isDeleted && !isArchiveFile;
+    const showPromote = can_upload && !isDeleted && !isArchived && !isCurrent;
+    const showRestore = can_delete && isDeleted && !isArchived;
     const showPreview = canPreview && !isSelected;
     const hasActions = showDelete || showDownload || showPreview || showPromote || showRestore;
 

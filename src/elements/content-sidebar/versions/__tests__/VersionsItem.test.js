@@ -102,7 +102,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         `('should show the correct menu items based on permissions', async ({ permissions }) => {
             renderComponent({
                 version: getVersion({ permissions }),
-                isArchiveFile: false,
+                isArchived: false,
             });
 
             const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
@@ -309,7 +309,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             async ({ permissions }) => {
                 renderComponent({
                     version: getVersion({ permissions }),
-                    isArchiveFile: true,
+                    isArchived: true,
                 });
 
                 const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
@@ -335,7 +335,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         `('should not render actions based on permissions when is archive file', ({ permissions }) => {
             renderComponent({
                 version: getVersion({ permissions }),
-                isArchiveFile: true,
+                isArchived: true,
             });
 
             const actions = screen.queryByRole('button', { name: 'Toggle Actions Menu' });
@@ -364,7 +364,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
                             can_upload: true,
                         },
                     }),
-                    isArchiveFile: true,
+                    isArchived: true,
                 });
 
                 const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
