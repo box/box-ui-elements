@@ -49,15 +49,17 @@ describe('MetadataInstanceEditor', () => {
     };
 
     const defaultProps: MetadataInstanceEditorProps = {
+        areAiSuggestionsAvailable: true,
+        fetchSuggestions: jest.fn(),
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
         isUnsavedChangesModalOpen: false,
-        template: mockMetadataTemplate,
         onCancel: mockOnCancel,
         onDelete: jest.fn(),
+        onDiscardUnsavedChanges: mockOnDiscardUnsavedChanges,
         onSubmit: jest.fn(),
         setIsUnsavedChangesModalOpen: mockSetIsUnsavedChangesModalOpen,
-        onDiscardUnsavedChanges: mockOnDiscardUnsavedChanges,
+        template: mockMetadataTemplate,
     };
 
     test('should render MetadataInstanceForm with correct props', () => {

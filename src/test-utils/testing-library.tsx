@@ -9,8 +9,16 @@ import { FeatureProvider } from '../elements/common/feature-checking';
 
 jest.unmock('react-intl');
 
-const Wrapper = ({ children, features = {}, isAiSuggestionsFeatureEnabled = false, fetchSuggestions = () => Promise.resolve([]) }) => (
-    <AutofillContextProvider isAiSuggestionsFeatureEnabled={isAiSuggestionsFeatureEnabled} fetchSuggestions={fetchSuggestions}>
+const Wrapper = ({
+    children,
+    features = {},
+    isAiSuggestionsFeatureEnabled = false,
+    fetchSuggestions = () => Promise.resolve([]),
+}) => (
+    <AutofillContextProvider
+        isAiSuggestionsFeatureEnabled={isAiSuggestionsFeatureEnabled}
+        fetchSuggestions={fetchSuggestions}
+    >
         <FeatureProvider features={features}>
             <TooltipProvider>
                 <IntlProvider locale="en">{children}</IntlProvider>

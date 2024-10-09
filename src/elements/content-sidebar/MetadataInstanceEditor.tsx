@@ -1,5 +1,6 @@
 import {
     AutofillContextProvider,
+    AutofillContextProviderProps,
     MetadataInstanceForm,
     type FormValues,
     type JSONPatchOperations,
@@ -8,27 +9,31 @@ import {
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
+    areAiSuggestionsAvailable: boolean;
+    fetchSuggestions: AutofillContextProviderProps['fetchSuggestions'];
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
-    template: MetadataTemplateInstance;
+    onDiscardUnsavedChanges: () => void;
     onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
-    onDiscardUnsavedChanges: () => void;
+    template: MetadataTemplateInstance;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
+    areAiSuggestionsAvailable,
+    fetchSuggestions,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
+    onCancel,
     onDelete,
+    onDiscardUnsavedChanges,
     onSubmit,
     setIsUnsavedChangesModalOpen,
     template,
-    onCancel,
-    onDiscardUnsavedChanges,
 }) => {
     const handleCancel = () => {
         onCancel();
@@ -36,20 +41,20 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
 
     return (
         <AutofillContextProvider
-            fetchSuggestions={() => Promise.resolve([])}
+            fetchSuggestions={fetchSuggestions}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
         >
             <MetadataInstanceForm
-                areAiSuggestionsAvailable={true}
+                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
                 isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                 isDeleteButtonDisabled={isDeleteButtonDisabled}
                 isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                selectedTemplateInstance={template}
                 onCancel={handleCancel}
-                onSubmit={onSubmit}
-                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                 onDelete={onDelete}
                 onDiscardUnsavedChanges={onDiscardUnsavedChanges}
+                onSubmit={onSubmit}
+                selectedTemplateInstance={template}
+                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             />
         </AutofillContextProvider>
     );
