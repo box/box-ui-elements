@@ -1,5 +1,5 @@
 import React from 'react';
-import { type MetadataTemplateInstance } from '@box/metadata-editor';
+import { MetadataTemplateField, type MetadataTemplateInstance } from '@box/metadata-editor';
 import userEvent from '@testing-library/user-event';
 import { screen, render } from '../../../test-utils/testing-library';
 import MetadataInstanceEditor, { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
@@ -133,5 +133,45 @@ describe('MetadataInstanceEditor', () => {
         await userEvent.click(unsavedChangesModalDiscardButton);
 
         expect(mockOnDiscardUnsavedChanges).toHaveBeenCalled();
+    });
+
+    test('should call taxonomyOptionsFetcher on metadata taxonomy field search', async () => {
+        const taxonomyField: MetadataTemplateField = {
+            type: 'taxonomy',
+            key: 'States',
+            displayName: 'States',
+            description: 'State locations',
+            hidden: false,
+            id: '2',
+            taxonomyKey: 'geography',
+            taxonomyId: '1',
+            optionsRules: {
+                multiSelect: true,
+                selectableLevels: [1],
+            },
+        };
+
+        const template: MetadataTemplateInstance = {
+            ...mockCustomMetadataTemplateWithField,
+            fields: [...mockCustomMetadataTemplateWithField.fields, taxonomyField],
+        };
+
+        const props: MetadataInstanceEditorProps = {
+            ...defaultProps,
+            template,
+        };
+
+        const { getByRole } = render(<MetadataInstanceEditor {...props} />);
+        const combobox = getByRole('combobox', { name: 'States' });
+
+        await userEvent.type(combobox, 'A');
+
+        expect(props.taxonomyOptionsFetcher).toHaveBeenCalledWith(
+            template.scope,
+            template.templateKey,
+            taxonomyField.key,
+            taxonomyField.optionsRules.selectableLevels[0],
+            { marker: null, searchInput: 'A', signal: expect.anything() },
+        );
     });
 });
