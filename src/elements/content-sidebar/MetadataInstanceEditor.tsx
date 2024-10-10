@@ -1,6 +1,5 @@
 import {
     MetadataInstanceForm,
-    withApiWrapper,
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
@@ -24,7 +23,7 @@ export interface MetadataInstanceEditorProps {
     template: MetadataTemplateInstance;
 }
 
-export const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
+const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
@@ -53,4 +52,4 @@ export const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     );
 };
 
-export default withApiWrapper(MetadataInstanceEditor);
+export default MetadataInstanceEditor;

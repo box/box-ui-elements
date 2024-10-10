@@ -2,7 +2,7 @@ import React from 'react';
 import { type MetadataTemplateInstance } from '@box/metadata-editor';
 import userEvent from '@testing-library/user-event';
 import { screen, render } from '../../../test-utils/testing-library';
-import { MetadataInstanceEditor, MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
+import MetadataInstanceEditor, { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
 
 const mockOnCancel = jest.fn();
 const mockOnDiscardUnsavedChanges = jest.fn();
