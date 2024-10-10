@@ -1,11 +1,23 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import { type MessageDescriptor } from 'react-intl';
-import { type JSONPatchOperations, type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
+import {
+    type JSONPatchOperations,
+    type MetadataTemplate,
+    type MetadataTemplateInstance,
+    type MetadataTemplateField,
+} from '@box/metadata-editor';
+import isEmpty from 'lodash/isEmpty';
 import API from '../../../api';
 import { type ElementsXhrError } from '../../../common/types/api';
 import { isUserCorrectableError } from '../../../utils/error';
-import { FIELD_IS_EXTERNALLY_OWNED, FIELD_PERMISSIONS, FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
+import {
+    ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
+    ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+    FIELD_IS_EXTERNALLY_OWNED,
+    FIELD_PERMISSIONS_CAN_UPLOAD,
+    FIELD_PERMISSIONS,
+} from '../../../constants';
 
 import messages from '../../common/messages';
 
@@ -18,8 +30,10 @@ export enum STATUS {
     ERROR = 'error',
     SUCCESS = 'success',
 }
+
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
+    extractSuggestions: (templateKey: string, fields: MetadataTemplateField[]) => Promise<MetadataTemplateField[]>;
     file: BoxItem | null;
     handleCreateMetadataInstance: (
         templateInstance: MetadataTemplateInstance,
@@ -174,6 +188,39 @@ function useSidebarMetadataFetcher(
         [api, file, onApiError],
     );
 
+    const extractSuggestions = React.useCallback(
+        async (templateKey: string, fields: MetadataTemplateField[]) => {
+            const aiAPI = api.getIntelligenceAPI();
+
+            let answer = {};
+            try {
+                answer = await aiAPI.extractStructured({
+                    items: [{ id: file.id, type: file.type }],
+                    fields,
+                });
+            } catch (error) {
+                onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
+            }
+
+            if (isEmpty(answer)) {
+                const error = new Error('No suggestions found.');
+                onError(error, ERROR_CODE_EMPTY_METADATA_SUGGESTIONS, { showNotification: true });
+            }
+
+            return fields.map(field => {
+                const value = answer[field.key];
+                if (!value) {
+                    return field;
+                }
+                return {
+                    ...field,
+                    aiSuggestion: value,
+                };
+            });
+        },
+        [api, file, onError],
+    );
+
     React.useEffect(() => {
         if (status === STATUS.IDLE) {
             setStatus(STATUS.LOADING);
@@ -185,6 +232,7 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
+        extractSuggestions,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,

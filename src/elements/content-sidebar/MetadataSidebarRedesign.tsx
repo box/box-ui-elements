@@ -8,33 +8,31 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
+    AutofillContextProvider,
     MetadataEmptyState,
     MetadataInstanceList,
     type FormValues,
     type JSONPatchOperations,
-    type MetadataTemplateInstance,
     type MetadataTemplate,
+    type MetadataTemplateInstance,
 } from '@box/metadata-editor';
-import noop from 'lodash/noop';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
+import { useFeatureEnabled } from '../common/feature-checking';
 import { ORIGIN_METADATA_SIDEBAR_REDESIGN, SIDEBAR_VIEW_METADATA } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
-import { useFeatureEnabled } from '../common/feature-checking';
 import { mark } from '../../utils/performance';
 import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
 
-import { type ElementsXhrError } from '../../common/types/api';
-import { type ElementOrigin } from '../common/flowTypes';
 import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
-import MetadataInstanceEditor, { MetadataInstanceEditorProps } from './MetadataInstanceEditor';
+import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 
@@ -52,13 +50,8 @@ interface PropsWithoutContext extends ExternalProps {
     hasSidebarInitialized?: boolean;
 }
 
-interface ContextInfo {
-    isErrorDisplayed: boolean;
-    error: ElementsXhrError | Error;
-}
-
 export interface ErrorContextProps {
-    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: ContextInfo, origin?: ElementOrigin) => void;
+    onError: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
 }
 
 export interface MetadataSidebarRedesignProps extends PropsWithoutContext, ErrorContextProps, WithLoggerProps {
@@ -67,6 +60,7 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
 
 function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
     const {
+        extractSuggestions,
         file,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
@@ -174,13 +168,6 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
-    const fetchSuggestions = React.useCallback<MetadataInstanceEditorProps['fetchSuggestions']>(
-        async (templateKey, fields) => {
-            // should use getIntelligenceAPI().extractStructured
-            return fields;
-        },
-        [],
-    );
 
     return (
         <SidebarContent
@@ -196,32 +183,36 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                 {showEmptyState && (
                     <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
                 )}
-                {editingTemplate && (
-                    <MetadataInstanceEditor
-                        areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                        fetchSuggestions={fetchSuggestions}
-                        isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                        isDeleteButtonDisabled={isDeleteButtonDisabled}
-                        isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                        onCancel={handleCancel}
-                        onDelete={handleDeleteInstance}
-                        onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
-                        onSubmit={handleSubmit}
-                        setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
-                        template={editingTemplate}
-                    />
-                )}
-                {showList && (
-                    <MetadataInstanceList
-                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                        onEdit={templateInstance => {
-                            setEditingTemplate(templateInstance);
-                            setIsDeleteButtonDisabled(false);
-                        }}
-                        onEditWithAutofill={noop}
-                        templateInstances={templateInstances}
-                    />
-                )}
+                <AutofillContextProvider
+                    fetchSuggestions={extractSuggestions}
+                    isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                >
+                    {editingTemplate && (
+                        <MetadataInstanceEditor
+                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                            isDeleteButtonDisabled={isDeleteButtonDisabled}
+                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                            onCancel={handleCancel}
+                            onDelete={handleDeleteInstance}
+                            onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
+                            onSubmit={handleSubmit}
+                            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                            template={editingTemplate}
+                        />
+                    )}
+                    {showList && (
+                        <MetadataInstanceList
+                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                            onEdit={templateInstance => {
+                                setEditingTemplate(templateInstance);
+                                setIsDeleteButtonDisabled(false);
+                            }}
+                            templateInstances={templateInstances}
+                        />
+                    )}
+                </AutofillContextProvider>
             </div>
         </SidebarContent>
     );
