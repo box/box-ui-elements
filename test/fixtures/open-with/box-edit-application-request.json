@@ -1,8 +1,0 @@
-{
-    "response_type": "request",
-    "default_application_name": [
-        {
-            "docx": "Microsoft Word"
-        }
-    ]
-}

@@ -1,0 +1,237 @@
+[
+  {
+    "id": "boxui.securityControls.securityControlsLabel",
+    "description": "Label displayed above the security restrictions on the file due to the classification label and associated policies.",
+    "defaultMessage": "Restrictions"
+  },
+  {
+    "id": "boxui.securityControls.shortSharing",
+    "description": "Short summary displayed for classification when a sharing restriction is applied to it",
+    "defaultMessage": "Sharing restriction applies"
+  },
+  {
+    "id": "boxui.securityControls.shortDownload",
+    "description": "Short summary displayed for classification when a download restriction is applied to it",
+    "defaultMessage": "Download restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortApp",
+    "description": "Short summary displayed for classification when an application download restriction is applied to it",
+    "defaultMessage": "Application restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortWatermarking",
+    "description": "Short summary displayed for classification when watermarking is applied to it",
+    "defaultMessage": "Watermarking applies"
+  },
+  {
+    "id": "boxui.securityControls.shortSign",
+    "description": "Short summary displayed for items when Sign restriction is applied to them. Box Sign is a product name",
+    "defaultMessage": "Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortSharingDownload",
+    "description": "Short summary displayed for classification when both sharing and download restrictions are applied to it",
+    "defaultMessage": "Sharing and download restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortSharingApp",
+    "description": "Short summary displayed for classification when both sharing and app download restrictions are applied to it",
+    "defaultMessage": "Sharing and app restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortDownloadApp",
+    "description": "Short summary displayed for classification when both download and app download restrictions are applied to it",
+    "defaultMessage": "Download and app restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortSharingSign",
+    "description": "Short summary displayed for items when both sharing and Sign restrictions are applied to them. Box Sign is a product name",
+    "defaultMessage": "Sharing and Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortDownloadSign",
+    "description": "Short summary displayed for items when both download and Sign restrictions are applied to them. Box Sign is a product name",
+    "defaultMessage": "Download and Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortAppSign",
+    "description": "Short summary displayed for items when both app download and Sign restrictions are applied to them. Box Sign is a product name",
+    "defaultMessage": "App and Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortDownloadAppSign",
+    "description": "Short summary displayed for items when download, app download and Sign restrictions are applied to them. Box Sign is a product name",
+    "defaultMessage": "Download, app and Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortSharingAppSign",
+    "description": "Short summary displayed for items when sharing, app download and Sign restrictions are applied to them. Box Sign is a product name",
+    "defaultMessage": "Sharing, app and Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortSharingDownloadSign",
+    "description": "Short summary displayed for items when sharing, download and Sign restrictions are applied to them. Box Sign is a product name",
+    "defaultMessage": "Sharing, download and Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortSharingDownloadApp",
+    "description": "Short summary displayed for items when sharing, download and app download restrictions are applied to them.",
+    "defaultMessage": "Sharing, download and app restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.shortSharingDownloadAppSign",
+    "description": "Short summary displayed for items when sharing, download, app download and Sign restrictions are applied to them. Box Sign is a product name",
+    "defaultMessage": "Sharing, download, app and Sign restrictions apply"
+  },
+  {
+    "id": "boxui.securityControls.sharingCollabOnly",
+    "description": "Bullet point that summarizes shared link restriction applied to classification",
+    "defaultMessage": "Shared links allowed for collaborators only."
+  },
+  {
+    "id": "boxui.securityControls.sharingCollabAndCompanyOnly",
+    "description": "Bullet point that summarizes collaborators shared link restriction applied to classification",
+    "defaultMessage": "Shared links cannot be made publicly accessible."
+  },
+  {
+    "id": "boxui.securityControls.watermarkingApplied",
+    "description": "Bullet point that summarizes watermarking applied to classification",
+    "defaultMessage": "Watermarking will be applied."
+  },
+  {
+    "id": "boxui.securityControls.externalCollabBlock",
+    "description": "Bullet point that summarizes external collaboration blocked restriction applied to classification",
+    "defaultMessage": "External collaboration restricted."
+  },
+  {
+    "id": "boxui.securityControls.externalCollabDomainList",
+    "description": "Bullet point that summarizes external collaboration restriction applied to classification",
+    "defaultMessage": "External collaboration limited to approved domains."
+  },
+  {
+    "id": "boxui.securityControls.appDownloadRestricted",
+    "description": "Bullet point that summarizes application download restriction applied to classification",
+    "defaultMessage": "Download restricted for some applications."
+  },
+  {
+    "id": "boxui.securityControls.appDownloadBlacklist",
+    "description": "Bullet point that summarizes application download restriction applied to classification",
+    "defaultMessage": "Download restricted for some applications: {appNames}"
+  },
+  {
+    "id": "boxui.securityControls.appDownloadBlacklistOverflow",
+    "description": "Bullet point that summarizes application download restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold",
+    "defaultMessage": "Download restricted for some applications: {appNames} +{remainingAppCount} more"
+  },
+  {
+    "id": "boxui.securityControls.appDownloadWhitelist",
+    "description": "Bullet point that summarizes application download restriction applied to classification",
+    "defaultMessage": "Only select applications are allowed: {appNames}"
+  },
+  {
+    "id": "boxui.securityControls.appDownloadWhitelistOverflow",
+    "description": "Bullet point that summarizes application download restriction applied to classification. This variation is used when the list of applications is longer than the configured threshold",
+    "defaultMessage": "Only select applications are allowed: {appNames} +{remainingAppCount} more"
+  },
+  {
+    "id": "boxui.securityControls.allAppNames",
+    "description": "Name list of all applications download restriction applied to classification",
+    "defaultMessage": "All applications: {appsList}"
+  },
+  {
+    "id": "boxui.securityControls.webDownloadOwners",
+    "description": "Bullet point that summarizes web download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners",
+    "defaultMessage": "Download restricted on web, except Owners/Co-Owners."
+  },
+  {
+    "id": "boxui.securityControls.webDownloadOwnersEditors",
+    "description": "Bullet point that summarizes web download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners/Editors",
+    "defaultMessage": "Download restricted on web, except Owners/Co-Owners/Editors."
+  },
+  {
+    "id": "boxui.securityControls.webDownloadExternalOwners",
+    "description": "Bullet point that summarizes web download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners",
+    "defaultMessage": "Download restricted on web, except Owners/Co-Owners. Also restricted for external users."
+  },
+  {
+    "id": "boxui.securityControls.webDownloadExternalOwnersEditors",
+    "description": "Bullet point that summarizes web download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners/Editors",
+    "defaultMessage": "Download restricted on web, except Owners/Co-Owners/Editors. Also restricted for external users."
+  },
+  {
+    "id": "boxui.securityControls.webDownloadExternal",
+    "description": "Bullet point that summarizes web download restrictions applied to classification, when restriction applies to external users",
+    "defaultMessage": "Download restricted on web for external users."
+  },
+  {
+    "id": "boxui.securityControls.boxSignRequestRestricted",
+    "description": "Bullet point that summarizes Box Sign request restrictions applied to items. Box Sign is a product name",
+    "defaultMessage": "Sign restrictions apply."
+  },
+  {
+    "id": "boxui.securityControls.mobileDownloadOwners",
+    "description": "Bullet point that summarizes mobile download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners",
+    "defaultMessage": "Download restricted on mobile, except Owners/Co-Owners."
+  },
+  {
+    "id": "boxui.securityControls.mobileDownloadOwnersEditors",
+    "description": "Bullet point that summarizes mobile download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners/Editors",
+    "defaultMessage": "Download restricted on mobile, except Owners/Co-Owners/Editors."
+  },
+  {
+    "id": "boxui.securityControls.mobileDownloadExternalOwners",
+    "description": "Bullet point that summarizes mobile download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners",
+    "defaultMessage": "Download restricted on mobile, except Owners/Co-Owners. Also restricted for external users."
+  },
+  {
+    "id": "boxui.securityControls.mobileDownloadExternalOwnersEditors",
+    "description": "Bullet point that summarizes mobile download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners/Editors",
+    "defaultMessage": "Download restricted on mobile, except Owners/Co-Owners/Editors. Also restricted for external users."
+  },
+  {
+    "id": "boxui.securityControls.mobileDownloadExternal",
+    "description": "Bullet point that summarizes mobile download restrictions applied to classification, when restriction applies to external users",
+    "defaultMessage": "Download restricted on mobile for external users."
+  },
+  {
+    "id": "boxui.securityControls.desktopDownloadOwners",
+    "description": "Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners. Box Drive is a product name and not translated",
+    "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners."
+  },
+  {
+    "id": "boxui.securityControls.desktopDownloadOwnersEditors",
+    "description": "Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to managed users except Owners/Co-Owners/Editors. Box Drive is a product name and not translated",
+    "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners/Editors."
+  },
+  {
+    "id": "boxui.securityControls.desktopDownloadExternalOwners",
+    "description": "Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners. Box Drive is a product name and not translated",
+    "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners. Also restricted for external users."
+  },
+  {
+    "id": "boxui.securityControls.desktopDownloadExternalOwnersEditors",
+    "description": "Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to external users and managed users except Owners/Co-Owners/Editors. Box Drive is a product name and not translated",
+    "defaultMessage": "Download restricted on Box Drive, except Owners/Co-Owners/Editors. Also restricted for external users."
+  },
+  {
+    "id": "boxui.securityControls.downloadExternal",
+    "description": "Bullet point that summarizes desktop download restrictions applied to classification, when restriction applies to external users. Box Drive is a product name and not translated",
+    "defaultMessage": "Download restricted on Box Drive for external users."
+  },
+  {
+    "id": "boxui.securityControls.viewAll",
+    "description": "Button to display security controls modal",
+    "defaultMessage": "View All"
+  },
+  {
+    "id": "boxui.securityControls.modalTitle",
+    "description": "Title for modal to display classification and security controls details",
+    "defaultMessage": "View Classification for “{itemName}”"
+  },
+  {
+    "id": "boxui.securityControls.modalDescription",
+    "description": "Description for modal to display classification and security controls details",
+    "defaultMessage": "Classification labels defined by your administrator can be used to label content and apply security policies."
+  }
+]
