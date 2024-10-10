@@ -8,6 +8,8 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
+    AutofillContextProvider,
+    AutofillContextProviderProps,
     MetadataEmptyState,
     MetadataInstanceList,
     type FormValues,
@@ -15,7 +17,6 @@ import {
     type MetadataTemplateInstance,
     type MetadataTemplate,
 } from '@box/metadata-editor';
-import noop from 'lodash/noop';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -34,7 +35,7 @@ import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
-import MetadataInstanceEditor, { MetadataInstanceEditorProps } from './MetadataInstanceEditor';
+import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 
@@ -174,7 +175,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
-    const fetchSuggestions = React.useCallback<MetadataInstanceEditorProps['fetchSuggestions']>(
+    const fetchSuggestions = React.useCallback<AutofillContextProviderProps['fetchSuggestions']>(
         async (templateKey, fields) => {
             // should use getIntelligenceAPI().extractStructured
             return fields;
@@ -196,32 +197,36 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                 {showEmptyState && (
                     <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
                 )}
-                {editingTemplate && (
-                    <MetadataInstanceEditor
-                        areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                        fetchSuggestions={fetchSuggestions}
-                        isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                        isDeleteButtonDisabled={isDeleteButtonDisabled}
-                        isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                        onCancel={handleCancel}
-                        onDelete={handleDeleteInstance}
-                        onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
-                        onSubmit={handleSubmit}
-                        setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
-                        template={editingTemplate}
-                    />
-                )}
-                {showList && (
-                    <MetadataInstanceList
-                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                        onEdit={templateInstance => {
-                            setEditingTemplate(templateInstance);
-                            setIsDeleteButtonDisabled(false);
-                        }}
-                        onEditWithAutofill={noop}
-                        templateInstances={templateInstances}
-                    />
-                )}
+                <AutofillContextProvider
+                    fetchSuggestions={fetchSuggestions}
+                    isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                >
+                    {editingTemplate && (
+                        <MetadataInstanceEditor
+                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                            isDeleteButtonDisabled={isDeleteButtonDisabled}
+                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                            onCancel={handleCancel}
+                            onDelete={handleDeleteInstance}
+                            onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
+                            onSubmit={handleSubmit}
+                            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                            template={editingTemplate}
+                        />
+                    )}
+                    {showList && (
+                        <MetadataInstanceList
+                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                            onEdit={templateInstance => {
+                                setEditingTemplate(templateInstance);
+                                setIsDeleteButtonDisabled(false);
+                            }}
+                            templateInstances={templateInstances}
+                        />
+                    )}
+                </AutofillContextProvider>
             </div>
         </SidebarContent>
     );

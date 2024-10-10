@@ -1,6 +1,4 @@
 import {
-    AutofillContextProvider,
-    AutofillContextProviderProps,
     MetadataInstanceForm,
     type FormValues,
     type JSONPatchOperations,
@@ -10,7 +8,6 @@ import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
-    fetchSuggestions: AutofillContextProviderProps['fetchSuggestions'];
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
@@ -24,7 +21,6 @@ export interface MetadataInstanceEditorProps {
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
-    fetchSuggestions,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
@@ -40,23 +36,19 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     };
 
     return (
-        <AutofillContextProvider
-            fetchSuggestions={fetchSuggestions}
+        <MetadataInstanceForm
+            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-        >
-            <MetadataInstanceForm
-                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isDeleteButtonDisabled={isDeleteButtonDisabled}
-                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                onCancel={handleCancel}
-                onDelete={onDelete}
-                onDiscardUnsavedChanges={onDiscardUnsavedChanges}
-                onSubmit={onSubmit}
-                selectedTemplateInstance={template}
-                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
-            />
-        </AutofillContextProvider>
+            isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+            onCancel={handleCancel}
+            onDelete={onDelete}
+            onDiscardUnsavedChanges={onDiscardUnsavedChanges}
+            onSubmit={onSubmit}
+            selectedTemplateInstance={template}
+            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+            taxonomyOptionsFetcher={null}
+        />
     );
 };
 
