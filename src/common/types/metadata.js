@@ -5,6 +5,7 @@ import {
     FIELD_TYPE_FLOAT,
     FIELD_TYPE_MULTISELECT,
     FIELD_TYPE_STRING,
+    FIELD_TYPE_TAXONOMY,
 } from '../../features/metadata-instance-fields/constants';
 import type { SkillCards } from './skills';
 
@@ -13,7 +14,8 @@ type MetadataFieldType =
     | typeof FIELD_TYPE_ENUM
     | typeof FIELD_TYPE_FLOAT
     | typeof FIELD_TYPE_MULTISELECT
-    | typeof FIELD_TYPE_STRING;
+    | typeof FIELD_TYPE_STRING
+    | typeof FIELD_TYPE_TAXONOMY;
 
 type MetadataTemplateFieldOption = {
     id?: string,

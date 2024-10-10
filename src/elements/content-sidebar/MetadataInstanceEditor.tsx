@@ -5,6 +5,9 @@ import {
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
+    type BaseOptionType,
+    type FetcherResponse,
+    type PaginationQueryInput,
 } from '@box/metadata-editor';
 import React from 'react';
 
@@ -19,6 +22,13 @@ export interface MetadataInstanceEditorProps {
     onDiscardUnsavedChanges: () => void;
     onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
+    taxonomyOptionsFetcher: (
+        scope: string,
+        templateKey: string,
+        fieldKey: string,
+        level: number,
+        options: PaginationQueryInput,
+    ) => Promise<FetcherResponse<BaseOptionType>>;
     template: MetadataTemplateInstance;
 }
 
@@ -33,6 +43,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     onDiscardUnsavedChanges,
     onSubmit,
     setIsUnsavedChangesModalOpen,
+    taxonomyOptionsFetcher,
     template,
 }) => {
     const handleCancel = () => {
@@ -55,6 +66,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
                 onSubmit={onSubmit}
                 selectedTemplateInstance={template}
                 setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                taxonomyOptionsFetcher={taxonomyOptionsFetcher}
             />
         </AutofillContextProvider>
     );

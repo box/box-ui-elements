@@ -59,6 +59,7 @@ describe('MetadataInstanceEditor', () => {
         onDiscardUnsavedChanges: mockOnDiscardUnsavedChanges,
         onSubmit: jest.fn(),
         setIsUnsavedChangesModalOpen: mockSetIsUnsavedChangesModalOpen,
+        taxonomyOptionsFetcher: jest.fn(),
         template: mockMetadataTemplate,
     };
 
