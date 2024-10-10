@@ -1,19 +1,23 @@
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { shallow } from 'enzyme/build';
+import { userEvent } from '@testing-library/user-event';
+import { screen, render } from '../../../../test-utils/testing-library';
 import messages from '../messages';
 import selectors from '../../../common/selectors/version';
 import VersionsItem from '../VersionsItem';
-import VersionsItemActions from '../VersionsItemActions';
-import VersionsItemButton from '../VersionsItemButton';
-import VersionsItemRetention from '../VersionsItemRetention';
-import { ReadableTime } from '../../../../components/time';
 import { FILE_REQUEST_NAME, PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
 
 jest.mock('../../../../utils/dom', () => ({
     ...jest.requireActual('../../../../utils/dom'),
     scrollIntoView: jest.fn(),
 }));
+
+const checkExpectedActionButtonVisibility = (permissionButtonText, isVisible) => {
+    if (isVisible) {
+        expect(screen.queryByText(permissionButtonText)).toBeVisible();
+    } else {
+        expect(screen.queryByText(permissionButtonText)).not.toBeInTheDocument();
+    }
+};
 
 describe('elements/content-sidebar/versions/VersionsItem', () => {
     const defaultDate = new Date('2019-03-01T00:00:00');
@@ -23,7 +27,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
     const restoreUser = { name: 'Restore User', id: 12 };
     const trashedDate = new Date('2019-04-01T00:00:00');
     const trashedUser = { name: 'Delete User', id: 11 };
-    const unknownUser = <FormattedMessage {...messages.versionUserUnknown} />;
+    const unknownUser = 'Unknown';
     const defaults = {
         created_at: defaultDate,
         extension: 'docx',
@@ -42,7 +46,7 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         ...defaults,
         ...overrides,
     });
-    const getWrapper = (props = {}) => shallow(<VersionsItem fileId="123" version={defaults} {...props} />);
+    const renderComponent = (props = {}) => render(<VersionsItem fileId="123" version={defaults} {...props} />);
 
     beforeEach(() => {
         selectors.getVersionAction = jest.fn().mockReturnValue(VERSION_UPLOAD_ACTION);
@@ -57,10 +61,10 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${'upload'}  | ${true}    | ${true}      | ${true}     | ${true}     | ${false}
         `(
             "should show actions correctly when the version's action is $action",
-            ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
+            async ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
                 selectors.getVersionAction.mockReturnValueOnce(action);
 
-                const wrapper = getWrapper({
+                renderComponent({
                     version: getVersion({
                         permissions: {
                             can_delete: true,
@@ -70,17 +74,19 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
                         },
                     }),
                 });
-                const actions = wrapper.find(VersionsItemActions);
-                const button = wrapper.find(VersionsItemButton);
 
-                expect(button.prop('isDisabled')).toBe(!showPreview);
-                expect(actions.prop('showDelete')).toBe(showDelete);
-                expect(actions.prop('showDownload')).toBe(showDownload);
-                expect(actions.prop('showPromote')).toBe(showPromote);
-                expect(actions.prop('showPreview')).toBe(showPreview);
-                expect(actions.prop('showRestore')).toBe(showRestore);
-                expect(wrapper.find(ReadableTime)).toBeTruthy();
-                expect(wrapper).toMatchSnapshot();
+                const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
+                const button = screen.getByTestId('versions-item-button');
+
+                await userEvent.click(actions);
+
+                expect(button.getAttribute('aria-disabled')).toBe((!showPreview).toString());
+                checkExpectedActionButtonVisibility('Delete', showDelete);
+                checkExpectedActionButtonVisibility('Download', showDownload);
+                checkExpectedActionButtonVisibility('Make Current', showPromote);
+                checkExpectedActionButtonVisibility('Preview', showPreview);
+                checkExpectedActionButtonVisibility('Restore', showRestore);
+                expect(screen.getByTestId('bcs-VersionsItem-info')).toBeVisible();
             },
         );
 
@@ -93,26 +99,35 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${{ can_delete: false, can_download: true, can_preview: false, can_upload: false }}
             ${{ can_delete: false, can_download: false, can_preview: true, can_upload: false }}
             ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
-        `('should show the correct menu items based on permissions', ({ permissions }) => {
-            const wrapper = getWrapper({ version: getVersion({ permissions }) });
-            const actions = wrapper.find(VersionsItemActions);
-            const button = wrapper.find(VersionsItemButton);
+        `('should show the correct menu items based on permissions', async ({ permissions }) => {
+            renderComponent({
+                version: getVersion({ permissions }),
+                isArchived: false,
+            });
 
-            expect(button.prop('isDisabled')).toBe(!permissions.can_preview);
-            expect(actions.prop('showDelete')).toBe(permissions.can_delete);
-            expect(actions.prop('showDownload')).toBe(permissions.can_download);
-            expect(actions.prop('showPromote')).toBe(permissions.can_upload);
-            expect(actions.prop('showPreview')).toBe(permissions.can_preview);
-            expect(wrapper.find(ReadableTime)).toBeTruthy();
+            const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
+            const button = screen.getByTestId('versions-item-button');
+
+            await userEvent.click(actions);
+
+            expect(button.getAttribute('aria-disabled')).toBe((!permissions.can_preview).toString());
+            checkExpectedActionButtonVisibility('Delete', permissions.can_delete);
+            checkExpectedActionButtonVisibility('Download', permissions.can_download);
+            checkExpectedActionButtonVisibility('Make Current', permissions.can_upload);
+            checkExpectedActionButtonVisibility('Preview', permissions.can_preview);
+            expect(screen.getByTestId('bcs-VersionsItem-info')).toBeVisible();
         });
 
-        test('should render a selected version correctly', () => {
-            const wrapper = getWrapper({ isSelected: true });
-            const actions = wrapper.find(VersionsItemActions);
-            const button = wrapper.find(VersionsItemButton);
+        test('should render a selected version correctly', async () => {
+            renderComponent({ isSelected: true });
 
-            expect(actions.prop('showPreview')).toBe(false);
-            expect(button.prop('isSelected')).toBe(true);
+            const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
+            const button = screen.getByTestId('versions-item-button');
+
+            await userEvent.click(actions);
+
+            checkExpectedActionButtonVisibility('Preview', false);
+            expect(button.classList.contains('bcs-is-selected')).toBe(true);
         });
 
         test.each`
@@ -125,9 +140,11 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         `('should render the correct user name', ({ expected, versionUser }) => {
             selectors.getVersionUser.mockReturnValue(versionUser);
 
-            const wrapper = getWrapper();
-            const result = wrapper.find('[data-testid="bcs-VersionsItem-log"]').find('FormattedMessage');
-            expect(result.prop('values')).toEqual({ name: expected });
+            renderComponent();
+
+            const lastActionLog = screen.queryByTestId('bcs-VersionsItem-log');
+
+            expect(lastActionLog).toHaveTextContent(`Uploaded by ${expected}`);
         });
 
         test.each`
@@ -136,30 +153,37 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${promotedByUser}                                   | ${promotedByUser.name}
             ${restoreUser}                                      | ${restoreUser.name}
             ${trashedUser}                                      | ${trashedUser.name}
-            ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }} | ${(<FormattedMessage {...messages.fileRequestDisplayName} />)}
+            ${{ ...PLACEHOLDER_USER, name: FILE_REQUEST_NAME }} | ${messages.fileRequestDisplayName.defaultMessage}
         `('should render the correct user name if uploader_user_name present', ({ expected, versionUser }) => {
-            selectors.getVersionUser.mockReturnValueOnce(versionUser);
+            selectors.getVersionUser.mockReturnValue(versionUser);
 
-            const wrapper = getWrapper({ version: { ...defaults, uploader_display_name: FILE_REQUEST_NAME } });
-            const result = wrapper.find('[data-testid="bcs-VersionsItem-log"]').find('FormattedMessage');
-            expect(result.prop('values')).toEqual({ name: expected });
+            renderComponent({ version: { ...defaults, uploader_display_name: FILE_REQUEST_NAME } });
+
+            const lastActionLog = screen.queryByTestId('bcs-VersionsItem-log');
+
+            expect(lastActionLog).toHaveTextContent(`Uploaded by ${expected}`);
         });
 
         test.each`
             created_at     | restored_at    | trashed_at     | expected
-            ${defaultDate} | ${null}        | ${null}        | ${defaultDate}
-            ${defaultDate} | ${restoreDate} | ${null}        | ${restoreDate}
-            ${defaultDate} | ${restoreDate} | ${trashedDate} | ${restoreDate}
-            ${defaultDate} | ${null}        | ${trashedDate} | ${trashedDate}
+            ${defaultDate} | ${null}        | ${null}        | ${'Mar 1, 2019 at 12:00 AM'}
+            ${defaultDate} | ${restoreDate} | ${null}        | ${'May 1, 2019 at 12:00 AM'}
+            ${defaultDate} | ${restoreDate} | ${trashedDate} | ${'May 1, 2019 at 12:00 AM'}
+            ${defaultDate} | ${null}        | ${trashedDate} | ${'Apr 1, 2019 at 12:00 AM'}
         `('should render the correct date and time', ({ expected, created_at, restored_at, trashed_at }) => {
-            const wrapper = getWrapper({
+            renderComponent({
                 version: getVersion({
                     created_at,
                     restored_at,
                     trashed_at,
                 }),
             });
-            expect(wrapper.find(ReadableTime).prop('timestamp')).toEqual(expected.getTime());
+
+            const dateTimeText = screen
+                .getByTestId('bcs-VersionsItem-info')
+                .getElementsByTagName('time')[0].textContent;
+
+            expect(dateTimeText).toBe(expected);
         });
 
         test.each`
@@ -175,15 +199,20 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         `(
             'should show version number $versionNumber with a limit of $versionLimit correctly',
             ({ isLimited, versionLimit, versionNumber }) => {
-                const wrapper = getWrapper({
+                renderComponent({
                     version: getVersion({ action: 'upload', version_number: versionNumber }),
                     versionCount: 10,
                     versionLimit,
                 });
-                const button = wrapper.find(VersionsItemButton);
+                const button = screen.getByTestId('versions-item-button');
+                const actions = screen.queryByRole('button', { name: 'Toggle Actions Menu' });
 
-                expect(button.prop('isDisabled')).toBe(isLimited);
-                expect(wrapper.find(VersionsItemActions).length).toBe(isLimited ? 0 : 1);
+                expect(button.getAttribute('aria-disabled')).toBe(isLimited.toString());
+                if (isLimited) {
+                    expect(actions).not.toBeInTheDocument();
+                } else {
+                    expect(actions).toBeVisible();
+                }
             },
         );
 
@@ -199,31 +228,39 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
             ${'xlsx'} | ${false}  | ${false}
         `(
             'should restrict preview for non-current versions with extensions that could use the office viewer',
-            ({ extension, isCurrent, showPreview }) => {
-                const wrapper = getWrapper({
+            async ({ extension, isCurrent, showPreview }) => {
+                renderComponent({
                     isCurrent,
                     version: getVersion({ extension }),
                 });
 
-                expect(wrapper.find(VersionsItemActions).prop('showPreview')).toBe(showPreview);
-                expect(wrapper.find(VersionsItemButton).prop('isDisabled')).toBe(!showPreview);
+                const actions = screen.queryByRole('button', { name: 'Toggle Actions Menu' });
+                const button = screen.getByTestId('versions-item-button');
+
+                await userEvent.click(actions);
+
+                expect(button.getAttribute('aria-disabled')).toBe((!showPreview).toString());
+                checkExpectedActionButtonVisibility('Preview', showPreview);
             },
         );
 
-        test('should disable preview if the file is watermarked', () => {
-            const wrapper = getWrapper({
+        test('should disable preview if the file is watermarked', async () => {
+            renderComponent({
                 isWatermarked: true,
             });
-            const actions = wrapper.find(VersionsItemActions);
-            const button = wrapper.find(VersionsItemButton);
 
-            expect(actions.prop('showPreview')).toBe(false);
-            expect(button.prop('isDisabled')).toBe(true);
+            const actions = screen.queryByRole('button', { name: 'Toggle Actions Menu' });
+            const button = screen.getByTestId('versions-item-button');
+
+            await userEvent.click(actions);
+
+            expect(button.getAttribute('aria-disabled')).toBe('true');
+            checkExpectedActionButtonVisibility('Preview', false);
         });
 
-        test('should disable actions as needed and render retention info if retention is provided', () => {
+        test('should disable actions as needed and render retention info if retention is provided', async () => {
             const dispositionAt = new Date(new Date().getTime() + 365 * 24 * 60 * 60 * 1000); // Future time
-            const wrapper = getWrapper({
+            renderComponent({
                 version: getVersion({
                     retention: {
                         applied_at: defaultDate,
@@ -232,11 +269,117 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
                             disposition_action: 'permanently_delete',
                         },
                     },
+                    permissions: {
+                        can_delete: true,
+                        can_download: true,
+                        can_preview: true,
+                        can_upload: true,
+                    },
                 }),
             });
 
-            expect(wrapper.exists(VersionsItemRetention)).toBe(true);
-            expect(wrapper.find(VersionsItemActions).prop('isRetained')).toBe(true);
+            const actions = screen.queryByRole('button', { name: 'Toggle Actions Menu' });
+            const retention = screen.queryByTestId('bcs-VersionsItem-retention');
+
+            await userEvent.click(actions);
+
+            const deleteButton = screen.queryByText('Delete');
+
+            expect(retention).toBeVisible();
+            expect(deleteButton).toBeVisible();
+            expect(deleteButton.getAttribute('aria-disabled')).toBeTruthy();
         });
+
+        test.each`
+            permissions
+            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: true }}
+            ${{ can_delete: true, can_download: true, can_preview: true, can_upload: false }}
+            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: true }}
+            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: true }}
+            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: true }}
+            ${{ can_delete: true, can_download: true, can_preview: false, can_upload: false }}
+            ${{ can_delete: true, can_download: false, can_preview: true, can_upload: false }}
+            ${{ can_delete: false, can_download: true, can_preview: true, can_upload: false }}
+            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: true }}
+            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: true }}
+            ${{ can_delete: false, can_download: true, can_preview: false, can_upload: false }}
+            ${{ can_delete: false, can_download: false, can_preview: true, can_upload: false }}
+        `(
+            'should disable the correct menu items based on permissions when is archive file',
+            async ({ permissions }) => {
+                renderComponent({
+                    version: getVersion({ permissions }),
+                    isArchived: true,
+                });
+
+                const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
+                const button = screen.getByTestId('versions-item-button');
+
+                await userEvent.click(actions);
+
+                expect(button.getAttribute('aria-disabled')).toBe((!permissions.can_preview).toString());
+                checkExpectedActionButtonVisibility('Delete', false);
+                checkExpectedActionButtonVisibility('Download', permissions.can_download);
+                checkExpectedActionButtonVisibility('Make Current', false);
+                checkExpectedActionButtonVisibility('Preview', permissions.can_preview);
+                expect(screen.getByTestId('bcs-VersionsItem-info')).toBeVisible();
+            },
+        );
+
+        test.each`
+            permissions
+            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: true }}
+            ${{ can_delete: true, can_download: false, can_preview: false, can_upload: false }}
+            ${{ can_delete: false, can_download: false, can_preview: false, can_upload: true }}
+            ${{ can_delete: false, can_download: false, can_preview: false, can_upload: false }}
+        `('should not render actions based on permissions when is archive file', ({ permissions }) => {
+            renderComponent({
+                version: getVersion({ permissions }),
+                isArchived: true,
+            });
+
+            const actions = screen.queryByRole('button', { name: 'Toggle Actions Menu' });
+            const button = screen.getByTestId('versions-item-button');
+
+            expect(button.getAttribute('aria-disabled')).toBe((!permissions.can_preview).toString());
+            expect(actions).not.toBeInTheDocument();
+            expect(screen.getByTestId('bcs-VersionsItem-info')).toBeVisible();
+        });
+
+        test.each`
+            action       | showDelete | showDownload | showPreview | showPromote | showRestore
+            ${'restore'} | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
+            ${'upload'}  | ${false}   | ${true}      | ${true}     | ${false}    | ${false}
+        `(
+            "should show actions correctly when the version's action is $action and is archive file",
+            async ({ action, showDelete, showDownload, showPreview, showPromote, showRestore }) => {
+                selectors.getVersionAction.mockReturnValueOnce(action);
+
+                renderComponent({
+                    version: getVersion({
+                        permissions: {
+                            can_delete: true,
+                            can_download: true,
+                            can_preview: true,
+                            can_upload: true,
+                        },
+                    }),
+                    isArchived: true,
+                });
+
+                const actions = screen.getByRole('button', { name: 'Toggle Actions Menu' });
+                const button = screen.getByTestId('versions-item-button');
+
+                await userEvent.click(actions);
+
+                expect(button.getAttribute('aria-disabled')).toBe((!showPreview).toString());
+                checkExpectedActionButtonVisibility('Delete', showDelete);
+                checkExpectedActionButtonVisibility('Download', showDownload);
+                checkExpectedActionButtonVisibility('Make Current', showPromote);
+                checkExpectedActionButtonVisibility('Preview', showPreview);
+                checkExpectedActionButtonVisibility('Restore', showRestore);
+                expect(screen.getByTestId('bcs-VersionsItem-info')).toBeVisible();
+            },
+        );
     });
 });

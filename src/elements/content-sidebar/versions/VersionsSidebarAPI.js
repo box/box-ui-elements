@@ -4,7 +4,7 @@
  * @author Box
  */
 import API from '../../../api';
-import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../utils/fields';
+import { FILE_VERSION_FIELDS_TO_FETCH, FILE_VERSION_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
 import type { BoxItem, FileVersions, BoxItemVersion } from '../../../common/types/core';
 
 export type fetchPayload = [BoxItem, FileVersions];
@@ -14,9 +14,20 @@ export default class VersionsSidebarAPI {
 
     fileId: string;
 
-    constructor({ api, fileId }: { api: API, fileId: string }) {
+    isArchiveFeatureEnabled: boolean;
+
+    constructor({
+        api,
+        fileId,
+        isArchiveFeatureEnabled,
+    }: {
+        api: API,
+        fileId: string,
+        isArchiveFeatureEnabled: boolean,
+    }) {
         this.api = api;
         this.fileId = fileId;
+        this.isArchiveFeatureEnabled = isArchiveFeatureEnabled;
     }
 
     fetchData = (): Promise<fetchPayload> => {
@@ -34,9 +45,13 @@ export default class VersionsSidebarAPI {
     };
 
     fetchFile = (): Promise<BoxItem> => {
+        const fields = this.isArchiveFeatureEnabled
+            ? FILE_VERSION_FIELDS_TO_FETCH_ARCHIVE
+            : FILE_VERSION_FIELDS_TO_FETCH;
+
         return new Promise((resolve, reject) =>
             this.api.getFileAPI().getFile(this.fileId, resolve, reject, {
-                fields: FILE_VERSION_FIELDS_TO_FETCH,
+                fields,
                 forceFetch: true,
             }),
         );

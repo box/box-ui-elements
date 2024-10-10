@@ -1,5 +1,5 @@
 import VersionsSidebarAPI from '../VersionsSidebarAPI';
-import { FILE_VERSION_FIELDS_TO_FETCH } from '../../../../utils/fields';
+import { FILE_VERSION_FIELDS_TO_FETCH, FILE_VERSION_FIELDS_TO_FETCH_ARCHIVE } from '../../../../utils/fields';
 
 describe('VersionsSidebarAPI', () => {
     const defaultFileId = '123';
@@ -24,7 +24,8 @@ describe('VersionsSidebarAPI', () => {
     };
     const mockPermissons = { can_delete: true, can_download: true, can_upload: true };
     const mockVersion = { id: defaultVersionId, permissions: mockPermissons };
-    const getInstance = (options = {}) => new VersionsSidebarAPI({ api: mockAPI, fileId: defaultFileId, ...options });
+    const getInstance = (options = {}) =>
+        new VersionsSidebarAPI({ api: mockAPI, fileId: defaultFileId, isArchiveFeatureEnabled: false, ...options });
 
     describe('deleteVersion', () => {
         test('should call deleteVersion', () => {
@@ -68,12 +69,22 @@ describe('VersionsSidebarAPI', () => {
     });
 
     describe('fetchFile', () => {
-        test('should call getFile', () => {
+        test('should call getFile without archive field when feature is disabled', () => {
             const instance = getInstance();
 
             expect(instance.fetchFile()).toBeInstanceOf(Promise);
             expect(fileAPI.getFile).toBeCalledWith(defaultFileId, expect.any(Function), expect.any(Function), {
                 fields: FILE_VERSION_FIELDS_TO_FETCH,
+                forceFetch: true,
+            });
+        });
+
+        test('should call getFile with archive field when feature is enabled', () => {
+            const instance = getInstance({ isArchiveFeatureEnabled: true });
+
+            expect(instance.fetchFile()).toBeInstanceOf(Promise);
+            expect(fileAPI.getFile).toBeCalledWith(defaultFileId, expect.any(Function), expect.any(Function), {
+                fields: FILE_VERSION_FIELDS_TO_FETCH_ARCHIVE,
                 forceFetch: true,
             });
         });

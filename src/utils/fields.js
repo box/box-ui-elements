@@ -160,6 +160,9 @@ const FILE_VERSION_FIELDS_TO_FETCH = [
     FIELD_VERSION_NUMBER,
 ];
 
+// Fields needed to get information on the current version of a file for file in archive
+const FILE_VERSION_FIELDS_TO_FETCH_ARCHIVE: Array<string> = FILE_VERSION_FIELDS_TO_FETCH.concat(FIELD_METADATA_ARCHIVE);
+
 // Fields needed to get versions for a file
 const FILE_VERSIONS_FIELDS_TO_FETCH = [
     FIELD_AUTHENTICATED_DOWNLOAD_URL, // Expensive field to fetch
@@ -282,6 +285,7 @@ export {
     FEED_FILE_VERSIONS_FIELDS_TO_FETCH,
     FILE_SHARED_LINK_FIELDS_TO_FETCH,
     FILE_VERSION_FIELDS_TO_FETCH,
+    FILE_VERSION_FIELDS_TO_FETCH_ARCHIVE,
     FILE_VERSIONS_FIELDS_TO_FETCH,
     fillMissingProperties,
     fillUserPlaceholder,
