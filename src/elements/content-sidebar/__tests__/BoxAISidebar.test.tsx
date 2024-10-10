@@ -2,7 +2,6 @@ import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { screen, render } from '../../../test-utils/testing-library';
 import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebar';
-import sidebarMessages from '../messages';
 
 const mockOnExpandClick = jest.fn();
 
@@ -24,13 +23,13 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     test('should have accessible "Expand" button', () => {
         renderComponent();
 
-        expect(screen.getByRole('button', sidebarMessages.expandBoxAI)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Expand' })).toBeInTheDocument();
     });
 
     test('should call onExpandClick when click "Expand" button', async () => {
         renderComponent();
 
-        const expandButton = screen.getByRole('button', sidebarMessages.expandBoxAI);
+        const expandButton = screen.getByRole('button', { name: 'Expand' });
         await userEvent.click(expandButton);
 
         expect(mockOnExpandClick).toHaveBeenCalled();
