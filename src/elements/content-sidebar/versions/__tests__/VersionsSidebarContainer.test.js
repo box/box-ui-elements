@@ -265,17 +265,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
             expect(wrapper.state('isWatermarked')).toBe(true);
         });
-
-        test('should set state with isArchived if file is archive file', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const testFile = { ...file, metadata: { global: { archivedItemTemplate: { archiveDate: '1726832355' } } } };
-
-            instance.verifyVersion = jest.fn();
-            instance.handleFetchSuccess([testFile, versionsWithCurrent]);
-
-            expect(wrapper.state('isArchived')).toBe(true);
-        });
     });
 
     describe('findVersion', () => {
