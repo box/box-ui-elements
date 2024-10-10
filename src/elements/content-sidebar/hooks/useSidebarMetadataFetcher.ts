@@ -31,22 +31,7 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 
-class ElementsError extends Error {
-    code: string;
-
-    type: 'error';
-
-    constructor(message: string, errorCode: string) {
-        super(message);
-        this.name = 'ElementsError';
-        this.code = errorCode;
-        this.message = message;
-        this.type = 'error';
-
-        // Set the prototype explicitly to maintain the instanceof check
-        Object.setPrototypeOf(this, ElementsError.prototype);
-    }
-}
+const wait = async ms => new Promise(resolve => setTimeout(resolve, ms));
 
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
@@ -208,18 +193,22 @@ function useSidebarMetadataFetcher(
     const extractSuggestions = React.useCallback(
         async (templateKey: string, fields: MetadataTemplateField[]) => {
             const aiAPI = api.getIntelligenceAPI();
+
+            await wait(1000);
+
             let answer = {};
             try {
                 answer = await aiAPI.extractStructured({
-                    items: [file],
+                    items: [{ id: file.id, type: file.type }],
                     fields,
                 });
             } catch (error) {
-                throw new ElementsError(error.message, ERROR_CODE_FETCH_METADATA_SUGGESTIONS);
+                onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
             }
 
             if (isEmpty(answer)) {
-                throw new ElementsError('No suggestions found.', ERROR_CODE_EMPTY_METADATA_SUGGESTIONS);
+                const error = new Error('No suggestions found.');
+                onError(error, ERROR_CODE_EMPTY_METADATA_SUGGESTIONS, { showNotification: true });
             }
 
             return fields.map(field => {
@@ -233,7 +222,7 @@ function useSidebarMetadataFetcher(
                 };
             });
         },
-        [api, file],
+        [api, file, onError],
     );
 
     React.useEffect(() => {

@@ -4,8 +4,12 @@ import {
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
+    type FetcherResponse,
+    type BaseOptionType,
 } from '@box/metadata-editor';
 import React from 'react';
+
+const noopTaxonomyFetcher = () => Promise.resolve({ options: [] } satisfies FetcherResponse<BaseOptionType>);
 
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
@@ -44,6 +48,7 @@ export const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             onSubmit={onSubmit}
             selectedTemplateInstance={template}
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+            taxonomyOptionsFetcher={noopTaxonomyFetcher}
         />
     );
 };
