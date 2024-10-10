@@ -31,8 +31,6 @@ export enum STATUS {
     SUCCESS = 'success',
 }
 
-const wait = async ms => new Promise(resolve => setTimeout(resolve, ms));
-
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
     extractSuggestions: (templateKey: string, fields: MetadataTemplateField[]) => Promise<MetadataTemplateField[]>;
@@ -193,8 +191,6 @@ function useSidebarMetadataFetcher(
     const extractSuggestions = React.useCallback(
         async (templateKey: string, fields: MetadataTemplateField[]) => {
             const aiAPI = api.getIntelligenceAPI();
-
-            await wait(1000);
 
             let answer = {};
             try {
