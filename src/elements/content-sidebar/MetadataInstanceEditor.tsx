@@ -1,16 +1,17 @@
 import {
-    AutofillContextProvider,
-    AutofillContextProviderProps,
     MetadataInstanceForm,
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
+    type FetcherResponse,
+    type BaseOptionType,
 } from '@box/metadata-editor';
 import React from 'react';
 
+const noopTaxonomyFetcher = () => Promise.resolve({ options: [] } satisfies FetcherResponse<BaseOptionType>);
+
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
-    fetchSuggestions: AutofillContextProviderProps['fetchSuggestions'];
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
@@ -24,7 +25,6 @@ export interface MetadataInstanceEditorProps {
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
-    fetchSuggestions,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
@@ -35,28 +35,20 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     setIsUnsavedChangesModalOpen,
     template,
 }) => {
-    const handleCancel = () => {
-        onCancel();
-    };
-
     return (
-        <AutofillContextProvider
-            fetchSuggestions={fetchSuggestions}
+        <MetadataInstanceForm
+            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-        >
-            <MetadataInstanceForm
-                areAiSuggestionsAvailable={areAiSuggestionsAvailable}
-                isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isDeleteButtonDisabled={isDeleteButtonDisabled}
-                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                onCancel={handleCancel}
-                onDelete={onDelete}
-                onDiscardUnsavedChanges={onDiscardUnsavedChanges}
-                onSubmit={onSubmit}
-                selectedTemplateInstance={template}
-                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
-            />
-        </AutofillContextProvider>
+            isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+            onCancel={onCancel}
+            onDelete={onDelete}
+            onDiscardUnsavedChanges={onDiscardUnsavedChanges}
+            onSubmit={onSubmit}
+            selectedTemplateInstance={template}
+            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+            taxonomyOptionsFetcher={noopTaxonomyFetcher}
+        />
     );
 };
 
