@@ -185,7 +185,7 @@ describe('MetadataInstanceEditor', () => {
             template,
         };
 
-        const { getByRole } = render(<MetadataInstanceEditor {...props} />);
+        const { getByRole } = renderWithAutofill(<MetadataInstanceEditor {...props} />);
         const combobox = getByRole('combobox', { name: 'States' });
 
         await userEvent.type(combobox, 'A');
