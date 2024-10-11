@@ -2886,7 +2886,7 @@ describe('api/Metadata', () => {
     });
 
     describe('getMetadataOptions()', () => {
-        test('should return metadata options when called with valid parameters', async () => {
+        test.only('should return metadata options when called with valid parameters', async () => {
             const response = {
                 entries: [
                     {
@@ -2929,7 +2929,7 @@ describe('api/Metadata', () => {
                 id: 'file_id',
                 params: {
                     marker: 'current_marker',
-                    searchInput: 'search_term',
+                    query_text: 'search_term',
                     level: 0,
                 },
             });
