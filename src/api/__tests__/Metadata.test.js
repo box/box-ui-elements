@@ -2886,7 +2886,7 @@ describe('api/Metadata', () => {
     });
 
     describe('getMetadataOptions()', () => {
-        test.only('should return metadata options when called with valid parameters', async () => {
+        test('should return metadata options when called with valid parameters', async () => {
             const response = {
                 entries: [
                     {
