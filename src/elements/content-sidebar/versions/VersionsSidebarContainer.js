@@ -12,18 +12,22 @@ import noop from 'lodash/noop';
 import { generatePath, withRouter } from 'react-router-dom';
 import type { Match, RouterHistory } from 'react-router-dom';
 import type { MessageDescriptor } from 'react-intl';
+import { withFeatureConsumer, isFeatureEnabled } from '../../common/feature-checking';
 import API from '../../../api';
+import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 import messages from './messages';
 import openUrlInsideIframe from '../../../utils/iframe';
 import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
+import type { FeatureConfig } from '../../common/feature-checking';
 import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 
 type Props = {
     api: API,
+    features: FeatureConfig,
     fileId: string,
     hasSidebarInitialized?: boolean,
     history: RouterHistory,
@@ -42,6 +46,7 @@ type Props = {
 
 type State = {
     error?: MessageDescriptor,
+    isArchived: boolean,
     isLoading: boolean,
     isWatermarked: boolean,
     versionCount: number,
@@ -66,6 +71,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     props: Props;
 
     state: State = {
+        isArchived: false,
         isLoading: true,
         isWatermarked: false,
         versionCount: Infinity,
@@ -168,6 +174,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     handleFetchError = (): void => {
         this.setState({
             error: messages.versionFetchError,
+            isArchived: false,
             isLoading: false,
             isWatermarked: false,
             versionCount: 0,
@@ -175,9 +182,10 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         });
     };
 
-    handleFetchSuccess = ([fileResponse, versionsResponse]): [BoxItem, FileVersions] => {
+    handleFetchSuccess = ([fileResponse, versionsResponse]: [BoxItem, FileVersions]): [BoxItem, FileVersions] => {
         const { api } = this.props;
         const { version_limit } = fileResponse;
+        const isArchived = !!getProp(fileResponse, FIELD_METADATA_ARCHIVE);
         const isWatermarked = getProp(fileResponse, 'watermark_info.is_watermarked', false);
         const versionLimit = version_limit !== null && version_limit !== undefined ? version_limit : Infinity;
         const versionsWithPermissions = api.getVersionsAPI(false).addPermissions(versionsResponse, fileResponse) || {};
@@ -186,6 +194,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState(
             {
                 error: undefined,
+                isArchived,
                 isLoading: false,
                 isWatermarked,
                 versionCount,
@@ -207,14 +216,14 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
     };
 
     initialize = (): void => {
-        this.api = new VersionsSidebarAPI(this.props);
+        const { api, features, fileId }: Props = this.props;
+        const isArchiveFeatureEnabled = isFeatureEnabled(features, 'contentSidebar.archive.enabled');
+
+        this.api = new VersionsSidebarAPI({ api, fileId, isArchiveFeatureEnabled });
     };
 
     fetchData = (): Promise<?[BoxItem, FileVersions]> => {
-        return this.api
-            .fetchData()
-            .then(this.handleFetchSuccess)
-            .catch(this.handleFetchError);
+        return this.api.fetchData().then(this.handleFetchSuccess).catch(this.handleFetchError);
     };
 
     findVersion = (versionId: ?string): ?BoxItemVersion => {
@@ -299,4 +308,5 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 }
 
 export type VersionsSidebarProps = Props;
-export default flow([withRouter, withAPIContext])(VersionsSidebarContainer);
+export { VersionsSidebarContainer as VersionsSidebarContainerComponent };
+export default flow([withRouter, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);

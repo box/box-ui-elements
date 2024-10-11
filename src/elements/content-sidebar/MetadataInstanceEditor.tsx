@@ -1,25 +1,24 @@
 import {
-    AutofillContextProvider,
     MetadataInstanceForm,
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
-    type BaseOptionType,
     type FetcherResponse,
+    type BaseOptionType,
     type PaginationQueryInput,
 } from '@box/metadata-editor';
 import React from 'react';
 
 export interface MetadataInstanceEditorProps {
+    areAiSuggestionsAvailable: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
-    template: MetadataTemplateInstance;
+    onDiscardUnsavedChanges: () => void;
     onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
-    onDiscardUnsavedChanges: () => void;
     taxonomyOptionsFetcher: (
         scope: string,
         templateKey: string,
@@ -27,43 +26,36 @@ export interface MetadataInstanceEditorProps {
         level: number,
         options: PaginationQueryInput,
     ) => Promise<FetcherResponse<BaseOptionType>>;
+    template: MetadataTemplateInstance;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
+    areAiSuggestionsAvailable,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
+    onCancel,
     onDelete,
+    onDiscardUnsavedChanges,
     onSubmit,
     setIsUnsavedChangesModalOpen,
     taxonomyOptionsFetcher,
     template,
-    onCancel,
-    onDiscardUnsavedChanges,
 }) => {
-    const handleCancel = () => {
-        onCancel();
-    };
-
     return (
-        <AutofillContextProvider
-            fetchSuggestions={() => Promise.resolve([])}
+        <MetadataInstanceForm
+            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-        >
-            <MetadataInstanceForm
-                areAiSuggestionsAvailable={true}
-                isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                isDeleteButtonDisabled={isDeleteButtonDisabled}
-                isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                selectedTemplateInstance={template}
-                onCancel={handleCancel}
-                onSubmit={onSubmit}
-                setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
-                onDelete={onDelete}
-                onDiscardUnsavedChanges={onDiscardUnsavedChanges}
-                taxonomyOptionsFetcher={taxonomyOptionsFetcher}
-            />
-        </AutofillContextProvider>
+            isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+            onCancel={onCancel}
+            onDelete={onDelete}
+            onDiscardUnsavedChanges={onDiscardUnsavedChanges}
+            onSubmit={onSubmit}
+            selectedTemplateInstance={template}
+            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+            taxonomyOptionsFetcher={taxonomyOptionsFetcher}
+        />
     );
 };
 

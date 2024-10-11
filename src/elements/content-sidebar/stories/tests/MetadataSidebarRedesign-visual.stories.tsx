@@ -206,7 +206,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
 
         headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(1);
-        expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['Custom Metadata']));
+        expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['My Template']));
 
         // cancel editing - back to list view
         const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
@@ -339,7 +339,7 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
         expect(templateMetadataOptionBAfterSwitch).toHaveAttribute('aria-disabled');
     },
 };
-    
+
 export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
         features: {

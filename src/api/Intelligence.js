@@ -75,6 +75,7 @@ class Intelligence extends Base {
             suggestionsResponse = await this.xhr.post({
                 url,
                 data: request,
+                id: `file_${request.items[0].id}`,
             });
         } catch (e) {
             const { status } = e;
