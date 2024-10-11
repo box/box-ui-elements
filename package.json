@@ -92,11 +92,7 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": [
-            "last 1 Chrome versions",
-            "last 1 Firefox versions",
-            "last 1 Safari versions"
-        ]
+        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
     },
     "husky": {
         "hooks": {
@@ -132,7 +128,7 @@
         "@box/cldr-data": "^34.2.0",
         "@box/frontend": "^10.0.0",
         "@box/languages": "^1.0.0",
-        "@box/metadata-editor": "^0.61.1",
+        "@box/metadata-editor": "0.64.0",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@chromatic-com/storybook": "^1.6.1",
@@ -370,8 +366,6 @@
         }
     },
     "msw": {
-        "workerDirectory": [
-            ".storybook/public"
-        ]
+        "workerDirectory": [".storybook/public"]
     }
 }
