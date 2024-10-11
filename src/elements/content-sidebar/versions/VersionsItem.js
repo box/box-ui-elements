@@ -27,6 +27,7 @@ import './VersionsItem.scss';
 
 type Props = {
     fileId: string,
+    isArchived?: boolean,
     isCurrent?: boolean,
     isSelected?: boolean,
     isWatermarked?: boolean,
@@ -51,6 +52,7 @@ const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 const VersionsItem = ({
     fileId,
+    isArchived = false,
     isCurrent = false,
     isSelected = false,
     isWatermarked = false,
@@ -104,10 +106,10 @@ const VersionsItem = ({
 
     // Version action helpers
     const canPreview = can_preview && !isDeleted && !isLimited && !isRestricted;
-    const showDelete = can_delete && !isDeleted && !isCurrent;
+    const showDelete = can_delete && !isDeleted && !isArchived && !isCurrent;
     const showDownload = can_download && !isDeleted && isDownloadable;
-    const showPromote = can_upload && !isDeleted && !isCurrent;
-    const showRestore = can_delete && isDeleted;
+    const showPromote = can_upload && !isDeleted && !isArchived && !isCurrent;
+    const showRestore = can_delete && isDeleted && !isArchived;
     const showPreview = canPreview && !isSelected;
     const hasActions = showDelete || showDownload || showPreview || showPromote || showRestore;
 
@@ -145,7 +147,7 @@ const VersionsItem = ({
                         />
                     </div>
 
-                    <div className="bcs-VersionsItem-info">
+                    <div className="bcs-VersionsItem-info" data-testid="bcs-VersionsItem-info">
                         {versionTimestamp && (
                             <time className="bcs-VersionsItem-date" dateTime={versionTime}>
                                 <ReadableTime
@@ -159,7 +161,7 @@ const VersionsItem = ({
                     </div>
 
                     {isRetained && (
-                        <div className="bcs-VersionsItem-retention">
+                        <div className="bcs-VersionsItem-retention" data-testid="bcs-VersionsItem-retention">
                             <VersionsItemRetention retention={retention} />
                         </div>
                     )}

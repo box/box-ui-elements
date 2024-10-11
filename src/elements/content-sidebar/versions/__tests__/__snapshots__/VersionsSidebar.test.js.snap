@@ -75,6 +75,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebar render should show th
   >
     <div
       className="bcs-Versions-menu"
+      data-testid="bcs-Versions-menu"
     >
       <Component
         versions={
