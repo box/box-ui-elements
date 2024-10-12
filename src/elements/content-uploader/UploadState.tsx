@@ -1,10 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { useIntl } from 'react-intl';
-import { HatWand } from '@box/blueprint-web-assets/illustrations/Medium';
+import { DiscoDanceParty, HatWand, UploadCloud } from '@box/blueprint-web-assets/illustrations/Medium';
 
-import UploadEmptyState from '../../icons/states/UploadEmptyState';
-import UploadSuccessState from '../../icons/states/UploadSuccessState';
 import UploadStateContent from './UploadStateContent';
 import type { View } from '../../common/types/core';
 
@@ -38,11 +36,11 @@ const UploadState = ({
     let content;
     switch (view) {
         case VIEW_ERROR:
-            icon = <HatWand aria-label={formatMessage(messages.uploadErrorState)} height={126} width={130} />;
+            icon = <HatWand aria-label={formatMessage(messages.uploadErrorState)} />;
             content = <UploadStateContent message={formatMessage(messages.uploadError)} />;
             break;
         case VIEW_UPLOAD_EMPTY:
-            icon = <UploadEmptyState title={formatMessage(messages.uploadEmptyState)} />;
+            icon = <UploadCloud aria-label={formatMessage(messages.uploadEmptyState)} />;
             /* eslint-disable no-nested-ternary */
             content =
                 canDrop && hasItems ? (
@@ -68,11 +66,11 @@ const UploadState = ({
             /* eslint-enable no-nested-ternary */
             break;
         case VIEW_UPLOAD_IN_PROGRESS:
-            icon = <UploadEmptyState title={formatMessage(messages.uploadEmptyState)} />;
+            icon = <UploadCloud aria-label={formatMessage(messages.uploadEmptyState)} />;
             content = <UploadStateContent message={formatMessage(messages.uploadInProgress)} />;
             break;
         case VIEW_UPLOAD_SUCCESS:
-            icon = <UploadSuccessState title={formatMessage(messages.uploadSuccessState)} />;
+            icon = <DiscoDanceParty aria-label={formatMessage(messages.uploadSuccessState)} />;
             content = (
                 <UploadStateContent
                     fileInputLabel={formatMessage(messages.uploadSuccessFileInput)}
