@@ -25,7 +25,7 @@ export const BoxAIInSidebar: StoryObj<typeof BoxAISidebar> = {
     },
 };
 
-export const ExpandButtonCheck: StoryObj<typeof BoxAISidebar> = {
+export const BoxAIWithExpandedView: StoryObj<typeof BoxAISidebar> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 

@@ -18,7 +18,6 @@ import { mark } from '../../utils/performance';
 
 import messages from '../common/messages';
 import sidebarMessages from './messages';
-import './BoxAISidebar.scss';
 
 const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 

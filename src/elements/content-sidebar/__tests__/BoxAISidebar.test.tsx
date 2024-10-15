@@ -14,6 +14,10 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         render(<BoxAISidebarComponent {...defaultProps} {...props} />);
     };
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     test('should render title', () => {
         renderComponent();
 
