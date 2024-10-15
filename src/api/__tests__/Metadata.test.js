@@ -2929,7 +2929,7 @@ describe('api/Metadata', () => {
                 id: 'file_id',
                 params: {
                     marker: 'current_marker',
-                    searchInput: 'search_term',
+                    query_text: 'search_term',
                     level: 0,
                 },
             });
