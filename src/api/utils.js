@@ -7,6 +7,8 @@
 import type Xhr from '../utils/Xhr';
 import type { Comment } from '../common/types/feed';
 import { getAbortError } from '../utils/error';
+import type { MetadataTemplateField, MetadataFieldValue } from '../common/types/metadata';
+import { FIELD_TYPE_TAXONOMY } from '../features/metadata-instance-fields/constants';
 
 /**
  * Formats comment data (including replies) for use in components.
@@ -25,6 +27,20 @@ export const formatComment = (comment: Comment): Comment => {
     }
 
     return formattedComment;
+};
+
+export const formatMetadataFieldValue = (
+    field: MetadataTemplateField,
+    value: MetadataFieldValue,
+): MetadataFieldValue => {
+    if (field.type === FIELD_TYPE_TAXONOMY) {
+        return value.map((option: { id: string, displayName: string }) => ({
+            value: option.id,
+            displayValue: option.displayName,
+        }));
+    }
+
+    return value;
 };
 
 export const handleOnAbort = (xhr: Xhr) => {

@@ -443,6 +443,19 @@ describe('api/Metadata', () => {
                 id: 'file_id',
             });
         });
+        test('should apply hydrated query string param for isMetadataRedesign', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    entries: [],
+                },
+            });
+            await metadata.getInstances('id', true);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'metadata_url?view=hydrated',
+                id: 'file_id',
+            });
+        });
     });
 
     describe('getUserAddableTemplates()', () => {
