@@ -34,7 +34,7 @@ function BoxAISidebar({ onExpandClick }: BoxAISidebarProps) {
         <SidebarContent
             actions={
                 <IconButton
-                    aria-label={formatMessage(sidebarMessages.expandBoxAI)}
+                    aria-label={formatMessage(sidebarMessages.boxAISidebarExpand)}
                     icon={ArrowsExpand}
                     onClick={onExpandClick}
                     size="x-small"
