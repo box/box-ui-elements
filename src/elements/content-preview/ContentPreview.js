@@ -27,6 +27,7 @@ import AsyncLoad from '../common/async-load';
 import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
+import { withAnnotations, withAnnotatorContext } from '../common/annotator-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { PREVIEW_FIELDS_TO_FETCH } from '../../utils/fields';
@@ -40,12 +41,6 @@ import PreviewHeader from './preview-header';
 import PreviewMask from './PreviewMask';
 import PreviewNavigation from './PreviewNavigation';
 import Providers from '../common/Providers';
-import {
-    withAnnotations,
-    WithAnnotationsProps,
-    withAnnotatorContext,
-    WithAnnotatorContextProps,
-} from '../common/annotator-context';
 import {
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_APP,
@@ -66,6 +61,7 @@ import type { RequestOptions, ErrorContextProps, ElementsXhrError } from '../../
 import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/types/core';
 import type { VersionChangeCallback } from '../content-sidebar/versions';
 import type { FeatureConfig } from '../common/feature-checking';
+import type { WithAnnotationsProps, WithAnnotatorContextProps } from '../common/annotator-context';
 import type APICache from '../../utils/Cache';
 
 import '../common/fonts.scss';
