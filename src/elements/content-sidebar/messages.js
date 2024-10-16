@@ -32,6 +32,11 @@ const messages = defineMessages({
         defaultMessage: 'Tasks',
         description: 'Dropdown option for filtering tasks from activity list',
     },
+    boxAISidebarExpand: {
+        id: 'be.contentSidebar.boxAI.expand',
+        description: 'Default message for Box AI expand button in sidebar header',
+        defaultMessage: 'Expand',
+    },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
         defaultMessage: 'Sign documents or send signature requests, right from where your content lives',
@@ -116,11 +121,6 @@ const messages = defineMessages({
         id: 'be.contentSidebar.editTask.general.title',
         defaultMessage: 'Modify General Task',
         description: 'modal title for when editing an existing general task',
-    },
-    expandBoxAI: {
-        id: 'be.contentSidebarExpandBoxAI',
-        description: 'Default message for Box AI expand button in sidebar header',
-        defaultMessage: 'Expand',
     },
 });
 
