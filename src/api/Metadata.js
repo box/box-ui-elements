@@ -1111,10 +1111,10 @@ class Metadata extends File {
         }
 
         const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
-        const { marker, searchInput, signal } = options;
+        const { marker, searchInput: query_text, signal } = options;
         const params = {
             ...(marker ? { marker } : {}),
-            ...(searchInput ? { searchInput } : {}),
+            ...(query_text ? { query_text } : {}),
             ...(level || level === 0 ? { level } : {}),
         };
 

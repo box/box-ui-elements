@@ -6,6 +6,8 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 
+import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Fill';
+import { IconButton } from '@box/blueprint-web';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
@@ -15,21 +17,30 @@ import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 
 import messages from '../common/messages';
+import sidebarMessages from './messages';
 
 const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
 export interface BoxAISidebarProps {
-    onExpandPressed: () => void;
+    onExpandClick: () => void;
 }
 
-function BoxAISidebar() {
+function BoxAISidebar({ onExpandClick }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
 
     return (
         <SidebarContent
-            className={'bcs-BoxAISidebar'}
+            actions={
+                <IconButton
+                    aria-label={formatMessage(sidebarMessages.boxAISidebarExpand)}
+                    icon={ArrowsExpand}
+                    onClick={onExpandClick}
+                    size="x-small"
+                />
+            }
+            className="bcs-BoxAISidebar"
             sidebarView={SIDEBAR_VIEW_BOXAI}
             title={formatMessage(messages.sidebarBoxAITitle)}
         >

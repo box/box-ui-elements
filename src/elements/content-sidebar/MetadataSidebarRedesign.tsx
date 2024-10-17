@@ -15,6 +15,7 @@ import {
     type JSONPatchOperations,
     type MetadataTemplate,
     type MetadataTemplateInstance,
+    type PaginationQueryInput,
 } from '@box/metadata-editor';
 
 import API from '../../api';
@@ -35,6 +36,7 @@ import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
+import { metadataTaxonomyFetcher } from './fetchers/metadataTaxonomyFetcher';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -169,6 +171,14 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
+    const taxonomyOptionsFetcher = async (
+        scope: string,
+        templateKey: string,
+        fieldKey: string,
+        level: number,
+        options: PaginationQueryInput,
+    ) => metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options);
+
     return (
         <SidebarContent
             actions={metadataDropdown}
@@ -198,6 +208,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                             onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
                             onSubmit={handleSubmit}
                             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                            taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
                         />
                     )}
