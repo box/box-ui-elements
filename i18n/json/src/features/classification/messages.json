@@ -1,0 +1,82 @@
+[
+  {
+    "id": "boxui.classification.add",
+    "description": "Button to add classification on an item",
+    "defaultMessage": "Add"
+  },
+  {
+    "id": "boxui.classification.classification",
+    "description": "Header for classification section in sidebar",
+    "defaultMessage": "Classification"
+  },
+  {
+    "id": "boxui.classification.definition",
+    "description": "Header displayed above the classification definition",
+    "defaultMessage": "Definition"
+  },
+  {
+    "id": "boxui.classification.edit",
+    "description": "Button to edit classification on an item",
+    "defaultMessage": "Edit"
+  },
+  {
+    "id": "boxui.classification.missing",
+    "description": "Default message for classification in the sidebar when there is none",
+    "defaultMessage": "Not classified"
+  },
+  {
+    "id": "boxui.classification.modifiedByLabel",
+    "description": "Label displayed above details about when a classification was last modified.",
+    "defaultMessage": "Classification Label"
+  },
+  {
+    "id": "boxui.classification.importedBy",
+    "description": "Sentence stating which user or service imported a classification and on what date.",
+    "defaultMessage": "Imported from {modifiedBy} on {modifiedAt}"
+  },
+  {
+    "id": "boxui.classification.modifiedBy",
+    "description": "Sentence stating which user or service modified a classification and on what date.",
+    "defaultMessage": "Applied by {modifiedBy} on {modifiedAt}"
+  },
+  {
+    "id": "boxui.classification.classificationYellow",
+    "description": "Classification label color name as yellow",
+    "defaultMessage": "Yellow"
+  },
+  {
+    "id": "boxui.classification.classificationOrange",
+    "description": "Classification label color name as orange",
+    "defaultMessage": "Orange"
+  },
+  {
+    "id": "boxui.classification.classificationRed",
+    "description": "Classification label color name as red",
+    "defaultMessage": "Red"
+  },
+  {
+    "id": "boxui.classification.classificationPurple",
+    "description": "Classification label color name as purple",
+    "defaultMessage": "Purple"
+  },
+  {
+    "id": "boxui.classification.classificationLightBlue",
+    "description": "Classification label color name as light blue",
+    "defaultMessage": "Light Blue"
+  },
+  {
+    "id": "boxui.classification.classificationDarkBlue",
+    "description": "Classification label color name as dark blue",
+    "defaultMessage": "Dark Blue"
+  },
+  {
+    "id": "boxui.classification.classificationGreen",
+    "description": "Classification label color name as green",
+    "defaultMessage": "Green"
+  },
+  {
+    "id": "boxui.classification.classificationGrey",
+    "description": "Classification label color name as grey",
+    "defaultMessage": "Grey"
+  }
+]
