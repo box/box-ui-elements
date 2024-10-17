@@ -1,8 +1,14 @@
 import { type StoryObj } from '@storybook/react';
 import { fn, userEvent, within } from '@storybook/test';
 import React, { type ComponentProps } from 'react';
+import { http, HttpResponse } from 'msw';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
+import {
+    mockEnterpriseMetadataTemplates,
+    mockFileRequest,
+    mockMetadataInstances,
+} from './__mocks__/MetadataSidebarRedesignedMocks';
 
 const fileIdWithMetadata = global.FILE_ID;
 const mockFeatures = {
@@ -31,6 +37,21 @@ export default {
         hasMetadata: true,
         token: global.TOKEN,
         metadataSidebarProps: defaultMetadataSidebarProps,
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(mockFileRequest.url, () => {
+                    return HttpResponse.json(mockFileRequest.response);
+                }),
+                http.get(mockMetadataInstances.url, () => {
+                    return HttpResponse.json(mockMetadataInstances.response);
+                }),
+                http.get(mockEnterpriseMetadataTemplates.url, () => {
+                    return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
+                }),
+            ],
+        },
     },
     render: args => {
         return <ContentSidebar {...args} />;

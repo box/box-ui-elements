@@ -1,12 +1,21 @@
 import { type ComponentProps } from 'react';
 import { expect, userEvent, within, fn, screen } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
+import { http, HttpResponse } from 'msw';
 import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
+import {
+    fileId,
+    fileIdWithoutMetadata,
+    mockEmptyMetadataInstances,
+    mockEnterpriseMetadataTemplates,
+    mockFileRequest,
+    mockFileRequestWithoutMetadata,
+    mockMetadataInstances,
+} from '../__mocks__/MetadataSidebarRedesignedMocks';
 
-const fileIdWithMetadata = global.FILE_ID;
-const fileWithoutMetadata = '416047501580';
+const fileIdWithMetadata = fileId;
 const token = global.TOKEN;
 
 const defaultMetadataArgs = {
@@ -45,7 +54,7 @@ export const AddTemplateDropdownMenuOn = {
 
 export const AddTemplateDropdownMenuOnEmpty = {
     args: {
-        fileId: '416047501580',
+        fileId: fileIdWithoutMetadata,
         metadataSidebarProps: {
             isBoxAiSuggestionsEnabled: true,
             isFeatureEnabled: true,
@@ -82,6 +91,25 @@ export default {
     },
     parameters: {
         ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: [
+                http.get(mockFileRequest.url, () => {
+                    return HttpResponse.json(mockFileRequest.response);
+                }),
+                http.get(mockFileRequestWithoutMetadata.url, () => {
+                    return HttpResponse.json(mockFileRequestWithoutMetadata.response);
+                }),
+                http.get(mockMetadataInstances.url, () => {
+                    return HttpResponse.json(mockMetadataInstances.response);
+                }),
+                http.get(mockEmptyMetadataInstances.url, () => {
+                    return HttpResponse.json(mockEmptyMetadataInstances.response);
+                }),
+                http.get(mockEnterpriseMetadataTemplates.url, () => {
+                    return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
+                }),
+            ],
+        },
     },
 };
 
@@ -104,7 +132,7 @@ export const AddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign>
 
 export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
-        fileId: '416047501580',
+        fileId: fileIdWithoutMetadata,
         metadataSidebarProps: defaultMetadataSidebarProps,
     },
     play: async ({ canvasElement }) => {
@@ -134,7 +162,7 @@ export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof M
 
 export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
-        fileId: fileWithoutMetadata,
+        fileId: fileIdWithoutMetadata,
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
         },
@@ -147,7 +175,7 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
 
 export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
-        fileId: fileWithoutMetadata,
+        fileId: fileIdWithoutMetadata,
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
             isBoxAiSuggestionsEnabled: false,
@@ -157,7 +185,7 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
 
 export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
-        fileId: '416047501580',
+        fileId: fileIdWithoutMetadata,
         metadataSidebarProps: defaultMetadataSidebarProps,
     },
     play: async ({ canvasElement }) => {
@@ -173,7 +201,7 @@ export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof Metadata
 
 export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
-        fileId: '416047501580',
+        fileId: fileIdWithoutMetadata,
         metadataSidebarProps: defaultMetadataSidebarProps,
     },
     play: async ({ canvasElement }) => {
@@ -256,7 +284,7 @@ export const DeleteButtonIsEnabledWhenEditingMetadataTemplateInstance: StoryObj<
 
 export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
-        fileId: '416047501580',
+        fileId: fileIdWithoutMetadata,
         metadataSidebarProps: defaultMetadataSidebarProps,
     },
     play: async ({ canvasElement }) => {
