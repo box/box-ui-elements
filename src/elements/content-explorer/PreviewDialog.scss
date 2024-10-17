@@ -1,0 +1,16 @@
+[class^='bp_modal_module_content'].bce-PreviewDialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    display: grid;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    inset: 0;
+    border-radius: 0;
+
+    .be.bcpr {
+        height: 100vh;
+    }
+}
