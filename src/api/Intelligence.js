@@ -5,13 +5,13 @@
  */
 
 import getProp from 'lodash/get';
-import { QuestionType } from '@box/box-ai-content-answers';
-import type { BoxItem } from '../common/types/core';
-import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
-import { isUserCorrectableError } from '../utils/error';
+import type { QuestionType } from '@box/box-ai-content-answers';
 import Base from './Base';
+import { isUserCorrectableError } from '../utils/error';
 import { AiExtractResponse } from './schemas/AiExtractResponse';
 import { AiExtractStructured } from './schemas/AiExtractStructured';
+import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
+import type { BoxItem } from '../common/types/core';
 
 class Intelligence extends Base {
     /**
