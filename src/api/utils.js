@@ -16,7 +16,7 @@ import { FIELD_TYPE_TAXONOMY } from '../features/metadata-instance-fields/consta
  * @param {Comment} comment - An individual comment entry from the API
  * @return {Comment} Updated comment
  */
-export const formatComment = (comment: Comment): Comment => {
+const formatComment = (comment: Comment): Comment => {
     const formattedComment = {
         ...comment,
         tagged_message: comment.message,
@@ -29,11 +29,8 @@ export const formatComment = (comment: Comment): Comment => {
     return formattedComment;
 };
 
-export const formatMetadataFieldValue = (
-    field: MetadataTemplateField,
-    value: MetadataFieldValue,
-): MetadataFieldValue => {
-    if (field.type === FIELD_TYPE_TAXONOMY) {
+const formatMetadataFieldValue = (field: MetadataTemplateField, value: MetadataFieldValue): MetadataFieldValue => {
+    if (field.type === FIELD_TYPE_TAXONOMY && Array.isArray(value)) {
         return value.map((option: { id: string, displayName: string }) => ({
             value: option.id,
             displayValue: option.displayName,
@@ -43,12 +40,10 @@ export const formatMetadataFieldValue = (
     return value;
 };
 
-export const handleOnAbort = (xhr: Xhr) => {
+const handleOnAbort = (xhr: Xhr) => {
     xhr.abort();
 
     throw getAbortError();
 };
 
-export default {
-    formatComment,
-};
+export { formatComment, formatMetadataFieldValue, handleOnAbort };

@@ -904,7 +904,7 @@ class Metadata extends File {
                 }
 
                 // API expects values as an array of strings
-                if (obj.type === 'taxonomy' && value) {
+                if (obj.type === 'taxonomy' && value && Array.isArray(value)) {
                     value = value.map(option => option.value);
                 }
 
