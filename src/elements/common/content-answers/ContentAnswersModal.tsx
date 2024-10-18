@@ -15,12 +15,10 @@ import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from './con
 import withCurrentUser from '../current-user';
 
 // @ts-ignore: no ts definition
-// eslint-disable-next-line import/named
 import { BoxItem, User } from '../../../common/types/core';
 // @ts-ignore: no ts definition
 import APIFactory from '../../../api';
 // @ts-ignore: no ts definition
-// eslint-disable-next-line import/named
 import { ElementsXhrError } from '../../common/types/api';
 
 import messages from './messages';

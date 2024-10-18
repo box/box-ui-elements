@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-
-import ContentAnswers from '../../../common/content-answers';
 import PreviewHeader from '..';
 
 describe('elements/content-preview/preview-header/PreviewHeader', () => {
@@ -31,7 +29,7 @@ describe('elements/content-preview/preview-header/PreviewHeader', () => {
         const contentAnswersProps = { show };
         const wrapper = getWrapper({ contentAnswersProps, file });
 
-        expect(wrapper.exists(ContentAnswers)).toBe(expected);
+        expect(wrapper.exists('.bcpr-PreviewHeader-contentAnswers')).toBe(expected);
     });
 
     it('should render ContentAnswers correctly and provided the correct props', () => {
@@ -41,7 +39,7 @@ describe('elements/content-preview/preview-header/PreviewHeader', () => {
             contentAnswersProps,
             file,
         });
-        expect(wrapper.find(ContentAnswers).prop('file')).toBe(file);
+        expect(wrapper.find('.bcpr-PreviewHeader-contentAnswers').prop('file')).toBe(file);
     });
 
     test.each([
