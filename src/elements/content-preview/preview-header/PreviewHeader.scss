@@ -89,6 +89,12 @@
 .bcpr-PreviewHeader-controls {
     display: flex;
 
+    .bcpr-PreviewHeader-contentAnswers {
+        display: flex;
+        align-items: center;
+        padding: 0 5px;
+    }
+
     .be & .bcpr-bcow-btn {
         margin: 0 10px 0 0;
         padding: 0 5px;

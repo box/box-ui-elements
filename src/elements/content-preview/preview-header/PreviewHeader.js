@@ -10,8 +10,6 @@ import type { IntlShape } from 'react-intl';
 import classNames from 'classnames';
 import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
-// $FlowFixMe typescript component
-import ContentAnswers from '../../common/content-answers';
 import FileInfo from './FileInfo';
 import IconClose from '../../../icons/general/IconClose';
 import IconDownload from '../../../icons/general/IconDownloadSolid';
@@ -42,6 +40,9 @@ type Props = {
     token: ?string,
 };
 
+const LoadableContentAnswers = AsyncLoad({
+    loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-answers" */ '../../common/content-answers'),
+});
 const LoadableContentOpenWith = AsyncLoad({
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../../content-open-with'),
 });
@@ -101,7 +102,13 @@ const PreviewHeader = ({
                                     {...contentOpenWithProps}
                                 />
                             )}
-                            {shouldRenderAnswers && <ContentAnswers file={file} {...contentAnswersProps} />}
+                            {shouldRenderAnswers && (
+                                <LoadableContentAnswers
+                                    className="bcpr-PreviewHeader-contentAnswers"
+                                    file={file}
+                                    {...contentAnswersProps}
+                                />
+                            )}
                             {canAnnotate && (
                                 <>
                                     <PlainButton
