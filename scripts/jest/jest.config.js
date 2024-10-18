@@ -4,6 +4,7 @@ module.exports = {
     collectCoverageFrom: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', '!**/node_modules/**', '!**/__tests__/**'],
     coverageDirectory: '<rootDir>/reports',
     coveragePathIgnorePatterns: ['\\.stories.*$', 'src/icon/*', 'src/icons/*', 'src/illustration'],
+    coverageReporters: ['clover', 'json', 'lcov', 'text', 'json-summary'],
     globalSetup: '<rootDir>/scripts/jest/env-setup.js',
     moduleNameMapper: {
         'box-ui-elements-locale-data': '<rootDir>/i18n/en-US.js',
