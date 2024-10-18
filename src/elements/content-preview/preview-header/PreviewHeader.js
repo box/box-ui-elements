@@ -41,6 +41,7 @@ type Props = {
 };
 
 const LoadableContentAnswers = AsyncLoad({
+    // $FlowFixMe TypeScript component
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-answers" */ '../../common/content-answers'),
 });
 const LoadableContentOpenWith = AsyncLoad({
