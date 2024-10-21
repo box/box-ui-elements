@@ -7,6 +7,8 @@
 import type Xhr from '../utils/Xhr';
 import type { Comment } from '../common/types/feed';
 import { getAbortError } from '../utils/error';
+import type { MetadataTemplateField, MetadataFieldValue } from '../common/types/metadata';
+import { FIELD_TYPE_TAXONOMY } from '../features/metadata-instance-fields/constants';
 
 /**
  * Formats comment data (including replies) for use in components.
@@ -14,7 +16,7 @@ import { getAbortError } from '../utils/error';
  * @param {Comment} comment - An individual comment entry from the API
  * @return {Comment} Updated comment
  */
-export const formatComment = (comment: Comment): Comment => {
+const formatComment = (comment: Comment): Comment => {
     const formattedComment = {
         ...comment,
         tagged_message: comment.message,
@@ -27,12 +29,21 @@ export const formatComment = (comment: Comment): Comment => {
     return formattedComment;
 };
 
-export const handleOnAbort = (xhr: Xhr) => {
+const formatMetadataFieldValue = (field: MetadataTemplateField, value: MetadataFieldValue): MetadataFieldValue => {
+    if (field.type === FIELD_TYPE_TAXONOMY && Array.isArray(value)) {
+        return value.map((option: { id: string, displayName: string }) => ({
+            value: option.id,
+            displayValue: option.displayName,
+        }));
+    }
+
+    return value;
+};
+
+const handleOnAbort = (xhr: Xhr) => {
     xhr.abort();
 
     throw getAbortError();
 };
 
-export default {
-    formatComment,
-};
+export { formatComment, formatMetadataFieldValue, handleOnAbort };

@@ -25,6 +25,7 @@ import { handleOnAbort } from '../utils';
 let metadata: Metadata;
 
 jest.mock('../utils', () => ({
+    ...jest.requireActual('../utils'),
     handleOnAbort: jest.fn(),
 }));
 
@@ -443,6 +444,19 @@ describe('api/Metadata', () => {
                 id: 'file_id',
             });
         });
+        test('should apply hydrated query string param for isMetadataRedesign', async () => {
+            metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('metadata_url');
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({
+                data: {
+                    entries: [],
+                },
+            });
+            await metadata.getInstances('id', true);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'metadata_url?view=hydrated',
+                id: 'file_id',
+            });
+        });
     });
 
     describe('getUserAddableTemplates()', () => {
@@ -810,7 +824,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -865,7 +879,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, true);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -922,7 +936,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -980,7 +994,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1037,7 +1051,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).not.toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
@@ -1092,7 +1106,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).not.toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.getEditors).not.toHaveBeenCalled();
@@ -1132,7 +1146,7 @@ describe('api/Metadata', () => {
             expect(metadata.isDestroyed).toHaveBeenCalled();
             expect(metadata.getCache).toHaveBeenCalled();
             expect(metadata.getMetadataCacheKey).toHaveBeenCalledWith(file.id);
-            expect(metadata.getInstances).toHaveBeenCalledWith(file.id);
+            expect(metadata.getInstances).toHaveBeenCalledWith(file.id, false);
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'global');
             expect(metadata.getTemplates).toHaveBeenCalledWith(file.id, 'enterprise');
             expect(metadata.extractClassification).toBeCalledWith('id', 'instances');
