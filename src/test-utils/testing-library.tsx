@@ -4,7 +4,6 @@ import { render, type RenderOptions } from '@testing-library/react';
 // Data Providers
 import { TooltipProvider } from '@box/blueprint-web';
 import { IntlProvider } from 'react-intl';
-
 import { FeatureProvider } from '../elements/common/feature-checking';
 
 jest.unmock('react-intl');
