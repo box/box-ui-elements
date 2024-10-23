@@ -1,5 +1,5 @@
 import type { PaginationQueryInput } from '@box/metadata-editor';
-import { metadataTaxonomyFetcher, metadataTaxonomyNodeFetcher } from '../fetchers/metadataTaxonomyFetcher';
+import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from '../fetchers/metadataTaxonomyFetcher';
 import type API from '../../../api';
 
 describe('metadataTaxonomyFetcher', () => {
@@ -127,7 +127,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
         apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels.mockResolvedValue(mockTaxonomyLevels);
         apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockResolvedValue(mockTaxonomyNode);
 
-        const result = await metadataTaxonomyNodeFetcher(apiMock, scope, taxonomyKey, nodeID);
+        const result = await metadataTaxonomyNodeAncestorsFetcher(apiMock, scope, taxonomyKey, nodeID);
 
         const expectedResult = [
             {
@@ -170,7 +170,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
         apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels.mockResolvedValue(mockTaxonomyLevels);
         apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockResolvedValue(mockTaxonomyNode);
 
-        const result = await metadataTaxonomyNodeFetcher(apiMock, scope, taxonomyKey, nodeID);
+        const result = await metadataTaxonomyNodeAncestorsFetcher(apiMock, scope, taxonomyKey, nodeID);
 
         const expectedResult = [
             {
@@ -189,13 +189,17 @@ describe('metadataNodeTaxonomiesFetcher', () => {
         const error = new Error('API Error');
         apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels.mockRejectedValue(error);
 
-        await expect(metadataTaxonomyNodeFetcher(apiMock, scope, taxonomyKey, nodeID)).rejects.toThrow('API Error');
+        await expect(metadataTaxonomyNodeAncestorsFetcher(apiMock, scope, taxonomyKey, nodeID)).rejects.toThrow(
+            'API Error',
+        );
     });
 
     test('should throw an error if getMetadataTaxonomyNode fails', async () => {
         const error = new Error('API Error');
         apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockRejectedValue(error);
 
-        await expect(metadataTaxonomyNodeFetcher(apiMock, scope, taxonomyKey, nodeID)).rejects.toThrow('API Error');
+        await expect(metadataTaxonomyNodeAncestorsFetcher(apiMock, scope, taxonomyKey, nodeID)).rejects.toThrow(
+            'API Error',
+        );
     });
 });

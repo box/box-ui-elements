@@ -25,7 +25,12 @@ export const metadataTaxonomyFetcher = async (
     };
 };
 
-export const metadataTaxonomyNodeFetcher = async (api: API, scope: string, taxonomyKey: string, nodeID: string) => {
+export const metadataTaxonomyNodeAncestorsFetcher = async (
+    api: API,
+    scope: string,
+    taxonomyKey: string,
+    nodeID: string,
+) => {
     const [metadataTaxonomyLevels, metadataTaxonomyNode] = await Promise.all([
         api.getMetadataAPI(false).getMetadataTaxonomyLevels(scope, taxonomyKey),
         api.getMetadataAPI(false).getMetadataTaxonomyNode(scope, taxonomyKey, nodeID, true),
