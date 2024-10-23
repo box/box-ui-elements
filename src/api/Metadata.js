@@ -33,6 +33,8 @@ import {
     ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     TYPE_FILE,
+    ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE,
+    ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS,
 } from '../constants';
 
 import type { RequestOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
@@ -1147,6 +1149,87 @@ class Metadata extends File {
         });
 
         return getProp(metadataOptions, 'data', {});
+    }
+
+    /**
+     * Build URL for metadata taxonomy levels.
+     *
+     * @param scope
+     * @param taxonomyKey
+     * @returns {`${string}/metadata_taxonomies/${string}/${string}`}
+     */
+    getMetadataTaxonomyLevelsUrl(scope: string, taxonomyKey: string): string {
+        return `${this.getBaseApiUrl()}/metadata_taxonomies/${scope}/${taxonomyKey}`;
+    }
+
+    /**
+     * Gets taxonomy levels associated with a taxonomy key.
+     *
+     * @param scope
+     * @param taxonomyKey
+     * @param nodeID
+     * @returns {Promise<MetadataTaxonomyLevels>}
+     */
+    async getMetadataTaxonomyLevels(scope: string, taxonomyKey: string) {
+        this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS;
+
+        if (!scope) {
+            throw new Error('Missing scope');
+        }
+
+        if (!taxonomyKey) {
+            throw new Error('Missing taxonomyKey');
+        }
+
+        const url = this.getMetadataTaxonomyLevelsUrl(scope, taxonomyKey);
+
+        const metadataTaxonomyLevels = await this.xhr.get({ url });
+
+        return getProp(metadataTaxonomyLevels, 'data', {});
+    }
+
+    /**
+     * Build URL for metadata taxonomies associated to a taxonomy node ID.
+     *
+     * @param scope
+     * @param taxonomyKey
+     * @param nodeID
+     * @param includeAncestors
+     * @returns {`${string}/metadata_taxonomies/${string}/${string}/nodes/${string}`}
+     */
+    getMetadataTaxonomyNodeUrl(scope: string, taxonomyKey: string, nodeID: string, includeAncestors?: boolean): string {
+        return `${this.getBaseApiUrl()}/metadata_taxonomies/${scope}/${taxonomyKey}/nodes/${nodeID}${includeAncestors && '?include-ancestors=true'}`;
+    }
+
+    /**
+     * Gets info associated with a taxonomy node.
+     *
+     * @param scope
+     * @param taxonomyKey
+     * @param nodeID
+     * @param includeAncestors
+     * @returns {Promise<MetadataTaxonomyNode>}
+     */
+    async getMetadataTaxonomyNode(scope: string, taxonomyKey: string, nodeID: string, includeAncestors?: boolean) {
+        this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE;
+
+        if (!nodeID) {
+            throw getBadItemError();
+        }
+
+        if (!scope) {
+            throw new Error('Missing scope');
+        }
+
+        if (!taxonomyKey) {
+            throw new Error('Missing taxonomyKey');
+        }
+
+        const url = this.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, includeAncestors);
+
+        const metadataTaxonomyNode = await this.xhr.get({ url });
+
+        return getProp(metadataTaxonomyNode, 'data', {});
     }
 }
 
