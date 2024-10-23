@@ -1214,7 +1214,7 @@ class Metadata extends File {
         this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE;
 
         if (!nodeID) {
-            throw getBadItemError();
+            throw new Error('Missing nodeID');
         }
 
         if (!scope) {
