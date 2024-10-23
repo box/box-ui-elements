@@ -3010,9 +3010,10 @@ describe('api/Metadata', () => {
     describe('getMetadataTaxonomyLevels', () => {
         const scope = 'enterprise';
         const taxonomyKey = '12345';
-        const url = metadata.getMetadataTaxonomyLevelsUrl(scope, taxonomyKey);
 
         it('should build getMetadataTaxonomyLevelsUrl correctly', () => {
+            const url = metadata.getMetadataTaxonomyLevelsUrl(scope, taxonomyKey);
+
             expect(url).toBe(`https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}`);
         });
 
@@ -3037,14 +3038,18 @@ describe('api/Metadata', () => {
                     ],
                 },
             };
-            xhrMock.get.mockResolvedValue(mockResponse);
-            getProp.mockReturnValue(mockResponse.data);
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: mockResponse });
+            metadata.getMetadataTaxonomyLevelsUrl = jest.fn().mockReturnValueOnce('levels_url');
 
             const result = await metadata.getMetadataTaxonomyLevels(scope, taxonomyKey);
 
-            expect(xhrMock.get).toHaveBeenCalledWith({ url });
-            expect(getProp).toHaveBeenCalledWith(mockResponse, 'data', {});
-            expect(result).toEqual(mockResponse.data);
+            expect(result).toEqual(mockResponse);
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS);
+            expect(metadata.getMetadataTaxonomyLevelsUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'levels_url',
+            });
         });
 
         it('should throw an error if scope is missing', async () => {
@@ -3069,39 +3074,44 @@ describe('api/Metadata', () => {
         const scope = 'enterprise';
         const taxonomyKey = '12345';
         const nodeID = '67890';
-        const url = metadata.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, true);
-        const mockResponse = {
-            data: {
-                id: 'this-is-a-node-id',
-                displayName: 'Florida',
-                level: 2,
-                createdAt: '2024-10-09 13:04:28',
-                updatedAt: '2024-10-09 13:04:28',
-                ancestors: [
-                    {
-                        id: 'this-is-a-parent-node-id',
-                        displayName: 'United States',
-                        level: 1,
-                    },
-                ],
-            },
-        };
 
         it('should build getMetadataTaxonomyNodeUrl correctly', () => {
+            const url = metadata.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, true);
+
             expect(url).toBe(
-                `https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}/node/${nodeID}?include_ancestors=true`,
+                `https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}/nodes/${nodeID}?include-ancestors=true`,
             );
         });
 
         it('should fetch metadata taxonomy node successfully with ancestors', async () => {
-            xhrMock.get.mockResolvedValue(mockResponse);
-            getProp.mockReturnValue(mockResponse.data);
+            const mockResponse = {
+                data: {
+                    id: 'this-is-a-node-id',
+                    displayName: 'Florida',
+                    level: 2,
+                    createdAt: '2024-10-09 13:04:28',
+                    updatedAt: '2024-10-09 13:04:28',
+                    ancestors: [
+                        {
+                            id: 'this-is-a-parent-node-id',
+                            displayName: 'United States',
+                            level: 1,
+                        },
+                    ],
+                },
+            };
+
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: mockResponse });
+            metadata.getMetadataTaxonomyNodeUrl = jest.fn().mockReturnValueOnce('node_url');
 
             const result = await metadata.getMetadataTaxonomyNode(scope, taxonomyKey, nodeID, true);
 
-            expect(xhrMock.get).toHaveBeenCalledWith({ url });
-            expect(getProp).toHaveBeenCalledWith(mockResponse, 'data', {});
-            expect(result).toEqual(mockResponse.data);
+            expect(result).toEqual(mockResponse);
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE);
+            expect(metadata.getMetadataTaxonomyNodeUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'node_url',
+            });
         });
 
         it('should fetch metadata taxonomy node successfully without ancestors', async () => {
@@ -3114,15 +3124,18 @@ describe('api/Metadata', () => {
                     updatedAt: '2024-10-09 13:04:28',
                 },
             };
-            xhrMock.get.mockResolvedValue(noAncestorsMock);
-            getProp.mockReturnValue(noAncestorsMock.data);
+
+            metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: noAncestorsMock });
+            metadata.getMetadataTaxonomyNodeUrl = jest.fn().mockReturnValueOnce('node_url');
 
             const result = await metadata.getMetadataTaxonomyNode(scope, taxonomyKey, nodeID);
 
-            expect(xhrMock.get).toHaveBeenCalledWith({ url });
-            expect(getProp).toHaveBeenCalledWith(noAncestorsMock, 'data', {});
-            expect(result).not.toEqual(mockResponse.data);
-            expect(result).toEqual(noAncestorsMock.data);
+            expect(result).toEqual(noAncestorsMock);
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE);
+            expect(metadata.getMetadataTaxonomyNodeUrl).toHaveBeenCalled();
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'node_url',
+            });
         });
 
         it('should throw an error if scope is missing', async () => {
