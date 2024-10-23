@@ -19,6 +19,8 @@ import {
     TYPE_FILE,
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     ERROR_CODE_FETCH_METADATA_OPTIONS,
+    ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS,
+    ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE,
 } from '../../constants';
 import { handleOnAbort } from '../utils';
 
@@ -3003,6 +3005,146 @@ describe('api/Metadata', () => {
             abortController.abort();
 
             expect(handleOnAbort).toHaveBeenCalled();
+        });
+    });
+    describe('getMetadataTaxonomyLevels', () => {
+        const scope = 'enterprise';
+        const taxonomyKey = '12345';
+        const url = metadata.getMetadataTaxonomyLevelsUrl(scope, taxonomyKey);
+
+        it('should build getMetadataTaxonomyLevelsUrl correctly', () => {
+            expect(url).toBe(`https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}`);
+        });
+
+        it('should fetch metadata taxonomy levels successfully', async () => {
+            const mockResponse = {
+                data: {
+                    displayName: 'Geography',
+                    namespace: 'my_enterprise',
+                    id: 'this-is-a-taxonomy-id',
+                    key: 'geography',
+                    levels: [
+                        {
+                            displayName: 'Independent Nations States',
+                            description: 'Country',
+                            level: 1,
+                        },
+                        {
+                            displayName: 'States of a Specific Country',
+                            description: 'State',
+                            level: 2,
+                        },
+                    ],
+                },
+            };
+            xhrMock.get.mockResolvedValue(mockResponse);
+            getProp.mockReturnValue(mockResponse.data);
+
+            const result = await metadata.getMetadataTaxonomyLevels(scope, taxonomyKey);
+
+            expect(xhrMock.get).toHaveBeenCalledWith({ url });
+            expect(getProp).toHaveBeenCalledWith(mockResponse, 'data', {});
+            expect(result).toEqual(mockResponse.data);
+        });
+
+        it('should throw an error if scope is missing', async () => {
+            await expect(metadata.getMetadataTaxonomyLevels('', taxonomyKey)).rejects.toThrow('Missing scope');
+        });
+
+        it('should throw an error if taxonomyKey is missing', async () => {
+            await expect(metadata.getMetadataTaxonomyLevels(scope, '')).rejects.toThrow('Missing taxonomyKey');
+        });
+
+        it('should set the correct error code', async () => {
+            try {
+                await metadata.getMetadataTaxonomyLevels(scope, taxonomyKey);
+            } catch (error) {
+                // Ignore error
+            }
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS);
+        });
+    });
+    describe('getMetadataTaxonomyNode', () => {
+        const scope = 'enterprise';
+        const taxonomyKey = '12345';
+        const nodeID = '67890';
+        const url = metadata.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, true);
+        const mockResponse = {
+            data: {
+                id: 'this-is-a-node-id',
+                displayName: 'Florida',
+                level: 2,
+                createdAt: '2024-10-09 13:04:28',
+                updatedAt: '2024-10-09 13:04:28',
+                ancestors: [
+                    {
+                        id: 'this-is-a-parent-node-id',
+                        displayName: 'United States',
+                        level: 1,
+                    },
+                ],
+            },
+        };
+
+        it('should build getMetadataTaxonomyNodeUrl correctly', () => {
+            expect(url).toBe(
+                `https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}/node/${nodeID}?include_ancestors=true`,
+            );
+        });
+
+        it('should fetch metadata taxonomy node successfully with ancestors', async () => {
+            xhrMock.get.mockResolvedValue(mockResponse);
+            getProp.mockReturnValue(mockResponse.data);
+
+            const result = await metadata.getMetadataTaxonomyNode(scope, taxonomyKey, nodeID, true);
+
+            expect(xhrMock.get).toHaveBeenCalledWith({ url });
+            expect(getProp).toHaveBeenCalledWith(mockResponse, 'data', {});
+            expect(result).toEqual(mockResponse.data);
+        });
+
+        it('should fetch metadata taxonomy node successfully without ancestors', async () => {
+            const noAncestorsMock = {
+                data: {
+                    id: 'this-is-a-node-id',
+                    displayName: 'Florida',
+                    level: 2,
+                    createdAt: '2024-10-09 13:04:28',
+                    updatedAt: '2024-10-09 13:04:28',
+                },
+            };
+            xhrMock.get.mockResolvedValue(noAncestorsMock);
+            getProp.mockReturnValue(noAncestorsMock.data);
+
+            const result = await metadata.getMetadataTaxonomyNode(scope, taxonomyKey, nodeID);
+
+            expect(xhrMock.get).toHaveBeenCalledWith({ url });
+            expect(getProp).toHaveBeenCalledWith(noAncestorsMock, 'data', {});
+            expect(result).not.toEqual(mockResponse.data);
+            expect(result).toEqual(noAncestorsMock.data);
+        });
+
+        it('should throw an error if scope is missing', async () => {
+            await expect(metadata.getMetadataTaxonomyNode('', taxonomyKey, nodeID)).rejects.toThrow('Missing scope');
+        });
+
+        it('should throw an error if taxonomyKey is missing', async () => {
+            await expect(metadata.getMetadataTaxonomyNode(scope, '', nodeID)).rejects.toThrow('Missing taxonomyKey');
+        });
+
+        it('should throw an error if nodeID is missing', async () => {
+            await expect(metadata.getMetadataTaxonomyNode(scope, taxonomyKey, '')).rejects.toThrow('Missing nodeID');
+        });
+
+        it('should set the correct error code', async () => {
+            try {
+                await metadata.getMetadataTaxonomyNode(scope, taxonomyKey, nodeID);
+            } catch (error) {
+                // Ignore error
+            }
+
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE);
         });
     });
 });
