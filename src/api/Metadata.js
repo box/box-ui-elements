@@ -1198,7 +1198,9 @@ class Metadata extends File {
      * @returns {`${string}/metadata_taxonomies/${string}/${string}/nodes/${string}`}
      */
     getMetadataTaxonomyNodeUrl(scope: string, taxonomyKey: string, nodeID: string, includeAncestors?: boolean): string {
-        return `${this.getBaseApiUrl()}/metadata_taxonomies/${scope}/${taxonomyKey}/nodes/${nodeID}${includeAncestors && '?include-ancestors=true'}`;
+        const includeAncestorsParam = includeAncestors ? '?include-ancestors=true' : '';
+
+        return `${this.getBaseApiUrl()}/metadata_taxonomies/${scope}/${taxonomyKey}/nodes/${nodeID}${includeAncestorsParam}`;
     }
 
     /**
