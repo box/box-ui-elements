@@ -19,7 +19,7 @@ export const metadataTaxonomyFetcher = async (
     return {
         options: metadataOptions.entries.map((metadataOption: MetadataOptionEntry) => ({
             value: metadataOption.id,
-            displayValue: metadataOption.display_name,
+            displayValue: metadataOption.displayName,
         })),
         marker,
     };
@@ -36,7 +36,7 @@ export const metadataTaxonomyNodeFetcher = async (api: API, scope: string, taxon
     for (const item of metadataTaxonomyLevels) {
         const levelData = {
             level: item.level,
-            levelName: item.display_name,
+            levelName: item.displayName,
             description: item.description,
         };
 
@@ -56,7 +56,7 @@ export const metadataTaxonomyNodeFetcher = async (api: API, scope: string, taxon
             const levelData = levelsMap.get(ancestor.level);
 
             if (levelData) {
-                levelsMap.set(ancestor.level, { ...levelData, levelName: ancestor.display_name, id: ancestor.id });
+                levelsMap.set(ancestor.level, { ...levelData, levelValue: ancestor.displayName, id: ancestor.id });
             }
         }
     }

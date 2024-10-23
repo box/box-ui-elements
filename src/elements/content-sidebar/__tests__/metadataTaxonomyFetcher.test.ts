@@ -22,8 +22,8 @@ describe('metadataTaxonomyFetcher', () => {
     test('should fetch metadata options and return formatted data', async () => {
         const mockMetadataOptions = {
             entries: [
-                { id: 'opt1', display_name: 'Option 1' },
-                { id: 'opt2', display_name: 'Option 2' },
+                { id: 'opt1', displayName: 'Option 1' },
+                { id: 'opt2', displayName: 'Option 2' },
             ],
         };
 
@@ -70,7 +70,7 @@ describe('metadataTaxonomyFetcher', () => {
 
     test('should set marker to null if not provided in options', async () => {
         const mockMetadataOptions = {
-            entries: [{ id: 'opt1', display_name: 'Option 1' }],
+            entries: [{ id: 'opt1', displayName: 'Option 1' }],
         };
 
         apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
@@ -113,15 +113,15 @@ describe('metadataNodeTaxonomiesFetcher', () => {
 
     test('should fetch taxonomy levels and node data and return formatted data', async () => {
         const mockTaxonomyLevels = [
-            { level: 1, display_name: 'Level 1', description: 'Description 1' },
-            { level: 2, display_name: 'Level 2', description: 'Description 2' },
+            { level: 1, displayName: 'Level 1', description: 'Description 1' },
+            { level: 2, displayName: 'Level 2', description: 'Description 2' },
         ];
 
         const mockTaxonomyNode = {
             id: 'node_abc',
             level: 1,
             displayName: 'Node ABC',
-            ancestors: [{ id: 'ancestor_1', level: 2, display_name: 'Ancestor 1' }],
+            ancestors: [{ id: 'ancestor_1', level: 2, displayName: 'Ancestor 1' }],
         };
 
         apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels.mockResolvedValue(mockTaxonomyLevels);
@@ -132,16 +132,17 @@ describe('metadataNodeTaxonomiesFetcher', () => {
         const expectedResult = [
             {
                 level: 1,
-                levelName: 'Node ABC',
+                levelName: 'Level 1',
                 description: 'Description 1',
                 id: 'node_abc',
                 levelValue: 'Node ABC',
             },
             {
                 level: 2,
-                levelName: 'Ancestor 1',
+                levelName: 'Level 2',
                 description: 'Description 2',
                 id: 'ancestor_1',
+                levelValue: 'Ancestor 1',
             },
         ];
 
@@ -157,7 +158,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
     });
 
     test('should handle empty ancestors array', async () => {
-        const mockTaxonomyLevels = [{ level: 1, display_name: 'Level 1', description: 'Description 1' }];
+        const mockTaxonomyLevels = [{ level: 1, displayName: 'Level 1', description: 'Description 1' }];
 
         const mockTaxonomyNode = {
             id: 'node_abc',
@@ -174,7 +175,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
         const expectedResult = [
             {
                 level: 1,
-                levelName: 'Node ABC',
+                levelName: 'Level 1',
                 description: 'Description 1',
                 id: 'node_abc',
                 levelValue: 'Node ABC',
