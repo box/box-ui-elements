@@ -1165,13 +1165,18 @@ class Metadata extends File {
     /**
      * Gets taxonomy levels associated with a taxonomy key.
      *
+     * @param id
      * @param scope
      * @param taxonomyKey
      * @param nodeID
      * @returns {Promise<MetadataTaxonomyLevels>}
      */
-    async getMetadataTaxonomyLevels(scope: string, taxonomyKey: string) {
+    async getMetadataTaxonomyLevels(id: string, scope: string, taxonomyKey: string) {
         this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS;
+
+        if (!id) {
+            throw getBadItemError();
+        }
 
         if (!scope) {
             throw new Error('Missing scope');
@@ -1183,7 +1188,7 @@ class Metadata extends File {
 
         const url = this.getMetadataTaxonomyLevelsUrl(scope, taxonomyKey);
 
-        const metadataTaxonomyLevels = await this.xhr.get({ url });
+        const metadataTaxonomyLevels = await this.xhr.get({ url, id: getTypedFileId(id) });
 
         return getProp(metadataTaxonomyLevels, 'data', {});
     }
@@ -1206,14 +1211,25 @@ class Metadata extends File {
     /**
      * Gets info associated with a taxonomy node.
      *
+     * @param id
      * @param scope
      * @param taxonomyKey
      * @param nodeID
      * @param includeAncestors
      * @returns {Promise<MetadataTaxonomyNode>}
      */
-    async getMetadataTaxonomyNode(scope: string, taxonomyKey: string, nodeID: string, includeAncestors?: boolean) {
+    async getMetadataTaxonomyNode(
+        id: string,
+        scope: string,
+        taxonomyKey: string,
+        nodeID: string,
+        includeAncestors?: boolean,
+    ) {
         this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE;
+
+        if (!id) {
+            throw getBadItemError();
+        }
 
         if (!nodeID) {
             throw new Error('Missing nodeID');
@@ -1229,7 +1245,7 @@ class Metadata extends File {
 
         const url = this.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, includeAncestors);
 
-        const metadataTaxonomyNode = await this.xhr.get({ url });
+        const metadataTaxonomyNode = await this.xhr.get({ url, id: getTypedFileId(id) });
 
         return getProp(metadataTaxonomyNode, 'data', {});
     }
