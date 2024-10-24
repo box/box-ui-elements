@@ -27,15 +27,19 @@ export const metadataTaxonomyFetcher = async (
 
 export const metadataTaxonomyNodeAncestorsFetcher = async (
     api: API,
+    fileID: string,
     scope: string,
     taxonomyKey: string,
     nodeID: string,
 ) => {
     const [metadataTaxonomyLevels, metadataTaxonomyNode] = await Promise.all([
-        api.getMetadataAPI(false).getMetadataTaxonomyLevels(scope, taxonomyKey),
-        api.getMetadataAPI(false).getMetadataTaxonomyNode(scope, taxonomyKey, nodeID, true),
+        api.getMetadataAPI(false).getMetadataTaxonomyLevels(fileID, scope, taxonomyKey),
+        api.getMetadataAPI(false).getMetadataTaxonomyNode(fileID, scope, taxonomyKey, nodeID, true),
     ]);
 
+    if (!metadataTaxonomyLevels?.levels) {
+        return [];
+    }
     // Create a hashmap of levels to easily hydrate with data from metadataTaxonomyNode
     const levelsMap = new Map();
     for (const item of metadataTaxonomyLevels.levels) {
