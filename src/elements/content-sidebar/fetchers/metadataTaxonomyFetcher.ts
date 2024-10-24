@@ -38,7 +38,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
 
     // Create a hashmap of levels to easily hydrate with data from metadataTaxonomyNode
     const levelsMap = new Map();
-    for (const item of metadataTaxonomyLevels) {
+    for (const item of metadataTaxonomyLevels.levels) {
         const levelData = {
             level: item.level,
             levelName: item.displayName,
