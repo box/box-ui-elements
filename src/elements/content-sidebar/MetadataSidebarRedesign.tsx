@@ -36,7 +36,7 @@ import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
-import { metadataTaxonomyFetcher } from './fetchers/metadataTaxonomyFetcher';
+import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -179,6 +179,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         options: PaginationQueryInput,
     ) => metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options);
 
+    const taxonomyNodeFetcher = async (scope: string, taxonomyKey: string, nodeID: string) =>
+        metadataTaxonomyNodeAncestorsFetcher(api, fileId, scope, taxonomyKey, nodeID);
+
     return (
         <SidebarContent
             actions={metadataDropdown}
@@ -221,6 +224,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                                 setIsDeleteButtonDisabled(false);
                             }}
                             templateInstances={templateInstances}
+                            taxonomyNodeFetcher={taxonomyNodeFetcher}
                         />
                     )}
                 </AutofillContextProvider>
