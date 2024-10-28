@@ -24,6 +24,7 @@ type Props = {
     itemName?: string,
     maxAppCount?: number,
     shouldRenderLabel?: boolean,
+    shouldDisplayAppsAsIntegrations?: boolean,
 };
 
 type State = {
@@ -39,6 +40,7 @@ class SecurityControls extends React.Component<Props, State> {
         controlsFormat: SHORT,
         maxAppCount: DEFAULT_MAX_APP_COUNT,
         shouldRenderLabel: false,
+        shouldDisplayAppsAsIntegrations: false,
     };
 
     state = {
@@ -59,18 +61,19 @@ class SecurityControls extends React.Component<Props, State> {
             itemName,
             maxAppCount,
             shouldRenderLabel,
+            shouldDisplayAppsAsIntegrations,
         } = this.props;
 
         let items = [];
         let modalItems;
 
         if (controlsFormat === FULL) {
-            items = getFullSecurityControlsMessages(controls, maxAppCount);
+            items = getFullSecurityControlsMessages(controls, maxAppCount, shouldDisplayAppsAsIntegrations);
         } else {
-            items = getShortSecurityControlsMessage(controls);
+            items = getShortSecurityControlsMessage(controls, shouldDisplayAppsAsIntegrations);
 
             if (items.length && controlsFormat === SHORT_WITH_BTN) {
-                modalItems = getFullSecurityControlsMessages(controls, maxAppCount);
+                modalItems = getFullSecurityControlsMessages(controls, maxAppCount, shouldDisplayAppsAsIntegrations);
             }
         }
 

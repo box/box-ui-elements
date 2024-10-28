@@ -45,6 +45,13 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render SecurityControls with Integration label when using SHORT controlsFormat and shouldDisplayAppsAsIntegrations is true', () => {
+        wrapper.setProps({ controlsFormat: SHORT, shouldDisplayAppsAsIntegrations: true });
+        expect(wrapper.find('SecurityControlsItem').prop('message').id).toBe(
+            messages.shortSharingDownloadIntegration.id,
+        );
+    });
+
     test('should render SecurityControls with single SecurityControlsItem and modal items when using SHORT_WITH_BTN controlsFormat and item, classification data is provided', () => {
         wrapper.setProps({
             controlsFormat: SHORT_WITH_BTN,
@@ -55,9 +62,36 @@ describe('features/classification/security-controls/SecurityControls', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render SecurityControls with Integration label when SHORT_WITH_BTN controlsFormat and shouldDisplayAppsAsIntegrations is true', () => {
+        wrapper.setProps({
+            controlsFormat: SHORT_WITH_BTN,
+            classificationName: 'internal only',
+            definition: 'classification definition',
+            itemName: 'welcome.pdf',
+            shouldDisplayAppsAsIntegrations: true,
+        });
+        expect(
+            wrapper
+                .find('SecurityControlsModal')
+                .prop('modalItems')
+                .find(item => item.message.id === messages.integrationDownloadAllowlist.id),
+        ).toBeDefined();
+    });
+
     test('should render SecurityControls multiple SecurityControlsItem when using FULL controlsFormat', () => {
         wrapper.setProps({ controlsFormat: FULL });
         expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render SecurityControls with Integration label when FULL controlsFormat and shouldDisplayAppsAsIntegrations is true', () => {
+        wrapper.setProps({ controlsFormat: FULL, shouldDisplayAppsAsIntegrations: true });
+        expect(
+            wrapper.findWhere(
+                node =>
+                    node.type() === 'SecurityControlsItem' &&
+                    node.prop('message').id === messages.integrationDownloadAllowlist.id,
+            ),
+        ).toBeDefined();
     });
 
     test('should render label for security controls when shouldRenderLabel prop is set', () => {
