@@ -73,6 +73,7 @@ const SidebarNav = ({
                     {hasBoxAI && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
+                            data-target-id="SidebarNavButton-boxAI"
                             data-testid="sidebarboxai"
                             sidebarView={SIDEBAR_VIEW_BOXAI}
                             tooltip={intl.formatMessage(messages.sidebarBoxAITitle)}
@@ -83,6 +84,7 @@ const SidebarNav = ({
                     {hasActivity && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
+                            data-target-id="SidebarNavButton-activity"
                             data-testid="sidebaractivity"
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
@@ -93,6 +95,7 @@ const SidebarNav = ({
                     {hasDetails && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
+                            data-target-id="SidebarNavButton-details"
                             data-testid="sidebardetails"
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
@@ -103,6 +106,7 @@ const SidebarNav = ({
                     {hasSkills && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
+                            data-target-id="SidebarNavButton-skills"
                             data-testid="sidebarskills"
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
@@ -113,6 +117,7 @@ const SidebarNav = ({
                     {hasMetadata && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
+                            data-target-id="SidebarNavButton-metadata"
                             data-testid="sidebarmetadata"
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
@@ -123,6 +128,7 @@ const SidebarNav = ({
                     {hasDocGen && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
+                            data-target-id="SidebarNavButton-docGen"
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
                         >
