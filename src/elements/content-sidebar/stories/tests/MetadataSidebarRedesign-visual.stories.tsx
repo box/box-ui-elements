@@ -1,12 +1,12 @@
 import { type ComponentProps } from 'react';
+import { http, HttpResponse } from 'msw';
 import { expect, userEvent, within, fn, screen } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
-import { http, HttpResponse } from 'msw';
 import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
-    fileId,
+    fileIdWithMetadata,
     fileIdWithoutMetadata,
     mockEmptyMetadataInstances,
     mockEnterpriseMetadataTemplates,
@@ -15,7 +15,6 @@ import {
     mockMetadataInstances,
 } from '../__mocks__/MetadataSidebarRedesignedMocks';
 
-const fileIdWithMetadata = fileId;
 const token = global.TOKEN;
 
 const defaultMetadataArgs = {
@@ -76,6 +75,24 @@ export const AddTemplateDropdownMenuOnEmpty = {
     },
 };
 
+const defaultMockHandlers = [
+    http.get(mockFileRequest.url, () => {
+        return HttpResponse.json(mockFileRequest.response);
+    }),
+    http.get(mockFileRequestWithoutMetadata.url, () => {
+        return HttpResponse.json(mockFileRequestWithoutMetadata.response);
+    }),
+    http.get(mockMetadataInstances.url, () => {
+        return HttpResponse.json(mockMetadataInstances.response);
+    }),
+    http.get(mockEmptyMetadataInstances.url, () => {
+        return HttpResponse.json(mockEmptyMetadataInstances.response);
+    }),
+    http.get(mockEnterpriseMetadataTemplates.url, () => {
+        return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
+    }),
+];
+
 export default {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
     component: ContentSidebar,
@@ -92,23 +109,7 @@ export default {
     parameters: {
         ...defaultVisualConfig.parameters,
         msw: {
-            handlers: [
-                http.get(mockFileRequest.url, () => {
-                    return HttpResponse.json(mockFileRequest.response);
-                }),
-                http.get(mockFileRequestWithoutMetadata.url, () => {
-                    return HttpResponse.json(mockFileRequestWithoutMetadata.response);
-                }),
-                http.get(mockMetadataInstances.url, () => {
-                    return HttpResponse.json(mockMetadataInstances.response);
-                }),
-                http.get(mockEmptyMetadataInstances.url, () => {
-                    return HttpResponse.json(mockEmptyMetadataInstances.response);
-                }),
-                http.get(mockEnterpriseMetadataTemplates.url, () => {
-                    return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
-                }),
-            ],
+            handlers: defaultMockHandlers,
         },
     },
 };

@@ -5,12 +5,12 @@ import { http, HttpResponse } from 'msw';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 import {
+    fileIdWithMetadata,
     mockEnterpriseMetadataTemplates,
     mockFileRequest,
     mockMetadataInstances,
 } from './__mocks__/MetadataSidebarRedesignedMocks';
 
-const fileIdWithMetadata = global.FILE_ID;
 const mockFeatures = {
     'metadata.redesign.enabled': true,
 };

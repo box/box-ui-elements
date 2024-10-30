@@ -1,13 +1,14 @@
-export const fileId = '415542803939';
+export const fileIdWithMetadata = '415542803939';
 export const fileIdWithoutMetadata = '416047501580';
 
 export const mockFileRequest = {
-    url: `https://api.box.com/2.0/files/${fileId}?fields=is_externally_owned,permissions`,
+    url: `https://api.box.com/2.0/files/${fileIdWithMetadata}?fields=is_externally_owned,permissions`,
     response: {
         type: 'file',
-        id: fileId,
+        id: fileIdWithMetadata,
         etag: '3',
         is_externally_owned: false,
+        extension: 'pdf',
         permissions: {
             can_download: true,
             can_preview: true,
@@ -61,7 +62,7 @@ export const mockEmptyMetadataInstances = {
 };
 
 export const mockMetadataInstances = {
-    url: `https://api.box.com/2.0/files/${fileId}/metadata`,
+    url: `https://api.box.com/2.0/files/${fileIdWithMetadata}/metadata`,
     response: {
         entries: [
             {
@@ -73,7 +74,7 @@ export const mockMetadataInstances = {
                 $template: 'myTemplate',
                 $scope: 'enterprise_173733877',
                 myAttribute: 'My Value',
-                $canEdit: false,
+                $canEdit: true,
             },
             {
                 $id: '8efaaafc-6bbf-4d8a-bb94-6e0ed158d2a8',
@@ -83,7 +84,7 @@ export const mockMetadataInstances = {
                 $typeVersion: 2,
                 $template: 'selectDropdowns',
                 $scope: 'enterprise_173733877',
-                $canEdit: false,
+                $canEdit: true,
             },
             {
                 $id: 'af8eb470-5336-4886-b488-9480526ffa06',
@@ -95,7 +96,7 @@ export const mockMetadataInstances = {
                 $scope: 'global',
                 Test: 'Value',
                 Key: 'Value',
-                $canEdit: false,
+                $canEdit: true,
             },
         ],
         limit: 100,
@@ -319,5 +320,12 @@ export const mockUpdateCustomMetadataRequest = {
         $scope: 'global',
         dsadsa: 'dd',
         $canEdit: true,
+    },
+};
+
+export const aiSuggestionsForMyAttribute = {
+    url: 'https://api.box.com/2.0/ai/extract_structured',
+    response: {
+        myAttribute: 'it works fine',
     },
 };
