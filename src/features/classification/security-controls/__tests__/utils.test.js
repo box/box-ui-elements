@@ -202,7 +202,7 @@ describe('features/classification/security-controls/utils', () => {
         );
 
         test.each([WHITELIST, BLACKLIST])(
-            'should include correct message when integration download is restricted by %s and integrations list is not provided and shouldDisplayAppsAsIntegrations is true',
+            'should include correct variable when integration download is restricted by %s and integrations list is not provided and shouldDisplayAppsAsIntegrations is true',
             listType => {
                 accessPolicy = {
                     app: {
@@ -248,7 +248,7 @@ describe('features/classification/security-controls/utils', () => {
         );
 
         test.each([WHITELIST, BLACKLIST])(
-            'should include correct message when integration download is restricted by %s and integrations are less than maxAppCount and shouldDisplayAppsAsIntegrations is true',
+            'should include correct variable when integration download is restricted by %s and integrations are less than maxAppCount and shouldDisplayAppsAsIntegrations is true',
             listType => {
                 accessPolicy = {
                     app: {
