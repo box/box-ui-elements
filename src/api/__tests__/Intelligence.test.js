@@ -130,7 +130,7 @@ describe('api/Intelligence', () => {
             });
         });
 
-        test('should return empty map of suggestions when error is 400', async () => {
+        test('should not return any suggestions when error is 400', async () => {
             const error = new Error();
             error.status = 400;
             intelligence.xhr.post = jest.fn().mockReturnValueOnce(Promise.reject(error));
@@ -141,10 +141,10 @@ describe('api/Intelligence', () => {
                 expect(e.status).toEqual(400);
             }
             expect(intelligence.errorCode).toBe(ERROR_CODE_EXTRACT_STRUCTURED);
-            expect(suggestions).toEqual({});
+            expect(suggestions).toEqual(undefined);
             expect(intelligence.xhr.post).toHaveBeenCalledWith({
                 url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
-                data: request,
+                data: request, // request is the data
                 id: 'file_123',
             });
         });

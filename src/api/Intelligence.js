@@ -7,7 +7,6 @@
 import getProp from 'lodash/get';
 import type { QuestionType } from '@box/box-ai-content-answers';
 import Base from './Base';
-import { isUserCorrectableError } from '../utils/error';
 import { AiExtractResponse } from './schemas/AiExtractResponse';
 import { AiExtractStructured } from './schemas/AiExtractStructured';
 import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
@@ -70,20 +69,13 @@ class Intelligence extends Base {
 
         const url = `${this.getBaseApiUrl()}/ai/extract_structured`;
 
-        let suggestionsResponse = {};
-        try {
-            suggestionsResponse = await this.xhr.post({
-                url,
-                data: request,
-                id: `file_${request.items[0].id}`,
-            });
-        } catch (e) {
-            const { status } = e;
-            if (isUserCorrectableError(status)) {
-                throw e;
-            }
-        }
-        return getProp(suggestionsResponse, 'data', {});
+        const suggestionsResponse = await this.xhr.post({
+            url,
+            data: request,
+            id: `file_${request.items[0].id}`,
+        });
+
+        return getProp(suggestionsResponse, 'data');
     }
 }
 

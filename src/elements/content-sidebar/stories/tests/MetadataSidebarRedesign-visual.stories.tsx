@@ -13,6 +13,7 @@ import {
     mockFileRequest,
     mockFileRequestWithoutMetadata,
     mockMetadataInstances,
+    aiSuggestionsForMyAttribute,
 } from '../__mocks__/MetadataSidebarRedesignedMocks';
 
 const token = global.TOKEN;
@@ -391,5 +392,82 @@ export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRed
 
         const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
         expect(autofillButton).toBeInTheDocument();
+    },
+};
+
+export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
+    },
+    parameters: {
+        ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post('https://api.box.com/2.0/ai/extract_structured', () => {
+                    return new HttpResponse('Internal Server Error', { status: 500 });
+                }),
+            ],
+        },
+        test: {
+            dangerouslyIgnoreUnhandledErrors: true,
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillButton = await canvas.findByRole(
+            'button',
+            { name: 'Autofill My Template with Box AI' },
+            { timeout: 5000 },
+        );
+        await userEvent.click(autofillButton);
+
+        const errorAlert = await canvas.findByText('We’re sorry, something went wrong.');
+        expect(errorAlert).toBeInTheDocument();
+    },
+};
+
+export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
+    },
+    parameters: {
+        ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post(aiSuggestionsForMyAttribute.url, () =>
+                    HttpResponse.json(aiSuggestionsForMyAttribute.response),
+                ),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillButton = await canvas.findByRole(
+            'button',
+            { name: 'Autofill My Template with Box AI' },
+            { timeout: 5000 },
+        );
+        userEvent.click(autofillButton);
+
+        const suggestion = await canvas.findByText('it works fine');
+        expect(suggestion).toBeInTheDocument();
+
+        const replaceButton = await canvas.findByRole('button', { name: 'Clear and Replace' });
+        expect(replaceButton).toBeInTheDocument();
+
+        await userEvent.click(replaceButton);
+
+        const input = await canvas.getByLabelText('My Attribute');
+        expect(input).toHaveValue('it works fine');
     },
 };
