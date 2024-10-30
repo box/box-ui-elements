@@ -1,5 +1,6 @@
 import messages from '../messages';
 import appRestrictionsMessageMap from '../appRestrictionsMessageMap';
+import integrationRestrictionsMessageMap from '../integrationRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from '../downloadRestrictionsMessageMap';
 import { getShortSecurityControlsMessage, getFullSecurityControlsMessages } from '../utils';
 import {
@@ -67,6 +68,45 @@ describe('features/classification/security-controls/utils', () => {
 
             expect(result).toEqual(expectedResult);
         });
+
+        test.each`
+            securityControls                                            | expectedMessages                                                              | description
+            ${{}}                                                       | ${[]}                                                                         | ${'there are no restrictions'}
+            ${allSecurityControls}                                      | ${[messages.shortSharingDownloadIntegrationSign, messages.shortWatermarking]} | ${'all restrictions are present'}
+            ${{ sharedLink: { accessLevel: PUBLIC } }}                  | ${[]}                                                                         | ${'shared link restriction has a "public" access level'}
+            ${{ sharedLink: {}, download: {}, app: {} }}                | ${[messages.shortSharingDownloadIntegration]}                                 | ${'download, integration and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {}, app: {} }}            | ${[messages.shortSharingDownloadIntegration]}                                 | ${'download, integration and external collab restrictions are present'}
+            ${{ download: {}, app: {}, boxSignRequest: {} }}            | ${[messages.shortDownloadIntegrationSign]}                                    | ${'download, integration and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, sharedLink: {} }}          | ${[messages.shortSharingIntegrationSign]}                                     | ${'integration, sign and shared link restrictions are present'}
+            ${{ app: {}, boxSignRequest: {}, externalCollab: {} }}      | ${[messages.shortSharingIntegrationSign]}                                     | ${'integration, sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, sharedLink: {} }}     | ${[messages.shortSharingDownloadSign]}                                        | ${'download, sign and shared link restrictions are present'}
+            ${{ download: {}, boxSignRequest: {}, externalCollab: {} }} | ${[messages.shortSharingDownloadSign]}                                        | ${'download, sign and external collab restrictions are present'}
+            ${{ sharedLink: {}, boxSignRequest: {} }}                   | ${[messages.shortSharingSign]}                                                | ${'sign and shared link restrictions are present'}
+            ${{ externalCollab: {}, boxSignRequest: {} }}               | ${[messages.shortSharingSign]}                                                | ${'sign and external collab restrictions are present'}
+            ${{ download: {}, boxSignRequest: {} }}                     | ${[messages.shortDownloadSign]}                                               | ${'download and sign restrictions are present'}
+            ${{ app: {}, boxSignRequest: {} }}                          | ${[messages.shortIntegrationSign]}                                            | ${'integration and sign restrictions are present'}
+            ${{ sharedLink: {}, download: {} }}                         | ${[messages.shortSharingDownload]}                                            | ${'download and shared link restrictions are present'}
+            ${{ externalCollab: {}, download: {} }}                     | ${[messages.shortSharingDownload]}                                            | ${'download and external collab restrictions are present'}
+            ${{ sharedLink: {}, app: {} }}                              | ${[messages.shortSharingIntegration]}                                         | ${'integration and shared link restrictions are present'}
+            ${{ externalCollab: {}, app: {} }}                          | ${[messages.shortSharingIntegration]}                                         | ${'integration and external collab restrictions are present'}
+            ${{ download: {}, app: {} }}                                | ${[messages.shortDownloadIntegration]}                                        | ${'integration and download restrictions are present'}
+            ${{ sharedLink: {}, externalCollab: {} }}                   | ${[messages.shortSharing]}                                                    | ${'shared link and external collab restrictions are present'}
+            ${{ sharedLink: {} }}                                       | ${[messages.shortSharing]}                                                    | ${'shared link restrictions are present'}
+            ${{ externalCollab: {} }}                                   | ${[messages.shortSharing]}                                                    | ${'external collab restrictions are present'}
+            ${{ download: {} }}                                         | ${[messages.shortDownload]}                                                   | ${'download restrictions are present'}
+            ${{ app: {} }}                                              | ${[messages.shortIntegration]}                                                | ${'integration restrictions are present'}
+            ${{ watermark: {} }}                                        | ${[messages.shortWatermarking]}                                               | ${'watermark restrictions are present'}
+            ${{ boxSignRequest: {} }}                                   | ${[messages.shortSign]}                                                       | ${'sign restrictions are present'}
+        `(
+            'should return correct messages when $description and shouldDisplayAppsAsIntegrations is true',
+            ({ securityControls, expectedMessages }) => {
+                const expectedResult = expectedMessages.map(message => ({ message }));
+
+                const result = getShortSecurityControlsMessage(securityControls, true);
+
+                expect(result).toEqual(expectedResult);
+            },
+        );
 
         test('should not return tooltipMessage', () => {
             accessPolicy = { sharedLink: {}, download: {}, externalCollab: {}, app: {} };
@@ -162,6 +202,29 @@ describe('features/classification/security-controls/utils', () => {
         );
 
         test.each([WHITELIST, BLACKLIST])(
+            'should include correct variable when integration download is restricted by %s and integrations list is not provided and shouldDisplayAppsAsIntegrations is true',
+            listType => {
+                accessPolicy = {
+                    app: {
+                        accessLevel: listType,
+                        apps: [],
+                    },
+                };
+                const expectedMessage = integrationRestrictionsMessageMap[listType][DEFAULT];
+
+                expect(expectedMessage).toBeTruthy();
+                expect(getFullSecurityControlsMessages(accessPolicy, 3, true)).toEqual([
+                    {
+                        message: {
+                            ...expectedMessage,
+                            values: { appNames: '' },
+                        },
+                    },
+                ]);
+            },
+        );
+
+        test.each([WHITELIST, BLACKLIST])(
             'should include correct message when app download is restricted by %s and apps are less than maxAppCount',
             listType => {
                 accessPolicy = {
@@ -174,6 +237,29 @@ describe('features/classification/security-controls/utils', () => {
 
                 expect(expectedMessage).toBeTruthy();
                 expect(getFullSecurityControlsMessages(accessPolicy, 3)).toEqual([
+                    {
+                        message: {
+                            ...expectedMessage,
+                            values: { appNames: 'a, b, c' },
+                        },
+                    },
+                ]);
+            },
+        );
+
+        test.each([WHITELIST, BLACKLIST])(
+            'should include correct variable when integration download is restricted by %s and integrations are less than maxAppCount and shouldDisplayAppsAsIntegrations is true',
+            listType => {
+                accessPolicy = {
+                    app: {
+                        accessLevel: listType,
+                        apps: [{ displayText: 'a' }, { displayText: 'b' }, { displayText: 'c' }],
+                    },
+                };
+                const expectedMessage = integrationRestrictionsMessageMap[listType][WITH_APP_LIST];
+
+                expect(expectedMessage).toBeTruthy();
+                expect(getFullSecurityControlsMessages(accessPolicy, 3, true)).toEqual([
                     {
                         message: {
                             ...expectedMessage,
@@ -210,6 +296,39 @@ describe('features/classification/security-controls/utils', () => {
                         },
                         tooltipMessage: {
                             ...messages.allAppNames,
+                            values: { appsList: 'a, b, c, d, e' },
+                        },
+                    },
+                ]);
+            },
+        );
+
+        test.each([WHITELIST, BLACKLIST])(
+            'should include correct message and tooltipMessage when integration download is restricted by %s and integrations are maxAppCount or more and shouldDisplayAppsAsIntegrations is true',
+            listType => {
+                accessPolicy = {
+                    app: {
+                        accessLevel: listType,
+                        apps: [
+                            { displayText: 'a' },
+                            { displayText: 'b' },
+                            { displayText: 'c' },
+                            { displayText: 'd' },
+                            { displayText: 'e' },
+                        ],
+                    },
+                };
+                const expectedMessage = integrationRestrictionsMessageMap[listType][WITH_OVERFLOWN_APP_LIST];
+
+                expect(expectedMessage).toBeTruthy();
+                expect(getFullSecurityControlsMessages(accessPolicy, 3, true)).toEqual([
+                    {
+                        message: {
+                            ...expectedMessage,
+                            values: { appNames: 'a, b, c', remainingAppCount: 2 },
+                        },
+                        tooltipMessage: {
+                            ...messages.allIntegrationNames,
                             values: { appsList: 'a, b, c, d, e' },
                         },
                     },
