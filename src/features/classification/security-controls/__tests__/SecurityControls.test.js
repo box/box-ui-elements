@@ -47,8 +47,8 @@ describe('features/classification/security-controls/SecurityControls', () => {
 
     test('should render SecurityControls with Integration label when using SHORT controlsFormat and shouldDisplayAppsAsIntegrations is true', () => {
         wrapper.setProps({ controlsFormat: SHORT, shouldDisplayAppsAsIntegrations: true });
-        expect(wrapper.find('SecurityControlsItem').prop('message').id).toBe(
-            messages.shortSharingDownloadIntegration.id,
+        expect(wrapper.find('SecurityControlsItem').prop('message').defaultMessage).toBe(
+            'Sharing, download and integration restrictions apply',
         );
     });
 
@@ -74,7 +74,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
             wrapper
                 .find('SecurityControlsModal')
                 .prop('modalItems')
-                .find(item => item.message.id === messages.integrationDownloadAllowlist.id),
+                .find(item => item.message.defaultMessage === 'Only select integrations are allowed: {appNames}'),
         ).toBeDefined();
     });
 
@@ -89,7 +89,7 @@ describe('features/classification/security-controls/SecurityControls', () => {
             wrapper.findWhere(
                 node =>
                     node.type() === 'SecurityControlsItem' &&
-                    node.prop('message').id === messages.integrationDownloadAllowlist.id,
+                    node.prop('message').defaultMessage === 'Only select integrations are allowed: {appNames}',
             ),
         ).toBeDefined();
     });
