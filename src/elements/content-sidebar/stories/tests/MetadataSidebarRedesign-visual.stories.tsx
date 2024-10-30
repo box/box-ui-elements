@@ -223,7 +223,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         const editButton = await canvas.findByRole('button', { name: 'Edit My Template' }, { timeout: 5000 });
         expect(editButton).toBeInTheDocument();
 
-        let headlines = await canvas.findAllByRole('heading', { level: 1 });
+        let headlines = await canvas.findAllByRole('heading', { level: 4 });
         expect(headlines).toHaveLength(3);
         expect(headlines.map(heading => heading.textContent)).toEqual(
             expect.arrayContaining(['My Template', 'Select Dropdowns', 'Custom Metadata']),
@@ -232,7 +232,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         // go to edit mode - only edited template is visible
         await userEvent.click(editButton);
 
-        headlines = await canvas.findAllByRole('heading', { level: 1 });
+        headlines = await canvas.findAllByRole('heading', { level: 4 });
         expect(headlines).toHaveLength(1);
         expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['My Template']));
 
@@ -240,7 +240,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
         await userEvent.click(cancelButton);
 
-        headlines = await canvas.findAllByRole('heading', { level: 1 });
+        headlines = await canvas.findAllByRole('heading', { level: 4 });
         expect(headlines).toHaveLength(3);
         expect(headlines.map(heading => heading.textContent)).toEqual(
             expect.arrayContaining(['My Template', 'Select Dropdowns', 'Custom Metadata']),
@@ -386,7 +386,7 @@ export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRed
         expect(autofillWithBoxAI).toHaveLength(2);
 
         const editButton = await canvas.findByRole('button', { name: 'Edit My Template' });
-        userEvent.click(editButton);
+        await userEvent.click(editButton);
 
         const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
         expect(autofillButton).toBeInTheDocument();
