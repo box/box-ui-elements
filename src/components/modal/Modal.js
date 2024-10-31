@@ -15,6 +15,7 @@ type Props = {
     children: React.Node,
     /** Additional CSS classname of the `.modal` element */
     className?: string,
+    container?: HTMLElement,
     focusElementSelector?: string,
     isLoading?: boolean,
     isOpen?: boolean,
@@ -130,7 +131,8 @@ class Modal extends React.Component<Props> {
     };
 
     render() {
-        const { className, isLoading, isOpen, onRequestClose, shouldNotUsePortal, style, ...rest } = this.props;
+        const { className, isLoading, isOpen, onRequestClose, shouldNotUsePortal, style, container, ...rest } =
+            this.props;
 
         if (!isOpen) {
             return null;
@@ -148,7 +150,12 @@ class Modal extends React.Component<Props> {
         const WrapperComponent = shouldNotUsePortal ? 'div' : Portal;
         // Render a style tag to prevent body from scrolling as long as the Modal is open
         return (
-            <WrapperComponent className={classNames('modal', className)} onKeyDown={this.onKeyDown} tabIndex="-1">
+            <WrapperComponent
+                className={classNames('modal', className)}
+                onKeyDown={this.onKeyDown}
+                tabIndex="-1"
+                container={container}
+            >
                 {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */}
                 <div className="modal-backdrop" onClick={this.onBackdropClick} style={style.backdrop} />
                 <FocusTrap className="modal-dialog-container">

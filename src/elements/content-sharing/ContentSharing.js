@@ -23,6 +23,7 @@ type ContentSharingProps = {
     apiHost: string,
     /** config - Configuration object that shows/hides features in the USM */
     config?: USMConfig,
+    container?: HTMLElement,
     /**
      * customButton - Clickable element for opening the SharingModal component.
      * This property should always be used in conjunction with displayInModal.
@@ -35,6 +36,7 @@ type ContentSharingProps = {
      * the modal will appear on page load. See ContentSharing.stories.js for examples.
      */
     displayInModal: boolean,
+    dropdownMenuClassname?: string,
     /** itemID - Box file or folder ID */
     itemID: string,
     /** itemType - "file" or "folder" */
@@ -68,6 +70,8 @@ function ContentSharing({
     messages,
     token,
     uuid,
+    container,
+    dropdownMenuClassname,
 }: ContentSharingProps) {
     const [api, setAPI] = React.useState<API | null>(createAPI(apiHost, itemID, itemType, token));
     const [launchButton, setLaunchButton] = React.useState<React.Element<any> | null>(null);
@@ -112,6 +116,8 @@ function ContentSharing({
                     messages={messages}
                     setIsVisible={setIsVisible}
                     uuid={uuid}
+                    container={container}
+                    dropdownMenuClassname={dropdownMenuClassname}
                 />
             )}
         </>

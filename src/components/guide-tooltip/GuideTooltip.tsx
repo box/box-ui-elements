@@ -22,6 +22,7 @@ type Props = TooltipProps & {
     steps?: [number, number];
     primaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
     secondaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
+    container?: HTMLElement;
 };
 
 function GuideTooltip({
@@ -36,6 +37,7 @@ function GuideTooltip({
     secondaryButtonProps,
     showCloseButton = true,
     title,
+    container,
     ...rest
 }: Props) {
     return (
@@ -44,6 +46,7 @@ function GuideTooltip({
             className={`bdl-GuideTooltip ${className}`}
             isShown={isShown}
             showCloseButton={showCloseButton}
+            bodyElement={container}
             text={
                 <>
                     {icon && <div className="bdl-GuideTooltip-icon">{icon}</div>}

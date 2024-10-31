@@ -49,7 +49,9 @@ import type {
 type SharingModalProps = {
     api: API,
     config?: USMConfig,
+    container?: HTMLElement,
     displayInModal: boolean,
+    dropdownMenuClassname?: string,
     isVisible: boolean,
     itemID: string,
     itemType: ItemType,
@@ -70,6 +72,8 @@ function SharingModal({
     messages,
     setIsVisible,
     uuid,
+    container,
+    dropdownMenuClassname,
 }: SharingModalProps) {
     const [item, setItem] = React.useState<itemFlowType | null>(null);
     const [sharedLink, setSharedLink] = React.useState<ContentSharingSharedLinkType | null>(null);
@@ -80,14 +84,10 @@ function SharingModal({
     const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType | null>(null);
     const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
     const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
-    const [
-        changeSharedLinkAccessLevel,
-        setChangeSharedLinkAccessLevel,
-    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
-    const [
-        changeSharedLinkPermissionLevel,
-        setChangeSharedLinkPermissionLevel,
-    ] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] =
+        React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [changeSharedLinkPermissionLevel, setChangeSharedLinkPermissionLevel] =
+        React.useState<null | SharedLinkUpdateLevelFnType>(null);
     const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | SharedLinkUpdateSettingsFnType>(null);
     const [currentView, setCurrentView] = React.useState<string>(CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL);
     const [getContacts, setGetContacts] = React.useState<null | GetContactsFnType>(null);
@@ -263,6 +263,7 @@ function SharingModal({
                     setOnSubmitSettings={setOnSubmitSettings}
                     setSendInvites={setSendInvites}
                     setSharedLink={setSharedLink}
+                    container={container}
                 />
                 {isVisible && currentView === CONTENT_SHARING_VIEWS.SHARED_LINK_SETTINGS && (
                     <SharedLinkSettingsModal
@@ -276,10 +277,12 @@ function SharingModal({
                         submitting={isLoading}
                         {...sharedLink}
                         canChangeExpiration={canChangeExpiration && !!currentUserEnterpriseName}
+                        container={container}
                     />
                 )}
                 {isVisible && currentView === CONTENT_SHARING_VIEWS.UNIFIED_SHARE_MODAL && (
                     <UnifiedShareModal
+                        dropdownMenuClassname={dropdownMenuClassname}
                         canInvite={sharedLink.canInvite}
                         config={config}
                         changeSharedLinkAccessLevel={changeSharedLinkAccessLevel}
@@ -305,6 +308,7 @@ function SharingModal({
                             expirationTimestamp: expirationTimestamp ? expirationTimestamp / 1000 : null,
                         }} // the USM expects this value in seconds, while the SLSM expects this value in milliseconds
                         submitting={isLoading}
+                        container={container}
                     />
                 )}
             </>

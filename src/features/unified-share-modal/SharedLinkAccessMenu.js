@@ -27,6 +27,7 @@ type Props = {
     accessLevelsDisabledReason: accessLevelsDisabledReasonType,
     allowedAccessLevels: allowedAccessLevelsType,
     changeAccessLevel: (newAccessLevel: accessLevelType) => Promise<{ accessLevel: accessLevelType }>,
+    dropdownMenuClassname?: string,
     enterpriseName?: string,
     itemType: ItemType,
     onDismissTooltip: () => void,
@@ -117,6 +118,7 @@ class SharedLinkAccessMenu extends React.Component<Props> {
             submitting,
             tooltipContent,
             trackingProps,
+            dropdownMenuClassname,
         } = this.props;
         const { onSharedLinkAccessMenuOpen, sharedLinkAccessMenuButtonProps } = trackingProps;
 
@@ -130,7 +132,11 @@ class SharedLinkAccessMenu extends React.Component<Props> {
                 text={tooltipContent}
                 theme="callout"
             >
-                <DropdownMenu onMenuOpen={onSharedLinkAccessMenuOpen} constrainToWindow>
+                <DropdownMenu
+                    onMenuOpen={onSharedLinkAccessMenuOpen}
+                    constrainToWindow
+                    className={dropdownMenuClassname}
+                >
                     <PlainButton
                         className={classNames('lnk', {
                             'is-disabled': submitting,

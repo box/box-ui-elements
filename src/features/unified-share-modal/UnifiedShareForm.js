@@ -150,13 +150,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
     onToggleSharedLink = (event: SyntheticInputEvent<HTMLInputElement>) => {
         const { target } = event;
-        const {
-            handleFtuxCloseClick,
-            onAddLink,
-            openConfirmModal,
-            shouldRenderFTUXTooltip,
-            trackingProps,
-        } = this.props;
+        const { handleFtuxCloseClick, onAddLink, openConfirmModal, shouldRenderFTUXTooltip, trackingProps } =
+            this.props;
         const { sharedLinkTracking } = trackingProps;
         const { onToggleLink } = sharedLinkTracking;
 
@@ -627,7 +622,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderInviteePermissionsDropdown() {
-        const { inviteePermissions, item, submitting, canInvite, trackingProps } = this.props;
+        const { inviteePermissions, item, submitting, canInvite, trackingProps, dropdownMenuClassname } = this.props;
         const { type } = item;
         const { inviteCollabTracking } = trackingProps;
 
@@ -640,6 +635,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                     inviteePermissions={inviteePermissions}
                     changeInviteePermissionLevel={this.handleInviteePermissionChange}
                     itemType={type}
+                    dropdownMenuClassname={dropdownMenuClassname}
                 />
             )
         );
@@ -705,6 +701,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             tooltips = {},
             trackingProps,
             upsellInlineNotice = null,
+            dropdownMenuClassname,
         } = this.props;
         const { sharedLinkTracking, sharedLinkEmailTracking } = trackingProps;
         const { isEmailLinkSectionExpanded, isInviteSectionExpanded, showCollaboratorList } = this.state;
@@ -727,6 +724,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
 
                     {!hasExpandedSections && (
                         <SharedLinkSection
+                            dropdownMenuClassname={dropdownMenuClassname}
                             addSharedLink={onAddLink}
                             autofocusSharedLink={this.shouldAutoFocusSharedLink()}
                             autoCreateSharedLink={createSharedLinkOnLoad}

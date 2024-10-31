@@ -55,6 +55,7 @@ class SharedLinkSettingsModal extends Component {
         dateFormat: PropTypes.string,
         hideVanityNameSection: PropTypes.bool,
         isOpen: PropTypes.bool,
+        container: PropTypes.element,
         onRequestClose: PropTypes.func,
         submitting: PropTypes.bool,
         warnOnPublic: PropTypes.bool,
@@ -293,13 +294,8 @@ class SharedLinkSettingsModal extends Component {
     }
 
     renderExpirationSection() {
-        const {
-            canChangeExpiration,
-            dateDisplayFormat,
-            dateFormat,
-            expirationCheckboxProps,
-            expirationInputProps,
-        } = this.props;
+        const { canChangeExpiration, dateDisplayFormat, dateFormat, expirationCheckboxProps, expirationInputProps } =
+            this.props;
         const { expirationDate, isExpirationEnabled, expirationError } = this.state;
 
         return (
@@ -404,6 +400,7 @@ class SharedLinkSettingsModal extends Component {
             onRequestClose,
             saveButtonProps,
             submitting,
+            container,
         } = this.props;
 
         const showInaccessibleSettingsNotice = !(
@@ -420,6 +417,7 @@ class SharedLinkSettingsModal extends Component {
                 isOpen={isOpen}
                 onRequestClose={submitting ? undefined : onRequestClose}
                 title={this.renderModalTitle()}
+                container={container}
                 {...modalProps}
             >
                 <form onSubmit={this.onSubmit}>

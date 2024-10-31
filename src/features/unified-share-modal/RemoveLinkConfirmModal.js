@@ -11,6 +11,7 @@ import messages from './messages';
 
 type Props = {
     cancelButtonProps?: Object,
+    container?: HTMLElement,
     isOpen: boolean,
     modalProps?: Object,
     okayButtonProps?: Object,
@@ -38,6 +39,7 @@ class RemoveLinkConfirmModal extends Component<Props> {
             okayButtonProps,
             modalProps,
             cancelButtonProps,
+            container,
         } = this.props;
 
         return (
@@ -48,6 +50,7 @@ class RemoveLinkConfirmModal extends Component<Props> {
                 onRequestClose={submitting ? undefined : onRequestClose}
                 title={<FormattedMessage {...messages.removeLinkConfirmationTitle} />}
                 type="alert"
+                container={container}
                 {...modalProps}
             >
                 <FormattedMessage {...messages.removeLinkConfirmationDescription} />

@@ -19,6 +19,7 @@ import type { inviteePermissionType } from './flowTypes';
 type Props = {
     changeInviteePermissionLevel: Function,
     disabled: boolean,
+    dropdownMenuClassname?: string,
     inviteePermissionLevel: string,
     inviteePermissions: Array<inviteePermissionType>,
     inviteePermissionsButtonProps?: Object,
@@ -76,6 +77,7 @@ class InviteePermissionsMenu extends Component<Props> {
             inviteePermissionLevel,
             disabled,
             itemType,
+            dropdownMenuClassname,
         } = this.props;
         const defaultPermissionLevel = getDefaultPermissionLevel(inviteePermissions);
         const selectedPermissionLevel = inviteePermissionLevel || defaultPermissionLevel;
@@ -121,7 +123,7 @@ class InviteePermissionsMenu extends Component<Props> {
         // the available vertical space. cannot use the constraint props here in short windows.
         return (
             <div className="be invitee-menu-wrap">
-                <DropdownMenu>
+                <DropdownMenu className={dropdownMenuClassname}>
                     {plainButtonWrap}
                     {this.renderMenu()}
                 </DropdownMenu>

@@ -52,6 +52,7 @@ type Props = {
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
     config?: USMConfig,
+    dropdownMenuClassname?: string,
     intl: IntlShape,
     isAllowEditSharedLinkForFileEnabled: boolean,
     item: itemtype,
@@ -200,12 +201,8 @@ class SharedLinkSection extends React.Component<Props, State> {
     getAllowedPermissionLevels = (): Array<permissionLevelType> => {
         const { isAllowEditSharedLinkForFileEnabled, sharedLink } = this.props;
 
-        const {
-            canChangeAccessLevel,
-            isEditSettingAvailable,
-            isDownloadSettingAvailable,
-            permissionLevel,
-        } = sharedLink;
+        const { canChangeAccessLevel, isEditSettingAvailable, isDownloadSettingAvailable, permissionLevel } =
+            sharedLink;
 
         let allowedPermissionLevels = [CAN_EDIT, CAN_VIEW_DOWNLOAD, CAN_VIEW_ONLY];
 
@@ -245,6 +242,7 @@ class SharedLinkSection extends React.Component<Props, State> {
             trackingProps,
             triggerCopyOnLoad,
             tooltips,
+            dropdownMenuClassname,
         } = this.props;
 
         const { isCopySuccessful, isSharedLinkEditTooltipShown } = this.state;
@@ -341,6 +339,7 @@ class SharedLinkSection extends React.Component<Props, State> {
 
                 <div className="shared-link-access-row">
                     <SharedLinkAccessMenu
+                        dropdownMenuClassname={dropdownMenuClassname}
                         accessLevel={accessLevel}
                         accessLevelsDisabledReason={accessLevelsDisabledReason}
                         allowedAccessLevels={allowedAccessLevels}
@@ -372,6 +371,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                             position="bottom-center"
                         >
                             <SharedLinkPermissionMenu
+                                dropdownMenuClassname={dropdownMenuClassname}
                                 allowedPermissionLevels={allowedPermissionLevels}
                                 canChangePermissionLevel={canChangeAccessLevel}
                                 changePermissionLevel={changeSharedLinkPermissionLevel}
@@ -430,14 +430,8 @@ class SharedLinkSection extends React.Component<Props, State> {
     }
 
     renderSharedLinkSettingsLink() {
-        const {
-            intl,
-            onDismissTooltip,
-            onSettingsClick,
-            showSharedLinkSettingsCallout,
-            trackingProps,
-            tooltips,
-        } = this.props;
+        const { intl, onDismissTooltip, onSettingsClick, showSharedLinkSettingsCallout, trackingProps, tooltips } =
+            this.props;
         const { sharedLinkSettingsButtonProps } = trackingProps;
 
         return (

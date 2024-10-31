@@ -24,6 +24,7 @@ type Props = {
     changePermissionLevel: (
         newPermissionLevel: permissionLevelType,
     ) => Promise<{ permissionLevel: permissionLevelType }>,
+    dropdownMenuClassname?: string,
     isSharedLinkEditTooltipShown: boolean,
     permissionLevel?: permissionLevelType,
     sharedLinkEditTagTargetingApi?: TargetingApi,
@@ -64,6 +65,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
             size,
             submitting,
             trackingProps,
+            dropdownMenuClassname,
         } = this.props;
         const { sharedLinkPermissionsMenuButtonProps } = trackingProps;
         const canShowTag = sharedLinkEditTagTargetingApi ? sharedLinkEditTagTargetingApi.canShow : false;
@@ -89,6 +91,7 @@ class SharedLinkPermissionMenu extends Component<Props> {
 
         return (
             <DropdownMenu
+                className={dropdownMenuClassname}
                 constrainToWindow
                 isRightAligned={isRightAligned}
                 onMenuClose={() => {

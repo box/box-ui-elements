@@ -137,7 +137,8 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     };
 
     renderUSF = () => {
-        const { sharedLinkEditTagTargetingApi, sharedLinkEditTooltipTargetingApi } = this.props;
+        const { sharedLinkEditTagTargetingApi, sharedLinkEditTooltipTargetingApi, container, dropdownMenuClassname } =
+            this.props;
         const { isFetching, sharedLinkLoaded, shouldRenderFTUXTooltip } = this.state;
 
         return (
@@ -150,13 +151,16 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                 sharedLinkEditTooltipTargetingApi={sharedLinkEditTooltipTargetingApi}
                 sharedLinkLoaded={sharedLinkLoaded}
                 shouldRenderFTUXTooltip={shouldRenderFTUXTooltip}
+                container={container}
+                dropdownMenuClassname={dropdownMenuClassname}
             />
         );
     };
 
     render() {
         // Shared link section props
-        const { canInvite, displayInModal, isOpen, item, onRequestClose, submitting, trackingProps } = this.props;
+        const { canInvite, displayInModal, isOpen, item, onRequestClose, submitting, trackingProps, container } =
+            this.props;
         const { modalTracking, removeLinkConfirmModalTracking } = trackingProps;
         const { modalProps } = modalTracking;
         const { isEmailLinkSectionExpanded, isConfirmModalOpen, showCollaboratorList } = this.state;
@@ -183,6 +187,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                                 item={item}
                             />
                         }
+                        container={container}
                         {...extendedModalProps}
                     >
                         {this.renderUSF()}
@@ -196,6 +201,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                         onRequestClose={this.closeConfirmModal}
                         removeLink={this.removeLink}
                         submitting={submitting}
+                        container={container}
                         {...removeLinkConfirmModalTracking}
                     />
                 )}
