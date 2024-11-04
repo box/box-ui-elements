@@ -1,8 +1,11 @@
 export const fileIdWithMetadata = '415542803939';
 export const fileIdWithoutMetadata = '416047501580';
 
+const host = 'https://api.box.com';
+const apiV2Path = `${host}/2.0`;
+
 export const mockFileRequest = {
-    url: `https://api.box.com/2.0/files/${fileIdWithMetadata}?fields=is_externally_owned,permissions`,
+    url: `${apiV2Path}/files/${fileIdWithMetadata}?fields=is_externally_owned,permissions`,
     response: {
         type: 'file',
         id: fileIdWithMetadata,
@@ -29,7 +32,7 @@ export const mockFileRequest = {
 };
 
 export const mockFileRequestWithoutMetadata = {
-    url: `https://api.box.com/2.0/files/${fileIdWithoutMetadata}?fields=is_externally_owned,permissions`,
+    url: `${apiV2Path}/files/${fileIdWithoutMetadata}?fields=is_externally_owned,permissions`,
     response: {
         type: 'file',
         id: fileIdWithoutMetadata,
@@ -55,14 +58,14 @@ export const mockFileRequestWithoutMetadata = {
 };
 
 export const mockEmptyMetadataInstances = {
-    url: `https://api.box.com/2.0/files/${fileIdWithoutMetadata}/metadata`,
+    url: `${apiV2Path}/files/${fileIdWithoutMetadata}/metadata`,
     response: {
         entries: [],
     },
 };
 
 export const mockMetadataInstances = {
-    url: `https://api.box.com/2.0/files/${fileIdWithMetadata}/metadata`,
+    url: `${apiV2Path}/files/${fileIdWithMetadata}/metadata`,
     response: {
         entries: [
             {
@@ -104,7 +107,7 @@ export const mockMetadataInstances = {
 };
 
 export const mockEnterpriseMetadataTemplates = {
-    url: 'https://api.box.com/2.0/metadata_templates/enterprise?limit=1000',
+    url: `${apiV2Path}/metadata_templates/enterprise?limit=1000`,
     response: {
         limit: 1000,
         entries: [
@@ -309,7 +312,7 @@ export const mockEnterpriseMetadataTemplates = {
 };
 
 export const mockUpdateCustomMetadataRequest = {
-    url: 'https://api.box.com/2.0/files/415542803939/metadata/global/properties',
+    url: `${apiV2Path}/files/${fileIdWithMetadata}/metadata/global/properties`,
     response: {
         $id: 'a3e3f24a-dea8-4882-8830-5f922fb05fa8',
         $version: 1,
@@ -324,7 +327,7 @@ export const mockUpdateCustomMetadataRequest = {
 };
 
 export const aiSuggestionsForMyAttribute = {
-    url: 'https://api.box.com/2.0/ai/extract_structured',
+    url: `${apiV2Path}/ai/extract_structured`,
     response: {
         myAttribute: 'it works fine',
     },

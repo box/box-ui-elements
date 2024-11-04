@@ -407,7 +407,7 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         msw: {
             handlers: [
                 ...defaultMockHandlers,
-                http.post('https://api.box.com/2.0/ai/extract_structured', () => {
+                http.post(aiSuggestionsForMyAttribute.url, () => {
                     return new HttpResponse('Internal Server Error', { status: 500 });
                 }),
             ],
@@ -467,7 +467,7 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
 
         await userEvent.click(replaceButton);
 
-        const input = await canvas.getByLabelText('My Attribute');
+        const input = canvas.getByLabelText('My Attribute');
         expect(input).toHaveValue('it works fine');
     },
 };
