@@ -62,7 +62,11 @@ export const Basic: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole(
+            'button',
+            { name: 'Add template' },
+            { container: await canvas.findByRole('tabpanel') },
+        );
         await userEvent.click(addTemplateButton);
     },
 };

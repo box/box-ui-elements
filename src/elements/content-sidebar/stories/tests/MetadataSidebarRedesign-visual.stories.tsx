@@ -41,7 +41,7 @@ export const AddTemplateDropdownMenuOn = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
 
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
@@ -63,7 +63,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
 
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
@@ -119,7 +119,7 @@ export const AddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign>
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
@@ -140,7 +140,7 @@ export const UnsavedChangesModalWhenChoosingDifferentTemplate: StoryObj<typeof M
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
@@ -193,7 +193,7 @@ export const MetadataInstanceEditorWithDefinedTemplate: StoryObj<typeof Metadata
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
         await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'My Template' });
@@ -209,7 +209,7 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
         await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
@@ -222,7 +222,7 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         const canvas = within(canvasElement);
 
         // Edit buttons contains also template name
-        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' }, { timeout: 5000 });
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' }, { timeout: 2000 });
         expect(editButton).toBeInTheDocument();
 
         let headlines = await canvas.findAllByRole('heading', { level: 4 });
@@ -254,7 +254,7 @@ export const DeleteButtonIsDisabledWhenAddingNewMetadataTemplate: StoryObj<typeo
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
         expect(addTemplateButton).toBeInTheDocument();
         await userEvent.click(addTemplateButton);
 
@@ -274,7 +274,7 @@ export const DeleteButtonIsEnabledWhenEditingMetadataTemplateInstance: StoryObj<
         const editMetadataInstanceButton = await canvas.findByRole(
             'button',
             { name: 'Edit My Template' },
-            { timeout: 5000 },
+            { timeout: 2000 },
         );
         expect(editMetadataInstanceButton).toBeInTheDocument();
         await userEvent.click(editMetadataInstanceButton);
@@ -292,7 +292,7 @@ export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof 
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
 
         await userEvent.click(addTemplateButton);
 
@@ -322,7 +322,7 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         // open and edit a new template
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
 
         await userEvent.click(addTemplateButton);
 
@@ -383,7 +383,7 @@ export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRed
         const autofillWithBoxAI = await canvas.findAllByRole(
             'button',
             { name: /Autofill .+ with Box AI/ },
-            { timeout: 5000 },
+            { timeout: 2000 },
         );
         expect(autofillWithBoxAI).toHaveLength(2);
 
@@ -422,7 +422,7 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         const autofillButton = await canvas.findByRole(
             'button',
             { name: 'Autofill My Template with Box AI' },
-            { timeout: 5000 },
+            { timeout: 2000 },
         );
         await userEvent.click(autofillButton);
 
@@ -455,7 +455,7 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
         const autofillButton = await canvas.findByRole(
             'button',
             { name: 'Autofill My Template with Box AI' },
-            { timeout: 5000 },
+            { timeout: 2000 },
         );
         userEvent.click(autofillButton);
 
@@ -469,5 +469,43 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
 
         const input = canvas.getByLabelText('My Attribute');
         expect(input).toHaveValue('it works fine');
+    },
+};
+
+export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
+    parameters: {
+        ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.delete(mockErrorDeleteMyTemplateMetadataRequest.url, () => {
+                    return HttpResponse.json(mockErrorDeleteMyTemplateMetadataRequest.response);
+                }),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' }, { timeout: 2000 });
+        await userEvent.click(editButton);
+
+        const deleteButton = await canvas.findByRole('button', { name: 'Delete' });
+        await userEvent.click(deleteButton);
+
+        const confirmModal = await screen.findByRole('dialog', { name: /delete.+/i }, { timeout: 2000 });
+
+        const confirmInput = within(confirmModal).getByRole('textbox');
+        await userEvent.type(confirmInput, 'My Template');
+
+        const confirmButton = await within(confirmModal).getByRole('button', { name: 'Confirm' });
+        await userEvent.click(confirmButton);
+
+        const errorAlert = await canvas.findByText(
+            'An error has occurred while updating metadata. Please refresh the page and try again.',
+            {},
+            { timeout: 2000 },
+        );
+        expect(errorAlert).toBeInTheDocument();
     },
 };
