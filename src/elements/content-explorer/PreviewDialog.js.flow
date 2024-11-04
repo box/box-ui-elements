@@ -5,17 +5,19 @@
  */
 
 import * as React from 'react';
+import { useIntl } from 'react-intl';
 import Modal from 'react-modal';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
 import cloneDeep from 'lodash/cloneDeep';
-import messages from '../common/messages';
+
 import ContentPreview from '../content-preview';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
+import type { ContentPreviewProps } from '../content-preview';
 import type { Token, BoxItem, Collection } from '../../common/types/core';
 import type APICache from '../../utils/Cache';
 
-type Props = {
+import messages from '../common/messages';
+
+type PreviewDialogProps = {
     apiHost: string,
     appElement: HTMLElement,
     appHost: string,
@@ -23,17 +25,16 @@ type Props = {
     canDownload: boolean,
     contentPreviewProps: ContentPreviewProps,
     currentCollection: Collection,
-    intl: IntlShape,
     isOpen: boolean,
     isTouch: boolean,
     item: BoxItem,
-    onCancel: Function,
-    onDownload: Function,
-    onPreview: Function,
+    onCancel: any,
+    onDownload: any,
+    onPreview: any,
     parentElement: HTMLElement,
     previewLibraryVersion: string,
-    requestInterceptor?: Function,
-    responseInterceptor?: Function,
+    responseInterceptor?: any,
+    requestInterceptor?: any,
     sharedLink?: string,
     sharedLinkPassword?: string,
     staticHost: string,
@@ -42,29 +43,29 @@ type Props = {
 };
 
 const PreviewDialog = ({
-    item,
-    isOpen,
-    parentElement,
-    appElement,
-    token,
-    cache,
-    currentCollection,
-    canDownload,
-    onCancel,
-    onPreview,
-    onDownload,
-    apiHost,
-    appHost,
-    staticHost,
-    staticPath,
-    previewLibraryVersion,
-    sharedLink,
-    sharedLinkPassword,
-    contentPreviewProps,
-    requestInterceptor,
-    responseInterceptor,
-    intl,
-}: Props) => {
+   apiHost,
+   appElement,
+   appHost,
+   cache,
+   canDownload,
+   contentPreviewProps,
+   currentCollection,
+   isOpen,
+   item,
+   onCancel,
+   onDownload,
+   onPreview,
+   parentElement,
+   previewLibraryVersion,
+   requestInterceptor,
+   responseInterceptor,
+   sharedLink,
+   sharedLinkPassword,
+   staticHost,
+   staticPath,
+   token,
+}: PreviewDialogProps) => {
+    const { formatMessage } = useIntl();
     const { items }: Collection = currentCollection;
     const onLoad = (data: any): void => {
         onPreview(cloneDeep(data));
@@ -77,39 +78,38 @@ const PreviewDialog = ({
     const files: BoxItem[] = items.filter(({ type }) => type === TYPE_FILE);
     return (
         <Modal
-            isOpen={isOpen}
-            parentSelector={() => parentElement}
-            portalClassName={`${CLASS_MODAL} be-modal-preview`}
-            className={CLASS_MODAL_CONTENT_FULL_BLEED}
-            overlayClassName={CLASS_MODAL_OVERLAY}
-            contentLabel={intl.formatMessage(messages.preview)}
-            onRequestClose={onCancel}
             appElement={appElement}
+            className={CLASS_MODAL_CONTENT_FULL_BLEED}
+            contentLabel={formatMessage(messages.preview)}
+            isOpen={isOpen}
+            onRequestClose={onCancel}
+            overlayClassName={CLASS_MODAL_OVERLAY}
+            parentSelector={() => parentElement}
+            portalClassName={CLASS_MODAL}
         >
             <ContentPreview
                 {...contentPreviewProps}
-                fileId={item.id}
+                autoFocus
                 apiHost={apiHost}
                 appHost={appHost}
-                staticHost={staticHost}
-                staticPath={staticPath}
-                previewLibraryVersion={previewLibraryVersion}
                 cache={cache}
-                token={token}
-                hasHeader
-                autoFocus
+                canDownload={canDownload}
                 collection={files}
-                onLoad={onLoad}
+                fileId={item.id}
+                hasHeader
                 onClose={onCancel}
                 onDownload={onDownload}
-                canDownload={canDownload}
+                onLoad={onLoad}
+                previewLibraryVersion={previewLibraryVersion}
+                staticHost={staticHost}
+                staticPath={staticPath}
                 sharedLink={sharedLink}
                 sharedLinkPassword={sharedLinkPassword}
                 requestInterceptor={requestInterceptor}
                 responseInterceptor={responseInterceptor}
+                token={token}
             />
         </Modal>
     );
 };
-
-export default injectIntl(PreviewDialog);
+export default PreviewDialog;
