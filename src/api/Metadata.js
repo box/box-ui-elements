@@ -9,7 +9,7 @@ import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
-import { handleOnAbort } from './utils';
+import { handleOnAbort, formatMetadataFieldValue } from './utils';
 import File from './File';
 import {
     HEADER_CONTENT_TYPE,
@@ -226,14 +226,17 @@ class Metadata extends File {
      * Gets metadata instances for a Box file
      *
      * @param {string} id - file id
+     * @param {boolean} isMetadataRedesign - feature flag
      * @return {Object} array of metadata instances
      */
-    async getInstances(id: string): Promise<Array<MetadataInstanceV2>> {
+    async getInstances(id: string, isMetadataRedesign: boolean = false): Promise<Array<MetadataInstanceV2>> {
         this.errorCode = ERROR_CODE_FETCH_METADATA;
+        const baseUrl = this.getMetadataUrl(id);
+        const url = isMetadataRedesign ? `${baseUrl}?view=hydrated` : baseUrl;
         let instances = {};
         try {
             instances = await this.xhr.get({
-                url: this.getMetadataUrl(id),
+                url,
                 id: getTypedFileId(id),
             });
         } catch (e) {
@@ -377,9 +380,11 @@ class Metadata extends File {
             // Get Metadata Fields for Instances created from predefined template
             const templateFields = template.fields || [];
             templateFields.forEach(field => {
+                const value = formatMetadataFieldValue(field, instance[field.key]);
+
                 fields.push({
                     ...field,
-                    value: instance[field.key],
+                    value,
                 });
             });
         } else {
@@ -501,7 +506,7 @@ class Metadata extends File {
         try {
             const customPropertiesTemplate: MetadataTemplate = this.getCustomPropertiesTemplate();
             const [instances, globalTemplates, enterpriseTemplates] = await Promise.all([
-                this.getInstances(id),
+                this.getInstances(id, isMetadataRedesign),
                 this.getTemplates(id, METADATA_SCOPE_GLOBAL),
                 hasMetadataFeature ? this.getTemplates(id, METADATA_SCOPE_ENTERPRISE) : Promise.resolve([]),
             ]);
@@ -887,11 +892,24 @@ class Metadata extends File {
         try {
             const fieldsValues = template.fields.reduce((acc, obj) => {
                 let { value } = obj;
+
                 // API does not accept string for float type
-                if (obj.type === 'float' && value) value = parseFloat(obj.value);
+                if (obj.type === 'float' && value) {
+                    value = parseFloat(obj.value);
+                }
+
                 // API does not accept empty string for enum type
-                if (obj.type === 'enum' && value && value.length === 0) value = undefined;
+                if (obj.type === 'enum' && value && value.length === 0) {
+                    value = undefined;
+                }
+
+                // API expects values as an array of strings
+                if (obj.type === 'taxonomy' && value && Array.isArray(value)) {
+                    value = value.map(option => option.value);
+                }
+
                 acc[obj.key] = value;
+
                 return acc;
             }, {});
 
@@ -1111,10 +1129,10 @@ class Metadata extends File {
         }
 
         const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
-        const { marker, searchInput, signal } = options;
+        const { marker, searchInput: query_text, signal } = options;
         const params = {
             ...(marker ? { marker } : {}),
-            ...(searchInput ? { searchInput } : {}),
+            ...(query_text ? { query_text } : {}),
             ...(level || level === 0 ? { level } : {}),
         };
 

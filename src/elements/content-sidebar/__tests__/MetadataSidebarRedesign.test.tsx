@@ -54,23 +54,23 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
     };
 
-    const renderComponent = (props = {}) => {
+    const renderComponent = (props = {}, features = {}) => {
         const defaultProps = {
             api: {},
             fileId: 'test-file-id-1',
             elementId: 'element-1',
-            isBoxAiSuggestionsEnabled: true,
             isFeatureEnabled: true,
             onError: jest.fn(),
         } satisfies MetadataSidebarRedesignProps;
 
-        render(<MetadataSidebarRedesign {...defaultProps} {...props} />);
+        render(<MetadataSidebarRedesign {...defaultProps} {...props} />, { wrapperProps: { features } });
     };
 
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
-            handleDeleteMetadataInstance: jest.fn(),
+            extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
             templates: mockTemplates,
             templateInstances: [],
@@ -114,8 +114,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
-            handleDeleteMetadataInstance: jest.fn(),
+            extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
             templateInstances: [],
             templates: [],
@@ -136,6 +137,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with loading indicator', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
@@ -154,7 +156,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     });
 
     test('should correctly render empty state when AI feature is enabled', () => {
-        renderComponent();
+        renderComponent({}, { 'metadata.aiSuggestions.enabled': true });
         expect(screen.getByRole('heading', { level: 2, name: 'Autofill Metadata with Box AI' })).toBeInTheDocument();
         expect(
             screen.getByText(
@@ -164,7 +166,10 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     });
 
     test('should correctly render empty state when AI feature is disabled', () => {
-        renderComponent({ isBoxAiSuggestionsEnabled: false });
+        renderComponent(
+            { isBoxAiSuggestionsEnabled: false },
+            { wrapperProps: { features: { 'metadata.aiSuggestions.enabled': false } } },
+        );
         expect(screen.getByRole('heading', { level: 2, name: 'Add Metadata Templates' })).toBeInTheDocument();
         expect(
             screen.getByText('Add Metadata to your file to support business operations, workflows, and more!'),
@@ -173,8 +178,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata instance list when templates are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
-            handleDeleteMetadataInstance: jest.fn(),
+            extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
             handleUpdateMetadataInstance: jest.fn(),
             templateInstances: [mockCustomTemplateInstance],
             templates: mockTemplates,

@@ -29,6 +29,7 @@ type Props = {
     modifiedBy?: string,
     name?: string,
     onClick?: (event: SyntheticEvent<HTMLButtonElement>) => void,
+    shouldDisplayAppsAsIntegrations?: boolean,
 };
 
 const Classification = ({
@@ -46,6 +47,7 @@ const Classification = ({
     modifiedBy,
     name,
     onClick,
+    shouldDisplayAppsAsIntegrations = false,
 }: Props) => {
     const isClassified = !!name;
     const hasDefinition = !!definition;
@@ -109,6 +111,7 @@ const Classification = ({
                     itemName={itemName}
                     maxAppCount={maxAppCount}
                     shouldRenderLabel
+                    shouldDisplayAppsAsIntegrations={shouldDisplayAppsAsIntegrations}
                 />
             )}
             {isControlsIndicatorEnabled && <LoadingIndicator />}

@@ -102,6 +102,7 @@ describe('api/Intelligence', () => {
 
     describe('extractStructured()', () => {
         const request = {
+            items: [{ id: '123', type: 'file' }],
             metadata_template: {
                 type: 'metadata_template',
                 scope: 'global',
@@ -124,6 +125,7 @@ describe('api/Intelligence', () => {
             expect(suggestions).toEqual(suggestionsFromServer);
             expect(intelligence.xhr.post).toHaveBeenCalledWith({
                 url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
+                id: 'file_123',
                 data: request,
             });
         });
@@ -143,6 +145,7 @@ describe('api/Intelligence', () => {
             expect(intelligence.xhr.post).toHaveBeenCalledWith({
                 url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
                 data: request,
+                id: 'file_123',
             });
         });
 
@@ -161,6 +164,7 @@ describe('api/Intelligence', () => {
             expect(intelligence.xhr.post).toHaveBeenCalledWith({
                 url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
                 data: request,
+                id: 'file_123',
             });
         });
     });

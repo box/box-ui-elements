@@ -8,40 +8,41 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
+    AutofillContextProvider,
     MetadataEmptyState,
     MetadataInstanceList,
     type FormValues,
     type JSONPatchOperations,
-    type MetadataTemplateInstance,
     type MetadataTemplate,
+    type MetadataTemplateInstance,
+    type PaginationQueryInput,
 } from '@box/metadata-editor';
-import noop from 'lodash/noop';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
+import { useFeatureEnabled } from '../common/feature-checking';
 import { ORIGIN_METADATA_SIDEBAR_REDESIGN, SIDEBAR_VIEW_METADATA } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
 
-import { type ElementsXhrError } from '../../common/types/api';
-import { type ElementOrigin } from '../common/flowTypes';
 import { type WithLoggerProps } from '../../common/types/logging';
 
 import messages from '../common/messages';
 import './MetadataSidebarRedesign.scss';
 import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
+import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
+import { metadataTaxonomyFetcher } from './fetchers/metadataTaxonomyFetcher';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
 export interface ExternalProps {
-    isBoxAiSuggestionsEnabled: boolean;
     isFeatureEnabled: boolean;
 }
 
@@ -51,28 +52,17 @@ interface PropsWithoutContext extends ExternalProps {
     hasSidebarInitialized?: boolean;
 }
 
-interface ContextInfo {
-    isErrorDisplayed: boolean;
-    error: ElementsXhrError | Error;
-}
-
 export interface ErrorContextProps {
-    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: ContextInfo, origin?: ElementOrigin) => void;
+    onError: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
 }
 
 export interface MetadataSidebarRedesignProps extends PropsWithoutContext, ErrorContextProps, WithLoggerProps {
     api: API;
 }
 
-function MetadataSidebarRedesign({
-    api,
-    elementId,
-    fileId,
-    isBoxAiSuggestionsEnabled,
-    onError,
-    isFeatureEnabled,
-}: MetadataSidebarRedesignProps) {
+function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
     const {
+        extractSuggestions,
         file,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
@@ -84,6 +74,7 @@ function MetadataSidebarRedesign({
     } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
 
     const { formatMessage } = useIntl();
+    const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
@@ -93,15 +84,25 @@ function MetadataSidebarRedesign({
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
     React.useEffect(() => {
-        setSelectedTemplates(templateInstances);
-    }, [templateInstances, templateInstances.length]);
+        // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
+        const isEditingTemplateAlreadyExisting =
+            editingTemplate &&
+            templateInstances.some(
+                t => t.templateKey === editingTemplate.templateKey && t.scope === editingTemplate.scope,
+            );
+
+        if (!editingTemplate || isEditingTemplateAlreadyExisting) {
+            setSelectedTemplates(templateInstances);
+        } else {
+            setSelectedTemplates([...templateInstances, editingTemplate]);
+        }
+    }, [editingTemplate, templateInstances, templateInstances.length]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
         if (editingTemplate) {
             setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
             setIsUnsavedChangesModalOpen(true);
         } else {
-            setSelectedTemplates([...selectedTemplates, selectedTemplate]);
             setEditingTemplate(convertTemplateToTemplateInstance(file, selectedTemplate));
             setIsDeleteButtonDisabled(true);
         }
@@ -109,21 +110,20 @@ function MetadataSidebarRedesign({
 
     const handleCancel = () => {
         setEditingTemplate(null);
-        setSelectedTemplates(templateInstances);
     };
 
-    const handleCancelUnsavedChanges = () => {
+    const handleDiscardUnsavedChanges = () => {
         // check if user tried to edit another template before unsaved changes modal
         if (pendingTemplateToEdit) {
             setEditingTemplate(pendingTemplateToEdit);
-            setSelectedTemplates([...templateInstances, pendingTemplateToEdit]);
             setIsDeleteButtonDisabled(true);
 
             setPendingTemplateToEdit(null);
-            setIsUnsavedChangesModalOpen(false);
         } else {
             handleCancel();
         }
+
+        setIsUnsavedChangesModalOpen(false);
     };
 
     const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {
@@ -169,6 +169,15 @@ function MetadataSidebarRedesign({
     const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
+    const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
+
+    const taxonomyOptionsFetcher = async (
+        scope: string,
+        templateKey: string,
+        fieldKey: string,
+        level: number,
+        options: PaginationQueryInput,
+    ) => metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options);
 
     return (
         <SidebarContent
@@ -184,30 +193,37 @@ function MetadataSidebarRedesign({
                 {showEmptyState && (
                     <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
                 )}
-                {editingTemplate && (
-                    <MetadataInstanceEditor
-                        isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
-                        isDeleteButtonDisabled={isDeleteButtonDisabled}
-                        isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
-                        onCancel={handleCancel}
-                        onUnsavedChangesModalCancel={handleCancelUnsavedChanges}
-                        onSubmit={handleSubmit}
-                        onDelete={handleDeleteInstance}
-                        template={editingTemplate}
-                        setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
-                    />
-                )}
-                {showList && (
-                    <MetadataInstanceList
-                        isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-                        onEdit={templateInstance => {
-                            setEditingTemplate(templateInstance);
-                            setIsDeleteButtonDisabled(false);
-                        }}
-                        onEditWithAutofill={noop}
-                        templateInstances={templateInstances}
-                    />
-                )}
+                <AutofillContextProvider
+                    fetchSuggestions={extractSuggestions}
+                    isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                >
+                    {editingTemplate && (
+                        <MetadataInstanceEditor
+                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
+                            isDeleteButtonDisabled={isDeleteButtonDisabled}
+                            isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
+                            onCancel={handleCancel}
+                            onDelete={handleDeleteInstance}
+                            onDiscardUnsavedChanges={handleDiscardUnsavedChanges}
+                            onSubmit={handleSubmit}
+                            setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
+                            taxonomyOptionsFetcher={taxonomyOptionsFetcher}
+                            template={editingTemplate}
+                        />
+                    )}
+                    {showList && (
+                        <MetadataInstanceList
+                            areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                            onEdit={templateInstance => {
+                                setEditingTemplate(templateInstance);
+                                setIsDeleteButtonDisabled(false);
+                            }}
+                            templateInstances={templateInstances}
+                        />
+                    )}
+                </AutofillContextProvider>
             </div>
         </SidebarContent>
     );

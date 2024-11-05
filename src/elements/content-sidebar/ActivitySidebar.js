@@ -18,10 +18,10 @@ import AddTaskButton from './AddTaskButton';
 import API from '../../api';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
-import { WithAnnotatorContextProps, withAnnotatorContext } from '../common/annotator-context';
 import { EVENT_DATA_READY, EVENT_JS_READY } from '../common/logger/constants';
 import { getBadUserError } from '../../utils/error';
 import { mark } from '../../utils/performance';
+import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
@@ -72,6 +72,7 @@ import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../co
 import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
 import type { Translations } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
+import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import './ActivitySidebar.scss';
 
 import type { OnAnnotationEdit, OnAnnotationStatusChange } from './activity-feed/comment/types';

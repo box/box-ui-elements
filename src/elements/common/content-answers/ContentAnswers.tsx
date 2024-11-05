@@ -4,7 +4,6 @@ import getProp from 'lodash/get';
 import ContentAnswersModal, { ExternalProps as ContentAnswersModalExternalProps } from './ContentAnswersModal';
 import ContentAnswersOpenButton from './ContentAnswersOpenButton';
 // @ts-ignore: no ts definition
-// eslint-disable-next-line import/named
 import { BoxItem } from '../../common/types/core';
 
 interface ExternalProps extends ContentAnswersModalExternalProps {
@@ -12,10 +11,13 @@ interface ExternalProps extends ContentAnswersModalExternalProps {
 }
 
 interface Props {
+    className?: string;
     file: BoxItem;
 }
 
-const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: ContentAnswersModalExternalProps & Props) => {
+const ContentAnswers = (props: ContentAnswersModalExternalProps & Props) => {
+    const { className = '', file, onAsk, onRequestClose, ...rest } = props;
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [hasQuestions, setHasQuestions] = useState(false);
     const [isHighlighted, setIsHighlighted] = useState(false);
@@ -44,7 +46,7 @@ const ContentAnswers = ({ file, onAsk, onRequestClose, ...rest }: ContentAnswers
 
     const currentExtension = getProp(file, 'extension');
     return (
-        <div className="be-ContentAnswers">
+        <div className={`be-ContentAnswers ${className}`}>
             <ContentAnswersOpenButton
                 fileExtension={currentExtension}
                 isHighlighted={isHighlighted}

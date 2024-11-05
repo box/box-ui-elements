@@ -61,7 +61,7 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Pr
                 )}
 
                 {showVersions && (
-                    <div className="bcs-Versions-menu">
+                    <div className="bcs-Versions-menu" data-testid="bcs-Versions-menu">
                         <VersionsMenu versions={versions} {...rest} />
                     </div>
                 )}

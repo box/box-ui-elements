@@ -1,12 +1,33 @@
 import React from 'react';
-import { type MetadataTemplateInstance } from '@box/metadata-editor';
+import {
+    AutofillContextProvider,
+    type MetadataTemplateField,
+    type MetadataTemplateInstance,
+} from '@box/metadata-editor';
 import userEvent from '@testing-library/user-event';
+import { TooltipProvider } from '@box/blueprint-web';
+import { IntlProvider } from 'react-intl';
 import { screen, render } from '../../../test-utils/testing-library';
 import MetadataInstanceEditor, { MetadataInstanceEditorProps } from '../MetadataInstanceEditor';
+import { FeatureProvider } from '../../common/feature-checking';
 
 const mockOnCancel = jest.fn();
-const mockOnUnsavedChangesModalCancel = jest.fn();
+const mockOnDiscardUnsavedChanges = jest.fn();
 const mockSetIsUnsavedChangesModalOpen = jest.fn();
+
+jest.unmock('react-intl');
+
+const wrapper = ({ children }) => (
+    <AutofillContextProvider fetchSuggestions={() => Promise.resolve([])} isAiSuggestionsFeatureEnabled>
+        <FeatureProvider features={{}}>
+            <TooltipProvider>
+                <IntlProvider locale="en">{children}</IntlProvider>
+            </TooltipProvider>
+        </FeatureProvider>
+    </AutofillContextProvider>
+);
+
+const renderWithAutofill = element => render(element, { wrapper });
 
 describe('MetadataInstanceEditor', () => {
     const mockCustomMetadataTemplate: MetadataTemplateInstance = {
@@ -49,19 +70,21 @@ describe('MetadataInstanceEditor', () => {
     };
 
     const defaultProps: MetadataInstanceEditorProps = {
+        areAiSuggestionsAvailable: true,
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
         isUnsavedChangesModalOpen: false,
-        template: mockMetadataTemplate,
         onCancel: mockOnCancel,
         onDelete: jest.fn(),
+        onDiscardUnsavedChanges: mockOnDiscardUnsavedChanges,
         onSubmit: jest.fn(),
         setIsUnsavedChangesModalOpen: mockSetIsUnsavedChangesModalOpen,
-        onUnsavedChangesModalCancel: mockOnUnsavedChangesModalCancel,
+        taxonomyOptionsFetcher: jest.fn(),
+        template: mockMetadataTemplate,
     };
 
     test('should render MetadataInstanceForm with correct props', () => {
-        render(<MetadataInstanceEditor {...defaultProps} />);
+        renderWithAutofill(<MetadataInstanceEditor {...defaultProps} />);
 
         const templateHeader = screen.getByText(mockMetadataTemplateInstance.displayName);
         expect(templateHeader).toBeInTheDocument();
@@ -69,7 +92,7 @@ describe('MetadataInstanceEditor', () => {
 
     test('should render MetadataInstanceForm with Custom Template', () => {
         const props = { ...defaultProps, template: mockCustomMetadataTemplate };
-        render(<MetadataInstanceEditor {...props} />);
+        renderWithAutofill(<MetadataInstanceEditor {...props} />);
 
         const templateHeader = screen.getByText('Custom Metadata');
         expect(templateHeader).toBeInTheDocument();
@@ -77,7 +100,7 @@ describe('MetadataInstanceEditor', () => {
 
     test('should render UnsavedChangesModal if isUnsavedChangesModalOpen is true', async () => {
         const props = { ...defaultProps, isUnsavedChangesModalOpen: true };
-        const { findByText } = render(<MetadataInstanceEditor {...props} />);
+        const { findByText } = renderWithAutofill(<MetadataInstanceEditor {...props} />);
 
         const unsavedChangesModal = await findByText('Unsaved Changes');
         expect(unsavedChangesModal).toBeInTheDocument();
@@ -85,14 +108,14 @@ describe('MetadataInstanceEditor', () => {
 
     test('should render MetadataInstanceForm with Delete button disabled', () => {
         const props = { ...defaultProps, isDeleteButtonDisabled: true };
-        render(<MetadataInstanceEditor {...props} />);
+        renderWithAutofill(<MetadataInstanceEditor {...props} />);
 
         const deleteButton = screen.getByRole('button', { name: 'Delete' });
         expect(deleteButton).toBeDisabled();
     });
 
     test('should render MetadataInstanceForm with Delete button enabled', () => {
-        render(<MetadataInstanceEditor {...defaultProps} />);
+        renderWithAutofill(<MetadataInstanceEditor {...defaultProps} />);
 
         const deleteButton = screen.getByRole('button', { name: 'Delete' });
         expect(deleteButton).toBeEnabled();
@@ -100,22 +123,23 @@ describe('MetadataInstanceEditor', () => {
 
     test('Should call onCancel when canceling editing', async () => {
         const props: MetadataInstanceEditorProps = { ...defaultProps, template: mockCustomMetadataTemplate };
-        const { findByRole } = render(<MetadataInstanceEditor {...props} />);
-        const cancelButton = await findByRole('button', { name: 'Cancel' });
+        renderWithAutofill(<MetadataInstanceEditor {...props} />);
 
+        const cancelButton = await screen.findByRole('button', { name: 'Cancel' });
         await userEvent.click(cancelButton);
 
         expect(mockOnCancel).toHaveBeenCalled();
     });
 
-    test('Should call onUnsavedChangesModalCancel instead onCancel when canceling through UnsavedChangesModal', async () => {
+    test('Should call onDiscardUnsavedChanges instead onCancel when canceling through UnsavedChangesModal', async () => {
         const props: MetadataInstanceEditorProps = {
             ...defaultProps,
             template: mockCustomMetadataTemplateWithField,
         };
-        const { rerender, findByRole, findByText } = render(<MetadataInstanceEditor {...props} />);
-        const input = await findByRole('textbox');
-        const cancelButton = await findByRole('button', { name: 'Cancel' });
+        const { rerender } = renderWithAutofill(<MetadataInstanceEditor {...props} />);
+
+        const input = await screen.findByRole('textbox');
+        const cancelButton = await screen.findByRole('button', { name: 'Cancel' });
 
         await userEvent.type(input, 'Lorem ipsum dolor.');
         await userEvent.click(cancelButton);
@@ -124,13 +148,54 @@ describe('MetadataInstanceEditor', () => {
         expect(mockSetIsUnsavedChangesModalOpen).toHaveBeenCalledWith(true);
 
         rerender(<MetadataInstanceEditor {...props} isUnsavedChangesModalOpen={true} />);
-        const unsavedChangesModal = await findByText('Unsaved Changes');
+
+        const unsavedChangesModal = await screen.findByText('Unsaved Changes');
 
         expect(unsavedChangesModal).toBeInTheDocument();
-        const unsavedChangesModalCancelButton = await findByRole('button', { name: 'Cancel' });
+        const unsavedChangesModalDiscardButton = await screen.findByRole('button', { name: 'Discard Changes' });
 
-        await userEvent.click(unsavedChangesModalCancelButton);
+        await userEvent.click(unsavedChangesModalDiscardButton);
 
-        expect(mockOnUnsavedChangesModalCancel).toHaveBeenCalled();
+        expect(mockOnDiscardUnsavedChanges).toHaveBeenCalled();
+    });
+
+    test('should call taxonomyOptionsFetcher on metadata taxonomy field search', async () => {
+        const taxonomyField: MetadataTemplateField = {
+            type: 'taxonomy',
+            key: 'States',
+            displayName: 'States',
+            description: 'State locations',
+            hidden: false,
+            id: '2',
+            taxonomyKey: 'geography',
+            taxonomyId: '1',
+            optionsRules: {
+                multiSelect: true,
+                selectableLevels: [1],
+            },
+        };
+
+        const template: MetadataTemplateInstance = {
+            ...mockCustomMetadataTemplateWithField,
+            fields: [...mockCustomMetadataTemplateWithField.fields, taxonomyField],
+        };
+
+        const props: MetadataInstanceEditorProps = {
+            ...defaultProps,
+            template,
+        };
+
+        const { getByRole } = renderWithAutofill(<MetadataInstanceEditor {...props} />);
+        const combobox = getByRole('combobox', { name: 'States' });
+
+        await userEvent.type(combobox, 'A');
+
+        expect(props.taxonomyOptionsFetcher).toHaveBeenCalledWith(
+            template.scope,
+            template.templateKey,
+            taxonomyField.key,
+            taxonomyField.optionsRules.selectableLevels[0],
+            { marker: null, searchInput: 'A', signal: expect.anything() },
+        );
     });
 });

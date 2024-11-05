@@ -24,7 +24,6 @@ const defaultMetadataArgs = {
     onError: fn,
 };
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
-    isBoxAiSuggestionsEnabled: true,
     isFeatureEnabled: true,
     onError: fn,
 };
@@ -167,6 +166,10 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
         },
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
     },
 };
 
@@ -216,7 +219,9 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const editButtons = await canvas.findAllByRole('button', { name: 'Edit' }, { timeout: 5000 });
+        // Edit buttons contains also template name
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' }, { timeout: 5000 });
+        expect(editButton).toBeInTheDocument();
 
         let headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(3);
@@ -225,11 +230,11 @@ export const MetadataInstanceEditorCancelChanges: StoryObj<typeof MetadataSideba
         );
 
         // go to edit mode - only edited template is visible
-        await userEvent.click(editButtons[0]);
+        await userEvent.click(editButton);
 
         headlines = await canvas.findAllByRole('heading', { level: 1 });
         expect(headlines).toHaveLength(1);
-        expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['Custom Metadata']));
+        expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['My Template']));
 
         // cancel editing - back to list view
         const cancelButton = await canvas.findByRole('button', { name: 'Cancel' });
@@ -304,5 +309,86 @@ export const MetadataInstanceEditorAddTemplateAgainAfterCancel: StoryObj<typeof 
         await userEvent.click(addTemplateButton);
         const templateMetadataOptionEnabled = canvas.getByRole('option', { name: 'My Template' });
         expect(templateMetadataOptionEnabled).not.toHaveAttribute('aria-disabled');
+    },
+};
+
+export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        fileId: '416047501580',
+        metadataSidebarProps: defaultMetadataSidebarProps,
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        // open and edit a new template
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+
+        await userEvent.click(addTemplateButton);
+
+        const templateMetadataOption = canvas.getByRole('option', { name: 'My Template' });
+
+        await userEvent.click(templateMetadataOption);
+
+        const input = await canvas.findByRole('textbox');
+
+        await userEvent.type(input, 'Lorem ipsum dolor.');
+
+        // open another template while editing the first one (with discarding changes)
+        await userEvent.click(addTemplateButton);
+
+        const templateMetadataOptionA = canvas.getByRole('option', { name: 'My Template' });
+        const templateMetadataOptionB = canvas.getByRole('option', { name: 'Virus Scan' });
+
+        expect(templateMetadataOptionA).toHaveAttribute('aria-disabled');
+        expect(templateMetadataOptionB).not.toHaveAttribute('aria-disabled');
+
+        await userEvent.click(templateMetadataOptionB);
+
+        const unsavedChangesModal = await screen.findByRole(
+            'heading',
+            { level: 2, name: 'Unsaved Changes' },
+            { timeout: 5000 },
+        );
+        expect(unsavedChangesModal).toBeInTheDocument();
+
+        const unsavedChangesModalDiscardButton = await screen.findByRole('button', { name: 'Discard Changes' });
+
+        await userEvent.click(unsavedChangesModalDiscardButton);
+
+        const newTemplateHeader = await canvas.findByRole('heading', { name: 'Virus Scan' });
+        expect(newTemplateHeader).toBeInTheDocument();
+
+        // check if template buttons disabled correctly after switching editors
+        await userEvent.click(addTemplateButton);
+
+        const templateMetadataOptionAAfterSwitch = canvas.getByRole('option', { name: 'My Template' });
+        const templateMetadataOptionBAfterSwitch = canvas.getByRole('option', { name: 'Virus Scan' });
+
+        expect(templateMetadataOptionAAfterSwitch).not.toHaveAttribute('aria-disabled');
+        expect(templateMetadataOptionBAfterSwitch).toHaveAttribute('aria-disabled');
+    },
+};
+
+export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const autofillWithBoxAI = await canvas.findAllByRole(
+            'button',
+            { name: /Autofill .+ with Box AI/ },
+            { timeout: 5000 },
+        );
+        expect(autofillWithBoxAI).toHaveLength(2);
+
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' });
+        userEvent.click(editButton);
+
+        const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
+        expect(autofillButton).toBeInTheDocument();
     },
 };

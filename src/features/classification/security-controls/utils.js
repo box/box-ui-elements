@@ -5,6 +5,7 @@ import isNil from 'lodash/isNil';
 import type { Controls, MessageItem } from '../flowTypes';
 
 import appRestrictionsMessageMap from './appRestrictionsMessageMap';
+import integrationRestrictionsMessageMap from './integrationRestrictionsMessageMap';
 import downloadRestrictionsMessageMap from './downloadRestrictionsMessageMap';
 import messages from './messages';
 import {
@@ -21,7 +22,10 @@ const { DESKTOP, MOBILE, WEB } = DOWNLOAD_CONTROL;
 const { BLOCK, WHITELIST, BLACKLIST } = LIST_ACCESS_LEVEL;
 const { COLLAB_ONLY, COLLAB_AND_COMPANY_ONLY, PUBLIC } = SHARED_LINK_ACCESS_LEVEL;
 
-const getShortSecurityControlsMessage = (controls: Controls): Array<MessageItem> => {
+const getShortSecurityControlsMessage = (
+    controls: Controls,
+    shouldDisplayAppsAsIntegrations?: boolean,
+): Array<MessageItem> => {
     const items = [];
     const { app, boxSignRequest, download, externalCollab, sharedLink, watermark } = controls;
 
@@ -31,15 +35,31 @@ const getShortSecurityControlsMessage = (controls: Controls): Array<MessageItem>
 
     // 4 restriction combinations
     if (sharing && download && app && boxSignRequest) {
-        items.push({ message: messages.shortSharingDownloadAppSign });
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortSharingDownloadIntegrationSign
+                : messages.shortSharingDownloadAppSign,
+        });
     }
     // 3 restriction combinations
     else if (sharing && download && app) {
-        items.push({ message: messages.shortSharingDownloadApp });
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortSharingDownloadIntegration
+                : messages.shortSharingDownloadApp,
+        });
     } else if (download && app && boxSignRequest) {
-        items.push({ message: messages.shortDownloadAppSign });
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortDownloadIntegrationSign
+                : messages.shortDownloadAppSign,
+        });
     } else if (sharing && app && boxSignRequest) {
-        items.push({ message: messages.shortSharingAppSign });
+        items.push({
+            message: shouldDisplayAppsAsIntegrations
+                ? messages.shortSharingIntegrationSign
+                : messages.shortSharingAppSign,
+        });
     } else if (sharing && download && boxSignRequest) {
         items.push({ message: messages.shortSharingDownloadSign });
     }
@@ -49,13 +69,19 @@ const getShortSecurityControlsMessage = (controls: Controls): Array<MessageItem>
     } else if (download && boxSignRequest) {
         items.push({ message: messages.shortDownloadSign });
     } else if (app && boxSignRequest) {
-        items.push({ message: messages.shortAppSign });
+        items.push({
+            message: shouldDisplayAppsAsIntegrations ? messages.shortIntegrationSign : messages.shortAppSign,
+        });
     } else if (sharing && download) {
         items.push({ message: messages.shortSharingDownload });
     } else if (sharing && app) {
-        items.push({ message: messages.shortSharingApp });
+        items.push({
+            message: shouldDisplayAppsAsIntegrations ? messages.shortSharingIntegration : messages.shortSharingApp,
+        });
     } else if (download && app) {
-        items.push({ message: messages.shortDownloadApp });
+        items.push({
+            message: shouldDisplayAppsAsIntegrations ? messages.shortDownloadIntegration : messages.shortDownloadApp,
+        });
     }
     // 1 restriction combinations
     else if (boxSignRequest) {
@@ -65,7 +91,7 @@ const getShortSecurityControlsMessage = (controls: Controls): Array<MessageItem>
     } else if (download) {
         items.push({ message: messages.shortDownload });
     } else if (app) {
-        items.push({ message: messages.shortApp });
+        items.push({ message: shouldDisplayAppsAsIntegrations ? messages.shortIntegration : messages.shortApp });
     }
 
     if (watermark) {
@@ -123,13 +149,21 @@ const getExternalCollabMessages = (controls: Controls): Array<MessageItem> => {
     return items;
 };
 
-const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array<MessageItem> => {
+const getAppDownloadMessages = (
+    controls: Controls,
+    maxAppCount?: number,
+    shouldDisplayAppsAsIntegrations?: boolean,
+): Array<MessageItem> => {
     const items = [];
     const accessLevel = getProp(controls, `${APP}.accessLevel`);
 
     switch (accessLevel) {
         case BLOCK:
-            items.push({ message: messages.appDownloadRestricted });
+            items.push({
+                message: shouldDisplayAppsAsIntegrations
+                    ? messages.integrationDownloadRestricted
+                    : messages.appDownloadRestricted,
+            });
             break;
         case WHITELIST:
         case BLACKLIST: {
@@ -145,11 +179,13 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
 
                 items.push({
                     message: {
-                        ...appRestrictionsMessageMap[accessLevel][WITH_OVERFLOWN_APP_LIST],
+                        ...(shouldDisplayAppsAsIntegrations
+                            ? integrationRestrictionsMessageMap[accessLevel][WITH_OVERFLOWN_APP_LIST]
+                            : appRestrictionsMessageMap[accessLevel][WITH_OVERFLOWN_APP_LIST]),
                         values: { appNames, remainingAppCount },
                     },
                     tooltipMessage: {
-                        ...messages.allAppNames,
+                        ...(shouldDisplayAppsAsIntegrations ? messages.allIntegrationNames : messages.allAppNames),
                         values: { appsList },
                     },
                 });
@@ -160,7 +196,9 @@ const getAppDownloadMessages = (controls: Controls, maxAppCount?: number): Array
 
                 items.push({
                     message: {
-                        ...appRestrictionsMessageMap[accessLevel][messageType],
+                        ...(shouldDisplayAppsAsIntegrations
+                            ? integrationRestrictionsMessageMap[accessLevel][messageType]
+                            : appRestrictionsMessageMap[accessLevel][messageType]),
                         values: { appNames },
                     },
                 });
@@ -220,12 +258,16 @@ const getBoxSignRequestMessages = (controls: Controls): Array<MessageItem> => {
     return items;
 };
 
-const getFullSecurityControlsMessages = (controls: Controls, maxAppCount?: number): Array<MessageItem> => {
+const getFullSecurityControlsMessages = (
+    controls: Controls,
+    maxAppCount?: number,
+    shouldDisplayAppsAsIntegrations?: boolean,
+): Array<MessageItem> => {
     const items = [
         ...getSharedLinkMessages(controls),
         ...getExternalCollabMessages(controls),
         ...getDownloadMessages(controls),
-        ...getAppDownloadMessages(controls, maxAppCount),
+        ...getAppDownloadMessages(controls, maxAppCount, shouldDisplayAppsAsIntegrations),
         ...getWatermarkingMessages(controls),
         ...getBoxSignRequestMessages(controls),
     ];
