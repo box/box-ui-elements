@@ -1,18 +1,17 @@
-// @flow
 import * as React from 'react';
 import { useArgs } from '@storybook/preview-api';
+import { Button } from '@box/blueprint-web';
 
-import PrimaryButton from '../../../components/primary-button/PrimaryButton';
-import { ACCESS_OPEN } from '../../../constants';
+import { ACCESS_COLLAB, ACCESS_COMPANY, ACCESS_OPEN } from '../../../constants';
 import { addRootElement } from '../../../utils/storybook';
 
-import ShareDialog from '../ShareDialog';
+import ShareDialog, { ShareDialogProps } from '../ShareDialog';
 
 // need to import this into the story because it's usually in ContentExplorer
 import '../../common/modal.scss';
 
 export const shareDialog = {
-    render: (args: any) => {
+    render: (args: ShareDialogProps) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const [, setArgs] = useArgs();
 
@@ -37,7 +36,10 @@ export const shareDialog = {
                     parentElement={rootElement}
                     {...args}
                 />
-                <PrimaryButton onClick={handleOpenModal}>Launch ShareDialog</PrimaryButton>
+
+                <Button onClick={handleOpenModal} variant="primary">
+                    Launch ShareDialog
+                </Button>
             </div>
         );
     },
@@ -47,8 +49,19 @@ export default {
     title: 'Elements/ContentExplorer',
     component: ShareDialog,
     args: {
-        canSetShareAccess: false,
+        canSetShareAccess: true,
         isLoading: false,
         isOpen: false,
+        item: {
+            allowed_shared_link_access_levels: [ACCESS_COLLAB, ACCESS_COMPANY, ACCESS_OPEN],
+            id: 'abcdefg',
+            permissions: {
+                can_set_share_access: true,
+            },
+            shared_link: {
+                access: ACCESS_OPEN,
+                url: 'https://cloud.box.com/s/abcdefg',
+            },
+        },
     },
 };

@@ -44,6 +44,7 @@
     background-color: $darker-black;
 }
 
+.be-modal-share .be-modal-dialog-content,
 .be-modal-delete .be-modal-dialog-content {
     padding: 0;
     border-radius: tokens.$radius-4;
