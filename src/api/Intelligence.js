@@ -67,12 +67,23 @@ class Intelligence extends Base {
     async extractStructured(request: AiExtractStructured): Promise<AiExtractResponse> {
         this.errorCode = ERROR_CODE_EXTRACT_STRUCTURED;
 
+        const { items } = request;
+        if (!items || items.length === 0) {
+            throw new Error('Missing items!');
+        }
+
+        items.forEach(item => {
+            if (!item.id || !item.type) {
+                throw new Error('Invalid item!');
+            }
+        });
+
         const url = `${this.getBaseApiUrl()}/ai/extract_structured`;
 
         const suggestionsResponse = await this.xhr.post({
             url,
             data: request,
-            id: `file_${request.items[0].id}`,
+            id: `file_${items[0].id}`,
         });
 
         return getProp(suggestionsResponse, 'data');

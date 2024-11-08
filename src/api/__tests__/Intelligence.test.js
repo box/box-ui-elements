@@ -110,6 +110,20 @@ describe('api/Intelligence', () => {
             },
         };
 
+        test.each`
+            items   | message             | missing
+            ${[]}   | ${'Missing items!'} | ${'item'}
+            ${[{}]} | ${'Invalid item!'}  | ${'item'}
+        `('should throw error if $missing is missing  ', async ({ items, message }) => {
+            const req = { ...request, items };
+            try {
+                await intelligence.extractStructured(req);
+                expect(true).toEqual(false); // should never hit this line, if it does then the test fails
+            } catch (e) {
+                expect(e.message).toEqual(message);
+            }
+        });
+
         test('should return a successful response including the answer from the LLM', async () => {
             const suggestionsFromServer = {
                 stringFieldKey: 'fieldVal1',
