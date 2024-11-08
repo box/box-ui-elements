@@ -146,9 +146,15 @@ function useSidebarMetadataFetcher(
                 return;
             }
             setStatus(STATUS.LOADING);
-            await api
-                .getMetadataAPI(false)
-                .deleteMetadata(file, metadataInstance, () => setStatus(STATUS.SUCCESS), onApiError, true);
+            await api.getMetadataAPI(false).deleteMetadata(
+                file,
+                metadataInstance,
+                () => setStatus(STATUS.SUCCESS),
+                (error: ElementsXhrError, code: string) => {
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
+                },
+                true,
+            );
         },
         [api, onApiError, file],
     );

@@ -14,6 +14,7 @@ import {
     mockFileRequestWithoutMetadata,
     mockMetadataInstances,
     aiSuggestionsForMyAttribute,
+    mockErrorDeleteMyTemplateMetadataRequest,
 } from '../__mocks__/MetadataSidebarRedesignedMocks';
 
 const token = global.TOKEN;

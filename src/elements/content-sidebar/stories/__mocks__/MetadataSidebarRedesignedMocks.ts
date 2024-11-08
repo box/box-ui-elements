@@ -332,3 +332,12 @@ export const aiSuggestionsForMyAttribute = {
         myAttribute: 'it works fine',
     },
 };
+
+export const mockErrorDeleteMyTemplateMetadataRequest = {
+    url: `${apiV2Path}/files/${fileIdWithoutMetadata}/metadata/global/properties`,
+    response: {
+        message: "Instance of 'properties' not found for 'file_416047501580'",
+        code: 'instance_not_found',
+        request_id: 'fasf6as5fasfas7a',
+    },
+};

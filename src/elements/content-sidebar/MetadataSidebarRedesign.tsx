@@ -158,7 +158,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     );
 
     const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
-        <InlineError>
+        <InlineError className="bcs-MetadataSidebarRedesign-inline-error">
             <FormattedMessage {...errorMessage} />
         </InlineError>
     );
