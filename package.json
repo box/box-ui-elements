@@ -128,7 +128,7 @@
         "@box/cldr-data": "^34.2.0",
         "@box/frontend": "^10.0.0",
         "@box/languages": "^1.0.0",
-        "@box/metadata-editor": "^0.65.0",
+        "@box/metadata-editor": "^0.73.0",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@chromatic-com/storybook": "^1.6.1",
