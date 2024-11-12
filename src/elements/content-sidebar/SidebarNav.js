@@ -47,6 +47,7 @@ type Props = {
     intl: IntlShape,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
+    onPanelChange?: (name: string) => void,
 };
 
 const SidebarNav = ({
@@ -63,6 +64,7 @@ const SidebarNav = ({
     intl,
     isOpen,
     onNavigate,
+    onPanelChange,
 }: Props) => {
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
 
@@ -75,6 +77,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                             data-target-id="SidebarNavButton-boxAI"
                             data-testid="sidebarboxai"
+                            onClick={onPanelChange}
                             sidebarView={SIDEBAR_VIEW_BOXAI}
                             tooltip={intl.formatMessage(messages.sidebarBoxAITitle)}
                         >
@@ -86,6 +89,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                             data-target-id="SidebarNavButton-activity"
                             data-testid="sidebaractivity"
+                            onClick={onPanelChange}
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
@@ -97,6 +101,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                             data-target-id="SidebarNavButton-details"
                             data-testid="sidebardetails"
+                            onClick={onPanelChange}
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
@@ -108,6 +113,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                             data-target-id="SidebarNavButton-skills"
                             data-testid="sidebarskills"
+                            onClick={onPanelChange}
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                         >
@@ -119,6 +125,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                             data-target-id="SidebarNavButton-metadata"
                             data-testid="sidebarmetadata"
+                            onClick={onPanelChange}
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
@@ -129,6 +136,7 @@ const SidebarNav = ({
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             data-target-id="SidebarNavButton-docGen"
+                            onClick={onPanelChange}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
                         >

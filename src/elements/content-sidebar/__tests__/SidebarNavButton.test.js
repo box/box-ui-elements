@@ -52,4 +52,18 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
 
         expect(button.hasClass('bcs-is-selected')).toBe(expected);
     });
+
+    test('should call onClick with sidebarView when clicked', () => {
+        const mockOnClick = jest.fn();
+        const mockSidebarView = 'activity';
+
+        const wrapper = getWrapper({
+            onClick: mockOnClick,
+            sidebarView: mockSidebarView,
+        });
+        const button = getButton(wrapper);
+
+        button.simulate('click');
+        expect(mockOnClick).toBeCalledWith(mockSidebarView);
+    });
 });
