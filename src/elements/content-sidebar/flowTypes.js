@@ -1,4 +1,5 @@
 // @flow
+import { Icon } from 'icons/flowTypes';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
@@ -28,6 +29,7 @@ type AdditionalSidebarTab = {
     ftuxTooltipData?: AdditionalSidebarTabFtuxData,
     iconUrl?: string,
     id: number,
+    icon?: Icon,
     title: ?string,
 };
 
