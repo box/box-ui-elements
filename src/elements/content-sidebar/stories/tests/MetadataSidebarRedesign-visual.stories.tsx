@@ -480,7 +480,7 @@ export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
             handlers: [
                 ...defaultMockHandlers,
                 http.delete(mockErrorDeleteMyTemplateMetadataRequest.url, () => {
-                    return HttpResponse.json(mockErrorDeleteMyTemplateMetadataRequest.response);
+                    return HttpResponse.json(mockErrorDeleteMyTemplateMetadataRequest.response, { status: 404 });
                 }),
             ],
         },
