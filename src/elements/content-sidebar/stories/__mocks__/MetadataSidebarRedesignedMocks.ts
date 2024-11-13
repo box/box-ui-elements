@@ -1,8 +1,9 @@
+import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+
 export const fileIdWithMetadata = '415542803939';
 export const fileIdWithoutMetadata = '416047501580';
 
-const host = 'https://api.box.com';
-const apiV2Path = `${host}/2.0`;
+const apiV2Path = `${DEFAULT_HOSTNAME_API}/2.0`;
 
 export const mockFileRequest = {
     url: `${apiV2Path}/files/${fileIdWithMetadata}?fields=is_externally_owned,permissions`,
@@ -54,6 +55,13 @@ export const mockFileRequestWithoutMetadata = {
             can_create_annotations: true,
             can_view_annotations: true,
         },
+    },
+};
+
+export const mockGlobalMetadataTemplates = {
+    url: `${apiV2Path}/metadata_templates/global?limit=1000`,
+    response: {
+        entries: [],
     },
 };
 
@@ -334,7 +342,7 @@ export const aiSuggestionsForMyAttribute = {
 };
 
 export const mockErrorDeleteMyTemplateMetadataRequest = {
-    url: `${apiV2Path}/files/${fileIdWithoutMetadata}/metadata/global/properties`,
+    url: 'https://api.box.com/2.0/files/415542803939/metadata/enterprise_173733877/myTemplate',
     response: {
         message: "Instance of 'properties' not found for 'file_416047501580'",
         code: 'instance_not_found',

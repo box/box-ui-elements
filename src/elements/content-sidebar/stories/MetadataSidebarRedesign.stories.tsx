@@ -9,6 +9,7 @@ import {
     mockEnterpriseMetadataTemplates,
     mockFileRequest,
     mockMetadataInstances,
+    mockGlobalMetadataTemplates,
 } from './__mocks__/MetadataSidebarRedesignedMocks';
 
 const mockFeatures = {
@@ -49,6 +50,9 @@ export default {
                 }),
                 http.get(mockEnterpriseMetadataTemplates.url, () => {
                     return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
+                }),
+                http.get(mockGlobalMetadataTemplates.url, () => {
+                    return HttpResponse.json(mockGlobalMetadataTemplates.response);
                 }),
             ],
         },
