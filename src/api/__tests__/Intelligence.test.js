@@ -111,10 +111,10 @@ describe('api/Intelligence', () => {
         };
 
         test.each`
-            items   | message             | missing
-            ${[]}   | ${'Missing items!'} | ${'item'}
-            ${[{}]} | ${'Invalid item!'}  | ${'item'}
-        `('should throw error if $missing is missing  ', async ({ items, message }) => {
+            items   | message
+            ${[]}   | ${'Missing items!'}
+            ${[{}]} | ${'Invalid item!'}
+        `('should throw error with $message', async ({ items, message }) => {
             const req = { ...request, items };
             try {
                 await intelligence.extractStructured(req);
