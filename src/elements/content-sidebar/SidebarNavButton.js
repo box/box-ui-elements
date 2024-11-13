@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { Route } from 'react-router-dom';
+import noop from 'lodash/noop';
 import NavButton from '../common/nav-button';
 import Tooltip from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
@@ -16,6 +17,7 @@ type Props = {
     children: React.Node,
     elementId?: string,
     isOpen?: boolean,
+    onClick?: (sidebarView: string) => void,
     sidebarView: string,
     tooltip: React.Node,
 };
@@ -27,10 +29,15 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         children,
         elementId = '',
         isOpen,
+        onClick = noop,
         sidebarView,
         tooltip,
     } = props;
     const sidebarPath = `/${sidebarView}`;
+
+    const handleNavButtonClick = () => {
+        onClick(sidebarView);
+    };
 
     return (
         <Route path={sidebarPath}>
@@ -54,6 +61,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             getDOMRef={ref}
                             id={id}
                             isActive={isActive}
+                            onClick={handleNavButtonClick}
                             replace={isExactMatch}
                             role="tab"
                             tabIndex={isActiveValue ? '0' : '-1'}

@@ -61,6 +61,7 @@ type Props = {
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onPanelChange?: (name: string) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -267,6 +268,7 @@ class Sidebar extends React.Component<Props, State> {
             metadataEditors,
             metadataSidebarProps,
             onAnnotationSelect,
+            onPanelChange,
             onVersionChange,
             versionsSidebarProps,
         }: Props = this.props;
@@ -302,6 +304,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasSkills={hasSkills}
                                 hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
+                                onPanelChange={onPanelChange}
                             />
                         )}
                         <SidebarPanels

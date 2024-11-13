@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
+import { render, screen, fireEvent } from '@testing-library/react';
 import PlainButton from '../../../components/plain-button';
 import SidebarNavButton from '../SidebarNavButton';
 import Tooltip from '../../../components/tooltip/Tooltip';
@@ -51,5 +52,22 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         const button = getButton(wrapper);
 
         expect(button.hasClass('bcs-is-selected')).toBe(expected);
+    });
+
+    test('should call onClick with sidebarView when clicked', () => {
+        const mockOnClick = jest.fn();
+        const mockSidebarView = 'activity';
+
+        render(
+            <MemoryRouter initialEntries={['/']}>
+                <SidebarNavButton onClick={mockOnClick} sidebarView={mockSidebarView}>
+                    button
+                </SidebarNavButton>
+            </MemoryRouter>,
+        );
+        const button = screen.getByText('button');
+
+        fireEvent.click(button);
+        expect(mockOnClick).toBeCalledWith(mockSidebarView);
     });
 });
