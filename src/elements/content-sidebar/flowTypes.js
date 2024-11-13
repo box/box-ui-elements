@@ -1,5 +1,5 @@
 // @flow
-import { Icon } from 'icons/flowTypes';
+import { IconButton } from '@box/blueprint-web/lib-esm/primitives/icon-button/icon-button';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
@@ -29,7 +29,7 @@ type AdditionalSidebarTab = {
     ftuxTooltipData?: AdditionalSidebarTabFtuxData,
     iconUrl?: string,
     id: number,
-    icon?: Icon,
+    icon?: IconButton,
     title: ?string,
 };
 
