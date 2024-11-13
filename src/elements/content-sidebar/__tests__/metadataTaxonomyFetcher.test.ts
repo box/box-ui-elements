@@ -22,8 +22,8 @@ describe('metadataTaxonomyFetcher', () => {
     test('should fetch metadata options and return formatted data', async () => {
         const mockMetadataOptions = {
             entries: [
-                { id: 'opt1', displayName: 'Option 1' },
-                { id: 'opt2', displayName: 'Option 2' },
+                { id: 'opt1', display_name: 'Option 1' },
+                { id: 'opt2', display_name: 'Option 2' },
             ],
         };
 
@@ -70,7 +70,7 @@ describe('metadataTaxonomyFetcher', () => {
 
     test('should set marker to null if not provided in options', async () => {
         const mockMetadataOptions = {
-            entries: [{ id: 'opt1', displayName: 'Option 1' }],
+            entries: [{ id: 'opt1', display_name: 'Option 1' }],
         };
 
         apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);

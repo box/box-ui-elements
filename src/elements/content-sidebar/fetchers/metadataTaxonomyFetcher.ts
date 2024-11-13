@@ -19,7 +19,7 @@ export const metadataTaxonomyFetcher = async (
     return {
         options: metadataOptions.entries.map((metadataOption: MetadataOptionEntry) => ({
             value: metadataOption.id,
-            displayValue: metadataOption.displayName,
+            displayValue: metadataOption.display_name,
         })),
         marker,
     };
