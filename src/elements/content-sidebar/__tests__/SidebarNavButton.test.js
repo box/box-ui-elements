@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
+import { render, screen, fireEvent } from '@testing-library/react';
 import PlainButton from '../../../components/plain-button';
 import SidebarNavButton from '../SidebarNavButton';
 import Tooltip from '../../../components/tooltip/Tooltip';
@@ -57,13 +58,16 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         const mockOnClick = jest.fn();
         const mockSidebarView = 'activity';
 
-        const wrapper = getWrapper({
-            onClick: mockOnClick,
-            sidebarView: mockSidebarView,
-        });
-        const button = getButton(wrapper);
+        render(
+            <MemoryRouter initialEntries={['/']}>
+                <SidebarNavButton onClick={mockOnClick} sidebarView={mockSidebarView}>
+                    button
+                </SidebarNavButton>
+            </MemoryRouter>,
+        );
+        const button = screen.getByText('button');
 
-        button.simulate('click');
+        fireEvent.click(button);
         expect(mockOnClick).toBeCalledWith(mockSidebarView);
     });
 });
