@@ -1,30 +1,26 @@
-@import '../common/variables';
+@use '@box/blueprint-web-assets/tokens/tokens.scss';
 
 .be-modal.be-modal-share {
     .bce-shared-access-select {
         height: 27px;
         line-height: 15px;
+        border-radius: tokens.$radius-2;
     }
 
-    .be-modal-content {
-        position: relative;
+    .be-modal-input-group {
+        display: flex;
 
         input[type='text'] {
             flex-grow: 1;
             max-width: 296px;
             text-overflow: ellipsis;
             border-right: 0 none;
-            border-radius: $bdl-border-radius-size 0 0 $bdl-border-radius-size;
+            border-radius: tokens.$radius-2 0 0 tokens.$radius-2;
 
             .be-is-small & {
                 width: 237px;
             }
         }
-    }
-
-    .be-modal-input-group {
-        display: flex;
-        justify-content: space-between;
     }
 
     .be-modal-button-copy {
@@ -37,15 +33,11 @@
         line-height: 34px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        border-radius: 0 $bdl-border-radius-size $bdl-border-radius-size 0;
+        border-radius: 0 tokens.$radius-2 tokens.$radius-2 0;
     }
 
     .be-modal-btns {
         align-items: center;
         justify-content: space-between;
-
-        .btn {
-            margin: 0;
-        }
     }
 }
