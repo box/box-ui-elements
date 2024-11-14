@@ -83,7 +83,6 @@ class Sidebar extends React.Component<Props, State> {
         isLoading: false,
         getAnnotationsMatchPath: noop,
         getAnnotationsPath: noop,
-        onOpenChange: noop,
     };
 
     id: string = uniqueid('bcs_');
@@ -115,7 +114,7 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, location, onOpenChange }: Props = this.props;
+        const { fileId, history, location, onOpenChange = noop }: Props = this.props;
         const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
 
