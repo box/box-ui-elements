@@ -195,9 +195,11 @@ describe('elements/content-sidebar/Sidebar', () => {
             });
 
             test.each`
-                prevOpen | open
-                ${false} | ${true}
-                ${true}  | ${false}
+                prevOpen     | open
+                ${false}     | ${true}
+                ${true}      | ${false}
+                ${undefined} | ${true}
+                ${undefined} | ${false}
             `(
                 'given previous open state = $prevOpen and new open state = $open should call onOpenChange with $open',
                 ({ prevOpen, open }) => {
@@ -206,6 +208,20 @@ describe('elements/content-sidebar/Sidebar', () => {
                     rerender(getSidebar(open));
 
                     expect(mockOnOpenChange).toBeCalledWith(open);
+                },
+            );
+            test.each`
+                prevOpen | open
+                ${false} | ${false}
+                ${true}  | ${true}
+            `(
+                'given previous open state = $prevOpen and new open state = $open should not call onOpenChange',
+                ({ prevOpen, open }) => {
+                    const { rerender } = render(getSidebar(prevOpen));
+
+                    rerender(getSidebar(open));
+
+                    expect(mockOnOpenChange).not.toBeCalled();
                 },
             );
         });
