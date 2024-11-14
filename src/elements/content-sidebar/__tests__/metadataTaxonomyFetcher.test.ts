@@ -106,14 +106,14 @@ describe('metadataNodeTaxonomiesFetcher', () => {
     beforeEach(() => {
         apiMock = {
             getMetadataAPI: jest.fn().mockReturnValue({
-                getMetadataTaxonomyLevels: jest.fn(),
+                getMetadataTaxonomy: jest.fn(),
                 getMetadataTaxonomyNode: jest.fn(),
             }),
         };
     });
 
-    test('should fetch taxonomy levels and node data and return formatted data', async () => {
-        const mockTaxonomyLevels = {
+    test('should fetch taxonomy and node data and return formatted data', async () => {
+        const mockTaxonomy = {
             displayName: 'Geography',
             namespace: 'my_enterprise',
             id: 'my_id',
@@ -131,7 +131,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
             ancestors: [{ id: 'ancestor_1', level: 2, displayName: 'Ancestor 1' }],
         };
 
-        apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels.mockResolvedValue(mockTaxonomyLevels);
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue(mockTaxonomy);
         apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockResolvedValue(mockTaxonomyNode);
 
         const result = await metadataTaxonomyNodeAncestorsFetcher(apiMock, fileID, scope, taxonomyKey, nodeID);
@@ -154,11 +154,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
         ];
 
         expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
-        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels).toHaveBeenCalledWith(
-            fileID,
-            scope,
-            taxonomyKey,
-        );
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomy).toHaveBeenCalledWith(fileID, scope, taxonomyKey);
         expect(apiMock.getMetadataAPI(false).getMetadataTaxonomyNode).toHaveBeenCalledWith(
             fileID,
             scope,
@@ -170,7 +166,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
     });
 
     test('should handle empty ancestors array', async () => {
-        const mockTaxonomyLevels = {
+        const mockTaxonomy = {
             displayName: 'Geography',
             namespace: 'my_enterprise',
             id: 'my_id',
@@ -185,7 +181,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
             ancestors: [],
         };
 
-        apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels.mockResolvedValue(mockTaxonomyLevels);
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue(mockTaxonomy);
         apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockResolvedValue(mockTaxonomyNode);
 
         const result = await metadataTaxonomyNodeAncestorsFetcher(apiMock, fileID, scope, taxonomyKey, nodeID);
@@ -203,9 +199,9 @@ describe('metadataNodeTaxonomiesFetcher', () => {
         expect(result).toEqual(expectedResult);
     });
 
-    test('should throw an error if getMetadataTaxonomyLevels fails', async () => {
+    test('should throw an error if getMetadataTaxonomy fails', async () => {
         const error = new Error('API Error');
-        apiMock.getMetadataAPI(false).getMetadataTaxonomyLevels.mockRejectedValue(error);
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockRejectedValue(error);
 
         await expect(metadataTaxonomyNodeAncestorsFetcher(apiMock, fileID, scope, taxonomyKey, nodeID)).rejects.toThrow(
             'API Error',
