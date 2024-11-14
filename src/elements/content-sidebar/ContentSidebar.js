@@ -76,6 +76,7 @@ type Props = {
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
     onFetchFileSuccess?: () => void,
+    onOpenChange?: (isOpen: boolean) => void,
     onPanelChange?: (name: string) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
@@ -358,6 +359,7 @@ class ContentSidebar extends React.Component<Props, State> {
             messages,
             metadataSidebarProps,
             onAnnotationSelect,
+            onOpenChange,
             onPanelChange,
             onVersionChange,
             onVersionHistoryClick,
@@ -398,6 +400,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 metadataEditors={metadataEditors}
                                 metadataSidebarProps={metadataSidebarProps}
                                 onAnnotationSelect={onAnnotationSelect}
+                                onOpenChange={onOpenChange}
                                 onPanelChange={onPanelChange}
                                 onVersionChange={onVersionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}

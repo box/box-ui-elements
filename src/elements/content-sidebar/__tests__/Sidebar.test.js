@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
+import { render } from '@testing-library/react';
 import {
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
@@ -171,6 +173,41 @@ describe('elements/content-sidebar/Sidebar', () => {
                 docGenSidebarProps: withDocgenFeature,
             });
             expect(historyMock.push).toHaveBeenCalledWith('/');
+        });
+        describe('open state change', () => {
+            const mockOnOpenChange = jest.fn();
+            const getSidebar = open => (
+                <MemoryRouter initialEntries={['/']}>
+                    <Sidebar
+                        {...defaultProps}
+                        file={file}
+                        location={{
+                            pathname: '/',
+                            state: { open },
+                        }}
+                        onOpenChange={mockOnOpenChange}
+                    />
+                </MemoryRouter>
+            );
+
+            afterEach(() => {
+                mockOnOpenChange.mockClear();
+            });
+
+            test.each`
+                prevOpen | open
+                ${false} | ${true}
+                ${true}  | ${false}
+            `(
+                'given previous open state = $prevOpen and new open state = $open should call onOpenChange with $open',
+                ({ prevOpen, open }) => {
+                    const { rerender } = render(getSidebar(prevOpen));
+
+                    rerender(getSidebar(open));
+
+                    expect(mockOnOpenChange).toBeCalledWith(open);
+                },
+            );
         });
     });
 
