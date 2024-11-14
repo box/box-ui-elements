@@ -19,7 +19,7 @@ import {
     TYPE_FILE,
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     ERROR_CODE_FETCH_METADATA_OPTIONS,
-    ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS,
+    ERROR_CODE_FETCH_METADATA_TAXONOMY,
     ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE,
 } from '../../constants';
 import { handleOnAbort } from '../utils';
@@ -3007,18 +3007,18 @@ describe('api/Metadata', () => {
             expect(handleOnAbort).toHaveBeenCalled();
         });
     });
-    describe('getMetadataTaxonomyLevels', () => {
+    describe('getMetadataTaxonomy', () => {
         const scope = 'enterprise';
         const taxonomyKey = '12345';
         const fileID = 'id';
 
-        test('should build getMetadataTaxonomyLevelsUrl correctly', () => {
-            const url = metadata.getMetadataTaxonomyLevelsUrl(scope, taxonomyKey);
+        test('should build getMetadataTaxonomyUrl correctly', () => {
+            const url = metadata.getMetadataTaxonomyUrl(scope, taxonomyKey);
 
             expect(url).toBe(`https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}`);
         });
 
-        test('should fetch metadata taxonomy levels successfully', async () => {
+        test('should fetch metadata taxonomy successfully', async () => {
             const mockResponse = {
                 displayName: 'Geography',
                 namespace: 'my_enterprise',
@@ -3038,41 +3038,41 @@ describe('api/Metadata', () => {
                 ],
             };
             metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: mockResponse });
-            metadata.getMetadataTaxonomyLevelsUrl = jest.fn().mockReturnValueOnce('levels_url');
+            metadata.getMetadataTaxonomyUrl = jest.fn().mockReturnValueOnce('taxonomy_url');
 
-            const result = await metadata.getMetadataTaxonomyLevels(fileID, scope, taxonomyKey);
+            const result = await metadata.getMetadataTaxonomy(fileID, scope, taxonomyKey);
 
             expect(result).toEqual(mockResponse);
-            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS);
-            expect(metadata.getMetadataTaxonomyLevelsUrl).toHaveBeenCalled();
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY);
+            expect(metadata.getMetadataTaxonomyUrl).toHaveBeenCalled();
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 id: 'file_id',
-                url: 'levels_url',
+                url: 'taxonomy_url',
             });
         });
 
         test('should throw an error if id is missing', async () => {
-            await expect(() => metadata.getMetadataTaxonomyLevels('', scope, taxonomyKey)).rejects.toThrow(
+            await expect(() => metadata.getMetadataTaxonomy('', scope, taxonomyKey)).rejects.toThrow(
                 ErrorUtil.getBadItemError(),
             );
         });
 
         test('should throw an error if scope is missing', async () => {
-            await expect(metadata.getMetadataTaxonomyLevels(fileID, '', taxonomyKey)).rejects.toThrow('Missing scope');
+            await expect(metadata.getMetadataTaxonomy(fileID, '', taxonomyKey)).rejects.toThrow('Missing scope');
         });
 
         test('should throw an error if taxonomyKey is missing', async () => {
-            await expect(metadata.getMetadataTaxonomyLevels(fileID, scope, '')).rejects.toThrow('Missing taxonomyKey');
+            await expect(metadata.getMetadataTaxonomy(fileID, scope, '')).rejects.toThrow('Missing taxonomyKey');
         });
 
         test('should set the correct error code', async () => {
             try {
-                await metadata.getMetadataTaxonomyLevels(scope, taxonomyKey);
+                await metadata.getMetadataTaxonomy(scope, taxonomyKey);
             } catch (error) {
                 // Ignore error
             }
 
-            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS);
+            expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY);
         });
     });
     describe('getMetadataTaxonomyNode', () => {
@@ -3083,9 +3083,13 @@ describe('api/Metadata', () => {
 
         test('should build getMetadataTaxonomyNodeUrl correctly', () => {
             const url = metadata.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, true);
+            const noAncestorsUrl = metadata.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, false);
 
             expect(url).toBe(
                 `https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}/nodes/${nodeID}?include-ancestors=true`,
+            );
+            expect(noAncestorsUrl).toBe(
+                `https://api.box.com/2.0/metadata_taxonomies/${scope}/${taxonomyKey}/nodes/${nodeID}`,
             );
         });
 
@@ -3112,7 +3116,7 @@ describe('api/Metadata', () => {
 
             expect(result).toEqual(mockResponse);
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE);
-            expect(metadata.getMetadataTaxonomyNodeUrl).toHaveBeenCalled();
+            expect(metadata.getMetadataTaxonomyNodeUrl).toHaveBeenCalledWith(scope, taxonomyKey, nodeID, true);
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 id: 'file_id',
                 url: 'node_url',
@@ -3135,7 +3139,7 @@ describe('api/Metadata', () => {
 
             expect(result).toEqual(noAncestorsMock);
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE);
-            expect(metadata.getMetadataTaxonomyNodeUrl).toHaveBeenCalled();
+            expect(metadata.getMetadataTaxonomyNodeUrl).toHaveBeenCalledWith(scope, taxonomyKey, nodeID, undefined);
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 id: 'file_id',
                 url: 'node_url',

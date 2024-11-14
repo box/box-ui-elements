@@ -34,7 +34,7 @@ import {
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     TYPE_FILE,
     ERROR_CODE_FETCH_METADATA_TAXONOMY_NODE,
-    ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS,
+    ERROR_CODE_FETCH_METADATA_TAXONOMY,
 } from '../constants';
 
 import type { RequestOptions, ElementsErrorCallback, JSONPatchOperations } from '../common/types/api';
@@ -1152,27 +1152,27 @@ class Metadata extends File {
     }
 
     /**
-     * Build URL for metadata taxonomy levels.
+     * Build URL for metadata taxonomy.
      *
      * @param scope
      * @param taxonomyKey
      * @returns {`${string}/metadata_taxonomies/${string}/${string}`}
      */
-    getMetadataTaxonomyLevelsUrl(scope: string, taxonomyKey: string): string {
+    getMetadataTaxonomyUrl(scope: string, taxonomyKey: string): string {
         return `${this.getBaseApiUrl()}/metadata_taxonomies/${scope}/${taxonomyKey}`;
     }
 
     /**
-     * Gets taxonomy levels associated with a taxonomy key.
+     * Gets taxonomy associated with a taxonomy key.
      *
      * @param id
      * @param scope
      * @param taxonomyKey
      * @param nodeID
-     * @returns {Promise<MetadataTaxonomyLevels>}
+     * @returns {Promise<MetadataTaxonomy>}
      */
-    async getMetadataTaxonomyLevels(id: string, scope: string, taxonomyKey: string) {
-        this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMY_LEVELS;
+    async getMetadataTaxonomy(id: string, scope: string, taxonomyKey: string) {
+        this.errorCode = ERROR_CODE_FETCH_METADATA_TAXONOMY;
 
         if (!id) {
             throw getBadItemError();
@@ -1186,11 +1186,11 @@ class Metadata extends File {
             throw new Error('Missing taxonomyKey');
         }
 
-        const url = this.getMetadataTaxonomyLevelsUrl(scope, taxonomyKey);
+        const url = this.getMetadataTaxonomyUrl(scope, taxonomyKey);
 
-        const metadataTaxonomyLevels = await this.xhr.get({ url, id: getTypedFileId(id) });
+        const metadataTaxonomy = await this.xhr.get({ url, id: getTypedFileId(id) });
 
-        return getProp(metadataTaxonomyLevels, 'data', {});
+        return getProp(metadataTaxonomy, 'data', {});
     }
 
     /**
