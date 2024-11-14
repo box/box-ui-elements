@@ -28,6 +28,24 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render di
 </AdditionalTabTooltip>
 `;
 
+exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render icon if no valid id provided with an icon 1`] = `
+<AdditionalTabTooltip
+  defaultTooltipText="test title"
+  isFtuxVisible={true}
+>
+  <PlainButton
+    aria-label="test title"
+    className="bdl-AdditionalTab bdl-is-overflow"
+    data-testid="additionaltab"
+    isDisabled={false}
+    onClick={[Function]}
+    type="button"
+  >
+    <SvgPlus />
+  </PlainButton>
+</AdditionalTabTooltip>
+`;
+
 exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render the more icon ellipsis if no valid id and icon URL are provided 1`] = `
 <AdditionalTabTooltip
   defaultTooltipText="test title"
