@@ -60,7 +60,7 @@ class AdditionalTab extends React.PureComponent<Props, State> {
     }
 
     getTabIcon() {
-        const { id, iconUrl, onImageLoad, title } = this.props;
+        const { id, iconUrl, onImageLoad, title, icon } = this.props;
         const { isErrored } = this.state;
 
         let TabIcon;
@@ -77,6 +77,8 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                     alt={title}
                 />
             );
+        } else if (id && id < 0 && icon) {
+            TabIcon = icon;
         } else {
             TabIcon = <Apps16 color={bdlGray50} width={20} height={20} />;
         }
