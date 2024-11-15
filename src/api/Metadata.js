@@ -1154,8 +1154,8 @@ class Metadata extends File {
     /**
      * Build URL for metadata taxonomy.
      *
-     * @param scope
-     * @param taxonomyKey
+     * @param {string} scope
+     * @param {string} taxonomyKey
      * @returns {`${string}/metadata_taxonomies/${string}/${string}`}
      */
     getMetadataTaxonomyUrl(scope: string, taxonomyKey: string): string {
@@ -1165,10 +1165,10 @@ class Metadata extends File {
     /**
      * Gets taxonomy associated with a taxonomy key.
      *
-     * @param id
-     * @param scope
-     * @param taxonomyKey
-     * @param nodeID
+     * @param {number} id
+     * @param {string} scope
+     * @param {string} taxonomyKey
+     * @param {string} nodeID
      * @returns {Promise<MetadataTaxonomy>}
      */
     async getMetadataTaxonomy(id: string, scope: string, taxonomyKey: string) {
@@ -1196,10 +1196,10 @@ class Metadata extends File {
     /**
      * Build URL for metadata taxonomies associated to a taxonomy node ID.
      *
-     * @param scope
-     * @param taxonomyKey
-     * @param nodeID
-     * @param includeAncestors
+     * @param {string} scope
+     * @param {string} taxonomyKey
+     * @param {string} nodeID
+     * @param {boolean} includeAncestors
      * @returns {`${string}/metadata_taxonomies/${string}/${string}/nodes/${string}`}
      */
     getMetadataTaxonomyNodeUrl(scope: string, taxonomyKey: string, nodeID: string, includeAncestors?: boolean): string {
@@ -1211,11 +1211,11 @@ class Metadata extends File {
     /**
      * Gets info associated with a taxonomy node.
      *
-     * @param id
-     * @param scope
-     * @param taxonomyKey
-     * @param nodeID
-     * @param includeAncestors
+     * @param {number} id
+     * @param {string} scope
+     * @param {string} taxonomyKey
+     * @param {string} nodeID
+     * @param {boolean} includeAncestors
      * @returns {Promise<MetadataTaxonomyNode>}
      */
     async getMetadataTaxonomyNode(

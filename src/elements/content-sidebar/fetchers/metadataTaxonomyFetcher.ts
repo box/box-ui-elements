@@ -25,12 +25,12 @@ export const metadataTaxonomyFetcher = async (
     };
 };
 
-type HydaratedMetadataTaxonomyLevel = {
+type HydratedMetadataTaxonomyLevel = {
     level: number;
     levelName: string;
     description: string;
-    levelValue?: string;
-    id?: string;
+    levelValue: string;
+    id: string;
 };
 
 export const metadataTaxonomyNodeAncestorsFetcher = async (
@@ -39,7 +39,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
     scope: string,
     taxonomyKey: string,
     nodeID: string,
-): Promise<HydaratedMetadataTaxonomyLevel[]> => {
+): Promise<HydratedMetadataTaxonomyLevel[]> => {
     const [metadataTaxonomy, metadataTaxonomyNode] = await Promise.all([
         api.getMetadataAPI(false).getMetadataTaxonomy(fileID, scope, taxonomyKey),
         api.getMetadataAPI(false).getMetadataTaxonomyNode(fileID, scope, taxonomyKey, nodeID, true),
@@ -80,6 +80,9 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
         }
     }
 
+    // Filter out levels that were not hydrated by metadataTaxonomyNode
+    const hydratedLevels = Array.from(levelsMap.values()).filter(level => !!level.id);
+
     // Return the hydrated levels as an array
-    return Array.from(levelsMap.values());
+    return hydratedLevels;
 };

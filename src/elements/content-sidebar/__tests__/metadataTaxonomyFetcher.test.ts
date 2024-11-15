@@ -121,6 +121,7 @@ describe('metadataNodeTaxonomiesFetcher', () => {
             levels: [
                 { level: 1, displayName: 'Level 1', description: 'Description 1' },
                 { level: 2, displayName: 'Level 2', description: 'Description 2' },
+                { level: 3, displayName: 'Level 3', description: 'Description 3' },
             ],
         };
 
