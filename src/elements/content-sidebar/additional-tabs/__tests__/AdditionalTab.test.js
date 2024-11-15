@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
+import { Plus } from '@box/blueprint-web-assets/icons/Fill';
 import PlainButton from '../../../../components/plain-button/PlainButton';
 import AdditionalTab from '../AdditionalTab';
 import AdditionalTabTooltip from '../AdditionalTabTooltip';
@@ -19,12 +20,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
 
         const wrapper = getWrapper(props);
 
-        expect(
-            wrapper
-                .find(PlainButton)
-                .childAt(0)
-                .prop('src'),
-        ).toEqual(mockSrc);
+        expect(wrapper.find(PlainButton).childAt(0).prop('src')).toEqual(mockSrc);
         expect(wrapper.find(AdditionalTabTooltip).prop('defaultTooltipText')).toBe('test title');
 
         expect(wrapper).toMatchSnapshot();
@@ -34,6 +30,18 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
         const props = {
             title: 'test title',
             id: -1,
+            callback: () => {},
+        };
+
+        const wrapper = getWrapper(props);
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render icon if no valid id provided with an icon', () => {
+        const props = {
+            title: 'test title',
+            id: -1,
+            icon: <Plus />,
             callback: () => {},
         };
 
