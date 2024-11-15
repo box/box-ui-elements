@@ -61,6 +61,7 @@ type Props = {
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onOpenChange?: (isOpen: boolean) => void,
     onPanelChange?: (name: string) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
@@ -113,7 +114,7 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidUpdate(prevProps: Props): void {
-        const { fileId, history, location }: Props = this.props;
+        const { fileId, history, location, onOpenChange = noop }: Props = this.props;
         const { fileId: prevFileId, location: prevLocation }: Props = prevProps;
         const { isDirty }: State = this.state;
 
@@ -126,6 +127,11 @@ class Sidebar extends React.Component<Props, State> {
         if (location !== prevLocation && !this.getLocationState('silent')) {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
+            const openState = this.getLocationState('open');
+            // Check if the sidebar was expanded / collapsed
+            if (prevLocation.state?.open !== openState) {
+                onOpenChange(openState);
+            }
         }
 
         this.handleDocgenTemplateOnUpdate(prevProps);
