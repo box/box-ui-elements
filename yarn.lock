@@ -1503,19 +1503,19 @@
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.21.0.tgz#204707eebd44447c02f3fa2b7e14d7f2aa5a00f1"
   integrity sha512-ulzyPit8sMFQfYdkSU7vX/XUxALE8U8TkHDHdA+yPtJNHcxndjkd7Nf0hcCt48lMigLQjHYM2f39ZfSRmqmH5Q==
 
-"@box/blueprint-web-assets@^4.25.0":
-  version "4.25.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.25.0.tgz#fd9c3aa8d37d41704e97575225d963dc18509e1b"
-  integrity sha512-Wm2lIb0+hxlRYl6fKNlzxht10HF0EYafJQt0uXEjoJ7KzyuDu7dxTNqSdenMSxLSu34bESxKnE3G+oEV2kJjeA==
+"@box/blueprint-web-assets@^4.28.0":
+  version "4.28.0"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.28.0.tgz#c0ef88156ff2697e63de9ac12b6fc17b2bd7c981"
+  integrity sha512-udRZAvhNbPIAPrNIPg8awV5lfU3g3LzAloaAAFdBiwCmPQxaU4JvuwJambOOXUqdftV6pCD6NmJvE90NxTcwmg==
 
-"@box/blueprint-web@^7.30.1":
-  version "7.30.1"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-7.30.1.tgz#f710aae380cabe226e83afd13e224bccd565679e"
-  integrity sha512-rgwYsXGiAolAvZpD5KhHLlQ3X+IfXvNYlWEepupi+iMQ5AM/WVn6GZrHl9SRUoWSlsYuo57ii6MusHhVT79DNQ==
+"@box/blueprint-web@^7.36.3":
+  version "7.36.3"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-7.36.3.tgz#22c655820f2e6cfb8d6dc55d21662f2161605396"
+  integrity sha512-lPSViEw1EYFi4DBcFR7q0KECJnGYRRTgMRtzjwMBME13XBWTSVnfeuodbhAQ9K+IZzvSNGTvh867XY+siQJxgA==
   dependencies:
     "@ariakit/react" "0.4.5"
     "@ariakit/react-core" "0.4.5"
-    "@box/blueprint-web-assets" "^4.25.0"
+    "@box/blueprint-web-assets" "^4.28.0"
     "@internationalized/date" "^3.5.4"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1569,10 +1569,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^0.65.0":
-  version "0.65.0"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.65.0.tgz#ebacdf249d1106a250431d2b55cd670b9cf6adbd"
-  integrity sha512-MjYmCWUdqpjkpYZvOAmIKJ0gAtJ0DZ3U5yLS2IYCm1vtWoTtfji77PQ+4UeHHK/dmalDWn61FC3daicQx6Buxw==
+"@box/metadata-editor@^0.73.0":
+  version "0.73.0"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.73.0.tgz#8f89ac3c8f908b812b9b45a64a40eac39e1ecb65"
+  integrity sha512-IJIzMg4sF4Vx8J1LtusXOhm1dYRuoUVgzsRq7QABeaadgCJ+DrLnQ68vFBgQkOE7URWw4zOGCPa0R3Gc1pRiiQ==
 
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"

@@ -192,7 +192,6 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         renderComponent();
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
-        expect(screen.getByRole('heading', { level: 1, name: 'Custom Metadata' })).toBeInTheDocument();
         expect(screen.getByText(mockCustomTemplateInstance.fields[0].key)).toBeInTheDocument();
         expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeInTheDocument();
     });
