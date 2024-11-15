@@ -12,9 +12,9 @@ import { bdlGray50 } from '../../../styles/variables';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import AdditionalTabTooltip from './AdditionalTabTooltip';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
-import Apps16 from '../../../icon/fill/Apps16';
 import messages from './messages';
 import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
+import IconEllipsis from '../../../icons/general/IconEllipsis';
 
 import './AdditionalTab.scss';
 
@@ -77,10 +77,8 @@ class AdditionalTab extends React.PureComponent<Props, State> {
                     alt={title}
                 />
             );
-        } else if (id && id < 0 && icon) {
-            TabIcon = icon;
         } else {
-            TabIcon = <Apps16 color={bdlGray50} width={20} height={20} />;
+            TabIcon = icon || <IconEllipsis color={bdlGray50} />;
         }
 
         return TabIcon;

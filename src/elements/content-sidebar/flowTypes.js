@@ -1,5 +1,5 @@
 // @flow
-import { IconButton } from '@box/blueprint-web/lib-esm/primitives/icon-button/icon-button';
+import * as React from 'react';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
@@ -30,7 +30,7 @@ type AdditionalSidebarTab = {
     iconUrl?: string,
     id: number,
     title: ?string,
-    icon?: IconButton,
+    icon?: React.Node,
 };
 
 type Translations = {
