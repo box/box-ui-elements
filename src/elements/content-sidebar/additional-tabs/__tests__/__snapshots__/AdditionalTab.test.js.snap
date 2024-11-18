@@ -59,8 +59,10 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render th
     onClick={[Function]}
     type="button"
   >
-    <IconEllipsis
+    <Apps16
       color="#909090"
+      height={20}
+      width={20}
     />
   </PlainButton>
 </AdditionalTabTooltip>
