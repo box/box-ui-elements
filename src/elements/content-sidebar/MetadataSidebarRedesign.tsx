@@ -127,7 +127,11 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     };
 
     const handleDeleteInstance = async (metadataInstance: MetadataTemplateInstance) => {
-        await handleDeleteMetadataInstance(metadataInstance);
+        try {
+            await handleDeleteMetadataInstance(metadataInstance);
+        } catch {
+            // ignore error, handled in useSidebarMetadataFetcher
+        }
         setEditingTemplate(null);
     };
 
@@ -158,7 +162,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     );
 
     const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
-        <InlineError>
+        <InlineError className="bcs-MetadataSidebarRedesign-inline-error">
             <FormattedMessage {...errorMessage} />
         </InlineError>
     );

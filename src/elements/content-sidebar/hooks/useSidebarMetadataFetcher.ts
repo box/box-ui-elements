@@ -6,6 +6,7 @@ import {
     type MetadataTemplate,
     type MetadataTemplateInstance,
     type MetadataTemplateField,
+    type MetadataFieldValue,
 } from '@box/metadata-editor';
 import isEmpty from 'lodash/isEmpty';
 import API from '../../../api';
@@ -145,9 +146,15 @@ function useSidebarMetadataFetcher(
                 return;
             }
             setStatus(STATUS.LOADING);
-            await api
-                .getMetadataAPI(false)
-                .deleteMetadata(file, metadataInstance, () => setStatus(STATUS.SUCCESS), onApiError, true);
+            await api.getMetadataAPI(false).deleteMetadata(
+                file,
+                metadataInstance,
+                () => setStatus(STATUS.SUCCESS),
+                (error: ElementsXhrError, code: string) => {
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
+                },
+                true,
+            );
         },
         [api, onApiError, file],
     );
@@ -188,18 +195,28 @@ function useSidebarMetadataFetcher(
         [api, file, onApiError],
     );
 
+    const [, setError] = React.useState();
     const extractSuggestions = React.useCallback(
-        async (templateKey: string, fields: MetadataTemplateField[]) => {
+        async (templateKey: string, fields: MetadataTemplateField[]): Promise<MetadataTemplateField[]> => {
             const aiAPI = api.getIntelligenceAPI();
 
-            let answer = {};
+            let answer = null;
             try {
-                answer = await aiAPI.extractStructured({
+                answer = (await aiAPI.extractStructured({
                     items: [{ id: file.id, type: file.type }],
                     fields,
-                });
+                })) as Record<string, MetadataFieldValue>;
             } catch (error) {
-                onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
+                if (isUserCorrectableError(error.status)) {
+                    onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
+                } else {
+                    // react way of throwing errors from async callbacks - https://github.com/facebook/react/issues/14981#issuecomment-468460187
+                    setError(() => {
+                        throw error;
+                    });
+                }
+
+                return [];
             }
 
             if (isEmpty(answer)) {

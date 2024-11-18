@@ -5,12 +5,13 @@ import { http, HttpResponse } from 'msw';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 import {
+    fileIdWithMetadata,
     mockEnterpriseMetadataTemplates,
     mockFileRequest,
     mockMetadataInstances,
+    mockGlobalMetadataTemplates,
 } from './__mocks__/MetadataSidebarRedesignedMocks';
 
-const fileIdWithMetadata = global.FILE_ID;
 const mockFeatures = {
     'metadata.redesign.enabled': true,
 };
@@ -50,6 +51,9 @@ export default {
                 http.get(mockEnterpriseMetadataTemplates.url, () => {
                     return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
                 }),
+                http.get(mockGlobalMetadataTemplates.url, () => {
+                    return HttpResponse.json(mockGlobalMetadataTemplates.response);
+                }),
             ],
         },
     },
@@ -62,7 +66,11 @@ export const Basic: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 5000 });
+        const addTemplateButton = await canvas.findByRole(
+            'button',
+            { name: 'Add template' },
+            { container: await canvas.findByRole('tabpanel') },
+        );
         await userEvent.click(addTemplateButton);
     },
 };
