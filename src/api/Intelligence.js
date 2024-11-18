@@ -72,18 +72,18 @@ class Intelligence extends Base {
             throw new Error('Missing items!');
         }
 
-        items.forEach(item => {
-            if (!item.id || !item.type) {
-                throw new Error('Invalid item!');
-            }
-        });
+        const item = items[0];
+
+        if (!item.id || !item.type) {
+            throw new Error('Invalid item!');
+        }
 
         const url = `${this.getBaseApiUrl()}/ai/extract_structured`;
 
         const suggestionsResponse = await this.xhr.post({
             url,
             data: request,
-            id: `file_${items[0].id}`,
+            id: `file_${item.id}`,
         });
 
         return getProp(suggestionsResponse, 'data');
