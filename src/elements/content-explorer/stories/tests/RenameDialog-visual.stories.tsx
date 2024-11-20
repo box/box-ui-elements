@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { addRootElement, defaultVisualConfig } from '../../../../utils/storybook';
 
-import RenameDialog from '../../RenameDialog';
+import RenameDialog, { RenameDialogProps } from '../../RenameDialog';
 import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     ERROR_CODE_ITEM_NAME_INVALID,
@@ -22,25 +22,34 @@ const itemWithLongName = {
 };
 
 export const renameDialogNotLoading = {
-    render: () => {
+    render: (args: RenameDialogProps) => {
         const { appElement, rootElement } = addRootElement();
 
         return (
-            <RenameDialog appElement={appElement} isLoading={false} isOpen item={item} parentElement={rootElement} />
+            <RenameDialog
+                appElement={appElement}
+                isLoading={false}
+                isOpen
+                item={item}
+                parentElement={rootElement}
+                {...args}
+            />
         );
     },
 };
 
 export const renameDialogIsLoading = {
-    render: () => {
+    render: (args: RenameDialogProps) => {
         const { appElement, rootElement } = addRootElement();
 
-        return <RenameDialog appElement={appElement} isLoading isOpen item={item} parentElement={rootElement} />;
+        return (
+            <RenameDialog appElement={appElement} isLoading isOpen item={item} parentElement={rootElement} {...args} />
+        );
     },
 };
 
 export const renameDialogNameInvalidError = {
-    render: () => {
+    render: (args: RenameDialogProps) => {
         const { appElement, rootElement } = addRootElement();
 
         return (
@@ -51,13 +60,14 @@ export const renameDialogNameInvalidError = {
                 isOpen
                 item={item}
                 parentElement={rootElement}
+                {...args}
             />
         );
     },
 };
 
 export const renameDialogNameInUseError = {
-    render: () => {
+    render: (args: RenameDialogProps) => {
         const { appElement, rootElement } = addRootElement();
 
         return (
@@ -68,13 +78,14 @@ export const renameDialogNameInUseError = {
                 isOpen
                 item={item}
                 parentElement={rootElement}
+                {...args}
             />
         );
     },
 };
 
 export const renameDialogNameTooLongError = {
-    render: () => {
+    render: (args: RenameDialogProps) => {
         const { appElement, rootElement } = addRootElement();
 
         return (
@@ -85,6 +96,7 @@ export const renameDialogNameTooLongError = {
                 isOpen
                 item={itemWithLongName}
                 parentElement={rootElement}
+                {...args}
             />
         );
     },
