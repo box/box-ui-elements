@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import FormContext from './FormContext';
 
 class FormInput extends Component {
     static propTypes = {
@@ -17,8 +16,6 @@ class FormInput extends Component {
             unregisterInput: PropTypes.func.isRequired,
         }),
     };
-
-    // static contextType = FormContext;
 
     componentDidMount() {
         const { name, onValidityStateUpdate } = this.props;
