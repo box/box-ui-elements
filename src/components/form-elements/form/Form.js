@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import serialize from 'form-serialize';
+import FormContext from './FormContext';
 
 function getFormValidityState(form) {
     // Turn the form.elements HTMLCollection into Array before reducing
@@ -60,6 +61,13 @@ class Form extends Component {
             },
         };
     }
+
+    // state = {
+    //     form: {
+    //         registerInput: this.registerInput.bind(this),
+    //         unregisterInput: this.unregisterInput.bind(this),
+    //     },
+    // }
 
     componentDidUpdate({ formValidityState: prevFormValidityState }) {
         const { formValidityState } = this.props;
@@ -129,9 +137,11 @@ class Form extends Component {
     render() {
         const { children } = this.props;
         return (
-            <form noValidate onChange={this.onChange} onSubmit={this.onSubmit}>
-                {children}
-            </form>
+            // <FormContext.Provider value={this.state}>
+                <form noValidate onChange={this.onChange} onSubmit={this.onSubmit}>
+                    {children}
+                </form>
+            // </FormContext.Provider>
         );
     }
 }
