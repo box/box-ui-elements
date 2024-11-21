@@ -1,6 +1,6 @@
 import * as React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitFor } from '../../../test-utils/testing-library';
+import { render, screen } from '../../../test-utils/testing-library';
 import ShareDialog, { ShareDialogProps } from '../ShareDialog';
 
 jest.mock('react-modal', () => {
@@ -29,16 +29,16 @@ describe('elements/content-explorer/ShareDialog', () => {
 
     test('calls onCancel when Close button is clicked', async () => {
         renderComponent();
-        userEvent.click(await screen.findByRole('button', { name: 'Close' }));
-        await waitFor(() => expect(defaultProps.onCancel).toHaveBeenCalled());
+        await userEvent.click(await screen.findByRole('button', { name: 'Close' }));
+        expect(defaultProps.onCancel).toHaveBeenCalled();
     });
 
     test('copies URL to clipboard when Copy button is clicked', async () => {
         renderComponent();
         const copyButton = await screen.findByRole('button', { name: 'Copy' });
         document.execCommand = jest.fn();
-        userEvent.click(copyButton);
-        await waitFor(() => expect(document.execCommand).toHaveBeenCalledWith('copy'));
+        await userEvent.click(copyButton);
+        expect(document.execCommand).toHaveBeenCalledWith('copy');
     });
 
     test('renders loading state when isLoading is true', async () => {

@@ -44,10 +44,17 @@
     background-color: $darker-black;
 }
 
+.be-modal-rename .be-modal-dialog-content,
 .be-modal-share .be-modal-dialog-content,
 .be-modal-delete .be-modal-dialog-content {
     padding: 0;
     border-radius: tokens.$radius-4;
+}
+
+.be-modal-rename .be-modal-dialog-content {
+    input[type='text'] {
+        width: 100%;
+    }
 }
 
 .be-modal-dialog-content {
