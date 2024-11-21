@@ -23,7 +23,7 @@ describe('elements/content-sidebar/SidebarFileProperties', () => {
             metadata: {
                 global: {
                     archivedItemTemplate: {
-                        archiveDate: '1726832355',
+                        archiveDate: '1726832355000',
                     },
                 },
             },
