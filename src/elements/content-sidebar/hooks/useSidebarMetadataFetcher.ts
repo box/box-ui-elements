@@ -226,7 +226,8 @@ function useSidebarMetadataFetcher(
 
             return fields.map(field => {
                 const value = answer[field.key];
-                if (!value) {
+                // TODO: @box/metadadata-editor does not support AI suggestions, enable once supported
+                if (!value || field.type === 'taxonomy') {
                     return field;
                 }
                 return {
