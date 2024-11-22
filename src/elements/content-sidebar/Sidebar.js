@@ -254,7 +254,7 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
-    getDefaultPanel(): string | undefined {
+    getDefaultPanel(): string | typeof undefined {
         const { hasPanelSelectionPreservation } = this.props;
 
         if (!hasPanelSelectionPreservation) {

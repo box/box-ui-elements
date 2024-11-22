@@ -185,7 +185,7 @@ class SidebarPanels extends React.Component<Props, State> {
             boxAISidebarProps,
             currentUser,
             currentUserError,
-            defaultPanel,
+            defaultPanel = '',
             detailsSidebarProps,
             docGenSidebarProps,
             elementId,
