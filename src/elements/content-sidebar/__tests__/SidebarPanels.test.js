@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme/build';
 import { MemoryRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK } from '../../../constants';
 import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
@@ -31,6 +32,23 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             },
         );
 
+    const getSidebarPanels = ({ path = '/', ...props }) => (
+        <MemoryRouter initialEntries={[path]}>
+            <SidebarPanels
+                file={{ id: '1234' }}
+                hasBoxAI
+                hasActivity
+                hasDetails
+                hasMetadata
+                hasSkills
+                hasVersions
+                isOpen
+                {...props}
+            />
+            ,
+        </MemoryRouter>
+    );
+
     describe('render', () => {
         test.each`
             path                                 | sidebar
@@ -55,6 +73,27 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             const wrapper = getWrapper({ path });
             expect(wrapper.exists(sidebar)).toBe(true);
         });
+
+        test.each`
+            defaultPanel  | sidebar
+            ${'activity'} | ${'activity-sidebar'}
+            ${'details'}  | ${'details-sidebar'}
+            ${'metadata'} | ${'metadata-sidebar'}
+            ${'skills'}   | ${'skills-sidebar'}
+            ${'boxai'}    | ${'boxai-sidebar'}
+            ${'nonsense'} | ${'boxai-sidebar'}
+            ${undefined}  | ${'boxai-sidebar'}
+        `(
+            'should render $sidebar given the path = "/" and defaultPanel = $defaultPanel',
+            ({ defaultPanel, sidebar }) => {
+                render(
+                    getSidebarPanels({
+                        defaultPanel,
+                    }),
+                );
+                expect(screen.getByTestId(sidebar)).toBeInTheDocument();
+            },
+        );
 
         test('should render redesigned metadata sidebar if it is enabled', () => {
             const wrapper = getWrapper({ path: '/metadata', features: { metadata: { redesign: { enabled: true } } } });

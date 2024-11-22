@@ -46,6 +46,7 @@ type Props = {
     boxAISidebarProps: BoxAISidebarProps,
     currentUser?: User,
     currentUserError?: Errors,
+    defaultPanel?: string,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
@@ -184,6 +185,7 @@ class SidebarPanels extends React.Component<Props, State> {
             boxAISidebarProps,
             currentUser,
             currentUserError,
+            defaultPanel,
             detailsSidebarProps,
             docGenSidebarProps,
             elementId,
@@ -211,6 +213,16 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
         const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
+
+        const availablePanels = [
+            SIDEBAR_VIEW_BOXAI,
+            SIDEBAR_VIEW_DOCGEN,
+            SIDEBAR_VIEW_SKILLS,
+            SIDEBAR_VIEW_ACTIVITY,
+            SIDEBAR_VIEW_DETAILS,
+            SIDEBAR_VIEW_METADATA,
+        ];
+        const canShowDefaultPanel = !!(defaultPanel && availablePanels.includes(defaultPanel));
 
         if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
@@ -369,7 +381,9 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (hasBoxAI) {
+                        if (canShowDefaultPanel) {
+                            redirect = defaultPanel;
+                        } else if (hasBoxAI) {
                             redirect = SIDEBAR_VIEW_BOXAI;
                         } else if (hasDocGen) {
                             redirect = SIDEBAR_VIEW_DOCGEN;
