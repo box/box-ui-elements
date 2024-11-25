@@ -43,7 +43,7 @@ const SidebarFileProperties = ({
     return (
         <LoadingIndicatorWrapper isLoading={isLoading}>
             <ItemProperties
-                archivedAt={archiveDate && archiveDate * 1000}
+                archivedAt={archiveDate && Number(archiveDate)}
                 createdAt={file.content_created_at}
                 description={file.description}
                 descriptionTextareaProps={{
