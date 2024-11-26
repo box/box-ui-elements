@@ -3,6 +3,7 @@ import {
     FILE_ACTIVITY_TYPE_ANNOTATION,
     FILE_ACTIVITY_TYPE_COMMENT,
     FILE_ACTIVITY_TYPE_TASK,
+    FILE_ACTIVITY_TYPE_VERSION,
     TASK_NEW_NOT_STARTED,
 } from '../constants';
 
@@ -83,6 +84,53 @@ export const annotations = [
         },
     },
 ];
+
+export const fileActivitiesVersion = {
+    end: {
+        created_at: "2022-01-05T10:12:28.000-08:00",
+        created_by: {
+            id: "42",
+            name: "John Doe",
+            login: "johndoe@box.com",
+            type: "user"
+        },
+        id: "123",
+        number: 1,
+        uploader_display_name: "John Doe",
+        type: "file_version"
+    },
+    start: {
+        created_at: "2022-01-05T10:12:28.000-08:00",
+        created_by: {
+            id: "42",
+            name: "John Doe",
+            login: "johndoe@box.com",
+            type: "user"
+        },
+        id: "123",
+        number: 1,
+        uploader_display_name: "John Doe",
+        type: "file_version"
+    },
+    action_by: [
+        {
+            id: "42",
+            name: "John Doe",
+            login: "johndoe@box.com",
+            type: "user"
+        }
+    ],
+    created_by: [
+        {
+            id: "42",
+            name: "John Doe",
+            login: "johndoe@box.com",
+            type: "user"
+        }
+    ],
+    type: "versions",
+    action_type: "created"
+};
 
 export const annotationsWithFormattedReplies = [
     {
@@ -400,6 +448,7 @@ export const threadedCommentsFormatted = [
 ];
 
 export const fileActivities = [
+    { activity_type: FILE_ACTIVITY_TYPE_VERSION, source: { versions: fileActivitiesVersion }},
     { activity_type: FILE_ACTIVITY_TYPE_ANNOTATION, source: { annotation: annotationsWithFormattedReplies[0] } },
     { activity_type: FILE_ACTIVITY_TYPE_COMMENT, source: { comment: threadedCommentsFormatted[0] } },
     {
