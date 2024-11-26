@@ -2336,7 +2336,12 @@ describe('api/Feed', () => {
                 { ...mockTask, task_type: 'GENERAL', created_by: { target: mockTask.created_by.target } },
                 threadedCommentsFormatted[0],
                 mockFormattedAnnotations[0],
-                { ...fileActivitiesVersion, uploader_display_name: 'John Doe', type: FEED_ITEM_TYPE_VERSION, version_number: 1 }
+                {
+                    ...fileActivitiesVersion,
+                    uploader_display_name: 'John Doe',
+                    type: FEED_ITEM_TYPE_VERSION,
+                    version_number: 1,
+                },
             ]);
         });
     });
