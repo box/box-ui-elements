@@ -214,15 +214,16 @@ class SidebarPanels extends React.Component<Props, State> {
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
         const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
 
-        const availablePanels = [
-            SIDEBAR_VIEW_BOXAI,
-            SIDEBAR_VIEW_DOCGEN,
-            SIDEBAR_VIEW_SKILLS,
-            SIDEBAR_VIEW_ACTIVITY,
-            SIDEBAR_VIEW_DETAILS,
-            SIDEBAR_VIEW_METADATA,
-        ];
-        const canShowDefaultPanel = !!(defaultPanel && availablePanels.includes(defaultPanel));
+        const panelsEligibility = {
+            [SIDEBAR_VIEW_BOXAI]: hasBoxAI,
+            [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
+            [SIDEBAR_VIEW_SKILLS]: hasSkills,
+            [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
+            [SIDEBAR_VIEW_DETAILS]: hasDetails,
+            [SIDEBAR_VIEW_METADATA]: hasMetadata,
+        };
+
+        const canShowDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
 
         if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;

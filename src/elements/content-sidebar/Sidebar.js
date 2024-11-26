@@ -18,7 +18,7 @@ import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
 import { withCurrentUser } from '../common/current-user';
-import { withFeatureConsumer } from '../common/feature-checking';
+import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -52,7 +52,6 @@ type Props = {
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasNav: boolean,
-    hasPanelSelectionPreservation: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     history: RouterHistory,
@@ -255,9 +254,9 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     getDefaultPanel(): string | typeof undefined {
-        const { hasPanelSelectionPreservation } = this.props;
+        const { features } = this.props;
 
-        if (!hasPanelSelectionPreservation) {
+        if (!isFeatureEnabled(features, 'panelSelectionPreservation')) {
             return undefined;
         }
 
@@ -265,8 +264,8 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     handlePanelChange = (name: string) => {
-        const { hasPanelSelectionPreservation, onPanelChange = noop } = this.props;
-        if (hasPanelSelectionPreservation) {
+        const { features, onPanelChange = noop } = this.props;
+        if (isFeatureEnabled(features, 'panelSelectionPreservation')) {
             this.store.setItem(SIDEBAR_SELECTED_PANEL_KEY, name);
         }
         onPanelChange(name);

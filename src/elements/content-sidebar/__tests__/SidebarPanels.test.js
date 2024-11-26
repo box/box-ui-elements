@@ -15,6 +15,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             <SidebarPanels
                 file={{ id: '1234' }}
                 hasBoxAI
+                hasDocGen
                 hasActivity
                 hasDetails
                 hasMetadata
@@ -37,6 +38,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             <SidebarPanels
                 file={{ id: '1234' }}
                 hasBoxAI
+                hasDocGen
                 hasActivity
                 hasDetails
                 hasMetadata
@@ -67,6 +69,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/metadata'}                       | ${'MetadataSidebar'}
             ${'/skills'}                         | ${'SkillsSidebar'}
             ${'/boxai'}                          | ${'BoxAISidebar'}
+            ${'/docgen'}                         | ${'DocGenSidebar'}
             ${'/nonsense'}                       | ${'BoxAISidebar'}
             ${'/'}                               | ${'BoxAISidebar'}
         `('should render $sidebar given the path $path', ({ path, sidebar }) => {
@@ -77,6 +80,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         test.each`
             defaultPanel  | sidebar
             ${'activity'} | ${'activity-sidebar'}
+            ${'docgen'}   | ${'docgen-sidebar'}
             ${'details'}  | ${'details-sidebar'}
             ${'metadata'} | ${'metadata-sidebar'}
             ${'skills'}   | ${'skills-sidebar'}
@@ -94,6 +98,74 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 expect(screen.getByTestId(sidebar)).toBeInTheDocument();
             },
         );
+
+        test.each`
+            defaultPanel  | expectedSidebar     | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasBoxAI
+            ${'activity'} | ${'boxai-sidebar'}  | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}
+            ${'details'}  | ${'boxai-sidebar'}  | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}
+            ${'metadata'} | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}
+            ${'skills'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}
+            ${'docgen'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}
+            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false}
+        `(
+            'should render first available panel for users without rights to render default panel, given the path = "/" and defaultPanel = $defaultPanel',
+            ({
+                defaultPanel,
+                expectedSidebar,
+                hasActivity,
+                hasDetails,
+                hasMetadata,
+                hasSkills,
+                hasDocGen,
+                hasBoxAI,
+            }) => {
+                render(
+                    getSidebarPanels({
+                        defaultPanel,
+                        hasActivity,
+                        hasDetails,
+                        hasMetadata,
+                        hasSkills,
+                        hasDocGen,
+                        hasBoxAI,
+                    }),
+                );
+                expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
+            },
+        );
+
+        describe('sidebar selected with path should take precedence over default panel', () => {
+            test.each`
+                path                                 | sidebar               | defaultPanel
+                ${'/activity'}                       | ${'activity-sidebar'} | ${'details'}
+                ${'/activity/comments'}              | ${'activity-sidebar'} | ${'details'}
+                ${'/activity/comments/1234'}         | ${'activity-sidebar'} | ${'details'}
+                ${'/activity/tasks'}                 | ${'activity-sidebar'} | ${'details'}
+                ${'/activity/tasks/1234'}            | ${'activity-sidebar'} | ${'details'}
+                ${'/activity/annotations/1234/5678'} | ${'activity-sidebar'} | ${'details'}
+                ${'/activity/annotations/1234'}      | ${'activity-sidebar'} | ${'details'}
+                ${'/activity/versions'}              | ${'versions-sidebar'} | ${'details'}
+                ${'/activity/versions/1234'}         | ${'versions-sidebar'} | ${'details'}
+                ${'/details'}                        | ${'details-sidebar'}  | ${'activity'}
+                ${'/details/versions'}               | ${'versions-sidebar'} | ${'activity'}
+                ${'/details/versions/1234'}          | ${'versions-sidebar'} | ${'activity'}
+                ${'/metadata'}                       | ${'metadata-sidebar'} | ${'details'}
+                ${'/skills'}                         | ${'skills-sidebar'}   | ${'details'}
+                ${'/boxai'}                          | ${'boxai-sidebar'}    | ${'details'}
+                ${'/docgen'}                         | ${'docgen-sidebar'}   | ${'details'}
+            `(
+                'should render $sidebar given the path = $path and defaultPanel = $defaultPanel',
+                ({ path, sidebar, defaultPanel }) => {
+                    render(
+                        getSidebarPanels({
+                            defaultPanel,
+                            path,
+                        }),
+                    );
+                    expect(screen.getByTestId(sidebar)).toBeInTheDocument();
+                },
+            );
+        });
 
         test('should render redesigned metadata sidebar if it is enabled', () => {
             const wrapper = getWrapper({ path: '/metadata', features: { metadata: { redesign: { enabled: true } } } });

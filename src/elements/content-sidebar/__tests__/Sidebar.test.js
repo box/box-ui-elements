@@ -416,19 +416,19 @@ describe('elements/content-sidebar/Sidebar', () => {
                 MockSidebarPanels.mockClear();
             });
             test.each`
-                hasPanelSelectionPreservation | savedDefaultPanel | expected
-                ${true}                       | ${'activity'}     | ${'activity'}
-                ${true}                       | ${'details'}      | ${'details'}
-                ${true}                       | ${null}           | ${undefined}
-                ${false}                      | ${'activity'}     | ${undefined}
-                ${undefined}                  | ${'activity'}     | ${undefined}
+                panelSelectionPreservation | savedDefaultPanel | expected
+                ${true}                    | ${'activity'}     | ${'activity'}
+                ${true}                    | ${'details'}      | ${'details'}
+                ${true}                    | ${null}           | ${undefined}
+                ${false}                   | ${'activity'}     | ${undefined}
+                ${undefined}               | ${'activity'}     | ${undefined}
             `(
-                'should render SidebarPanels with defaultPanel prop = $defaultPanel, given sidebar selected panel saved in LocalStore is $defaultPanel and hasPanelSelectionPreservation = $hasPanelSelectionPreservation',
-                ({ hasPanelSelectionPreservation, savedDefaultPanel, expected }) => {
+                'should render SidebarPanels with defaultPanel prop = $defaultPanel, given sidebar selected panel saved in LocalStore is $defaultPanel and panelSelectionPreservation feature = $panelSelectionPreservation',
+                ({ panelSelectionPreservation, savedDefaultPanel, expected }) => {
                     mockGetItem.mockReturnValue(savedDefaultPanel);
                     render(
                         getSidebar({
-                            hasPanelSelectionPreservation,
+                            features: { panelSelectionPreservation },
                         }),
                     );
                     expect(MockSidebarPanels).toHaveBeenCalledWith(
@@ -484,11 +484,11 @@ describe('elements/content-sidebar/Sidebar', () => {
             expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName);
         });
 
-        test('given hasPanelSelectionPreservation = true should save panel name in LocalStore', () => {
+        test('given panelSelectionPreservation feature = true should save panel name in LocalStore', () => {
             render(
                 getSidebar({
+                    features: { panelSelectionPreservation: true },
                     hasNav: true,
-                    hasPanelSelectionPreservation: true,
                 }),
             );
 
@@ -496,16 +496,16 @@ describe('elements/content-sidebar/Sidebar', () => {
         });
 
         test.each`
-            hasPanelSelectionPreservation
+            panelSelectionPreservation
             ${undefined}
             ${false}
         `(
-            'given hasPanelSelectionPreservation = $hasPanelSelectionPreservation should not save panel name in LocalStore',
-            ({ hasPanelSelectionPreservation }) => {
+            'given panelSelectionPreservation feature = $panelSelectionPreservation should not save panel name in LocalStore',
+            ({ panelSelectionPreservation }) => {
                 render(
                     getSidebar({
+                        features: { panelSelectionPreservation },
                         hasNav: true,
-                        hasPanelSelectionPreservation,
                     }),
                 );
 

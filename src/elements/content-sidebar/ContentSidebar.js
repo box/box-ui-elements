@@ -67,7 +67,6 @@ type Props = {
     hasAdditionalTabs: boolean,
     hasMetadata: boolean,
     hasNav: boolean,
-    hasPanelSelectionPreservation: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     history?: RouterHistory,
@@ -352,7 +351,6 @@ class ContentSidebar extends React.Component<Props, State> {
             hasActivityFeed,
             hasMetadata,
             hasNav,
-            hasPanelSelectionPreservation,
             hasSkills,
             hasVersions,
             history,
@@ -395,7 +393,6 @@ class ContentSidebar extends React.Component<Props, State> {
                                 hasAdditionalTabs={hasAdditionalTabs}
                                 hasNav={hasNav}
                                 hasMetadata={hasMetadata}
-                                hasPanelSelectionPreservation={hasPanelSelectionPreservation}
                                 hasSkills={hasSkills}
                                 hasVersions={hasVersions}
                                 isDefaultOpen={isDefaultOpen}
