@@ -1,5 +1,4 @@
 // @flow
-import * as React from 'react';
 import { http, HttpResponse } from 'msw';
 import ContentSidebar from '../ContentSidebar';
 import { mockFileRequest } from './__mocks__/ContentSidebarMocks';
@@ -23,10 +22,11 @@ const defaultArgs = {
 
 export const basic = {};
 
-export const withPanelPreservation = () => {
-    const features = { ...defaultArgs.features, panelSelectionPreservation: true };
-
-    return <ContentSidebar {...defaultArgs} features={features} />;
+export const withPanelPreservation = {
+    args: {
+        ...defaultArgs,
+        features: { ...defaultArgs.features, panelSelectionPreservation: true },
+    },
 };
 
 export default {

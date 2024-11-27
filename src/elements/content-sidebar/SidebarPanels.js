@@ -223,7 +223,7 @@ class SidebarPanels extends React.Component<Props, State> {
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
         };
 
-        const canShowDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
+        const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
 
         if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
@@ -382,7 +382,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     render={() => {
                         let redirect = '';
 
-                        if (canShowDefaultPanel) {
+                        if (showDefaultPanel) {
                             redirect = defaultPanel;
                         } else if (hasBoxAI) {
                             redirect = SIDEBAR_VIEW_BOXAI;
