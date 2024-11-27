@@ -18,7 +18,7 @@ import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
 import { withCurrentUser } from '../common/current-user';
-import { withFeatureConsumer } from '../common/feature-checking';
+import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { ActivitySidebarProps } from './ActivitySidebar';
 import type { DetailsSidebarProps } from './DetailsSidebar';
@@ -75,6 +75,7 @@ type State = {
 export const SIDEBAR_FORCE_KEY: 'bcs.force' = 'bcs.force';
 export const SIDEBAR_FORCE_VALUE_CLOSED: 'closed' = 'closed';
 export const SIDEBAR_FORCE_VALUE_OPEN: 'open' = 'open';
+export const SIDEBAR_SELECTED_PANEL_KEY: 'sidebar-selected-panel' = 'sidebar-selected-panel';
 
 class Sidebar extends React.Component<Props, State> {
     static defaultProps = {
@@ -252,6 +253,24 @@ class Sidebar extends React.Component<Props, State> {
         }
     }
 
+    getDefaultPanel(): string | typeof undefined {
+        const { features } = this.props;
+
+        if (!isFeatureEnabled(features, 'panelSelectionPreservation')) {
+            return undefined;
+        }
+
+        return this.store.getItem(SIDEBAR_SELECTED_PANEL_KEY) || undefined;
+    }
+
+    handlePanelChange = (name: string) => {
+        const { features, onPanelChange = noop } = this.props;
+        if (isFeatureEnabled(features, 'panelSelectionPreservation')) {
+            this.store.setItem(SIDEBAR_SELECTED_PANEL_KEY, name);
+        }
+        onPanelChange(name);
+    };
+
     render() {
         const {
             activitySidebarProps,
@@ -274,7 +293,6 @@ class Sidebar extends React.Component<Props, State> {
             metadataEditors,
             metadataSidebarProps,
             onAnnotationSelect,
-            onPanelChange,
             onVersionChange,
             versionsSidebarProps,
         }: Props = this.props;
@@ -288,6 +306,7 @@ class Sidebar extends React.Component<Props, State> {
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
         });
+        const defaultPanel = this.getDefaultPanel();
 
         return (
             <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
@@ -310,7 +329,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasSkills={hasSkills}
                                 hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
-                                onPanelChange={onPanelChange}
+                                onPanelChange={this.handlePanelChange}
                             />
                         )}
                         <SidebarPanels
@@ -319,6 +338,7 @@ class Sidebar extends React.Component<Props, State> {
                             currentUser={currentUser}
                             currentUserError={currentUserError}
                             elementId={this.id}
+                            defaultPanel={defaultPanel}
                             detailsSidebarProps={detailsSidebarProps}
                             docGenSidebarProps={docGenSidebarProps}
                             file={file}
