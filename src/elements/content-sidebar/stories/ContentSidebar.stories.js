@@ -24,7 +24,6 @@ export const basic = {};
 
 export const withPanelPreservation = {
     args: {
-        ...defaultArgs,
         features: { ...defaultArgs.features, panelSelectionPreservation: true },
     },
 };
