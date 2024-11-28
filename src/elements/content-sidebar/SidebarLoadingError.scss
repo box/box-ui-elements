@@ -4,4 +4,8 @@
     .bcs-loading-error {
         width: $sidebarContentWidth;
     }
+
+    .bcs-wider .bcs-loading-error {
+        width: $sidebarContentIncreasedWidth;
+    }
 }

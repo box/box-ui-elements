@@ -287,12 +287,13 @@ class Sidebar extends React.Component<Props, State> {
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
+            'bcs-wider': hasBoxAI,
         });
 
         return (
             <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
                 {isLoading ? (
-                    <div className="bcs-loading">
+                    <div className={classNames('bcs-loading', { 'bcs-wider': hasBoxAI })}>
                         <LoadingIndicator />
                     </div>
                 ) : (

@@ -2,6 +2,7 @@
 
 $sidebarTabsWidth: 60px;
 $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
+$sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
 
 .be {
     &.bcs {
@@ -10,6 +11,10 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
         min-width: $sidebarTabsWidth;
         max-width: $sidebarWidth;
         background-color: $white;
+
+        &.bcs-wider {
+            max-width: $sidebarIncreasedWidth;
+        }
     }
 
     .bcs-loading {
@@ -25,6 +30,10 @@ $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
     &.bcs-is-open {
         .bcs-loading {
             width: $sidebarWidth;
+
+            &.bcs-wider {
+                width: $sidebarIncreasedWidth;
+            }
         }
     }
 }
