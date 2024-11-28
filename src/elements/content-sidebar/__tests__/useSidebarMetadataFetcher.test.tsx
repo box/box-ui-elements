@@ -1,6 +1,11 @@
+import { MetadataTemplateFieldType } from '@box/metadata-editor/types/lib/types';
 import { renderHook, waitFor } from '../../../test-utils/testing-library';
 import messages from '../../common/messages';
-import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
+import {
+    ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
+    ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+    FIELD_PERMISSIONS_CAN_UPLOAD,
+} from '../../../constants';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
 
 const mockError = {
@@ -26,9 +31,20 @@ const mockTemplateInstances = [
     {
         canEdit: true,
         id: 'metadata_template_instance_1',
-        fields: [],
+        fields: [
+            {
+                key: 'field1',
+                type: 'string' as MetadataTemplateFieldType,
+                hidden: false,
+            },
+            {
+                key: 'field2',
+                type: 'string' as MetadataTemplateFieldType,
+                hidden: false,
+            },
+        ],
         scope: 'global',
-        templateKey: 'properties',
+        templateKey: 'templateKey',
         type: 'properties',
         hidden: false,
     },
@@ -37,7 +53,7 @@ const mockTemplateInstances = [
         id: 'metadata_template_instance_2',
         fields: [],
         scope: 'global',
-        templateKey: 'properties',
+        templateKey: 'properties1',
         type: 'properties',
         hidden: false,
     },
@@ -93,10 +109,12 @@ const mockAPI = {
             errorCallback(error);
         }
     }),
+    extractStructured: jest.fn(),
 };
 const api = {
     getFileAPI: jest.fn().mockReturnValue(mockAPI),
     getMetadataAPI: jest.fn().mockReturnValue(mockAPI),
+    getIntelligenceAPI: jest.fn().mockReturnValue(mockAPI),
 };
 
 describe('useSidebarMetadataFetcher', () => {
@@ -112,6 +130,7 @@ describe('useSidebarMetadataFetcher', () => {
         mockAPI.getMetadata.mockClear();
         mockAPI.deleteMetadata.mockClear();
         mockAPI.updateMetadataRedesign.mockClear();
+        mockAPI.extractStructured.mockClear();
     });
 
     test('should fetch the file and metadata successfully', async () => {
@@ -300,5 +319,58 @@ describe('useSidebarMetadataFetcher', () => {
                 isErrorDisplayed: true,
             }),
         );
+    });
+
+    describe('extractSuggestions', () => {
+        test('should extract suggestions successfully', async () => {
+            const mockSuggestions = {
+                field1: 'value1',
+                field2: 'value2',
+            };
+            mockAPI.extractStructured.mockResolvedValue(mockSuggestions);
+
+            const { result } = setupHook();
+
+            expect(result.current.templateInstances).toEqual(mockTemplateInstances);
+
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([
+                { ...mockTemplateInstances[0].fields[0], aiSuggestion: 'value1' },
+                { ...mockTemplateInstances[0].fields[1], aiSuggestion: 'value2' },
+            ]);
+        });
+
+        test('should handle error during suggestions extraction', async () => {
+            mockAPI.extractStructured.mockRejectedValue(mockError);
+
+            const { result } = setupHook();
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([]);
+            expect(onErrorMock).toHaveBeenCalledWith(
+                mockError,
+                ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+                expect.objectContaining({
+                    showNotification: true,
+                }),
+            );
+        });
+
+        test('should handle empty suggestions', async () => {
+            mockAPI.extractStructured.mockResolvedValue([]);
+
+            const { result } = setupHook();
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([]);
+            expect(onErrorMock).toHaveBeenCalledWith(
+                new Error('No suggestions found.'),
+                ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
+                expect.objectContaining({
+                    showNotification: true,
+                }),
+            );
+        });
     });
 });
