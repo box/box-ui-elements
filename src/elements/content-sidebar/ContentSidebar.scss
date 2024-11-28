@@ -48,6 +48,10 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
             max-width: none;
             max-height: 48px;
             transition: max-height .5s ease-in-out 0s;
+
+            &.bcs-wider {
+                max-width: none;
+            }
         }
 
         &.bcs-is-open {

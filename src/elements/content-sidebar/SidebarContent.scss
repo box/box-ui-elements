@@ -53,7 +53,7 @@ $sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
 }
 
 @include breakpoint($medium-screen) {
-    .bcs-content {
+    .bcs-wider .bcs-content {
         flex-basis: 100%;
         width: auto;
 
