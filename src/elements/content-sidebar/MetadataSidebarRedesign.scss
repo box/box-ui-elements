@@ -1,10 +1,11 @@
 @use '@box/blueprint-web-assets/tokens/tokens.scss';
 
+@import '../common/variables';
+
 .bcs-MetadataSidebarRedesign {
     border-left: 1px solid tokens.$gray-10;
 
     .bcs-MetadataSidebarRedesign-content {
-        position: absolute;
         top: 0;
         right: 0;
         left: 0;
@@ -13,5 +14,13 @@
 
     .bcs-MetadataSidebarRedesign-inline-error {
         margin-bottom: tokens.$space-4;
+    }
+
+    .bcs-MetadataSidebarRedesign-subheader {
+        display: flex;
+        align-items: center;
+        height: $sidebarSubHeaderHeight;
+        margin: 0 $sidebarActivityFeedSpacingHorizontal;
+        border-bottom: 1px solid $bdl-gray-10;
     }
 }
