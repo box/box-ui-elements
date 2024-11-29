@@ -9,6 +9,7 @@ import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
     AutofillContextProvider,
+    FilterInstancesDropdown,
     MetadataEmptyState,
     MetadataInstanceList,
     type FormValues,
@@ -79,7 +80,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
-    const [selectedTemplates, setSelectedTemplates] =
+    const [appliedTemplates, setAppliedTemplates] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
@@ -92,9 +93,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
             );
 
         if (!editingTemplate || isEditingTemplateAlreadyExisting) {
-            setSelectedTemplates(templateInstances);
+            setAppliedTemplates(templateInstances);
         } else {
-            setSelectedTemplates([...templateInstances, editingTemplate]);
+            setAppliedTemplates([...templateInstances, editingTemplate]);
         }
     }, [editingTemplate, templateInstances, templateInstances.length]);
 
@@ -156,8 +157,17 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
-            selectedTemplates={selectedTemplates as MetadataTemplate[]}
+            selectedTemplates={appliedTemplates as MetadataTemplate[]}
             onSelect={handleTemplateSelect}
+        />
+    );
+
+    const [filteredTemplates, setFilteredTemplates] = React.useState([]);
+    const filterDropdown = status === STATUS.SUCCESS && appliedTemplates.length > 1 && (
+        <FilterInstancesDropdown
+            appliedTemplates={appliedTemplates as MetadataTemplate[]}
+            selectedTemplates={filteredTemplates}
+            setSelectedTemplates={setFilteredTemplates}
         />
     );
 
@@ -194,6 +204,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
             elementId={elementId}
             sidebarView={SIDEBAR_VIEW_METADATA}
             title={formatMessage(messages.sidebarMetadataTitle)}
+            subheader={filterDropdown}
         >
             <div className="bcs-MetadataSidebarRedesign-content">
                 {errorMessageDisplay}
