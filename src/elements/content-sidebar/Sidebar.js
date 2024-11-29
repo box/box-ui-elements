@@ -61,8 +61,8 @@ type Props = {
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
-    onOpenChange?: (isOpen: boolean) => void,
-    onPanelChange?: (name: string) => void,
+    onOpenChange?: (isOpen: boolean, isInitialState?: boolean) => void,
+    onPanelChange?: (name: string, isInitialState?: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -107,11 +107,13 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        const { file, api, metadataSidebarProps, docGenSidebarProps }: Props = this.props;
+        const { file, api, metadataSidebarProps, docGenSidebarProps, onOpenChange = noop }: Props = this.props;
         // if docgen feature is enabled, load metadata to check whether file is a docgen template
         if (docGenSidebarProps.enabled) {
             docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
+        const isOpen = this.isOpen();
+        onOpenChange(isOpen, true);
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -231,6 +233,15 @@ class Sidebar extends React.Component<Props, State> {
     }
 
     /**
+     * Getter for sidebar current open state
+     * @returns {boolean} - True if the sidebar is open
+     */
+    isOpen(): boolean {
+        const { isDefaultOpen } = this.props;
+        return this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
+    }
+
+    /**
      * Refreshes the sidebar panel
      * @returns {void}
      */
@@ -263,12 +274,13 @@ class Sidebar extends React.Component<Props, State> {
         return this.store.getItem(SIDEBAR_SELECTED_PANEL_KEY) || undefined;
     }
 
-    handlePanelChange = (name: string) => {
+    handlePanelChange = (name: string, isInitialState?: boolean) => {
         const { features, onPanelChange = noop } = this.props;
-        if (isFeatureEnabled(features, 'panelSelectionPreservation')) {
+        // We don't need to preserve panel if it's the initial state
+        if (isFeatureEnabled(features, 'panelSelectionPreservation') && !isInitialState) {
             this.store.setItem(SIDEBAR_SELECTED_PANEL_KEY, name);
         }
-        onPanelChange(name);
+        onPanelChange(name, isInitialState);
     };
 
     render() {
@@ -288,7 +300,6 @@ class Sidebar extends React.Component<Props, State> {
             hasAdditionalTabs,
             hasNav,
             hasVersions,
-            isDefaultOpen,
             isLoading,
             metadataEditors,
             metadataSidebarProps,
@@ -296,7 +307,7 @@ class Sidebar extends React.Component<Props, State> {
             onVersionChange,
             versionsSidebarProps,
         }: Props = this.props;
-        const isOpen = this.isForcedSet() ? this.isForcedOpen() : !!isDefaultOpen;
+        const isOpen = this.isOpen();
         const hasBoxAI = SidebarUtils.canHaveBoxAISidebar(this.props);
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
@@ -356,6 +367,7 @@ class Sidebar extends React.Component<Props, State> {
                             key={file.id}
                             metadataSidebarProps={metadataSidebarProps}
                             onAnnotationSelect={onAnnotationSelect}
+                            onPanelChange={this.handlePanelChange}
                             onVersionChange={onVersionChange}
                             onVersionHistoryClick={onVersionHistoryClick}
                             ref={this.sidebarPanels}
