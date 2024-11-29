@@ -390,7 +390,9 @@ class SidebarPanels extends React.Component<Props, State> {
                     <Route
                         path={SIDEBAR_PATH_VERSIONS}
                         render={({ match }) => {
-                            this.handlePanelRender(match.params.sidebar);
+                            if (match.params.sidebar) {
+                                this.handlePanelRender(match.params.sidebar);
+                            }
                             return (
                                 <LoadableVersionsSidebar
                                     fileId={fileId}
