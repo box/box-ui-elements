@@ -1,6 +1,6 @@
 .bce .ReactVirtualized__Table__headerColumn {
-    .icon-chevron-down {
-        position: relative;
-        top: -2px;
+    .bce-item-header-cell {
+        display: flex;
+        align-items: center;
     }
 }

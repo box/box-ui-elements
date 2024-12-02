@@ -32,9 +32,7 @@ const helpers = {
         }
     },
     selectRow(rowNum) {
-        return this.getRow(rowNum)
-            .click()
-            .should('have.class', selectedRowClassName);
+        return this.getRow(rowNum).click().should('have.class', selectedRowClassName);
     },
     getAddButton() {
         return cy.getByAriaLabel(localize('be.add'));
@@ -59,12 +57,11 @@ const helpers = {
     getShareButton(rowNum) {
         return this.getRow(rowNum).contains(localize('be.share'));
     },
-    // using data-testid since more options button has "..." for text
     getMoreOptionsButton(rowNum) {
-        return this.getRow(rowNum).find('[data-testid="bce-btn-more-options"]');
+        return this.getRow(rowNum).find(`[aria-label="${localize('be.moreOptions')}"]`);
     },
     getAllMoreOptionsButtons() {
-        return cy.get('[data-testid="bce-btn-more-options"]');
+        return cy.getByAriaLabel(localize('be.moreOptions'));
     },
     // need exact match since 'Rename' appears elsewhere on the page
     getRenameButton() {
@@ -216,39 +213,25 @@ describe('ContentExplorer', () => {
         });
 
         it('Should initially show list view', () => {
-            cy.getByTestId('content-explorer')
-                .find(helpers.getSelector(listViewClass))
-                .should('exist');
-            cy.getByTestId('content-explorer')
-                .find(helpers.getSelector(gridViewClass))
-                .should('not.exist');
+            cy.getByTestId('content-explorer').find(helpers.getSelector(listViewClass)).should('exist');
+            cy.getByTestId('content-explorer').find(helpers.getSelector(gridViewClass)).should('not.exist');
         });
     });
 
     describe('Grid View', () => {
         beforeEach(() => {
             helpers.load();
-            helpers
-                .getViewModeChangeButton()
-                .click()
-                .blur();
+            helpers.getViewModeChangeButton().click().blur();
         });
 
         it('Should switch to grid view', () => {
-            cy.getByTestId('content-explorer')
-                .find(helpers.getSelector(listViewClass))
-                .should('not.exist');
-            cy.getByTestId('content-explorer')
-                .find(helpers.getSelector(gridViewClass))
-                .should('exist');
+            cy.getByTestId('content-explorer').find(helpers.getSelector(listViewClass)).should('not.exist');
+            cy.getByTestId('content-explorer').find(helpers.getSelector(gridViewClass)).should('exist');
         });
 
         it('Should open and close share modal', () => {
             cy.getByAriaLabel(localize('be.shareDialogLabel')).should('not.exist');
-            helpers
-                .getAllMoreOptionsButtons()
-                .eq(2)
-                .click();
+            helpers.getAllMoreOptionsButtons().eq(2).click();
             cy.contains(utils.getExactRegex(localize('be.share'))).click();
             cy.getByAriaLabel(localize('be.shareDialogLabel')).should('exist');
             helpers.getCloseButton().click();
@@ -257,10 +240,7 @@ describe('ContentExplorer', () => {
 
         it('Should open and close rename modal', () => {
             cy.getByAriaLabel(localize('be.renameDialogLabel')).should('not.exist');
-            helpers
-                .getAllMoreOptionsButtons()
-                .eq(0)
-                .click();
+            helpers.getAllMoreOptionsButtons().eq(0).click();
             helpers.getRenameButton().click();
             cy.getByAriaLabel(localize('be.renameDialogLabel')).should('exist');
             helpers.getCancelButton().click();
