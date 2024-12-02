@@ -94,7 +94,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                             data-target-id="SidebarNavButton-activity"
                             data-testid="sidebaractivity"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
@@ -106,7 +106,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                             data-target-id="SidebarNavButton-details"
                             data-testid="sidebardetails"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
@@ -118,7 +118,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                             data-target-id="SidebarNavButton-skills"
                             data-testid="sidebarskills"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                         >
@@ -130,7 +130,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                             data-target-id="SidebarNavButton-metadata"
                             data-testid="sidebarmetadata"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
@@ -141,7 +141,7 @@ const SidebarNav = ({
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             data-target-id="SidebarNavButton-docGen"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
                         >
