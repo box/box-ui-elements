@@ -140,7 +140,7 @@ describe('utils/datetime', () => {
             ['2019-01-01T09:41:56-07:00', true],
             ['some random string', false],
             ['', false],
-        ])('should interpret %s as a %p date', (dateString, expected) => {
+        ])('should interpret %s as a %p date', (dateString: string, expected: boolean) => {
             const date = new Date(dateString);
             expect(isValidDate(date)).toBe(expected);
         });
@@ -151,7 +151,7 @@ describe('utils/datetime', () => {
             const TEN_MIN_IN_MS = 600000;
             const date = new Date('1995-12-17T03:24:00');
             const result = addTime(date, TEN_MIN_IN_MS);
-            expect(result.getMinutes()).toBe(34);
+            expect((result as Date).getMinutes()).toBe(34);
         });
 
         test('should correctly add time if the date Value is a number', () => {
@@ -168,7 +168,7 @@ describe('utils/datetime', () => {
             ['2018-06-13T01:00:00.000+01:00', '2018-06-13T07:00:00.000Z'],
             ['2018-06-12T23:00:00.000-0100', '2018-06-13T07:00:00.000Z'],
             ['2018-06-13T02:00:00.000+02', '2018-06-13T07:00:00.000Z'],
-        ])('should correctly convert from %s to %s', (originDateTime, expectedDateTime) => {
+        ])('should correctly convert from %s to %s', (originDateTime: string, expectedDateTime: string) => {
             const result = convertISOStringToUTCDate(originDateTime);
             expect(result.toISOString()).toBe(expectedDateTime);
         });
@@ -202,7 +202,7 @@ describe('utils/datetime', () => {
             // Null-conversion examples
             ['2018-06-13T00:00:00.000-05:45', '2018-06-13T00:00:00.000-05:45'],
             ['2018-06-13T00:00:00.000+34', '2018-06-13T00:00:00.000+34'],
-        ])('should convert %s to %s correctly', (from, to) => {
+        ])('should convert %s to %s correctly', (from: string, to: string) => {
             const input = convertISOStringtoRFC3339String(from);
             expect(input).toEqual(to);
         });
