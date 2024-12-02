@@ -171,6 +171,11 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         />
     );
 
+    const filteredTemplateIstances = templateInstances.filter(instance =>
+        filteredTemplates.some(template => template === instance.id),
+    );
+    const templateInstancesList = filteredTemplates.length === 0 ? templateInstances : filteredTemplateIstances;
+
     const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
         <InlineError className="bcs-MetadataSidebarRedesign-inline-error">
             <FormattedMessage {...errorMessage} />
@@ -239,7 +244,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                                 setEditingTemplate(templateInstance);
                                 setIsDeleteButtonDisabled(false);
                             }}
-                            templateInstances={templateInstances}
+                            templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
                         />
                     )}

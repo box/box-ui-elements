@@ -137,7 +137,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         renderComponent();
 
-        expect(screen.getByRole('combobox')).toBeInTheDocument();
+        expect(
+            screen.getAllByRole('combobox').find(combobox => combobox.textContent === 'All Templates'),
+        ).toBeInTheDocument();
     });
 
     test('should have accessible "Add template" button', () => {
