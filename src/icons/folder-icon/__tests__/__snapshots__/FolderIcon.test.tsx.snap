@@ -28,20 +28,6 @@ exports[`icons/folder-icon/FolderIcon should render and external icon when isExt
 />
 `;
 
-exports[`icons/folder-icon/FolderIcon should render archive icon when isArchive is true 1`] = `
-<SvgArchive
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/folder-icon/FolderIcon should render archived folder icon when isArchivedFolder is true 1`] = `
-<SvgFolderArchive
-  height={32}
-  width={32}
-/>
-`;
-
 exports[`icons/folder-icon/FolderIcon should render default 32 icon when no props are defined 1`] = `
 <FolderPersonal32
   height={32}

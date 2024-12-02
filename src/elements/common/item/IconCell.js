@@ -7,6 +7,7 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
+import { Archive, FolderArchive } from '@box/blueprint-web-assets/icons/Content';
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
@@ -29,12 +30,22 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
             title = intl.formatMessage(messages.file);
             return <FileIcon dimension={dimension} extension={extension} title={title} />;
         case TYPE_FOLDER:
+            if (is_archive) {
+                return (
+                    <Archive aria-label={intl.formatMessage(messages.archive)} height={dimension} width={dimension} />
+                );
+            }
+            if (is_archived_content) {
+                return (
+                    <FolderArchive
+                        aria-label={intl.formatMessage(messages.archivedFolder)}
+                        height={dimension}
+                        width={dimension}
+                    />
+                );
+            }
             if (has_collaborations) {
                 title = intl.formatMessage(messages.collaboratedFolder);
-            } else if (is_archive) {
-                title = intl.formatMessage(messages.archive);
-            } else if (is_archived_content) {
-                title = intl.formatMessage(messages.archivedFolder);
             } else if (is_externally_owned) {
                 title = intl.formatMessage(messages.externalFolder);
             } else {
@@ -43,8 +54,6 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
             return (
                 <FolderIcon
                     dimension={dimension}
-                    isArchive={is_archive}
-                    isArchivedFolder={is_archived_content}
                     isCollab={has_collaborations}
                     isExternal={is_externally_owned}
                     title={title}
