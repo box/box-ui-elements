@@ -48,7 +48,7 @@ type Props = {
     intl: IntlShape,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-    onPanelChange?: (name: string, isInitialState?: boolean) => void,
+    onPanelChange?: (name: string, isInitialState: boolean) => void,
 };
 
 const SidebarNav = ({
@@ -70,7 +70,7 @@ const SidebarNav = ({
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
 
     const handleSidebarNavButtonClick = (sidebarview: string) => {
-        onPanelChange(sidebarview);
+        onPanelChange(sidebarview, false);
     };
 
     return (

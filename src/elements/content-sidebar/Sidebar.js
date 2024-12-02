@@ -61,8 +61,8 @@ type Props = {
     metadataEditors?: Array<MetadataEditor>,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
-    onOpenChange?: (isOpen: boolean, isInitialState?: boolean) => void,
-    onPanelChange?: (name: string, isInitialState?: boolean) => void,
+    onOpenChange?: (isOpen: boolean, isInitialState: boolean) => void,
+    onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -112,8 +112,7 @@ class Sidebar extends React.Component<Props, State> {
         if (docGenSidebarProps.enabled) {
             docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
-        const isOpen = this.isOpen();
-        onOpenChange(isOpen, true);
+        onOpenChange(this.isOpen(), true);
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -133,7 +132,7 @@ class Sidebar extends React.Component<Props, State> {
             const openState = this.getLocationState('open');
             // Check if the sidebar was expanded / collapsed
             if (prevLocation.state?.open !== openState) {
-                onOpenChange(openState);
+                onOpenChange(openState, false);
             }
         }
 
@@ -274,7 +273,7 @@ class Sidebar extends React.Component<Props, State> {
         return this.store.getItem(SIDEBAR_SELECTED_PANEL_KEY) || undefined;
     }
 
-    handlePanelChange = (name: string, isInitialState?: boolean) => {
+    handlePanelChange = (name: string, isInitialState: boolean) => {
         const { features, onPanelChange = noop } = this.props;
         // We don't need to preserve panel if it's the initial state
         if (isFeatureEnabled(features, 'panelSelectionPreservation') && !isInitialState) {

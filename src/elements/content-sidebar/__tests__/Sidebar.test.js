@@ -249,7 +249,7 @@ describe('elements/content-sidebar/Sidebar', () => {
                         }),
                     );
 
-                    expect(mockOnOpenChange).toBeCalledWith(open);
+                    expect(mockOnOpenChange).toBeCalledWith(open, false);
                 },
             );
             test.each`
@@ -484,7 +484,7 @@ describe('elements/content-sidebar/Sidebar', () => {
             }));
 
             SidebarNav.mockImplementationOnce(({ onPanelChange }) => {
-                onPanelChange(mockPanelName);
+                onPanelChange(mockPanelName, false);
                 return 'SidebarNav';
             });
         });
@@ -502,7 +502,7 @@ describe('elements/content-sidebar/Sidebar', () => {
                 }),
             );
 
-            expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName, undefined);
+            expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName, false);
         });
 
         test('should call onPanelChange prop when handling setting of initial panel', () => {
