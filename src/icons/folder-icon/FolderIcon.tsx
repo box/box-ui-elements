@@ -37,11 +37,11 @@ const FolderIcon = ({
     }
 
     if (isArchive) {
-        return <Archive height={dimension} title={title} width={dimension} />;
+        return <Archive aria-label={title} height={dimension} width={dimension} />;
     }
 
     if (isArchivedFolder) {
-        return <FolderArchive height={dimension} title={title} width={dimension} />;
+        return <FolderArchive aria-label={title} height={dimension} width={dimension} />;
     }
 
     return <IconFolderPersonal height={dimension} title={title} width={dimension} />;
