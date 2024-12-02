@@ -124,6 +124,7 @@
         "@babel/types": "^7.24.7",
         "@box/blueprint-web": "^7.36.3",
         "@box/blueprint-web-assets": "^4.28.0",
+        "@box/box-ai-agent-selector": "^0.15.8",
         "@box/box-ai-content-answers": "^0.57.1",
         "@box/cldr-data": "^34.2.0",
         "@box/frontend": "^10.0.0",
@@ -304,6 +305,7 @@
     "peerDependencies": {
         "@box/blueprint-web": "^7.36.3",
         "@box/blueprint-web-assets": "^4.28.0",
+        "@box/box-ai-agent-selector": "^0.15.8",
         "@box/box-ai-content-answers": "^0.57.1",
         "@box/cldr-data": ">=34.2.0",
         "@box/metadata-editor": "^0.79.1",
@@ -367,8 +369,5 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
-    },
-    "dependencies": {
-        "@box/box-ai-agent-selector": "^0.15.8"
     }
 }

@@ -8,7 +8,7 @@ import { useIntl } from 'react-intl';
 
 import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Fill';
 import { BoxAiAgentSelector, REQUEST_STATE } from '@box/box-ai-agent-selector';
-import { IconButton } from '@box/blueprint-web';
+import {IconButton, Text} from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -37,7 +37,9 @@ function BoxAISidebar({ onClearCLick, onExpandClick }: BoxAISidebarProps) {
     const renderBoxAISidebarTitle = () => {
         return (
             <div className="bcs-BoxAISidebar-title-part">
-                <h3 className="bcs-title">{formatMessage(messages.sidebarBoxAITitle)}</h3>
+                <Text as="h3" className="bcs-title">
+                    {formatMessage(messages.sidebarBoxAITitle)}
+                </Text>
                 <BoxAiAgentSelector
                     agents={[]}
                     onErrorAction={() => null}

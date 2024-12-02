@@ -7,9 +7,7 @@ import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebar';
 const mockOnExpandClick = jest.fn();
 const mockOnClearClick = jest.fn();
 
-jest.mock('@box/box-ai-agent-selector', () => ({
-    BoxAiAgentSelector: jest.fn(),
-}));
+jest.mock('@box/box-ai-agent-selector');
 
 describe('elements/content-sidebar/BoxAISidebar', () => {
     const renderComponent = (props = {}) => {
