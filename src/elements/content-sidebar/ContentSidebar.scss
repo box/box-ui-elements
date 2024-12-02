@@ -30,10 +30,6 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
     &.bcs-is-open {
         .bcs-loading {
             width: $sidebarWidth;
-
-            &.bcs-is-wider {
-                width: $sidebarIncreasedWidth;
-            }
         }
     }
 }
