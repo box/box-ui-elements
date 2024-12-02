@@ -56,13 +56,37 @@ describe('elements/common/item/IconCell', () => {
                 },
                 title: 'External Folder',
             },
-        ].forEach(({ rowData, title }) => {
+            // archive
+            {
+                rowData: {
+                    type: 'folder',
+                    has_collaborations: false,
+                    is_externally_owned: true,
+                    archive_type: 'archive',
+                },
+                title: 'Archive',
+                isArchive: true,
+            },
+            // archivedFolder
+            {
+                rowData: {
+                    type: 'folder',
+                    has_collaborations: false,
+                    is_externally_owned: true,
+                    archive_type: 'archive-content',
+                },
+                title: 'Archived Folder',
+                isArchivedFolder: true,
+            },
+        ].forEach(({ rowData, title, isArchive = false, isArchivedFolder = false }) => {
             test('should render correct folder icon', () => {
                 const wrapper = getWrapper({ rowData });
 
                 expect(wrapper.name()).toBe('FolderIcon');
                 expect(wrapper.prop('isCollab')).toBe(rowData.has_collaborations);
                 expect(wrapper.prop('isExternal')).toBe(rowData.is_externally_owned);
+                expect(wrapper.prop('isArchive')).toBe(isArchive);
+                expect(wrapper.prop('isArchivedFolder')).toBe(isArchivedFolder);
                 expect(wrapper.prop('title')).toBe(title);
             });
         });

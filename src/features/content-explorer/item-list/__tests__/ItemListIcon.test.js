@@ -43,6 +43,20 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
                 hasCollaborations: false,
                 isExternallyOwned: true,
             },
+            // archive
+            {
+                type: 'folder',
+                hasCollaborations: false,
+                isExternallyOwned: false,
+                archiveType: 'archive',
+            },
+            // archivedFolder
+            {
+                type: 'folder',
+                hasCollaborations: false,
+                isExternallyOwned: false,
+                archiveType: 'archive-content',
+            },
         ].forEach(rowData => {
             test('should render correct folder icon', () => {
                 const wrapper = renderComponent(rowData);

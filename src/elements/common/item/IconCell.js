@@ -20,8 +20,10 @@ import './IconCell.scss';
 type Props = { dimension?: number, intl: IntlShape, rowData: BoxItem };
 
 const IconCell = ({ intl, rowData, dimension }: Props) => {
-    const { type, extension, has_collaborations, is_externally_owned }: BoxItem = rowData;
+    const { type, extension, has_collaborations, is_externally_owned, archive_type }: BoxItem = rowData;
     let title;
+    const is_archive = archive_type === 'archive';
+    const is_archived_content = archive_type === 'archive-content';
     switch (type) {
         case TYPE_FILE:
             title = intl.formatMessage(messages.file);
@@ -29,6 +31,10 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
         case TYPE_FOLDER:
             if (has_collaborations) {
                 title = intl.formatMessage(messages.collaboratedFolder);
+            } else if (is_archive) {
+                title = intl.formatMessage(messages.archive);
+            } else if (is_archived_content) {
+                title = intl.formatMessage(messages.archivedFolder);
             } else if (is_externally_owned) {
                 title = intl.formatMessage(messages.externalFolder);
             } else {
@@ -37,6 +43,8 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
             return (
                 <FolderIcon
                     dimension={dimension}
+                    isArchive={is_archive}
+                    isArchivedFolder={is_archived_content}
                     isCollab={has_collaborations}
                     isExternal={is_externally_owned}
                     title={title}

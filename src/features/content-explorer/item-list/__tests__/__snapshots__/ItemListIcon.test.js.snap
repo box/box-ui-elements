@@ -4,6 +4,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 <IconCell
   rowData={
     {
+      "archive_type": undefined,
       "extension": undefined,
       "has_collaborations": false,
       "is_externally_owned": false,
@@ -17,6 +18,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 <IconCell
   rowData={
     {
+      "archive_type": undefined,
       "extension": undefined,
       "has_collaborations": true,
       "is_externally_owned": false,
@@ -30,6 +32,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 <IconCell
   rowData={
     {
+      "archive_type": undefined,
       "extension": undefined,
       "has_collaborations": true,
       "is_externally_owned": true,
@@ -43,9 +46,38 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 <IconCell
   rowData={
     {
+      "archive_type": undefined,
       "extension": undefined,
       "has_collaborations": false,
       "is_externally_owned": true,
+      "type": "folder",
+    }
+  }
+/>
+`;
+
+exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 5`] = `
+<IconCell
+  rowData={
+    {
+      "archive_type": "archive",
+      "extension": undefined,
+      "has_collaborations": false,
+      "is_externally_owned": false,
+      "type": "folder",
+    }
+  }
+/>
+`;
+
+exports[`features/content-explorer/item-list/ItemListIcon render() should render correct folder icon 6`] = `
+<IconCell
+  rowData={
+    {
+      "archive_type": "archive-content",
+      "extension": undefined,
+      "has_collaborations": false,
+      "is_externally_owned": false,
       "type": "folder",
     }
   }

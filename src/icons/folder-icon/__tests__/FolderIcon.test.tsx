@@ -24,6 +24,18 @@ describe('icons/folder-icon/FolderIcon', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should render archive icon when isArchive is true', () => {
+        const wrapper = getWrapper({ isArchive: true });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    test('should render archived folder icon when isArchivedFolder is true', () => {
+        const wrapper = getWrapper({ isArchivedFolder: true });
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
     test('should render and external icon when isExternal and isCollab is true', () => {
         const wrapper = getWrapper({
             isCollab: true,
