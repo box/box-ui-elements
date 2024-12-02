@@ -26,7 +26,9 @@ export default {
 export const ContentSidebarWithBoxAIDisabled: StoryObj<typeof BoxAISidebar> = {
     args: {
         features: {
+            ...global.FEATURES,
             'boxai.sidebar.enabled': false,
+            'metadata.redesign.enabled': true,
         },
     },
 };
@@ -34,7 +36,9 @@ export const ContentSidebarWithBoxAIDisabled: StoryObj<typeof BoxAISidebar> = {
 export const ContentSidebarWithBoxAIEnabled: StoryObj<typeof BoxAISidebar> = {
     args: {
         features: {
+            ...global.FEATURES,
             'boxai.sidebar.enabled': true,
+            'metadata.redesign.enabled': true,
         },
     },
 };

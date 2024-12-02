@@ -12,7 +12,7 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
         max-width: $sidebarWidth;
         background-color: $white;
 
-        &.bcs-wider {
+        &.bcs-is-wider {
             max-width: $sidebarIncreasedWidth;
         }
     }
@@ -31,7 +31,7 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
         .bcs-loading {
             width: $sidebarWidth;
 
-            &.bcs-wider {
+            &.bcs-is-wider {
                 width: $sidebarIncreasedWidth;
             }
         }
@@ -49,7 +49,7 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
             max-height: 48px;
             transition: max-height .5s ease-in-out 0s;
 
-            &.bcs-wider {
+            &.bcs-is-wider {
                 max-width: none;
             }
         }
