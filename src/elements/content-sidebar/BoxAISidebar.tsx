@@ -46,7 +46,6 @@ function BoxAISidebar({ onClearCLick, onExpandClick }: BoxAISidebarProps) {
                     requestState={REQUEST_STATE.SUCCESS}
                     selectedAgent={null}
                     triggerChipClassName="sidebar-chip"
-                    data-testid="agent-selector"
                 />
             </div>
         );
