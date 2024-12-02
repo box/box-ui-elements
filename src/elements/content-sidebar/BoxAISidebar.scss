@@ -1,4 +1,8 @@
+@use '@box/blueprint-web-assets/tokens/tokens.scss';
+
 @import '../common/variables';
+
+$agentSelectorSidebarWidth: 211px;
 
 .bcs-BoxAISidebar {
     .bcs-BoxAISidebar-title-part {
@@ -8,10 +12,10 @@
         margin: 0;
         padding: 0;
         font-weight: normal;
-        font-size: 16px;
+        font-size: tokens.$title-medium-font-size;
 
         .bcs-title {
-            margin-right: 8px;
+            margin-right: tokens.$space-2;
         }
     }
 
@@ -20,12 +24,12 @@
         justify-content: right;
 
         .bcs-BoxAISidebar-expand {
-            margin-left: 8px;
+            margin-left: tokens.$space-2;
         }
     }
 
     .sidebar-chip {
-        max-width: 211px;
+        max-width: $agentSelectorSidebarWidth;
         margin-inline-start: 0;
 
         button {
