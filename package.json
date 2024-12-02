@@ -367,5 +367,8 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
+    },
+    "dependencies": {
+        "@box/box-ai-agent-selector": "^0.15.8"
     }
 }
