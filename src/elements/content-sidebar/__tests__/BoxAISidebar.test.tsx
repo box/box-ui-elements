@@ -1,13 +1,10 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
-import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
 import { screen, render } from '../../../test-utils/testing-library';
 import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebar';
 
 const mockOnExpandClick = jest.fn();
 const mockOnClearClick = jest.fn();
-
-jest.mock('@box/box-ai-agent-selector');
 
 describe('elements/content-sidebar/BoxAISidebar', () => {
     const renderComponent = (props = {}) => {
@@ -18,12 +15,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
         render(<BoxAISidebarComponent {...defaultProps} {...props} />);
     };
-
-    beforeEach(() => {
-        (BoxAiAgentSelector as jest.MockedFunction<typeof BoxAiAgentSelector>).mockImplementation(() => (
-            <div>BoxAiAgentSelector</div>
-        ));
-    });
 
     afterEach(() => {
         jest.clearAllMocks();
