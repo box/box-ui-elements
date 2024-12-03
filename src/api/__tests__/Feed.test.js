@@ -27,6 +27,7 @@ import {
     threadedComments as mockThreadedComments,
     threadedCommentsFormatted,
     annotationsWithFormattedReplies as mockFormattedAnnotations,
+    fileActivitiesVersion,
 } from '../fixtures';
 
 const mockErrors = [{ code: 'error_code_0' }, { code: 'error_code_1' }];
@@ -2331,10 +2332,24 @@ describe('api/Feed', () => {
             ${{ entries: mockFileActivities }}
             ${{ entries: [...mockFileActivities, { test: 'filtered out' }] }}
         `('should return a parsed entries array when response is valid', ({ response }) => {
+            const mockUser = fileActivitiesVersion.start.created_by;
+
             expect(getParsedFileActivitiesResponse(response)).toEqual([
                 { ...mockTask, task_type: 'GENERAL', created_by: { target: mockTask.created_by.target } },
                 threadedCommentsFormatted[0],
                 mockFormattedAnnotations[0],
+                {
+                    ...fileActivitiesVersion,
+                    uploader_display_name: 'John Doe',
+                    type: FEED_ITEM_TYPE_VERSION,
+                    version_number: 1,
+                    version_end: 1,
+                    version_start: 1,
+                    modified_at: '2022-01-05T10:12:28.000-08:00',
+                    id: '123',
+                    modified_by: mockUser,
+                    collaborators: { 42: mockUser },
+                },
             ]);
         });
     });
