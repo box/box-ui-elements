@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme/build';
 import { MemoryRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK } from '../../../constants';
 import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
@@ -14,6 +15,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             <SidebarPanels
                 file={{ id: '1234' }}
                 hasBoxAI
+                hasDocGen
                 hasActivity
                 hasDetails
                 hasMetadata
@@ -30,6 +32,24 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 },
             },
         );
+
+    const getSidebarPanels = ({ path = '/', ...props }) => (
+        <MemoryRouter initialEntries={[path]}>
+            <SidebarPanels
+                file={{ id: '1234' }}
+                hasBoxAI
+                hasDocGen
+                hasActivity
+                hasDetails
+                hasMetadata
+                hasSkills
+                hasVersions
+                isOpen
+                {...props}
+            />
+            ,
+        </MemoryRouter>
+    );
 
     describe('render', () => {
         test.each`
@@ -49,11 +69,210 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/metadata'}                       | ${'MetadataSidebar'}
             ${'/skills'}                         | ${'SkillsSidebar'}
             ${'/boxai'}                          | ${'BoxAISidebar'}
+            ${'/docgen'}                         | ${'DocGenSidebar'}
             ${'/nonsense'}                       | ${'BoxAISidebar'}
             ${'/'}                               | ${'BoxAISidebar'}
         `('should render $sidebar given the path $path', ({ path, sidebar }) => {
             const wrapper = getWrapper({ path });
             expect(wrapper.exists(sidebar)).toBe(true);
+        });
+
+        test.each`
+            defaultPanel  | sidebar               | expectedPanelName
+            ${'activity'} | ${'activity-sidebar'} | ${'activity'}
+            ${'docgen'}   | ${'docgen-sidebar'}   | ${'docgen'}
+            ${'details'}  | ${'details-sidebar'}  | ${'details'}
+            ${'metadata'} | ${'metadata-sidebar'} | ${'metadata'}
+            ${'skills'}   | ${'skills-sidebar'}   | ${'skills'}
+            ${'boxai'}    | ${'boxai-sidebar'}    | ${'boxai'}
+            ${'nonsense'} | ${'boxai-sidebar'}    | ${'boxai'}
+            ${undefined}  | ${'boxai-sidebar'}    | ${'boxai'}
+        `(
+            'should render $sidebar and call onPanelChange with $expectedPanelName given the path = "/" and defaultPanel = $defaultPanel',
+            ({ defaultPanel, sidebar, expectedPanelName }) => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        defaultPanel,
+                        onPanelChange,
+                    }),
+                );
+                expect(screen.getByTestId(sidebar)).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+            },
+        );
+
+        test.each`
+            defaultPanel  | expectedSidebar     | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasBoxAI | expectedPanelName
+            ${'activity'} | ${'boxai-sidebar'}  | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'details'}  | ${'boxai-sidebar'}  | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'metadata'} | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'skills'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}  | ${'boxai'}
+            ${'docgen'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}  | ${'boxai'}
+            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false} | ${'docgen'}
+        `(
+            'should render first available panel and call onPanelChange with $expectedPanelName for users without rights to render default panel, given the path = "/" and defaultPanel = $defaultPanel',
+            ({
+                defaultPanel,
+                expectedSidebar,
+                hasActivity,
+                hasDetails,
+                hasMetadata,
+                hasSkills,
+                hasDocGen,
+                hasBoxAI,
+                expectedPanelName,
+            }) => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        defaultPanel,
+                        hasActivity,
+                        hasDetails,
+                        hasMetadata,
+                        hasSkills,
+                        hasDocGen,
+                        hasBoxAI,
+                        onPanelChange,
+                    }),
+                );
+                expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+            },
+        );
+
+        describe('sidebar selected with path should take precedence over default panel', () => {
+            test.each`
+                path                                 | sidebar               | defaultPanel  | expectedPanelName
+                ${'/activity'}                       | ${'activity-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/comments'}              | ${'activity-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/comments/1234'}         | ${'activity-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/tasks'}                 | ${'activity-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/tasks/1234'}            | ${'activity-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/annotations/1234/5678'} | ${'activity-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/annotations/1234'}      | ${'activity-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/versions'}              | ${'versions-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/activity/versions/1234'}         | ${'versions-sidebar'} | ${'details'}  | ${'activity'}
+                ${'/details'}                        | ${'details-sidebar'}  | ${'activity'} | ${'details'}
+                ${'/details/versions'}               | ${'versions-sidebar'} | ${'activity'} | ${'details'}
+                ${'/details/versions/1234'}          | ${'versions-sidebar'} | ${'activity'} | ${'details'}
+                ${'/metadata'}                       | ${'metadata-sidebar'} | ${'details'}  | ${'metadata'}
+                ${'/skills'}                         | ${'skills-sidebar'}   | ${'details'}  | ${'skills'}
+                ${'/boxai'}                          | ${'boxai-sidebar'}    | ${'details'}  | ${'boxai'}
+                ${'/docgen'}                         | ${'docgen-sidebar'}   | ${'details'}  | ${'docgen'}
+            `(
+                'should render $sidebar and call onPanelChange with $expectedPanelName given the path = $path and defaultPanel = $defaultPanel',
+                ({ path, sidebar, defaultPanel, expectedPanelName }) => {
+                    const onPanelChange = jest.fn();
+                    render(
+                        getSidebarPanels({
+                            defaultPanel,
+                            onPanelChange,
+                            path,
+                        }),
+                    );
+                    expect(screen.getByTestId(sidebar)).toBeInTheDocument();
+                    expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+                },
+            );
+        });
+
+        test.each`
+            path                                 | expectedPanelName
+            ${'/activity'}                       | ${'activity'}
+            ${'/activity/comments'}              | ${'activity'}
+            ${'/activity/comments/1234'}         | ${'activity'}
+            ${'/activity/tasks'}                 | ${'activity'}
+            ${'/activity/tasks/1234'}            | ${'activity'}
+            ${'/activity/annotations/1234/5678'} | ${'activity'}
+            ${'/activity/annotations/1234'}      | ${'activity'}
+            ${'/activity/versions'}              | ${'activity'}
+            ${'/activity/versions/1234'}         | ${'activity'}
+            ${'/details'}                        | ${'details'}
+            ${'/details/versions'}               | ${'details'}
+            ${'/details/versions/1234'}          | ${'details'}
+            ${'/metadata'}                       | ${'metadata'}
+            ${'/skills'}                         | ${'skills'}
+            ${'/boxai'}                          | ${'boxai'}
+            ${'/docgen'}                         | ${'docgen'}
+            ${'/nonsense'}                       | ${'boxai'}
+            ${'/'}                               | ${'boxai'}
+        `('should call onPanelChange with $expectedPanelName given the path = $path', ({ path, expectedPanelName }) => {
+            const onPanelChange = jest.fn();
+            render(
+                getSidebarPanels({
+                    path,
+                    onPanelChange,
+                }),
+            );
+            expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+        });
+
+        test.each`
+            path                                 | hasActivity | hasDetails | hasVersions | hasMetadata | hasSkills | hasDocGen | hasBoxAI | expectedPanelName
+            ${'/activity'}                       | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/comments'}              | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/comments/1234'}         | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/tasks'}                 | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/tasks/1234'}            | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/annotations/1234/5678'} | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/annotations/1234'}      | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/versions'}              | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/activity/versions/1234'}         | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/details'}                        | ${true}     | ${false}   | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/details/versions'}               | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/details/versions/1234'}          | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/metadata'}                       | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/skills'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${false}  | ${true}   | ${true}  | ${'boxai'}
+            ${'/docgen'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${false}  | ${true}  | ${'boxai'}
+            ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false} | ${'docgen'}
+        `(
+            'should call onPanelChange with $expectedPanelName given the path = $path for users without rights to render the panel for given path',
+            ({
+                path,
+                hasActivity,
+                hasDetails,
+                hasVersions,
+                hasMetadata,
+                hasSkills,
+                hasDocGen,
+                hasBoxAI,
+                expectedPanelName,
+            }) => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        hasActivity,
+                        hasBoxAI,
+                        hasDetails,
+                        hasDocGen,
+                        hasMetadata,
+                        hasSkills,
+                        hasVersions,
+                        onPanelChange,
+                        path,
+                    }),
+                );
+                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+            },
+        );
+
+        test('should call onPanelChange only once with the initial panel value', () => {
+            const onPanelChange = jest.fn();
+            const { rerender } = render(
+                getSidebarPanels({
+                    onPanelChange,
+                    path: '/details',
+                }),
+            );
+            rerender(
+                getSidebarPanels({
+                    onPanelChange,
+                    path: '/activity',
+                }),
+            );
+            expect(onPanelChange).toHaveBeenCalledWith('details', true);
+            expect(onPanelChange).toHaveBeenCalledTimes(1);
         });
 
         test('should render redesigned metadata sidebar if it is enabled', () => {

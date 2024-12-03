@@ -6,10 +6,21 @@ import {
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
     SIDEBAR_FORCE_VALUE_OPEN,
+    SIDEBAR_SELECTED_PANEL_KEY,
     SidebarComponent as Sidebar,
 } from '../Sidebar';
+import SidebarNav from '../SidebarNav';
+import SidebarPanels from '../SidebarPanels';
 import LocalStore from '../../../utils/LocalStore';
 
+jest.mock('../SidebarNav', () => ({
+    __esModule: true,
+    default: jest.fn(() => 'SidebarNav'),
+}));
+jest.mock('../SidebarPanels', () => ({
+    __esModule: true,
+    default: jest.fn(() => 'SidebarPanels'),
+}));
 jest.mock('../../common/async-load', () => () => 'LoadableComponent');
 jest.mock('../../../utils/LocalStore');
 
@@ -41,6 +52,12 @@ describe('elements/content-sidebar/Sidebar', () => {
 
     const getWrapper = props => shallow(<Sidebar {...defaultProps} {...props} />);
 
+    const getSidebar = props => (
+        <MemoryRouter initialEntries={['/']}>
+            <Sidebar {...defaultProps} {...props} />
+        </MemoryRouter>
+    );
+
     beforeEach(() => {
         LocalStore.mockClear();
     });
@@ -58,6 +75,29 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.instance();
             expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(1);
         });
+
+        test.each`
+            localStoreValue | expected
+            ${'closed'}     | ${false}
+            ${'open'}       | ${true}
+            ${null}         | ${true}
+        `(
+            'given the LocalStore value for open state = localStoreValue, should call onOpenChange with $expected and "initialState" parameter = true',
+            ({ localStoreValue, expected }) => {
+                const mockOnOpenChange = jest.fn();
+                LocalStore.mockImplementationOnce(() => ({
+                    getItem: jest.fn(() => localStoreValue),
+                    setItem: jest.fn(),
+                }));
+
+                render(
+                    getSidebar({
+                        onOpenChange: mockOnOpenChange,
+                    }),
+                );
+                expect(mockOnOpenChange).toBeCalledWith(expected, true);
+            },
+        );
     });
 
     describe('componentDidUpdate', () => {
@@ -176,19 +216,6 @@ describe('elements/content-sidebar/Sidebar', () => {
         });
         describe('open state change', () => {
             const mockOnOpenChange = jest.fn();
-            const getSidebar = open => (
-                <MemoryRouter initialEntries={['/']}>
-                    <Sidebar
-                        {...defaultProps}
-                        file={file}
-                        location={{
-                            pathname: '/',
-                            state: { open },
-                        }}
-                        onOpenChange={mockOnOpenChange}
-                    />
-                </MemoryRouter>
-            );
 
             afterEach(() => {
                 mockOnOpenChange.mockClear();
@@ -203,11 +230,26 @@ describe('elements/content-sidebar/Sidebar', () => {
             `(
                 'given previous open state = $prevOpen and new open state = $open should call onOpenChange with $open',
                 ({ prevOpen, open }) => {
-                    const { rerender } = render(getSidebar(prevOpen));
+                    const { rerender } = render(
+                        getSidebar({
+                            location: {
+                                pathname: '/',
+                                state: { open: prevOpen },
+                            },
+                        }),
+                    );
 
-                    rerender(getSidebar(open));
+                    rerender(
+                        getSidebar({
+                            location: {
+                                pathname: '/',
+                                state: { open },
+                            },
+                            onOpenChange: mockOnOpenChange,
+                        }),
+                    );
 
-                    expect(mockOnOpenChange).toBeCalledWith(open);
+                    expect(mockOnOpenChange).toBeCalledWith(open, false);
                 },
             );
             test.each`
@@ -217,9 +259,24 @@ describe('elements/content-sidebar/Sidebar', () => {
             `(
                 'given previous open state = $prevOpen and new open state = $open should not call onOpenChange',
                 ({ prevOpen, open }) => {
-                    const { rerender } = render(getSidebar(prevOpen));
+                    const { rerender } = render(
+                        getSidebar({
+                            location: {
+                                pathname: '/',
+                                state: { open: prevOpen },
+                            },
+                        }),
+                    );
 
-                    rerender(getSidebar(open));
+                    rerender(
+                        getSidebar({
+                            location: {
+                                pathname: '/',
+                                state: { open },
+                            },
+                            onOpenChange: mockOnOpenChange,
+                        }),
+                    );
 
                     expect(mockOnOpenChange).not.toBeCalled();
                 },
@@ -362,6 +419,46 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             expect(wrapper.exists('SidebarNav')).toBe(false);
         });
+
+        describe('SidebarPanels', () => {
+            const mockGetItem = jest.fn();
+            const MockSidebarPanels = jest.fn(() => 'SidebarPanels');
+
+            beforeEach(() => {
+                LocalStore.mockImplementationOnce(() => ({
+                    getItem: mockGetItem,
+                    setItem: jest.fn(),
+                }));
+                SidebarPanels.mockImplementationOnce(MockSidebarPanels);
+            });
+
+            afterEach(() => {
+                mockGetItem.mockClear();
+                MockSidebarPanels.mockClear();
+            });
+            test.each`
+                panelSelectionPreservation | savedDefaultPanel | expected
+                ${true}                    | ${'activity'}     | ${'activity'}
+                ${true}                    | ${'details'}      | ${'details'}
+                ${true}                    | ${null}           | ${undefined}
+                ${false}                   | ${'activity'}     | ${undefined}
+                ${undefined}               | ${'activity'}     | ${undefined}
+            `(
+                'should render SidebarPanels with defaultPanel prop = $defaultPanel, given sidebar selected panel saved in LocalStore is $defaultPanel and panelSelectionPreservation feature = $panelSelectionPreservation',
+                ({ panelSelectionPreservation, savedDefaultPanel, expected }) => {
+                    mockGetItem.mockReturnValue(savedDefaultPanel);
+                    render(
+                        getSidebar({
+                            features: { panelSelectionPreservation },
+                        }),
+                    );
+                    expect(MockSidebarPanels).toHaveBeenCalledWith(
+                        expect.objectContaining({ defaultPanel: expected }),
+                        {},
+                    );
+                },
+            );
+        });
     });
 
     describe('refresh()', () => {
@@ -374,5 +471,82 @@ describe('elements/content-sidebar/Sidebar', () => {
 
             expect(refresh).toHaveBeenCalledWith(shouldRefreshCache);
         });
+    });
+
+    describe('on panel change', () => {
+        const mockSetItem = jest.fn();
+        const mockPanelName = 'activity';
+
+        beforeEach(() => {
+            LocalStore.mockImplementationOnce(() => ({
+                getItem: jest.fn(),
+                setItem: mockSetItem,
+            }));
+
+            SidebarNav.mockImplementationOnce(({ onPanelChange }) => {
+                onPanelChange(mockPanelName, false);
+                return 'SidebarNav';
+            });
+        });
+
+        afterEach(() => {
+            mockSetItem.mockClear();
+        });
+
+        test('should call onPanelChange prop when handling panel change by the user', () => {
+            const mockOnPanelChange = jest.fn();
+            render(
+                getSidebar({
+                    hasNav: true,
+                    onPanelChange: mockOnPanelChange,
+                }),
+            );
+
+            expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName, false);
+        });
+
+        test('should call onPanelChange prop when handling setting of initial panel', () => {
+            SidebarPanels.mockImplementationOnce(({ onPanelChange }) => {
+                onPanelChange(mockPanelName, true);
+                return 'SidebarPanels';
+            });
+            const mockOnPanelChange = jest.fn();
+            render(
+                getSidebar({
+                    onPanelChange: mockOnPanelChange,
+                }),
+            );
+
+            expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName, true);
+        });
+
+        test('given panelSelectionPreservation feature = true should save panel name in LocalStore', () => {
+            render(
+                getSidebar({
+                    features: { panelSelectionPreservation: true },
+                    hasNav: true,
+                }),
+            );
+
+            expect(mockSetItem).toHaveBeenCalledWith(SIDEBAR_SELECTED_PANEL_KEY, mockPanelName);
+        });
+
+        test.each`
+            panelSelectionPreservation
+            ${undefined}
+            ${false}
+        `(
+            'given panelSelectionPreservation feature = $panelSelectionPreservation should not save panel name in LocalStore',
+            ({ panelSelectionPreservation }) => {
+                render(
+                    getSidebar({
+                        features: { panelSelectionPreservation },
+                        hasNav: true,
+                    }),
+                );
+
+                expect(mockSetItem).not.toHaveBeenCalled();
+            },
+        );
     });
 });

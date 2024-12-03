@@ -42,6 +42,11 @@ export default {
                     return <div data-testid="versions-sidebar" />;
                 }
             },
+            docgen: class DocGenSidebar extends React.Component {
+                render() {
+                    return <div data-testid="docgen-sidebar" />;
+                }
+            },
         }[panelName];
     }),
 };
