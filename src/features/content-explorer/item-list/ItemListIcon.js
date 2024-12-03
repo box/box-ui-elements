@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { ItemTypePropType, ItemArchiveTypePropType } from '../prop-types';
 import IconCell from '../../../elements/common/item/IconCell';
 
-const ItemListIcon = ({ type, extension, hasCollaborations = false, isExternallyOwned = false, archiveType }) => {
+const ItemListIcon = ({ archiveType, extension, type, hasCollaborations = false, isExternallyOwned = false }) => {
     const rowData = {
         type,
         extension,
