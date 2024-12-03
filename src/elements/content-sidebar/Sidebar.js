@@ -305,6 +305,7 @@ class Sidebar extends React.Component<Props, State> {
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
         const styleClassName = classNames('be bcs', className, {
             'bcs-is-open': isOpen,
+            'bcs-is-wider': hasBoxAI,
         });
         const defaultPanel = this.getDefaultPanel();
 
