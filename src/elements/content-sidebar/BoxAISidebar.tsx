@@ -8,7 +8,7 @@ import { useIntl } from 'react-intl';
 
 import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Fill';
 import { BoxAiAgentSelector, REQUEST_STATE } from '@box/box-ai-agent-selector';
-import {IconButton, Text} from '@box/blueprint-web';
+import { IconButton, Text } from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -27,11 +27,11 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 export interface BoxAISidebarProps {
-    onClearCLick: () => void;
+    onClearClick: () => void;
     onExpandClick: () => void;
 }
 
-function BoxAISidebar({ onClearCLick, onExpandClick }: BoxAISidebarProps) {
+function BoxAISidebar({ onClearClick, onExpandClick }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
 
     const renderBoxAISidebarTitle = () => {
@@ -57,7 +57,7 @@ function BoxAISidebar({ onClearCLick, onExpandClick }: BoxAISidebarProps) {
                 <IconButton
                     aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
                     icon={Trash}
-                    onClick={onClearCLick}
+                    onClick={onClearClick}
                     size="x-small"
                 />
                 <IconButton
