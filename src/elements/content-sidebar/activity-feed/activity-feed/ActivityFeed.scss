@@ -157,6 +157,10 @@
     }
 }
 
+.bcs-is-wider .bcs-activity-feed {
+    width: $sidebarContentIncreasedWidth;
+}
+
 @include breakpoint($medium-screen) {
     .be .bcs-activity-feed {
         width: 100%;
