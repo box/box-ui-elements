@@ -3,7 +3,7 @@ import { useArgs } from '@storybook/preview-api';
 import { Button } from '@box/blueprint-web';
 import { userEvent, within } from '@storybook/test';
 
-import { addRootElement } from '../../../../utils/storybook';
+import { addRootElement, defaultVisualConfig } from '../../../../utils/storybook';
 
 import PreviewDialog from '../../PreviewDialog';
 
@@ -84,5 +84,8 @@ export default {
     component: PreviewDialog,
     args: {
         token: global.TOKEN,
+    },
+    parameters: {
+        ...defaultVisualConfig.parameters,
     },
 };

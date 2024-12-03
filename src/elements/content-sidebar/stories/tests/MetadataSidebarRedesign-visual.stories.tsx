@@ -39,6 +39,27 @@ const mockLogger = {
     },
 };
 
+const defaultMockHandlers = [
+    http.get(mockFileRequest.url, () => {
+        return HttpResponse.json(mockFileRequest.response);
+    }),
+    http.get(mockFileRequestWithoutMetadata.url, () => {
+        return HttpResponse.json(mockFileRequestWithoutMetadata.response);
+    }),
+    http.get(mockMetadataInstances.url, () => {
+        return HttpResponse.json(mockMetadataInstances.response);
+    }),
+    http.get(mockGlobalMetadataTemplates.url, () => {
+        return HttpResponse.json(mockGlobalMetadataTemplates.response);
+    }),
+    http.get(mockEmptyMetadataInstances.url, () => {
+        return HttpResponse.json(mockEmptyMetadataInstances.response);
+    }),
+    http.get(mockEnterpriseMetadataTemplates.url, () => {
+        return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
+    }),
+];
+
 export const AddTemplateDropdownMenuOn = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -75,48 +96,6 @@ export const AddTemplateDropdownMenuOnEmpty = {
         options.forEach(option => {
             expect(option).not.toHaveAttribute('disabled');
         });
-    },
-};
-
-const defaultMockHandlers = [
-    http.get(mockFileRequest.url, () => {
-        return HttpResponse.json(mockFileRequest.response);
-    }),
-    http.get(mockFileRequestWithoutMetadata.url, () => {
-        return HttpResponse.json(mockFileRequestWithoutMetadata.response);
-    }),
-    http.get(mockMetadataInstances.url, () => {
-        return HttpResponse.json(mockMetadataInstances.response);
-    }),
-    http.get(mockGlobalMetadataTemplates.url, () => {
-        return HttpResponse.json(mockGlobalMetadataTemplates.response);
-    }),
-    http.get(mockEmptyMetadataInstances.url, () => {
-        return HttpResponse.json(mockEmptyMetadataInstances.response);
-    }),
-    http.get(mockEnterpriseMetadataTemplates.url, () => {
-        return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
-    }),
-];
-
-export default {
-    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
-    component: ContentSidebar,
-    args: {
-        token,
-        metadataSidebarProps: {
-            ...defaultMetadataArgs,
-        },
-        hasMetadata: true,
-        features: mockFeatures,
-        fileId: fileIdWithMetadata,
-        logger: mockLogger,
-    },
-    parameters: {
-        ...defaultVisualConfig.parameters,
-        msw: {
-            handlers: defaultMockHandlers,
-        },
     },
 };
 
@@ -400,7 +379,6 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -432,7 +410,6 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -463,7 +440,6 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
 
 export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -494,5 +470,26 @@ export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
             'An error has occurred while updating metadata. Please refresh the page and try again.',
         );
         expect(errorAlert).toBeInTheDocument();
+    },
+};
+
+export default {
+    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
+    component: ContentSidebar,
+    args: {
+        token,
+        metadataSidebarProps: {
+            ...defaultMetadataArgs,
+        },
+        hasMetadata: true,
+        features: mockFeatures,
+        fileId: fileIdWithMetadata,
+        logger: mockLogger,
+    },
+    parameters: {
+        ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: defaultMockHandlers,
+        },
     },
 };
