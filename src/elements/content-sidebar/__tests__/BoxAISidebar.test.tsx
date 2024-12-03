@@ -10,7 +10,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     const renderComponent = (props = {}) => {
         const defaultProps = {
             onExpandClick: mockOnExpandClick,
-            onClearCLick: mockOnClearClick,
+            onClearClick: mockOnClearClick,
         } satisfies BoxAISidebarProps;
 
         render(<BoxAISidebarComponent {...defaultProps} {...props} />);
