@@ -32,6 +32,10 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
             width: $sidebarWidth;
         }
     }
+
+    &.bcs-is-wider.bcs-is-open .bcs-loading {
+        width: $sidebarIncreasedWidth;
+    }
 }
 
 @include breakpoint($medium-screen) {
