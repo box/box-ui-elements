@@ -207,10 +207,6 @@ export const getParsedFileActivitiesResponse = (
                     if (versionsItem.action_by) {
                         const collaborators = {};
 
-                        if (versionsItem.action_by.length === 1) {
-                            versionsItem.uploader_display_name = versionsItem.action_by[0].name;
-                        }
-
                         versionsItem.action_by.map(collaborator => {
                             collaborators[collaborator.id] = { ...collaborator };
                             return collaborator;
@@ -228,6 +224,7 @@ export const getParsedFileActivitiesResponse = (
 
                     if (versionsItem.version_start === versionsItem.version_end) {
                         versionsItem.version_number = versionsItem.version_start;
+                        versionsItem.uploader_display_name = versionsItem.start?.uploader_display_name;
 
                         if (
                             versionsItem.action_type === ACTION_TYPE_CREATED &&

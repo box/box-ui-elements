@@ -1,8 +1,13 @@
 @import '../common/variables';
 
+$sidebarWidth: $sidebarContentWidth + 1px; // 1px extra to account for the margin left
+$sidebarIncreasedWidth: $sidebarContentIncreasedWidth + 1px;
+$sidebarScrollContentWidth: 323px; // 17px less than the total width for scroll bar
+$sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
+
 .bcs-content {
     position: relative;
-    width: 341px; // 1px extra to account for the margin left
+    width: $sidebarWidth;
     margin-left: -1px; // -1px to make nav button hover not have blank space
     border-left: 1px solid $bdl-gray-10;
 
@@ -35,12 +40,21 @@
 
     .bcs-scroll-content {
         // Styles can be overriden by each sidebar
-        width: 323px; // 17px less than the total width for scroll bar
+        width: $sidebarScrollContentWidth;
+    }
+}
+
+.bcs-is-wider .bcs-content {
+    width: $sidebarIncreasedWidth;
+
+    .bcs-scroll-content {
+        width: $sidebarScrollContentIncreasedWidth;
     }
 }
 
 @include breakpoint($medium-screen) {
-    .bcs-content {
+    .bcs-content,
+    .bcs-is-wider .bcs-content {
         flex-basis: 100%;
         width: auto;
 

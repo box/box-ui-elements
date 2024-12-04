@@ -5,7 +5,7 @@ aliases:
 
   - &clean
     name: Cleaning
-    command: yarn clean
+    command: yarn cache clean
 
   - &i18n
     name: Building locales
@@ -17,13 +17,20 @@ aliases:
 
   - &restore-yarn-cache
     keys:
-        - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-packages-v1-{{ .Branch }}-
+        - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-cache-{{ .Branch }}-
 
   - &save-yarn-cache
     paths:
       - ~/.cache/yarn
-    key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - node_modules
+    key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+  - &prepare-cache
+    name: Prepare Yarn Cache
+    command: |
+        mkdir -p ~/.cache/yarn
+        chown -R $(whoami) ~/.cache/yarn
 
 defaults: &defaults
   resource_class: large
@@ -38,6 +45,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run: *prepare-cache
       - restore-cache: *restore-yarn-cache
       - run: *yarn
       - save-cache: *save-yarn-cache
@@ -54,6 +62,7 @@ jobs:
       <<: *defaults
       steps:
         - checkout
+        - run: *prepare-cache
         - restore-cache: *restore-yarn-cache
         - run: *yarn
         - save-cache: *save-yarn-cache
@@ -66,6 +75,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run: *prepare-cache
       - restore-cache: *restore-yarn-cache
       - run: *yarn
       - save-cache: *save-yarn-cache
@@ -91,6 +101,7 @@ jobs:
       - image: cypress/included:13.13.0
     steps:
       - checkout
+      - run: *prepare-cache
       - restore-cache: *restore-yarn-cache
       - run: *yarn
       - save-cache: *save-yarn-cache
@@ -102,6 +113,7 @@ jobs:
     <<: *defaults
     steps:
         - checkout
+        - run: *prepare-cache
         - restore-cache: *restore-yarn-cache
         - run: *yarn
         - save-cache: *save-yarn-cache

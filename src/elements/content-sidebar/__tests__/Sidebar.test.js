@@ -75,6 +75,29 @@ describe('elements/content-sidebar/Sidebar', () => {
             wrapper.instance();
             expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(1);
         });
+
+        test.each`
+            localStoreValue | expected
+            ${'closed'}     | ${false}
+            ${'open'}       | ${true}
+            ${null}         | ${true}
+        `(
+            'given the LocalStore value for open state = localStoreValue, should call onOpenChange with $expected and "initialState" parameter = true',
+            ({ localStoreValue, expected }) => {
+                const mockOnOpenChange = jest.fn();
+                LocalStore.mockImplementationOnce(() => ({
+                    getItem: jest.fn(() => localStoreValue),
+                    setItem: jest.fn(),
+                }));
+
+                render(
+                    getSidebar({
+                        onOpenChange: mockOnOpenChange,
+                    }),
+                );
+                expect(mockOnOpenChange).toBeCalledWith(expected, true);
+            },
+        );
     });
 
     describe('componentDidUpdate', () => {
@@ -213,7 +236,6 @@ describe('elements/content-sidebar/Sidebar', () => {
                                 pathname: '/',
                                 state: { open: prevOpen },
                             },
-                            onOpenChange: mockOnOpenChange,
                         }),
                     );
 
@@ -227,7 +249,7 @@ describe('elements/content-sidebar/Sidebar', () => {
                         }),
                     );
 
-                    expect(mockOnOpenChange).toBeCalledWith(open);
+                    expect(mockOnOpenChange).toBeCalledWith(open, false);
                 },
             );
             test.each`
@@ -243,7 +265,6 @@ describe('elements/content-sidebar/Sidebar', () => {
                                 pathname: '/',
                                 state: { open: prevOpen },
                             },
-                            onOpenChange: mockOnOpenChange,
                         }),
                     );
 
@@ -463,7 +484,7 @@ describe('elements/content-sidebar/Sidebar', () => {
             }));
 
             SidebarNav.mockImplementationOnce(({ onPanelChange }) => {
-                onPanelChange(mockPanelName);
+                onPanelChange(mockPanelName, false);
                 return 'SidebarNav';
             });
         });
@@ -472,7 +493,7 @@ describe('elements/content-sidebar/Sidebar', () => {
             mockSetItem.mockClear();
         });
 
-        test('should call onPanelChange prop', () => {
+        test('should call onPanelChange prop when handling panel change by the user', () => {
             const mockOnPanelChange = jest.fn();
             render(
                 getSidebar({
@@ -481,7 +502,22 @@ describe('elements/content-sidebar/Sidebar', () => {
                 }),
             );
 
-            expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName);
+            expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName, false);
+        });
+
+        test('should call onPanelChange prop when handling setting of initial panel', () => {
+            SidebarPanels.mockImplementationOnce(({ onPanelChange }) => {
+                onPanelChange(mockPanelName, true);
+                return 'SidebarPanels';
+            });
+            const mockOnPanelChange = jest.fn();
+            render(
+                getSidebar({
+                    onPanelChange: mockOnPanelChange,
+                }),
+            );
+
+            expect(mockOnPanelChange).toHaveBeenCalledWith(mockPanelName, true);
         });
 
         test('given panelSelectionPreservation feature = true should save panel name in LocalStore', () => {
