@@ -163,18 +163,19 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     );
 
     const [filteredTemplates, setFilteredTemplates] = React.useState([]);
-    const filterDropdown = status === STATUS.SUCCESS && appliedTemplates.length > 1 && (
-        <FilterInstancesDropdown
-            appliedTemplates={appliedTemplates as MetadataTemplate[]}
-            selectedTemplates={filteredTemplates}
-            setSelectedTemplates={setFilteredTemplates}
-        />
-    );
+    const filterDropdown =
+        status === STATUS.SUCCESS && appliedTemplates.length > 1 ? (
+            <FilterInstancesDropdown
+                appliedTemplates={appliedTemplates as MetadataTemplate[]}
+                selectedTemplates={filteredTemplates}
+                setSelectedTemplates={setFilteredTemplates}
+            />
+        ) : null;
 
-    const filteredTemplateIstances = templateInstances.filter(instance =>
+    const filteredTemplateInstances = templateInstances.filter(instance =>
         filteredTemplates.some(template => template === instance.id),
     );
-    const templateInstancesList = filteredTemplates.length === 0 ? templateInstances : filteredTemplateIstances;
+    const templateInstancesList = filteredTemplates.length === 0 ? templateInstances : filteredTemplateInstances;
 
     const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
         <InlineError className="bcs-MetadataSidebarRedesign-inline-error">
