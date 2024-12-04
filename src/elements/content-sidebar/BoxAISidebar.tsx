@@ -6,7 +6,6 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 
-import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Fill';
 import { BoxAiAgentSelector, REQUEST_STATE } from '@box/box-ai-agent-selector';
 import { IconButton, Text } from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
@@ -17,6 +16,7 @@ import { withLogger } from '../common/logger';
 import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
+import { useFeatureEnabled } from '../common/feature-checking';
 
 import messages from '../common/messages';
 import sidebarMessages from './messages';
@@ -28,11 +28,11 @@ mark(MARK_NAME_JS_READY);
 
 export interface BoxAISidebarProps {
     onClearClick: () => void;
-    onExpandClick: () => void;
 }
 
-function BoxAISidebar({ onClearClick, onExpandClick }: BoxAISidebarProps) {
+function BoxAISidebar({ onClearClick }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
+    const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
 
     const renderBoxAISidebarTitle = () => {
         return (
@@ -40,33 +40,16 @@ function BoxAISidebar({ onClearClick, onExpandClick }: BoxAISidebarProps) {
                 <Text as="h3" className="bcs-title">
                     {formatMessage(messages.sidebarBoxAITitle)}
                 </Text>
-                <BoxAiAgentSelector
-                    agents={[]}
-                    onErrorAction={() => null}
-                    requestState={REQUEST_STATE.SUCCESS}
-                    selectedAgent={null}
-                    triggerChipClassName="sidebar-chip"
-                />
-            </div>
-        );
-    };
-
-    const renderChatActionButtons = () => {
-        return (
-            <div className="bcs-BoxAISidebar-chat-actions">
-                <IconButton
-                    aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
-                    icon={Trash}
-                    onClick={onClearClick}
-                    size="x-small"
-                />
-                <IconButton
-                    aria-label={formatMessage(sidebarMessages.boxAISidebarExpand)}
-                    className="bcs-BoxAISidebar-expand"
-                    icon={ArrowsExpand}
-                    onClick={onExpandClick}
-                    size="x-small"
-                />
+                {isAgentSelectorEnabled &&
+                        <div data-testid="sidebar-agent-selector">
+                            <BoxAiAgentSelector
+                                    agents={[]}
+                                    onErrorAction={() => null}
+                                    requestState={REQUEST_STATE.SUCCESS}
+                                    selectedAgent={null}
+                                    triggerChipClassName="sidebar-chip" />
+                        </div>
+                }
             </div>
         );
     };
@@ -74,7 +57,12 @@ function BoxAISidebar({ onClearClick, onExpandClick }: BoxAISidebarProps) {
     const renderActions = () => (
         <>
             {renderBoxAISidebarTitle()}
-            {renderChatActionButtons()}
+            <IconButton
+                aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
+                icon={Trash}
+                onClick={onClearClick}
+                size="x-small"
+            />
         </>
     );
 
