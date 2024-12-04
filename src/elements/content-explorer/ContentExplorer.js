@@ -1691,35 +1691,7 @@ class ContentExplorer extends Component<Props, State> {
                                 />
                             </>
                         )}
-                        <Content
-                            canDelete={canDelete}
-                            canDownload={canDownload}
-                            canPreview={canPreview}
-                            canRename={canRename}
-                            canShare={canShare}
-                            currentCollection={currentCollection}
-                            focusedRow={focusedRow}
-                            gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
-                            isMedium={isMedium}
-                            isSmall={isSmall}
-                            isTouch={isTouch}
-                            fieldsToShow={fieldsToShow}
-                            onItemClick={this.onItemClick}
-                            onItemDelete={this.delete}
-                            onItemDownload={this.download}
-                            onItemPreview={this.preview}
-                            onItemRename={this.rename}
-                            onItemSelect={this.select}
-                            onItemShare={this.share}
-                            onMetadataUpdate={this.updateMetadata}
-                            onSortChange={this.sort}
-                            rootElement={this.rootElement}
-                            rootId={rootFolderId}
-                            selected={selected}
-                            tableRef={this.tableRef}
-                            view={view}
-                            viewMode={viewMode}
-                        />
+
                         {!isErrorView && (
                             <Footer>
                                 <Pagination

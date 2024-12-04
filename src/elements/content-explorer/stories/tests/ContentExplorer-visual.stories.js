@@ -158,17 +158,4 @@ export default {
         rootFolderId: global.FOLDER_ID,
         token: global.TOKEN,
     },
-    parameters: {
-        ...defaultVisualConfig.parameters,
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
-                    return HttpResponse.json(mockSubFolder);
-                }),
-            ],
-        },
-    },
 };

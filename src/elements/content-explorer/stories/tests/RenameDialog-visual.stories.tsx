@@ -105,7 +105,4 @@ export const renameDialogNameTooLongError = {
 export default {
     title: 'Elements/ContentExplorer/tests/RenameDialog/visual',
     component: RenameDialog,
-    parameters: {
-        ...defaultVisualConfig.parameters,
-    },
 };
