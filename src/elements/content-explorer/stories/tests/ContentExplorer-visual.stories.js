@@ -15,6 +15,12 @@ export const basic = {
         expect(await canvas.findByText('An Ordered Folder')).toBeInTheDocument();
         expect(canvas.getByText('Tue Apr 16 2019 by Preview')).toBeInTheDocument();
 
+        expect(await canvas.findByText('Archive')).toBeInTheDocument();
+        expect(canvas.getByText('Wed Dec 16 2020 by Preview')).toBeInTheDocument();
+
+        expect(canvas.getByText('Archived Folder')).toBeInTheDocument();
+        expect(canvas.getByText('Thu Dec 17 2020  by Preview')).toBeInTheDocument();
+
         expect(canvas.getByText('Book Sample.pdf')).toBeInTheDocument();
         expect(canvas.getByText('Thu Dec 8 2022 by Preview')).toBeInTheDocument();
     },
