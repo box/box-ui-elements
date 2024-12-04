@@ -37,7 +37,9 @@ export const TYPE_WEBLINK: 'web_link' = 'web_link';
 
 /* ----------------------- Archive Types ---------------------------- */
 export const TYPE_ARCHIVE: 'archive' = 'archive';
-export const TYPE_ARCHIVE_CONTENT: 'archive-content' = 'archive-content';
+export const TYPE_ARCHIVE_FOLDER: 'folder_archive' = 'folder_archive';
+export const TYPE_ARCHIVE_FILE: 'file' = 'file';
+export const TYPE_ARCHIVE_WEB_LINK: 'web_link' = 'web_link';
 
 /* ----------------------- Feed Items Types ---------------------------- */
 export const FEED_ITEM_TYPE_APP_ACTIVITY: 'app_activity' = 'app_activity';

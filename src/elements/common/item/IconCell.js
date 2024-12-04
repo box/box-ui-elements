@@ -24,7 +24,7 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
     const { type, extension, has_collaborations, is_externally_owned, archive_type }: BoxItem = rowData;
     let title;
     const is_archive = archive_type === 'archive';
-    const is_archived_content = archive_type === 'archive-content';
+    const is_archive_folder = archive_type === 'folder_archive';
     switch (type) {
         case TYPE_FILE:
             title = intl.formatMessage(messages.file);
@@ -35,7 +35,7 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
                     <Archive aria-label={intl.formatMessage(messages.archive)} height={dimension} width={dimension} />
                 );
             }
-            if (is_archived_content) {
+            if (is_archive_folder) {
                 return (
                     <FolderArchive
                         aria-label={intl.formatMessage(messages.archivedFolder)}

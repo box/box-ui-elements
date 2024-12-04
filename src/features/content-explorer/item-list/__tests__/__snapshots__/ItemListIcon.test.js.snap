@@ -74,7 +74,7 @@ exports[`features/content-explorer/item-list/ItemListIcon render() should render
 <IconCell
   rowData={
     {
-      "archive_type": "archive-content",
+      "archive_type": "folder_archive",
       "extension": undefined,
       "has_collaborations": false,
       "is_externally_owned": false,

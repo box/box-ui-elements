@@ -35,7 +35,7 @@ describe('elements/common/item/IconCell', () => {
         test('should render archived folder icon', () => {
             const rowData = {
                 type: 'folder',
-                archive_type: 'archive-content',
+                archive_type: 'folder_archive',
                 has_collaborations: false,
                 is_externally_owned: false,
             };

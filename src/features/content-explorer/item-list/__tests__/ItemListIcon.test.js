@@ -55,7 +55,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
                 type: 'folder',
                 hasCollaborations: false,
                 isExternallyOwned: false,
-                archiveType: 'archive-content',
+                archiveType: 'folder_archive',
             },
         ].forEach(rowData => {
             test('should render correct folder icon', () => {
