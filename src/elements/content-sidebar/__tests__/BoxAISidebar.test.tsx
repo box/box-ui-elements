@@ -33,7 +33,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     test('should not have accessible Agent selector if boxai.agentSelector.enabled is false', () => {
         renderComponent({}, { 'boxai.agentSelector.enabled': false });
 
-        expect(screen.getByTestId('sidebar-agent-selector')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('sidebar-agent-selector')).not.toBeInTheDocument();
     });
 
     test('should have accessible "Clear" button', () => {
