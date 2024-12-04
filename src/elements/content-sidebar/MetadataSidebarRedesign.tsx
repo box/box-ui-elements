@@ -167,12 +167,13 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         </InlineError>
     );
 
-    const showTemplateInstances = file && templates && templateInstances;
+    const isFullyLoaded = file && templates && templateInstances;
+    const visibleTemplateInstances = templateInstances.filter(templateInstance => !templateInstance.hidden);
 
     const showLoading = status === STATUS.LOADING;
-    const showEmptyState = !showLoading && showTemplateInstances && templateInstances.length === 0 && !editingTemplate;
+    const showEmptyState = !showLoading && isFullyLoaded && visibleTemplateInstances.length === 0 && !editingTemplate;
     const showEditor = !showEmptyState && editingTemplate;
-    const showList = !showEditor && templateInstances.length > 0 && !editingTemplate;
+    const showList = !showEditor && visibleTemplateInstances.length > 0 && !editingTemplate;
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
     const taxonomyOptionsFetcher = async (
