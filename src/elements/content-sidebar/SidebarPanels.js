@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import flow from 'lodash/flow';
+import noop from 'lodash/noop';
 import { matchPath, Redirect, Route, Switch, type Location } from 'react-router-dom';
 import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
@@ -46,6 +47,7 @@ type Props = {
     boxAISidebarProps: BoxAISidebarProps,
     currentUser?: User,
     currentUserError?: Errors,
+    defaultPanel?: string,
     detailsSidebarProps: DetailsSidebarProps,
     docGenSidebarProps: DocGenSidebarProps,
     elementId: string,
@@ -65,6 +67,7 @@ type Props = {
     location: Location,
     metadataSidebarProps: MetadataSidebarProps,
     onAnnotationSelect?: Function,
+    onPanelChange?: (name: string, isInitialState?: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     versionsSidebarProps: VersionsSidebarProps,
@@ -121,6 +124,8 @@ class SidebarPanels extends React.Component<Props, State> {
 
     detailsSidebar: ElementRefType = React.createRef();
 
+    initialPanel: { current: null | string } = React.createRef();
+
     metadataSidebar: ElementRefType = React.createRef();
 
     state: State = { isInitialized: false };
@@ -144,6 +149,15 @@ class SidebarPanels extends React.Component<Props, State> {
     getVersionsMatchPath = (location: Location) => {
         const { pathname } = location;
         return matchPath(pathname, SIDEBAR_PATH_VERSIONS);
+    };
+
+    handlePanelRender = (panel: string): void => {
+        const { onPanelChange = noop } = this.props;
+        // Call onPanelChange only once with the initial panel
+        if (!this.initialPanel.current) {
+            this.initialPanel.current = panel;
+            onPanelChange(panel, true);
+        }
     };
 
     /**
@@ -184,6 +198,7 @@ class SidebarPanels extends React.Component<Props, State> {
             boxAISidebarProps,
             currentUser,
             currentUserError,
+            defaultPanel = '',
             detailsSidebarProps,
             docGenSidebarProps,
             elementId,
@@ -212,6 +227,17 @@ class SidebarPanels extends React.Component<Props, State> {
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
         const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
 
+        const panelsEligibility = {
+            [SIDEBAR_VIEW_BOXAI]: hasBoxAI,
+            [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
+            [SIDEBAR_VIEW_SKILLS]: hasSkills,
+            [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
+            [SIDEBAR_VIEW_DETAILS]: hasDetails,
+            [SIDEBAR_VIEW_METADATA]: hasMetadata,
+        };
+
+        const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
+
         if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
         }
@@ -223,6 +249,7 @@ class SidebarPanels extends React.Component<Props, State> {
                         exact
                         path={`/${SIDEBAR_VIEW_BOXAI}`}
                         render={() => {
+                            this.handlePanelRender(SIDEBAR_VIEW_BOXAI);
                             return (
                                 <LoadableBoxAISidebar
                                     elementId={elementId}
@@ -240,17 +267,20 @@ class SidebarPanels extends React.Component<Props, State> {
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_SKILLS}`}
-                        render={() => (
-                            <LoadableSkillsSidebar
-                                elementId={elementId}
-                                key={file.id}
-                                file={file}
-                                getPreview={getPreview}
-                                getViewer={getViewer}
-                                hasSidebarInitialized={isInitialized}
-                                startMarkName={MARK_NAME_JS_LOADING_SKILLS}
-                            />
-                        )}
+                        render={() => {
+                            this.handlePanelRender(SIDEBAR_VIEW_SKILLS);
+                            return (
+                                <LoadableSkillsSidebar
+                                    elementId={elementId}
+                                    key={file.id}
+                                    file={file}
+                                    getPreview={getPreview}
+                                    getViewer={getViewer}
+                                    hasSidebarInitialized={isInitialized}
+                                    startMarkName={MARK_NAME_JS_LOADING_SKILLS}
+                                />
+                            );
+                        }}
                     />
                 )}
                 {/* This handles both the default activity sidebar and the activity sidebar with a
@@ -268,6 +298,7 @@ class SidebarPanels extends React.Component<Props, State> {
                             const activeFeedEntryType = matchEntryType
                                 ? URL_TO_FEED_ITEM_TYPE[matchEntryType]
                                 : undefined;
+                            this.handlePanelRender(SIDEBAR_VIEW_ACTIVITY);
                             return (
                                 <LoadableActivitySidebar
                                     elementId={elementId}
@@ -292,27 +323,31 @@ class SidebarPanels extends React.Component<Props, State> {
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_DETAILS}`}
-                        render={() => (
-                            <LoadableDetailsSidebar
-                                elementId={elementId}
-                                fileId={fileId}
-                                hasSidebarInitialized={isInitialized}
-                                key={fileId}
-                                hasVersions={hasVersions}
-                                onVersionHistoryClick={onVersionHistoryClick}
-                                ref={this.detailsSidebar}
-                                startMarkName={MARK_NAME_JS_LOADING_DETAILS}
-                                {...detailsSidebarProps}
-                            />
-                        )}
+                        render={() => {
+                            this.handlePanelRender(SIDEBAR_VIEW_DETAILS);
+                            return (
+                                <LoadableDetailsSidebar
+                                    elementId={elementId}
+                                    fileId={fileId}
+                                    hasSidebarInitialized={isInitialized}
+                                    key={fileId}
+                                    hasVersions={hasVersions}
+                                    onVersionHistoryClick={onVersionHistoryClick}
+                                    ref={this.detailsSidebar}
+                                    startMarkName={MARK_NAME_JS_LOADING_DETAILS}
+                                    {...detailsSidebarProps}
+                                />
+                            );
+                        }}
                     />
                 )}
                 {hasMetadata && (
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_METADATA}`}
-                        render={() =>
-                            isMetadataSidebarRedesignEnabled ? (
+                        render={() => {
+                            this.handlePanelRender(SIDEBAR_VIEW_METADATA);
+                            return isMetadataSidebarRedesignEnabled ? (
                                 <LoadableMetadataSidebarRedesigned
                                     elementId={elementId}
                                     fileId={fileId}
@@ -331,45 +366,55 @@ class SidebarPanels extends React.Component<Props, State> {
                                     startMarkName={MARK_NAME_JS_LOADING_METADATA}
                                     {...metadataSidebarProps}
                                 />
-                            )
-                        }
+                            );
+                        }}
                     />
                 )}
                 {hasDocGen && (
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_DOCGEN}`}
-                        render={() => (
-                            <LoadableDocGenSidebar
-                                hasSidebarInitialized={isInitialized}
-                                startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
-                                {...docGenSidebarProps}
-                            />
-                        )}
+                        render={() => {
+                            this.handlePanelRender(SIDEBAR_VIEW_DOCGEN);
+                            return (
+                                <LoadableDocGenSidebar
+                                    hasSidebarInitialized={isInitialized}
+                                    startMarkName={MARK_NAME_JS_LOADING_DOCGEN}
+                                    {...docGenSidebarProps}
+                                />
+                            );
+                        }}
                     />
                 )}
                 {hasVersions && (
                     <Route
                         path={SIDEBAR_PATH_VERSIONS}
-                        render={({ match }) => (
-                            <LoadableVersionsSidebar
-                                fileId={fileId}
-                                hasSidebarInitialized={isInitialized}
-                                key={fileId}
-                                onVersionChange={onVersionChange}
-                                parentName={match.params.sidebar}
-                                ref={this.versionsSidebar}
-                                versionId={match.params.versionId}
-                                {...versionsSidebarProps}
-                            />
-                        )}
+                        render={({ match }) => {
+                            if (match.params.sidebar) {
+                                this.handlePanelRender(match.params.sidebar);
+                            }
+                            return (
+                                <LoadableVersionsSidebar
+                                    fileId={fileId}
+                                    hasSidebarInitialized={isInitialized}
+                                    key={fileId}
+                                    onVersionChange={onVersionChange}
+                                    parentName={match.params.sidebar}
+                                    ref={this.versionsSidebar}
+                                    versionId={match.params.versionId}
+                                    {...versionsSidebarProps}
+                                />
+                            );
+                        }}
                     />
                 )}
                 <Route
                     render={() => {
                         let redirect = '';
 
-                        if (hasBoxAI) {
+                        if (showDefaultPanel) {
+                            redirect = defaultPanel;
+                        } else if (hasBoxAI) {
                             redirect = SIDEBAR_VIEW_BOXAI;
                         } else if (hasDocGen) {
                             redirect = SIDEBAR_VIEW_DOCGEN;

@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
 import AdditionalTabs from './additional-tabs';
@@ -47,7 +48,7 @@ type Props = {
     intl: IntlShape,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-    onPanelChange?: (name: string) => void,
+    onPanelChange?: (name: string, isInitialState: boolean) => void,
 };
 
 const SidebarNav = ({
@@ -64,9 +65,13 @@ const SidebarNav = ({
     intl,
     isOpen,
     onNavigate,
-    onPanelChange,
+    onPanelChange = noop,
 }: Props) => {
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
+
+    const handleSidebarNavButtonClick = (sidebarview: string) => {
+        onPanelChange(sidebarview, false);
+    };
 
     return (
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
@@ -77,7 +82,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                             data-target-id="SidebarNavButton-boxAI"
                             data-testid="sidebarboxai"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_BOXAI}
                             tooltip={intl.formatMessage(messages.sidebarBoxAITitle)}
                         >
@@ -89,7 +94,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                             data-target-id="SidebarNavButton-activity"
                             data-testid="sidebaractivity"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
@@ -101,7 +106,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                             data-target-id="SidebarNavButton-details"
                             data-testid="sidebardetails"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
@@ -113,7 +118,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                             data-target-id="SidebarNavButton-skills"
                             data-testid="sidebarskills"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                         >
@@ -125,7 +130,7 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                             data-target-id="SidebarNavButton-metadata"
                             data-testid="sidebarmetadata"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
@@ -136,7 +141,7 @@ const SidebarNav = ({
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             data-target-id="SidebarNavButton-docGen"
-                            onClick={onPanelChange}
+                            onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
                         >
