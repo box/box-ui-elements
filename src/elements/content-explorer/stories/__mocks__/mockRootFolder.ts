@@ -101,7 +101,7 @@ const mockRootFolder = {
             },
             {
                 type: 'folder',
-                id: '73426618530',
+                id: '73426618531',
                 etag: '3',
                 name: 'Archive',
                 size: 1231231,
@@ -154,11 +154,11 @@ const mockRootFolder = {
                 watermark_info: {
                     is_watermarked: false,
                 },
-                archiveType: 'archive',
+                archive_type: 'archive',
             },
             {
                 type: 'folder',
-                id: '12312323232',
+                id: '73426618532',
                 etag: '3',
                 name: 'Archived Folder',
                 size: 1231231,
@@ -211,7 +211,7 @@ const mockRootFolder = {
                 watermark_info: {
                     is_watermarked: false,
                 },
-                archiveType: 'folder_archive',
+                archive_type: 'folder_archive',
             },
             {
                 type: 'file',
