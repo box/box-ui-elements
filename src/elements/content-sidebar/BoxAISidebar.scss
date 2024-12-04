@@ -5,6 +5,18 @@
 $agentSelectorSidebarWidth: 211px;
 
 .bcs-BoxAISidebar {
+    max-height: 100%;
+    height: 100%;
+
+    .bcs-scroll-content {
+        width: 100%;
+        height: 100%;
+    }
+
+    .bcs-BoxAISidebar-content {
+        height: 100%;
+    }
+
     .bcs-BoxAISidebar-title-part {
         display: flex;
         align-items: center;

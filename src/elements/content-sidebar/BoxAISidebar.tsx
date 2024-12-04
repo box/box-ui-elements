@@ -9,6 +9,7 @@ import { useIntl } from 'react-intl';
 import {AgentType, BoxAiAgentSelector, REQUEST_STATE} from '@box/box-ai-agent-selector';
 import { IconButton, Text } from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
+import { BoxAiContentAnswers, withApiWrapper, type ApiWrapperProps } from '@box/box-ai-content-answers'
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
@@ -22,19 +23,27 @@ import messages from '../common/messages';
 import sidebarMessages from './messages';
 import './BoxAISidebar.scss';
 
+
 const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-export interface BoxAISidebarProps {
+export interface BoxAISidebarProps extends ApiWrapperProps{
     onClearClick: () => void;
     agents: AgentType[];
     selectedAgent: AgentType | null;
 }
 
-function BoxAISidebar({ agents = [], onClearClick, selectedAgent}: BoxAISidebarProps) {
+function BoxAISidebar({ agents = [], onClearClick, selectedAgent, ...props }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
+    const { createSession, encodedSession } = props;
     const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
+
+    React.useEffect(() => {
+        if (!encodedSession && createSession) {
+            createSession();
+        }
+    }, []);
 
     const renderBoxAISidebarTitle = () => {
         return (
@@ -68,7 +77,9 @@ function BoxAISidebar({ agents = [], onClearClick, selectedAgent}: BoxAISidebarP
 
     return (
         <SidebarContent actions={renderActions()} className="bcs-BoxAISidebar" sidebarView={SIDEBAR_VIEW_BOXAI}>
-            <div className="bcs-BoxAISidebar-content" />
+            <div className="bcs-BoxAISidebar-content">
+                <BoxAiContentAnswers className="bcs-BoxAISidebar-contentAnswers" isSidebarOpen {...props} />
+            </div>
         </SidebarContent>
     );
 }
@@ -76,6 +87,7 @@ function BoxAISidebar({ agents = [], onClearClick, selectedAgent}: BoxAISidebarP
 export { BoxAISidebar as BoxAISidebarComponent };
 
 const BoxAISidebarDefaultExport: typeof withAPIContext = flow([
+    withApiWrapper,
     withLogger(ORIGIN_BOXAI_SIDEBAR),
     withErrorBoundary(ORIGIN_BOXAI_SIDEBAR),
     withAPIContext,

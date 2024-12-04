@@ -11,7 +11,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             onClearClick: mockOnClearClick,
             agents: [],
             selectedAgent: null,
-        } satisfies BoxAISidebarProps;
+        } as unknown as BoxAISidebarProps;
 
         render(<BoxAISidebarComponent {...defaultProps} {...props} />, { wrapperProps: { features } });
     };
