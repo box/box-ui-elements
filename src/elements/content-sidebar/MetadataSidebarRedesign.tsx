@@ -154,6 +154,15 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         }
     };
 
+    const isFullyLoaded = file && templates && templateInstances;
+    const visibleTemplateInstances = templateInstances.filter(templateInstance => !templateInstance.hidden);
+
+    const showLoading = status === STATUS.LOADING;
+    const showEmptyState = !showLoading && isFullyLoaded && visibleTemplateInstances.length === 0 && !editingTemplate;
+    const showEditor = !showEmptyState && editingTemplate;
+    const showList = !showEditor && visibleTemplateInstances.length > 0 && !editingTemplate;
+    const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
+
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
@@ -164,7 +173,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
 
     const [filteredTemplates, setFilteredTemplates] = React.useState([]);
     const filterDropdown =
-        status === STATUS.SUCCESS && appliedTemplates.length > 1 ? (
+        status === STATUS.SUCCESS && showList && appliedTemplates.length > 1 ? (
             <FilterInstancesDropdown
                 appliedTemplates={appliedTemplates as MetadataTemplate[]}
                 selectedTemplates={filteredTemplates}
@@ -182,15 +191,6 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
             <FormattedMessage {...errorMessage} />
         </InlineError>
     );
-
-    const isFullyLoaded = file && templates && templateInstances;
-    const visibleTemplateInstances = templateInstances.filter(templateInstance => !templateInstance.hidden);
-
-    const showLoading = status === STATUS.LOADING;
-    const showEmptyState = !showLoading && isFullyLoaded && visibleTemplateInstances.length === 0 && !editingTemplate;
-    const showEditor = !showEmptyState && editingTemplate;
-    const showList = !showEditor && visibleTemplateInstances.length > 0 && !editingTemplate;
-    const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
     const taxonomyOptionsFetcher = async (
         scope: string,
