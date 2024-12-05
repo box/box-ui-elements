@@ -32,13 +32,19 @@ const IconCell = ({ intl, rowData, dimension }: Props) => {
         case TYPE_FOLDER:
             if (is_archive) {
                 return (
-                    <Archive aria-label={intl.formatMessage(messages.archive)} height={dimension} width={dimension} />
+                    <Archive
+                        aria-label={intl.formatMessage(messages.archive)}
+                        data-testid="archive-icon-cell"
+                        height={dimension}
+                        width={dimension}
+                    />
                 );
             }
             if (is_archive_folder) {
                 return (
                     <FolderArchive
                         aria-label={intl.formatMessage(messages.archivedFolder)}
+                        data-testid="folder-archive-icon-cell"
                         height={dimension}
                         width={dimension}
                     />

@@ -1,85 +1,100 @@
 import * as React from 'react';
 
 import ItemListIcon from '../ItemListIcon';
+import { render, screen } from '../../../../test-utils/testing-library';
 
 describe('features/content-explorer/item-list/ItemListIcon', () => {
-    const renderComponent = props => shallow(<ItemListIcon {...props} />);
+    const renderComponent = props => render(<ItemListIcon {...props} />);
 
     describe('render()', () => {
-        test('should render default component', () => {
-            const wrapper = renderComponent();
+        test('should render default file icon', () => {
+            renderComponent({});
 
-            expect(wrapper.find('IconCell').length).toBe(1);
-            expect(wrapper.prop('rowData')).toEqual({
-                type: undefined,
-                extension: undefined,
-                has_collaborations: false,
-                is_externally_owned: false,
-            });
+            expect(screen.getByTitle('File')).toBeInTheDocument();
+        });
+
+        test('should render archive icon', () => {
+            const rowData = {
+                type: 'folder',
+                archiveType: 'archive',
+                hasCollaborations: false,
+                isExternallyOwned: false,
+            };
+            renderComponent(rowData);
+
+            expect(screen.getByTestId('archive-icon-cell')).toBeVisible();
+        });
+
+        test('should render archived folder icon', () => {
+            const rowData = {
+                type: 'folder',
+                archiveType: 'folder_archive',
+                hasCollaborations: false,
+                isExternallyOwned: false,
+            };
+            renderComponent(rowData);
+
+            expect(screen.getByTestId('folder-archive-icon-cell')).toBeVisible();
         });
 
         [
             // personalFolder
             {
-                type: 'folder',
-                hasCollaborations: false,
-                isExternallyOwned: false,
+                rowData: {
+                    type: 'folder',
+                    hasCollaborations: false,
+                    isExternallyOwned: false,
+                },
+                title: 'Personal Folder',
             },
             // collabFolder
             {
-                type: 'folder',
-                hasCollaborations: true,
-                isExternallyOwned: false,
+                rowData: {
+                    type: 'folder',
+                    hasCollaborations: true,
+                    isExternallyOwned: false,
+                },
+                title: 'Collaborated Folder',
             },
             // externalCollabFolder
             {
-                type: 'folder',
-                hasCollaborations: true,
-                isExternallyOwned: true,
+                rowData: {
+                    type: 'folder',
+                    hasCollaborations: true,
+                    isExternallyOwned: true,
+                },
+                title: 'Collaborated Folder',
             },
             // externalFolder
             {
-                type: 'folder',
-                hasCollaborations: false,
-                isExternallyOwned: true,
+                rowData: {
+                    type: 'folder',
+                    hasCollaborations: false,
+                    isExternallyOwned: true,
+                },
+                title: 'External Folder',
             },
-            // archive
-            {
-                type: 'folder',
-                hasCollaborations: false,
-                isExternallyOwned: false,
-                archiveType: 'archive',
-            },
-            // archivedFolder
-            {
-                type: 'folder',
-                hasCollaborations: false,
-                isExternallyOwned: false,
-                archiveType: 'folder_archive',
-            },
-        ].forEach(rowData => {
+        ].forEach(({ rowData, title }) => {
             test('should render correct folder icon', () => {
-                const wrapper = renderComponent(rowData);
+                renderComponent(rowData);
 
-                expect(wrapper.find('IconCell').length).toBe(1);
-                expect(wrapper).toMatchSnapshot();
+                expect(screen.getByTitle(title)).toBeInTheDocument();
             });
         });
 
         test('should render correct file icon', () => {
-            const rowData = { type: 'file', extension: 'boxnote' };
-            const wrapper = renderComponent(rowData);
+            const extension = 'boxnote';
+            const rowData = { type: 'file', extension };
+            renderComponent(rowData);
 
-            expect(wrapper.find('IconCell').length).toBe(1);
-            expect(wrapper.prop('rowData')).toEqual(expect.objectContaining(rowData));
+            expect(screen.getByTitle('File')).toBeInTheDocument();
         });
 
         test('should render correct bookmark icon', () => {
             const rowData = { type: 'web_link' };
-            const wrapper = renderComponent(rowData);
+            renderComponent(rowData);
 
-            expect(wrapper.find('IconCell').length).toBe(1);
-            expect(wrapper.prop('rowData')).toEqual(expect.objectContaining(rowData));
+            expect(screen.getByTitle('Bookmark')).toBeInTheDocument();
         });
     });
 });
