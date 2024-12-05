@@ -18,6 +18,7 @@ import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { useFeatureEnabled } from '../common/feature-checking';
+import type { User } from '../../common/types/core';
 
 import messages from '../common/messages';
 import sidebarMessages from './messages';
@@ -28,15 +29,19 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-export interface BoxAISidebarProps extends ApiWrapperProps{
+export interface BoxAISidebarProps extends ApiWrapperProps {
+    currentUser: User,
     onClearClick: () => void;
     agents: AgentType[];
     selectedAgent: AgentType | null;
+    fileName: string,
+    contentType: string,
 }
 
-function BoxAISidebar({ agents = [], onClearClick, selectedAgent, ...props }: BoxAISidebarProps) {
+function BoxAISidebar({ agents = [], currentUser, fileName, onClearClick, selectedAgent, ...props }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
-    const { createSession, encodedSession } = props;
+    const { createSession, encodedSession, sendQuestion } = props;
+    const userInfo = { name: currentUser.name, avatarUrl: currentUser.avatar_url };
     const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
 
     React.useEffect(() => {
@@ -78,7 +83,15 @@ function BoxAISidebar({ agents = [], onClearClick, selectedAgent, ...props }: Bo
     return (
         <SidebarContent actions={renderActions()} className="bcs-BoxAISidebar" sidebarView={SIDEBAR_VIEW_BOXAI}>
             <div className="bcs-BoxAISidebar-content">
-                <BoxAiContentAnswers className="bcs-BoxAISidebar-contentAnswers" isSidebarOpen {...props} />
+                <BoxAiContentAnswers 
+                    userInfo={userInfo} 
+                    className="bcs-BoxAISidebar-contentAnswers" 
+                    isSidebarOpen 
+                    contentName={fileName} 
+                    contentType={props.contentType} 
+                    submitQuestion={sendQuestion} 
+                    {...props} 
+                />
             </div>
         </SidebarContent>
     );
