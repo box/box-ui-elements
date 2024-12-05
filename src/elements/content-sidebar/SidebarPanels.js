@@ -252,14 +252,13 @@ class SidebarPanels extends React.Component<Props, State> {
                             this.handlePanelRender(SIDEBAR_VIEW_BOXAI);
                             return (
                                 <LoadableBoxAISidebar
-                                    currentUser={currentUser}
+                                    contentName={file.name}
                                     elementId={elementId}
                                     hasSidebarInitialized={isInitialized}
                                     ref={this.boxAISidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_BOXAI}
+                                    userInfo={{name: currentUser.name, avatarUrl: currentUser.avatar_url}}
                                     {...boxAISidebarProps}
-                                    fileName={file.name}
-                                    fileExtension={file.extension}
                                 />
                             );
                         }}
