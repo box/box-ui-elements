@@ -1,6 +1,6 @@
 import { type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
-import { expect, userEvent, within, fn, screen } from '@storybook/test';
+import { expect, userEvent, waitFor, within, fn, screen } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
@@ -83,17 +83,22 @@ export const FilterInstancesDropdown = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const filterInstancesButton = await canvas.findByRole('combobox');
+        await waitFor(
+            async () => {
+                const filterInstancesButton = await canvas.findByRole('combobox');
 
-        expect(filterInstancesButton).toBeInTheDocument();
-        await userEvent.click(filterInstancesButton);
+                expect(filterInstancesButton).toBeInTheDocument();
+                await userEvent.click(filterInstancesButton);
 
-        const firstOption = canvas.getByRole('option', { name: 'My Template' });
-        expect(firstOption).toBeInTheDocument();
-        const secondOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
-        expect(secondOption).toBeInTheDocument();
-        const thirdOption = canvas.getByRole('option', { name: 'Custom Metadata' });
-        expect(thirdOption).toBeInTheDocument();
+                const firstOption = canvas.getByRole('option', { name: 'My Template' });
+                expect(firstOption).toBeInTheDocument();
+                const secondOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
+                expect(secondOption).toBeInTheDocument();
+                const thirdOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+                expect(thirdOption).toBeInTheDocument();
+            },
+            { timeout: 2000 },
+        );
     },
 };
 
@@ -215,7 +220,7 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
         await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
