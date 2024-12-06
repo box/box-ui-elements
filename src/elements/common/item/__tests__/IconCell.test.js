@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { render, screen } from '../../../../test-utils/testing-library';
 import { IconCellBase as IconCell } from '../IconCell';
 
 const intl = {
@@ -7,16 +8,38 @@ const intl = {
 };
 
 describe('elements/common/item/IconCell', () => {
-    const getWrapper = props => shallow(<IconCell intl={intl} {...props} />);
+    const getWrapper = props => render(<IconCell intl={intl} {...props} />);
 
     describe('render()', () => {
         test('should render default file icon', () => {
             const rowData = { type: undefined };
-            const wrapper = getWrapper({ rowData });
+            getWrapper({ rowData });
 
-            expect(wrapper.name()).toBe('FileIcon');
-            expect(wrapper.prop('extension')).toBe(undefined);
-            expect(wrapper.prop('title')).toBe('File');
+            expect(screen.getByTitle('File')).toBeInTheDocument();
+        });
+
+        test('should render archive icon', () => {
+            const rowData = {
+                type: 'folder',
+                archive_type: 'archive',
+                has_collaborations: false,
+                is_externally_owned: false,
+            };
+            getWrapper({ rowData });
+
+            expect(screen.getByTestId('archive-icon-cell')).toBeVisible();
+        });
+
+        test('should render archived folder icon', () => {
+            const rowData = {
+                type: 'folder',
+                archive_type: 'folder_archive',
+                has_collaborations: false,
+                is_externally_owned: false,
+            };
+            getWrapper({ rowData });
+
+            expect(screen.getByTestId('folder-archive-icon-cell')).toBeVisible();
         });
 
         [
@@ -58,31 +81,25 @@ describe('elements/common/item/IconCell', () => {
             },
         ].forEach(({ rowData, title }) => {
             test('should render correct folder icon', () => {
-                const wrapper = getWrapper({ rowData });
+                getWrapper({ rowData });
 
-                expect(wrapper.name()).toBe('FolderIcon');
-                expect(wrapper.prop('isCollab')).toBe(rowData.has_collaborations);
-                expect(wrapper.prop('isExternal')).toBe(rowData.is_externally_owned);
-                expect(wrapper.prop('title')).toBe(title);
+                expect(screen.getByTitle(title)).toBeInTheDocument();
             });
         });
 
         test('should render correct file icon', () => {
             const extension = 'boxnote';
             const rowData = { type: 'file', extension };
-            const wrapper = getWrapper({ rowData });
+            getWrapper({ rowData });
 
-            expect(wrapper.name()).toBe('FileIcon');
-            expect(wrapper.prop('extension')).toBe(extension);
-            expect(wrapper.prop('title')).toBe('File');
+            expect(screen.getByTitle('File')).toBeInTheDocument();
         });
 
         test('should render correct bookmark icon', () => {
             const rowData = { type: 'web_link' };
-            const wrapper = getWrapper({ rowData });
+            getWrapper({ rowData });
 
-            expect(wrapper.name()).toBe('BookmarkIcon');
-            expect(wrapper.prop('title')).toBe('Bookmark');
+            expect(screen.getByTitle('Bookmark')).toBeInTheDocument();
         });
     });
 });

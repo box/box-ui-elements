@@ -41,7 +41,7 @@ const TableResponsive = withAutoSizer(Table);
 
 const itemIconCellRenderer = rendererParams => {
     const {
-        rowData: { type, extension, hasCollaborations, isExternallyOwned },
+        rowData: { type, extension, hasCollaborations, isExternallyOwned, archiveType },
         columnData: { itemIconRenderer },
     } = rendererParams;
     return (
@@ -54,6 +54,7 @@ const itemIconCellRenderer = rendererParams => {
                     extension={extension}
                     hasCollaborations={hasCollaborations}
                     isExternallyOwned={isExternallyOwned}
+                    archiveType={archiveType}
                 />
             )}
         </div>

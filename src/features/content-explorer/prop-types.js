@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types';
 
 import ContentExplorerModes from './modes';
-import { TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK } from '../../constants';
+import {
+    TYPE_ARCHIVE,
+    TYPE_ARCHIVE_FILE,
+    TYPE_ARCHIVE_FOLDER,
+    TYPE_ARCHIVE_WEB_LINK,
+    TYPE_FILE,
+    TYPE_FOLDER,
+    TYPE_WEBLINK,
+} from '../../constants';
 
 const ContentExplorerModePropType = PropTypes.oneOf([
     ContentExplorerModes.COPY,
@@ -19,12 +27,19 @@ const FolderPropType = PropTypes.shape({
 const FoldersPathPropType = PropTypes.arrayOf(FolderPropType);
 
 const ItemTypePropType = PropTypes.oneOf([TYPE_FILE, TYPE_FOLDER, TYPE_WEBLINK]);
+const ItemArchiveTypePropType = PropTypes.oneOf([
+    TYPE_ARCHIVE,
+    TYPE_ARCHIVE_FOLDER,
+    TYPE_ARCHIVE_WEB_LINK,
+    TYPE_ARCHIVE_FILE,
+]);
 
 const ItemPropType = PropTypes.shape({
     id: PropTypes.string.isRequired,
     type: ItemTypePropType,
     name: PropTypes.string.isRequired,
     label: PropTypes.string,
+    archiveType: ItemArchiveTypePropType,
     extension: PropTypes.string,
     hasCollaborations: PropTypes.bool,
     isExternallyOwned: PropTypes.bool,
@@ -59,4 +74,5 @@ export {
     ItemPropType,
     ItemsPropType,
     ItemsMapPropType,
+    ItemArchiveTypePropType,
 };
