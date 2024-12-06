@@ -80,7 +80,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
-    const [appliedTemplates, setAppliedTemplates] =
+    const [appliedTemplateInstances, setAppliedTemplateInstances] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
@@ -93,9 +93,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
             );
 
         if (!editingTemplate || isEditingTemplateAlreadyExisting) {
-            setAppliedTemplates(templateInstances);
+            setAppliedTemplateInstances(templateInstances);
         } else {
-            setAppliedTemplates([...templateInstances, editingTemplate]);
+            setAppliedTemplateInstances([...templateInstances, editingTemplate]);
         }
     }, [editingTemplate, templateInstances, templateInstances.length]);
 
@@ -159,6 +159,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
 
     const showLoading = status === STATUS.LOADING;
     const showEmptyState = !showLoading && isFullyLoaded && visibleTemplateInstances.length === 0 && !editingTemplate;
+    //
     const showEditor = !showEmptyState && editingTemplate;
     const showList = !showEditor && visibleTemplateInstances.length > 0 && !editingTemplate;
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
@@ -166,16 +167,16 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const metadataDropdown = status === STATUS.SUCCESS && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
-            selectedTemplates={appliedTemplates as MetadataTemplate[]}
+            selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
             onSelect={handleTemplateSelect}
         />
     );
 
     const [filteredTemplates, setFilteredTemplates] = React.useState([]);
     const filterDropdown =
-        status === STATUS.SUCCESS && showList && appliedTemplates.length > 1 ? (
+        status === STATUS.SUCCESS && showList && appliedTemplateInstances.length > 1 ? (
             <FilterInstancesDropdown
-                appliedTemplates={appliedTemplates as MetadataTemplate[]}
+                appliedTemplates={appliedTemplateInstances as MetadataTemplate[]}
                 selectedTemplates={filteredTemplates}
                 setSelectedTemplates={setFilteredTemplates}
             />
