@@ -9,7 +9,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     const renderComponent = (props = {}) => {
         const defaultProps = {
             onExpandClick: mockOnExpandClick,
-        } satisfies BoxAISidebarProps;
+        } as unknown as BoxAISidebarProps;
 
         render(<BoxAISidebarComponent {...defaultProps} {...props} />);
     };
