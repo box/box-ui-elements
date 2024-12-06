@@ -3,6 +3,8 @@ import { type StoryObj } from '@storybook/react';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
 
+import { defaultVisualConfig } from '../../../../utils/storybook';
+
 const mockFeatures = {
     'boxai.sidebar.enabled': true,
 };
@@ -14,6 +16,9 @@ export default {
         features: mockFeatures,
         fileId: global.FILE_ID,
         token: global.TOKEN,
+    },
+    parameters: {
+        ...defaultVisualConfig.parameters,
     },
 };
 

@@ -2,6 +2,8 @@ import { type StoryObj } from '@storybook/react';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
 
+import { defaultVisualConfig } from '../../../../utils/storybook';
+
 export default {
     title: 'Elements/ContentSidebar/tests/visual-regression-tests',
     component: ContentSidebar,
@@ -20,6 +22,9 @@ export default {
         hasSkills: true,
         hasVersions: true,
         token: global.TOKEN,
+    },
+    parameters: {
+        ...defaultVisualConfig.parameters,
     },
 };
 
