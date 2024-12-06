@@ -17,5 +17,5 @@ then
   echo "Head SHA1 $HEAD_SHA1"
   COMMIT_RANGE="${BASE_SHA1}...${HEAD_SHA1}"
   echo "Linting ${COMMIT_RANGE}"
-  git log ${COMMIT_RANGE} --pretty=%B | ./node_modules/.bin/commitlint
+  git log ${COMMIT_RANGE} --pretty=%B | yarn --cwd /buie commitlint
 fi
