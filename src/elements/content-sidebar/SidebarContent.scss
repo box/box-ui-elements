@@ -33,7 +33,7 @@ $sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        min-height: $sidebarSubHeaderHeight;
+        height: $sidebarSubHeaderHeight;
         margin: 0 $sidebarActivityFeedSpacingHorizontal;
         padding: 0;
         border-bottom: 1px solid $bdl-gray-10;
