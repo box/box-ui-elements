@@ -1025,6 +1025,16 @@ const messages = defineMessages({
         description: 'Icon title for a Box item of type bookmark or web-link',
         defaultMessage: 'Bookmark',
     },
+    archive: {
+        id: 'be.archive',
+        description: 'Icon title for a Box item of type folder is an archive',
+        defaultMessage: 'Archive',
+    },
+    archivedFolder: {
+        id: 'be.archivedFolder',
+        description: 'Icon title for a Box item of type folder is in archive',
+        defaultMessage: 'Archived Folder',
+    },
     collaboratedFolder: {
         id: 'be.collaboratedFolder',
         description: 'Icon title for a Box item of type folder that has collaborators',

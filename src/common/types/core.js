@@ -302,6 +302,7 @@ type SharedLinkFeatures = {
 
 type BoxItem = {
     allowed_shared_link_access_levels?: Array<Access>,
+    archive_type?: 'archive' | 'folder_archive' | 'file' | 'web_link',
     authenticated_download_url?: string,
     content_created_at?: string,
     content_modified_at?: string,
