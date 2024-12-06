@@ -17,26 +17,25 @@ aliases:
 
   - &restore-yarn-cache
     keys:
-        - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-cache-{{ .Branch }}-
+        - yarn-cache-{{ checksum "yarn.lock" }}
+        - yarn-cache-
 
   - &save-yarn-cache
+    key: yarn-cache-{{ checksum "yarn.lock" }}
     paths:
       - ~/.cache/yarn
-      - node_modules
-    key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
 
   - &prepare-cache
     name: Prepare Yarn Cache
     command: |
-        mkdir -p ~/.cache/yarn
-        chown -R $(whoami) ~/.cache/yarn
+        ls -l
 
 defaults: &defaults
   resource_class: large
   working_directory: ~/buie
   docker:
     - image: cimg/node:18.18
+      user: root
 
 version: 2
 
@@ -99,6 +98,7 @@ jobs:
     <<: *defaults
     docker:
       - image: cypress/included:13.13.0
+        user: root
     steps:
       - checkout
       - run: *prepare-cache
