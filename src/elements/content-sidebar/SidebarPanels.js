@@ -8,6 +8,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import { matchPath, Redirect, Route, Switch, type Location } from 'react-router-dom';
+import { type QuestionType } from '@box/box-ai-content-answers';
 import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
@@ -132,6 +133,8 @@ class SidebarPanels extends React.Component<Props, State> {
 
     versionsSidebar: ElementRefType = React.createRef();
 
+    boxAiSidebarCache: { encodedSession?: string | null, questions?: QuestionType[] } = { encodedSession: null, questions: [] };
+
     componentDidMount() {
         this.setState({ isInitialized: true });
     }
@@ -158,6 +161,10 @@ class SidebarPanels extends React.Component<Props, State> {
             this.initialPanel.current = panel;
             onPanelChange(panel, true);
         }
+    };
+
+    setBoxAiSidebarCacheValue = (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => {
+        this.boxAiSidebarCache[key] = value;
     };
 
     /**
@@ -258,6 +265,8 @@ class SidebarPanels extends React.Component<Props, State> {
                                     ref={this.boxAISidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_BOXAI}
                                     userInfo={{name: currentUser.name, avatarUrl: currentUser.avatar_url}}
+                                    cache={this.boxAiSidebarCache}
+                                    setCacheValue={this.setBoxAiSidebarCacheValue}
                                     {...boxAISidebarProps}
                                 />
                             );

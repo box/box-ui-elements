@@ -5,10 +5,10 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
-
 import {BoxAiAgentSelector, REQUEST_STATE} from '@box/box-ai-agent-selector';
 import { IconButton, Text } from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
+// @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
 import { BoxAiContentAnswers, withApiWrapper, type ApiWrapperProps } from '@box/box-ai-content-answers'
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -32,10 +32,10 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
     
 function BoxAISidebar(props: ApiWrapperProps) {
-    const { agents, createSession, encodedSession, onClearClick, selectedAgent, sendQuestion, ...rest } = props;
+    const { agents, createSession, encodedSession, onClearClick, questions, selectedAgent, sendQuestion, stopQuestion, ...rest } = props;
     const { formatMessage } = useIntl();
-    const { elementId, userInfo, contentName } = React.useContext(BoxAISidebarContext);
     const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
+    const { cache, setCacheValue, elementId, userInfo, contentName } = React.useContext(BoxAISidebarContext);
 
     React.useEffect(() => {
         if (!encodedSession && createSession) {
@@ -72,6 +72,14 @@ function BoxAISidebar(props: ApiWrapperProps) {
             />
         </>
     );
+    
+    if (!cache[encodedSession] && encodedSession) {
+        setCacheValue('encodedSession', encodedSession);
+    }
+
+    if (!cache[questions] && questions) {
+        setCacheValue('questions', questions);
+    }
 
     return (
         <SidebarContent actions={renderActions()} className="bcs-BoxAISidebar" elementId={elementId} sidebarView={SIDEBAR_VIEW_BOXAI}>
@@ -81,8 +89,9 @@ function BoxAISidebar(props: ApiWrapperProps) {
                     className="bcs-BoxAISidebar-contentAnswers" 
                     isSidebarOpen 
                     contentName={contentName} 
-                    contentType={props.contentType} 
+                    questions={questions}
                     submitQuestion={sendQuestion} 
+                    stopQuestion={stopQuestion}
                     {...rest} 
                 />
             </div>
