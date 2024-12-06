@@ -1,5 +1,5 @@
-// @flow
 import * as React from 'react';
+
 import ItemName from './ItemName';
 import ItemDetails from './ItemDetails';
 import { VIEW_SEARCH } from '../../../constants';
@@ -7,16 +7,16 @@ import type { View, BoxItem } from '../../../common/types/core';
 
 import './NameCell.scss';
 
-type Props = {
-    canPreview: boolean,
-    isTouch: boolean,
-    item: BoxItem,
-    onItemClick: (item: BoxItem | string) => void,
-    onItemSelect?: (item: BoxItem, callback: Function) => void,
-    rootId: string,
-    showDetails: boolean,
-    view: View,
-};
+export interface NameProps {
+    canPreview: boolean;
+    isTouch: boolean;
+    item: BoxItem;
+    onItemClick: (item: BoxItem | string) => void;
+    onItemSelect?: (item: BoxItem) => void;
+    rootId: string;
+    showDetails: boolean;
+    view: View;
+}
 
 const Name = ({
     canPreview = false,
@@ -27,7 +27,7 @@ const Name = ({
     showDetails = true,
     rootId,
     view,
-}: Props) => (
+}: NameProps) => (
     <div className="be-item-name">
         <ItemName canPreview={canPreview} isTouch={isTouch} item={item} onClick={onItemClick} onFocus={onItemSelect} />
         {view === VIEW_SEARCH || showDetails ? (

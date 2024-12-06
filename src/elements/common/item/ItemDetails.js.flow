@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Component for the details for the item name
- * @author Box
- */
-
 import * as React from 'react';
 import { InlineBreadcrumbs } from '../breadcrumbs';
 import { VIEW_SEARCH, VIEW_SELECTED } from '../../../constants';
@@ -14,12 +8,17 @@ import './ItemDetails.scss';
 
 type Props = {
     item: BoxItem,
-    onItemClick: Function,
+    onItemClick: any,
     rootId: string,
-    view: View,
+    view: View
 };
 
-const ItemDetails = ({ view, rootId, item, onItemClick }: Props) => (
+const ItemDetails = ({
+    view,
+    rootId,
+    item,
+    onItemClick,
+}: Props) => (
     <div className="be-item-details">
         {view === VIEW_SELECTED || view === VIEW_SEARCH ? (
             <InlineBreadcrumbs item={item} onItemClick={onItemClick} rootId={rootId} />
