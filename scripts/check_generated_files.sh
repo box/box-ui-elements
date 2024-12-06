@@ -14,7 +14,7 @@ check_generated_files() {
     printf "${blue}-------------------------------------------------------------${end}"
     printf "${blue}Building bundles again, this may update en-US.properties${end}"
     printf "${blue}-------------------------------------------------------------${end}"
-    yarn build:i18n || return 1
+    yarn --cwd /buie build:i18n || return 1
 
     if [[ $(git status --porcelain 2>/dev/null | egrep "^(M| M)") != "" ]]; then
         printf "${red}Your PR has uncommitted files!${end}"
