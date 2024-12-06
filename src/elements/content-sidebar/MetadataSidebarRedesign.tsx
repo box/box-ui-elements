@@ -154,17 +154,18 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         }
     };
 
-    const isFullyLoaded = file && templates && templateInstances;
     const visibleTemplateInstances = templateInstances.filter(templateInstance => !templateInstance.hidden);
 
-    const showLoading = status === STATUS.LOADING;
-    const showEmptyState = !showLoading && isFullyLoaded && visibleTemplateInstances.length === 0 && !editingTemplate;
-    //
-    const showEditor = !showEmptyState && editingTemplate;
-    const showList = !showEditor && visibleTemplateInstances.length > 0 && !editingTemplate;
+    const isSuccess = status === STATUS.SUCCESS;
+    const isLoading = status === STATUS.LOADING;
+
+    const isViewMode = !isLoading && file && templates && templateInstances && !editingTemplate;
+    const showEmptyState = isViewMode && visibleTemplateInstances.length === 0;
+    const showList = isViewMode && visibleTemplateInstances.length > 0;
+
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
-    const metadataDropdown = status === STATUS.SUCCESS && templates && (
+    const metadataDropdown = isSuccess && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
             selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
@@ -174,7 +175,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
 
     const [filteredTemplates, setFilteredTemplates] = React.useState([]);
     const filterDropdown =
-        status === STATUS.SUCCESS && showList && appliedTemplateInstances.length > 1 ? (
+        isSuccess && isViewMode && appliedTemplateInstances.length > 1 ? (
             <FilterInstancesDropdown
                 appliedTemplates={appliedTemplateInstances as MetadataTemplate[]}
                 selectedTemplates={filteredTemplates}
@@ -215,7 +216,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         >
             <div className="bcs-MetadataSidebarRedesign-content">
                 {errorMessageDisplay}
-                {showLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
+                {isLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
                 {showEmptyState && (
                     <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
                 )}
