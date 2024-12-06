@@ -34,7 +34,7 @@ export enum STATUS {
 
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
-    extractSuggestions: (templateKey: string, fields: MetadataTemplateField[]) => Promise<MetadataTemplateField[]>;
+    extractSuggestions: (templateKey: string, scope: string) => Promise<MetadataTemplateField[]>;
     file: BoxItem | null;
     handleCreateMetadataInstance: (
         templateInstance: MetadataTemplateInstance,
@@ -197,14 +197,14 @@ function useSidebarMetadataFetcher(
 
     const [, setError] = React.useState();
     const extractSuggestions = React.useCallback(
-        async (templateKey: string, fields: MetadataTemplateField[]): Promise<MetadataTemplateField[]> => {
+        async (templateKey: string, scope: string): Promise<MetadataTemplateField[]> => {
             const aiAPI = api.getIntelligenceAPI();
 
             let answer = null;
             try {
                 answer = (await aiAPI.extractStructured({
                     items: [{ id: file.id, type: file.type }],
-                    fields,
+                    metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
                 })) as Record<string, MetadataFieldValue>;
             } catch (error) {
                 if (isUserCorrectableError(error.status)) {
@@ -222,8 +222,13 @@ function useSidebarMetadataFetcher(
             if (isEmpty(answer)) {
                 const error = new Error('No suggestions found.');
                 onError(error, ERROR_CODE_EMPTY_METADATA_SUGGESTIONS, { showNotification: true });
+                return [];
             }
 
+            const templateInstance = templateInstances.find(
+                template => template.templateKey === templateKey && template.scope,
+            );
+            const fields = templateInstance?.fields || [];
             return fields.map(field => {
                 const value = answer[field.key];
                 // TODO: @box/metadadata-editor does not support AI suggestions, enable once supported
@@ -236,7 +241,7 @@ function useSidebarMetadataFetcher(
                 };
             });
         },
-        [api, file, onError],
+        [api, file, onError, templateInstances],
     );
 
     React.useEffect(() => {
