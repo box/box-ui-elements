@@ -36,10 +36,21 @@ function BoxAISidebar(props: ApiWrapperProps) {
     const { formatMessage } = useIntl();
     const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
     const { cache, setCacheValue, elementId, userInfo, contentName } = React.useContext(BoxAISidebarContext);
+    const { questions: cacheQuestions } = cache;
 
     React.useEffect(() => {
         if (!encodedSession && createSession) {
             createSession();
+        }
+
+        if (cacheQuestions.length > 0 && cacheQuestions[cacheQuestions.length-1].isCompleted === false) {
+            // if we have cache with question that is not completed resend it to trigger an API
+            sendQuestion({prompt: cacheQuestions[cacheQuestions.length-1].prompt});
+        }
+
+        return () => {
+            // stop API request on unmount (e.g. during switching to another tab)
+            stopQuestion();
         }
     }, []);
 
@@ -87,11 +98,11 @@ function BoxAISidebar(props: ApiWrapperProps) {
                 <BoxAiContentAnswers 
                     userInfo={userInfo} 
                     className="bcs-BoxAISidebar-contentAnswers" 
-                    isSidebarOpen 
                     contentName={contentName} 
                     questions={questions}
                     submitQuestion={sendQuestion} 
                     stopQuestion={stopQuestion}
+                    variant="sidebar"
                     {...rest} 
                 />
             </div>

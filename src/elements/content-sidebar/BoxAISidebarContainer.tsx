@@ -35,9 +35,15 @@ export interface BoxAISidebarProps {
 
 const  BoxAISidebarContainer = (props: BoxAISidebarProps) => {
     const { elementId, contentName, userInfo, cache, setCacheValue, ...rest } = props;
+    const { questions } = cache;
+    let questionsWithoutInProgress = questions;
+    if (questions.length > 0 && !questions[questions.length -1].isCompleted) {
+        // pass only fully completed questions to not show loading indicator of question where we canceled API request
+        questionsWithoutInProgress = questionsWithoutInProgress.slice(0,-1);
+    }
     return (
         <BoxAISidebarContext.Provider value={{elementId, contentName, userInfo, setCacheValue, cache}}>
-            <BoxAISidebar restoredQuestions={cache.questions} restoredSession={cache.encodedSession} {...rest} />
+            <BoxAISidebar restoredQuestions={questionsWithoutInProgress} restoredSession={cache.encodedSession} {...rest} />
         </BoxAISidebarContext.Provider>
     );
 }
