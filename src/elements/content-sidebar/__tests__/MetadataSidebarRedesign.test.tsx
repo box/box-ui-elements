@@ -164,6 +164,26 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(customMetadataOption).toHaveAttribute('aria-disabled', 'true');
     });
 
+    test('should have accessible "All templates" combobox trigger button', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockTemplateInstance, mockCustomTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        renderComponent();
+
+        expect(
+            screen.getAllByRole('combobox').find(combobox => combobox.textContent === 'All Templates'),
+        ).toBeInTheDocument();
+    });
+
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             extractSuggestions: jest.fn(),

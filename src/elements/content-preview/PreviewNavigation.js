@@ -13,6 +13,7 @@ import IconNavigateRight from '../../icons/general/IconNavigateRight';
 import PlainButton from '../../components/plain-button/PlainButton';
 import messages from '../common/messages';
 import type { BoxItem } from '../../common/types/core';
+import { SIDEBAR_VIEW_METADATA } from "../../constants";
 
 type Props = {
     collection: Array<string | BoxItem>,
@@ -31,7 +32,7 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
     }
 
     return (
-        <Route path={['/:activeTab/:deeplink', '/']}>
+        <Route path={['/:activeTab/:deeplink/*', '/']}>
             {({ match, history }) => (
                 <>
                     {hasLeftNavigation && (
@@ -39,7 +40,11 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
                             className="bcpr-navigate-left"
                             onClick={() => {
                                 if (match.params.deeplink) {
-                                    history.push(`/${match.params.activeTab}`);
+                                    if (match.params.activeTab === SIDEBAR_VIEW_METADATA) {
+                                        history.push(`/${match.params.activeTab}/${match.params.deeplink}/${match.params[0]}`);
+                                    } else {
+                                        history.push(`/${match.params.activeTab}`);
+                                    }
                                 }
                                 onNavigateLeft();
                             }}
@@ -54,7 +59,11 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
                             className="bcpr-navigate-right"
                             onClick={() => {
                                 if (match.params.deeplink) {
-                                    history.push(`/${match.params.activeTab}`);
+                                    if (match.params.activeTab === SIDEBAR_VIEW_METADATA) {
+                                        history.push(`/${match.params.activeTab}/${match.params.deeplink}/${match.params[0]}`);
+                                    } else {
+                                        history.push(`/${match.params.activeTab}`);
+                                    }
                                 }
                                 onNavigateRight();
                             }}
