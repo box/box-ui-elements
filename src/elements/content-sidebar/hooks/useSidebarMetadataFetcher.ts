@@ -79,9 +79,9 @@ function useSidebarMetadataFetcher(
 
     const fetchMetadataSuccessCallback = React.useCallback(
         ({
-            templates: fetchedTemplates,
-            templateInstances: fetchedTemplateInstances,
-        }: {
+             templates: fetchedTemplates,
+             templateInstances: fetchedTemplateInstances,
+         }: {
             templates: Array<MetadataTemplate>;
             templateInstances: Array<MetadataTemplateInstance>;
         }) => {

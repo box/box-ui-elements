@@ -15,8 +15,9 @@ type Props = {
     elementId: string,
     sidebarView: string,
     title?: React.Node,
+    subheader?: React.Node,
 };
-const SidebarContent = ({ actions, children, className, elementId, sidebarView, title, ...rest }: Props) => {
+const SidebarContent = ({ actions, children, className, elementId, sidebarView, title, subheader, ...rest }: Props) => {
     const label = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
     const id = `${label}-content`;
 
@@ -33,6 +34,7 @@ const SidebarContent = ({ actions, children, className, elementId, sidebarView, 
                 {title && <h3 className="bcs-title">{title}</h3>}
                 {actions}
             </div>
+            {subheader && <div className="bcs-content-subheader">{subheader}</div>}
             <div className="bcs-scroll-content-wrapper">
                 <div className="bcs-scroll-content">{children}</div>
             </div>

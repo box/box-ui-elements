@@ -26,6 +26,16 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         },
     ];
 
+    const mockTemplateInstance = {
+        canEdit: true,
+        id: '123',
+        scope: 'global',
+        templateKey: 'metadata_template_123',
+        hidden: false,
+        fields: [],
+        type: 'metadata_template',
+    } satisfies MetadataTemplateInstance;
+
     const mockCustomTemplateInstance = {
         canEdit: true,
         hidden: false,
@@ -110,6 +120,26 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         renderComponent();
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+    });
+
+    test('should have accessible "All templates" combobox trigger button', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockTemplateInstance, mockCustomTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        renderComponent();
+
+        expect(
+            screen.getAllByRole('combobox').find(combobox => combobox.textContent === 'All Templates'),
+        ).toBeInTheDocument();
     });
 
     test('should have accessible "Add template" button', () => {
