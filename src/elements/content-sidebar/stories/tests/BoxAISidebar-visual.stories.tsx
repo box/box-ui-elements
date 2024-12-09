@@ -22,7 +22,7 @@ export default {
 export const BoxAIInSidebar: StoryObj<typeof BoxAISidebar> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const sidebar = await canvas.findByRole('heading', { name: 'Box AI' }, { timeout: 5000 });
+        const sidebar = await canvas.findByRole('heading', { name: 'Box AI' }, { timeout: 2000 });
         expect(sidebar).toBeInTheDocument();
     },
 };
@@ -54,7 +54,7 @@ export const BoxAIWithClearButton: StoryObj<typeof BoxAISidebar> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const clearButton = await canvas.findByRole('button', { name: 'Clear' }, { timeout: 5000 });
+        const clearButton = await canvas.findByRole('button', { name: 'Clear' }, { timeout: 2000 });
         await userEvent.click(clearButton);
     },
 };
