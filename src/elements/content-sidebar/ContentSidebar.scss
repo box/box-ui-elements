@@ -3,7 +3,7 @@
 $sidebarTabsWidth: 60px;
 $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
 $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
-$sidebarDefaultErrorWidth: $sidebarContentWidth - 16px;
+$sidebarDefaultErrorWidth: $sidebarContentWidth - 16px; // 16px is the compined 8px left and right margin on the .be-default-error
 $sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
 
 .be {
