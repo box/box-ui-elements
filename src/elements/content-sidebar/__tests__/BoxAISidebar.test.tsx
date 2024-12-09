@@ -9,6 +9,8 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     const renderComponent = (props = {}, features = {}) => {
         const defaultProps = {
             onClearClick: mockOnClearClick,
+            agents: [],
+            selectedAgent: null,
         } satisfies BoxAISidebarProps;
 
         render(<BoxAISidebarComponent {...defaultProps} {...props} />, { wrapperProps: { features } });
@@ -27,7 +29,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     test('should have accessible Agent selector if boxai.agentSelector.enabled is true', () => {
         renderComponent({}, { 'boxai.agentSelector.enabled': true });
 
-        expect(screen.getByTestId('sidebar-agent-selector')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Agent Select an Agent'})).toBeInTheDocument();
     });
 
     test('should not have accessible Agent selector if boxai.agentSelector.enabled is false', () => {
