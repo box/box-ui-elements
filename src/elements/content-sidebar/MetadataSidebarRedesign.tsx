@@ -18,7 +18,6 @@ import {
     type MetadataTemplateInstance,
     type PaginationQueryInput,
 } from '@box/metadata-editor';
-
 import API from '../../api';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -50,6 +49,7 @@ export interface ExternalProps {
 interface PropsWithoutContext extends ExternalProps {
     elementId: string;
     fileId: string;
+    filteredTemplateIds?: string;
     hasSidebarInitialized?: boolean;
 }
 
@@ -61,7 +61,14 @@ export interface MetadataSidebarRedesignProps extends PropsWithoutContext, Error
     api: API;
 }
 
-function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
+function MetadataSidebarRedesign({
+    api,
+    elementId,
+    fileId,
+    filteredTemplateIds,
+    onError,
+    isFeatureEnabled,
+}: MetadataSidebarRedesignProps) {
     const {
         extractSuggestions,
         file,
@@ -173,7 +180,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         />
     );
 
-    const [filteredTemplates, setFilteredTemplates] = React.useState([]);
+    const parsedFilteredTemplateIds = filteredTemplateIds?.split(',') || [];
+
+    const [filteredTemplates, setFilteredTemplates] = React.useState(parsedFilteredTemplateIds);
     const filterDropdown =
         isSuccess && isViewMode && appliedTemplateInstances.length > 1 ? (
             <FilterInstancesDropdown
