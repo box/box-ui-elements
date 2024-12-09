@@ -67,9 +67,8 @@ const helpers = {
     getRenameButton() {
         return cy.contains(utils.getExactRegex(localize('be.rename')));
     },
-    // using data-testid since name is different from row to row
     getItemNameFromRow(rowNum) {
-        return this.getRow(rowNum).find('[data-testid="be-item-name"]');
+        return this.getRow(rowNum).find('.be-item-name .be-item-label');
     },
     getClosePreviewButton() {
         return cy.getByAriaLabel(localize('be.close'));
