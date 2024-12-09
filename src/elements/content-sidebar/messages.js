@@ -37,11 +37,6 @@ const messages = defineMessages({
         description: 'Default message for Box AI clear button in sidebar header',
         defaultMessage: 'Clear',
     },
-    boxAISidebarExpand: {
-        id: 'be.contentSidebar.boxAI.expand',
-        description: 'Default message for Box AI expand button in sidebar header',
-        defaultMessage: 'Expand',
-    },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
         defaultMessage: 'Sign documents or send signature requests, right from where your content lives',
