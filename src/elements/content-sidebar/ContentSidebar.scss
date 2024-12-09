@@ -3,6 +3,8 @@
 $sidebarTabsWidth: 60px;
 $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
 $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
+$sidebarDefaultErrorWidth: $sidebarContentWidth - 16px;
+$sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
 
 .be {
     &.bcs {
@@ -28,7 +30,7 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
     }
 
     .be-default-error {
-        min-width: 324px;
+        min-width: $sidebarDefaultErrorWidth;
     }
 
     &.bcs-is-open {
@@ -39,7 +41,7 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
 
     &.bcs-is-wider {
         .be-default-error {
-            min-width: 364px;
+            min-width: $sidebarDefaultErrorIncreasedWidth;
         }
 
         &.bcs-is-open {
