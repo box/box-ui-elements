@@ -1,30 +1,26 @@
-/**
- * @flow
- * @file Component for the sub details for the item name
- * @author Box
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+
 import getSize from '../../../utils/size';
-import Datefield from '../date';
-import messages from '../messages';
+import DateField from '../date';
 import { VIEW_RECENTS } from '../../../constants';
 import type { View, BoxItem } from '../../../common/types/core';
+
+import messages from '../messages';
 import './ItemSubDetails.scss';
 
-type Props = {
-    item: BoxItem,
-    view: View,
-};
+export interface ItemSubDetailsProps {
+    item: BoxItem;
+    view: View;
+}
 
-const ItemSubDetails = ({ item, view }: Props) => {
+const ItemSubDetails = ({ item, view }: ItemSubDetailsProps) => {
     const { modified_at = '', interacted_at = '', modified_by }: BoxItem = item;
     const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = view === VIEW_RECENTS;
     const date: string = isRecents ? interacted_at || modified_at : modified_at;
     const { size }: BoxItem = item;
-    const DateValue = <Datefield date={date} omitCommas />;
+    const DateValue = <DateField date={date} omitCommas />;
 
     let message = messages.modifiedDateBy;
     if (isRecents) {

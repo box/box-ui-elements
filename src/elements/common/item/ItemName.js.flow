@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Component for the details for the item name
- * @author Box
- */
-
 import * as React from 'react';
 import PlainButton from '../../../components/plain-button/PlainButton';
 import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
@@ -15,14 +9,23 @@ type Props = {
     canPreview: boolean,
     isTouch: boolean,
     item: BoxItem,
-    onClick: Function,
-    onFocus?: Function,
+    onClick: any,
+    onFocus?: any
 };
 
-const ItemName = ({ item, onClick, onFocus, canPreview, isTouch }: Props) => {
-    const { name, type }: BoxItem = item;
+const ItemName = ({
+    item,
+    onClick,
+    onFocus,
+    canPreview,
+    isTouch,
+}: Props) => {
+    const {
+        name,
+        type,
+    }: BoxItem = item;
     const onItemFocus = onFocus ? () => onFocus(item) : null;
-    const onItemClick: Function = (): void => onClick(item);
+    const onItemClick: any = (): void => onClick(item);
 
     return type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview)) ? (
         <PlainButton
