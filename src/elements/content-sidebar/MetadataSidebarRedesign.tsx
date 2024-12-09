@@ -9,6 +9,7 @@ import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
     AutofillContextProvider,
+    FilterInstancesDropdown,
     MetadataEmptyState,
     MetadataInstanceList,
     type FormValues,
@@ -79,7 +80,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
     const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
-    const [selectedTemplates, setSelectedTemplates] =
+    const [appliedTemplateInstances, setAppliedTemplateInstances] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
 
@@ -92,9 +93,9 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
             );
 
         if (!editingTemplate || isEditingTemplateAlreadyExisting) {
-            setSelectedTemplates(templateInstances);
+            setAppliedTemplateInstances(templateInstances);
         } else {
-            setSelectedTemplates([...templateInstances, editingTemplate]);
+            setAppliedTemplateInstances([...templateInstances, editingTemplate]);
         }
     }, [editingTemplate, templateInstances, templateInstances.length]);
 
@@ -153,28 +154,45 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         }
     };
 
-    const metadataDropdown = status === STATUS.SUCCESS && templates && (
+    const visibleTemplateInstances = templateInstances.filter(templateInstance => !templateInstance.hidden);
+
+    const isSuccess = status === STATUS.SUCCESS;
+    const isLoading = status === STATUS.LOADING;
+
+    const isViewMode = !isLoading && file && templates && templateInstances && !editingTemplate;
+    const showEmptyState = isViewMode && visibleTemplateInstances.length === 0;
+    const showList = isViewMode && visibleTemplateInstances.length > 0;
+
+    const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
+
+    const metadataDropdown = isSuccess && templates && (
         <AddMetadataTemplateDropdown
             availableTemplates={templates}
-            selectedTemplates={selectedTemplates as MetadataTemplate[]}
+            selectedTemplates={appliedTemplateInstances as MetadataTemplate[]}
             onSelect={handleTemplateSelect}
         />
     );
+
+    const [filteredTemplates, setFilteredTemplates] = React.useState([]);
+    const filterDropdown =
+        isSuccess && isViewMode && appliedTemplateInstances.length > 1 ? (
+            <FilterInstancesDropdown
+                appliedTemplates={appliedTemplateInstances as MetadataTemplate[]}
+                selectedTemplates={filteredTemplates}
+                setSelectedTemplates={setFilteredTemplates}
+            />
+        ) : null;
+
+    const filteredTemplateInstances = templateInstances.filter(instance =>
+        filteredTemplates.some(template => template === instance.id),
+    );
+    const templateInstancesList = filteredTemplates.length === 0 ? templateInstances : filteredTemplateInstances;
 
     const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
         <InlineError className="bcs-MetadataSidebarRedesign-inline-error">
             <FormattedMessage {...errorMessage} />
         </InlineError>
     );
-
-    const isFullyLoaded = file && templates && templateInstances;
-    const visibleTemplateInstances = templateInstances.filter(templateInstance => !templateInstance.hidden);
-
-    const showLoading = status === STATUS.LOADING;
-    const showEmptyState = !showLoading && isFullyLoaded && visibleTemplateInstances.length === 0 && !editingTemplate;
-    const showEditor = !showEmptyState && editingTemplate;
-    const showList = !showEditor && visibleTemplateInstances.length > 0 && !editingTemplate;
-    const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
     const taxonomyOptionsFetcher = async (
         scope: string,
@@ -194,10 +212,11 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
             elementId={elementId}
             sidebarView={SIDEBAR_VIEW_METADATA}
             title={formatMessage(messages.sidebarMetadataTitle)}
+            subheader={filterDropdown}
         >
             <div className="bcs-MetadataSidebarRedesign-content">
                 {errorMessageDisplay}
-                {showLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
+                {isLoading && <LoadingIndicator aria-label={formatMessage(messages.loading)} />}
                 {showEmptyState && (
                     <MetadataEmptyState level={'file'} isBoxAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled} />
                 )}
@@ -228,7 +247,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
                                 setEditingTemplate(templateInstance);
                                 setIsDeleteButtonDisabled(false);
                             }}
-                            templateInstances={templateInstances}
+                            templateInstances={templateInstancesList}
                             taxonomyNodeFetcher={taxonomyNodeFetcher}
                         />
                     )}

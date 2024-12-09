@@ -78,6 +78,24 @@ export const AddTemplateDropdownMenuOnEmpty = {
     },
 };
 
+export const FilterInstancesDropdown = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const filterInstancesButton = await canvas.findByRole('combobox');
+
+        expect(filterInstancesButton).toBeInTheDocument();
+        await userEvent.click(filterInstancesButton);
+
+        const firstOption = canvas.getByRole('option', { name: 'My Template' });
+        expect(firstOption).toBeInTheDocument();
+        const secondOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
+        expect(secondOption).toBeInTheDocument();
+        const thirdOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+        expect(thirdOption).toBeInTheDocument();
+    },
+};
+
 const defaultMockHandlers = [
     http.get(mockFileRequest.url, () => {
         return HttpResponse.json(mockFileRequest.response);
