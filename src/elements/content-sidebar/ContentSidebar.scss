@@ -27,14 +27,26 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
         white-space: nowrap;
     }
 
+    .be-default-error {
+        min-width: 324px;
+    }
+
     &.bcs-is-open {
         .bcs-loading {
             width: $sidebarWidth;
         }
     }
 
-    &.bcs-is-wider.bcs-is-open .bcs-loading {
-        width: $sidebarIncreasedWidth;
+    &.bcs-is-wider {
+        .be-default-error {
+            min-width: 364px;
+        }
+
+        &.bcs-is-open {
+            .bcs-loading {
+                width: $sidebarIncreasedWidth;
+            }
+        }
     }
 }
 
