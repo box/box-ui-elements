@@ -3,6 +3,8 @@
 $sidebarTabsWidth: 60px;
 $sidebarWidth: $sidebarTabsWidth + $sidebarContentWidth;
 $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
+$sidebarDefaultErrorWidth: $sidebarContentWidth - 16px; // 16px is the compined 8px left and right margin on the .be-default-error
+$sidebarDefaultErrorIncreasedWidth: $sidebarContentIncreasedWidth - 16px;
 
 .be {
     &.bcs {
@@ -27,14 +29,26 @@ $sidebarIncreasedWidth: $sidebarTabsWidth + $sidebarContentIncreasedWidth;
         white-space: nowrap;
     }
 
+    .be-default-error {
+        min-width: $sidebarDefaultErrorWidth;
+    }
+
     &.bcs-is-open {
         .bcs-loading {
             width: $sidebarWidth;
         }
     }
 
-    &.bcs-is-wider.bcs-is-open .bcs-loading {
-        width: $sidebarIncreasedWidth;
+    &.bcs-is-wider {
+        .be-default-error {
+            min-width: $sidebarDefaultErrorIncreasedWidth;
+        }
+
+        &.bcs-is-open {
+            .bcs-loading {
+                width: $sidebarIncreasedWidth;
+            }
+        }
     }
 }
 
