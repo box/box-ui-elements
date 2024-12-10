@@ -5,7 +5,7 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
-import {BoxAiAgentSelector, REQUEST_STATE} from '@box/box-ai-agent-selector';
+import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
 import { IconButton, Text } from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
 // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
@@ -18,7 +18,6 @@ import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { useFeatureEnabled } from '../common/feature-checking';
-import type { User } from '../../common/types/core';
 import { BoxAISidebarContext } from './BoxAISidebarContainer';
 
 import messages from '../common/messages';
@@ -32,7 +31,7 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
     
 function BoxAISidebar(props: ApiWrapperProps) {
-    const { agents, createSession, encodedSession, onClearClick, questions, selectedAgent, sendQuestion, stopQuestion, ...rest } = props;
+    const { createSession, encodedSession, onClearClick, getAIStudioAgents, onSelectAgent, questions, sendQuestion, stopQuestion, ...rest } = props;
     const { formatMessage } = useIntl();
     const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
     const { cache, setCacheValue, elementId, userInfo, contentName } = React.useContext(BoxAISidebarContext);
@@ -61,12 +60,10 @@ function BoxAISidebar(props: ApiWrapperProps) {
                     {formatMessage(messages.sidebarBoxAITitle)}
                 </Text>
                 {isAgentSelectorEnabled &&
-                        <BoxAiAgentSelector
-                            agents={agents}
-                            onErrorAction={() => null}
-                            requestState={REQUEST_STATE.SUCCESS}
-                            selectedAgent={selectedAgent}
-                            triggerChipClassName="sidebar-chip" />
+                    <BoxAiAgentSelectorWithApi
+                        fetcher={getAIStudioAgents}
+                        onSelectAgent={onSelectAgent}
+                    />
                 }
             </div>
         );
@@ -93,20 +90,22 @@ function BoxAISidebar(props: ApiWrapperProps) {
     }
 
     return (
-        <SidebarContent actions={renderActions()} className="bcs-BoxAISidebar" elementId={elementId} sidebarView={SIDEBAR_VIEW_BOXAI}>
-            <div className="bcs-BoxAISidebar-content">
-                <BoxAiContentAnswers 
-                    userInfo={userInfo} 
-                    className="bcs-BoxAISidebar-contentAnswers" 
-                    contentName={contentName} 
-                    questions={questions}
-                    submitQuestion={sendQuestion} 
-                    stopQuestion={stopQuestion}
-                    variant="sidebar"
-                    {...rest} 
-                />
-            </div>
-        </SidebarContent>
+        <AgentsProvider>
+            <SidebarContent actions={renderActions()} className="bcs-BoxAISidebar" elementId={elementId} sidebarView={SIDEBAR_VIEW_BOXAI}>
+                <div className="bcs-BoxAISidebar-content">
+                    <BoxAiContentAnswers 
+                        userInfo={userInfo} 
+                        className="bcs-BoxAISidebar-contentAnswers" 
+                        contentName={contentName} 
+                        questions={questions}
+                        submitQuestion={sendQuestion} 
+                        stopQuestion={stopQuestion}
+                        variant="sidebar"
+                        {...rest} 
+                    />
+                </div>
+            </SidebarContent>
+        </AgentsProvider>
     );
 }
 
