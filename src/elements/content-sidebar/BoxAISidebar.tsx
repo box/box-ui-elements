@@ -31,7 +31,7 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
     
 function BoxAISidebar(props: ApiWrapperProps) {
-    const { createSession, encodedSession, onClearClick, getAIStudioAgents, onSelectAgent, questions, sendQuestion, stopQuestion, ...rest } = props;
+    const { createSession, encodedSession, onClearAction, getAIStudioAgents, onSelectAgent, questions, sendQuestion, stopQuestion, ...rest } = props;
     const { formatMessage } = useIntl();
     const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
     const { cache, setCacheValue, elementId, userInfo, contentName } = React.useContext(BoxAISidebarContext);
@@ -75,7 +75,7 @@ function BoxAISidebar(props: ApiWrapperProps) {
             <IconButton
                 aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
                 icon={Trash}
-                onClick={onClearClick}
+                onClick={onClearAction}
                 size="x-small"
             />
         </>
