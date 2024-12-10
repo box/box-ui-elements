@@ -6,7 +6,6 @@ import { Notification } from '@box/blueprint-web';
 import { http, HttpResponse } from 'msw';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
-import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentPreview from '../../ContentPreview';
 
 export const basic = {
@@ -245,7 +244,6 @@ export default {
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 http.post(`${DEFAULT_HOSTNAME_API}/2.0/ai/ask`, async ({ request }) => {
