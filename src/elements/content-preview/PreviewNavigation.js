@@ -13,7 +13,7 @@ import IconNavigateRight from '../../icons/general/IconNavigateRight';
 import PlainButton from '../../components/plain-button/PlainButton';
 import messages from '../common/messages';
 import type { BoxItem } from '../../common/types/core';
-import { SIDEBAR_VIEW_METADATA } from "../../constants";
+import { SIDEBAR_VIEW_METADATA } from '../../constants';
 
 type Props = {
     collection: Array<string | BoxItem>,
@@ -31,6 +31,16 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
         return null;
     }
 
+    const goToActiveSidebarTab = (routeParams, history) => {
+        if (routeParams.deeplink) {
+            if (routeParams.activeTab === SIDEBAR_VIEW_METADATA) {
+                history.push(`/${routeParams.activeTab}/${routeParams.deeplink}/${routeParams[0]}`);
+            } else {
+                history.push(`/${routeParams.activeTab}`);
+            }
+        }
+    };
+
     return (
         <Route path={['/:activeTab/:deeplink/*', '/']}>
             {({ match, history }) => (
@@ -39,13 +49,7 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
                         <PlainButton
                             className="bcpr-navigate-left"
                             onClick={() => {
-                                if (match.params.deeplink) {
-                                    if (match.params.activeTab === SIDEBAR_VIEW_METADATA) {
-                                        history.push(`/${match.params.activeTab}/${match.params.deeplink}/${match.params[0]}`);
-                                    } else {
-                                        history.push(`/${match.params.activeTab}`);
-                                    }
-                                }
+                                goToActiveSidebarTab(match.params, history);
                                 onNavigateLeft();
                             }}
                             title={intl.formatMessage(messages.previousFile)}
@@ -58,13 +62,7 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
                         <PlainButton
                             className="bcpr-navigate-right"
                             onClick={() => {
-                                if (match.params.deeplink) {
-                                    if (match.params.activeTab === SIDEBAR_VIEW_METADATA) {
-                                        history.push(`/${match.params.activeTab}/${match.params.deeplink}/${match.params[0]}`);
-                                    } else {
-                                        history.push(`/${match.params.activeTab}`);
-                                    }
-                                }
+                                goToActiveSidebarTab(match.params, history);
                                 onNavigateRight();
                             }}
                             title={intl.formatMessage(messages.nextFile)}

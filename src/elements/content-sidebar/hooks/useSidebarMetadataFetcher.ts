@@ -79,9 +79,9 @@ function useSidebarMetadataFetcher(
 
     const fetchMetadataSuccessCallback = React.useCallback(
         ({
-             templates: fetchedTemplates,
-             templateInstances: fetchedTemplateInstances,
-         }: {
+            templates: fetchedTemplates,
+            templateInstances: fetchedTemplateInstances,
+        }: {
             templates: Array<MetadataTemplate>;
             templateInstances: Array<MetadataTemplateInstance>;
         }) => {
@@ -229,7 +229,6 @@ function useSidebarMetadataFetcher(
                 template => template.templateKey === templateKey && template.scope,
             );
             const fields = templateInstance?.fields || [];
-
             return fields.map(field => {
                 const value = answer[field.key];
                 // TODO: @box/metadadata-editor does not support AI suggestions, enable once supported
