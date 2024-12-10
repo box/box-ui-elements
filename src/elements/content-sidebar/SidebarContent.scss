@@ -29,6 +29,20 @@ $sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
         }
     }
 
+    .bcs-content-subheader {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: $sidebarSubHeaderHeight;
+        margin: 0 $sidebarActivityFeedSpacingHorizontal;
+        padding: 0;
+        border-bottom: 1px solid $bdl-gray-10;
+    }
+
+    .bcs-content-subheader + .bcs-scroll-content-wrapper {
+        top: $sidebarHeaderHeight + $sidebarSubHeaderHeight; // when subheader is provided
+    }
+
     .bcs-scroll-content-wrapper {
         position: absolute; // Prevents non-sidebar parts from re-painting
         top: $sidebarHeaderHeight; // Same as title above

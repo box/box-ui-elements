@@ -1,40 +1,33 @@
-/**
- * @flow
- * @file Function to render the date table cell
- * @author Box
- */
-
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import { FormatDateOptions, FormattedMessage, useIntl } from 'react-intl';
 import { isToday, isYesterday } from '../../../utils/datetime';
+
 import messages from '../messages';
 import './DateField.scss';
-
-type Props = {
-    capitalize?: boolean,
-    date: string,
-    dateFormat?: Object,
-    intl: IntlShape,
-    omitCommas?: boolean,
-    relative?: boolean,
-};
 
 const DEFAULT_DATE_FORMAT = {
     weekday: 'short',
     month: 'short',
     year: 'numeric',
     day: 'numeric',
-};
+} as const;
+
+export interface DateFieldProps {
+    capitalize?: boolean;
+    date: string;
+    dateFormat?: FormatDateOptions;
+    omitCommas?: boolean;
+    relative?: boolean;
+}
 
 const DateField = ({
     date,
     dateFormat = DEFAULT_DATE_FORMAT,
     omitCommas = false,
-    intl,
     relative = true,
     capitalize = false,
-}: Props) => {
+}: DateFieldProps): React.ReactNode | string => {
+    const { formatDate } = useIntl();
     const d = new Date(date);
     const isTodaysDate = isToday(d);
     const isYesterdaysDate = isYesterday(d);
@@ -52,9 +45,9 @@ const DateField = ({
         return Message;
     }
 
-    let formattedDate = intl.formatDate(d, dateFormat);
+    let formattedDate = formatDate(d, dateFormat);
     formattedDate = omitCommas ? formattedDate.replace(/,/g, '') : formattedDate;
     return formattedDate;
 };
 
-export default injectIntl(DateField);
+export default DateField;

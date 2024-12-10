@@ -11,12 +11,20 @@ import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 export const basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
+        await waitFor(async () => {
+            const folder = await canvas.findByText('An Ordered Folder');
+            expect(folder).toBeInTheDocument();
+            expect(canvas.getByText('Tue Apr 16 2019 by Preview')).toBeInTheDocument();
 
-        expect(await canvas.findByText('An Ordered Folder')).toBeInTheDocument();
-        expect(canvas.getByText('Tue Apr 16 2019 by Preview')).toBeInTheDocument();
+            expect(canvas.getByText('Archive')).toBeInTheDocument();
+            expect(canvas.getByText('Wed Dec 16 2020 by Preview')).toBeInTheDocument();
 
-        expect(canvas.getByText('Book Sample.pdf')).toBeInTheDocument();
-        expect(canvas.getByText('Thu Dec 8 2022 by Preview')).toBeInTheDocument();
+            expect(canvas.getByText('Archived Folder')).toBeInTheDocument();
+            expect(canvas.getByText('Thu Dec 17 2020 by Preview')).toBeInTheDocument();
+
+            expect(canvas.getByText('Book Sample.pdf')).toBeInTheDocument();
+            expect(canvas.getByText('Thu Dec 8 2022 by Preview')).toBeInTheDocument();
+        });
     },
 };
 
@@ -39,7 +47,7 @@ export const openDeleteConfirmationDialog = {
         await userEvent.click(moreOptionsButton);
 
         const dropdown = await screen.findByRole('menu');
-        const deleteButton = within(dropdown).findByText('Delete');
+        const deleteButton = within(dropdown).getByText('Delete');
         expect(deleteButton).toBeInTheDocument();
         await userEvent.click(deleteButton);
 
@@ -147,6 +155,16 @@ export const closeShareDialog = {
         });
         const inputElement = screen.queryByDisplayValue('https://example.com/share-link');
         expect(inputElement).not.toBeInTheDocument();
+    },
+};
+
+export const withMoreOptionsAndShareButton = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await waitFor(async () => {
+            const row = canvas.getByText('Thu Dec 8 2022 by Preview');
+            await userEvent.click(row);
+        });
     },
 };
 

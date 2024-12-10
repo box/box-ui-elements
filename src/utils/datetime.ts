@@ -1,8 +1,3 @@
-/**
- * @flow
- * @file Date and time utilities
- * @author Box
- */
 import isNaN from 'lodash/isNaN';
 
 const MILLISECONDS_PER_SECOND = 1000;
@@ -22,14 +17,15 @@ const MILLISECONDS_PER_MINUTE = 60 * MILLISECONDS_PER_SECOND;
  * 6) the colon-less format for timezone (if matched)
  * 7) the colon long format for timezone (if matched)
  */
-const RE_ISO8601_DATE = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?)?((Z$)|(?:[+-](?:([0-2]\d$)|([0-2]\d(?:00|30)$)|([0-2]\d:(?:00|30)$))))$/;
-const ISO8601_DATETIME: 1 = 1;
-const ISO8601_MILLISECONDS: 2 = 2;
-const ISO8601_TIMEZONE: 3 = 3;
-const ISO8601_Z_FMT: 4 = 4;
-const ISO8601_SHORT_FMT: 5 = 5;
-const ISO8601_MEDIUM_FMT: 6 = 6;
-const ISO8601_LONG_FMT: 7 = 7;
+const RE_ISO8601_DATE =
+    /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?)?((Z$)|(?:[+-](?:([0-2]\d$)|([0-2]\d(?:00|30)$)|([0-2]\d:(?:00|30)$))))$/;
+const ISO8601_DATETIME = 1 as const;
+const ISO8601_MILLISECONDS = 2 as const;
+const ISO8601_TIMEZONE = 3 as const;
+const ISO8601_Z_FMT = 4 as const;
+const ISO8601_SHORT_FMT = 5 as const;
+const ISO8601_MEDIUM_FMT = 6 as const;
+const ISO8601_LONG_FMT = 7 as const;
 
 /**
  * Helper to normalize a date value to a date object
