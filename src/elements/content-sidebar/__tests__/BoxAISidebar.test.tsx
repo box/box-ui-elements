@@ -1,17 +1,19 @@
 import React from 'react';
-import { userEvent } from '@testing-library/user-event';
-import { screen, render } from '../../../test-utils/testing-library';
-import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebar';
+import {userEvent} from '@testing-library/user-event';
+import {render, screen} from '../../../test-utils/testing-library';
+import BoxAISidebarComponent, {BoxAISidebarProps} from '../BoxAISidebar';
 
-const mockOnExpandClick = jest.fn();
+const mockOnClearClick = jest.fn();
 
 describe('elements/content-sidebar/BoxAISidebar', () => {
-    const renderComponent = (props = {}) => {
+    const renderComponent = (props = {}, features = {}) => {
         const defaultProps = {
-            onExpandClick: mockOnExpandClick,
+            onClearClick: mockOnClearClick,
+            agents: [],
+            selectedAgent: null,
         } satisfies BoxAISidebarProps;
 
-        render(<BoxAISidebarComponent {...defaultProps} {...props} />);
+        render(<BoxAISidebarComponent {...defaultProps} {...props} />, { wrapperProps: { features } });
     };
 
     afterEach(() => {
@@ -24,18 +26,30 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         expect(screen.getByRole('heading', { level: 3, name: 'Box AI' })).toBeInTheDocument();
     });
 
-    test('should have accessible "Expand" button', () => {
-        renderComponent();
+    test('should have accessible Agent selector if boxai.agentSelector.enabled is true', () => {
+        renderComponent({}, { 'boxai.agentSelector.enabled': true });
 
-        expect(screen.getByRole('button', { name: 'Expand' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Agent Select an Agent'})).toBeInTheDocument();
     });
 
-    test('should call onExpandClick when click "Expand" button', async () => {
+    test('should not have accessible Agent selector if boxai.agentSelector.enabled is false', () => {
+        renderComponent({}, { 'boxai.agentSelector.enabled': false });
+
+        expect(screen.queryByTestId('sidebar-agent-selector')).not.toBeInTheDocument();
+    });
+
+    test('should have accessible "Clear" button', () => {
         renderComponent();
 
-        const expandButton = screen.getByRole('button', { name: 'Expand' });
+        expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
+    });
+
+    test('should call onClearClick when click "Clear" button', async () => {
+        renderComponent();
+
+        const expandButton = screen.getByRole('button', { name: 'Clear' });
         await userEvent.click(expandButton);
 
-        expect(mockOnExpandClick).toHaveBeenCalled();
+        expect(mockOnClearClick).toHaveBeenCalled();
     });
 });

@@ -32,10 +32,10 @@ const messages = defineMessages({
         defaultMessage: 'Tasks',
         description: 'Dropdown option for filtering tasks from activity list',
     },
-    boxAISidebarExpand: {
-        id: 'be.contentSidebar.boxAI.expand',
-        description: 'Default message for Box AI expand button in sidebar header',
-        defaultMessage: 'Expand',
+    boxAISidebarClear: {
+        id: 'be.contentSidebar.boxAI.clear',
+        description: 'Default message for Box AI clear button in sidebar header',
+        defaultMessage: 'Clear',
     },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
