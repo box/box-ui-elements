@@ -17,6 +17,7 @@ import {
     mockGlobalMetadataTemplates,
     mockMetadataInstances,
 } from '../__mocks__/MetadataSidebarRedesignedMocks';
+import { mockUserRequest } from '../../../__mocks__/mockRequests';
 
 const token = global.TOKEN;
 
@@ -71,7 +72,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
         await userEvent.click(addTemplateButton);
 
         const options = canvas.getAllByRole('option');
-        expect(options).toHaveLength(4);
+        expect(options).toHaveLength(5);
         options.forEach(option => {
             expect(option).not.toHaveAttribute('disabled');
         });
@@ -97,6 +98,9 @@ export const FilterInstancesDropdown = {
 };
 
 const defaultMockHandlers = [
+    http.get(mockUserRequest.url, () => {
+        return HttpResponse.json(mockUserRequest.response);
+    }),
     http.get(mockFileRequest.url, () => {
         return HttpResponse.json(mockFileRequest.response);
     }),
@@ -464,7 +468,6 @@ export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof Metadata
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
