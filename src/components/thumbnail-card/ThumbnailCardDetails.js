@@ -7,13 +7,13 @@ import { useIsContentOverflowed } from '../../utils/dom';
 type Props = {
     actionItem?: React.Element<any>,
     icon?: React.Node,
-    onKeyDownCallback: () => void,
+    onKeyDownCallback?: () => void,
     subtitle?: React.Node,
     title: React.Node,
 };
 
 type TitleProps = {
-    onKeyDownCallback: () => void,
+    onKeyDownCallback?: () => void,
     title: React.Node,
 };
 

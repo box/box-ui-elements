@@ -12,7 +12,7 @@ type Props = {
     className?: string,
     highlightOnHover?: boolean,
     icon?: React.Node,
-    onKeyDownCallback: () => void,
+    onKeyDownCallback?: () => void,
     subtitle?: React.Node,
     thumbnail: React.Node,
     title: React.Node,
