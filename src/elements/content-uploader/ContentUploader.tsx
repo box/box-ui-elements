@@ -644,7 +644,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         // Don't add more than fileLimit # of items
         if (totalNumOfItems > fileLimit) {
-            updatedItems = this.itemsRef.current.concat(newItems.slice(0, fileLimit - items.length));
+            updatedItems = this.itemsRef.current.concat(newItems.slice(0, fileLimit - prevItemsNum));
             this.setState({
                 errorCode: ERROR_CODE_UPLOAD_FILE_LIMIT,
             });
