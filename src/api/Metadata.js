@@ -926,12 +926,17 @@ class Metadata extends File {
                 const key = this.getMetadataCacheKey(id);
                 const cachedMetadata = cache.get(key);
 
-                const templateId =
-                    cachedMetadata?.templates.find(
+                let templateId;
+                if (cachedMetadata && cachedMetadata.templates) {
+                    const foundTemplate = cachedMetadata.templates.find(
                         cachedTemplate =>
                             cachedTemplate.templateKey === template.templateKey &&
                             cachedTemplate.scope === template.scope,
-                    )?.id || template.id;
+                    );
+                    templateId = foundTemplate ? foundTemplate.id : template.id;
+                } else {
+                    templateId = template.id;
+                }
 
                 const templateInstance = { ...template, type: metadata.data.$type, id: templateId };
                 cachedMetadata.templateInstances.push(templateInstance);
