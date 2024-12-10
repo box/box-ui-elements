@@ -1,0 +1,39 @@
+@use '@box/blueprint-web-assets/tokens/tokens.scss';
+
+@import '../common/variables';
+
+$agentSelectorSidebarWidth: 211px;
+
+.bcs-BoxAISidebar {
+    .bcs-BoxAISidebar-title-part {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        margin: 0;
+        padding: 0;
+        font-weight: normal;
+        font-size: tokens.$title-medium-font-size;
+
+        .bcs-title {
+            margin-right: tokens.$space-2;
+        }
+    }
+
+    .bcs-BoxAISidebar-chat-actions {
+        display: flex;
+        justify-content: right;
+
+        .bcs-BoxAISidebar-expand {
+            margin-left: tokens.$space-2;
+        }
+    }
+
+    .sidebar-chip {
+        max-width: $agentSelectorSidebarWidth;
+        margin-inline-start: 0;
+
+        button {
+            width: 100%;
+        }
+    }
+}
