@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { addRootElement, defaultVisualConfig } from '../../../../utils/storybook';
+import { addRootElement } from '../../../../utils/storybook';
 
 import RenameDialog, { RenameDialogProps } from '../../RenameDialog';
 import {
@@ -105,7 +105,4 @@ export const renameDialogNameTooLongError = {
 export default {
     title: 'Elements/ContentExplorer/tests/RenameDialog/visual',
     component: RenameDialog,
-    parameters: {
-        ...defaultVisualConfig.parameters,
-    },
 };

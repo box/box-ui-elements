@@ -122,7 +122,7 @@ jobs:
         - run: *build
         - run:
             name: Chromatic
-            command: ./scripts/chromatic.sh
+            command: yarn chromatic
 
 workflows:
   version: 2

@@ -4,7 +4,6 @@ import { expect, userEvent, waitFor, within, screen } from '@storybook/test';
 import ContentExplorer from '../../ContentExplorer';
 import mockRootFolder from '../__mocks__/mockRootFolder';
 import mockSubFolder from '../__mocks__/mockSubFolder';
-import { defaultVisualConfig } from '../../../../utils/storybook';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
@@ -177,7 +176,6 @@ export default {
         token: global.TOKEN,
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
