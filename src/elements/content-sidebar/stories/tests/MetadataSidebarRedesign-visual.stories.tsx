@@ -2,7 +2,6 @@ import { type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
 import { expect, userEvent, within, fn, screen } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
-import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
@@ -116,27 +115,6 @@ const defaultMockHandlers = [
         return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
     }),
 ];
-
-export default {
-    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
-    component: ContentSidebar,
-    args: {
-        token,
-        metadataSidebarProps: {
-            ...defaultMetadataArgs,
-        },
-        hasMetadata: true,
-        features: mockFeatures,
-        fileId: fileIdWithMetadata,
-        logger: mockLogger,
-    },
-    parameters: {
-        ...defaultVisualConfig.parameters,
-        msw: {
-            handlers: defaultMockHandlers,
-        },
-    },
-};
 
 export const AddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
@@ -418,7 +396,6 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -450,7 +427,6 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -481,7 +457,6 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
 
 export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -512,5 +487,25 @@ export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
             'An error has occurred while updating metadata. Please refresh the page and try again.',
         );
         expect(errorAlert).toBeInTheDocument();
+    },
+};
+
+export default {
+    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
+    component: ContentSidebar,
+    args: {
+        token,
+        metadataSidebarProps: {
+            ...defaultMetadataArgs,
+        },
+        hasMetadata: true,
+        features: mockFeatures,
+        fileId: fileIdWithMetadata,
+        logger: mockLogger,
+    },
+    parameters: {
+        msw: {
+            handlers: defaultMockHandlers,
+        },
     },
 };

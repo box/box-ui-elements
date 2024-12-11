@@ -2,7 +2,7 @@ import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
 
 import ContentUploader from '../../ContentUploader';
-import { defaultVisualConfig, SLEEP_TIMEOUT } from '../../../../utils/storybook';
+import { SLEEP_TIMEOUT } from '../../../../utils/storybook';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD } from '../../../../constants';
 
 const singleFile = new File(['contents'], 'upload_file.txt', { type: 'text/plain' });
@@ -169,7 +169,6 @@ export default {
         token: global.TOKEN,
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 http.options(`${DEFAULT_HOSTNAME_API}/2.0/files/content`, () => {

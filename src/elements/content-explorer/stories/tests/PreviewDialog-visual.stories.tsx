@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useArgs } from '@storybook/preview-api';
 import { Button } from '@box/blueprint-web';
-import { userEvent, within } from '@storybook/test';
+import { expect, screen, userEvent, within, waitFor } from '@storybook/test';
 
 import { addRootElement } from '../../../../utils/storybook';
 
@@ -15,7 +15,11 @@ export const basic = {
         const canvas = within(canvasElement);
         const button = canvas.getByRole('button', { name: 'Launch PreviewDialog' });
         await userEvent.click(button);
-        expect(canvas.getByText('Book Sample.pdf')).toBeInTheDocument();
+
+        await waitFor(async () => {
+            const header = await screen.findByText('Book Sample.pdf');
+            await expect(header).toBeInTheDocument();
+        });
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     render: (args: any) => {
