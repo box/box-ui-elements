@@ -6,7 +6,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 
-import {AgentType, BoxAiAgentSelector, REQUEST_STATE} from '@box/box-ai-agent-selector';
+import { AgentType, BoxAiAgentSelector, REQUEST_STATE } from '@box/box-ai-agent-selector';
 import { IconButton, Text } from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
 import SidebarContent from './SidebarContent';
@@ -32,7 +32,7 @@ export interface BoxAISidebarProps {
     selectedAgent: AgentType | null;
 }
 
-function BoxAISidebar({ agents = [], onClearClick, selectedAgent}: BoxAISidebarProps) {
+function BoxAISidebar({ agents = [], onClearClick, selectedAgent }: BoxAISidebarProps) {
     const { formatMessage } = useIntl();
     const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
 
@@ -42,14 +42,15 @@ function BoxAISidebar({ agents = [], onClearClick, selectedAgent}: BoxAISidebarP
                 <Text as="h3" className="bcs-title">
                     {formatMessage(messages.sidebarBoxAITitle)}
                 </Text>
-                {isAgentSelectorEnabled &&
-                        <BoxAiAgentSelector
-                            agents={agents}
-                            onErrorAction={() => null}
-                            requestState={REQUEST_STATE.SUCCESS}
-                            selectedAgent={selectedAgent}
-                            triggerChipClassName="sidebar-chip" />
-                }
+                {isAgentSelectorEnabled && (
+                    <BoxAiAgentSelector
+                        agents={agents}
+                        onErrorAction={() => null}
+                        requestState={REQUEST_STATE.SUCCESS}
+                        selectedAgent={selectedAgent}
+                        variant="sidebar"
+                    />
+                )}
             </div>
         );
     };
