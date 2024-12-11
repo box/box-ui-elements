@@ -128,6 +128,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
     isAutoExpanded: boolean = false;
 
+    itemsRef: React.MutableRefObject<UploadItem[]>;
+
     static defaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
         chunked: true,
@@ -177,6 +179,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             isUploadsManagerExpanded: false,
         };
         this.id = uniqueid('bcu_');
+
+        this.itemsRef = React.createRef();
+        this.itemsRef.current = [];
     }
 
     /**
@@ -631,20 +636,20 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     addToQueue = (newItems: UploadItem[], itemUpdateCallback: Function) => {
         const { fileLimit, useUploadsManager } = this.props;
-        const { items, isUploadsManagerExpanded } = this.state;
+        const { isUploadsManagerExpanded } = this.state;
 
         let updatedItems = [];
-        const prevItemsNum = items.length;
+        const prevItemsNum = this.itemsRef.current.length;
         const totalNumOfItems = prevItemsNum + newItems.length;
 
         // Don't add more than fileLimit # of items
         if (totalNumOfItems > fileLimit) {
-            updatedItems = items.concat(newItems.slice(0, fileLimit - items.length));
+            updatedItems = this.itemsRef.current.concat(newItems.slice(0, fileLimit - prevItemsNum));
             this.setState({
                 errorCode: ERROR_CODE_UPLOAD_FILE_LIMIT,
             });
         } else {
-            updatedItems = items.concat(newItems);
+            updatedItems = this.itemsRef.current.concat(newItems);
             this.setState({ errorCode: '' });
 
             // If the number of items being uploaded passes the threshold, expand the upload manager
@@ -658,6 +663,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 this.expandUploadsManager();
             }
         }
+
+        this.itemsRef.current = updatedItems;
 
         this.updateViewAndCollection(updatedItems, () => {
             if (itemUpdateCallback) {
