@@ -386,6 +386,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             const instance = wrapper.instance();
             const items = [{ status: STATUS_COMPLETE }, { status: STATUS_IN_PROGRESS }, { status: STATUS_ERROR }];
             instance.state.items = items;
+            instance.itemsRef.current = items;
 
             instance.onClick = jest.fn();
             instance.clickAllWithStatus();
@@ -404,6 +405,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 { status: STATUS_ERROR },
             ];
             instance.state.items = items;
+            instance.itemsRef.current = items;
 
             instance.onClick = jest.fn();
             instance.clickAllWithStatus(STATUS_ERROR);
@@ -585,6 +587,8 @@ describe('elements/content-uploader/ContentUploader', () => {
                 items,
                 isUploadsManagerExpanded: true,
             });
+
+            instance.itemsRef.current = items;
 
             instance.isAutoExpanded = true;
 
