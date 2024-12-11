@@ -72,9 +72,12 @@ describe('elements/content-uploader/ContentUploader', () => {
                 isResumableUploadsEnabled,
             });
 
-            wrapper.instance().updateViewAndCollection([], null);
+            const instance = wrapper.instance();
+
+            instance.updateViewAndCollection([], null);
 
             expect(wrapper.state().itemIds).toEqual({});
+            expect(instance.itemIdsRef.current).toEqual({});
         });
 
         test.each([
@@ -124,23 +127,30 @@ describe('elements/content-uploader/ContentUploader', () => {
     describe('addFilesToUploadQueue()', () => {
         test('should overwrite itemIds if they already exist', () => {
             const wrapper = getWrapper();
-            wrapper.setState({ itemIds: { yoyo: false } });
+            const instance = wrapper.instance();
+
+            const itemIds = { yoyo: false };
+            wrapper.setState({ itemIds });
+            instance.itemIdsRef.current = itemIds;
 
             wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
 
             const expected = { yoyo: true };
             expect(wrapper.state().itemIds).toMatchObject(expected);
+            expect(instance.itemIdsRef.current).toMatchObject(expected);
         });
 
         test('should add generated itemId', () => {
             const wrapper = getWrapper({ rootFolderId: 0 });
+            const instance = wrapper.instance();
 
             global.Date.now = jest.fn(() => 10000);
 
-            wrapper.instance().addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
+            instance.addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
 
             const expected = { yoyo: true, yoyo_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
+            expect(instance.itemIdsRef.current).toEqual(expected);
         });
 
         test('should handle accepting package "files" separate from folders', () => {
@@ -176,6 +186,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             });
             const expected = { hi: true, hi_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
+            expect(wrapper.instance().itemIdsRef.current).toEqual(expected);
         });
     });
 
@@ -194,6 +205,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 items: [item],
             });
             instance = wrapper.instance();
+            instance.itemsRef.current = [item];
         });
 
         test('should cancel and remove item from uploading queue', () => {
@@ -201,6 +213,7 @@ describe('elements/content-uploader/ContentUploader', () => {
 
             expect(item.api.cancel).toBeCalled();
             expect(wrapper.state().items.length).toBe(0);
+            expect(instance.itemsRef.current.length).toBe(0);
         });
 
         test.each`
@@ -386,6 +399,7 @@ describe('elements/content-uploader/ContentUploader', () => {
             const instance = wrapper.instance();
             const items = [{ status: STATUS_COMPLETE }, { status: STATUS_IN_PROGRESS }, { status: STATUS_ERROR }];
             instance.state.items = items;
+            instance.itemsRef.current = items;
 
             instance.onClick = jest.fn();
             instance.clickAllWithStatus();
@@ -404,6 +418,7 @@ describe('elements/content-uploader/ContentUploader', () => {
                 { status: STATUS_ERROR },
             ];
             instance.state.items = items;
+            instance.itemsRef.current = items;
 
             instance.onClick = jest.fn();
             instance.clickAllWithStatus(STATUS_ERROR);
@@ -585,6 +600,8 @@ describe('elements/content-uploader/ContentUploader', () => {
                 items,
                 isUploadsManagerExpanded: true,
             });
+
+            instance.itemsRef.current = items;
 
             instance.isAutoExpanded = true;
 

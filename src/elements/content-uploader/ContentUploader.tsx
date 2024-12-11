@@ -130,6 +130,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
     itemsRef: React.MutableRefObject<UploadItem[]>;
 
+    itemIdsRef: React.MutableRefObject<Object>;
+
     static defaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
         chunked: true,
@@ -182,6 +184,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         this.itemsRef = React.createRef();
         this.itemsRef.current = [];
+
+        this.itemIdsRef = React.createRef();
+        this.itemIdsRef.current = {};
     }
 
     /**
@@ -289,9 +294,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     getNewFiles = (files: Array<UploadFileWithAPIOptions | File>): Array<UploadFileWithAPIOptions | File> => {
         const { rootFolderId } = this.props;
-        const { itemIds } = this.state;
 
-        return Array.from(files).filter(file => !itemIds[getFileId(file, rootFolderId)]);
+        return Array.from(files).filter(file => !this.itemIdsRef.current[getFileId(file, rootFolderId)]);
     };
 
     /**
@@ -303,9 +307,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         items: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
     ): Array<DataTransferItem | UploadDataTransferItemWithAPIOptions> => {
         const { rootFolderId } = this.props;
-        const { itemIds } = this.state;
 
-        return Array.from(items).filter(item => !itemIds[getDataTransferItemId(item, rootFolderId)]);
+        return Array.from(items).filter(item => !this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)]);
     };
 
     /**
@@ -342,26 +345,22 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const firstFile = getFile(newFiles[0]);
 
-        this.setState(
-            state => ({
-                itemIds: {
-                    ...state.itemIds,
-                    ...newItemIds,
-                },
-            }),
-            () => {
-                onBeforeUpload(newFiles);
-                if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
-                    // webkitRelativePath should be ignored when the upload destination folder is known
-                    this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
-                } else {
-                    this.addFilesWithoutRelativePathToQueue(
-                        newFiles,
-                        isPrepopulateFilesEnabled ? this.upload : itemUpdateCallback,
-                    );
-                }
-            },
-        );
+        const newItemIdsState = { ...this.itemsRef.current, ...newItemIds };
+
+        this.itemIdsRef.current = newItemIdsState;
+
+        this.setState({ itemIds: newItemIdsState }, () => {
+            onBeforeUpload(newFiles);
+            if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
+                // webkitRelativePath should be ignored when the upload destination folder is known
+                this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
+            } else {
+                this.addFilesWithoutRelativePathToQueue(
+                    newFiles,
+                    isPrepopulateFilesEnabled ? this.upload : itemUpdateCallback,
+                );
+            }
+        });
     };
 
     /**
@@ -469,7 +468,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         itemUpdateCallback: Function,
     ): void => {
         const { rootFolderId } = this.props;
-        const { itemIds } = this.state;
 
         if (dataTransferItems.length === 0) {
             return;
@@ -477,7 +475,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const newItems = this.getNewDataTransferItems(dataTransferItems);
         newItems.forEach(item => {
-            itemIds[getDataTransferItemId(item, rootFolderId)] = true;
+            this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)] = true;
         });
 
         if (newItems.length === 0) {
@@ -581,7 +579,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         files: Array<UploadFileWithAPIOptions | File>,
         itemUpdateCallback: Function,
     ) => {
-        const { itemIds } = this.state;
         const { rootFolderId } = this.props;
 
         // Convert files from the file API to upload items
@@ -611,7 +608,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 uploadItem.options = uploadAPIOptions;
             }
 
-            itemIds[getFileId(uploadItem, rootFolderId)] = true;
+            this.itemIdsRef.current[getFileId(uploadItem, rootFolderId)] = true;
 
             return uploadItem;
         });
@@ -621,7 +618,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         }
 
         this.setState({
-            itemIds,
+            itemIds: this.itemIdsRef.current,
         });
         this.addToQueue(newItems, itemUpdateCallback);
     };
@@ -663,8 +660,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 this.expandUploadsManager();
             }
         }
-
-        this.itemsRef.current = updatedItems;
 
         this.updateViewAndCollection(updatedItems, () => {
             if (itemUpdateCallback) {
@@ -727,19 +722,21 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     removeFileFromUploadQueue = (item: UploadItem) => {
         const { onCancel, useUploadsManager } = this.props;
-        const { items } = this.state;
         // Clear any error errorCode in footer
         this.setState({ errorCode: '' });
 
         const { api } = item;
         api.cancel();
 
-        items.splice(items.indexOf(item), 1);
+        const itemIndex = this.itemsRef.current.indexOf(item);
+        const updatedItems = this.itemsRef.current
+            .slice(0, itemIndex)
+            .concat(this.itemsRef.current.slice(itemIndex + 1));
 
         onCancel([item]);
-        this.updateViewAndCollection(items, () => {
+        this.updateViewAndCollection(updatedItems, () => {
             // Minimize uploads manager if there are no more items
-            if (useUploadsManager && !items.length) {
+            if (useUploadsManager && !updatedItems.length) {
                 this.minimizeUploadsManager();
             }
 
@@ -757,8 +754,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     cancel = () => {
-        const { items } = this.state;
-        items.forEach(uploadItem => {
+        this.itemsRef.current.forEach(uploadItem => {
             const { api, status } = uploadItem;
             if (status === STATUS_IN_PROGRESS) {
                 api.cancel();
@@ -776,8 +772,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     upload = () => {
-        const { items } = this.state;
-        items.forEach(uploadItem => {
+        this.itemsRef.current.forEach(uploadItem => {
             if (uploadItem.status === STATUS_PENDING) {
                 this.uploadFile(uploadItem);
             }
@@ -792,10 +787,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     uploadFile(item: UploadItem) {
         const { overwrite, rootFolderId } = this.props;
-        const { items } = this.state;
         const { api, file, options } = item;
 
-        const numItemsUploading = items.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
+        const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
 
         if (numItemsUploading >= UPLOAD_CONCURRENCY) {
             return;
@@ -812,11 +806,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         };
 
         item.status = STATUS_IN_PROGRESS;
-        items[items.indexOf(item)] = item;
+        const updatedItems = [...this.itemsRef.current];
+        updatedItems[this.itemsRef.current.indexOf(item)] = item;
 
         api.upload(uploadOptions);
 
-        this.updateViewAndCollection(items);
+        this.updateViewAndCollection(updatedItems);
     }
 
     /**
@@ -827,10 +822,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     resumeFile(item: UploadItem) {
         const { onResume, overwrite, rootFolderId } = this.props;
-        const { items } = this.state;
         const { api, file, options } = item;
 
-        const numItemsUploading = items.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
+        const numItemsUploading = this.itemsRef.current.filter(item_t => item_t.status === STATUS_IN_PROGRESS).length;
 
         if (numItemsUploading >= UPLOAD_CONCURRENCY) {
             return;
@@ -849,12 +843,14 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         item.status = STATUS_IN_PROGRESS;
         delete item.error;
-        items[items.indexOf(item)] = item;
+
+        const updatedItems = [...this.itemsRef.current];
+        updatedItems[this.itemsRef.current.indexOf(item)] = item;
 
         onResume(item);
         api.resume(resumeOptions);
 
-        this.updateViewAndCollection(items);
+        this.updateViewAndCollection(updatedItems);
     }
 
     /**
@@ -875,10 +871,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         item.status = STATUS_PENDING;
         delete item.error;
 
-        const { items } = this.state;
-        items[items.indexOf(item)] = item;
+        const updatedItems = [...this.itemsRef.current];
+        updatedItems[this.itemsRef.current.indexOf(item)] = item;
 
-        this.updateViewAndCollection(items);
+        this.updateViewAndCollection(updatedItems);
     }
 
     /**
@@ -903,8 +899,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             item.boxFile = boxFile;
         }
 
-        const { items } = this.state;
-        items[items.indexOf(item)] = item;
+        const updatedItems = [...this.itemsRef.current];
+        updatedItems[this.itemsRef.current.indexOf(item)] = item;
 
         // Broadcast that a file has been uploaded
         if (useUploadsManager) {
@@ -914,7 +910,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             onUpload(item.boxFile);
         }
 
-        this.updateViewAndCollection(items, () => {
+        this.updateViewAndCollection(updatedItems, () => {
             const { view } = this.state;
             if (view === VIEW_UPLOAD_IN_PROGRESS) {
                 this.upload();
@@ -994,9 +990,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         };
 
         if (items.length === 0) {
+            this.itemIdsRef.current = {};
             state.itemIds = {};
             state.errorCode = '';
         }
+
+        this.itemsRef.current = items;
 
         this.setState(state as Pick<State, keyof State>, callback);
     }
@@ -1011,13 +1010,12 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     handleUploadError = (item: UploadItem, error: Error) => {
         const { onError, useUploadsManager } = this.props;
-        const { items } = this.state;
         const { file } = item;
 
         item.status = STATUS_ERROR;
         item.error = error;
 
-        const newItems = [...items];
+        const newItems = [...this.itemsRef.current];
         const index = newItems.findIndex(singleItem => singleItem === item);
         if (index !== -1) {
             newItems[index] = item;
@@ -1067,10 +1065,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         const { onProgress } = this.props;
         onProgress(item);
 
-        const { items } = this.state;
-        items[items.indexOf(item)] = item;
+        const updatedItems = [...this.itemsRef.current];
+        updatedItems[this.itemsRef.current.indexOf(item)] = item;
 
-        this.updateViewAndCollection(items);
+        this.updateViewAndCollection(updatedItems);
     };
 
     /**
@@ -1119,9 +1117,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      * @return {void}
      */
     clickAllWithStatus = (status?: UploadStatus) => {
-        const { items } = this.state;
-
-        items.forEach(item => {
+        this.itemsRef.current.forEach(item => {
             if (!status || item.status === status) {
                 this.onClick(item);
             }
@@ -1198,14 +1194,20 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     resetUploadsManagerItemsWhenUploadsComplete = (): void => {
         const { onCancel, useUploadsManager } = this.props;
-        const { isUploadsManagerExpanded, items, view } = this.state;
+        const { isUploadsManagerExpanded, view } = this.state;
 
         // Do not reset items when upload manger is expanded or there're uploads in progress
-        if ((isUploadsManagerExpanded && useUploadsManager && !!items.length) || view === VIEW_UPLOAD_IN_PROGRESS) {
+        if (
+            (isUploadsManagerExpanded && useUploadsManager && !!this.itemsRef.current.length) ||
+            view === VIEW_UPLOAD_IN_PROGRESS
+        ) {
             return;
         }
 
-        onCancel(items);
+        onCancel(this.itemsRef.current);
+
+        this.itemsRef.current = [];
+        this.itemIdsRef.current = {};
 
         this.setState({
             items: [],
