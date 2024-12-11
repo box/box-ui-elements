@@ -1,0 +1,72 @@
+[
+  {
+    "id": "boxui.securityCloudGame.success",
+    "description": "Success message shown when a user successfully drags the cloud into position.",
+    "defaultMessage": "Success!"
+  },
+  {
+    "id": "boxui.securityCloudGame.instructions",
+    "description": "Instructional message displayed on the embed widget security drag-drop game",
+    "defaultMessage": "For security purposes, please drag the white cloud onto the dark cloud. Keyboard users: Press spacebar to grab the cloud, arrow keys to move, and spacebar to drop."
+  },
+  {
+    "id": "boxui.securityCloudGame.accessibilityInstructions",
+    "description": "Instructional message displayed on the embed widget security drag-drop game for screen readers",
+    "defaultMessage": "For security purposes, please drag the cloud object onto the target. You are on a {row} by {column} grid with a movable cloud object and a target area. Press spacebar to grab the cloud object, arrow keys to move, and spacebar to drop on the target."
+  },
+  {
+    "id": "boxui.securityCloudGame.cloudObject",
+    "description": "White cloud title.",
+    "defaultMessage": "Cloud object"
+  },
+  {
+    "id": "boxui.securityCloudGame.target",
+    "description": "Target dark cloud title.",
+    "defaultMessage": "Target"
+  },
+  {
+    "id": "boxui.securityCloudGame.currentPosition",
+    "description": "Message for the screen reader to tell the current position of the cloud.",
+    "defaultMessage": "Current position: Row {row}, Column {column}."
+  },
+  {
+    "id": "boxui.securityCloudGame.targetPosition",
+    "description": "Message for the screen reader to tell the position of the target.",
+    "defaultMessage": "Target position: Row {row}, Column {column}."
+  },
+  {
+    "id": "boxui.securityCloudGame.cloudGrabbed",
+    "description": "Message for the screen reader to tell when user grab the cloud.",
+    "defaultMessage": "Cloud object grabbed."
+  },
+  {
+    "id": "boxui.securityCloudGame.cloudDropped",
+    "description": "Message for the screen reader to tell when user drop the cloud.",
+    "defaultMessage": "Cloud object dropped."
+  },
+  {
+    "id": "boxui.securityCloudGame.reachLeftEdge",
+    "description": "Message for the screen reader to tell when the cloud hits the left edge of game board.",
+    "defaultMessage": "Reached left edge of grid."
+  },
+  {
+    "id": "boxui.securityCloudGame.reachRightEdge",
+    "description": "Message for the screen reader to tell when the cloud hits the right edge of game board.",
+    "defaultMessage": "Reached right edge of grid."
+  },
+  {
+    "id": "boxui.securityCloudGame.reachTopEdge",
+    "description": "Message for the screen reader to tell when the cloud hits the top edge of game board.",
+    "defaultMessage": "Reached top edge of grid."
+  },
+  {
+    "id": "boxui.securityCloudGame.reachBottomEdge",
+    "description": "Message for the screen reader to tell when the cloud hits the bottom edge of game board.",
+    "defaultMessage": "Reached bottom edge of grid."
+  },
+  {
+    "id": "boxui.securityCloudGame.targetInRange",
+    "description": "Message for the screen reader to tell when the white cloud overlaps with the target cloud.",
+    "defaultMessage": "Target in range, you can drop the cloud object."
+  }
+]

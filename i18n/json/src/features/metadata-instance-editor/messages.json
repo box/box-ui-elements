@@ -1,0 +1,207 @@
+[
+  {
+    "id": "boxui.metadataInstanceEditor.customTitle",
+    "description": "title of the custom metadata card",
+    "defaultMessage": "Custom Metadata"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customAdd",
+    "description": "Label for the add button for custom metadata",
+    "defaultMessage": "Add"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customRemove",
+    "description": "Label for the remove button for custom metadata",
+    "defaultMessage": "Remove"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customKey",
+    "description": "Label for the key field for custom metadata",
+    "defaultMessage": "Key"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customKeyPlaceholder",
+    "description": "Placeholder for the key field for custom metadata",
+    "defaultMessage": "e.g. Order Number"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customValue",
+    "description": "Label for the value field for custom metadata",
+    "defaultMessage": "Value"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customValuePlaceholder",
+    "description": "Placeholder for the value field for custom metadata",
+    "defaultMessage": "e.g. 42"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customNewField",
+    "description": "Title for the new field section for custom metadata",
+    "defaultMessage": "New Field"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customNewFieldMessage",
+    "description": "Description for the new field section for custom metadata",
+    "defaultMessage": "Add a custom metadata field. Other people will be able to see and search for this field."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customErrorRequired",
+    "description": "Error enforcing required key for custom metadata",
+    "defaultMessage": "A key is required."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customErrorDuplicateKey",
+    "description": "Error enforcing unique key for custom metadata",
+    "defaultMessage": "A field with that key already exists."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.customErrorInternalKey",
+    "description": "Error enforcing non internal key for custom metadata",
+    "defaultMessage": "Keys cannot begin with a $."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.invalidValue",
+    "description": "Error message displayed if the user enters a badly formatted value in metadata text box",
+    "defaultMessage": "Invalid Input!"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.editTooltip",
+    "description": "Text that shows in a tooltip above the edit pencil button.",
+    "defaultMessage": "Edit Metadata"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.removeTemplate",
+    "description": "Label to remove a template",
+    "defaultMessage": "Remove"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.fileMetadataRemoveTemplateConfirm",
+    "description": "Message for users who may attempt to remove a metadata instance for a file, which is non-recoverable",
+    "defaultMessage": "Are you sure you want to delete \"{metadataName}\" and all of its values from this file?"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.folderMetadataRemoveTemplateConfirm",
+    "description": "Message for users who may attempt to remove a metadata instance for a folder, which is non-recoverable",
+    "defaultMessage": "Are you sure you want to delete \"{metadataName}\" and all of its values? Any metadata template values already applied to files in this folder will not be deleted."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.fileMetadataRemoveCustomTemplateConfirm",
+    "description": "Message for users who may attempt to remove a custom metadata instance for a file. Also non-recoverable",
+    "defaultMessage": "Are you sure you want to delete this custom metadata and all of its values from this file?"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.folderMetadataRemoveCustomTemplateConfirm",
+    "description": "Message for users who may attempt to remove a custom metadata instance for a folder. Also non-recoverable",
+    "defaultMessage": "Are you sure you want to delete this custom metadata and all of its values? Any metadata template values already applied to files in this folder will not be deleted."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.templateSearchPlaceholder",
+    "description": "Placeholder to search for all templates",
+    "defaultMessage": "Search all templates"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.templateAdd",
+    "description": "Label to add a template",
+    "defaultMessage": "Add"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.templatesTitle",
+    "description": "Overall title of metadata",
+    "defaultMessage": "Templates"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.templatesNoResults",
+    "description": "Text to indicate no templates found by searching",
+    "defaultMessage": "No Results"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.templatesFetchFailed",
+    "description": "Text to indicate that we failed to fetch templates",
+    "defaultMessage": "Sorry! We could not fetch templates. Please contact your administrator"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.templatesNoRemainingTemplates",
+    "description": "Text to indicate that all the templates have been added",
+    "defaultMessage": "All templates have been added"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.templatesServerHasNoTemplates",
+    "description": "Text to indicate that the server has no templates",
+    "defaultMessage": "Zero templates"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.metadataSave",
+    "description": "Label for save button",
+    "defaultMessage": "Save"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.metadataCancel",
+    "description": "Label for cancel button",
+    "defaultMessage": "Cancel"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.metadataCascadePolicyEnabledInfo",
+    "description": "Informational text shown in metadata modal when cascading is turned on for current folder",
+    "defaultMessage": "This template and its values are being cascaded to all items in this folder and its subfolders."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.noMetadata",
+    "description": "Text to display when no metadata is applied to folder",
+    "defaultMessage": "No Metadata Applied"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.noMetadataAddTemplate",
+    "description": "Instructions to create metadata for the selected folder",
+    "defaultMessage": "Click 'Add' in the top right to add metadata to this item"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.enableCascadePolicy",
+    "description": "Label for enable cascade policy toggle switch",
+    "defaultMessage": "Enable Cascade Policy"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.applyCascadePolicyText",
+    "description": "Informational text below enable cascade policy toggle switch",
+    "defaultMessage": "Apply template and its values to all new and existing items in this folder and its subfolders."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.cannotApplyCascadePolicyText",
+    "description": "Informational text below enable cascade policy toggle switch indicating that cascade policy cannot be applied",
+    "defaultMessage": "Cascade policy cannot be applied to custom metadata at this time."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.cascadePolicyLearnMore",
+    "description": "Tooltip text a user can use to learn more about cascading metadata policy",
+    "defaultMessage": "Learn more"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.cascadePolicyModeQuestion",
+    "description": "Tooltip text that asks the user what they want to do when applying cascading to their metadata policy",
+    "defaultMessage": "In the case of conflicts when applying this template and its values to existing items, what would you like to do? This is a one time action."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.cascadePolicySkipMode",
+    "description": "Label for radio button that selects skip mode for cascading policy",
+    "defaultMessage": "Skip and keep all existing template values"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.cascadePolicyOverwriteMode",
+    "description": "Label for radio button that selects overwrite mode for cascading policy",
+    "defaultMessage": "Overwrite all existing template values"
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.allAttributesAreHidden",
+    "description": "Informational text below collapsible header indicating that all fields for this template are hidden",
+    "defaultMessage": "All attributes in this template have been hidden."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.noAttributesForTemplate",
+    "description": "Informational text below collapsible header indicating that there are no attributes for this template",
+    "defaultMessage": "There are no attributes in this template."
+  },
+  {
+    "id": "boxui.metadataInstanceEditor.operationNotImmediate",
+    "description": "Informational text below cascade policy description and explains to the user that the policy will take some time to take effect.",
+    "defaultMessage": "This operation is not immediate and may take some time."
+  }
+]

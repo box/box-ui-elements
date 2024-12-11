@@ -1,0 +1,47 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivity.annotationActivityDeleteMenuItem",
+    "description": "Text to show on menu item to delete the annotation comment",
+    "defaultMessage": "Delete"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivity.annotationActivityDeletePrompt",
+    "description": "Confirmation prompt text to delete the annotation comment",
+    "defaultMessage": "Are you sure you want to permanently delete this comment?"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivity.annotationActivityEditMenuItem",
+    "description": "Text to show on menu item to edit the annotation comment",
+    "defaultMessage": "Modify"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivity.annotationActivityPostedFullDateTime",
+    "description": "Full data and time for annotation title",
+    "defaultMessage": "{time, date, full} at {time, time, short}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivityPageItem",
+    "description": "Annotation activity item link shown on annotation activity",
+    "defaultMessage": "Page {number}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivity.annotationActivityResolveMenuItem",
+    "description": "Text to show on menu item to resolve the annotation comment",
+    "defaultMessage": "Resolve"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivityVersionLink",
+    "description": "Annotation activity item link shown on annotation activity for previous file version",
+    "defaultMessage": "Version {number}"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivityVersionUnavailable",
+    "description": "Annotation activity item link shown on annotation activity for previous file version that is unavailable",
+    "defaultMessage": "Version Unavailable"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.annotationActivity.annotationActivityUnresolveMenuItem",
+    "description": "Text to show on menu item to unresolve the annotation comment",
+    "defaultMessage": "Unresolve"
+  }
+]
