@@ -130,6 +130,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
     itemsRef: React.MutableRefObject<UploadItem[]>;
 
+    itemIdsRef: React.MutableRefObject<Object>;
+
     static defaultProps = {
         apiHost: DEFAULT_HOSTNAME_API,
         chunked: true,
@@ -182,6 +184,9 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         this.itemsRef = React.createRef();
         this.itemsRef.current = [];
+
+        this.itemIdsRef = React.createRef();
+        this.itemIdsRef.current = {};
     }
 
     /**
@@ -289,9 +294,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     getNewFiles = (files: Array<UploadFileWithAPIOptions | File>): Array<UploadFileWithAPIOptions | File> => {
         const { rootFolderId } = this.props;
-        const { itemIds } = this.state;
 
-        return Array.from(files).filter(file => !itemIds[getFileId(file, rootFolderId)]);
+        return Array.from(files).filter(file => !this.itemIdsRef.current[getFileId(file, rootFolderId)]);
     };
 
     /**
@@ -303,9 +307,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         items: Array<DataTransferItem | UploadDataTransferItemWithAPIOptions>,
     ): Array<DataTransferItem | UploadDataTransferItemWithAPIOptions> => {
         const { rootFolderId } = this.props;
-        const { itemIds } = this.state;
 
-        return Array.from(items).filter(item => !itemIds[getDataTransferItemId(item, rootFolderId)]);
+        return Array.from(items).filter(item => !this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)]);
     };
 
     /**
@@ -342,26 +345,22 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const firstFile = getFile(newFiles[0]);
 
-        this.setState(
-            state => ({
-                itemIds: {
-                    ...state.itemIds,
-                    ...newItemIds,
-                },
-            }),
-            () => {
-                onBeforeUpload(newFiles);
-                if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
-                    // webkitRelativePath should be ignored when the upload destination folder is known
-                    this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
-                } else {
-                    this.addFilesWithoutRelativePathToQueue(
-                        newFiles,
-                        isPrepopulateFilesEnabled ? this.upload : itemUpdateCallback,
-                    );
-                }
-            },
-        );
+        const newItemIdsState = { ...this.itemsRef.current, ...newItemIds };
+
+        this.itemIdsRef.current = newItemIdsState;
+
+        this.setState({ itemIds: newItemIdsState }, () => {
+            onBeforeUpload(newFiles);
+            if (firstFile.webkitRelativePath && !isRelativePathIgnored) {
+                // webkitRelativePath should be ignored when the upload destination folder is known
+                this.addFilesWithRelativePathToQueue(newFiles, itemUpdateCallback);
+            } else {
+                this.addFilesWithoutRelativePathToQueue(
+                    newFiles,
+                    isPrepopulateFilesEnabled ? this.upload : itemUpdateCallback,
+                );
+            }
+        });
     };
 
     /**
@@ -469,7 +468,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         itemUpdateCallback: Function,
     ): void => {
         const { rootFolderId } = this.props;
-        const { itemIds } = this.state;
 
         if (dataTransferItems.length === 0) {
             return;
@@ -477,7 +475,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const newItems = this.getNewDataTransferItems(dataTransferItems);
         newItems.forEach(item => {
-            itemIds[getDataTransferItemId(item, rootFolderId)] = true;
+            this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)] = true;
         });
 
         if (newItems.length === 0) {
@@ -581,7 +579,6 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         files: Array<UploadFileWithAPIOptions | File>,
         itemUpdateCallback: Function,
     ) => {
-        const { itemIds } = this.state;
         const { rootFolderId } = this.props;
 
         // Convert files from the file API to upload items
@@ -611,7 +608,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 uploadItem.options = uploadAPIOptions;
             }
 
-            itemIds[getFileId(uploadItem, rootFolderId)] = true;
+            this.itemIdsRef.current[getFileId(uploadItem, rootFolderId)] = true;
 
             return uploadItem;
         });
@@ -621,7 +618,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         }
 
         this.setState({
-            itemIds,
+            itemIds: this.itemIdsRef.current,
         });
         this.addToQueue(newItems, itemUpdateCallback);
     };
@@ -994,6 +991,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         };
 
         if (items.length === 0) {
+            this.itemIdsRef.current = {};
             state.itemIds = {};
             state.errorCode = '';
         }
@@ -1206,6 +1204,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
         }
 
         onCancel(items);
+
+        this.itemIdsRef.current = {};
 
         this.setState({
             items: [],
