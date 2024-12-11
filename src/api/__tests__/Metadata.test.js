@@ -2305,11 +2305,13 @@ describe('api/Metadata', () => {
 
             const updatedMetadata = {
                 ...template,
+                id: 'template_id',
                 type: undefined,
             };
 
             cache.set('metadata_id', {
                 templateInstances: [priorMetadata],
+                templates: [{ ...template, id: 'template_id' }],
             });
 
             metadata.getMetadataUrl = jest.fn().mockReturnValueOnce('url');
@@ -2338,6 +2340,7 @@ describe('api/Metadata', () => {
             expect(metadata.errorHandler).not.toHaveBeenCalled();
             expect(cache.get('metadata_id')).toEqual({
                 templateInstances: [priorMetadata, updatedMetadata],
+                templates: [{ ...template, id: 'template_id' }],
             });
         });
         test('should make request but not update cache or call success handler when destroyed', async () => {

@@ -4,14 +4,21 @@ import noop from 'lodash/noop';
 import { mount } from 'enzyme';
 import { PreviewNavigationComponent as PreviewNavigation } from '../PreviewNavigation';
 
-const historyMock = {
+const historyMockDefault = {
     location: { pathname: '/activity/tasks/1234', hash: '' },
     listen: jest.fn(),
     push: jest.fn(),
     entries: [{}],
 };
 
-const getWrapper = ({ collection = ['a', 'b', 'c'], onNavigateLeft = noop, onNavigateRight = noop, ...rest }) =>
+const deeplinkedMetadataHistoryMock = {
+    location: { pathname: '/metadata/filteredTemplates/123', hash: '' },
+    listen: jest.fn(),
+    push: jest.fn(),
+    entries: [{}],
+}
+
+const getWrapper = ({ collection = ['a', 'b', 'c'], historyMock = historyMockDefault,  onNavigateLeft = noop, onNavigateRight = noop, ...rest }) =>
     mount(
         <Router history={historyMock}>
             <PreviewNavigation
@@ -51,8 +58,8 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
-            expect(historyMock.push).toBeCalledTimes(1);
-            expect(historyMock.push).toBeCalledWith('/activity');
+            expect(historyMockDefault.push).toBeCalledTimes(1);
+            expect(historyMockDefault.push).toBeCalledWith('/activity');
             expect(onNavigateLeftMock).toHaveBeenCalled();
         });
 
@@ -63,8 +70,8 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
-            expect(historyMock.push).toBeCalledTimes(1);
-            expect(historyMock.push).toBeCalledWith('/activity');
+            expect(historyMockDefault.push).toBeCalledTimes(1);
+            expect(historyMockDefault.push).toBeCalledWith('/activity');
             expect(onNavigateRightMock).toHaveBeenCalled();
         });
         test('should render navigation correctly from comments deeplinked URL ', () => {
@@ -74,8 +81,20 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
-            expect(historyMock.push).toBeCalledTimes(1);
-            expect(historyMock.push).toBeCalledWith('/activity');
+            expect(historyMockDefault.push).toBeCalledTimes(1);
+            expect(historyMockDefault.push).toBeCalledWith('/activity');
+            expect(onNavigateRightMock).toHaveBeenCalled();
+        });
+
+        test('should render navigation correctly from metadata deeplinked URL ', () => {
+            const onNavigateRightMock = jest.fn();
+            const wrapper = getWrapper({ currentIndex: 0, historyMock: deeplinkedMetadataHistoryMock, onNavigateRight: onNavigateRightMock });
+
+            expect(wrapper.find('PlainButton')).toHaveLength(1);
+            wrapper.find('PlainButton').simulate('click');
+
+            expect(deeplinkedMetadataHistoryMock.push).toBeCalledTimes(1);
+            expect(deeplinkedMetadataHistoryMock.push).toBeCalledWith('/metadata/filteredTemplates/123');
             expect(onNavigateRightMock).toHaveBeenCalled();
         });
     });
