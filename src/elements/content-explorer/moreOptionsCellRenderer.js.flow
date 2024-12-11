@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Function to render the date table cell
- * @author Box
- */
-
 import * as React from 'react';
 import MoreOptions from './MoreOptions';
 import type { BoxItem } from '../../common/types/core';
@@ -14,14 +8,18 @@ export default (
     canDownload: boolean,
     canDelete: boolean,
     canRename: boolean,
-    onItemSelect: Function,
-    onItemDelete: Function,
-    onItemDownload: Function,
-    onItemRename: Function,
-    onItemShare: Function,
-    onItemPreview: Function,
+    onItemSelect: any,
+    onItemDelete: any,
+    onItemDownload: any,
+    onItemRename: any,
+    onItemShare: any,
+    onItemPreview: any,
     isSmall: boolean,
-) => ({ rowData }: { rowData: BoxItem }) => (
+) => ({
+    rowData,
+}: {
+    rowData: BoxItem
+}) => (
     <MoreOptions
         canPreview={canPreview}
         canShare={canShare}
