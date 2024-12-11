@@ -442,6 +442,11 @@ const messages = defineMessages({
         description: 'Title for the preview Box AI feed.',
         defaultMessage: 'Box AI',
     },
+    sidebarBoxAIContent: {
+        id: 'be.sidebarBoxAIContent',
+        description: 'Generic Box AI content type opened used in welcome message and placeholder',
+        defaultMessage: 'content',
+    },
     sidebarActivityTitle: {
         id: 'be.sidebarActivityTitle',
         description: 'Title for the preview activity feed.',

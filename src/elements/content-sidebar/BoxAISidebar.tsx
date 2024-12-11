@@ -17,7 +17,6 @@ import { withLogger } from '../common/logger';
 import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
-import { useFeatureEnabled } from '../common/feature-checking';
 import { BoxAISidebarContext } from './BoxAISidebarContainer';
 
 import messages from '../common/messages';
@@ -31,11 +30,29 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
     
 function BoxAISidebar(props: ApiWrapperProps) {
-    const { createSession, encodedSession, onClearAction, getAIStudioAgents, onSelectAgent, questions, sendQuestion, stopQuestion, ...rest } = props;
+    const { 
+        createSession, 
+        encodedSession, 
+        onClearAction, 
+        getAIStudioAgents, 
+        isAIStudioAgentSelectorEnabled, 
+        onSelectAgent, 
+        questions, 
+        sendQuestion, 
+        stopQuestion, 
+        ...rest 
+    } = props;
     const { formatMessage } = useIntl();
-    const isAgentSelectorEnabled = useFeatureEnabled('boxai.agentSelector.enabled');
-    const { cache, setCacheValue, elementId, userInfo, contentName } = React.useContext(BoxAISidebarContext);
+    const { cache, contentName, elementId, setCacheValue, userInfo } = React.useContext(BoxAISidebarContext);
     const { questions: cacheQuestions } = cache;
+
+    if (!cache[encodedSession] && encodedSession) {
+        setCacheValue('encodedSession', encodedSession);
+    }
+
+    if (!cache[questions] && questions) {
+        setCacheValue('questions', questions);
+    }
 
     React.useEffect(() => {
         if (!encodedSession && createSession) {
@@ -59,7 +76,7 @@ function BoxAISidebar(props: ApiWrapperProps) {
                 <Text as="h3" className="bcs-title">
                     {formatMessage(messages.sidebarBoxAITitle)}
                 </Text>
-                {isAgentSelectorEnabled &&
+                {isAIStudioAgentSelectorEnabled &&
                     <BoxAiAgentSelectorWithApi
                         fetcher={getAIStudioAgents}
                         onSelectAgent={onSelectAgent}
@@ -80,26 +97,25 @@ function BoxAISidebar(props: ApiWrapperProps) {
             />
         </>
     );
-    
-    if (!cache[encodedSession] && encodedSession) {
-        setCacheValue('encodedSession', encodedSession);
-    }
-
-    if (!cache[questions] && questions) {
-        setCacheValue('questions', questions);
-    }
 
     return (
         <AgentsProvider>
-            <SidebarContent actions={renderActions()} className="bcs-BoxAISidebar" elementId={elementId} sidebarView={SIDEBAR_VIEW_BOXAI}>
+            <SidebarContent 
+                actions={renderActions()}
+                className="bcs-BoxAISidebar"
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_BOXAI}
+            >
                 <div className="bcs-BoxAISidebar-content">
-                    <BoxAiContentAnswers 
-                        userInfo={userInfo} 
-                        className="bcs-BoxAISidebar-contentAnswers" 
-                        contentName={contentName} 
+                    <BoxAiContentAnswers
+                        className="bcs-BoxAISidebar-contentAnswers"
+                        contentName={contentName}
+                        contentType={formatMessage(messages.sidebarBoxAIContent)}
+                        isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
                         questions={questions}
-                        submitQuestion={sendQuestion} 
                         stopQuestion={stopQuestion}
+                        submitQuestion={sendQuestion}
+                        userInfo={userInfo}
                         variant="sidebar"
                         {...rest} 
                     />

@@ -261,6 +261,8 @@ class SidebarPanels extends React.Component<Props, State> {
                                 <LoadableBoxAISidebar
                                     contentName={file.name}
                                     elementId={elementId}
+                                    fileExtension={file.extension}
+                                    fileID={file.id}
                                     hasSidebarInitialized={isInitialized}
                                     ref={this.boxAISidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_BOXAI}
