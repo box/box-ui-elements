@@ -37,3 +37,12 @@ $agentSelectorSidebarWidth: 211px;
         }
     }
 }
+
+@include breakpoint($medium-screen) {
+    .bcs-BoxAISidebar {
+        .bcs-BoxAISidebar-content {
+            height: 100%;
+            width: auto;
+        }
+    }
+}
