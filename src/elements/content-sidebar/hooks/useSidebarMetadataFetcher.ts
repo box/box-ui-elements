@@ -65,7 +65,6 @@ function useSidebarMetadataFetcher(
     const [file, setFile] = React.useState<BoxItem>(null);
     const [templates, setTemplates] = React.useState(null);
     const [errorMessage, setErrorMessage] = React.useState<MessageDescriptor | null>(null);
-    // const [successMessage, setSuccessMessage] = React.useState<MessageDescriptor | null>(null);
     const [templateInstances, setTemplateInstances] = React.useState<Array<MetadataTemplateInstance>>([]);
 
     const onApiError = React.useCallback(
@@ -100,7 +99,6 @@ function useSidebarMetadataFetcher(
 
     const fetchMetadataErrorCallback = React.useCallback(
         (e: ElementsXhrError, code: string) => {
-            // setSuccessMessage(null);
             setTemplates(null);
             setTemplateInstances(null);
             onApiError(e, code, messages.sidebarMetadataFetchingErrorContent);
