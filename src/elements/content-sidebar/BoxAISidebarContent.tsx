@@ -47,11 +47,11 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
     const { cache, contentName, elementId, setCacheValue, userInfo } = React.useContext(BoxAISidebarContext);
     const { questions: cacheQuestions } = cache;
 
-    if (!cache[encodedSession] && encodedSession) {
+    if (cache.encodedSession !== encodedSession) {
         setCacheValue('encodedSession', encodedSession);
     }
 
-    if (!cache[questions] && questions) {
+    if (cache.questions !== questions) {
         setCacheValue('questions', questions);
     }
 
@@ -84,6 +84,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         hostAppName={hostAppName}
                         onSelectAgent={onSelectAgent}
                         shouldHideAgentSelectorOnLoad
+                        variant="sidebar"
                     />
                 }
             </div>
