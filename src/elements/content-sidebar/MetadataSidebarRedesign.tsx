@@ -60,9 +60,14 @@ export interface ErrorContextProps {
     onError: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
 }
 
+export interface SuccessContextProps {
+    onSuccess: (code: string, showNotification: boolean) => void;
+}
+
 export interface MetadataSidebarRedesignProps
     extends PropsWithoutContext,
         ErrorContextProps,
+        SuccessContextProps,
         WithLoggerProps,
         RouteComponentProps {
     api: API;
@@ -75,6 +80,7 @@ function MetadataSidebarRedesign({
     filteredTemplateIds = [],
     history,
     onError,
+    onSuccess,
     isFeatureEnabled,
 }: MetadataSidebarRedesignProps) {
     const {
@@ -87,7 +93,7 @@ function MetadataSidebarRedesign({
         errorMessage,
         status,
         templateInstances,
-    } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+    } = useSidebarMetadataFetcher(api, fileId, onError, onSuccess, isFeatureEnabled);
 
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');

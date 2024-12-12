@@ -68,6 +68,11 @@ type ErrorContextProps = {
 
 type ElementsErrorCallback = (e: ElementsXhrError, code: string, contextInfo?: Object) => void;
 
+type ElementsSuccess = {
+    code: string,
+    showNotification: boolean,
+};
+
 type APIOptions = {
     apiHost?: string,
     cache?: APICache,
@@ -92,6 +97,7 @@ export type {
     ElementOrigin,
     ElementsError,
     ElementsErrorCallback,
+    ElementsSuccess,
     ElementsXhrError,
     ErrorContextProps,
     ErrorResponseData,
