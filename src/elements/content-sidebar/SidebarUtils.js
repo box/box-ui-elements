@@ -207,7 +207,7 @@ class SidebarUtils {
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "activity-sidebar" */ './ActivitySidebar');
                 break;
             case SIDEBAR_VIEW_BOXAI:
-                importFn = import(/* webpackMode: "lazy", webpackChunkName: "boxai-sidebar" */ './BoxAISidebarContainer');
+                importFn = import(/* webpackMode: "lazy", webpackChunkName: "boxai-sidebar" */ './BoxAISidebar');
                 break;
             case SIDEBAR_VIEW_VERSIONS:
                 importFn = import(/* webpackMode: "lazy", webpackChunkName: "versions-sidebar" */ './versions');

@@ -163,7 +163,7 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => {
+    setBoxAiSidebarCacheValue = (key: 'encodedSession' | 'questions', value: any) => {
         this.boxAiSidebarCache[key] = value;
     };
 
@@ -266,7 +266,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     hasSidebarInitialized={isInitialized}
                                     ref={this.boxAISidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_BOXAI}
-                                    userInfo={{name: currentUser.name, avatarUrl: currentUser.avatar_url}}
+                                    userInfo={{name: currentUser?.name, avatarUrl: currentUser?.avatar_url}}
                                     cache={this.boxAiSidebarCache}
                                     setCacheValue={this.setBoxAiSidebarCacheValue}
                                     {...boxAISidebarProps}

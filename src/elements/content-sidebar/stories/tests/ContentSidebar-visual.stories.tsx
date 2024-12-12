@@ -1,6 +1,6 @@
 import { type StoryObj } from '@storybook/react';
 import ContentSidebar from '../../ContentSidebar';
-import BoxAISidebar from '../../BoxAISidebar';
+import BoxAISidebar from '../../BoxAISidebarContent';
 
 export default {
     title: 'Elements/ContentSidebar/tests/visual-regression-tests',

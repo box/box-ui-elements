@@ -1,137 +1,118 @@
 /**
- * @file Box AI sidebar component
+ * @file Box AI Sidebar Container
  * @author Box
  */
 import * as React from 'react';
-import flow from 'lodash/flow';
+import noop from 'lodash/noop';
 import { useIntl } from 'react-intl';
-import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
-import { IconButton, Text } from '@box/blueprint-web';
-import { Trash } from '@box/blueprint-web-assets/icons/Line';
-// @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
-import { BoxAiContentAnswers, withApiWrapper, type ApiWrapperProps } from '@box/box-ai-content-answers'
-import SidebarContent from './SidebarContent';
-import { withAPIContext } from '../common/api-context';
-import { withErrorBoundary } from '../common/error-boundary';
-import { withLogger } from '../common/logger';
-import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
-import { EVENT_JS_READY } from '../common/logger/constants';
-import { mark } from '../../utils/performance';
-import { BoxAISidebarContext } from './BoxAISidebarContainer';
+import { type QuestionType } from '@box/box-ai-content-answers';
+import BoxAISidebarContent from './BoxAISidebarContent';
+import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 
-import messages from '../common/messages';
-import sidebarMessages from './messages';
+import messages from '../common/content-answers/messages';
 
-import './BoxAISidebar.scss';
+export interface BoxAISidebarContextValues {
+    contentName: string,
+    elementId: string,
+    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,
+    cache: { encodedSession?: string | null, questions?: QuestionType[] },
+    userInfo: { name: string, avatarUrl: string },
+};
 
+export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues>({
+    setCacheValue: noop,
+    cache: null,
+    contentName: '',
+    elementId: '',
+    userInfo: { name: '', avatarUrl: ''},
+});
 
-const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
+export interface BoxAISidebarProps {
+    contentName: string,
+    cache: { encodedSession?: string | null, questions?: QuestionType[] },
+    createSessionRequest: (payload: Record<string, unknown>, itemID: string) => Promise<unknown>,
+    elementId: string,
+    fetchTimeout: Record<string, unknown>;
+    fileExtension: string,
+    fileID: string,
+    getAgentConfig: (payload: Record<string, unknown>) => Promise<unknown>;
+    getAIStudioAgents: () => Promise<unknown>;
+    getAnswer: (payload: Record<string, unknown>,
+        itemID?: string,
+        itemIDs?: Array<string>,
+        state?: Record<string, unknown> ) => Promise<unknown>;
+    getAnswerStreaming: (
+        payload: Record<string, unknown>,
+        itemID?: string,
+        itemIDs?: Array<string>,
+        abortController?: AbortController,
+        state?: Record<string, unknown>,
+    ) => Promise<unknown>,
+    getSuggestedQuestions: (itemID: string) => Promise<unknown> | null;
+    hostAppName: string;
+    isAgentSelectorEnabled: boolean;
+    isAIStudioAgentSelectorEnabled: boolean;
+    isCitationsEnabled: boolean;
+    isDebugModeEnabled: boolean;
+    isIntelligentQueryMode: boolean;
+    isMarkdownEnabled: boolean;
+    isResetChatEnabled: boolean;
+    isStopResponseEnabled: boolean;
+    isStreamingEnabled: boolean;
+    userInfo: { name: '', avatarUrl: ''},
+    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,
+}
 
-mark(MARK_NAME_JS_READY);
-    
-function BoxAISidebar(props: ApiWrapperProps) {
+const BoxAISidebar = (props: BoxAISidebarProps) => {
     const { 
-        createSession, 
-        encodedSession, 
-        onClearAction, 
-        getAIStudioAgents, 
-        isAIStudioAgentSelectorEnabled, 
-        onSelectAgent, 
-        questions, 
-        sendQuestion, 
-        stopQuestion, 
-        ...rest 
+        elementId, 
+        fileExtension,
+        fileID,
+        contentName,
+        userInfo,
+        getSuggestedQuestions,
+        isIntelligentQueryMode,
+        cache,
+        setCacheValue,
+        ...rest
     } = props;
+    const { questions } = cache;
     const { formatMessage } = useIntl();
-    const { cache, contentName, elementId, setCacheValue, userInfo } = React.useContext(BoxAISidebarContext);
-    const { questions: cacheQuestions } = cache;
-
-    if (!cache[encodedSession] && encodedSession) {
-        setCacheValue('encodedSession', encodedSession);
+    let questionsWithoutInProgress = questions;
+    if (questions.length > 0 && !questions[questions.length -1].isCompleted) {
+        // pass only fully completed questions to not show loading indicator of question where we canceled API request
+        questionsWithoutInProgress = questionsWithoutInProgress.slice(0,-1);
     }
 
-    if (!cache[questions] && questions) {
-        setCacheValue('questions', questions);
+    const localizedQuestions = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
+        id: question.id,
+        label: formatMessage(messages[question.labelId]),
+        prompt: formatMessage(messages[question.promptId]),
+    }));
+
+    const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(fileExtension);
+
+    let spreadsheetNotice = isSpreadsheet ? formatMessage(messages.welcomeMessageSpreadsheetNotice) : '';
+    if (isIntelligentQueryMode) {
+        spreadsheetNotice = formatMessage(messages.welcomeMessageIntelligentQueryNotice);
+    } else if (isSpreadsheet) {
+        spreadsheetNotice = formatMessage(messages.welcomeMessageSpreadsheetNotice);
     }
-
-    React.useEffect(() => {
-        if (!encodedSession && createSession) {
-            createSession();
-        }
-
-        if (cacheQuestions.length > 0 && cacheQuestions[cacheQuestions.length-1].isCompleted === false) {
-            // if we have cache with question that is not completed resend it to trigger an API
-            sendQuestion({prompt: cacheQuestions[cacheQuestions.length-1].prompt});
-        }
-
-        return () => {
-            // stop API request on unmount (e.g. during switching to another tab)
-            stopQuestion();
-        }
-    }, []);
-
-    const renderBoxAISidebarTitle = () => {
-        return (
-            <div className="bcs-BoxAISidebar-title-part">
-                <Text as="h3" className="bcs-title">
-                    {formatMessage(messages.sidebarBoxAITitle)}
-                </Text>
-                {isAIStudioAgentSelectorEnabled &&
-                    <BoxAiAgentSelectorWithApi
-                        fetcher={getAIStudioAgents}
-                        onSelectAgent={onSelectAgent}
-                    />
-                }
-            </div>
-        );
-    };
-
-    const renderActions = () => (
-        <>
-            {renderBoxAISidebarTitle()}
-            <IconButton
-                aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
-                icon={Trash}
-                onClick={onClearAction}
-                size="x-small"
-            />
-        </>
-    );
 
     return (
-        <AgentsProvider>
-            <SidebarContent 
-                actions={renderActions()}
-                className="bcs-BoxAISidebar"
-                elementId={elementId}
-                sidebarView={SIDEBAR_VIEW_BOXAI}
-            >
-                <div className="bcs-BoxAISidebar-content">
-                    <BoxAiContentAnswers
-                        className="bcs-BoxAISidebar-contentAnswers"
-                        contentName={contentName}
-                        contentType={formatMessage(messages.sidebarBoxAIContent)}
-                        isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
-                        questions={questions}
-                        stopQuestion={stopQuestion}
-                        submitQuestion={sendQuestion}
-                        userInfo={userInfo}
-                        variant="sidebar"
-                        {...rest} 
-                    />
-                </div>
-            </SidebarContent>
-        </AgentsProvider>
+        <BoxAISidebarContext.Provider value={{elementId, contentName, userInfo, setCacheValue, cache}}>
+            <BoxAISidebarContent
+                itemID={fileID}
+                itemIDs={[fileID]}
+                restoredQuestions={questionsWithoutInProgress} 
+                restoredSession={cache.encodedSession}
+                suggestedQuestions={getSuggestedQuestions === null? localizedQuestions : []}
+                warningNotice={spreadsheetNotice}
+                warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
+                {...rest} 
+            />
+        </BoxAISidebarContext.Provider>
     );
 }
 
-export { BoxAISidebar as BoxAISidebarComponent };
-
-const BoxAISidebarDefaultExport: typeof withAPIContext = flow([
-    withLogger(ORIGIN_BOXAI_SIDEBAR),
-    withErrorBoundary(ORIGIN_BOXAI_SIDEBAR),
-    withAPIContext,
-    withApiWrapper, // returns only props for Box AI, keep it at the end
-])(BoxAISidebar);
-
-export default BoxAISidebarDefaultExport;
+export default BoxAISidebar;

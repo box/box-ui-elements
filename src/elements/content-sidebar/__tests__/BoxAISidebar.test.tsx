@@ -1,7 +1,7 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { screen, render } from '../../../test-utils/testing-library';
-import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebarContainer';
+import BoxAISidebarComponent, { BoxAISidebarProps } from '../BoxAISidebar';
 
 const mockOnClearClick = jest.fn();
 
