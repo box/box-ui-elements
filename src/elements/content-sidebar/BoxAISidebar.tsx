@@ -5,25 +5,27 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { useIntl } from 'react-intl';
-import { type QuestionType } from '@box/box-ai-content-answers';
+import { type RecordActionType, type QuestionType } from '@box/box-ai-content-answers';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 
 import messages from '../common/content-answers/messages';
 
 export interface BoxAISidebarContextValues {
+    cache: { encodedSession?: string | null, questions?: QuestionType[] },
     contentName: string,
     elementId: string,
+    recordAction: (params: RecordActionType) => void,
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,
-    cache: { encodedSession?: string | null, questions?: QuestionType[] },
     userInfo: { name: string, avatarUrl: string },
 };
 
 export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues>({
-    setCacheValue: noop,
     cache: null,
     contentName: '',
     elementId: '',
+    recordAction: noop,
+    setCacheValue: noop,
     userInfo: { name: '', avatarUrl: ''},
 });
 
@@ -60,20 +62,22 @@ export interface BoxAISidebarProps {
     isStopResponseEnabled: boolean;
     isStreamingEnabled: boolean;
     userInfo: { name: '', avatarUrl: ''},
+    recordAction: (params: RecordActionType) => void,
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
-    const { 
+    const {
+        cache,
+        contentName,
         elementId, 
         fileExtension,
         fileID,
-        contentName,
-        userInfo,
         getSuggestedQuestions,
         isIntelligentQueryMode,
-        cache,
+        recordAction,
         setCacheValue,
+        userInfo,
         ...rest
     } = props;
     const { questions } = cache;
@@ -100,7 +104,9 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     }
 
     return (
-        <BoxAISidebarContext.Provider value={{elementId, contentName, userInfo, setCacheValue, cache}}>
+        // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
+        // that's why we need to use provider to pass other props
+        <BoxAISidebarContext.Provider value={{cache, contentName, elementId, setCacheValue, recordAction, userInfo}}>
             <BoxAISidebarContent
                 itemID={fileID}
                 itemIDs={[fileID]}

@@ -38,13 +38,13 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         hostAppName,
         isAIStudioAgentSelectorEnabled, 
         onSelectAgent, 
-        questions, 
+        questions,
         sendQuestion, 
         stopQuestion, 
         ...rest 
     } = props;
     const { formatMessage } = useIntl();
-    const { cache, contentName, elementId, setCacheValue, userInfo } = React.useContext(BoxAISidebarContext);
+    const { cache, contentName, elementId, recordAction, setCacheValue, userInfo } = React.useContext(BoxAISidebarContext);
     const { questions: cacheQuestions } = cache;
 
     if (cache.encodedSession !== encodedSession) {
@@ -83,6 +83,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         fetcher={getAIStudioAgents}
                         hostAppName={hostAppName}
                         onSelectAgent={onSelectAgent}
+                        recordAction={recordAction}
                         shouldHideAgentSelectorOnLoad
                         variant="sidebar"
                     />
@@ -123,6 +124,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         submitQuestion={sendQuestion}
                         userInfo={userInfo}
                         variant="sidebar"
+                        recordAction={recordAction}
                         {...rest} 
                     />
                 </div>
