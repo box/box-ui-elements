@@ -5,7 +5,8 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { useIntl } from 'react-intl';
-import { type RecordActionType, type QuestionType } from '@box/box-ai-content-answers';
+import { type QuestionType } from '@box/box-ai-content-answers';
+import { RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 
