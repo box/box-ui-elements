@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import { flushSync } from 'react-dom';
 import { withRouter, type RouterHistory } from 'react-router-dom';
 
 import AddTaskMenu from './AddTaskMenu';
@@ -46,17 +45,13 @@ class AddTaskButton extends React.Component<Props, State> {
     };
 
     handleModalClose = () => {
-        flushSync(() => {
-            const { onTaskModalClose } = this.props;
-            this.setState({ isTaskFormOpen: false, error: null });
-            onTaskModalClose();
-        });
-
-        flushSync(() => {
+        const { onTaskModalClose } = this.props;
+        this.setState({ isTaskFormOpen: false, error: null }, () => {
             if (this.buttonRef.current) {
                 this.buttonRef.current.focus();
             }
         });
+        onTaskModalClose();
     };
 
     handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
