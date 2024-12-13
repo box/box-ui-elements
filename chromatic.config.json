@@ -1,4 +1,6 @@
 {
+    "autoAcceptChanges": "master",
     "buildScriptName": "build:prod:storybook",
-    "onlyStoryNames": ["Elements/*"]
+    "onlyStoryFiles": ["./src/**/stories/tests/*.stories.@(js|jsx|ts|tsx)"],
+    "skip": "mojito"
 }

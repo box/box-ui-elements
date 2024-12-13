@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { ACCESS_COLLAB, ACCESS_COMPANY, ACCESS_OPEN } from '../../../../constants';
-import { addRootElement, defaultVisualConfig } from '../../../../utils/storybook';
+import { addRootElement } from '../../../../utils/storybook';
 
 import ShareDialog, { ShareDialogProps } from '../../ShareDialog';
 
@@ -73,7 +73,4 @@ export const shareDialogShareAccessSelect = {
 export default {
     title: 'Elements/ContentExplorer/tests/ShareDialog/visual',
     component: ShareDialog,
-    parameters: {
-        ...defaultVisualConfig.parameters,
-    },
 };
