@@ -1,54 +1,48 @@
-/**
- * @flow
- * @file Item list component
- * @author Box
- */
-
 import * as React from 'react';
 import classNames from 'classnames';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Table, Column } from '@box/react-virtualized/dist/es/Table';
 import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';
 import nameCellRenderer from '../common/item/nameCellRenderer';
 import iconCellRenderer from '../common/item/iconCellRenderer';
 import { focus } from '../../utils/dom';
-import messages from '../common/messages';
 import headerCellRenderer from './headerCellRenderer';
 import sizeCellRenderer from './sizeCellRenderer';
 import dateCellRenderer from './dateCellRenderer';
 import moreOptionsCellRenderer from './moreOptionsCellRenderer';
 import { FIELD_DATE, FIELD_ID, FIELD_NAME, FIELD_SIZE, VIEW_FOLDER, VIEW_RECENTS } from '../../constants';
-import type { View, Collection } from '../../common/types/core';
+import type { BoxItem, Collection, View } from '../../common/types/core';
+
 import '@box/react-virtualized/styles.css';
 import './ItemList.scss';
 
-type Props = {
-    canDelete: boolean,
-    canDownload: boolean,
-    canPreview: boolean,
-    canRename: boolean,
-    canShare: boolean,
-    currentCollection: Collection,
-    focusedRow: number,
-    intl: IntlShape,
-    isMedium: boolean,
-    isSmall: boolean,
-    isTouch: boolean,
-    onItemClick: Function,
-    onItemDelete: Function,
-    onItemDownload: Function,
-    onItemPreview: Function,
-    onItemRename: Function,
-    onItemSelect: Function,
-    onItemShare: Function,
-    onSortChange: Function,
-    rootElement: HTMLElement,
-    rootId: string,
-    tableRef: Function,
-    view: View,
-};
+import messages from '../common/messages';
+
+export interface ItemListProps {
+    canDelete: boolean;
+    canDownload: boolean;
+    canPreview: boolean;
+    canRename: boolean;
+    canShare: boolean;
+    currentCollection: Collection;
+    focusedRow: number;
+    isMedium: boolean;
+    isSmall: boolean;
+    isTouch: boolean;
+    onItemClick: (item: BoxItem) => void;
+    onItemDelete: (item: BoxItem) => void;
+    onItemDownload: (item: BoxItem) => void;
+    onItemPreview: (item: BoxItem) => void;
+    onItemRename: (item: BoxItem) => void;
+    onItemSelect: (item: BoxItem) => void;
+    onItemShare: (item: BoxItem) => void;
+    onSortChange: (sortBy: string, sortDirection: string) => void;
+    rootElement: HTMLElement;
+    rootId: string;
+    tableRef: (ref: Table) => void;
+    view: View;
+}
 
 const ItemList = ({
     view,
@@ -73,8 +67,8 @@ const ItemList = ({
     currentCollection,
     tableRef,
     focusedRow,
-    intl,
-}: Props) => {
+}: ItemListProps) => {
+    const { formatMessage } = useIntl();
     const nameCell = nameCellRenderer(
         rootId,
         view,
@@ -87,7 +81,7 @@ const ItemList = ({
     const iconCell = iconCellRenderer();
     const dateCell = dateCellRenderer();
     const sizeAccessCell = sizeCellRenderer();
-    const moreOptionsCell = moreOptionsCellRenderer(
+    const moreOptionsCell = moreOptionsCellRenderer({
         canPreview,
         canShare,
         canDownload,
@@ -100,7 +94,7 @@ const ItemList = ({
         onItemShare,
         onItemPreview,
         isSmall,
-    );
+    });
     const isRecents: boolean = view === VIEW_RECENTS;
     const hasSort: boolean = view === VIEW_FOLDER;
     const { id, items = [], sortBy, sortDirection }: Collection = currentCollection;
@@ -173,7 +167,7 @@ const ItemList = ({
                             />
                             <Column
                                 disableSort={!hasSort}
-                                label={intl.formatMessage(messages.name)}
+                                label={formatMessage(messages.name)}
                                 dataKey={FIELD_NAME}
                                 cellRenderer={nameCell}
                                 headerRenderer={headerCellRenderer}
@@ -186,8 +180,8 @@ const ItemList = ({
                                     disableSort={!hasSort}
                                     label={
                                         isRecents
-                                            ? intl.formatMessage(messages.interacted)
-                                            : intl.formatMessage(messages.modified)
+                                            ? formatMessage(messages.interacted)
+                                            : formatMessage(messages.modified)
                                     }
                                     dataKey={FIELD_DATE}
                                     cellRenderer={dateCell}
@@ -200,7 +194,7 @@ const ItemList = ({
                                 <Column
                                     className="bce-item-column"
                                     disableSort={!hasSort}
-                                    label={intl.formatMessage(messages.size)}
+                                    label={formatMessage(messages.size)}
                                     dataKey={FIELD_SIZE}
                                     cellRenderer={sizeAccessCell}
                                     headerRenderer={headerCellRenderer}
@@ -224,4 +218,4 @@ const ItemList = ({
     );
 };
 
-export default injectIntl(ItemList);
+export default ItemList;

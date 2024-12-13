@@ -1,10 +1,4 @@
 /**
- * @flow
- * @file Function to create size in words out of number
- * @author Box
- */
-
-/**
  * Gets the size in words
  *
  * @param {number} value in bytes
