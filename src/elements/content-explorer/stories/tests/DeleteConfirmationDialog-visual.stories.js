@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { addRootElement, defaultVisualConfig } from '../../../../utils/storybook';
+import { addRootElement } from '../../../../utils/storybook';
 
 import DeleteConfirmationDialog from '../../DeleteConfirmationDialog';
 
@@ -28,7 +28,4 @@ export const deleteDialogIsLoading = {
 export default {
     title: 'Elements/ContentExplorer/tests/DeleteConfirmationDialog/visual',
     component: DeleteConfirmationDialog,
-    parameters: {
-        ...defaultVisualConfig.parameters,
-    },
 };
