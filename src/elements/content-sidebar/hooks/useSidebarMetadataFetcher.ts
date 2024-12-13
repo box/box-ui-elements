@@ -79,9 +79,9 @@ function useSidebarMetadataFetcher(
 
     const fetchMetadataSuccessCallback = React.useCallback(
         ({
-             templates: fetchedTemplates,
-             templateInstances: fetchedTemplateInstances,
-         }: {
+            templates: fetchedTemplates,
+            templateInstances: fetchedTemplateInstances,
+        }: {
             templates: Array<MetadataTemplate>;
             templateInstances: Array<MetadataTemplateInstance>;
         }) => {
@@ -225,9 +225,7 @@ function useSidebarMetadataFetcher(
                 return [];
             }
 
-            const templateInstance = templateInstances.find(
-                template => template.templateKey === templateKey && template.scope,
-            );
+            const templateInstance = templates.find(template => template.templateKey === templateKey && template.scope);
             const fields = templateInstance?.fields || [];
             return fields.map(field => {
                 const value = answer[field.key];
@@ -241,7 +239,7 @@ function useSidebarMetadataFetcher(
                 };
             });
         },
-        [api, file, onError, templateInstances],
+        [api, file, onError, templateInstances, templates],
     );
 
     React.useEffect(() => {

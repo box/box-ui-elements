@@ -6,6 +6,7 @@ import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
+    aiSuggestionForDateField,
     aiSuggestionsForMyAttribute,
     fileIdWithMetadata,
     fileIdWithoutMetadata,
@@ -476,6 +477,44 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
 
         const input = canvas.getByLabelText('My Attribute');
         expect(input).toHaveValue('it works fine');
+    },
+};
+
+export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
+    },
+    parameters: {
+        ...defaultVisualConfig.parameters,
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post(aiSuggestionsForMyAttribute.url, () => HttpResponse.json(aiSuggestionForDateField.response)),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        expect(addTemplateButton).toBeInTheDocument();
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Date Template' });
+        expect(customMetadataOption).toBeInTheDocument();
+        await userEvent.click(customMetadataOption);
+
+        const templateHeader = await canvas.findByRole('heading', { name: 'Date Template' });
+        expect(templateHeader).toBeInTheDocument();
+
+        const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
+        userEvent.click(autofillButton);
+
+        const suggestion = await canvas.findByText('4/1/2024');
+        expect(suggestion).toBeInTheDocument();
     },
 };
 
