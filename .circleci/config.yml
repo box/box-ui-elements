@@ -1,135 +1,148 @@
-aliases:
-  - &yarn
-    name: Installing dependencies
-    command: yarn install --non-interactive --frozen-lockfile --cache-folder ~/.cache/yarn
+version: 2.1
 
-  - &clean
-    name: Cleaning
-    command: yarn cache clean
+executors:
+  default:
+    docker:
+      - image: cimg/node:18.18
+        user: root
+    resource_class: large
+    working_directory: ~/buie
+  cypress-executor:
+    docker:
+      - image: cypress/included:13.13.0
+        user: root
+    resource_class: large
+    working_directory: ~/buie
 
-  - &i18n
-    name: Building locales
-    command: yarn build:i18n
+commands:
+  yarn-install:
+    steps:
+      - run:
+          name: Installing dependencies
+          command: yarn install --non-interactive --frozen-lockfile --cache-folder /node_modules
 
-  - &build
-    name: Building project
-    command: yarn build:prod:npm
+  build-locales:
+    steps:
+      - run:
+          name: Building locales
+          command: yarn --cwd /buie build:i18n
 
-  - &restore-yarn-cache
-    keys:
-        - yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
-        - yarn-cache-{{ .Branch }}-
+  build-project:
+    steps:
+      - run:
+          name: Building project
+          command: yarn --cwd /buie build:prod:npm
 
-  - &save-yarn-cache
-    paths:
-      - ~/.cache/yarn
-      - node_modules
-    key: yarn-cache-{{ .Branch }}-{{ checksum "yarn.lock" }}
+  restore-yarn-cache:
+    steps:
+      - restore_cache:
+          keys:
+            - yarn-cache-v5-{{ checksum "yarn.lock" }}
 
-  - &prepare-cache
-    name: Prepare Yarn Cache
-    command: |
-        mkdir -p ~/.cache/yarn
-        chown -R $(whoami) ~/.cache/yarn
+  save-yarn-cache:
+    steps:
+      - save_cache:
+          key: yarn-cache-v5-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
 
-defaults: &defaults
-  resource_class: large
-  working_directory: ~/buie
-  docker:
-    - image: cimg/node:18.18
-
-version: 2
+  setup-workspace:
+    steps:
+      - attach_workspace:
+          at: /buie
 
 jobs:
-  lint:
-    <<: *defaults
+  setup:
+    executor: default
     steps:
       - checkout
-      - run: *prepare-cache
-      - restore-cache: *restore-yarn-cache
-      - run: *yarn
-      - save-cache: *save-yarn-cache
-      - run: *clean
-      - run: *i18n
+      - restore-yarn-cache
+      - yarn-install
+      - save-yarn-cache
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  lint:
+    executor: default
+    steps:
+      - checkout
+      - setup-workspace
+      - build-locales
       - run:
           name: Commit lint
-          command: ./scripts/commitlint.sh
+          command: /buie/scripts/commitlint.sh
       - run:
           name: Code lint
-          command: yarn lint
+          command: yarn --cwd /buie lint
 
   flow:
-      <<: *defaults
-      steps:
-        - checkout
-        - run: *prepare-cache
-        - restore-cache: *restore-yarn-cache
-        - run: *yarn
-        - save-cache: *save-yarn-cache
-        - run: *clean
-        - run:
-            name: Flow
-            command: yarn flow check
-
-  build-unit-tests:
-    <<: *defaults
+    executor: default
     steps:
       - checkout
-      - run: *prepare-cache
-      - restore-cache: *restore-yarn-cache
-      - run: *yarn
-      - save-cache: *save-yarn-cache
-      - run: *clean
-      - run: *i18n
+      - setup-workspace
+      - run:
+          name: Flow
+          command: yarn --cwd /buie flow check
+
+  build-unit-tests:
+    executor: default
+    steps:
+      - checkout
+      - setup-workspace
+      - build-locales
       - run:
           name: Babel build
-          command: yarn build:ci:es
+          command: yarn --cwd /buie build:ci:es
       - run:
           name: Checking locales and styles
-          command: ./scripts/check_generated_files.sh
+          command: /buie/scripts/check_generated_files.sh
       - run:
           name: Webpack build
-          command: yarn build:ci:dist
+          command: yarn --cwd /buie build:ci:dist
       - run: echo 'export TZ=America/Los_Angeles' >> $BASH_ENV
       - run:
           name: Unit tests
-          command: yarn test --maxWorkers=3
+          command: yarn --cwd /buie test --maxWorkers=3
 
   e2e-tests:
-    <<: *defaults
-    docker:
-      - image: cypress/included:13.13.0
-    steps:
-      - checkout
-      - run: *prepare-cache
-      - restore-cache: *restore-yarn-cache
-      - run: *yarn
-      - save-cache: *save-yarn-cache
-      - run:
-          name: E2E tests
-          command: yarn test:e2e
+   executor: cypress-executor
+   steps:
+     - checkout
+     - setup-workspace
+     - run:
+         name: Cypress run
+         command: yarn --cwd /buie test:e2e
 
   chromatic-deploy:
-    <<: *defaults
+    executor: default
     steps:
-        - checkout
-        - run: *prepare-cache
-        - restore-cache: *restore-yarn-cache
-        - run: *yarn
-        - save-cache: *save-yarn-cache
-        - run: *clean
-        - run: *i18n
-        - run: *build
-        - run:
-            name: Chromatic
-            command: yarn chromatic
+      - checkout
+      - setup-workspace
+      - build-locales
+      - build-project
+      - run:
+          name: Chromatic
+          command: yarn --cwd /buie chromatic
 
 workflows:
   version: 2
   lint_test_build:
     jobs:
-      - lint
-      - flow
-      - build-unit-tests
-      - e2e-tests
-      - chromatic-deploy
+      - setup
+      - lint:
+          requires:
+            - setup
+      - flow:
+          requires:
+            - setup
+      - build-unit-tests:
+          requires:
+            - setup
+      - e2e-tests:
+          requires:
+            - setup
+      - chromatic-deploy:
+          requires:
+            - setup
