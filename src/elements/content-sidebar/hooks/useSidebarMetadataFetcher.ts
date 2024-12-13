@@ -239,7 +239,7 @@ function useSidebarMetadataFetcher(
                 };
             });
         },
-        [api, file, onError, templateInstances, templates],
+        [api, file, onError, templates],
     );
 
     React.useEffect(() => {
