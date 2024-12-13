@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
+import { flushSync } from 'react-dom';
 import { withRouter, type RouterHistory } from 'react-router-dom';
+
 import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
@@ -44,12 +46,17 @@ class AddTaskButton extends React.Component<Props, State> {
     };
 
     handleModalClose = () => {
-        const { onTaskModalClose } = this.props;
-        this.setState({ isTaskFormOpen: false, error: null });
-        if (this.buttonRef.current) {
-            this.buttonRef.current.focus();
-        }
-        onTaskModalClose();
+        flushSync(() => {
+            const { onTaskModalClose } = this.props;
+            this.setState({ isTaskFormOpen: false, error: null });
+            onTaskModalClose();
+        });
+
+        flushSync(() => {
+            if (this.buttonRef.current) {
+                this.buttonRef.current.focus();
+            }
+        });
     };
 
     handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
