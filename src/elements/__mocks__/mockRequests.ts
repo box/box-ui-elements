@@ -2,6 +2,11 @@ import { DEFAULT_HOSTNAME_API } from '../../constants';
 
 const apiV2Path = `${DEFAULT_HOSTNAME_API}/2.0`;
 
+export const mockEventRequest = {
+    url: `${apiV2Path}/events`,
+    response: {},
+};
+
 export const mockUserRequest = {
     url: `${apiV2Path}/users/me`,
     response: {
@@ -20,7 +25,6 @@ export const mockUserRequest = {
         job_title: '',
         phone: '',
         address: '',
-        avatar_url: 'https://previewteam.app.box.com/api/avatar/large/7504104663',
         notification_email: null,
     },
 };
@@ -57,53 +61,9 @@ export const mockFileRequest = {
         name: 'Document (PDF).pdf',
         size: 792687,
         extension: 'pdf',
-        representations: {
-            entries: [
-                {
-                    representation: 'jpg',
-                    properties: {
-                        dimensions: '1024x1024',
-                        paged: 'false',
-                        thumb: 'false',
-                    },
-                    info: {
-                        url: 'https://api.box.com/2.0/internal_files/415542803939/versions/780895440222/representations/jpg_1024x1024',
-                    },
-                    status: {
-                        state: 'success',
-                    },
-                    content: {
-                        url_template:
-                            'https://dl.boxcloud.com/api/2.0/internal_files/415542803939/versions/780895440222/representations/jpg_1024x1024/content/{+asset_path}',
-                    },
-                },
-                {
-                    representation: 'png',
-                    properties: {
-                        dimensions: '2048x2048',
-                        paged: 'true',
-                        thumb: 'false',
-                    },
-                    info: {
-                        url: 'https://api.box.com/2.0/internal_files/415542803939/versions/780895440222/representations/png_paged_2048x2048',
-                    },
-                    status: {
-                        state: 'success',
-                    },
-                    content: {
-                        url_template:
-                            'https://dl.boxcloud.com/api/2.0/internal_files/415542803939/versions/780895440222/representations/png_paged_2048x2048/content/{+asset_path}',
-                    },
-                    metadata: {
-                        pages: 2,
-                    },
-                },
-            ],
-        },
         watermark_info: {
             is_watermarked: false,
         },
-        authenticated_download_url: 'https://dl.boxcloud.com/api/2.0/files/415542803939/content',
         is_download_available: true,
     },
 };

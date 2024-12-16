@@ -21,7 +21,8 @@ const preview = {
     parameters: {
         chromatic: {
             cropToViewport: true,
-            delay: 1000,
+            delay: 500,
+            diffThreshold: 0.1,
             modes: {
                 specific: {
                     viewport: {

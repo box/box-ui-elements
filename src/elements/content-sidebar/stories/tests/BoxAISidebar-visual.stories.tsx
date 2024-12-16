@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
 import { mockAgents } from '../__mocks__/BoxAISidebarMocks';
-import { mockFileRequest } from '../../../__mocks__/mockRequests';
+import { mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
 
 const mockFeatures = {
     'boxai.sidebar.enabled': true,
@@ -65,6 +65,9 @@ export default {
     parameters: {
         msw: {
             handlers: [
+                http.get(mockUserRequest.url, () => {
+                    return HttpResponse.json(mockUserRequest.response);
+                }),
                 http.get(mockFileRequest.url, () => {
                     return HttpResponse.json(mockFileRequest.response);
                 }),

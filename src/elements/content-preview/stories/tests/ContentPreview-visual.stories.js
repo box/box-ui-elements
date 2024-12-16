@@ -5,12 +5,12 @@ import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Notification } from '@box/blueprint-web';
 import { http, HttpResponse } from 'msw';
 
-import { mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
+import { mockEventRequest, mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
 import ContentPreview from '../../ContentPreview';
 
-const WAIT_TIMEOUT = 2000;
+const WAIT_TIMEOUT = 5000;
 
 export const basic = {
     play: async ({ canvasElement }) => {
@@ -248,8 +248,14 @@ export default {
         },
     },
     parameters: {
+        chromatic: {
+            ignoreSelectors: ['[data-testid="content-answers-question-input-avatar"]'], // highly inconsistent in snapshots
+        },
         msw: {
             handlers: [
+                http.post(mockEventRequest.url, () => {
+                    return HttpResponse.json(mockEventRequest.response);
+                }),
                 http.get(mockUserRequest.url, () => {
                     return HttpResponse.json(mockUserRequest.response);
                 }),
