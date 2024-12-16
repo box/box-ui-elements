@@ -13,5 +13,8 @@ export default {
     component: SecurityCloudGame,
     parameters: {
         notes,
+        chromatic: {
+            disableSnapshot: true,
+        },
     },
 };

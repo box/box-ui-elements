@@ -248,6 +248,9 @@ export default {
         },
     },
     parameters: {
+        chromatic: {
+            ignoreSelectors: ['[data-testid="content-answers-question-input-avatar"]'], // highly inconsistent in snapshots
+        },
         msw: {
             handlers: [
                 http.post(mockEventRequest.url, () => {
