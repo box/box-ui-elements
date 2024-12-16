@@ -24,17 +24,13 @@ const token = global.TOKEN;
 const defaultMetadataArgs = {
     fileId: fileIdWithMetadata,
     isFeatureEnabled: true,
-    onError: fn,
-    onSuccess: () => {
-        console.log('success');
-    },
+    onError: fn(),
+    onSuccess: fn(),
 };
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
     isFeatureEnabled: true,
-    onError: fn,
-    onSuccess: () => {
-        console.log('success');
-    },
+    onError: fn(),
+    onSuccess: fn(),
 };
 const mockFeatures = {
     'metadata.redesign.enabled': true,
@@ -67,10 +63,8 @@ export const AddTemplateDropdownMenuOnEmpty = {
         metadataSidebarProps: {
             isBoxAiSuggestionsEnabled: true,
             isFeatureEnabled: true,
-            onError: fn,
-            onSuccess: () => {
-                console.log('success');
-            },
+            onError: fn(),
+            onSuccess: fn(),
         },
     },
     play: async ({ canvasElement }) => {
