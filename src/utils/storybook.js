@@ -17,13 +17,3 @@ export const addRootElement = () => {
 };
 
 export const SLEEP_TIMEOUT = 500;
-
-export const enableSnapshotsParams = {
-    chromatic: { disableSnapshot: false },
-};
-
-export const defaultVisualConfig = {
-    parameters: {
-        ...enableSnapshotsParams,
-    },
-};

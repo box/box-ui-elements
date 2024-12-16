@@ -57,12 +57,11 @@ const helpers = {
     getShareButton(rowNum) {
         return this.getRow(rowNum).contains(localize('be.share'));
     },
-    // using data-testid since more options button has "..." for text
     getMoreOptionsButton(rowNum) {
-        return this.getRow(rowNum).find('[data-testid="bce-btn-more-options"]');
+        return this.getRow(rowNum).find(`[aria-label="${localize('be.moreOptions')}"]`);
     },
     getAllMoreOptionsButtons() {
-        return cy.get('[data-testid="bce-btn-more-options"]');
+        return cy.getByAriaLabel(localize('be.moreOptions'));
     },
     // need exact match since 'Rename' appears elsewhere on the page
     getRenameButton() {

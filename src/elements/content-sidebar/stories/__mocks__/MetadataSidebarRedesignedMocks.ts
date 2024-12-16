@@ -6,7 +6,7 @@ export const fileIdWithoutMetadata = '416047501580';
 const apiV2Path = `${DEFAULT_HOSTNAME_API}/2.0`;
 
 export const mockFileRequest = {
-    url: `${apiV2Path}/files/${fileIdWithMetadata}?fields=is_externally_owned,permissions`,
+    url: `${apiV2Path}/files/${fileIdWithMetadata}`,
     response: {
         type: 'file',
         id: fileIdWithMetadata,
@@ -33,7 +33,7 @@ export const mockFileRequest = {
 };
 
 export const mockFileRequestWithoutMetadata = {
-    url: `${apiV2Path}/files/${fileIdWithoutMetadata}?fields=is_externally_owned,permissions`,
+    url: `${apiV2Path}/files/${fileIdWithoutMetadata}`,
     response: {
         type: 'file',
         id: fileIdWithoutMetadata,
@@ -59,7 +59,7 @@ export const mockFileRequestWithoutMetadata = {
 };
 
 export const mockGlobalMetadataTemplates = {
-    url: `${apiV2Path}/metadata_templates/global?limit=1000`,
+    url: `${apiV2Path}/metadata_templates/global`,
     response: {
         entries: [],
     },
@@ -115,7 +115,7 @@ export const mockMetadataInstances = {
 };
 
 export const mockEnterpriseMetadataTemplates = {
-    url: `${apiV2Path}/metadata_templates/enterprise?limit=1000`,
+    url: `${apiV2Path}/metadata_templates/enterprise`,
     response: {
         limit: 1000,
         entries: [
@@ -313,6 +313,24 @@ export const mockEnterpriseMetadataTemplates = {
                     },
                 ],
             },
+            {
+                id: 'dc864980-9e7f-45ca-9c8a-454367642fsdf3',
+                type: 'metadata_template',
+                templateKey: 'date_template',
+                scope: 'enterprise_173733877',
+                displayName: 'Date Template',
+                hidden: false,
+                copyInstanceOnItemCopy: false,
+                fields: [
+                    {
+                        id: 'ffbca749-771b-4399-8c93-4534fsdgs3423',
+                        type: 'date',
+                        key: 'dateField',
+                        displayName: 'Date Field',
+                        hidden: false,
+                    },
+                ],
+            },
         ],
         next_marker: null,
         prev_marker: null,
@@ -338,6 +356,13 @@ export const aiSuggestionsForMyAttribute = {
     url: `${apiV2Path}/ai/extract_structured`,
     response: {
         myAttribute: 'it works fine',
+    },
+};
+
+export const aiSuggestionForDateField = {
+    url: `${apiV2Path}/ai/extract_structured`,
+    response: {
+        dateField: '2024-04-01T00:00:00Z',
     },
 };
 

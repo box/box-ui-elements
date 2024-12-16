@@ -20,15 +20,6 @@ const mockFile = {
 
 const mockTemplates = [
     {
-        id: 'metadata_template_custom_1',
-        scope: 'global',
-        templateKey: 'properties',
-        hidden: false,
-    },
-];
-
-const mockTemplateInstances = [
-    {
         canEdit: true,
         id: 'metadata_template_instance_1',
         fields: [
@@ -45,9 +36,16 @@ const mockTemplateInstances = [
         ],
         scope: 'global',
         templateKey: 'templateKey',
-        type: 'properties',
+    },
+    {
+        id: 'metadata_template_custom_1',
+        scope: 'global',
+        templateKey: 'properties',
         hidden: false,
     },
+];
+
+const mockTemplateInstances = [
     {
         canEdit: true,
         id: 'metadata_template_instance_2',
@@ -331,13 +329,13 @@ describe('useSidebarMetadataFetcher', () => {
 
             const { result } = setupHook();
 
-            expect(result.current.templateInstances).toEqual(mockTemplateInstances);
+            expect(result.current.templates).toEqual(mockTemplates);
 
             const suggestions = await result.current.extractSuggestions('templateKey', 'global');
 
             expect(suggestions).toEqual([
-                { ...mockTemplateInstances[0].fields[0], aiSuggestion: 'value1' },
-                { ...mockTemplateInstances[0].fields[1], aiSuggestion: 'value2' },
+                { ...mockTemplates[0].fields[0], aiSuggestion: 'value1' },
+                { ...mockTemplates[0].fields[1], aiSuggestion: 'value2' },
             ]);
         });
 

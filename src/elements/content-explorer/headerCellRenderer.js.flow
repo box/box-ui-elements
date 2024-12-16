@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Function to render the date table cell
- * @author Box
- */
-
 import * as React from 'react';
 import IconChevron from '../../icons/general/IconChevron';
 import { SORT_ASC, COLOR_999 } from '../../constants';
@@ -15,10 +9,15 @@ type Props = {
     dataKey: SortBy,
     label: string,
     sortBy: SortBy,
-    sortDirection: SortDirection,
+    sortDirection: SortDirection
 };
 
-export default ({ dataKey, label, sortBy, sortDirection }: Props) => {
+export default ({
+    dataKey,
+    label,
+    sortBy,
+    sortDirection,
+}: Props) => {
     const by = sortBy && sortBy.toLowerCase();
     const direction = sortDirection === SORT_ASC ? 'up' : 'down';
     return (

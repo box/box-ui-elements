@@ -20,7 +20,6 @@ initialize();
 const preview = {
     parameters: {
         chromatic: {
-            disableSnapshot: true,
             cropToViewport: true,
             modes: {
                 specific: {

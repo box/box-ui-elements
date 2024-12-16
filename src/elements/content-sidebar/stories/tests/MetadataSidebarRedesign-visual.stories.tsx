@@ -1,11 +1,11 @@
 import { type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
-import { expect, userEvent, within, fn, screen } from '@storybook/test';
+import { expect, userEvent, waitFor, within, fn, screen } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
-import { defaultVisualConfig } from '../../../../utils/storybook';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
+    aiSuggestionForDateField,
     aiSuggestionsForMyAttribute,
     fileIdWithMetadata,
     fileIdWithoutMetadata,
@@ -17,6 +17,7 @@ import {
     mockGlobalMetadataTemplates,
     mockMetadataInstances,
 } from '../__mocks__/MetadataSidebarRedesignedMocks';
+import { mockUserRequest } from '../../../__mocks__/mockRequests';
 
 const token = global.TOKEN;
 
@@ -71,7 +72,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
         await userEvent.click(addTemplateButton);
 
         const options = canvas.getAllByRole('option');
-        expect(options).toHaveLength(4);
+        expect(options).toHaveLength(5);
         options.forEach(option => {
             expect(option).not.toHaveAttribute('disabled');
         });
@@ -82,21 +83,29 @@ export const FilterInstancesDropdown = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const filterInstancesButton = await canvas.findByRole('combobox');
+        await waitFor(
+            async () => {
+                const filterInstancesButton = await canvas.findByRole('combobox');
 
-        expect(filterInstancesButton).toBeInTheDocument();
-        await userEvent.click(filterInstancesButton);
+                expect(filterInstancesButton).toBeInTheDocument();
+                await userEvent.click(filterInstancesButton);
 
-        const firstOption = canvas.getByRole('option', { name: 'My Template' });
-        expect(firstOption).toBeInTheDocument();
-        const secondOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
-        expect(secondOption).toBeInTheDocument();
-        const thirdOption = canvas.getByRole('option', { name: 'Custom Metadata' });
-        expect(thirdOption).toBeInTheDocument();
+                const firstOption = canvas.getByRole('option', { name: 'My Template' });
+                expect(firstOption).toBeInTheDocument();
+                const secondOption = canvas.getByRole('option', { name: 'Select Dropdowns' });
+                expect(secondOption).toBeInTheDocument();
+                const thirdOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+                expect(thirdOption).toBeInTheDocument();
+            },
+            { timeout: 2000 },
+        );
     },
 };
 
 const defaultMockHandlers = [
+    http.get(mockUserRequest.url, () => {
+        return HttpResponse.json(mockUserRequest.response);
+    }),
     http.get(mockFileRequest.url, () => {
         return HttpResponse.json(mockFileRequest.response);
     }),
@@ -116,27 +125,6 @@ const defaultMockHandlers = [
         return HttpResponse.json(mockEnterpriseMetadataTemplates.response);
     }),
 ];
-
-export default {
-    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
-    component: ContentSidebar,
-    args: {
-        token,
-        metadataSidebarProps: {
-            ...defaultMetadataArgs,
-        },
-        hasMetadata: true,
-        features: mockFeatures,
-        fileId: fileIdWithMetadata,
-        logger: mockLogger,
-    },
-    parameters: {
-        ...defaultVisualConfig.parameters,
-        msw: {
-            handlers: defaultMockHandlers,
-        },
-    },
-};
 
 export const AddingNewMetadataTemplate: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {
@@ -232,7 +220,7 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
         await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
@@ -418,7 +406,6 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -450,7 +437,6 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -479,9 +465,45 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
     },
 };
 
+export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+        },
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.post(aiSuggestionsForMyAttribute.url, () => HttpResponse.json(aiSuggestionForDateField.response)),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+        expect(addTemplateButton).toBeInTheDocument();
+        await userEvent.click(addTemplateButton);
+
+        const customMetadataOption = canvas.getByRole('option', { name: 'Date Template' });
+        expect(customMetadataOption).toBeInTheDocument();
+        await userEvent.click(customMetadataOption);
+
+        const templateHeader = await canvas.findByRole('heading', { name: 'Date Template' });
+        expect(templateHeader).toBeInTheDocument();
+
+        const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
+        userEvent.click(autofillButton);
+
+        const suggestion = await canvas.findByText('4/1/2024');
+        expect(suggestion).toBeInTheDocument();
+    },
+};
+
 export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
                 ...defaultMockHandlers,
@@ -512,5 +534,25 @@ export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
             'An error has occurred while updating metadata. Please refresh the page and try again.',
         );
         expect(errorAlert).toBeInTheDocument();
+    },
+};
+
+export default {
+    title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
+    component: ContentSidebar,
+    args: {
+        token,
+        metadataSidebarProps: {
+            ...defaultMetadataArgs,
+        },
+        hasMetadata: true,
+        features: mockFeatures,
+        fileId: fileIdWithMetadata,
+        logger: mockLogger,
+    },
+    parameters: {
+        msw: {
+            handlers: defaultMockHandlers,
+        },
     },
 };

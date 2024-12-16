@@ -5,14 +5,17 @@ import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Notification } from '@box/blueprint-web';
 import { http, HttpResponse } from 'msw';
 
+import { mockEventRequest, mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
-import { defaultVisualConfig } from '../../../../utils/storybook';
+
 import ContentPreview from '../../ContentPreview';
+
+const WAIT_TIMEOUT = 5000;
 
 export const basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -36,7 +39,7 @@ export const basic = {
 export const closeModal = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -52,7 +55,7 @@ export const closeModal = {
 export const submitAnswer = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -76,7 +79,7 @@ export const submitAnswer = {
 export const clickOnSuggestion = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -97,7 +100,7 @@ export const clickOnSuggestion = {
 export const hoverOverCitation = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -129,7 +132,7 @@ export const citationDisabled = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -150,7 +153,7 @@ export const citationDisabled = {
 export const clearConversation = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -177,7 +180,7 @@ export const clearConversation = {
 export const markdownEnabled = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -206,7 +209,7 @@ export const markdownDisabled = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: 5000 });
+        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
         expect(button).toBeInTheDocument();
         await userEvent.click(button);
 
@@ -245,9 +248,17 @@ export default {
         },
     },
     parameters: {
-        ...defaultVisualConfig.parameters,
         msw: {
             handlers: [
+                http.post(mockEventRequest.url, () => {
+                    return HttpResponse.json(mockEventRequest.response);
+                }),
+                http.get(mockUserRequest.url, () => {
+                    return HttpResponse.json(mockUserRequest.response);
+                }),
+                http.get(mockFileRequest.url, () => {
+                    return HttpResponse.json(mockFileRequest.response);
+                }),
                 http.post(`${DEFAULT_HOSTNAME_API}/2.0/ai/ask`, async ({ request }) => {
                     const body = await request.json();
                     switch (body.prompt) {
