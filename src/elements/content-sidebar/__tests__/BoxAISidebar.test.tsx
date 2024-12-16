@@ -120,6 +120,12 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
     });
 
+    test('should not have accessible "Clear" button if isResetChatEnabled is false', async () => {
+        await renderComponent({ isResetChatEnabled: false });
+
+        expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument();
+    });
+
     test('should call onClearClick when click "Clear" button', async () => {
         await renderComponent();
 

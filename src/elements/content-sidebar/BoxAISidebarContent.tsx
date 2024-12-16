@@ -37,6 +37,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         getAIStudioAgents,
         hostAppName,
         isAIStudioAgentSelectorEnabled, 
+        isResetChatEnabled,
         onSelectAgent, 
         questions,
         sendQuestion, 
@@ -95,13 +96,15 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
 
     const renderActions = () => (
         <>
-            {renderBoxAISidebarTitle()}
-            <IconButton
-                aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
-                icon={Trash}
-                onClick={onClearAction}
-                size="x-small"
-            />
+            { renderBoxAISidebarTitle() }
+            { isResetChatEnabled && 
+                <IconButton
+                    aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
+                    icon={Trash}
+                    onClick={onClearAction}
+                    size="x-small"
+                />
+            }
         </>
     );
 
@@ -120,6 +123,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         contentType={formatMessage(messages.sidebarBoxAIContent)}
                         hostAppName={hostAppName}
                         isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                        isResetChatEnabled={isResetChatEnabled}
                         questions={questions}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
