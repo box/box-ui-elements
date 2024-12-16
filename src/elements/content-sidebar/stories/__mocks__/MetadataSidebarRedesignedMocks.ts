@@ -84,6 +84,7 @@ export const mockMetadataInstances = {
                 $typeVersion: 1,
                 $template: 'myTemplate',
                 $scope: 'enterprise_173733877',
+                $templateKey: 'myTemplate',
                 myAttribute: 'My Value',
                 $canEdit: true,
             },

@@ -25,10 +25,16 @@ const defaultMetadataArgs = {
     fileId: fileIdWithMetadata,
     isFeatureEnabled: true,
     onError: fn,
+    onSuccess: () => {
+        console.log('success');
+    },
 };
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
     isFeatureEnabled: true,
     onError: fn,
+    onSuccess: () => {
+        console.log('success');
+    },
 };
 const mockFeatures = {
     'metadata.redesign.enabled': true,
@@ -62,6 +68,9 @@ export const AddTemplateDropdownMenuOnEmpty = {
             isBoxAiSuggestionsEnabled: true,
             isFeatureEnabled: true,
             onError: fn,
+            onSuccess: () => {
+                console.log('success');
+            },
         },
     },
     play: async ({ canvasElement }) => {

@@ -26,6 +26,9 @@ const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign
     isBoxAiSuggestionsEnabled: true,
     isFeatureEnabled: true,
     onError: fn,
+    onSuccess: () => {
+        console.log('success');
+    },
 };
 
 export default {
