@@ -346,15 +346,19 @@ class SidebarPanels extends React.Component<Props, State> {
                         exact
                         path={[
                             `/${SIDEBAR_VIEW_METADATA}`,
-                            `/${SIDEBAR_VIEW_METADATA}/filteredTemplates/:filteredTemplateIds?`
+                            `/${SIDEBAR_VIEW_METADATA}/filteredTemplates/:filteredTemplateIds?`,
                         ]}
-                        render={({match}) => {
+                        render={({ match }) => {
                             this.handlePanelRender(SIDEBAR_VIEW_METADATA);
                             return isMetadataSidebarRedesignEnabled ? (
                                 <LoadableMetadataSidebarRedesigned
                                     elementId={elementId}
                                     fileId={fileId}
-                                    filteredTemplateIds={match.params.filteredTemplateIds}
+                                    filteredTemplateIds={
+                                        match.params.filteredTemplateIds
+                                            ? match.params.filteredTemplateIds.split(',')
+                                            : []
+                                    }
                                     hasSidebarInitialized={isInitialized}
                                     isBoxAiSuggestionsEnabled={isMetadataAiSuggestionsEnabled}
                                     ref={this.metadataSidebar}

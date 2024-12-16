@@ -12,13 +12,19 @@ const historyMockDefault = {
 };
 
 const deeplinkedMetadataHistoryMock = {
-    location: { pathname: '/metadata/filteredTemplates/123', hash: '' },
+    location: { pathname: '/metadata/filteredTemplates/123,124', hash: '' },
     listen: jest.fn(),
     push: jest.fn(),
     entries: [{}],
-}
+};
 
-const getWrapper = ({ collection = ['a', 'b', 'c'], historyMock = historyMockDefault,  onNavigateLeft = noop, onNavigateRight = noop, ...rest }) =>
+const getWrapper = ({
+    collection = ['a', 'b', 'c'],
+    historyMock = historyMockDefault,
+    onNavigateLeft = noop,
+    onNavigateRight = noop,
+    ...rest
+}) =>
     mount(
         <Router history={historyMock}>
             <PreviewNavigation
@@ -86,16 +92,36 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(onNavigateRightMock).toHaveBeenCalled();
         });
 
-        test('should render navigation correctly from metadata deeplinked URL ', () => {
+        test('should render right navigation correctly from metadata deeplinked URL ', () => {
             const onNavigateRightMock = jest.fn();
-            const wrapper = getWrapper({ currentIndex: 0, historyMock: deeplinkedMetadataHistoryMock, onNavigateRight: onNavigateRightMock });
+            const wrapper = getWrapper({
+                currentIndex: 0,
+                historyMock: deeplinkedMetadataHistoryMock,
+                onNavigateRight: onNavigateRightMock,
+            });
 
             expect(wrapper.find('PlainButton')).toHaveLength(1);
             wrapper.find('PlainButton').simulate('click');
 
             expect(deeplinkedMetadataHistoryMock.push).toBeCalledTimes(1);
-            expect(deeplinkedMetadataHistoryMock.push).toBeCalledWith('/metadata/filteredTemplates/123');
+            expect(deeplinkedMetadataHistoryMock.push).toBeCalledWith('/metadata/filteredTemplates/123,124');
             expect(onNavigateRightMock).toHaveBeenCalled();
+        });
+
+        test('should render left navigation correctly from metadata deeplinked URL ', () => {
+            const onNavigateLeftMock = jest.fn();
+            const wrapper = getWrapper({
+                currentIndex: 2,
+                historyMock: deeplinkedMetadataHistoryMock,
+                onNavigateLeft: onNavigateLeftMock,
+            });
+
+            expect(wrapper.find('PlainButton')).toHaveLength(1);
+            wrapper.find('PlainButton').simulate('click');
+
+            expect(deeplinkedMetadataHistoryMock.push).toBeCalledTimes(1);
+            expect(deeplinkedMetadataHistoryMock.push).toBeCalledWith('/metadata/filteredTemplates/123,124');
+            expect(onNavigateLeftMock).toHaveBeenCalled();
         });
     });
 });

@@ -67,7 +67,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/details/versions'}               | ${'VersionsSidebar'}
             ${'/details/versions/1234'}          | ${'VersionsSidebar'}
             ${'/metadata'}                       | ${'MetadataSidebar'}
-            ${'/metadata/filteredTemplates/123'} | ${'MetadataSidebar'}
+            ${'/metadata/filteredTemplates/1,3'} | ${'MetadataSidebar'}
             ${'/skills'}                         | ${'SkillsSidebar'}
             ${'/boxai'}                          | ${'BoxAISidebar'}
             ${'/docgen'}                         | ${'DocGenSidebar'}
@@ -158,7 +158,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 ${'/details/versions'}               | ${'versions-sidebar'} | ${'activity'} | ${'details'}
                 ${'/details/versions/1234'}          | ${'versions-sidebar'} | ${'activity'} | ${'details'}
                 ${'/metadata'}                       | ${'metadata-sidebar'} | ${'details'}  | ${'metadata'}
-                ${'/metadata/filteredTemplates/123'} | ${'metadata-sidebar'} | ${'details'}  | ${'metadata'}
+                ${'/metadata/filteredTemplates/1,3'} | ${'metadata-sidebar'} | ${'details'}  | ${'metadata'}
                 ${'/skills'}                         | ${'skills-sidebar'}   | ${'details'}  | ${'skills'}
                 ${'/boxai'}                          | ${'boxai-sidebar'}    | ${'details'}  | ${'boxai'}
                 ${'/docgen'}                         | ${'docgen-sidebar'}   | ${'details'}  | ${'docgen'}
@@ -194,7 +194,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/details/versions'}               | ${'details'}
             ${'/details/versions/1234'}          | ${'details'}
             ${'/metadata'}                       | ${'metadata'}
-            ${'/metadata/filteredTemplates/123'} | ${'metadata'}
+            ${'/metadata/filteredTemplates/1,3'} | ${'metadata'}
             ${'/skills'}                         | ${'skills'}
             ${'/boxai'}                          | ${'boxai'}
             ${'/docgen'}                         | ${'docgen'}
@@ -226,7 +226,7 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/details/versions'}               | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
             ${'/details/versions/1234'}          | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${'boxai'}
             ${'/metadata'}                       | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${'boxai'}
-            ${'/metadata/filteredTemplates/123'} | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${'boxai'}
+            ${'/metadata/filteredTemplates/1,3'} | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${'boxai'}
             ${'/skills'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${false}  | ${true}   | ${true}  | ${'boxai'}
             ${'/docgen'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${false}  | ${true}  | ${'boxai'}
             ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false} | ${'docgen'}
@@ -341,14 +341,20 @@ describe('elements/content-sidebar/SidebarPanels', () => {
 
         describe('metadata sidebar', () => {
             test('should render with filteredTemplates deeplink', () => {
-                const wrapper = getWrapper({ path: '/metadata/filteredTemplates/123', features: { metadata: { redesign: { enabled: true } } } });
-                expect(wrapper.find('MetadataSidebarRedesigned').props().filteredTemplateIds).toBe('123');
+                const wrapper = getWrapper({
+                    path: '/metadata/filteredTemplates/123,124',
+                    features: { metadata: { redesign: { enabled: true } } },
+                });
+                expect(wrapper.find('MetadataSidebarRedesigned').props().filteredTemplateIds).toEqual(['123', '124']);
             });
             test('should render redesigned  sidebar if it is enabled', () => {
-                const wrapper = getWrapper({ path: '/metadata', features: { metadata: { redesign: { enabled: true } } } });
+                const wrapper = getWrapper({
+                    path: '/metadata',
+                    features: { metadata: { redesign: { enabled: true } } },
+                });
                 expect(wrapper.exists('MetadataSidebarRedesigned')).toBe(true);
             });
-        })
+        });
 
         describe('details sidebar', () => {
             test('should render with versions deeplink', () => {
