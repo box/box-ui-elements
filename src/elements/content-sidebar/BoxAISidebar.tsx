@@ -38,12 +38,12 @@ export interface BoxAISidebarProps {
     fetchTimeout: Record<string, unknown>;
     fileExtension: string,
     fileID: string,
-    getAgentConfig: (payload: Record<string, unknown>) => Promise<unknown>;
-    getAIStudioAgents: () => Promise<unknown>;
+    getAgentConfig: (payload: Record<string, unknown>) => Promise<unknown>,
+    getAIStudioAgents: () => Promise<unknown>,
     getAnswer: (payload: Record<string, unknown>,
         itemID?: string,
         itemIDs?: Array<string>,
-        state?: Record<string, unknown> ) => Promise<unknown>;
+        state?: Record<string, unknown> ) => Promise<unknown>,
     getAnswerStreaming: (
         payload: Record<string, unknown>,
         itemID?: string,
@@ -51,17 +51,17 @@ export interface BoxAISidebarProps {
         abortController?: AbortController,
         state?: Record<string, unknown>,
     ) => Promise<unknown>,
-    getSuggestedQuestions: (itemID: string) => Promise<unknown> | null;
-    hostAppName: string;
-    isAgentSelectorEnabled: boolean;
-    isAIStudioAgentSelectorEnabled: boolean;
-    isCitationsEnabled: boolean;
-    isDebugModeEnabled: boolean;
-    isIntelligentQueryMode: boolean;
-    isMarkdownEnabled: boolean;
-    isResetChatEnabled: boolean;
-    isStopResponseEnabled: boolean;
-    isStreamingEnabled: boolean;
+    getSuggestedQuestions: (itemID: string) => Promise<unknown> | null,
+    hostAppName: string,
+    isAgentSelectorEnabled: boolean,
+    isAIStudioAgentSelectorEnabled: boolean,
+    isCitationsEnabled: boolean,
+    isDebugModeEnabled: boolean,
+    isIntelligentQueryMode: boolean,
+    isMarkdownEnabled: boolean,
+    isResetChatEnabled: boolean,
+    isStopResponseEnabled: boolean,
+    isStreamingEnabled: boolean,
     userInfo: { name: '', avatarUrl: ''},
     recordAction: (params: RecordActionType) => void,
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,

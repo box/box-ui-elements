@@ -1,55 +1,30 @@
-import { expect, fn, screen, userEvent, waitFor, within } from '@storybook/test';
+import { expect, within } from '@storybook/test';
 import { type StoryObj } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
-import { mockAgents } from '../__mocks__/BoxAISidebarMocks';
 import { mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
 
 const mockFeatures = {
     'boxai.sidebar.enabled': true,
 };
 
-export const BoxAIInSidebar: StoryObj<typeof BoxAISidebar> = {
+export const basic: StoryObj<typeof BoxAISidebar> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const sidebar = await canvas.findByRole('heading', { name: 'Box AI' });
-        expect(sidebar).toBeInTheDocument();
-    },
-};
-
-export const BoxAIWithAgentSelectorOpened: StoryObj<typeof BoxAISidebar> = {
-    args: {
-        features: {
-            ...mockFeatures,
-            'boxai.agentSelector.enabled': true,
-        },
-        boxAISidebarProps: {
-            onClearClick: fn,
-            agents: mockAgents,
-            selectedAgent: mockAgents[0],
-        },
-    },
-    play: async () => {
-        await waitFor(async () => {
-            const agentSelector = await screen.findByRole('button', { name: 'Agent Agent 1' });
-            expect(agentSelector).toBeInTheDocument();
-
-            await userEvent.click(agentSelector);
-        });
-    },
-};
-
-export const BoxAIWithClearButton: StoryObj<typeof BoxAISidebar> = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-
-        const sidebar = await canvas.findByRole('heading', { name: 'Box AI' });
-        expect(sidebar).toBeInTheDocument();
-
+        const sidebarTitle = await canvas.findByRole('heading', { name: 'Box AI' });
+        expect(sidebarTitle).toBeInTheDocument();
         const clearButton = await canvas.findByRole('button', { name: 'Clear' });
-        await userEvent.click(clearButton);
         expect(clearButton).toBeInTheDocument();
+        
+        expect(await canvas.findByText('Welcome to Box AI')).toBeInTheDocument();
+        expect(await canvas.findByText('Ask questions about')).toBeInTheDocument();
+        expect(await canvas.findByText('This chat will be cleared when you close this content')).toBeInTheDocument();
+        expect(await canvas.findByPlaceholderText('Ask anything about this content')).toBeInTheDocument();
+        expect(await canvas.findByText('Summarize this document')).toBeInTheDocument();
+        expect(await canvas.findByText('What are the key takeaways?')).toBeInTheDocument();
+        expect(await canvas.findByText('How can this document be improved?')).toBeInTheDocument();
+        expect(await canvas.findByText('Are there any next steps defined?')).toBeInTheDocument();
     },
 };
 
@@ -60,7 +35,26 @@ export default {
         features: mockFeatures,
         fileId: global.FILE_ID,
         token: global.TOKEN,
-        selectedAgent: mockAgents[0],
+        boxAISidebarProps: {
+            createSessionRequest: () => ({ encodedSession: '1234'}),
+            fetchTimeout: { initial: 20000 },
+            getAgentConfig: () => ({}),
+            getAIStudioAgents: () => ({}),
+            getAnswer: () => ({}),
+            getAnswerStreaming: () => ({}),
+            getSuggestedQuestions: null,
+            hostAppName: 'storybook-test',
+            isAgentSelectorEnabled: false,
+            isAIStudioAgentSelectorEnabled: true,
+            isCitationsEnabled: true,
+            isDebugModeEnabled: true,
+            isIntelligentQueryMode: false,
+            isMarkdownEnabled: true,
+            isResetChatEnabled: true,
+            isStopResponseEnabled: true,
+            isStreamingEnabled: false,
+            recordAction: () => ({}),
+        },
     },
     parameters: {
         msw: {
