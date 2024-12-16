@@ -9,6 +9,7 @@ $agentSelectorSidebarWidth: 211px;
         display: flex;
         align-items: center;
         justify-content: left;
+        width: 100%;
         margin: 0;
         padding: 0;
         font-weight: normal;
@@ -16,6 +17,7 @@ $agentSelectorSidebarWidth: 211px;
 
         .bcs-title {
             margin-right: tokens.$space-2;
+            white-space: nowrap;
         }
     }
 
