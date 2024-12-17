@@ -1,6 +1,6 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
-import { screen, render } from '../../../test-utils/testing-library';
+import { render, screen } from '../../../test-utils/testing-library';
 import BoxAISidebar, { BoxAISidebarProps } from '../BoxAISidebar';
 
 jest.mock('@box/box-ai-agent-selector', () => ({

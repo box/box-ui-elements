@@ -123,7 +123,6 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         contentType={formatMessage(messages.sidebarBoxAIContent)}
                         hostAppName={hostAppName}
                         isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
-                        isResetChatEnabled={isResetChatEnabled}
                         questions={questions}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
