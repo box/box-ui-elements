@@ -50,4 +50,14 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
 
         expect(wrapper.find('Tooltip').length).toBe(1);
     });
+
+    test('should accept a keydown callback', () => {
+        const someFunction = jest.fn();
+
+        const wrapper = mount(<ThumbnailCardDetails onKeyDownCallback={someFunction} />);
+        const title = wrapper.find('.thumbnail-card-title');
+        title.simulate('keydown', { key: 'Enter' });
+
+        expect(someFunction).toHaveBeenCalled();
+    });
 });

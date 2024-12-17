@@ -18,7 +18,6 @@ type TitleProps = {
 };
 
 const Title = ({ title, onKeyDownCallback }: TitleProps) => {
-    // $FlowFixMe
     const textRef: { current: null | HTMLElement } = React.useRef(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
 
