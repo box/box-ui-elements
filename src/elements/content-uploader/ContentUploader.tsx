@@ -295,12 +295,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     getNewFiles = (files: Array<UploadFileWithAPIOptions | File>): Array<UploadFileWithAPIOptions | File> => {
         const { rootFolderId } = this.props;
 
-        return Array.from(files).filter(file => {
-            console.log('getFileId(item, rootFolderId)', getFileId(file, rootFolderId));
-            console.log('this.itemIdsRef.current', this.itemIdsRef.current);
-            console.log('filterOutcome', !this.itemIdsRef.current[getFileId(file, rootFolderId)]);
-            return !this.itemIdsRef.current[getFileId(file, rootFolderId)];
-        });
+        return Array.from(files).filter(file => !this.itemIdsRef.current[getFileId(file, rootFolderId)]);
     };
 
     /**
@@ -313,12 +308,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
     ): Array<DataTransferItem | UploadDataTransferItemWithAPIOptions> => {
         const { rootFolderId } = this.props;
 
-        return Array.from(items).filter(item => {
-            console.log('getDataTransferItemId(item, rootFolderId)', getDataTransferItemId(item, rootFolderId));
-            console.log('this.itemIdsRef.current', this.itemIdsRef.current);
-            console.log('filterOutcome', !this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)]);
-            return !this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)];
-        });
+        return Array.from(items).filter(item => !this.itemIdsRef.current[getDataTransferItemId(item, rootFolderId)]);
     };
 
     /**
