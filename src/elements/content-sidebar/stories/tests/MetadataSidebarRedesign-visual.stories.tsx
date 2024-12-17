@@ -101,7 +101,7 @@ export const FilterInstancesDropdown = {
 
                 const headlines = await canvas.findAllByRole('heading', { level: 4 });
                 expect(headlines).toHaveLength(1);
-                expect(headlines.map(heading => heading.textContent)).toEqual(expect.arrayContaining(['My Template']));
+                expect(headlines[0].textContent).toEqual(expect.arrayContaining(['My Template']));
             },
             { timeout: 2000 },
         );

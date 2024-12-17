@@ -36,6 +36,7 @@ describe('convertTemplateToTemplateInstance', () => {
         expect(result.displayName).toBe(mockTemplateInstance.displayName);
         expect(result.hidden).toBe(mockTemplateInstance.hidden);
         expect(result.fields).toEqual(mockTemplateInstance.fields);
+        expect(result.id).toEqual(mockTemplateInstance.id);
         expect(result.scope).toBe(mockTemplateInstance.scope);
         expect(result.templateKey).toBe(mockTemplateInstance.templateKey);
         expect(result.type).toBe(mockTemplateInstance.type);
