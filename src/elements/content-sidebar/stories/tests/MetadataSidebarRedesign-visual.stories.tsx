@@ -220,11 +220,20 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
-        await userEvent.click(addTemplateButton);
+        await waitFor(
+            async () => {
+                const addTemplateButton = await canvas.findByRole(
+                    'button',
+                    { name: 'Add template' },
+                    { timeout: 2000 },
+                );
+                await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
-        await userEvent.click(customMetadataOption);
+                const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
+                await userEvent.click(customMetadataOption);
+            },
+            { timeout: 2000 },
+        );
     },
 };
 
