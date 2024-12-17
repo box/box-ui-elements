@@ -345,7 +345,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
 
         const firstFile = getFile(newFiles[0]);
 
-        const newItemIdsState = { ...this.itemsRef.current, ...newItemIds };
+        const newItemIdsState = { ...this.itemIdsRef.current, ...newItemIds };
 
         this.itemIdsRef.current = newItemIdsState;
 
