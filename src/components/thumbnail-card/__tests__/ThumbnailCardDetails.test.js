@@ -1,13 +1,12 @@
 // @flow
 import * as React from 'react';
 
-import { mount, shallow } from 'enzyme';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import * as libDom from '../../../utils/dom';
-
 import ThumbnailCardDetails from '../ThumbnailCardDetails';
 
-const getWrapper = (props = {}) => shallow(<ThumbnailCardDetails title={<div>Foo Bar!</div>} {...props} />);
+const getWrapper = (props = {}) => render(<ThumbnailCardDetails title={<div>Foo Bar!</div>} {...props} />);
 
 jest.mock('../../../utils/dom', () => ({ useIsContentOverflowed: jest.fn() }));
 
@@ -45,18 +44,21 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
 
     test('should render a Tooltip if text is overflowed', () => {
         libDom.useIsContentOverflowed.mockReturnValue(true);
+        const { container } = getWrapper();
+        const title = container.querySelector('.thumbnail-card-title');
 
-        const wrapper = mount(<ThumbnailCardDetails title={<div>Foo Bar!</div>} />);
+        fireEvent.focus(title);
+        const tooltip = screen.getByRole('tooltip');
 
-        expect(wrapper.find('Tooltip').length).toBe(1);
+        expect(tooltip).toBeInTheDocument();
     });
 
     test('should accept a keydown callback', () => {
         const someFunction = jest.fn();
+        const { container } = getWrapper({ onKeyDownCallback: someFunction });
+        const title = container.querySelector('.thumbnail-card-title');
 
-        const wrapper = mount(<ThumbnailCardDetails onKeyDownCallback={someFunction} />);
-        const title = wrapper.find('.thumbnail-card-title');
-        title.simulate('keydown', { key: 'Enter' });
+        fireEvent.keyDown(title, { key: 'Enter' });
 
         expect(someFunction).toHaveBeenCalled();
     });
