@@ -62,6 +62,12 @@ const messages = defineMessages({
         description: 'Actual prompt for the fourth suggested question for documents',
         id: 'boxui.contentAnswers.documentSuggestedQuestionPrompt4',
     },
+    welcomeMessageIntelligentQueryNotice: {
+        defaultMessage: 
+            'You can ask Box AI both simple and complex questions in your spreadsheet: total counts, averages, advanced comparisons, trend analyses and so on. Try it out today!',
+        description: 'Content Answers welcome message spreadsheet supported by Intelligent Query notification',
+        id: 'boxui.contentAnswers.welcomeMessageIntelligentQueryNotice',
+    },
     welcomeMessageSpreadsheetNotice: {
         defaultMessage: 'Spreadsheet support works best for text dense files',
         description: 'Content Answers welcome message spreadsheet notification',
