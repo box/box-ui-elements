@@ -96,6 +96,12 @@ export const FilterInstancesDropdown = {
                 expect(secondOption).toBeInTheDocument();
                 const thirdOption = canvas.getByRole('option', { name: 'Custom Metadata' });
                 expect(thirdOption).toBeInTheDocument();
+
+                await userEvent.click(firstOption);
+
+                const headlines = await canvas.findAllByRole('heading', { level: 4 });
+                expect(headlines).toHaveLength(1);
+                expect(headlines[0].textContent).toEqual('My Template');
             },
             { timeout: 2000 },
         );

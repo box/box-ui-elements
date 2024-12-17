@@ -1,5 +1,6 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
+import { RouteComponentProps } from 'react-router-dom';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
@@ -87,12 +88,16 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     };
 
     const renderComponent = (props = {}, features = {}) => {
+        const emptyFilteredTemplateIds = [];
+        const routeComponentProps = {} as RouteComponentProps;
         const defaultProps = {
             api: {},
             fileId: 'test-file-id-1',
             elementId: 'element-1',
+            filteredTemplateIds: emptyFilteredTemplateIds,
             isFeatureEnabled: true,
             onError: jest.fn(),
+            ...routeComponentProps,
         } satisfies MetadataSidebarRedesignProps;
 
         render(<MetadataSidebarRedesign {...defaultProps} {...props} />, { wrapperProps: { features } });
@@ -162,6 +167,26 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         await userEvent.click(addTemplateButton);
 
         expect(customMetadataOption).toHaveAttribute('aria-disabled', 'true');
+    });
+
+    test('should have accessible "All templates" combobox trigger button', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockTemplateInstance, mockCustomTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        renderComponent();
+
+        expect(
+            screen.getAllByRole('combobox').find(combobox => combobox.textContent === 'All Templates'),
+        ).toBeInTheDocument();
     });
 
     test('should render metadata sidebar with error', async () => {
@@ -264,6 +289,53 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         });
 
         renderComponent();
+
+        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 4, name: 'Custom Metadata' })).toBeInTheDocument();
+        expect(screen.getByText(mockCustomTemplateInstance.fields[0].key)).toBeInTheDocument();
+        expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeInTheDocument();
+
+        expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
+    });
+
+    test('should render metadata filterd instance list when fileterd templates are present and matching', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockCustomTemplateInstance, mockVisibleTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        const filteredTemplateIds = [mockVisibleTemplateInstance.id];
+
+        renderComponent({ filteredTemplateIds });
+
+        expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { level: 4, name: 'Custom Metadata' })).not.toBeInTheDocument();
+    });
+
+    test('should render metadata unfiltered instance list when fileterd templates are present and do not match existing templates', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockCustomTemplateInstance, mockVisibleTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        const filteredTemplateIds = ['non-existing-template-id'];
+
+        renderComponent({ filteredTemplateIds });
 
         expect(screen.getByRole('heading', { level: 3, name: 'Metadata' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { level: 4, name: 'Custom Metadata' })).toBeInTheDocument();
