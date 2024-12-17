@@ -143,12 +143,13 @@ describe('elements/content-uploader/ContentUploader', () => {
         test('should add generated itemId', () => {
             const wrapper = getWrapper({ rootFolderId: 0 });
             const instance = wrapper.instance();
+            instance.itemIdsRef.current = { abcd: true };
 
             global.Date.now = jest.fn(() => 10000);
 
             instance.addFilesToUploadQueue([{ name: 'yoyo', size: 1000 }], jest.fn(), false);
 
-            const expected = { yoyo: true, yoyo_0_10000: true };
+            const expected = { abcd: true, yoyo: true, yoyo_0_10000: true };
             expect(wrapper.state().itemIds).toEqual(expected);
             expect(instance.itemIdsRef.current).toEqual(expected);
         });
