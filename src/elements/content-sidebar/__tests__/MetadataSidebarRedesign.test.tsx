@@ -97,6 +97,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             filteredTemplateIds: emptyFilteredTemplateIds,
             isFeatureEnabled: true,
             onError: jest.fn(),
+            onSuccess: jest.fn(),
             ...routeComponentProps,
         } satisfies MetadataSidebarRedesignProps;
 

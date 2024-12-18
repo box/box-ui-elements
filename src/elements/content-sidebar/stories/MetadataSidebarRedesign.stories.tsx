@@ -25,7 +25,8 @@ const mockLogger = {
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
     isBoxAiSuggestionsEnabled: true,
     isFeatureEnabled: true,
-    onError: fn,
+    onError: fn(),
+    onSuccess: fn(),
 };
 
 export default {
