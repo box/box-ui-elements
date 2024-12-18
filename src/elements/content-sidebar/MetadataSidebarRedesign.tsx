@@ -175,14 +175,12 @@ function MetadataSidebarRedesign({
         }
     };
 
-    const visibleTemplateInstances = templateInstances.filter(templateInstance => !templateInstance.hidden);
-
     const isSuccess = status === STATUS.SUCCESS;
     const isLoading = status === STATUS.LOADING;
 
     const isViewMode = !isLoading && file && templates && templateInstances && !editingTemplate;
-    const showEmptyState = isViewMode && visibleTemplateInstances.length === 0;
-    const showList = isViewMode && visibleTemplateInstances.length > 0;
+    const showEmptyState = isViewMode && templateInstances.length === 0;
+    const showList = isViewMode && templateInstances.length > 0;
 
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
