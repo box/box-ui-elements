@@ -18,7 +18,6 @@ import {
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS_CAN_UPLOAD,
     FIELD_PERMISSIONS,
-    SUCCESS_CODE_EXTRACT_METADATA_SUGGESTIONS,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
@@ -236,8 +235,6 @@ function useSidebarMetadataFetcher(
             const templateInstance = templates.find(template => template.templateKey === templateKey && template.scope);
             const fields = templateInstance?.fields || [];
 
-            onSuccess(SUCCESS_CODE_EXTRACT_METADATA_SUGGESTIONS, true);
-
             return fields.map(field => {
                 const value = answer[field.key];
                 // TODO: @box/metadadata-editor does not support AI suggestions, enable once supported
@@ -250,7 +247,7 @@ function useSidebarMetadataFetcher(
                 };
             });
         },
-        [api, file, onError, onSuccess, templates],
+        [api, file, onError, templates],
     );
 
     React.useEffect(() => {

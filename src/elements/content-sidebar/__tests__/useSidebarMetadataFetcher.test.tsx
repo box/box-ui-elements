@@ -7,7 +7,6 @@ import {
     FIELD_PERMISSIONS_CAN_UPLOAD,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
-    SUCCESS_CODE_EXTRACT_METADATA_SUGGESTIONS,
 } from '../../../constants';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
 
@@ -350,7 +349,6 @@ describe('useSidebarMetadataFetcher', () => {
                 { ...mockTemplates[0].fields[0], aiSuggestion: 'value1' },
                 { ...mockTemplates[0].fields[1], aiSuggestion: 'value2' },
             ]);
-            expect(onSuccessMock).toHaveBeenCalledWith(SUCCESS_CODE_EXTRACT_METADATA_SUGGESTIONS, true);
         });
 
         test('should handle error during suggestions extraction', async () => {

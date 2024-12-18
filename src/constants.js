@@ -91,7 +91,6 @@ export const METADATA_SCOPE_GLOBAL = 'global';
 export const METADATA_SCOPE_ENTERPRISE = 'enterprise';
 export const METADATA_TEMPLATE_FETCH_LIMIT = API_PAGE_LIMIT;
 export const METADATA_SUGGESTIONS_CONFIDENCE_EXPERIMENTAL = 'experimental';
-export const SUCCESS_CODE_EXTRACT_METADATA_SUGGESTIONS = 'extract_metadata_suggestions_success';
 export const SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE = 'update_metadata_template_instance_success';
 export const SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE = 'delete_metadata_template_instance_success';
 
