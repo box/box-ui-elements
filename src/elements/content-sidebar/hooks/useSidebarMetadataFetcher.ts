@@ -18,12 +18,14 @@ import {
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS_CAN_UPLOAD,
     FIELD_PERMISSIONS,
+    SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
+    SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
 
 import messages from '../../common/messages';
 
 import { type BoxItem } from '../../../common/types/core';
-import { type ErrorContextProps, type ExternalProps } from '../MetadataSidebarRedesign';
+import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
 
 export enum STATUS {
     IDLE = 'idle',
@@ -55,6 +57,7 @@ function useSidebarMetadataFetcher(
     api: API,
     fileId: string,
     onError: ErrorContextProps['onError'],
+    onSuccess: SuccessContextProps['onSuccess'],
     isFeatureEnabled: ExternalProps['isFeatureEnabled'],
 ): DataFetcher {
     const [status, setStatus] = React.useState<STATUS>(STATUS.IDLE);
@@ -149,14 +152,17 @@ function useSidebarMetadataFetcher(
             await api.getMetadataAPI(false).deleteMetadata(
                 file,
                 metadataInstance,
-                () => setStatus(STATUS.SUCCESS),
+                () => {
+                    setStatus(STATUS.SUCCESS);
+                    onSuccess(SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE, true);
+                },
                 (error: ElementsXhrError, code: string) => {
                     onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
                 },
                 true,
             );
         },
-        [api, onApiError, file],
+        [api, onApiError, onSuccess, file],
     );
 
     const handleCreateMetadataInstance = React.useCallback(
@@ -180,19 +186,20 @@ function useSidebarMetadataFetcher(
             JSONPatch: JSONPatchOperations,
             successCallback: () => void,
         ) => {
-            await api
-                .getMetadataAPI(false)
-                .updateMetadataRedesign(
-                    file,
-                    metadataInstance,
-                    JSONPatch,
-                    successCallback,
-                    (error: ElementsXhrError, code: string) => {
-                        onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
-                    },
-                );
+            await api.getMetadataAPI(false).updateMetadataRedesign(
+                file,
+                metadataInstance,
+                JSONPatch,
+                () => {
+                    successCallback();
+                    onSuccess(SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE, true);
+                },
+                (error: ElementsXhrError, code: string) => {
+                    onApiError(error, code, messages.sidebarMetadataEditingErrorContent);
+                },
+            );
         },
-        [api, file, onApiError],
+        [api, file, onApiError, onSuccess],
     );
 
     const [, setError] = React.useState();
@@ -227,6 +234,7 @@ function useSidebarMetadataFetcher(
 
             const templateInstance = templates.find(template => template.templateKey === templateKey && template.scope);
             const fields = templateInstance?.fields || [];
+
             return fields.map(field => {
                 const value = answer[field.key];
                 // TODO: @box/metadadata-editor does not support AI suggestions, enable once supported

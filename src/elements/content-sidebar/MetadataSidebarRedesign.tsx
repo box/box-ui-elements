@@ -5,6 +5,7 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
@@ -38,6 +39,7 @@ import MetadataInstanceEditor from './MetadataInstanceEditor';
 import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemplateInstance';
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
+import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -50,6 +52,7 @@ export interface ExternalProps {
 interface PropsWithoutContext extends ExternalProps {
     elementId: string;
     fileId: string;
+    filteredTemplateIds?: string[];
     hasSidebarInitialized?: boolean;
 }
 
@@ -57,11 +60,29 @@ export interface ErrorContextProps {
     onError: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
 }
 
-export interface MetadataSidebarRedesignProps extends PropsWithoutContext, ErrorContextProps, WithLoggerProps {
+export interface SuccessContextProps {
+    onSuccess: (code: string, showNotification: boolean) => void;
+}
+
+export interface MetadataSidebarRedesignProps
+    extends PropsWithoutContext,
+        ErrorContextProps,
+        SuccessContextProps,
+        WithLoggerProps,
+        RouteComponentProps {
     api: API;
 }
 
-function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEnabled }: MetadataSidebarRedesignProps) {
+function MetadataSidebarRedesign({
+    api,
+    elementId,
+    fileId,
+    filteredTemplateIds = [],
+    history,
+    onError,
+    onSuccess,
+    isFeatureEnabled,
+}: MetadataSidebarRedesignProps) {
     const {
         extractSuggestions,
         file,
@@ -72,7 +93,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         errorMessage,
         status,
         templateInstances,
-    } = useSidebarMetadataFetcher(api, fileId, onError, isFeatureEnabled);
+    } = useSidebarMetadataFetcher(api, fileId, onError, onSuccess, isFeatureEnabled);
 
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
@@ -173,20 +194,16 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
         />
     );
 
-    const [filteredTemplates, setFilteredTemplates] = React.useState([]);
+    const { handleSetFilteredTemplates, filteredTemplates, templateInstancesList } =
+        useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances);
     const filterDropdown =
         isSuccess && isViewMode && appliedTemplateInstances.length > 1 ? (
             <FilterInstancesDropdown
                 appliedTemplates={appliedTemplateInstances as MetadataTemplate[]}
                 selectedTemplates={filteredTemplates}
-                setSelectedTemplates={setFilteredTemplates}
+                setSelectedTemplates={handleSetFilteredTemplates}
             />
         ) : null;
-
-    const filteredTemplateInstances = templateInstances.filter(instance =>
-        filteredTemplates.some(template => template === instance.id),
-    );
-    const templateInstancesList = filteredTemplates.length === 0 ? templateInstances : filteredTemplateInstances;
 
     const errorMessageDisplay = status === STATUS.ERROR && errorMessage && (
         <InlineError className="bcs-MetadataSidebarRedesign-inline-error">
@@ -259,6 +276,7 @@ function MetadataSidebarRedesign({ api, elementId, fileId, onError, isFeatureEna
 
 export { MetadataSidebarRedesign as MetadataSidebarRedesignComponent };
 export default flow([
+    withRouter,
     withLogger(ORIGIN_METADATA_SIDEBAR_REDESIGN),
     withErrorBoundary(ORIGIN_METADATA_SIDEBAR_REDESIGN),
     withAPIContext,

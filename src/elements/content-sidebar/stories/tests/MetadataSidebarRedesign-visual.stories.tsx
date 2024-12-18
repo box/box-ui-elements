@@ -24,11 +24,13 @@ const token = global.TOKEN;
 const defaultMetadataArgs = {
     fileId: fileIdWithMetadata,
     isFeatureEnabled: true,
-    onError: fn,
+    onError: fn(),
+    onSuccess: fn(),
 };
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
     isFeatureEnabled: true,
-    onError: fn,
+    onError: fn(),
+    onSuccess: fn(),
 };
 const mockFeatures = {
     'metadata.redesign.enabled': true,
@@ -61,7 +63,8 @@ export const AddTemplateDropdownMenuOnEmpty = {
         metadataSidebarProps: {
             isBoxAiSuggestionsEnabled: true,
             isFeatureEnabled: true,
-            onError: fn,
+            onError: fn(),
+            onSuccess: fn(),
         },
     },
     play: async ({ canvasElement }) => {
@@ -96,6 +99,12 @@ export const FilterInstancesDropdown = {
                 expect(secondOption).toBeInTheDocument();
                 const thirdOption = canvas.getByRole('option', { name: 'Custom Metadata' });
                 expect(thirdOption).toBeInTheDocument();
+
+                await userEvent.click(firstOption);
+
+                const headlines = await canvas.findAllByRole('heading', { level: 4 });
+                expect(headlines).toHaveLength(1);
+                expect(headlines[0].textContent).toEqual('My Template');
             },
             { timeout: 2000 },
         );
@@ -271,11 +280,15 @@ export const DeleteButtonIsDisabledWhenAddingNewMetadataTemplate: StoryObj<typeo
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
         expect(addTemplateButton).toBeInTheDocument();
-        await userEvent.click(addTemplateButton);
+        await act(async () => {
+            await userEvent.click(addTemplateButton);
+        });
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
         expect(customMetadataOption).toBeInTheDocument();
-        await userEvent.click(customMetadataOption);
+        await act(async () => {
+            await userEvent.click(customMetadataOption);
+        });
 
         const deleteButton = await canvas.findByRole('button', { name: 'Delete' });
         expect(deleteButton).toBeDisabled();
