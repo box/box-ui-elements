@@ -88,10 +88,13 @@ function useSidebarMetadataFetcher(
             templates: Array<MetadataTemplate>;
             templateInstances: Array<MetadataTemplateInstance>;
         }) => {
+            const visibleTemplatesInstances = fetchedTemplateInstances.filter(template => template.hidden !== true);
+            const visibleTemplates = fetchedTemplates.filter(template => template.hidden !== true);
+
             setErrorMessage(null);
             setStatus(STATUS.SUCCESS);
-            setTemplateInstances(fetchedTemplateInstances);
-            setTemplates(fetchedTemplates);
+            setTemplateInstances(visibleTemplatesInstances);
+            setTemplates(visibleTemplates);
         },
         [],
     );
