@@ -278,16 +278,21 @@ export const DeleteButtonIsDisabledWhenAddingNewMetadataTemplate: StoryObj<typeo
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
-        expect(addTemplateButton).toBeInTheDocument();
-        await userEvent.click(addTemplateButton);
+        await waitFor(
+            async () => {
+                const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
+                expect(addTemplateButton).toBeInTheDocument();
+                await userEvent.click(addTemplateButton);
 
-        const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
-        expect(customMetadataOption).toBeInTheDocument();
-        await userEvent.click(customMetadataOption);
+                const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
+                expect(customMetadataOption).toBeInTheDocument();
+                await userEvent.click(customMetadataOption);
 
-        const deleteButton = await canvas.findByRole('button', { name: 'Delete' });
-        expect(deleteButton).toBeDisabled();
+                const deleteButton = await canvas.findByRole('button', { name: 'Delete' });
+                expect(deleteButton).toBeDisabled();
+            },
+            { timeout: 2000 },
+        );
     },
 };
 
