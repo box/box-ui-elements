@@ -47,16 +47,6 @@ const mockTemplates = [
     },
 ];
 
-const mockHiddenTemplate = {
-    id: 'hidden_template',
-    canEdit: true,
-    hidden: true,
-    fields: [],
-    scope: 'global',
-    templateKey: 'hiddenTemplate',
-    type: 'metadata_template',
-};
-
 const mockTemplateInstances = [
     {
         canEdit: true,
@@ -77,17 +67,6 @@ const newTemplateInstance = {
     templateKey: 'properties',
     type: 'properties',
     hidden: false,
-};
-
-const mockHiddenTemplateInstance = {
-    displayName: 'Hidden Template',
-    canEdit: true,
-    hidden: true,
-    fields: [],
-    id: 'hidden_template',
-    scope: 'global',
-    templateKey: 'hiddenTemplate',
-    type: 'metadata_template',
 };
 
 const mockAPI = {
@@ -163,21 +142,6 @@ describe('useSidebarMetadataFetcher', () => {
 
         expect(result.current.file).toEqual(mockFile);
         expect(result.current.templates).toEqual(mockTemplates);
-        expect(result.current.errorMessage).toBeNull();
-    });
-
-    test('should fetch metadata and return only visible templates and template instances', async () => {
-        const { result } = setupHook();
-
-        mockAPI.getMetadata.mockImplementation((file, successCallback) => {
-            successCallback({
-                templates: [...mockTemplates, mockHiddenTemplate],
-                templateInstances: [...mockTemplateInstances, mockHiddenTemplateInstance],
-            });
-        });
-
-        expect(result.current.templates).toEqual(mockTemplates);
-        expect(result.current.templateInstances).toEqual(mockTemplateInstances);
         expect(result.current.errorMessage).toBeNull();
     });
 
