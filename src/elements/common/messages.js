@@ -1067,6 +1067,11 @@ const messages = defineMessages({
         description: 'Icon title for a Box item of type file',
         defaultMessage: 'File',
     },
+    iconFile: {
+        id: 'be.iconFile',
+        description: 'Aria label for file icon',
+        defaultMessage: '{extension} File',
+    },
     folder: {
         id: 'be.folder',
         description: 'Icon title for a Box item of type folder',
