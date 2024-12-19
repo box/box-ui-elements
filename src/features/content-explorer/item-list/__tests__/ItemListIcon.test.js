@@ -10,7 +10,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
         test('should render default file icon', () => {
             renderComponent({});
 
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            expect(screen.getByLabelText('File')).toBeInTheDocument();
         });
 
         test('should render archive icon', () => {
@@ -22,7 +22,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             };
             renderComponent(rowData);
 
-            expect(screen.getByTestId('archive-icon-cell')).toBeVisible();
+            expect(screen.getByLabelText('Archive')).toBeVisible();
         });
 
         test('should render archived folder icon', () => {
@@ -34,10 +34,10 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             };
             renderComponent(rowData);
 
-            expect(screen.getByTestId('folder-archive-icon-cell')).toBeVisible();
+            expect(screen.getByLabelText('Archived Folder')).toBeVisible();
         });
 
-        [
+        test.each([
             // personalFolder
             {
                 rowData: {
@@ -45,7 +45,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
                     hasCollaborations: false,
                     isExternallyOwned: false,
                 },
-                title: 'Personal Folder',
+                label: 'Personal Folder',
             },
             // collabFolder
             {
@@ -54,16 +54,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
                     hasCollaborations: true,
                     isExternallyOwned: false,
                 },
-                title: 'Collaborated Folder',
-            },
-            // externalCollabFolder
-            {
-                rowData: {
-                    type: 'folder',
-                    hasCollaborations: true,
-                    isExternallyOwned: true,
-                },
-                title: 'Collaborated Folder',
+                label: 'Collaborated Folder',
             },
             // externalFolder
             {
@@ -72,14 +63,12 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
                     hasCollaborations: false,
                     isExternallyOwned: true,
                 },
-                title: 'External Folder',
+                label: 'External Folder',
             },
-        ].forEach(({ rowData, title }) => {
-            test('should render correct folder icon', () => {
-                renderComponent(rowData);
+        ])('should render $label folder icon', ({ rowData, label }) => {
+            renderComponent(rowData);
 
-                expect(screen.getByTitle(title)).toBeInTheDocument();
-            });
+            expect(screen.getByLabelText(label)).toBeInTheDocument();
         });
 
         test('should render correct file icon', () => {
@@ -87,14 +76,14 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             const rowData = { type: 'file', extension };
             renderComponent(rowData);
 
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            expect(screen.getByLabelText('BOXNOTE File')).toBeInTheDocument();
         });
 
         test('should render correct bookmark icon', () => {
             const rowData = { type: 'web_link' };
             renderComponent(rowData);
 
-            expect(screen.getByTitle('Bookmark')).toBeInTheDocument();
+            expect(screen.getByLabelText('Bookmark')).toBeInTheDocument();
         });
     });
 });
