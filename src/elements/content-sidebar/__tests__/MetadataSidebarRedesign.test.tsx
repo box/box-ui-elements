@@ -71,6 +71,17 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         type: 'metadata_template',
     } satisfies MetadataTemplateInstance;
 
+    const mockHiddenTemplateInstance = {
+        displayName: 'Hidden Template',
+        canEdit: true,
+        hidden: true,
+        fields: [],
+        id: 'hidden_template',
+        scope: 'global',
+        templateKey: 'hiddenTemplate',
+        type: 'metadata_template',
+    } satisfies MetadataTemplateInstance;
+
     const mockFile = {
         id: '123',
         permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
@@ -243,6 +254,28 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         ).toBeInTheDocument();
     });
 
+    test('should render empty state when no visible template instances are present', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockHiddenTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        renderComponent();
+
+        expect(screen.getByRole('heading', { level: 2, name: 'Add Metadata Templates' })).toBeInTheDocument();
+        expect(
+            screen.getByText('Add Metadata to your file to support business operations, workflows, and more!'),
+        ).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { level: 4, name: 'Hidden Template' })).not.toBeInTheDocument();
+    });
+
     test('should render metadata instance list when templates are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
             extractSuggestions: jest.fn(),
@@ -265,6 +298,51 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
         expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
     });
+
+    test('should render filter dropdown when more than one templates are present', () => {
+        mockUseSidebarMetadataFetcher.mockReturnValue({
+            extractSuggestions: jest.fn(),
+            handleCreateMetadataInstance: jest.fn(),
+            handleDeleteMetadataInstance: jest.fn(),
+            handleUpdateMetadataInstance: jest.fn(),
+            templateInstances: [mockCustomTemplateInstance, mockVisibleTemplateInstance],
+            templates: mockTemplates,
+            errorMessage: null,
+            status: STATUS.SUCCESS,
+            file: mockFile,
+        });
+
+        renderComponent();
+
+        const filterDropdown = screen.getByRole('combobox');
+        expect(filterDropdown.textContent).toContain('All Templates');
+    });
+
+    test.each([
+        [[mockVisibleTemplateInstance, mockHiddenTemplateInstance]], // One visible and one hidden template
+        [[mockVisibleTemplateInstance]], // One visible template
+        [[]], // No templates
+        [[mockHiddenTemplateInstance]], // One hidden template
+    ])(
+        'should not render filter dropdown when only one or none visible template is present',
+        (templateInstances: MetadataTemplateInstance[]) => {
+            mockUseSidebarMetadataFetcher.mockReturnValue({
+                extractSuggestions: jest.fn(),
+                handleCreateMetadataInstance: jest.fn(),
+                handleDeleteMetadataInstance: jest.fn(),
+                handleUpdateMetadataInstance: jest.fn(),
+                templateInstances,
+                templates: mockTemplates,
+                errorMessage: null,
+                status: STATUS.SUCCESS,
+                file: mockFile,
+            });
+
+            renderComponent();
+
+            expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+        },
+    );
 
     test('should render metadata filterd instance list when fileterd templates are present and matching', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({

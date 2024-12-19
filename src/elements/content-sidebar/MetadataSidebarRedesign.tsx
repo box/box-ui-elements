@@ -175,12 +175,16 @@ function MetadataSidebarRedesign({
         }
     };
 
+    const visibleTemplateInstances = React.useMemo(() => {
+        return templateInstances.filter(templateInstance => !templateInstance.hidden);
+    }, [templateInstances]);
+
     const isSuccess = status === STATUS.SUCCESS;
     const isLoading = status === STATUS.LOADING;
 
     const isViewMode = !isLoading && file && templates && templateInstances && !editingTemplate;
-    const showEmptyState = isViewMode && templateInstances.length === 0;
-    const showList = isViewMode && templateInstances.length > 0;
+    const showEmptyState = isViewMode && visibleTemplateInstances.length === 0;
+    const showList = isViewMode && visibleTemplateInstances.length > 0;
 
     const areAiSuggestionsAvailable = isExtensionSupportedForMetadataSuggestions(file?.extension ?? '');
 
@@ -193,11 +197,11 @@ function MetadataSidebarRedesign({
     );
 
     const { handleSetFilteredTemplates, filteredTemplates, templateInstancesList } =
-        useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances);
+        useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, visibleTemplateInstances);
     const filterDropdown =
-        isSuccess && isViewMode && appliedTemplateInstances.length > 1 ? (
+        isSuccess && isViewMode && visibleTemplateInstances.length > 1 ? (
             <FilterInstancesDropdown
-                appliedTemplates={appliedTemplateInstances as MetadataTemplate[]}
+                appliedTemplates={visibleTemplateInstances as MetadataTemplate[]}
                 selectedTemplates={filteredTemplates}
                 setSelectedTemplates={handleSetFilteredTemplates}
             />
