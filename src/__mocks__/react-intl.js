@@ -57,3 +57,10 @@ export const injectIntl = Component => {
     WrapperComponent.displayName = Component.displayName || Component.name || 'Component';
     return WrapperComponent;
 };
+
+export const useIntl = () => ({
+    formatMessage: (message, values) => {
+        const imf = new IntlMessageFormat(message.defaultMessage || message.message, 'en');
+        return imf.format(values);
+    },
+});
