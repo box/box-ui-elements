@@ -1,0 +1,27 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.commmon.showOriginalMessage",
+    "description": "Show original button for showing original comment",
+    "defaultMessage": "Show Original"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.common.translateMessage",
+    "description": "Translate button for translating comment",
+    "defaultMessage": "Translate"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.common.seeMoreMessage",
+    "description": "See more button for showing whole long message",
+    "defaultMessage": "See more"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.common.seeLessMessage",
+    "description": "See less button for hiding part of long message",
+    "defaultMessage": "See less"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.common.editedMessage",
+    "description": "Label indicating that message was edited, should be lowercase, should have escaped leading space",
+    "defaultMessage": "\\ (edited)"
+  }
+]

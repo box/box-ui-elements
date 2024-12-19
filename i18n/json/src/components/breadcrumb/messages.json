@@ -1,0 +1,7 @@
+[
+  {
+    "id": "boxui.breadcrumb.breadcrumbLabel",
+    "description": "Aria label for describing \"breadcrumb\"",
+    "defaultMessage": "Breadcrumb"
+  }
+]

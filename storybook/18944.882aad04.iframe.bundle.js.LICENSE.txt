@@ -1,0 +1,10 @@
+/*! Bundled license information:
+
+statuses/index.js:
+  (*!
+   * statuses
+   * Copyright(c) 2014 Jonathan Ong
+   * Copyright(c) 2016 Douglas Christopher Wilson
+   * MIT Licensed
+   *)
+*/
