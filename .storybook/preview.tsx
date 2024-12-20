@@ -23,6 +23,7 @@ const preview = {
             cropToViewport: true,
             delay: 500,
             diffThreshold: 0.1,
+            externals: ['public/**'],
             modes: {
                 specific: {
                     viewport: {
@@ -31,6 +32,8 @@ const preview = {
                     },
                 },
             },
+            traceChanged: 'expanded',
+            untraced: ['reactIntl.ts'],
         },
         controls: {
             matchers: {
