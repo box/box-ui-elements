@@ -12,7 +12,7 @@ type Props = {
     className?: string,
     highlightOnHover?: boolean,
     icon?: React.Node,
-    onKeyDownCallback?: () => void,
+    onKeyDown?: () => void,
     subtitle?: React.Node,
     thumbnail: React.Node,
     title: React.Node,
@@ -23,7 +23,7 @@ const ThumbnailCard = ({
     className = '',
     highlightOnHover = false,
     icon,
-    onKeyDownCallback,
+    onKeyDown,
     subtitle,
     thumbnail,
     title,
@@ -39,7 +39,7 @@ const ThumbnailCard = ({
         <ThumbnailCardDetails
             actionItem={actionItem}
             icon={icon}
-            onKeyDownCallback={onKeyDownCallback}
+            onKeyDown={onKeyDown}
             subtitle={subtitle}
             title={title}
         />

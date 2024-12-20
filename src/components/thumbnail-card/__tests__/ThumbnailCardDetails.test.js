@@ -55,7 +55,7 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
 
     test('should accept a keydown callback', async () => {
         const someFunction = jest.fn();
-        const { container } = renderComponent({ onKeyDownCallback: someFunction });
+        const { container } = renderComponent({ onKeyDown: someFunction });
         const title = container.querySelector('.thumbnail-card-title');
 
         await userEvent.type(title, '{enter}');
