@@ -830,6 +830,15 @@ class ContentPreview extends React.PureComponent<Props, State> {
             useHotkeys: false,
         };
 
+
+
+
+
+
+
+
+
+
         const { Preview } = global.Box;
         this.preview = new Preview();
         this.preview.addListener('load', this.onPreviewLoad);

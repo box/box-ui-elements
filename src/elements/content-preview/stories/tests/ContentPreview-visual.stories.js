@@ -120,26 +120,26 @@ export const hoverOverCitation = {
         expect(citation).toBeInTheDocument();
         await userEvent.hover(citation);
     },
-};
-
-export const citationDisabled = {
-    args: {
-        contentAnswersProps: {
-            show: true,
+};    args: {
+    contentAnswersProps: {
+        show: true,
             isCitationsEnabled: false,
             isMarkdownEnabled: true,
-        },
     },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
-        expect(button).toBeInTheDocument();
-        await userEvent.click(button);
+},
+play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
+    expect(button).toBeInTheDocument();
+    await userEvent.click(button);
 
-        const dialog = await waitFor(() => document.querySelector('[role="dialog"]'));
-        expect(dialog).toBeInTheDocument();
+    const dialog = await waitFor(() => document.querySelector('[role="dialog"]'));
+    expect(dialog).toBeInTheDocument();
 
-        const modal = within(dialog);
+    const modal = within(dialog
+
+export const citationDisabled = {
+);
         const suggestion = modal.getByText('Summarize this document');
         await userEvent.click(suggestion);
 
