@@ -4,60 +4,52 @@
 
 $agentSelectorSidebarWidth: 211px;
 
-.bcs-BoxAISidebar {
-    height: 100%;
-    max-height: 100%;
-
-    .bcs-scroll-content {
-        width: 100%;
-        height: 100%;
-    }
-
-    .bcs-BoxAISidebar-content {
-        width: $sidebarContentIncreasedWidth;
-        height: 100%;
-    }
-
-    .bcs-BoxAISidebar-title-part {
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        font-weight: normal;
-        font-size: tokens.$title-medium-font-size;
-
-        .bcs-title {
-            margin-right: tokens.$space-2;
-            white-space: nowrap;
-        }
-    }
-
-    .bcs-BoxAISidebar-chat-actions {
-        display: flex;
-        justify-content: right;
-
-        .bcs-BoxAISidebar-expand {
-            margin-left: tokens.$space-2;
-        }
-    }
-
-    .sidebar-chip {
-        max-width: $agentSelectorSidebarWidth;
-        margin-inline-start: 0;
-
-        button {
-            width: 100%;
-        }
-    }
-}
-
-@include breakpoint($medium-screen) {
+.bcs-is-wider {
     .bcs-BoxAISidebar {
-        .bcs-BoxAISidebar-content {
+        height: 100%;
+        max-height: 100%;
+
+        .bcs-scroll-content {
             width: auto;
             height: 100%;
+        }
+
+        .bcs-BoxAISidebar-content {
+            height: 100%;
+        }
+
+        .bcs-BoxAISidebar-title-part {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-weight: normal;
+            font-size: tokens.$title-medium-font-size;
+
+            .bcs-title {
+                margin-right: tokens.$space-2;
+                white-space: nowrap;
+            }
+        }
+
+        .bcs-BoxAISidebar-chat-actions {
+            display: flex;
+            justify-content: right;
+
+            .bcs-BoxAISidebar-expand {
+                margin-left: tokens.$space-2;
+            }
+        }
+
+        .sidebar-chip {
+            max-width: $agentSelectorSidebarWidth;
+            margin-inline-start: 0;
+
+            button {
+                width: 100%;
+            }
         }
     }
 }
