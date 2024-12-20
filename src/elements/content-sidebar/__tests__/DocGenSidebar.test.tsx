@@ -85,7 +85,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         const errorState = await screen.findByTestId('docgen-sidebar-error');
         expect(errorState).toBeInTheDocument();
 
-        const refreshButton = screen.getByRole('button', { name: 'Refresh' });
+        const refreshButton = screen.getByRole('button', { name: 'Process document' });
         fireEvent.click(refreshButton);
 
         await waitFor(() => expect(errorTagsMock).toBeCalledTimes(2));
