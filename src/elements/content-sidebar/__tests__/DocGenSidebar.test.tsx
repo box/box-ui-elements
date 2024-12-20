@@ -96,7 +96,9 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: noDataMock,
         });
 
-        const emptyState = await screen.findByText("We couldn't load the tags");
+        const emptyState = await screen.findByText(
+            'Looks like your recent changes to the Doc Gen template are yet to be processed.',
+        );
         expect(emptyState).toBeInTheDocument();
     });
 });
