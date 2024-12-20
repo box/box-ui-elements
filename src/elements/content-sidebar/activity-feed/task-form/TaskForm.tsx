@@ -94,20 +94,26 @@ type Props = TaskFormProps & TaskFormConsumerProps & { intl: IntlShape };
 type TaskFormFieldName = 'taskName' | 'taskAssignees' | 'taskDueDate';
 
 interface TaskFormValidityState {
-    code: string;
-    message: string;
+    validityState: {
+        badInput: boolean;
+        customError: boolean;
+        patternMismatch: boolean;
+        rangeOverflow: boolean;
+        rangeUnderflow: boolean;
+        stepMismatch: boolean;
+        tooLong: boolean;
+        tooShort: boolean;
+        typeMismatch: boolean;
+        valid: boolean;
+        valueMissing: boolean;
+    };
+    error: {
+        code: string;
+        message: string;
+    } | null;
 }
 
-type TaskFormInvalidSubmitState = Partial<
-    Record<
-        TaskFormFieldName,
-        {
-            validityState?: {
-                patternMismatch: boolean;
-            } | null;
-        } | null
-    >
->;
+type TaskFormInvalidSubmitState = Partial<Record<TaskFormFieldName, TaskFormValidityState | null>>;
 
 function convertAssigneesToSelectorItems(approvers: Array<TaskCollabAssignee>): SelectorItems<UserMini | GroupMini> {
     return approvers.map(({ target }) => {
@@ -146,11 +152,10 @@ const TaskForm: React.FC<Props> = ({
     const [completionRule, setCompletionRule] = useState<TaskCompletionRule>(TASK_COMPLETION_RULE_ALL);
     const [dueDate, setDueDate] = useState<Date | null>(null);
     const [formValidityState, setFormValidityState] = useState<{
-        [key in TaskFormFieldName]?: TaskFormValidityState | null;
+        [key in TaskFormFieldName]?: TaskFormValidityState;
     }>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>(initialMessage);
-    const [isValid, setIsValid] = useState<boolean | null>(null);
 
     const validateForm = useCallback(
         (only?: TaskFormFieldName, invalidSubmitValidityState?: TaskFormInvalidSubmitState | null): void => {
@@ -171,19 +176,58 @@ const TaskForm: React.FC<Props> = ({
                 message: intl.formatMessage(commonMessages.invalidDateError),
             };
 
-            const newFormValidityState = {
-                taskAssignees:
-                    (approverTextInput.length ? assigneeFieldInvalidError : null) ||
-                    (approvers.length ? null : assigneeFieldMissingError),
-                taskName: message ? null : messageFieldError,
-                taskDueDate: getProp(invalidSubmitValidityState, 'taskDueDate.validityState.patternMismatch')
-                    ? taskDueDateError
-                    : null,
+            const baseValidityState = {
+                badInput: false,
+                customError: false,
+                patternMismatch: false,
+                rangeOverflow: false,
+                rangeUnderflow: false,
+                stepMismatch: false,
+                tooLong: false,
+                tooShort: false,
+                typeMismatch: false,
+                valid: false,
+                valueMissing: false,
             };
 
-            const newIsValid = Object.values(newFormValidityState).every(val => val == null);
+            const newFormValidityState: {
+                [key in TaskFormFieldName]: TaskFormValidityState;
+            } = {
+                taskAssignees: {
+                    validityState: {
+                        ...baseValidityState,
+                        customError: approverTextInput.length > 0,
+                        valid: approvers.length > 0 && approverTextInput.length === 0,
+                        valueMissing: approvers.length === 0,
+                    },
+                    error:
+                        (approverTextInput.length ? assigneeFieldInvalidError : null) ||
+                        (approvers.length ? null : assigneeFieldMissingError),
+                },
+                taskName: {
+                    validityState: {
+                        ...baseValidityState,
+                        valid: !!message,
+                        valueMissing: !message,
+                    },
+                    error: message ? null : messageFieldError,
+                },
+                taskDueDate: {
+                    validityState: {
+                        ...baseValidityState,
+                        patternMismatch: getProp(
+                            invalidSubmitValidityState,
+                            'taskDueDate.validityState.patternMismatch',
+                            false,
+                        ),
+                        valid: !getProp(invalidSubmitValidityState, 'taskDueDate.validityState.patternMismatch', false),
+                    },
+                    error: getProp(invalidSubmitValidityState, 'taskDueDate.validityState.patternMismatch')
+                        ? taskDueDateError
+                        : null,
+                },
+            };
 
-            setIsValid(newIsValid);
             setFormValidityState(prevState =>
                 only ? { ...prevState, [only]: newFormValidityState[only] } : newFormValidityState,
             );
@@ -193,7 +237,7 @@ const TaskForm: React.FC<Props> = ({
 
     const getErrorByFieldname = useCallback(
         (fieldName: TaskFormFieldName): string | null => {
-            return formValidityState[fieldName] ? formValidityState[fieldName]?.message || null : null;
+            return formValidityState[fieldName]?.error?.message || null;
         },
         [formValidityState],
     );
@@ -260,54 +304,66 @@ const TaskForm: React.FC<Props> = ({
         };
     }, [dueDate, editMode, getAddedAssignees, getRemovedAssignees, initialId, taskType]);
 
-    const handleValidSubmit = useCallback((): void => {
-        if (!isValid) return;
+    const handleValidSubmit = useCallback(
+        (data: { taskName: string; taskDueDate?: string }) => {
+            setIsLoading(true);
 
-        setIsLoading(true);
-        const dueDateString = dueDate && dueDate.toISOString();
+            const taskPayload = {
+                id: initialId,
+                description: data.taskName || message,
+                due_at: data.taskDueDate || (dueDate ? dueDate.toISOString() : null),
+                completion_rule: completionRule,
+            };
 
-        if (editMode === TASK_EDIT_MODE_EDIT && editTask) {
-            editTask(
-                {
-                    id: initialId,
-                    completion_rule: completionRule,
-                    description: message,
-                    due_at: dueDateString,
-                    addedAssignees: convertAssigneesToSelectorItems(getAddedAssignees()),
-                    removedAssignees: getRemovedAssignees(),
-                },
-                () => {
-                    handleSubmitSuccess({ id: initialId, description: message, due_at: dueDateString });
-                },
-                handleSubmitError,
-            );
-        } else {
-            createTask(
-                message,
-                convertAssigneesToSelectorItems(approvers),
-                dueDateString,
-                completionRule,
-                () => {
-                    handleSubmitSuccess({ id: initialId, description: message, due_at: dueDateString });
-                },
-                handleSubmitError,
-            );
-        }
-    }, [
-        isValid,
-        dueDate,
-        editMode,
-        editTask,
-        initialId,
-        completionRule,
-        message,
-        getAddedAssignees,
-        getRemovedAssignees,
-        createTask,
-        approvers,
-        handleSubmitSuccess,
-        handleSubmitError,
-    ]);
+            if (editMode === TASK_EDIT_MODE_EDIT) {
+                if (editTask) {
+                    const addedAssignees = getAddedAssignees();
+                    const removedAssignees = getRemovedAssignees();
+
+                    editTask(
+                        {
+                            ...taskPayload,
+                            addedAssignees,
+                            removedAssignees,
+                        },
+                        () => {
+                            handleSubmitSuccess({
+                                ...taskPayload,
+                                addedAssignees,
+                                removedAssignees,
+                            });
+                        },
+                        handleSubmitError,
+                    );
+                }
+            } else {
+                createTask(
+                    taskPayload.description,
+                    approvers,
+                    taskPayload.due_at,
+                    completionRule,
+                    () => {
+                        handleSubmitSuccess(taskPayload);
+                    },
+                    handleSubmitError,
+                );
+            }
+        },
+        [
+            approvers,
+            completionRule,
+            createTask,
+            dueDate,
+            editMode,
+            editTask,
+            getAddedAssignees,
+            getRemovedAssignees,
+            handleSubmitError,
+            handleSubmitSuccess,
+            initialId,
+            message,
+        ],
+    );
 
     const handleDueDateChange = useCallback(
         (date: string | null): void => {
@@ -420,6 +476,7 @@ const TaskForm: React.FC<Props> = ({
                         inputProps={{
                             'data-testid': 'task-form-assignee-input',
                             'data-target-id': 'PillSelectorDropdown-selectAssigneesInput',
+                            name: 'taskAssignees',
                         }}
                         isRequired
                         label={<FormattedMessage {...messages.tasksAddTaskFormSelectAssigneesLabel} />}

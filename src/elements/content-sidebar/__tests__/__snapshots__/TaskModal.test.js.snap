@@ -23,7 +23,7 @@ exports[`elements/content-sidebar/TaskModal render should render a default compo
   <div
     className="be"
   >
-    <TaskForm
+    <TaskFormWithIntl
       approverSelectorContacts={null}
       createTask={[MockFunction]}
       editMode="CREATE"
@@ -59,7 +59,7 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
   <div
     className="be"
   >
-    <TaskForm
+    <TaskFormWithIntl
       approverSelectorContacts={null}
       createTask={[MockFunction]}
       editMode="CREATE"
@@ -96,7 +96,7 @@ exports[`elements/content-sidebar/TaskModal render using type APPROVAL and mode 
   <div
     className="be"
   >
-    <TaskForm
+    <TaskFormWithIntl
       approverSelectorContacts={null}
       createTask={[MockFunction]}
       editMode="EDIT"
@@ -133,7 +133,7 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode C
   <div
     className="be"
   >
-    <TaskForm
+    <TaskFormWithIntl
       approverSelectorContacts={null}
       createTask={[MockFunction]}
       editMode="CREATE"
@@ -170,7 +170,7 @@ exports[`elements/content-sidebar/TaskModal render using type GENERAL and mode E
   <div
     className="be"
   >
-    <TaskForm
+    <TaskFormWithIntl
       approverSelectorContacts={null}
       createTask={[MockFunction]}
       editMode="EDIT"

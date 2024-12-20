@@ -20,17 +20,23 @@ interface DatePickerProps {
     inputProps?: Record<string, unknown>;
 }
 
-jest.mock('../../../../../components/date-picker/DatePicker', () => (props: DatePickerProps) => {
-    const { name, value = '', className, onChange, placeholder, inputProps = {} } = props;
-    return React.createElement('input', {
-        type: 'date',
-        name,
-        value,
-        className,
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) => onChange?.(e.target.value),
-        placeholder,
-        ...inputProps,
-    });
+jest.mock('../../../../../components/date-picker/DatePicker', () => {
+    const MockDatePicker = (props: DatePickerProps) => {
+        const { name, value = '', className, onChange, placeholder, inputProps = {} } = props;
+        return (
+            <input
+                type="date"
+                name={name}
+                value={value}
+                className={className}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange?.(e.target.value)}
+                placeholder={placeholder}
+                data-testid="task-form-date-input"
+                {...inputProps}
+            />
+        );
+    };
+    return MockDatePicker;
 });
 
 const mockIntl: IntlShape = {
