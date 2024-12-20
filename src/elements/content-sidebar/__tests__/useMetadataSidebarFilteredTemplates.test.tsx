@@ -26,6 +26,16 @@ const templateInstances = [
     },
 ];
 
+const hiddenTemplateInstances = {
+    id: 'template3',
+    canEdit: true,
+    fields: [],
+    hidden: true,
+    scope: 'enterprise_123',
+    templateKey: 'temlpate_1',
+    type: 'metadata_template',
+};
+
 describe('useMetadataSidebarFilteredTemplates', () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -95,5 +105,26 @@ describe('useMetadataSidebarFilteredTemplates', () => {
         rerender({ filteredTemplateIds: [] });
 
         expect(result.current.templateInstancesList).toEqual(templateInstances);
+    });
+
+    test('should filter out hidden template instances', () => {
+        const filteredTemplateIds = ['template1'];
+        const templateInstancesWithHidden = [...templateInstances, hiddenTemplateInstances];
+        const { result } = renderHook(() =>
+            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstancesWithHidden),
+        );
+
+        expect(result.current.filteredTemplates).toEqual(['template1']);
+        expect(result.current.templateInstancesList).toEqual([templateInstances[0]]);
+    });
+
+    test('should filter out non existing template instances', () => {
+        const filteredTemplateIds = ['template1', 'template4'];
+        const { result } = renderHook(() =>
+            useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances),
+        );
+
+        expect(result.current.filteredTemplates).toEqual(['template1']);
+        expect(result.current.templateInstancesList).toEqual([templateInstances[0]]);
     });
 });
