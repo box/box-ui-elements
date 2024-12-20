@@ -61,11 +61,10 @@
         "cy:open": "yarn cy:wait; yarn cypress open",
         "cy:run": "yarn cy:wait; yarn cypress run --spec \"test/integration/**/*.cy.js\"",
         "cy:wait": "wait-on http-get://127.0.0.1:6060/#",
-        "lint": "npm-run-all lint:js lint:ts lint:staged",
+        "lint": "npm-run-all lint:js lint:ts lint:ci",
         "lint:js": "eslint --max-warnings=0 .",
         "lint:ts": "tsc",
-        "lint:css": "stylelint \"src/**/*.scss\" --syntax scss",
-        "lint:staged": "lint-staged -c scripts/lint-staged.config.js",
+        "lint:ci": "./scripts/lint.sh",
         "prebuild:es": "npm-run-all copy:styles ts:defs copy:flow",
         "release": "yarn release:beta",
         "release:beta": "DIST=beta BRANCH=master ./scripts/release.sh",
@@ -97,7 +96,7 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "yarn lint:staged",
+            "pre-commit": "lint-staged -c scripts/lint-staged.config.js",
             "pre-push": "scripts/prepush.sh",
             "commit-msg": "commitlint -e"
         }
