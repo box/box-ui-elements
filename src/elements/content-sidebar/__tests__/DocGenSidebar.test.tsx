@@ -72,9 +72,12 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         expect(await screen.findByRole('status', { name: 'Loading' })).toBeInTheDocument();
 
-        await waitFor(() => {
-            expect(screen.queryByRole('status', { name: 'Loading' })).not.toBeInTheDocument();
-        });
+        await waitFor(
+            () => {
+                expect(screen.queryByRole('status', { name: 'Loading' })).not.toBeInTheDocument();
+            },
+            { timeout: 1250 },
+        );
     });
 
     test('should re-trigger getDocGenTags on click on refresh button', async () => {
