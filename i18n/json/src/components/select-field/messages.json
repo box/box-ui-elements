@@ -1,0 +1,17 @@
+[
+  {
+    "id": "boxui.selectField.clearAll",
+    "description": "text shown on the Clear All option in the options list",
+    "defaultMessage": "Clear All"
+  },
+  {
+    "id": "boxui.selectField.searchPlaceholder",
+    "description": "Placeholder text shown in the search input",
+    "defaultMessage": "Search"
+  },
+  {
+    "id": "boxui.selectField.noResults",
+    "description": "Text shown in the select field dropdown when there are no options that match the search field input",
+    "defaultMessage": "No Results"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.common.activityStatusResolved",
+    "description": "Indicator of resolved status of Comment or Annotation, visible in Feed Item (in upper-case in supported language)",
+    "defaultMessage": "RESOLVED"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "be.feedbackCtaText",
+    "description": "Call-to-action text describing what to do to navigate to specified feedback form",
+    "defaultMessage": "Click to provide feedback"
+  },
+  {
+    "id": "be.feedbackFormDescription",
+    "description": "Accessible text used to describe the form used for feedback",
+    "defaultMessage": "Beta Feedback Form"
+  }
+]
