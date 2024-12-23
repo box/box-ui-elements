@@ -6,7 +6,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
-import { IconButton, Text } from '@box/blueprint-web';
+import {IconButton, Text, Tooltip} from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
 // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
 import { BoxAiContentAnswers, withApiWrapper, type ApiWrapperProps } from '@box/box-ai-content-answers'
@@ -23,7 +23,6 @@ import messages from '../common/messages';
 import sidebarMessages from './messages';
 
 import './BoxAISidebar.scss';
-import Tooltip, {TooltipPosition} from "../../components/tooltip/Tooltip";
 
 
 const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
@@ -99,7 +98,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         <>
             { renderBoxAISidebarTitle() }
             { isResetChatEnabled &&
-                <Tooltip position={TooltipPosition.MIDDLE_LEFT} text={formatMessage(sidebarMessages.boxAISidebarClearConversationTooltip)} isTabbable={false}>
+                <Tooltip content={formatMessage(sidebarMessages.boxAISidebarClearConversationTooltip)}>
 					<IconButton
 							aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
 							icon={Trash}
