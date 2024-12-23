@@ -23,6 +23,7 @@ import messages from '../common/messages';
 import sidebarMessages from './messages';
 
 import './BoxAISidebar.scss';
+import Tooltip, {TooltipPosition} from "../../components/tooltip/Tooltip";
 
 
 const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
@@ -97,13 +98,15 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
     const renderActions = () => (
         <>
             { renderBoxAISidebarTitle() }
-            { isResetChatEnabled && 
-                <IconButton
-                    aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
-                    icon={Trash}
-                    onClick={onClearAction}
-                    size="x-small"
-                />
+            { isResetChatEnabled &&
+                <Tooltip position={TooltipPosition.MIDDLE_LEFT} text={formatMessage(sidebarMessages.boxAISidebarClearConversationTooltip)} isTabbable={false}>
+					<IconButton
+							aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
+							icon={Trash}
+							onClick={onClearAction}
+							size="small"
+					/>
+                </Tooltip>
             }
         </>
     );
