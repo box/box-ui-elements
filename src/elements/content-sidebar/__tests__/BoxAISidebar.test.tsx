@@ -2,6 +2,7 @@ import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import BoxAISidebar, { BoxAISidebarProps } from '../BoxAISidebar';
+import messages from "../../common/content-answers/messages";
 
 jest.mock('@box/box-ai-agent-selector', () => ({
     ...jest.requireActual('@box/box-ai-agent-selector'),
@@ -168,5 +169,15 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
         expect(screen.getByText('completed question')).toBeInTheDocument();
         expect(screen.queryByText('not completed question')).not.toBeInTheDocument();
+    });
+
+    test('should display clear conversation tooltip', async () => {
+        await renderComponent();
+
+        const button = screen.getByRole('button', { name: 'Clear' });
+        await userEvent.hover(button);
+        const tooltip = await screen.findByRole('tooltip', { name: 'Clear conversation' });
+
+        expect(tooltip).toBeInTheDocument();
     });
 });
