@@ -64,7 +64,7 @@ export interface BoxAISidebarProps {
     isIntelligentQueryMode: boolean;
     isMarkdownEnabled: boolean;
     isResetChatEnabled: boolean;
-    isStopResponseEnabled: boolean;
+    isStopResponseEnabled?: boolean;
     isStreamingEnabled: boolean;
     userInfo: { name: ''; avatarUrl: '' };
     recordAction: (params: RecordActionType) => void;
