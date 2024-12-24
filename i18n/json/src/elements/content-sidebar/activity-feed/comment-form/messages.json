@@ -1,0 +1,62 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.commentCancel",
+    "description": "Text for cancel button",
+    "defaultMessage": "Cancel"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.commentLabel",
+    "description": "Accessible label for comment input field",
+    "defaultMessage": "Write a comment"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.commentPost",
+    "description": "Text for post button",
+    "defaultMessage": "Post"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.commentWrite",
+    "description": "Placeholder for comment input",
+    "defaultMessage": "Write a comment"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.approvalAddAssignee",
+    "description": "Placeholder for approvers input",
+    "defaultMessage": "Add an assignee"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.approvalAddTask",
+    "description": "Label for checkbox to add approvers to a comment",
+    "defaultMessage": "Add Task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.approvalAddTaskTooltip",
+    "description": "Tooltip text for checkbox to add approvers to a comment",
+    "defaultMessage": "Assigning a task to someone will send them a notification with the message in the comment box and allow them to approve or deny."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.approvalAssignees",
+    "description": "Title for assignees input",
+    "defaultMessage": "Assignees"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.approvalDueDate",
+    "description": "Title for approvers due date input",
+    "defaultMessage": "Due Date"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.approvalSelectDate",
+    "description": "Placeholder for due date input",
+    "defaultMessage": "Select a date"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.atMentionTip",
+    "description": "Mentioning call to action displayed below the comment input",
+    "defaultMessage": "@mention users to notify them."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.commentForm.atMentionTipDescription",
+    "description": "Mentioning call to action detailed description for screen reader users",
+    "defaultMessage": "Use the @ symbol to mention users and use the up and down arrow keys to scroll through autocomplete suggestions."
+  }
+]

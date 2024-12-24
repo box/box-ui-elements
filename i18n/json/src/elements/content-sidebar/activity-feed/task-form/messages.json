@@ -1,0 +1,82 @@
+[
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskCreateErrorTitle",
+    "description": "Title shown above error message when a task creation fails",
+    "defaultMessage": "Error"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskEditWarningTitle",
+    "description": "Title shown above warning message when a task create/edit partially fails",
+    "defaultMessage": "Task Updated with Errors"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskGroupExceedsWarningTitle",
+    "description": "Title shown above warning message when task group exceeds limit",
+    "defaultMessage": "Exceeded max assignees per group"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskUpdateErrorMessage",
+    "description": "Error message when a task edit fails",
+    "defaultMessage": "An error occurred while modifying this task. Please try again."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskApprovalAssigneeRemovalWarningMessage",
+    "description": "Warning message showing that, while the task was updated, not all assignees (1+) were removed",
+    "defaultMessage": "Unable to remove assignee(s) because the task is now approved."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskGeneralAssigneeRemovalWarningMessage",
+    "description": "Warning message showing that, while the task was updated, not all assignees (1+) were removed",
+    "defaultMessage": "Unable to remove assignee(s) because the task is now completed."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.tasksAddTaskFormSelectAssigneesLabel",
+    "description": "label for task create form assignee input",
+    "defaultMessage": "Select Assignees"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.tasksAddTaskFormMessageLabel",
+    "description": "label for task create form message input",
+    "defaultMessage": "Message"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.tasksAddTaskFormDueDateLabel",
+    "description": "label for task create form due date input",
+    "defaultMessage": "Due Date"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.tasksAddTaskFormSubmitLabel",
+    "description": "label for create button in create task modal in create mode",
+    "defaultMessage": "Create"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.tasksEditTaskFormSubmitLabel",
+    "description": "label for edit button in create task modal in edit mode",
+    "defaultMessage": "Update"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.tasksAddTaskFormCancelLabel",
+    "description": "label for cancel button in create task popup",
+    "defaultMessage": "Cancel"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskAnyCheckboxLabel",
+    "description": "Label for checkbox to set a task that requires only one assignee to complete.",
+    "defaultMessage": "Only one assignee is required to complete this task"
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskAnyInfoTooltip",
+    "description": "Text in tooltip explaining completion rule for an any assignee task.",
+    "defaultMessage": "By default, all assignees are required to take action before a task is complete. Selecting this option will require only one assignee to complete this task."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskAnyInfoGroupTooltip",
+    "description": "Text in tooltip explaining completion rule for an any assignee task (with optional groups).",
+    "defaultMessage": "Selecting this option will require only one assignee to complete this task. This will include assignees across all groups."
+  },
+  {
+    "id": "be.contentSidebar.activityFeed.taskForm.taskCreateGroupLabel",
+    "description": "Subheading for dropdown where user can select assignees and the item is a group",
+    "defaultMessage": "Group"
+  }
+]
