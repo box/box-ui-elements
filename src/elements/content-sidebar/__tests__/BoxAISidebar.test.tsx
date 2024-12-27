@@ -2,72 +2,73 @@ import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import BoxAISidebar, { BoxAISidebarProps } from '../BoxAISidebar';
-import messages from "../../common/content-answers/messages";
 
 jest.mock('@box/box-ai-agent-selector', () => ({
     ...jest.requireActual('@box/box-ai-agent-selector'),
-    BoxAiAgentSelectorWithApi: () => <div data-testid="sidebar-agent-selector" />
+    BoxAiAgentSelectorWithApi: () => <div data-testid="sidebar-agent-selector" />,
 }));
 
 const mockOnClearAction = jest.fn();
 jest.mock('@box/box-ai-content-answers', () => ({
     ...jest.requireActual('@box/box-ai-content-answers'),
-    withApiWrapper: Component => props => (<Component 
-        createSession={props.createSessionRequest}
-        encodedSession={props.restoredSession}
-        error={null}
-        getAIStudioAgents={props.getAIStudioAgents}
-        hostAppName={props.hostAppName}
-        hasCustomSuggestedQuestions={false}
-        isAgentSelectorEnabled={props.isAgentSelectorEnabled}
-        isAIStudioAgentSelectorEnabled={props.isAIStudioAgentSelectorEnabled}
-        isCitationsEnabled={props.isCitationsEnabled}
-        isDebugModeEnabled={props.isDebugModeEnabled}
-        isMarkdownEnabled={props.isMarkdownEnabled}
-        isLoading={false}
-        isOpen
-        isResetChatEnabled={props.isResetChatEnabled}
-        isStreamingEnabled={props.isStreamingEnabled}
-        itemID={props.itemID}
-        itemIDs={props.itemIDs}
-        onClearAction={mockOnClearAction}
-        onCloseModal={jest.fn()}
-        onSelectAgent={jest.fn()}
-        onAgentEditorToggle={jest.fn()}
-        questions={props.restoredQuestions}
-        retryQuestion={jest.fn()}
-        sendQuestion={jest.fn()}
-        shouldRenderProviders={jest.fn()}
-        stopQuestion={jest.fn()}
-        suggestedQuestionsRequestState="success"
-        suggestedQuestions={props.suggestedQuestions}
-        warningNotice={props.warningNotice}
-        warningNoticeAriaLabel={props.warningNoticeAriaLabel}
-        />),
+    withApiWrapper: Component => props => (
+        <Component
+            createSession={props.createSessionRequest}
+            encodedSession={props.restoredSession}
+            error={null}
+            getAIStudioAgents={props.getAIStudioAgents}
+            hostAppName={props.hostAppName}
+            hasCustomSuggestedQuestions={false}
+            isAgentSelectorEnabled={props.isAgentSelectorEnabled}
+            isAIStudioAgentSelectorEnabled={props.isAIStudioAgentSelectorEnabled}
+            isCitationsEnabled={props.isCitationsEnabled}
+            isDebugModeEnabled={props.isDebugModeEnabled}
+            isMarkdownEnabled={props.isMarkdownEnabled}
+            isLoading={false}
+            isOpen
+            isResetChatEnabled={props.isResetChatEnabled}
+            isStreamingEnabled={props.isStreamingEnabled}
+            itemID={props.itemID}
+            itemIDs={props.itemIDs}
+            onClearAction={mockOnClearAction}
+            onCloseModal={jest.fn()}
+            onSelectAgent={jest.fn()}
+            onAgentEditorToggle={jest.fn()}
+            questions={props.restoredQuestions}
+            retryQuestion={jest.fn()}
+            sendQuestion={jest.fn()}
+            shouldRenderProviders={jest.fn()}
+            stopQuestion={jest.fn()}
+            suggestedQuestionsRequestState="success"
+            suggestedQuestions={props.suggestedQuestions}
+            warningNotice={props.warningNotice}
+            warningNoticeAriaLabel={props.warningNoticeAriaLabel}
+        />
+    ),
 }));
 
 describe('elements/content-sidebar/BoxAISidebar', () => {
     const mockProps = {
         contentName: 'testName.txt',
         cache: { encodedSession: '', questions: [] },
-        createSessionRequest: jest.fn(()=> ({ encodedSession: '1234' })),
+        createSessionRequest: jest.fn(() => ({ encodedSession: '1234' })),
         elementId: '123',
         fetchTimeout: {},
         fileExtension: 'txt',
         fileID: '123',
         getAgentConfig: jest.fn(),
-        getAIStudioAgents: jest.fn(() => ([
+        getAIStudioAgents: jest.fn(() => [
             {
                 id: null,
-                name: "Default agent",
+                name: 'Default agent',
                 isSelected: true,
             },
             {
-                id: "special",
-                name: "Special agent",
+                id: 'special',
+                name: 'Special agent',
                 isSelected: false,
             },
-        ])),
+        ]),
         getAnswer: jest.fn(),
         getAnswerStreaming: jest.fn(),
         getSuggestedQuestions: jest.fn(),
@@ -81,7 +82,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isResetChatEnabled: true,
         isStopResponseEnabled: true,
         isStreamingEnabled: true,
-        userInfo: { name: 'Test', avatarUrl: undefined},
+        userInfo: { name: 'Test', avatarUrl: undefined },
         recordAction: jest.fn(),
         setCacheValue: jest.fn(),
     } as unknown as BoxAISidebarProps;
@@ -98,7 +99,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
     test('should render title', async () => {
         await renderComponent();
-        
 
         expect(screen.getByRole('heading', { level: 3, name: 'Box AI' })).toBeInTheDocument();
     });
@@ -150,7 +150,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
     test('should not set questions that are in progress', async () => {
         await renderComponent({
-            cache: { 
+            cache: {
                 encodedSession: '1234',
                 questions: [
                     {
@@ -162,9 +162,9 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                         error: 'general',
                         isCompleted: false,
                         prompt: 'not completed question',
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
 
         expect(screen.getByText('completed question')).toBeInTheDocument();

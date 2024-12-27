@@ -39,7 +39,7 @@ const messages = defineMessages({
     },
     boxAISidebarClearConversationTooltip: {
         id: 'be.contentSidebar.boxAI.clearConversationTooltip',
-        description: 'Tooltip text for clear button for Box AI in sidebae header',
+        description: 'Tooltip text for clear button for Box AI in sidebar header',
         defaultMessage: 'Clear conversation',
     },
     boxSignFtuxBody: {
