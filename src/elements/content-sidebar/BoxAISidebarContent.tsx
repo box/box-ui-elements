@@ -9,7 +9,7 @@ import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-sel
 import { IconButton, Text } from '@box/blueprint-web';
 import { Trash } from '@box/blueprint-web-assets/icons/Line';
 // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
-import { BoxAiContentAnswers, withApiWrapper, type ApiWrapperProps } from '@box/box-ai-content-answers'
+import { BoxAiContentAnswers, withApiWrapper, type ApiWrapperProps } from '@box/box-ai-content-answers';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
@@ -24,28 +24,28 @@ import sidebarMessages from './messages';
 
 import './BoxAISidebar.scss';
 
-
 const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
-    
+
 function BoxAISidebarContent(props: ApiWrapperProps) {
-    const { 
-        createSession, 
-        encodedSession, 
-        onClearAction, 
+    const {
+        createSession,
+        encodedSession,
+        onClearAction,
         getAIStudioAgents,
         hostAppName,
-        isAIStudioAgentSelectorEnabled, 
+        isAIStudioAgentSelectorEnabled,
         isResetChatEnabled,
-        onSelectAgent, 
+        onSelectAgent,
         questions,
-        sendQuestion, 
-        stopQuestion, 
-        ...rest 
+        sendQuestion,
+        stopQuestion,
+        ...rest
     } = props;
     const { formatMessage } = useIntl();
-    const { cache, contentName, elementId, recordAction, setCacheValue, userInfo } = React.useContext(BoxAISidebarContext);
+    const { cache, contentName, elementId, isStopResponseEnabled, recordAction, setCacheValue, userInfo } =
+        React.useContext(BoxAISidebarContext);
     const { questions: cacheQuestions } = cache;
 
     if (cache.encodedSession !== encodedSession) {
@@ -61,15 +61,15 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
             createSession();
         }
 
-        if (cacheQuestions.length > 0 && cacheQuestions[cacheQuestions.length-1].isCompleted === false) {
+        if (cacheQuestions.length > 0 && cacheQuestions[cacheQuestions.length - 1].isCompleted === false) {
             // if we have cache with question that is not completed resend it to trigger an API
-            sendQuestion({prompt: cacheQuestions[cacheQuestions.length-1].prompt});
+            sendQuestion({ prompt: cacheQuestions[cacheQuestions.length - 1].prompt });
         }
 
         return () => {
             // stop API request on unmount (e.g. during switching to another tab)
             stopQuestion();
-        }
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -79,7 +79,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                 <Text as="h3" className="bcs-title">
                     {formatMessage(messages.sidebarBoxAITitle)}
                 </Text>
-                {isAIStudioAgentSelectorEnabled &&
+                {isAIStudioAgentSelectorEnabled && (
                     <BoxAiAgentSelectorWithApi
                         fetcher={getAIStudioAgents}
                         hostAppName={hostAppName}
@@ -89,28 +89,28 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         // @ts-ignore variant will be available in higher version
                         variant="sidebar"
                     />
-                }
+                )}
             </div>
         );
     };
 
     const renderActions = () => (
         <>
-            { renderBoxAISidebarTitle() }
-            { isResetChatEnabled && 
+            {renderBoxAISidebarTitle()}
+            {isResetChatEnabled && (
                 <IconButton
                     aria-label={formatMessage(sidebarMessages.boxAISidebarClear)}
                     icon={Trash}
                     onClick={onClearAction}
                     size="x-small"
                 />
-            }
+            )}
         </>
     );
 
     return (
         <AgentsProvider>
-            <SidebarContent 
+            <SidebarContent
                 actions={renderActions()}
                 className="bcs-BoxAISidebar"
                 elementId={elementId}
@@ -123,13 +123,14 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         contentType={formatMessage(messages.sidebarBoxAIContent)}
                         hostAppName={hostAppName}
                         isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                        isStopResponseEnabled={isStopResponseEnabled}
                         questions={questions}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
                         userInfo={userInfo}
                         variant="sidebar"
                         recordAction={recordAction}
-                        {...rest} 
+                        {...rest}
                     />
                 </div>
             </SidebarContent>
