@@ -66,7 +66,7 @@ export interface BoxAISidebarProps {
     isResetChatEnabled: boolean;
     isStopResponseEnabled?: boolean;
     isStreamingEnabled: boolean;
-    userInfo: { name: string, avatarURL: string};
+    userInfo: { name: string, avatarURL: string };
     recordAction: (params: RecordActionType) => void;
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
 }
