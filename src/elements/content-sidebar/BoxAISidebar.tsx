@@ -54,21 +54,21 @@ export interface BoxAISidebarProps {
         itemIDs?: Array<string>,
         abortController?: AbortController,
         state?: Record<string, unknown>,
-    ) => Promise<unknown>,
-    getSuggestedQuestions: (itemID: string) => Promise<unknown> | null,
-    hostAppName: string,
-    isAgentSelectorEnabled: boolean,
-    isAIStudioAgentSelectorEnabled: boolean,
-    isCitationsEnabled: boolean,
-    isDebugModeEnabled: boolean,
-    isIntelligentQueryMode: boolean,
-    isMarkdownEnabled: boolean,
-    isResetChatEnabled: boolean,
+    ) => Promise<unknown>;
+    getSuggestedQuestions: (itemID: string) => Promise<unknown> | null;
+    hostAppName: string;
+    isAgentSelectorEnabled: boolean;
+    isAIStudioAgentSelectorEnabled: boolean;
+    isCitationsEnabled: boolean;
+    isDebugModeEnabled: boolean;
+    isIntelligentQueryMode: boolean;
+    isMarkdownEnabled: boolean;
+    isResetChatEnabled: boolean;
     isStopResponseEnabled?: boolean;
-    isStreamingEnabled: boolean,
-    userInfo: { name: string, avatarURL: string},
-    recordAction: (params: RecordActionType) => void,
-    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,
+    isStreamingEnabled: boolean;
+    userInfo: { name: string, avatarURL: string};
+    recordAction: (params: RecordActionType) => void;
+    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
