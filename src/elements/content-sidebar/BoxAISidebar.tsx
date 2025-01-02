@@ -63,6 +63,7 @@ export interface BoxAISidebarProps {
     isDebugModeEnabled: boolean;
     isIntelligentQueryMode: boolean;
     isMarkdownEnabled: boolean;
+    isOpen: boolean;
     isResetChatEnabled: boolean;
     isStopResponseEnabled?: boolean;
     isStreamingEnabled: boolean;
@@ -80,6 +81,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         fileID,
         getSuggestedQuestions,
         isIntelligentQueryMode,
+        isOpen,
         isStopResponseEnabled,
         recordAction,
         setCacheValue,
@@ -116,6 +118,8 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             value={{ cache, contentName, elementId, isStopResponseEnabled, setCacheValue, recordAction, userInfo }}
         >
             <BoxAISidebarContent
+                getSuggestedQuestions={getSuggestedQuestions}
+                isOpen={isOpen}
                 isStopResponseEnabled={isStopResponseEnabled}
                 itemID={fileID}
                 itemIDs={[fileID]}
