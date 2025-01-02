@@ -19,7 +19,7 @@ export interface BoxAISidebarContextValues {
     isStopResponseEnabled: boolean;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
-    userInfo: { name: string; avatarUrl: string };
+    userInfo: { name: string, avatarURL: string };
 }
 
 export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues>({
@@ -29,7 +29,7 @@ export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues
     isStopResponseEnabled: false,
     recordAction: noop,
     setCacheValue: noop,
-    userInfo: { name: '', avatarUrl: '' },
+    userInfo: { name: '', avatarURL: '' },
 });
 
 export interface BoxAISidebarProps {
@@ -66,7 +66,7 @@ export interface BoxAISidebarProps {
     isResetChatEnabled: boolean;
     isStopResponseEnabled?: boolean;
     isStreamingEnabled: boolean;
-    userInfo: { name: ''; avatarUrl: '' };
+    userInfo: { name: string, avatarURL: string };
     recordAction: (params: RecordActionType) => void;
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
 }
