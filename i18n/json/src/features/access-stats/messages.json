@@ -1,0 +1,32 @@
+[
+  {
+    "id": "boxui.accessStats.accessStatsViewDetails",
+    "description": "The text in the link in the sidebar to open up the access stats popup",
+    "defaultMessage": "View Details"
+  },
+  {
+    "id": "boxui.accessStats.accessStatsViews",
+    "description": "The label for the view category of access stats for box notes",
+    "defaultMessage": "Views"
+  },
+  {
+    "id": "boxui.accessStats.accessStatsPreviews",
+    "description": "The label for the preview category of access stats",
+    "defaultMessage": "Previews"
+  },
+  {
+    "id": "boxui.accessStats.accessStatsEdits",
+    "description": "The label for the edit category of access stats",
+    "defaultMessage": "Edits"
+  },
+  {
+    "id": "boxui.accessStats.accessStatsComments",
+    "description": "The label for the comments category of access stats",
+    "defaultMessage": "Comments"
+  },
+  {
+    "id": "boxui.accessStats.accessStatsDownloads",
+    "description": "The label for the downloads category of access stats",
+    "defaultMessage": "Downloads"
+  }
+]

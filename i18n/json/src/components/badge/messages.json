@@ -1,0 +1,17 @@
+[
+  {
+    "id": "boxui.badges.beta",
+    "description": "Text for the beta badge",
+    "defaultMessage": "BETA"
+  },
+  {
+    "id": "boxui.badges.trial",
+    "description": "Text for the trial badge",
+    "defaultMessage": "TRIAL"
+  },
+  {
+    "id": "boxui.badges.upgrade",
+    "description": "Text for the upgrade badge",
+    "defaultMessage": "UPGRADE"
+  }
+]
