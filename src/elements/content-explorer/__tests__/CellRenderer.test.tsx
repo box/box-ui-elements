@@ -2,7 +2,7 @@ import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import dateCellRenderer from '../dateCellRenderer';
-import { ITEM_TYPE_FILE } from '../../../constants';
+import { TYPE_FILE } from '../../../constants';
 import type { BoxItem } from '../../../common/types/core';
 
 import headerCellRenderer, { HeaderCellRendererProps } from '../headerCellRenderer';
@@ -23,7 +23,7 @@ const mockItem: BoxItem = {
         can_rename: true,
         can_share: true,
     },
-    type: ITEM_TYPE_FILE,
+    type: TYPE_FILE,
 };
 
 describe('elements/content-explorer/CellRenderer', () => {
