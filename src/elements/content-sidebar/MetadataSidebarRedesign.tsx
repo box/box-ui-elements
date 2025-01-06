@@ -197,9 +197,9 @@ function MetadataSidebarRedesign({
     const { handleSetFilteredTemplates, filteredTemplates, templateInstancesList } =
         useMetadataSidebarFilteredTemplates(history, filteredTemplateIds, templateInstances);
     const filterDropdown =
-        isSuccess && isViewMode && appliedTemplateInstances.length > 1 ? (
+        isSuccess && isViewMode && visibleTemplateInstances.length > 1 ? (
             <FilterInstancesDropdown
-                appliedTemplates={appliedTemplateInstances as MetadataTemplate[]}
+                appliedTemplates={visibleTemplateInstances as MetadataTemplate[]}
                 selectedTemplates={filteredTemplates}
                 setSelectedTemplates={handleSetFilteredTemplates}
             />
