@@ -68,7 +68,19 @@ export const mockGlobalMetadataTemplates = {
 export const mockEmptyMetadataInstances = {
     url: `${apiV2Path}/files/${fileIdWithoutMetadata}/metadata`,
     response: {
-        entries: [],
+        entries: [
+            {
+                id: '2cb618ed-f31e-4172-b354-534524246653',
+                $version: 1,
+                $type: 'Secrets-453ffc2f-bf5a-464c-a004-432342',
+                $parent: 'file_415542803939',
+                $typeVersion: 1,
+                $template: 'secrets',
+                $scope: 'enterprise_173733877',
+                myAttribute: 'Secrets',
+                $canEdit: true,
+            },
+        ],
     },
 };
 

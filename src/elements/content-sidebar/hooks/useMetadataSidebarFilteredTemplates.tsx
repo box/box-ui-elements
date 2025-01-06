@@ -20,7 +20,7 @@ export function useMetadataSidebarFilteredTemplates(
 
     React.useEffect(() => {
         const matchingFilteredTemplateIds = templateInstances
-            .filter(instance => filteredTemplateIds.includes(instance.id))
+            .filter(instance => filteredTemplateIds.includes(instance.id) && !instance.hidden)
             .map(instance => instance.id);
 
         setFilteredTemplates(matchingFilteredTemplateIds);
@@ -37,7 +37,7 @@ export function useMetadataSidebarFilteredTemplates(
 
     const templateInstancesList = React.useMemo(() => {
         const filteredTemplateInstances = templateInstances.filter((instance: MetadataTemplateInstance) =>
-            filteredTemplates.some((template: string) => template === instance.id),
+            filteredTemplates.some((template: string) => template === instance.id && !instance.hidden),
         );
         return filteredTemplates.length === 0 ? templateInstances : filteredTemplateInstances;
     }, [templateInstances, filteredTemplates]);

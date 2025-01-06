@@ -79,4 +79,8 @@
         margin-top: tokens.$space-15;
         margin-bottom: tokens.$space-4;
     }
+
+    &--message {
+        text-align: center;
+    }
 }
