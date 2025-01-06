@@ -6,6 +6,15 @@ export type { StringAnyMap, StringMap };
 
 export type Token = null | undefined | string | Function;
 
+export interface ElementsXhrError extends Error {
+    code?: string;
+    status?: number;
+    response?: {
+        status: number;
+        code: string;
+    };
+}
+
 export interface APIOptions {
     apiHost?: string;
     cache?: Cache;

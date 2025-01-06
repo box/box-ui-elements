@@ -1,18 +1,22 @@
 import * as React from 'react';
 import { render, screen } from '../../../test-utils/testing-library';
-
+import type { BoxItem } from '../../../common/types/core';
 import Date, { DateProps } from '../Date';
-import { FIELD_INTERACTED_AT } from '../../../constants';
+import { FIELD_INTERACTED_AT, ITEM_TYPE_FILE } from '../../../constants';
 
-const itemWithModifiedBy = {
+const itemWithModifiedBy: BoxItem = {
+    id: '123',
     modified_at: '2023-10-01T12:00:00Z',
     interacted_at: '2023-10-02T12:00:00Z',
-    modified_by: { name: 'John Doe' },
+    modified_by: { id: '456', name: 'John Doe', type: 'user' },
+    type: ITEM_TYPE_FILE,
 };
 
-const itemWithoutModifiedBy = {
+const itemWithoutModifiedBy: BoxItem = {
+    id: '789',
     modified_at: '2023-10-01T12:00:00Z',
     interacted_at: '2023-10-02T12:00:00Z',
+    type: ITEM_TYPE_FILE,
 };
 
 describe('elements/content-explorer/Date', () => {

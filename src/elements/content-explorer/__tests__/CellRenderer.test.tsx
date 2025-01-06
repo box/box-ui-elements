@@ -2,16 +2,18 @@ import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import dateCellRenderer from '../dateCellRenderer';
+import { ITEM_TYPE_FILE } from '../../../constants';
+import type { BoxItem } from '../../../common/types/core';
 
 import headerCellRenderer, { HeaderCellRendererProps } from '../headerCellRenderer';
 import moreOptionsCellRenderer, { MoreOptionsCellRendererProps } from '../moreOptionsCellRenderer';
 import sizeCellRenderer, { SizeCellRendererProps } from '../sizeCellRenderer';
 
-const mockItem = {
+const mockItem: BoxItem = {
     id: '1',
     name: 'Test Item',
     modified_at: '2023-10-10T10:00:00Z',
-    modified_by: { name: 'John Doe' },
+    modified_by: { id: '123', name: 'John Doe', type: 'user' },
     interacted_at: '',
     size: 12345,
     permissions: {
@@ -21,7 +23,7 @@ const mockItem = {
         can_rename: true,
         can_share: true,
     },
-    type: 'file',
+    type: ITEM_TYPE_FILE,
 };
 
 describe('elements/content-explorer/CellRenderer', () => {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { ComponentWithCurrentUser, CurrentUserState, WithCurrentUserProps } from '../withCurrentUser';
 import { withCurrentUser } from '../index';
+import type { User } from '../../../../common/types/core';
 // @ts-ignore no ts defintion
 import messages from '../../messages';
 
@@ -31,8 +32,10 @@ describe('elements/common/current-user/withCurrentUser', () => {
     const getWrapper = (props: WrappedProps = {}): WrapperType =>
         shallow(<WrappedComponent api={api} file={file} {...props} />);
 
-    const currentUser = {
+    const currentUser: User = {
         id: 'foo',
+        name: 'Test User',
+        type: 'user',
     };
 
     let instance: React.Component<{}, {}, {}> & ComponentWithCurrentUser;
@@ -86,7 +89,7 @@ describe('elements/common/current-user/withCurrentUser', () => {
         });
 
         test('should set a maskError if there is an error in fetching the current user', () => {
-            instance.fetchCurrentUserErrorCallback({}, '404');
+            instance.fetchCurrentUserErrorCallback({ name: 'Error', message: 'Not Found' }, '404');
             const inlineErrorState = wrapper.state().currentUserError.maskError;
 
             expect(typeof currentUserErrorHeaderMessage).toBe('object');
@@ -97,7 +100,7 @@ describe('elements/common/current-user/withCurrentUser', () => {
 
         test('should set the current user error and call the error callback', () => {
             instance.setState = jest.fn();
-            instance.fetchCurrentUserErrorCallback({ status: 500 }, '500');
+            instance.fetchCurrentUserErrorCallback({ name: 'Error', message: 'Server Error', status: 500 }, '500');
             expect(instance.setState).toBeCalledWith({
                 currentUser: undefined,
                 currentUserError: expect.any(Object),

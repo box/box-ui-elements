@@ -13,7 +13,7 @@ describe('elements/content-explorer/ShareDialog', () => {
         canSetShareAccess: true,
         isLoading: false,
         isOpen: true,
-        item: { shared_link: { url: 'http://example.com' } },
+        item: { id: 'share123', type: 'file', name: 'test.txt', shared_link: { url: 'http://example.com' } },
         onCancel: jest.fn(),
         onShareAccessChange: jest.fn(),
         parentElement: document.createElement('div'),
@@ -47,7 +47,7 @@ describe('elements/content-explorer/ShareDialog', () => {
     });
 
     test('renders with empty input when item has no shared link', async () => {
-        renderComponent({ item: { shared_link: null } });
+        renderComponent({ item: { id: 'share123', type: 'file', name: 'test.txt', shared_link: null } });
         expect(await screen.findByRole('textbox')).toHaveValue('None');
     });
 });

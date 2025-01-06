@@ -1,16 +1,17 @@
 import React from 'react';
-
+import type { BoxItem } from '../../../../common/types/core';
 import { render, screen } from '../../../../test-utils/testing-library';
 import ItemSubDetails, { ItemSubDetailsProps } from '../ItemSubDetails';
-import { VIEW_RECENTS } from '../../../../constants';
+import { VIEW_RECENTS, ITEM_TYPE_FILE } from '../../../../constants';
 
-const mockItem = {
+const mockItem: BoxItem = {
     id: '1',
     name: 'Test Item',
     modified_at: '2023-10-10T10:00:00Z',
-    modified_by: { name: 'John Doe' },
+    modified_by: { id: '123', name: 'John Doe', type: 'user' },
     interacted_at: '',
     size: 12345,
+    type: ITEM_TYPE_FILE,
 };
 
 describe('ItemSubDetails', () => {

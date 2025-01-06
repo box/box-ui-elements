@@ -2,11 +2,10 @@ import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import DeleteConfirmationDialog, { DeleteConfirmationDialogProps } from '../DeleteConfirmationDialog';
+import { ITEM_TYPE_FILE, ITEM_TYPE_FOLDER } from '../../../constants';
 
-import { TYPE_FOLDER } from '../../../constants';
-
-const mockItem = { type: 'pdf', name: 'Test File' };
-const mockFolderItem = { type: TYPE_FOLDER, name: 'Test Folder' };
+const mockItem = { id: '123', type: ITEM_TYPE_FILE, name: 'Test File' };
+const mockFolderItem = { id: '456', type: ITEM_TYPE_FOLDER, name: 'Test Folder' };
 
 jest.mock('react-modal', () => {
     return jest.fn(({ children }) => <div aria-label="Delete">{children}</div>);
