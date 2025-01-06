@@ -34,6 +34,16 @@ export type StringMixedMap = { [key: string]: unknown };
 export type StringBooleanMap = { [key: string]: boolean };
 export type NumberBooleanMap = { [key: number]: boolean };
 
+export interface SelectorItem {
+    id: string;
+    name: string;
+    item?: BoxItem;
+    value?: string;
+    type?: 'user' | 'group';
+}
+
+export type SelectorItems = Array<SelectorItem>;
+
 export type Token = null | undefined | string | Function;
 export type TokenReadWrite = { read: string; write?: string };
 export type TokenLiteral = null | undefined | string | TokenReadWrite;

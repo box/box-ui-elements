@@ -6,6 +6,16 @@ export type { StringAnyMap, StringMap };
 
 export type Token = null | undefined | string | Function;
 
+export interface ErrorResponseData {
+    code: string;
+    context_info?: Record<string, unknown>;
+    help_url?: string;
+    message?: string;
+    request_id?: string;
+    status?: number;
+    type?: string;
+}
+
 export interface ElementsXhrError extends Error {
     code?: string;
     status?: number;

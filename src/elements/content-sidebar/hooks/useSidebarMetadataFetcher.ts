@@ -121,8 +121,8 @@ function useSidebarMetadataFetcher(
 
     const fetchFileSuccessCallback = React.useCallback(
         (fetchedFile: BoxItem) => {
-            const currentFileCanUpload = getProp(file, FIELD_PERMISSIONS_CAN_UPLOAD, false);
-            const newFileCanUpload = getProp(fetchedFile, FIELD_PERMISSIONS_CAN_UPLOAD, false);
+            const currentFileCanUpload = getProp(file, `permissions.${FIELD_PERMISSIONS_CAN_UPLOAD}`, false);
+            const newFileCanUpload = getProp(fetchedFile, `permissions.${FIELD_PERMISSIONS_CAN_UPLOAD}`, false);
             const shouldFetchMetadata = !file || currentFileCanUpload !== newFileCanUpload;
             setFile(fetchedFile);
             if (shouldFetchMetadata && fetchedFile) {
