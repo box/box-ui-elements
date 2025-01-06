@@ -369,5 +369,6 @@
     },
     "msw": {
         "workerDirectory": [".storybook/public"]
-    }
+    },
+    "dependencies": {}
 }
