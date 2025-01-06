@@ -1,18 +1,12 @@
-/**
- * @flow
- * @file Progress Bar component
- * @author Box
- */
-
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import './ProgressBar.scss';
 
 type Props = {
-    percent: number,
+    percent: number
 };
 
 type State = {
-    percent: number,
+    percent: number
 };
 
 class ProgressBar extends PureComponent<Props, State> {
@@ -20,9 +14,9 @@ class ProgressBar extends PureComponent<Props, State> {
 
     state: State;
 
-    timeout: TimeoutID;
+    timeout: number;
 
-    interval: IntervalID;
+    interval: number;
 
     static defaultProps = { percent: 0 };
 
@@ -33,7 +27,9 @@ class ProgressBar extends PureComponent<Props, State> {
      */
     constructor(props: Props) {
         super(props);
-        const { percent }: State = props;
+        const {
+            percent,
+        }: State = props;
         this.state = { percent };
     }
 
@@ -61,7 +57,9 @@ class ProgressBar extends PureComponent<Props, State> {
      * @return {void}
      */
     componentDidUpdate(prevProps: Props): void {
-        const { percent }: Props = this.props;
+        const {
+            percent,
+        }: Props = this.props;
 
         if (prevProps.percent !== percent) {
             this.clearTimeoutAndInterval();
@@ -85,7 +83,9 @@ class ProgressBar extends PureComponent<Props, State> {
      * @return {void}
      */
     startProgress = () => {
-        const { percent }: State = this.state;
+        const {
+            percent,
+        }: State = this.state;
         if (percent === 0) {
             this.interval = setInterval(this.incrementProgress, 100);
         } else if (percent === 100) {
@@ -121,7 +121,9 @@ class ProgressBar extends PureComponent<Props, State> {
      * @return {void}
      */
     render() {
-        const { percent }: State = this.state;
+        const {
+            percent,
+        }: State = this.state;
         const containerStyle = {
             opacity: percent > 0 && percent < 100 ? 1 : 0,
             transitionDelay: percent > 0 && percent < 100 ? '0' : '0.4s',

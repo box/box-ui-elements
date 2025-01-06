@@ -1,10 +1,5 @@
-/**
- * @flow
- * @file File picker header and list component
- * @author Box
- */
-
 import * as React from 'react';
+import { Table } from '@box/react-virtualized/dist/es/Table';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
 import ItemGrid from './ItemGrid';
@@ -14,8 +9,8 @@ import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTE
 import type { ViewMode } from '../common/flowTypes';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
+import type { MetadataFieldValue } from '../../common/types/metadata';
 import './Content.scss';
-
 /**
  * Determines if we should show the empty state
  *
@@ -29,35 +24,40 @@ function isEmpty(view: View, currentCollection: Collection, fieldsToShow: Fields
     return view === VIEW_ERROR || !items.length || (view === VIEW_METADATA && !fieldsToShow.length);
 }
 
-type Props = {
-    canDelete: boolean,
-    canDownload: boolean,
-    canPreview: boolean,
-    canRename: boolean,
-    canShare: boolean,
-    currentCollection: Collection,
-    fieldsToShow?: FieldsToShow,
-    focusedRow: number,
-    gridColumnCount?: number,
-    isMedium: boolean,
-    isSmall: boolean,
-    isTouch: boolean,
-    onItemClick: Function,
-    onItemDelete: Function,
-    onItemDownload: Function,
-    onItemPreview: Function,
-    onItemRename: Function,
-    onItemSelect: Function,
-    onItemShare: Function,
-    onMetadataUpdate: Function,
-    onSortChange: Function,
-    rootElement?: HTMLElement,
-    rootId: string,
-    selected?: BoxItem,
-    tableRef: Function,
-    view: View,
-    viewMode?: ViewMode,
-};
+export interface ContentProps {
+    canDelete: boolean;
+    canDownload: boolean;
+    canPreview: boolean;
+    canRename: boolean;
+    canShare: boolean;
+    currentCollection: Collection;
+    fieldsToShow?: FieldsToShow;
+    focusedRow: number;
+    gridColumnCount?: number;
+    isMedium: boolean;
+    isSmall: boolean;
+    isTouch: boolean;
+    onItemClick: (item: BoxItem) => void;
+    onItemDelete: (item: BoxItem) => void;
+    onItemDownload: (item: BoxItem) => void;
+    onItemPreview: (item: BoxItem) => void;
+    onItemRename: (item: BoxItem) => void;
+    onItemSelect: (item: BoxItem) => void;
+    onItemShare: (item: BoxItem) => void;
+    onMetadataUpdate: (
+        item: BoxItem,
+        field: string,
+        currentValue: MetadataFieldValue,
+        editedValue: MetadataFieldValue,
+    ) => void;
+    onSortChange: (sortBy: string, sortDirection: string) => void;
+    rootElement?: HTMLElement;
+    rootId: string;
+    selected?: BoxItem;
+    tableRef: (ref: Table) => void;
+    view: View;
+    viewMode?: ViewMode;
+}
 
 const Content = ({
     currentCollection,
@@ -70,7 +70,7 @@ const Content = ({
     view,
     viewMode = VIEW_MODE_LIST,
     ...rest
-}: Props) => {
+}: ContentProps) => {
     const isViewEmpty = isEmpty(view, currentCollection, fieldsToShow);
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
