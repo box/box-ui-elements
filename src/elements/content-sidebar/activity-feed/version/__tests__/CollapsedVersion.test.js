@@ -1,86 +1,82 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
-
+import { render, screen } from '@testing-library/react';
+import { IntlProvider } from 'react-intl';
+import { ACTION_TYPE_RESTORED } from 'constants';
+import CollapsedVersion from '../CollapsedVersion';
 import selectors from '../../../../common/selectors/version';
-import { CollapsedVersionBase as CollapsedVersion } from '../CollapsedVersion';
 
-const translationProps = {
-    intl: { formatMessage: () => {} },
-};
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+}));
 
 describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () => {
-    const render = item => shallow(<CollapsedVersion {...translationProps} {...item} />);
-
     beforeEach(() => {
         selectors.getVersionAction = jest.fn().mockReturnValue('upload');
     });
 
+    const intl = {
+        formatMessage: jest.fn().mockImplementation(message => message.defaultMessage),
+    };
+
+    const renderComponent = props =>
+        render(
+            <IntlProvider locale="en">
+                <CollapsedVersion
+                    intl={intl}
+                    collaborators={{ 1: { name: 'Person one', id: 1 } }}
+                    version_start={1}
+                    version_end={10}
+                    versions={[]}
+                    id={0}
+                    {...props}
+                />
+            </IntlProvider>,
+        );
+
     test('should correctly render for single collaborator', () => {
-        const version_start = 1;
-        const version_end = 10;
-        const item = {
-            collaborators: { 1: { name: 'Person one', id: 1 } },
-            version_start,
-            version_end,
-        };
+        renderComponent();
 
-        const wrapper = render(item);
-        const formattedMessage = wrapper.find('FormattedMessage');
-        expect(wrapper).toMatchSnapshot();
-
-        const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
-        expect(renderedVersionsMessage).toMatchSnapshot();
+        expect(screen.getByText('Person one')).toBeInTheDocument();
+        expect(screen.getByText('uploaded v')).toBeInTheDocument();
+        expect(screen.getByText('1 - 10')).toBeInTheDocument();
     });
 
     test('should correctly render for multiple collaborators', () => {
-        const version_start = 1;
-        const version_end = 10;
-        const item = {
-            collaborators: {
-                1: { name: 'Person one', id: 1 },
-                2: { name: 'Person two', id: 2 },
-            },
-            version_start,
-            version_end,
-        };
+        renderComponent({
+            collaborators: { 1: { name: 'Person one', id: 1 }, 2: { name: 'Person two', id: 2 } },
+        });
 
-        const wrapper = render(item);
-        const formattedMessage = wrapper.find('FormattedMessage');
-
-        expect(wrapper).toMatchSnapshot();
-
-        const renderedVersionsMessage = shallow(formattedMessage.prop('values').versions);
-        expect(renderedVersionsMessage).toMatchSnapshot();
+        expect(screen.getByText('2 collaborators uploaded v')).toBeInTheDocument();
+        expect(screen.getByText('1 - 10')).toBeInTheDocument();
     });
 
     test('should correctly render info icon if onInfo is passed', () => {
-        const item = {
+        renderComponent({
             onInfo: () => {},
-            collaborators: {
-                1: { name: 'Person one', id: 1 },
-                2: { name: 'Person two', id: 2 },
-            },
-            version_start: 1,
-            version_end: 10,
-        };
+        });
 
-        const wrapper = render(item);
-
-        expect(wrapper.exists('IconInfo')).toBe(true);
+        expect(screen.getByLabelText('Get version information')).toBeInTheDocument();
     });
 
     test('should not render a message if action is not upload', () => {
         selectors.getVersionAction.mockReturnValueOnce('delete');
 
-        const item = {
-            collaborators: { 1: { name: 'Person one', id: 1 } },
-            version_start: 1,
-            version_end: 10,
-        };
+        renderComponent();
 
-        const wrapper = render(item);
-        const formattedMessage = wrapper.find('FormattedMessage');
+        expect(screen.queryByText('Person one')).not.toBeInTheDocument();
+    });
 
-        expect(formattedMessage.length).toBe(0);
+    test('should correctly render when shouldUseUAA is true', () => {
+        renderComponent({
+            shouldUseUAA: true,
+            action_type: ACTION_TYPE_RESTORED,
+            action_by: [{ name: 'John Doe', id: 1 }],
+            version_start: 2,
+            version_end: 4,
+        });
+
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.getByText('restored v')).toBeInTheDocument();
+        expect(screen.getByText('2 - 4')).toBeInTheDocument();
     });
 });

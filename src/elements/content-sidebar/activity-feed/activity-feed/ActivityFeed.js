@@ -403,7 +403,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
                             hasReplies={hasReplies}
                             hasVersions={hasVersions}
                             isDisabled={isDisabled}
-                            items={collapseFeedState(feedItems)}
+                            items={shouldUseUAA ? feedItems : collapseFeedState(feedItems)}
                             mentionSelectorContacts={mentionSelectorContacts}
                             onAnnotationDelete={onAnnotationDelete}
                             onAnnotationEdit={onAnnotationEdit}
