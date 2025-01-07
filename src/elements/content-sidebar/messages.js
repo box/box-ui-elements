@@ -32,16 +32,6 @@ const messages = defineMessages({
         defaultMessage: 'Tasks',
         description: 'Dropdown option for filtering tasks from activity list',
     },
-    boxAISidebarClear: {
-        id: 'be.contentSidebar.boxAI.clear',
-        description: 'Default message for Box AI clear button in sidebar header',
-        defaultMessage: 'Clear',
-    },
-    boxAISidebarClearConversationTooltip: {
-        id: 'be.contentSidebar.boxAI.clearConversationTooltip',
-        description: 'Tooltip text for clear button for Box AI in sidebar header',
-        defaultMessage: 'Clear conversation',
-    },
     boxSignFtuxBody: {
         id: 'be.contentSidebar.boxSignFtuxBody',
         defaultMessage: 'Sign documents or send signature requests, right from where your content lives',

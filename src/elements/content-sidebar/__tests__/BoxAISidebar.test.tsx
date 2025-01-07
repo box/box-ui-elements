@@ -118,7 +118,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     test('should have accessible "Clear" button', async () => {
         await renderComponent();
 
-        expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Clear conversation' })).toBeInTheDocument();
     });
 
     test('should not have accessible "Clear" button if isResetChatEnabled is false', async () => {
@@ -130,7 +130,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     test('should call onClearClick when click "Clear" button', async () => {
         await renderComponent();
 
-        const expandButton = screen.getByRole('button', { name: 'Clear' });
+        const expandButton = screen.getByRole('button', { name: 'Clear conversation' });
         await userEvent.click(expandButton);
 
         expect(mockOnClearAction).toHaveBeenCalled();
@@ -174,7 +174,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     test('should display clear conversation tooltip', async () => {
         await renderComponent();
 
-        const button = screen.getByRole('button', { name: 'Clear' });
+        const button = screen.getByRole('button', { name: 'Clear conversation' });
         await userEvent.hover(button);
         const tooltip = await screen.findByRole('tooltip', { name: 'Clear conversation' });
 
