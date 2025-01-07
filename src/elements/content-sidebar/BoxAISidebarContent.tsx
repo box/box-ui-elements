@@ -7,11 +7,11 @@ import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
 import { Text } from '@box/blueprint-web';
-// @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
 import {
     BoxAiContentAnswers,
     ClearConversationButton,
     withApiWrapper,
+    // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
     type ApiWrapperProps,
 } from '@box/box-ai-content-answers';
 import SidebarContent from './SidebarContent';
