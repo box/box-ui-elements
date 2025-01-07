@@ -30,7 +30,7 @@ queue_rules:
     merge_method: squash
   - name: Automatic devin merge
     queue_conditions:
-      - author=devin-ai-integration
+      - author=devin-ai-integration[bot]
       - base=master
       - "#approved-reviews-by>=1"
       - status-success="Validate"
