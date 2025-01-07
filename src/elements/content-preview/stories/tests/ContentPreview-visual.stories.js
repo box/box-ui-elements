@@ -119,6 +119,11 @@ export const hoverOverCitation = {
         const citation = await modal.getByRole('button', { name: 'Reference 1' });
         expect(citation).toBeInTheDocument();
         await userEvent.hover(citation);
+
+        const main = await waitFor(() => document.querySelector('.sb-main-padded.sb-show-main'));
+        await waitFor(async () => {
+            await expect(within(main).getByText('Public APIs are key drivers of innovation and growth.')).toBeVisible();
+        });
     },
 };
 
@@ -249,7 +254,7 @@ export default {
     },
     parameters: {
         chromatic: {
-            ignoreSelectors: ['[data-testid="content-answers-question-input-avatar"]'], // highly inconsistent in snapshots
+            ignoreSelectors: ['[class^="bp_avatar_module_avatar--"] > [class^="bp_avatar_module_text--"]'],
         },
         msw: {
             handlers: [
