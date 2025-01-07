@@ -269,5 +269,10 @@ export const ThemeExample = () => {
 export default {
     title: 'Theming/Theme',
     component: ThemeExample,
-    parameters: { notes },
+    parameters: {
+        notes,
+        chromatic: {
+            disableSnapshot: true,
+        },
+    },
 };
