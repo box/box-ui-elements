@@ -122,7 +122,7 @@ const CollapsedVersion = (props: Props): React.Node => {
     // $FlowFixMe
     const {
         action_by,
-        action_type,
+        action_type = ACTION_TYPE_CREATED,
         collaborators,
         id,
         intl,
@@ -132,6 +132,7 @@ const CollapsedVersion = (props: Props): React.Node => {
         version_start,
         version_end,
     } = props;
+    // $FlowFixMe
     const action = shouldUseUAA ? action_type : selectors.getVersionAction(props);
 
     return (

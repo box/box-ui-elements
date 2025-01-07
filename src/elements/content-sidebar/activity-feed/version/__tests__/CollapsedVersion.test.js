@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import { ACTION_TYPE_RESTORED } from 'constants';
+import { ACTION_TYPE_CREATED, ACTION_TYPE_RESTORED, ACTION_TYPE_TRASHED } from '../../../../../constants';
 import CollapsedVersion from '../CollapsedVersion';
 import selectors from '../../../../common/selectors/version';
 
@@ -66,17 +66,22 @@ describe('elements/content-sidebar/ActivityFeed/version/CollapsedVersion', () =>
         expect(screen.queryByText('Person one')).not.toBeInTheDocument();
     });
 
-    test('should correctly render when shouldUseUAA is true', () => {
+    test.each`
+        actionType              | actionText
+        ${ACTION_TYPE_RESTORED} | ${'restored v'}
+        ${ACTION_TYPE_TRASHED}  | ${'deleted v'}
+        ${ACTION_TYPE_CREATED}  | ${'uploaded v'}
+    `('should correctly render when shouldUseUAA is true with actionType $actionType', ({ actionType, actionText }) => {
         renderComponent({
             shouldUseUAA: true,
-            action_type: ACTION_TYPE_RESTORED,
-            action_by: [{ name: 'John Doe', id: 1 }],
+            action_type: actionType,
+            action_by: [{ name: 'John Doe', id: 3 }],
             version_start: 2,
             version_end: 4,
         });
 
         expect(screen.getByText('John Doe')).toBeInTheDocument();
-        expect(screen.getByText('restored v')).toBeInTheDocument();
+        expect(screen.getByText(actionText)).toBeInTheDocument();
         expect(screen.getByText('2 - 4')).toBeInTheDocument();
     });
 });
