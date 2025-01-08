@@ -250,6 +250,9 @@ export const getParsedFileActivitiesResponse = (
                             versionsItem.restored_at = versionsItem.start.restored_at;
                             versionsItem.restored_by = { ...versionsItem.start.restored_by };
                         }
+                        if (versionsItem.start?.promoted_from) {
+                            versionsItem.version_promoted = versionsItem.start?.promoted_from;
+                        }
                     }
 
                     return versionsItem;
