@@ -63,14 +63,14 @@ function getMessageForAction(
     );
 
     if (numberOfCollaborators === 1) {
-        const collaborator = shouldUseUAA && action_by.length ? action_by[0] : collaborators[collaboratorIDs[0]];
+        const collaborator = shouldUseUAA ? action_by?.[0] : collaborators[collaboratorIDs[0]];
 
         if (shouldUseUAA) {
             return (
                 <FormattedMessage
                     {...messages.versionCollapsed}
                     values={{
-                        name: <strong>{collaborator.name}</strong>,
+                        name: <strong>{collaborator?.name}</strong>,
                         versions: versionRange,
                         actionMessage,
                     }}
