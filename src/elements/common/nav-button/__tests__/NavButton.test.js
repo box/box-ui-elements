@@ -1,9 +1,18 @@
 import * as React from 'react';
 import { mount, render } from 'enzyme';
 import { MemoryRouter, Router } from 'react-router-dom';
+import { render as rtlRender, screen } from '@testing-library/react';
 import NavButton from '..';
 
 describe('elements/common/nav-button/NavButton', () => {
+    const getNavButton = (content, { path = '/activity', ...props }) => (
+        <MemoryRouter initialEntries={[path]}>
+            <NavButton to={path} {...props}>
+                {content}
+            </NavButton>
+        </MemoryRouter>
+    );
+
     describe('when active', () => {
         test('applies its default activeClassName', () => {
             const button = render(
@@ -51,6 +60,15 @@ describe('elements/common/nav-button/NavButton', () => {
 
             expect(button.hasClass('bdl-is-active')).toBe(false);
             expect(button.hasClass('bdl-is-selected')).toBe(false);
+        });
+    });
+
+    describe('when disabled', () => {
+        test('applies bdl-is-disabled class name', () => {
+            const content = 'Activity';
+            rtlRender(getNavButton(content, { isDisabled: true }));
+
+            expect(screen.getByText(content, { selector: '.bdl-is-disabled' })).toBeInTheDocument();
         });
     });
 

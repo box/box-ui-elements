@@ -6,6 +6,20 @@ const mockFeatures = {
 
 export const basic = {};
 
+export const withFileTypeNotSupported = {
+    args: {
+        features: {
+            boxai: {
+                sidebar: {
+                    disabledTooltip: 'Box AI is not currently supported for this file type',
+                    enabled: true,
+                    showOnlyNavButton: true,
+                },
+            },
+        },
+    },
+};
+
 export default {
     title: 'Elements/ContentSidebar/BoxAISidebar',
     component: ContentSidebar,
@@ -14,7 +28,7 @@ export default {
         fileId: global.FILE_ID,
         token: global.TOKEN,
         boxAISidebarProps: {
-            createSessionRequest: () => ({ encodedSession: '1234'}),
+            createSessionRequest: () => ({ encodedSession: '1234' }),
             fetchTimeout: { initial: 20000 },
             getAgentConfig: () => ({}),
             getAIStudioAgents: () => ({}),
@@ -32,6 +46,6 @@ export default {
             isStopResponseEnabled: true,
             isStreamingEnabled: false,
             recordAction: () => ({}),
-        }
+        },
     },
 };

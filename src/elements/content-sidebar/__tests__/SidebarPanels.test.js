@@ -365,6 +365,36 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             });
         });
 
+        describe('boxai sidebar', () => {
+            test('should render, given hasBoxAI = true and feature boxai.sidebar.showOnlyNavButton = false', () => {
+                render(
+                    getSidebarPanels({
+                        features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                        hasBoxAI: true,
+                    }),
+                );
+                expect(screen.getByTestId('boxai-sidebar')).toBeInTheDocument();
+            });
+
+            test.each`
+                hasBoxAI | showOnlyNavButton
+                ${true}  | ${true}
+                ${false} | ${true}
+                ${false} | ${false}
+            `(
+                'should not render, given hasBoxAI = $hasBoxAI and feature boxai.sidebar.showOnlyNavButton = $showOnlyNavButton',
+                ({ hasBoxAI, showOnlyNavButton }) => {
+                    render(
+                        getSidebarPanels({
+                            features: { boxai: { sidebar: { showOnlyNavButton } } },
+                            hasBoxAI,
+                        }),
+                    );
+                    expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
+                },
+            );
+        });
+
         describe('first loaded behavior', () => {
             test('should update isInitialized state on mount', () => {
                 const wrapper = getWrapper({ path: '/activity' });

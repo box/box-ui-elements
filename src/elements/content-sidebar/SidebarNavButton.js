@@ -16,6 +16,7 @@ type Props = {
     'data-testid'?: string,
     children: React.Node,
     elementId?: string,
+    isDisabled?: boolean,
     isOpen?: boolean,
     onClick?: (sidebarView: string) => void,
     sidebarView: string,
@@ -28,6 +29,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         'data-testid': dataTestId,
         children,
         elementId = '',
+        isDisabled,
         isOpen,
         onClick = noop,
         sidebarView,
@@ -61,6 +63,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             getDOMRef={ref}
                             id={id}
                             isActive={isActive}
+                            isDisabled={isDisabled}
                             onClick={handleNavButtonClick}
                             replace={isExactMatch}
                             role="tab"

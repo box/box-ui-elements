@@ -13,7 +13,7 @@ import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
-import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
+import { getFeatureConfig, withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -237,6 +237,8 @@ class SidebarPanels extends React.Component<Props, State> {
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
         const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
 
+        const { showOnlyNavButton: showOnlyBoxAINavButton } = getFeatureConfig(features, 'boxai.sidebar');
+
         const panelsEligibility = {
             [SIDEBAR_VIEW_BOXAI]: hasBoxAI,
             [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
@@ -248,13 +250,15 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
 
+        const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
+
         if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
         }
 
         return (
             <Switch>
-                {hasBoxAI && (
+                {canShowBoxAISidebarPanel && (
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_BOXAI}`}
