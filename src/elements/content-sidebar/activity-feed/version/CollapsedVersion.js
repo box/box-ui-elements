@@ -25,6 +25,7 @@ function getMessageForAction(
     collaborators: { [collaborator_id: string]: User } = {},
     version_start: number,
     version_end: number,
+    shouldUseUAA?: boolean,
     action_by?: User[],
 ): React.Node {
     if (
@@ -37,16 +38,23 @@ function getMessageForAction(
     }
 
     let actionMessage = '';
-    if (action === ACTION_TYPE_CREATED) {
-        actionMessage = ACTION_MESSAGE_UPLOAD;
-    } else if (action === ACTION_TYPE_RESTORED) {
-        actionMessage = ACTION_MESSAGE_RESTORE;
-    } else if (action === ACTION_TYPE_TRASHED) {
-        actionMessage = ACTION_MESSAGE_TRASH;
+    switch (action) {
+        case ACTION_TYPE_CREATED:
+            actionMessage = ACTION_MESSAGE_UPLOAD;
+            break;
+        case ACTION_TYPE_RESTORED:
+            actionMessage = ACTION_MESSAGE_RESTORE;
+            break;
+        case ACTION_TYPE_TRASHED:
+            actionMessage = ACTION_MESSAGE_TRASH;
+            break;
+        default:
+            actionMessage = '';
+            break;
     }
 
     const collaboratorIDs = Object.keys(collaborators);
-    const numberOfCollaborators = action_by ? action_by.length : collaboratorIDs.length;
+    const numberOfCollaborators = shouldUseUAA ? action_by?.length : collaboratorIDs.length;
 
     const versionRange: React.Node = (
         <span className="bcs-Version-range">
@@ -55,9 +63,9 @@ function getMessageForAction(
     );
 
     if (numberOfCollaborators === 1) {
-        const collaborator = action_by ? action_by[0] : collaborators[collaboratorIDs[0]];
+        const collaborator = shouldUseUAA && action_by.length ? action_by[0] : collaborators[collaboratorIDs[0]];
 
-        if (action_by) {
+        if (shouldUseUAA) {
             return (
                 <FormattedMessage
                     {...messages.versionCollapsed}
@@ -81,7 +89,7 @@ function getMessageForAction(
         );
     }
 
-    if (action_by) {
+    if (shouldUseUAA) {
         return (
             <FormattedMessage
                 {...messages.versionMultipleUsersCollapsed}
@@ -119,7 +127,6 @@ type Props = {
 };
 
 const CollapsedVersion = (props: Props): React.Node => {
-    // $FlowFixMe
     const {
         action_by,
         action_type = ACTION_TYPE_CREATED,
@@ -138,7 +145,7 @@ const CollapsedVersion = (props: Props): React.Node => {
     return (
         <ActivityCard className="bcs-Version">
             <span className="bcs-Version-message">
-                {getMessageForAction(action, collaborators, version_start, version_end, action_by)}
+                {getMessageForAction(action, collaborators, version_start, version_end, shouldUseUAA, action_by)}
             </span>
             {onInfo ? (
                 <span className="bcs-Version-actions">
