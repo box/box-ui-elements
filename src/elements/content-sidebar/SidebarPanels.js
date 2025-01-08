@@ -239,8 +239,10 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const { showOnlyNavButton: showOnlyBoxAINavButton } = getFeatureConfig(features, 'boxai.sidebar');
 
+        const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
+
         const panelsEligibility = {
-            [SIDEBAR_VIEW_BOXAI]: hasBoxAI,
+            [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
             [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
             [SIDEBAR_VIEW_SKILLS]: hasSkills,
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
@@ -249,8 +251,6 @@ class SidebarPanels extends React.Component<Props, State> {
         };
 
         const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
-
-        const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
 
         if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
@@ -441,7 +441,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
                         if (showDefaultPanel) {
                             redirect = defaultPanel;
-                        } else if (hasBoxAI) {
+                        } else if (canShowBoxAISidebarPanel) {
                             redirect = SIDEBAR_VIEW_BOXAI;
                         } else if (hasDocGen) {
                             redirect = SIDEBAR_VIEW_DOCGEN;
