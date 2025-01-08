@@ -82,7 +82,7 @@ function getMessageForAction(
             <FormattedMessage
                 {...messages.versionUploadCollapsed}
                 values={{
-                    name: <strong>{collaborator.name}</strong>,
+                    name: <strong>{collaborator?.name}</strong>,
                     versions: versionRange,
                 }}
             />
