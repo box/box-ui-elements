@@ -1,33 +1,7 @@
 import * as React from 'react';
 import { TooltipProvider } from '@box/blueprint-web';
 import { screen, render } from '../../../test-utils/testing-library';
-import Footer from '../Footer';
-import type { Collection, BoxItem } from '../../../common/types/core';
-
-type RenderCustomActionButtonsProps = {
-    currentFolderId: string;
-    currentFolderName: string;
-    onCancel: () => void;
-    onChoose: () => void;
-    selectedCount: number;
-    selectedItems: BoxItem[];
-};
-
-type FooterProps = {
-    cancelButtonLabel?: string;
-    children?: React.ReactNode;
-    chooseButtonLabel?: string;
-    currentCollection: Collection;
-    hasHitSelectionLimit: boolean;
-    isSingleSelect: boolean;
-    onCancel: () => void;
-    onChoose: () => void;
-    onSelectedClick: () => void;
-    renderCustomActionButtons?: (props: RenderCustomActionButtonsProps) => React.ReactNode;
-    selectedCount: number;
-    selectedItems: BoxItem[];
-    showSelectedButton: boolean;
-};
+import Footer, { type FooterProps } from '../Footer';
 
 describe('elements/content-picker/Footer', () => {
     const defaultProps = {
