@@ -4,12 +4,15 @@
  */
 
 import * as React from 'react';
-import { useIntl } from 'react-intl';
 import type { Node } from 'react';
+import { useIntl } from 'react-intl';
+import { Button } from '@box/blueprint-web';
 
 import type { Collection, BoxItem } from '../../common/types/core';
-import { Button } from '@box/blueprint-web';
+import ButtonGroup from '../../components/button-group';
 import messages from '../common/messages';
+import Tooltip from '../common/Tooltip';
+
 import './Footer.scss';
 
 type FooterCustomActionButtonsProps = {
@@ -84,23 +87,24 @@ const Footer = ({
                         selectedItems,
                     })
                 ) : (
-                    <div className="bcp-footer-actions">
-                        <Button 
-                            onClick={onCancel}
-                            variant="secondary"
-                        >
-                            {cancelButtonLabel || cancelMessage}
-                        </Button>
-                        <Button
-                            disabled={isChooseButtonDisabled}
-                            onClick={onChoose}
-                            variant="primary"
-                            data-testid="choose-button"
-                            data-resin-target="choose"
-                        >
-                            {chooseButtonLabel || chooseMessage}
-                        </Button>
-                    </div>
+                    <ButtonGroup className="bcp-footer-actions">
+                        <Tooltip text={cancelButtonLabel || cancelMessage}>
+                            <Button onClick={onCancel} variant="secondary">
+                                {cancelButtonLabel || cancelMessage}
+                            </Button>
+                        </Tooltip>
+                        <Tooltip isDisabled={isChooseButtonDisabled} text={chooseButtonLabel || chooseMessage}>
+                            <Button
+                                disabled={isChooseButtonDisabled}
+                                onClick={onChoose}
+                                variant="primary"
+                                data-testid="choose-button"
+                                data-resin-target="choose"
+                            >
+                                {chooseButtonLabel || chooseMessage}
+                            </Button>
+                        </Tooltip>
+                    </ButtonGroup>
                 )}
             </div>
         </footer>

@@ -5,10 +5,12 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@box/blueprint-web';
+
 import type { Collection, BoxItem } from '../../common/types/core';
 import ButtonGroup from '../../components/button-group';
-import Tooltip from '../common/Tooltip';
 import messages from '../common/messages';
+import Tooltip from '../common/Tooltip';
+
 import './Footer.scss';
 
 export interface FooterCustomActionButtonsProps {
