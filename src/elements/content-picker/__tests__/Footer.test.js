@@ -1,9 +1,35 @@
-// Footer test file
 Object.defineProperty(exports, '__esModule', { value: true });
 const React = require('react');
 require('@testing-library/jest-dom');
 const testing_library_1 = require('../../../test-utils/testing-library');
 const Footer_1 = require('../Footer');
+
+const testCases = [
+    {
+        showSelectedButton: false,
+        isSingleSelect: false,
+        shown: false,
+        description: 'should not show selected button when showSelectedButton is false',
+    },
+    {
+        showSelectedButton: false,
+        isSingleSelect: true,
+        shown: false,
+        description: 'should not show selected button when isSingleSelect is true',
+    },
+    {
+        showSelectedButton: true,
+        isSingleSelect: false,
+        shown: true,
+        description: 'should show selected button when conditions are met',
+    },
+    {
+        showSelectedButton: true,
+        isSingleSelect: true,
+        shown: false,
+        description: 'should not show selected button when isSingleSelect is true regardless of showSelectedButton',
+    },
+];
 
 describe('elements/content-picker/Footer', () => {
     const defaultProps = {
