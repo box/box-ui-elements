@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { injectIntl, type IntlShape } from 'react-intl';
-import { Button } from '@box/blueprint-web';
+import { Button, Toolbar } from '@box/blueprint-web';
 import type { Collection, BoxItem } from '../../common/types/core';
 
 import messages from '../common/messages';
@@ -76,7 +76,7 @@ const Footer = ({
                         selectedItems,
                     })
                 ) : (
-                    <div className="bcp-footer-actions">
+                    <Toolbar.Root className="bcp-footer-actions">
                         <Button onClick={onCancel} variant="secondary">
                             {cancelButtonLabel || cancelMessage}
                         </Button>
@@ -89,7 +89,7 @@ const Footer = ({
                         >
                             {chooseButtonLabel || chooseMessage}
                         </Button>
-                    </div>
+                    </Toolbar.Root>
                 )}
             </div>
         </footer>
