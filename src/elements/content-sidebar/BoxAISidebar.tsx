@@ -116,6 +116,8 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             value={{ cache, contentName, elementId, isStopResponseEnabled, setCacheValue, recordAction, userInfo }}
         >
             <BoxAISidebarContent
+                getSuggestedQuestions={getSuggestedQuestions}
+                isOpen
                 isStopResponseEnabled={isStopResponseEnabled}
                 itemID={fileID}
                 itemIDs={[fileID]}
