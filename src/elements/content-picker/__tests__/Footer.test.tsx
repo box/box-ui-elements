@@ -1,9 +1,11 @@
 import * as React from 'react';
+import '@testing-library/jest-dom';
 import { screen, render } from '../../../test-utils/testing-library';
-import Footer, { type FooterProps } from '../Footer';
+import type { FooterProps } from '../Footer';
+import Footer from '../Footer';
 
 describe('elements/content-picker/Footer', () => {
-    const defaultProps = {
+    const defaultProps: FooterProps = {
         children: <div data-testid="footer-child" className="footer-child" />,
         currentCollection: { id: '123', name: 'Folder' },
         hasHitSelectionLimit: false,

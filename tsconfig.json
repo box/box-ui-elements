@@ -15,5 +15,6 @@
         "strict": false
     },
     "files": [".storybook/typings.d.ts"],
-    "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"]
+    "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"],
+    "types": ["@testing-library/jest-dom"]
 }
