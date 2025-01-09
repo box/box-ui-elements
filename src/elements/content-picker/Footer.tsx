@@ -3,7 +3,7 @@
  * Provides action buttons and selection status
  */
 import * as React from 'react';
-import { injectIntl, type IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Button, Toolbar, Tooltip } from '@box/blueprint-web';
 import type { Collection, BoxItem } from '../../common/types/core';
 
@@ -25,7 +25,6 @@ export interface FooterProps {
     chooseButtonLabel?: string;
     currentCollection: Collection;
     hasHitSelectionLimit: boolean;
-    intl: IntlShape;
     isSingleSelect: boolean;
     onCancel: () => void;
     onChoose: () => void;
@@ -42,7 +41,6 @@ const Footer = ({
     selectedItems,
     onSelectedClick,
     hasHitSelectionLimit,
-    intl,
     isSingleSelect,
     onCancel,
     onChoose,
@@ -52,6 +50,7 @@ const Footer = ({
     renderCustomActionButtons,
     showSelectedButton,
 }: FooterProps) => {
+    const intl = useIntl();
     const cancelMessage = intl.formatMessage(messages.cancel);
     const chooseMessage = intl.formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
@@ -108,4 +107,4 @@ const Footer = ({
     );
 };
 
-export default injectIntl(Footer);
+export default Footer;

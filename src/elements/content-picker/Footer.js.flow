@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import type { Node } from 'react';
 
 import type { Collection, BoxItem } from '../../common/types/core';
@@ -27,7 +27,6 @@ type Props = {
     chooseButtonLabel?: string,
     currentCollection: Collection,
     hasHitSelectionLimit: boolean,
-    intl: any,
     isSingleSelect: boolean,
     onCancel: () => void,
     onChoose: () => void,
@@ -44,7 +43,6 @@ const Footer = ({
     selectedItems,
     onSelectedClick,
     hasHitSelectionLimit,
-    intl,
     isSingleSelect,
     onCancel,
     onChoose,
@@ -54,6 +52,7 @@ const Footer = ({
     renderCustomActionButtons,
     showSelectedButton,
 }: Props) => {
+    const intl = useIntl();
     const cancelMessage = intl.formatMessage(messages.cancel);
     const chooseMessage = intl.formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
@@ -108,4 +107,4 @@ const Footer = ({
     );
 };
 
-export default injectIntl(Footer);
+export default Footer;
