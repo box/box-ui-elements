@@ -1,8 +1,7 @@
 import * as React from 'react';
 import '@testing-library/jest-dom';
 import { screen, render } from '../../../test-utils/testing-library';
-import type { FooterProps } from '../Footer';
-import Footer from '../Footer';
+import Footer, { type FooterProps } from '../Footer';
 
 describe('elements/content-picker/Footer', () => {
     const defaultProps: FooterProps = {
