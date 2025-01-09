@@ -77,7 +77,7 @@ const Footer = ({
                     })
                 ) : (
                     <Toolbar.Root className="bcp-footer-actions">
-                        <Tooltip content={cancelButtonLabel || cancelMessage}>
+                        <Tooltip content={cancelButtonLabel || cancelMessage} __checkInteractivity={false}>
                             <Button onClick={onCancel} variant="secondary">
                                 {cancelButtonLabel || cancelMessage}
                             </Button>
@@ -85,6 +85,7 @@ const Footer = ({
                         <Tooltip
                             content={chooseButtonLabel || chooseMessage}
                             open={isChooseButtonDisabled ? false : undefined}
+                            __checkInteractivity={false}
                         >
                             <Button
                                 disabled={isChooseButtonDisabled}
