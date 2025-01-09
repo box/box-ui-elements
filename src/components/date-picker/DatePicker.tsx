@@ -317,47 +317,46 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
     }
 
-    // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(nextProps: DatePickerProps) {
+    componentDidUpdate(prevProps: DatePickerProps) {
         if (!this.datePicker) return;
 
-        const { value: nextValue = null, minDate: nextMinDate = null, maxDate: nextMaxDate = null } = nextProps;
-        const { value, minDate, maxDate, isTextInputAllowed } = this.props;
+        const { value = null, minDate = null, maxDate = null, isTextInputAllowed } = this.props;
+        const { value: prevValue, minDate: prevMinDate, maxDate: prevMaxDate } = prevProps;
         const selectedDate = this.datePicker && this.datePicker.getDate();
 
         // only set date when props change
         if (
-            (nextValue && !value) ||
-            (!nextValue && value) ||
-            (nextValue && value && nextValue.getTime() !== value.getTime())
+            (value && !prevValue) ||
+            (!value && prevValue) ||
+            (value && prevValue && value.getTime() !== prevValue.getTime())
         ) {
-            this.datePicker.setDate(nextValue);
+            this.datePicker.setDate(value);
         }
         // If text input is allowed the dateInputEl will act as an uncontrolled input and
         // we need to set formatted value manually.
         if (isTextInputAllowed) {
-            this.updateDateInputValue(this.formatDisplay(nextValue));
+            this.updateDateInputValue(this.formatDisplay(value));
         }
         if (
-            (nextMinDate && !minDate) ||
-            (nextMinDate && minDate) ||
-            (nextMinDate && minDate && nextMinDate.getTime() !== minDate.getTime())
+            (minDate && !prevMinDate) ||
+            (!minDate && prevMinDate) ||
+            (minDate && prevMinDate && minDate.getTime() !== prevMinDate.getTime())
         ) {
-            this.datePicker.setMinDate(nextMinDate);
+            this.datePicker.setMinDate(minDate);
 
-            if (selectedDate && selectedDate < nextMinDate) {
-                this.datePicker.gotoDate(nextMinDate);
+            if (selectedDate && selectedDate < minDate) {
+                this.datePicker.gotoDate(minDate);
             }
         }
         if (
-            (nextMaxDate && !maxDate) ||
-            (!nextMaxDate && maxDate) ||
-            (nextMaxDate && maxDate && nextMaxDate.getTime() !== maxDate.getTime())
+            (maxDate && !prevMaxDate) ||
+            (!maxDate && prevMaxDate) ||
+            (maxDate && prevMaxDate && maxDate.getTime() !== prevMaxDate.getTime())
         ) {
-            this.datePicker.setMaxDate(nextMaxDate);
+            this.datePicker.setMaxDate(maxDate);
 
-            if (selectedDate && nextMaxDate && selectedDate > nextMaxDate) {
-                this.datePicker.gotoDate(nextMaxDate);
+            if (selectedDate && maxDate && selectedDate > maxDate) {
+                this.datePicker.gotoDate(maxDate);
             }
         }
     }
