@@ -5,9 +5,7 @@
  */
 
 import * as React from 'react';
-// TODO switch to createRoot when upgrading to React 18
-// eslint-disable-next-line react/no-deprecated
-import { render } from 'react-dom';
+import { versionAwareRender } from '../../utils/dom-render';
 import ES6Wrapper from './ES6Wrapper';
 import ContentUploaderPopup from '../content-uploader/ContentUploaderPopup';
 import WrappedContentUploaderComponent from '../content-uploader/ContentUploader';
@@ -70,7 +68,7 @@ class ContentUploader extends ES6Wrapper {
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
         const UploaderComponent = modal ? ContentUploaderPopup : WrappedContentUploaderComponent;
 
-        render(
+        this.cleanup = versionAwareRender(
             <UploaderComponent
                 language={this.language}
                 messages={this.messages}

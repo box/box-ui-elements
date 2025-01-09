@@ -6,9 +6,7 @@
 
 import * as React from 'react';
 import uniqueId from 'lodash/uniqueId';
-// TODO switch to createRoot when upgrading to React 18
-// eslint-disable-next-line react/no-deprecated
-import { render } from 'react-dom';
+import { versionAwareRender } from '../../utils/dom-render';
 import ES6Wrapper from './ES6Wrapper';
 import ContentSharingReactComponent from '../content-sharing';
 import { ITEM_TYPE_FILE } from '../../common/constants';
@@ -19,7 +17,7 @@ class ContentSharing extends ES6Wrapper {
     render() {
         const { itemType }: { itemType?: ItemType } = this.options;
 
-        render(
+        this.cleanup = versionAwareRender(
             <ContentSharingReactComponent
                 itemID={this.id}
                 itemType={itemType || ITEM_TYPE_FILE}

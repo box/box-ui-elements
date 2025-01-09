@@ -5,9 +5,7 @@
  */
 
 import * as React from 'react';
-// TODO switch to createRoot when upgrading to React 18
-// eslint-disable-next-line react/no-deprecated
-import { render } from 'react-dom';
+import { versionAwareRender } from '../../utils/dom-render';
 import ES6Wrapper from './ES6Wrapper';
 import ContentSidebarComponent from '../content-sidebar';
 
@@ -22,7 +20,7 @@ class ContentSidebar extends ES6Wrapper {
 
     /** @inheritdoc */
     render() {
-        render(
+        this.cleanup = versionAwareRender(
             <ContentSidebarComponent
                 componentRef={this.setComponent}
                 fileId={this.id}

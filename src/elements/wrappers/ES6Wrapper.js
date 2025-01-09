@@ -4,10 +4,11 @@
  * @author Box
  */
 
+import * as React from 'react';
 import EventEmitter from 'events';
-import ReactDOM from 'react-dom';
 import i18n from '../common/i18n';
 import { DEFAULT_CONTAINER } from '../../constants';
+import { versionAwareRender } from '../../utils/dom-render';
 import type { Token, StringMap } from '../../common/types/core';
 
 declare var __VERSION__: string;
@@ -82,10 +83,14 @@ class ES6Wrapper extends EventEmitter {
      * @public
      * @return {void}
      */
+    cleanup: (() => void) | null = null;
+
     hide(): void {
         this.removeAllListeners();
-        // eslint-disable-next-line react/no-deprecated
-        ReactDOM.unmountComponentAtNode(this.container);
+        if (this.cleanup) {
+            this.cleanup();
+            this.cleanup = null;
+        }
         if (this.container) {
             this.container.innerHTML = '';
         }
@@ -99,7 +104,13 @@ class ES6Wrapper extends EventEmitter {
      * @return {void}
      */
     render() {
-        throw new Error('Unimplemented!');
+        if (!this.container) {
+            throw new Error('Container element is required');
+        }
+        this.cleanup = versionAwareRender(
+            <div>Unimplemented! Child classes must implement render() and use versionAwareRender.</div>,
+            this.container,
+        );
     }
 
     /**
