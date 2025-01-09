@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { TooltipProvider } from '@box/blueprint-web';
 import { screen, render } from '../../../test-utils/testing-library';
 import Footer from '../Footer';
 import type { Collection, BoxItem } from '../../../common/types/core';
@@ -42,7 +43,12 @@ describe('elements/content-picker/Footer', () => {
         showSelectedButton: false,
     };
 
-    const renderComponent = (props: Partial<FooterProps> = {}) => render(<Footer {...defaultProps} {...props} />);
+    const renderComponent = (props: Partial<FooterProps> = {}) =>
+        render(
+            <TooltipProvider>
+                <Footer {...defaultProps} {...props} />
+            </TooltipProvider>,
+        );
 
     describe('render()', () => {
         test('should render Footer with basic elements', () => {
@@ -104,6 +110,58 @@ describe('elements/content-picker/Footer', () => {
             } else {
                 expect(selectedButton).not.toBeInTheDocument();
             }
+        });
+
+        test('should call onCancel when cancel button is clicked', () => {
+            const onCancel = jest.fn();
+            renderComponent({ onCancel });
+
+            const cancelButton = screen.getByRole('button', { name: 'Cancel' });
+            cancelButton.click();
+
+            expect(onCancel).toHaveBeenCalled();
+        });
+
+        test('should call onChoose when choose button is clicked and items are selected', () => {
+            const onChoose = jest.fn();
+            renderComponent({ onChoose, selectedCount: 2 });
+
+            const chooseButton = screen.getByRole('button', { name: 'Choose' });
+            chooseButton.click();
+
+            expect(onChoose).toHaveBeenCalled();
+        });
+
+        test('should call onSelectedClick when selected button is clicked', () => {
+            const onSelectedClick = jest.fn();
+            renderComponent({ onSelectedClick, showSelectedButton: true });
+
+            const selectedButton = screen.getByRole('button', { name: /selected/i });
+            selectedButton.click();
+
+            expect(onSelectedClick).toHaveBeenCalled();
+        });
+
+        test('should render custom button labels when provided', () => {
+            renderComponent({
+                cancelButtonLabel: 'Custom Cancel',
+                chooseButtonLabel: 'Custom Choose',
+            });
+
+            expect(screen.getByRole('button', { name: 'Custom Cancel' })).toBeInTheDocument();
+            expect(screen.getByRole('button', { name: 'Custom Choose' })).toBeInTheDocument();
+        });
+
+        test('should show selection limit message when hasHitSelectionLimit is true', () => {
+            renderComponent({
+                hasHitSelectionLimit: true,
+                selectedCount: 3,
+                showSelectedButton: true,
+            });
+
+            const selectedButton = screen.getByRole('button', { name: /selected.*max/i });
+            expect(selectedButton).toBeInTheDocument();
+            expect(selectedButton).toHaveTextContent(/3.*selected.*max/i);
         });
     });
 });
