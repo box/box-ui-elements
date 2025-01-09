@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { injectIntl, type IntlShape } from 'react-intl';
-import { Button, Toolbar } from '@box/blueprint-web';
+import { Button, Toolbar, Tooltip } from '@box/blueprint-web';
 import type { Collection, BoxItem } from '../../common/types/core';
 
 import messages from '../common/messages';
@@ -77,18 +77,25 @@ const Footer = ({
                     })
                 ) : (
                     <Toolbar.Root className="bcp-footer-actions">
-                        <Button onClick={onCancel} variant="secondary">
-                            {cancelButtonLabel || cancelMessage}
-                        </Button>
-                        <Button
-                            disabled={isChooseButtonDisabled}
-                            onClick={onChoose}
-                            variant="primary"
-                            data-testid="choose-button"
-                            data-resin-target="choose"
+                        <Tooltip content={cancelButtonLabel || cancelMessage}>
+                            <Button onClick={onCancel} variant="secondary">
+                                {cancelButtonLabel || cancelMessage}
+                            </Button>
+                        </Tooltip>
+                        <Tooltip
+                            content={chooseButtonLabel || chooseMessage}
+                            open={isChooseButtonDisabled ? false : undefined}
                         >
-                            {chooseButtonLabel || chooseMessage}
-                        </Button>
+                            <Button
+                                disabled={isChooseButtonDisabled}
+                                onClick={onChoose}
+                                variant="primary"
+                                data-testid="choose-button"
+                                data-resin-target="choose"
+                            >
+                                {chooseButtonLabel || chooseMessage}
+                            </Button>
+                        </Tooltip>
                     </Toolbar.Root>
                 )}
             </div>
