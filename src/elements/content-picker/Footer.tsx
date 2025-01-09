@@ -7,8 +7,6 @@ import { useIntl } from 'react-intl';
 import { Button } from '@box/blueprint-web';
 import type { Collection, BoxItem } from '../../common/types/core';
 import ButtonGroup from '../../components/button-group';
-import IconCheck from '../../icons/general/IconCheck';
-import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
 import Tooltip from '../common/Tooltip';
 
@@ -30,9 +28,9 @@ export interface FooterProps {
     currentCollection: Collection;
     hasHitSelectionLimit: boolean;
     isSingleSelect: boolean;
-    onCancel: () => void;
-    onChoose: () => void;
-    onSelectedClick: () => void;
+    onCancel: (event?: React.SyntheticEvent<HTMLButtonElement>) => void;
+    onChoose: (event?: React.SyntheticEvent<HTMLButtonElement>) => void;
+    onSelectedClick: (event?: React.SyntheticEvent<HTMLButtonElement>) => void;
     renderCustomActionButtons?: (props: FooterCustomActionButtonsProps) => React.ReactNode;
     selectedCount: number;
     selectedItems: BoxItem[];
@@ -63,9 +61,13 @@ const Footer = ({
         <footer className="bcp-footer">
             <div className="bcp-footer-left">
                 {showSelectedButton && !isSingleSelect && (
-                    <Button className="bcp-selected" onClick={onSelectedClick} variant="secondary">
-                        {formatMessage(messages.selected, { count: selectedCount })}
-                        {hasHitSelectionLimit ? ` (${formatMessage(messages.max)})` : ''}
+                    <Button
+                        className="bcp-selected"
+                        onClick={onSelectedClick}
+                        variant="secondary"
+                        aria-label={`${selectedCount} selected${hasHitSelectionLimit ? ' (max)' : ''}`}
+                    >
+                        {`${selectedCount} selected${hasHitSelectionLimit ? ' (max)' : ''}`}
                     </Button>
                 )}
             </div>
@@ -88,21 +90,17 @@ const Footer = ({
                                 onClick={onCancel}
                                 variant="secondary"
                                 aria-label={cancelButtonLabel || cancelMessage}
-                                icon={IconClose}
                             >
                                 {cancelButtonLabel || cancelMessage}
                             </Button>
                         </Tooltip>
                         <Tooltip isDisabled={isChooseButtonDisabled} text={chooseButtonLabel || chooseMessage}>
                             <Button
-                                variant="primary"
-                                onClick={onChoose}
                                 disabled={isChooseButtonDisabled}
-                                aria-disabled={isChooseButtonDisabled}
-                                aria-label={chooseButtonLabel || chooseMessage}
+                                onClick={onChoose}
+                                variant="primary"
                                 data-testid="choose-button"
-                                data-resin-target="choose"
-                                icon={IconCheck}
+                                aria-label={chooseButtonLabel || chooseMessage}
                             >
                                 {chooseButtonLabel || chooseMessage}
                             </Button>
