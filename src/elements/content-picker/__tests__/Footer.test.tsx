@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { TooltipProvider } from '@box/blueprint-web';
 import { screen, render } from '../../../test-utils/testing-library';
 import Footer, { type FooterProps } from '../Footer';
 
@@ -17,12 +16,7 @@ describe('elements/content-picker/Footer', () => {
         showSelectedButton: false,
     };
 
-    const renderComponent = (props: Partial<FooterProps> = {}) =>
-        render(
-            <TooltipProvider>
-                <Footer {...defaultProps} {...props} />
-            </TooltipProvider>,
-        );
+    const renderComponent = (props: Partial<FooterProps> = {}) => render(<Footer {...defaultProps} {...props} />);
 
     describe('render()', () => {
         test('should render Footer with basic elements', () => {
