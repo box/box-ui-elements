@@ -105,7 +105,7 @@ describe('elements/content-picker/Footer', () => {
         test('should call onSelectedClick when selected button is clicked', () => {
             const onSelectedClick = jest.fn();
             renderComponent({ onSelectedClick, showSelectedButton: true });
-            const selectedButton = testing_library_1.screen.getByRole('button', { name: /selected/i });
+            const selectedButton = screen.getByRole('button', { name: /selected/i });
             selectedButton.click();
             expect(onSelectedClick).toHaveBeenCalled();
         });
