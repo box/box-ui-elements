@@ -1,3 +1,7 @@
+/**
+ * Footer component for content picker
+ * Provides action buttons and selection status
+ */
 import * as React from 'react';
 import { injectIntl, type IntlShape } from 'react-intl';
 import { Button, Toolbar, Tooltip } from '@box/blueprint-web';
