@@ -4,9 +4,10 @@
  */
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { Button, Toolbar, Tooltip } from '@box/blueprint-web';
+import { Button } from '@box/blueprint-web';
 import type { Collection, BoxItem } from '../../common/types/core';
-
+import ButtonGroup from '../../components/button-group';
+import Tooltip from '../common/Tooltip';
 import messages from '../common/messages';
 import './Footer.scss';
 
@@ -50,9 +51,9 @@ const Footer = ({
     renderCustomActionButtons,
     showSelectedButton,
 }: FooterProps) => {
-    const intl = useIntl();
-    const cancelMessage = intl.formatMessage(messages.cancel);
-    const chooseMessage = intl.formatMessage(messages.choose);
+    const { formatMessage } = useIntl();
+    const cancelMessage = formatMessage(messages.cancel);
+    const chooseMessage = formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
 
     return (
@@ -60,8 +61,8 @@ const Footer = ({
             <div className="bcp-footer-left">
                 {showSelectedButton && !isSingleSelect && (
                     <Button className="bcp-selected" onClick={onSelectedClick} variant="secondary">
-                        {`${intl.formatMessage(messages.selected, { count: selectedCount })}${
-                            hasHitSelectionLimit ? ` (${intl.formatMessage(messages.max)})` : ''
+                        {`${formatMessage(messages.selected, { count: selectedCount })}${
+                            hasHitSelectionLimit ? ` (${formatMessage(messages.max)})` : ''
                         }`}
                     </Button>
                 )}
@@ -79,17 +80,13 @@ const Footer = ({
                         selectedItems,
                     })
                 ) : (
-                    <Toolbar.Root className="bcp-footer-actions">
-                        <Tooltip content={cancelButtonLabel || cancelMessage} __checkInteractivity={false}>
+                    <ButtonGroup className="bcp-footer-actions">
+                        <Tooltip text={cancelButtonLabel || cancelMessage}>
                             <Button onClick={onCancel} variant="secondary">
                                 {cancelButtonLabel || cancelMessage}
                             </Button>
                         </Tooltip>
-                        <Tooltip
-                            content={chooseButtonLabel || chooseMessage}
-                            open={isChooseButtonDisabled ? false : undefined}
-                            __checkInteractivity={false}
-                        >
+                        <Tooltip isDisabled={isChooseButtonDisabled} text={chooseButtonLabel || chooseMessage}>
                             <Button
                                 disabled={isChooseButtonDisabled}
                                 onClick={onChoose}
@@ -100,7 +97,7 @@ const Footer = ({
                                 {chooseButtonLabel || chooseMessage}
                             </Button>
                         </Tooltip>
-                    </Toolbar.Root>
+                    </ButtonGroup>
                 )}
             </div>
         </footer>

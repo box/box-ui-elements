@@ -52,9 +52,9 @@ const Footer = ({
     renderCustomActionButtons,
     showSelectedButton,
 }: Props) => {
-    const intl = useIntl();
-    const cancelMessage = intl.formatMessage(messages.cancel);
-    const chooseMessage = intl.formatMessage(messages.choose);
+    const { formatMessage } = useIntl();
+    const cancelMessage = formatMessage(messages.cancel);
+    const chooseMessage = formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
     return (
         <footer className="bcp-footer">
@@ -65,8 +65,8 @@ const Footer = ({
                         onClick={onSelectedClick}
                         variant="secondary"
                     >
-                        {`${intl.formatMessage(messages.selected, { count: selectedCount })}${
-                            hasHitSelectionLimit ? ` (${intl.formatMessage(messages.max)})` : ''
+                        {`${formatMessage(messages.selected, { count: selectedCount })}${
+                            hasHitSelectionLimit ? ` (${formatMessage(messages.max)})` : ''
                         }`}
                     </Button>
                 )}
