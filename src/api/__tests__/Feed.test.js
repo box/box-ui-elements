@@ -28,6 +28,7 @@ import {
     threadedCommentsFormatted,
     annotationsWithFormattedReplies as mockFormattedAnnotations,
     fileActivitiesVersion,
+    promotedFileActivitiesVersion,
 } from '../fixtures';
 
 const mockErrors = [{ code: 'error_code_0' }, { code: 'error_code_1' }];
@@ -2349,6 +2350,32 @@ describe('api/Feed', () => {
                     id: '123',
                     modified_by: mockUser,
                     collaborators: { 42: mockUser },
+                },
+            ]);
+        });
+
+        test('should return a parsed entries array when response is valid', () => {
+            const mockUser = fileActivitiesVersion.start.created_by;
+            const promotedFileActivities = {
+                entries: [
+                    {
+                        activity_type: FILE_ACTIVITY_TYPE_VERSION,
+                        source: { versions: promotedFileActivitiesVersion },
+                    },
+                ],
+            };
+
+            expect(getParsedFileActivitiesResponse(promotedFileActivities)).toEqual([
+                {
+                    ...promotedFileActivitiesVersion,
+                    uploader_display_name: 'John Doe',
+                    type: FEED_ITEM_TYPE_VERSION,
+                    version_number: 4,
+                    version_end: 4,
+                    version_start: 4,
+                    id: '123',
+                    collaborators: { 42: mockUser },
+                    version_promoted: 2,
                 },
             ]);
         });
