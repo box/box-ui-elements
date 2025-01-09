@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mount } from 'enzyme';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
@@ -16,6 +15,7 @@ import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import SidebarNav from '../SidebarNav';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNavSignButton from '../SidebarNavSignButton';
+import { render, screen } from '../../../test-utils/testing-library';
 import messages from '../../common/messages';
 
 describe('elements/content-sidebar/SidebarNav', () => {

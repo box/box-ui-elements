@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, render } from 'enzyme';
 import { MemoryRouter, Router } from 'react-router-dom';
-import { render as rtlRender, screen } from '@testing-library/react';
+import { render as rtlRender, screen } from '../../../../test-utils/testing-library';
 import NavButton from '..';
 
 describe('elements/common/nav-button/NavButton', () => {
