@@ -1,11 +1,19 @@
 import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
+
 import ContentPicker from '../../ContentPicker';
 import { mockRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
-
+import { SLEEP_TIMEOUT } from '../../../../utils/storybook';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
-export const basic = {};
+export const basic = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        // Basic checks for default state using aria-labels
+        expect(canvas.getByLabelText('Choose')).toBeInTheDocument();
+        expect(canvas.getByLabelText('Cancel')).toBeInTheDocument();
+    },
+};
 
 export const selectedEmptyState = {
     play: async ({ canvasElement }) => {
@@ -17,8 +25,93 @@ export const selectedEmptyState = {
         const selectedButton = canvas.getByRole('button', { name: '0 Selected' });
         await userEvent.click(selectedButton);
         await waitFor(() => {
-            expect(canvas.getByText('You haven’t selected any items yet.')).toBeInTheDocument();
+            expect(canvas.getByText('You haven't selected any items yet.')).toBeInTheDocument();
         });
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
+    },
+};
+
+export const emptyFolder = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitFor(
+            () => {
+                // Verify empty folder state
+                expect(canvas.getByText('This folder is empty')).toBeInTheDocument();
+            },
+            {
+                timeout: SLEEP_TIMEOUT,
+            },
+        );
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
+    },
+};
+
+export const emptySelectionMode = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitFor(
+            () => {
+                // Verify empty folder state in selection mode
+                expect(canvas.getByText('This folder is empty')).toBeInTheDocument();
+                expect(canvas.getByLabelText('Choose')).toBeDisabled();
+            },
+            {
+                timeout: SLEEP_TIMEOUT,
+            },
+        );
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
+    },
+};
+
+export const withError = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitFor(
+            () => {
+                // Verify error state is displayed
+                expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
+            },
+            {
+                timeout: SLEEP_TIMEOUT,
+            },
+        );
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.error();
+                }),
+            ],
+        },
     },
 };
 
@@ -33,7 +126,7 @@ export default {
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
             ],
