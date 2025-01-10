@@ -132,6 +132,55 @@ export const fileActivitiesVersion = {
     action_type: 'created',
 };
 
+export const promotedFileActivitiesVersion = {
+    end: {
+        created_at: '2022-01-05T10:12:28.000-08:00',
+        created_by: {
+            id: '42',
+            name: 'John Doe',
+            login: 'johndoe@box.com',
+            type: 'user',
+        },
+        id: '123',
+        number: 4,
+        uploader_display_name: 'John Doe',
+        type: 'file_version',
+        promoted_from: 2,
+    },
+    start: {
+        created_at: '2022-01-05T10:12:28.000-08:00',
+        created_by: {
+            id: '42',
+            name: 'John Doe',
+            login: 'johndoe@box.com',
+            type: 'user',
+        },
+        id: '123',
+        number: 4,
+        uploader_display_name: 'John Doe',
+        type: 'file_version',
+        promoted_from: 2,
+    },
+    action_by: [
+        {
+            id: '42',
+            name: 'John Doe',
+            login: 'johndoe@box.com',
+            type: 'user',
+        },
+    ],
+    created_by: [
+        {
+            id: '42',
+            name: 'John Doe',
+            login: 'johndoe@box.com',
+            type: 'user',
+        },
+    ],
+    type: 'versions',
+    action_type: 'promoted',
+};
+
 export const annotationsWithFormattedReplies = [
     {
         created_at: '2022-08-19T03:39:00-07:00',
