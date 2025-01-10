@@ -2,10 +2,10 @@ import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
 
 import ContentPicker from '../../ContentPicker';
+// Import mockRootFolder - used for testing empty states and error scenarios
 import { mockRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
 import { SLEEP_TIMEOUT } from '../../../../utils/storybook';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
-
 export const basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
