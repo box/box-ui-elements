@@ -88,8 +88,9 @@ const SidebarNav = ({
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_BOXAI}
                             tooltip={
-                                (showOnlyBoxAINavButton && boxAIDisabledTooltip) ||
-                                intl.formatMessage(messages.sidebarBoxAITitle)
+                                showOnlyBoxAINavButton
+                                    ? boxAIDisabledTooltip
+                                    : intl.formatMessage(messages.sidebarBoxAITitle)
                             }
                         >
                             <BoxAiLogo height={Size5} width={Size5} />

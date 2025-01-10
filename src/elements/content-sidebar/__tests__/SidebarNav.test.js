@@ -16,7 +16,6 @@ import SidebarNav from '../SidebarNav';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNavSignButton from '../SidebarNavSignButton';
 import { render, screen } from '../../../test-utils/testing-library';
-import messages from '../../common/messages';
 
 describe('elements/content-sidebar/SidebarNav', () => {
     const getWrapper = (props = {}, active = '', features = {}) =>
@@ -99,13 +98,10 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     describe('should render box ai tab with correct disabled state and tooltip', () => {
-        const defaultTooltip = messages.sidebarBoxAITitle.defaultMessage;
-
         test.each`
             disabledTooltip          | expectedTooltip
             ${'tooltip msg'}         | ${'tooltip msg'}
             ${'another tooltip msg'} | ${'another tooltip msg'}
-            ${undefined}             | ${defaultTooltip}
         `(
             'given feature boxai.sidebar.showOnlyNavButton = true and boxai.sidebar.disabledTooltip = $disabledTooltip, should render box ai tab with disabled state and tooltip = $expectedTooltip',
             async ({ disabledTooltip, expectedTooltip }) => {
@@ -125,28 +121,21 @@ describe('elements/content-sidebar/SidebarNav', () => {
             },
         );
 
-        test.each`
-            disabledTooltip
-            ${'tooltip msg'}
-            ${undefined}
-        `(
-            'given feature boxai.sidebar.showOnlyNavButton = false and boxai.sidebar.disabledTooltip = $disabledTooltip, should render box ai tab with default tooltip',
-            async ({ disabledTooltip }) => {
-                render(
-                    getSidebarNav({
-                        features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: false } } },
-                        props: { hasBoxAI: true },
-                    }),
-                );
+        test('given feature boxai.sidebar.showOnlyNavButton = false, should render box ai tab with default tooltip', async () => {
+            render(
+                getSidebarNav({
+                    features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                    props: { hasBoxAI: true },
+                }),
+            );
 
-                const button = screen.getByTestId('sidebarboxai');
+            const button = screen.getByTestId('sidebarboxai');
 
-                await userEvent.hover(button);
+            await userEvent.hover(button);
 
-                expect(button).not.toHaveAttribute('aria-disabled');
-                expect(screen.getByText(defaultTooltip)).toBeInTheDocument();
-            },
-        );
+            expect(button).not.toHaveAttribute('aria-disabled');
+            expect(screen.getByText('Box AI')).toBeInTheDocument();
+        });
     });
 
     test('should have multiple tabs', () => {
