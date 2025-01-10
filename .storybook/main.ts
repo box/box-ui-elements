@@ -20,14 +20,26 @@ const config: {
         '@storybook/addon-essentials',
         '@storybook/addon-interactions',
         {
-            name: '@storybook/addon-styling',
+            name: '@storybook/addon-styling-webpack',
             options: {
-                sass: {
-                    implementation: require('sass'),
-                },
+                rules: [
+                    {
+                        test: /\.s?css$/,
+                        use: [
+                            'style-loader',
+                            'css-loader',
+                            'postcss-loader',
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    implementation: require('sass'),
+                                },
+                            },
+                        ],
+                    },
+                ],
             },
         },
-        '@storybook/addon-styling-webpack',
         '@storybook/addon-docs',
         '@storybook/addon-webpack5-compiler-babel',
         '@chromatic-com/storybook',
