@@ -857,6 +857,18 @@ const messages = defineMessages({
         description:
             'Message displayed in the activity feed to represent the range of versions uploaded by a single user. {name} is the user who uploaded. {versions} is a range of versions.',
     },
+    versionMultipleUsersCollapsed: {
+        id: 'be.versionMultipleUsersCollapsed',
+        defaultMessage: '{numberOfCollaborators} collaborators {actionMessage} v{versions}',
+        description:
+            'Message displayed in the activity feed to represent the range of versions actioned by multiple users. {numberOfCollaborators} is a number. {actionMessage} is the action. {versions} is a range of versions.',
+    },
+    versionCollapsed: {
+        id: 'be.versionCollapsed',
+        defaultMessage: '{name} {actionMessage} v{versions}',
+        description:
+            'Message displayed in the activity feed to represent the range of versions actioned by a single user. {name} is the user who did the action. {actionMessage} is the action. {versions} is a range of versions.',
+    },
     versionUploaded: {
         id: 'be.versionUploaded',
         defaultMessage: '{name} uploaded v{version_number}',
