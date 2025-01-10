@@ -2,11 +2,11 @@
  * Footer component for content picker
  * Provides action buttons and selection status
  */
-import * as React from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@box/blueprint-web';
 import type { Collection, BoxItem } from '../../common/types/core';
-import ButtonGroup from '../../components/button-group';
+import ButtonGroup from '../../components/button-group/ButtonGroup';
 import messages from '../common/messages';
 import Tooltip from '../common/Tooltip';
 

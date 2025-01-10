@@ -1,24 +1,30 @@
 {
     "extends": "./node_modules/@box/frontend/ts/tsconfig",
     "compilerOptions": {
-        "esModuleInterop": true,
+        "module": "CommonJS",
+        "target": "ES2015",
         "jsx": "react",
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "strict": false,
+        "allowSyntheticDefaultImports": true,
+        "noErrorTruncation": true,
+        "declaration": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "allowJs": false,
+        "esModuleInterop": true,
         "baseUrl": ".",
         "outDir": "es",
-        "allowJs": false,
-        "checkJs": false,
         "rootDir": ".",
         "paths": {
             "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"],
-            "react": ["node_modules/@types/react"]
+            "react": ["node_modules/@types/react"],
+            "@box/blueprint-web": ["node_modules/@box/blueprint-web"],
+            "@box/blueprint-web/*": ["node_modules/@box/blueprint-web/*"]
         },
-        "strict": false,
-        "target": "ES2015",
-        "module": "CommonJS",
-        "moduleResolution": "node",
-        "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "lib": ["ES2015", "DOM", "ES2016", "ES2017", "ES2018", "ES2019", "ES2020"]
     },
     "files": [".storybook/typings.d.ts"],
     "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"],
