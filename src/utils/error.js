@@ -46,6 +46,21 @@ function getAbortError() {
     return new AbortError('Aborted');
 }
 
+/**
+ * Reports an error to window.reportError or falls back to console.error
+ * @param {Error | string} error - The error to report
+ * @param {Object | string} [info] - Additional error information
+ * @returns {void}
+ */
+function reportError(error: Error | string, info?: Object | string): void {
+    if (typeof window.reportError === 'function') {
+        window.reportError(error);
+    } else {
+        // Fallback for browsers that don't support window.reportError
+        console.error(error, info); // eslint-disable-line no-console
+    }
+}
+
 export {
     getAbortError,
     getBadItemError,
@@ -53,4 +68,5 @@ export {
     getBadUserError,
     getMissingItemTextOrStatus,
     isUserCorrectableError,
+    reportError,
 };

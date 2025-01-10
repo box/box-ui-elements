@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import serialize from 'form-serialize';
+import { FormProvider } from './FormContext';
 
 function getFormValidityState(form) {
     // Turn the form.elements HTMLCollection into Array before reducing
@@ -37,27 +38,14 @@ class Form extends Component {
         formValidityState: PropTypes.object, // eslint-disable-line react/no-unused-prop-types
     };
 
-    static childContextTypes = {
-        form: PropTypes.shape({
-            registerInput: PropTypes.func.isRequired,
-            unregisterInput: PropTypes.func.isRequired,
-        }).isRequired,
-    };
-
     constructor(props) {
         super(props);
-
         this.state = {
             registeredInputs: {},
         };
-    }
-
-    getChildContext() {
-        return {
-            form: {
-                registerInput: this.registerInput.bind(this),
-                unregisterInput: this.unregisterInput.bind(this),
-            },
+        this.formContext = {
+            registerInput: this.registerInput.bind(this),
+            unregisterInput: this.unregisterInput.bind(this),
         };
     }
 
@@ -109,29 +97,43 @@ class Form extends Component {
     };
 
     registerInput = (name, setValidityStateHandler) => {
-        const { registeredInputs } = this.state;
+        this.setState(prevState => {
+            // Allow re-registration of the same handler
+            if (prevState.registeredInputs[name] === setValidityStateHandler) {
+                return prevState;
+            }
 
-        if (registeredInputs[name]) {
-            throw new Error(`Input '${name}' is already registered.`);
-        }
+            // Only throw if trying to register a different handler
+            if (prevState.registeredInputs[name]) {
+                throw new Error(`Input '${name}' is already registered with a different handler.`);
+            }
 
-        const nextState = this.state;
-        nextState.registeredInputs[name] = setValidityStateHandler;
-        this.setState(nextState);
+            return {
+                registeredInputs: {
+                    ...prevState.registeredInputs,
+                    [name]: setValidityStateHandler,
+                },
+            };
+        });
     };
 
     unregisterInput = name => {
-        const nextState = this.state;
-        delete nextState.registeredInputs[name];
-        this.setState(nextState);
+        this.setState(prevState => {
+            const { [name]: removed, ...remaining } = prevState.registeredInputs;
+            return {
+                registeredInputs: remaining,
+            };
+        });
     };
 
     render() {
         const { children } = this.props;
         return (
-            <form noValidate onChange={this.onChange} onSubmit={this.onSubmit}>
-                {children}
-            </form>
+            <FormProvider value={this.formContext}>
+                <form noValidate onChange={this.onChange} onSubmit={this.onSubmit}>
+                    {children}
+                </form>
+            </FormProvider>
         );
     }
 }

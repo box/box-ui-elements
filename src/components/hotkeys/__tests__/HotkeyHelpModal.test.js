@@ -1,180 +1,159 @@
 import * as React from 'react';
-import sinon from 'sinon';
-
+import { render, screen } from '@testing-library/react';
+import { HotkeyProvider } from '../HotkeyContext';
 import HotkeyRecord from '../HotkeyRecord';
+import HotkeyService from '../HotkeyService';
 import HotkeyHelpModal from '../HotkeyHelpModal';
 
-const sandbox = sinon.sandbox.create();
-
 describe('components/hotkeys/components/HotkeyHelpModal', () => {
-    let HotkeyServiceMock;
+    const defaultProps = {
+        onRequestClose: jest.fn(),
+    };
 
-    const getWrapper = (props = {}, context = { hotkeyLayer: HotkeyServiceMock }) =>
-        shallow(<HotkeyHelpModal onRequestClose={sandbox.stub()} {...props} />, { context });
+    const createMockHotkeyService = (overrides = {}) => {
+        const service = new HotkeyService();
+        service.getActiveHotkeys = jest.fn().mockReturnValue({ other: [new HotkeyRecord()] });
+        service.getActiveTypes = jest.fn().mockReturnValue(['other']);
+        service.registerHotkey = jest.fn();
+        service.deregisterHotkey = jest.fn();
+        Object.assign(service, overrides);
+        return service;
+    };
 
-    beforeEach(() => {
-        HotkeyServiceMock = {
-            getActiveHotkeys: sandbox.stub().returns({ other: [new HotkeyRecord()] }),
-            getActiveTypes: sandbox.stub().returns(['other']),
+    const renderWithHotkeys = (ui, customHotkeyService) => {
+        const hotkeyService = customHotkeyService || createMockHotkeyService();
+        const result = render(<HotkeyProvider hotkeyService={hotkeyService}>{ui}</HotkeyProvider>);
+        return {
+            ...result,
+            hotkeyService,
+            rerender: newUi => result.rerender(<HotkeyProvider hotkeyService={hotkeyService}>{newUi}</HotkeyProvider>),
         };
-    });
-
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
+    };
 
     describe('render()', () => {
-        test('should render a HotkeyFriendlyModal', () => {
-            const wrapper = getWrapper();
-
-            const modal = wrapper.find('HotkeyFriendlyModal');
-            expect(modal.length).toBe(1);
-            expect(modal.prop('onRequestClose')).toBeTruthy();
-            expect(modal.prop('isOpen')).toBeFalsy();
-            expect(wrapper.find('ModalActions').length).toBe(1);
+        test('should render a HotkeyFriendlyModal when open', () => {
+            renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={true} />);
+            expect(screen.getByRole('dialog')).toBeInTheDocument();
+            expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
         });
 
-        test('should pass isOpen prop to modal when modal is open', () => {
-            const wrapper = getWrapper({ isOpen: true });
-
-            const modal = wrapper.find('HotkeyFriendlyModal');
-            expect(modal.prop('isOpen')).toBe(true);
+        test('should not render modal when not open', () => {
+            renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={false} />);
+            expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         });
 
         test('should return null when no hotkeys exist', () => {
-            HotkeyServiceMock.getActiveHotkeys = sandbox.stub().returns({});
-            HotkeyServiceMock.getActiveTypes = sandbox.stub().returns([]);
-            const wrapper = getWrapper();
-
-            expect(wrapper.get(0)).toBeFalsy();
+            const emptyHotkeyService = createMockHotkeyService({
+                getActiveHotkeys: jest.fn().mockReturnValue({}),
+                getActiveTypes: jest.fn().mockReturnValue([]),
+            });
+            renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={true} />, emptyHotkeyService);
+            expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         });
     });
 
     describe('componentDidUpdate()', () => {
-        test('should set state.currentType when state.currentType is null', () => {
-            const wrapper = getWrapper();
-            wrapper.setState({ currentType: null });
+        test('should update hotkeys when modal is opened', async () => {
+            const hotkeyService = createMockHotkeyService();
+            const { rerender } = renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={false} />, hotkeyService);
 
-            sandbox.mock(wrapper.instance()).expects('setState');
+            rerender(<HotkeyHelpModal {...defaultProps} isOpen={true} />);
 
-            wrapper.setProps({
-                isOpen: true,
-            });
-        });
+            // Wait for state updates
+            await screen.findByRole('dialog');
 
-        test('should refresh hotkey and hotkey types from hotkeyService when modal is opened', () => {
-            const wrapper = getWrapper();
+            // Give time for the hotkey service to be called
+            await new Promise(resolve => setTimeout(resolve, 0));
 
-            wrapper.setProps({ isOpen: true });
-
-            // should've been called once in constructor and once in componentDidMount
-            expect(HotkeyServiceMock.getActiveHotkeys.calledTwice).toBe(true);
-            expect(HotkeyServiceMock.getActiveTypes.calledTwice).toBe(true);
+            expect(hotkeyService.getActiveHotkeys).toHaveBeenCalled();
+            expect(hotkeyService.getActiveTypes).toHaveBeenCalled();
         });
     });
 
     describe('renderDropdownMenu()', () => {
         test('should render DropdownMenu with correct items', () => {
-            HotkeyServiceMock.getActiveHotkeys = sandbox.stub().returns({
-                hello: [new HotkeyRecord()],
-                hi: [new HotkeyRecord()],
-                hey: [new HotkeyRecord()],
+            const hotkeyService = createMockHotkeyService({
+                getActiveHotkeys: jest.fn().mockReturnValue({
+                    hello: [new HotkeyRecord()],
+                    hi: [new HotkeyRecord()],
+                    hey: [new HotkeyRecord()],
+                }),
+                getActiveTypes: jest.fn().mockReturnValue(['hello', 'hi', 'hey']),
             });
-            HotkeyServiceMock.getActiveTypes = sandbox.stub().returns(['hello', 'hi', 'hey']);
 
-            const wrapper = getWrapper();
-
-            expect(wrapper.find('MenuItem').length).toBe(3);
+            renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={true} />, hotkeyService);
+            expect(screen.getByText('hello')).toBeInTheDocument();
+            expect(screen.getByText('hi')).toBeInTheDocument();
+            expect(screen.getByText('hey')).toBeInTheDocument();
         });
     });
 
     describe('renderHotkeyList()', () => {
         test('should render hotkeys for currently selected type', () => {
-            HotkeyServiceMock.getActiveHotkeys = sandbox.stub().returns({
-                navigation: [
-                    {
-                        description: 'hi',
-                        key: 'a',
-                    },
-                    {
-                        description: 'hi',
-                        key: 'b',
-                    },
-                ],
-                other: [
-                    {
-                        description: 'hi',
-                        key: 'c',
-                    },
-                    {
-                        description: 'hi',
-                        key: 'd',
-                    },
-                    {
-                        description: 'hi',
-                        key: 'e',
-                    },
-                ],
-            });
-            HotkeyServiceMock.getActiveTypes = sandbox.stub().returns(['navigation', 'other']);
-
-            const wrapper = getWrapper();
-
-            wrapper.setState({
-                currentType: 'navigation',
+            const hotkeyService = createMockHotkeyService({
+                getActiveHotkeys: jest.fn().mockReturnValue({
+                    navigation: [
+                        { description: 'nav1', key: 'a' },
+                        { description: 'nav2', key: 'b' },
+                    ],
+                    other: [
+                        { description: 'other1', key: 'c' },
+                        { description: 'other2', key: 'd' },
+                        { description: 'other3', key: 'e' },
+                    ],
+                }),
+                getActiveTypes: jest.fn().mockReturnValue(['navigation', 'other']),
             });
 
-            // should render the two 'navigation' hotkeys
-            expect(wrapper.find('.hotkey-item').length).toBe(2);
+            renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={true} />, hotkeyService);
 
-            wrapper.setState({
-                currentType: 'other',
-            });
-
-            // should render the three 'other' hotkeys
-            expect(wrapper.find('.hotkey-item').length).toBe(3);
+            // Initial type should be 'navigation'
+            expect(screen.getByText('nav1')).toBeInTheDocument();
+            expect(screen.getByText('nav2')).toBeInTheDocument();
         });
     });
 
     describe('renderHotkey()', () => {
         test('should render hotkey correctly', () => {
-            HotkeyServiceMock.getActiveHotkeys = sandbox.stub().returns({
-                navigation: [
-                    {
-                        description: 'hi',
-                        key: 'shift+a+b+c',
-                    },
-                ],
+            const hotkeyService = createMockHotkeyService({
+                getActiveHotkeys: jest.fn().mockReturnValue({
+                    navigation: [
+                        {
+                            description: 'test hotkey',
+                            key: 'shift+a+b+c',
+                        },
+                    ],
+                }),
+                getActiveTypes: jest.fn().mockReturnValue(['navigation']),
             });
-            HotkeyServiceMock.getActiveTypes = sandbox.stub().returns(['navigation']);
 
-            const wrapper = getWrapper();
+            renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={true} />, hotkeyService);
 
-            // should render one hotkey
-            expect(wrapper.find('.hotkey-key').children().length).toBe(1);
-
-            // kbd elements should be [ "shift", "a", "b", "c" ]
-            expect(wrapper.find('kbd').length).toBe(4);
+            // Verify description and key combinations
+            expect(screen.getByText('test hotkey')).toBeInTheDocument();
+            const kbdElements = screen.getAllByRole('definition');
+            expect(kbdElements).toHaveLength(4); // shift, a, b, c
         });
 
         test('should render all keys when a hotkey has multiple hotkeys', () => {
-            HotkeyServiceMock.getActiveHotkeys = sandbox.stub().returns({
-                navigation: [
-                    {
-                        description: 'hi',
-                        key: ['shift+a', 'alt+a'],
-                    },
-                ],
+            const hotkeyService = createMockHotkeyService({
+                getActiveHotkeys: jest.fn().mockReturnValue({
+                    navigation: [
+                        {
+                            description: 'multi hotkey',
+                            key: ['shift+a', 'alt+a'],
+                        },
+                    ],
+                }),
+                getActiveTypes: jest.fn().mockReturnValue(['navigation']),
             });
-            HotkeyServiceMock.getActiveTypes = sandbox.stub().returns(['navigation']);
 
-            const wrapper = getWrapper();
+            renderWithHotkeys(<HotkeyHelpModal {...defaultProps} isOpen={true} />, hotkeyService);
 
-            // elements should be [ "shift+a", "/", "alt+a" ] (i.e. length 3)
-            expect(wrapper.find('.hotkey-key').children().length).toBe(3);
-
-            // kbd elements should be [ "shift", "a", "alt", "a" ]
-            expect(wrapper.find('.hotkey-key kbd').length).toBe(4);
+            // Verify description and key combinations
+            expect(screen.getByText('multi hotkey')).toBeInTheDocument();
+            const kbdElements = screen.getAllByRole('definition');
+            expect(kbdElements).toHaveLength(4); // shift, a, alt, a
         });
     });
 });

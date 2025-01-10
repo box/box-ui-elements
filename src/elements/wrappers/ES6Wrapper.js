@@ -11,9 +11,24 @@ import { DEFAULT_CONTAINER } from '../../constants';
 import { versionAwareRender } from '../../utils/dom-render';
 import type { Token, StringMap } from '../../common/types/core';
 
+type Props = {|
+    className: string,
+    container: string | HTMLElement,
+|};
+
 declare var __VERSION__: string;
 
 class ES6Wrapper extends EventEmitter {
+    props: Props;
+
+    constructor() {
+        super();
+        this.props = {
+            className: '',
+            container: DEFAULT_CONTAINER,
+        };
+    }
+
     /**
      * @property {Function}
      */
@@ -55,6 +70,15 @@ class ES6Wrapper extends EventEmitter {
     component: any;
 
     /**
+     * @property {Object}
+     */
+
+    static defaultProps = {
+        className: '',
+        container: DEFAULT_CONTAINER,
+    };
+
+    /**
      * Shows the content picker.
      *
      * @public
@@ -69,7 +93,7 @@ class ES6Wrapper extends EventEmitter {
         this.options = options;
         this.options.version = __VERSION__;
         this.emit = this.emit.bind(this);
-        const container = options.container || DEFAULT_CONTAINER;
+        const container = options.container || this.props.container;
         this.container =
             container instanceof HTMLElement ? container : ((document.querySelector(container): any): HTMLElement);
         this.render();

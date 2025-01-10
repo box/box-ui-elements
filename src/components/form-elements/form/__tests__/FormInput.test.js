@@ -1,47 +1,52 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
-import sinon from 'sinon';
+import { render } from '@testing-library/react';
+import { FormProvider } from '../FormContext';
+import FormInput from '../FormInput';
 
-import { FormInput } from '..';
-
-const sandbox = sinon.sandbox.create();
+const noop = () => {};
 
 describe('components/form-elements/form/FormInput', () => {
-    afterEach(() => {
-        sandbox.verifyAndRestore();
-    });
+    const renderWithForm = (ui, formContext = {}) => {
+        return render(<FormProvider value={formContext}>{ui}</FormProvider>);
+    };
 
-    test('should register itself with the form when form is exposed on context', () => {
-        const context = {
-            form: {
-                registerInput: sandbox.mock().withArgs('forminput'),
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
+    test('should register itself with the form when form context is available', () => {
+        const registerInput = jest.fn();
+        const unregisterInput = jest.fn();
 
-        mount(
-            <FormInput name="forminput" onValidityStateUpdate={sinon.stub()}>
+        renderWithForm(
+            <FormInput name="test-input" onValidityStateUpdate={noop}>
                 <input />
             </FormInput>,
-            { context },
+            { registerInput, unregisterInput },
         );
+
+        expect(registerInput).toHaveBeenCalledWith('test-input', noop);
+        expect(unregisterInput).not.toHaveBeenCalled();
     });
 
-    test('should unregister itself with the form when form is exposed on context and component unmounts', () => {
-        const context = {
-            form: {
-                registerInput: sandbox.mock().withArgs('input'),
-                unregisterInput: sandbox.mock().withArgs('input'),
-            },
-        };
+    test('should unregister itself when unmounted', () => {
+        const registerInput = jest.fn();
+        const unregisterInput = jest.fn();
 
-        const component = mount(
-            <FormInput label="label" name="input" onValidityStateUpdate={sinon.stub()} value="">
-                Children
+        const { unmount } = renderWithForm(
+            <FormInput name="test-input" onValidityStateUpdate={noop}>
+                <input />
             </FormInput>,
-            { context },
+            { registerInput, unregisterInput },
         );
 
-        component.unmount();
+        unmount();
+        expect(unregisterInput).toHaveBeenCalledWith('test-input');
+    });
+
+    test('should not throw when form context is not available', () => {
+        expect(() => {
+            render(
+                <FormInput name="test-input" onValidityStateUpdate={noop}>
+                    <input />
+                </FormInput>,
+            );
+        }).not.toThrow();
     });
 });

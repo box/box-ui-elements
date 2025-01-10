@@ -10,6 +10,7 @@ import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
+import { reportError } from '../../utils/error';
 import Internationalize from '../common/Internationalize';
 import messages from '../common/messages';
 import { withErrorBoundary } from '../common/error-boundary';
@@ -493,8 +494,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     executeIntegrationErrorHandler = (error: any, code: string): void => {
         this.props.onError(error, code, { error });
-        // eslint-disable-next-line no-console
-        console.error(error);
+        reportError(error);
         this.setState({
             shouldRenderLoadingIntegrationPortal: false,
             shouldRenderErrorIntegrationPortal: true,
@@ -510,8 +510,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
      */
     executeBoxEditErrorHandler = (error: any): void => {
         this.props.onError(error);
-        // eslint-disable-next-line no-console
-        console.error(error);
+        reportError(error);
     };
 
     /**

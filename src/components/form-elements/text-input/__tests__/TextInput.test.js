@@ -221,50 +221,72 @@ describe('components/form-elements/text-input/TextInput', () => {
     });
 
     test('should set validity state when set validity state handler is called with custom error', () => {
-        const validityStateHandlerSpy = sinon.spy();
+        const error = {
+            errorCode: 'errorCode',
+            errorMessage: 'Error Message',
+        };
+
+        let registeredHandler;
+        const registerInput = (name, handler) => {
+            registeredHandler = handler;
+        };
+
         const context = {
             form: {
-                registerInput: validityStateHandlerSpy,
+                registerInput,
                 unregisterInput: sandbox.mock().never(),
             },
         };
         const childContextTypes = {
             form: PropTypes.object,
         };
-        const error = {
-            errorCode: 'errorCode',
-            errorMessage: 'Error Message',
-        };
 
         const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
 
+        // Wait for component to mount and register handler
         act(() => {
-            validityStateHandlerSpy.callArgWith(1, error);
+            component.update();
+        });
+
+        // Now use the handler that was registered during mount
+        act(() => {
+            registeredHandler(error);
         });
 
         expect(component.state('error')).toEqual(error);
     });
 
     test('should set validity state when set validity state handler is called with ValidityState object', () => {
-        const validityStateHandlerSpy = sinon.spy();
+        const error = {
+            valid: false,
+            badInput: true,
+        };
+
+        let registeredHandler;
+        const registerInput = (name, handler) => {
+            registeredHandler = handler;
+        };
+
         const context = {
             form: {
-                registerInput: validityStateHandlerSpy,
+                registerInput,
                 unregisterInput: sandbox.mock().never(),
             },
         };
         const childContextTypes = {
             form: PropTypes.object,
         };
-        const error = {
-            valid: false,
-            badInput: true,
-        };
 
         const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
 
+        // Wait for component to mount and register handler
         act(() => {
-            validityStateHandlerSpy.callArgWith(1, error);
+            component.update();
+        });
+
+        // Now use the handler that was registered during mount
+        act(() => {
+            registeredHandler(error);
         });
         expect(component.state('error').code).toEqual('badInput');
     });
@@ -274,43 +296,59 @@ describe('components/form-elements/text-input/TextInput', () => {
      * support the functionality
      */
     test('should correctly validate patternMismatch', () => {
-        const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-        const childContextTypes = {
-            form: PropTypes.object,
-        };
         const error = {
             valid: false,
             patternMismatch: true,
         };
 
-        const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
+        let registeredHandler;
+        const registerInput = (name, handler) => {
+            registeredHandler = handler;
+        };
 
-        act(() => {
-            validityStateHandlerSpy.callArgWith(1, error);
-        });
-        expect(component.state('error').code).toEqual('patternMismatch');
-    });
-
-    test('should correctly validate tooLong', () => {
-        const validityStateHandlerSpy = sinon.spy();
         const context = {
             form: {
-                registerInput: validityStateHandlerSpy,
+                registerInput,
                 unregisterInput: sandbox.mock().never(),
             },
         };
         const childContextTypes = {
             form: PropTypes.object,
         };
+
+        const component = mount(<TextInput label="label" name="input" value="" />, { context, childContextTypes });
+
+        // Wait for component to mount and register handler
+        act(() => {
+            component.update();
+        });
+
+        // Now use the handler that was registered during mount
+        act(() => {
+            registeredHandler(error);
+        });
+        expect(component.state('error').code).toEqual('patternMismatch');
+    });
+
+    test('should correctly validate tooLong', () => {
         const error = {
             valid: false,
             tooLong: true,
+        };
+
+        let registeredHandler;
+        const registerInput = (name, handler) => {
+            registeredHandler = handler;
+        };
+
+        const context = {
+            form: {
+                registerInput,
+                unregisterInput: sandbox.mock().never(),
+            },
+        };
+        const childContextTypes = {
+            form: PropTypes.object,
         };
 
         const component = mount(<TextInput label="label" maxLength={10} name="input" value="" />, {
@@ -318,28 +356,37 @@ describe('components/form-elements/text-input/TextInput', () => {
             childContextTypes,
         });
 
+        // Wait for component to mount and register handler
         act(() => {
-            validityStateHandlerSpy.callArgWith(1, error);
+            component.update();
+        });
+
+        // Now use the handler that was registered during mount
+        act(() => {
+            registeredHandler(error);
         });
         expect(component.state('error').code).toEqual('tooLong');
     });
 
     test('should correctly validate tooShort', () => {
-        const validityStateHandlerSpy = sinon.spy();
-        const context = {
-            form: {
-                registerInput: validityStateHandlerSpy,
-                unregisterInput: sandbox.mock().never(),
-            },
-        };
-
-        const childContextTypes = {
-            form: PropTypes.object,
-        };
-
         const error = {
             valid: false,
             tooShort: true,
+        };
+
+        let registeredHandler;
+        const registerInput = (name, handler) => {
+            registeredHandler = handler;
+        };
+
+        const context = {
+            form: {
+                registerInput,
+                unregisterInput: sandbox.mock().never(),
+            },
+        };
+        const childContextTypes = {
+            form: PropTypes.object,
         };
 
         const component = mount(<TextInput label="label" minLength={1} name="input" value="" />, {
@@ -347,8 +394,14 @@ describe('components/form-elements/text-input/TextInput', () => {
             childContextTypes,
         });
 
+        // Wait for component to mount and register handler
         act(() => {
-            validityStateHandlerSpy.callArgWith(1, error);
+            component.update();
+        });
+
+        // Now use the handler that was registered during mount
+        act(() => {
+            registeredHandler(error);
         });
         expect(component.state('error').code).toEqual('tooShort');
     });

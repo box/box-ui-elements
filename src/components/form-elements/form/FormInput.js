@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { FormConsumer } from './FormContext';
 
 class FormInput extends Component {
     static propTypes = {
@@ -10,29 +11,35 @@ class FormInput extends Component {
         name: PropTypes.string.isRequired,
     };
 
-    static contextTypes = {
-        form: PropTypes.shape({
-            registerInput: PropTypes.func.isRequired,
-            unregisterInput: PropTypes.func.isRequired,
-        }),
-    };
-
     componentDidMount() {
         const { name, onValidityStateUpdate } = this.props;
-
-        if (this.context.form) {
-            this.context.form.registerInput(name, onValidityStateUpdate);
+        if (this.form) {
+            this.form.registerInput(name, onValidityStateUpdate);
         }
     }
 
     componentWillUnmount() {
-        if (this.context.form) {
-            this.context.form.unregisterInput(this.props.name);
+        const { name } = this.props;
+        if (this.form) {
+            this.form.unregisterInput(name);
         }
     }
 
-    render() {
+    setFormRef = form => {
+        this.form = form;
+        if (form) {
+            const { name, onValidityStateUpdate } = this.props;
+            form.registerInput(name, onValidityStateUpdate);
+        }
+    };
+
+    renderWithForm = form => {
+        this.setFormRef(form);
         return <div>{this.props.children}</div>;
+    };
+
+    render() {
+        return <FormConsumer>{this.renderWithForm}</FormConsumer>;
     }
 }
 

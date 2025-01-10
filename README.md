@@ -28,7 +28,7 @@ Box UI Elements are pre-built UI components that allow developers to add feature
 
 `yarn add box-ui-elements` or `npm install box-ui-elements`
 
-To prevent library duplication, the UI Elements require certain peer dependencies to be installed manually. For a list of required peer dependencies, see [package.json](package.json).
+To prevent library duplication, the UI Elements require certain peer dependencies to be installed manually. The library supports React versions 17, 18, and 19. For a list of required peer dependencies, see [package.json](package.json).
 
 # Usage
 
@@ -62,6 +62,8 @@ Box UI Elements use [SCSS stylesheets](https://sass-lang.com/guide). Each of the
 
 - Desktop Chrome, Firefox, Safari, Edge (latest 2 versions)
 - Mobile Chrome and Safari
+
+Note: When using React 19 with older browsers that don't support Symbol or Promise natively, you will need to provide your own polyfills as React 19 no longer includes them. We recommend using core-js or a similar polyfill library.
 
 # Contributing
 

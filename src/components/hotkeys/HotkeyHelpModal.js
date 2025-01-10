@@ -11,6 +11,7 @@ import { Menu, MenuItem } from '../menu';
 
 import HotkeyFriendlyModal from './HotkeyFriendlyModal'; // eslint-disable-line import/no-cycle
 import messages from './messages';
+import { HotkeyContext } from './HotkeyContext';
 
 import './HotkeyHelpModal.scss';
 
@@ -35,39 +36,46 @@ class HotkeyHelpModal extends Component {
         onRequestClose: PropTypes.func.isRequired,
     };
 
-    static contextTypes = {
-        hotkeyLayer: PropTypes.object,
-    };
-
-    constructor(props, context) {
+    constructor(props) {
         super(props);
-
-        this.hotkeys = context.hotkeyLayer.getActiveHotkeys();
-        this.types = context.hotkeyLayer.getActiveTypes();
         this.state = {
-            currentType: this.types.length ? this.types[0] : null,
+            currentType: null,
+            hotkeys: {},
+            types: [],
         };
     }
 
-    componentDidUpdate({ isOpen: prevIsOpen }, { currentType: prevType }) {
-        const { isOpen } = this.props;
+    static contextType = HotkeyContext;
 
-        if (!isOpen) {
+    componentDidMount() {
+        if (this.props.isOpen) {
+            this.refreshHotkeys();
+        }
+    }
+
+    componentDidUpdate({ isOpen: prevIsOpen }) {
+        const { isOpen } = this.props;
+        if (!isOpen || prevIsOpen) {
             return;
         }
 
-        // modal is being opened; refresh hotkeys
-        if (!prevIsOpen && isOpen) {
-            this.hotkeys = this.context.hotkeyLayer.getActiveHotkeys();
-            this.types = this.context.hotkeyLayer.getActiveTypes();
-        }
-
-        if (!prevType) {
-            this.setState({
-                currentType: this.types.length ? this.types[0] : null,
-            });
-        }
+        // Refresh hotkeys when modal is opened
+        this.refreshHotkeys();
     }
+
+    refreshHotkeys = () => {
+        const hotkeyLayer = this.context;
+        if (!hotkeyLayer) return;
+
+        const hotkeys = hotkeyLayer.getActiveHotkeys();
+        const types = hotkeyLayer.getActiveTypes();
+
+        this.setState({
+            hotkeys,
+            types,
+            currentType: types.length ? types[0] : null,
+        });
+    };
 
     /**
      * Converts a "raw" hotkey to translated JSX version
@@ -119,7 +127,7 @@ class HotkeyHelpModal extends Component {
     };
 
     renderDropdownMenu() {
-        const { currentType } = this.state;
+        const { currentType, types } = this.state;
 
         if (!currentType) {
             return null;
@@ -132,7 +140,7 @@ class HotkeyHelpModal extends Component {
                         <MenuToggle>{currentType}</MenuToggle>
                     </PlainButton>
                     <Menu>
-                        {this.types.map((hotkeyType, i) => (
+                        {types.map((hotkeyType, i) => (
                             <MenuItem key={i} onClick={() => this.setState({ currentType: hotkeyType })}>
                                 {hotkeyType}
                             </MenuItem>
@@ -151,15 +159,15 @@ class HotkeyHelpModal extends Component {
     );
 
     renderHotkeyList() {
-        const { currentType } = this.state;
+        const { currentType, hotkeys } = this.state;
 
         if (!currentType) {
             return null;
         }
 
-        const hotkeys = this.hotkeys[currentType];
+        const currentHotkeys = hotkeys[currentType];
 
-        return <ul className="hotkey-list">{hotkeys.map(this.renderHotkey)}</ul>;
+        return <ul className="hotkey-list">{currentHotkeys.map(this.renderHotkey)}</ul>;
     }
 
     render() {
