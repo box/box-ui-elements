@@ -2,26 +2,32 @@ import * as React from 'react';
 import { versionAwareRender } from '../dom-render';
 
 // Create mock functions with implementations
-const mockRender = jest.fn();
-const mockUnmountComponentAtNode = jest.fn();
-const mockRootRender = jest.fn();
-const mockRootUnmount = jest.fn();
-const mockCreateRoot = jest.fn(() => ({
+const mockRender = jest.fn().mockReturnValue(undefined);
+const mockUnmountComponentAtNode = jest.fn().mockReturnValue(true);
+const mockRootRender = jest.fn().mockReturnValue(undefined);
+const mockRootUnmount = jest.fn().mockReturnValue(undefined);
+const mockCreateRoot = jest.fn().mockReturnValue({
     render: mockRootRender,
     unmount: mockRootUnmount,
-}));
+});
 
 // Mock modules before importing the module under test
-jest.mock('react-dom', () => ({
-    __esModule: true,
-    render: mockRender,
-    unmountComponentAtNode: mockUnmountComponentAtNode,
-}));
+jest.mock('react-dom', () => {
+    const actual = jest.requireActual('react-dom');
+    return {
+        ...actual,
+        render: mockRender,
+        unmountComponentAtNode: mockUnmountComponentAtNode,
+    };
+});
 
-jest.mock('react-dom/client', () => ({
-    __esModule: true,
-    createRoot: mockCreateRoot,
-}));
+jest.mock('react-dom/client', () => {
+    const actual = jest.requireActual('react-dom/client');
+    return {
+        ...actual,
+        createRoot: mockCreateRoot,
+    };
+});
 
 describe('dom-render', () => {
     const TestComponent = () => <div>Test Component</div>;
