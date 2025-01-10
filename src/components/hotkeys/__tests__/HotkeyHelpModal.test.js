@@ -10,15 +10,20 @@ describe('components/hotkeys/components/HotkeyHelpModal', () => {
         onRequestClose: jest.fn(),
     };
 
-    const createMockHotkeyService = (overrides = {}) => {
-        const service = new HotkeyService();
-        service.getActiveHotkeys = jest.fn().mockReturnValue({ other: [new HotkeyRecord()] });
-        service.getActiveTypes = jest.fn().mockReturnValue(['other']);
-        service.registerHotkey = jest.fn();
-        service.deregisterHotkey = jest.fn();
-        Object.assign(service, overrides);
-        return service;
-    };
+    class MockHotkeyService extends HotkeyService {
+        constructor(overrides = {}) {
+            super();
+            this.getActiveHotkeys = jest
+                .fn()
+                .mockReturnValue({ other: [new HotkeyRecord({ description: 'test', key: 'a' })] });
+            this.getActiveTypes = jest.fn().mockReturnValue(['other']);
+            this.registerHotkey = jest.fn();
+            this.deregisterHotkey = jest.fn();
+            Object.assign(this, overrides);
+        }
+    }
+
+    const createMockHotkeyService = (overrides = {}) => new MockHotkeyService(overrides);
 
     const renderWithHotkeys = (ui, customHotkeyService) => {
         const hotkeyService = customHotkeyService || createMockHotkeyService();
