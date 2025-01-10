@@ -68,11 +68,15 @@ export const emptySelectionMode = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
+        // Click to enter selection mode
+        const chooseButton = canvas.getByLabelText('Choose');
+        await userEvent.click(chooseButton);
+
         await waitFor(
             () => {
                 // Verify empty folder state in selection mode
                 expect(canvas.getByText('This folder is empty')).toBeInTheDocument();
-                expect(canvas.getByLabelText('Choose')).toBeDisabled();
+                expect(chooseButton).toBeDisabled();
             },
             {
                 timeout: SLEEP_TIMEOUT,
