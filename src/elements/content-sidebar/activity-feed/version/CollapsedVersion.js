@@ -13,21 +13,48 @@ import messages from '../../../common/messages';
 import selectors from '../../../common/selectors/version';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import type { User, FileVersions } from '../../../../common/types/core';
+import { ACTION_TYPE_CREATED, ACTION_TYPE_RESTORED, ACTION_TYPE_TRASHED } from '../../../../constants';
 import './Version.scss';
+
+const ACTION_MESSAGE_UPLOAD = 'uploaded';
+const ACTION_MESSAGE_RESTORE = 'restored';
+const ACTION_MESSAGE_TRASH = 'deleted';
 
 function getMessageForAction(
     action: string,
-    collaborators: { [collaborator_id: string]: User },
+    collaborators: { [collaborator_id: string]: User } = {},
     version_start: number,
     version_end: number,
+    shouldUseUAA?: boolean,
+    action_by?: User[],
 ): React.Node {
-    // We only support collapsing for multiple upload versions
-    if (action !== 'upload') {
+    if (
+        action !== 'upload' &&
+        action !== ACTION_TYPE_RESTORED &&
+        action !== ACTION_TYPE_TRASHED &&
+        action !== ACTION_TYPE_CREATED
+    ) {
         return null;
     }
 
+    let actionMessage = '';
+    switch (action) {
+        case ACTION_TYPE_CREATED:
+            actionMessage = ACTION_MESSAGE_UPLOAD;
+            break;
+        case ACTION_TYPE_RESTORED:
+            actionMessage = ACTION_MESSAGE_RESTORE;
+            break;
+        case ACTION_TYPE_TRASHED:
+            actionMessage = ACTION_MESSAGE_TRASH;
+            break;
+        default:
+            actionMessage = '';
+            break;
+    }
+
     const collaboratorIDs = Object.keys(collaborators);
-    const numberOfCollaborators = collaboratorIDs.length;
+    const numberOfCollaborators = shouldUseUAA ? action_by?.length : collaboratorIDs.length;
 
     const versionRange: React.Node = (
         <span className="bcs-Version-range">
@@ -36,13 +63,40 @@ function getMessageForAction(
     );
 
     if (numberOfCollaborators === 1) {
-        const collaborator = collaborators[collaboratorIDs[0]];
+        const collaborator = shouldUseUAA ? action_by?.[0] : collaborators[collaboratorIDs[0]];
+
+        if (shouldUseUAA) {
+            return (
+                <FormattedMessage
+                    {...messages.versionCollapsed}
+                    values={{
+                        name: <strong>{collaborator?.name}</strong>,
+                        versions: versionRange,
+                        actionMessage,
+                    }}
+                />
+            );
+        }
+
         return (
             <FormattedMessage
                 {...messages.versionUploadCollapsed}
                 values={{
-                    name: <strong>{collaborator.name}</strong>,
+                    name: <strong>{collaborator?.name}</strong>,
                     versions: versionRange,
+                }}
+            />
+        );
+    }
+
+    if (shouldUseUAA) {
+        return (
+            <FormattedMessage
+                {...messages.versionMultipleUsersCollapsed}
+                values={{
+                    numberOfCollaborators,
+                    versions: versionRange,
+                    actionMessage,
                 }}
             />
         );
@@ -60,6 +114,8 @@ function getMessageForAction(
 }
 
 type Props = {
+    action_by?: User[],
+    action_type?: string,
     collaborators: { [collaborator_id: string]: User },
     id: string,
     intl: IntlShape,
@@ -71,14 +127,25 @@ type Props = {
 };
 
 const CollapsedVersion = (props: Props): React.Node => {
+    const {
+        action_by,
+        action_type = ACTION_TYPE_CREATED,
+        collaborators,
+        id,
+        intl,
+        onInfo,
+        shouldUseUAA,
+        versions,
+        version_start,
+        version_end,
+    } = props;
     // $FlowFixMe
-    const action = selectors.getVersionAction(props);
-    const { collaborators, id, intl, onInfo, shouldUseUAA, versions, version_start, version_end } = props;
+    const action = shouldUseUAA ? action_type : selectors.getVersionAction(props);
 
     return (
         <ActivityCard className="bcs-Version">
             <span className="bcs-Version-message">
-                {getMessageForAction(action, collaborators, version_start, version_end)}
+                {getMessageForAction(action, collaborators, version_start, version_end, shouldUseUAA, action_by)}
             </span>
             {onInfo ? (
                 <span className="bcs-Version-actions">
