@@ -147,7 +147,7 @@
         "@storybook/addon-interactions": "^8.2.4",
         "@storybook/addon-knobs": "^8.0.1",
         "@storybook/addon-links": "^8.2.4",
-        "@storybook/addon-styling": "^2.0.2-next.3",
+
         "@storybook/addon-styling-webpack": "^1.0.0",
         "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
         "@storybook/blocks": "^8.2.4",
