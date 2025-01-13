@@ -92,6 +92,12 @@ class ContentExplorer extends Component {
         /** Called when the number of items selected text is clicked */
         onViewSelectedClick: PropTypes.func,
         /**
+         * Called before finalizing item selection to validate the selection
+         * @param {Array<Object>} selectedItems - Array of selected items
+         * @returns {boolean} - Return false to prevent selection, true or undefined to allow
+         */
+        onSelection: PropTypes.func,
+        /**
          * Called when a destination folder has been selected for moving an item to
          *
          * @param {Object} destFolder destination folder
@@ -168,6 +174,7 @@ class ContentExplorer extends Component {
         cancelButtonProps: {},
         chooseButtonProps: {},
         className: '',
+        onSelection: undefined,
         searchInputProps: {},
     };
 
@@ -355,6 +362,14 @@ class ContentExplorer extends Component {
             newSelectedItems[item.id] = item;
         }
 
+        // Validate selection if callback provided
+        if (this.props.onSelection) {
+            const isValid = this.props.onSelection(Object.values(newSelectedItems));
+            if (isValid === false) {
+                return; // Prevent selection if validation fails
+            }
+        }
+
         this.setState({ selectedItems: newSelectedItems });
         if (onSelectedItemsUpdate) {
             onSelectedItemsUpdate(newSelectedItems);
@@ -376,6 +391,13 @@ class ContentExplorer extends Component {
         if (item.type === TYPE_FOLDER) {
             this.enterFolder(item);
         } else if (!item.isActionDisabled) {
+            // Validate selection if callback provided
+            if (this.props.onSelection) {
+                const isValid = this.props.onSelection([item]);
+                if (isValid === false) {
+                    return; // Prevent selection if validation fails
+                }
+            }
             onChooseItems([item]);
         }
     };
@@ -435,12 +457,20 @@ class ContentExplorer extends Component {
     };
 
     handleSelectAllClick = async () => {
-        const { onSelectedItemsUpdate } = this.props;
+        const { onSelectedItemsUpdate, onSelection } = this.props;
         if (this.isLoadingItems()) {
             return;
         }
         const { isSelectAllChecked } = this.state;
         const newSelectedItems = isSelectAllChecked ? this.unselectAll() : this.selectAll();
+
+        // Validate selection if callback provided
+        if (onSelection) {
+            const isValid = onSelection(Object.values(newSelectedItems));
+            if (isValid === false) {
+                return; // Prevent selection if validation fails
+            }
+        }
 
         this.setState({ selectedItems: newSelectedItems, isSelectAllChecked: !isSelectAllChecked });
         if (onSelectedItemsUpdate) {

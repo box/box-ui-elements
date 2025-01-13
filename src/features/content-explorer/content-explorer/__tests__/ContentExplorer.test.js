@@ -531,6 +531,26 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
 
             expect(onChooseItemsSpy.withArgs(items).calledOnce).toBe(true);
         });
+
+        test('should block file selection if onSelection returns false', () => {
+            const items = [{ id: '1', name: 'item1', type: 'file' }];
+            const onSelection = sandbox.stub().returns(false);
+            const wrapper = renderComponent({ items, onSelection, onChooseItems: onChooseItemsSpy }, true);
+
+            wrapper.find('.table-row').simulate('doubleClick');
+            expect(onSelection.calledOnce).toBe(true);
+            expect(onChooseItemsSpy.notCalled).toBe(true);
+        });
+
+        test('should allow file selection if onSelection returns true', () => {
+            const items = [{ id: '1', name: 'item1', type: 'file' }];
+            const onSelection = sandbox.stub().returns(true);
+            const wrapper = renderComponent({ items, onSelection, onChooseItems: onChooseItemsSpy }, true);
+
+            wrapper.find('.table-row').simulate('doubleClick');
+            expect(onSelection.calledOnce).toBe(true);
+            expect(onChooseItemsSpy.calledOnce).toBe(true);
+        });
     });
 
     describe('handleExitSearch()', () => {
@@ -795,6 +815,80 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
                 contentExplorerMode: ContentExplorerModes.MULTI_SELECT,
             });
             wrapper.instance().handleItemClick({ event: mockEvent, index: 1 });
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(2);
+        });
+
+        test('should block selection if onSelection returns false', () => {
+            const items = [{ id: 'item1', name: 'name1' }];
+            const onSelection = sandbox.stub().returns(false);
+            const mockEvent = { stopPropagation: () => {} };
+
+            const wrapper = renderComponent({
+                items,
+                onSelection,
+                contentExplorerMode: ContentExplorerModes.SELECT_FILE,
+            });
+
+            wrapper.instance().handleItemClick({ event: mockEvent, index: 0 });
+            expect(onSelection.calledOnce).toBe(true);
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(0);
+        });
+
+        test('should allow selection if onSelection returns true', () => {
+            const items = [{ id: 'item1', name: 'name1' }];
+            const onSelection = sandbox.stub().returns(true);
+            const mockEvent = { stopPropagation: () => {} };
+
+            const wrapper = renderComponent({
+                items,
+                onSelection,
+                contentExplorerMode: ContentExplorerModes.SELECT_FILE,
+            });
+
+            wrapper.instance().handleItemClick({ event: mockEvent, index: 0 });
+            expect(onSelection.calledOnce).toBe(true);
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(1);
+        });
+
+        test('should allow selection if onSelection is undefined', () => {
+            const items = [{ id: 'item1', name: 'name1' }];
+            const mockEvent = { stopPropagation: () => {} };
+
+            const wrapper = renderComponent({
+                items,
+                contentExplorerMode: ContentExplorerModes.SELECT_FILE,
+            });
+
+            wrapper.instance().handleItemClick({ event: mockEvent, index: 0 });
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(1);
+        });
+    });
+
+    describe('handleSelectAllClick() with onSelection', () => {
+        const items = [
+            { id: 'item1', name: 'name1' },
+            { id: 'item2', name: 'name2' },
+        ];
+
+        test('should block select all if onSelection returns false', () => {
+            const onSelection = sandbox.stub().returns(false);
+            const wrapper = renderComponent({ items, onSelection });
+            wrapper.setState({ isSelectAllChecked: false });
+
+            wrapper.instance().handleSelectAllClick();
+            expect(onSelection.calledOnce).toBe(true);
+            expect(wrapper.state('isSelectAllChecked')).toBe(false);
+            expect(Object.keys(wrapper.state('selectedItems')).length).toBe(0);
+        });
+
+        test('should allow select all if onSelection returns true', () => {
+            const onSelection = sandbox.stub().returns(true);
+            const wrapper = renderComponent({ items, onSelection });
+            wrapper.setState({ isSelectAllChecked: false });
+
+            wrapper.instance().handleSelectAllClick();
+            expect(onSelection.calledOnce).toBe(true);
+            expect(wrapper.state('isSelectAllChecked')).toBe(true);
             expect(Object.keys(wrapper.state('selectedItems')).length).toBe(2);
         });
     });
