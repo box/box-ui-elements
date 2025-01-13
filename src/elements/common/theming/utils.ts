@@ -1,7 +1,7 @@
 import isObject from 'lodash/isObject';
 import kebabCase from 'lodash/kebabCase';
 
-const convertTokensToCustomProperties = (tokens, prefix = '') => {
+const convertTokensToCustomProperties = (tokens = {}, prefix = '') => {
     const customProperties = {};
 
     Object.entries(tokens).forEach(([level, value]) => {
