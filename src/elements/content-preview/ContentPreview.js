@@ -65,7 +65,7 @@ import type { VersionChangeCallback } from '../content-sidebar/versions';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { WithAnnotationsProps, WithAnnotatorContextProps } from '../common/annotator-context';
 // $FlowFixMe TypeScript file
-import type { Theme } from '../common/theming/types';
+import type { Theme } from '../common/theming';
 import type APICache from '../../utils/Cache';
 
 import '../common/fonts.scss';

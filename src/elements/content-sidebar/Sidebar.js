@@ -33,7 +33,7 @@ import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 // $FlowFixMe TypeScript file
-import type { Theme } from '../common/theming/types';
+import type { Theme } from '../common/theming';
 import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
 import API from '../../api';
 

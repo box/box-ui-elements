@@ -54,7 +54,7 @@ import {
 } from '../../constants';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 // $FlowFixMe TypeScript file
-import type { Theme } from '../common/theming/types';
+import type { Theme } from '../common/theming';
 import type { ElementsXhrError } from '../../common/types/api';
 import type {
     View,
