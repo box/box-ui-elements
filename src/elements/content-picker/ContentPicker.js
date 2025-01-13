@@ -18,6 +18,7 @@ import UploadDialog from '../common/upload-dialog';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
+// $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
 import Pagination from '../../features/pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
@@ -52,6 +53,7 @@ import {
     VIEW_SELECTED,
 } from '../../constants';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
+// $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming/types';
 import type { ElementsXhrError } from '../../common/types/api';
 import type {

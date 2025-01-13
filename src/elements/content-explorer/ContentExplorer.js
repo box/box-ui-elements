@@ -21,6 +21,7 @@ import SubHeader from '../common/sub-header/SubHeader';
 import makeResponsive from '../common/makeResponsive';
 import openUrlInsideIframe from '../../utils/iframe';
 import Internationalize from '../common/Internationalize';
+// $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
 import API from '../../api';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
@@ -68,6 +69,7 @@ import {
     VIEW_MODE_GRID,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+// $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';

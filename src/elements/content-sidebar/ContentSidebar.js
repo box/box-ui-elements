@@ -40,6 +40,7 @@ import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
+// $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming/types';
 import type APICache from '../../utils/Cache';
 

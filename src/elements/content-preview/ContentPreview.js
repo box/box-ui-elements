@@ -24,6 +24,7 @@ import makeResponsive from '../common/makeResponsive';
 import { withNavRouter } from '../common/nav-router';
 import Internationalize from '../common/Internationalize';
 import AsyncLoad from '../common/async-load';
+// $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
 import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
@@ -63,6 +64,7 @@ import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/typ
 import type { VersionChangeCallback } from '../content-sidebar/versions';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { WithAnnotationsProps, WithAnnotatorContextProps } from '../common/annotator-context';
+// $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming/types';
 import type APICache from '../../utils/Cache';
 
