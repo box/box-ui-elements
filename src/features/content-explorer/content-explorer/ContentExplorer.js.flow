@@ -1,0 +1,14 @@
+// @flow
+import * as React from 'react';
+import type { BoxItem } from '../../../common/types/core';
+
+type Props = {
+    onSelection?: (selectedItems: Array<BoxItem>) => boolean,
+    ...React$ElementConfig<typeof React.Component>,
+};
+
+declare export default class ContentExplorer extends React.Component<Props> {
+    static defaultProps: {
+        onSelection: void,
+    };
+}

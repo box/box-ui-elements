@@ -92,6 +92,12 @@ class ContentExplorer extends Component {
         /** Called when the number of items selected text is clicked */
         onViewSelectedClick: PropTypes.func,
         /**
+         * Called before finalizing item selection to validate the selection
+         * @param {Array<Object>} selectedItems - Array of selected items
+         * @returns {boolean} - Return false to prevent selection, true or undefined to allow
+         */
+        onSelection: PropTypes.func,
+        /**
          * Called when a destination folder has been selected for moving an item to
          *
          * @param {Object} destFolder destination folder
@@ -168,6 +174,7 @@ class ContentExplorer extends Component {
         cancelButtonProps: {},
         chooseButtonProps: {},
         className: '',
+        onSelection: undefined,
         searchInputProps: {},
     };
 
