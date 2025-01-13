@@ -8,7 +8,7 @@
 import * as React from 'react';
 
 type Props = {
-    handleChange: Function,
+    onChange: Function,
     /** Optional callback to validate files before selection. Return false to prevent selection. */
     onSelection?: (files: FileList) => boolean,
     inputLabel?: React.Node,
@@ -18,11 +18,12 @@ type Props = {
 };
 
 const UploadInput = ({
-    handleChange,
+    onChange,
     inputLabel,
     inputLabelClass = '',
     isFolderUpload = false,
     isMultiple = true,
+    onSelection,
 }: Props) => {
     const inputRef = React.useRef(null);
 
@@ -49,7 +50,7 @@ const UploadInput = ({
                             return;
                         }
                     }
-                    handleChange(event);
+                    onChange(event);
                 }}
                 ref={inputRef}
                 type="file"
