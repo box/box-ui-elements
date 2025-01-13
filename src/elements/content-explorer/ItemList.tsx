@@ -38,7 +38,7 @@ export interface ItemListProps {
     onItemSelect: (item: BoxItem) => void;
     onItemShare: (item: BoxItem) => void;
     onSortChange: (sortBy: string, sortDirection: string) => void;
-    rootElement: HTMLElement;
+    rootElement?: HTMLElement;
     rootId: string;
     tableRef: (ref: Table) => void;
     view: View;
