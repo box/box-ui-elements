@@ -104,7 +104,10 @@ type Props = {
     canUpload: boolean,
     className: string,
     contentPreviewProps: ContentPreviewProps,
-    contentUploaderProps: ContentUploaderProps,
+    /** Props to be forwarded to the ContentUploader UI Element, including onSelection callback for file validation */
+    contentUploaderProps: ContentUploaderProps & {
+        onSelection?: (files: FileList) => boolean,
+    },
     currentFolderId?: string,
     defaultView: DefaultView,
     features: FeatureConfig,
@@ -224,7 +227,9 @@ class ContentExplorer extends Component<Props, State> {
         contentPreviewProps: {
             contentSidebarProps: {},
         },
-        contentUploaderProps: {},
+        contentUploaderProps: {
+            onSelection: undefined, // Optional callback for file validation
+        },
     };
 
     /**

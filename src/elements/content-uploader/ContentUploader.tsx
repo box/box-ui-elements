@@ -56,6 +56,8 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 
 export interface ContentUploaderProps {
+    /** Callback invoked when files are selected, before upload begins. Return false to prevent upload. */
+    onSelection?: (files: FileList) => boolean;
     apiHost: string;
     chunked: boolean;
     className: string;

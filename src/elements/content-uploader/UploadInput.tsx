@@ -15,6 +15,8 @@ export interface UploadInputProps {
     isFolderUpload?: boolean;
     isMultiple?: boolean;
     onChange: React.ChangeEventHandler<HTMLInputElement>;
+    /** Optional callback to validate files before selection. Return false to prevent selection. */
+    onSelection?: (files: FileList) => boolean;
 }
 
 const UploadInput = ({
@@ -23,6 +25,7 @@ const UploadInput = ({
     isFolderUpload = false,
     isMultiple = true,
     onChange,
+    onSelection,
 }: UploadInputProps) => {
     const inputRef = React.useRef(null);
 
@@ -42,7 +45,16 @@ const UploadInput = ({
                 data-testid="upload-input"
                 directory={isFolderUpload ? '' : undefined}
                 multiple={isMultiple}
-                onChange={onChange}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const { files } = event.target;
+                    if (onSelection && files) {
+                        const shouldContinue = onSelection(files);
+                        if (!shouldContinue) {
+                            return;
+                        }
+                    }
+                    onChange(event);
+                }}
                 ref={inputRef}
                 type="file"
                 webkitdirectory={isFolderUpload ? '' : undefined}
