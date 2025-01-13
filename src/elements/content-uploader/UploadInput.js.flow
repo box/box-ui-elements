@@ -9,6 +9,8 @@ import * as React from 'react';
 
 type Props = {
     handleChange: Function,
+    /** Optional callback to validate files before selection. Return false to prevent selection. */
+    onSelection?: (files: FileList) => boolean,
     inputLabel?: React.Node,
     inputLabelClass?: string,
     isFolderUpload?: boolean,
@@ -39,7 +41,16 @@ const UploadInput = ({
                 data-testid="upload-input"
                 directory={isFolderUpload ? '' : undefined}
                 multiple={isMultiple}
-                onChange={handleChange}
+                onChange={(event) => {
+                    const { files } = event.target;
+                    if (onSelection && files) {
+                        const shouldContinue = onSelection(files);
+                        if (!shouldContinue) {
+                            return;
+                        }
+                    }
+                    handleChange(event);
+                }}
                 ref={inputRef}
                 type="file"
                 webkitdirectory={isFolderUpload ? '' : undefined}
