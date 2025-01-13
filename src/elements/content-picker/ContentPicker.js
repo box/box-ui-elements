@@ -18,6 +18,7 @@ import UploadDialog from '../common/upload-dialog';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
+import ThemingStyles from '../common/theming';
 import Pagination from '../../features/pagination';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import API from '../../api';
@@ -51,6 +52,7 @@ import {
     VIEW_SELECTED,
 } from '../../constants';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
+import type { Theme } from '../common/theming/types';
 import type { ElementsXhrError } from '../../common/types/api';
 import type {
     View,
@@ -114,6 +116,7 @@ type Props = {
     showSelectedButton: boolean,
     sortBy: SortBy,
     sortDirection: SortDirection,
+    theme?: Theme,
     token: Token,
     type: string,
     uploadHost: string,
@@ -1206,6 +1209,7 @@ class ContentPicker extends Component<Props, State> {
             responseInterceptor,
             renderCustomActionButtons,
             showSelectedButton,
+            theme,
         }: Props = this.props;
         const {
             view,
@@ -1234,6 +1238,7 @@ class ContentPicker extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-picker">
+                    <ThemingStyles selector={`#${this.id}`} theme={theme} />
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
