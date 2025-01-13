@@ -5,9 +5,9 @@
  */
 
 import noop from 'lodash/noop';
-import Xhr from '../utils/Xhr';
-import Cache from '../utils/Cache';
-import UploadsReachability from './uploads/UploadsReachability';
+import { Xhr } from '../utils/Xhr';
+import { Cache } from '../utils/Cache';
+import { UploadsReachability } from './uploads/UploadsReachability';
 import { getTypedFileId } from '../utils/file';
 import { getBadItemError, getBadPermissionsError } from '../utils/error';
 import {
@@ -206,9 +206,7 @@ class Base {
      * Gets the URL for the API, meant to be overridden
      * @param {string} id - The item id
      */
-    /* eslint-disable no-unused-vars */
-    getUrl(id: string) {
-        /* eslint-enable no-unused-vars */
+    getUrl() {
         throw new Error('Implement me!');
     }
 
@@ -216,9 +214,7 @@ class Base {
      * Formats an API entry for use in components
      * @param {string} entry - an API response entry
      */
-    /* eslint-disable no-unused-vars */
-    format(entry: Object) {
-        /* eslint-enable no-unused-vars */
+    format() {
         throw new Error('Implement me!');
     }
 

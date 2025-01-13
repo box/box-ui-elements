@@ -105,10 +105,16 @@
         "node": ">=18.x",
         "yarn": ">=1.10.0"
     },
+    "dependencies": {
+        "@babel/eslint-parser": "^7.24.7",
+        "@eslint/eslintrc": "^3.1.0",
+        "@eslint/js": "^9.6.0",
+        "eslint-plugin-cypress": "^3.3.0"
+    },
     "devDependencies": {
         "@babel/cli": "^7.24.7",
         "@babel/core": "^7.24.7",
-        "@babel/eslint-parser": "^7.24.7",
+
         "@babel/helper-create-class-features-plugin": "^7.24.7",
         "@babel/plugin-syntax-dynamic-import": "^7.8.3",
         "@babel/plugin-transform-class-properties": "^7.24.7",
@@ -135,8 +141,7 @@
         "@chromatic-com/storybook": "^1.6.1",
         "@commitlint/cli": "^8.3.5",
         "@commitlint/config-conventional": "^8.3.4",
-        "@eslint/eslintrc": "^3.1.0",
-        "@eslint/js": "^9.6.0",
+
         "@formatjs/intl-pluralrules": "^1.5.2",
         "@formatjs/intl-relativetimeformat": "^4.5.9",
         "@formatjs/intl-unified-numberformat": "^3.2.0",
@@ -209,7 +214,7 @@
         "eslint": "^8.57.0",
         "eslint-config-airbnb": "^19.0.4",
         "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-cypress": "^3.3.0",
+
         "eslint-plugin-formatjs": "^4.13.3",
         "eslint-plugin-ft-flow": "^3.0.7",
         "eslint-plugin-import": "^2.29.1",

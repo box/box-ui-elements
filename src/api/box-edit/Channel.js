@@ -1,20 +1,14 @@
-// @flow
-import CONSTANTS from './constants';
+import { CONSTANTS } from './constants';
 
-/* eslint-disable*/
 class Channel {
-    channelName: string;
-    appName: string;
-    window: any;
-
-    constructor(appName: string) {
+    constructor(appName) {
         this.appName = appName;
         this.window = window;
     }
 
     buildNextRequestID = () => `${CONSTANTS.REQUEST_ID_PRE}${this.window.performance.now()}`;
 
-    buildDetailsObj = (operationType: string, data: ?Object, comServerToApplicationTimeoutSec: number) => {
+    buildDetailsObj = (operationType, data, comServerToApplicationTimeoutSec) => {
         const timeoutSecString = comServerToApplicationTimeoutSec.toString();
         const details = {
             data: undefined,
@@ -23,8 +17,7 @@ class Channel {
                 application: this.appName,
                 timeout: timeoutSecString,
             },
-            // eslint-disable-next-line camelcase
-            req_id: this.buildNextRequestID(),
+            requestId: this.buildNextRequestID(),
         };
 
         if (operationType !== CONSTANTS.OPERATION_STATUS) {
@@ -38,27 +31,30 @@ class Channel {
         return details;
     };
 
-    sendCommand(
-        requestData: any,
-        browserToComServerTimeoutMS: number,
-        comServerToApplicationTimeoutSec: number,
-    ): Promise<any> {
-        return Promise.resolve('TODO');
+    sendCommand(requestData, browserToComServerTimeoutMS, comServerToApplicationTimeoutSec) {
+        const details = this.buildDetailsObj(
+            CONSTANTS.OPERATION_COMMAND,
+            requestData,
+            comServerToApplicationTimeoutSec,
+        );
+        return Promise.resolve(details);
     }
 
-    sendRequest(
-        requestData: any,
-        browserToComServerTimeoutMS: number,
-        comServerToApplicationTimeoutSec: number,
-    ): Promise<any> {
-        return Promise.resolve('TODO');
+    sendRequest(requestData, browserToComServerTimeoutMS, comServerToApplicationTimeoutSec) {
+        const details = this.buildDetailsObj(
+            CONSTANTS.OPERATION_REQUEST,
+            requestData,
+            comServerToApplicationTimeoutSec,
+        );
+        return Promise.resolve(details);
     }
 
-    getComServerStatus(browserToComServerTimeoutMS: number, comServerToApplicationTimeoutSec: number): Promise<any> {
-        return Promise.resolve('TODO');
+    getComServerStatus(browserToComServerTimeoutMS, comServerToApplicationTimeoutSec) {
+        const details = this.buildDetailsObj(CONSTANTS.OPERATION_STATUS, null, comServerToApplicationTimeoutSec);
+        return Promise.resolve(details);
     }
 
-    destroy(): void {}
+    destroy() {}
 }
 
 export default Channel;

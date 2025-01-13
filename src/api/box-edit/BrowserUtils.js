@@ -123,10 +123,7 @@ function getBrowserData(navigator: Object, data: Array<Object>) {
         versionSearchString = data[i].versionSearch || data[i].identity;
 
         if (dataString && dataString.indexOf(data[i].subString) !== -1) {
-            /* eslint-disable prefer-destructuring */
-            identity = data[i].identity;
-            device = data[i].device;
-            /* eslint-enable prefer-destructuring */
+            ({ identity, device } = data[i]);
             break;
         }
     }
@@ -287,6 +284,7 @@ const BrowserInstance = new BrowserUtils();
 
 // for testing only
 export {
+    BrowserInstance,
     BrowserUtils,
     BROWSER_CONSTANTS,
     MIN_FOLDER_UPLOAD_CHROME,
@@ -294,5 +292,3 @@ export {
     MIN_FOLDER_UPLOAD_FIREFOX,
     MIN_FOLDER_UPLOAD_SAFARI,
 };
-// export as a singleton
-export default BrowserInstance;

@@ -1,33 +1,24 @@
-// @flow
-
-import Browser from './BrowserUtils';
-import ComServerClient from './ComServerClient';
-import CONSTANTS from './constants';
-
-type stringTuple = [string, string];
-type extensionRequestQueueItem = {
-    promise: Promise<string>,
-    reject: Function,
-    resolve: Function,
-};
+import { BrowserInstance } from './BrowserUtils';
+import { ComServerClient } from './ComServerClient';
+import { CONSTANTS } from './constants';
 
 const TIMEOUT_MS = 5000;
 const EXTENSION_CHECK_DEBOUNCE_TIME = 100;
 
-let extensionRequestTimeout: ?TimeoutID;
+let extensionRequestTimeout = null;
 
-function createRequestData(extensions: Array<string>): string {
+function createRequestData(extensions) {
     return JSON.stringify({
         request_type: 'get_default_application',
         extension: extensions,
     });
 }
 
-function createExecuteData(fileId, token, authCode, tokenScope): string {
+function createExecuteData(fileId, token, authCode, tokenScope) {
     const execData = JSON.stringify({
         auth_code: authCode,
         auth_token: token,
-        browser_type: Browser.getName(),
+        browser_type: BrowserInstance.getName(),
         command_type: 'launch_application',
         file_id: fileId.toString(),
         token_scope: tokenScope,
@@ -35,7 +26,7 @@ function createExecuteData(fileId, token, authCode, tokenScope): string {
     return execData;
 }
 
-function isBlacklistedExtension(extension): boolean {
+function isBlacklistedExtension(extension) {
     const { EXTENSION_BLACKLIST } = CONSTANTS;
     let uppercaseExt = extension.toUpperCase();
 
@@ -47,23 +38,21 @@ function isBlacklistedExtension(extension): boolean {
     return uppercaseExt in EXTENSION_BLACKLIST;
 }
 
-let BoxEditInstance = null;
-
 class BoxEdit {
-    client: ComServerClient;
-
-    extensionRequestQueue: Map<string, extensionRequestQueueItem>;
+    static instance = null;
 
     constructor() {
-        if (!(BoxEditInstance instanceof BoxEdit)) {
-            BoxEditInstance = this;
+        if (!BoxEdit.instance) {
+            this.extensionRequestQueue = new Map();
+            BoxEdit.instance = this;
         }
-        this.extensionRequestQueue = new Map();
-        // eslint-disable-next-line no-constructor-return
-        return BoxEditInstance;
     }
 
-    queueGetNativeAppNameFromLocal(extension: string): Promise<string> {
+    static getInstance() {
+        return BoxEdit.instance || new BoxEdit();
+    }
+
+    queueGetNativeAppNameFromLocal = extension => {
         // There's already a pending or fulfilled request for the appname
         if (this.extensionRequestQueue.has(extension)) {
             const queueItem = this.extensionRequestQueue.get(extension);
@@ -82,39 +71,36 @@ class BoxEdit {
         this.extensionRequestQueue.set(extension, extensionRequest);
 
         return appNameRequestPromise;
-    }
+    };
 
-    checkBoxEditAvailability(): Promise<any> {
+    checkBoxEditAvailability = () => {
         return this.getBoxEditAvailability();
-    }
+    };
 
-    getBoxEditAvailability(): Promise<any> {
+    getBoxEditAvailability = () => {
         this.client = new ComServerClient(CONSTANTS.BOX_EDIT_APP_NAME);
-
         return this.client.getComServerStatus();
-    }
+    };
 
-    async canOpenWithBoxEdit(extensions: string[]): Promise<any> {
-        const extensionToAppTuples: Array<stringTuple> = await Promise.all(
+    canOpenWithBoxEdit = async extensions => {
+        const extensionToAppTuples = await Promise.all(
             extensions.map(async ext => {
                 try {
                     const appName = await this.getAppForExtension(ext);
-                    const result: stringTuple = [ext, appName];
-                    return result;
+                    return [ext, appName];
                 } catch (err) {
-                    const result: stringTuple = [ext, ''];
-                    return result;
+                    return [ext, ''];
                 }
             }),
         );
 
-        const resultMap: Map<string, string> = new Map();
+        const resultMap = new Map();
         extensionToAppTuples.forEach(tuple => resultMap.set(...tuple));
 
         return Promise.resolve(resultMap);
-    }
+    };
 
-    openFile(fileID: string, token: Object): Promise<any> {
+    openFile = (fileID, token) => {
         // @NOTE. canOpenWithBoxEdit, create token taken care of higher levels
         // therefore not ported into React library
 
@@ -127,9 +113,9 @@ class BoxEdit {
         );
 
         return this.client.sendCommand(executeDataAsString, TIMEOUT_MS);
-    }
+    };
 
-    getAppForExtension(extension: string): Promise<any> {
+    getAppForExtension = extension => {
         try {
             if (isBlacklistedExtension(extension)) {
                 throw new Error('blacklisted');
@@ -147,9 +133,9 @@ class BoxEdit {
         } catch (err) {
             return Promise.reject();
         }
-    }
+    };
 
-    processExtensionRequestQueue(): void {
+    processExtensionRequestQueue = () => {
         const copyQueue = new Map();
 
         const extensions = [];
@@ -195,7 +181,7 @@ class BoxEdit {
                 }
             });
         });
-    }
+    };
 }
 
-export default BoxEdit;
+export default BoxEdit.getInstance();

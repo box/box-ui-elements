@@ -118,7 +118,7 @@ const EXTENSION_BLACKLIST = {
     XQT: 1,
 };
 
-export default {
+export const CONSTANTS = {
     SAFARI_CHANNEL_NAME,
     SECRET_STORE_COOKIE_NAME,
     BOX_EDIT_APP_NAME,
