@@ -1,0 +1,11 @@
+/**
+ * @flow
+ * @file Flow type definitions for React rendering utility
+ * @author Box
+ */
+
+import * as React from 'react';
+
+declare function reactRender(element: React.Element<any>, container: HTMLElement): any;
+
+export default reactRender;

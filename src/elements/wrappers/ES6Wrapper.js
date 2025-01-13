@@ -103,6 +103,17 @@ class ES6Wrapper extends EventEmitter {
     }
 
     /**
+     * Renders a React element into the DOM container
+     *
+     * @protected
+     * @param {React.Element} element - React element to render
+     * @return {void}
+     */
+    renderElement(element: React.Element<any>): void {
+        this.root = reactRender(element, this.container);
+    }
+
+    /**
      * Sets reference to the inner component
      *
      * @protected
