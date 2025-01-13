@@ -21,7 +21,7 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
     const inputLabelClass = useButton ? 'btn btn-primary be-input-btn' : 'be-input-link';
     const shouldShowFolderUploadInput = !useButton && !!folderInputLabel;
 
-    const handleChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
+    const handleInputChange = (event: SyntheticInputEvent<HTMLInputElement>) => {
         if (!onChange) {
             return;
         }
@@ -34,11 +34,11 @@ const UploadStateContent = ({ fileInputLabel, folderInputLabel, message, onChang
     };
 
     const fileInputContent = (
-        <UploadInput handleChange={handleChange} inputLabel={fileInputLabel} inputLabelClass={inputLabelClass} />
+        <UploadInput onChange={handleInputChange} inputLabel={fileInputLabel} inputLabelClass={inputLabelClass} />
     );
     const folderInputContent = shouldShowFolderUploadInput ? (
         <UploadInput
-            handleChange={handleChange}
+            onChange={handleInputChange}
             inputLabel={folderInputLabel}
             inputLabelClass={inputLabelClass}
             isFolderUpload
