@@ -31,6 +31,7 @@ import type { VersionsSidebarProps } from './versions';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
+import type { SignSideBarProps } from './SidebarNavSign';
 import type { Errors } from '../common/flowTypes';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
@@ -70,6 +71,7 @@ type Props = {
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
     theme?: Theme,
+    signSidebarProps: SignSideBarProps,
     versionsSidebarProps: VersionsSidebarProps,
 };
 
@@ -311,6 +313,7 @@ class Sidebar extends React.Component<Props, State> {
             onVersionChange,
             theme,
             versionsSidebarProps,
+            signSidebarProps,
         }: Props = this.props;
         const isOpen = this.isOpen();
         const hasBoxAI = SidebarUtils.canHaveBoxAISidebar(this.props);
@@ -346,6 +349,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasMetadata={hasMetadata}
                                 hasSkills={hasSkills}
                                 hasDocGen={docGenSidebarProps.isDocGenTemplate}
+                                signSideBarProps={signSidebarProps}
                                 isOpen={isOpen}
                                 onPanelChange={this.handlePanelChange}
                             />

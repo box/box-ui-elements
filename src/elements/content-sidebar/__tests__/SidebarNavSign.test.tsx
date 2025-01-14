@@ -8,10 +8,15 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
     const onClickRequestSignature = jest.fn();
     const onClickSignMyself = jest.fn();
 
-    const renderComponent = (props = {}, features = {}) =>
-        render(<SidebarNavSign {...props} />, {
-            wrapperProps: { features },
-        });
+    const defaultSignSideBarProps = {
+        blockedReason: '',
+        enabled: true,
+        onClick: onClickRequestSignature,
+        onClickSignMyself,
+        targetingApi: null,
+    };
+
+    const renderComponent = () => render(<SidebarNavSign {...defaultSignSideBarProps} />, {});
 
     test('should render sign button', async () => {
         renderComponent();
@@ -29,12 +34,7 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
     });
 
     test('should call correct handler when request signature option is clicked', async () => {
-        const features = {
-            boxSign: {
-                onClick: onClickRequestSignature,
-            },
-        };
-        renderComponent({}, features);
+        renderComponent();
 
         await userEvent.click(screen.getByRole('button', { name: 'Request Signature' }));
         await userEvent.click(screen.getByRole('menuitem', { name: 'Request Signature' }));
@@ -43,12 +43,7 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
     });
 
     test('should call correct handler when sign myself option is clicked', async () => {
-        const features = {
-            boxSign: {
-                onClickSignMyself,
-            },
-        };
-        renderComponent({}, features);
+        renderComponent();
 
         await userEvent.click(screen.getByRole('button', { name: 'Request Signature' }));
         await userEvent.click(screen.getByRole('menuitem', { name: 'Sign Myself' }));

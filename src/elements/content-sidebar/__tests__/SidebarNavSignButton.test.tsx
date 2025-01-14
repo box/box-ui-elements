@@ -10,16 +10,11 @@ import Tooltip from '../../../components/tooltip';
 describe('elements/content-sidebar/SidebarNavSignButton', () => {
     const getWrapper = (props = {}) => shallow(<SidebarNavSignButton {...props} />).dive();
 
-    test.each`
-        status       | label
-        ${undefined} | ${'Request Signature'}
-        ${'random'}  | ${'Request Signature'}
-        ${'active'}  | ${'Sign'}
-    `('should render the correct label based on the current signature status', ({ label, status }) => {
-        const wrapper = getWrapper({ status });
+    test('should render the correct label', () => {
+        const wrapper = getWrapper();
 
-        expect(wrapper.find(Tooltip).prop('text')).toBe(label);
-        expect(wrapper.find(PlainButton).prop('aria-label')).toBe(label);
+        expect(wrapper.find(Tooltip).prop('text')).toBe('Request Signature');
+        expect(wrapper.find(PlainButton).prop('aria-label')).toBe('Request Signature');
         expect(wrapper.exists(BoxSign28)).toBe(true);
     });
 
