@@ -23,12 +23,21 @@ type MoreOptionsWithFunctionsProps = {
 };
 
 export interface ItemGridCellProps {
+    canDelete?: boolean;
+    canDownload?: boolean;
     canPreview?: boolean;
+    canRename?: boolean;
+    canShare?: boolean;
     isSmall?: boolean;
     isTouch?: boolean;
     item: BoxItem;
     onItemClick?: (item: BoxItem) => void;
+    onItemDelete?: (item: BoxItem) => void;
+    onItemDownload?: (item: BoxItem) => void;
+    onItemPreview?: (item: BoxItem) => void;
+    onItemRename?: (item: BoxItem) => void;
     onItemSelect: (item: BoxItem, callback?: () => void) => void;
+    onItemShare?: (item: BoxItem) => void;
     rootId: string;
     view?: View;
 }

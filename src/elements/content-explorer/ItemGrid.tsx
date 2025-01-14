@@ -7,16 +7,25 @@ import GridView from '../../components/grid-view/GridView';
 import { focus } from '../../utils/dom';
 import ItemGridCell from './ItemGridCell';
 
-import type { BoxItem, Collection } from '../../common/types/core';
+import type { BoxItem, Collection, View } from '../../common/types/core';
 
 export interface ItemGridProps {
-    onItemSelect: (item: BoxItem, callback?: () => void) => void;
-    rootId: string;
+    canDelete?: boolean;
+    canDownload?: boolean;
     canPreview?: boolean;
+    canRename?: boolean;
+    canShare?: boolean;
     isSmall?: boolean;
     isTouch?: boolean;
     onItemClick?: (item: BoxItem) => void;
-    view?: string;
+    onItemDelete?: (item: BoxItem) => void;
+    onItemDownload?: (item: BoxItem) => void;
+    onItemPreview?: (item: BoxItem) => void;
+    onItemRename?: (item: BoxItem) => void;
+    onItemSelect: (item: BoxItem, callback?: () => void) => void;
+    onItemShare?: (item: BoxItem) => void;
+    rootId: string;
+    view?: View;
 }
 
 interface Props extends ItemGridProps {
