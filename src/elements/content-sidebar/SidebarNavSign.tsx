@@ -2,8 +2,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 // @ts-ignore Module is written in Flow
-import { useFeatureConfig } from '../common/feature-checking';
-// @ts-ignore Module is written in Flow
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 
 // @ts-ignore Module is written in Flow
@@ -17,21 +15,29 @@ import { Menu, MenuItem } from '../../components/menu';
 import messages from './messages';
 
 import './SidebarNavSign.scss';
+// @ts-ignore Module is written in Flow
+import type { TargetingApi } from '../../features/targeting/types';
 
-export function SidebarNavSign() {
+export interface SignSideBarProps {
+    blockedReason: string;
+    enabled: boolean;
+    onClick: () => void;
+    onClickSignMyself: () => void;
+    targetingApi: TargetingApi | null;
+}
+
+export function SidebarNavSign(signSideBarProps: SignSideBarProps) {
     const {
         blockedReason: boxSignBlockedReason,
         onClick: onBoxClickRequestSignature,
         onClickSignMyself: onBoxClickSignMyself,
-        status: boxSignStatus,
         targetingApi: boxSignTargetingApi,
-    } = useFeatureConfig('boxSign');
+    } = signSideBarProps;
 
     return (
         <DropdownMenu isResponsive constrainToWindow isRightAligned>
             <SidebarNavSignButton
                 blockedReason={boxSignBlockedReason}
-                status={boxSignStatus}
                 targetingApi={boxSignTargetingApi}
                 data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
             />
