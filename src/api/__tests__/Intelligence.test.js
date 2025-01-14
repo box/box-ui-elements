@@ -1,4 +1,4 @@
-import { ERROR_CODE_EXTRACT_STRUCTURED } from '../../constants';
+import { ERROR_CODE_EXTRACT_STRUCTURED, ERROR_CODE_AI_AGENT_DEFAULT } from '../../constants';
 import Intelligence from '../Intelligence';
 
 describe('api/Intelligence', () => {
@@ -180,6 +180,80 @@ describe('api/Intelligence', () => {
                 data: request,
                 id: 'file_123',
             });
+        });
+    });
+
+    describe('getAIDefaultConfig()', () => {
+        test('should use authentication from options', async () => {
+            const customToken = 'custom_token';
+            intelligence = new Intelligence({ token: customToken });
+            const data = {
+                data: {
+                    mode: 'ask',
+                },
+            };
+            intelligence.xhr.get = jest.fn().mockReturnValueOnce(Promise.resolve(data));
+            await intelligence.getAIDefaultConfig({ mode: 'ask' });
+            expect(intelligence.options.token).toBe(customToken);
+        });
+
+        test('should throw error if mode is missing', async () => {
+            try {
+                await intelligence.getAIDefaultConfig({});
+                expect(true).toEqual(false); // should never hit this line
+            } catch (e) {
+                expect(e.message).toEqual('Missing mode!');
+            }
+        });
+
+        test('should make GET request with correct params', async () => {
+            const data = {
+                data: {
+                    mode: 'ask',
+                    language: 'en',
+                },
+            };
+            intelligence.xhr.get = jest.fn().mockReturnValueOnce(Promise.resolve(data));
+            const response = await intelligence.getAIDefaultConfig({ mode: 'ask', language: 'en' });
+            expect(response).toEqual(data.data);
+            expect(intelligence.xhr.get).toBeCalledWith({
+                url: 'https://api.box.com/2.0/ai_agent_default',
+                id: 'ai_agent_default',
+                params: {
+                    mode: 'ask',
+                    language: 'en',
+                },
+            });
+        });
+
+        test('should make GET request without optional language param', async () => {
+            const data = {
+                data: {
+                    mode: 'ask',
+                },
+            };
+            intelligence.xhr.get = jest.fn().mockReturnValueOnce(Promise.resolve(data));
+            const response = await intelligence.getAIDefaultConfig({ mode: 'ask' });
+            expect(response).toEqual(data.data);
+            expect(intelligence.xhr.get).toBeCalledWith({
+                url: 'https://api.box.com/2.0/ai_agent_default',
+                id: 'ai_agent_default',
+                params: {
+                    mode: 'ask',
+                },
+            });
+        });
+
+        test('should handle error response', async () => {
+            const error = new Error();
+            error.status = 400;
+            intelligence.xhr.get = jest.fn().mockReturnValueOnce(Promise.reject(error));
+            try {
+                await intelligence.getAIDefaultConfig({ mode: 'ask' });
+            } catch (e) {
+                expect(e.status).toEqual(400);
+            }
+            expect(intelligence.errorCode).toBe(ERROR_CODE_AI_AGENT_DEFAULT);
         });
     });
 });

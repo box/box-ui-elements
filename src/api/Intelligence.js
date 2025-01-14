@@ -5,29 +5,40 @@
  */
 
 import getProp from 'lodash/get';
-import type { QuestionType } from '@box/box-ai-content-answers';
 import Base from './Base';
 import { AiExtractResponse } from './schemas/AiExtractResponse';
 import { AiExtractStructured } from './schemas/AiExtractStructured';
-import { ERROR_CODE_EXTRACT_STRUCTURED } from '../constants';
-import type { BoxItem } from '../common/types/core';
+import { ERROR_CODE_EXTRACT_STRUCTURED, ERROR_CODE_AI_AGENT_DEFAULT } from '../constants';
+
+/**
+ * @typedef {Object} BoxItem
+ * @property {string} id - The item ID
+ * @property {string} type - The item type
+ */
+
+/**
+ * @typedef {Object} AiAgentDefaultConfig
+ * @property {string} mode - Required mode parameter for AI agent
+ * @property {string} [language] - Optional language parameter for AI agent
+ */
 
 class Intelligence extends Base {
     /**
      * API endpoint to ask ai a question
      *
-     * @param {QuestionType} question - Object should at least contain the prompt, which is the question to ask
-     * @param {Array<object>} items - Array of items to ask about
-     * @param {Array<QuestionType>} dialogueHistory - Array of previous questions object that already have answers
-     * @param {{ include_citations?: boolean }} options - Optional parameters
-     * @return {Promise}
+     * @param {Object} question - Question object containing prompt
+     * @param {Array<BoxItem>} items - Array of items to ask about
+     * @param {Array<Object>} [dialogueHistory=[]] - Array of previous questions
+     * @param {Object} [options={}] - Optional parameters
+     * @param {boolean} [options.include_citations] - Whether to include citations
+     * @returns {Promise<any>}
      */
-    async ask(
-        question: QuestionType,
+    ask = async (
+        question: Object,
         items: Array<BoxItem>,
-        dialogueHistory: Array<QuestionType> = [],
-        options: { include_citations?: boolean } = {},
-    ): Promise<any> {
+        dialogueHistory: Array<Object> = [],
+        options: Object = {},
+    ): Promise<any> => {
         const { prompt } = question;
         if (!prompt) {
             throw new Error('Missing prompt!');
@@ -56,15 +67,15 @@ class Intelligence extends Base {
                 ...options,
             },
         });
-    }
+    };
 
     /**
      * Sends an AI request to supported LLMs and returns extracted key pairs and values.
      *
      * @param {AiExtractStructured} request - AI Extract Structured Request
-     * @return A successful response including the answer from the LLM.
+     * @returns {Promise<AiExtractResponse>}
      */
-    async extractStructured(request: AiExtractStructured): Promise<AiExtractResponse> {
+    extractStructured = async (request: AiExtractStructured): Promise<AiExtractResponse> => {
         this.errorCode = ERROR_CODE_EXTRACT_STRUCTURED;
 
         const { items } = request;
@@ -87,7 +98,38 @@ class Intelligence extends Base {
         });
 
         return getProp(suggestionsResponse, 'data');
-    }
+    };
+
+    /**
+     * Gets the AI agent default configuration
+     *
+     * @param {AiAgentDefaultConfig} options - Configuration options
+     * @returns {Promise<Object>}
+     */
+    getAIDefaultConfig = async (options: AiAgentDefaultConfig): Promise<Object> => {
+        this.errorCode = ERROR_CODE_AI_AGENT_DEFAULT;
+
+        const { mode, language } = options;
+        if (!mode) {
+            throw new Error('Missing mode!');
+        }
+
+        const url = `${this.getBaseApiUrl()}/ai_agent_default`;
+        const requestData = {
+            params: {
+                mode,
+                ...(language && { language }),
+            },
+        };
+
+        const { data } = await this.xhr.get({
+            url,
+            id: 'ai_agent_default',
+            ...requestData,
+        });
+
+        return data;
+    };
 }
 
 export default Intelligence;
