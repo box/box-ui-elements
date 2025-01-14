@@ -24,6 +24,7 @@ export interface ItemGridProps {
     onItemRename?: (item: BoxItem) => void;
     onItemSelect: (item: BoxItem, callback?: () => void) => void;
     onItemShare?: (item: BoxItem) => void;
+    rootElement?: HTMLElement;
     rootId: string;
     view?: View;
 }
@@ -31,7 +32,7 @@ export interface ItemGridProps {
 interface Props extends ItemGridProps {
     currentCollection: Collection;
     gridColumnCount: number;
-    rootElement: HTMLElement;
+    rootElement?: HTMLElement;
     selected?: BoxItem;
 }
 
@@ -72,7 +73,9 @@ const ItemGrid = ({
 
         if (item) {
             onItemSelect(item, () => {
-                focus(rootElement, '.bdl-GridViewSlot-content--selected .be-item-name .be-item-label', false);
+                if (rootElement) {
+                    focus(rootElement, '.bdl-GridViewSlot-content--selected .be-item-name .be-item-label', false);
+                }
             });
         }
     };
