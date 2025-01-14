@@ -6,21 +6,18 @@
 
 import getProp from 'lodash/get';
 import Base from './Base';
-import { AiExtractResponse } from './schemas/AiExtractResponse';
-import { AiExtractStructured } from './schemas/AiExtractStructured';
 import { ERROR_CODE_EXTRACT_STRUCTURED, ERROR_CODE_AI_AGENT_DEFAULT } from '../constants';
 
-/**
- * @typedef {Object} BoxItem
- * @property {string} id - The item ID
- * @property {string} type - The item type
- */
+/* eslint-disable no-unused-vars */
+import type { AiExtractResponse } from './schemas/AiExtractResponse';
+import type { AiExtractStructured } from './schemas/AiExtractStructured';
+import type { AiAgentDefaultConfig } from './schemas/AiAgentDefaultConfig';
 
-/**
- * @typedef {Object} AiAgentDefaultConfig
- * @property {string} mode - Required mode parameter for AI agent
- * @property {string} [language] - Optional language parameter for AI agent
- */
+type BoxItem = {|
+    id: string,
+    type: string,
+|};
+/* eslint-enable no-unused-vars */
 
 class Intelligence extends Base {
     /**
@@ -33,12 +30,7 @@ class Intelligence extends Base {
      * @param {boolean} [options.include_citations] - Whether to include citations
      * @returns {Promise<any>}
      */
-    ask = async (
-        question: Object,
-        items: Array<BoxItem>,
-        dialogueHistory: Array<Object> = [],
-        options: Object = {},
-    ): Promise<any> => {
+    ask = async (question, items, dialogueHistory = [], options = {}) => {
         const { prompt } = question;
         if (!prompt) {
             throw new Error('Missing prompt!');
@@ -75,7 +67,7 @@ class Intelligence extends Base {
      * @param {AiExtractStructured} request - AI Extract Structured Request
      * @returns {Promise<AiExtractResponse>}
      */
-    extractStructured = async (request: AiExtractStructured): Promise<AiExtractResponse> => {
+    extractStructured = async request => {
         this.errorCode = ERROR_CODE_EXTRACT_STRUCTURED;
 
         const { items } = request;
@@ -106,7 +98,7 @@ class Intelligence extends Base {
      * @param {AiAgentDefaultConfig} options - Configuration options
      * @returns {Promise<Object>}
      */
-    getAIDefaultConfig = async (options: AiAgentDefaultConfig): Promise<Object> => {
+    getAIDefaultConfig = async options => {
         this.errorCode = ERROR_CODE_AI_AGENT_DEFAULT;
 
         const { mode, language } = options;
