@@ -1,58 +1,48 @@
-import { BrowserInstance } from './BrowserUtils';
+// @flow
+
 import { ComServerClient } from './ComServerClient';
 import { CONSTANTS } from './constants';
+import { createRequestData, createExecuteData, isBlacklistedExtension } from './boxEditUtils';
 
 const TIMEOUT_MS = 5000;
 const EXTENSION_CHECK_DEBOUNCE_TIME = 100;
 
 let extensionRequestTimeout = null;
+let instance = null;
 
-function createRequestData(extensions) {
-    return JSON.stringify({
-        request_type: 'get_default_application',
-        extension: extensions,
-    });
-}
+type ExtensionRequestQueueItem = {|
+    promise: Promise<string>,
+    reject: Function,
+    resolve: Function,
+|};
 
-function createExecuteData(fileId, token, authCode, tokenScope) {
-    const execData = JSON.stringify({
-        auth_code: authCode,
-        auth_token: token,
-        browser_type: BrowserInstance.getName(),
-        command_type: 'launch_application',
-        file_id: fileId.toString(),
-        token_scope: tokenScope,
-    });
-    return execData;
-}
-
-function isBlacklistedExtension(extension) {
-    const { EXTENSION_BLACKLIST } = CONSTANTS;
-    let uppercaseExt = extension.toUpperCase();
-
-    // if ext has a leading ., strip it
-    if (uppercaseExt.charAt(0) === '.') {
-        uppercaseExt = uppercaseExt.substr(1);
-    }
-
-    return uppercaseExt in EXTENSION_BLACKLIST;
-}
-
+type TokenData = {|
+    data: {|
+        token: string,
+        auth_code: string,
+        token_scope: string,
+    |},
+|};
 class BoxEdit {
-    static instance = null;
+    client: ComServerClient;
+
+    extensionRequestQueue: Map<string, ExtensionRequestQueueItem>;
 
     constructor() {
-        if (!BoxEdit.instance) {
-            this.extensionRequestQueue = new Map();
-            BoxEdit.instance = this;
+        this.extensionRequestQueue = new Map();
+        if (!instance) {
+            instance = this;
         }
     }
 
-    static getInstance() {
-        return BoxEdit.instance || new BoxEdit();
+    static getInstance(): any {
+        if (!instance) {
+            instance = new BoxEdit();
+        }
+        return instance;
     }
 
-    queueGetNativeAppNameFromLocal = extension => {
+    queueGetNativeAppNameFromLocal(extension: string): Promise<string> {
         // There's already a pending or fulfilled request for the appname
         if (this.extensionRequestQueue.has(extension)) {
             const queueItem = this.extensionRequestQueue.get(extension);
@@ -71,18 +61,18 @@ class BoxEdit {
         this.extensionRequestQueue.set(extension, extensionRequest);
 
         return appNameRequestPromise;
-    };
+    }
 
-    checkBoxEditAvailability = () => {
+    checkBoxEditAvailability = (): Promise<any> => {
         return this.getBoxEditAvailability();
     };
 
-    getBoxEditAvailability = () => {
+    getBoxEditAvailability = (): Promise<any> => {
         this.client = new ComServerClient(CONSTANTS.BOX_EDIT_APP_NAME);
         return this.client.getComServerStatus();
     };
 
-    canOpenWithBoxEdit = async extensions => {
+    canOpenWithBoxEdit = async (extensions: Array<string>): Promise<Map<string, string>> => {
         const extensionToAppTuples = await Promise.all(
             extensions.map(async ext => {
                 try {
@@ -97,14 +87,10 @@ class BoxEdit {
         const resultMap = new Map();
         extensionToAppTuples.forEach(tuple => resultMap.set(...tuple));
 
-        return Promise.resolve(resultMap);
+        return resultMap;
     };
 
-    openFile = (fileID, token) => {
-        // @NOTE. canOpenWithBoxEdit, create token taken care of higher levels
-        // therefore not ported into React library
-
-        // TODO is token the right name?
+    openFile = (fileID: string, token: TokenData): Promise<any> => {
         const executeDataAsString = createExecuteData(
             fileID,
             token.data.token,
@@ -115,7 +101,7 @@ class BoxEdit {
         return this.client.sendCommand(executeDataAsString, TIMEOUT_MS);
     };
 
-    getAppForExtension = extension => {
+    getAppForExtension = (extension: string): Promise<string> => {
         try {
             if (isBlacklistedExtension(extension)) {
                 throw new Error('blacklisted');
@@ -135,7 +121,7 @@ class BoxEdit {
         }
     };
 
-    processExtensionRequestQueue = () => {
+    processExtensionRequestQueue = (): Promise<any> => {
         const copyQueue = new Map();
 
         const extensions = [];
@@ -184,4 +170,5 @@ class BoxEdit {
     };
 }
 
+// Export singleton instance
 export default BoxEdit.getInstance();
