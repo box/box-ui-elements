@@ -10,8 +10,7 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
-import { withRouter } from 'react-router-dom';
-import type { Location, RouterHistory } from 'react-router-dom';
+import { withNavRouter } from '../common/nav-router';
 import LoadingIndicator from '../../components/loading-indicator/LoadingIndicator';
 import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
@@ -381,4 +380,4 @@ class Sidebar extends React.Component<Props, State> {
 }
 
 export { Sidebar as SidebarComponent };
-export default flow([withCurrentUser, withFeatureConsumer, withRouter])(Sidebar);
+export default flow([withCurrentUser, withFeatureConsumer, withNavRouter])(Sidebar);

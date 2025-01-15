@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Versions Sidebar container
  * @author Box
  */
@@ -9,10 +8,10 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import merge from 'lodash/merge';
 import noop from 'lodash/noop';
-import { generatePath, withRouter } from 'react-router-dom';
-import type { Match, RouterHistory } from 'react-router-dom';
-import type { MessageDescriptor } from 'react-intl';
-import { withFeatureConsumer, isFeatureEnabled } from '../../common/feature-checking';
+import { MessageDescriptor } from 'react-intl';
+import { History } from 'history';
+import { withNavRouter } from '../../common/nav-router';
+import { withFeatureConsumer, isFeatureEnabled, FeatureConfig } from '../../common/feature-checking';
 import API from '../../../api';
 import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 import messages from './messages';
@@ -21,40 +20,46 @@ import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
-import type { FeatureConfig } from '../../common/feature-checking';
-import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
-import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
+import { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
+import { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 
-type Props = {
-    api: API,
-    features: FeatureConfig,
-    fileId: string,
-    hasSidebarInitialized?: boolean,
-    history: RouterHistory,
-    match: Match,
-    onLoad: SidebarLoadCallback,
-    onUpgradeClick?: () => void,
-    onVersionChange: VersionChangeCallback,
-    onVersionDelete: VersionActionCallback,
-    onVersionDownload: VersionActionCallback,
-    onVersionPreview: VersionActionCallback,
-    onVersionPromote: VersionActionCallback,
-    onVersionRestore: VersionActionCallback,
-    parentName: string,
-    versionId?: string,
-};
+interface Props {
+    api: API;
+    features: FeatureConfig;
+    fileId: string;
+    hasSidebarInitialized?: boolean;
+    history: History;
+    match: {
+        params: { [key: string]: string };
+        path: string;
+        url: string;
+        isExact: boolean;
+    };
+    onLoad: SidebarLoadCallback;
+    onUpgradeClick?: () => void;
+    onVersionChange: VersionChangeCallback;
+    onVersionDelete: VersionActionCallback;
+    onVersionDownload: VersionActionCallback;
+    onVersionPreview: VersionActionCallback;
+    onVersionPromote: VersionActionCallback;
+    onVersionRestore: VersionActionCallback;
+    parentName: string;
+    versionId?: string;
+}
 
-type State = {
-    error?: MessageDescriptor,
-    isArchived: boolean,
-    isLoading: boolean,
-    isWatermarked: boolean,
-    versionCount: number,
-    versionLimit: number,
-    versions: Array<BoxItemVersion>,
-};
+interface State {
+    error?: MessageDescriptor;
+    isArchived: boolean;
+    isLoading: boolean;
+    isWatermarked: boolean;
+    versionCount: number;
+    versionLimit: number;
+    versions: Array<BoxItemVersion>;
+}
 
 class VersionsSidebarContainer extends React.Component<Props, State> {
+    api: VersionsSidebarAPI;
+
     static defaultProps = {
         onLoad: noop,
         onVersionChange: noop,
@@ -66,11 +71,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         parentName: '',
     };
 
-    api: VersionsSidebarAPI;
-
-    props: Props;
-
-    state: State = {
+    state = {
         isArchived: false,
         isLoading: true,
         isWatermarked: false,
@@ -79,7 +80,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         versions: [],
     };
 
-    window: any = window;
+    window = window;
 
     componentDidMount() {
         const { onLoad } = this.props;
@@ -222,17 +223,17 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.api = new VersionsSidebarAPI({ api, fileId, isArchiveFeatureEnabled });
     };
 
-    fetchData = (): Promise<?[BoxItem, FileVersions]> => {
+    fetchData = (): Promise<[BoxItem, FileVersions] | null> => {
         return this.api.fetchData().then(this.handleFetchSuccess).catch(this.handleFetchError);
     };
 
-    findVersion = (versionId: ?string): ?BoxItemVersion => {
+    findVersion = (versionId: string | null): BoxItemVersion | null => {
         const { versions } = this.state;
 
-        return versions.find(version => version.id === versionId);
+        return versions.find(version => version.id === versionId) || null;
     };
 
-    getCurrentVersionId = (): ?string => {
+    getCurrentVersionId = (): string | null => {
         const { versions } = this.state;
         return versions[0] ? versions[0].id : null;
     };
@@ -258,13 +259,13 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         this.setState({ isLoading: true }, this.fetchData);
     }
 
-    sortVersions(versions?: Array<BoxItemVersion> = []): Array<BoxItemVersion> {
+    sortVersions(versions: Array<BoxItemVersion> = []): Array<BoxItemVersion> {
         return [...versions].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
     }
 
-    updateVersion = (versionId?: ?string): void => {
+    updateVersion = (versionId: string | null = null): void => {
         const { history, match } = this.props;
-        return history.push(generatePath(match.path, { ...match.params, versionId }));
+        return history.push(`${match.path}/${versionId || ''}`);
     };
 
     updateVersionToCurrent = (): void => {
@@ -309,4 +310,4 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
 
 export type VersionsSidebarProps = Props;
 export { VersionsSidebarContainer as VersionsSidebarContainerComponent };
-export default flow([withRouter, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);
+export default flow([withNavRouter, withAPIContext, withFeatureConsumer])(VersionsSidebarContainer);

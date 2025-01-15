@@ -6,7 +6,14 @@ import APICache from '../../../utils/Cache';
 import PreviewDialog, { PreviewDialogProps } from '../PreviewDialog';
 
 jest.mock('react-modal', () => {
-    return jest.fn(({ children }) => <div aria-label="Preview">{children}</div>);
+    return jest.fn(({ children, onRequestClose }) => (
+        <div aria-label="Preview">
+            <button aria-label="Close" onClick={onRequestClose}>
+                Close
+            </button>
+            {children}
+        </div>
+    ));
 });
 
 describe('elements/content-explorer/PreviewDialog', () => {
@@ -41,10 +48,13 @@ describe('elements/content-explorer/PreviewDialog', () => {
     });
 
     test('calls onCancel when modal is closed', async () => {
-        renderComponent();
+        const onCancel = jest.fn();
+        renderComponent({ onCancel });
         const closeButton = screen.getByRole('button', { name: 'Close' });
+        // Ensure we have the right close button by checking its parent
+        expect(closeButton.closest('.bcpr-PreviewHeader-button-close')).toBeTruthy();
         await userEvent.click(closeButton);
-        expect(defaultProps.onCancel).toHaveBeenCalled();
+        expect(onCancel).toHaveBeenCalled();
     });
 
     test('does not render when item is null', () => {

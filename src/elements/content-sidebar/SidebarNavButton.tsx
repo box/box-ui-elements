@@ -1,34 +1,31 @@
-/**
- * @flow
- * @file Preview sidebar nav button component
- * @author Box
- */
-
 import * as React from 'react';
+import { History } from 'history';
 import noop from 'lodash/noop';
 import { useMatch } from '../common/nav-router/utils';
 import NavButton from '../common/nav-button';
-import Tooltip from '../../components/tooltip/Tooltip';
+import Tooltip, { TooltipPosition } from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
-type Props = {
-    'data-resin-target'?: string,
-    'data-testid'?: string,
-    children: React.Node,
-    elementId?: string,
-    isDisabled?: boolean,
-    isOpen?: boolean,
-    onClick?: (sidebarView: string) => void,
-    sidebarView: string,
-    tooltip: React.Node,
-};
+interface Props {
+    'data-resin-target'?: string;
+    'data-testid'?: string;
+    children: React.ReactNode;
+    elementId?: string;
+    history: History;
+    isDisabled?: boolean;
+    isOpen?: boolean;
+    onClick?: (sidebarView: string) => void;
+    sidebarView: string;
+    tooltip: React.ReactNode;
+}
 
-const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
+const SidebarNavButton = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
     const {
         'data-resin-target': dataResinTarget,
         'data-testid': dataTestId,
         children,
         elementId = '',
+        history,
         isDisabled,
         isOpen,
         onClick = noop,
@@ -41,14 +38,14 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
         onClick(sidebarView);
     };
 
-    const { isExact: isExactMatch, params } = useMatch(props, sidebarPath);
-    const isMatch = !!isExactMatch || !!params;
+    const { isExact, params } = useMatch({ history, location: history.location }, sidebarPath);
+    const isMatch = !!isExact || !!Object.keys(params).length;
     const isActive = () => isMatch && !!isOpen;
     const isActiveValue = isActive();
     const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
     return (
-        <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
+        <Tooltip position={TooltipPosition.MIDDLE_LEFT} text={tooltip} isTabbable={false}>
             <NavButton
                 activeClassName="bcs-is-selected"
                 aria-selected={isActiveValue}
@@ -62,9 +59,9 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 isActive={isActive}
                 isDisabled={isDisabled}
                 onClick={handleNavButtonClick}
-                replace={isExactMatch}
+                replace={isExact}
                 role="tab"
-                tabIndex={isActiveValue ? '0' : '-1'}
+                tabIndex={0}
                 to={{
                     pathname: sidebarPath,
                     state: { open: true },

@@ -1,16 +1,11 @@
 import * as React from 'react';
-import { createBrowserHistory } from 'history';
-import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import { userEvent } from '@testing-library/user-event';
 
 import { screen, render } from '../../../../test-utils/testing-library';
+import { NavRouter } from '../../../common/nav-router';
 import VersionsSidebarAPI from '../VersionsSidebarAPI';
 import VersionsSidebarContainer from '../VersionsSidebarContainer';
-
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    withRouter: Component => Component,
-}));
 
 jest.mock('../../../common/api-context', () => ({
     withAPIContext: Component => Component,
@@ -32,11 +27,11 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
         getVersionsAPI: () => versionsAPI,
     };
 
-    const history = createBrowserHistory();
+    const history = createMemoryHistory();
 
     const renderComponent = ({ ...props } = {}, wrapperProps) =>
         render(
-            <Router history={history}>
+            <NavRouter history={history}>
                 <VersionsSidebarContainer
                     api={api}
                     fileId="12345"
@@ -45,7 +40,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                     versionId="321"
                     {...props}
                 />
-            </Router>,
+            </NavRouter>,
             { wrapperProps },
         );
 

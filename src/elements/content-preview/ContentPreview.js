@@ -17,11 +17,10 @@ import setProp from 'lodash/set';
 import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
 import Measure from 'react-measure';
-import { withRouter } from 'react-router-dom';
-import type { ContextRouter } from 'react-router-dom';
+import { withNavRouter } from '../common/nav-router';
+import type { WithNavRouterProps } from '../common/nav-router/types';
 import { decode } from '../../utils/keys';
 import makeResponsive from '../common/makeResponsive';
-import { withNavRouter } from '../common/nav-router';
 import Internationalize from '../common/Internationalize';
 import AsyncLoad from '../common/async-load';
 import TokenService from '../../utils/TokenService';
@@ -129,7 +128,7 @@ type Props = {
     WithLoggerProps &
     WithAnnotationsProps &
     WithAnnotatorContextProps &
-    ContextRouter;
+    WithNavRouterProps;
 
 type State = {
     canPrint?: boolean,
@@ -1407,7 +1406,7 @@ export default flow([
     makeResponsive,
     withAnnotatorContext,
     withAnnotations,
-    withRouter,
+
     withNavRouter,
     withFeatureConsumer,
     withFeatureProvider,

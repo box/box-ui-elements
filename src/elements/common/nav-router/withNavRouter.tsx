@@ -1,19 +1,20 @@
 import * as React from 'react';
-import NavRouter from './NavRouter';
-import { WithNavRouterProps } from './types';
+import { useNavRouter } from './NavRouter';
+import type { WithNavRouterProps } from './types';
 
-const withNavRouter = <P extends object>(Component: React.ComponentType<P>): React.FC<P & WithNavRouterProps> => {
-    function WithNavRouter({ history, initialEntries, ...rest }: P & WithNavRouterProps) {
-        return (
-            <NavRouter history={history} initialEntries={initialEntries}>
-                <Component {...(rest as P)} />
-            </NavRouter>
-        );
-    }
+const withNavRouter = <P extends object>(
+    WrappedComponent: React.ComponentType<P>,
+): React.FC<Omit<P, keyof WithNavRouterProps>> => {
+    const WithNavRouterComponent: React.FC<Omit<P, keyof WithNavRouterProps>> = props => {
+        const routerProps = useNavRouter();
+        return <WrappedComponent {...(props as P)} {...routerProps} />;
+    };
 
-    WithNavRouter.displayName = `withNavRouter(${Component.displayName || Component.name || 'Component'}`;
+    WithNavRouterComponent.displayName = `WithNavRouter(${
+        WrappedComponent.displayName || WrappedComponent.name || 'Component'
+    })`;
 
-    return WithNavRouter;
+    return WithNavRouterComponent;
 };
 
 export default withNavRouter;

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { mount } from 'enzyme/build';
-import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { render, screen } from '../../../test-utils/testing-library';
+import { NavRouter } from '../../common/nav-router';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK } from '../../../constants';
 import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
@@ -10,46 +10,25 @@ import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
 jest.mock('../SidebarUtils');
 
 describe('elements/content-sidebar/SidebarPanels', () => {
-    const getWrapper = ({ path = '/', ...rest } = {}) =>
-        mount(
-            <SidebarPanels
-                file={{ id: '1234' }}
-                hasBoxAI
-                hasDocGen
-                hasActivity
-                hasDetails
-                hasMetadata
-                hasSkills
-                hasVersions
-                isOpen
-                {...rest}
-            />,
-            {
-                wrappingComponent: MemoryRouter,
-                wrappingComponentProps: {
-                    initialEntries: [path],
-                    keyLength: 0,
-                },
-            },
+    const renderComponent = ({ path = '/', ...props } = {}) => {
+        const history = createMemoryHistory({ initialEntries: [path] });
+        return render(
+            <NavRouter history={history}>
+                <SidebarPanels
+                    file={{ id: '1234' }}
+                    hasBoxAI
+                    hasDocGen
+                    hasActivity
+                    hasDetails
+                    hasMetadata
+                    hasSkills
+                    hasVersions
+                    isOpen
+                    {...props}
+                />
+            </NavRouter>,
         );
-
-    const getSidebarPanels = ({ path = '/', ...props }) => (
-        <MemoryRouter initialEntries={[path]}>
-            <SidebarPanels
-                file={{ id: '1234' }}
-                hasBoxAI
-                hasDocGen
-                hasActivity
-                hasDetails
-                hasMetadata
-                hasSkills
-                hasVersions
-                isOpen
-                {...props}
-            />
-            ,
-        </MemoryRouter>
-    );
+    };
 
     describe('render', () => {
         test.each`
@@ -74,8 +53,8 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/nonsense'}                       | ${'BoxAISidebar'}
             ${'/'}                               | ${'BoxAISidebar'}
         `('should render $sidebar given the path $path', ({ path, sidebar }) => {
-            const wrapper = getWrapper({ path });
-            expect(wrapper.exists(sidebar)).toBe(true);
+            renderComponent({ path });
+            expect(screen.getByTestId(`${sidebar.toLowerCase()}`)).toBeInTheDocument();
         });
 
         test.each`
@@ -92,12 +71,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             'should render $sidebar and call onPanelChange with $expectedPanelName given the path = "/" and defaultPanel = $defaultPanel',
             ({ defaultPanel, sidebar, expectedPanelName }) => {
                 const onPanelChange = jest.fn();
-                render(
-                    getSidebarPanels({
-                        defaultPanel,
-                        onPanelChange,
-                    }),
-                );
+                renderComponent({
+                    defaultPanel,
+                    onPanelChange,
+                });
                 expect(screen.getByTestId(sidebar)).toBeInTheDocument();
                 expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
             },
@@ -127,19 +104,17 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 expectedPanelName,
             }) => {
                 const onPanelChange = jest.fn();
-                render(
-                    getSidebarPanels({
-                        features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
-                        defaultPanel,
-                        hasActivity,
-                        hasDetails,
-                        hasMetadata,
-                        hasSkills,
-                        hasDocGen,
-                        hasBoxAI,
-                        onPanelChange,
-                    }),
-                );
+                renderComponent({
+                    features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
+                    defaultPanel,
+                    hasActivity,
+                    hasDetails,
+                    hasMetadata,
+                    hasSkills,
+                    hasDocGen,
+                    hasBoxAI,
+                    onPanelChange,
+                });
                 expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
                 expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
             },
@@ -205,12 +180,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ${'/'}                               | ${'boxai'}
         `('should call onPanelChange with $expectedPanelName given the path = $path', ({ path, expectedPanelName }) => {
             const onPanelChange = jest.fn();
-            render(
-                getSidebarPanels({
-                    path,
-                    onPanelChange,
-                }),
-            );
+            renderComponent({
+                path,
+                onPanelChange,
+            });
             expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
         });
 
@@ -249,51 +222,57 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 expectedPanelName,
             }) => {
                 const onPanelChange = jest.fn();
-                render(
-                    getSidebarPanels({
-                        features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
-                        hasActivity,
-                        hasBoxAI,
-                        hasDetails,
-                        hasDocGen,
-                        hasMetadata,
-                        hasSkills,
-                        hasVersions,
-                        onPanelChange,
-                        path,
-                    }),
-                );
+                renderComponent({
+                    features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
+                    hasActivity,
+                    hasBoxAI,
+                    hasDetails,
+                    hasDocGen,
+                    hasMetadata,
+                    hasSkills,
+                    hasVersions,
+                    onPanelChange,
+                    path,
+                });
                 expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
             },
         );
 
         test('should call onPanelChange only once with the initial panel value', () => {
             const onPanelChange = jest.fn();
-            const { rerender } = render(
-                getSidebarPanels({
-                    onPanelChange,
-                    path: '/details',
-                }),
-            );
+            const { rerender } = renderComponent({
+                onPanelChange,
+                path: '/details',
+            });
             rerender(
-                getSidebarPanels({
-                    onPanelChange,
-                    path: '/activity',
-                }),
+                <NavRouter history={createMemoryHistory({ initialEntries: ['/activity'] })}>
+                    <SidebarPanels
+                        file={{ id: '1234' }}
+                        hasBoxAI
+                        hasDocGen
+                        hasActivity
+                        hasDetails
+                        hasMetadata
+                        hasSkills
+                        hasVersions
+                        isOpen
+                        onPanelChange={onPanelChange}
+                    />
+                </NavRouter>,
             );
             expect(onPanelChange).toHaveBeenCalledWith('details', true);
             expect(onPanelChange).toHaveBeenCalledTimes(1);
         });
 
         test('should render nothing if the sidebar is closed', () => {
-            const wrapper = getWrapper({
+            renderComponent({
                 isOpen: false,
             });
-            expect(wrapper.isEmptyRender()).toBe(true);
+            expect(screen.queryByTestId('preview-sidebar')).not.toBeInTheDocument();
         });
 
         test('should render nothing if all sidebars are disabled', () => {
-            const wrapper = getWrapper({
+            renderComponent({
                 hasBoxAI: false,
                 hasActivity: false,
                 hasDetails: false,
@@ -301,64 +280,60 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 hasSkills: false,
                 hasVersions: false,
             });
-            expect(wrapper.isEmptyRender()).toBe(true);
+            expect(screen.queryByTestId('preview-sidebar')).not.toBeInTheDocument();
         });
 
         describe('activity sidebar', () => {
             test('should render with tasks deeplink', () => {
-                const wrapper = getWrapper({ path: '/activity/tasks/12345' });
-                expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedEntryType: FEED_ITEM_TYPE_TASK,
-                    activeFeedEntryId: '12345',
-                });
+                renderComponent({ path: '/activity/tasks/12345' });
+                const sidebar = screen.getByTestId('activity-sidebar');
+                expect(sidebar).toHaveAttribute('data-feed-entry-type', FEED_ITEM_TYPE_TASK);
+                expect(sidebar).toHaveAttribute('data-feed-entry-id', '12345');
             });
 
             test('should render with comments deeplink', () => {
-                const wrapper = getWrapper({ path: '/activity/comments/12345' });
-                expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedEntryType: FEED_ITEM_TYPE_COMMENT,
-                    activeFeedEntryId: '12345',
-                });
+                renderComponent({ path: '/activity/comments/12345' });
+                const sidebar = screen.getByTestId('activity-sidebar');
+                expect(sidebar).toHaveAttribute('data-feed-entry-type', FEED_ITEM_TYPE_COMMENT);
+                expect(sidebar).toHaveAttribute('data-feed-entry-id', '12345');
             });
 
             test('should render with versions deeplink', () => {
-                const wrapper = getWrapper({ path: '/activity/versions/12345' });
-                expect(wrapper.find('VersionsSidebar').props()).toMatchObject({
-                    versionId: '12345',
-                });
+                renderComponent({ path: '/activity/versions/12345' });
+                const sidebar = screen.getByTestId('versions-sidebar');
+                expect(sidebar).toHaveAttribute('data-version-id', '12345');
             });
 
             test('should render with annotations deeplink', () => {
-                const wrapper = getWrapper({ path: '/activity/annotations/12345/67890' });
-                expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedEntryType: FEED_ITEM_TYPE_ANNOTATION,
-                    activeFeedEntryId: '67890',
-                });
+                renderComponent({ path: '/activity/annotations/12345/67890' });
+                const sidebar = screen.getByTestId('activity-sidebar');
+                expect(sidebar).toHaveAttribute('data-feed-entry-type', FEED_ITEM_TYPE_ANNOTATION);
+                expect(sidebar).toHaveAttribute('data-feed-entry-id', '67890');
             });
 
             test('should not pass down activeFeedEntry props with partial annotations deeplink', () => {
-                const wrapper = getWrapper({ path: '/activity/annotations/12345' });
-                expect(wrapper.find('ActivitySidebar').props()).toMatchObject({
-                    activeFeedEntryType: undefined,
-                    activeFeedEntryId: undefined,
-                });
+                renderComponent({ path: '/activity/annotations/12345' });
+                const sidebar = screen.getByTestId('activity-sidebar');
+                expect(sidebar).not.toHaveAttribute('data-feed-entry-type');
+                expect(sidebar).not.toHaveAttribute('data-feed-entry-id');
             });
         });
 
         describe('metadata sidebar', () => {
             test('should render with filteredTemplates deeplink', () => {
-                const wrapper = getWrapper({
+                renderComponent({
                     path: '/metadata/filteredTemplates/123,124',
                     features: { metadata: { redesign: { enabled: true } } },
                 });
-                expect(wrapper.find('MetadataSidebarRedesigned').props().filteredTemplateIds).toEqual(['123', '124']);
+                const sidebar = screen.getByTestId('metadata-sidebar');
+                expect(sidebar).toHaveAttribute('data-filtered-template-ids', '123,124');
             });
-            test('should render redesigned  sidebar if it is enabled', () => {
-                const wrapper = getWrapper({
+            test('should render redesigned sidebar if it is enabled', () => {
+                renderComponent({
                     path: '/metadata',
                     features: { metadata: { redesign: { enabled: true } } },
                 });
-                expect(wrapper.exists('MetadataSidebarRedesigned')).toBe(true);
+                expect(screen.getByTestId('metadata-sidebar')).toBeInTheDocument();
             });
         });
 
@@ -439,14 +414,53 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ['/activity/versions', '/activity/versions/123'],
             ['/activity/versions', '/details/versions'],
         ])('should not reset the current version if the versions route is still active', (prevPathname, pathname) => {
-            const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
-            wrapper.setProps({ location: { pathname } });
+            const history = createMemoryHistory({ initialEntries: [prevPathname] });
+            const { rerender } = renderComponent({ location: history.location, onVersionChange });
+            history.push(pathname);
+            rerender(
+                <NavRouter history={history}>
+                    <SidebarPanels
+                        file={{ id: '1234' }}
+                        hasBoxAI
+                        hasDocGen
+                        hasActivity
+                        hasDetails
+                        hasMetadata
+                        hasSkills
+                        hasVersions
+                        isOpen
+                        location={history.location}
+                        onVersionChange={onVersionChange}
+                    />
+                </NavRouter>,
+            );
             expect(onVersionChange).not.toBeCalled();
         });
 
         test.each([true, false])('should not reset the current version if the sidebar is toggled', isOpen => {
-            const wrapper = getWrapper({ isOpen, location: { pathname: '/details/versions/123' }, onVersionChange });
-            wrapper.setProps({ isOpen: !isOpen });
+            const history = createMemoryHistory({ initialEntries: ['/details/versions/123'] });
+            const { rerender } = renderComponent({
+                isOpen,
+                location: history.location,
+                onVersionChange,
+            });
+            rerender(
+                <NavRouter history={history}>
+                    <SidebarPanels
+                        file={{ id: '1234' }}
+                        hasBoxAI
+                        hasDocGen
+                        hasActivity
+                        hasDetails
+                        hasMetadata
+                        hasSkills
+                        hasVersions
+                        isOpen={!isOpen}
+                        location={history.location}
+                        onVersionChange={onVersionChange}
+                    />
+                </NavRouter>,
+            );
             expect(onVersionChange).not.toBeCalled();
         });
 
@@ -458,8 +472,26 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             ['/details/versions/123', '/details'],
             ['/details/versions', '/metadata'],
         ])('should reset the current version if the versions route is no longer active', (prevPathname, pathname) => {
-            const wrapper = getWrapper({ location: { pathname: prevPathname }, onVersionChange });
-            wrapper.setProps({ location: { pathname } });
+            const history = createMemoryHistory({ initialEntries: [prevPathname] });
+            const { rerender } = renderComponent({ location: history.location, onVersionChange });
+            history.push(pathname);
+            rerender(
+                <NavRouter history={history}>
+                    <SidebarPanels
+                        file={{ id: '1234' }}
+                        hasBoxAI
+                        hasDocGen
+                        hasActivity
+                        hasDetails
+                        hasMetadata
+                        hasSkills
+                        hasVersions
+                        isOpen
+                        location={history.location}
+                        onVersionChange={onVersionChange}
+                    />
+                </NavRouter>,
+            );
             expect(onVersionChange).toBeCalledWith(null);
         });
     });

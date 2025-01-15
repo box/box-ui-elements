@@ -6,9 +6,9 @@ import Picture16 from '../../icon/fill/Picture16';
 import messages from './messages';
 import './styles/PreviewErrorNotification.scss';
 
-function PreviewErrorNotification() {
+function PreviewErrorNotification(props) {
     return (
-        <div className="PreviewErrorNotification">
+        <div className="PreviewErrorNotification" {...props}>
             <Picture16 className="PreviewErrorNotification-image" />
             <div className="PreviewErrorNotification-message">
                 <FormattedMessage {...messages.messagePreviewError} />

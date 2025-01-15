@@ -1,26 +1,25 @@
 import * as React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
-import { render, screen, fireEvent } from '@testing-library/react';
-import PlainButton from '../../../components/plain-button';
-import SidebarNavButton from '../SidebarNavButton';
-import Tooltip from '../../../components/tooltip/Tooltip';
+import { createMemoryHistory } from 'history';
+import { render, screen, fireEvent } from '../../../test-utils/testing-library';
+import { NavRouter } from '../../common/nav-router';
+import SidebarNavButton from '../SidebarNavButton.tsx';
 
 describe('elements/content-sidebar/SidebarNavButton', () => {
-    const getWrapper = ({ children, ...props }, path = '/') =>
-        mount(
-            <MemoryRouter initialEntries={[path]}>
+    const renderComponent = ({ children, ...props }, path = '/') => {
+        const history = createMemoryHistory({ initialEntries: [path] });
+        return render(
+            <NavRouter history={history}>
                 <SidebarNavButton {...props}>{children}</SidebarNavButton>
-            </MemoryRouter>,
+            </NavRouter>,
         );
-    const getButton = wrapper => wrapper.find(PlainButton).first();
+    };
 
     test('should render nav button properly', () => {
-        const wrapper = getWrapper({ tooltip: 'foo' });
-        const button = getButton(wrapper);
+        renderComponent({ tooltip: 'foo' });
+        const button = screen.getByRole('button');
 
-        expect(wrapper.find(Tooltip).prop('text')).toBe('foo');
-        expect(button.hasClass('bcs-is-selected')).toBe(false);
+        expect(screen.getByRole('tooltip')).toHaveTextContent('foo');
+        expect(button).not.toHaveClass('bcs-is-selected');
     });
 
     test.each`
@@ -34,10 +33,14 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             sidebarView: 'activity',
             tooltip: 'foo',
         };
-        const wrapper = getWrapper(props, '/activity');
-        const button = getButton(wrapper);
+        renderComponent(props, '/activity');
+        const button = screen.getByRole('button');
 
-        expect(button.hasClass('bcs-is-selected')).toBe(expected);
+        if (expected) {
+            expect(button).toHaveClass('bcs-is-selected');
+        } else {
+            expect(button).not.toHaveClass('bcs-is-selected');
+        }
     });
 
     test.each`
@@ -48,22 +51,27 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         ${'/activity/test'} | ${true}
         ${'/skills'}        | ${false}
     `('should reflect active state ($expected) correctly based on active path', ({ expected, path }) => {
-        const wrapper = getWrapper({ isOpen: true, sidebarView: 'activity' }, path);
-        const button = getButton(wrapper);
+        renderComponent({ isOpen: true, sidebarView: 'activity' }, path);
+        const button = screen.getByRole('button');
 
-        expect(button.hasClass('bcs-is-selected')).toBe(expected);
+        if (expected) {
+            expect(button).toHaveClass('bcs-is-selected');
+        } else {
+            expect(button).not.toHaveClass('bcs-is-selected');
+        }
     });
 
     test('should call onClick with sidebarView when clicked', () => {
         const mockOnClick = jest.fn();
         const mockSidebarView = 'activity';
 
+        const history = createMemoryHistory({ initialEntries: ['/'] });
         render(
-            <MemoryRouter initialEntries={['/']}>
+            <NavRouter history={history}>
                 <SidebarNavButton onClick={mockOnClick} sidebarView={mockSidebarView}>
                     button
                 </SidebarNavButton>
-            </MemoryRouter>,
+            </NavRouter>,
         );
         const button = screen.getByText('button');
 

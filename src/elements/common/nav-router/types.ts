@@ -1,6 +1,12 @@
-import { History } from 'history';
+import { History, Location } from 'history';
 
-export type WithNavRouterProps = {
-    history?: History;
-    initialEntries?: History.LocationDescriptor[];
-};
+export interface WithNavRouterProps {
+    history: History;
+    location: Location;
+    match: {
+        params: Record<string, string>;
+        isExact: boolean;
+        path: string;
+        url: string;
+    };
+}
