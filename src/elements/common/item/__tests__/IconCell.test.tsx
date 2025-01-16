@@ -2,7 +2,8 @@ import * as React from 'react';
 import type { IntlShape } from 'react-intl';
 import { render, screen } from '../../../../test-utils/testing-library';
 
-import { IconCellBase, type BoxItem } from '../IconCell';
+import { IconCellBase } from '../IconCell';
+import type { BoxItem } from '../IconCell';
 import type { ItemType } from '../../../../common/types/core';
 import { ITEM_TYPE_FILE, ITEM_TYPE_FOLDER, ITEM_TYPE_WEBLINK } from '../../../../common/constants';
 
