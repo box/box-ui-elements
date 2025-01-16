@@ -8,9 +8,9 @@ const ItemListIcon = ({ archiveType, extension, type, hasCollaborations = false,
     const rowData = {
         type,
         extension,
-        has_collaborations: hasCollaborations,
-        is_externally_owned: isExternallyOwned,
-        archive_type: archiveType,
+        hasCollaborations,
+        isExternallyOwned,
+        archiveType,
     };
     return <IconCell rowData={rowData} />;
 };

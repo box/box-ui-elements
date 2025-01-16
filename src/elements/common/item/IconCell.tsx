@@ -15,9 +15,9 @@ import type { ItemType } from '../../../common/types/core';
 export type BoxItem = {
     type: ItemType;
     extension?: string;
-    has_collaborations?: boolean;
-    is_externally_owned?: boolean;
-    archive_type?: string;
+    hasCollaborations?: boolean;
+    isExternallyOwned?: boolean;
+    archiveType?: string;
 };
 
 type IconCellProps = {
@@ -29,13 +29,7 @@ type IconCellProps = {
 
 const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
     const { formatMessage } = useIntl();
-    const {
-        type,
-        extension,
-        has_collaborations: hasCollaborations,
-        is_externally_owned: isExternallyOwned,
-        archive_type: archiveType,
-    } = rowData;
+    const { type, extension, hasCollaborations, isExternallyOwned, archiveType } = rowData;
 
     switch (type) {
         case ITEM_TYPE_FILE:

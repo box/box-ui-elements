@@ -33,16 +33,14 @@ const FolderIcon = ({
     'aria-hidden': ariaHidden,
 }: FolderIconProps): JSX.Element => {
     // Priority: Collab > External > Personal
-    const getIconComponent = () => {
-        if (isCollab) {
-            return IconFolderCollab;
-        }
-        if (isExternal) {
-            return IconFolderExternal;
-        }
-        return IconFolderPersonal;
-    };
-    const IconComponent = getIconComponent();
+    let IconComponent;
+    if (isCollab) {
+        IconComponent = IconFolderCollab;
+    } else if (isExternal) {
+        IconComponent = IconFolderExternal;
+    } else {
+        IconComponent = IconFolderPersonal;
+    }
 
     // For backward compatibility, we keep both title and aria-label
     const accessibilityProps = {
