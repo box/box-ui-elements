@@ -20,6 +20,7 @@ module.exports = {
         '<rootDir>/node_modules/regenerator-runtime/runtime.js',
         '<rootDir>/scripts/jest/enzyme-adapter.js',
         '<rootDir>/scripts/jest/jest-setup.ts',
+        '<rootDir>/src/test-utils/__mocks__/radix-ui-tooltip.ts',
     ],
     snapshotSerializers: ['enzyme-to-json/serializer'],
     testEnvironment: 'jsdom',
