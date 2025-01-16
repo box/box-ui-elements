@@ -40,7 +40,7 @@ describe('elements/common/item/IconCell', () => {
 
     const externalFolderItem = {
         type: ITEM_TYPE_FOLDER,
-        is_externally_owned: true,
+        isExternallyOwned: true,
     };
 
     const fileItem = {
@@ -54,7 +54,7 @@ describe('elements/common/item/IconCell', () => {
 
     const sharedFolderItem = {
         type: ITEM_TYPE_FOLDER,
-        has_collaborations: true,
+        hasCollaborations: true,
     };
 
     const unknownTypeItem = {

@@ -53,24 +53,20 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             );
         case ITEM_TYPE_FOLDER: {
             if (archiveType === 'folder_archive') {
+                const title = formatMessage(messages.archivedFolder);
                 return (
-                    <FolderArchive
-                        width={dimension}
-                        height={dimension}
-                        role="img"
-                        aria-label={formatMessage(messages.archivedFolder)}
-                    />
+                    <div role="img" aria-label={title}>
+                        <FolderArchive width={dimension} height={dimension} />
+                    </div>
                 );
             }
 
             if (archiveType === 'archive') {
+                const title = formatMessage(messages.archive);
                 return (
-                    <Archive
-                        width={dimension}
-                        height={dimension}
-                        role="img"
-                        aria-label={formatMessage(messages.archive)}
-                    />
+                    <div role="img" aria-label={title}>
+                        <Archive width={dimension} height={dimension} />
+                    </div>
                 );
             }
 
