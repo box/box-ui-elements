@@ -16,9 +16,9 @@ export interface ContextMenuProps {
     /** isDisabled - when disabled, native context menu behavior is applied, and the menu will close if it was open */
     isDisabled?: boolean;
     /** onMenuClose - called when menu is closed */
-    onMenuClose?: Function;
+    onMenuClose?: () => void;
     /** onMenuOpen - called when menu is opened */
-    onMenuOpen?: Function;
+    onMenuOpen?: () => void;
 }
 
 export interface ContextMenuState {
@@ -67,7 +67,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         if (this.state.isOpen) {
             // Clean-up global click handlers
             document.removeEventListener('contextmenu', this.handleDocumentClick, true);
@@ -79,7 +79,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
 
     menuTargetID: string;
 
-    closeMenu = () => {
+    closeMenu = (): void => {
         const { onMenuClose } = this.props;
 
         this.setState({ isOpen: false });
@@ -88,7 +88,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         }
     };
 
-    focusTarget = () => {
+    focusTarget = (): void => {
         // breaks encapsulation but the only alternative is passing a ref to an unknown child component
         const menuTargetEl = document.getElementById(this.menuTargetID);
         if (menuTargetEl) {
@@ -96,12 +96,12 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         }
     };
 
-    handleMenuClose = () => {
+    handleMenuClose = (): void => {
         this.closeMenu();
         this.focusTarget();
     };
 
-    handleDocumentClick = (event: MouseEvent) => {
+    handleDocumentClick = (event: MouseEvent): void => {
         const menuEl = document.getElementById(this.menuID);
         if (menuEl && event.target instanceof Node && menuEl.contains(event.target)) {
             return;
@@ -109,7 +109,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         this.closeMenu();
     };
 
-    handleContextMenu = (event: MouseEvent) => {
+    handleContextMenu = (event: MouseEvent): void => {
         if (this.props.isDisabled) {
             return;
         }
@@ -132,7 +132,7 @@ class ContextMenu extends React.Component<ContextMenuProps, ContextMenuState> {
         event.preventDefault();
     };
 
-    render() {
+    render(): JSX.Element {
         const { children, constraints } = this.props;
         const { isOpen, targetOffset } = this.state;
 

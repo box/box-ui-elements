@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import BoxMobile140 from './BoxMobile140';
 
-export const boxMobile140 = () => <BoxMobile140 />;
+export const boxMobile140 = (): JSX.Element => <BoxMobile140 />;
 
 export default {
     title: 'Illustration/BoxMobile140',

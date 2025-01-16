@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import CollectionStar140 from './CollectionStar140';
 
-export const collectionStar140 = () => <CollectionStar140 />;
+export const collectionStar140 = (): JSX.Element => <CollectionStar140 />;
 
 export default {
     title: 'Illustration/CollectionStar140',

@@ -9,6 +9,7 @@ import IconFolderTree from '../../../icons/general/IconFolderTree';
 import { Menu, MenuItem } from '../../../components/menu';
 
 import { FoldersPathPropType } from '../prop-types';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 import {
     FOLDER_TREE_ICON_HEIGHT,
@@ -56,8 +57,8 @@ const ContentExplorerFolderTreeBreadcrumbs = ({
                 <Arrow16
                     className="bdl-ContentExplorerFolderTreeBreadcrumbs-icon"
                     height={BREADCRUMB_ARROW_ICON_HEIGHT}
-                    width={BREADCRUMB_ARROW_ICON_WIDTH}
                     viewBox={BREADCRUMB_ARROW_ICON_VIEWBOX}
+                    width={BREADCRUMB_ARROW_ICON_WIDTH}
                 />
             )}
             <span className="bdl-ContentExplorerFolderTreeBreadcrumbs-text" title={currentFolderName}>

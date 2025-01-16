@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import MonthlyReport56 from './MonthlyReport56';
 
-export const monthlyReport56 = () => <MonthlyReport56 />;
+export const monthlyReport56 = (): JSX.Element => <MonthlyReport56 />;
 
 export default {
     title: 'Illustration/MonthlyReport56',

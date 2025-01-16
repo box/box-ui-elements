@@ -3,16 +3,24 @@ import React, { PureComponent } from 'react';
 import { injectIntl } from 'react-intl';
 import SearchForm from '../../../components/search-form';
 
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 class ContentExplorerSearch extends PureComponent {
     static propTypes = {
-        intl: PropTypes.any,
+        intl: PropTypes.shape({
+            formatMessage: PropTypes.func.isRequired,
+        }),
         inputValue: PropTypes.string,
         onSubmit: PropTypes.func,
         onInput: PropTypes.func,
         onClearButtonClick: PropTypes.func,
-        searchInputProps: PropTypes.object,
+        searchInputProps: PropTypes.shape({
+            onChange: PropTypes.func,
+            onSubmit: PropTypes.func,
+            placeholder: PropTypes.string,
+            value: PropTypes.string,
+        }),
     };
 
     static defaultProps = {

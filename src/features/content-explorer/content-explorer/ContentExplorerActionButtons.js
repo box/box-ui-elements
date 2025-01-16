@@ -8,6 +8,7 @@ import PrimaryButton from '../../../components/primary-button';
 
 import { ContentExplorerModePropType, FolderPropType, ItemsMapPropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 export const getChosenItemsFromSelectedItems = selectedItems => {
@@ -131,9 +132,9 @@ const ContentExplorerActionButtons = ({
             {renderStatus()}
             <Button
                 className="content-explorer-cancel-button"
-                type="button"
                 isDisabled={isChooseButtonLoading || isMoveButtonLoading || isCopyButtonLoading}
                 onClick={onCancelClick}
+                type="button"
                 {...cancelButtonProps}
             >
                 <FormattedMessage {...messages.cancel} />
@@ -142,11 +143,11 @@ const ContentExplorerActionButtons = ({
                 contentExplorerMode === ContentExplorerModes.SELECT_FOLDER ||
                 contentExplorerMode === ContentExplorerModes.MULTI_SELECT) && (
                 <PrimaryButton
-                    type="button"
                     className="content-explorer-choose-button"
                     isDisabled={areButtonsDisabled || isChooseButtonLoading}
                     isLoading={isChooseButtonLoading}
                     onClick={handleChooseClick}
+                    type="button"
                     {...chooseButtonProps}
                 >
                     {chooseButtonText || <FormattedMessage {...messages.choose} />}
@@ -154,12 +155,12 @@ const ContentExplorerActionButtons = ({
             )}
             {contentExplorerMode === ContentExplorerModes.MOVE_COPY && (
                 <PrimaryButton
-                    key="move-btn"
-                    type="button"
                     className="content-explorer-move-button"
-                    onClick={handleMoveClick}
                     isDisabled={areButtonsDisabled || isMoveButtonLoading || isCopyButtonLoading}
                     isLoading={isMoveButtonLoading}
+                    key="move-btn"
+                    onClick={handleMoveClick}
+                    type="button"
                 >
                     <FormattedMessage {...messages.move} />
                 </PrimaryButton>
@@ -167,12 +168,12 @@ const ContentExplorerActionButtons = ({
             {(contentExplorerMode === ContentExplorerModes.MOVE_COPY ||
                 contentExplorerMode === ContentExplorerModes.COPY) && (
                 <PrimaryButton
-                    key="copy-btn"
-                    type="button"
                     className="content-explorer-copy-button"
-                    onClick={handleCopyClick}
                     isDisabled={areButtonsDisabled || isMoveButtonLoading || isCopyButtonLoading}
                     isLoading={isCopyButtonLoading}
+                    key="copy-btn"
+                    onClick={handleCopyClick}
+                    type="button"
                 >
                     <FormattedMessage {...messages.copy} />
                 </PrimaryButton>

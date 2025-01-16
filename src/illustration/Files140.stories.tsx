@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Files140 from './Files140';
 
-export const files140 = () => <Files140 />;
+export const files140 = (): JSX.Element => <Files140 />;
 
 export default {
     title: 'Illustration/Files140',

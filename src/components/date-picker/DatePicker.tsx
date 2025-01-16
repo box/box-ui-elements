@@ -3,6 +3,7 @@ import { defineMessages, injectIntl, FormattedMessage, WrappedComponentProps } f
 
 import classNames from 'classnames';
 import noop from 'lodash/noop';
+import omit from 'lodash/omit';
 import range from 'lodash/range';
 import uniqueId from 'lodash/uniqueId';
 
@@ -113,7 +114,7 @@ function getFormattedDate(date: Date | null, format: DateFormat) {
             utcDate = new Date(convertDateToUnixMidnightTime(date));
             return utcDate.toISOString();
         default:
-            return date.getTime();
+            return date.getTime().toString();
     }
 }
 
@@ -144,7 +145,7 @@ export interface DatePickerProps extends WrappedComponentProps {
     /** Whether show or hide the 'Optional' label */
     hideOptionalLabel?: boolean;
     /** Props that will be applied on the input element */
-    inputProps?: Object;
+    inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
     /** Does the date input meet accessibility standards */
     isAccessible?: boolean;
     /** Is the calendar always visible */
@@ -170,7 +171,7 @@ export interface DatePickerProps extends WrappedComponentProps {
     /** Called when input loses focus */
     onBlur?: ((event: React.FocusEvent<HTMLInputElement>) => void) | undefined;
     /** Called when input is changed, passed the selected Date */
-    onChange?: Function;
+    onChange?: (date: Date | null, formattedDate: string) => void;
     /** Called when input receives focus */
     onFocus?: ((event: React.FocusEvent<HTMLInputElement>) => void) | undefined;
     /** Placeholder for the text input */
@@ -213,7 +214,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
 
     descriptionID = uniqueId('description');
 
-    componentDidMount() {
+    componentDidMount(): void {
         const {
             customInput,
             dateFormat,
@@ -318,7 +319,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     }
 
     // eslint-disable-next-line camelcase
-    UNSAFE_componentWillReceiveProps(nextProps: DatePickerProps) {
+    UNSAFE_componentWillReceiveProps(nextProps: DatePickerProps): void {
         if (!this.datePicker) return;
 
         const { value: nextValue = null, minDate: nextMinDate = null, maxDate: nextMaxDate = null } = nextProps;
@@ -362,13 +363,13 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         if (this.datePicker) {
             this.datePicker.destroy();
         }
     }
 
-    onSelectHandler = (date: Date | null = null) => {
+    onSelectHandler = (date: Date | null = null): void => {
         const { onChange, isAccessible } = this.props;
         const { isDateInputInvalid } = this.state;
 
@@ -394,7 +395,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
     };
 
-    updateDateInputValue(value: string) {
+    updateDateInputValue(value: string): void {
         if (this.dateInputEl) {
             this.dateInputEl.value = value;
         }
@@ -412,14 +413,14 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
     // Used to prevent bad sequences of hide/show when toggling the datepicker button
     shouldStayClosed = false;
 
-    focusDatePicker = () => {
+    focusDatePicker = (): void => {
         // This also opens the date picker when isAccessible is disabled
         if (this.dateInputEl) {
             this.dateInputEl.focus();
         }
     };
 
-    getDateInputError = () => {
+    getDateInputError = (): string => {
         const { intl, maxDate = null, minDate = null } = this.props;
         const { showDateInputError } = this.state;
         const { formatMessage } = intl;
@@ -441,7 +442,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         return dateInputError;
     };
 
-    handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
         const { isKeyboardInputAllowed, isTextInputAllowed, isAccessible } = this.props;
 
         if (!isKeyboardInputAllowed && this.datePicker && this.datePicker.isVisible()) {
@@ -470,7 +471,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
     };
 
-    handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleOnChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         const { isAccessible, maxDate, minDate, onChange } = this.props;
         const { isDateInputInvalid } = this.state;
 
@@ -512,7 +513,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
     };
 
-    handleInputBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    handleInputBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
         const { isAccessible, isTextInputAllowed, onBlur } = this.props;
         const { isDateInputInvalid } = this.state;
         const nextActiveElement = event.relatedTarget || document.activeElement;
@@ -553,7 +554,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         if (isAccessible && isDateInputInvalid) this.setState({ showDateInputError: true });
     };
 
-    handleButtonClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    handleButtonClick = (event: React.SyntheticEvent<HTMLButtonElement>): void => {
         event.preventDefault();
         event.stopPropagation();
         const { isAccessible, isDisabled } = this.props;
@@ -577,7 +578,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         }
     };
 
-    handleOnClick = (event: React.SyntheticEvent<HTMLInputElement>) => {
+    handleOnClick = (event: React.SyntheticEvent<HTMLInputElement>): void => {
         const { isAccessible } = this.props;
 
         if (isAccessible) {
@@ -609,12 +610,13 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         return null;
     };
 
-    formatValue = (date: Date | null): string | number => {
+    formatValue = (date: Date | null): string => {
         const { dateFormat } = this.props;
-        return dateFormat ? getFormattedDate(date, dateFormat) : '';
+        const value = dateFormat ? getFormattedDate(date, dateFormat) : '';
+        return typeof value === 'number' ? value.toString() : value;
     };
 
-    clearDate = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+    clearDate = (event: React.SyntheticEvent<HTMLButtonElement>): void => {
         // Prevents the date picker from opening after clearing
         event.preventDefault();
         const { isAccessible } = this.props;
@@ -672,7 +674,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
         );
     };
 
-    render() {
+    render(): JSX.Element {
         const {
             className,
             customInput,
@@ -759,7 +761,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                     <Label hideLabel={hideLabel} showOptionalText={!hideOptionalLabel && !isRequired} text={label}>
                         <>
                             {!!description && (
-                                <div id={this.descriptionID} className="date-picker-description">
+                                <div className="date-picker-description" id={this.descriptionID}>
                                     {description}
                                 </div>
                             )}
@@ -782,28 +784,28 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                                     })
                                 ) : (
                                     <input
-                                        ref={ref => {
-                                            this.dateInputEl = ref;
-                                        }}
-                                        className="date-picker-input"
+                                        {...(inputProps ? { ...omit(inputProps, ['className']) } : {})}
+                                        className={classNames('date-picker-input', inputProps?.className)}
                                         disabled={isDisabled}
                                         onBlur={this.handleInputBlur}
                                         onClick={this.handleOnClick}
+                                        onFocus={onFocus}
+                                        onKeyDown={this.handleInputKeyDown}
                                         placeholder={placeholder || formatMessage(messages.chooseDate)}
+                                        ref={ref => {
+                                            this.dateInputEl = ref;
+                                        }}
                                         required={isRequired}
                                         type={isAccessible && this.canUseDateInputType ? 'date' : 'text'}
                                         {...onChangeAttr}
-                                        onFocus={onFocus}
-                                        onKeyDown={this.handleInputKeyDown}
                                         {...resinTargetAttr}
                                         {...ariaAttrs}
-                                        {...inputProps}
                                         {...valueAttr}
                                         {...additionalAttrs}
                                     />
                                 )}
                             </Tooltip>
-                            <span id={this.errorMessageID} className="accessibility-hidden" role="alert">
+                            <span className="accessibility-hidden" id={this.errorMessageID} role="alert">
                                 {errorMessage}
                             </span>
                         </>

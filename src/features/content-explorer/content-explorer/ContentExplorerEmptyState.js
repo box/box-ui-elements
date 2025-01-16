@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import FolderEmptyState from '../../../icons/states/FolderEmptyState';
 import SearchEmptyState from '../../../icons/states/SearchEmptyState';
 
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ContentExplorerEmptyState = ({ isSearch = false }) => (

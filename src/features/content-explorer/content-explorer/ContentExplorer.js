@@ -11,7 +11,13 @@ import ContentExplorerIncludeSubfolders from './ContentExplorerIncludeSubfolders
 import ContentExplorerInfoNotice from './ContentExplorerInfoNotice';
 
 import ItemList from '../item-list';
-import { ContentExplorerModePropType, FoldersPathPropType, ItemsPropType } from '../prop-types';
+import {
+    BreadcrumbPropType,
+    ContentExplorerModePropType,
+    FoldersPathPropType,
+    ItemsPropType,
+    ItemPropType,
+} from '../prop-types';
 import ContentExplorerModes from '../modes';
 
 import { TYPE_FOLDER } from '../../../constants';
@@ -21,22 +27,64 @@ import './ContentExplorer.scss';
 class ContentExplorer extends Component {
     static propTypes = {
         /** Props for the action buttons container */
-        actionButtonsProps: PropTypes.object,
+        actionButtonsProps: PropTypes.shape({
+            /** Any valid button props */
+            className: PropTypes.string,
+            /** Custom styles */
+            style: PropTypes.shape({
+                /** CSS properties */
+                display: PropTypes.string,
+                margin: PropTypes.string,
+                padding: PropTypes.string,
+                width: PropTypes.string,
+                height: PropTypes.string,
+                color: PropTypes.string,
+                backgroundColor: PropTypes.string,
+            }),
+        }),
         /**
          * Extra columns displayed in the folders table after folder name column
          * Each column has to be a Column element
          */
         additionalColumns: PropTypes.arrayOf(PropTypes.element),
         /** Items that will show up as selected */
-        controlledSelectedItems: PropTypes.object,
+        controlledSelectedItems: PropTypes.objectOf(ItemPropType),
         /**  Allow users to choose no selections in MULTI_SELECT mode, defaults to false  */
         isNoSelectionAllowed: PropTypes.bool,
         /** Props for breadcrumbs */
-        breadcrumbProps: PropTypes.object,
+        breadcrumbProps: BreadcrumbPropType,
         /** Props for the cancel button */
-        cancelButtonProps: PropTypes.object,
+        cancelButtonProps: PropTypes.shape({
+            /** Any valid button props */
+            className: PropTypes.string,
+            /** Custom styles */
+            style: PropTypes.shape({
+                /** CSS properties */
+                display: PropTypes.string,
+                margin: PropTypes.string,
+                padding: PropTypes.string,
+                width: PropTypes.string,
+                height: PropTypes.string,
+                color: PropTypes.string,
+                backgroundColor: PropTypes.string,
+            }),
+        }),
         /** Props for the choose button */
-        chooseButtonProps: PropTypes.object,
+        chooseButtonProps: PropTypes.shape({
+            /** Any valid button props */
+            className: PropTypes.string,
+            /** Custom styles */
+            style: PropTypes.shape({
+                /** CSS properties */
+                display: PropTypes.string,
+                margin: PropTypes.string,
+                padding: PropTypes.string,
+                width: PropTypes.string,
+                height: PropTypes.string,
+                color: PropTypes.string,
+                backgroundColor: PropTypes.string,
+            }),
+        }),
         /** Custom text for the choose button */
         chooseButtonText: PropTypes.node,
         /** Adds class name. */
@@ -50,11 +98,16 @@ class ContentExplorer extends Component {
         /** Any extra items in the header to the right of the search input (and new folder button) */
         headerActionsAccessory: PropTypes.node,
         /** Props for the include subfolders toggle */
-        includeSubfoldersProps: PropTypes.object,
+        includeSubfoldersProps: PropTypes.shape({
+            /** Whether the toggle is enabled */
+            isEnabled: PropTypes.bool,
+            /** Callback when toggle changes */
+            onChange: PropTypes.func,
+        }),
         /** Initial path of folders. The last folder in the array is the current folder. */
         initialFoldersPath: FoldersPathPropType.isRequired,
         /** Initial items that will show up as selected */
-        initialSelectedItems: PropTypes.object,
+        initialSelectedItems: PropTypes.objectOf(ItemPropType),
         /** Whether to use the responsive version */
         isResponsive: PropTypes.bool,
         /**
@@ -158,11 +211,28 @@ class ContentExplorer extends Component {
         /** Height of the item list */
         listHeight: PropTypes.number.isRequired,
         /** Props for the search input */
-        searchInputProps: PropTypes.object,
+        searchInputProps: PropTypes.shape({
+            /** Any valid input props */
+            className: PropTypes.string,
+            /** Custom styles */
+            style: PropTypes.shape({
+                /** CSS properties */
+                display: PropTypes.string,
+                margin: PropTypes.string,
+                padding: PropTypes.string,
+                width: PropTypes.string,
+                height: PropTypes.string,
+                color: PropTypes.string,
+                backgroundColor: PropTypes.string,
+            }),
+            /** Placeholder text */
+            placeholder: PropTypes.string,
+        }),
         /** Text for the informational notice, defaults to empty string, which makes notice not visible */
         infoNoticeText: PropTypes.string,
     };
 
+    // Static methods
     static defaultProps = {
         actionButtonsProps: {},
         cancelButtonProps: {},
@@ -179,8 +249,10 @@ class ContentExplorer extends Component {
             isInSearchMode: false,
             isSelectAllChecked: false,
         };
+        this.domNode = React.createRef();
     }
 
+    // Lifecycle methods
     componentDidMount() {
         document.addEventListener('click', this.handleDocumentClick, true);
     }
@@ -204,8 +276,16 @@ class ContentExplorer extends Component {
         document.removeEventListener('click', this.handleDocumentClick, true);
     }
 
+    // Instance methods
+    getCurrentFolder() {
+        const { foldersPath } = this.state;
+        return foldersPath[foldersPath.length - 1];
+    }
+
     getAllSelectedItems = () => {
-        return { ...this.state.selectedItems, ...this.props.controlledSelectedItems };
+        const { selectedItems } = this.state;
+        const { controlledSelectedItems } = this.props;
+        return { ...selectedItems, ...controlledSelectedItems };
     };
 
     areAllItemsSelected = () => {
@@ -216,13 +296,9 @@ class ContentExplorer extends Component {
     };
 
     isLoadingItems = () => {
-        return this.props?.items?.[0]?.isLoading;
+        const { items } = this.props;
+        return items?.[0]?.isLoading;
     };
-
-    getCurrentFolder() {
-        const { foldersPath } = this.state;
-        return foldersPath[foldersPath.length - 1];
-    }
 
     /**
      * Traverse the hirerachy up to the limit to see if any of the parent has the className
@@ -546,15 +622,13 @@ class ContentExplorer extends Component {
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
             <div
+                {...contentExplorerProps}
                 className={classNames('content-explorer', className, {
                     'bdl-ContentExplorer--responsive': isResponsive,
                 })}
                 data-testid="content-explorer"
                 onClick={this.handleContentExplorerClick}
-                ref={ref => {
-                    this.domNode = ref;
-                }}
-                {...contentExplorerProps}
+                ref={this.domNode}
             >
                 {infoNoticeText && <ContentExplorerInfoNotice infoNoticeText={infoNoticeText} />}
                 <ContentExplorerHeaderActions
@@ -564,12 +638,12 @@ class ContentExplorer extends Component {
                     foldersPath={foldersPath}
                     hasFolderTreeBreadcrumbs={hasFolderTreeBreadcrumbs}
                     isCreateNewFolderAllowed={isCreateNewFolderAllowed}
+                    numTotalItems={numTotalItems}
                     onCreateNewFolderButtonClick={onCreateNewFolderButtonClick}
-                    onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onEnterFolder={this.enterFolder}
                     onExitSearch={this.handleExitSearch}
+                    onFoldersPathUpdated={this.handleFoldersPathUpdated}
                     onSearchSubmit={this.handleSearchSubmit}
-                    numTotalItems={numTotalItems}
                     searchInputProps={searchInputProps}
                     showCreateNewFolderButton={showCreateNewFolderButton}
                 >
@@ -580,10 +654,10 @@ class ContentExplorer extends Component {
                         {canIncludeSubfolders && <ContentExplorerIncludeSubfolders {...includeSubfoldersProps} />}
                         {isSelectAllAllowed && (
                             <ContentExplorerSelectAll
-                                handleSelectAllClick={this.handleSelectAllClick}
                                 isLabelHidden={canIncludeSubfolders}
                                 isSelectAllChecked={isSelectAllChecked}
                                 numTotalItems={numTotalItems}
+                                onSelectAllClick={this.handleSelectAllClick}
                             />
                         )}
                     </div>
@@ -598,8 +672,8 @@ class ContentExplorer extends Component {
                     itemButtonRenderer={itemButtonRenderer}
                     itemIconRenderer={itemIconRenderer}
                     itemNameLinkRenderer={itemNameLinkRenderer}
-                    items={items}
                     itemRowRenderer={itemRowRenderer}
+                    items={items}
                     noItemsRenderer={this.renderItemListEmptyState}
                     numItemsPerPage={numItemsPerPage}
                     numTotalItems={numTotalItems}
@@ -614,8 +688,8 @@ class ContentExplorer extends Component {
                 <ContentExplorerActionButtons
                     actionButtonsProps={actionButtonsProps}
                     areButtonsDisabled={areActionButtonsDisabled}
-                    cancelButtonProps={cancelButtonProps}
                     canIncludeSubfolders={canIncludeSubfolders}
+                    cancelButtonProps={cancelButtonProps}
                     chooseButtonProps={chooseButtonProps}
                     chooseButtonText={chooseButtonText}
                     contentExplorerMode={contentExplorerMode}
@@ -623,17 +697,17 @@ class ContentExplorer extends Component {
                     isChooseButtonLoading={isChooseButtonLoading}
                     isCopyButtonLoading={isCopyButtonLoading}
                     isMoveButtonLoading={isMoveButtonLoading}
+                    isNoSelectionAllowed={isNoSelectionAllowed}
                     isResponsive={isResponsive}
                     isSelectAllAllowed={isSelectAllAllowed}
                     onCancelClick={onCancelButtonClick}
                     onChooseClick={onChooseItems}
                     onCopyClick={onCopyItem}
                     onFoldersPathUpdated={this.handleFoldersPathUpdated}
-                    onSelectedClick={onSelectedClick}
                     onMoveClick={onMoveItem}
+                    onSelectedClick={onSelectedClick}
                     onViewSelectedClick={onViewSelectedClick}
                     selectedItems={allSelectedItems}
-                    isNoSelectionAllowed={isNoSelectionAllowed}
                 />
             </div>
         );

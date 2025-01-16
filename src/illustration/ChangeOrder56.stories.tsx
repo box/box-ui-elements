@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import ChangeOrder56 from './ChangeOrder56';
 
-export const changeOrder56 = () => <ChangeOrder56 />;
+export const changeOrder56 = (): JSX.Element => <ChangeOrder56 />;
 
 export default {
     title: 'Illustration/ChangeOrder56',

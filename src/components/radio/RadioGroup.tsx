@@ -4,7 +4,7 @@ export interface RadioGroupProps {
     children: Array<React.ReactElement> | React.ReactElement;
     className: string;
     name?: string;
-    onChange?: Function;
+    onChange?: (event: React.SyntheticEvent<HTMLElement>) => void;
     value?: string;
 }
 
@@ -26,7 +26,7 @@ class RadioGroup extends React.Component<RadioGroupProps, RadioGroupState> {
 
     // @TODO: think about adding componentDidUpdate or gDSFP
     // to update the internal state value based on new props value
-    onChangeHandler = (event: React.SyntheticEvent<HTMLElement>) => {
+    onChangeHandler = (event: React.SyntheticEvent<HTMLElement>): void => {
         const { target } = event;
         const { onChange } = this.props;
 
@@ -41,7 +41,7 @@ class RadioGroup extends React.Component<RadioGroupProps, RadioGroupState> {
         }
     };
 
-    render() {
+    render(): JSX.Element {
         const { children, className, name } = this.props;
         const { value: stateValue } = this.state;
 

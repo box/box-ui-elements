@@ -19,14 +19,19 @@ describe('features/content-insights/charts/bar/BarChart', () => {
         { x: 3, y: 0 },
     ];
 
-    const getDefaultProps = () => ({
+    const getDefaultProps = (): {
+        data: Array<{ x: number; y: number }>;
+        label: string;
+        labelAccessor: string;
+        valueAccessor: string;
+    } => ({
         data: defaultAccessorsData,
         label: 'Chart Label',
         labelAccessor: 'x',
         valueAccessor: 'y',
     });
 
-    const getWrapper = (props = {}) => {
+    const getWrapper = (props = {}): RenderResult => {
         return render(<BarChart {...getDefaultProps()} {...props} />);
     };
 
@@ -58,7 +63,7 @@ describe('features/content-insights/charts/bar/BarChart', () => {
             expect(element.children.item(0)?.querySelector('.ca-Bar-value')).toHaveStyle(`width: 10%`); // max value of the data is 10, since the first item is 1, 1/10 is 10%
         });
 
-        test('should use valueAccessor as function if provided', () => {
+        test('should use valueAccessor as a callback function if provided', () => {
             const data = [
                 { x: 1, y: ['a', 'b'] },
                 { x: 2, y: ['a', 'b', 'c', 'd'] },

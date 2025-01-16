@@ -10,18 +10,20 @@ import { TYPE_FOLDER } from '../../../constants';
 
 const ITEM_LIST_NAME_CLASS = 'item-list-name';
 
-const ItemListName = ({ itemId = '', type, name, label = '', isSelected = false, onClick, linkRenderer }) => {
+const ItemListName = ({ itemId = '', type, name, label = '', isSelected = false, onClick, rowIndex, linkRenderer }) => {
     const isFolder = type === TYPE_FOLDER;
+
+    const handleClick = React.useCallback(event => onClick(event, rowIndex), [onClick, rowIndex]);
 
     const linkProps = {
         className: `lnk ${ITEM_LIST_NAME_CLASS}`,
-        onClick,
+        onClick: handleClick,
         children: [
             <span key="name">{name}</span>,
             <IconChevron
-                key="icon"
                 color={isSelected ? '#447991' : '#333'}
                 direction="right"
+                key="icon"
                 size="4px"
                 thickness="1px"
             />,
@@ -44,6 +46,7 @@ ItemListName.propTypes = {
     label: PropTypes.string,
     isSelected: PropTypes.bool,
     onClick: PropTypes.func,
+    rowIndex: PropTypes.number,
     linkRenderer: PropTypes.func,
 };
 

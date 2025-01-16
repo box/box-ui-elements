@@ -26,15 +26,12 @@ const InfiniteLoaderTable = withInfiniteLoader(Table);
 const DEFAULT_ROW_HEIGHT = 40;
 
 const withAutoSizer = WrappedComponent => {
-    return props => {
-        return (
-            <div style={{ flex: 1 }}>
-                <AutoSizer>
-                    {({ width: w, height: h }) => <WrappedComponent {...props} width={w} height={h} />}
-                </AutoSizer>
-            </div>
-        );
-    };
+    const WithAutoSizer = React.memo(props => (
+        <div style={{ flex: 1 }}>
+            <AutoSizer>{({ width: w, height: h }) => <WrappedComponent {...props} height={h} width={w} />}</AutoSizer>
+        </div>
+    ));
+    return WithAutoSizer;
 };
 
 const TableResponsive = withAutoSizer(Table);
@@ -50,11 +47,11 @@ const itemIconCellRenderer = rendererParams => {
                 itemIconRenderer(rendererParams)
             ) : (
                 <ItemListIcon
-                    type={type}
+                    archiveType={archiveType}
                     extension={extension}
                     hasCollaborations={hasCollaborations}
                     isExternallyOwned={isExternallyOwned}
-                    archiveType={archiveType}
+                    type={type}
                 />
             )}
         </div>
@@ -74,13 +71,14 @@ const itemNameCellRenderer = rendererParams => {
         name && (
             <div className={TABLE_CELL_CLASS}>
                 <ItemListName
-                    itemId={id}
-                    type={type}
-                    name={name}
-                    label={label}
                     isSelected={isItemSelected(id, selectedItems)}
-                    onClick={event => onItemNameClick(event, rowIndex)}
+                    itemId={id}
+                    label={label}
                     linkRenderer={itemNameLinkRenderer}
+                    name={name}
+                    onClick={onItemNameClick}
+                    rowIndex={rowIndex}
+                    type={type}
                 />
             </div>
         )
@@ -149,53 +147,65 @@ const ItemList = ({
     height,
     rowHeight = DEFAULT_ROW_HEIGHT,
 }) => {
-    const getRow = ({ index }) => items[index];
+    const handleRowClick = React.useCallback(onItemClick, [onItemClick]);
+    const handleRowDoubleClick = React.useCallback(onItemDoubleClick, [onItemDoubleClick]);
+    const handleItemNameClick = React.useCallback(
+        (event, rowIndex) => onItemNameClick(event, rowIndex),
+        [onItemNameClick],
+    );
+    const getRow = React.useCallback(({ index }) => items[index], [items]);
 
-    const getRowClassNames = (index, item) => {
-        let result = index === -1 ? 'table-header' : 'table-row';
+    const getRowClassNames = React.useCallback(
+        (index, item) => {
+            let result = index === -1 ? 'table-header' : 'table-row';
 
-        if (isItemSelected(item.id, selectedItems)) {
-            result = classNames('is-selected', result);
-        }
-        if (item && (item.isDisabled || item.isLoading)) {
-            result = classNames('disabled', result);
-        }
+            if (isItemSelected(item.id, selectedItems)) {
+                result = classNames('is-selected', result);
+            }
+            if (item && (item.isDisabled || item.isLoading)) {
+                result = classNames('disabled', result);
+            }
 
-        return result;
-    };
+            return result;
+        },
+        [isItemSelected, selectedItems],
+    );
 
-    const renderRow = rendererParams => {
-        const { index, key, style, className: rowClassName, columns } = rendererParams;
-        const item = items[index];
-        const itemRowClassname = classNames(rowClassName, getRowClassNames(index, item));
-        const testId = getProp(rendererParams, 'rowData.id', '');
+    const renderLoadingColumn = React.useCallback(column => {
+        const columnKey = `${column.props.dataKey || 'col'}-${column.props.className || ''}`;
+        return (
+            <div className={column.props.className} key={columnKey} role="gridcell" style={column.props.style}>
+                {itemLoadingPlaceholderRenderer({
+                    columnIndex: column.props.dataKey,
+                    item: null,
+                })}
+            </div>
+        );
+    }, []);
 
-        if (item.isLoading) {
-            return (
-                <div key={key} style={style} className={itemRowClassname} role="row">
-                    {columns.map((column, columnIndex) => (
-                        <div
-                            key={columnIndex}
-                            className={column.props.className}
-                            style={column.props.style}
-                            role="gridcell"
-                        >
-                            {itemLoadingPlaceholderRenderer({
-                                item,
-                                columnIndex,
-                            })}
-                        </div>
-                    ))}
-                </div>
-            );
-        }
+    const renderRow = React.useCallback(
+        rendererParams => {
+            const { index, key, style, className: rowClassName, columns } = rendererParams;
+            const item = items[index];
+            const itemRowClassname = classNames(rowClassName, getRowClassNames(index, item));
+            const testId = getProp(rendererParams, 'rowData.id', '');
 
-        const defaultRow = itemRowRenderer({
-            ...rendererParams,
-            className: itemRowClassname,
-        });
-        return React.cloneElement(defaultRow, { 'data-testid': `item-row-${testId}` });
-    };
+            if (item.isLoading) {
+                return (
+                    <div className={itemRowClassname} key={key} role="row" style={style}>
+                        {columns.map(renderLoadingColumn)}
+                    </div>
+                );
+            }
+
+            const defaultRow = itemRowRenderer({
+                ...rendererParams,
+                className: itemRowClassname,
+            });
+            return React.cloneElement(defaultRow, { 'data-testid': `item-row-${testId}` });
+        },
+        [items, getRowClassNames, itemRowRenderer, renderLoadingColumn],
+    );
 
     let TableComponent = isResponsive ? TableResponsive : Table;
     const tableProps = {};
@@ -225,20 +235,20 @@ const ItemList = ({
             <TableComponent
                 gridClassName="table-body"
                 headerClassName="table-header-item"
-                width={width}
                 height={height}
-                rowHeight={rowHeight}
-                rowCount={items.length}
-                onRowClick={onItemClick}
-                onRowDoubleClick={onItemDoubleClick}
-                rowGetter={getRow}
-                rowRenderer={renderRow}
                 noRowsRenderer={noItemsRenderer}
+                onRowClick={handleRowClick}
+                onRowDoubleClick={handleRowDoubleClick}
+                rowCount={items.length}
+                rowGetter={getRow}
+                rowHeight={rowHeight}
+                rowRenderer={renderRow}
+                width={width}
                 {...tableProps}
             >
                 <Column
-                    className="item-list-icon-col"
                     cellRenderer={itemIconCellRenderer}
+                    className="item-list-icon-col"
                     columnData={{
                         itemIconRenderer,
                     }}
@@ -246,22 +256,22 @@ const ItemList = ({
                     width={32}
                 />
                 <Column
-                    className="item-list-name-col"
                     cellRenderer={itemNameCellRenderer}
+                    className="item-list-name-col"
                     columnData={{
-                        selectedItems,
-                        onItemNameClick,
                         itemNameLinkRenderer,
+                        onItemNameClick: handleItemNameClick,
+                        selectedItems,
                     }}
                     dataKey="name"
-                    width={0}
                     flexGrow={1}
                     flexShrink={0}
+                    width={0}
                 />
                 {additionalColumns}
                 <Column
-                    className="item-list-button-col"
                     cellRenderer={itemButtonCellRenderer}
+                    className="item-list-button-col"
                     columnData={{
                         contentExplorerMode,
                         itemButtonRenderer,

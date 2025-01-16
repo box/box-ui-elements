@@ -155,6 +155,8 @@ class ContentExplorerModalContainer extends Component {
         infoNoticeText: PropTypes.string,
     };
 
+    // Static methods
+    // Static methods
     static defaultProps = {
         onCreateFolderSubmit: () => {},
     };
@@ -167,6 +169,7 @@ class ContentExplorerModalContainer extends Component {
         };
     }
 
+    // Lifecycle methods
     componentDidUpdate({ initialFoldersPath: prevInitialFoldersPath }) {
         const { initialFoldersPath } = this.props;
 
@@ -219,25 +222,25 @@ class ContentExplorerModalContainer extends Component {
             <div className={classNames('content-explorer-modal-container', className)}>
                 <ContentExplorerModal
                     className={isNewFolderModalOpen ? 'hidden' : ''}
-                    title={modalTitle}
                     description={modalDescription}
+                    infoNoticeText={infoNoticeText}
                     initialFoldersPath={initialFoldersPath}
                     isOpen
-                    onEnterFolder={this.handleEnterFolder}
                     onCreateNewFolderButtonClick={this.handleCreateNewFolderButtonClick}
+                    onEnterFolder={this.handleEnterFolder}
                     shouldNotUsePortal={shouldNotUsePortal}
-                    infoNoticeText={infoNoticeText}
+                    title={modalTitle}
                     {...rest}
                 />
                 {isNewFolderModalOpen && (
                     <NewFolderModal
-                        isOpen
-                        parentFolderName={currentFolder.name}
-                        onRequestClose={this.handleNewFolderModalClose}
-                        onCreateFolderSubmit={onCreateFolderSubmit}
-                        onCreateFolderInput={onCreateFolderInput}
-                        isCreatingFolder={isCreatingFolder}
                         createFolderError={createFolderError}
+                        isCreatingFolder={isCreatingFolder}
+                        isOpen
+                        onCreateFolderInput={onCreateFolderInput}
+                        onCreateFolderSubmit={onCreateFolderSubmit}
+                        onRequestClose={this.handleNewFolderModalClose}
+                        parentFolderName={currentFolder.name}
                         shouldNotUsePortal={shouldNotUsePortal}
                     />
                 )}

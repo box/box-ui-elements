@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import AllNewBox140 from './AllNewBox140';
 
-export const allNewBox140 = () => <AllNewBox140 />;
+export const allNewBox140 = (): JSX.Element => <AllNewBox140 />;
 
 export default {
     title: 'Illustration/AllNewBox140',

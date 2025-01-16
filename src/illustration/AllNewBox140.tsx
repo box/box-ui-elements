@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-sort-props */
+/** @jsx React.createElement */
 import * as React from 'react';
 import * as vars from '../styles/variables';
 import AccessibleSVG, { SVGProps } from '../components/accessible-svg/AccessibleSVG';
@@ -14,7 +15,7 @@ import AccessibleSVG, { SVGProps } from '../components/accessible-svg/Accessible
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const AllNewBox140 = (props: SVGProps) => (
+const AllNewBox140 = (props: SVGProps): JSX.Element => (
     <AccessibleSVG width={140} height={140} viewBox="0 0 140 140" {...props}>
         <g fill="none" fillRule="evenodd" transform="translate(9 20)">
             <path fill={vars.bdlBoxBlue} d="M39 12H12v74h27z" />

@@ -8,6 +8,7 @@ import TextInput from '../../../components/text-input';
 import Button from '../../../components/button';
 import PrimaryButton from '../../../components/primary-button';
 
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 import './NewFolderModal.scss';
@@ -16,7 +17,9 @@ class NewFolderModal extends Component {
     static propTypes = {
         /** Adds class name to modal. */
         className: PropTypes.string,
-        intl: PropTypes.any,
+        intl: PropTypes.shape({
+            formatMessage: PropTypes.func.isRequired,
+        }),
         /** Opens the modal. */
         isOpen: PropTypes.bool,
         /** Called when the modal is requested to be closed. */
@@ -43,6 +46,7 @@ class NewFolderModal extends Component {
         shouldNotUsePortal: PropTypes.bool,
     };
 
+    // Static methods
     static defaultProps = {
         className: '',
         isOpen: false,
@@ -59,6 +63,7 @@ class NewFolderModal extends Component {
         };
     }
 
+    // Event handlers
     handleCreateClick = () => {
         const { onCreateFolderSubmit } = this.props;
         const { folderNameInput } = this.state;

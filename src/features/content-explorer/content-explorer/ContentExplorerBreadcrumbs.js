@@ -8,7 +8,8 @@ import IconChevron from '../../../icons/general/IconChevron';
 import IconAllFiles from '../../../icons/general/IconAllFiles';
 import PlainButton from '../../../components/plain-button';
 
-import { FoldersPathPropType } from '../prop-types';
+import { BreadcrumbPropType, FoldersPathPropType } from '../prop-types';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ContentExplorerBreadcrumbs = ({
@@ -23,16 +24,16 @@ const ContentExplorerBreadcrumbs = ({
         <Button
             aria-label={formatMessage(messages.clickToGoBack)}
             className="content-explorer-breadcrumbs-up-button"
-            type="button"
-            onClick={onUpButtonClick}
             isDisabled={isUpButtonDisabled}
+            onClick={onUpButtonClick}
+            type="button"
         >
-            <IconChevron direction="left" size="6px" color="#333" />
+            <IconChevron color="#333" direction="left" size="6px" />
         </Button>
         <Breadcrumb label={formatMessage(messages.breadcrumb)} {...breadcrumbProps}>
             {/* The outer div for each crumb prevents styling conflicts when the crumbs menu is active */}
             {foldersPath.map((folder, i) => (
-                <div key={folder.id} className="lnk">
+                <div className="lnk" key={folder.id}>
                     <PlainButton
                         className="bdl-ContentExplorerBreadcrumbs-crumbLink"
                         data-testid="breadcrumb-lnk"
@@ -49,9 +50,11 @@ const ContentExplorerBreadcrumbs = ({
 );
 
 ContentExplorerBreadcrumbs.propTypes = {
-    breadcrumbProps: PropTypes.object,
+    breadcrumbProps: BreadcrumbPropType,
     foldersPath: FoldersPathPropType.isRequired,
-    intl: PropTypes.any,
+    intl: PropTypes.shape({
+        formatMessage: PropTypes.func.isRequired,
+    }),
     isUpButtonDisabled: PropTypes.bool,
     onUpButtonClick: PropTypes.func,
     onBreadcrumbClick: PropTypes.func,

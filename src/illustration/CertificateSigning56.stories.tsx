@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import CertificateSigning56 from './CertificateSigning56';
 
-export const certificateSigning56 = () => <CertificateSigning56 />;
+export const certificateSigning56 = (): JSX.Element => <CertificateSigning56 />;
 
 export default {
     title: 'Illustration/CertificateSigning56',

@@ -18,13 +18,10 @@ jest.mock('pikaday');
 
 describe('components/date-picker/DatePicker', () => {
     const getWrapper = (props = {}) =>
-        mount(<DatePicker name="dateinput" label="Date" placeholder="a date" {...props} />);
+        mount(<DatePicker label="Date" name="dateinput" placeholder="a date" {...props} />);
 
     const getInputField = (wrapper: ReactWrapper) =>
-        wrapper
-            .find('.date-picker-unix-time-input')
-            .at(0)
-            .getDOMNode() as HTMLInputElement;
+        wrapper.find('.date-picker-unix-time-input').at(0).getDOMNode() as HTMLInputElement;
 
     beforeEach(() => {
         clock = sinon.useFakeTimers();
@@ -36,7 +33,7 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     test('should pass hideLabel to Label', () => {
-        const wrapper = mount(<DatePicker name="dateinput" label="Date" hideLabel placeholder="a date" />);
+        const wrapper = mount(<DatePicker hideLabel label="Date" name="dateinput" placeholder="a date" />);
 
         expect(wrapper.find('Label').prop('hideLabel')).toBe(true);
     });
@@ -44,7 +41,7 @@ describe('components/date-picker/DatePicker', () => {
     test('should add resin target to datepicker input when specified', () => {
         const resinTarget = 'target';
         const wrapper = mount(
-            <DatePicker name="dateinput" label="Date" placeholder="a date" resinTarget={resinTarget} />,
+            <DatePicker label="Date" name="dateinput" placeholder="a date" resinTarget={resinTarget} />,
         );
 
         expect(wrapper.find('.date-picker-input').prop('data-resin-target')).toEqual(resinTarget);
@@ -52,14 +49,16 @@ describe('components/date-picker/DatePicker', () => {
 
     test('should pass inputProps to datepicker input when provided', () => {
         const wrapper = mount(
-            <DatePicker name="dateinput" label="Date" placeholder="a date" inputProps={{ 'data-prop': 'hello' }} />,
+            <DatePicker inputProps={{ className: 'test-input' }} label="Date" name="dateinput" placeholder="a date" />,
         );
 
-        expect(wrapper.find('.date-picker-input').prop('data-prop')).toEqual('hello');
+        const input = wrapper.find('input').first();
+        expect(input.hasClass('date-picker-input')).toBe(true);
+        expect(input.hasClass('test-input')).toBe(true);
     });
 
     test('should set hidden input to readOnly', () => {
-        const wrapper = mount(<DatePicker name="dateinput" label="Date" placeholder="a date" />);
+        const wrapper = mount(<DatePicker label="Date" name="dateinput" placeholder="a date" />);
 
         expect(wrapper.find('.date-picker-unix-time-input').prop('readOnly')).toBe(true);
     });
@@ -68,11 +67,11 @@ describe('components/date-picker/DatePicker', () => {
         const expectedOffset = new Date().getTimezoneOffset() * 60 * 1000 * -1;
         const wrapper = mount(
             <DatePicker
-                name="dateinput"
+                dateFormat={DateFormat.UTC_TIME_DATE_FORMAT}
                 label="Date"
+                name="dateinput"
                 placeholder="a date"
                 value={new Date()}
-                dateFormat={DateFormat.UTC_TIME_DATE_FORMAT}
             />,
         );
 
@@ -86,11 +85,11 @@ describe('components/date-picker/DatePicker', () => {
         const date = new Date(expectedOffset);
         const wrapper = mount(
             <DatePicker
-                name="dateinput"
+                dateFormat={DateFormat.UTC_ISO_STRING_DATE_FORMAT}
                 label="Date"
+                name="dateinput"
                 placeholder="a date"
                 value={new Date(0)}
-                dateFormat={DateFormat.UTC_ISO_STRING_DATE_FORMAT}
             />,
         );
 
@@ -98,13 +97,13 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     test('should hide optional label text when specified', () => {
-        const wrapper = mount(<DatePicker name="dateinput" label="Date" placeholder="a date" hideOptionalLabel />);
+        const wrapper = mount(<DatePicker hideOptionalLabel label="Date" name="dateinput" placeholder="a date" />);
 
         expect(wrapper.find('Label').prop('showOptionalText')).toBe(false);
     });
 
     test('should set value if one is defined', () => {
-        const wrapper = mount(<DatePicker name="dateinput" label="Date" placeholder="a date" value={new Date()} />);
+        const wrapper = mount(<DatePicker label="Date" name="dateinput" placeholder="a date" value={new Date()} />);
 
         expect(getInputField(wrapper).value).toEqual('0');
     });
@@ -113,11 +112,11 @@ describe('components/date-picker/DatePicker', () => {
         const date = new Date(1461953802469);
         const wrapper = mount(
             <DatePicker
-                name="dateinput"
+                dateFormat={DateFormat.ISO_STRING_DATE_FORMAT}
                 label="Date"
+                name="dateinput"
                 placeholder="a date"
                 value={date}
-                dateFormat={DateFormat.ISO_STRING_DATE_FORMAT}
             />,
         );
 
@@ -125,7 +124,7 @@ describe('components/date-picker/DatePicker', () => {
     });
 
     test('should show clear button when formatted date exists', () => {
-        const wrapper = mount(<DatePicker name="dateinput" label="Date" placeholder="a date" value={new Date()} />);
+        const wrapper = mount(<DatePicker label="Date" name="dateinput" placeholder="a date" value={new Date()} />);
 
         expect(wrapper.find('PlainButton.date-picker-clear-btn').length).toEqual(1);
         expect(wrapper.find('ClearBadge16').length).toEqual(1);
@@ -134,7 +133,7 @@ describe('components/date-picker/DatePicker', () => {
     test('should clear datepicker and call onChange() prop when clear button is clicked', () => {
         const onChangeSpy = jest.fn();
         const wrapper = mount(
-            <DatePicker name="dateinput" label="Date" placeholder="a date" value={new Date()} onChange={onChangeSpy} />,
+            <DatePicker label="Date" name="dateinput" onChange={onChangeSpy} placeholder="a date" value={new Date()} />,
         );
 
         wrapper.find('PlainButton.date-picker-clear-btn').simulate('click', { preventDefault: noop });
@@ -152,7 +151,7 @@ describe('components/date-picker/DatePicker', () => {
 
     test('should not have clear button when isClearable prop is false', () => {
         const wrapper = mount(
-            <DatePicker name="dateinput" isClearable={false} label="Date" placeholder="a date" value={new Date()} />,
+            <DatePicker isClearable={false} label="Date" name="dateinput" placeholder="a date" value={new Date()} />,
         );
 
         expect(wrapper.find('.date-picker-clear-btn').length).toEqual(0);
@@ -240,8 +239,8 @@ describe('components/date-picker/DatePicker', () => {
                 intl={intlFake}
                 label="Date"
                 name="dateinput"
-                placeholder="a date"
                 onChange={noop}
+                placeholder="a date"
                 value={new Date()}
                 {...props}
             />,
@@ -303,10 +302,7 @@ describe('components/date-picker/DatePicker', () => {
         test('should call focus on DatePicker input when called', () => {
             const wrapper = renderDatePicker();
             const instance = wrapper.instance();
-            const inputEl: HTMLInputElement = wrapper
-                .find('input')
-                .at(0)
-                .getDOMNode();
+            const inputEl: HTMLInputElement = wrapper.find('input').at(0).getDOMNode();
             inputEl.focus = jest.fn();
             instance.focusDatePicker();
             expect(inputEl.focus).toHaveBeenCalled();

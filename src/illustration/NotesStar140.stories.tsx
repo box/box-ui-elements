@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import NotesStar140 from './NotesStar140';
 
-export const notesStar140 = () => <NotesStar140 />;
+export const notesStar140 = (): JSX.Element => <NotesStar140 />;
 
 export default {
     title: 'Illustration/NotesStar140',

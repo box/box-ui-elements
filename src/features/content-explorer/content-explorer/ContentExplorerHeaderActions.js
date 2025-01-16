@@ -8,6 +8,7 @@ import ContentExplorerBreadcrumbs from './ContentExplorerBreadcrumbs';
 import ContentExplorerFolderTreeBreadcrumbs from './ContentExplorerFolderTreeBreadcrumbs';
 
 import { BreadcrumbPropType, ContentExplorerModePropType, FoldersPathPropType } from '../prop-types';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const SEARCH_RESULTS_FOLDER_ID = 'search_results_id';
@@ -21,7 +22,9 @@ class ContentExplorerHeaderActions extends Component {
         contentExplorerMode: ContentExplorerModePropType.isRequired,
         customInput: PropTypes.func,
         foldersPath: FoldersPathPropType.isRequired,
-        intl: PropTypes.any,
+        intl: PropTypes.shape({
+            formatMessage: PropTypes.func.isRequired,
+        }),
         onFoldersPathUpdated: PropTypes.func.isRequired,
         onEnterFolder: PropTypes.func.isRequired,
         onCreateNewFolderButtonClick: PropTypes.func,
@@ -31,9 +34,16 @@ class ContentExplorerHeaderActions extends Component {
         onSearchSubmit: PropTypes.func.isRequired,
         onExitSearch: PropTypes.func.isRequired,
         numTotalItems: PropTypes.number,
-        searchInputProps: PropTypes.object,
+        searchInputProps: PropTypes.shape({
+            onChange: PropTypes.func,
+            onSubmit: PropTypes.func,
+            placeholder: PropTypes.string,
+            value: PropTypes.string,
+        }),
     };
 
+    // Static methods
+    // Static methods
     static defaultProps = {
         showCreateNewFolderButton: true,
         isCreateNewFolderAllowed: true,
@@ -49,6 +59,7 @@ class ContentExplorerHeaderActions extends Component {
         this.lastSubmittedSearchInput = '';
     }
 
+    // Instance methods
     getCurrentFolder() {
         const { foldersPath } = this.props;
         return foldersPath[foldersPath.length - 1];
@@ -63,6 +74,7 @@ class ContentExplorerHeaderActions extends Component {
         return isSearchResultsFolder(this.getCurrentFolder());
     }
 
+    // Event handlers
     handleBreadcrumbClick = (folderPathIndex, event) => {
         const { foldersPath, onEnterFolder } = this.props;
         const clickedFolder = foldersPath[folderPathIndex];
@@ -184,9 +196,9 @@ class ContentExplorerHeaderActions extends Component {
                     {showCreateNewFolderButton && (
                         <ContentExplorerNewFolderButton
                             contentExplorerMode={contentExplorerMode}
-                            onClick={onCreateNewFolderButtonClick}
-                            isDisabled={!isCreateNewFolderAllowed || isInSearchMode}
                             isCreateNewFolderAllowed={isCreateNewFolderAllowed}
+                            isDisabled={!isCreateNewFolderAllowed || isInSearchMode}
+                            onClick={onCreateNewFolderButtonClick}
                         />
                     )}
                     {children}
@@ -203,8 +215,8 @@ class ContentExplorerHeaderActions extends Component {
                         breadcrumbProps={breadcrumbProps}
                         foldersPath={foldersPath}
                         isUpButtonDisabled={isBreadcrumbButtonDisabled}
-                        onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
                         onBreadcrumbClick={this.handleBreadcrumbClick}
+                        onUpButtonClick={this.handleBreadcrumbsUpButtonClick}
                     />
                 )}
             </div>

@@ -67,7 +67,7 @@ describe('components/avatar/Avatar', () => {
         const wrapper = getWrapper({ avatarUrl: 'http://foo.bar/baz123_invalid', id: '1', name: 'hello world' });
 
         const avatarImage = wrapper.find(AvatarImage);
-        const onError = avatarImage.prop('onError') as Function;
+        const onError = avatarImage.prop('onError') as () => void;
         onError();
 
         const avatarInitials = wrapper.find('AvatarInitials');
@@ -99,7 +99,7 @@ describe('components/avatar/Avatar', () => {
 
         act(() => {
             const avatarImage = wrapper.find(AvatarImage);
-            const onError = avatarImage.prop('onError') as Function;
+            const onError = avatarImage.prop('onError') as () => void;
             onError();
         });
         wrapper.update();

@@ -6,6 +6,7 @@ import Button from '../../../components/button';
 
 import { ContentExplorerModePropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ContentExplorerNewFolderButton = ({
@@ -24,10 +25,10 @@ const ContentExplorerNewFolderButton = ({
     return doesModeAllowCreateNewFolder ? (
         <Button
             className="content-explorer-new-folder-button"
-            type="button"
-            onClick={onClick}
             isDisabled={isDisabled}
+            onClick={onClick}
             title={!isCreateNewFolderAllowed ? intl.formatMessage(messages.newFolderForbidden) : ''}
+            type="button"
         >
             <FormattedMessage {...messages.newFolder} />
         </Button>
@@ -36,7 +37,9 @@ const ContentExplorerNewFolderButton = ({
 
 ContentExplorerNewFolderButton.propTypes = {
     contentExplorerMode: ContentExplorerModePropType.isRequired,
-    intl: PropTypes.any,
+    intl: PropTypes.shape({
+        formatMessage: PropTypes.func.isRequired,
+    }),
     onClick: PropTypes.func,
     isDisabled: PropTypes.bool,
     isCreateNewFolderAllowed: PropTypes.bool,

@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-sort-props */
+/** @jsx React.createElement */
 import * as React from 'react';
 import * as vars from '../styles/variables';
 import AccessibleSVG, { SVGProps } from '../components/accessible-svg/AccessibleSVG';
@@ -14,7 +15,7 @@ import AccessibleSVG, { SVGProps } from '../components/accessible-svg/Accessible
  * - https://github.com/box/box-ui-elements/issues/new?template=Feature_request.md
  */
 
-const AppSupport140 = (props: SVGProps) => (
+const AppSupport140 = (props: SVGProps): JSX.Element => (
     <AccessibleSVG width={140} height={140} viewBox="0 0 140 140" {...props}>
         <path
             d="M26 32c6.627 0 12-5.373 12-12S32.627 8 26 8s-12 5.373-12 12 5.373 12 12 12zm96 36a8 8 0 100-16 8 8 0 000 16zM22 78a8 8 0 11-16 0 8 8 0 0116 0zm15 34a4 4 0 000 8h40a4 4 0 000-8H37zm46.703-68.672A17.929 17.929 0 0188 55c0 4.454-1.618 8.53-4.297 11.672a3.972 3.972 0 011.853 1.056l12.728 12.728a3.988 3.988 0 011.026 1.764C105.943 75.082 110 65.514 110 55s-4.057-20.081-10.69-27.22a3.988 3.988 0 01-1.026 1.764L85.556 42.272a3.968 3.968 0 01-1.853 1.056zM40.69 27.78C34.057 34.919 30 44.486 30 55s4.057 20.081 10.69 27.22a3.988 3.988 0 011.026-1.764l12.728-12.728a3.967 3.967 0 011.853-1.055A17.929 17.929 0 0152 55c0-4.454 1.617-8.53 4.297-11.672a3.967 3.967 0 01-1.853-1.056L41.716 29.544a3.988 3.988 0 01-1.026-1.765zm47.695 8.835A25.919 25.919 0 0070 29c-7.18 0-13.68 2.91-18.385 7.615l4.243 4.243c.78.78 2.041.77 2.904.08 6.552-5.25 15.924-5.25 22.477 0 .862.69 2.122.7 2.903-.08l4.243-4.243zm0 36.77A25.919 25.919 0 0170 81c-7.18 0-13.68-2.91-18.385-7.615l4.243-4.243c.78-.78 2.041-.77 2.904-.08 6.552 5.25 15.924 5.25 22.477 0 .862-.69 2.122-.7 2.903.08l4.243 4.243z"

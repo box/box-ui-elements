@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import MarketingPlan56 from './MarketingPlan56';
 
-export const marketingPlan56 = () => <MarketingPlan56 />;
+export const marketingPlan56 = (): JSX.Element => <MarketingPlan56 />;
 
 export default {
     title: 'Illustration/MarketingPlan56',

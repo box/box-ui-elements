@@ -7,6 +7,7 @@ import { RadioButton } from '../../../components/radio';
 import { ContentExplorerModePropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
 
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ItemListButton = ({
