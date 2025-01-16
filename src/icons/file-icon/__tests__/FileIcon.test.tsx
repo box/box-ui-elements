@@ -2,6 +2,10 @@ import * as React from 'react';
 import { render, screen } from '../../../test-utils/testing-library';
 import FileIcon from '../FileIcon';
 
+jest.mock('@box/blueprint-web', () => ({
+    TooltipProvider: ({ children }) => children,
+}));
+
 describe('icons/file-icon/FileIcon', () => {
     const renderComponent = (props = {}) => render(<FileIcon {...props} />);
 
@@ -58,6 +62,9 @@ describe('icons/file-icon/FileIcon', () => {
         renderComponent({ title });
         const icon = screen.getByRole('img', { name: title });
         expect(icon).toBeInTheDocument();
-        expect(icon).toHaveAttribute('aria-label', title);
+        expect(icon).toHaveAttribute('aria-labelledby');
+        const titleElement = screen.getByText(title);
+        expect(titleElement).toBeInTheDocument();
+        expect(titleElement.tagName.toLowerCase()).toBe('title');
     });
 });
