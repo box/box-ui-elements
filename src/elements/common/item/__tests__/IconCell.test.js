@@ -1,105 +1,91 @@
-import * as React from 'react';
-
-import { render, screen } from '../../../../test-utils/testing-library';
-import { IconCellBase as IconCell } from '../IconCell';
-
-const intl = {
-    formatMessage: jest.fn().mockImplementation(message => message.defaultMessage),
-};
+Object.defineProperty(exports, '__esModule', { value: true });
+const react_1 = require('react');
+const testing_library_1 = require('../../../../test-utils/testing-library');
+const IconCell_1 = require('../IconCell');
+const constants_1 = require('../../../../common/constants');
 
 describe('elements/common/item/IconCell', () => {
-    const getWrapper = props => render(<IconCell intl={intl} {...props} />);
-
+    const defaultIntl = {
+        formatMessage: jest.fn(_a => {
+            const { defaultMessage } = _a;
+            return defaultMessage;
+        }),
+    };
+    const defaultProps = {
+        intl: defaultIntl,
+        rowData: { type: constants_1.ITEM_TYPE_FILE },
+    };
+    const getWrapper = function (props) {
+        if (props === void 0) {
+            props = {};
+        }
+        return (0, testing_library_1.render)(<IconCell_1.IconCellBase {...defaultProps} {...props} />);
+    };
+    // Test data (alphabetically ordered)
+    const archiveItem = {
+        type: constants_1.ITEM_TYPE_FOLDER,
+        archive_type: 'archive',
+    };
+    const archiveFolderItem = {
+        type: constants_1.ITEM_TYPE_FOLDER,
+        archive_type: 'folder_archive',
+    };
+    const externalFolderItem = {
+        type: constants_1.ITEM_TYPE_FOLDER,
+        is_externally_owned: true,
+    };
+    const fileItem = {
+        type: constants_1.ITEM_TYPE_FILE,
+        extension: 'boxnote',
+    };
+    const folderItem = {
+        type: constants_1.ITEM_TYPE_FOLDER,
+    };
+    const personalFolderItem = {
+        type: constants_1.ITEM_TYPE_FOLDER,
+    };
+    const sharedFolderItem = {
+        type: constants_1.ITEM_TYPE_FOLDER,
+        has_collaborations: true,
+    };
+    const unknownTypeItem = {
+        type: 'unknown',
+    };
+    const webLinkItem = {
+        type: constants_1.ITEM_TYPE_WEBLINK,
+    };
     describe('render()', () => {
-        test('should render default file icon', () => {
-            const rowData = { type: undefined };
-            getWrapper({ rowData });
-
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+        test('should render default file icon for undefined type', () => {
+            getWrapper({ rowData: { type: constants_1.ITEM_TYPE_FILE } });
+            expect(testing_library_1.screen.getByTitle('File')).toBeInTheDocument();
         });
-
         test('should render archive icon', () => {
-            const rowData = {
-                type: 'folder',
-                archive_type: 'archive',
-                has_collaborations: false,
-                is_externally_owned: false,
-            };
-            getWrapper({ rowData });
-
-            expect(screen.getByTestId('archive-icon-cell')).toBeVisible();
+            getWrapper({ intl: defaultIntl, rowData: archiveItem });
+            expect(testing_library_1.screen.getByTestId('archive-icon-cell')).toBeVisible();
         });
-
         test('should render archived folder icon', () => {
-            const rowData = {
-                type: 'folder',
-                archive_type: 'folder_archive',
-                has_collaborations: false,
-                is_externally_owned: false,
-            };
-            getWrapper({ rowData });
-
-            expect(screen.getByTestId('folder-archive-icon-cell')).toBeVisible();
+            getWrapper({ intl: defaultIntl, rowData: archiveFolderItem });
+            expect(testing_library_1.screen.getByTestId('folder-archive-icon-cell')).toBeVisible();
         });
-
-        [
-            // personalFolder
-            {
-                rowData: {
-                    type: 'folder',
-                    has_collaborations: false,
-                    is_externally_owned: false,
-                },
-                title: 'Personal Folder',
-            },
-            // collabFolder
-            {
-                rowData: {
-                    type: 'folder',
-                    has_collaborations: true,
-                    is_externally_owned: false,
-                },
-                title: 'Collaborated Folder',
-            },
-            // externalCollabFolder
-            {
-                rowData: {
-                    type: 'folder',
-                    has_collaborations: true,
-                    is_externally_owned: true,
-                },
-                title: 'Collaborated Folder',
-            },
-            // externalFolder
-            {
-                rowData: {
-                    type: 'folder',
-                    has_collaborations: false,
-                    is_externally_owned: true,
-                },
-                title: 'External Folder',
-            },
-        ].forEach(({ rowData, title }) => {
-            test('should render correct folder icon', () => {
-                getWrapper({ rowData });
-
-                expect(screen.getByTitle(title)).toBeInTheDocument();
-            });
+        test.each([
+            ['personal folder', personalFolderItem, 'Personal Folder'],
+            ['collaborated folder', sharedFolderItem, 'Collaborated Folder'],
+            ['external folder', externalFolderItem, 'External Folder'],
+        ])('should render correct icon for %s', (_, rowData, expectedTitle) => {
+            getWrapper({ intl: defaultIntl, rowData });
+            expect(testing_library_1.screen.getByTitle(expectedTitle)).toBeInTheDocument();
         });
-
         test('should render correct file icon', () => {
-            const extension = 'boxnote';
-            const rowData = { type: 'file', extension };
-            getWrapper({ rowData });
-
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            getWrapper({ intl: defaultIntl, rowData: fileItem });
+            expect(testing_library_1.screen.getByTitle('File')).toBeInTheDocument();
         });
-
         test('should render correct bookmark icon', () => {
-            const rowData = { type: 'web_link' };
-            getWrapper({ rowData });
-
-            expect(screen.getByTitle('Bookmark')).toBeInTheDocument();
+            getWrapper({ intl: defaultIntl, rowData: webLinkItem });
+            expect(testing_library_1.screen.getByTitle('Bookmark')).toBeInTheDocument();
+        });
+        test('should render default file icon for unknown type', () => {
+            getWrapper({ intl: defaultIntl, rowData: unknownTypeItem });
+            expect(testing_library_1.screen.getByTitle('File')).toBeInTheDocument();
         });
     });
 });
