@@ -17,6 +17,8 @@ import LocalStore from '../../utils/LocalStore';
 import SidebarNav from './SidebarNav';
 import SidebarPanels from './SidebarPanels';
 import SidebarUtils from './SidebarUtils';
+// $FlowFixMe TypeScript file
+import ThemingStyles from '../common/theming';
 import { withCurrentUser } from '../common/current-user';
 import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
 import type { FeatureConfig } from '../common/feature-checking';
@@ -30,6 +32,8 @@ import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
+// $FlowFixMe TypeScript file
+import type { Theme } from '../common/theming';
 import { SIDEBAR_VIEW_DOCGEN } from '../../constants';
 import API from '../../api';
 
@@ -65,6 +69,7 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    theme?: Theme,
     versionsSidebarProps: VersionsSidebarProps,
 };
 
@@ -304,6 +309,7 @@ class Sidebar extends React.Component<Props, State> {
             metadataSidebarProps,
             onAnnotationSelect,
             onVersionChange,
+            theme,
             versionsSidebarProps,
         }: Props = this.props;
         const isOpen = this.isOpen();
@@ -321,6 +327,7 @@ class Sidebar extends React.Component<Props, State> {
 
         return (
             <aside id={this.id} className={styleClassName} data-testid="preview-sidebar">
+                <ThemingStyles selector={`#${this.id}`} theme={theme} />
                 {isLoading ? (
                     <div className="bcs-loading">
                         <LoadingIndicator />
