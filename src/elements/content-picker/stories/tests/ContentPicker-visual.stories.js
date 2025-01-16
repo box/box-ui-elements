@@ -1,7 +1,10 @@
 import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { http, HttpResponse } from 'msw';
 
 import ContentPicker from '../../ContentPicker';
+import { mockRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
 import { SLEEP_TIMEOUT } from '../../../../utils/storybook';
+import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
 export const basic = {
     play: async ({ canvasElement }) => {
@@ -25,10 +28,14 @@ export const selectedEmptyState = {
             expect(canvas.getByText("You haven't selected any items yet.")).toBeInTheDocument();
         });
     },
-    args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
-        token: global.TOKEN,
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
 };
 
@@ -46,10 +53,14 @@ export const emptyFolder = {
             },
         );
     },
-    args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
-        token: global.TOKEN,
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
 };
 
@@ -72,10 +83,14 @@ export const emptySelectionMode = {
             },
         );
     },
-    args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
-        token: global.TOKEN,
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
 };
 
@@ -93,19 +108,29 @@ export const withError = {
             },
         );
     },
-    args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: 'invalid-folder-id', // Force error state
-        token: global.TOKEN,
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.error();
+                }),
+            ],
+        },
     },
 };
 
 export const hitSelectionLimit = {
     args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
-        token: global.TOKEN,
         maxSelectable: 2,
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -149,10 +174,16 @@ export const hitSelectionLimit = {
 
 export const singleSelectWithItems = {
     args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
-        token: global.TOKEN,
         maxSelectable: 1,
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -200,7 +231,16 @@ export default {
     component: ContentPicker,
     args: {
         features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
+        rootFolderId: global.FOLDER_ID,
         token: global.TOKEN,
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
 };
