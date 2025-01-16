@@ -70,7 +70,7 @@ describe('elements/common/item/IconCell', () => {
     describe('render()', () => {
         test('should render default file icon for undefined type', () => {
             renderComponent({ rowData: { type: ITEM_TYPE_FILE } });
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
         });
 
         test('should render archive icon', () => {
@@ -89,22 +89,22 @@ describe('elements/common/item/IconCell', () => {
             ['external folder', externalFolderItem, 'External Folder'],
         ])('should render correct icon for %s', (_, rowData, expectedTitle) => {
             renderComponent({ intl: defaultIntl, rowData });
-            expect(screen.getByTitle(expectedTitle)).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: expectedTitle })).toBeInTheDocument();
         });
 
         test('should render correct file icon', () => {
             renderComponent({ intl: defaultIntl, rowData: fileItem });
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
         });
 
         test('should render correct bookmark icon', () => {
             renderComponent({ intl: defaultIntl, rowData: webLinkItem });
-            expect(screen.getByTitle('Bookmark')).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: 'Bookmark' })).toBeInTheDocument();
         });
 
         test('should render default file icon for unknown type', () => {
             renderComponent({ intl: defaultIntl, rowData: unknownTypeItem });
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
         });
     });
 });
