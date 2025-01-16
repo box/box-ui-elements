@@ -2,9 +2,11 @@ import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
 
 // Data Providers
-import { TooltipProvider } from '@box/blueprint-web';
 import { IntlProvider } from 'react-intl';
 import { FeatureProvider } from '../elements/common/feature-checking';
+
+// Mock TooltipProvider since we don't need actual tooltip functionality in tests
+const TooltipProvider = ({ children }) => children;
 
 jest.unmock('react-intl');
 
