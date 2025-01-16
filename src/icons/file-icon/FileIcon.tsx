@@ -210,11 +210,33 @@ interface FileIconProps {
     extension?: string;
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
     title?: string | React.ReactElement<string>;
+    /** Accessibility label for the icon */
+    'aria-label'?: string;
+    /** Role attribute for accessibility */
+    role?: string;
+    /** Additional class name */
+    className?: string;
 }
 
-const FileIcon = ({ dimension = 32, extension = '', title }: FileIconProps) => {
+const FileIcon = ({
+    dimension = 32,
+    extension = '',
+    title,
+    'aria-label': ariaLabel,
+    role = 'img',
+    className,
+}: FileIconProps) => {
     const IconComponent = Components[getFileIconComponent(extension)];
-    return <IconComponent height={dimension} title={title} width={dimension} />;
+    return (
+        <IconComponent
+            height={dimension}
+            width={dimension}
+            title={title}
+            aria-label={ariaLabel || title}
+            role={role}
+            className={className}
+        />
+    );
 };
 
 export default FileIcon;

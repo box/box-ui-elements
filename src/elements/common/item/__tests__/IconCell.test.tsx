@@ -1,32 +1,30 @@
 import * as React from 'react';
-import type { IntlShape } from 'react-intl';
 import { render, screen } from '../../../../test-utils/testing-library';
-
-import { IconCellBase } from '../IconCell';
+import IconCell from '../IconCell';
 import type { BoxItem } from '../IconCell';
 import type { ItemType } from '../../../../common/types/core';
 import { ITEM_TYPE_FILE, ITEM_TYPE_FOLDER, ITEM_TYPE_WEBLINK } from '../../../../common/constants';
 
 interface TestProps {
-    intl: IntlShape;
     rowData: BoxItem;
     dimension?: number;
 }
 
-describe('elements/common/item/IconCell', () => {
-    const defaultIntl = {
+jest.mock('react-intl', () => ({
+    useIntl: () => ({
         formatMessage: jest.fn(({ defaultMessage }) => defaultMessage),
-    } as unknown as IntlShape;
+    }),
+}));
 
+describe('elements/common/item/IconCell', () => {
     const defaultProps: TestProps = {
-        intl: defaultIntl,
         rowData: { type: ITEM_TYPE_FILE },
         dimension: 32,
     };
 
     const renderComponent = (props: Partial<TestProps> = {}) => {
         const mergedProps = { ...defaultProps, ...props };
-        return render(<IconCellBase {...mergedProps} />);
+        return render(<IconCell {...mergedProps} />);
     };
 
     // Test data (alphabetically ordered)
@@ -74,12 +72,12 @@ describe('elements/common/item/IconCell', () => {
         });
 
         test('should render archive icon', () => {
-            renderComponent({ intl: defaultIntl, rowData: archiveItem });
+            renderComponent({ rowData: archiveItem });
             expect(screen.getByRole('img', { name: 'Archive' })).toBeInTheDocument();
         });
 
         test('should render archived folder icon', () => {
-            renderComponent({ intl: defaultIntl, rowData: archiveFolderItem });
+            renderComponent({ rowData: archiveFolderItem });
             expect(screen.getByRole('img', { name: 'Archived Folder' })).toBeInTheDocument();
         });
 
@@ -88,22 +86,22 @@ describe('elements/common/item/IconCell', () => {
             ['collaborated folder', sharedFolderItem, 'Collaborated Folder'],
             ['external folder', externalFolderItem, 'External Folder'],
         ])('should render correct icon for %s', (_, rowData, expectedTitle) => {
-            renderComponent({ intl: defaultIntl, rowData });
+            renderComponent({ rowData });
             expect(screen.getByRole('img', { name: expectedTitle })).toBeInTheDocument();
         });
 
         test('should render correct file icon', () => {
-            renderComponent({ intl: defaultIntl, rowData: fileItem });
+            renderComponent({ rowData: fileItem });
             expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
         });
 
         test('should render correct bookmark icon', () => {
-            renderComponent({ intl: defaultIntl, rowData: webLinkItem });
+            renderComponent({ rowData: webLinkItem });
             expect(screen.getByRole('img', { name: 'Bookmark' })).toBeInTheDocument();
         });
 
         test('should render default file icon for unknown type', () => {
-            renderComponent({ intl: defaultIntl, rowData: unknownTypeItem });
+            renderComponent({ rowData: unknownTypeItem });
             expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
         });
     });

@@ -1,90 +1,100 @@
+// @flow
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import type { Node } from 'react';
+import { useIntl } from 'react-intl';
 import { Archive, FolderArchive } from '@box/blueprint-web-assets/icons/Content';
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
-import PersonalIcon from '../../../icons/folder-icon/PersonalIcon';
-import ExternalIcon from '../../../icons/folder-icon/ExternalIcon';
 import messages from '../messages';
 import {
-    TYPE_FILE,
-    TYPE_FOLDER,
-    TYPE_WEBLINK,
+    ITEM_TYPE_FILE,
+    ITEM_TYPE_FOLDER,
+    ITEM_TYPE_WEBLINK,
 } from '../../../common/constants';
 
 import './IconCell.scss';
 
-type Props = {
-    intl: Object,
-    rowData: {
+type Props = {|
+    rowData: {|
         type: string,
         extension?: string,
         has_collaborations?: boolean,
         is_externally_owned?: boolean,
         archive_type?: string,
-    },
+    |},
     dimension?: number,
-};
+|};
 
-const IconCell = ({ intl, rowData, dimension }: Props) => {
+const IconCell = ({ rowData, dimension }: Props): Node => {
+    const { formatMessage } = useIntl();
     const { type, extension, has_collaborations, is_externally_owned, archive_type } = rowData;
-    const { formatMessage } = intl;
 
     switch (type) {
-        case TYPE_FILE:
+        case ITEM_TYPE_FILE:
             return (
                 <FileIcon
                     aria-label={formatMessage(messages.file)}
                     dimension={dimension}
                     extension={extension}
+                    title={formatMessage(messages.file)}
                 />
             );
-        case TYPE_WEBLINK:
+        case ITEM_TYPE_WEBLINK:
             return (
                 <BookmarkIcon
                     aria-label={formatMessage(messages.bookmark)}
-                    dimension={dimension}
+                    className="icon-bookmark"
+                    height={dimension}
+                    title={formatMessage(messages.bookmark)}
+                    width={dimension}
                 />
             );
-        case TYPE_FOLDER:
-            if (archive_type) {
+        case ITEM_TYPE_FOLDER: {
+            if (archive_type === 'folder_archive') {
+                return (
+                    <FolderArchive
+                        width={dimension}
+                        height={dimension}
+                        role="img"
+                        aria-label={formatMessage(messages.archivedFolder)}
+                    />
+                );
+            }
+
+            if (archive_type === 'archive') {
                 return (
                     <Archive
+                        width={dimension}
+                        height={dimension}
+                        role="img"
                         aria-label={formatMessage(messages.archive)}
-                        dimension={dimension}
                     />
                 );
             }
 
-            if (is_externally_owned) {
-                return (
-                    <ExternalIcon
-                        aria-label={formatMessage(messages.externalFolder)}
-                        dimension={dimension}
-                    />
-                );
-            }
-
-            if (has_collaborations) {
-                return (
-                    <FolderIcon
-                        aria-label={formatMessage(messages.collaboratedFolder)}
-                        dimension={dimension}
-                    />
-                );
-            }
+            let title: string = formatMessage(
+                is_externally_owned
+                    ? messages.externalFolder
+                    : has_collaborations
+                    ? messages.collaboratedFolder
+                    : messages.personalFolder,
+            );
 
             return (
-                <PersonalIcon
-                    aria-label={formatMessage(messages.personalFolder)}
+                <FolderIcon
                     dimension={dimension}
+                    role="img"
+                    title={title}
+                    aria-label={title}
+                    isExternal={is_externally_owned}
+                    isCollab={has_collaborations}
                 />
             );
+        }
         default:
-            return <FileIcon dimension={dimension} />;
+            return <FileIcon dimension={dimension} title={formatMessage(messages.file)} />;
     }
 };
 
-export { IconCell as IconCellBase };
-export default injectIntl(IconCell);
+export default IconCell;

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import type { IntlShape } from 'react-intl';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Archive, FolderArchive } from '@box/blueprint-web-assets/icons/Content';
 
 import FileIcon from '../../../icons/file-icon/FileIcon';
@@ -22,15 +21,14 @@ export type BoxItem = {
 };
 
 type IconCellProps = {
-    /** Intl object for translations */
-    intl: IntlShape;
     /** Data for the row being rendered */
     rowData: BoxItem;
     /** Dimension of the icon */
     dimension?: number;
 };
 
-const IconCell = ({ intl, rowData, dimension = 32 }: IconCellProps): JSX.Element => {
+const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
+    const { formatMessage } = useIntl();
     const {
         type,
         extension,
@@ -38,7 +36,6 @@ const IconCell = ({ intl, rowData, dimension = 32 }: IconCellProps): JSX.Element
         is_externally_owned: isExternallyOwned,
         archive_type: archiveType,
     } = rowData;
-    const { formatMessage } = intl;
 
     switch (type) {
         case ITEM_TYPE_FILE:
@@ -108,5 +105,4 @@ const IconCell = ({ intl, rowData, dimension = 32 }: IconCellProps): JSX.Element
     }
 };
 
-export { IconCell as IconCellBase };
-export default injectIntl(IconCell);
+export default IconCell;
