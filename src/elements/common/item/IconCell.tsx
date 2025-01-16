@@ -81,11 +81,11 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             }
 
             const getFolderTitle = () => {
-                if (isExternallyOwned) {
-                    return formatMessage(messages.externalFolder);
-                }
                 if (hasCollaborations) {
                     return formatMessage(messages.collaboratedFolder);
+                }
+                if (isExternallyOwned) {
+                    return formatMessage(messages.externalFolder);
                 }
                 return formatMessage(messages.personalFolder);
             };
