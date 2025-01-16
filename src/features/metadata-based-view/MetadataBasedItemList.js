@@ -421,7 +421,7 @@ class MetadataBasedItemList extends React.Component<Props, State> {
                         scrollClasses,
                     );
                     return (
-                        <div className="bdl-MetadataBasedItemList">
+                        <div className="bdl-MetadataBasedItemList" data-testid="metadata-based-item-list">
                             <MultiGrid
                                 cellRenderer={this.cellRenderer}
                                 classNameBottomRightGrid={classesBottomRightGrid}
