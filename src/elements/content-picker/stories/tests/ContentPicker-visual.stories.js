@@ -104,7 +104,7 @@ export const withError = {
                 expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
             },
             {
-                timeout: SLEEP_TIMEOUT,
+                timeout: SLEEP_TIMEOUT * 3, // Increase timeout to allow for retries
             },
         );
     },
@@ -169,6 +169,47 @@ export const hitSelectionLimit = {
                 expect(chooseButton).toBeEnabled();
             });
         }
+    },
+};
+
+export const cancelUnselectsItems = {
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        // Wait for items to load
+        await waitFor(() => {
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1); // Header row + at least one item
+        });
+
+        const items = canvas.getAllByRole('row');
+        await userEvent.click(items[1]); // Select first item after header
+
+        await waitFor(() => {
+            expect(canvas.getByText('1 Selected')).toBeInTheDocument();
+            const chooseButton = canvas.getByLabelText('Choose');
+            expect(chooseButton).toBeEnabled();
+        });
+
+        // Click cancel button to unselect items
+        const cancelButton = canvas.getByLabelText('Cancel');
+        await userEvent.click(cancelButton);
+
+        // Verify item is unselected
+        await waitFor(() => {
+            expect(canvas.queryByText('1 Selected')).not.toBeInTheDocument();
+            const chooseButton = canvas.getByLabelText('Choose');
+            expect(chooseButton).toBeDisabled();
+        });
     },
 };
 
