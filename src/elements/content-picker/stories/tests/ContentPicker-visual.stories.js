@@ -154,7 +154,7 @@ export const withError = {
         msw: {
             handlers: [
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json({}, { status: 500 });
+                    return new HttpResponse('Internal Server Error', { status: 500 });
                 }),
             ],
         },
