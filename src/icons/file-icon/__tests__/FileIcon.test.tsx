@@ -1,14 +1,16 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from '../../../test-utils/testing-library';
 import FileIcon from '../FileIcon';
 
 describe('icons/file-icon/FileIcon', () => {
-    const getWrapper = (props = {}) => shallow(<FileIcon {...props} />);
+    const renderComponent = (props = {}) => render(<FileIcon {...props} />);
 
     test('should render default 32 icon when no extension and dimension is defined', () => {
-        const wrapper = getWrapper();
-
-        expect(wrapper).toMatchSnapshot();
+        renderComponent();
+        const icon = screen.getByRole('img');
+        expect(icon).toBeInTheDocument();
+        expect(icon).toHaveAttribute('height', '32');
+        expect(icon).toHaveAttribute('width', '32');
     });
 
     test.each([
@@ -35,21 +37,27 @@ describe('icons/file-icon/FileIcon', () => {
         'HEIF',
         'xbd',
         'xdw',
-    ])(`should render the expected icon when %s is defined`, extension => {
-        const wrapper = getWrapper({ extension });
-
-        expect(wrapper).toMatchSnapshot();
+    ])('should render the expected icon when %s is defined', extension => {
+        renderComponent({ extension });
+        const icon = screen.getByRole('img');
+        expect(icon).toBeInTheDocument();
+        expect(icon).toHaveAttribute('height', '32');
+        expect(icon).toHaveAttribute('width', '32');
     });
 
     test('should render 64 icon when dimension is defined', () => {
-        const wrapper = getWrapper({ dimension: 64 });
-
-        expect(wrapper).toMatchSnapshot();
+        renderComponent({ dimension: 64 });
+        const icon = screen.getByRole('img');
+        expect(icon).toBeInTheDocument();
+        expect(icon).toHaveAttribute('height', '64');
+        expect(icon).toHaveAttribute('width', '64');
     });
 
     test('should render title when title is defined', () => {
-        const wrapper = getWrapper({ title: 'title' });
-
-        expect(wrapper).toMatchSnapshot();
+        const title = 'Custom Title';
+        renderComponent({ title });
+        const icon = screen.getByRole('img', { name: title });
+        expect(icon).toBeInTheDocument();
+        expect(icon).toHaveAttribute('aria-label', title);
     });
 });

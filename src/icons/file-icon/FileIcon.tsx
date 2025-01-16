@@ -218,25 +218,9 @@ interface FileIconProps {
     className?: string;
 }
 
-const FileIcon = ({
-    dimension = 32,
-    extension = '',
-    title,
-    'aria-label': ariaLabel,
-    role = 'img',
-    className,
-}: FileIconProps) => {
+const FileIcon = ({ dimension = 32, extension = '', title = 'File', className }: FileIconProps): JSX.Element => {
     const IconComponent = Components[getFileIconComponent(extension)];
-    return (
-        <IconComponent
-            height={dimension}
-            width={dimension}
-            title={title}
-            aria-label={ariaLabel || title}
-            role={role}
-            className={className}
-        />
-    );
+    return <IconComponent height={dimension} width={dimension} title={title} className={className} />;
 };
 
 export default FileIcon;
