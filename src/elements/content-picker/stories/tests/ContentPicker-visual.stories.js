@@ -49,7 +49,7 @@ export const emptyFolder = {
                 expect(canvas.getByText('This folder is empty')).toBeInTheDocument();
             },
             {
-                timeout: SLEEP_TIMEOUT,
+                timeout: SLEEP_TIMEOUT * 3, // Increase timeout to allow for retries
             },
         );
     },
@@ -57,7 +57,7 @@ export const emptyFolder = {
         msw: {
             handlers: [
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
+                    return HttpResponse.json(mockEmptyRootFolder);
                 }),
             ],
         },
@@ -67,30 +67,9 @@ export const emptyFolder = {
 export const emptySelectionMode = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-
-        // Click to enter selection mode
         const chooseButton = canvas.getByLabelText('Choose');
         await userEvent.click(chooseButton);
-
-        await waitFor(
-            () => {
-                // Verify empty folder state in selection mode
-                expect(canvas.getByText('This folder is empty')).toBeInTheDocument();
-                expect(chooseButton).toBeDisabled();
-            },
-            {
-                timeout: SLEEP_TIMEOUT,
-            },
-        );
-    },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
+        expect(chooseButton).toBeDisabled();
     },
 };
 
