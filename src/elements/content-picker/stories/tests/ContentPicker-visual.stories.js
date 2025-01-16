@@ -31,7 +31,7 @@ export const selectedEmptyState = {
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
             ],
@@ -56,7 +56,7 @@ export const emptyFolder = {
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
             ],
@@ -86,7 +86,7 @@ export const emptySelectionMode = {
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
             ],
@@ -111,7 +111,7 @@ export const withError = {
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.error();
                 }),
             ],
@@ -126,7 +126,7 @@ export const hitSelectionLimit = {
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
             ],
@@ -179,7 +179,7 @@ export const singleSelectWithItems = {
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
             ],
@@ -231,13 +231,13 @@ export default {
     component: ContentPicker,
     args: {
         features: global.FEATURE_FLAGS,
-        rootFolderId: global.FOLDER_ID,
+        rootFolderId: '69083462919',
         token: global.TOKEN,
     },
     parameters: {
         msw: {
             handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/*`, () => {
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
             ],
