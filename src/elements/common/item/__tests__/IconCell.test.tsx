@@ -21,9 +21,13 @@ describe('elements/common/item/IconCell', () => {
     const defaultProps: TestProps = {
         intl: defaultIntl,
         rowData: { type: ITEM_TYPE_FILE },
+        dimension: 32,
     };
 
-    const renderComponent = (props: Partial<TestProps> = {}) => render(<IconCellBase {...defaultProps} {...props} />);
+    const renderComponent = (props: Partial<TestProps> = {}) => {
+        const mergedProps = { ...defaultProps, ...props };
+        return render(<IconCellBase {...mergedProps} />);
+    };
 
     // Test data (alphabetically ordered)
     const archiveItem: BoxItem = {
