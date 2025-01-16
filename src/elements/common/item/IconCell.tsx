@@ -80,14 +80,16 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                 );
             }
 
-            let title: string;
-            if (isExternallyOwned) {
-                title = formatMessage(messages.externalFolder);
-            } else if (hasCollaborations) {
-                title = formatMessage(messages.collaboratedFolder);
-            } else {
-                title = formatMessage(messages.personalFolder);
-            }
+            const getFolderTitle = () => {
+                if (isExternallyOwned) {
+                    return formatMessage(messages.externalFolder);
+                }
+                if (hasCollaborations) {
+                    return formatMessage(messages.collaboratedFolder);
+                }
+                return formatMessage(messages.personalFolder);
+            };
+            const title = getFolderTitle();
 
             return (
                 <FolderIcon
