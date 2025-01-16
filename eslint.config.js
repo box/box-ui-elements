@@ -3,8 +3,13 @@ const js = require('@eslint/js');
 
 // Plugins
 const cypress = require('eslint-plugin-cypress/flat');
+const babelParser = require('@babel/eslint-parser');
+const flowSyntax = require('@babel/plugin-syntax-flow');
 
-const compat = new FlatCompat({ recommendedConfig: js.configs.recommended });
+const compat = new FlatCompat({
+    recommendedConfig: js.configs.recommended,
+    baseDirectory: __dirname,
+});
 
 module.exports = [
     {
@@ -29,12 +34,41 @@ module.exports = [
         require.resolve('@box/frontend/eslint/typescript'),
         require.resolve('@box/frontend/eslint/flow'),
     ),
+    {
+        files: ['**/*.js', '**/*.flow.js', '**/*.jsx'],
+        languageOptions: {
+            parser: babelParser,
+            parserOptions: {
+                requireConfigFile: false,
+                babelOptions: {
+                    plugins: [flowSyntax],
+                    rootMode: 'upward-optional',
+                },
+                sourceType: 'module',
+                ecmaVersion: 'latest',
+                ecmaFeatures: {
+                    jsx: true,
+                    modules: true,
+                },
+            },
+        },
+        settings: {
+            'import/resolver': {
+                node: {
+                    extensions: ['.js', '.jsx', '.flow.js'],
+                },
+            },
+            'import/parsers': {
+                '@babel/eslint-parser': ['.js', '.jsx', '.flow.js'],
+            },
+        },
+    },
     cypress.configs.recommended,
     {
         rules: {
             camelcase: 'off',
             'class-methods-use-this': 'off',
-            'import/export': 'off', // fixme
+            'import/export': 'error',
             'import/no-extraneous-dependencies': 'off', // fixme
             'import/no-named-as-default': 'off', // fixme
             'import/no-named-as-default-member': 'off', // fixme
