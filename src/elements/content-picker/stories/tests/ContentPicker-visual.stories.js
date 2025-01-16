@@ -139,16 +139,21 @@ export const withError = {
             expect(canvas.getByRole('progressbar')).toBeInTheDocument();
         });
 
-        // Wait for error state to be displayed after loading fails
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-            expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
-            // Verify error state UI elements
-            const errorChooseButton = canvas.getByLabelText('Choose');
-            const errorCancelButton = canvas.getByLabelText('Cancel');
-            expect(errorChooseButton).toBeDisabled();
-            expect(errorCancelButton).toBeEnabled();
-        });
+        // Wait for error state to be displayed after loading fails (allowing time for retries)
+        await waitFor(
+            () => {
+                expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
+                expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
+                // Verify error state UI elements
+                const errorChooseButton = canvas.getByLabelText('Choose');
+                const errorCancelButton = canvas.getByLabelText('Cancel');
+                expect(errorChooseButton).toBeDisabled();
+                expect(errorCancelButton).toBeEnabled();
+            },
+            {
+                timeout: 10000, // Increased timeout to allow for 3 retries
+            },
+        );
     },
     parameters: {
         msw: {
