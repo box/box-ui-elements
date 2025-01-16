@@ -68,7 +68,6 @@ const IconCell = ({ intl, rowData, dimension = 32 }: IconCellProps): JSX.Element
                         height={dimension}
                         role="img"
                         aria-label={formatMessage(messages.archivedFolder)}
-                        data-testid="folder-archive-icon-cell"
                     />
                 );
             }
@@ -80,7 +79,6 @@ const IconCell = ({ intl, rowData, dimension = 32 }: IconCellProps): JSX.Element
                         height={dimension}
                         role="img"
                         aria-label={formatMessage(messages.archive)}
-                        data-testid="archive-icon-cell"
                     />
                 );
             }

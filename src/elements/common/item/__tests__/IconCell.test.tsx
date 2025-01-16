@@ -75,12 +75,12 @@ describe('elements/common/item/IconCell', () => {
 
         test('should render archive icon', () => {
             renderComponent({ intl: defaultIntl, rowData: archiveItem });
-            expect(screen.getByTestId('archive-icon-cell')).toBeVisible();
+            expect(screen.getByRole('img', { name: 'Archive' })).toBeInTheDocument();
         });
 
         test('should render archived folder icon', () => {
             renderComponent({ intl: defaultIntl, rowData: archiveFolderItem });
-            expect(screen.getByTestId('folder-archive-icon-cell')).toBeVisible();
+            expect(screen.getByRole('img', { name: 'Archived Folder' })).toBeInTheDocument();
         });
 
         test.each([
