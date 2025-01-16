@@ -43,15 +43,20 @@ const FolderIcon = ({
     };
     const IconComponent = getIconComponent();
 
+    // For backward compatibility, we keep both title and aria-label
+    const accessibilityProps = {
+        role,
+        'aria-label': ariaLabel || title,
+        'aria-hidden': ariaHidden,
+        title: title || ariaLabel, // Ensure title is always set for backward compatibility
+    };
+
     return (
         <IconComponent
             height={Number(dimension)}
             width={Number(dimension)}
-            role={role}
-            aria-label={ariaLabel || title}
-            aria-hidden={ariaHidden}
-            title={title}
             viewBox="0 0 32 32"
+            {...accessibilityProps}
         />
     );
 };
