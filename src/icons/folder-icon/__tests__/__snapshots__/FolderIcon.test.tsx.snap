@@ -1,44 +1,160 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`icons/folder-icon/FolderIcon should render 64 icon when dimension is defined 1`] = `
-<FolderPersonal32
-  height={64}
-  width={64}
-/>
+<svg
+  aria-hidden="true"
+  focusable="false"
+  height="64"
+  role="presentation"
+  viewBox="0 0 32 32"
+  width="64"
+>
+  <g
+    fill="none"
+    fill-rule="evenodd"
+  >
+    <path
+      d="M6 6h6c2 0 1.5 2 4 2h10a3 3 0 013 3v13a3 3 0 01-3 3H6a3 3 0 01-3-3V9a3 3 0 013-3z"
+      fill="gold"
+    />
+    <path
+      d="M6 11h20a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3V14a3 3 0 013-3z"
+      fill="#fff"
+      fill-opacity="0.5"
+    />
+  </g>
+</svg>
 `;
 
-exports[`icons/folder-icon/FolderIcon should render and collab icon when isCollab is true 1`] = `
-<FolderShared32
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/folder-icon/FolderIcon should render and external icon when isExternal and isCollab is true 1`] = `
-<FolderExternal32
-  height={32}
-  width={32}
-/>
-`;
-
-exports[`icons/folder-icon/FolderIcon should render and external icon when isExternal is true 1`] = `
-<FolderExternal32
-  height={32}
-  width={32}
-/>
+exports[`icons/folder-icon/FolderIcon should render collab icon when isCollab is true 1`] = `
+<svg
+  aria-hidden="true"
+  focusable="false"
+  height="32"
+  role="presentation"
+  viewBox="0 0 32 32"
+  width="32"
+>
+  <g
+    fill="none"
+    fill-rule="evenodd"
+  >
+    <path
+      d="M6 6h6c2 0 1.5 2 4 2h10a3 3 0 013 3v13a3 3 0 01-3 3H6a3 3 0 01-3-3V9a3 3 0 013-3z"
+      fill="#2687FC"
+    />
+    <path
+      d="M26 11a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3V14a3 3 0 013-3h20zm-6.999 8c-1.117 0-1.933.543-2.439 1.401a6.024 6.024 0 01.414 1.45c.066.42.003.809-.165 1.138a1.7 1.7 0 00.193.011h4.002l.14-.006c.63-.054.924-.476.844-.988a5.028 5.028 0 00-.258-.997c-.453-1.2-1.367-2.009-2.73-2.009zM13 19c-1.364 0-2.278.81-2.731 2.01a4.774 4.774 0 00-.185.62c-.028.123-.053.25-.073.378-.084.54.258.992.992.992h4.002l.14-.006c.63-.054.924-.476.843-.988a5.028 5.028 0 00-.257-.997C15.277 19.81 14.363 19 13 19zm0-4a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.001 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
+      fill="#91c2fd"
+    />
+  </g>
+</svg>
 `;
 
 exports[`icons/folder-icon/FolderIcon should render default 32 icon when no props are defined 1`] = `
-<FolderPersonal32
-  height={32}
-  width={32}
-/>
+<svg
+  aria-hidden="true"
+  focusable="false"
+  height="32"
+  role="presentation"
+  viewBox="0 0 32 32"
+  width="32"
+>
+  <g
+    fill="none"
+    fill-rule="evenodd"
+  >
+    <path
+      d="M6 6h6c2 0 1.5 2 4 2h10a3 3 0 013 3v13a3 3 0 01-3 3H6a3 3 0 01-3-3V9a3 3 0 013-3z"
+      fill="gold"
+    />
+    <path
+      d="M6 11h20a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3V14a3 3 0 013-3z"
+      fill="#fff"
+      fill-opacity="0.5"
+    />
+  </g>
+</svg>
+`;
+
+exports[`icons/folder-icon/FolderIcon should render external icon when isExternal and isCollab is true 1`] = `
+<svg
+  aria-hidden="true"
+  focusable="false"
+  height="32"
+  role="presentation"
+  viewBox="0 0 32 32"
+  width="32"
+>
+  <g
+    fill="none"
+    fill-rule="evenodd"
+  >
+    <path
+      d="M6 6h6c2 0 1.5 2 4 2h10a3 3 0 013 3v13a3 3 0 01-3 3H6a3 3 0 01-3-3V9a3 3 0 013-3z"
+      fill="#737E88"
+    />
+    <path
+      d="M26 11a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3V14a3 3 0 013-3h20zm-10 3c-2.77 0-5 2.23-5 5s2.23 5 5 5 5-2.23 5-5-2.23-5-5-5zm-3.923 4.077l2.385 2.385V21c0 .538.461 1 1 1v1C13.538 22.692 12 21.077 12 19c0-.308.077-.615.077-.923zm5.461-2.77C19 15.924 20 17.308 20 19c0 1.077-.385 2-1.077 2.692C18.77 21.308 18.385 21 18 21h-.538v-1.538c0-.231-.154-.462-.462-.462h-3v-1h1c.308 0 .538-.23.538-.538v-.924h1c.539 0 1-.461 1-1v-.23z"
+      fill="#B8BEC3"
+    />
+  </g>
+</svg>
+`;
+
+exports[`icons/folder-icon/FolderIcon should render external icon when isExternal is true 1`] = `
+<svg
+  aria-hidden="true"
+  focusable="false"
+  height="32"
+  role="presentation"
+  viewBox="0 0 32 32"
+  width="32"
+>
+  <g
+    fill="none"
+    fill-rule="evenodd"
+  >
+    <path
+      d="M6 6h6c2 0 1.5 2 4 2h10a3 3 0 013 3v13a3 3 0 01-3 3H6a3 3 0 01-3-3V9a3 3 0 013-3z"
+      fill="#737E88"
+    />
+    <path
+      d="M26 11a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3V14a3 3 0 013-3h20zm-10 3c-2.77 0-5 2.23-5 5s2.23 5 5 5 5-2.23 5-5-2.23-5-5-5zm-3.923 4.077l2.385 2.385V21c0 .538.461 1 1 1v1C13.538 22.692 12 21.077 12 19c0-.308.077-.615.077-.923zm5.461-2.77C19 15.924 20 17.308 20 19c0 1.077-.385 2-1.077 2.692C18.77 21.308 18.385 21 18 21h-.538v-1.538c0-.231-.154-.462-.462-.462h-3v-1h1c.308 0 .538-.23.538-.538v-.924h1c.539 0 1-.461 1-1v-.23z"
+      fill="#B8BEC3"
+    />
+  </g>
+</svg>
 `;
 
 exports[`icons/folder-icon/FolderIcon should render title when title is defined 1`] = `
-<FolderPersonal32
-  height={32}
-  title="title"
-  width={32}
-/>
+<svg
+  aria-label="title"
+  aria-labelledby="icon6-title"
+  focusable="false"
+  height="32"
+  role="img"
+  viewBox="0 0 32 32"
+  width="32"
+>
+  <title
+    id="icon6-title"
+  >
+    title
+  </title>
+  <g
+    fill="none"
+    fill-rule="evenodd"
+  >
+    <path
+      d="M6 6h6c2 0 1.5 2 4 2h10a3 3 0 013 3v13a3 3 0 01-3 3H6a3 3 0 01-3-3V9a3 3 0 013-3z"
+      fill="gold"
+    />
+    <path
+      d="M6 11h20a3 3 0 013 3v10a3 3 0 01-3 3H6a3 3 0 01-3-3V14a3 3 0 013-3z"
+      fill="#fff"
+      fill-opacity="0.5"
+    />
+  </g>
+</svg>
 `;
