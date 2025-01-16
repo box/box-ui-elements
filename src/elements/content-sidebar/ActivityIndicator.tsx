@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import flow from 'lodash/flow';
-import noop from 'lodash/noop';
+// import noop from 'lodash/noop';
 
 import { withAPIContext } from '../common/api-context';
 
@@ -17,27 +17,41 @@ export function ActivityIndicator({ api, features, file }) {
             return;
         }
         setCanLoadActivities(false);
-        api.getFeedAPI().feedItems(
-            file,
-            false,
-            (data: Array<unknown>) => {
-                if (data.length > 0) {
-                    // has comments, replies, annotations or tasks
-                    setCount(data.length);
-                    setShouldShowIndicator(true);
-                }
-            },
-            noop,
-            noop,
-            {
-                shouldShowAnnotations: true,
-                shouldShowAppActivity: true,
-                shouldShowReplies: true,
-                shouldShowTasks: true,
-                shouldShowVersions: false, // do we need to inform about versions?
-                shouldUseUAA: false, // don't know what this is
-            },
-        );
+        // api.getFeedAPI().feedItems(
+        //     file,
+        //     false,
+        //     (data: Array<unknown>) => {
+        //         console.log('data', data);
+        //         if (data.length > 0) {
+        //             // has comments, replies, annotations or tasks
+        //             setCount(data.length);
+        //             setShouldShowIndicator(true);
+        //         }
+        //     },
+        //     noop,
+        //     noop,
+        //     {
+        //         shouldShowAnnotations: false,
+        //         shouldShowAppActivity: false,
+        //         shouldShowReplies: false,
+        //         shouldShowTasks: false,
+        //         shouldShowVersions: false, // do we need to inform about versions?
+        //         shouldUseUAA: true, // don't know what this is
+        //     },
+        // );
+
+        const activityTypes = ['annotation', 'app_activity', 'comment', 'task'];
+        const { permissions = {} } = file;
+        const feedAPI = api.getFeedAPI();
+
+        feedAPI.file = file;
+        feedAPI.fetchFileActivities(permissions, activityTypes, true).then(data => {
+            if (data.entries.length > 0) {
+                // has comments, replies, annotations or tasks
+                setCount(data.entries.length);
+                setShouldShowIndicator(true);
+            }
+        });
     }, [api, features, file, canLoadActivities]);
 
     return shouldShowIndicator ? <div className="bcs-activity-indicator">{count}</div> : null;
