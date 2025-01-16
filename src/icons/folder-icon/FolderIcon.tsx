@@ -3,7 +3,6 @@ import * as React from 'react';
 import IconFolderCollab from '../../icon/content/FolderShared32';
 import IconFolderExternal from '../../icon/content/FolderExternal32';
 import IconFolderPersonal from '../../icon/content/FolderPersonal32';
-// No SVGProps import needed
 
 type FolderIconProps = {
     /** Dimension of the icon */
@@ -33,18 +32,19 @@ const FolderIcon = ({
     'aria-label': ariaLabel,
     'aria-hidden': ariaHidden,
 }: FolderIconProps): JSX.Element => {
-    let Icon = IconFolderPersonal;
+    let IconComponent;
     if (isExternal) {
-        Icon = IconFolderExternal;
+        IconComponent = IconFolderExternal;
     } else if (isCollab) {
-        Icon = IconFolderCollab;
+        IconComponent = IconFolderCollab;
+    } else {
+        IconComponent = IconFolderPersonal;
     }
-    const size = Number(dimension);
 
     return (
-        <Icon
-            height={size}
-            width={size}
+        <IconComponent
+            height={Number(dimension)}
+            width={Number(dimension)}
             role={role}
             aria-label={ariaLabel || title}
             aria-hidden={ariaHidden}
