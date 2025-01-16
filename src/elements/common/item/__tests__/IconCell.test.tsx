@@ -30,12 +30,12 @@ describe('elements/common/item/IconCell', () => {
     // Test data (alphabetically ordered)
     const archiveItem: BoxItem = {
         type: ITEM_TYPE_FOLDER,
-        archive_type: 'archive',
+        archiveType: 'archive',
     };
 
     const archiveFolderItem: BoxItem = {
         type: ITEM_TYPE_FOLDER,
-        archive_type: 'folder_archive',
+        archiveType: 'folder_archive',
     };
 
     const externalFolderItem = {
