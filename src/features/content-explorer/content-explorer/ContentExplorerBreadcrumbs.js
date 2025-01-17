@@ -9,6 +9,7 @@ import IconAllFiles from '../../../icons/general/IconAllFiles';
 import PlainButton from '../../../components/plain-button';
 
 import { FoldersPathPropType } from '../prop-types';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ContentExplorerBreadcrumbs = ({

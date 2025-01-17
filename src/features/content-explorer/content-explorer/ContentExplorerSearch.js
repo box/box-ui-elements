@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import { injectIntl } from 'react-intl';
 import SearchForm from '../../../components/search-form';
 
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 class ContentExplorerSearch extends PureComponent {

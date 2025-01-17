@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 
 import { InlineNotice } from '@box/blueprint-web';
 
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 export interface ContentExplorerInfoNoticeProps {

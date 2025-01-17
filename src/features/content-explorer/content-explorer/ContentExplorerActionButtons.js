@@ -8,6 +8,7 @@ import PrimaryButton from '../../../components/primary-button';
 
 import { ContentExplorerModePropType, FolderPropType, ItemsMapPropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 export const getChosenItemsFromSelectedItems = selectedItems => {

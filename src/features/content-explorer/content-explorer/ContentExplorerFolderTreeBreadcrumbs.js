@@ -9,6 +9,7 @@ import IconFolderTree from '../../../icons/general/IconFolderTree';
 import { Menu, MenuItem } from '../../../components/menu';
 
 import { FoldersPathPropType } from '../prop-types';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 import {
     FOLDER_TREE_ICON_HEIGHT,

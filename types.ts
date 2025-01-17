@@ -1,2 +1,2 @@
 export * from './src/types';
-export * from './examples/types';
+export { default as ExampleTypes } from './examples/types';

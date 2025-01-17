@@ -4,6 +4,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import InfoBadge16 from '../../../icon/fill/InfoBadge16';
 import Toggle from '../../../components/toggle';
 import Tooltip from '../../../components/tooltip';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ContentExplorerIncludeSubfolders = ({ isDisabled, onChange, tooltipMessage }) => {

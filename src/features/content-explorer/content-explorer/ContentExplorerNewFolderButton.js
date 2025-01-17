@@ -6,6 +6,7 @@ import Button from '../../../components/button';
 
 import { ContentExplorerModePropType } from '../prop-types';
 import ContentExplorerModes from '../modes';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ContentExplorerNewFolderButton = ({

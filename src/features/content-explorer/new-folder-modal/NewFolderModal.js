@@ -8,6 +8,7 @@ import TextInput from '../../../components/text-input';
 import Button from '../../../components/button';
 import PrimaryButton from '../../../components/primary-button';
 
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 import './NewFolderModal.scss';

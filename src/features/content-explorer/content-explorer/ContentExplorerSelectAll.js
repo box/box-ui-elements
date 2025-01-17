@@ -3,6 +3,7 @@ import * as React from 'react';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import Checkbox from '../../../components/checkbox/Checkbox';
 import Tooltip from '../../../components/tooltip';
+// eslint-disable-next-line import/no-named-as-default
 import messages from '../messages';
 
 const ContentExplorerSelectAll = ({

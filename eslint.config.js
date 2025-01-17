@@ -1,9 +1,14 @@
+// eslint-disable-next-line global-require
 const { FlatCompat } = require('@eslint/eslintrc');
+// eslint-disable-next-line global-require
 const js = require('@eslint/js');
 
 // Plugins
+// eslint-disable-next-line global-require
 const cypress = require('eslint-plugin-cypress/flat');
+// eslint-disable-next-line global-require
 const babelParser = require('@babel/eslint-parser');
+// eslint-disable-next-line global-require
 const flowSyntax = require('@babel/plugin-syntax-flow');
 
 const compat = new FlatCompat({
@@ -68,9 +73,24 @@ module.exports = [
         rules: {
             camelcase: 'off',
             'class-methods-use-this': 'off',
-            'import/export': 'error',
-            'import/no-extraneous-dependencies': 'off', // fixme
-            'import/no-named-as-default': 'off', // fixme
+            'import/export': 'error', // enabled and fixed
+            'import/no-extraneous-dependencies': [
+                'warn',
+                {
+                    devDependencies: [
+                        '**/__tests__/**',
+                        '**/*.test.{js,jsx,ts,tsx}',
+                        '**/*.stories.{js,jsx,ts,tsx}',
+                        '**/stories/**',
+                        '**/test/**',
+                        'test/**',
+                        'scripts/**',
+                        '**/webpack.config.js',
+                        '**/styleguide.config.js',
+                    ],
+                },
+            ], // fixme - in progress
+            'import/no-named-as-default': 'error', // enabled and fixed with inline disables
             'import/no-named-as-default-member': 'off', // fixme
             'import/no-unresolved': 'off', // fixme
             'jsx-a11y/label-has-associated-control': 'off',
@@ -103,6 +123,42 @@ module.exports = [
     },
     {
         files: ['**/*.ts', '**/*.tsx'],
+        languageOptions: {
+            // eslint-disable-next-line global-require
+            parser: require('@typescript-eslint/parser'),
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module',
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+                warnOnUnsupportedTypeScriptVersion: false,
+            },
+        },
+        plugins: {
+            // eslint-disable-next-line global-require
+            '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
+        },
+        settings: {
+            'import/resolver': {
+                typescript: {
+                    project: './tsconfig.json',
+                },
+                node: {
+                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+                    moduleDirectory: ['node_modules', 'src'],
+                    paths: ['src'],
+                },
+            },
+            'import/parsers': {
+                '@typescript-eslint/parser': ['.ts', '.tsx'],
+            },
+            'import/extensions': ['.js', '.jsx', '.ts', '.tsx'],
+            'import/core-modules': [],
+            'import/ignore': ['\\.(css|scss|less|svg|json)$'],
+        },
         rules: {
             '@typescript-eslint/ban-ts-comment': [
                 'error',
