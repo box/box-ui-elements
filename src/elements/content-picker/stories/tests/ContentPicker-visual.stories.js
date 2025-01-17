@@ -1,9 +1,29 @@
+// @flow
 import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
 
 import ContentPicker from '../../ContentPicker';
 import { mockRootFolder, mockEmptyRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
+
+export default {
+    title: 'Elements/ContentPicker/tests/visual',
+    component: ContentPicker,
+    args: {
+        features: global.FEATURE_FLAGS,
+        rootFolderId: '69083462919',
+        token: global.TOKEN,
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
+    },
+};
 
 export const basic = {
     play: async ({ canvasElement }) => {
@@ -524,6 +544,7 @@ export const shareAccess = {
             name: text => text.includes('0') && text.includes('Selected'),
         });
         expect(initialSelectedButton).toBeInTheDocument();
+
         const shareInitialChooseButton = canvas.getByLabelText('Choose');
         expect(shareInitialChooseButton).toBeDisabled();
 
@@ -886,24 +907,5 @@ export const searchFunctionality = {
             const searchClearedChooseButton = canvas.getByLabelText('Choose');
             expect(searchClearedChooseButton).toBeEnabled();
         });
-    },
-};
-
-export default {
-    title: 'Elements/ContentPicker/tests/visual',
-    component: ContentPicker,
-    args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
-        token: global.TOKEN,
-    },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
     },
 };
