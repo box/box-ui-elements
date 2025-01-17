@@ -515,12 +515,11 @@ export const multiSelectWithKeyboard = {
             },
         );
 
-        // Wait for folder contents to load
+        // Wait for folder contents to load and verify Audio.mp3 is visible
         await waitFor(() => {
+            const audioRow = canvas.getByRole('row', { name: /Audio\.mp3/ });
+            expect(audioRow).toBeVisible();
             expect(canvas.getByRole('button', { name: /Preview Test Folder/i })).toBeInTheDocument();
-            const rows = canvas.getAllByRole('row');
-            expect(rows.length).toBeGreaterThan(1);
-            expect(rows[1]).toBeVisible();
         });
 
         // Get the Audio.mp3 row and click its checkbox
@@ -719,7 +718,7 @@ export const searchFunctionality = {
     },
 };
 
-export default {
+const meta = {
     title: 'Elements/ContentPicker/tests/visual',
     component: ContentPicker,
     args: {
@@ -746,3 +745,5 @@ export default {
         },
     },
 };
+
+export default meta;
