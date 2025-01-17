@@ -48,13 +48,13 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
         case ITEM_TYPE_WEBLINK:
             return (
                 <AccessibleSVG
-                    width={dimension}
+                    className="icon-bookmark"
                     height={dimension}
                     title={formatMessage(messages.bookmark)}
                     viewBox="0 0 32 32"
-                    role="img"
+                    width={dimension}
                 >
-                    <BookmarkIcon className="icon-bookmark" />
+                    <BookmarkIcon />
                 </AccessibleSVG>
             );
         case ITEM_TYPE_FOLDER: {
