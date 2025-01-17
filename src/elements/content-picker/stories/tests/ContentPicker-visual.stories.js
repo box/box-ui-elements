@@ -134,10 +134,9 @@ export const hitSelectionLimit = {
 
         // Select first item and verify visual feedback
         await userEvent.click(items[1]);
-        expect(items[1]).toHaveClass('bcp-item-row-selected');
-
-        // Verify selection count and button state
         await waitFor(() => {
+            expect(items[1]).toHaveClass('bcp-item-row-selected');
+            // Verify selection count and button state
             const selectedButton = canvas.getByRole('button', {
                 name: text => text.includes('1') && text.includes('Selected'),
             });
@@ -148,10 +147,9 @@ export const hitSelectionLimit = {
 
         // Select second item to hit limit
         await userEvent.click(items[2]);
-        expect(items[2]).toHaveClass('bcp-item-row-selected');
-
-        // Verify max selection state
         await waitFor(() => {
+            expect(items[2]).toHaveClass('bcp-item-row-selected');
+            // Verify max selection state
             const selectedButton = canvas.getByRole('button', { name: /2 Selected/i });
             expect(selectedButton).toBeInTheDocument();
             expect(canvas.getByText('(max)')).toBeInTheDocument();
@@ -495,13 +493,14 @@ export const multiSelectWithKeyboard = {
 
         // Wait for initial load and verify state
         await waitFor(() => {
-            expect(canvas.getByText('An Ordered Folder')).toBeInTheDocument();
+            const orderedFolder = canvas.getByRole('button', { name: /An Ordered Folder/i });
+            expect(orderedFolder).toBeInTheDocument();
             expect(canvas.getByRole('button', { name: /0 Selected/i })).toBeInTheDocument();
             expect(canvas.getByLabelText('Choose')).toBeDisabled();
         });
 
         // Navigate into "An Ordered Folder"
-        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        const orderedFolder = canvas.getByRole('button', { name: /An Ordered Folder/i });
         await userEvent.dblClick(orderedFolder);
 
         // Wait for folder contents to load
