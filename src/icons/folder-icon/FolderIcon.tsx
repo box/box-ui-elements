@@ -1,10 +1,11 @@
 import * as React from 'react';
 
+import { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
 import IconFolderCollab from '../../icon/content/FolderShared32';
 import IconFolderExternal from '../../icon/content/FolderExternal32';
 import IconFolderPersonal from '../../icon/content/FolderPersonal32';
 
-type FolderIconProps = {
+type FolderIconProps = SVGProps & {
     /** Dimension of the icon */
     dimension?: number | string;
     /** If true displays collaborated folder icon */
@@ -31,22 +32,28 @@ const FolderIcon = ({
     role = 'img',
     'aria-label': ariaLabel,
     'aria-hidden': ariaHidden,
+    className,
 }: FolderIconProps): JSX.Element => {
     // Priority: External > Collab > Personal
     let IconComponent;
+    let defaultTitle;
+
     if (isExternal) {
         IconComponent = IconFolderExternal;
+        defaultTitle = 'External Folder';
     } else if (isCollab) {
         IconComponent = IconFolderCollab;
+        defaultTitle = 'Collaborated Folder';
     } else {
         IconComponent = IconFolderPersonal;
+        defaultTitle = 'Personal Folder';
     }
 
-    // For backward compatibility, we keep both title and aria-label
-    const effectiveTitle = title || ariaLabel;
+    const effectiveTitle = title || ariaLabel || defaultTitle;
 
     return (
         <IconComponent
+            className={className}
             height={Number(dimension)}
             width={Number(dimension)}
             title={effectiveTitle}

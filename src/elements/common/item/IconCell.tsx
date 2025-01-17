@@ -135,18 +135,19 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
 
             // Handle regular folder types
             const getFolderConfig = () => {
-                if (isExternallyOwnedFlag) {
-                    return {
-                        title: formatMessage(messages.externalFolder),
-                        IconComponent: FolderExternal32,
-                        className: 'icon-folder-external',
-                    };
-                }
+                // Priority: Collaboration > External > Personal
                 if (hasCollaborationsFlag) {
                     return {
                         title: formatMessage(messages.collaboratedFolder),
                         IconComponent: FolderShared32,
                         className: 'icon-folder-shared',
+                    };
+                }
+                if (isExternallyOwnedFlag && !hasCollaborationsFlag) {
+                    return {
+                        title: formatMessage(messages.externalFolder),
+                        IconComponent: FolderExternal32,
+                        className: 'icon-folder-external',
                     };
                 }
                 return {

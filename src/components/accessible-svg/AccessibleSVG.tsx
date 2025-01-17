@@ -1,5 +1,4 @@
 import * as React from 'react';
-import omit from 'lodash/omit';
 import uniqueId from 'lodash/uniqueId';
 
 export interface SVGProps {
@@ -32,23 +31,28 @@ class AccessibleSVG extends React.Component<AccessibleSVGProps & SVGProps> {
         const titleID = `${this.id}-title`;
 
         // Make sure parent doesn't accidentally override these values
-        const svgProps: Record<string, string | number | React.ReactNode> = omit(rest, ['role']);
+        const svgProps: Record<string, string | number | React.ReactNode> = { ...rest };
 
         // Accessibility fix for IE11, which treats all SVGs as focusable by default
         svgProps.focusable = 'false';
 
-        // If there's a title or aria-label, treat as img, otherwise as presentation
-        if (title || svgProps['aria-label']) {
-            svgProps.role = 'img';
-            // If aria-label is provided, use it instead of aria-labelledby
+        // If role is explicitly set to 'img', ensure proper accessibility attributes
+        if (svgProps.role === 'img') {
             if (!svgProps['aria-label'] && title) {
                 svgProps['aria-labelledby'] = titleID;
             }
         } else {
-            svgProps['aria-hidden'] = 'true';
-            svgProps.role = 'presentation';
-            // Remove aria-labelledby when role is presentation
-            delete svgProps['aria-labelledby'];
+            const hasAccessibilityLabel = title || svgProps['aria-label'];
+            if (hasAccessibilityLabel) {
+                svgProps.role = 'img';
+                if (!svgProps['aria-label'] && title) {
+                    svgProps['aria-labelledby'] = titleID;
+                }
+            } else {
+                svgProps['aria-hidden'] = 'true';
+                svgProps.role = 'presentation';
+                delete svgProps['aria-labelledby'];
+            }
         }
 
         return (
