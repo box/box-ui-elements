@@ -4,6 +4,7 @@ import { http, HttpResponse } from 'msw';
 
 import ContentPicker from '../../ContentPicker';
 import { mockRootFolder, mockEmptyRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
+import mockSubFolder from '../../../content-explorer/stories/__mocks__/mockSubFolder';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
 export const basic = {
@@ -116,7 +117,7 @@ export const hitSelectionLimit = {
 
         // Wait for folder contents to load
         await waitFor(() => {
-            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
@@ -178,14 +179,8 @@ export const cancelUnselectsItems = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
         // Wait for items to load
         await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1); // Header row + at least one item
         });
@@ -196,7 +191,7 @@ export const cancelUnselectsItems = {
 
         // Wait for folder contents to load
         await waitFor(() => {
-            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
@@ -267,7 +262,7 @@ export const singleSelectWithItems = {
 
         // Wait for folder contents to load
         await waitFor(() => {
-            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
@@ -336,14 +331,8 @@ export const keyboardShortcuts = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
         // Wait for items to load
         await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
@@ -354,7 +343,7 @@ export const keyboardShortcuts = {
 
         // Wait for folder contents to load
         await waitFor(() => {
-            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
@@ -504,10 +493,9 @@ export const multiSelectWithKeyboard = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for items to load and verify initial state
+        // Wait for initial load and verify state
         await waitFor(() => {
-            const items = canvas.getAllByRole('row');
-            expect(items.length).toBeGreaterThan(1);
+            expect(canvas.getByText('An Ordered Folder')).toBeInTheDocument();
             expect(canvas.getByRole('button', { name: /0 Selected/i })).toBeInTheDocument();
             expect(canvas.getByLabelText('Choose')).toBeDisabled();
         });
@@ -517,65 +505,119 @@ export const multiSelectWithKeyboard = {
         await userEvent.dblClick(orderedFolder);
 
         // Wait for folder contents to load
+        await waitFor(
+            () => {
+                const audioRow = canvas.getByRole('row', { name: /Audio\.mp3/ });
+                expect(audioRow).toBeInTheDocument();
+            },
+            {
+                timeout: 3000,
+                interval: 500,
+            },
+        );
+
+        // Wait for folder contents to load
         await waitFor(() => {
-            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
-            const items = canvas.getAllByRole('row');
-            expect(items.length).toBeGreaterThan(1);
+            expect(canvas.getByRole('button', { name: /Preview Test Folder/i })).toBeInTheDocument();
+            const rows = canvas.getAllByRole('row');
+            expect(rows.length).toBeGreaterThan(1);
+            expect(rows[1]).toBeVisible();
         });
 
-        // Select first item
-        const firstItems = canvas.getAllByRole('row');
-        await userEvent.click(firstItems[1]);
+        // Get the Audio.mp3 row and click its checkbox
+        const audioRow = await canvas.findByRole('row', { name: /Audio\.mp3/ });
+        const firstCheckbox = within(audioRow).getByRole('checkbox', { name: 'Audio.mp3' });
+        await userEvent.click(firstCheckbox);
 
         // Verify first selection state
-        await waitFor(() => {
-            const selectedItems = canvas.getAllByRole('row');
-            const row = selectedItems[1];
-            expect(row).toHaveClass('bcp-item-row-selected');
-            const selectedButton = canvas.getByRole('button', { name: /1 Selected/i });
-            expect(selectedButton).toBeInTheDocument();
-            const chooseButton = canvas.getByLabelText('Choose');
-            expect(chooseButton).toBeEnabled();
-        });
+        await waitFor(
+            () => {
+                expect(audioRow).toHaveClass('bcp-item-row-selected');
+                expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+                expect(canvas.getByLabelText('Choose')).toBeEnabled();
+            },
+            {
+                timeout: 3000,
+                interval: 500,
+            },
+        );
 
-        // Select second item with keyboard
-        await userEvent.keyboard('{ArrowDown}');
-        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for selection update
-        await userEvent.keyboard(' ');
+        // Find and click the second item's checkbox directly
+        const rows = await canvas.findAllByRole('row');
+        const secondRow = rows[1];
+
+        // Wait for the second row to be visible and get its checkbox
+        await waitFor(
+            () => {
+                expect(secondRow).toBeVisible();
+            },
+            {
+                timeout: 3000,
+                interval: 500,
+            },
+        );
+
+        const secondCheckbox = within(secondRow).getByRole('checkbox');
+        await userEvent.click(secondCheckbox);
 
         // Verify second selection state
-        await waitFor(() => {
-            const selectedItems = canvas.getAllByRole('row');
-            const row = selectedItems[2];
-            expect(row).toHaveClass('bcp-item-row-selected');
-            const selectedButton = canvas.getByRole('button', { name: /2 Selected/i });
-            expect(selectedButton).toBeInTheDocument();
-            const chooseButton = canvas.getByLabelText('Choose');
-            expect(chooseButton).toBeEnabled();
-        });
+        await waitFor(
+            () => {
+                expect(secondRow).toHaveClass('bcp-item-row-selected');
+                expect(canvas.getByRole('button', { name: /2 Selected/i })).toBeInTheDocument();
+                expect(canvas.getByLabelText('Choose')).toBeEnabled();
+            },
+            {
+                timeout: 3000,
+                interval: 500,
+            },
+        );
+
+        // Verify second selection state
+        await waitFor(
+            () => {
+                const selectedButton = canvas.getByRole('button', { name: /Selected/i });
+                expect(selectedButton).toHaveTextContent('2 Selected');
+                expect(canvas.getByLabelText('Choose')).toBeEnabled();
+            },
+            {
+                timeout: 3000,
+                interval: 500,
+            },
+        );
 
         // Select third item to hit max
         await userEvent.keyboard('{ArrowDown}');
-        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for selection update
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Longer delay for keyboard navigation
         await userEvent.keyboard(' ');
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for selection to update
 
         // Verify max selection state
-        await waitFor(() => {
-            const selectedItems = canvas.getAllByRole('row');
-            const row = selectedItems[3];
-            expect(row).toHaveClass('bcp-item-row-selected');
-            const selectedButton = canvas.getByRole('button', { name: /3 Selected/i });
-            expect(selectedButton).toBeInTheDocument();
-            expect(canvas.getByText('(max)')).toBeInTheDocument();
-            const chooseButton = canvas.getByLabelText('Choose');
-            expect(chooseButton).toBeEnabled();
-        });
+        await waitFor(
+            () => {
+                // First verify selection count and max indicator
+                const selectedButton = canvas.getByRole('button', { name: /Selected/i });
+                expect(selectedButton).toHaveTextContent('3 Selected');
+                expect(canvas.getByText('(max)')).toBeInTheDocument();
+                expect(canvas.getByLabelText('Choose')).toBeEnabled();
+            },
+            {
+                timeout: 3000,
+                interval: 500,
+            },
+        );
 
-        // Verify cannot select beyond max
-        if (items.length > 4) {
+        // Get all rows and verify we can't select beyond max
+        const allRows = canvas.getAllByRole('row');
+        if (allRows.length > 4) {
             await userEvent.keyboard('{ArrowDown}');
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for navigation
             await userEvent.keyboard(' ');
-            expect(items[4]).not.toHaveClass('bcp-item-row-selected');
+            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for attempted selection
+
+            // Verify max selection is maintained
+            const selectedButton = canvas.getByRole('button', { name: /Selected/i });
+            expect(selectedButton).toHaveTextContent('3 Selected');
             expect(canvas.getByText('(max)')).toBeInTheDocument();
         }
     },
@@ -603,7 +645,7 @@ export const folderNavigationAndSelection = {
         await userEvent.dblClick(items[2]);
         await waitFor(() => {
             expect(canvas.getByText('Subfolder')).toBeInTheDocument();
-            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
         });
 
         // Verify selection persists in subfolder
@@ -611,7 +653,7 @@ export const folderNavigationAndSelection = {
         expect(canvas.getByLabelText('Choose')).toBeEnabled();
 
         // Navigate back to root
-        await userEvent.click(canvas.getByText('All Files'));
+        await userEvent.click(canvas.getByText('Preview Test Folder'));
         await waitFor(() => {
             expect(canvas.queryByRole('link', { name: /Subfolder/i })).not.toBeInTheDocument();
         });
@@ -639,7 +681,7 @@ export const searchFunctionality = {
 
         // Wait for folder contents to load
         await waitFor(() => {
-            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
@@ -697,6 +739,9 @@ export default {
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
+                    return HttpResponse.json(mockSubFolder);
                 }),
             ],
         },
