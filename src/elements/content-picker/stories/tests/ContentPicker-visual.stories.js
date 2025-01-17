@@ -110,6 +110,17 @@ export const hitSelectionLimit = {
             expect(items.length).toBeGreaterThan(1); // Header row + at least one item
         });
 
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        await userEvent.dblClick(orderedFolder);
+
+        // Wait for folder contents to load
+        await waitFor(() => {
+            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1);
+        });
+
         // Verify initial selection state
         const initialSelectedButton = canvas.getByRole('button', {
             name: text => text.includes('0') && text.includes('Selected'),
@@ -179,6 +190,17 @@ export const cancelUnselectsItems = {
             expect(items.length).toBeGreaterThan(1); // Header row + at least one item
         });
 
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        await userEvent.dblClick(orderedFolder);
+
+        // Wait for folder contents to load
+        await waitFor(() => {
+            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1);
+        });
+
         // Verify initial selection state
         const initialSelectedButton = canvas.getByRole('button', {
             name: text => text.includes('0') && text.includes('Selected'),
@@ -237,6 +259,17 @@ export const singleSelectWithItems = {
             expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1); // Header row + at least one item
+        });
+
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        await userEvent.dblClick(orderedFolder);
+
+        // Wait for folder contents to load
+        await waitFor(() => {
+            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1);
         });
 
         // Verify initial selection state
@@ -311,6 +344,17 @@ export const keyboardShortcuts = {
         // Wait for items to load
         await waitFor(() => {
             expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1);
+        });
+
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        await userEvent.dblClick(orderedFolder);
+
+        // Wait for folder contents to load
+        await waitFor(() => {
+            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
@@ -401,6 +445,20 @@ export const shareAccess = {
             expect(shareColumn).toBeVisible();
         });
 
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        await userEvent.dblClick(orderedFolder);
+
+        // Wait for folder contents to load
+        await waitFor(() => {
+            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1);
+            const shareColumn = canvas.getByRole('columnheader', { name: /Share/ });
+            expect(shareColumn).toBeInTheDocument();
+            expect(shareColumn).toBeVisible();
+        });
+
         // Verify initial selection state
         const initialSelectedButton = canvas.getByRole('button', {
             name: text => text.includes('0') && text.includes('Selected'),
@@ -452,6 +510,17 @@ export const multiSelectWithKeyboard = {
             expect(items.length).toBeGreaterThan(1);
             expect(canvas.getByRole('button', { name: /0 Selected/i })).toBeInTheDocument();
             expect(canvas.getByLabelText('Choose')).toBeDisabled();
+        });
+
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        await userEvent.dblClick(orderedFolder);
+
+        // Wait for folder contents to load
+        await waitFor(() => {
+            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1);
         });
 
         // Select first item
@@ -560,6 +629,17 @@ export const searchFunctionality = {
 
         // Wait for items to load
         await waitFor(() => {
+            const items = canvas.getAllByRole('row');
+            expect(items.length).toBeGreaterThan(1);
+        });
+
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        await userEvent.dblClick(orderedFolder);
+
+        // Wait for folder contents to load
+        await waitFor(() => {
+            expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
