@@ -66,8 +66,10 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         width={dimension}
                         title={title}
                         viewBox="0 0 32 32"
+                        role="img"
+                        aria-label={title}
                     >
-                        <FolderArchive />
+                        <FolderArchive role={undefined} aria-hidden="true" />
                     </AccessibleSVG>
                 );
             }
@@ -81,8 +83,10 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         width={dimension}
                         title={title}
                         viewBox="0 0 32 32"
+                        role="img"
+                        aria-label={title}
                     >
-                        <Archive />
+                        <Archive role={undefined} aria-hidden="true" />
                     </AccessibleSVG>
                 );
             }

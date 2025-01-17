@@ -3,6 +3,7 @@ import * as React from 'react';
 import IconFolderCollab from '../../icon/content/FolderShared32';
 import IconFolderExternal from '../../icon/content/FolderExternal32';
 import IconFolderPersonal from '../../icon/content/FolderPersonal32';
+import AccessibleSVG from '../../components/accessible-svg/AccessibleSVG';
 
 type FolderIconProps = {
     /** Dimension of the icon */
@@ -43,20 +44,20 @@ const FolderIcon = ({
     }
 
     // For backward compatibility, we keep both title and aria-label
-    const accessibilityProps = {
-        role,
-        'aria-label': ariaLabel || title,
-        'aria-hidden': ariaHidden,
-        title: title || ariaLabel, // Ensure title is always set for backward compatibility
-    };
+    const effectiveTitle = title || ariaLabel;
 
     return (
-        <IconComponent
+        <AccessibleSVG
             height={Number(dimension)}
             width={Number(dimension)}
+            title={effectiveTitle}
             viewBox="0 0 32 32"
-            {...accessibilityProps}
-        />
+            role={role}
+            aria-label={effectiveTitle}
+            aria-hidden={ariaHidden}
+        >
+            <IconComponent />
+        </AccessibleSVG>
     );
 };
 
