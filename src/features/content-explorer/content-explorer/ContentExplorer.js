@@ -205,7 +205,9 @@ class ContentExplorer extends Component {
     }
 
     getAllSelectedItems = () => {
-        return { ...this.state.selectedItems, ...this.props.controlledSelectedItems };
+        const { selectedItems } = this.state;
+        const { controlledSelectedItems } = this.props;
+        return { ...selectedItems, ...controlledSelectedItems };
     };
 
     areAllItemsSelected = () => {
@@ -216,7 +218,8 @@ class ContentExplorer extends Component {
     };
 
     isLoadingItems = () => {
-        return this.props?.items?.[0]?.isLoading;
+        const { items } = this.props;
+        return items?.[0]?.isLoading;
     };
 
     getCurrentFolder() {

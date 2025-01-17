@@ -95,7 +95,7 @@ module.exports = [
             'import/no-unresolved': 'off', // requires import resolver configuration - skipping
             'jsx-a11y/label-has-associated-control': 'off',
             'react/default-props-match-prop-types': 'error', // enabled - no issues found
-            'react/destructuring-assignment': 'off', // fixme
+            'react/destructuring-assignment': 'error', // enabled and fixed
             'react/forbid-prop-types': 'off', // fixme
             'react/jsx-no-bind': 'off', // fixme
             'react/jsx-sort-props': 'off', // fixme
