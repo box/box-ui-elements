@@ -12,19 +12,21 @@ export const basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Verify initial UI state
-        const basicInitialChooseButton = canvas.getByLabelText('Choose');
-        expect(basicInitialChooseButton).toBeDisabled();
-        expect(canvas.getByLabelText('Cancel')).toBeInTheDocument();
-
-        // Wait for content to load and verify complete UI state
+        // Wait for initial load and verify state
         await waitFor(() => {
-            expect(canvas.getByText('All Files')).toBeInTheDocument();
+            // Verify button states using aria-labels
+            expect(canvas.getByLabelText('Choose')).toBeDisabled();
+            expect(canvas.getByLabelText('Cancel')).toBeInTheDocument();
+
+            // Verify folder content is loaded
+            expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
+            expect(canvas.getByRole('button', { name: /An Ordered Folder/i })).toBeInTheDocument();
+            expect(canvas.getByRole('button', { name: /0 Selected/i })).toBeInTheDocument();
+
+            // Verify grid structure
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
             expect(canvas.getByRole('grid')).toBeInTheDocument();
-            const basicLoadedChooseButton = canvas.getByLabelText('Choose');
-            expect(basicLoadedChooseButton).toBeDisabled();
         });
     },
 };
