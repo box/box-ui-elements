@@ -10,7 +10,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
         test('should render default file icon', () => {
             renderComponent({});
 
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
         });
 
         test('should render archive icon', () => {
@@ -22,7 +22,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             };
             renderComponent(rowData);
 
-            expect(screen.getByTestId('archive-icon-cell')).toBeVisible();
+            expect(screen.getByRole('img', { name: 'Archive' })).toBeInTheDocument();
         });
 
         test('should render archived folder icon', () => {
@@ -34,7 +34,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             };
             renderComponent(rowData);
 
-            expect(screen.getByTestId('folder-archive-icon-cell')).toBeVisible();
+            expect(screen.getByRole('img', { name: 'Archived Folder' })).toBeInTheDocument();
         });
 
         [
@@ -78,7 +78,7 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             test('should render correct folder icon', () => {
                 renderComponent(rowData);
 
-                expect(screen.getByTitle(title)).toBeInTheDocument();
+                expect(screen.getByRole('img', { name: title })).toBeInTheDocument();
             });
         });
 
@@ -87,14 +87,14 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             const rowData = { type: 'file', extension };
             renderComponent(rowData);
 
-            expect(screen.getByTitle('File')).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
         });
 
         test('should render correct bookmark icon', () => {
             const rowData = { type: 'web_link' };
             renderComponent(rowData);
 
-            expect(screen.getByTitle('Bookmark')).toBeInTheDocument();
+            expect(screen.getByRole('img', { name: 'Bookmark' })).toBeInTheDocument();
         });
     });
 });
