@@ -32,13 +32,16 @@ class AccessibleSVG extends React.Component<AccessibleSVGProps & SVGProps> {
         const titleID = `${this.id}-title`;
 
         // Make sure parent doesn't accidentally override these values
-        const svgProps: Record<string, string | number | React.ReactNode> = omit(rest, ['role', 'aria-labelledby']);
+        const svgProps: Record<string, string | number | React.ReactNode> = omit(rest, ['role']);
 
         // Accessibility fix for IE11, which treats all SVGs as focusable by default
         svgProps.focusable = 'false';
 
         if (title) {
-            svgProps['aria-labelledby'] = titleID;
+            // If aria-label is provided, use it instead of aria-labelledby
+            if (!svgProps['aria-label']) {
+                svgProps['aria-labelledby'] = titleID;
+            }
             svgProps.role = 'img';
         } else {
             svgProps['aria-hidden'] = 'true';
@@ -47,7 +50,7 @@ class AccessibleSVG extends React.Component<AccessibleSVGProps & SVGProps> {
 
         return (
             <svg {...svgProps}>
-                {title ? <title id={titleID}>{title}</title> : null}
+                {title && !svgProps['aria-label'] ? <title id={titleID}>{title}</title> : null}
                 {children}
             </svg>
         );
