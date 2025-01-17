@@ -37,16 +37,18 @@ class AccessibleSVG extends React.Component<AccessibleSVGProps & SVGProps> {
         // Accessibility fix for IE11, which treats all SVGs as focusable by default
         svgProps.focusable = 'false';
 
-        // Always set role to img for icons
-        svgProps.role = 'img';
-
-        // Use aria-label if provided, otherwise use title with aria-labelledby
-        if (svgProps['aria-label']) {
-            delete svgProps['aria-labelledby'];
-        } else if (title) {
-            svgProps['aria-labelledby'] = titleID;
+        // If there's a title or aria-label, treat as img, otherwise as presentation
+        if (title || svgProps['aria-label']) {
+            svgProps.role = 'img';
+            // If aria-label is provided, use it instead of aria-labelledby
+            if (!svgProps['aria-label'] && title) {
+                svgProps['aria-labelledby'] = titleID;
+            }
         } else {
             svgProps['aria-hidden'] = 'true';
+            svgProps.role = 'presentation';
+            // Remove aria-labelledby when role is presentation
+            delete svgProps['aria-labelledby'];
         }
 
         return (
