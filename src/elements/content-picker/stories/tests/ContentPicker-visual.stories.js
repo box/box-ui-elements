@@ -625,41 +625,44 @@ export const folderNavigationAndSelection = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for items to load
+        // Wait for initial load and verify state
         await waitFor(() => {
-            const items = canvas.getAllByRole('row');
-            expect(items.length).toBeGreaterThan(1);
+            const orderedFolder = canvas.getByRole('button', { name: /An Ordered Folder/i });
+            expect(orderedFolder).toBeInTheDocument();
+            expect(canvas.getByRole('button', { name: /0 Selected/i })).toBeInTheDocument();
+            expect(canvas.getByLabelText('Choose')).toBeDisabled();
         });
 
-        const items = canvas.getAllByRole('row');
+        // Navigate into "An Ordered Folder"
+        const orderedFolder = canvas.getByRole('button', { name: /An Ordered Folder/i });
+        await userEvent.dblClick(orderedFolder);
 
-        // Select first item
-        await userEvent.click(items[1]);
-        expect(items[1]).toHaveClass('bcp-item-row-selected');
-        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
-        expect(canvas.getByLabelText('Choose')).toBeEnabled();
-
-        // Navigate into folder
-        await userEvent.dblClick(items[2]);
+        // Wait for folder contents to load
         await waitFor(() => {
-            expect(canvas.getByText('Subfolder')).toBeInTheDocument();
+            expect(canvas.getByText('Audio.mp3')).toBeInTheDocument();
             expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
         });
 
-        // Verify selection persists in subfolder
-        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
-        expect(canvas.getByLabelText('Choose')).toBeEnabled();
+        // Select first item
+        const audioRow = canvas.getByRole('row', { name: /Audio\.mp3/i });
+        await userEvent.click(audioRow);
+
+        // Verify selection state
+        await waitFor(() => {
+            expect(audioRow).toHaveClass('bcp-item-row-selected');
+            expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+            expect(canvas.getByLabelText('Choose')).toBeEnabled();
+        });
 
         // Navigate back to root
         await userEvent.click(canvas.getByText('Preview Test Folder'));
-        await waitFor(() => {
-            expect(canvas.queryByRole('link', { name: /Subfolder/i })).not.toBeInTheDocument();
-        });
 
         // Verify selection persists in root
-        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
-        expect(canvas.getByLabelText('Choose')).toBeEnabled();
-        expect(items[1]).toHaveClass('bcp-item-row-selected');
+        await waitFor(() => {
+            expect(canvas.queryByText('Audio.mp3')).not.toBeInTheDocument();
+            expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+            expect(canvas.getByLabelText('Choose')).toBeEnabled();
+        });
     },
 };
 
@@ -667,54 +670,59 @@ export const searchFunctionality = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for items to load
+        // Wait for initial load and verify state
         await waitFor(() => {
-            const items = canvas.getAllByRole('row');
-            expect(items.length).toBeGreaterThan(1);
+            const orderedFolder = canvas.getByRole('button', { name: /An Ordered Folder/i });
+            expect(orderedFolder).toBeInTheDocument();
+            expect(canvas.getByRole('button', { name: /0 Selected/i })).toBeInTheDocument();
+            expect(canvas.getByLabelText('Choose')).toBeDisabled();
         });
 
         // Navigate into "An Ordered Folder"
-        const orderedFolder = await canvas.findByText('An Ordered Folder');
+        const orderedFolder = canvas.getByRole('button', { name: /An Ordered Folder/i });
         await userEvent.dblClick(orderedFolder);
 
         // Wait for folder contents to load
         await waitFor(() => {
+            expect(canvas.getByText('Audio.mp3')).toBeInTheDocument();
             expect(canvas.getByText('Preview Test Folder')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
 
-        const items = canvas.getAllByRole('row');
-
         // Focus search and enter query
         await userEvent.keyboard('/');
         const searchInput = canvas.getByRole('textbox');
-        await userEvent.type(searchInput, 'test');
+        await userEvent.type(searchInput, 'Audio');
 
         // Verify search results
         await waitFor(() => {
             expect(canvas.getByText(/Search Results/i)).toBeInTheDocument();
             expect(canvas.getByRole('button', { name: /Clear Search/i })).toBeInTheDocument();
+            expect(canvas.getByText('Audio.mp3')).toBeInTheDocument();
         });
 
-        // Select first search result
-        await userEvent.click(items[1]);
-        expect(items[1]).toHaveClass('bcp-item-row-selected');
-        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
-        expect(canvas.getByLabelText('Choose')).toBeEnabled();
+        // Select search result
+        const audioRow = canvas.getByRole('row', { name: /Audio\.mp3/i });
+        await userEvent.click(audioRow);
+
+        // Verify selection state
+        await waitFor(() => {
+            expect(audioRow).toHaveClass('bcp-item-row-selected');
+            expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+            expect(canvas.getByLabelText('Choose')).toBeEnabled();
+        });
 
         // Clear search
         await userEvent.clear(searchInput);
 
-        // Verify return to folder view
+        // Verify return to folder view and selection persistence
         await waitFor(() => {
             expect(canvas.queryByText(/Search Results/i)).not.toBeInTheDocument();
             expect(canvas.getByPlaceholderText(/Search/i)).toHaveValue('');
+            expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+            expect(canvas.getByLabelText('Choose')).toBeEnabled();
         });
-
-        // Verify selection persists
-        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
-        expect(canvas.getByLabelText('Choose')).toBeEnabled();
     },
 };
 
