@@ -84,7 +84,7 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         viewBox="0 0 32 32"
                         aria-label={title}
                     >
-                        <FolderArchive aria-hidden="true" />
+                        <FolderArchive aria-hidden="true" height={dimension} width={dimension} />
                     </AccessibleSVG>
                 );
             }
@@ -102,7 +102,7 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         viewBox="0 0 32 32"
                         aria-label={title}
                     >
-                        <Archive aria-hidden="true" />
+                        <Archive aria-hidden="true" height={dimension} width={dimension} />
                     </AccessibleSVG>
                 );
             }
@@ -126,7 +126,7 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             }
 
             return (
-                <AccessibleSVG
+                <IconComponent
                     className={className}
                     height={dimension}
                     width={dimension}
@@ -134,9 +134,7 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                     viewBox="0 0 32 32"
                     role="img"
                     aria-label={title}
-                >
-                    <IconComponent aria-hidden="true" />
-                </AccessibleSVG>
+                />
             );
         }
         default:
