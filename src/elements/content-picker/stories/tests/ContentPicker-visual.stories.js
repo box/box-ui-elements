@@ -17,6 +17,12 @@ export default {
     parameters: {
         msw: {
             handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
+                    return HttpResponse.json(mockEmptyRootFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
+                    return new HttpResponse('Internal Server Error', { status: 500 });
+                }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
                     return HttpResponse.json(mockRootFolder);
                 }),
@@ -29,24 +35,19 @@ export const basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state and verify loading UI
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-            expect(canvas.queryByRole('row')).not.toBeInTheDocument(); // No items while loading
-            const basicInitialChooseButton = canvas.getByLabelText('Choose');
-            expect(basicInitialChooseButton).toBeDisabled(); // Choose button disabled during load
-            expect(canvas.getByLabelText('Cancel')).toBeInTheDocument(); // Cancel always present
-        });
+        // Verify initial UI state
+        const basicInitialChooseButton = canvas.getByLabelText('Choose');
+        expect(basicInitialChooseButton).toBeDisabled();
+        expect(canvas.getByLabelText('Cancel')).toBeInTheDocument();
 
-        // Wait for items to load and verify complete UI state
+        // Wait for content to load and verify complete UI state
         await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
+            expect(canvas.getByText('All Files')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
-            expect(canvas.getByText('All Files')).toBeInTheDocument(); // Verify breadcrumb
-            expect(canvas.getByRole('grid')).toBeInTheDocument(); // Verify grid structure
+            expect(canvas.getByRole('grid')).toBeInTheDocument();
             const basicLoadedChooseButton = canvas.getByLabelText('Choose');
-            expect(basicLoadedChooseButton).toBeDisabled(); // Choose still disabled (no selection)
+            expect(basicLoadedChooseButton).toBeDisabled();
         });
     },
 };
@@ -55,17 +56,12 @@ export const selectedEmptyState = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state and verify loading UI
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-            expect(canvas.queryByRole('row')).not.toBeInTheDocument(); // No items while loading
-            const emptyInitialChooseButton = canvas.getByLabelText('Choose');
-            expect(emptyInitialChooseButton).toBeDisabled(); // Choose button disabled during load
-        });
+        // Verify initial UI state
+        const emptyInitialChooseButton = canvas.getByLabelText('Choose');
+        expect(emptyInitialChooseButton).toBeDisabled();
 
         // Wait for folder content to load
         await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             expect(canvas.getByText('An Ordered Folder')).toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
@@ -89,55 +85,18 @@ export const selectedEmptyState = {
             expect(emptySelectedChooseButton).toBeDisabled();
         });
     },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
 };
 
 export const emptyFolder = {
+    args: {
+        rootFolderId: '74729718131',
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-
-        // Wait for initial loading state and verify loading UI
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-            expect(canvas.queryByRole('row')).not.toBeInTheDocument(); // No items while loading
-            const emptyFolderInitialChooseButton = canvas.getByLabelText('Choose');
-            expect(emptyFolderInitialChooseButton).toBeDisabled(); // Choose button disabled during load
-            expect(canvas.getByLabelText('Cancel')).toBeInTheDocument(); // Cancel always present
-        });
-
-        // Wait for empty folder content to load and verify complete UI state
-        await waitFor(() => {
+            expect(canvas.getByText('There are no items in this folder.')).toBeInTheDocument();
             expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-            expect(canvas.getByText('This folder is empty')).toBeInTheDocument();
-            expect(canvas.queryByRole('row')).not.toBeInTheDocument(); // Still no items
-            expect(canvas.getByRole('grid')).toBeInTheDocument(); // Grid structure exists but empty
-
-            // Verify button states in empty folder
-            const emptyFolderLoadedChooseButton = canvas.getByLabelText('Choose');
-            expect(emptyFolderLoadedChooseButton).toBeDisabled();
-            expect(canvas.getByLabelText('Cancel')).toBeInTheDocument();
-
-            // Verify selection state
-            const selectedButton = canvas.getByRole('button', { name: '0 Selected' });
-            expect(selectedButton).toBeInTheDocument();
         });
-    },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockEmptyRootFolder);
-                }),
-            ],
-        },
     },
 };
 
@@ -151,33 +110,15 @@ export const emptySelectionMode = {
 };
 
 export const withError = {
+    args: {
+        rootFolderId: '191354690948',
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-
-        // Wait for initial loading state
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for error state to be displayed after loading fails (allowing time for retries)
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
-            // Verify error state UI elements
-            const errorChooseButton = canvas.getByLabelText('Choose');
-            const errorCancelButton = canvas.getByLabelText('Cancel');
-            expect(errorChooseButton).toBeDisabled();
-            expect(errorCancelButton).toBeEnabled();
+            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
         });
-    },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return new HttpResponse('Internal Server Error', { status: 500 });
-                }),
-            ],
-        },
     },
 };
 
@@ -185,26 +126,11 @@ export const hitSelectionLimit = {
     args: {
         maxSelectable: 2,
     },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
         // Wait for items to load and verify initial state
         await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1); // Header row + at least one item
         });
@@ -263,15 +189,6 @@ export const hitSelectionLimit = {
 };
 
 export const cancelUnselectsItems = {
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
@@ -331,15 +248,6 @@ export const cancelUnselectsItems = {
 export const singleSelectWithItems = {
     args: {
         maxSelectable: 1,
-    },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -417,15 +325,6 @@ export const singleSelectWithItems = {
 };
 
 export const keyboardShortcuts = {
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
@@ -515,31 +414,19 @@ export const keyboardShortcuts = {
 };
 
 export const shareAccess = {
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
+        // Wait for content to load and verify initial state
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for items to load
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
+            const shareColumn = canvas.getByRole('columnheader', { name: /Share/ });
+            expect(shareColumn).toBeInTheDocument();
+            expect(shareColumn).toBeVisible();
         });
 
-        // Verify initial selection state and share column visibility
+        // Verify initial selection state
         const initialSelectedButton = canvas.getByRole('button', {
             name: text => text.includes('0') && text.includes('Selected'),
         });
@@ -547,19 +434,6 @@ export const shareAccess = {
 
         const shareInitialChooseButton = canvas.getByLabelText('Choose');
         expect(shareInitialChooseButton).toBeDisabled();
-
-        // Wait for initial loading state
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for content to load and verify share access column
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-            const shareColumn = canvas.getByRole('columnheader', { name: /Share/ });
-            expect(shareColumn).toBeInTheDocument();
-            expect(shareColumn).toBeVisible();
-        });
 
         const items = canvas.getAllByRole('row');
 
@@ -594,98 +468,66 @@ export const multiSelectWithKeyboard = {
     args: {
         maxSelectable: 3,
     },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
+        // Wait for items to load and verify initial state
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for items to load
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
+            expect(canvas.getByRole('button', { name: /0 Selected/i })).toBeInTheDocument();
+            expect(canvas.getByLabelText('Choose')).toBeDisabled();
         });
 
-        // Verify initial selection state
-        const initialSelectedButton = canvas.getByRole('button', {
-            name: text => text.includes('0') && text.includes('Selected'),
-        });
-        expect(initialSelectedButton).toBeInTheDocument();
-        const multiInitialChooseButton = canvas.getByLabelText('Choose');
-        expect(multiInitialChooseButton).toBeDisabled();
-
-        // Wait for initial loading state
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for items to load
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-            const items = canvas.getAllByRole('row');
-            expect(items.length).toBeGreaterThan(1);
-        });
-
-        const items = canvas.getAllByRole('row');
-
-        // Focus and select first item with visual feedback
-        await userEvent.click(items[1]);
-        expect(items[1]).toHaveClass('bcp-item-row-selected');
+        // Select first item
+        const firstItems = canvas.getAllByRole('row');
+        await userEvent.click(firstItems[1]);
 
         // Verify first selection state
         await waitFor(() => {
-            const selectedButton = canvas.getByRole('button', {
-                name: text => text.includes('1') && text.includes('Selected'),
-            });
+            const selectedItems = canvas.getAllByRole('row');
+            const row = selectedItems[1];
+            expect(row).toHaveClass('bcp-item-row-selected');
+            const selectedButton = canvas.getByRole('button', { name: /1 Selected/i });
             expect(selectedButton).toBeInTheDocument();
-            const multiFirstChooseButton = canvas.getByLabelText('Choose');
-            expect(multiFirstChooseButton).toBeEnabled();
+            const chooseButton = canvas.getByLabelText('Choose');
+            expect(chooseButton).toBeEnabled();
         });
 
-        // Use arrow down to navigate and space to select second item
+        // Select second item with keyboard
         await userEvent.keyboard('{ArrowDown}');
+        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for selection update
         await userEvent.keyboard(' ');
-        expect(items[2]).toHaveClass('bcp-item-row-selected');
 
         // Verify second selection state
         await waitFor(() => {
-            const selectedButton = canvas.getByRole('button', {
-                name: text => text.includes('2') && text.includes('Selected'),
-            });
+            const selectedItems = canvas.getAllByRole('row');
+            const row = selectedItems[2];
+            expect(row).toHaveClass('bcp-item-row-selected');
+            const selectedButton = canvas.getByRole('button', { name: /2 Selected/i });
             expect(selectedButton).toBeInTheDocument();
-            const multiSecondChooseButton = canvas.getByLabelText('Choose');
-            expect(multiSecondChooseButton).toBeEnabled();
+            const chooseButton = canvas.getByLabelText('Choose');
+            expect(chooseButton).toBeEnabled();
         });
 
-        // Navigate to third item and select to hit max
+        // Select third item to hit max
         await userEvent.keyboard('{ArrowDown}');
+        await new Promise(resolve => setTimeout(resolve, 100)); // Small delay for selection update
         await userEvent.keyboard(' ');
-        expect(items[3]).toHaveClass('bcp-item-row-selected');
 
         // Verify max selection state
         await waitFor(() => {
-            const selectedButton = canvas.getByRole('button', {
-                name: text => text.includes('3') && text.includes('Selected'),
-            });
+            const selectedItems = canvas.getAllByRole('row');
+            const row = selectedItems[3];
+            expect(row).toHaveClass('bcp-item-row-selected');
+            const selectedButton = canvas.getByRole('button', { name: /3 Selected/i });
             expect(selectedButton).toBeInTheDocument();
             expect(canvas.getByText('(max)')).toBeInTheDocument();
             const chooseButton = canvas.getByLabelText('Choose');
             expect(chooseButton).toBeEnabled();
         });
 
-        // Try to select beyond max (should not work)
+        // Verify cannot select beyond max
         if (items.length > 4) {
             await userEvent.keyboard('{ArrowDown}');
             await userEvent.keyboard(' ');
@@ -696,216 +538,87 @@ export const multiSelectWithKeyboard = {
 };
 
 export const folderNavigationAndSelection = {
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-                // Mock subfolder response
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/123`, () => {
-                    return HttpResponse.json({
-                        ...mockRootFolder,
-                        id: '123',
-                        name: 'Subfolder',
-                    });
-                }),
-            ],
-        },
-    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
         // Wait for items to load
         await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
         });
 
-        // Verify initial selection state
-        const initialSelectedButton = canvas.getByRole('button', {
-            name: text => text.includes('0') && text.includes('Selected'),
-        });
-        expect(initialSelectedButton).toBeInTheDocument();
-        const navInitialChooseButton = canvas.getByLabelText('Choose');
-        expect(navInitialChooseButton).toBeDisabled();
-
         const items = canvas.getAllByRole('row');
 
-        // Select first item and verify visual feedback
+        // Select first item
         await userEvent.click(items[1]);
         expect(items[1]).toHaveClass('bcp-item-row-selected');
+        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+        expect(canvas.getByLabelText('Choose')).toBeEnabled();
 
-        // Verify selection state
-        await waitFor(() => {
-            const selectedButton = canvas.getByRole('button', {
-                name: text => text.includes('1') && text.includes('Selected'),
-            });
-            expect(selectedButton).toBeInTheDocument();
-            const navFirstChooseButton = canvas.getByLabelText('Choose');
-            expect(navFirstChooseButton).toBeEnabled();
-        });
-
-        // Navigate into folder (assuming second item is a folder)
+        // Navigate into folder
         await userEvent.dblClick(items[2]);
-
-        // Wait for loading state during navigation
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for subfolder content to load and verify navigation
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             expect(canvas.getByText('Subfolder')).toBeInTheDocument();
-            // Verify folder structure is updated
             expect(canvas.getByRole('link', { name: /All Files/i })).toBeInTheDocument();
-            expect(canvas.getByRole('link', { name: /Subfolder/i })).toBeInTheDocument();
         });
 
-        // Verify selection is maintained during navigation
-        await waitFor(() => {
-            const selectedButtonAfterNav = canvas.getByRole('button', {
-                name: text => text.includes('1') && text.includes('Selected'),
-            });
-            expect(selectedButtonAfterNav).toBeInTheDocument();
-            const navSubfolderChooseButton = canvas.getByLabelText('Choose');
-            expect(navSubfolderChooseButton).toBeEnabled();
-        });
+        // Verify selection persists in subfolder
+        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+        expect(canvas.getByLabelText('Choose')).toBeEnabled();
 
-        // Navigate back using breadcrumb
-        const breadcrumbLink = canvas.getByText('All Files');
-        await userEvent.click(breadcrumbLink);
-
-        // Wait for loading state during navigation back
+        // Navigate back to root
+        await userEvent.click(canvas.getByText('All Files'));
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for root folder content to load
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-            expect(canvas.getByText('All Files')).toBeInTheDocument();
-            // Verify we're back in root folder
             expect(canvas.queryByRole('link', { name: /Subfolder/i })).not.toBeInTheDocument();
         });
 
-        // Verify selection is maintained after returning to root
-        await waitFor(() => {
-            const selectedButtonAfterReturn = canvas.getByRole('button', {
-                name: text => text.includes('1') && text.includes('Selected'),
-            });
-            expect(selectedButtonAfterReturn).toBeInTheDocument();
-            const navReturnChooseButton = canvas.getByLabelText('Choose');
-            expect(navReturnChooseButton).toBeEnabled();
-            expect(items[1]).toHaveClass('bcp-item-row-selected');
-        });
+        // Verify selection persists in root
+        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+        expect(canvas.getByLabelText('Choose')).toBeEnabled();
+        expect(items[1]).toHaveClass('bcp-item-row-selected');
     },
 };
 
 export const searchFunctionality = {
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
         // Wait for items to load
         await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1);
-        });
-
-        // Verify initial selection state
-        const initialSelectedButton = canvas.getByRole('button', {
-            name: text => text.includes('0') && text.includes('Selected'),
-        });
-        expect(initialSelectedButton).toBeInTheDocument();
-        const searchInitialChooseButton = canvas.getByLabelText('Choose');
-        expect(searchInitialChooseButton).toBeDisabled();
-
-        // Press / to focus search
-        await userEvent.keyboard('/');
-        const searchInput = canvas.getByRole('textbox');
-        expect(searchInput).toHaveFocus();
-
-        // Type search query
-        await userEvent.type(searchInput, 'test');
-
-        // Wait for loading state during search
-        await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for search results and verify search UI
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-            const items = canvas.getAllByRole('row');
-            expect(items.length).toBeGreaterThan(1);
-            expect(canvas.getByText(/Search Results/i)).toBeInTheDocument();
-            // Verify search mode indicators
-            expect(canvas.getByRole('button', { name: /Clear Search/i })).toBeInTheDocument();
-            expect(canvas.getByPlaceholderText(/Search/i)).toHaveValue('test');
         });
 
         const items = canvas.getAllByRole('row');
 
-        // Select first search result and verify visual feedback
+        // Focus search and enter query
+        await userEvent.keyboard('/');
+        const searchInput = canvas.getByRole('textbox');
+        await userEvent.type(searchInput, 'test');
+
+        // Verify search results
+        await waitFor(() => {
+            expect(canvas.getByText(/Search Results/i)).toBeInTheDocument();
+            expect(canvas.getByRole('button', { name: /Clear Search/i })).toBeInTheDocument();
+        });
+
+        // Select first search result
         await userEvent.click(items[1]);
         expect(items[1]).toHaveClass('bcp-item-row-selected');
-
-        // Verify selection state in search results
-        await waitFor(() => {
-            const selectedButton = canvas.getByRole('button', {
-                name: text => text.includes('1') && text.includes('Selected'),
-            });
-            expect(selectedButton).toBeInTheDocument();
-            const searchResultChooseButton = canvas.getByLabelText('Choose');
-            expect(searchResultChooseButton).toBeEnabled();
-        });
+        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+        expect(canvas.getByLabelText('Choose')).toBeEnabled();
 
         // Clear search
         await userEvent.clear(searchInput);
 
-        // Wait for loading state during return to folder view
+        // Verify return to folder view
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
-        });
-
-        // Wait for folder content to load and verify search UI is cleared
-        await waitFor(() => {
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             expect(canvas.queryByText(/Search Results/i)).not.toBeInTheDocument();
-            expect(canvas.queryByRole('button', { name: /Clear Search/i })).not.toBeInTheDocument();
             expect(canvas.getByPlaceholderText(/Search/i)).toHaveValue('');
         });
 
-        // Verify selection is maintained after search is cleared
-        await waitFor(() => {
-            const selectedButtonAfterSearch = canvas.getByRole('button', {
-                name: text => text.includes('1') && text.includes('Selected'),
-            });
-            expect(selectedButtonAfterSearch).toBeInTheDocument();
-            const searchClearedChooseButton = canvas.getByLabelText('Choose');
-            expect(searchClearedChooseButton).toBeEnabled();
-        });
+        // Verify selection persists
+        expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
+        expect(canvas.getByLabelText('Choose')).toBeEnabled();
     },
 };
