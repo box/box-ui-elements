@@ -32,12 +32,12 @@ const FolderIcon = ({
     'aria-label': ariaLabel,
     'aria-hidden': ariaHidden,
 }: FolderIconProps): JSX.Element => {
-    // Priority: Collab > External > Personal
+    // Priority: External > Collab > Personal
     let IconComponent;
-    if (isCollab) {
-        IconComponent = IconFolderCollab;
-    } else if (isExternal) {
+    if (isExternal) {
         IconComponent = IconFolderExternal;
+    } else if (isCollab) {
+        IconComponent = IconFolderCollab;
     } else {
         IconComponent = IconFolderPersonal;
     }
