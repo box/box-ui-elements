@@ -1,7 +1,7 @@
 import * as React from 'react';
-import type { SVGProps } from 'react';
 import { useIntl } from 'react-intl';
 import { Archive, FolderArchive } from '@box/blueprint-web-assets/icons/Content';
+import AccessibleSVG from '../../../components/accessible-svg/AccessibleSVG';
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
@@ -59,30 +59,18 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             if (archive_type === 'folder_archive') {
                 const title = formatMessage(messages.archivedFolder);
                 return (
-                    <FolderArchive
-                        {...({
-                            height: dimension,
-                            width: dimension,
-                            title,
-                            role: 'img',
-                            'aria-label': title,
-                        } as SVGProps<SVGSVGElement>)}
-                    />
+                    <AccessibleSVG height={dimension} width={dimension} title={title} viewBox="0 0 32 32" role="img">
+                        <FolderArchive aria-hidden="true" />
+                    </AccessibleSVG>
                 );
             }
 
             if (archive_type === 'archive') {
                 const title = formatMessage(messages.archive);
                 return (
-                    <Archive
-                        {...({
-                            height: dimension,
-                            width: dimension,
-                            title,
-                            role: 'img',
-                            'aria-label': title,
-                        } as SVGProps<SVGSVGElement>)}
-                    />
+                    <AccessibleSVG height={dimension} width={dimension} title={title} viewBox="0 0 32 32" role="img">
+                        <Archive aria-hidden="true" />
+                    </AccessibleSVG>
                 );
             }
 
