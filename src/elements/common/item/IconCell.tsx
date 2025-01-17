@@ -61,7 +61,6 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                 const title = formatMessage(messages.archivedFolder);
                 return (
                     <AccessibleSVG
-                        data-testid="folder-archive-icon-cell"
                         height={dimension}
                         width={dimension}
                         title={title}
@@ -69,7 +68,7 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         role="img"
                         aria-label={title}
                     >
-                        <FolderArchive role={undefined} aria-hidden="true" />
+                        <FolderArchive aria-hidden="true" />
                     </AccessibleSVG>
                 );
             }
@@ -78,7 +77,6 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                 const title = formatMessage(messages.archive);
                 return (
                     <AccessibleSVG
-                        data-testid="archive-icon-cell"
                         height={dimension}
                         width={dimension}
                         title={title}
@@ -86,31 +84,36 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         role="img"
                         aria-label={title}
                     >
-                        <Archive role={undefined} aria-hidden="true" />
+                        <Archive aria-hidden="true" />
                     </AccessibleSVG>
                 );
             }
 
-            const getFolderTitle = () => {
-                if (has_collaborations) {
-                    return formatMessage(messages.collaboratedFolder);
-                }
-                if (is_externally_owned) {
-                    return formatMessage(messages.externalFolder);
-                }
-                return formatMessage(messages.personalFolder);
-            };
-            const title = getFolderTitle();
+            let title;
+            if (has_collaborations) {
+                title = formatMessage(messages.collaboratedFolder);
+            } else if (is_externally_owned) {
+                title = formatMessage(messages.externalFolder);
+            } else {
+                title = formatMessage(messages.personalFolder);
+            }
 
             return (
-                <FolderIcon
-                    dimension={dimension}
-                    role="img"
+                <AccessibleSVG
+                    height={dimension}
+                    width={dimension}
                     title={title}
+                    viewBox="0 0 32 32"
+                    role="img"
                     aria-label={title}
-                    isExternal={is_externally_owned}
-                    isCollab={has_collaborations}
-                />
+                >
+                    <FolderIcon
+                        dimension={dimension}
+                        aria-hidden={true}
+                        isExternal={is_externally_owned}
+                        isCollab={has_collaborations}
+                    />
+                </AccessibleSVG>
             );
         }
         default:
