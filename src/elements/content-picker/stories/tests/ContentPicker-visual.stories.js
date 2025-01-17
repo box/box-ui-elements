@@ -6,31 +6,6 @@ import ContentPicker from '../../ContentPicker';
 import { mockRootFolder, mockEmptyRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
-export default {
-    title: 'Elements/ContentPicker/tests/visual',
-    component: ContentPicker,
-    args: {
-        features: global.FEATURE_FLAGS,
-        rootFolderId: '69083462919',
-        token: global.TOKEN,
-    },
-    parameters: {
-        msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
-                    return HttpResponse.json(mockEmptyRootFolder);
-                }),
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
-                    return new HttpResponse('Internal Server Error', { status: 500 });
-                }),
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-            ],
-        },
-    },
-};
-
 export const basic = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -620,5 +595,30 @@ export const searchFunctionality = {
         // Verify selection persists
         expect(canvas.getByRole('button', { name: /1 Selected/i })).toBeInTheDocument();
         expect(canvas.getByLabelText('Choose')).toBeEnabled();
+    },
+};
+
+export default {
+    title: 'Elements/ContentPicker/tests/visual',
+    component: ContentPicker,
+    args: {
+        features: global.FEATURE_FLAGS,
+        rootFolderId: '69083462919',
+        token: global.TOKEN,
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
+                    return HttpResponse.json(mockEmptyRootFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
+                    return new HttpResponse('Internal Server Error', { status: 500 });
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+            ],
+        },
     },
 };
