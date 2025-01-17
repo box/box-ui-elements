@@ -59,8 +59,8 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         data-testid="folder-archive-icon-cell"
                         role="img"
                         aria-label={title}
-                        width={dimension}
                         height={dimension}
+                        width={dimension}
                     />
                 );
             }
@@ -72,8 +72,8 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                         data-testid="archive-icon-cell"
                         role="img"
                         aria-label={title}
-                        width={dimension}
                         height={dimension}
+                        width={dimension}
                     />
                 );
             }
