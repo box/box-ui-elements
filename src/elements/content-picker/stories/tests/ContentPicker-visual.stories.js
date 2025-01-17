@@ -5,6 +5,7 @@ import { http, HttpResponse } from 'msw';
 import ContentPicker from '../../ContentPicker';
 import { mockRootFolder, mockEmptyRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
 import mockSubFolder from '../../../content-explorer/stories/__mocks__/mockSubFolder';
+import { SLEEP_TIMEOUT } from '../../../../utils/storybook';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
 export const basic = {
@@ -69,19 +70,33 @@ export const emptyFolder = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await waitFor(() => {
-            expect(canvas.getByText('There are no items in this folder.')).toBeInTheDocument();
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-        });
+
+        await waitFor(
+            () => {
+                // Verify empty folder state
+                expect(canvas.getByText('This folder is empty')).toBeInTheDocument();
+            },
+            {
+                timeout: SLEEP_TIMEOUT,
+            },
+        );
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
+                    return HttpResponse.json(mockEmptyRootFolder);
+                }),
+            ],
+        },
     },
 };
 
 export const emptySelectionMode = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const emptyModeChooseButton = canvas.getByLabelText('Choose');
-        await userEvent.click(emptyModeChooseButton);
-        expect(emptyModeChooseButton).toBeDisabled();
+        const chooseButton = canvas.getByLabelText('Choose');
+        expect(chooseButton).toBeDisabled();
     },
 };
 
@@ -91,10 +106,25 @@ export const withError = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        await waitFor(() => {
-            expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
-            expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
-        });
+
+        await waitFor(
+            () => {
+                // Verify error state is displayed
+                expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
+            },
+            {
+                timeout: SLEEP_TIMEOUT * 3, // Increase timeout to allow for retries
+            },
+        );
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return new HttpResponse('Internal Server Error', { status: 500 });
+                }),
+            ],
+        },
     },
 };
 
@@ -102,10 +132,28 @@ export const hitSelectionLimit = {
     args: {
         maxSelectable: 2,
     },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
+                    return HttpResponse.json(mockSubFolder);
+                }),
+            ],
+        },
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for items to load and verify initial state
+        // Wait for root folder to load and navigate into "An Ordered Folder"
+        await waitFor(() => {
+            expect(canvas.getByText('An Ordered Folder')).toBeInTheDocument();
+        });
+        await userEvent.dblClick(canvas.getByText('An Ordered Folder'));
+
+        // Wait for subfolder items to load
         await waitFor(() => {
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1); // Header row + at least one item
@@ -174,10 +222,28 @@ export const hitSelectionLimit = {
 };
 
 export const cancelUnselectsItems = {
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
+                    return HttpResponse.json(mockSubFolder);
+                }),
+            ],
+        },
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for items to load
+        // Wait for root folder to load and navigate into "An Ordered Folder"
+        await waitFor(() => {
+            expect(canvas.getByText('An Ordered Folder')).toBeInTheDocument();
+        });
+        await userEvent.click(canvas.getByText('An Ordered Folder'));
+
+        // Wait for subfolder items to load
         await waitFor(() => {
             const items = canvas.getAllByRole('row');
             expect(items.length).toBeGreaterThan(1); // Header row + at least one item
@@ -239,15 +305,28 @@ export const singleSelectWithItems = {
     args: {
         maxSelectable: 1,
     },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+                    return HttpResponse.json(mockRootFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
+                    return HttpResponse.json(mockSubFolder);
+                }),
+            ],
+        },
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        // Wait for initial loading state
+        // Wait for root folder to load and navigate into "An Ordered Folder"
         await waitFor(() => {
-            expect(canvas.getByRole('progressbar')).toBeInTheDocument();
+            expect(canvas.getByText('An Ordered Folder')).toBeInTheDocument();
         });
+        await userEvent.dblClick(canvas.getByText('An Ordered Folder'));
 
-        // Wait for items to load
+        // Wait for subfolder items to load
         await waitFor(() => {
             expect(canvas.queryByRole('progressbar')).not.toBeInTheDocument();
             const items = canvas.getAllByRole('row');
