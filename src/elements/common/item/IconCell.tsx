@@ -3,8 +3,10 @@ import { useIntl } from 'react-intl';
 import { Archive, FolderArchive } from '@box/blueprint-web-assets/icons/Content';
 import AccessibleSVG from '../../../components/accessible-svg/AccessibleSVG';
 import FileIcon from '../../../icons/file-icon/FileIcon';
-import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
+import FolderShared32 from '../../../icon/content/FolderShared32';
+import FolderExternal32 from '../../../icon/content/FolderExternal32';
+import FolderPersonal32 from '../../../icon/content/FolderPersonal32';
 import messages from '../messages';
 import { ITEM_TYPE_FILE, ITEM_TYPE_FOLDER, ITEM_TYPE_WEBLINK } from '../../../common/constants';
 
@@ -33,7 +35,19 @@ type IconCellProps = {
 
 const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
     const { formatMessage } = useIntl();
-    const { type, extension, has_collaborations, is_externally_owned, archive_type } = rowData;
+    const {
+        type,
+        extension,
+        has_collaborations,
+        hasCollaborations,
+        is_externally_owned,
+        isExternallyOwned,
+        archive_type,
+        archiveType,
+    } = rowData;
+    const effectiveArchiveType = archive_type || archiveType;
+    const isExternallyOwnedFlag = is_externally_owned || isExternallyOwned;
+    const hasCollaborationsFlag = has_collaborations || hasCollaborations;
 
     switch (type) {
         case ITEM_TYPE_FILE:
@@ -47,26 +61,27 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             );
         case ITEM_TYPE_WEBLINK:
             return (
-                <AccessibleSVG
+                <BookmarkIcon
                     className="icon-bookmark"
                     height={dimension}
-                    title={formatMessage(messages.bookmark)}
                     width={dimension}
-                >
-                    <BookmarkIcon className="icon-bookmark" height={dimension} width={dimension} />
-                </AccessibleSVG>
+                    title={formatMessage(messages.bookmark)}
+                    aria-label={formatMessage(messages.bookmark)}
+                    role="img"
+                />
             );
         case ITEM_TYPE_FOLDER: {
-            if (archive_type === 'folder_archive') {
+            if (effectiveArchiveType === 'folder_archive') {
                 const title = formatMessage(messages.archivedFolder);
                 return (
                     <AccessibleSVG
                         className="icon-folder-archive"
+                        data-testid="folder-archive-icon-cell"
                         height={dimension}
                         width={dimension}
                         title={title}
-                        viewBox="0 0 32 32"
                         role="img"
+                        viewBox="0 0 32 32"
                         aria-label={title}
                     >
                         <FolderArchive aria-hidden="true" />
@@ -74,16 +89,17 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                 );
             }
 
-            if (archive_type === 'archive') {
+            if (effectiveArchiveType === 'archive') {
                 const title = formatMessage(messages.archive);
                 return (
                     <AccessibleSVG
                         className="icon-archive"
+                        data-testid="archive-icon-cell"
                         height={dimension}
                         width={dimension}
                         title={title}
-                        viewBox="0 0 32 32"
                         role="img"
+                        viewBox="0 0 32 32"
                         aria-label={title}
                     >
                         <Archive aria-hidden="true" />
@@ -92,23 +108,35 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             }
 
             let title;
-            if (has_collaborations) {
-                title = formatMessage(messages.collaboratedFolder);
-            } else if (is_externally_owned) {
+            let IconComponent;
+            let className;
+
+            if (isExternallyOwnedFlag) {
                 title = formatMessage(messages.externalFolder);
+                IconComponent = FolderExternal32;
+                className = 'icon-folder-external';
+            } else if (hasCollaborationsFlag) {
+                title = formatMessage(messages.collaboratedFolder);
+                IconComponent = FolderShared32;
+                className = 'icon-folder-shared';
             } else {
                 title = formatMessage(messages.personalFolder);
+                IconComponent = FolderPersonal32;
+                className = 'icon-folder-personal';
             }
 
             return (
-                <FolderIcon
-                    dimension={dimension}
+                <AccessibleSVG
+                    className={className}
+                    height={dimension}
+                    width={dimension}
                     title={title}
-                    aria-label={title}
+                    viewBox="0 0 32 32"
                     role="img"
-                    isExternal={is_externally_owned}
-                    isCollab={has_collaborations}
-                />
+                    aria-label={title}
+                >
+                    <IconComponent aria-hidden="true" />
+                </AccessibleSVG>
             );
         }
         default:
