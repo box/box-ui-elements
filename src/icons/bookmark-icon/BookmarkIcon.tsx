@@ -4,13 +4,27 @@ import AccessibleSVG from '../accessible-svg';
 
 import { TwoTonedIcon } from '../iconTypes';
 
-const BookmarkIcon = ({ className = '', height = 32, title, width = 32 }: TwoTonedIcon) => (
+interface BookmarkIconProps extends TwoTonedIcon {
+    'aria-label'?: string;
+    role?: string;
+}
+
+const BookmarkIcon = ({
+    className = '',
+    height = 32,
+    title,
+    width = 32,
+    role = 'img',
+    'aria-label': ariaLabel,
+}: BookmarkIconProps) => (
     <AccessibleSVG
         className={`icon-bookmark ${className}`}
         height={height}
         title={title}
         viewBox="0 0 32 32"
         width={width}
+        role={role}
+        aria-label={ariaLabel || title}
     >
         <path
             clipRule="evenodd"

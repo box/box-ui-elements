@@ -50,18 +50,17 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
                 <AccessibleSVG
                     className="icon-bookmark"
                     height={dimension}
-                    role="img"
                     title={formatMessage(messages.bookmark)}
                     width={dimension}
                 >
-                    <BookmarkIcon />
+                    <BookmarkIcon className="icon-bookmark" height={dimension} width={dimension} />
                 </AccessibleSVG>
             );
         case ITEM_TYPE_FOLDER: {
             if (archive_type === 'folder_archive') {
                 const title = formatMessage(messages.archivedFolder);
                 return (
-                    <AccessibleSVG height={dimension} role="img" title={title} width={dimension}>
+                    <AccessibleSVG className="icon-folder-archive" height={dimension} title={title} width={dimension}>
                         <FolderArchive />
                     </AccessibleSVG>
                 );
@@ -70,7 +69,7 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             if (archive_type === 'archive') {
                 const title = formatMessage(messages.archive);
                 return (
-                    <AccessibleSVG height={dimension} role="img" title={title} width={dimension}>
+                    <AccessibleSVG className="icon-archive" height={dimension} title={title} width={dimension}>
                         <Archive />
                     </AccessibleSVG>
                 );
