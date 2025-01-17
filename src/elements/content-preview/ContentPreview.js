@@ -24,6 +24,8 @@ import makeResponsive from '../common/makeResponsive';
 import { withNavRouter } from '../common/nav-router';
 import Internationalize from '../common/Internationalize';
 import AsyncLoad from '../common/async-load';
+// $FlowFixMe TypeScript file
+import ThemingStyles from '../common/theming';
 import TokenService from '../../utils/TokenService';
 import { isInputElement, focus } from '../../utils/dom';
 import { getTypedFileId } from '../../utils/file';
@@ -62,6 +64,8 @@ import type { StringMap, Token, BoxItem, BoxItemVersion } from '../../common/typ
 import type { VersionChangeCallback } from '../content-sidebar/versions';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { WithAnnotationsProps, WithAnnotatorContextProps } from '../common/annotator-context';
+// $FlowFixMe TypeScript file
+import type { Theme } from '../common/theming';
 import type APICache from '../../utils/Cache';
 
 import '../common/fonts.scss';
@@ -123,6 +127,7 @@ type Props = {
     showAnnotationsControls?: boolean,
     staticHost: string,
     staticPath: string,
+    theme?: Theme,
     token: Token,
     useHotkeys: boolean,
 } & ErrorContextProps &
@@ -1282,6 +1287,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
             sharedLinkPassword,
             requestInterceptor,
             responseInterceptor,
+            theme,
         }: Props = this.props;
 
         const {
@@ -1326,6 +1332,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             onKeyDown={this.onKeyDown}
                             tabIndex={0}
                         >
+                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
                             {hasHeader && (
                                 <PreviewHeader
                                     file={file}

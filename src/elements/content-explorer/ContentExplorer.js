@@ -21,6 +21,8 @@ import SubHeader from '../common/sub-header/SubHeader';
 import makeResponsive from '../common/makeResponsive';
 import openUrlInsideIframe from '../../utils/iframe';
 import Internationalize from '../common/Internationalize';
+// $FlowFixMe TypeScript file
+import ThemingStyles from '../common/theming';
 import API from '../../api';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
 import Footer from './Footer';
@@ -67,6 +69,8 @@ import {
     VIEW_MODE_GRID,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+// $FlowFixMe TypeScript file
+import type { Theme } from '../common/theming';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import type {
@@ -139,6 +143,7 @@ type Props = {
     sortDirection: SortDirection,
     staticHost: string,
     staticPath: string,
+    theme?: Theme,
     token: Token,
     uploadHost: string,
 };
@@ -1615,6 +1620,7 @@ class ContentExplorer extends Component<Props, State> {
             staticHost,
             staticPath,
             previewLibraryVersion,
+            theme,
             token,
             uploadHost,
         }: Props = this.props;
@@ -1659,6 +1665,7 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
+                    <ThemingStyles selector={`#${this.id}`} theme={theme} />
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         {!isDefaultViewMetadata && (
                             <>

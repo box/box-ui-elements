@@ -13,6 +13,7 @@ import API from '../../api';
 import Browser from '../../utils/Browser';
 import Internationalize from '../common/Internationalize';
 import makeResponsive from '../common/makeResponsive';
+import ThemingStyles, { Theme } from '../common/theming';
 import FolderUpload from '../../api/uploads/FolderUpload';
 import { getTypedFileId, getTypedFolderId } from '../../utils/file';
 import {
@@ -94,6 +95,7 @@ export interface ContentUploaderProps {
     rootFolderId: string;
     sharedLink?: string;
     sharedLinkPassword?: string;
+    theme?: Theme;
     token?: Token;
     uploadHost: string;
     useUploadsManager?: boolean;
@@ -1249,6 +1251,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             messages,
             onClose,
             onUpgradeCTAClick,
+            theme,
             useUploadsManager,
         }: ContentUploaderProps = this.props;
         const { view, items, errorCode, isUploadsManagerExpanded }: State = this.state;
@@ -1269,6 +1272,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 <TooltipProvider>
                     {useUploadsManager ? (
                         <div ref={measureRef} className={styleClassName} id={this.id}>
+                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
                             <UploadsManager
                                 isDragging={isDraggingItemsToUploadsManager}
                                 isExpanded={isUploadsManagerExpanded}
@@ -1285,6 +1289,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                         </div>
                     ) : (
                         <div ref={measureRef} className={styleClassName} id={this.id}>
+                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
                             <DroppableContent
                                 addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
                                 addFiles={this.addFilesToUploadQueue}
