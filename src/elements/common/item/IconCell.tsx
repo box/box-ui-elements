@@ -1,8 +1,7 @@
 import * as React from 'react';
+import type { SVGProps } from 'react';
 import { useIntl } from 'react-intl';
 import { Archive, FolderArchive } from '@box/blueprint-web-assets/icons/Content';
-import AccessibleSVG from '../../../components/accessible-svg/AccessibleSVG';
-
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
@@ -60,32 +59,30 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             if (archive_type === 'folder_archive') {
                 const title = formatMessage(messages.archivedFolder);
                 return (
-                    <AccessibleSVG
-                        height={dimension}
-                        width={dimension}
-                        title={title}
-                        viewBox="0 0 32 32"
-                        role="img"
-                        aria-label={title}
-                    >
-                        <FolderArchive aria-hidden="true" />
-                    </AccessibleSVG>
+                    <FolderArchive
+                        {...({
+                            height: dimension,
+                            width: dimension,
+                            title,
+                            role: 'img',
+                            'aria-label': title,
+                        } as SVGProps<SVGSVGElement>)}
+                    />
                 );
             }
 
             if (archive_type === 'archive') {
                 const title = formatMessage(messages.archive);
                 return (
-                    <AccessibleSVG
-                        height={dimension}
-                        width={dimension}
-                        title={title}
-                        viewBox="0 0 32 32"
-                        role="img"
-                        aria-label={title}
-                    >
-                        <Archive aria-hidden="true" />
-                    </AccessibleSVG>
+                    <Archive
+                        {...({
+                            height: dimension,
+                            width: dimension,
+                            title,
+                            role: 'img',
+                            'aria-label': title,
+                        } as SVGProps<SVGSVGElement>)}
+                    />
                 );
             }
 
@@ -99,21 +96,14 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             }
 
             return (
-                <AccessibleSVG
-                    height={dimension}
-                    width={dimension}
+                <FolderIcon
+                    dimension={dimension}
                     title={title}
-                    viewBox="0 0 32 32"
-                    role="img"
                     aria-label={title}
-                >
-                    <FolderIcon
-                        dimension={dimension}
-                        aria-hidden={true}
-                        isExternal={is_externally_owned}
-                        isCollab={has_collaborations}
-                    />
-                </AccessibleSVG>
+                    role="img"
+                    isExternal={is_externally_owned}
+                    isCollab={has_collaborations}
+                />
             );
         }
         default:
