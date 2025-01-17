@@ -92,7 +92,7 @@ module.exports = [
             ], // fixme - in progress
             'import/no-named-as-default': 'error', // enabled and fixed with inline disables
             'import/no-named-as-default-member': 'error', // enabled - no issues found
-            'import/no-unresolved': 'off', // fixme
+            'import/no-unresolved': 'off', // requires import resolver configuration - skipping
             'jsx-a11y/label-has-associated-control': 'off',
             'react/default-props-match-prop-types': 'off', // fixme
             'react/destructuring-assignment': 'off', // fixme
