@@ -5,7 +5,6 @@ import { Archive, FolderArchive } from '@box/blueprint-web-assets/icons/Content'
 import FileIcon from '../../../icons/file-icon/FileIcon';
 import FolderIcon from '../../../icons/folder-icon/FolderIcon';
 import BookmarkIcon from '../../../icons/bookmark-icon/BookmarkIcon';
-import AccessibleSVG from '../../../components/accessible-svg/AccessibleSVG';
 import messages from '../messages';
 import { ITEM_TYPE_FILE, ITEM_TYPE_FOLDER, ITEM_TYPE_WEBLINK } from '../../../common/constants';
 
@@ -56,18 +55,26 @@ const IconCell = ({ rowData, dimension = 32 }: IconCellProps): JSX.Element => {
             if (archiveType === 'folder_archive') {
                 const title = formatMessage(messages.archivedFolder);
                 return (
-                    <AccessibleSVG width={dimension} height={dimension} title={title} viewBox="0 0 32 32">
-                        <FolderArchive />
-                    </AccessibleSVG>
+                    <FolderArchive
+                        data-testid="folder-archive-icon-cell"
+                        role="img"
+                        aria-label={title}
+                        width={dimension}
+                        height={dimension}
+                    />
                 );
             }
 
             if (archiveType === 'archive') {
                 const title = formatMessage(messages.archive);
                 return (
-                    <AccessibleSVG width={dimension} height={dimension} title={title} viewBox="0 0 32 32">
-                        <Archive />
-                    </AccessibleSVG>
+                    <Archive
+                        data-testid="archive-icon-cell"
+                        role="img"
+                        aria-label={title}
+                        width={dimension}
+                        height={dimension}
+                    />
                 );
             }
 
