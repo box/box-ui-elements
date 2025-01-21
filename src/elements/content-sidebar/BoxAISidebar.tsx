@@ -13,69 +13,74 @@ import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../co
 import messages from '../common/content-answers/messages';
 
 export interface BoxAISidebarContextValues {
-    cache: { encodedSession?: string | null, questions?: QuestionType[] },
-    contentName: string,
-    elementId: string,
-    recordAction: (params: RecordActionType) => void,
-    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,
-    userInfo: { name: string, avatarUrl: string },
-};
+    cache: { encodedSession?: string | null; questions?: QuestionType[] };
+    contentName: string;
+    elementId: string;
+    isStopResponseEnabled: boolean;
+    recordAction: (params: RecordActionType) => void;
+    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
+    userInfo: { name: string, avatarURL: string };
+}
 
 export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues>({
     cache: null,
     contentName: '',
     elementId: '',
+    isStopResponseEnabled: false,
     recordAction: noop,
     setCacheValue: noop,
-    userInfo: { name: '', avatarUrl: ''},
+    userInfo: { name: '', avatarURL: '' },
 });
 
 export interface BoxAISidebarProps {
-    contentName: string,
-    cache: { encodedSession?: string | null, questions?: QuestionType[] },
-    createSessionRequest: (payload: Record<string, unknown>, itemID: string) => Promise<unknown>,
-    elementId: string,
+    contentName: string;
+    cache: { encodedSession?: string | null; questions?: QuestionType[] };
+    createSessionRequest: (payload: Record<string, unknown>, itemID: string) => Promise<unknown>;
+    elementId: string;
     fetchTimeout: Record<string, unknown>;
-    fileExtension: string,
-    fileID: string,
-    getAgentConfig: (payload: Record<string, unknown>) => Promise<unknown>,
-    getAIStudioAgents: () => Promise<unknown>,
-    getAnswer: (payload: Record<string, unknown>,
+    fileExtension: string;
+    fileID: string;
+    getAgentConfig: (payload: Record<string, unknown>) => Promise<unknown>;
+    getAIStudioAgents: () => Promise<unknown>;
+    getAnswer: (
+        payload: Record<string, unknown>,
         itemID?: string,
         itemIDs?: Array<string>,
-        state?: Record<string, unknown> ) => Promise<unknown>,
+        state?: Record<string, unknown>,
+    ) => Promise<unknown>;
     getAnswerStreaming: (
         payload: Record<string, unknown>,
         itemID?: string,
         itemIDs?: Array<string>,
         abortController?: AbortController,
         state?: Record<string, unknown>,
-    ) => Promise<unknown>,
-    getSuggestedQuestions: (itemID: string) => Promise<unknown> | null,
-    hostAppName: string,
-    isAgentSelectorEnabled: boolean,
-    isAIStudioAgentSelectorEnabled: boolean,
-    isCitationsEnabled: boolean,
-    isDebugModeEnabled: boolean,
-    isIntelligentQueryMode: boolean,
-    isMarkdownEnabled: boolean,
-    isResetChatEnabled: boolean,
-    isStopResponseEnabled: boolean,
-    isStreamingEnabled: boolean,
-    userInfo: { name: '', avatarUrl: ''},
-    recordAction: (params: RecordActionType) => void,
-    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void,
+    ) => Promise<unknown>;
+    getSuggestedQuestions: (itemID: string) => Promise<unknown> | null;
+    hostAppName: string;
+    isAgentSelectorEnabled: boolean;
+    isAIStudioAgentSelectorEnabled: boolean;
+    isCitationsEnabled: boolean;
+    isDebugModeEnabled: boolean;
+    isIntelligentQueryMode: boolean;
+    isMarkdownEnabled: boolean;
+    isResetChatEnabled: boolean;
+    isStopResponseEnabled?: boolean;
+    isStreamingEnabled: boolean;
+    userInfo: { name: string, avatarURL: string };
+    recordAction: (params: RecordActionType) => void;
+    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
     const {
         cache,
         contentName,
-        elementId, 
+        elementId,
         fileExtension,
         fileID,
         getSuggestedQuestions,
         isIntelligentQueryMode,
+        isStopResponseEnabled,
         recordAction,
         setCacheValue,
         userInfo,
@@ -84,9 +89,9 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     const { questions } = cache;
     const { formatMessage } = useIntl();
     let questionsWithoutInProgress = questions;
-    if (questions.length > 0 && !questions[questions.length -1].isCompleted) {
+    if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
         // pass only fully completed questions to not show loading indicator of question where we canceled API request
-        questionsWithoutInProgress = questionsWithoutInProgress.slice(0,-1);
+        questionsWithoutInProgress = questionsWithoutInProgress.slice(0, -1);
     }
 
     const localizedQuestions = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
@@ -107,19 +112,24 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     return (
         // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
         // that's why we need to use provider to pass other props
-        <BoxAISidebarContext.Provider value={{cache, contentName, elementId, setCacheValue, recordAction, userInfo}}>
+        <BoxAISidebarContext.Provider
+            value={{ cache, contentName, elementId, isStopResponseEnabled, setCacheValue, recordAction, userInfo }}
+        >
             <BoxAISidebarContent
+                getSuggestedQuestions={getSuggestedQuestions}
+                isOpen
+                isStopResponseEnabled={isStopResponseEnabled}
                 itemID={fileID}
                 itemIDs={[fileID]}
-                restoredQuestions={questionsWithoutInProgress} 
+                restoredQuestions={questionsWithoutInProgress}
                 restoredSession={cache.encodedSession}
-                suggestedQuestions={getSuggestedQuestions === null? localizedQuestions : []}
+                suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
                 warningNotice={spreadsheetNotice}
                 warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
-                {...rest} 
+                {...rest}
             />
         </BoxAISidebarContext.Provider>
     );
-}
+};
 
 export default BoxAISidebar;

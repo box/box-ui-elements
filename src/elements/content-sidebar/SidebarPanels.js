@@ -13,7 +13,7 @@ import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
-import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
+import { getFeatureConfig, withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withRouterAndRef } from '../common/routing';
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
@@ -133,7 +133,10 @@ class SidebarPanels extends React.Component<Props, State> {
 
     versionsSidebar: ElementRefType = React.createRef();
 
-    boxAiSidebarCache: { encodedSession?: string | null, questions?: QuestionType[] } = { encodedSession: null, questions: [] };
+    boxAiSidebarCache: { encodedSession?: string | null, questions?: QuestionType[] } = {
+        encodedSession: null,
+        questions: [],
+    };
 
     componentDidMount() {
         this.setState({ isInitialized: true });
@@ -234,8 +237,12 @@ class SidebarPanels extends React.Component<Props, State> {
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
         const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
 
+        const { showOnlyNavButton: showOnlyBoxAINavButton } = getFeatureConfig(features, 'boxai.sidebar');
+
+        const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
+
         const panelsEligibility = {
-            [SIDEBAR_VIEW_BOXAI]: hasBoxAI,
+            [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
             [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
             [SIDEBAR_VIEW_SKILLS]: hasSkills,
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
@@ -251,7 +258,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         return (
             <Switch>
-                {hasBoxAI && (
+                {canShowBoxAISidebarPanel && (
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_BOXAI}`}
@@ -266,7 +273,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     hasSidebarInitialized={isInitialized}
                                     ref={this.boxAISidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_BOXAI}
-                                    userInfo={{name: currentUser?.name, avatarUrl: currentUser?.avatar_url}}
+                                    userInfo={{ name: currentUser?.name, avatarURL: currentUser?.avatar_url }}
                                     cache={this.boxAiSidebarCache}
                                     setCacheValue={this.setBoxAiSidebarCacheValue}
                                     {...boxAISidebarProps}
@@ -434,7 +441,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
                         if (showDefaultPanel) {
                             redirect = defaultPanel;
-                        } else if (hasBoxAI) {
+                        } else if (canShowBoxAISidebarPanel) {
                             redirect = SIDEBAR_VIEW_BOXAI;
                         } else if (hasDocGen) {
                             redirect = SIDEBAR_VIEW_DOCGEN;

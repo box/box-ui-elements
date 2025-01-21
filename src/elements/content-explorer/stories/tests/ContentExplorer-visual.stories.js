@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { expect, userEvent, waitFor, within, screen } from '@storybook/test';
 
 import ContentExplorer from '../../ContentExplorer';
-import mockRootFolder from '../__mocks__/mockRootFolder';
+import { mockEmptyRootFolder, mockRootFolder } from '../__mocks__/mockRootFolder';
 import mockSubFolder from '../__mocks__/mockSubFolder';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
@@ -167,6 +167,43 @@ export const withMoreOptionsAndShareButton = {
     },
 };
 
+export const emptyState = {
+    args: {
+        rootFolderId: '74729718131',
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await waitFor(() => {
+            expect(canvas.getByText('There are no items in this folder.')).toBeInTheDocument();
+        });
+    },
+};
+
+export const errorEmptyState = {
+    args: {
+        rootFolderId: '191354690948',
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        await waitFor(() => {
+            expect(canvas.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
+        });
+    },
+};
+
+export const searchEmptyState = {
+    args: {
+        rootFolderId: '74729718131',
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        const searchBar = canvas.getByRole('searchbox', { name: 'Search files and folders' });
+        await userEvent.type(searchBar, 'foo');
+
+        expect(canvas.getByText('Sorry, we couldn’t find what you’re looking for.')).toBeInTheDocument();
+    },
+};
+
 export default {
     title: 'Elements/ContentExplorer/tests/ContentExplorer/visual',
     component: ContentExplorer,
@@ -183,6 +220,12 @@ export default {
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
                     return HttpResponse.json(mockSubFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
+                    return HttpResponse.json(mockEmptyRootFolder);
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
+                    return new HttpResponse('Internal Server Error', { status: 500 });
                 }),
             ],
         },

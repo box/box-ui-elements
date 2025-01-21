@@ -23,18 +23,13 @@ const messages = defineMessages({
     },
     errorCouldNotLoad: {
         id: 'be.docGenSidebar.errorTags',
-        defaultMessage: "We couldn't load the tags",
+        defaultMessage: 'Looks like your recent changes to the Doc Gen template are yet to be processed.',
         description: 'Error message when tags could not be loaded',
-    },
-    errorRefreshList: {
-        id: 'be.docGenSidebar.refreshPrompt',
-        defaultMessage: 'Please refresh the list.',
-        description: 'Prompt to refresh the list after an error',
     },
     errorRefreshButton: {
         id: 'be.docGenSidebar.refreshButton',
-        defaultMessage: 'Refresh',
-        description: 'Label for the refresh button',
+        defaultMessage: 'Process document',
+        description: 'Label for the Process document button',
     },
 });
 

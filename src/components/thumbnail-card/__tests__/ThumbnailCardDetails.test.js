@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react';
+import userEvent from '@testing-library/user-event';
 
-import { mount, shallow } from 'enzyme';
+import { render, screen } from '../../../test-utils/testing-library';
 
 import * as libDom from '../../../utils/dom';
-
 import ThumbnailCardDetails from '../ThumbnailCardDetails';
 
-const getWrapper = (props = {}) => shallow(<ThumbnailCardDetails title={<div>Foo Bar!</div>} {...props} />);
+const renderComponent = (props = {}) => render(<ThumbnailCardDetails title={<div>Foo Bar!</div>} {...props} />);
 
 jest.mock('../../../utils/dom', () => ({ useIsContentOverflowed: jest.fn() }));
 
@@ -17,37 +17,49 @@ describe('components/thumbnail-card/ThumbnailCardDetails', () => {
     });
 
     test('should render', () => {
-        const wrapper = getWrapper();
+        const { container } = renderComponent();
 
-        expect(wrapper).toMatchSnapshot();
+        expect(container.querySelector('.thumbnail-card-details')).toBeInTheDocument();
     });
 
     test('should render icon', () => {
         const icon = <img alt="icon" />;
-        const wrapper = getWrapper({ icon });
+        renderComponent({ icon });
 
-        expect(wrapper).toMatchSnapshot();
+        expect(screen.queryByAltText('icon')).toBeInTheDocument();
     });
 
     test('should render subtitle', () => {
         const subtitle = <div>Subtitle!</div>;
-        const wrapper = getWrapper({ subtitle });
+        const { container } = renderComponent({ subtitle });
 
-        expect(wrapper).toMatchSnapshot();
+        expect(container.querySelector('.thumbnail-card-subtitle')).toBeInTheDocument();
     });
 
     test('should render actionItem', () => {
-        const actionItem = <button type="button">Click Me</button>;
-        const wrapper = getWrapper({ actionItem });
+        const actionText = 'Click Me';
+        const actionItem = <button type="button">{actionText}</button>;
+        renderComponent({ actionItem });
 
-        expect(wrapper).toMatchSnapshot();
+        expect(screen.getByText(actionText)).toBeInTheDocument();
     });
 
-    test('should render a Tooltip if text is overflowed', () => {
+    test('should render a Tooltip if text is overflowed', async () => {
         libDom.useIsContentOverflowed.mockReturnValue(true);
+        renderComponent();
 
-        const wrapper = mount(<ThumbnailCardDetails title={<div>Foo Bar!</div>} />);
+        await userEvent.tab();
 
-        expect(wrapper.find('Tooltip').length).toBe(1);
+        expect(screen.getByRole('tooltip')).toBeInTheDocument();
+    });
+
+    test('should accept a keydown callback', async () => {
+        const someFunction = jest.fn();
+        const { container } = renderComponent({ onKeyDown: someFunction });
+        const title = container.querySelector('.thumbnail-card-title');
+
+        await userEvent.type(title, '{enter}');
+
+        expect(someFunction).toHaveBeenCalled();
     });
 });

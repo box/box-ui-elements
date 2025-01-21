@@ -97,7 +97,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         const errorState = await screen.findByTestId('docgen-sidebar-error');
         expect(errorState).toBeInTheDocument();
 
-        const refreshButton = screen.getByRole('button', { name: 'Refresh' });
+        const refreshButton = screen.getByRole('button', { name: 'Process document' });
         fireEvent.click(refreshButton);
 
         await waitFor(() => expect(errorTagsMock).toHaveBeenCalledTimes(2));
@@ -108,7 +108,9 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: noDataMock,
         });
 
-        const emptyState = await screen.findByText("We couldn't load the tags");
+        const emptyState = await screen.findByText(
+            'Looks like your recent changes to the Doc Gen template are yet to be processed.',
+        );
         expect(emptyState).toBeInTheDocument();
     });
 });

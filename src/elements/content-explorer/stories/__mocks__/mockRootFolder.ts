@@ -1,3 +1,69 @@
+const mockEmptyRootFolder = {
+    type: 'folder',
+    id: '74729718131',
+    etag: '0',
+    name: 'test',
+    size: 0,
+    parent: {
+        type: 'folder',
+        id: '0',
+        sequence_id: null,
+        etag: null,
+        name: 'All Files',
+    },
+    permissions: {
+        can_download: true,
+        can_upload: true,
+        can_rename: false,
+        can_delete: true,
+        can_share: false,
+        can_invite_collaborator: false,
+        can_set_share_access: false,
+    },
+    path_collection: {
+        total_count: 1,
+        entries: [
+            {
+                type: 'folder',
+                id: '0',
+                sequence_id: null,
+                etag: null,
+                name: 'All Files',
+            },
+        ],
+    },
+    modified_at: '2019-04-25T17:01:17-07:00',
+    created_at: '2019-04-25T17:01:17-07:00',
+    modified_by: {
+        type: 'user',
+        id: '7504104663',
+        name: 'PreviewTestApp',
+        login: 'AutomationUser_759881_KEmZdXHHrF@boxdevedition.com',
+    },
+    has_collaborations: false,
+    is_externally_owned: false,
+    shared_link: null,
+    watermark_info: {
+        is_watermarked: false,
+    },
+    item_collection: {
+        total_count: 0,
+        entries: [],
+        offset: 0,
+        limit: 50,
+        order: [
+            {
+                by: 'type',
+                direction: 'ASC',
+            },
+            {
+                by: 'name',
+                direction: 'ASC',
+            },
+        ],
+    },
+};
+
 const mockRootFolder = {
     type: 'folder',
     id: '69083462919',
@@ -330,4 +396,4 @@ const mockRootFolder = {
     },
 };
 
-export default mockRootFolder;
+export { mockEmptyRootFolder, mockRootFolder };

@@ -124,25 +124,26 @@ describe('api/Intelligence', () => {
             }
         });
 
-        test('should return a successful response including the answer from the LLM', async () => {
-            const suggestionsFromServer = {
-                stringFieldKey: 'fieldVal1',
-                floatFieldKey: 124.0,
-                enumFieldKey: 'EnumOptionKey',
-                multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'],
-            };
-            intelligence.xhr.post = jest.fn().mockReturnValueOnce({
-                data: suggestionsFromServer,
-            });
+        test.each`
+            suggestionsFromServer                                                                                                                                      | responseData
+            ${{ stringFieldKey: 'fieldVal1', floatFieldKey: 124.0, enumFieldKey: 'EnumOptionKey', multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'] }} | ${{ data: { stringFieldKey: 'fieldVal1', floatFieldKey: 124.0, enumFieldKey: 'EnumOptionKey', multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'] } }}
+            ${{ stringFieldKey: 'fieldVal1', floatFieldKey: 124.0, enumFieldKey: 'EnumOptionKey', multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'] }} | ${{ data: { answer: { stringFieldKey: 'fieldVal1', floatFieldKey: 124.0, enumFieldKey: 'EnumOptionKey', multiSelectFieldKey: ['multiSelectOption1', 'multiSelectOption5'] }, create_at: '2025-01-14T00:00:00-00:00' } }}
+            ${{}}                                                                                                                                                      | ${{ data: {} }}
+            ${{}}                                                                                                                                                      | ${{ data: { answer: {}, create_at: '2025-01-14T00:00:00-00:00' } }}
+        `(
+            'should return a successful response including the answer from the LLM',
+            async ({ suggestionsFromServer, responseData }) => {
+                intelligence.xhr.post = jest.fn().mockReturnValueOnce(responseData);
 
-            const suggestions = await intelligence.extractStructured(request);
-            expect(suggestions).toEqual(suggestionsFromServer);
-            expect(intelligence.xhr.post).toHaveBeenCalledWith({
-                url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
-                id: 'file_123',
-                data: request,
-            });
-        });
+                const suggestions = await intelligence.extractStructured(request);
+                expect(suggestions).toEqual(suggestionsFromServer);
+                expect(intelligence.xhr.post).toHaveBeenCalledWith({
+                    url: `${intelligence.getBaseApiUrl()}/ai/extract_structured`,
+                    id: 'file_123',
+                    data: request,
+                });
+            },
+        );
 
         test('should not return any suggestions when error is 400', async () => {
             const error = new Error();

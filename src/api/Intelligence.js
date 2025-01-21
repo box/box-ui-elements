@@ -4,7 +4,6 @@
  * @author Box
  */
 
-import getProp from 'lodash/get';
 import type { QuestionType } from '@box/box-ai-content-answers';
 import Base from './Base';
 import { AiExtractResponse } from './schemas/AiExtractResponse';
@@ -86,7 +85,9 @@ class Intelligence extends Base {
             id: `file_${item.id}`,
         });
 
-        return getProp(suggestionsResponse, 'data');
+        return !!suggestionsResponse?.data?.answer && typeof suggestionsResponse.data.answer === 'object'
+            ? suggestionsResponse.data.answer
+            : suggestionsResponse.data;
     }
 }
 

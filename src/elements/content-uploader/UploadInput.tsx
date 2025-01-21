@@ -35,8 +35,8 @@ const UploadInput = ({
     };
 
     return inputLabel ? (
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/no-noninteractive-tabindex
-        <label className={inputLabelClass} onKeyDown={onKeyDown} tabIndex={0}>
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
+        <label className={inputLabelClass} onKeyDown={onKeyDown} role="button" tabIndex={0}>
             {inputLabel}
             <input
                 data-testid="upload-input"

@@ -18,6 +18,7 @@ type Props = {
     component?: React.ComponentType<any>,
     exact?: boolean,
     isActive?: (match: Match, location: Location) => ?boolean,
+    isDisabled?: boolean,
     onClick?: (event: SyntheticEvent<>) => void,
     replace?: boolean,
     strict?: boolean,
@@ -32,6 +33,7 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
         component: Component = PlainButton,
         exact,
         isActive,
+        isDisabled,
         onClick,
         replace,
         strict,
@@ -40,6 +42,8 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
     } = props;
     const path = typeof to === 'object' ? to.pathname : to;
 
+    const disabledClassName = 'bdl-is-disabled';
+
     return (
         <Route exact={exact} path={path} strict={strict}>
             {({ history, location, match }) => {
@@ -47,7 +51,11 @@ const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: Re
 
                 return (
                     <Component
-                        className={classNames(className, { [activeClassName]: isActiveValue })}
+                        className={classNames(className, {
+                            [activeClassName]: isActiveValue,
+                            [disabledClassName]: isDisabled,
+                        })}
+                        isDisabled={isDisabled}
                         onClick={event => {
                             if (onClick) {
                                 onClick(event);
