@@ -10,6 +10,7 @@ export type DocGenTag = {
 
 export type DocGenTemplateTagsResponse = {
     data?: DocGenTag[];
+    message?: string;
     pagination?: {
         previousMarker?: string;
         nextMarker?: string;

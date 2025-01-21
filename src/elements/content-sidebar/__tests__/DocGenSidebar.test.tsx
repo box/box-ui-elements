@@ -14,6 +14,9 @@ const docGenSidebarProps = {
 };
 
 const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
+const processingTagsMock = jest.fn().mockReturnValue(Promise.resolve({
+    "message": "Processing tags for this file."
+}));
 const errorTagsMock = jest.fn().mockRejectedValue([]);
 const noDataMock = jest.fn().mockReturnValue(Promise.resolve({}));
 
@@ -77,6 +80,15 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         });
     });
 
+
+    test('should re-trigger loadTags if the tempalte is still processing', async () => {
+        renderComponent({
+            getDocGenTags: processingTagsMock,
+        });
+
+        await waitFor(() => expect(processingTagsMock).toHaveBeenCalledTimes(10));
+    });
+
     test('should re-trigger getDocGenTags on click on refresh button', async () => {
         renderComponent({
             getDocGenTags: errorTagsMock,
@@ -88,7 +100,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         const refreshButton = screen.getByRole('button', { name: 'Refresh' });
         fireEvent.click(refreshButton);
 
-        await waitFor(() => expect(errorTagsMock).toBeCalledTimes(2));
+        await waitFor(() => expect(errorTagsMock).toHaveBeenCalledTimes(2));
     });
 
     test('should handle undefined data', async () => {

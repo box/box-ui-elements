@@ -86,13 +86,20 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
         return jsonPathsMap;
     };
 
-    const loadTags = async () => {
+
+    const loadTags = async (attempts = 10) => {
+        if(attempts <= 0){
+            return
+        }
         setIsLoading(true);
         try {
             const response: DocGenTemplateTagsResponse = await getDocGenTags();
-            if (response && !!response.data) {
+            if(response.message){
+                loadTags(attempts - 1);
+            } else if (response && !!response.data) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
+
                 const { data } = response || [];
 
                 // anything that is not an image tag for this view is treated as a text tag
@@ -107,19 +114,22 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
                     imageTree: tagsToJsonPaths(imageTags),
                 });
                 setHasError(false);
+                setIsLoading(false);
             } else {
                 setHasError(true);
+                setIsLoading(false);
             }
         } catch (error) {
             setHasError(true);
+            setIsLoading(false);
         }
-        setIsLoading(false);
-    };
-
+    }
+    
     React.useEffect(() => {
-        loadTags();
+        loadTags(10);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
 
     const isEmpty = tags.image.length + tags.text.length === 0;
 
