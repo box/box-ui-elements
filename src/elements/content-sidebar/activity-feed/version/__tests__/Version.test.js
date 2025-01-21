@@ -96,4 +96,25 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
             version_number: '1',
         });
     });
+
+    test('should correctly render promoted version', () => {
+        selectors.getVersionUser = jest.fn().mockReturnValueOnce(defaultUser);
+
+        const version = {
+            id: '14',
+            modified_at: Date.now(),
+            modified_by: defaultUser,
+            version_number: '10',
+            version_promoted: '2',
+        };
+
+        const wrapper = shallow(<Version {...version} {...translationProps} />);
+
+        expect(wrapper.hasClass('bcs-Version')).toBe(true);
+        expect(wrapper.find('FormattedMessage').prop('values')).toEqual({
+            name: <strong>{defaultUser.name}</strong>,
+            version_number: '10',
+            version_promoted: '2',
+        });
+    });
 });

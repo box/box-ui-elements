@@ -40,6 +40,8 @@ import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
+// $FlowFixMe TypeScript file
+import type { Theme } from '../common/theming';
 import type APICache from '../../utils/Cache';
 
 import '../common/fonts.scss';
@@ -84,6 +86,7 @@ type Props = {
     responseInterceptor?: Function,
     sharedLink?: string,
     sharedLinkPassword?: string,
+    theme?: Theme,
     token: Token,
     versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
@@ -363,6 +366,7 @@ class ContentSidebar extends React.Component<Props, State> {
             onPanelChange,
             onVersionChange,
             onVersionHistoryClick,
+            theme,
             versionsSidebarProps,
         }: Props = this.props;
         const { file, isLoading, metadataEditors }: State = this.state;
@@ -404,6 +408,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 onPanelChange={onPanelChange}
                                 onVersionChange={onVersionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}
+                                theme={theme}
                                 versionsSidebarProps={versionsSidebarProps}
                                 wrappedComponentRef={ref => {
                                     this.sidebarRef = ref;

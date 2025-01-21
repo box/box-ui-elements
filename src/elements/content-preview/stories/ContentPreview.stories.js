@@ -70,4 +70,9 @@ export default {
         hasHeader: true,
         token: global.TOKEN,
     },
+    parameters: {
+        chromatic: {
+            disableSnapshot: true,
+        },
+    },
 };

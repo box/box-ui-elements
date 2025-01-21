@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
 import { mount } from 'enzyme';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
@@ -14,6 +15,7 @@ import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import SidebarNav from '../SidebarNav';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNavSignButton from '../SidebarNavSignButton';
+import { render, screen } from '../../../test-utils/testing-library';
 
 describe('elements/content-sidebar/SidebarNav', () => {
     const getWrapper = (props = {}, active = '', features = {}) =>
@@ -26,6 +28,14 @@ describe('elements/content-sidebar/SidebarNav', () => {
         )
             .find('SidebarNav')
             .at(1);
+
+    const getSidebarNav = ({ path = '/', props, features }) => (
+        <MemoryRouter initialEntries={[path]}>
+            <FeatureProvider features={features}>
+                <SidebarNav {...props} />
+            </FeatureProvider>
+        </MemoryRouter>
+    );
 
     test('should render skills tab', () => {
         const props = {
@@ -85,6 +95,47 @@ describe('elements/content-sidebar/SidebarNav', () => {
         expect(wrapper.find(IconMetadataThick)).toHaveLength(0);
         expect(wrapper.find(IconDocInfo)).toHaveLength(0);
         expect(wrapper.find(IconChatRound)).toHaveLength(0);
+    });
+
+    describe('should render box ai tab with correct disabled state and tooltip', () => {
+        test.each`
+            disabledTooltip          | expectedTooltip
+            ${'tooltip msg'}         | ${'tooltip msg'}
+            ${'another tooltip msg'} | ${'another tooltip msg'}
+        `(
+            'given feature boxai.sidebar.showOnlyNavButton = true and boxai.sidebar.disabledTooltip = $disabledTooltip, should render box ai tab with disabled state and tooltip = $expectedTooltip',
+            async ({ disabledTooltip, expectedTooltip }) => {
+                render(
+                    getSidebarNav({
+                        features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: true } } },
+                        props: { hasBoxAI: true },
+                    }),
+                );
+
+                const button = screen.getByTestId('sidebarboxai');
+
+                await userEvent.hover(button);
+
+                expect(button).toHaveAttribute('aria-disabled', 'true');
+                expect(screen.getByText(expectedTooltip)).toBeInTheDocument();
+            },
+        );
+
+        test('given feature boxai.sidebar.showOnlyNavButton = false, should render box ai tab with default tooltip', async () => {
+            render(
+                getSidebarNav({
+                    features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                    props: { hasBoxAI: true },
+                }),
+            );
+
+            const button = screen.getByTestId('sidebarboxai');
+
+            await userEvent.hover(button);
+
+            expect(button).not.toHaveAttribute('aria-disabled');
+            expect(screen.getByText('Box AI')).toBeInTheDocument();
+        });
     });
 
     test('should have multiple tabs', () => {

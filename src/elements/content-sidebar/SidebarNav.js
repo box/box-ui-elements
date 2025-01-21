@@ -68,6 +68,8 @@ const SidebarNav = ({
     onPanelChange = noop,
 }: Props) => {
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
+    const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
+        useFeatureConfig('boxai.sidebar');
 
     const handleSidebarNavButtonClick = (sidebarview: string) => {
         onPanelChange(sidebarview, false);
@@ -82,9 +84,14 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                             data-target-id="SidebarNavButton-boxAI"
                             data-testid="sidebarboxai"
+                            isDisabled={showOnlyBoxAINavButton}
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_BOXAI}
-                            tooltip={intl.formatMessage(messages.sidebarBoxAITitle)}
+                            tooltip={
+                                showOnlyBoxAINavButton
+                                    ? boxAIDisabledTooltip
+                                    : intl.formatMessage(messages.sidebarBoxAITitle)
+                            }
                         >
                             <BoxAiLogo height={Size5} width={Size5} />
                         </SidebarNavButton>

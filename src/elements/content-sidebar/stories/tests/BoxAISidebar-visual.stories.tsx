@@ -14,9 +14,9 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
         const canvas = within(canvasElement);
         const sidebarTitle = await canvas.findByRole('heading', { name: 'Box AI' });
         expect(sidebarTitle).toBeInTheDocument();
-        const clearButton = await canvas.findByRole('button', { name: 'Clear' });
+        const clearButton = await canvas.findByRole('button', { name: 'Clear conversation' });
         expect(clearButton).toBeInTheDocument();
-        
+
         expect(await canvas.findByText('Welcome to Box AI')).toBeInTheDocument();
         expect(await canvas.findByText('Ask questions about')).toBeInTheDocument();
         expect(await canvas.findByText('This chat will be cleared when you close this content')).toBeInTheDocument();
@@ -36,7 +36,7 @@ export default {
         fileId: global.FILE_ID,
         token: global.TOKEN,
         boxAISidebarProps: {
-            createSessionRequest: () => ({ encodedSession: '1234'}),
+            createSessionRequest: () => ({ encodedSession: '1234' }),
             fetchTimeout: { initial: 20000 },
             getAgentConfig: () => ({}),
             getAIStudioAgents: () => ({}),

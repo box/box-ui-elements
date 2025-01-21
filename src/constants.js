@@ -499,6 +499,7 @@ export const ACTIVITY_FILTER_OPTION_UNRESOLVED: 'open' = 'open';
 /* ------------------ File Activity Action Types ----------- */
 export const ACTION_TYPE_CREATED: 'created' = 'created';
 export const ACTION_TYPE_RESTORED: 'restored' = 'restored';
+export const ACTION_TYPE_PROMOTED: 'promoted' = 'promoted';
 export const ACTION_TYPE_TRASHED: 'trashed' = 'trashed';
 
 /* ------------------ File Activity Types ------------------ */

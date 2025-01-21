@@ -25,6 +25,7 @@ import AppActivityAPI from './AppActivity';
 import {
     ACTION_TYPE_CREATED,
     ACTION_TYPE_RESTORED,
+    ACTION_TYPE_PROMOTED,
     ACTION_TYPE_TRASHED,
     ERROR_CODE_CREATE_TASK,
     ERROR_CODE_UPDATE_TASK,
@@ -249,6 +250,9 @@ export const getParsedFileActivitiesResponse = (
                         ) {
                             versionsItem.restored_at = versionsItem.start.restored_at;
                             versionsItem.restored_by = { ...versionsItem.start.restored_by };
+                        }
+                        if (versionsItem.action_type === ACTION_TYPE_PROMOTED && versionsItem.start?.promoted_from) {
+                            versionsItem.version_promoted = versionsItem.start?.promoted_from;
                         }
                     }
 
