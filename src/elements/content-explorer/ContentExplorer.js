@@ -876,7 +876,12 @@ class ContentExplorer extends Component<Props, State> {
                 thumbnailUrl,
             };
 
-            if (item.type === TYPE_FILE && thumbnailUrl && !isThumbnailReady(newItem)) {
+            if (
+                item.type === TYPE_FILE &&
+                thumbnailUrl &&
+                !isThumbnailReady(newItem) &&
+                this.getViewMode() === VIEW_MODE_GRID
+            ) {
                 this.attemptThumbnailGeneration(newItem);
             }
 
