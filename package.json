@@ -309,7 +309,7 @@
         "@box/box-ai-agent-selector": "^0.15.8",
         "@box/box-ai-content-answers": "^0.79.3",
         "@box/cldr-data": ">=34.2.0",
-        "@box/item-icon": "^0.9.44",
+        "@box/item-icon": "^0.9.58",
         "@box/metadata-editor": "^0.79.1",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@hapi/address": "^2.1.4",
