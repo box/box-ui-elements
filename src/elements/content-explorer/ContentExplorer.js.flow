@@ -1,0 +1,225 @@
+/**
+ * @file Content Explorer Component
+ * @author Box
+ */
+
+import 'regenerator-runtime/runtime';
+import React, { Component } from 'react';
+import classNames from 'classnames';
+import cloneDeep from 'lodash/cloneDeep';
+import debounce from 'lodash/debounce';
+import flow from 'lodash/flow';
+import getProp from 'lodash/get';
+import noop from 'lodash/noop';
+import uniqueid from 'lodash/uniqueId';
+import CreateFolderDialog from '../common/create-folder-dialog';
+import UploadDialog from '../common/upload-dialog';
+import Header from '../common/header';
+import Pagination from '../../features/pagination';
+import SubHeader from '../common/sub-header/SubHeader';
+import makeResponsive from '../common/makeResponsive';
+import openUrlInsideIframe from '../../utils/iframe';
+import Internationalize from '../common/Internationalize';
+import ThemingStyles from '../common/theming';
+import API from '../../api';
+import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
+import Footer from './Footer';
+import PreviewDialog from './PreviewDialog';
+import ShareDialog from './ShareDialog';
+import RenameDialog from './RenameDialog';
+import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import Content from './Content';
+import isThumbnailReady from './utils';
+import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
+import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
+import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from './constants';
+import LocalStore from '../../utils/LocalStore';
+import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
+import {
+    DEFAULT_HOSTNAME_UPLOAD,
+    DEFAULT_HOSTNAME_API,
+    DEFAULT_HOSTNAME_APP,
+    DEFAULT_HOSTNAME_STATIC,
+    DEFAULT_SEARCH_DEBOUNCE,
+    SORT_ASC,
+    FIELD_NAME,
+    FIELD_PERMISSIONS_CAN_SHARE,
+    FIELD_SHARED_LINK,
+    DEFAULT_ROOT,
+    VIEW_SEARCH,
+    VIEW_FOLDER,
+    VIEW_ERROR,
+    VIEW_RECENTS,
+    VIEW_METADATA,
+    VIEW_MODE_LIST,
+    TYPE_FILE,
+    TYPE_WEBLINK,
+    TYPE_FOLDER,
+    CLIENT_NAME_CONTENT_EXPLORER,
+    DEFAULT_PAGE_NUMBER,
+    DEFAULT_PAGE_SIZE,
+    DEFAULT_VIEW_FILES,
+    DEFAULT_VIEW_RECENTS,
+    DEFAULT_VIEW_METADATA,
+    ERROR_CODE_ITEM_NAME_INVALID,
+    ERROR_CODE_ITEM_NAME_TOO_LONG,
+    TYPED_ID_FOLDER_PREFIX,
+    VIEW_MODE_GRID,
+} from '../../constants';
+import type { ViewMode } from '../common/flowTypes';
+import type { Theme } from '../common/theming';
+import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
+import type { MetadataFieldValue } from '../../common/types/metadata';
+import type {
+    View,
+    DefaultView,
+    StringMap,
+    SortBy,
+    SortDirection,
+    Token,
+    Access,
+    Collection,
+    BoxItemPermission,
+    BoxItem,
+} from '../../common/types/core';
+
+import '../common/fonts.scss';
+import '../common/base.scss';
+import '../common/modal.scss';
+import './ContentExplorer.scss';
+
+const GRID_VIEW_MAX_COLUMNS = 7;
+const GRID_VIEW_MIN_COLUMNS = 1;
+
+type Props = {
+    apiHost: string,
+    appHost: string,
+    autoFocus: boolean,
+    canCreateNewFolder: boolean,
+    canDelete: boolean,
+    canDownload: boolean,
+    canPreview: boolean,
+    canRename: boolean,
+    canSetShareAccess: boolean,
+    canShare: boolean,
+    canUpload: boolean,
+    className: string,
+    contentPreviewProps: ContentPreviewProps,
+    contentUploaderProps: ContentUploaderProps,
+    currentFolderId?: string,
+    defaultView: DefaultView,
+    features: FeatureConfig,
+    fieldsToShow?: FieldsToShow,
+    initialPage: number,
+    initialPageSize: number,
+    isLarge: boolean,
+    isMedium: boolean,
+    isSmall: boolean,
+    isTouch: boolean,
+    isVeryLarge: boolean,
+    language?: string,
+    logoUrl?: string,
+    measureRef?: Function,
+    messages?: StringMap,
+    metadataQuery?: MetadataQuery,
+    onCreate: Function,
+    onDelete: Function,
+    onDownload: Function,
+    onNavigate: Function,
+    onPreview: Function,
+    onRename: Function,
+    onSelect: Function,
+    onUpload: Function,
+    previewLibraryVersion: string,
+    requestInterceptor?: Function,
+    responseInterceptor?: Function,
+    rootFolderId: string,
+    sharedLink?: string,
+    sharedLinkPassword?: string,
+    sortBy: SortBy,
+    sortDirection: SortDirection,
+    staticHost: string,
+    staticPath: string,
+    theme?: Theme,
+    token: Token,
+    uploadHost: string,
+};
+
+type State = {
+    currentCollection: Collection,
+    currentOffset: number,
+    currentPageNumber: number,
+    currentPageSize: number,
+    errorCode: string,
+    focusedRow: number,
+    gridColumnCount: number,
+    isCreateFolderModalOpen: boolean,
+    isDeleteModalOpen: boolean,
+    isLoading: boolean,
+    isPreviewModalOpen: boolean,
+    isRenameModalOpen: boolean,
+    isShareModalOpen: boolean,
+    isUploadModalOpen: boolean,
+    markers: Array<?string>,
+    rootName: string,
+    searchQuery: string,
+    selected?: BoxItem,
+    sortBy: SortBy,
+    sortDirection: SortDirection,
+    view: View,
+};
+
+const localStoreViewMode = 'bce.defaultViewMode';
+
+class ContentExplorer extends Component<Props, State> {
+    id: string;
+    api: API;
+    state: State;
+    props: Props;
+    table: any;
+    rootElement: HTMLElement;
+    appElement: HTMLElement;
+    globalModifier: boolean;
+    firstLoad: boolean = true;
+    store: LocalStore = new LocalStore();
+    metadataQueryAPIHelper: MetadataQueryAPIHelper;
+
+    static defaultProps = {
+        rootFolderId: DEFAULT_ROOT,
+        sortBy: FIELD_NAME,
+        sortDirection: SORT_ASC,
+        canDownload: true,
+        canDelete: true,
+        canUpload: true,
+        canRename: true,
+        canShare: true,
+        canPreview: true,
+        canSetShareAccess: true,
+        canCreateNewFolder: true,
+        autoFocus: false,
+        apiHost: DEFAULT_HOSTNAME_API,
+        appHost: DEFAULT_HOSTNAME_APP,
+        staticHost: DEFAULT_HOSTNAME_STATIC,
+        uploadHost: DEFAULT_HOSTNAME_UPLOAD,
+        className: '',
+        onDelete: noop,
+        onDownload: noop,
+        onPreview: noop,
+        onRename: noop,
+        onCreate: noop,
+        onSelect: noop,
+        onUpload: noop,
+        onNavigate: noop,
+        defaultView: DEFAULT_VIEW_FILES,
+        initialPage: DEFAULT_PAGE_NUMBER,
+        initialPageSize: DEFAULT_PAGE_SIZE,
+        contentPreviewProps: {
+            contentSidebarProps: {},
+        },
+        contentUploaderProps: {},
+    };
+
+    // ... rest of the component implementation will follow
+}
+
+export default ContentExplorer;
