@@ -1494,10 +1494,10 @@
   resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.15.8.tgz#30484b819f2c57da7a5e461f7d66a8c9fdbcfd18"
   integrity sha512-bFwrE82P7ePxKQ/x5H4Q77gdGYkFhNn7ejOi7IfEKU8ekbJd8cVI5d/T/luxsrG74bEG0sLDswFzMGYbI8H5lg==
 
-"@box/box-ai-content-answers@^0.75.1":
-  version "0.75.1"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.75.1.tgz#8235b12c02f8c703f36155e3e0bedf598b6d173a"
-  integrity sha512-hN3zbWJydDXE/khSvGsy5qLeSk00uXbVRscEaiKW/w8UIT2/rRcGRbi1198R1bOz5C/jqrOYvyc8LB+R4NYQcQ==
+"@box/box-ai-content-answers@^0.79.3":
+  version "0.79.4"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.79.4.tgz#53f6d6af89eb5167a87101440cf053510593287f"
+  integrity sha512-4hAvEOisVJsvO380C9WahoCmqe3UVpsMzPxJmpdgtXgm/2k9fsCg2yQLPFDNeIJSP2pSEjLpPfQbKl4jVzb7Tw==
 
 "@box/cldr-data@^34.2.0":
   version "34.8.0"
@@ -1512,6 +1512,11 @@
     properties-parser "^0.3.1"
     rimraf "^3.0.0"
     semver "^7.4.0"
+
+"@box/item-icon@^0.9.58":
+  version "0.9.59"
+  resolved "https://registry.yarnpkg.com/@box/item-icon/-/item-icon-0.9.59.tgz#090590dd88d08aec29e0710dfc8630476bff8a82"
+  integrity sha512-mLTIdg9uUkEFNTgXNrugK8iRsV5wf8ptMaSPbezzDNKxVAo4mcK9jr5FV3eu368OjMqa3mBbBNY7qIad5HX8uQ==
 
 "@box/languages@^1.0.0":
   version "1.1.2"
