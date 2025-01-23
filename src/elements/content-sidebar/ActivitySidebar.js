@@ -12,10 +12,9 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueId from 'lodash/uniqueId';
 import { FormattedMessage } from 'react-intl';
-import { generatePath, type ContextRouter } from 'react-router-dom';
+import { generatePath } from '../common/routing/utils';
 import ActivityFeed from './activity-feed';
 import AddTaskButton from './AddTaskButton';
-import API from '../../api';
 import messages from '../common/messages';
 import SidebarContent from './SidebarContent';
 import { EVENT_DATA_READY, EVENT_JS_READY } from '../common/logger/constants';
@@ -26,7 +25,7 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withLogger } from '../common/logger';
-import { withRouterAndRef } from '../common/routing';
+import withRouter from '../common/routing/withRouter';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
 import {
     ACTIVITY_FILTER_OPTION_ALL,
@@ -44,14 +43,8 @@ import {
     TASK_COMPLETION_RULE_ALL,
     METRIC_TYPE_UAA_PARITY_METRIC,
 } from '../../constants';
-import type {
-    TaskCompletionRule,
-    TaskType,
-    TaskNew,
-    TaskUpdatePayload,
-    TaskCollabStatus,
-} from '../../common/types/tasks';
-import type {
+import { TaskCompletionRule, TaskType, TaskNew, TaskUpdatePayload, TaskCollabStatus } from '../../common/types/tasks';
+import {
     Annotation,
     AnnotationPermission,
     ActivityFilterItemType,
@@ -59,25 +52,18 @@ import type {
     BoxCommentPermission,
     Comment,
     CommentFeedItemType,
-    FocusableFeedItem,
-    FocusableFeedItemType,
     FeedItem,
     FeedItems,
     FeedItemStatus,
     FeedItemType,
 } from '../../common/types/feed';
-import type { ErrorContextProps, ElementsXhrError } from '../../common/types/api';
-import type { WithLoggerProps } from '../../common/types/logging';
-import type { SelectorItems, User, UserMini, GroupMini, BoxItem } from '../../common/types/core';
-import type { Errors, GetProfileUrlCallback } from '../common/flowTypes';
-import type { Translations } from './flowTypes';
-import type { FeatureConfig } from '../common/feature-checking';
-import type { WithAnnotatorContextProps } from '../common/annotator-context';
+import { ElementsXhrError } from '../../common/types/api';
+import { SelectorItems } from '../../common/types/core';
 import './ActivitySidebar.scss';
 
-import type { OnAnnotationEdit, OnAnnotationStatusChange } from './activity-feed/comment/types';
+import { OnAnnotationEdit, OnAnnotationStatusChange } from './activity-feed/comment/types';
 
-type ExternalProps = {
+type ExternalProps = {|
     activeFeedEntryId?: string,
     activeFeedEntryType?: FocusableFeedItemType,
     currentUser?: User,
@@ -94,10 +80,9 @@ type ExternalProps = {
     onTaskDelete: (id: string) => any,
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
-} & ErrorContextProps &
+|} & ErrorContextProps &
     WithAnnotatorContextProps;
-
-type PropsWithoutContext = {
+type PropsWithoutContext = {|
     elementId: string,
     file: BoxItem,
     hasSidebarInitialized?: boolean,
@@ -107,25 +92,28 @@ type PropsWithoutContext = {
     onVersionChange: Function,
     onVersionHistoryClick?: Function,
     translations?: Translations,
-} & ExternalProps &
+|} & ExternalProps &
     WithLoggerProps &
     ContextRouter;
-
-type Props = {
+type Props = {|
     api: API,
     features: FeatureConfig,
-} & PropsWithoutContext;
-
-type State = {
+|} & PropsWithoutContext;
+type State = {|
     activityFeedError?: Errors,
     approverSelectorContacts: SelectorItems<UserMini | GroupMini>,
     contactsLoaded?: boolean,
     feedItems?: FeedItems,
     feedItemsStatusFilter?: ActivityFilterItemType,
     mentionSelectorContacts?: SelectorItems<UserMini>,
-};
-
-export const activityFeedInlineError: Errors = {
+|};
+export type ActivityFeedInlineError = {|
+    inlineError: {|
+        title: typeof messages.errorOccured,
+        content: typeof messages.activityFeedItemApiError,
+    |},
+|};
+export const activityFeedInlineError = {
     inlineError: {
         title: messages.errorOccured,
         content: messages.activityFeedItemApiError,
@@ -1319,5 +1307,5 @@ export default flow([
     withAPIContext,
     withFeatureConsumer,
     withAnnotatorContext,
-    withRouterAndRef,
+    withRouter,
 ])(ActivitySidebar);

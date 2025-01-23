@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import { MemoryRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
+import CustomRouter from '../../common/routing/customRouter';
+import { render } from '../../../test-utils/testing-library';
 import {
     SIDEBAR_FORCE_KEY,
     SIDEBAR_FORCE_VALUE_CLOSED,
@@ -53,9 +53,9 @@ describe('elements/content-sidebar/Sidebar', () => {
     const getWrapper = props => shallow(<Sidebar {...defaultProps} {...props} />);
 
     const getSidebar = props => (
-        <MemoryRouter initialEntries={['/']}>
+        <CustomRouter initialEntries={['/']}>
             <Sidebar {...defaultProps} {...props} />
-        </MemoryRouter>
+        </CustomRouter>
     );
 
     beforeEach(() => {

@@ -6,75 +6,80 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
-import { Route } from 'react-router-dom';
-import type { Match, Location } from 'react-router-dom';
+import { RouterContext } from '../routing/RouterContext';
+import { matchPath } from '../routing/utils';
 import PlainButton from '../../../components/plain-button';
 import { isLeftClick } from '../../../utils/dom';
 
-type Props = {
-    activeClassName?: string,
-    children: React.Node,
-    className?: string,
-    component?: React.ComponentType<any>,
-    exact?: boolean,
-    isActive?: (match: Match, location: Location) => ?boolean,
-    isDisabled?: boolean,
-    onClick?: (event: SyntheticEvent<>) => void,
-    replace?: boolean,
-    strict?: boolean,
-    to: string | Location,
-};
+const NavButton = React.forwardRef(
+    (
+        props: {
+            activeClassName?: string,
+            children: React.Node,
+            className?: string,
+            component?: React.ComponentType<any>,
+            exact?: boolean,
+            isActive?: (match: Object, location: Object) => ?boolean,
+            isDisabled?: boolean,
+            onClick?: (event: SyntheticEvent<>) => void,
+            replace?: boolean,
+            strict?: boolean,
+            to: string | Object,
+        },
+        ref,
+    ) => {
+        const {
+            activeClassName = 'bdl-is-active',
+            children,
+            className = 'bdl-NavButton',
+            component: Component = PlainButton,
+            exact,
+            isActive,
+            isDisabled,
+            onClick,
+            replace,
+            strict,
+            to,
+            ...rest
+        } = props;
 
-const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
-    const {
-        activeClassName = 'bdl-is-active',
-        children,
-        className = 'bdl-NavButton',
-        component: Component = PlainButton,
-        exact,
-        isActive,
-        isDisabled,
-        onClick,
-        replace,
-        strict,
-        to,
-        ...rest
-    } = props;
-    const path = typeof to === 'object' ? to.pathname : to;
+        const path = typeof to === 'object' ? to.pathname : to;
+        const disabledClassName = 'bdl-is-disabled';
 
-    const disabledClassName = 'bdl-is-disabled';
+        return (
+            <RouterContext.Consumer>
+                {({ history, location }) => {
+                    const match = matchPath(location.pathname, { path, exact, strict });
+                    const isActiveValue = !!(isActive ? isActive(match, location) : match);
+                    const handleClick = event => {
+                        if (onClick) {
+                            onClick(event);
+                        }
 
-    return (
-        <Route exact={exact} path={path} strict={strict}>
-            {({ history, location, match }) => {
-                const isActiveValue = !!(isActive ? isActive(match, location) : match);
+                        if (!event.defaultPrevented && isLeftClick(event)) {
+                            const method = replace ? history.replace : history.push;
+                            method(to);
+                        }
+                    };
 
-                return (
-                    <Component
-                        className={classNames(className, {
-                            [activeClassName]: isActiveValue,
-                            [disabledClassName]: isDisabled,
-                        })}
-                        isDisabled={isDisabled}
-                        onClick={event => {
-                            if (onClick) {
-                                onClick(event);
-                            }
-
-                            if (!event.defaultPrevented && isLeftClick(event)) {
-                                const method = replace ? history.replace : history.push;
-                                method(to);
-                            }
-                        }}
-                        ref={ref}
-                        {...rest}
-                    >
-                        {children}
-                    </Component>
-                );
-            }}
-        </Route>
-    );
-});
+                    return (
+                        <Component
+                            className={classNames(className, {
+                                [activeClassName]: isActiveValue,
+                                [disabledClassName]: isDisabled,
+                            })}
+                            isDisabled={isDisabled}
+                            onClick={handleClick}
+                            ref={ref}
+                            {...rest}
+                        >
+                            {children}
+                        </Component>
+                    );
+                }}
+            </RouterContext.Consumer>
+        );
+    },
+);
 
 export default NavButton;

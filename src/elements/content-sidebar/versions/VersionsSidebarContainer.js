@@ -9,11 +9,9 @@ import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import merge from 'lodash/merge';
 import noop from 'lodash/noop';
-import { generatePath, withRouter } from 'react-router-dom';
-import type { Match, RouterHistory } from 'react-router-dom';
-import type { MessageDescriptor } from 'react-intl';
+import { generatePath } from '../../common/routing/utils';
+import withRouter from '../../common/routing/withRouter';
 import { withFeatureConsumer, isFeatureEnabled } from '../../common/feature-checking';
-import API from '../../../api';
 import { FIELD_METADATA_ARCHIVE } from '../../../constants';
 import messages from './messages';
 import openUrlInsideIframe from '../../../utils/iframe';
@@ -21,40 +19,40 @@ import StaticVersionsSidebar from './StaticVersionSidebar';
 import VersionsSidebar from './VersionsSidebar';
 import VersionsSidebarAPI from './VersionsSidebarAPI';
 import { withAPIContext } from '../../common/api-context';
-import type { FeatureConfig } from '../../common/feature-checking';
-import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
-import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
 
-type Props = {
-    api: API,
-    features: FeatureConfig,
-    fileId: string,
-    hasSidebarInitialized?: boolean,
-    history: RouterHistory,
-    match: Match,
-    onLoad: SidebarLoadCallback,
-    onUpgradeClick?: () => void,
-    onVersionChange: VersionChangeCallback,
-    onVersionDelete: VersionActionCallback,
-    onVersionDownload: VersionActionCallback,
-    onVersionPreview: VersionActionCallback,
-    onVersionPromote: VersionActionCallback,
-    onVersionRestore: VersionActionCallback,
-    parentName: string,
-    versionId?: string,
-};
+/**
+ * @typedef {Object} Props
+ * @property {API} api
+ * @property {Object} features
+ * @property {string} fileId
+ * @property {boolean} [hasSidebarInitialized]
+ * @property {Object} history
+ * @property {Object} match
+ * @property {Function} onLoad
+ * @property {Function} [onUpgradeClick]
+ * @property {Function} onVersionChange
+ * @property {Function} onVersionDelete
+ * @property {Function} onVersionDownload
+ * @property {Function} onVersionPreview
+ * @property {Function} onVersionPromote
+ * @property {Function} onVersionRestore
+ * @property {string} parentName
+ * @property {string} [versionId]
+ */
 
-type State = {
-    error?: MessageDescriptor,
-    isArchived: boolean,
-    isLoading: boolean,
-    isWatermarked: boolean,
-    versionCount: number,
-    versionLimit: number,
-    versions: Array<BoxItemVersion>,
-};
+/**
+ * @typedef {Object} State
+ * @property {Object} [error]
+ * @property {boolean} isArchived
+ * @property {boolean} isLoading
+ * @property {boolean} isWatermarked
+ * @property {number} versionCount
+ * @property {number} versionLimit
+ * @property {Array<Object>} versions
+ */
 
-class VersionsSidebarContainer extends React.Component<Props, State> {
+/** @extends {React.Component} */
+class VersionsSidebarContainer extends React.Component {
     static defaultProps = {
         onLoad: noop,
         onVersionChange: noop,

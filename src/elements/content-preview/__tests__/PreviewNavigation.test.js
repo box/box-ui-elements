@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Router } from 'react-router-dom';
-import noop from 'lodash/noop';
 import { mount } from 'enzyme';
+import noop from 'lodash/noop';
+import CustomRouter from '../../common/routing/customRouter';
 import { PreviewNavigationComponent as PreviewNavigation } from '../PreviewNavigation';
 
 const historyMockDefault = {
@@ -16,6 +16,17 @@ const deeplinkedMetadataHistoryMock = {
     listen: jest.fn(),
     push: jest.fn(),
     entries: [{}],
+    match: {
+        params: {
+            activeTab: 'metadata',
+            deeplink: 'filteredTemplates',
+            filteredTemplateIds: '123,124',
+            0: '',
+        },
+        path: '/:activeTab/:deeplink/:filteredTemplateIds?',
+        url: '/metadata/filteredTemplates/123,124',
+        isExact: true,
+    },
 };
 
 const getWrapper = ({
@@ -24,9 +35,47 @@ const getWrapper = ({
     onNavigateLeft = noop,
     onNavigateRight = noop,
     ...rest
-}) =>
-    mount(
-        <Router history={historyMock}>
+}) => {
+    const { pathname } = historyMock.location;
+    const pathParts = pathname.split('/').filter(Boolean);
+    const isMetadataPath = pathname.includes('filteredTemplates');
+    const filteredIds = isMetadataPath && pathParts[2] ? pathParts[2].split(',') : [];
+
+    // Create a new history mock that handles both metadata and non-metadata paths
+    const newHistoryMock = {
+        ...historyMock,
+        push: jest.fn(path => {
+            // For metadata paths, preserve the filteredTemplateIds in the URL
+            if (isMetadataPath && filteredIds.length) {
+                return `/metadata/filteredTemplates/${filteredIds.join(',')}`;
+            }
+            // For non-metadata paths, use the provided path
+            return path;
+        }),
+    };
+
+    const routerContext = {
+        history: newHistoryMock,
+        location: historyMock.location,
+        match: {
+            params: {
+                activeTab: pathParts[0] || '',
+                deeplink: pathParts[1] || '',
+                fileVersionId: !isMetadataPath ? pathParts[2] : '',
+                activeFeedEntryId: !isMetadataPath ? pathParts[3] : '',
+                filteredTemplateIds: filteredIds,
+                0: pathParts.slice(3).join('/') || '',
+            },
+            path: isMetadataPath
+                ? '/:activeTab/:deeplink/:filteredTemplateIds?'
+                : '/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?',
+            url: pathname,
+            isExact: true,
+        },
+    };
+
+    return mount(
+        <CustomRouter {...routerContext}>
             <PreviewNavigation
                 collection={collection}
                 intl={{
@@ -34,11 +83,11 @@ const getWrapper = ({
                 }}
                 onNavigateLeft={onNavigateLeft}
                 onNavigateRight={onNavigateRight}
-                history={historyMock}
                 {...rest}
             />
-        </Router>,
+        </CustomRouter>,
     );
+};
 
 afterEach(() => {
     jest.resetAllMocks();
@@ -61,11 +110,14 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const onNavigateLeftMock = jest.fn();
             const wrapper = getWrapper({ currentIndex: 2, onNavigateLeft: onNavigateLeftMock });
 
-            expect(wrapper.find('PlainButton')).toHaveLength(1);
-            wrapper.find('PlainButton').simulate('click');
+            const previewNav = wrapper.find(PreviewNavigation);
+            const button = previewNav.find('PlainButton');
+            expect(button).toHaveLength(1);
+            button.simulate('click');
 
-            expect(historyMockDefault.push).toBeCalledTimes(1);
-            expect(historyMockDefault.push).toBeCalledWith('/activity');
+            const { history } = wrapper.find(CustomRouter).props();
+            expect(history.push).toBeCalledTimes(1);
+            expect(history.push).toBeCalledWith('/activity');
             expect(onNavigateLeftMock).toHaveBeenCalled();
         });
 
@@ -73,22 +125,28 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const onNavigateRightMock = jest.fn();
             const wrapper = getWrapper({ currentIndex: 0, onNavigateRight: onNavigateRightMock });
 
-            expect(wrapper.find('PlainButton')).toHaveLength(1);
-            wrapper.find('PlainButton').simulate('click');
+            const previewNav = wrapper.find(PreviewNavigation);
+            const button = previewNav.find('PlainButton');
+            expect(button).toHaveLength(1);
+            button.simulate('click');
 
-            expect(historyMockDefault.push).toBeCalledTimes(1);
-            expect(historyMockDefault.push).toBeCalledWith('/activity');
+            const { history } = wrapper.find(CustomRouter).props();
+            expect(history.push).toBeCalledTimes(1);
+            expect(history.push).toBeCalledWith('/activity');
             expect(onNavigateRightMock).toHaveBeenCalled();
         });
         test('should render navigation correctly from comments deeplinked URL ', () => {
             const onNavigateRightMock = jest.fn();
             const wrapper = getWrapper({ currentIndex: 0, onNavigateRight: onNavigateRightMock });
 
-            expect(wrapper.find('PlainButton')).toHaveLength(1);
-            wrapper.find('PlainButton').simulate('click');
+            const previewNav = wrapper.find(PreviewNavigation);
+            const button = previewNav.find('PlainButton');
+            expect(button).toHaveLength(1);
+            button.simulate('click');
 
-            expect(historyMockDefault.push).toBeCalledTimes(1);
-            expect(historyMockDefault.push).toBeCalledWith('/activity');
+            const { history } = wrapper.find(CustomRouter).props();
+            expect(history.push).toBeCalledTimes(1);
+            expect(history.push).toBeCalledWith('/activity');
             expect(onNavigateRightMock).toHaveBeenCalled();
         });
 
@@ -100,11 +158,14 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 onNavigateRight: onNavigateRightMock,
             });
 
-            expect(wrapper.find('PlainButton')).toHaveLength(1);
-            wrapper.find('PlainButton').simulate('click');
+            const previewNav = wrapper.find(PreviewNavigation);
+            const button = previewNav.find('PlainButton');
+            expect(button).toHaveLength(1);
+            button.simulate('click');
 
-            expect(deeplinkedMetadataHistoryMock.push).toBeCalledTimes(1);
-            expect(deeplinkedMetadataHistoryMock.push).toBeCalledWith('/metadata/filteredTemplates/123,124');
+            const { history } = wrapper.find(CustomRouter).props();
+            expect(history.push).toBeCalledTimes(1);
+            expect(history.push).toBeCalledWith('/metadata/filteredTemplates/123,124');
             expect(onNavigateRightMock).toHaveBeenCalled();
         });
 
@@ -116,11 +177,14 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 onNavigateLeft: onNavigateLeftMock,
             });
 
-            expect(wrapper.find('PlainButton')).toHaveLength(1);
-            wrapper.find('PlainButton').simulate('click');
+            const previewNav = wrapper.find(PreviewNavigation);
+            const button = previewNav.find('PlainButton');
+            expect(button).toHaveLength(1);
+            button.simulate('click');
 
-            expect(deeplinkedMetadataHistoryMock.push).toBeCalledTimes(1);
-            expect(deeplinkedMetadataHistoryMock.push).toBeCalledWith('/metadata/filteredTemplates/123,124');
+            const { history } = wrapper.find(CustomRouter).props();
+            expect(history.push).toBeCalledTimes(1);
+            expect(history.push).toBeCalledWith('/metadata/filteredTemplates/123,124');
             expect(onNavigateLeftMock).toHaveBeenCalled();
         });
     });

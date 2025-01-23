@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '../../../test-utils/testing-library';
 
 import contentInsightsMessages from '../../../features/content-insights/messages';
 // @ts-ignore Module is written in Flow

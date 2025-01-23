@@ -2,29 +2,34 @@
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
-import { matchPath, type ContextRouter } from 'react-router-dom';
+import { matchPath } from '../common/routing/utils';
 import { FEED_ITEM_TYPE_VERSION } from '../../constants';
 import { getBadUserError } from '../../utils/error';
-import type { WithAnnotatorContextProps } from '../common/annotator-context';
-import type { BoxItem, User } from '../../common/types/core';
 
-type Props = {
-    ...ContextRouter,
-    currentUser?: User,
-    file: BoxItem,
-    fileId: string,
-    isOpen: boolean,
-    onVersionChange: Function,
-} & WithAnnotatorContextProps;
+/**
+ * @typedef {Object} Props
+ * @property {Object} [currentUser]
+ * @property {Object} file
+ * @property {string} fileId
+ * @property {boolean} isOpen
+ * @property {Function} onVersionChange
+ * @property {Object} history
+ * @property {Object} location
+ * @property {Object} match
+ */
 
-type SidebarPanelsRefType = {
-    refresh: (shouldRefreshCache?: boolean) => void,
-};
+/**
+ * @typedef {Object} SidebarPanelsRefType
+ * @property {(shouldRefreshCache?: boolean) => void} refresh
+ */
 
-export default function withSidebarAnnotations(
-    WrappedComponent: React.ComponentType<Props>,
-): React.ComponentType<Props> {
-    class WithSidebarAnnotations extends React.Component<Props> {
+/**
+ * @param {React.ComponentType} WrappedComponent
+ * @returns {React.ComponentType}
+ */
+export default function withSidebarAnnotations(WrappedComponent) {
+    /** @extends {React.Component} */
+    class WithSidebarAnnotations extends React.Component {
         static defaultProps = {
             annotatorState: {},
             getAnnotationsMatchPath: noop,

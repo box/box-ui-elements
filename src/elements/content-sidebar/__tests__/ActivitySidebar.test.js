@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import cloneDeep from 'lodash/cloneDeep';
+import CustomRouter from '../../common/routing/customRouter';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import ActivitySidebarFilter from '../ActivitySidebarFilter';
 import { filterableActivityFeedItems, formattedReplies } from '../fixtures';
@@ -69,23 +71,64 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         ],
     };
     let onError = jest.fn();
-    const getWrapper = (props = {}) =>
-        shallow(
-            <ActivitySidebarComponent
-                api={api}
-                currentUser={currentUser}
-                file={file}
-                logger={{ onReadyMetric: jest.fn() }}
-                onError={onError}
-                {...props}
-            />,
-        );
+    const getWrapper = (props = {}) => {
+        const pathParts = (props.location?.pathname || '/activity').split('/').filter(Boolean);
+        const location = props.location || { pathname: '/activity', search: '', hash: '', state: null };
+        const history = props.history || {
+            push: jest.fn(),
+            replace: jest.fn(),
+            go: jest.fn(),
+            goBack: jest.fn(),
+            goForward: jest.fn(),
+            listen: jest.fn(cb => {
+                cb({ location, action: 'PUSH' });
+                return () => {};
+            }),
+            block: jest.fn(() => () => {}),
+            createHref: jest.fn(() => ''),
+            location,
+            action: 'POP',
+            length: 1,
+        };
+        const match = {
+            params: {
+                activeTab: pathParts[0] || '',
+                deeplink: pathParts[1] || '',
+                fileVersionId: pathParts[2] || '',
+                activeFeedEntryId: pathParts[3] || '',
+                0: pathParts.slice(4).join('/') || '',
+            },
+            path: '/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?',
+            url: location.pathname,
+            isExact: true,
+        };
+
+        return mount(
+            <CustomRouter history={history} location={location} match={match}>
+                <ActivitySidebarComponent
+                    api={api}
+                    currentUser={currentUser}
+                    file={file}
+                    logger={{ onReadyMetric: jest.fn() }}
+                    onError={onError}
+                    {...props}
+                />
+            </CustomRouter>,
+        )
+            .find(ActivitySidebarComponent)
+            .at(0);
+    };
 
     describe('constructor()', () => {
         let onReadyMetric;
-        beforeEach(() => {
+        beforeEach(async () => {
             const wrapper = getWrapper();
-            ({ onReadyMetric } = wrapper.instance().props.logger);
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
+            ({ onReadyMetric } = instance.props.logger);
+
+            await act(async () => {
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
         });
 
         test('should emit when js loaded', () => {
@@ -99,11 +142,15 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         let wrapper;
         let instance;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             jest.spyOn(ActivitySidebarComponent.prototype, 'fetchFeedItems');
 
             wrapper = getWrapper();
-            instance = wrapper.instance();
+            instance = wrapper.find(ActivitySidebarComponent).instance();
+
+            await act(async () => {
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
         });
 
         afterEach(() => {
@@ -116,8 +163,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('render()', () => {
-        test('should render the activity feed sidebar', () => {
+        test('should render the activity feed sidebar', async () => {
             const wrapper = getWrapper();
+            await act(async () => {
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
             expect(wrapper).toMatchSnapshot();
         });
     });
@@ -155,14 +205,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('deleteTask()', () => {
-        test('should call the deleteTask prop if it exists', () => {
+        test('should call the deleteTask prop if it exists', async () => {
             const id = '1;';
             const onTaskDelete = jest.fn();
             const wrapper = getWrapper({ onTaskDelete });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.fetchFeedItems = jest.fn();
 
-            instance.deleteTask({ id });
+            await act(async () => {
+                instance.deleteTask({ id });
+            });
             expect(feedAPI.deleteTaskNew).toHaveBeenCalled();
             expect(instance.fetchFeedItems).toHaveBeenCalled();
         });
@@ -175,9 +227,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${false}
         `(
             'should call the deleteComment API if it exists when hasReplies prop equals to $hasReplies',
-            ({ hasReplies }) => {
+            async ({ hasReplies }) => {
                 const wrapper = getWrapper({ hasReplies });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
                 instance.fetchFeedItems = jest.fn();
 
                 const id = '1';
@@ -185,7 +237,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     can_edit: false,
                     can_delete: true,
                 };
-                instance.deleteComment({ id, permissions });
+                await act(async () => {
+                    instance.deleteComment({ id, permissions });
+                });
                 expect(feedAPI.deleteComment).toBeCalledWith(
                     file,
                     id,
@@ -266,14 +320,20 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         let instance;
         let wrapper;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             wrapper = getWrapper();
-            instance = wrapper.instance();
+            instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.fetchFeedItems = jest.fn();
+
+            await act(async () => {
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
         });
 
-        test('should fetch the feed items', () => {
-            instance.feedSuccessCallback();
+        test('should fetch the feed items', async () => {
+            await act(async () => {
+                instance.feedSuccessCallback();
+            });
             expect(instance.fetchFeedItems).toBeCalled();
         });
     });
@@ -282,15 +342,21 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         let instance;
         let wrapper;
 
-        beforeEach(() => {
+        beforeEach(async () => {
             wrapper = getWrapper();
-            instance = wrapper.instance();
+            instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.fetchFeedItems = jest.fn();
             instance.errorCallback = jest.fn();
+
+            await act(async () => {
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
         });
 
-        test('should invoke the generic error callback and fetch the items', () => {
-            instance.feedErrorCallback();
+        test('should invoke the generic error callback and fetch the items', async () => {
+            await act(async () => {
+                instance.feedErrorCallback();
+            });
             expect(instance.errorCallback).toBeCalled();
             expect(instance.fetchFeedItems).toBeCalled();
         });
@@ -405,24 +471,30 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     describe('createReply()', () => {
         test('should throw an error if missing current user', () => {
             const wrapper = getWrapper({ currentUser: undefined });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
 
             expect(() => instance.createReply('123', FEED_ITEM_TYPE_COMMENT, 'abc', true)).toThrow(userError);
         });
 
-        test('should call the createReply API, fetch the items and call emitAnnotationReplyCreateEvent', () => {
+        test('should call the createReply API, fetch the items and call emitAnnotationReplyCreateEvent', async () => {
             const mockEmitAnnotationReplyCreateEvent = jest.fn();
             const wrapper = getWrapper({ emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.fetchFeedItems = jest.fn();
             const parentId = '123';
             const parentType = FEED_ITEM_TYPE_COMMENT;
             const message = 'abc';
 
-            instance.setState({
-                currentUser,
+            await act(async () => {
+                instance.setState({
+                    currentUser,
+                });
             });
-            instance.createReply(parentId, parentType, message);
+
+            await act(async () => {
+                instance.createReply(parentId, parentType, message);
+            });
+
             expect(feedAPI.createReply).toBeCalledWith(
                 file,
                 currentUser,
@@ -464,14 +536,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             hasReplies
             ${undefined}
             ${false}
-        `('should call updateComment API when hasReplies prop equals to $hasReplies', ({ hasReplies }) => {
+        `('should call updateComment API when hasReplies prop equals to $hasReplies', async ({ hasReplies }) => {
             const wrapper = getWrapper({ hasReplies });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().updateComment('123', 'hello', undefined, false, {
-                can_edit: true,
-                can_delete: true,
+            await act(async () => {
+                instance.updateComment('123', 'hello', undefined, false, {
+                    can_edit: true,
+                    can_delete: true,
+                });
             });
 
             expect(api.getFeedAPI().updateComment).toBeCalledWith(
@@ -491,14 +565,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 status       | text         | expectedStatus | expectedText
                 ${undefined} | ${undefined} | ${undefined}   | ${undefined}
                 ${'open'}    | ${'foo'}     | ${'open'}      | ${'foo'}
-            `('given status=$status and text=$text', ({ status, text, expectedStatus, expectedText }) => {
+            `('given status=$status and text=$text', async ({ status, text, expectedStatus, expectedText }) => {
                 const wrapper = getWrapper({ hasReplies: true });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
                 instance.fetchFeedItems = jest.fn();
 
-                wrapper.instance().updateComment('123', text, status, false, {
-                    can_edit: true,
-                    can_delete: true,
+                await act(async () => {
+                    instance.updateComment('123', text, status, false, {
+                        can_edit: true,
+                        can_delete: true,
+                    });
                 });
 
                 expect(api.getFeedAPI().updateThreadedComment).toBeCalledWith(
@@ -516,10 +592,10 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('updateReply()', () => {
-        test('should call updateReply API and call emitAnnotationReplyUpdateEvent', () => {
+        test('should call updateReply API and call emitAnnotationReplyUpdateEvent', async () => {
             const mockEmitAnnotationReplyUpdateEvent = jest.fn();
             const wrapper = getWrapper({ emitAnnotationReplyUpdateEvent: mockEmitAnnotationReplyUpdateEvent });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
             const parentId = '123';
             const text = 'abc';
             const reply = {
@@ -528,7 +604,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             };
             instance.fetchFeedItems = jest.fn();
 
-            wrapper.instance().updateReply(reply.id, parentId, text, reply.permissions);
+            await act(async () => {
+                instance.updateReply(reply.id, parentId, text, reply.permissions);
+            });
 
             expect(api.getFeedAPI().updateReply).toBeCalledWith(
                 file,
@@ -572,10 +650,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             const historyReplace = jest.fn();
             const activeReplyId = '123';
 
-            const wrapper = getWrapper({
-                activeFeedEntryId: activeReplyId,
-                history: { replace: historyReplace },
-            });
+            const wrapper = mount(
+                <CustomRouter initialEntries={['/activity']}>
+                    <ActivitySidebarComponent
+                        activeFeedEntryId={activeReplyId}
+                        api={api}
+                        currentUser={currentUser}
+                        file={file}
+                        history={{ replace: historyReplace }}
+                        logger={{ onReadyMetric: jest.fn() }}
+                        onError={onError}
+                    />
+                </CustomRouter>,
+            );
             const instance = wrapper.instance();
             instance.getActiveCommentPath = jest.fn();
 
@@ -795,25 +882,37 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         beforeEach(() => {
             logger = { onDataReadyMetric: jest.fn(), onReadyMetric: jest.fn() };
             wrapper = getWrapper({ logger });
-            instance = wrapper.instance();
+            instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.setState = jest.fn();
         });
 
-        test('should set the feedItems in the state', () => {
-            instance.fetchFeedItemsSuccessCallback(feedItems);
+        test('should set the feedItems in the state', async () => {
+            await act(async () => {
+                instance.fetchFeedItemsSuccessCallback(feedItems);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
+
             expect(instance.setState).toBeCalledWith({
                 feedItems,
                 activityFeedError: undefined,
             });
         });
 
-        test('should not call onDataReadyMetric if feedItems is <= 1', () => {
-            instance.fetchFeedItemsSuccessCallback(feedItems);
+        test('should not call onDataReadyMetric if feedItems is <= 1', async () => {
+            await act(async () => {
+                instance.fetchFeedItemsSuccessCallback(feedItems);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
+
             expect(logger.onDataReadyMetric).not.toHaveBeenCalled();
         });
 
-        test('should call onDataReadyMetric if feedItems is > 1', () => {
-            instance.fetchFeedItemsSuccessCallback(['foo', 'bar']);
+        test('should call onDataReadyMetric if feedItems is > 1', async () => {
+            await act(async () => {
+                instance.fetchFeedItemsSuccessCallback(['foo', 'bar']);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
+
             expect(logger.onDataReadyMetric).toHaveBeenCalledWith(
                 {
                     endMarkName: 'activity_sidebar_data_ready',
@@ -831,12 +930,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper();
-            instance = wrapper.instance();
+            instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.setState = jest.fn();
         });
 
-        test('should set the feedItems in the state', () => {
-            instance.fetchFeedItemsErrorCallback(feedItems);
+        test('should set the feedItems in the state', async () => {
+            await act(async () => {
+                instance.fetchFeedItemsErrorCallback(feedItems);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
+
             expect(instance.setState).toBeCalledWith({
                 feedItems,
                 activityFeedError: activityFeedInlineError,
@@ -844,12 +947,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             expect(onError).not.toHaveBeenCalled();
         });
 
-        test('should call onError if errors is not empty', () => {
-            instance.fetchFeedItemsErrorCallback(feedItems, []);
+        test('should call onError if errors is not empty', async () => {
+            await act(async () => {
+                instance.fetchFeedItemsErrorCallback(feedItems, []);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
 
             expect(onError).not.toHaveBeenCalled();
 
-            instance.fetchFeedItemsErrorCallback(feedItems, [{ code: '0' }, { code: '1' }]);
+            await act(async () => {
+                instance.fetchFeedItemsErrorCallback(feedItems, [{ code: '0' }, { code: '1' }]);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
 
             expect(onError).toHaveBeenCalledWith(expect.any(Error), 'fetch_activity_error', {
                 showNotification: true,
@@ -993,12 +1102,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper();
-            instance = wrapper.instance();
+            instance = wrapper.find(ActivitySidebarComponent).instance();
             instance.setState = jest.fn();
         });
 
-        test('should set the feedItems in the state', () => {
-            instance.getApproverContactsSuccessCallback(collaborators);
+        test('should set the feedItems in the state', async () => {
+            await act(async () => {
+                instance.getApproverContactsSuccessCallback(collaborators);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
+
             expect(instance.setState).toBeCalledWith({
                 approverSelectorContacts: collaborators.entries,
             });
@@ -1128,12 +1241,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 activeFeedEntryId: '123',
                 activeFeedEntryType: 'annotation',
             });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
             const data = { id: '123', type: 'comment' };
 
             instance.getFocusableFeedItemById = jest.fn().mockImplementation(() => data);
 
-            const result = await instance.getActiveFeedEntryData([]);
+            let result;
+            await act(async () => {
+                result = await instance.getActiveFeedEntryData([]);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
 
             expect(result).toEqual(data);
         });
@@ -1143,13 +1260,17 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 activeFeedEntryId: '123',
                 activeFeedEntryType: 'annotation',
             });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
             const data = { id: '123', type: 'comment' };
 
             instance.getFocusableFeedItemById = jest.fn().mockImplementation(() => undefined);
             instance.getCommentFeedItemByReplyId = jest.fn().mockImplementation(() => data);
 
-            const result = await instance.getActiveFeedEntryData([]);
+            let result;
+            await act(async () => {
+                result = await instance.getActiveFeedEntryData([]);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
 
             expect(result).toEqual(data);
         });
@@ -1159,7 +1280,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 activeFeedEntryId: '123',
                 activeFeedEntryType: 'comment',
             });
-            const instance = wrapper.instance();
+            const instance = wrapper.find(ActivitySidebarComponent).instance();
             const expectedData = { id: '123', type: 'comment' };
             const parentItem = { id: '123', type: 'comment', replies: [{ id: '456' }] };
             const feedItems = [parentItem];
@@ -1175,7 +1296,11 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     successCallback({ parent: {} });
                 });
 
-            const result = await instance.getActiveFeedEntryData(feedItems);
+            let result;
+            await act(async () => {
+                result = await instance.getActiveFeedEntryData(feedItems);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
 
             expect(api.getFeedAPI().fetchThreadedComment).toBeCalledWith(
                 file,
@@ -1249,12 +1374,16 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper();
-            instance = wrapper.instance();
+            instance = wrapper.find(ActivitySidebarComponent).instance();
         });
 
-        test('should dinamycally set as false contacts loading state', () => {
+        test('should dynamically set contacts loading state', async () => {
             instance.setState = jest.fn();
-            instance.getMentionContactsSuccessCallback(collaborators);
+
+            await act(async () => {
+                instance.getMentionContactsSuccessCallback(collaborators);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
 
             expect(instance.setState).toBeCalledWith(
                 {
@@ -1264,8 +1393,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             );
         });
 
-        test('should set the feedItems in the state', () => {
-            instance.getMentionContactsSuccessCallback(collaborators);
+        test('should set the feedItems in the state', async () => {
+            await act(async () => {
+                instance.getMentionContactsSuccessCallback(collaborators);
+                await new Promise(resolve => setTimeout(resolve, 0));
+            });
+
             expect(wrapper.state('contactsLoaded')).toBeTruthy();
             expect(wrapper.state('mentionSelectorContacts')).toEqual(collaborators.entries);
         });
@@ -1338,19 +1471,56 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
         const history = {
             push: jest.fn(),
             replace: jest.fn(),
+            go: jest.fn(),
+            goBack: jest.fn(),
+            goForward: jest.fn(),
+            listen: jest.fn(cb => {
+                cb({ pathname: '/activity', search: '', hash: '', state: null });
+                return () => {};
+            }),
+            block: jest.fn(() => () => {}),
+            createHref: jest.fn(() => ''),
+            location: { pathname: '/activity', search: '', hash: '', state: null },
+            action: 'POP',
+            length: 1,
         };
         const onAnnotationSelect = jest.fn();
 
-        const getAnnotationWrapper = () =>
-            getWrapper({
-                annotatorState,
-                emitActiveAnnotationChangeEvent,
-                file,
-                getAnnotationsMatchPath,
-                getAnnotationsPath,
-                history,
-                onAnnotationSelect,
-            });
+        const getAnnotationWrapper = () => {
+            const pathParts = getAnnotationsPath().split('/').filter(Boolean);
+            const location = { pathname: getAnnotationsPath() };
+            const match = {
+                params: {
+                    activeTab: pathParts[0] || '',
+                    deeplink: pathParts[1] || '',
+                    fileVersionId: pathParts[2] || '',
+                    activeFeedEntryId: pathParts[3] || '',
+                    0: pathParts.slice(4).join('/') || '',
+                },
+                path: '/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?',
+                url: getAnnotationsPath(),
+                isExact: true,
+            };
+
+            return mount(
+                <CustomRouter history={history} location={location} match={match}>
+                    <ActivitySidebarComponent
+                        annotatorState={annotatorState}
+                        api={api}
+                        currentUser={currentUser}
+                        emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
+                        file={file}
+                        getAnnotationsMatchPath={getAnnotationsMatchPath}
+                        getAnnotationsPath={getAnnotationsPath}
+                        logger={{ onReadyMetric: jest.fn() }}
+                        onAnnotationSelect={onAnnotationSelect}
+                        onError={onError}
+                    />
+                </CustomRouter>,
+            )
+                .find(ActivitySidebarComponent)
+                .at(0);
+        };
 
         test('should call emitAnnotatorActiveChangeEvent and onAnnotatorSelect appropriately', () => {
             const wrapper = getAnnotationWrapper();
@@ -1504,6 +1674,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
     });
 
     describe('getFilteredFeedItems()', () => {
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
         const {
             annotationOpen: expectedAnnotationOpen,
             annotationResolved: expectedAnnotationResolved,
@@ -1513,6 +1691,14 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             versionItem: expectedVersionItem,
         } = filterableActivityFeedItems;
 
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
         test.each`
             status        | expected
             ${undefined}  | ${[expectedAnnotationOpen, expectedAnnotationResolved, expectedCommentOpen, expectedCommentResolved, expectedTaskItem, expectedVersionItem]}
@@ -1521,23 +1707,25 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
             ${'task'}     | ${[expectedTaskItem, expectedVersionItem]}
         `(
             'should filter feed items of type "comment" or "annotation" based on status equal to $status',
-            ({ status, expected }) => {
+            async ({ status, expected }) => {
                 const { annotationOpen, annotationResolved, commentOpen, commentResolved, taskItem, versionItem } =
                     cloneDeep(filterableActivityFeedItems);
                 const wrapper = getWrapper();
-                const instance = wrapper.instance();
-                instance.setState({
-                    feedItems: [
-                        annotationOpen,
-                        annotationResolved,
-                        commentOpen,
-                        commentResolved,
-                        taskItem,
-                        versionItem,
-                    ],
-                });
-                instance.setState({
-                    feedItemsStatusFilter: status,
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    instance.setState({
+                        feedItems: [
+                            { ...annotationOpen, tagged_message: 'test annotation' },
+                            { ...annotationResolved, tagged_message: 'test resolved annotation' },
+                            { ...commentOpen, tagged_message: 'test comment' },
+                            { ...commentResolved, tagged_message: 'test resolved comment' },
+                            { ...taskItem, tagged_message: 'test task' },
+                            { ...versionItem, tagged_message: 'test version' },
+                        ],
+                        feedItemsStatusFilter: status,
+                    });
+                    await new Promise(resolve => setTimeout(resolve, 0));
                 });
                 expect(instance.getFilteredFeedItems()).toMatchObject(expected);
             },
@@ -1558,7 +1746,9 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 const wrapper = getWrapper({ onFilterChange: mockOnFilterChange });
                 const instance = wrapper.instance();
                 instance.setState = jest.fn();
-                instance.handleItemsFiltered(status);
+                act(() => {
+                    instance.handleItemsFiltered(status);
+                });
                 expect(instance.setState).toBeCalledWith({ feedItemsStatusFilter: expected });
                 expect(mockOnFilterChange).toBeCalledWith(expected);
             },
@@ -1575,13 +1765,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('renderActivitySidebarFilter()', () => {
         describe('should return null', () => {
-            test('when activityFeed.filter feature is not set', () => {
+            test('when activityFeed.filter feature is not set', async () => {
                 const wrapper = getWrapper();
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 expect(instance.renderActivitySidebarFilter()).toBe(null);
             });
 
-            test('when activityFeed.filter feature is disabled', () => {
+            test('when activityFeed.filter feature is disabled', async () => {
                 const wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -1589,7 +1784,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         },
                     },
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 expect(instance.renderActivitySidebarFilter()).toBe(null);
             });
 
@@ -1597,7 +1797,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 hasTasks
                 ${false}
                 ${true}
-            `('when activityFeed.newThreadedReplies is not enabled and hasTasks is $hasTasks', ({ hasTasks }) => {
+            `('when activityFeed.newThreadedReplies is not enabled and hasTasks is $hasTasks', async ({ hasTasks }) => {
                 const wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -1606,13 +1806,18 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     },
                     hasTasks,
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 expect(instance.renderActivitySidebarFilter()).toBe(null);
             });
         });
 
         describe('should return ActivitySidebarFilter', () => {
-            test('when activityFeed.filter feature is enabled', () => {
+            test('when activityFeed.filter feature is enabled', async () => {
                 const wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -1620,12 +1825,17 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         },
                     },
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 const resultWrapper = mount(instance.renderActivitySidebarFilter());
                 expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
             });
 
-            test('with default filter options when activityFeed.filter is enabled', () => {
+            test('with default filter options when activityFeed.filter is enabled', async () => {
                 const wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -1634,7 +1844,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     },
                     hasTasks: true,
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 const resultWrapper = mount(instance.renderActivitySidebarFilter());
                 const sidebarFilter = resultWrapper.find(ActivitySidebarFilter).first();
                 expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
@@ -1657,8 +1872,8 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         },
                         hasTasks,
                     });
-                    const instance = wrapper.instance();
-                    const resultWrapper = mount(instance.renderActivitySidebarFilter());
+                    const component = wrapper.find('ActivitySidebar').at(0);
+                    const resultWrapper = mount(component.instance().renderActivitySidebarFilter());
                     const sidebarFilter = resultWrapper.find(ActivitySidebarFilter).first();
                     expect(resultWrapper.name()).toBe('ActivitySidebarFilter');
                     expect(sidebarFilter.props().activityFilterOptions).toEqual(expectedOptions);
@@ -1669,14 +1884,19 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
     describe('renderTitle()', () => {
         describe('should return FormattedMessage', () => {
-            test('when activityFeed.filter feature is not set', () => {
+            test('when activityFeed.filter feature is not set', async () => {
                 const wrapper = getWrapper();
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 const resultWrapper = mount(instance.renderTitle());
                 expect(resultWrapper.name()).toBe('FormattedMessage');
             });
 
-            test('when activityFeed.filter feature is disabled', () => {
+            test('when activityFeed.filter feature is disabled', async () => {
                 const wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -1684,7 +1904,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         },
                     },
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 const resultWrapper = mount(instance.renderTitle());
                 expect(resultWrapper.name()).toBe('FormattedMessage');
             });
@@ -1693,7 +1918,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 hasTasks
                 ${false}
                 ${true}
-            `('when activityFeed.newThreadedReplies is disabled and hasTasks is $hasTasks', ({ hasTasks }) => {
+            `('when activityFeed.newThreadedReplies is disabled and hasTasks is $hasTasks', async ({ hasTasks }) => {
                 const wrapper = getWrapper({
                     features: {
                         activityFeed: {
@@ -1702,16 +1927,26 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                     },
                     hasTasks,
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 const resultWrapper = mount(instance.renderTitle());
                 expect(resultWrapper.name()).toBe('FormattedMessage');
             });
         });
 
         describe('should return null', () => {
-            test('when activityFeed.filter feature is enabled', () => {
+            test('when activityFeed.filter feature is enabled', async () => {
                 const wrapper = getWrapper({ features: { activityFeed: { filter: { enabled: true } } } });
-                const instance = wrapper.instance();
+                const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                await act(async () => {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                });
+
                 expect(instance.renderTitle()).toBe(null);
             });
 
@@ -1721,7 +1956,7 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 ${true}
             `(
                 'when activityFeed.newThreadedReplies is enabled, activityFeed.filter is enabled, and hasTasks is $hasTasks',
-                ({ hasTasks }) => {
+                async ({ hasTasks }) => {
                     const wrapper = getWrapper({
                         features: {
                             activityFeed: {
@@ -1731,7 +1966,12 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                         },
                         hasTasks,
                     });
-                    const instance = wrapper.instance();
+                    const instance = wrapper.find(ActivitySidebarComponent).instance();
+
+                    await act(async () => {
+                        await new Promise(resolve => setTimeout(resolve, 0));
+                    });
+
                     expect(instance.renderTitle()).toBe(null);
                 },
             );

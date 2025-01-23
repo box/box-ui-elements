@@ -1,29 +1,28 @@
-// @flow
 import * as React from 'react';
-import { withRouter, type RouterHistory } from 'react-router-dom';
-
+import withRouter from '../common/routing/withRouter';
 import AddTaskMenu from './AddTaskMenu';
 import TaskModal from './TaskModal';
 import { TASK_TYPE_APPROVAL } from '../../constants';
-import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
-import type { TaskType } from '../../common/types/tasks';
-import type { ElementsXhrError } from '../../common/types/api';
 
-type Props = {|
-    history: RouterHistory,
-    isDisabled: boolean,
-    onTaskModalClose: () => void,
-    taskFormProps: TaskFormProps,
-|};
+/**
+ * @typedef {Object} Props
+ * @property {import('../common/routing/flowTypes').RouterHistory} history
+ * @property {boolean} isDisabled
+ * @property {() => void} onTaskModalClose
+ * @property {import('./activity-feed/task-form/TaskForm').TaskFormProps} taskFormProps
+ */
 
-type State = {
-    error: ?ElementsXhrError,
-    isTaskFormOpen: boolean,
-    taskType: TaskType,
-};
+/**
+ * @typedef {Object} State
+ * @property {import('../../common/types/api').ElementsXhrError | null} error
+ * @property {boolean} isTaskFormOpen
+ * @property {import('../../common/types/tasks').TaskType} taskType
+ */
 
-class AddTaskButton extends React.Component<Props, State> {
-    buttonRef = React.createRef<HTMLButtonElement>();
+/** @extends {React.Component<Props, State>} */
+class AddTaskButton extends React.Component {
+    /** @type {React.RefObject<HTMLButtonElement>} */
+    buttonRef = React.createRef();
 
     state = {
         error: null,
@@ -39,7 +38,8 @@ class AddTaskButton extends React.Component<Props, State> {
     1. Pushing the open state into history keeps the sidebar open upon resize and refresh
     2. Preventing the sidebar from closing keeps the task modal open upon edit and resize
     */
-    handleClickMenuItem = (taskType: TaskType) => {
+    /** @param {import('../../common/types/tasks').TaskType} taskType */
+    handleClickMenuItem = taskType => {
         this.props.history.replace({ state: { open: true } });
         this.setState({ isTaskFormOpen: true, taskType });
     };
@@ -54,9 +54,11 @@ class AddTaskButton extends React.Component<Props, State> {
         onTaskModalClose();
     };
 
-    handleSubmitError = (e: ElementsXhrError) => this.setState({ error: e });
+    /** @param {import('../../common/types/api').ElementsXhrError} e */
+    handleSubmitError = e => this.setState({ error: e });
 
-    setAddTaskButtonRef = (element: HTMLButtonElement) => {
+    /** @param {HTMLButtonElement} element */
+    setAddTaskButtonRef = element => {
         this.buttonRef.current = element;
     };
 

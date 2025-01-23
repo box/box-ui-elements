@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
 import { type MetadataTemplateInstance } from '@box/metadata-editor';
+import type { ContextRouter } from '../../common/routing/flowTypes';
 import { SIDEBAR_VIEW_METADATA } from '../../../constants';
 
-type History = RouteComponentProps['history'];
+type History = ContextRouter['history'];
 
 interface MetadataSidebarFilter {
     filteredTemplates: string[];

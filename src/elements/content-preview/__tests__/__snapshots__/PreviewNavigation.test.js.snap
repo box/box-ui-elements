@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 0 1`] = `
-<Router
+<CustomRouter
   history={
     {
       "entries": [
@@ -12,15 +12,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
-          [
-            [Function],
-          ],
         ],
         "results": [
-          {
-            "type": "return",
-            "value": undefined,
-          },
           {
             "type": "return",
             "value": undefined,
@@ -34,22 +27,29 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
->
-  <PreviewNavigation
-    collection={
-      [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-      ]
+  location={
+    {
+      "hash": "",
+      "pathname": "/activity/tasks/1234",
     }
+  }
+  match={
+    {
+      "isExact": true,
+      "params": {
+        "0": "",
+        "activeFeedEntryId": undefined,
+        "activeTab": "activity",
+        "deeplink": "tasks",
+        "fileVersionId": "1234",
+        "filteredTemplateIds": [],
+      },
+      "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+      "url": "/activity/tasks/1234",
+    }
+  }
+>
+  <Router
     history={
       {
         "entries": [
@@ -60,15 +60,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
-            [
-              [Function],
-            ],
           ],
           "results": [
-            {
-              "type": "return",
-              "value": undefined,
-            },
             {
               "type": "return",
               "value": undefined,
@@ -82,19 +75,57 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
         "push": [MockFunction],
       }
     }
-    intl={
+    location={
       {
-        "formatMessage": [MockFunction],
+        "hash": "",
+        "pathname": "/activity/tasks/1234",
       }
     }
-    onNavigateLeft={[Function]}
-    onNavigateRight={[Function]}
-  />
-</Router>
+    match={
+      {
+        "isExact": true,
+        "params": {
+          "0": "",
+          "activeFeedEntryId": undefined,
+          "activeTab": "activity",
+          "deeplink": "tasks",
+          "fileVersionId": "1234",
+          "filteredTemplateIds": [],
+        },
+        "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+        "url": "/activity/tasks/1234",
+      }
+    }
+  >
+    <PreviewNavigation
+      collection={
+        [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+        ]
+      }
+      intl={
+        {
+          "formatMessage": [MockFunction],
+        }
+      }
+      onNavigateLeft={[Function]}
+      onNavigateRight={[Function]}
+    />
+  </Router>
+</CustomRouter>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 1 1`] = `
-<Router
+<CustomRouter
   history={
     {
       "entries": [
@@ -105,15 +136,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
-          [
-            [Function],
-          ],
         ],
         "results": [
-          {
-            "type": "return",
-            "value": undefined,
-          },
           {
             "type": "return",
             "value": undefined,
@@ -127,22 +151,29 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
->
-  <PreviewNavigation
-    collection={
-      [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-      ]
+  location={
+    {
+      "hash": "",
+      "pathname": "/activity/tasks/1234",
     }
+  }
+  match={
+    {
+      "isExact": true,
+      "params": {
+        "0": "",
+        "activeFeedEntryId": undefined,
+        "activeTab": "activity",
+        "deeplink": "tasks",
+        "fileVersionId": "1234",
+        "filteredTemplateIds": [],
+      },
+      "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+      "url": "/activity/tasks/1234",
+    }
+  }
+>
+  <Router
     history={
       {
         "entries": [
@@ -153,15 +184,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
-            [
-              [Function],
-            ],
           ],
           "results": [
-            {
-              "type": "return",
-              "value": undefined,
-            },
             {
               "type": "return",
               "value": undefined,
@@ -175,19 +199,57 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
         "push": [MockFunction],
       }
     }
-    intl={
+    location={
       {
-        "formatMessage": [MockFunction],
+        "hash": "",
+        "pathname": "/activity/tasks/1234",
       }
     }
-    onNavigateLeft={[Function]}
-    onNavigateRight={[Function]}
-  />
-</Router>
+    match={
+      {
+        "isExact": true,
+        "params": {
+          "0": "",
+          "activeFeedEntryId": undefined,
+          "activeTab": "activity",
+          "deeplink": "tasks",
+          "fileVersionId": "1234",
+          "filteredTemplateIds": [],
+        },
+        "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+        "url": "/activity/tasks/1234",
+      }
+    }
+  >
+    <PreviewNavigation
+      collection={
+        [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+        ]
+      }
+      intl={
+        {
+          "formatMessage": [MockFunction],
+        }
+      }
+      onNavigateLeft={[Function]}
+      onNavigateRight={[Function]}
+    />
+  </Router>
+</CustomRouter>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with a filled collection 9 1`] = `
-<Router
+<CustomRouter
   history={
     {
       "entries": [
@@ -198,15 +260,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
-          [
-            [Function],
-          ],
         ],
         "results": [
-          {
-            "type": "return",
-            "value": undefined,
-          },
           {
             "type": "return",
             "value": undefined,
@@ -220,22 +275,29 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
->
-  <PreviewNavigation
-    collection={
-      [
-        "a",
-        "b",
-        "c",
-        "d",
-        "e",
-        "f",
-        "g",
-        "h",
-        "i",
-        "j",
-      ]
+  location={
+    {
+      "hash": "",
+      "pathname": "/activity/tasks/1234",
     }
+  }
+  match={
+    {
+      "isExact": true,
+      "params": {
+        "0": "",
+        "activeFeedEntryId": undefined,
+        "activeTab": "activity",
+        "deeplink": "tasks",
+        "fileVersionId": "1234",
+        "filteredTemplateIds": [],
+      },
+      "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+      "url": "/activity/tasks/1234",
+    }
+  }
+>
+  <Router
     history={
       {
         "entries": [
@@ -246,15 +308,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
-            [
-              [Function],
-            ],
           ],
           "results": [
-            {
-              "type": "return",
-              "value": undefined,
-            },
             {
               "type": "return",
               "value": undefined,
@@ -268,19 +323,57 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
         "push": [MockFunction],
       }
     }
-    intl={
+    location={
       {
-        "formatMessage": [MockFunction],
+        "hash": "",
+        "pathname": "/activity/tasks/1234",
       }
     }
-    onNavigateLeft={[Function]}
-    onNavigateRight={[Function]}
-  />
-</Router>
+    match={
+      {
+        "isExact": true,
+        "params": {
+          "0": "",
+          "activeFeedEntryId": undefined,
+          "activeTab": "activity",
+          "deeplink": "tasks",
+          "fileVersionId": "1234",
+          "filteredTemplateIds": [],
+        },
+        "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+        "url": "/activity/tasks/1234",
+      }
+    }
+  >
+    <PreviewNavigation
+      collection={
+        [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+        ]
+      }
+      intl={
+        {
+          "formatMessage": [MockFunction],
+        }
+      }
+      onNavigateLeft={[Function]}
+      onNavigateRight={[Function]}
+    />
+  </Router>
+</CustomRouter>
 `;
 
 exports[`elements/content-preview/PreviewNavigation render() should render correctly with an empty collection 1`] = `
-<Router
+<CustomRouter
   history={
     {
       "entries": [
@@ -291,15 +384,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
           [
             [Function],
           ],
-          [
-            [Function],
-          ],
         ],
         "results": [
-          {
-            "type": "return",
-            "value": undefined,
-          },
           {
             "type": "return",
             "value": undefined,
@@ -313,10 +399,29 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
       "push": [MockFunction],
     }
   }
+  location={
+    {
+      "hash": "",
+      "pathname": "/activity/tasks/1234",
+    }
+  }
+  match={
+    {
+      "isExact": true,
+      "params": {
+        "0": "",
+        "activeFeedEntryId": undefined,
+        "activeTab": "activity",
+        "deeplink": "tasks",
+        "fileVersionId": "1234",
+        "filteredTemplateIds": [],
+      },
+      "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+      "url": "/activity/tasks/1234",
+    }
+  }
 >
-  <PreviewNavigation
-    collection={[]}
-    currentIndex={0}
+  <Router
     history={
       {
         "entries": [
@@ -327,15 +432,8 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
             [
               [Function],
             ],
-            [
-              [Function],
-            ],
           ],
           "results": [
-            {
-              "type": "return",
-              "value": undefined,
-            },
             {
               "type": "return",
               "value": undefined,
@@ -349,13 +447,39 @@ exports[`elements/content-preview/PreviewNavigation render() should render corre
         "push": [MockFunction],
       }
     }
-    intl={
+    location={
       {
-        "formatMessage": [MockFunction],
+        "hash": "",
+        "pathname": "/activity/tasks/1234",
       }
     }
-    onNavigateLeft={[Function]}
-    onNavigateRight={[Function]}
-  />
-</Router>
+    match={
+      {
+        "isExact": true,
+        "params": {
+          "0": "",
+          "activeFeedEntryId": undefined,
+          "activeTab": "activity",
+          "deeplink": "tasks",
+          "fileVersionId": "1234",
+          "filteredTemplateIds": [],
+        },
+        "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+        "url": "/activity/tasks/1234",
+      }
+    }
+  >
+    <PreviewNavigation
+      collection={[]}
+      currentIndex={0}
+      intl={
+        {
+          "formatMessage": [MockFunction],
+        }
+      }
+      onNavigateLeft={[Function]}
+      onNavigateRight={[Function]}
+    />
+  </Router>
+</CustomRouter>
 `;

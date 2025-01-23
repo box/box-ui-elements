@@ -1,5 +1,5 @@
 import { Location } from 'history';
-import { match } from 'react-router-dom';
+import type { Match } from '../routing/flowTypes';
 
 export const CREATE = 'create';
 
@@ -39,7 +39,7 @@ export interface AnnotatorState {
     origin?: string;
 }
 
-export type GetMatchPath = (location?: Location) => match<MatchParams> | null;
+export type GetMatchPath = (location?: Location) => Match | null;
 
 export interface AnnotatorContext {
     emitActiveAnnotationChangeEvent?: (id: string) => void;

@@ -1,21 +1,30 @@
 import * as React from 'react';
-import { MemoryRouter, Router } from 'react-router';
-import { History } from 'history';
+import type { History } from '../routing/flowTypes';
+import CustomRouter from '../routing/customRouter';
 
 type Props = {
     children: React.ReactNode;
     history?: History;
-    initialEntries?: History.LocationDescriptor[];
+    initialEntries?: string[];
 };
 
 const NavRouter = ({ children, history, ...rest }: Props) => {
-    if (history) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return <Router history={history}>{children}</Router>;
-    }
+    // Convert history to match CustomRouter's expected type
+    const routerHistory = history
+        ? {
+              ...history,
+              scrollRestoration: 'auto',
+              state: {},
+              back: history.back,
+              forward: history.forward,
+          }
+        : undefined;
 
-    return <MemoryRouter {...rest}>{children}</MemoryRouter>;
+    return (
+        <CustomRouter history={routerHistory} {...rest}>
+            {children}
+        </CustomRouter>
+    );
 };
 
 export default NavRouter;

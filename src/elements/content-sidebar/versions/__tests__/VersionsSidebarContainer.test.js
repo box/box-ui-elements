@@ -4,11 +4,6 @@ import messages from '../messages';
 import openUrlInsideIframe from '../../../../utils/iframe';
 import { VersionsSidebarContainerComponent } from '../VersionsSidebarContainer';
 
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    withRouter: Component => Component,
-}));
-
 jest.mock('../../../common/api-context', () => ({
     withAPIContext: Component => Component,
 }));

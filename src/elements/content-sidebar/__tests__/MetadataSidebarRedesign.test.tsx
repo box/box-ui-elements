@@ -1,7 +1,7 @@
 import React from 'react';
 import { userEvent } from '@testing-library/user-event';
-import { RouteComponentProps } from 'react-router-dom';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
+import type { ContextRouter } from '../../common/routing/flowTypes';
 import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
 import { screen, render } from '../../../test-utils/testing-library';
 import {
@@ -89,7 +89,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     const renderComponent = (props = {}, features = {}) => {
         const emptyFilteredTemplateIds = [];
-        const routeComponentProps = {} as RouteComponentProps;
+        const routeComponentProps = {} as ContextRouter;
         const defaultProps = {
             api: {},
             fileId: 'test-file-id-1',

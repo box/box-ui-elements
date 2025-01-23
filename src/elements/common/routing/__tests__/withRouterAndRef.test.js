@@ -1,23 +1,22 @@
 // @flow
 import * as React from 'react';
-import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
+import CustomRouter from '../customRouter';
 import withRouterAndRef from '../withRouterAndRef';
 
 describe('elements/common/routing/withRouterAndRef', () => {
-    type Props = {
-        value: string,
-    };
+    /** @typedef {{ value: string }} Props */
 
-    const TestComponent = React.forwardRef(({ value }: Props, ref) => <div ref={ref}>{value}</div>);
+    /** @type {React.ForwardRefRenderFunction<HTMLDivElement, Props>} */
+    const TestComponent = React.forwardRef((props, ref) => <div ref={ref}>{props.value}</div>);
     const WithRouterComponent = withRouterAndRef(TestComponent);
 
     test('should pass ref down to wrapped component', () => {
         const ref = React.createRef();
         const wrapper = mount(
-            <MemoryRouter>
+            <CustomRouter>
                 <WithRouterComponent ref={ref} value="foo" />
-            </MemoryRouter>,
+            </CustomRouter>,
         );
         const referenced = wrapper.find('div').getDOMNode();
         expect(ref.current).toEqual(referenced);

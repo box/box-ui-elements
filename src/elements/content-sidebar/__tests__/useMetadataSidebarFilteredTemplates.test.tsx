@@ -1,9 +1,9 @@
-import { RouteComponentProps } from 'react-router-dom';
+import type { ContextRouter } from '../../common/routing/flowTypes';
 import { act, renderHook } from '../../../test-utils/testing-library';
 import { useMetadataSidebarFilteredTemplates } from '../hooks/useMetadataSidebarFilteredTemplates';
 import { SIDEBAR_VIEW_METADATA } from '../../../constants';
 
-type History = RouteComponentProps['history'];
+type History = ContextRouter['history'];
 const mockHistoryPush = jest.fn();
 const history = { push: mockHistoryPush } as unknown as History;
 

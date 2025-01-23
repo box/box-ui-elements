@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { MemoryRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
 import { mount } from 'enzyme';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
+import { IntlProvider } from 'react-intl';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../../test-utils/testing-library';
+import CustomRouter from '../../common/routing/customRouter';
 import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
 import AdditionalTabs from '../additional-tabs';
 import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
@@ -15,26 +17,29 @@ import IconMetadataThick from '../../../icons/general/IconMetadataThick';
 import SidebarNav from '../SidebarNav';
 import SidebarNavButton from '../SidebarNavButton';
 import SidebarNavSignButton from '../SidebarNavSignButton';
-import { render, screen } from '../../../test-utils/testing-library';
 
 describe('elements/content-sidebar/SidebarNav', () => {
     const getWrapper = (props = {}, active = '', features = {}) =>
         mount(
-            <MemoryRouter initialEntries={[`/${active}`]}>
+            <CustomRouter initialEntries={[`/${active}`]}>
                 <FeatureProvider features={features}>
-                    <SidebarNav {...props} />
+                    <IntlProvider locale="en">
+                        <SidebarNav {...props} />
+                    </IntlProvider>
                 </FeatureProvider>
-            </MemoryRouter>,
+            </CustomRouter>,
         )
             .find('SidebarNav')
             .at(1);
 
     const getSidebarNav = ({ path = '/', props, features }) => (
-        <MemoryRouter initialEntries={[path]}>
+        <CustomRouter initialEntries={[path]}>
             <FeatureProvider features={features}>
-                <SidebarNav {...props} />
+                <IntlProvider locale="en">
+                    <SidebarNav {...props} />
+                </IntlProvider>
             </FeatureProvider>
-        </MemoryRouter>
+        </CustomRouter>
     );
 
     test('should render skills tab', () => {

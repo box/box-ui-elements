@@ -1,9 +1,9 @@
 // @flow
 import * as React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Notification } from '@box/blueprint-web';
 import { http, HttpResponse } from 'msw';
+import CustomRouter from '../../../common/routing/customRouter';
 
 import { mockEventRequest, mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
@@ -234,11 +234,11 @@ export const markdownDisabled = {
 export default {
     title: 'Elements/ContentPreview/tests/visual/BoxAI',
     component: ContentPreview,
-    render: ({ ...args }: any) => (
+    render: ({ ...args }) => (
         <Notification.Provider>
-            <Router>
+            <CustomRouter initialEntries={['/']}>
                 <ContentPreview key={`${args.fileId}-${args.token}`} {...args} />
-            </Router>
+            </CustomRouter>
         </Notification.Provider>
     ),
     args: {

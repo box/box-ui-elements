@@ -1,17 +1,17 @@
 import * as React from 'react';
-import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils/testing-library';
 import PlainButton from '../../../components/plain-button';
+import CustomRouter from '../../common/routing/customRouter';
 import SidebarNavButton from '../SidebarNavButton';
 import Tooltip from '../../../components/tooltip/Tooltip';
 
 describe('elements/content-sidebar/SidebarNavButton', () => {
     const getWrapper = ({ children, ...props }, path = '/') =>
         mount(
-            <MemoryRouter initialEntries={[path]}>
+            <CustomRouter initialEntries={[path]}>
                 <SidebarNavButton {...props}>{children}</SidebarNavButton>
-            </MemoryRouter>,
+            </CustomRouter>,
         );
     const getButton = wrapper => wrapper.find(PlainButton).first();
 
@@ -59,11 +59,11 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         const mockSidebarView = 'activity';
 
         render(
-            <MemoryRouter initialEntries={['/']}>
+            <CustomRouter initialEntries={['/']}>
                 <SidebarNavButton onClick={mockOnClick} sidebarView={mockSidebarView}>
                     button
                 </SidebarNavButton>
-            </MemoryRouter>,
+            </CustomRouter>,
         );
         const button = screen.getByText('button');
 

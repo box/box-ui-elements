@@ -1,6 +1,6 @@
-import { History } from 'history';
+import type { History } from '../routing/flowTypes';
 
 export type WithNavRouterProps = {
     history?: History;
-    initialEntries?: History.LocationDescriptor[];
+    initialEntries?: string[];
 };

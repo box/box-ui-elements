@@ -1,16 +1,23 @@
 import * as React from 'react';
-import { MemoryRouter, Router } from 'react-router-dom';
 import { mount } from 'enzyme';
+import { createMemoryHistory } from 'history';
+import CustomRouter from '../../routing/customRouter';
 import { BackButton } from '..';
 
 describe('elements/common/nav-button/BackButton', () => {
-    const getWrapper = (props = {}) =>
+    const getMockHistory = (initialEntries = ['/start', '/test']) => {
+        const history = createMemoryHistory({ initialEntries });
+        jest.spyOn(history, 'goBack');
+        jest.spyOn(history, 'push');
+        return history;
+    };
+
+    const getWrapper = (props = {}, history = getMockHistory()) =>
         mount(
-            <MemoryRouter initialEntries={['/start', '/test']}>
+            <CustomRouter history={history}>
                 <BackButton {...props} />
-            </MemoryRouter>,
+            </CustomRouter>,
         );
-    const getHistory = wrapper => wrapper.find(Router).prop('history');
 
     test('should match its snapshot', () => {
         const wrapper = getWrapper();
@@ -20,23 +27,19 @@ describe('elements/common/nav-button/BackButton', () => {
     });
 
     test('should call history back on click if no path is defined', () => {
-        const wrapper = getWrapper();
-        const history = getHistory(wrapper);
+        const history = getMockHistory();
+        const wrapper = getWrapper({}, history);
 
-        history.goBack = jest.fn();
-
-        wrapper.simulate('click');
+        wrapper.find('button').simulate('click');
 
         expect(history.goBack).toHaveBeenCalled();
     });
 
     test('should call history.push on click if a path is defined', () => {
-        const wrapper = getWrapper({ to: '/new' });
-        const history = getHistory(wrapper);
+        const history = getMockHistory();
+        const wrapper = getWrapper({ to: '/new' }, history);
 
-        history.push = jest.fn();
-
-        wrapper.simulate('click');
+        wrapper.find('button').simulate('click');
 
         expect(history.push).toHaveBeenCalledWith('/new');
     });

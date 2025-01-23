@@ -5,7 +5,8 @@
  */
 
 import * as React from 'react';
-import { withRouter, type RouterHistory } from 'react-router-dom';
+import withRouter from '../common/routing/withRouter';
+import { RouterHistory } from '../common/routing/flowTypes';
 import SidebarToggleButton from '../../components/sidebar-toggle-button/SidebarToggleButton';
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 

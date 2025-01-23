@@ -5,8 +5,6 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { InlineError, LoadingIndicator } from '@box/blueprint-web';
 import {
     AddMetadataTemplateDropdown,
     AutofillContextProvider,
@@ -19,6 +17,9 @@ import {
     type MetadataTemplateInstance,
     type PaginationQueryInput,
 } from '@box/metadata-editor';
+import { InlineError, LoadingIndicator } from '@box/blueprint-web';
+import withRouter from '../common/routing/withRouter';
+import type { ContextRouter } from '../common/routing/flowTypes';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -69,8 +70,9 @@ export interface MetadataSidebarRedesignProps
         ErrorContextProps,
         SuccessContextProps,
         WithLoggerProps,
-        RouteComponentProps {
+        ContextRouter {
     api: API;
+    history: ContextRouter['history'];
 }
 
 function MetadataSidebarRedesign({

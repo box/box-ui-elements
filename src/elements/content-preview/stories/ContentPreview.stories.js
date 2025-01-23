@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import CustomRouter from '../../common/routing/customRouter';
 import ContentPreview from '../ContentPreview';
 
 export const basic = {};
@@ -59,10 +59,10 @@ export const withBoxAI = {
 export default {
     title: 'Elements/ContentPreview',
     component: ContentPreview,
-    render: ({ ...args }: any) => (
-        <Router>
+    render: ({ ...args }) => (
+        <CustomRouter initialEntries={['/']}>
             <ContentPreview key={`${args.fileId}-${args.token}`} {...args} />
-        </Router>
+        </CustomRouter>
     ),
     args: {
         features: global.FEATURE_FLAGS,

@@ -5,25 +5,27 @@
  */
 
 import * as React from 'react';
-import { Route } from 'react-router-dom';
 import noop from 'lodash/noop';
+import CustomRoute from '../common/routing/customRoute';
 import NavButton from '../common/nav-button';
 import Tooltip from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
-type Props = {
-    'data-resin-target'?: string,
-    'data-testid'?: string,
-    children: React.Node,
-    elementId?: string,
-    isDisabled?: boolean,
-    isOpen?: boolean,
-    onClick?: (sidebarView: string) => void,
-    sidebarView: string,
-    tooltip: React.Node,
-};
+/**
+ * @typedef {Object} Props
+ * @property {string} [data-resin-target]
+ * @property {string} [data-testid]
+ * @property {React.ReactNode} children
+ * @property {string} [elementId]
+ * @property {boolean} [isDisabled]
+ * @property {boolean} [isOpen]
+ * @property {(sidebarView: string) => void} [onClick]
+ * @property {string} sidebarView
+ * @property {React.ReactNode} tooltip
+ */
 
-const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
+/** @type {React.ForwardRefRenderFunction<HTMLElement, Props>} */
+const SidebarNavButton = React.forwardRef((props, ref) => {
     const {
         'data-resin-target': dataResinTarget,
         'data-testid': dataTestId,
@@ -42,7 +44,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
     };
 
     return (
-        <Route path={sidebarPath}>
+        <CustomRoute path={sidebarPath}>
             {({ match }) => {
                 const isMatch = !!match;
                 const isActive = () => isMatch && !!isOpen;
@@ -79,7 +81,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                     </Tooltip>
                 );
             }}
-        </Route>
+        </CustomRoute>
     );
 });
 

@@ -1,32 +1,32 @@
 /**
- * @flow
  * @file Versions List component
  * @author Box
  */
 
 import * as React from 'react';
-import { Route } from 'react-router-dom';
+import CustomRoute from '../../common/routing/customRoute';
 import VersionsItem from './VersionsItem';
-import type { BoxItemVersion } from '../../../common/types/core';
 import './VersionsList.scss';
 
-type Props = {
-    currentId?: string,
-    fileId: string,
-    versionCount: number,
-    versionLimit: number,
-    versions: Array<BoxItemVersion>,
-};
+/**
+ * @typedef {Object} Props
+ * @property {string} [currentId]
+ * @property {string} fileId
+ * @property {number} versionCount
+ * @property {number} versionLimit
+ * @property {Array<import('../../../common/types/core').BoxItemVersion>} versions
+ */
 
-const VersionsList = ({ currentId, versions, ...rest }: Props) => (
+/** @type {React.FC<Props>} */
+const VersionsList = ({ currentId, versions, ...rest }) => (
     <ul className="bcs-VersionsList">
         {versions.map(version => (
             <li className="bcs-VersionsList-item" key={version.id}>
-                <Route
+                <CustomRoute
                     render={({ match }) => (
                         <VersionsItem
                             isCurrent={currentId === version.id}
-                            isSelected={match.params.versionId === version.id}
+                            isSelected={match?.params?.versionId === version.id}
                             version={version}
                             {...rest}
                         />

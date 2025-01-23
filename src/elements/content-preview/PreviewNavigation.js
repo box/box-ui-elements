@@ -1,29 +1,28 @@
 /**
- * @flow
  * @file Preview Navigation
  * @author Box
  */
 
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
-import { Route } from 'react-router-dom';
+import CustomRoute from '../common/routing/customRoute';
 import IconNavigateLeft from '../../icons/general/IconNavigateLeft';
 import IconNavigateRight from '../../icons/general/IconNavigateRight';
 import PlainButton from '../../components/plain-button/PlainButton';
 import messages from '../common/messages';
-import type { BoxItem } from '../../common/types/core';
 import { SIDEBAR_VIEW_METADATA } from '../../constants';
 
-type Props = {
-    collection: Array<string | BoxItem>,
-    currentIndex: number,
-    intl: IntlShape,
-    onNavigateLeft: Function,
-    onNavigateRight: Function,
-};
+/**
+ * @typedef {Object} Props
+ * @property {Array<string|import('../../common/types/core').BoxItem>} collection
+ * @property {number} currentIndex
+ * @property {import('react-intl').IntlShape} intl
+ * @property {Function} onNavigateLeft
+ * @property {Function} onNavigateRight
+ */
 
-const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft, onNavigateRight }: Props) => {
+/** @type {React.FC<Props>} */
+const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft, onNavigateRight }) => {
     const hasLeftNavigation = collection.length > 1 && currentIndex > 0 && currentIndex < collection.length;
     const hasRightNavigation = collection.length > 1 && currentIndex > -1 && currentIndex < collection.length - 1;
 
@@ -34,7 +33,9 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
     const goToActiveSidebarTab = (routeParams, history) => {
         if (routeParams.deeplink) {
             if (routeParams.activeTab === SIDEBAR_VIEW_METADATA) {
-                history.push(`/${routeParams.activeTab}/${routeParams.deeplink}/${routeParams[0]}`);
+                // Preserve the full path for metadata routes
+                const fullPath = routeParams[0] || '';
+                history.push(`/${routeParams.activeTab}/${routeParams.deeplink}/${fullPath}`);
             } else {
                 history.push(`/${routeParams.activeTab}`);
             }
@@ -42,7 +43,7 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
     };
 
     return (
-        <Route path={['/:activeTab/:deeplink/*', '/']}>
+        <CustomRoute path={['/:activeTab/:deeplink/*', '/']}>
             {({ match, history }) => (
                 <>
                     {hasLeftNavigation && (
@@ -73,7 +74,7 @@ const PreviewNavigation = ({ collection = [], currentIndex, intl, onNavigateLeft
                     )}
                 </>
             )}
-        </Route>
+        </CustomRoute>
     );
 };
 

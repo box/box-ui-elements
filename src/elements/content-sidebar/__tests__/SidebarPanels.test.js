@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { mount } from 'enzyme/build';
-import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import CustomRouter from '../../common/routing/customRouter';
+import { render, screen } from '../../../test-utils/testing-library';
 
 import { FEED_ITEM_TYPE_ANNOTATION, FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_TASK } from '../../../constants';
 import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
@@ -10,46 +11,79 @@ import { SidebarPanelsComponent as SidebarPanels } from '../SidebarPanels';
 jest.mock('../SidebarUtils');
 
 describe('elements/content-sidebar/SidebarPanels', () => {
-    const getWrapper = ({ path = '/', ...rest } = {}) =>
-        mount(
-            <SidebarPanels
-                file={{ id: '1234' }}
-                hasBoxAI
-                hasDocGen
-                hasActivity
-                hasDetails
-                hasMetadata
-                hasSkills
-                hasVersions
-                isOpen
-                {...rest}
-            />,
-            {
-                wrappingComponent: MemoryRouter,
-                wrappingComponentProps: {
-                    initialEntries: [path],
-                    keyLength: 0,
-                },
+    const getWrapper = ({ path = '/', ...rest } = {}) => {
+        const pathParts = path.split('/').filter(Boolean);
+        const history = createMemoryHistory({ initialEntries: [path] });
+        const location = { pathname: path };
+        const match = {
+            params: {
+                activeTab: pathParts[0] || '',
+                deeplink: pathParts[1] || '',
+                versionId: pathParts[2] || '',
+                fileVersionId: pathParts[2] || '',
+                activeFeedEntryId: pathParts[3] || '',
+                filteredTemplateIds: pathParts[2] ? pathParts[2].split(',') : [],
+                0: pathParts.slice(3).join('/') || '',
             },
-        );
+            isExact: true,
+            path: '/:activeTab/:deeplink?/:versionId?/:activeFeedEntryId?',
+            url: path,
+        };
 
-    const getSidebarPanels = ({ path = '/', ...props }) => (
-        <MemoryRouter initialEntries={[path]}>
-            <SidebarPanels
-                file={{ id: '1234' }}
-                hasBoxAI
-                hasDocGen
-                hasActivity
-                hasDetails
-                hasMetadata
-                hasSkills
-                hasVersions
-                isOpen
-                {...props}
-            />
-            ,
-        </MemoryRouter>
-    );
+        return mount(
+            <CustomRouter history={history} location={location} match={match}>
+                <SidebarPanels
+                    file={{ id: '1234' }}
+                    hasBoxAI
+                    hasDocGen
+                    hasActivity
+                    hasDetails
+                    hasMetadata
+                    hasSkills
+                    hasVersions
+                    isOpen
+                    {...rest}
+                />
+            </CustomRouter>,
+        );
+    };
+
+    const getSidebarPanels = ({ path = '/', ...props }) => {
+        const pathParts = path.split('/').filter(Boolean);
+        const history = createMemoryHistory({ initialEntries: [path] });
+        const location = { pathname: path };
+        const match = {
+            params: {
+                activeTab: pathParts[0] || '',
+                deeplink: pathParts[1] || '',
+                versionId: pathParts[2] || '',
+                fileVersionId: pathParts[2] || '',
+                activeFeedEntryId: pathParts[3] || '',
+                filteredTemplateIds: pathParts[2] ? pathParts[2].split(',') : [],
+                0: pathParts.slice(3).join('/') || '',
+            },
+            isExact: true,
+            path: '/:activeTab/:deeplink?/:versionId?/:activeFeedEntryId?',
+            url: path,
+        };
+
+        return (
+            <CustomRouter history={history} location={location} match={match}>
+                <SidebarPanels
+                    file={{ id: '1234' }}
+                    hasBoxAI
+                    hasDocGen
+                    hasActivity
+                    hasDetails
+                    hasMetadata
+                    hasSkills
+                    hasVersions
+                    isOpen
+                    {...props}
+                />
+            </CustomRouter>
+        );
+    };
 
     describe('render', () => {
         test.each`

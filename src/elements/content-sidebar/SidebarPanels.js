@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Content Sidebar Panels component
  * @author Box
  */
@@ -7,14 +6,29 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
-import { matchPath, Redirect, Route, Switch, type Location } from 'react-router-dom';
-import { type QuestionType } from '@box/box-ai-content-answers';
 import SidebarUtils from './SidebarUtils';
+import { matchPath } from '../common/routing/utils';
+import CustomRoute from '../common/routing/customRoute';
+import CustomSwitch from '../common/routing/customSwitch';
+import CustomRedirect from '../common/routing/customRedirect';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
 import { withAPIContext } from '../common/api-context';
 import { getFeatureConfig, withFeatureConsumer, isFeatureEnabled } from '../common/feature-checking';
 import { withRouterAndRef } from '../common/routing';
+
+/**
+ * @typedef {import('./ActivitySidebar').ActivitySidebarProps} ActivitySidebarProps
+ * @typedef {import('./BoxAISidebar').BoxAISidebarProps} BoxAISidebarProps
+ * @typedef {import('./DetailsSidebar').DetailsSidebarProps} DetailsSidebarProps
+ * @typedef {import('./DocGenSidebar/DocGenSidebar').DocGenSidebarProps} DocGenSidebarProps
+ * @typedef {import('./MetadataSidebar').MetadataSidebarProps} MetadataSidebarProps
+ * @typedef {import('./versions').VersionsSidebarProps} VersionsSidebarProps
+ * @typedef {import('../../common/types/core').User} User
+ * @typedef {import('../../common/types/core').BoxItem} BoxItem
+ * @typedef {import('../common/flowTypes').Errors} Errors
+ * @typedef {import('../common/feature-checking').FeatureConfig} FeatureConfig
+ */
 import {
     ORIGIN_ACTIVITY_SIDEBAR,
     ORIGIN_DETAILS_SIDEBAR,
@@ -33,53 +47,19 @@ import {
     SIDEBAR_VIEW_BOXAI,
     ORIGIN_BOXAI_SIDEBAR,
 } from '../../constants';
-import type { DetailsSidebarProps } from './DetailsSidebar';
-import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
-import type { ActivitySidebarProps } from './ActivitySidebar';
-import type { BoxAISidebarProps } from './BoxAISidebar';
-import type { MetadataSidebarProps } from './MetadataSidebar';
-import type { VersionsSidebarProps } from './versions';
-import type { User, BoxItem } from '../../common/types/core';
-import type { Errors } from '../common/flowTypes';
-import type { FeatureConfig } from '../common/feature-checking';
 
-type Props = {
-    activitySidebarProps: ActivitySidebarProps,
-    boxAISidebarProps: BoxAISidebarProps,
-    currentUser?: User,
-    currentUserError?: Errors,
-    defaultPanel?: string,
-    detailsSidebarProps: DetailsSidebarProps,
-    docGenSidebarProps: DocGenSidebarProps,
-    elementId: string,
-    features: FeatureConfig,
-    file: BoxItem,
-    fileId: string,
-    getPreview: Function,
-    getViewer: Function,
-    hasActivity: boolean,
-    hasBoxAI: boolean,
-    hasDetails: boolean,
-    hasDocGen: boolean,
-    hasMetadata: boolean,
-    hasSkills: boolean,
-    hasVersions: boolean,
-    isOpen: boolean,
-    location: Location,
-    metadataSidebarProps: MetadataSidebarProps,
-    onAnnotationSelect?: Function,
-    onPanelChange?: (name: string, isInitialState?: boolean) => void,
-    onVersionChange?: Function,
-    onVersionHistoryClick?: Function,
-    versionsSidebarProps: VersionsSidebarProps,
-};
+/** @type {{ current: null | string }} */
+const initialPanel = React.createRef();
 
-type State = {
-    isInitialized: boolean,
-};
+/** @type {{ isInitialized: boolean }} */
+const initialState = { isInitialized: false };
 
-type ElementRefType = {
-    current: null | Object,
+/** @type {Object.<string, React.RefObject<any>>} */
+const sidebarRefs = {
+    boxAISidebar: React.createRef(),
+    activitySidebar: React.createRef(),
+    detailsSidebar: React.createRef(),
+    metadataSidebar: React.createRef(),
 };
 
 // TODO: place into code splitting logic
@@ -118,22 +98,55 @@ const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
 
 const SIDEBAR_PATH_VERSIONS = '/:sidebar(activity|details)/versions/:versionId?';
 
-class SidebarPanels extends React.Component<Props, State> {
-    boxAISidebar: ElementRefType = React.createRef();
+/**
+ * @typedef {Object} Props
+ * @property {ActivitySidebarProps} activitySidebarProps
+ * @property {BoxAISidebarProps} boxAISidebarProps
+ * @property {User} [currentUser]
+ * @property {Errors} [currentUserError]
+ * @property {string} [defaultPanel]
+ * @property {DetailsSidebarProps} detailsSidebarProps
+ * @property {DocGenSidebarProps} docGenSidebarProps
+ * @property {string} elementId
+ * @property {FeatureConfig} features
+ * @property {BoxItem} file
+ * @property {string} fileId
+ * @property {Function} getPreview
+ * @property {Function} getViewer
+ * @property {boolean} hasActivity
+ * @property {boolean} hasBoxAI
+ * @property {boolean} hasDetails
+ * @property {boolean} hasDocGen
+ * @property {boolean} hasMetadata
+ * @property {boolean} hasSkills
+ * @property {boolean} hasVersions
+ * @property {boolean} isOpen
+ * @property {MetadataSidebarProps} metadataSidebarProps
+ * @property {Function} [onAnnotationSelect]
+ * @property {Function} [onVersionChange]
+ * @property {Function} [onVersionHistoryClick]
+ * @property {VersionsSidebarProps} versionsSidebarProps
+ */
 
-    activitySidebar: ElementRefType = React.createRef();
+/** @extends {React.Component<Props>} */
+class SidebarPanels extends React.Component {
+    boxAISidebar = sidebarRefs.boxAISidebar;
 
-    detailsSidebar: ElementRefType = React.createRef();
+    activitySidebar = sidebarRefs.activitySidebar;
 
-    initialPanel: { current: null | string } = React.createRef();
+    detailsSidebar = sidebarRefs.detailsSidebar;
 
-    metadataSidebar: ElementRefType = React.createRef();
+    initialPanel = initialPanel;
 
-    state: State = { isInitialized: false };
+    metadataSidebar = sidebarRefs.metadataSidebar;
 
-    versionsSidebar: ElementRefType = React.createRef();
+    state = initialState;
 
-    boxAiSidebarCache: { encodedSession?: string | null, questions?: QuestionType[] } = {
+    /** @type {ElementRefType} */
+    versionsSidebar = React.createRef();
+
+    /** @type {{ encodedSession: string | null, questions: QuestionType[] }} */
+    boxAiSidebarCache = {
         encodedSession: null,
         questions: [],
     };
@@ -142,7 +155,8 @@ class SidebarPanels extends React.Component<Props, State> {
         this.setState({ isInitialized: true });
     }
 
-    componentDidUpdate(prevProps: Props): void {
+    /** @param {Props} prevProps */
+    componentDidUpdate(prevProps) {
         const { location, onVersionChange } = this.props;
         const { location: prevLocation } = prevProps;
 
@@ -152,12 +166,14 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     }
 
-    getVersionsMatchPath = (location: Location) => {
+    /** @param {Location} location */
+    getVersionsMatchPath = location => {
         const { pathname } = location;
         return matchPath(pathname, SIDEBAR_PATH_VERSIONS);
     };
 
-    handlePanelRender = (panel: string): void => {
+    /** @param {string} panel */
+    handlePanelRender = panel => {
         const { onPanelChange = noop } = this.props;
         // Call onPanelChange only once with the initial panel
         if (!this.initialPanel.current) {
@@ -166,7 +182,11 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (key: 'encodedSession' | 'questions', value: any) => {
+    /**
+     * @param {'encodedSession' | 'questions'} key
+     * @param {any} value
+     */
+    setBoxAiSidebarCacheValue = (key, value) => {
         this.boxAiSidebarCache[key] = value;
     };
 
@@ -174,7 +194,8 @@ class SidebarPanels extends React.Component<Props, State> {
      * Refreshes the contents of the active sidebar
      * @returns {void}
      */
-    refresh(shouldRefreshCache: boolean = true): void {
+    /** @param {boolean} [shouldRefreshCache=true] */
+    refresh(shouldRefreshCache = true) {
         const { current: boxAISidebar } = this.boxAISidebar;
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
@@ -230,7 +251,7 @@ class SidebarPanels extends React.Component<Props, State> {
             onVersionChange,
             onVersionHistoryClick,
             versionsSidebarProps,
-        }: Props = this.props;
+        } = this.props;
 
         const { isInitialized } = this.state;
 
@@ -250,16 +271,16 @@ class SidebarPanels extends React.Component<Props, State> {
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
         };
 
-        const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
+        const showDefaultPanel = !!(defaultPanel && panelsEligibility[defaultPanel]);
 
         if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
             return null;
         }
 
         return (
-            <Switch>
+            <CustomSwitch>
                 {canShowBoxAISidebarPanel && (
-                    <Route
+                    <CustomRoute
                         exact
                         path={`/${SIDEBAR_VIEW_BOXAI}`}
                         render={() => {
@@ -283,7 +304,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     />
                 )}
                 {hasSkills && (
-                    <Route
+                    <CustomRoute
                         exact
                         path={`/${SIDEBAR_VIEW_SKILLS}`}
                         render={() => {
@@ -305,7 +326,7 @@ class SidebarPanels extends React.Component<Props, State> {
                 {/* This handles both the default activity sidebar and the activity sidebar with a
                 comment or task deeplink.  */}
                 {hasActivity && (
-                    <Route
+                    <CustomRoute
                         exact
                         path={[
                             `/${SIDEBAR_VIEW_ACTIVITY}`,
@@ -339,7 +360,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     />
                 )}
                 {hasDetails && (
-                    <Route
+                    <CustomRoute
                         exact
                         path={`/${SIDEBAR_VIEW_DETAILS}`}
                         render={() => {
@@ -361,7 +382,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     />
                 )}
                 {hasMetadata && (
-                    <Route
+                    <CustomRoute
                         exact
                         path={[
                             `/${SIDEBAR_VIEW_METADATA}`,
@@ -398,7 +419,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     />
                 )}
                 {hasDocGen && (
-                    <Route
+                    <CustomRoute
                         exact
                         path={`/${SIDEBAR_VIEW_DOCGEN}`}
                         render={() => {
@@ -414,7 +435,7 @@ class SidebarPanels extends React.Component<Props, State> {
                     />
                 )}
                 {hasVersions && (
-                    <Route
+                    <CustomRoute
                         path={SIDEBAR_PATH_VERSIONS}
                         render={({ match }) => {
                             if (match.params.sidebar) {
@@ -435,7 +456,7 @@ class SidebarPanels extends React.Component<Props, State> {
                         }}
                     />
                 )}
-                <Route
+                <CustomRoute
                     render={() => {
                         let redirect = '';
 
@@ -455,10 +476,10 @@ class SidebarPanels extends React.Component<Props, State> {
                             redirect = SIDEBAR_VIEW_METADATA;
                         }
 
-                        return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
+                        return <CustomRedirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
                     }}
                 />
-            </Switch>
+            </CustomSwitch>
         );
     }
 }

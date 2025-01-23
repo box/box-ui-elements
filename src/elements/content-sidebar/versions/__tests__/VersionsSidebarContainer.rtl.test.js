@@ -1,16 +1,11 @@
 import * as React from 'react';
 import { createBrowserHistory } from 'history';
-import { Router } from 'react-router-dom';
 import { userEvent } from '@testing-library/user-event';
 
 import { screen, render } from '../../../../test-utils/testing-library';
 import VersionsSidebarAPI from '../VersionsSidebarAPI';
 import VersionsSidebarContainer from '../VersionsSidebarContainer';
-
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    withRouter: Component => Component,
-}));
+import CustomRouter from '../../../common/routing/customRouter';
 
 jest.mock('../../../common/api-context', () => ({
     withAPIContext: Component => Component,
@@ -34,20 +29,29 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
     const history = createBrowserHistory();
 
-    const renderComponent = ({ ...props } = {}, wrapperProps) =>
-        render(
-            <Router history={history}>
-                <VersionsSidebarContainer
-                    api={api}
-                    fileId="12345"
-                    history={history}
-                    match={{}}
-                    versionId="321"
-                    {...props}
-                />
-            </Router>,
+    const renderComponent = ({ ...props } = {}, wrapperProps) => {
+        const routerContext = {
+            history,
+            location: { pathname: '/activity/versions/321' },
+            match: {
+                params: {
+                    activeTab: 'activity',
+                    deeplink: 'versions',
+                    versionId: '321',
+                },
+                path: '/:activeTab/:deeplink/:versionId?',
+                url: '/activity/versions/321',
+                isExact: true,
+            },
+        };
+
+        return render(
+            <CustomRouter {...routerContext}>
+                <VersionsSidebarContainer api={api} fileId="12345" versionId="321" {...props} />
+            </CustomRouter>,
             { wrapperProps },
         );
+    };
 
     describe('archive tests', () => {
         const file = {

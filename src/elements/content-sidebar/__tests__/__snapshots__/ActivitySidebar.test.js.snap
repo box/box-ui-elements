@@ -1,79 +1,431 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`elements/content-sidebar/ActivitySidebar render() should render the activity feed sidebar 1`] = `
-<SidebarContent
-  actions={
-    <React.Fragment>
-      <withRouter(AddTaskButton)
-        isDisabled={false}
-        onTaskModalClose={[Function]}
-        taskFormProps={
-          {
-            "approverSelectorContacts": undefined,
-            "approvers": [],
-            "completionRule": "ALL_ASSIGNEES",
-            "createTask": [Function],
-            "getApproverWithQuery": [Function],
-            "getAvatarUrl": [Function],
-            "id": "",
-            "message": "",
-          }
-        }
-      />
-    </React.Fragment>
+<ActivitySidebar
+  annotatorState={{}}
+  api={
+    {
+      "getFeedAPI": [Function],
+      "getFileCollaboratorsAPI": [Function],
+      "getUsersAPI": [Function],
+    }
   }
-  className="bcs-activity"
-  elementId=""
-  sidebarView="activity"
-  title={
-    <FormattedMessage
-      defaultMessage="Activity"
-      id="be.sidebarActivityTitle"
-    />
+  currentUser={
+    {
+      "id": "123",
+      "name": "foo bar",
+    }
   }
->
-  <ActivityFeed
-    currentUser={
-      {
+  emitActiveAnnotationChangeEvent={[Function]}
+  emitAnnotationRemoveEvent={[Function]}
+  emitAnnotationReplyCreateEvent={[Function]}
+  emitAnnotationReplyDeleteEvent={[Function]}
+  emitAnnotationReplyUpdateEvent={[Function]}
+  emitAnnotationUpdateEvent={[Function]}
+  file={
+    {
+      "file_version": {
         "id": "123",
-        "name": "foo bar",
-      }
+      },
+      "id": "I_AM_A_FILE",
     }
-    file={
-      {
-        "file_version": {
-          "id": "123",
-        },
-        "id": "I_AM_A_FILE",
-      }
+  }
+  getAnnotationsMatchPath={[Function]}
+  getAnnotationsPath={[Function]}
+  hasReplies={false}
+  hasTasks={true}
+  hasVersions={true}
+  isDisabled={false}
+  logger={
+    {
+      "onReadyMetric": [MockFunction] {
+        "calls": [
+          [
+            {
+              "endMarkName": "activity_sidebar_js_ready",
+            },
+          ],
+        ],
+        "results": [
+          {
+            "type": "return",
+            "value": undefined,
+          },
+        ],
+      },
     }
-    getApproverWithQuery={[Function]}
-    getAvatarUrl={[Function]}
-    getMentionWithQuery={[Function]}
-    hasNewThreadedReplies={false}
-    hasReplies={false}
-    hasVersions={true}
-    isDisabled={false}
-    onAnnotationDelete={[Function]}
-    onAnnotationEdit={[Function]}
-    onAnnotationSelect={[Function]}
-    onAnnotationStatusChange={[Function]}
-    onAppActivityDelete={[Function]}
-    onCommentCreate={[Function]}
-    onCommentDelete={[Function]}
-    onCommentUpdate={[Function]}
-    onHideReplies={[Function]}
-    onReplyCreate={[Function]}
-    onReplyDelete={[Function]}
-    onReplyUpdate={[Function]}
-    onShowReplies={[Function]}
-    onTaskAssignmentUpdate={[Function]}
-    onTaskCreate={[Function]}
-    onTaskDelete={[Function]}
-    onTaskModalClose={[Function]}
-    onTaskUpdate={[Function]}
-    onVersionHistoryClick={[Function]}
-    shouldUseUAA={false}
-  />
-</SidebarContent>
+  }
+  onAnnotationSelect={[Function]}
+  onCommentCreate={[Function]}
+  onCommentDelete={[Function]}
+  onCommentUpdate={[Function]}
+  onError={[MockFunction]}
+  onFilterChange={[Function]}
+  onTaskAssignmentUpdate={[Function]}
+  onTaskCreate={[Function]}
+  onTaskDelete={[Function]}
+  onTaskUpdate={[Function]}
+  onVersionChange={[Function]}
+  onVersionHistoryClick={[Function]}
+>
+  <SidebarContent
+    actions={
+      <React.Fragment>
+        <withRouter(AddTaskButton)
+          isDisabled={false}
+          onTaskModalClose={[Function]}
+          taskFormProps={
+            {
+              "approverSelectorContacts": undefined,
+              "approvers": [],
+              "completionRule": "ALL_ASSIGNEES",
+              "createTask": [Function],
+              "getApproverWithQuery": [Function],
+              "getAvatarUrl": [Function],
+              "id": "",
+              "message": "",
+            }
+          }
+        />
+      </React.Fragment>
+    }
+    className="bcs-activity"
+    elementId=""
+    sidebarView="activity"
+    title={
+      <FormattedMessage
+        defaultMessage="Activity"
+        id="be.sidebarActivityTitle"
+      />
+    }
+  >
+    <div
+      aria-labelledby="activity"
+      className="bcs-content bcs-activity"
+      data-testid="bcs-content"
+      id="activity-content"
+      role="tabpanel"
+    >
+      <div
+        className="bcs-content-header"
+      >
+        <h3
+          className="bcs-title"
+        >
+          <FormattedMessage
+            defaultMessage="Activity"
+            id="be.sidebarActivityTitle"
+          >
+            <div />
+          </FormattedMessage>
+        </h3>
+        <withRouter(AddTaskButton)
+          isDisabled={false}
+          onTaskModalClose={[Function]}
+          taskFormProps={
+            {
+              "approverSelectorContacts": undefined,
+              "approvers": [],
+              "completionRule": "ALL_ASSIGNEES",
+              "createTask": [Function],
+              "getApproverWithQuery": [Function],
+              "getAvatarUrl": [Function],
+              "id": "",
+              "message": "",
+            }
+          }
+        >
+          <AddTaskButton
+            history={
+              {
+                "action": "POP",
+                "block": [MockFunction],
+                "createHref": [MockFunction],
+                "go": [MockFunction],
+                "goBack": [MockFunction],
+                "goForward": [MockFunction],
+                "length": 1,
+                "listen": [MockFunction] {
+                  "calls": [
+                    [
+                      [Function],
+                    ],
+                  ],
+                  "results": [
+                    {
+                      "type": "return",
+                      "value": [Function],
+                    },
+                  ],
+                },
+                "location": {
+                  "hash": "",
+                  "pathname": "/activity",
+                  "search": "",
+                  "state": null,
+                },
+                "push": [MockFunction],
+                "replace": [MockFunction],
+              }
+            }
+            isDisabled={false}
+            location={
+              {
+                "hash": "",
+                "pathname": "/activity",
+                "search": "",
+                "state": null,
+              }
+            }
+            match={
+              {
+                "isExact": true,
+                "params": {
+                  "0": "",
+                  "activeFeedEntryId": "",
+                  "activeTab": "activity",
+                  "deeplink": "",
+                  "fileVersionId": "",
+                },
+                "path": "/:activeTab/:deeplink/:fileVersionId?/:activeFeedEntryId?",
+                "url": "/activity",
+              }
+            }
+            onTaskModalClose={[Function]}
+            taskFormProps={
+              {
+                "approverSelectorContacts": undefined,
+                "approvers": [],
+                "completionRule": "ALL_ASSIGNEES",
+                "createTask": [Function],
+                "getApproverWithQuery": [Function],
+                "getAvatarUrl": [Function],
+                "id": "",
+                "message": "",
+              }
+            }
+          >
+            <AddTaskMenu
+              isDisabled={false}
+              onMenuItemClick={[Function]}
+              setAddTaskButtonRef={[Function]}
+            >
+              <DropdownMenu
+                constrainToScrollParent={true}
+                constrainToWindow={false}
+                isResponsive={false}
+                isRightAligned={true}
+              >
+                <TetherComponent
+                  attachment="top right"
+                  bodyElement={<body />}
+                  className=""
+                  classPrefix="dropdown-menu"
+                  constraints={
+                    [
+                      {
+                        "attachment": "together",
+                        "to": "scrollParent",
+                      },
+                    ]
+                  }
+                  enabled={false}
+                  renderElementTag="div"
+                  renderElementTo={null}
+                  targetAttachment="bottom right"
+                >
+                  <Button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    className=""
+                    id="uniqueId"
+                    isDisabled={false}
+                    isLoading={false}
+                    key=".$uniqueId"
+                    onClick={[Function]}
+                    onKeyDown={[Function]}
+                    setRef={[Function]}
+                    showRadar={false}
+                    type="button"
+                  >
+                    <button
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      className="btn"
+                      id="uniqueId"
+                      onClick={[Function]}
+                      onKeyDown={[Function]}
+                      type="button"
+                    >
+                      <span
+                        className="btn-content"
+                      >
+                        <MenuToggle>
+                          <span
+                            className="menu-toggle"
+                          >
+                            <FormattedMessage
+                              defaultMessage="Add Task"
+                              id="be.contentSidebar.addTask"
+                            >
+                              <div />
+                            </FormattedMessage>
+                            <IconCaretDown
+                              className="toggle-arrow"
+                              width={7}
+                            >
+                              <AccessibleSVG
+                                className="icon-caret-down toggle-arrow"
+                                height={6}
+                                viewBox="0 0 10 6"
+                                width={7}
+                              >
+                                <svg
+                                  aria-hidden="true"
+                                  className="icon-caret-down toggle-arrow"
+                                  focusable="false"
+                                  height={6}
+                                  role="presentation"
+                                  viewBox="0 0 10 6"
+                                  width={7}
+                                >
+                                  <path
+                                    className="fill-color"
+                                    d="M0 .5l5 5 5-5H0z"
+                                    fill="#000"
+                                    fillRule="evenodd"
+                                  />
+                                </svg>
+                              </AccessibleSVG>
+                            </IconCaretDown>
+                          </span>
+                        </MenuToggle>
+                      </span>
+                    </button>
+                  </Button>
+                </TetherComponent>
+              </DropdownMenu>
+            </AddTaskMenu>
+            <TaskModal
+              error={null}
+              isTaskFormOpen={false}
+              onModalClose={[Function]}
+              onSubmitError={[Function]}
+              onSubmitSuccess={[Function]}
+              taskFormProps={
+                {
+                  "approverSelectorContacts": undefined,
+                  "approvers": [],
+                  "completionRule": "ALL_ASSIGNEES",
+                  "createTask": [Function],
+                  "getApproverWithQuery": [Function],
+                  "getAvatarUrl": [Function],
+                  "id": "",
+                  "message": "",
+                }
+              }
+              taskType="APPROVAL"
+            >
+              <Modal
+                className="be-modal task-modal"
+                data-testid="create-task-modal"
+                focusElementSelector=".task-modal textarea, .task-modal input"
+                isOpen={false}
+                onRequestClose={[Function]}
+                style={
+                  {
+                    "backdrop": {},
+                    "dialog": {},
+                  }
+                }
+                title={
+                  <FormattedMessage
+                    defaultMessage="Create Approval Task"
+                    id="be.contentSidebar.addTask.approval.title"
+                  />
+                }
+              />
+            </TaskModal>
+          </AddTaskButton>
+        </withRouter(AddTaskButton)>
+      </div>
+      <div
+        className="bcs-scroll-content-wrapper"
+      >
+        <div
+          className="bcs-scroll-content"
+        >
+          <ActivityFeed
+            currentUser={
+              {
+                "id": "123",
+                "name": "foo bar",
+              }
+            }
+            file={
+              {
+                "file_version": {
+                  "id": "123",
+                },
+                "id": "I_AM_A_FILE",
+              }
+            }
+            getApproverWithQuery={[Function]}
+            getAvatarUrl={[Function]}
+            getMentionWithQuery={[Function]}
+            hasNewThreadedReplies={false}
+            hasReplies={false}
+            hasVersions={true}
+            isDisabled={false}
+            onAnnotationDelete={[Function]}
+            onAnnotationEdit={[Function]}
+            onAnnotationSelect={[Function]}
+            onAnnotationStatusChange={[Function]}
+            onAppActivityDelete={[Function]}
+            onCommentCreate={[Function]}
+            onCommentDelete={[Function]}
+            onCommentUpdate={[Function]}
+            onHideReplies={[Function]}
+            onReplyCreate={[Function]}
+            onReplyDelete={[Function]}
+            onReplyUpdate={[Function]}
+            onShowReplies={[Function]}
+            onTaskAssignmentUpdate={[Function]}
+            onTaskCreate={[Function]}
+            onTaskDelete={[Function]}
+            onTaskModalClose={[Function]}
+            onTaskUpdate={[Function]}
+            onVersionHistoryClick={[Function]}
+            shouldUseUAA={false}
+          >
+            <div
+              className="bcs-activity-feed"
+              data-testid="activityfeed"
+              onKeyDown={[Function]}
+            >
+              <div
+                className="bcs-activity-feed-items-container"
+                onScroll={[Function]}
+              >
+                <div
+                  className="bcs-activity-feed-loading-state"
+                >
+                  <LoadingIndicator>
+                    <div
+                      className="crawler  is-default"
+                    >
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  </LoadingIndicator>
+                </div>
+              </div>
+            </div>
+          </ActivityFeed>
+        </div>
+      </div>
+    </div>
+  </SidebarContent>
+</ActivitySidebar>
 `;

@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../../../test-utils/testing-library';
 import ActivitySidebarFilter from '../ActivitySidebarFilter';
-import type { ActivityFilterItemType, ActivityFilterOption } from '../../../common/types/feed';
+// $FlowFixMe
+import { ActivityFilterItemType, ActivityFilterOption } from '../../../common/types/feed';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),

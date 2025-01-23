@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createMemoryHistory } from 'history';
+import CustomRouter from '../../common/routing/customRouter';
 import SidebarNavTablist from '../SidebarNavTablist';
 import {
     SIDEBAR_VIEW_SKILLS,
@@ -9,24 +9,22 @@ import {
     KEYS,
 } from '../../../constants';
 
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    withRouter: Component => Component,
-}));
-
 describe('elements/content-sidebar/SidebarNavTablist', () => {
     test('should correctly render children', () => {
         const MockChildren = () => <div />;
 
         const wrapper = shallow(
-            <SidebarNavTablist>
-                <MockChildren />
-            </SidebarNavTablist>,
+            <CustomRouter initialEntries={['/']}>
+                <SidebarNavTablist>
+                    <MockChildren />
+                </SidebarNavTablist>
+            </CustomRouter>,
         );
 
-        expect(wrapper.type()).toEqual('div');
-        expect(wrapper.hasClass('bcs-SidebarNav-main')).toBe(true);
-        expect(wrapper.exists(MockChildren)).toBe(true);
+        const sidebarNav = wrapper.find(SidebarNavTablist);
+        expect(sidebarNav.dive().type()).toEqual('div');
+        expect(sidebarNav.dive().hasClass('bcs-SidebarNav-main')).toBe(true);
+        expect(sidebarNav.dive().exists(MockChildren)).toBe(true);
     });
 
     describe('handleKeyDown', () => {
@@ -38,16 +36,14 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
             ${KEYS.arrowDown}  | ${SIDEBAR_VIEW_SKILLS}
             ${KEYS.arrowRight} | ${SIDEBAR_VIEW_DETAILS}
         `('should navigate to right sidebar panels when a user presses different arrow keys', ({ key, route }) => {
-            const history = createMemoryHistory({
-                initialEntries: [`/${SIDEBAR_VIEW_DETAILS}`],
-            });
-
             const wrapper = shallow(
-                <SidebarNavTablist history={history}>
-                    {viewList.map(view => {
-                        return <div sidebarView={view} key={view} />;
-                    })}
-                </SidebarNavTablist>,
+                <CustomRouter initialEntries={[`/${SIDEBAR_VIEW_DETAILS}`]}>
+                    <SidebarNavTablist>
+                        {viewList.map(view => {
+                            return <div sidebarView={view} key={view} />;
+                        })}
+                    </SidebarNavTablist>
+                </CustomRouter>,
             );
 
             const event = {
@@ -55,12 +51,15 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
                 preventDefault: jest.fn(),
                 stopPropagation: jest.fn(),
             };
-            wrapper.props().onKeyDown(event);
+            const sidebarNav = wrapper.find(SidebarNavTablist);
+            sidebarNav.dive().props().onKeyDown(event);
 
             if (key === KEYS.arrowUp || key === KEYS.arrowDown) {
                 expect(event.preventDefault).toBeCalled();
                 expect(event.stopPropagation).toBeCalled();
             }
+
+            const history = wrapper.find('Router').prop('history');
             expect(history.location.pathname).toBe(`/${route}`);
         });
     });

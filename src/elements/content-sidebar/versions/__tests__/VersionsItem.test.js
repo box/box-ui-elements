@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { screen, render } from '../../../../test-utils/testing-library';
+import CustomRouter from '../../../common/routing/customRouter';
 import messages from '../messages';
 import selectors from '../../../common/selectors/version';
 import VersionsItem from '../VersionsItem';
@@ -9,6 +10,12 @@ import { FILE_REQUEST_NAME, PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../.
 jest.mock('../../../../utils/dom', () => ({
     ...jest.requireActual('../../../../utils/dom'),
     scrollIntoView: jest.fn(),
+}));
+
+// Mock TetherComponent to avoid findDOMNode warnings
+jest.mock('react-tether', () => ({
+    __esModule: true,
+    default: jest.fn(({ children }) => <div>{children}</div>),
 }));
 
 const checkExpectedActionButtonVisibility = (permissionButtonText, isVisible) => {
@@ -46,7 +53,27 @@ describe('elements/content-sidebar/versions/VersionsItem', () => {
         ...defaults,
         ...overrides,
     });
-    const renderComponent = (props = {}) => render(<VersionsItem fileId="123" version={defaults} {...props} />);
+    const renderComponent = (props = {}) => {
+        const routerContext = {
+            location: { pathname: '/activity/versions/12345' },
+            match: {
+                params: {
+                    activeTab: 'activity',
+                    deeplink: 'versions',
+                    versionId: props.isSelected ? defaults.id : undefined,
+                },
+                path: '/:activeTab/:deeplink/:versionId?',
+                url: '/activity/versions/12345',
+                isExact: true,
+            },
+        };
+
+        return render(
+            <CustomRouter {...routerContext}>
+                <VersionsItem fileId="123" version={defaults} {...props} />
+            </CustomRouter>,
+        );
+    };
 
     beforeEach(() => {
         selectors.getVersionAction = jest.fn().mockReturnValue(VERSION_UPLOAD_ACTION);
