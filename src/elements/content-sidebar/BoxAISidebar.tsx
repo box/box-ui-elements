@@ -99,6 +99,19 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         questionsWithoutInProgress = questionsWithoutInProgress.slice(0, -1);
     }
 
+    const handleKeyPress = React.useCallback((event: KeyboardEvent) => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+            event.stopPropagation();
+        }
+    }, []);
+
+    React.useEffect(() => {
+        document.addEventListener('keydown', handleKeyPress);
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
     const localizedQuestions = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
         id: question.id,
         label: formatMessage(messages[question.labelId]),
