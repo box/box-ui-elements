@@ -103,7 +103,6 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
                 // @ts-ignore
 
                 const { data } = response || [];
-
                 // anything that is not an image tag for this view is treated as a text tag
                 const textTags = data?.filter(tag => tag.tag_type !== 'image') || [];
                 const imageTags = data?.filter(tag => tag.tag_type === 'image') || [];

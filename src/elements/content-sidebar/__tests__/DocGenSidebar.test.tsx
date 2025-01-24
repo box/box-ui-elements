@@ -13,6 +13,15 @@ const docGenSidebarProps = {
     ),
 };
 
+const processAndResolveMock = jest.fn()
+.mockImplementationOnce(() => Promise.resolve({
+    message: "Processing tags for this file."
+}))
+.mockImplementationOnce(() => Promise.resolve({
+    pagination: {},
+    data: mockData,
+}));
+
 const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
 const processingTagsMock = jest.fn().mockReturnValue(Promise.resolve({
     "message": "Processing tags for this file."
@@ -108,6 +117,20 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         await jest.advanceTimersByTime(1000);
 
         await waitFor(() => expect(processingTagsMock).toHaveBeenCalledTimes(10));
+    });
+
+    test('should re-trigger loadTags retrigger and successfully display the tags', async () => {
+        renderComponent({
+            getDocGenTags: processAndResolveMock,
+        });
+
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+
+        await waitFor(() => expect(processAndResolveMock).toHaveBeenCalledTimes(2));
+        const parentTag = await screen.findByText('about');
+
+        expect(parentTag).toBeVisible();
     });
 
 
