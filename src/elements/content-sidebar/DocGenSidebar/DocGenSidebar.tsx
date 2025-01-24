@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import classNames from 'classnames';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
@@ -55,13 +55,13 @@ type JsonPathsState = {
 const DocGenSidebar = ({ getDocGenTags }: Props) => {
     const { formatMessage } = useIntl();
 
-    const [hasError, setHasError] = React.useState<boolean>(false);
-    const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const [tags, setTags] = React.useState<TagState>({
+    const [hasError, setHasError] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [tags, setTags] = useState<TagState>({
         text: [],
         image: [],
     });
-    const [jsonPaths, setJsonPaths] = React.useState<JsonPathsState>({
+    const [jsonPaths, setJsonPaths] = useState<JsonPathsState>({
         textTree: {},
         imageTree: {},
     });
@@ -73,7 +73,7 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
         }, base);
     };
 
-    const tagsToJsonPaths = (docGenTags: DocGenTag[]): JsonPathsMap => {
+    const tagsToJsonPaths = useCallback((docGenTags: DocGenTag[]): JsonPathsMap => {
         const jsonPathsMap: JsonPathsMap = {};
 
         docGenTags.forEach(tag => {
@@ -84,10 +84,11 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
         });
 
         return jsonPathsMap;
-    };
+    }, []);
 
 
-    const loadTags = async (attempts = 10) => {
+    const loadTags = useCallback(async (attempts = 10) => {
+        console.log({attempts})
         if(attempts <= 0){
             return
         }
@@ -95,7 +96,9 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
         try {
             const response: DocGenTemplateTagsResponse = await getDocGenTags();
             if(response.message){
-                loadTags(attempts - 1);
+                setTimeout(() => {
+                    loadTags.call(this, attempts - 1);
+                }, 1000);
             } else if (response && !!response.data) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
@@ -123,12 +126,13 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
             setHasError(true);
             setIsLoading(false);
         }
-    }
-    
-    React.useEffect(() => {
-        loadTags(10);
+        // disabling eslint because the getDocGenTags prop is changing very frequently
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [tagsToJsonPaths]);
+
+    useEffect(() => {
+        loadTags(10);
+    }, [loadTags]);
 
 
     const isEmpty = tags.image.length + tags.text.length === 0;
@@ -136,7 +140,7 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
     return (
         <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={formatMessage(messages.docGenTags)}>
             <div className={classNames('bcs-DocGenSidebar', { center: isEmpty || hasError || isLoading })}>
-                {hasError && <Error onClick={loadTags} />}
+                {hasError && <Error onClick={() => loadTags(10)} />}
                 {isLoading && (
                     <LoadingIndicator
                         aria-label={formatMessage(commonMessages.loading)}
