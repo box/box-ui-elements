@@ -8,6 +8,7 @@ export interface BoxAISidebarContextValues {
     contentName: string;
     elementId: string;
     fileExtension: string;
+    isFeedbackEnabled: boolean;
     isStopResponseEnabled: boolean;
     itemSize?: string;
     recordAction: (params: RecordActionType) => void;
@@ -20,6 +21,7 @@ export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues
     contentName: '',
     elementId: '',
     fileExtension: '',
+    isFeedbackEnabled: false,
     isStopResponseEnabled: false,
     recordAction: noop,
     setCacheValue: noop,

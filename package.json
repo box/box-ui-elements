@@ -123,7 +123,7 @@
         "@babel/template": "^7.24.7",
         "@babel/types": "^7.24.7",
         "@box/blueprint-web": "^7.36.3",
-        "@box/blueprint-web-assets": "^4.28.0",
+        "@box/blueprint-web-assets": "^4.31.0",
         "@box/box-ai-agent-selector": "^0.22.0",
         "@box/box-ai-content-answers": "^0.85.2",
         "@box/cldr-data": "^34.2.0",

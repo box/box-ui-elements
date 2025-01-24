@@ -12,6 +12,7 @@ import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../co
 
 import messages from '../common/content-answers/messages';
 
+
 export interface BoxAISidebarProps {
     contentName: string;
     cache: { encodedSession?: string | null; questions?: QuestionType[] };
@@ -41,6 +42,7 @@ export interface BoxAISidebarProps {
     isAIStudioAgentSelectorEnabled: boolean;
     isCitationsEnabled: boolean;
     isDebugModeEnabled: boolean;
+    isFeedbackEnabled: boolean;
     isIntelligentQueryMode: boolean;
     isMarkdownEnabled: boolean;
     isResetChatEnabled: boolean;
@@ -61,6 +63,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         fileID,
         getSuggestedQuestions,
         isIntelligentQueryMode,
+        isFeedbackEnabled,
         isStopResponseEnabled,
         itemSize,
         recordAction,
@@ -70,6 +73,33 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     } = props;
     const { questions } = cache;
     const { formatMessage } = useIntl();
+    const contextValue = React.useMemo(
+        () => ({
+            cache,
+            contentName,
+            elementId,
+            fileExtension,
+            isFeedbackEnabled,
+            isStopResponseEnabled,
+            itemSize,
+            setCacheValue,
+            recordAction,
+            userInfo,
+        }),
+        [
+            cache,
+            contentName,
+            elementId,
+            fileExtension,
+            isFeedbackEnabled,
+            isStopResponseEnabled,
+            itemSize,
+            setCacheValue,
+            recordAction,
+            userInfo,
+        ],
+    );
+
     let questionsWithoutInProgress = questions;
     if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
         // pass only fully completed questions to not show loading indicator of question where we canceled API request
@@ -108,19 +138,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     return (
         // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
         // that's why we need to use provider to pass other props
-        <BoxAISidebarContext.Provider
-            value={{
-                cache,
-                contentName,
-                elementId,
-                fileExtension,
-                isStopResponseEnabled,
-                itemSize,
-                setCacheValue,
-                recordAction,
-                userInfo,
-            }}
-        >
+        <BoxAISidebarContext.Provider value={contextValue}>
             <BoxAISidebarContent
                 getSuggestedQuestions={getSuggestedQuestions}
                 isOpen

@@ -56,6 +56,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         contentName,
         elementId,
         fileExtension,
+        isFeedbackEnabled,
         isStopResponseEnabled,
         itemSize,
         recordAction,
@@ -149,6 +150,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                             contentType={formatMessage(messages.sidebarBoxAIContent)}
                             hostAppName={hostAppName}
                             isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                            isFeedbackEnabled={isFeedbackEnabled}
                             isStopResponseEnabled={isStopResponseEnabled}
                             questions={questions}
                             stopQuestion={stopQuestion}
