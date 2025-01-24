@@ -253,6 +253,7 @@ export const getParsedFileActivitiesResponse = (
                         }
                         if (versionsItem.action_type === ACTION_TYPE_PROMOTED && versionsItem.start?.promoted_from) {
                             versionsItem.version_promoted = versionsItem.start?.promoted_from;
+                            versionsItem.promoted_by = { ...versionsItem.start?.promoted_by };
                         }
                     }
 
