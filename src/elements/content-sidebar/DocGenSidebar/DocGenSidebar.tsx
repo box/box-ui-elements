@@ -86,7 +86,6 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
         return jsonPathsMap;
     }, []);
 
-
     const loadTags = useCallback(async (attempts = 10) => {
         if(attempts <= 0){
             setIsLoading(false);
@@ -132,7 +131,6 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
     useEffect(() => {
         loadTags(10);
     }, [loadTags]);
-
 
     const isEmpty = tags.image.length + tags.text.length === 0;
 

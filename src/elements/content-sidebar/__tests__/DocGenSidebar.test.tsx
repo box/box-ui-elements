@@ -21,6 +21,15 @@ const errorTagsMock = jest.fn().mockRejectedValue([]);
 const noDataMock = jest.fn().mockReturnValue(Promise.resolve({}));
 
 describe('elements/content-sidebar/DocGenSidebar', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+        jest.clearAllMocks();
+    });
+
     const renderComponent = (props = {}) =>
         render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...docGenSidebarProps} {...props} />);
 
@@ -75,19 +84,32 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         expect(await screen.findByRole('status', { name: 'Loading' })).toBeInTheDocument();
 
+        jest.advanceTimersByTime(1000);
+
         await waitFor(() => {
             expect(screen.queryByRole('status', { name: 'Loading' })).not.toBeInTheDocument();
         });
     });
 
-
-    test('should re-trigger loadTags if the tempalte is still processing', async () => {
+    test('should re-trigger loadTags if the template is still processing', async () => {
         renderComponent({
             getDocGenTags: processingTagsMock,
         });
 
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+
         await waitFor(() => expect(processingTagsMock).toHaveBeenCalledTimes(10));
     });
+
 
     test('should re-trigger getDocGenTags on click on refresh button', async () => {
         renderComponent({
