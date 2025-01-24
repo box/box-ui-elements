@@ -88,8 +88,8 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
 
 
     const loadTags = useCallback(async (attempts = 10) => {
-        console.log({attempts})
         if(attempts <= 0){
+            setIsLoading(false);
             return
         }
         setIsLoading(true);
@@ -124,7 +124,6 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
             }
         } catch (error) {
             setHasError(true);
-            setIsLoading(false);
         }
         // disabling eslint because the getDocGenTags prop is changing very frequently
         // eslint-disable-next-line react-hooks/exhaustive-deps
