@@ -241,7 +241,7 @@ class Task extends React.Component<Props, State> {
 
         const isTaskCompleted = !(status === TASK_NEW_NOT_STARTED || status === TASK_NEW_IN_PROGRESS);
 
-        const isCreator = created_by.target.id === currentUser.id;
+        const isCreator = created_by.target?.id === currentUser.id;
 
         const isMultiFile = task_links.entries.length > 1;
 
@@ -334,11 +334,15 @@ class Task extends React.Component<Props, State> {
                             </TetherComponent>
                         )}
                         <div className="bcs-Task-headline">
-                            <UserLink
-                                {...createdByUser}
-                                data-resin-target={ACTIVITY_TARGETS.PROFILE}
-                                getUserProfileUrl={getUserProfileUrl}
-                            />
+                            {createdByUser.name ? (
+                                <UserLink
+                                    {...createdByUser}
+                                    data-resin-target={ACTIVITY_TARGETS.PROFILE}
+                                    getUserProfileUrl={getUserProfileUrl}
+                                />
+                            ) : (
+                                <FormattedMessage {...commonMessages.priorCollaborator} />
+                            )}
                         </div>
                         <div>
                             <ActivityTimestamp date={createdAtTimestamp} />
