@@ -2356,6 +2356,7 @@ describe('api/Feed', () => {
 
         test('should return a parsed entries array when response is valid', () => {
             const mockUser = fileActivitiesVersion.start.created_by;
+            const promotedByUser = promotedFileActivitiesVersion.start.promoted_by;
             const promotedFileActivities = {
                 entries: [
                     {
@@ -2376,6 +2377,7 @@ describe('api/Feed', () => {
                     id: '123',
                     collaborators: { 42: mockUser },
                     version_promoted: 2,
+                    promoted_by: promotedByUser,
                 },
             ]);
         });
