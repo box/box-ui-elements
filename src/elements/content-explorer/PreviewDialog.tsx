@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import Modal from 'react-modal';
 import cloneDeep from 'lodash/cloneDeep';
 
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import ContentPreview, { ContentPreviewProps } from '../content-preview';
 import { TYPE_FILE, CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
 import type { Token, BoxItem, Collection } from '../../common/types/core';
@@ -22,12 +23,12 @@ export interface PreviewDialogProps {
     isTouch: boolean;
     item: BoxItem;
     onCancel: () => void;
-    onDownload: () => void;
+    onDownload: (item: BoxItem) => void;
     onPreview: (data: unknown) => void;
     parentElement: HTMLElement;
     previewLibraryVersion: string;
-    requestInterceptor?: () => void;
-    responseInterceptor?: () => void;
+    requestInterceptor?: (response: AxiosResponse) => void;
+    responseInterceptor?: (config: AxiosRequestConfig) => void;
     sharedLink?: string;
     sharedLinkPassword?: string;
     staticHost: string;
