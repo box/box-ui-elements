@@ -33,6 +33,8 @@ import commonMessages from '../../common/messages';
 import './DocGenSidebar.scss';
 import { DocGenTag, DocGenTemplateTagsResponse, JsonPathsMap } from './types';
 
+const DEFAULT_RETRIES = 10;
+
 type ExternalProps = {
     enabled: boolean;
     getDocGenTags: () => Promise<DocGenTemplateTagsResponse>;
@@ -86,49 +88,50 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
         return jsonPathsMap;
     }, []);
 
-    const loadTags = useCallback(async (attempts = 10) => {
-        if (attempts <= 0) {
-            setIsLoading(false);
-            return;
-        }
-        setIsLoading(true);
-        try {
-            const response: DocGenTemplateTagsResponse = await getDocGenTags();
-            if(response.message){
-                setTimeout(() => {
-                    loadTags.call(this, attempts - 1);
-                }, 1000);
-            } else if (response && !!response.data) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-
-                const { data } = response;
-                // anything that is not an image tag for this view is treated as a text tag
-                const textTags = data?.filter(tag => tag.tag_type !== 'image') || [];
-                const imageTags = data?.filter(tag => tag.tag_type === 'image') || [];
-                setTags({
-                    text: textTags,
-                    image: imageTags,
-                });
-                setJsonPaths({
-                    textTree: tagsToJsonPaths(textTags),
-                    imageTree: tagsToJsonPaths(imageTags),
-                });
-                setHasError(false);
+    const loadTags = useCallback(
+        async (attempts = 10) => {
+            if (attempts <= 0) {
                 setIsLoading(false);
-            } else {
+                return;
+            }
+            setIsLoading(true);
+            try {
+                const response: DocGenTemplateTagsResponse = await getDocGenTags();
+                if (response.message) {
+                    setTimeout(() => {
+                        loadTags.call(this, attempts - 1);
+                    }, 1000);
+                } else if (response && !!response.data) {
+                    const { data } = response;
+                    // anything that is not an image tag for this view is treated as a text tag
+                    const textTags = data?.filter(tag => tag.tag_type !== 'image') || [];
+                    const imageTags = data?.filter(tag => tag.tag_type === 'image') || [];
+                    setTags({
+                        text: textTags,
+                        image: imageTags,
+                    });
+                    setJsonPaths({
+                        textTree: tagsToJsonPaths(textTags),
+                        imageTree: tagsToJsonPaths(imageTags),
+                    });
+                    setHasError(false);
+                    setIsLoading(false);
+                } else {
+                    setHasError(true);
+                    setIsLoading(false);
+                }
+            } catch (error) {
                 setHasError(true);
                 setIsLoading(false);
             }
-        } catch (error) {
-            setHasError(true);
-        }
-        // disabling eslint because the getDocGenTags prop is changing very frequently
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tagsToJsonPaths]);
+            // disabling eslint because the getDocGenTags prop is changing very frequently
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        },
+        [tagsToJsonPaths],
+    );
 
     useEffect(() => {
-        loadTags(10);
+        loadTags(DEFAULT_RETRIES);
     }, [loadTags]);
 
     const isEmpty = tags.image.length + tags.text.length === 0;
@@ -136,7 +139,7 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
     return (
         <SidebarContent sidebarView={SIDEBAR_VIEW_DOCGEN} title={formatMessage(messages.docGenTags)}>
             <div className={classNames('bcs-DocGenSidebar', { center: isEmpty || hasError || isLoading })}>
-                {hasError && <Error onClick={() => loadTags(10)} />}
+                {hasError && <Error onClick={() => loadTags(DEFAULT_RETRIES)} />}
                 {isLoading && (
                     <LoadingIndicator
                         aria-label={formatMessage(commonMessages.loading)}
