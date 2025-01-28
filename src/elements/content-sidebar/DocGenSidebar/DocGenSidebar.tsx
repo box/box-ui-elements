@@ -124,9 +124,9 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
                 setHasError(true);
                 setIsLoading(false);
             }
-            // disabling eslint because the getDocGenTags prop is changing very frequently
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         },
+        // disabling eslint because the getDocGenTags prop is changing very frequently
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [tagsToJsonPaths],
     );
 
