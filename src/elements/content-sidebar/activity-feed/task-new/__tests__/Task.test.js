@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
+import { FormattedMessage } from 'react-intl';
 
 import { FEED_ITEM_TYPE_TASK } from '../../../../../constants';
 import { TaskComponent as Task } from '..';
@@ -18,6 +19,7 @@ const allHandlers = {
 const approverSelectorContacts = [];
 
 describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
+    const placeholderUser = { nam: '', id: '0', type: 'user' };
     const currentUser = { name: 'Jake Thomas', id: '1', type: 'user' };
     const otherUser = { name: 'Patrick Paul', id: '3', type: 'user' };
     const creatorUser = { name: 'Steven Yang', id: '5', type: 'user' };
@@ -142,6 +144,22 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
             />,
         );
         expect(wrapper.find('[data-testid="task-due-date"]')).toHaveLength(1);
+    });
+
+    test('should show prior collaborator text if created_by user is a placeholder user', () => {
+        const completeWrapper = mount(
+            <Task
+                {...task}
+                created_by={placeholderUser}
+                currentUser={currentUser}
+                onEdit={jest.fn()}
+                onDelete={jest.fn()}
+                due_at={new Date() - 1000}
+                status="COMPLETED"
+            />,
+        );
+        const headline = completeWrapper.find('.bcs-Task-headline');
+        expect(headline.find(FormattedMessage).prop('id')).toBe('be.priorCollaborator');
     });
 
     test('due date should have overdue class if task is incomplete and due date is in past', () => {
@@ -270,10 +288,7 @@ describe('elements/content-sidebar/ActivityFeed/task-new/Task', () => {
     test('should call onView when view-task-details button is clicked for multifile task', () => {
         const onViewSpy = jest.fn();
         const wrapper = mount(<Task {...taskMultifile} currentUser={currentUser} onView={onViewSpy} />);
-        wrapper
-            .find('[data-testid="view-task"]')
-            .hostNodes()
-            .simulate('click');
+        wrapper.find('[data-testid="view-task"]').hostNodes().simulate('click');
         expect(onViewSpy).toHaveBeenCalledWith(taskId, false);
     });
 
