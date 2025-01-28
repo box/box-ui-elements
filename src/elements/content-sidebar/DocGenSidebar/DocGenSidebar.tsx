@@ -87,9 +87,9 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
     }, []);
 
     const loadTags = useCallback(async (attempts = 10) => {
-        if(attempts <= 0){
+        if (attempts <= 0) {
             setIsLoading(false);
-            return
+            return;
         }
         setIsLoading(true);
         try {
