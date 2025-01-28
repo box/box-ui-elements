@@ -10,7 +10,6 @@ import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
-import ActivityIndicator from './ActivityIndicator';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -38,7 +37,6 @@ import './SidebarNav.scss';
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
     elementId: string,
-    file: BoxItem,
     fileId: string,
     hasActivity: boolean,
     hasAdditionalTabs: boolean,
@@ -56,7 +54,6 @@ type Props = {
 const SidebarNav = ({
     additionalTabs,
     elementId,
-    file,
     fileId,
     hasActivity,
     hasAdditionalTabs,
@@ -109,7 +106,6 @@ const SidebarNav = ({
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
                             <IconChatRound />
-                            <ActivityIndicator file={file} />
                         </SidebarNavButton>
                     )}
                     {hasDetails && (

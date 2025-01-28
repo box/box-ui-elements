@@ -40,6 +40,7 @@ export default {
             isAIStudioAgentSelectorEnabled: true,
             isCitationsEnabled: true,
             isDebugModeEnabled: true,
+            isFeedbackEnabled: true,
             isIntelligentQueryMode: false,
             isMarkdownEnabled: true,
             isResetChatEnabled: true,
