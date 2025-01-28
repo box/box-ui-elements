@@ -65,7 +65,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         beforeEach(() => {
             const wrapper = getWrapper();
             const instance = wrapper.instance() as DetailsSidebar;
-            ({ onReadyMetric } = instance.props.logger);
+            onReadyMetric = instance.props.logger.onReadyMetric as jest.Mock;
         });
 
         test('should emit when js loaded', () => {

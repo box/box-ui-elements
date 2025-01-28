@@ -462,7 +462,10 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
     }
 }
 
-export type DetailsSidebarProps = ExternalProps;
+export interface DetailsSidebarProps extends ExternalProps {
+    refreshIdentity?: boolean;
+    file?: BoxItem;
+}
 export { DetailsSidebar as DetailsSidebarComponent };
 export default flow([
     withLogger(ORIGIN_DETAILS_SIDEBAR),
