@@ -102,7 +102,7 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
 
-                const { data } = response || [];
+                const { data } = response;
                 // anything that is not an image tag for this view is treated as a text tag
                 const textTags = data?.filter(tag => tag.tag_type !== 'image') || [];
                 const imageTags = data?.filter(tag => tag.tag_type === 'image') || [];
