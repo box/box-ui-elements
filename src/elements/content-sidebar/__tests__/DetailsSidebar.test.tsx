@@ -3,9 +3,9 @@ import * as React from 'react';
 import messages from '../../common/messages';
 import { getBadItemError } from '../../../utils/error';
 import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
-import { isFeatureEnabled , FeatureConfig } from '../../common/feature-checking';
+import { isFeatureEnabled, FeatureConfig } from '../../common/feature-checking';
 import { DetailsSidebarComponent as DetailsSidebar, DetailsSidebarProps } from '../DetailsSidebar';
-import { BoxItem , FileAccessStats, ElementsXhrError } from '../../../common/types/core';
+import { BoxItem, FileAccessStats, ElementsXhrError } from '../../../common/types/core';
 import { API } from '../../../common/types/api';
 import { Logger } from '../../../common/types/logging';
 
@@ -35,9 +35,10 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         shallow(
             <DetailsSidebar
                 api={api}
+                elementId="details-sidebar"
                 features={{} as FeatureConfig}
                 fileId={file.id}
-                logger={{ onReadyMetric: jest.fn() } as Logger}
+                logger={{ onReadyMetric: jest.fn(), onPreviewMetric: jest.fn() } as Logger}
                 onError={onError}
                 {...props}
             />,
@@ -63,7 +64,8 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         let onReadyMetric: jest.Mock;
         beforeEach(() => {
             const wrapper = getWrapper();
-            ({ onReadyMetric } = wrapper.instance().props.logger);
+            const instance = wrapper.instance() as DetailsSidebar;
+            ({ onReadyMetric } = instance.props.logger);
         });
 
         test('should emit when js loaded', () => {
@@ -403,7 +405,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should set the file description', () => {
             const newDescription = 'baz';
             instance.onDescriptionChange(newDescription);
-            setFileDescription.mockResolvedValue();
+            setFileDescription.mockResolvedValue(file);
             expect(setFileDescription).toHaveBeenCalledWith(
                 file,
                 newDescription,
@@ -475,9 +477,8 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         let instance: DetailsSidebar;
 
         beforeEach(() => {
-            wrapper = getWrapper({
-                file,
-            });
+            wrapper = getWrapper();
+            wrapper.setState({ file });
             instance = wrapper.instance() as DetailsSidebar;
             instance.setState = jest.fn();
         });
@@ -504,12 +505,12 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
 
         beforeEach(() => {
             wrapper = getWrapper({
-                file,
                 hasAccessStats: false,
                 hasContentInsights: false,
                 hasClassification: false,
                 refreshIdentity: false,
             });
+            wrapper.setState({ file });
             instance = wrapper.instance() as DetailsSidebar;
             instance.fetchAccessStats = jest.fn();
         });
