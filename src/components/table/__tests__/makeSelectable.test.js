@@ -22,6 +22,22 @@ describe('components/table/makeSelectable', () => {
     const getWrapper = (props = {}) =>
         shallow(<SelectableTable onSelect={sandbox.stub()} data={data} selectedItems={[]} enableHotkeys {...props} />);
 
+    const testClassNamePreventsArrowNavigation = (className, hotKey, isGridView = false) => {
+        const wrapper = getWrapper({
+            gridColumnCount: 3,
+            isGridView,
+            selectedItems: ['a'],
+        });
+
+        jest.spyOn(document, 'querySelector').mockImplementation(selector => className === selector);
+
+        wrapper.setState({ focusedIndex: undefined });
+        const instance = wrapper.instance();
+        const shortcut = instance.getHotkeyConfigs().find(h => h.get('key') === hotKey);
+        shortcut.handler({ preventDefault: sandbox.stub() });
+        expect(wrapper.state('focusedIndex')).toEqual(undefined);
+    };
+
     afterEach(() => {
         jest.clearAllTimers();
         jest.clearAllMocks();
@@ -677,6 +693,7 @@ describe('components/table/makeSelectable', () => {
         describe('ListView specific', () => {
             describe('down', () => {
                 const hotKey = 'down';
+
                 test('should set focus to first row when no currently focused item', () => {
                     const wrapper = getWrapper({
                         selectedItems: ['a'],
@@ -687,6 +704,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should call event.preventDefault() and set focus to next item', () => {
                     const wrapper = getWrapper({
                         selectedItems: ['a'],
@@ -697,6 +715,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(1);
                 });
+
                 test('should not focus on an index higher than the highest index in the table', () => {
                     const wrapper = getWrapper({
                         selectedItems: ['a'],
@@ -707,9 +726,18 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(4);
                 });
+
+                test.each([['flyout-overlay'], ['dropdown-menu-element']])(
+                    'should not set focus if element with class %s is rendered',
+                    className => {
+                        testClassNamePreventsArrowNavigation(className, hotKey);
+                    },
+                );
             });
+
             describe('up', () => {
                 const hotKey = 'up';
+
                 test('should call event.preventDefault() and call onSelect with new focused item', () => {
                     const wrapper = getWrapper({
                         selectedItems: ['a'],
@@ -720,6 +748,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should not focus on an index lower than 0', () => {
                     const wrapper = getWrapper({
                         selectedItems: ['a'],
@@ -730,6 +759,13 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
+                test.each([['flyout-overlay'], ['dropdown-menu-element']])(
+                    'should not set focus if element with class %s is rendered',
+                    className => {
+                        testClassNamePreventsArrowNavigation(className, hotKey);
+                    },
+                );
             });
 
             describe('shift+down', () => {
@@ -858,6 +894,7 @@ describe('components/table/makeSelectable', () => {
 
             describe('right', () => {
                 const hotKey = 'right';
+
                 test('should set focus to first row when no currently focused item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -870,6 +907,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -895,6 +933,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(1);
                 });
+
                 test('should not focus on an index higher than the highest index in the table', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -907,9 +946,18 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(4);
                 });
+
+                test.each([['flyout-overlay'], ['dropdown-menu-element']])(
+                    'should not set focus if element with class %s is rendered',
+                    className => {
+                        testClassNamePreventsArrowNavigation(className, hotKey, true);
+                    },
+                );
             });
+
             describe('left', () => {
                 const hotKey = 'left';
+
                 test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -922,6 +970,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ target: { role: 'slider' } });
                     expect(wrapper.state('focusedIndex')).toEqual(undefined);
                 });
+
                 test('should call event.preventDefault() and call onSelect with new focused item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -934,6 +983,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should call event.preventDefault() and set focus to previous item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -946,6 +996,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should not focus on an index lower than 0', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -958,9 +1009,17 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
+                test.each([['flyout-overlay'], ['dropdown-menu-element']])(
+                    'should not set focus if element with class %s is rendered',
+                    className => {
+                        testClassNamePreventsArrowNavigation(className, hotKey, true);
+                    },
+                );
             });
             describe('down', () => {
                 const hotKey = 'down';
+
                 test('should set focus to first row when no currently focused item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -973,6 +1032,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -985,6 +1045,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ target: { role: 'slider' } });
                     expect(wrapper.state('focusedIndex')).toEqual(undefined);
                 });
+
                 test('should call event.preventDefault() and set focus to next row item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -997,6 +1058,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(gridColumnCount);
                 });
+
                 test('should not focus on an index higher than the highest index in the table', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -1009,9 +1071,18 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(4);
                 });
+
+                test.each([['flyout-overlay'], ['dropdown-menu-element']])(
+                    'should not set focus if element with class %s is rendered',
+                    className => {
+                        testClassNamePreventsArrowNavigation(className, hotKey, true);
+                    },
+                );
             });
+
             describe('up', () => {
                 const hotKey = 'up';
+
                 test('should not set focus to first row if target has role of slider', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -1024,6 +1095,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ target: { role: 'slider' } });
                     expect(wrapper.state('focusedIndex')).toEqual(undefined);
                 });
+
                 test('should call event.preventDefault() and call onSelect with new focused item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -1036,6 +1108,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should call event.preventDefault() and set focus to previous row item', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -1048,6 +1121,7 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.mock() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
                 test('should not focus on an index lower than 0', () => {
                     const wrapper = getWrapper({
                         gridColumnCount,
@@ -1060,6 +1134,13 @@ describe('components/table/makeSelectable', () => {
                     shortcut.handler({ preventDefault: sandbox.stub() });
                     expect(wrapper.state('focusedIndex')).toEqual(0);
                 });
+
+                test.each([['flyout-overlay'], ['dropdown-menu-element']])(
+                    'should not set focus if element with class %s is rendered',
+                    className => {
+                        testClassNamePreventsArrowNavigation(className, hotKey, true);
+                    },
+                );
             });
 
             describe('shift+right', () => {
