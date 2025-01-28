@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Details sidebar component
  * @author Box
  */
@@ -13,7 +12,6 @@ import API from '../../api';
 import messages from '../common/messages';
 import SidebarAccessStats from './SidebarAccessStats';
 import SidebarClassification from './SidebarClassification';
-// $FlowFixMe typescript component
 import SidebarContentInsights from './SidebarContentInsights';
 import SidebarContent from './SidebarContent';
 import SidebarFileProperties from './SidebarFileProperties';
@@ -22,7 +20,7 @@ import SidebarSection from './SidebarSection';
 import SidebarVersions from './SidebarVersions';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { getBadItemError } from '../../utils/error';
-import { isFeatureEnabled, withFeatureConsumer } from '../common/feature-checking';
+import { isFeatureEnabled, withFeatureConsumer, FeatureConfig } from '../common/feature-checking';
 import { mark } from '../../utils/performance';
 import { SECTION_TARGETS } from '../common/interactionTargets';
 import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../utils/fields';
@@ -35,50 +33,80 @@ import {
     IS_ERROR_DISPLAYED,
     SIDEBAR_VIEW_DETAILS,
 } from '../../constants';
-import type { Errors } from '../common/flowTypes';
-import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flowTypes';
-import type { WithLoggerProps } from '../../common/types/logging';
-import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
-import type { BoxItem } from '../../common/types/core';
-import type { FeatureConfig } from '../common/feature-checking';
+import { ElementsErrorCallback, ElementsXhrError } from '../../common/types/api';
+import { ElementOrigin } from '../common/flowTypes';
+import { BoxItem } from '../../common/types/core';
 import './DetailsSidebar.scss';
 
-type ExternalProps = {
-    classification?: ClassificationInfo,
-    contentInsights?: ContentInsights,
-    elementId: string,
-    fetchContentInsights?: () => void,
-    fileId: string,
-    hasAccessStats?: boolean,
-    hasClassification?: boolean,
-    hasContentInsights?: boolean,
-    hasNotices?: boolean,
-    hasProperties?: boolean,
-    hasRetentionPolicy?: boolean,
-    hasSidebarInitialized?: boolean,
-    hasVersions?: boolean,
-    onAccessStatsClick?: Function,
-    onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
-    onContentInsightsClick?: () => void,
-    onRetentionPolicyExtendClick?: Function,
-    onVersionHistoryClick?: Function,
-    retentionPolicy?: Object,
-} & ErrorContextProps &
-    WithLoggerProps;
-type Props = {
-    api: API,
-    features: FeatureConfig,
-} & ExternalProps &
-    ErrorContextProps &
-    WithLoggerProps;
+interface ExternalProps {
+    classification?: {
+        definition?: string;
+        name: string;
+    };
+    contentInsights?: {
+        error?: object;
+        graphData: object[];
+        isLoading: boolean;
+        previousPeriodCount: number;
+        totalCount: number;
+    };
+    elementId: string;
+    logger: {
+        onPreviewMetric: (data: object) => void;
+        onReadyMetric: (data: { endMarkName: string; startMarkName?: string }) => void;
+    };
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: object, origin?: ElementOrigin) => void;
+    fetchContentInsights?: () => void;
+    fileId: string;
+    hasAccessStats?: boolean;
+    hasClassification?: boolean;
+    hasContentInsights?: boolean;
+    hasNotices?: boolean;
+    hasProperties?: boolean;
+    hasRetentionPolicy?: boolean;
+    hasSidebarInitialized?: boolean;
+    hasVersions?: boolean;
+    onAccessStatsClick?: () => void;
+    onClassificationClick?: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
+    onContentInsightsClick?: () => void;
+    onRetentionPolicyExtendClick?: () => void;
+    onVersionHistoryClick?: () => void;
+    retentionPolicy?: {
+        dispositionTime?: number;
+        policyType?: string;
+        retentionPolicyDescription?: string;
+    };
+}
 
-type State = {
-    accessStats?: FileAccessStats,
-    accessStatsError?: Errors,
-    file?: BoxItem,
-    fileError?: Errors,
-    isLoadingAccessStats: boolean,
-};
+interface Props extends ExternalProps {
+    api: API;
+    features: FeatureConfig;
+}
+
+interface State {
+    accessStats?: {
+        comment_count?: number;
+        download_count?: number;
+        edit_count?: number;
+        has_count_overflowed: boolean;
+        preview_count?: number;
+    };
+    accessStatsError?: {
+        error?: typeof messages.fileAccessStatsPermissionsError;
+        maskError?: {
+            errorHeader: typeof messages.fileAccessStatsErrorHeaderMessage;
+            errorSubHeader: typeof messages.defaultErrorMaskSubHeaderMessage;
+        };
+    };
+    file?: BoxItem;
+    fileError?: {
+        inlineError?: {
+            title: typeof messages.fileDescriptionInlineErrorTitleMessage;
+            content: typeof messages.defaultInlineErrorContentMessage;
+        };
+    };
+    isLoadingAccessStats: boolean;
+}
 
 const MARK_NAME_JS_READY = `${ORIGIN_DETAILS_SIDEBAR}_${EVENT_JS_READY}`;
 
@@ -302,7 +330,13 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
      * @param {Object} accessStats - access stats for a file
      * @return {void}
      */
-    fetchAccessStatsSuccessCallback = (accessStats: FileAccessStats): void => {
+    fetchAccessStatsSuccessCallback = (accessStats: {
+        comment_count?: number;
+        download_count?: number;
+        edit_count?: number;
+        has_count_overflowed: boolean;
+        preview_count?: number;
+    }): void => {
         if (!this.props.hasAccessStats) {
             return;
         }
