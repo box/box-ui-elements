@@ -1,10 +1,13 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import messages from '../../common/messages';
 import { getBadItemError } from '../../../utils/error';
 import { SIDEBAR_FIELDS_TO_FETCH, SIDEBAR_FIELDS_TO_FETCH_ARCHIVE } from '../../../utils/fields';
-import { isFeatureEnabled } from '../../common/feature-checking';
-import { DetailsSidebarComponent as DetailsSidebar } from '../DetailsSidebar';
+import { isFeatureEnabled , FeatureConfig } from '../../common/feature-checking';
+import { DetailsSidebarComponent as DetailsSidebar, DetailsSidebarProps } from '../DetailsSidebar';
+import { BoxItem , FileAccessStats, ElementsXhrError } from '../../../common/types/core';
+import { API } from '../../../common/types/api';
+import { Logger } from '../../../common/types/logging';
 
 jest.mock('../SidebarFileProperties', () => 'SidebarFileProperties');
 jest.mock('../SidebarAccessStats', () => 'SidebarAccessStats');
@@ -12,23 +15,29 @@ jest.mock('../SidebarClassification', () => 'SidebarClassification');
 jest.mock('../SidebarContentInsights', () => 'SidebarContentInsights');
 jest.mock('../../common/feature-checking');
 
-const file = {
+const file: BoxItem = {
     id: 'foo',
     description: 'bar',
+    type: 'file',
+    name: '',
 };
 
 describe('elements/content-sidebar/DetailsSidebar', () => {
-    let api;
-    let getFile;
-    let getStats;
-    let setFileDescription;
+    let api: API;
+    let getFile: jest.Mock;
+    let getStats: jest.Mock;
+    let setFileDescription: jest.Mock;
     const onError = jest.fn();
-    const getWrapper = (props, options) =>
+    const getWrapper = (
+        props?: Partial<DetailsSidebarProps>,
+        options?: { disableLifecycleMethods?: boolean },
+    ): ShallowWrapper =>
         shallow(
             <DetailsSidebar
                 api={api}
+                features={{} as FeatureConfig}
                 fileId={file.id}
-                logger={{ onReadyMetric: jest.fn() }}
+                logger={{ onReadyMetric: jest.fn() } as Logger}
                 onError={onError}
                 {...props}
             />,
@@ -47,11 +56,11 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             getFileAccessStatsAPI: jest.fn().mockImplementation(() => ({
                 getFileAccessStats: getStats,
             })),
-        };
+        } as unknown as API;
     });
 
     describe('constructor()', () => {
-        let onReadyMetric;
+        let onReadyMetric: jest.Mock;
         beforeEach(() => {
             const wrapper = getWrapper();
             ({ onReadyMetric } = wrapper.instance().props.logger);
@@ -81,7 +90,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                     hasClassification: true,
                     hasRetentionPolicy: true,
                     hasVersions: true,
-                    onClassificationClick: () => {},
+                    onClassificationClick: jest.fn(),
                 },
                 { disableLifecycleMethods: true },
             );
@@ -128,7 +137,12 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         test('should render DetailsSidebar with content insights', () => {
             const wrapper = getWrapper(
                 {
-                    contentInsights: {},
+                    contentInsights: {
+                        graphData: [],
+                        isLoading: false,
+                        previousPeriodCount: 0,
+                        totalCount: 0,
+                    },
                     fetchContentInsights: jest.fn(),
                     hasContentInsights: true,
                     onContentInsightsClick: jest.fn(),
@@ -163,14 +177,14 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('componentDidMount()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
         beforeEach(() => {
             wrapper = getWrapper({}, { disableLifecycleMethods: true });
             wrapper.setState({
                 file,
             });
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
             instance.fetchFile = jest.fn();
             instance.fetchAccessStats = jest.fn();
         });
@@ -207,8 +221,8 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('fetchAccessStatsSuccessCallback()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
         beforeEach(() => {
             wrapper = getWrapper(
                 {
@@ -218,7 +232,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                     disableLifecycleMethods: true,
                 },
             );
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
             instance.setState = jest.fn();
         });
 
@@ -226,12 +240,12 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             wrapper.setProps({
                 hasAccessStats: false,
             });
-            instance.fetchAccessStatsSuccessCallback('stats');
+            instance.fetchAccessStatsSuccessCallback('stats' as FileAccessStats);
             expect(instance.setState).not.toHaveBeenCalled();
         });
 
         test('should update the file state', () => {
-            instance.fetchAccessStatsSuccessCallback('stats');
+            instance.fetchAccessStatsSuccessCallback('stats' as FileAccessStats);
             expect(instance.setState).toBeCalledWith({
                 isLoadingAccessStats: false,
                 accessStats: 'stats',
@@ -241,8 +255,8 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('fetchAccessStatsErrorCallback()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
         beforeEach(() => {
             wrapper = getWrapper(
                 {
@@ -252,7 +266,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                     disableLifecycleMethods: true,
                 },
             );
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
             instance.setState = jest.fn();
         });
 
@@ -260,12 +274,12 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             wrapper.setProps({
                 hasAccessStats: false,
             });
-            instance.fetchAccessStatsSuccessCallback('stats');
+            instance.fetchAccessStatsSuccessCallback('stats' as FileAccessStats);
             expect(instance.setState).not.toHaveBeenCalled();
         });
 
         test('should set a maskError if there is an error in fetching the access stats', () => {
-            instance.fetchAccessStatsErrorCallback();
+            instance.fetchAccessStatsErrorCallback({ status: 500 } as ElementsXhrError, 'error_code');
             expect(instance.setState).toBeCalledWith({
                 isLoadingAccessStats: false,
                 accessStats: undefined,
@@ -282,7 +296,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             const error = {
                 status: 403,
             };
-            instance.fetchAccessStatsErrorCallback(error);
+            instance.fetchAccessStatsErrorCallback(error, 'error_code');
             expect(instance.setState).toBeCalledWith({
                 isLoadingAccessStats: false,
                 accessStats: undefined,
@@ -294,8 +308,8 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('fetchAccessStats()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
         beforeEach(() => {
             wrapper = getWrapper(
                 {
@@ -305,7 +319,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                     disableLifecycleMethods: true,
                 },
             );
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
         });
 
         test('should short circuit if it is already fetching', () => {
@@ -331,11 +345,11 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     describe('descriptionChangeErrorCallback()', () => {
         test('should set an inlineError if there is an error in updating the file description', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as DetailsSidebar;
             instance.setState = jest.fn();
-            instance.descriptionChangeErrorCallback('file');
+            instance.descriptionChangeErrorCallback(file);
             expect(instance.setState).toBeCalledWith({
-                file: 'file',
+                file,
                 fileError: {
                     inlineError: {
                         title: messages.fileDescriptionInlineErrorTitleMessage,
@@ -349,25 +363,25 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     describe('descriptionChangeSuccessCallback()', () => {
         test('should update the file state', () => {
             const wrapper = getWrapper();
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as DetailsSidebar;
             instance.setState = jest.fn();
-            instance.descriptionChangeSuccessCallback('file');
+            instance.descriptionChangeSuccessCallback(file);
             expect(instance.setState).toBeCalledWith({
-                file: 'file',
+                file,
                 fileError: undefined,
             });
         });
     });
 
     describe('onDescriptionChange()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
         beforeEach(() => {
             wrapper = getWrapper();
             wrapper.setState({
                 file,
             });
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
             instance.fetchFile = jest.fn();
             instance.descriptionChangeErrorCallback = jest.fn();
         });
@@ -377,7 +391,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 file: undefined,
             });
             expect(() => {
-                instance.onDescriptionChange();
+                instance.onDescriptionChange('');
             }).toThrow(getBadItemError());
         });
 
@@ -400,14 +414,14 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('fetchFile()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
 
         beforeEach(() => {
             wrapper = getWrapper({
                 file,
             });
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
         });
 
         test('should fetch the file info', () => {
@@ -423,7 +437,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
         });
 
         test('should fetch the file info with archive metadata field when feature is enabled', () => {
-            isFeatureEnabled.mockReturnValueOnce(true);
+            (isFeatureEnabled as jest.Mock).mockReturnValueOnce(true);
             instance.fetchFile();
             expect(getFile).toHaveBeenCalledWith(
                 file.id,
@@ -437,14 +451,14 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('fetchFileSuccessCallback()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
 
         beforeEach(() => {
             wrapper = getWrapper({
                 file,
             });
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
         });
 
         test('should fetch the file info', () => {
@@ -457,14 +471,14 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('fetchFileErrorCallback()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
 
         beforeEach(() => {
             wrapper = getWrapper({
                 file,
             });
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
             instance.setState = jest.fn();
         });
 
@@ -485,8 +499,8 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
     });
 
     describe('componentDidUpdate()', () => {
-        let wrapper;
-        let instance;
+        let wrapper: ShallowWrapper;
+        let instance: DetailsSidebar;
 
         beforeEach(() => {
             wrapper = getWrapper({
@@ -496,7 +510,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
                 hasClassification: false,
                 refreshIdentity: false,
             });
-            instance = wrapper.instance();
+            instance = wrapper.instance() as DetailsSidebar;
             instance.fetchAccessStats = jest.fn();
         });
 
@@ -522,7 +536,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
 
     describe('refresh', () => {
         test('should refetch data when refresh is called', () => {
-            const instance = getWrapper().instance();
+            const instance = getWrapper().instance() as DetailsSidebar;
             const fetchAccessStats = jest.fn();
             instance.fetchAccessStats = fetchAccessStats;
 
