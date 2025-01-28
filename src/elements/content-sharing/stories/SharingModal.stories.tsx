@@ -15,7 +15,7 @@ const createMockAPI = () => {
         apiHost: 'https://api.box.com',
         clientName: 'box-ui-elements',
         id: `file_${MOCK_ITEM_ID}`,
-        token: 'dummy-token',
+        token: process.env.BOX_SAMPLE_TOKEN || '',
     });
 
     // Mock API methods
