@@ -16,16 +16,19 @@ export interface BoxAISidebarContextValues {
     cache: { encodedSession?: string | null; questions?: QuestionType[] };
     contentName: string;
     elementId: string;
+    fileExtension: string;
     isStopResponseEnabled: boolean;
+    itemSize?: string;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
-    userInfo: { name: string, avatarURL: string };
+    userInfo: { name: string; avatarURL: string };
 }
 
 export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues>({
     cache: null,
     contentName: '',
     elementId: '',
+    fileExtension: '',
     isStopResponseEnabled: false,
     recordAction: noop,
     setCacheValue: noop,
@@ -66,7 +69,8 @@ export interface BoxAISidebarProps {
     isResetChatEnabled: boolean;
     isStopResponseEnabled?: boolean;
     isStreamingEnabled: boolean;
-    userInfo: { name: string, avatarURL: string };
+    itemSize?: string;
+    userInfo: { name: string; avatarURL: string };
     recordAction: (params: RecordActionType) => void;
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
 }
@@ -81,6 +85,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         getSuggestedQuestions,
         isIntelligentQueryMode,
         isStopResponseEnabled,
+        itemSize,
         recordAction,
         setCacheValue,
         userInfo,
@@ -113,7 +118,17 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
         // that's why we need to use provider to pass other props
         <BoxAISidebarContext.Provider
-            value={{ cache, contentName, elementId, isStopResponseEnabled, setCacheValue, recordAction, userInfo }}
+            value={{
+                cache,
+                contentName,
+                elementId,
+                fileExtension,
+                isStopResponseEnabled,
+                itemSize,
+                setCacheValue,
+                recordAction,
+                userInfo,
+            }}
         >
             <BoxAISidebarContent
                 getSuggestedQuestions={getSuggestedQuestions}
