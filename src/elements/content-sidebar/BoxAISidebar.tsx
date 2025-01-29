@@ -100,15 +100,16 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     }
 
     const handleKeyPress = React.useCallback((event: KeyboardEvent) => {
-        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+            event.preventDefault();
             event.stopPropagation();
         }
     }, []);
 
     React.useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
+        document.addEventListener('keydown', handleKeyPress,{ capture: true });
         return () => {
-            document.removeEventListener('keydown', handleKeyPress);
+            document.removeEventListener('keydown', handleKeyPress, { capture: true });
         };
     }, [handleKeyPress]);
 
