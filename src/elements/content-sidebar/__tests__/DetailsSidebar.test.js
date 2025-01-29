@@ -337,6 +337,7 @@ describe('elements/content-sidebar/DetailsSidebar', () => {
             expect(instance.setState).toBeCalledWith({
                 file: 'file',
                 fileError: {
+                    message: 'Error updating file description',
                     inlineError: {
                         title: messages.fileDescriptionInlineErrorTitleMessage,
                         content: messages.defaultInlineErrorContentMessage,

@@ -1,12 +1,16 @@
 import type { AxiosError } from 'axios';
 import type { ElementOrigin } from '../../elements/common/flowTypes';
 
-export interface ElementsXhrError extends AxiosError {
+export interface ElementsXhrError extends Omit<AxiosError, 'message'> {
     code?: string;
     context_info?: Record<string, unknown>;
-    message?: string;
+    message: string;
     status?: number;
     type?: 'error';
+    inlineError?: {
+        title: string;
+        content: string;
+    };
 }
 
 export interface ElementsError {

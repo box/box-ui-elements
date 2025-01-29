@@ -83,7 +83,7 @@ const MARK_NAME_JS_READY = `${ORIGIN_DETAILS_SIDEBAR}_${EVENT_JS_READY}`;
 mark(MARK_NAME_JS_READY);
 
 class DetailsSidebar extends React.PureComponent<Props, State> {
-    static defaultProps = {
+    static defaultProps: Partial<Props> = {
         hasNotices: false,
         hasProperties: false,
         hasAccessStats: false,
@@ -217,11 +217,12 @@ class DetailsSidebar extends React.PureComponent<Props, State> {
         this.setState({
             file,
             fileError: {
+                message: 'Error updating file description',
                 inlineError: {
                     title: messages.fileDescriptionInlineErrorTitleMessage,
                     content: messages.defaultInlineErrorContentMessage,
                 },
-            },
+            } as ElementsXhrError,
         });
     };
 

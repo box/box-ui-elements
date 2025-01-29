@@ -26,8 +26,14 @@ export interface NavigateOptions {
     isToggle?: boolean;
 }
 
+export interface TargetingApi {
+    canShow: boolean;
+    onShow: () => void;
+    onClose: () => void;
+}
+
 export interface AdditionalSidebarTabFtuxData {
-    targetingApi: UseTargetingApi;
+    targetingApi: TargetingApi;
     text: string;
 }
 
