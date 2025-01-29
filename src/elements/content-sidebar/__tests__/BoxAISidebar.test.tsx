@@ -220,4 +220,29 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
         expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
     });
+
+    describe('BoxAISidebar handleKeyPress', () => {
+
+        test('should prevent default behavior and stop propagation for ArrowLeft and ArrowRight keys', async () => {
+            await renderComponent();
+
+            const eventLeft = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+            const preventDefaultSpy = jest.spyOn(eventLeft, 'preventDefault');
+            const stopPropagationSpy = jest.spyOn(eventLeft, 'stopPropagation');
+
+            document.dispatchEvent(eventLeft);
+
+            expect(preventDefaultSpy).toHaveBeenCalled();
+            expect(stopPropagationSpy).toHaveBeenCalled();
+
+            const eventRight = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+            const preventDefaultSpyRight = jest.spyOn(eventRight, 'preventDefault');
+            const stopPropagationSpyRight = jest.spyOn(eventRight, 'stopPropagation');
+
+            document.dispatchEvent(eventRight);
+
+            expect(preventDefaultSpyRight).toHaveBeenCalled();
+            expect(stopPropagationSpyRight).toHaveBeenCalled();
+        });
+    });
 });
