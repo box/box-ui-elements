@@ -1240,7 +1240,7 @@ class ContentPicker extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-picker">
-                    <ThemingStyles selector={`#${this.id}`} theme={theme} />
+                    <ThemingStyles theme={theme} />
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         <Header
                             view={view}
