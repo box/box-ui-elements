@@ -31,7 +31,7 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
-import isThumbnailReady from './utils';
+import { isThumbnailAvailable } from '../common/utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from './constants';
@@ -876,7 +876,7 @@ class ContentExplorer extends Component<Props, State> {
                 thumbnailUrl,
             };
 
-            if (item.type === TYPE_FILE && thumbnailUrl && !isThumbnailReady(newItem)) {
+            if (item.type === TYPE_FILE && !isThumbnailAvailable(newItem)) {
                 this.attemptThumbnailGeneration(newItem);
             }
 

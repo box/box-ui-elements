@@ -1,3 +1,4 @@
+// @deprecated, use DateValue component
 import * as React from 'react';
 import { FormatDateOptions, FormattedMessage, useIntl } from 'react-intl';
 import { isToday, isYesterday } from '../../../utils/datetime';
@@ -20,6 +21,7 @@ export interface DateFieldProps {
     relative?: boolean;
 }
 
+// This component has internationalization concerns, e.g. comma removal, capitalization
 const DateField = ({
     date,
     dateFormat = DEFAULT_DATE_FORMAT,

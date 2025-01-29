@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Table } from '@box/react-virtualized/dist/es/Table';
 import EmptyState from '../common/empty-state';
 import ProgressBar from '../common/progress-bar';
-import ItemGrid from './ItemGrid';
+import ItemGrid from '../common/item-grid';
 import ItemList from './ItemList';
 import MetadataBasedItemList from '../../features/metadata-based-view';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
@@ -63,7 +63,7 @@ const Content = ({
     currentCollection,
     fieldsToShow = [],
     focusedRow,
-    gridColumnCount = 1,
+    gridColumnCount = 1, // eslint-disable-line
     isMedium,
     onSortChange,
     tableRef,
@@ -97,14 +97,7 @@ const Content = ({
                     {...rest}
                 />
             )}
-            {!isViewEmpty && isGridView && (
-                <ItemGrid
-                    currentCollection={currentCollection}
-                    gridColumnCount={gridColumnCount}
-                    view={view}
-                    {...rest}
-                />
-            )}
+            {!isViewEmpty && isGridView && <ItemGrid items={currentCollection.items} {...rest} />}
         </div>
     );
 };
