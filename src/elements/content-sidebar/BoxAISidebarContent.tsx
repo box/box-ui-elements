@@ -111,7 +111,6 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                             onSelectAgent={onSelectAgent}
                             recordAction={recordAction}
                             shouldHideAgentSelectorOnLoad={false}
-                            // @ts-ignore variant will be available in higher version
                             variant="sidebar"
                         />
                     </div>
