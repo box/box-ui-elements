@@ -1,10 +1,10 @@
 /**
- * @flow
  * @file Details sidebar component
  * @author Box
  */
 
 import * as React from 'react';
+import type { SyntheticEvent } from 'react';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
@@ -36,48 +36,52 @@ import {
     SIDEBAR_VIEW_DETAILS,
 } from '../../constants';
 import type { Errors } from '../common/flowTypes';
-import type { ClassificationInfo, ContentInsights, FileAccessStats } from './flowTypes';
-import type { WithLoggerProps } from '../../common/types/logging';
-import type { ElementsErrorCallback, ErrorContextProps, ElementsXhrError } from '../../common/types/api';
-import type { BoxItem } from '../../common/types/core';
+import type { ClassificationInfo, ContentInsights, FileAccessStats } from './types';
+import type {
+    WithLoggerProps,
+    ElementsErrorCallback,
+    ErrorContextProps,
+    ElementsXhrError,
+    BoxItem,
+} from '../../common/types/types';
 import type { FeatureConfig } from '../common/feature-checking';
 import './DetailsSidebar.scss';
 
 type ExternalProps = {
-    classification?: ClassificationInfo,
-    contentInsights?: ContentInsights,
-    elementId: string,
-    fetchContentInsights?: () => void,
-    fileId: string,
-    hasAccessStats?: boolean,
-    hasClassification?: boolean,
-    hasContentInsights?: boolean,
-    hasNotices?: boolean,
-    hasProperties?: boolean,
-    hasRetentionPolicy?: boolean,
-    hasSidebarInitialized?: boolean,
-    hasVersions?: boolean,
-    onAccessStatsClick?: Function,
-    onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void,
-    onContentInsightsClick?: () => void,
-    onRetentionPolicyExtendClick?: Function,
-    onVersionHistoryClick?: Function,
-    retentionPolicy?: Object,
+    classification?: ClassificationInfo;
+    contentInsights?: ContentInsights;
+    elementId: string;
+    fetchContentInsights?: () => void;
+    fileId: string;
+    hasAccessStats?: boolean;
+    hasClassification?: boolean;
+    hasContentInsights?: boolean;
+    hasNotices?: boolean;
+    hasProperties?: boolean;
+    hasRetentionPolicy?: boolean;
+    hasSidebarInitialized?: boolean;
+    hasVersions?: boolean;
+    onAccessStatsClick?: () => void;
+    onClassificationClick?: (e: SyntheticEvent<HTMLButtonElement>) => void;
+    onContentInsightsClick?: () => void;
+    onRetentionPolicyExtendClick?: () => void;
+    onVersionHistoryClick?: () => void;
+    retentionPolicy?: Record<string, unknown>;
 } & ErrorContextProps &
     WithLoggerProps;
 type Props = {
-    api: API,
-    features: FeatureConfig,
+    api: API;
+    features: FeatureConfig;
 } & ExternalProps &
     ErrorContextProps &
     WithLoggerProps;
 
 type State = {
-    accessStats?: FileAccessStats,
-    accessStatsError?: Errors,
-    file?: BoxItem,
-    fileError?: Errors,
-    isLoadingAccessStats: boolean,
+    accessStats?: FileAccessStats;
+    accessStatsError?: Errors;
+    file?: BoxItem;
+    fileError?: Errors;
+    isLoadingAccessStats: boolean;
 };
 
 const MARK_NAME_JS_READY = `${ORIGIN_DETAILS_SIDEBAR}_${EVENT_JS_READY}`;
