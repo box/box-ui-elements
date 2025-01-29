@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file SharingModal
  * @description This is the second-level component for the ContentSharing Element. It receives an API instance
  * from its parent component, ContentSharing, and then instantiates the UnifiedShareModal with API data.
