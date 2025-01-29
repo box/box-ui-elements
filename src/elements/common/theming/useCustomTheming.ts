@@ -11,6 +11,10 @@ const useCustomTheming = ({ theme = {} }: ThemingProps) => {
         .join(';');
 
     useEffect(() => {
+        if (!styles) {
+            return undefined;
+        }
+
         const styleEl = document.createElement('style');
         document.head.appendChild(styleEl);
 
