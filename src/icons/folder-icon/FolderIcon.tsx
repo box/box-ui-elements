@@ -1,10 +1,10 @@
 import * as React from 'react';
+import { FolderExternal, FolderPersonal, FolderShared } from '@box/blueprint-web-assets/icons/Content';
+import { useIntl } from 'react-intl';
 
-import IconFolderCollab from '../../icon/content/FolderShared32';
-import IconFolderExternal from '../../icon/content/FolderExternal32';
-import IconFolderPersonal from '../../icon/content/FolderPersonal32';
+import messages from '../../elements/common/messages';
 
-interface FolderIconProps {
+export interface FolderIconProps {
     /** Dimension of the icon */
     dimension?: number;
     /** If true displays collaborated folder icon */
@@ -12,19 +12,38 @@ interface FolderIconProps {
     /** If true displays externally collaborated folder icon */
     isExternal?: boolean;
     /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.ReactElement<string>;
+    title?: string;
 }
 
 const FolderIcon = ({ dimension = 32, isCollab = false, isExternal = false, title }: FolderIconProps) => {
+    const { formatMessage } = useIntl();
     if (isExternal) {
-        return <IconFolderExternal height={dimension} title={title} width={dimension} />;
+        return (
+            <FolderExternal
+                aria-label={title || formatMessage(messages.externalFolder)}
+                height={dimension}
+                width={dimension}
+            />
+        );
     }
 
     if (isCollab) {
-        return <IconFolderCollab height={dimension} title={title} width={dimension} />;
+        return (
+            <FolderShared
+                aria-label={title || formatMessage(messages.collaboratedFolder)}
+                height={dimension}
+                width={dimension}
+            />
+        );
     }
 
-    return <IconFolderPersonal height={dimension} title={title} width={dimension} />;
+    return (
+        <FolderPersonal
+            aria-label={title || formatMessage(messages.personalFolder)}
+            height={dimension}
+            width={dimension}
+        />
+    );
 };
 
 export default FolderIcon;

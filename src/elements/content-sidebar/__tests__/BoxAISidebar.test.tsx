@@ -73,6 +73,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         getAnswerStreaming: jest.fn(),
         getSuggestedQuestions: jest.fn(),
         hostAppName: 'appName',
+        itemSize: '1234',
         isAgentSelectorEnabled: false,
         isAIStudioAgentSelectorEnabled: true,
         isCitationsEnabled: true,
@@ -92,6 +93,15 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             render(<BoxAISidebar {...mockProps} {...props} />);
         });
     };
+
+    beforeAll(() => {
+        // Required to pass Blueprint Interactivity test for buttons with tooltip
+        Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
+            get() {
+                return this.parentNode;
+            },
+        });
+    });
 
     afterEach(() => {
         jest.clearAllMocks();
@@ -179,5 +189,35 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         const tooltip = await screen.findByRole('tooltip', { name: 'Clear conversation' });
 
         expect(tooltip).toBeInTheDocument();
+    });
+
+    test('should have accessible "Switch to modal view" button', async () => {
+        await renderComponent();
+
+        expect(screen.getByRole('button', { name: 'Switch to modal view' })).toBeInTheDocument();
+    });
+
+    test('should display "Switch to modal view" tooltip', async () => {
+        await renderComponent();
+
+        const button = screen.getByRole('button', { name: 'Switch to modal view' });
+        await userEvent.hover(button);
+        const tooltip = await screen.findByRole('tooltip', { name: 'Switch to modal view' });
+
+        expect(tooltip).toBeInTheDocument();
+    });
+
+    test('should open Intelligence Modal when clicking on "Switch to modal view" button and close when clicking "Switch to sidebar view"', async () => {
+        await renderComponent();
+
+        const switchToModalButton = screen.getByRole('button', { name: 'Switch to modal view' });
+        await userEvent.click(switchToModalButton);
+
+        expect(await screen.findByTestId('content-answers-modal')).toBeInTheDocument();
+
+        const switchToSidebarButton = screen.getByRole('button', { name: 'Switch to sidebar view' });
+        await userEvent.click(switchToSidebarButton);
+
+        expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
     });
 });

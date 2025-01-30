@@ -447,6 +447,11 @@ const messages = defineMessages({
         description: 'Generic Box AI content type opened used in welcome message and placeholder',
         defaultMessage: 'content',
     },
+    sidebarBoxAISwitchToModalView: {
+        id: 'be.sidebarBoxAISwitchToModalView',
+        description: 'Label for button that triggers switch to Box AI Modal',
+        defaultMessage: 'Switch to modal view',
+    },
     sidebarActivityTitle: {
         id: 'be.sidebarActivityTitle',
         description: 'Title for the preview activity feed.',
@@ -1066,6 +1071,11 @@ const messages = defineMessages({
         id: 'be.file',
         description: 'Icon title for a Box item of type file',
         defaultMessage: 'File',
+    },
+    iconFile: {
+        id: 'be.iconFile',
+        description: 'Aria label for file icon',
+        defaultMessage: '{extension} File',
     },
     folder: {
         id: 'be.folder',
