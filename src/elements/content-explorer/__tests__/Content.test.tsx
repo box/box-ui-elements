@@ -80,7 +80,7 @@ describe('Content Component', () => {
         expect(screen.getByText('Item 1')).toBeInTheDocument();
         expect(screen.getByText('1000 Bytes')).toBeInTheDocument();
         expect(screen.getByText('Tue Oct 10 2023')).toBeInTheDocument();
-        expect(screen.getByText('File')).toBeInTheDocument();
+        expect(screen.getByLabelText('File')).toBeInTheDocument();
     });
 
     test('renders ItemGrid when viewMode is VIEW_MODE_GRID', () => {
@@ -91,6 +91,6 @@ describe('Content Component', () => {
         expect(screen.getByText('Item 1')).toBeInTheDocument();
         expect(screen.getByText('1000 Bytes')).toBeInTheDocument();
         expect(screen.getByText(/Last accessed on\s+Tue Oct 10 2023/)).toBeInTheDocument();
-        expect(screen.getByText('File')).toBeInTheDocument();
+        expect(screen.getByLabelText('File')).toBeInTheDocument();
     });
 });

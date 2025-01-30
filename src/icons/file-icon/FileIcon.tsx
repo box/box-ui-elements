@@ -1,68 +1,79 @@
 import * as React from 'react';
 
-import { SVGProps } from '../../components/accessible-svg/AccessibleSVG';
+import {
+    FileAudio,
+    FileBookmark,
+    FileBoxNote,
+    FileCanvas,
+    FileCode,
+    FileDefault,
+    FileDicom,
+    FileDocGen,
+    FileDocs,
+    FileDwg,
+    FileExcel,
+    FileIllustrator,
+    FileImage,
+    FileIndesign,
+    FileKeynote,
+    FileNumbers,
+    FilePdf,
+    FilePages,
+    FilePhotoshop,
+    FilePowerpoint,
+    FilePresentation,
+    FileSheets,
+    FileSlides,
+    FileSpreadsheet,
+    FileText,
+    FileThreeD,
+    FileUpload,
+    FileVector,
+    FileVideo,
+    FileWord,
+    FileXbd,
+    FileXdw,
+    FileZip,
+} from '@box/blueprint-web-assets/icons/Content';
+import { useIntl } from 'react-intl';
 
-import IconFileAudio from '../../icon/content/FileAudio32';
-import IconFileBoxCanvas from '../../icon/content/FileCanvas32';
-import IconFileBoxNote from '../../icon/content/FileBoxNote32';
-import IconFileCode from '../../icon/content/FileCode32';
-import IconFileDefault from '../../icon/content/FileDefault32';
-import IconFileDwg from '../../icon/content/FileDwg32';
-import IconFileExcelSpreadsheet from '../../icon/content/FileExcel32';
-import IconFileGoogleDocs from '../../icon/content/FileDocs32';
-import IconFileGoogleSheets from '../../icon/content/FileSheets32';
-import IconFileGoogleSlides from '../../icon/content/FileSlides32';
-import IconFileIllustrator from '../../icon/content/FileIllustrator32';
-import IconFileImage from '../../icon/content/FileImage32';
-import IconFileIndesign from '../../icon/content/FileIndesign32';
-import IconFileKeynote from '../../icon/content/FileKeynote32';
-import IconFileNumbers from '../../icon/content/FileNumbers32';
-import IconFilePages from '../../icon/content/FilePages32';
-import IconFilePDF from '../../icon/content/FilePdf32';
-import IconFilePhotoshop from '../../icon/content/FilePhotoshop32';
-import IconFilePowerpointPresentation from '../../icon/content/FilePowerpoint32';
-import IconFilePresentation from '../../icon/content/FilePresentation32';
-import IconFileSpreadsheet from '../../icon/content/FileSpreadsheet32';
-import IconFileText from '../../icon/content/FileText32';
-import IconFileThreeD from '../../icon/content/FileThreeD32';
-import IconFileVector from '../../icon/content/FileVector32';
-import IconFileVideo from '../../icon/content/FileVideo32';
-import IconFileWordDocument from '../../icon/content/FileWord32';
-import IconFileXbd from '../../icon/content/FileXbd32';
-import IconFileXdw from '../../icon/content/FileXdw32';
-import IconFileZip from '../../icon/content/FileZip32';
+import messages from '../../elements/common/messages';
 
-const Components: { [key: string]: (props: SVGProps) => JSX.Element } = {
-    IconFileAudio,
-    IconFileBoxCanvas,
-    IconFileBoxNote,
-    IconFileCode,
-    IconFileDefault,
-    IconFileDocument: IconFileText,
-    IconFileDwg,
-    IconFileExcelSpreadsheet,
-    IconFileGoogleDocs,
-    IconFileGoogleSheets,
-    IconFileGoogleSlides,
-    IconFileIllustrator,
-    IconFileImage,
-    IconFileIndesign,
-    IconFileKeynote,
-    IconFileNumbers,
-    IconFilePages,
-    IconFilePDF,
-    IconFilePhotoshop,
-    IconFilePowerpointPresentation,
-    IconFilePresentation,
-    IconFileSpreadsheet,
-    IconFileText,
-    IconFileThreeD,
-    IconFileVector,
-    IconFileVideo,
-    IconFileWordDocument,
-    IconFileXbd,
-    IconFileXdw,
-    IconFileZip,
+const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element } = {
+    FileAudio,
+    FileBookmark,
+    FileBoxNote,
+    FileCanvas,
+    FileCode,
+    FileDefault,
+    FileDicom,
+    FileDocGen,
+    FileDocument: FileText,
+    FileDocs,
+    FileDwg,
+    FileExcel,
+    FileIllustrator,
+    FileImage,
+    FileIndesign,
+    FileKeynote,
+    FileNumbers,
+    FilePdf,
+    FilePages,
+    FilePhotoshop,
+    FilePowerpoint,
+    FilePresentation,
+    FileSheets,
+    FileSlides,
+    FileSpreadsheet,
+    FileText,
+    FileThreeD,
+    FileUpload,
+    FileVector,
+    FileVideo,
+    FileWord,
+    FileXbd,
+    FileXdw,
+    FileZip,
 };
 
 const mirror = (values: Array<string>) =>
@@ -71,8 +82,8 @@ const mirror = (values: Array<string>) =>
         return prev;
     }, {});
 
-const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
-    IconFileAudio: mirror([
+export const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
+    FileAudio: mirror([
         'aac',
         'aif',
         'aifc',
@@ -89,9 +100,9 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
         'wma',
         'wpl',
     ]),
-    IconFileBoxCanvas: mirror(['boxcanvas']),
-    IconFileBoxNote: mirror(['boxnote']),
-    IconFileCode: mirror([
+    FileCanvas: mirror(['boxcanvas']),
+    FileBoxNote: mirror(['boxnote']),
+    FileCode: mirror([
         'as',
         'as3',
         'asm',
@@ -138,41 +149,27 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
         'wabba',
         'yaml',
     ]),
-    IconFileDocument: mirror(['dot', 'dotx', 'msg', 'odt', 'rtf', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl']),
-    IconFileDwg: mirror(['dwg', 'dwgzip']),
-    IconFileExcelSpreadsheet: mirror(['xls', 'xlsx', 'xlsm', 'xlsb']),
-    IconFileGoogleDocs: mirror(['gdoc']),
-    IconFileGoogleSheets: mirror(['gsheet']),
-    IconFileGoogleSlides: mirror(['gslide', 'gslides']),
-    IconFileVector: mirror(['eps']),
-    IconFileIllustrator: mirror(['ai']),
-    IconFileIndesign: mirror(['idml', 'indd', 'indt', 'inx']),
-    IconFileKeynote: mirror(['key']),
-    IconFileNumbers: mirror(['numbers']),
-    IconFilePages: mirror(['pages']),
-    IconFileImage: mirror([
-        'bmp',
-        'gif',
-        'gdraw',
-        'jpeg',
-        'jpg',
-        'png',
-        'ps',
-        'svs',
-        'svg',
-        'tif',
-        'tiff',
-        'heic',
-        'heif',
-    ]),
-    IconFilePDF: mirror(['pdf']),
-    IconFilePresentation: mirror(['odp', 'otp', 'pot', 'potx']),
-    IconFilePowerpointPresentation: mirror(['ppt', 'pptx', 'pptm']),
-    IconFilePhotoshop: mirror(['psd']),
-    IconFileSpreadsheet: mirror(['csv', 'ods', 'tsv', 'xlt', 'xltx']),
-    IconFileText: mirror(['txt', 'vi', 'vim', 'webdoc']),
-    IconFileThreeD: mirror(['3ds', 'dae', 'fbx', 'obj', 'ply', 'stl']),
-    IconFileVideo: mirror([
+    FileDocument: mirror(['dot', 'dotx', 'msg', 'odt', 'rtf', 'wpd', 'xhtml', 'xml', 'xsd', 'xsl']),
+    FileDwg: mirror(['dwg', 'dwgzip']),
+    FileExcel: mirror(['xls', 'xlsx', 'xlsm', 'xlsb']),
+    FileDocs: mirror(['gdoc']),
+    FileSheets: mirror(['gsheet']),
+    FileSlides: mirror(['gslide', 'gslides']),
+    FileVector: mirror(['eps']),
+    FileIllustrator: mirror(['ai']),
+    FileIndesign: mirror(['idml', 'indd', 'indt', 'inx']),
+    FileKeynote: mirror(['key']),
+    FileNumbers: mirror(['numbers']),
+    FilePages: mirror(['pages']),
+    FileImage: mirror(['bmp', 'gif', 'gdraw', 'jpeg', 'jpg', 'png', 'ps', 'svs', 'svg', 'tif', 'tiff', 'heic', 'heif']),
+    FilePdf: mirror(['pdf']),
+    FilePresentation: mirror(['odp', 'otp', 'pot', 'potx']),
+    FilePowerpoint: mirror(['ppt', 'pptx', 'pptm']),
+    FilePhotoshop: mirror(['psd']),
+    FileSpreadsheet: mirror(['csv', 'ods', 'tsv', 'xlt', 'xltx']),
+    FileText: mirror(['txt', 'vi', 'vim', 'webdoc']),
+    FileThreeD: mirror(['3ds', 'dae', 'fbx', 'obj', 'ply', 'stl']),
+    FileVideo: mirror([
         '3g2',
         '3gp',
         'avi',
@@ -190,31 +187,45 @@ const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
         'qt',
         'wmv',
     ]),
-    IconFileWordDocument: mirror(['docx', 'doc', 'docm']),
-    IconFileXbd: mirror(['xbd']),
-    IconFileXdw: mirror(['xdw']),
-    IconFileZip: mirror(['rar', 'tgz', 'zip']),
+    FileWord: mirror(['docx', 'doc', 'docm']),
+    FileXbd: mirror(['xbd']),
+    FileXdw: mirror(['xdw']),
+    FileZip: mirror(['rar', 'tgz', 'zip']),
 };
 
 const getFileIconComponent = (extension = '') => {
     const extensionComponentName = Object.keys(EXTENSIONS).filter(
         extensionComponent => !!EXTENSIONS[extensionComponent][extension.toLowerCase()],
     )[0];
-    return extensionComponentName || 'IconFileDefault';
+    return extensionComponentName || 'FileDefault';
 };
 
-interface FileIconProps {
+export interface FileIconProps {
     /** Dimension of the icon. */
     dimension?: number;
     /** Extension of file to display icon for. Defaults to generic icon */
     extension?: string;
-    /** A text-only string describing the icon if it's not purely decorative for accessibility */
-    title?: string | React.ReactElement<string>;
+    /** A string describing the icon if it's not purely decorative for accessibility */
+    title?: string;
 }
 
 const FileIcon = ({ dimension = 32, extension = '', title }: FileIconProps) => {
-    const IconComponent = Components[getFileIconComponent(extension)];
-    return <IconComponent height={dimension} title={title} width={dimension} />;
+    const { formatMessage } = useIntl();
+    const componentName = getFileIconComponent(extension);
+    const IconComponent = Components[componentName];
+
+    return (
+        <IconComponent
+            aria-label={
+                title ||
+                (componentName === 'FileDefault'
+                    ? formatMessage(messages.file)
+                    : formatMessage(messages.iconFile, { extension: extension.toUpperCase() }))
+            }
+            height={dimension}
+            width={dimension}
+        />
+    );
 };
 
 export default FileIcon;

@@ -17,7 +17,7 @@ describe('elements/content-uploader/IconName', () => {
     test('renders component correctly', () => {
         renderComponent();
 
-        expect(screen.getByRole('img', { name: 'File' })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: 'PDF File' })).toBeInTheDocument();
         expect(screen.getByText('test-item')).toBeInTheDocument();
     });
 

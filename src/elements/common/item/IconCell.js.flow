@@ -1,8 +1,3 @@
-/**
- * @flow
- * @author Box
- */
-
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
@@ -18,10 +13,24 @@ import messages from '../messages';
 
 import './IconCell.scss';
 
-type Props = { dimension?: number, intl: IntlShape, rowData: BoxItem };
+type Props = {
+    dimension?: number,
+    intl: IntlShape,
+    rowData: BoxItem
+};
 
-const IconCell = ({ intl, rowData, dimension }: Props) => {
-    const { type, extension, has_collaborations, is_externally_owned, archive_type }: BoxItem = rowData;
+const IconCell = ({
+    intl,
+    rowData,
+    dimension,
+}: Props) => {
+    const {
+        type,
+        extension,
+        has_collaborations,
+        is_externally_owned,
+        archive_type,
+    }: BoxItem = rowData;
     let title;
     const is_archive = archive_type === 'archive';
     const is_archive_folder = archive_type === 'folder_archive';
