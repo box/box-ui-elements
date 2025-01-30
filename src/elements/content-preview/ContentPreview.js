@@ -1332,7 +1332,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             onKeyDown={this.onKeyDown}
                             tabIndex={0}
                         >
-                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
+                            <ThemingStyles theme={theme} />
                             {hasHeader && (
                                 <PreviewHeader
                                     file={file}

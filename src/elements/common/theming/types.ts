@@ -3,6 +3,5 @@ export interface Theme {
 }
 
 export interface ThemingProps {
-    selector?: string;
     theme?: Theme;
 }
