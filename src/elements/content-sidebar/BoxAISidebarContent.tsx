@@ -7,7 +7,7 @@ import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
-import { IconButton, Text, Tooltip } from '@box/blueprint-web';
+import { IconButton, Tooltip } from '@box/blueprint-web';
 import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Line';
 import {
     BoxAiContentAnswers,
@@ -72,11 +72,11 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         setCacheValue('questions', questions);
     }
 
-    const onModalClose = () => {
+    const handleModalClose = () => {
         setIsModalOpen(false);
     };
 
-    const onSwitchToModalClick = () => {
+    const handleSwitchToModalClick = () => {
         setIsModalOpen(true);
     };
 
@@ -100,17 +100,14 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
     const renderBoxAISidebarTitle = () => {
         return (
             <div className="bcs-BoxAISidebar-title-part">
-                <Text as="h3" className="bcs-title">
-                    {formatMessage(messages.sidebarBoxAITitle)}
-                </Text>
                 {isAIStudioAgentSelectorEnabled && (
-                    <div className="bcs-BoxAISidebar-agent-selector-container">
+                    <div className="bcs-BoxAISidebar-agentSelector">
                         <BoxAiAgentSelectorWithApi
                             fetcher={getAIStudioAgents}
                             hostAppName={hostAppName}
                             onSelectAgent={onSelectAgent}
                             recordAction={recordAction}
-                            shouldHideAgentSelectorOnLoad={false}
+                            shouldHideAgentSelectorOnLoad
                             variant="sidebar"
                         />
                     </div>
@@ -129,7 +126,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                     className="bcs-BoxAISidebar-expand"
                     data-target-id="IconButton-expandBoxAISidebar"
                     icon={ArrowsExpand}
-                    onClick={onSwitchToModalClick}
+                    onClick={handleSwitchToModalClick}
                     size="small"
                 />
             </Tooltip>
@@ -172,8 +169,8 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                     isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
                     isStopResponseEnabled={isStopResponseEnabled}
                     itemSize={itemSize}
-                    onModalClose={onModalClose}
-                    onOpenChange={onModalClose}
+                    onModalClose={handleModalClose}
+                    onOpenChange={handleModalClose}
                     onSelectAgent={onSelectAgent}
                     open={isModalOpen}
                     questions={questions}

@@ -107,12 +107,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         jest.clearAllMocks();
     });
 
-    test('should render title', async () => {
-        await renderComponent();
-
-        expect(screen.getByRole('heading', { level: 3, name: 'Box AI' })).toBeInTheDocument();
-    });
-
     test('should have accessible Agent selector if isAIStudioAgentSelectorEnabled is true', async () => {
         await renderComponent();
 
@@ -222,7 +216,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     });
 
     describe('BoxAISidebar handleKeyPress', () => {
-
         test('should prevent default behavior and stop propagation for ArrowLeft and ArrowRight keys', async () => {
             await renderComponent();
 
