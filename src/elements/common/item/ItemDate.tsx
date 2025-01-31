@@ -22,7 +22,7 @@ const ItemDate = ({ item, view }: ItemDateProps) => {
     if (view === VIEW_RECENTS) {
         return (
             <DateValue
-                date={interactedAt}
+                date={interactedAt || modifiedAt}
                 isRelative
                 messages={{
                     default: messages.viewedDate,
