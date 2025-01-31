@@ -31,7 +31,7 @@ const ItemGrid = ({ gridColumnCount = 1, items, ...rest }: ItemGridProps) => {
                 return (
                     <GridList.Item key={id} textValue={name}>
                         <GridList.Thumbnail>
-                            {isThumbnailAvailable(item) ? (
+                            {thumbnailUrl && isThumbnailAvailable(item) ? (
                                 <img alt={name} src={thumbnailUrl} />
                             ) : (
                                 <div className="be-ItemGrid-thumbnailIcon">

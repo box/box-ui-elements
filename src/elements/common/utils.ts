@@ -5,10 +5,6 @@ import { REPRESENTATIONS_RESPONSE_SUCCESS, REPRESENTATIONS_RESPONSE_VIEWABLE } f
 import type { BoxItem } from '../../common/types/core';
 
 const isThumbnailAvailable = (item: BoxItem) => {
-    if (!getProp(item, 'thumbnailUrl')) {
-        return false;
-    }
-
     const status = getProp(item, 'representations.entries[0].status.state');
     return status === REPRESENTATIONS_RESPONSE_SUCCESS || status === REPRESENTATIONS_RESPONSE_VIEWABLE;
 };
