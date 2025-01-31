@@ -1,7 +1,7 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { RecordActionType } from '@box/box-ai-agent-selector';
-import type { QuestionType } from '@box/box-ai-content-answers';
+import type { ItemType, QuestionType } from '@box/box-ai-content-answers';
 
 export interface BoxAISidebarContextValues {
     cache: { encodedSession?: string | null; questions?: QuestionType[] };
@@ -10,6 +10,7 @@ export interface BoxAISidebarContextValues {
     fileExtension: string;
     isFeedbackEnabled: boolean;
     isStopResponseEnabled: boolean;
+    items: Array<ItemType>;
     itemSize?: string;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
@@ -23,6 +24,7 @@ export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues
     fileExtension: '',
     isFeedbackEnabled: false,
     isStopResponseEnabled: false,
+    items: [],
     recordAction: noop,
     setCacheValue: noop,
     userInfo: { name: '', avatarURL: '' },

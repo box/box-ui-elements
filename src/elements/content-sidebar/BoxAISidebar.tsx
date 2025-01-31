@@ -4,14 +4,13 @@
  */
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { type QuestionType } from '@box/box-ai-content-answers';
+import { type ItemType, type QuestionType } from '@box/box-ai-content-answers';
 import { RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 
 import messages from '../common/content-answers/messages';
-
 
 export interface BoxAISidebarProps {
     contentName: string;
@@ -48,6 +47,7 @@ export interface BoxAISidebarProps {
     isResetChatEnabled: boolean;
     isStopResponseEnabled?: boolean;
     isStreamingEnabled: boolean;
+    items: Array<ItemType>;
     itemSize?: string;
     userInfo: { name: string; avatarURL: string };
     recordAction: (params: RecordActionType) => void;
@@ -65,6 +65,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         isIntelligentQueryMode,
         isFeedbackEnabled,
         isStopResponseEnabled,
+        items,
         itemSize,
         recordAction,
         setCacheValue,
@@ -81,6 +82,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             fileExtension,
             isFeedbackEnabled,
             isStopResponseEnabled,
+            items,
             itemSize,
             setCacheValue,
             recordAction,
@@ -93,6 +95,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             fileExtension,
             isFeedbackEnabled,
             isStopResponseEnabled,
+            items,
             itemSize,
             setCacheValue,
             recordAction,
