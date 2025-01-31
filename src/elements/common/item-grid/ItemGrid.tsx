@@ -1,52 +1,69 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
+import noop from 'lodash/noop';
 
 import { GridList } from '@box/blueprint-web';
 
-import DateValue from '../date-value';
-import IconCell from '../item/IconCell';
-import ItemOptions from '../item-options';
+import { ItemDate, ItemOptions, ItemTypeIcon } from '../item';
 import { isThumbnailAvailable } from '../utils';
+
+import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
 
 import messages from './messages';
 
-import type { BoxItem } from '../../../common/types/core';
-import type { ItemEventHandlers, ItemEventPermissions } from '../item-options/types';
+import type { BoxItem, View } from '../../../common/types/core';
+import type { ItemEventHandlers, ItemEventPermissions } from '../item';
 
 import './ItemGrid.scss';
 
 export interface ItemGridProps extends ItemEventHandlers, ItemEventPermissions {
     gridColumnCount?: number;
-    items: BoxItem;
+    isTouch?: boolean;
+    items: BoxItem[];
+    view: View;
 }
 
-const ItemGrid = ({ gridColumnCount = 1, items, ...rest }: ItemGridProps) => {
+const ItemGrid = ({
+    canPreview = false,
+    gridColumnCount = 1,
+    items,
+    isTouch = false,
+    onItemClick = noop,
+    view,
+    ...rest
+}: ItemGridProps) => {
     const { formatMessage } = useIntl();
 
     return (
-        <GridList style={{ gridTemplateColumns: `repeat(${gridColumnCount}, minmax(188px, 1fr))` }}>
+        <GridList
+            aria-label={formatMessage(messages.gridView)}
+            style={{ gridTemplateColumns: `repeat(${gridColumnCount}, minmax(188px, 1fr))` }}
+        >
             {items.map(item => {
-                const { id, modified_at: modifiedAt, modified_by: modifiedBy, name, thumbnailUrl } = item;
+                const { id, name, thumbnailUrl, type } = item;
+
+                const handleAction = () => {
+                    if (type === TYPE_FOLDER || (!isTouch && (type === TYPE_WEBLINK || canPreview))) {
+                        onItemClick(item);
+                    }
+                };
 
                 return (
-                    <GridList.Item key={id} textValue={name}>
+                    <GridList.Item key={id} onAction={handleAction} textValue={name}>
                         <GridList.Thumbnail>
                             {thumbnailUrl && isThumbnailAvailable(item) ? (
                                 <img alt={name} src={thumbnailUrl} />
                             ) : (
                                 <div className="be-ItemGrid-thumbnailIcon">
-                                    <IconCell rowData={item} />
+                                    <ItemTypeIcon item={item} />
                                 </div>
                             )}
                         </GridList.Thumbnail>
                         <GridList.Header>{name}</GridList.Header>
                         <GridList.Subtitle>
-                            {formatMessage(messages.modifiedDateBy, {
-                                date: <DateValue date={modifiedAt} isRelative />,
-                                name: modifiedBy.name,
-                            })}
+                            <ItemDate item={item} view={view} />
                         </GridList.Subtitle>
-                        <ItemOptions isGridView item={item} {...rest} />
+                        <ItemOptions canPreview={canPreview} isGridView item={item} {...rest} />
                     </GridList.Item>
                 );
             })}

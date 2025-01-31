@@ -15,9 +15,11 @@ export type ItemEventPermissions = {
 };
 
 export type ItemEventHandlers = {
+    onItemClick?: (item: BoxItem) => void;
     onItemDelete?: (item: BoxItem) => void;
     onItemDownload?: (item: BoxItem) => void;
     onItemPreview?: (item: BoxItem) => void;
     onItemRename?: (item: BoxItem) => void;
+    onItemSelect?: (item: BoxItem) => void;
     onItemShare?: (item: BoxItem) => void;
 };

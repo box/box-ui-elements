@@ -63,7 +63,6 @@ const Content = ({
     currentCollection,
     fieldsToShow = [],
     focusedRow,
-    isMedium,
     onSortChange,
     tableRef,
     view,
@@ -88,15 +87,14 @@ const Content = ({
             {!isViewEmpty && isListView && (
                 <ItemList
                     currentCollection={currentCollection}
-                    onSortChange={onSortChange}
                     focusedRow={focusedRow}
-                    isMedium={isMedium}
+                    onSortChange={onSortChange}
                     tableRef={tableRef}
                     view={view}
                     {...rest}
                 />
             )}
-            {!isViewEmpty && isGridView && <ItemGrid items={currentCollection.items} {...rest} />}
+            {!isViewEmpty && isGridView && <ItemGrid items={currentCollection.items} view={view} {...rest} />}
         </div>
     );
 };

@@ -1,10 +1,10 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    modifiedDateBy: {
-        id: 'be.gridView.modifiedDateBy',
-        description: 'Text for the subtitle of the grid item to indicate the modified date and modified user',
-        defaultMessage: '{date} by {name}',
+    gridView: {
+        id: 'be.itemGrid.gridView',
+        description: 'Label for the list of files and folders displayed in a grid view',
+        defaultMessage: 'Grid view',
     },
 });
 
