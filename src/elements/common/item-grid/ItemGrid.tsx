@@ -16,14 +16,15 @@ import type { ItemEventHandlers, ItemEventPermissions } from '../item-options/ty
 import './ItemGrid.scss';
 
 export interface ItemGridProps extends ItemEventHandlers, ItemEventPermissions {
+    gridColumnCount?: number;
     items: BoxItem;
 }
 
-const ItemGrid = ({ items, ...rest }: ItemGridProps) => {
+const ItemGrid = ({ gridColumnCount = 1, items, ...rest }: ItemGridProps) => {
     const { formatMessage } = useIntl();
 
     return (
-        <GridList>
+        <GridList style={{ gridTemplateColumns: `repeat(${gridColumnCount}, minmax(188px, 1fr))` }}>
             {items.map(item => {
                 const { id, modified_at: modifiedAt, modified_by: modifiedBy, name, thumbnailUrl } = item;
 

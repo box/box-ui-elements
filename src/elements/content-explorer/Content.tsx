@@ -63,7 +63,6 @@ const Content = ({
     currentCollection,
     fieldsToShow = [],
     focusedRow,
-    gridColumnCount = 1, // eslint-disable-line
     isMedium,
     onSortChange,
     tableRef,

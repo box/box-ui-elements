@@ -12,7 +12,7 @@ export interface DateValueProps {
     isRelative?: boolean;
 }
 
-const DateValue = ({ date, format = DEFAULT_DATE_FORMAT, isRelative }: DateValueProps) => {
+const DateValue = ({ date, format = DEFAULT_DATE_FORMAT, isRelative = false }: DateValueProps) => {
     const { formatDate, formatMessage } = useIntl();
     const dateObject = new Date(date);
 
