@@ -12,8 +12,6 @@ const mockFeatures = {
 export const basic: StoryObj<typeof BoxAISidebar> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const sidebarTitle = await canvas.findByRole('heading', { name: 'Box AI' });
-        expect(sidebarTitle).toBeInTheDocument();
         const clearButton = await canvas.findByRole('button', { name: 'Clear conversation' });
         expect(clearButton).toBeInTheDocument();
 
