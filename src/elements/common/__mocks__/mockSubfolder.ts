@@ -1,4 +1,4 @@
-const mockSubFolder = {
+const mockSubfolder = {
     type: 'folder',
     id: '73426618530',
     etag: '3',
@@ -154,4 +154,4 @@ const mockSubFolder = {
     },
 };
 
-export default mockSubFolder;
+export default mockSubfolder;
