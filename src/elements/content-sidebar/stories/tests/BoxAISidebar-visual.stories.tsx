@@ -3,7 +3,7 @@ import { type StoryObj } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
-import { mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
+import { mockFileRequest, mockUserRequest } from '../../../common/__mocks__/mockRequests';
 
 const mockFeatures = {
     'boxai.sidebar.enabled': true,
