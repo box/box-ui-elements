@@ -168,7 +168,10 @@ class SidebarUtils {
             case SIDEBAR_VIEW_METADATA:
                 return <FormattedMessage {...messages.sidebarMetadataTitle} />;
             case SIDEBAR_VIEW_BOXAI:
-                return <FormattedMessage {...messages.sidebarBoxAITitle} />;
+                // Box AI Sidebar title is not displayed in the BoxAISidebar component,
+                // and it also should not be visible as fallback before panel is loaded
+                // as that results in title flickering. So, returning empty string here.
+                return '';
             case SIDEBAR_VIEW_ACTIVITY:
                 return <FormattedMessage {...messages.sidebarActivityTitle} />;
             case SIDEBAR_VIEW_DOCGEN:

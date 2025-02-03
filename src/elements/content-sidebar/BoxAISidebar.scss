@@ -43,8 +43,8 @@ $agentSelectorSidebarWidth: 211px;
         }
 
         // Limit the width of Agent Selector to accomodate action buttons
-        .bcs-BoxAISidebar-agent-selector-container {
-            max-width: 217px;
+        .bcs-BoxAISidebar-agentSelector {
+            max-width: 279px;
         }
 
         @include breakpoint($medium-screen) {

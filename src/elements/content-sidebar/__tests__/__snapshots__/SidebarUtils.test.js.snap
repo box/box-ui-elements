@@ -11,12 +11,7 @@ exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return th
 />
 `;
 
-exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for boxai 1`] = `
-<FormattedMessage
-  defaultMessage="Box AI"
-  id="be.sidebarBoxAITitle"
-/>
-`;
+exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for boxai 1`] = `""`;
 
 exports[`elements/content-sidebar/SidebarUtil getTitleForView() should return the title for details 1`] = `
 <FormattedMessage
