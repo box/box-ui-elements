@@ -13,19 +13,26 @@ const docGenSidebarProps = {
     ),
 };
 
-const processAndResolveMock = jest.fn()
-.mockImplementationOnce(() => Promise.resolve({
-    message: "Processing tags for this file."
-}))
-.mockImplementationOnce(() => Promise.resolve({
-    pagination: {},
-    data: mockData,
-}));
+const processAndResolveMock = jest
+    .fn()
+    .mockImplementationOnce(() =>
+        Promise.resolve({
+            message: 'Processing tags for this file.',
+        }),
+    )
+    .mockImplementationOnce(() =>
+        Promise.resolve({
+            pagination: {},
+            data: mockData,
+        }),
+    );
 
 const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
-const processingTagsMock = jest.fn().mockReturnValue(Promise.resolve({
-    "message": "Processing tags for this file."
-}));
+const processingTagsMock = jest.fn().mockReturnValue(
+    Promise.resolve({
+        message: 'Processing tags for this file.',
+    }),
+);
 const errorTagsMock = jest.fn().mockRejectedValue([]);
 const noDataMock = jest.fn().mockReturnValue(Promise.resolve({}));
 
@@ -105,16 +112,11 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: processingTagsMock,
         });
 
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
+        const promises = [];
+        for (let i = 0; i < 10; i + 1) {
+            promises.push(jest.advanceTimersByTime(1000));
+        }
+        await Promise.all(promises);
 
         await waitFor(() => expect(processingTagsMock).toHaveBeenCalledTimes(10));
     });
@@ -132,7 +134,6 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         expect(parentTag).toBeVisible();
     });
-
 
     test('should re-trigger getDocGenTags on click on refresh button', async () => {
         renderComponent({

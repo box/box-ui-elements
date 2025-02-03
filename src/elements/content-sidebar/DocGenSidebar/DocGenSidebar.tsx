@@ -89,7 +89,7 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
     }, []);
 
     const loadTags = useCallback(
-        async (attempts = 10) => {
+        async (attempts = DEFAULT_RETRIES) => {
             if (attempts <= 0) {
                 setIsLoading(false);
                 return;
@@ -97,11 +97,11 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
             setIsLoading(true);
             try {
                 const response: DocGenTemplateTagsResponse = await getDocGenTags();
-                if (response.message) {
+                if (response?.message) {
                     setTimeout(() => {
                         loadTags.call(this, attempts - 1);
                     }, 1000);
-                } else if (response && !!response.data) {
+                } else if (response?.data) {
                     const { data } = response;
                     // anything that is not an image tag for this view is treated as a text tag
                     const textTags = data?.filter(tag => tag.tag_type !== 'image') || [];
