@@ -52,6 +52,7 @@ export default {
             isResetChatEnabled: true,
             isStopResponseEnabled: true,
             isStreamingEnabled: false,
+            items: [{ id: '123', name: 'Document (PDF).pdf', type: 'file', fileType: 'pdf', status: 'supported' }],
             recordAction: () => ({}),
         },
     },
