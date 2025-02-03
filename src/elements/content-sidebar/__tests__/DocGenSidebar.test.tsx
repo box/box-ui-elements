@@ -112,11 +112,16 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: processingTagsMock,
         });
 
-        const promises = [];
-        for (let i = 0; i < 10; i + 1) {
-            promises.push(jest.advanceTimersByTime(1000));
-        }
-        await Promise.all(promises);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
+        await jest.advanceTimersByTime(1000);
 
         await waitFor(() => expect(processingTagsMock).toHaveBeenCalledTimes(10));
     });
