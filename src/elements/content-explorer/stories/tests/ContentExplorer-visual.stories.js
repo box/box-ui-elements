@@ -4,6 +4,7 @@ import { expect, userEvent, waitFor, within, screen } from '@storybook/test';
 import ContentExplorer from '../../ContentExplorer';
 import { mockEmptyRootFolder, mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
 import mockSubfolder from '../../../common/__mocks__/mockSubfolder';
+import mockRecentItems from '../../../common/__mocks__/mockRecentItems';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
@@ -275,6 +276,9 @@ export default {
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
                     return new HttpResponse('Internal Server Error', { status: 500 });
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/recent_items`, () => {
+                    return HttpResponse.json(mockRecentItems);
                 }),
             ],
         },

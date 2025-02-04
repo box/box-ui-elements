@@ -1,11 +1,6 @@
-/**
- * @flow
- * @file Header bar
- * @author Box
- */
-
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
+import { SearchInput } from '@box/blueprint-web';
 import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
@@ -13,41 +8,45 @@ import type { View } from '../../../common/types/core';
 
 import './Header.scss';
 
-type Props = {
-    intl: any,
+type HeaderProps = {
     isHeaderLogoVisible?: boolean,
-    isSmall: boolean,
     logoUrl?: string,
-    onSearch: Function,
+    onSearch: any,
     searchQuery: string,
-    view: View,
+    view: View
 };
 
 // eslint-disable-next-line react/prop-types
-const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
-    const { formatMessage } = intl;
-    const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
+const Header = ({
+    isHeaderLogoVisible = true,
+    view,
+    searchQuery,
+    onSearch,
+    logoUrl,
+}: HeaderProps) => {
+    const { formatMessage } = useIntl();
     const searchMessage = formatMessage(messages.searchPlaceholder);
     const isFolder = view === VIEW_FOLDER;
     const isSearch = view === VIEW_SEARCH;
 
     return (
         <div className="be-header">
-            {isHeaderLogoVisible && <Logo isSmall={isSmall} url={logoUrl} />}
+            {isHeaderLogoVisible && <Logo url={logoUrl} />}
             <div className="be-search">
-                <input
-                    aria-label={searchMessage}
-                    data-testid="be-Header-searchInput"
+                <SearchInput
+                    className="my-class"
+                    defaultValue=""
                     disabled={!isFolder && !isSearch}
-                    onChange={search}
+                    onChange={onSearch}
                     placeholder={searchMessage}
-                    type="search"
+                    searchInputAriaLabel={searchMessage}
+                    searchInputClearAriaLabel={formatMessage(messages.searchClear)}
                     value={searchQuery}
+                    variant="global"
                 />
             </div>
         </div>
     );
 };
 
-export { Header as HeaderBase };
-export default injectIntl(Header);
+export default Header;
