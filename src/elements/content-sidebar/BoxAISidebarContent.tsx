@@ -24,7 +24,7 @@ import { withLogger } from '../common/logger';
 import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
-import { BoxAISidebarContext } from './BoxAISidebar';
+import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 
 import messages from '../common/messages';
 

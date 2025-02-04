@@ -3,37 +3,14 @@
  * @author Box
  */
 import * as React from 'react';
-import noop from 'lodash/noop';
 import { useIntl } from 'react-intl';
 import { type QuestionType } from '@box/box-ai-content-answers';
 import { RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
+import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 
 import messages from '../common/content-answers/messages';
-
-export interface BoxAISidebarContextValues {
-    cache: { encodedSession?: string | null; questions?: QuestionType[] };
-    contentName: string;
-    elementId: string;
-    fileExtension: string;
-    isStopResponseEnabled: boolean;
-    itemSize?: string;
-    recordAction: (params: RecordActionType) => void;
-    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
-    userInfo: { name: string; avatarURL: string };
-}
-
-export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues>({
-    cache: null,
-    contentName: '',
-    elementId: '',
-    fileExtension: '',
-    isStopResponseEnabled: false,
-    recordAction: noop,
-    setCacheValue: noop,
-    userInfo: { name: '', avatarURL: '' },
-});
 
 export interface BoxAISidebarProps {
     contentName: string;
@@ -107,7 +84,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     }, []);
 
     React.useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress,{ capture: true });
+        document.addEventListener('keydown', handleKeyPress, { capture: true });
         return () => {
             document.removeEventListener('keydown', handleKeyPress, { capture: true });
         };
