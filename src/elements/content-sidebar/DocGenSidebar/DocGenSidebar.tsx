@@ -98,9 +98,7 @@ const DocGenSidebar = ({ getDocGenTags }: Props) => {
             try {
                 const response: DocGenTemplateTagsResponse = await getDocGenTags();
                 if (response?.message) {
-                    setTimeout(() => {
-                        loadTags.call(this, attempts - 1);
-                    }, 1000);
+                    loadTags.call(this, attempts - 1);
                 } else if (response?.data) {
                     const { data } = response;
                     // anything that is not an image tag for this view is treated as a text tag

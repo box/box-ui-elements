@@ -112,17 +112,6 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
             getDocGenTags: processingTagsMock,
         });
 
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
-
         await waitFor(() => expect(processingTagsMock).toHaveBeenCalledTimes(10));
     });
 
@@ -130,9 +119,6 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         renderComponent({
             getDocGenTags: processAndResolveMock,
         });
-
-        await jest.advanceTimersByTime(1000);
-        await jest.advanceTimersByTime(1000);
 
         await waitFor(() => expect(processAndResolveMock).toHaveBeenCalledTimes(2));
         const parentTag = await screen.findByText('about');
