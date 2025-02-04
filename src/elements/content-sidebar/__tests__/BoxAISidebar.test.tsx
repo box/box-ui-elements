@@ -78,6 +78,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isAIStudioAgentSelectorEnabled: true,
         isCitationsEnabled: true,
         isDebugModeEnabled: true,
+        isFeedbackEnabled: true,
         isIntelligentQueryMode: true,
         isMarkdownEnabled: true,
         isResetChatEnabled: true,

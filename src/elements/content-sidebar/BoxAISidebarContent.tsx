@@ -56,7 +56,9 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         contentName,
         elementId,
         fileExtension,
+        isFeedbackEnabled,
         isStopResponseEnabled,
+        items,
         itemSize,
         recordAction,
         setCacheValue,
@@ -145,11 +147,12 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                     <div className="bcs-BoxAISidebar-content">
                         <BoxAiContentAnswers
                             className="bcs-BoxAISidebar-contentAnswers"
-                            contentName={contentName}
                             contentType={formatMessage(messages.sidebarBoxAIContent)}
                             hostAppName={hostAppName}
                             isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                            isFeedbackEnabled={isFeedbackEnabled}
                             isStopResponseEnabled={isStopResponseEnabled}
+                            items={items}
                             questions={questions}
                             stopQuestion={stopQuestion}
                             submitQuestion={sendQuestion}
@@ -168,6 +171,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                     hostAppName={hostAppName}
                     isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
                     isStopResponseEnabled={isStopResponseEnabled}
+                    items={items}
                     itemSize={itemSize}
                     onModalClose={handleModalClose}
                     onOpenChange={handleModalClose}
