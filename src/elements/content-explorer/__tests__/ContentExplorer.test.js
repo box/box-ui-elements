@@ -2,12 +2,13 @@ import React, { act } from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { mount } from 'enzyme';
 import noop from 'lodash/noop';
-import * as utils from '../utils';
 import { ContentExplorerComponent as ContentExplorer } from '../ContentExplorer';
 import UploadDialog from '../../common/upload-dialog';
+import { isThumbnailAvailable } from '../../common/utils';
 import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from '../constants';
 import { VIEW_MODE_GRID } from '../../../constants';
 
+jest.mock('../../common/utils');
 jest.mock('../../common/header/Header', () => 'mock-header');
 jest.mock('../../common/sub-header/SubHeader', () => 'mock-subheader');
 jest.mock('../Content', () => 'mock-content');
@@ -278,7 +279,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 });
             });
 
-            test('should not call attemptThumbnailGeneration if isThumbnailReady is true', () => {
+            test('should not call attemptThumbnailGeneration if isThumbnailAvailable is true', () => {
                 const getThumbnailUrl = jest.fn().mockReturnValue(null);
                 const getFileAPI = jest.fn().mockReturnValue({
                     getThumbnailUrl,
@@ -289,14 +290,14 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 instance.api = { getFileAPI };
                 instance.setState = jest.fn();
                 instance.attemptThumbnailGeneration = jest.fn();
-                utils.isThumbnailReady = jest.fn().mockReturnValue(true);
+                isThumbnailAvailable.mockReturnValue(true);
 
                 return instance.updateCollection(collection, item, callback).then(() => {
                     expect(instance.attemptThumbnailGeneration).not.toHaveBeenCalled();
                 });
             });
 
-            test('should call attemptThumbnailGeneration if isThumbnailReady is false', () => {
+            test('should call attemptThumbnailGeneration if isThumbnailAvailable is false', () => {
                 const getThumbnailUrl = jest.fn().mockReturnValue(thumbnailUrl);
                 const getFileAPI = jest.fn().mockReturnValue({
                     getThumbnailUrl,
@@ -307,7 +308,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 instance.api = { getFileAPI };
                 instance.setState = jest.fn();
                 instance.attemptThumbnailGeneration = jest.fn();
-                utils.isThumbnailReady = jest.fn().mockReturnValue(false);
+                isThumbnailAvailable.mockReturnValue(false);
 
                 return instance.updateCollection(collection, item, callback).then(() => {
                     expect(instance.attemptThumbnailGeneration).toHaveBeenCalled();
@@ -325,7 +326,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 instance.api = { getFileAPI };
                 instance.setState = jest.fn();
                 instance.attemptThumbnailGeneration = jest.fn();
-                utils.isThumbnailReady = jest.fn().mockReturnValue(false);
+                isThumbnailAvailable.mockReturnValue(false);
 
                 collection.items[0].type = 'folder';
                 return instance.updateCollection(collection, item, callback).then(() => {
