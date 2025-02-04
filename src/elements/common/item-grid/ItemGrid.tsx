@@ -37,6 +37,7 @@ const ItemGrid = ({
     return (
         <GridList
             aria-label={formatMessage(messages.gridView)}
+            className="be-ItemGrid"
             style={{ gridTemplateColumns: `repeat(${gridColumnCount}, minmax(188px, 1fr))` }}
         >
             {items.map(item => {

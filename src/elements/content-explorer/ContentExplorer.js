@@ -32,6 +32,7 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
+// $FlowFixMe TypeScript file
 import { isThumbnailAvailable } from '../common/utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
