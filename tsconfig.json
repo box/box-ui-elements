@@ -5,17 +5,15 @@
         "jsx": "react",
         "baseUrl": ".",
         "outDir": "es",
-        "allowJs": false,
+        "allowJs": false, // https://github.com/microsoft/TypeScript/issues/35470
         "checkJs": false,
         "rootDir": ".",
         "paths": {
             "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"],
             "react": ["node_modules/@types/react"]
         },
-        "strict": false,
-        "types": ["jest", "node", "@testing-library/jest-dom"],
-        "moduleResolution": "node"
+        "strict": false
     },
-    "files": [".storybook/typings.d.ts", "src/test-utils/jest-image-snapshot.d.ts"],
+    "files": [".storybook/typings.d.ts"],
     "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"]
 }

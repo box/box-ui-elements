@@ -1,6 +1,8 @@
+// @flow
+
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, type RenderResult } from '@testing-library/react';
 
 import { BaseCommentMenu } from '../BaseCommentMenu';
 import { baseCommmentMenuDefaultProps } from '../stories/common';
@@ -10,10 +12,10 @@ import messages from '../../messages';
 
 jest.mock('react-intl', () => ({
     ...jest.requireActual('react-intl'),
-    FormattedMessage: ({ defaultMessage }) => <span>{defaultMessage}</span>,
+    FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
 }));
 
-const openMenu = wrapper => {
+const openMenu = (wrapper: RenderResult) => {
     fireEvent.click(wrapper.queryByTestId('comment-actions-menu'));
 };
 

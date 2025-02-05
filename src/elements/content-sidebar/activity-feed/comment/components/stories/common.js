@@ -1,6 +1,10 @@
+// @flow
 import { TIME_STRING_SEPT_27_2017, user1 } from '../../stories/common';
 
-export const baseCommmentMenuDefaultProps = {
+import { type BaseCommentMenuProps } from '../BaseCommentMenu';
+import { type BaseCommentInfoProps } from '../BaseCommentInfo';
+
+export const baseCommmentMenuDefaultProps: BaseCommentMenuProps = {
     canDelete: true,
     canEdit: true,
     canResolve: true,
@@ -17,8 +21,8 @@ export const baseCommmentMenuDefaultProps = {
     onSelect: args => undefined,
 };
 
-export const baseCommmentInfoDefaultProps = {
+export const baseCommmentInfoDefaultProps: BaseCommentInfoProps = {
     created_at: TIME_STRING_SEPT_27_2017,
     created_by: user1,
-    getAvatarUrl: str => new Promise(() => str),
+    getAvatarUrl: (str: string) => new Promise(() => str),
 };
