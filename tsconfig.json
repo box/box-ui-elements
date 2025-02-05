@@ -12,8 +12,9 @@
             "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"],
             "react": ["node_modules/@types/react"]
         },
-        "strict": false
+        "strict": false,
+        "types": ["jest", "node", "@testing-library/jest-dom"]
     },
-    "files": [".storybook/typings.d.ts"],
+    "files": [".storybook/typings.d.ts", "src/test-utils/jest.d.ts"],
     "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"]
 }
