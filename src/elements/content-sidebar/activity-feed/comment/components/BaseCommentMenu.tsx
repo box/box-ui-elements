@@ -15,11 +15,9 @@ import Pencil16 from '../../../../../icon/line/Pencil16';
 import Trash16 from '../../../../../icon/line/Trash16';
 import X16 from '../../../../../icon/fill/X16';
 
-import { FeedItemStatus } from '../../../../../common/types/feed';
-import './BaseCommentMenu.scss';
+import type { FeedItemStatus } from '../../../../../common/types/feed';
 
-// DEVIN_TODO: Need proper types from @types/react-tether
-// Removed unused TetherProps interface as it's handled by @ts-expect-error
+import './BaseCommentMenu.scss';
 
 export interface BaseCommentMenuProps {
     canDelete: boolean;
@@ -35,6 +33,7 @@ export interface BaseCommentMenuProps {
     isResolved: boolean;
     onSelect: (isSelected: boolean) => void;
 }
+
 export const BaseCommentMenu = ({
     canDelete,
     canEdit,
