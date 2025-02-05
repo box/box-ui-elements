@@ -6,6 +6,7 @@ import HotkeyService from './HotkeyService';
 
 import Hotkeys from './Hotkeys';
 import HotkeyHelpModal from './HotkeyHelpModal'; // eslint-disable-line import/no-cycle
+import HotkeyContext from './HotKeyContext';
 
 import './HotkeyLayer.scss';
 
@@ -25,28 +26,17 @@ class HotkeyLayer extends Component {
         enableHelpModal: false,
     };
 
-    static contextTypes = {
-        hotkeyLayer: PropTypes.object,
-    };
-
-    static childContextTypes = {
-        hotkeyLayer: PropTypes.object,
-    };
-
     constructor(props) {
         super(props);
 
         this.hotkeyService = new HotkeyService();
-    }
 
-    state = {
-        isHelpModalOpen: false,
-    };
 
-    getChildContext() {
-        return {
+        // need to move this inside constructor so that we can access this.hotkeyService after it's initialized
+        this.state = {
+            isHelpModalOpen: false,
             hotkeyLayer: this.hotkeyService,
-        };
+        }
     }
 
     componentWillUnmount() {
@@ -85,16 +75,18 @@ class HotkeyLayer extends Component {
         const { children, className = '', enableHelpModal } = this.props;
 
         return (
-            <Hotkeys configs={this.getHotkeyConfigs()}>
-                {enableHelpModal ? (
-                    <span className={`hotkey-layer ${className}`}>
-                        <HotkeyHelpModal isOpen={this.state.isHelpModalOpen} onRequestClose={this.closeHelpModal} />
-                        {children}
-                    </span>
-                ) : (
-                    children
-                )}
-            </Hotkeys>
+            <HotkeyContext.Provider value={this.state}>
+                <Hotkeys configs={this.getHotkeyConfigs()}>
+                    {enableHelpModal ? (
+                        <span className={`hotkey-layer ${className}`}>
+                            <HotkeyHelpModal isOpen={this.state.isHelpModalOpen} onRequestClose={this.closeHelpModal} />
+                            {children}
+                        </span>
+                    ) : (
+                        children
+                    )}
+                </Hotkeys>
+            </HotkeyContext.Provider>
         );
     }
 }
