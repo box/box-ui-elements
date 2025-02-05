@@ -133,13 +133,23 @@ function getFileLastModifiedAsISONoMSIfPossible(file: UploadFile): ?string {
     // The compatibility chart at https://developer.mozilla.org/en-US/docs/Web/API/File/lastModified#Browser_compatibility
     // is not up to date as of 12-13-2018. Edge & ie11 do not support lastModified, but support lastModifiedDate.
     const lastModified = file.lastModified || file.lastModifiedDate;
-    if (
-        lastModified &&
-        (typeof lastModified === 'string' || typeof lastModified === 'number' || lastModified instanceof Date)
-    ) {
-        const lastModifiedDate = new Date(lastModified);
-        if (isValidDateObject(lastModifiedDate)) {
-            return toISOStringNoMS(lastModifiedDate);
+    if (lastModified) {
+        let lastModifiedDate: Date | null = null;
+
+        if (typeof lastModified === 'number') {
+            // Only non-negative timestamps are valid. In rare cases, the timestamp may be erroneously set to a negative value
+            // https://issues.chromium.org/issues/393149335
+            if (lastModified < 0) {
+                return null;
+            }
+            lastModifiedDate = new Date(lastModified); // Try number first
+        } else if (typeof lastModified === 'string' || lastModified instanceof Date) {
+            lastModifiedDate = new Date(lastModified);
+        }
+
+        if (lastModifiedDate && isValidDateObject(lastModifiedDate)) {
+            const isoString = toISOStringNoMS(lastModifiedDate);
+            return isoString;
         }
     }
 
