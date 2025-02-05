@@ -5,7 +5,7 @@
         "jsx": "react",
         "baseUrl": ".",
         "outDir": "es",
-        "allowJs": false, // https://github.com/microsoft/TypeScript/issues/35470
+        "allowJs": false,
         "checkJs": false,
         "rootDir": ".",
         "paths": {
