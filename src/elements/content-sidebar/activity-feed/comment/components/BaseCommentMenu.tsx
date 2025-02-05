@@ -111,7 +111,6 @@ export const BaseCommentMenu = ({
                     </MenuItem>
                 )}
             </Media.Menu>
-
             {isConfirmingDelete && (
                 <DeleteConfirmation
                     data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
