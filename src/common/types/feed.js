@@ -1,4 +1,4 @@
-// @flow strict
+// @flow
 import type { MessageDescriptor } from 'react-intl';
 import {
     ACTIVITY_FILTER_OPTION_ALL,

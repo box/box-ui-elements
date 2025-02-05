@@ -1,13 +1,12 @@
-// @flow
 import * as React from 'react';
-
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
+import type { ITetherConstraint } from 'tether';
 
-import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
+import { ACTIVITY_TARGETS, ActivityTargetType } from '../../../../common/interactionTargets';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../../constants';
 import { MenuItem } from '../../../../../components/menu';
-
+import type { FeedItemStatus } from '../../../../../common/types/feed';
 import Checkmark16 from '../../../../../icon/line/Checkmark16';
 import DeleteConfirmation from '../../common/delete-confirmation';
 import Media from '../../../../../components/media';
@@ -16,14 +15,13 @@ import Pencil16 from '../../../../../icon/line/Pencil16';
 import Trash16 from '../../../../../icon/line/Trash16';
 import X16 from '../../../../../icon/fill/X16';
 
-import type { FeedItemStatus } from '../../../../../common/types/feed';
-
 import './BaseCommentMenu.scss';
 
 export interface BaseCommentMenuProps {
-    canDelete: boolean;
-    canEdit: boolean;
-    canResolve: boolean;
+    canDelete?: boolean;
+    canEdit?: boolean;
+    canResolve?: boolean;
+    className?: string;
     handleDeleteCancel: () => void;
     handleDeleteClick: () => void;
     handleDeleteConfirm: () => void;
@@ -52,19 +50,22 @@ export const BaseCommentMenu = ({
         <TetherComponent
             attachment="top right"
             className="bcs-Comment-deleteConfirmationModal"
-            constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+            constraints={[{ to: 'scrollParent', attachment: 'together' }] as ITetherConstraint[]}
             targetAttachment="bottom right"
+            renderElementTag="div"
+            renderElementTo="body"
         >
             <Media.Menu
                 data-testid="comment-actions-menu"
                 dropdownProps={{
                     onMenuOpen: () => onSelect(true),
                     onMenuClose: handleMenuClose,
+                    constrainToScrollParent: true,
                 }}
                 className="BaseCommentMenu"
                 isDisabled={isConfirmingDelete}
                 menuProps={{
-                    'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
+                    'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS as ActivityTargetType,
                 }}
             >
                 {canResolve && isResolved && (

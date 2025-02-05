@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import uniqueId from 'lodash/uniqueId';
 import getProp from 'lodash/get';
 import TetherComponent from 'react-tether';
+import * as Tether from 'tether';
 
 import TetherPosition from '../../common/tether-positions';
 import CloseButton from './CloseButton';
@@ -263,7 +264,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         const withCloseButton = showCloseButton && isControlled;
         const tetherPosition = typeof position === 'string' ? positions[position] : position;
-        const constraints = [];
+        const constraints: Tether.ITetherConstraint[] = [];
         const componentProps: {
             [key: string]:
                 | string
@@ -316,7 +317,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
             attachment: TetherPosition;
             bodyElement: HTMLElement;
             classPrefix: string;
-            constraints: {};
+            constraints: Tether.ITetherConstraint[];
             enabled: boolean | undefined;
             targetAttachment: TetherPosition;
             offset?: string;

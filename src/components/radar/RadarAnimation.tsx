@@ -1,6 +1,7 @@
 import * as React from 'react';
 import uniqueId from 'lodash/uniqueId';
 import TetherComponent from 'react-tether';
+import * as Tether from 'tether';
 
 import './RadarAnimation.scss';
 
@@ -107,7 +108,7 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
             ...rest
         } = this.props;
 
-        const constraints = [];
+        const constraints: Tether.ITetherConstraint[] = [];
         if (constrainToScrollParent) {
             constraints.push({
                 to: 'scrollParent',
@@ -132,7 +133,7 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
             attachment: string;
             className?: string;
             classPrefix: string;
-            constraints: {};
+            constraints: Tether.ITetherConstraint[];
             targetAttachment: string;
             offset?: string;
         } = {
