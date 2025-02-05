@@ -1,6 +1,8 @@
+// @flow
+
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
-import { fireEvent, render, RenderResult } from '@testing-library/react';
+import { fireEvent, render, type RenderResult } from '@testing-library/react';
 
 import { BaseCommentMenu } from '../BaseCommentMenu';
 import { baseCommmentMenuDefaultProps } from '../stories/common';
@@ -14,10 +16,10 @@ jest.mock('react-intl', () => ({
 }));
 
 const openMenu = (wrapper: RenderResult) => {
-    fireEvent.click(wrapper.queryByTestId('comment-actions-menu')!);
+    fireEvent.click(wrapper.queryByTestId('comment-actions-menu'));
 };
 
-const getWrapper = (props: Partial<React.ComponentProps<typeof BaseCommentMenu>>) =>
+const getWrapper = props =>
     render(
         <IntlProvider locale="en">
             <BaseCommentMenu {...baseCommmentMenuDefaultProps} {...props} />
@@ -33,7 +35,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentMenu', () => 
         ${'canEdit'}    | ${false} | ${localize(messages.commentEditMenuItem.id)}
         ${'canDelete'}  | ${true}  | ${localize(messages.commentDeleteMenuItem.id)}
         ${'canDelete'}  | ${false} | ${localize(messages.commentDeleteMenuItem.id)}
-    `('should render appropriate menu items when $prop is $value', ({ prop, value, message }) => {
+    `(`should render appropriate menu items when $prop is $value`, ({ prop, value, message }) => {
         const wrapper = getWrapper({ [prop]: value });
         openMenu(wrapper);
         if (value) {
@@ -50,7 +52,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentMenu', () => 
         ${true}    | ${false}   | ${'should NOT'}
         ${false}   | ${false}   | ${'should NOT'}
     `(
-        '$should render unresolve menu item when canResolve us $canResolve and isResolved is $isResolved',
+        `$should render unresolve menu item when canResolve us $canResolve and isResolved is $isResolved`,
         ({ canResolve, isResolved, should }) => {
             const wrapper = getWrapper({ canResolve, isResolved });
             const message = localize(messages.commentUnresolveMenuItem.id);
@@ -68,7 +70,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentMenu', () => 
         ${true}            | ${'should'}
         ${false}           | ${'should NOT'}
     `(
-        '$should render delete confirmation modal when isConfirmingDelete is $isConfirmingDelete',
+        `$should render delete confirmation modal when isConfirmingDelete is $isConfirmingDelete`,
         ({ isConfirmingDelete, should }) => {
             const wrapper = getWrapper({ isConfirmingDelete });
             const message = localize(messages.commentDeletePrompt.id);

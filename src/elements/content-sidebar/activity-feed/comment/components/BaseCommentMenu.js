@@ -1,19 +1,20 @@
+// @flow
 import * as React from 'react';
+
 import { FormattedMessage } from 'react-intl';
 import TetherComponent from 'react-tether';
+
+import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
+import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../../constants';
+import { MenuItem } from '../../../../../components/menu';
 
 import Checkmark16 from '../../../../../icon/line/Checkmark16';
 import DeleteConfirmation from '../../common/delete-confirmation';
 import Media from '../../../../../components/media';
+import messages from '../messages';
 import Pencil16 from '../../../../../icon/line/Pencil16';
 import Trash16 from '../../../../../icon/line/Trash16';
 import X16 from '../../../../../icon/fill/X16';
-import { MenuItem } from '../../../../../components/menu';
-
-import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
-import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../../constants';
-
-import messages from '../messages';
 
 import type { FeedItemStatus } from '../../../../../common/types/feed';
 
@@ -33,7 +34,6 @@ export interface BaseCommentMenuProps {
     isResolved: boolean;
     onSelect: (isSelected: boolean) => void;
 }
-
 export const BaseCommentMenu = ({
     canDelete,
     canEdit,
@@ -50,7 +50,6 @@ export const BaseCommentMenu = ({
 }: BaseCommentMenuProps) => {
     return (
         <TetherComponent
-            // @ts-expect-error Awaiting proper types from @types/react-tether
             attachment="top right"
             className="bcs-Comment-deleteConfirmationModal"
             constraints={[{ to: 'scrollParent', attachment: 'together' }]}
@@ -111,6 +110,7 @@ export const BaseCommentMenu = ({
                     </MenuItem>
                 )}
             </Media.Menu>
+
             {isConfirmingDelete && (
                 <DeleteConfirmation
                     data-resin-component={ACTIVITY_TARGETS.COMMENT_OPTIONS}
