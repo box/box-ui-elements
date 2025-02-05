@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {
+    FileAdobeExpress,
     FileAudio,
     FileBookmark,
     FileBoxNote,
@@ -34,13 +35,13 @@ import {
     FileXbd,
     FileXdw,
     FileZip,
-    FileAdobeExpress,
 } from '@box/blueprint-web-assets/icons/Content';
 import { useIntl } from 'react-intl';
 
 import messages from '../../elements/common/messages';
 
 const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element } = {
+    FileAdobeExpress,
     FileAudio,
     FileBookmark,
     FileBoxNote,
@@ -75,7 +76,6 @@ const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => JSX
     FileXbd,
     FileXdw,
     FileZip,
-    FileAdobeExpress,
 };
 
 const mirror = (values: Array<string>) =>
