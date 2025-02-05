@@ -88,7 +88,7 @@ export const BaseCommentMenu = ({
                         <FormattedMessage {...messages.commentResolveMenuItem} />
                     </MenuItem>
                 )}
-                {canEdit && (
+                {canEdit && !isResolved && (
                     <MenuItem
                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                         data-testid="edit-comment"

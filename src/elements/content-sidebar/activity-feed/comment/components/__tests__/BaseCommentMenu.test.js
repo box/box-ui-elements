@@ -66,6 +66,24 @@ describe('elements/content-sidebar/ActivityFeed/comment/BaseCommentMenu', () => 
     );
 
     test.each`
+        canEdit | isResolved | should
+        ${true} | ${false}   | ${'should'}
+        ${true} | ${true}    | ${'should NOT'}
+    `(
+        `$should render modify menu item when isResolved is $isResolved and canEdit is $canEdit`,
+        ({ canEdit, isResolved, should }) => {
+            const wrapper = getWrapper({ canEdit, isResolved });
+            const message = localize(messages.commentEditMenuItem.id);
+            openMenu(wrapper);
+            if (should === 'should') {
+                expect(wrapper.getByText(message)).toBeInTheDocument();
+            } else {
+                expect(wrapper.queryByText(message)).not.toBeInTheDocument();
+            }
+        },
+    );
+
+    test.each`
         isConfirmingDelete | should
         ${true}            | ${'should'}
         ${false}           | ${'should NOT'}
