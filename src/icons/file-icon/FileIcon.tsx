@@ -34,6 +34,7 @@ import {
     FileXbd,
     FileXdw,
     FileZip,
+    FileAdobeExpress,
 } from '@box/blueprint-web-assets/icons/Content';
 import { useIntl } from 'react-intl';
 
@@ -74,6 +75,7 @@ const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => JSX
     FileXbd,
     FileXdw,
     FileZip,
+    FileAdobeExpress,
 };
 
 const mirror = (values: Array<string>) =>
@@ -83,6 +85,7 @@ const mirror = (values: Array<string>) =>
     }, {});
 
 export const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
+    FileAdobeExpress: mirror(['adobeexpress']),
     FileAudio: mirror([
         'aac',
         'aif',
