@@ -18,7 +18,34 @@ import X16 from '../../../../../icon/fill/X16';
 import { FeedItemStatus } from '../../../../../common/types/feed';
 import './BaseCommentMenu.scss';
 
+interface MenuProps {
+    'data-resin-component'?: string;
+}
+
+interface DropdownProps {
+    onMenuOpen: () => void;
+    onMenuClose: () => void;
+}
+
+interface MenuItemProps {
+    className?: string;
+    'data-resin-target'?: string;
+    'data-testid'?: string;
+    'aria-label'?: string;
+    onClick: () => void;
+    children: React.ReactNode;
+}
+
+interface DeleteConfirmationProps {
+    'data-resin-component'?: string;
+    isOpen: boolean;
+    message: { id: string; defaultMessage: string };
+    onDeleteCancel: () => void;
+    onDeleteConfirm: () => void;
+}
+
 // DEVIN_TODO: Need proper types from @types/react-tether
+// Removed unused TetherProps interface as it's handled by @ts-expect-error
 
 export interface BaseCommentMenuProps {
     canDelete: boolean;
@@ -58,15 +85,19 @@ export const BaseCommentMenu = ({
         >
             <Media.Menu
                 data-testid="comment-actions-menu"
-                dropdownProps={{
-                    onMenuOpen: () => onSelect(true),
-                    onMenuClose: handleMenuClose,
-                }}
+                dropdownProps={
+                    {
+                        onMenuOpen: () => onSelect(true),
+                        onMenuClose: handleMenuClose,
+                    } as DropdownProps
+                }
                 className="BaseCommentMenu"
                 isDisabled={isConfirmingDelete}
-                menuProps={{
-                    'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
-                }}
+                menuProps={
+                    {
+                        'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
+                    } as MenuProps
+                }
             >
                 {canResolve && isResolved && (
                     <MenuItem
@@ -74,6 +105,7 @@ export const BaseCommentMenu = ({
                         data-resin-target={ACTIVITY_TARGETS.COMMENT_OPTIONS_EDIT}
                         data-testid="unresolve-comment"
                         onClick={() => handleStatusUpdate(COMMENT_STATUS_OPEN)}
+                        {...({} as MenuItemProps)}
                     >
                         <X16 />
                         <FormattedMessage {...messages.commentUnresolveMenuItem} />
@@ -119,6 +151,7 @@ export const BaseCommentMenu = ({
                     message={messages.commentDeletePrompt}
                     onDeleteCancel={handleDeleteCancel}
                     onDeleteConfirm={handleDeleteConfirm}
+                    {...({} as DeleteConfirmationProps)}
                 />
             )}
         </TetherComponent>
