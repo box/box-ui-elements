@@ -57,12 +57,12 @@ export const BaseCommentMenu = ({
             targetAttachment="bottom right"
         >
             <Media.Menu
+                className="bcs-BaseCommentMenu"
                 data-testid="comment-actions-menu"
                 dropdownProps={{
-                    onMenuOpen: () => onSelect(true),
                     onMenuClose: handleMenuClose,
+                    onMenuOpen: () => onSelect(true),
                 }}
-                className="BaseCommentMenu"
                 isDisabled={isConfirmingDelete}
                 menuProps={{
                     'data-resin-component': ACTIVITY_TARGETS.COMMENT_OPTIONS,
