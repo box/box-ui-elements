@@ -5,12 +5,9 @@
  */
 
 import * as React from 'react';
-import PlainButton from '../../../components/plain-button/PlainButton';
-import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
-import Menu from '../../../components/menu/Menu';
-import MenuItem from '../../../components/menu/MenuItem';
+import { DropdownMenu, IconButton } from '@box/blueprint-web';
+import { Ellipsis } from '@box/blueprint-web-assets/icons/Fill';
 import type { Crumb } from '../../../common/types/core';
-import './BreadcrumbDropdown.scss';
 
 type Props = {
     className: string,
@@ -18,19 +15,19 @@ type Props = {
     onCrumbClick: Function,
 };
 
-const BreadcrumbDropdown = ({ crumbs, onCrumbClick, className = '' }: Props) => (
-    <DropdownMenu constrainToScrollParent>
-        <PlainButton className={`be-breadcrumbs-drop-down ${className}`} type="button">
-            ···
-        </PlainButton>
-        <Menu>
+const BreadcrumbDropdown = ({ crumbs, onCrumbClick }: Props) => (
+    <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+            <IconButton icon={Ellipsis} />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
             {crumbs.map(({ id, name }: Crumb) => (
-                <MenuItem key={id} onClick={() => onCrumbClick(id)}>
+                <DropdownMenu.Item key={id} onClick={() => onCrumbClick(id)}>
                     {name}
-                </MenuItem>
+                </DropdownMenu.Item>
             ))}
-        </Menu>
-    </DropdownMenu>
+        </DropdownMenu.Content>
+    </DropdownMenu.Root>
 );
 
 export default BreadcrumbDropdown;

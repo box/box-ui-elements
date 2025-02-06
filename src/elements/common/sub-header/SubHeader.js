@@ -6,11 +6,12 @@
 
 import * as React from 'react';
 import noop from 'lodash/noop';
+import { PageHeader } from '@box/blueprint-web';
 import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
-import { VIEW_MODE_LIST } from '../../../constants';
 import type { View, Collection } from '../../../common/types/core';
+import { VIEW_MODE_LIST } from '../../../constants';
 
 import './SubHeader.scss';
 
@@ -55,32 +56,36 @@ const SubHeader = ({
     view,
     viewMode = VIEW_MODE_LIST,
 }: Props) => (
-    <div className="be-sub-header" data-testid="be-sub-header">
-        <SubHeaderLeft
-            currentCollection={currentCollection}
-            isSmall={isSmall}
-            onItemClick={onItemClick}
-            rootId={rootId}
-            rootName={rootName}
-            view={view}
-        />
-        <SubHeaderRight
-            canCreateNewFolder={canCreateNewFolder}
-            canUpload={canUpload}
-            currentCollection={currentCollection}
-            gridColumnCount={gridColumnCount}
-            gridMaxColumns={gridMaxColumns}
-            gridMinColumns={gridMinColumns}
-            maxGridColumnCountForWidth={maxGridColumnCountForWidth}
-            onCreate={onCreate}
-            onGridViewSliderChange={onGridViewSliderChange}
-            onSortChange={onSortChange}
-            onUpload={onUpload}
-            onViewModeChange={onViewModeChange}
-            view={view}
-            viewMode={viewMode}
-        />
-    </div>
+    <PageHeader.Root className="be-sub-header" data-testid="be-sub-header">
+        <PageHeader.StartElements>
+            <SubHeaderLeft
+                currentCollection={currentCollection}
+                isSmall={isSmall}
+                onItemClick={onItemClick}
+                rootId={rootId}
+                rootName={rootName}
+                view={view}
+            />
+        </PageHeader.StartElements>
+        <PageHeader.EndElements>
+            <SubHeaderRight
+                canCreateNewFolder={canCreateNewFolder}
+                canUpload={canUpload}
+                currentCollection={currentCollection}
+                gridColumnCount={gridColumnCount}
+                gridMaxColumns={gridMaxColumns}
+                gridMinColumns={gridMinColumns}
+                maxGridColumnCountForWidth={maxGridColumnCountForWidth}
+                onCreate={onCreate}
+                onGridViewSliderChange={onGridViewSliderChange}
+                onSortChange={onSortChange}
+                onUpload={onUpload}
+                onViewModeChange={onViewModeChange}
+                view={view}
+                viewMode={viewMode}
+            />
+        </PageHeader.EndElements>
+    </PageHeader.Root>
 );
 
 export default SubHeader;

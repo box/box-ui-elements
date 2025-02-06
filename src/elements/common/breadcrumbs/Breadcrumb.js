@@ -5,9 +5,10 @@
  */
 
 import * as React from 'react';
-import PlainButton from '../../../components/plain-button/PlainButton';
+import { TextButton } from '@box/blueprint-web';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
 import type { Delimiter } from '../../../common/types/core';
+
 import './Breadcrumb.scss';
 
 type Props = {
@@ -19,9 +20,9 @@ type Props = {
 
 const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: Props) => {
     const title = onClick ? (
-        <PlainButton onClick={onClick} type="button" className="bdl-Breadcrumb-title">
+        <TextButton className="bdl-Breadcrumb-title" inheritFont onClick={onClick}>
             {name}
-        </PlainButton>
+        </TextButton>
     ) : (
         <div className="bdl-Breadcrumb-title">{name}</div>
     );

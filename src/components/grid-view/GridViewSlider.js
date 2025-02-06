@@ -1,25 +1,22 @@
 // @flow
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
-import IconPlusThin from '../../icons/general/IconPlusThin';
-import IconMinusThin from '../../icons/general/IconMinusThin';
-import PlainButton from '../plain-button/PlainButton';
-import messages from '../../elements/common/messages';
-import { bdlGray50 } from '../../styles/variables';
+import { useIntl } from 'react-intl';
+import { Slider } from '@box/blueprint-web';
+
 import './GridViewSlider.scss';
+
+import messages from '../../elements/common/messages';
 
 type Props = {
     columnCount: number,
     gridMaxColumns: number,
     gridMinColumns: number,
-    intl: IntlShape,
     maxColumnCount: number,
     onChange: (newSliderValue: number) => void,
 };
 
-const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, intl, maxColumnCount, onChange }: Props) => {
-    const { formatMessage } = intl;
+const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, maxColumnCount, onChange }: Props) => {
+    const { formatMessage } = useIntl();
     const RANGE_STEP = 1;
 
     // This math is necessary since the highest value of the slider should result in
@@ -30,43 +27,21 @@ const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, intl, max
 
     return (
         gridMinColumns < maxColumnCount && (
-            <div className="bdl-GridViewSlider">
-                <PlainButton
-                    className="bdl-GridViewSlider-button"
-                    onClick={() => {
-                        onChange(Math.max(RANGE_MIN, sliderValue - RANGE_STEP));
-                    }}
-                    type="button"
-                    aria-label={formatMessage(messages.gridViewDecreaseColumnSize)}
-                >
-                    <IconMinusThin color={bdlGray50} width={14} height={14} />
-                </PlainButton>
-                <input
-                    aria-label={formatMessage(messages.gridViewColumnSize)}
-                    className="bdl-GridViewSlider-range"
+            <div>
+                <Slider
+                    className="bdl-GridViewSlider"
                     max={RANGE_MAX}
                     min={RANGE_MIN}
-                    onChange={event => {
-                        onChange(event.currentTarget.valueAsNumber);
-                    }}
+                    minusButtonLabel={formatMessage(messages.gridViewDecreaseColumnSize)}
+                    onValueChange={onChange}
+                    plusButtonLabel={formatMessage(messages.gridViewIncreaseColumnSize)}
                     step={RANGE_STEP}
-                    type="range"
                     value={sliderValue}
                 />
-                <PlainButton
-                    className="bdl-GridViewSlider-button"
-                    onClick={() => {
-                        onChange(Math.min(RANGE_MAX, sliderValue + RANGE_STEP));
-                    }}
-                    type="button"
-                    aria-label={formatMessage(messages.gridViewIncreaseColumnSize)}
-                >
-                    <IconPlusThin color={bdlGray50} width={14} height={14} />
-                </PlainButton>
             </div>
         )
     );
 };
 
 export { GridViewSlider as GridViewSliderBase };
-export default injectIntl(GridViewSlider);
+export default GridViewSlider;

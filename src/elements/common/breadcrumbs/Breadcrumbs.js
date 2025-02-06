@@ -5,20 +5,21 @@
  */
 
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
+
 import Breadcrumb from './Breadcrumb';
 import BreadcrumbDropdown from './BreadcrumbDropdown';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
-import { DELIMITER_CARET, DEFAULT_ROOT, DELIMITER_SLASH } from '../../../constants';
-import messages from '../messages';
 import type { Delimiter, Crumb } from '../../../common/types/core';
+import { DELIMITER_CARET, DEFAULT_ROOT, DELIMITER_SLASH } from '../../../constants';
+
 import './Breadcrumbs.scss';
+
+import messages from '../messages';
 
 type Props = {
     crumbs: Crumb[],
     delimiter: Delimiter,
-    intl: IntlShape,
     isSmall?: boolean,
     onCrumbClick: Function,
     rootId: string,
@@ -65,7 +66,9 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
     return <Breadcrumb delimiter={delimiter} isLast={isLast} name={name} onClick={() => onCrumbClick(id)} />;
 }
 
-const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false, intl }: Props) => {
+const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: Props) => {
+    const { formatMessage } = useIntl();
+
     if (!rootId || crumbs.length === 0) {
         return <span />;
     }
@@ -76,7 +79,7 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false,
     // Make sure "All Files" crumb is localized
     const defaultRootCrumb = filteredCrumbs.find(({ id }) => id === DEFAULT_ROOT);
     if (defaultRootCrumb) {
-        defaultRootCrumb.name = intl.formatMessage(messages.rootBreadcrumb);
+        defaultRootCrumb.name = formatMessage(messages.rootBreadcrumb);
     }
 
     const { length } = filteredCrumbs;
@@ -108,4 +111,4 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false,
 };
 
 export { Breadcrumbs as BreadcrumbsBase };
-export default injectIntl(Breadcrumbs);
+export default Breadcrumbs;

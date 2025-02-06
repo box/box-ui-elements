@@ -23,21 +23,4 @@ describe('components/grid-view/GridViewSlider', () => {
         const wrapper = getWrapper();
         expect(wrapper).toMatchSnapshot();
     });
-
-    test('should use aria-label prop', () => {
-        const wrapper = getWrapper();
-        expect(wrapper.find('input').prop('aria-label')).toBe('Column size');
-        expect(
-            wrapper
-                .find('PlainButton')
-                .at(0)
-                .prop('aria-label'),
-        ).toBe('Decrease column size');
-        expect(
-            wrapper
-                .find('PlainButton')
-                .at(1)
-                .prop('aria-label'),
-        ).toBe('Increase column size');
-    });
 });
