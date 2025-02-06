@@ -13,11 +13,39 @@ const docGenSidebarProps = {
     ),
 };
 
+const processAndResolveMock = jest
+    .fn()
+    .mockImplementationOnce(() =>
+        Promise.resolve({
+            message: 'Processing tags for this file.',
+        }),
+    )
+    .mockImplementationOnce(() =>
+        Promise.resolve({
+            pagination: {},
+            data: mockData,
+        }),
+    );
+
 const noTagsMock = jest.fn().mockReturnValue(Promise.resolve({ data: [] }));
+const processingTagsMock = jest.fn().mockReturnValue(
+    Promise.resolve({
+        message: 'Processing tags for this file.',
+    }),
+);
 const errorTagsMock = jest.fn().mockRejectedValue([]);
 const noDataMock = jest.fn().mockReturnValue(Promise.resolve({}));
 
 describe('elements/content-sidebar/DocGenSidebar', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+        jest.clearAllMocks();
+    });
+
     const renderComponent = (props = {}) =>
         render(<DocGenSidebar logger={{ onReadyMetric: jest.fn() }} {...docGenSidebarProps} {...props} />);
 
@@ -72,9 +100,30 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
 
         expect(await screen.findByRole('status', { name: 'Loading' })).toBeInTheDocument();
 
+        jest.advanceTimersByTime(1000);
+
         await waitFor(() => {
             expect(screen.queryByRole('status', { name: 'Loading' })).not.toBeInTheDocument();
         });
+    });
+
+    test('should re-trigger loadTags if the template is still processing', async () => {
+        renderComponent({
+            getDocGenTags: processingTagsMock,
+        });
+
+        await waitFor(() => expect(processingTagsMock).toHaveBeenCalledTimes(10));
+    });
+
+    test('should re-trigger loadTags retrigger and successfully display the tags', async () => {
+        renderComponent({
+            getDocGenTags: processAndResolveMock,
+        });
+
+        await waitFor(() => expect(processAndResolveMock).toHaveBeenCalledTimes(2));
+        const parentTag = await screen.findByText('about');
+
+        expect(parentTag).toBeVisible();
     });
 
     test('should re-trigger getDocGenTags on click on refresh button', async () => {
@@ -88,7 +137,7 @@ describe('elements/content-sidebar/DocGenSidebar', () => {
         const refreshButton = screen.getByRole('button', { name: 'Process document' });
         fireEvent.click(refreshButton);
 
-        await waitFor(() => expect(errorTagsMock).toBeCalledTimes(2));
+        await waitFor(() => expect(errorTagsMock).toHaveBeenCalledTimes(2));
     });
 
     test('should handle undefined data', async () => {

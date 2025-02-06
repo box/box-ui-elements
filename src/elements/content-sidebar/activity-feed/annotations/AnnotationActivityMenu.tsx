@@ -1,7 +1,7 @@
-// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+
 import DropdownMenu from '../../../../components/dropdown-menu';
 import Checkmark16 from '../../../../icon/fill/Checkmark16';
 import IconEllipsis from '../../../../icons/general/IconEllipsis';
@@ -9,28 +9,33 @@ import Pencil16 from '../../../../icon/line/Pencil16';
 import PlainButton from '../../../../components/plain-button';
 import Trash16 from '../../../../icon/line/Trash16';
 import X16 from '../../../../icon/fill/X16';
+import { ButtonType } from '../../../../components/button';
 import { Menu, MenuItem } from '../../../../components/menu';
+
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { COMMENT_STATUS_OPEN, COMMENT_STATUS_RESOLVED } from '../../../../constants';
 import { bdlGray50 } from '../../../../styles/variables';
-import type { FeedItemStatus } from '../../../../common/types/feed';
+
 import messages from './messages';
+
+import type { FeedItemStatus } from '../../../../common/types/feed';
+
 import './AnnotationActivityMenu.scss';
 
-type AnnotationActivityMenuProps = {
-    canDelete?: boolean,
-    canEdit?: boolean,
-    canResolve?: boolean,
-    className?: string,
-    id: string,
-    isDisabled?: boolean,
-    onDelete: () => void,
-    onEdit: () => void,
-    onMenuClose: () => void,
-    onMenuOpen: () => void,
-    onStatusChange: (newStatus: FeedItemStatus) => void,
-    status?: FeedItemStatus,
-};
+export interface AnnotationActivityMenuProps {
+    canDelete?: boolean;
+    canEdit?: boolean;
+    canResolve?: boolean;
+    className?: string;
+    id: string;
+    isDisabled?: boolean;
+    onDelete: () => void;
+    onEdit: () => void;
+    onMenuClose: () => void;
+    onMenuOpen: () => void;
+    onStatusChange: (newStatus: FeedItemStatus) => void;
+    status?: FeedItemStatus;
+}
 
 const AnnotationActivityMenu = ({
     canDelete,
@@ -56,9 +61,9 @@ const AnnotationActivityMenu = ({
         <DropdownMenu constrainToScrollParent isRightAligned onMenuClose={onMenuClose} onMenuOpen={onMenuOpen}>
             <PlainButton
                 className={classNames('bcs-AnnotationActivityMenu', className)}
-                isDisabled={isDisabled}
                 data-testid="annotation-activity-actions-menu"
-                type="button"
+                isDisabled={isDisabled}
+                type={ButtonType.BUTTON}
             >
                 <IconEllipsis color={bdlGray50} height={16} width={16} />
             </PlainButton>
@@ -86,7 +91,6 @@ const AnnotationActivityMenu = ({
                         <FormattedMessage {...messages.annotationActivityResolveMenuItem} />
                     </MenuItem>
                 )}
-
                 {canEdit && (
                     <MenuItem
                         data-resin-itemid={id}

@@ -47,6 +47,8 @@ jest.mock('@box/box-ai-content-answers', () => ({
     ),
 }));
 
+jest.mock('../BoxAISidebarTitle', () => () => <div data-testid="boxai-sidebar-title" />);
+
 describe('elements/content-sidebar/BoxAISidebar', () => {
     const mockProps = {
         contentName: 'testName.txt',
@@ -106,6 +108,12 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
     afterEach(() => {
         jest.clearAllMocks();
+    });
+
+    test('should render BoxAISidebarTitle', async () => {
+        await renderComponent();
+
+        expect(screen.queryByTestId('boxai-sidebar-title')).toBeInTheDocument();
     });
 
     test('should have accessible Agent selector if isAIStudioAgentSelectorEnabled is true', async () => {
