@@ -21,7 +21,7 @@ type Props = {
 const Add = ({ onUpload, onCreate, showUpload = true, showCreate = true }: Props) => (
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-            <IconButton className="be-btn-add" icon={Plus} />
+            <IconButton aria-label={messages.add.defaultMessage} className="be-btn-add" icon={Plus} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
             {showUpload && (

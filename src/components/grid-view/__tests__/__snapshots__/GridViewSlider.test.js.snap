@@ -1,16 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`components/grid-view/GridViewSlider should render() 1`] = `
-<div>
-  <SliderRoot
-    className="bdl-GridViewSlider"
-    max={6}
-    min={4}
-    minusButtonLabel="Decrease column size"
-    onValueChange={[Function]}
-    plusButtonLabel="Increase column size"
-    step={1}
-    value={3}
-  />
-</div>
+<SliderRoot
+  className="bdl-GridViewSlider"
+  max={6}
+  min={4}
+  minusButtonLabel="Decrease column size"
+  onValueChange={[Function]}
+  plusButtonLabel="Increase column size"
+  step={1}
+  value={3}
+/>
 `;

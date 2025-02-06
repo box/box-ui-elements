@@ -33,7 +33,7 @@ const SORT_ITEMS: Array<SortItem> = [
 const Sort = ({ sortBy, sortDirection, onSortChange }: Props) => (
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-            <IconButton className="be-btn-sort" icon={IconSort} />
+            <IconButton aria-label={messages.sort.defaultMessage} className="be-btn-sort" icon={IconSort} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
             {SORT_ITEMS.map(([sortByValue, sortDirectionValue]) => {

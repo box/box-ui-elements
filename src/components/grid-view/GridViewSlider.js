@@ -27,18 +27,16 @@ const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, maxColumn
 
     return (
         gridMinColumns < maxColumnCount && (
-            <div>
-                <Slider
-                    className="bdl-GridViewSlider"
-                    max={RANGE_MAX}
-                    min={RANGE_MIN}
-                    minusButtonLabel={formatMessage(messages.gridViewDecreaseColumnSize)}
-                    onValueChange={onChange}
-                    plusButtonLabel={formatMessage(messages.gridViewIncreaseColumnSize)}
-                    step={RANGE_STEP}
-                    value={sliderValue}
-                />
-            </div>
+            <Slider
+                className="bdl-GridViewSlider"
+                max={RANGE_MAX}
+                min={RANGE_MIN}
+                minusButtonLabel={formatMessage(messages.gridViewDecreaseColumnSize)}
+                onValueChange={onChange}
+                plusButtonLabel={formatMessage(messages.gridViewIncreaseColumnSize)}
+                step={RANGE_STEP}
+                value={sliderValue}
+            />
         )
     );
 };
