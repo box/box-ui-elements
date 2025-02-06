@@ -1,18 +1,23 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { FormattedMessage } from 'react-intl';
+
 import CollapsableMessage from './CollapsableMessage';
-import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import LoadingIndicator, { LoadingIndicatorSize } from '../../../../../components/loading-indicator';
-import messages from './messages';
 import ShowOriginalButton from './ShowOriginalButton';
 import TranslateButton from './TranslateButton';
+
+import formatTaggedMessage from '../../utils/formatTaggedMessage';
 import { withFeatureConsumer, isFeatureEnabled } from '../../../../common/feature-checking';
+
+import messages from './messages';
+
+import type { FeatureConfig } from '../../../../common/feature-checking';
 
 import './ActivityMessage.scss';
 
-interface Props {
-    features: Record<string, boolean>;
+export interface ActivityMessageProps {
+    features: FeatureConfig;
     getUserProfileUrl?: (user: { id: string; name?: string; email?: string }) => string;
     id: string;
     isEdited?: boolean;
@@ -28,7 +33,7 @@ type State = {
     isTranslation?: boolean;
 };
 
-class ActivityMessage extends React.Component<Props, State> {
+class ActivityMessage extends React.Component<ActivityMessageProps, State> {
     static defaultProps = {
         isEdited: false,
         translationEnabled: false,
@@ -39,7 +44,7 @@ class ActivityMessage extends React.Component<Props, State> {
         isTranslation: false,
     };
 
-    componentDidUpdate(prevProps: Props): void {
+    componentDidUpdate(prevProps: ActivityMessageProps): void {
         const { translatedTaggedMessage, translationFailed } = this.props;
         const { translatedTaggedMessage: prevTaggedMessage, translationFailed: prevTranslationFailed } = prevProps;
 
