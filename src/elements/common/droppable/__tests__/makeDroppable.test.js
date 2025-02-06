@@ -1,79 +1,157 @@
 import * as React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { act } from 'react';
 
 import makeDroppable from '../makeDroppable';
 
-jest.mock('react-dom', () => ({
-    findDOMNode: jest.fn(),
-}));
-
 describe('elements/common/droppable/makeDroppable', () => {
-    const WrappedComponent = () => <div />;
+    const WrappedComponent = React.forwardRef((props, ref) => <div ref={ref} data-testid="droppable" {...props} />);
+    const dropValidator = jest.fn();
+    const onDrop = jest.fn();
     const MakeDroppableComponent = makeDroppable({
-        dropValidator: jest.fn(),
-        onDrop: jest.fn(),
+        dropValidator,
+        onDrop,
     })(WrappedComponent);
 
-    const addEventListenerMock = jest.fn();
-    const testElement = document.createElement('div');
-    testElement.addEventListener = addEventListenerMock;
-
-    const getWrapper = (props = {}) => shallow(<MakeDroppableComponent className="test" {...props} />);
+    let wrapper;
+    let element;
 
     beforeEach(() => {
-        ReactDOM.findDOMNode.mockImplementation(() => testElement);
+        element = document.createElement('div');
+        document.body.appendChild(element);
+        wrapper = mount(<MakeDroppableComponent className="test" />, {
+            attachTo: element,
+        });
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
+        if (wrapper) {
+            // Ensure proper cleanup
+            wrapper.detach();
+            wrapper = null;
+        }
+        if (element && element.parentNode) {
+            element.parentNode.removeChild(element);
+            element = null;
+        }
+        jest.clearAllMocks();
     });
 
-    describe('removeEventListeners()', () => {
-        test('should remove 4 of event listeners on the element', () => {
-            const wrapper = getWrapper();
-            const removeEventListener = jest.fn();
-            const element = {
-                foo: 'bar',
-                removeEventListener,
+    describe('event handlers', () => {
+        test('should have drag event handlers', () => {
+            const div = wrapper.find('div');
+            expect(div.prop('data-candrop')).toBe('false');
+            expect(div.prop('data-isdragging')).toBe('false');
+            expect(div.prop('data-isover')).toBe('false');
+            expect(div.prop('onDragEnter')).toBeDefined();
+            expect(div.prop('onDragOver')).toBeDefined();
+            expect(div.prop('onDragLeave')).toBeDefined();
+            expect(div.prop('onDrop')).toBeDefined();
+        });
+
+        test('should clean up properly on unmount', () => {
+            const div = wrapper.find('div');
+
+            // Store event handlers before unmount
+            const dragHandlers = {
+                onDragEnter: div.prop('onDragEnter'),
+                onDragOver: div.prop('onDragOver'),
+                onDragLeave: div.prop('onDragLeave'),
+                onDrop: div.prop('onDrop'),
             };
 
-            wrapper.instance().removeEventListeners(element);
+            // Verify handlers exist
+            Object.values(dragHandlers).forEach(handler => {
+                expect(handler).toBeDefined();
+            });
 
-            expect(removeEventListener).toBeCalledTimes(4);
+            // Get initial component count
+            const initialCount = wrapper.find('div').length;
+            expect(initialCount).toBe(1);
+
+            // Unmount and verify cleanup
+            wrapper.unmount();
+            wrapper.update();
+            expect(wrapper.find('div').length).toBe(0);
         });
     });
 
-    describe('componentDidMount()', () => {
-        test('should add 4 event listeners on the test element when the wrapped droppable element is not null for the first time', () => {
-            getWrapper();
+    describe('drag and drop behavior', () => {
+        test('should handle dragenter event', async () => {
+            const file = new File(['test'], 'test.txt', { type: 'text/plain' });
+            const mockEvent = {
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+                dataTransfer: {
+                    types: ['Files'],
+                    files: [file],
+                    items: [{ kind: 'file', type: 'text/plain', getAsFile: () => file }],
+                    effectAllowed: 'all',
+                    dropEffect: 'copy',
+                },
+                type: 'dragenter',
+            };
 
-            expect(addEventListenerMock).toBeCalledTimes(4);
+            await act(async () => {
+                wrapper.find('div').prop('onDragEnter')(mockEvent);
+                await new Promise(resolve => setTimeout(resolve, 50));
+            });
+
+            expect(mockEvent.preventDefault).toHaveBeenCalled();
+            expect(dropValidator).toHaveBeenCalledWith(expect.any(Object), mockEvent.dataTransfer);
+            wrapper.update();
+            expect(wrapper.find('div').prop('data-isover')).toBe('true');
         });
-    });
 
-    describe('componentDidUpdate()', () => {
-        test('should verify the instance attritute droppableEl is assigned when the wrapped element is not null', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
+        test('should handle drop event', async () => {
+            const file = new File(['test'], 'test.txt', { type: 'text/plain' });
+            const mockEvent = {
+                preventDefault: jest.fn(),
+                stopPropagation: jest.fn(),
+                type: 'drop',
+                dataTransfer: {
+                    types: ['Files'],
+                    files: [file],
+                    items: [{ kind: 'file', type: 'text/plain', getAsFile: () => file }],
+                    effectAllowed: 'all',
+                    dropEffect: 'copy',
+                },
+            };
 
-            instance.componentDidUpdate();
+            // Simulate complete drag and drop sequence
+            await act(async () => {
+                // First trigger dragenter
+                wrapper.find('div').prop('onDragEnter')(mockEvent);
+                await new Promise(resolve => setTimeout(resolve, 50));
 
-            expect(instance.droppableEl).toEqual(testElement);
-        });
+                // Then dragover to maintain state
+                wrapper.find('div').prop('onDragOver')(mockEvent);
+                await new Promise(resolve => setTimeout(resolve, 50));
 
-        test('should remove all event listeners on previous droppable element and assign the new droppable element to the instance after the wrapped element is changed', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-            const spanElement = document.createElement('span');
-            const spanRemoveEventListenerMock = jest.fn();
-            spanElement.removeEventListener = spanRemoveEventListenerMock;
+                // Finally drop
+                wrapper.find('div').prop('onDrop')(mockEvent);
+                await new Promise(resolve => setTimeout(resolve, 50));
+            });
 
-            instance.droppableEl = spanElement;
-            instance.componentDidUpdate();
-
-            expect(spanRemoveEventListenerMock).toBeCalledTimes(4);
-            expect(instance.droppableEl).toEqual(testElement);
+            expect(mockEvent.preventDefault).toHaveBeenCalled();
+            expect(mockEvent.stopPropagation).toHaveBeenCalled();
+            expect(onDrop).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    preventDefault: expect.any(Function),
+                    stopPropagation: expect.any(Function),
+                    type: 'drop',
+                    dataTransfer: mockEvent.dataTransfer,
+                }),
+                expect.objectContaining({
+                    className: expect.stringContaining('test'),
+                    'data-candrop': 'false',
+                    'data-isdragging': 'false',
+                    'data-isover': 'false',
+                }),
+            );
+            wrapper.update();
+            expect(wrapper.find('div').prop('data-isover')).toBe('false');
+            expect(wrapper.find('div').prop('data-candrop')).toBe('false');
         });
     });
 });

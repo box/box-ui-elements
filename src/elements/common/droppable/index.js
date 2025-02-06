@@ -1,2 +1,4 @@
 // @flow
-export { default } from './makeDroppable';
+import makeDroppable from './makeDroppable';
+
+export default makeDroppable;

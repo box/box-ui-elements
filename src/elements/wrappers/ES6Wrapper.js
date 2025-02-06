@@ -5,9 +5,9 @@
  */
 
 import EventEmitter from 'events';
-import ReactDOM from 'react-dom';
 import i18n from '../common/i18n';
 import { DEFAULT_CONTAINER } from '../../constants';
+import { unmountElement } from '../../utils/react-root-utils';
 import type { Token, StringMap } from '../../common/types/core';
 
 declare var __VERSION__: string;
@@ -84,9 +84,8 @@ class ES6Wrapper extends EventEmitter {
      */
     hide(): void {
         this.removeAllListeners();
-        // eslint-disable-next-line react/no-deprecated
-        ReactDOM.unmountComponentAtNode(this.container);
         if (this.container) {
+            unmountElement(this.container);
             this.container.innerHTML = '';
         }
     }
