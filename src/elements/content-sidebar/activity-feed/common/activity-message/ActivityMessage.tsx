@@ -12,13 +12,14 @@ import { withFeatureConsumer, isFeatureEnabled } from '../../../../common/featur
 
 import messages from './messages';
 
+import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
 import type { FeatureConfig } from '../../../../common/feature-checking';
 
 import './ActivityMessage.scss';
 
 export interface ActivityMessageProps {
     features: FeatureConfig;
-    getUserProfileUrl?: (user: { id: string; name?: string; email?: string }) => string;
+    getUserProfileUrl?: GetProfileUrlCallback;
     id: string;
     isEdited?: boolean;
     onTranslate?: ({ id, tagged_message }: { id: string; tagged_message: string }) => void;
