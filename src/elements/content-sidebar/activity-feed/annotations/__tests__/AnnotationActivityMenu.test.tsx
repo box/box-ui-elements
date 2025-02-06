@@ -2,10 +2,16 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 
 import AnnotationActivityMenu from '../AnnotationActivityMenu';
+import { FeedItemStatus } from '../../../../../common/types/feed';
 
 describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMenu', () => {
     const defaults = {
         id: '123',
+        onDelete: jest.fn(),
+        onEdit: jest.fn(),
+        onMenuClose: jest.fn(),
+        onMenuOpen: jest.fn(),
+        onStatusChange: jest.fn(),
     };
 
     const getWrapper = (props = {}) => shallow(<AnnotationActivityMenu {...defaults} {...props} />);
@@ -32,13 +38,13 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     });
 
     test('should render the resolve annotation activity menu item if canResolve is true for unresolved item', () => {
-        const wrapper = getWrapper({ canResolve: true, status: 'open' });
+        const wrapper = getWrapper({ canResolve: true, status: 'open' as FeedItemStatus });
 
         expect(wrapper.exists('[data-testid="resolve-annotation-activity"]')).toBe(true);
     });
 
     test('should render the unresolve annotation activity menu item if canResolve is true for resolved item', () => {
-        const wrapper = getWrapper({ canResolve: true, status: 'resolved' });
+        const wrapper = getWrapper({ canResolve: true, status: 'resolved' as FeedItemStatus });
 
         expect(wrapper.exists('[data-testid="unresolve-annotation-activity"]')).toBe(true);
     });
@@ -48,7 +54,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
             canDelete: true,
             canEdit: true,
             canResolve: true,
-            status: 'open',
+            status: 'open' as FeedItemStatus,
         });
 
         expect(wrapper.find("[data-testid='delete-annotation-activity']").props()).toMatchObject({
@@ -70,7 +76,7 @@ describe('elements/content-sidebar/ActivityFeed/annotations/AnnotationActivityMe
     test('should render resin tags for unresolve activity', () => {
         const wrapper = getWrapper({
             canResolve: true,
-            status: 'resolved',
+            status: 'resolved' as FeedItemStatus,
         });
 
         expect(wrapper.find("[data-testid='unresolve-annotation-activity']").props()).toMatchObject({

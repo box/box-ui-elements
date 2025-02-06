@@ -9,6 +9,14 @@ $agentSelectorSidebarWidth: 211px;
         height: 100%;
         max-height: 100%;
 
+        &.with-modal-open {
+            display: none;
+        }
+
+        .bcs-content-header {
+            margin: 0 tokens.$space-4;
+        }
+
         .bcs-scroll-content {
             width: auto;
             height: 100%;
@@ -34,13 +42,20 @@ $agentSelectorSidebarWidth: 211px;
             }
         }
 
+        // Limit the width of Agent Selector to accomodate action buttons
+        .bcs-BoxAISidebar-agentSelector {
+            max-width: 279px;
+        }
+
+        @include breakpoint($medium-screen) {
+            .bcs-BoxAISidebar-agent-selector-container {
+                max-width: none;
+            }
+        }
+
         .bcs-BoxAISidebar-chat-actions {
             display: flex;
             justify-content: right;
-
-            .bcs-BoxAISidebar-expand {
-                margin-left: tokens.$space-2;
-            }
         }
 
         .sidebar-chip {
@@ -50,6 +65,10 @@ $agentSelectorSidebarWidth: 211px;
             button {
                 width: 100%;
             }
+        }
+
+        .bcs-BoxAISidebar-expand {
+            margin-left: tokens.$space-2;
         }
     }
 }

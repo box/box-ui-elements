@@ -12,8 +12,6 @@ const mockFeatures = {
 export const basic: StoryObj<typeof BoxAISidebar> = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
-        const sidebarTitle = await canvas.findByRole('heading', { name: 'Box AI' });
-        expect(sidebarTitle).toBeInTheDocument();
         const clearButton = await canvas.findByRole('button', { name: 'Clear conversation' });
         expect(clearButton).toBeInTheDocument();
 
@@ -47,12 +45,14 @@ export default {
             isAgentSelectorEnabled: false,
             isAIStudioAgentSelectorEnabled: true,
             isCitationsEnabled: true,
+            isFeedbackEnabled: true,
             isDebugModeEnabled: true,
             isIntelligentQueryMode: false,
             isMarkdownEnabled: true,
             isResetChatEnabled: true,
             isStopResponseEnabled: true,
             isStreamingEnabled: false,
+            items: [{ id: '123', name: 'Document (PDF).pdf', type: 'file', fileType: 'pdf', status: 'supported' }],
             recordAction: () => ({}),
         },
     },

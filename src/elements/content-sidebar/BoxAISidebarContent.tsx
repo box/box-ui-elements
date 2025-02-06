@@ -5,11 +5,14 @@
 import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
+import classNames from 'classnames';
 import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
-import { Text } from '@box/blueprint-web';
+import { IconButton, Tooltip } from '@box/blueprint-web';
+import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Line';
 import {
     BoxAiContentAnswers,
     ClearConversationButton,
+    IntelligenceModal,
     withApiWrapper,
     // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
     type ApiWrapperProps,
@@ -21,7 +24,7 @@ import { withLogger } from '../common/logger';
 import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
-import { BoxAISidebarContext } from './BoxAISidebar';
+import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 
 import messages from '../common/messages';
 
@@ -47,8 +50,20 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         ...rest
     } = props;
     const { formatMessage } = useIntl();
-    const { cache, contentName, elementId, isStopResponseEnabled, recordAction, setCacheValue, userInfo } =
-        React.useContext(BoxAISidebarContext);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const {
+        cache,
+        contentName,
+        elementId,
+        fileExtension,
+        isFeedbackEnabled,
+        isStopResponseEnabled,
+        items,
+        itemSize,
+        recordAction,
+        setCacheValue,
+        userInfo,
+    } = React.useContext(BoxAISidebarContext);
     const { questions: cacheQuestions } = cache;
 
     if (cache.encodedSession !== encodedSession) {
@@ -58,6 +73,14 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
     if (cache.questions !== questions) {
         setCacheValue('questions', questions);
     }
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleSwitchToModalClick = () => {
+        setIsModalOpen(true);
+    };
 
     React.useEffect(() => {
         if (!encodedSession && createSession) {
@@ -79,19 +102,17 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
     const renderBoxAISidebarTitle = () => {
         return (
             <div className="bcs-BoxAISidebar-title-part">
-                <Text as="h3" className="bcs-title">
-                    {formatMessage(messages.sidebarBoxAITitle)}
-                </Text>
                 {isAIStudioAgentSelectorEnabled && (
-                    <BoxAiAgentSelectorWithApi
-                        fetcher={getAIStudioAgents}
-                        hostAppName={hostAppName}
-                        onSelectAgent={onSelectAgent}
-                        recordAction={recordAction}
-                        shouldHideAgentSelectorOnLoad
-                        // @ts-ignore variant will be available in higher version
-                        variant="sidebar"
-                    />
+                    <div className="bcs-BoxAISidebar-agentSelector">
+                        <BoxAiAgentSelectorWithApi
+                            fetcher={getAIStudioAgents}
+                            hostAppName={hostAppName}
+                            onSelectAgent={onSelectAgent}
+                            recordAction={recordAction}
+                            shouldHideAgentSelectorOnLoad
+                            variant="sidebar"
+                        />
+                    </div>
                 )}
             </div>
         );
@@ -101,35 +122,72 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         <>
             {renderBoxAISidebarTitle()}
             {isResetChatEnabled && <ClearConversationButton onClick={onClearAction} />}
+            <Tooltip content={formatMessage(messages.sidebarBoxAISwitchToModalView)} variant="standard">
+                <IconButton
+                    aria-label={formatMessage(messages.sidebarBoxAISwitchToModalView)}
+                    className="bcs-BoxAISidebar-expand"
+                    data-target-id="IconButton-expandBoxAISidebar"
+                    icon={ArrowsExpand}
+                    onClick={handleSwitchToModalClick}
+                    size="small"
+                />
+            </Tooltip>
         </>
     );
 
     return (
         <AgentsProvider>
-            <SidebarContent
-                actions={renderActions()}
-                className="bcs-BoxAISidebar"
-                elementId={elementId}
-                sidebarView={SIDEBAR_VIEW_BOXAI}
-            >
-                <div className="bcs-BoxAISidebar-content">
-                    <BoxAiContentAnswers
-                        className="bcs-BoxAISidebar-contentAnswers"
-                        contentName={contentName}
-                        contentType={formatMessage(messages.sidebarBoxAIContent)}
-                        hostAppName={hostAppName}
-                        isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
-                        isStopResponseEnabled={isStopResponseEnabled}
-                        questions={questions}
-                        stopQuestion={stopQuestion}
-                        submitQuestion={sendQuestion}
-                        userInfo={userInfo}
-                        variant="sidebar"
-                        recordAction={recordAction}
-                        {...rest}
-                    />
-                </div>
-            </SidebarContent>
+            <>
+                <SidebarContent
+                    actions={renderActions()}
+                    className={classNames('bcs-BoxAISidebar', { 'with-modal-open': isModalOpen })}
+                    elementId={elementId}
+                    sidebarView={SIDEBAR_VIEW_BOXAI}
+                >
+                    <div className="bcs-BoxAISidebar-content">
+                        <BoxAiContentAnswers
+                            className="bcs-BoxAISidebar-contentAnswers"
+                            contentType={formatMessage(messages.sidebarBoxAIContent)}
+                            hostAppName={hostAppName}
+                            isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                            isFeedbackEnabled={isFeedbackEnabled}
+                            isStopResponseEnabled={isStopResponseEnabled}
+                            items={items}
+                            questions={questions}
+                            stopQuestion={stopQuestion}
+                            submitQuestion={sendQuestion}
+                            userInfo={userInfo}
+                            variant="sidebar"
+                            recordAction={recordAction}
+                            {...rest}
+                        />
+                    </div>
+                </SidebarContent>
+                <IntelligenceModal
+                    contentName={contentName}
+                    contentType={formatMessage(messages.sidebarBoxAIContent)}
+                    extension={fileExtension}
+                    getAIStudioAgents={getAIStudioAgents}
+                    hostAppName={hostAppName}
+                    isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                    isStopResponseEnabled={isStopResponseEnabled}
+                    items={items}
+                    itemSize={itemSize}
+                    onModalClose={handleModalClose}
+                    onOpenChange={handleModalClose}
+                    onSelectAgent={onSelectAgent}
+                    open={isModalOpen}
+                    questions={questions}
+                    recordAction={isModalOpen ? recordAction : undefined}
+                    showLoadingIndicator={false}
+                    stopPropagationOnEsc
+                    submitQuestion={sendQuestion}
+                    userInfo={userInfo}
+                    variant="collapsible"
+                    {...rest}
+                    shouldRenderProviders={false}
+                />
+            </>
         </AgentsProvider>
     );
 }

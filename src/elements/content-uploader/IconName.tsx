@@ -25,7 +25,7 @@ const IconName = ({ name, extension, isFolder = false, isResumableUploadsEnabled
     let icon = isFolder ? (
         <FolderPersonal height={Size8} aria-label={formatMessage(messages.folder)} width={Size8} />
     ) : (
-        <FileIcon extension={extension} title={formatMessage(messages.file)} />
+        <FileIcon extension={extension} />
     );
 
     if (isResumableUploadsEnabled && status === STATUS_ERROR) {

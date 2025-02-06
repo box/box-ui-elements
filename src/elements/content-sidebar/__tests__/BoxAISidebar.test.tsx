@@ -73,10 +73,12 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         getAnswerStreaming: jest.fn(),
         getSuggestedQuestions: jest.fn(),
         hostAppName: 'appName',
+        itemSize: '1234',
         isAgentSelectorEnabled: false,
         isAIStudioAgentSelectorEnabled: true,
         isCitationsEnabled: true,
         isDebugModeEnabled: true,
+        isFeedbackEnabled: true,
         isIntelligentQueryMode: true,
         isMarkdownEnabled: true,
         isResetChatEnabled: true,
@@ -93,14 +95,17 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         });
     };
 
-    afterEach(() => {
-        jest.clearAllMocks();
+    beforeAll(() => {
+        // Required to pass Blueprint Interactivity test for buttons with tooltip
+        Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
+            get() {
+                return this.parentNode;
+            },
+        });
     });
 
-    test('should render title', async () => {
-        await renderComponent();
-
-        expect(screen.getByRole('heading', { level: 3, name: 'Box AI' })).toBeInTheDocument();
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     test('should have accessible Agent selector if isAIStudioAgentSelectorEnabled is true', async () => {
@@ -179,5 +184,59 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         const tooltip = await screen.findByRole('tooltip', { name: 'Clear conversation' });
 
         expect(tooltip).toBeInTheDocument();
+    });
+
+    test('should have accessible "Switch to modal view" button', async () => {
+        await renderComponent();
+
+        expect(screen.getByRole('button', { name: 'Switch to modal view' })).toBeInTheDocument();
+    });
+
+    test('should display "Switch to modal view" tooltip', async () => {
+        await renderComponent();
+
+        const button = screen.getByRole('button', { name: 'Switch to modal view' });
+        await userEvent.hover(button);
+        const tooltip = await screen.findByRole('tooltip', { name: 'Switch to modal view' });
+
+        expect(tooltip).toBeInTheDocument();
+    });
+
+    test('should open Intelligence Modal when clicking on "Switch to modal view" button and close when clicking "Switch to sidebar view"', async () => {
+        await renderComponent();
+
+        const switchToModalButton = screen.getByRole('button', { name: 'Switch to modal view' });
+        await userEvent.click(switchToModalButton);
+
+        expect(await screen.findByTestId('content-answers-modal')).toBeInTheDocument();
+
+        const switchToSidebarButton = screen.getByRole('button', { name: 'Switch to sidebar view' });
+        await userEvent.click(switchToSidebarButton);
+
+        expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
+    });
+
+    describe('BoxAISidebar handleKeyPress', () => {
+        test('should prevent default behavior and stop propagation for ArrowLeft and ArrowRight keys', async () => {
+            await renderComponent();
+
+            const eventLeft = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
+            const preventDefaultSpy = jest.spyOn(eventLeft, 'preventDefault');
+            const stopPropagationSpy = jest.spyOn(eventLeft, 'stopPropagation');
+
+            document.dispatchEvent(eventLeft);
+
+            expect(preventDefaultSpy).toHaveBeenCalled();
+            expect(stopPropagationSpy).toHaveBeenCalled();
+
+            const eventRight = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+            const preventDefaultSpyRight = jest.spyOn(eventRight, 'preventDefault');
+            const stopPropagationSpyRight = jest.spyOn(eventRight, 'stopPropagation');
+
+            document.dispatchEvent(eventRight);
+
+            expect(preventDefaultSpyRight).toHaveBeenCalled();
+            expect(stopPropagationSpyRight).toHaveBeenCalled();
+        });
     });
 });

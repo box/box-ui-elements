@@ -148,7 +148,7 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isTargetQuickSearch(event)) {
+                        if (this.shouldNotAllowArrowKeyNavigation(event)) {
                             return;
                         }
 
@@ -167,7 +167,7 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isTargetQuickSearch(event)) {
+                        if (this.shouldNotAllowArrowKeyNavigation(event)) {
                             return;
                         }
 
@@ -221,7 +221,7 @@ function makeSelectable(BaseTable) {
                     key: 'right',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
+                        if (this.isTargetSlider(event) || this.shouldNotAllowArrowKeyNavigation(event)) {
                             return;
                         }
 
@@ -240,7 +240,7 @@ function makeSelectable(BaseTable) {
                     key: 'left',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
+                        if (this.isTargetSlider(event) || this.shouldNotAllowArrowKeyNavigation(event)) {
                             return;
                         }
 
@@ -257,7 +257,7 @@ function makeSelectable(BaseTable) {
                     key: 'down',
                     description: <FormattedMessage {...messages.downDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
+                        if (this.isTargetSlider(event) || this.shouldNotAllowArrowKeyNavigation(event)) {
                             return;
                         }
 
@@ -276,7 +276,7 @@ function makeSelectable(BaseTable) {
                     key: 'up',
                     description: <FormattedMessage {...messages.upDescription} />,
                     handler: event => {
-                        if (this.isTargetSlider(event) || this.isTargetQuickSearch(event)) {
+                        if (this.isTargetSlider(event) || this.shouldNotAllowArrowKeyNavigation(event)) {
                             return;
                         }
 
@@ -643,6 +643,13 @@ function makeSelectable(BaseTable) {
 
             return false;
         };
+
+        isFlyoutOpen = () => document.querySelector('.flyout-overlay') !== null;
+
+        isDropdownMenuOpen = () => document.querySelector('.dropdown-menu-element') !== null;
+
+        shouldNotAllowArrowKeyNavigation = event =>
+            this.isTargetQuickSearch(event) || this.isFlyoutOpen() || this.isDropdownMenuOpen();
 
         render() {
             const { className, data } = this.props;
