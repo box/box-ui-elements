@@ -12,6 +12,7 @@
  */
 
 import ItemCollaborations from './ItemCollaborations';
+import type APICache from 'utils/Cache';
 
 class FileCollaborations extends ItemCollaborations {
     /**
@@ -26,6 +27,30 @@ class FileCollaborations extends ItemCollaborations {
         }
 
         return `${this.getBaseApiUrl()}/files/${id}/collaborations`;
+    }
+
+    async getCollaborationsRole(file) {
+        const cache: APICache = this.getCache();
+        const key: string = `getFileCollaborationsRole_${file.id}`;
+        const isCached: boolean = cache.has(key);
+        const cachedData = cache.get(key);
+
+        const { getCollaborationsRole: handler } = window.__shared_methods || {};
+
+        if (handler) {
+            const role = isCached ? cachedData : await handler(file);
+
+            cache.set(key, role);
+            return {
+                file_id: file.id,
+                role: role,
+            };
+        }
+
+        return {
+            file_id: file.id,
+            role: null,
+        };
     }
 }
 

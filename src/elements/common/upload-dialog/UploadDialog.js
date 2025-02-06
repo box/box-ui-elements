@@ -12,6 +12,7 @@ import ContentUploader from '../../content-uploader';
 import messages from '../messages';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../../constants';
 import type { Token } from '../../../common/types/core';
+import { ReactElement } from 'react';
 
 type Props = {
     apiHost: string,
@@ -28,6 +29,7 @@ type Props = {
     sharedLinkPassword?: string,
     token: Token,
     uploadHost: string,
+    subHeader?: ReactElement,
 } & InjectIntlProvidedProps;
 
 const UploadDialog = ({
@@ -46,6 +48,7 @@ const UploadDialog = ({
     requestInterceptor,
     responseInterceptor,
     intl,
+    subHeader,
 }: Props) => (
     <Modal
         appElement={appElement}
@@ -57,19 +60,22 @@ const UploadDialog = ({
         parentSelector={() => parentElement}
         portalClassName={`${CLASS_MODAL} be-modal-upload`}
     >
-        <ContentUploader
-            {...contentUploaderProps}
-            apiHost={apiHost}
-            onClose={onClose}
-            onComplete={onUpload}
-            requestInterceptor={requestInterceptor}
-            responseInterceptor={responseInterceptor}
-            rootFolderId={currentFolderId}
-            sharedLink={sharedLink}
-            sharedLinkPassword={sharedLinkPassword}
-            token={token}
-            uploadHost={uploadHost}
-        />
+        <div style={{ display: 'flex', flexFlow: 'column', height: '100%' }}>
+            {subHeader}
+            <ContentUploader
+                {...contentUploaderProps}
+                apiHost={apiHost}
+                onClose={onClose}
+                onComplete={onUpload}
+                requestInterceptor={requestInterceptor}
+                responseInterceptor={responseInterceptor}
+                rootFolderId={currentFolderId}
+                sharedLink={sharedLink}
+                sharedLinkPassword={sharedLinkPassword}
+                token={token}
+                uploadHost={uploadHost}
+            />
+        </div>
     </Modal>
 );
 

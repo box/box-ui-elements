@@ -58,6 +58,8 @@ import {
     FIELD_RETENTION,
     FIELD_URL,
     PLACEHOLDER_USER,
+    FIELD_COLLECTIONS,
+    FIELD_CLASSIFICATION
 } from '../constants';
 
 // Minimum set of fields needed for folder requests
@@ -78,8 +80,9 @@ const FOLDER_FIELDS_TO_FETCH = [
     FIELD_ITEM_COLLECTION,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_IS_DOWNLOAD_AVAILABLE,
-    FIELD_REPRESENTATIONS,
+    // FIELD_REPRESENTATIONS,
     FIELD_URL,
+    FIELD_OWNED_BY,
 ];
 
 // Fields needed for the sidebar
@@ -124,6 +127,9 @@ const PREVIEW_FIELDS_TO_FETCH = [
     FIELD_WATERMARK_INFO,
     FIELD_AUTHENTICATED_DOWNLOAD_URL,
     FIELD_IS_DOWNLOAD_AVAILABLE,
+    FIELD_COLLECTIONS,
+    FIELD_OWNED_BY,
+    FIELD_CLASSIFICATION
 ];
 
 // Fields needed to get versions for a file in activity feed
@@ -174,7 +180,7 @@ const FILE_VERSIONS_FIELDS_TO_FETCH = [
     FIELD_VERSION_NUMBER,
 ];
 
-// Fields needed to show shared link permissions
+// Fields needed for Content Picker to show shared link permissions
 const FILE_SHARED_LINK_FIELDS_TO_FETCH = [FIELD_ALLOWED_SHARED_LINK_ACCESS_LEVELS, FIELD_SHARED_LINK];
 
 // Fields needed to get tasks data

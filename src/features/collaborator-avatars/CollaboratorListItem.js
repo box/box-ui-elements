@@ -35,9 +35,7 @@ const CollaboratorListItem = (props: Props) => {
     const userOrGroupNameContent =
         type !== COLLAB_GROUP_TYPE ? (
             <div className={classnames('name', type)}>
-                <Link href={profileURL || `/profile/${userID}`} rel="noopener" target="_blank" {...usernameProps}>
-                    {name}
-                </Link>
+                <span>{name}</span>
             </div>
         ) : (
             <div className={classnames('name', type)}>{name}</div>

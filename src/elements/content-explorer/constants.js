@@ -1,4 +1,12 @@
-import { FIELD_FILE_VERSION, FIELD_SHA1, FIELD_SHARED_LINK, FIELD_WATERMARK_INFO } from '../../constants';
+import {
+    FIELD_COLLECTIONS,
+    FIELD_FILE_VERSION,
+    FIELD_LOCK,
+    FIELD_SHA1,
+    FIELD_SHARED_LINK,
+    FIELD_WATERMARK_INFO,
+    FIELD_VERSION_NUMBER
+} from '../../constants';
 import { FOLDER_FIELDS_TO_FETCH } from '../../utils/fields';
 
 // Fields needed for Content Explorer folder requests
@@ -8,6 +16,9 @@ const CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH = [
     FIELD_SHA1,
     FIELD_SHARED_LINK,
     FIELD_WATERMARK_INFO,
+    FIELD_COLLECTIONS,
+    FIELD_LOCK,
+    FIELD_VERSION_NUMBER
 ];
 
 export default CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH;

@@ -227,7 +227,7 @@ function SharingNotification({
 
     // Set the getContacts function
     const getContactsFn: GetContactsFnType | null = useContacts(api, itemID, {
-        handleError: () => createNotification(TYPE_ERROR, contentSharingMessages.getContactsError),
+        handleError: () => {},
         transformGroups: data => convertGroupContactsResponse(data),
         transformUsers: data => convertUserContactsResponse(data, currentUserID),
     });
@@ -254,8 +254,14 @@ function SharingNotification({
             });
             closeComponent();
         },
-        handleError: () => {
-            createNotification(TYPE_ERROR, contentSharingMessages.sendInvitesError);
+        handleError: error => {
+            const errorMap = {
+                collaboration_invite_restricted: contentSharingMessages.collaborationInviteRestricted,
+                forbidden_by_policy: contentSharingMessages.sendExternalCollaborationInvitesError
+            };
+
+            const errorMessage = errorMap[error.code] || contentSharingMessages.sendInvitesError;
+            createNotification(TYPE_ERROR, errorMessage);
             setIsLoading(false);
             closeComponent();
         },

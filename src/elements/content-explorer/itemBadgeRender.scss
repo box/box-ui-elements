@@ -1,0 +1,16 @@
+.item-badges {
+    .btn-plain {
+        &.item-badge {
+            align-items: center;
+            background-color: #e8e8e8;
+            border-radius: 50%;
+            display: inline-flex;
+            flex: none;
+            height: 20px;
+            justify-content: center;
+            margin: 0 2px;
+            outline: revert;
+            width: 20px;
+        }
+    }
+}

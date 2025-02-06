@@ -13,6 +13,10 @@
         padding: 0 15px;
         background-color: $bdl-gray-02;
         border-bottom: 1px solid $bdl-gray-10;
+
+        @media screen and (max-width: 768px) {
+            border-bottom: none;
+        }
     }
 
     // Box Annotations selector
@@ -84,6 +88,18 @@
         background: $bdl-gray;
         border-bottom: 1px solid $bdl-gray;
     }
+
+    .permission-level-mobile {
+        display: none;
+
+        @media screen and (max-width: 768px) {
+            display: block;
+            margin-right: 25px;
+            text-align: end;
+            background-color: $bdl-gray-02;
+            border-bottom: 1px solid $bdl-gray-10;
+        }
+    }
 }
 
 .bcpr-PreviewHeader-controls {
@@ -97,6 +113,15 @@
         &:focus,
         &:hover {
             background: none;
+        }
+    }
+
+    .preview-permission-level {
+        display: flex;
+        align-items: center;
+
+        @media screen and (max-width: 768px) {
+            display: none;
         }
     }
 }

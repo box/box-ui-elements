@@ -109,6 +109,7 @@ type State = {
     itemIds: Object,
     items: UploadItem[],
     view: View,
+    conflictedItems: UploadItem[],
 };
 
 const CHUNKED_UPLOAD_MIN_SIZE_BYTES = 104857600; // 100MB
@@ -177,6 +178,7 @@ class ContentUploader extends Component<Props, State> {
             errorCode: '',
             itemIds: {},
             isUploadsManagerExpanded: false,
+            conflictedItems: [],
         };
         this.id = uniqueid('bcu_');
     }
@@ -774,6 +776,10 @@ class ContentUploader extends Component<Props, State> {
      * @return {void}
      */
     uploadFile(item: UploadItem) {
+        this.setState({
+            conflictedItems: [],
+        });
+
         const { overwrite, rootFolderId } = this.props;
         const { api, file, options } = item;
         const { items } = this.state;
@@ -1224,10 +1230,23 @@ class ContentUploader extends Component<Props, State> {
         const hasFiles = items.length !== 0;
         const isLoading = items.some(item => item.status === STATUS_IN_PROGRESS);
         const isDone = items.every(item => item.status === STATUS_COMPLETE || item.status === STATUS_STAGED);
-
         const styleClassName = classNames('bcu', className, {
             'be-app-element': !useUploadsManager,
             be: !useUploadsManager,
+        });
+
+        items.forEach(item => {
+            const fileFromApi = item?.api?.file;
+
+            if (
+                fileFromApi &&
+                item?.api.hasConflict &&
+                !this.state.conflictedItems.find(conflictedItem => fileFromApi?.name === conflictedItem.name)
+            ) {
+                this.setState({
+                    conflictedItems: [...this.state.conflictedItems, fileFromApi],
+                });
+            }
         });
 
         return (
@@ -1259,6 +1278,7 @@ class ContentUploader extends Component<Props, State> {
                             items={items}
                             onClick={this.onClick}
                             view={view}
+                            conflictedItems={this.state.conflictedItems}
                         />
                         <Footer
                             errorCode={errorCode}

@@ -331,6 +331,8 @@ type BoxItem = {
     url?: string,
     version_limit?: ?number,
     version_number?: string,
+    is_favorite?: boolean
+    collections: any
 };
 
 type BoxItemCollection = {

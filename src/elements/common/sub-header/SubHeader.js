@@ -13,6 +13,7 @@ import { VIEW_MODE_LIST } from '../../../constants';
 import type { View, Collection } from '../../../common/types/core';
 
 import './SubHeader.scss';
+import { PermissionLevel } from '../../../components/permission-level/PermissionLevel';
 
 type Props = {
     canCreateNewFolder: boolean,
@@ -33,6 +34,7 @@ type Props = {
     rootName?: string,
     view: View,
     viewMode?: ViewMode,
+    hasSubHeaderRight?: boolean,
 };
 
 const SubHeader = ({
@@ -54,32 +56,42 @@ const SubHeader = ({
     rootName,
     view,
     viewMode = VIEW_MODE_LIST,
+    hasSubHeaderRight = true,
+    collaborationRole,
 }: Props) => (
-    <div className="be-sub-header" data-testid="be-sub-header">
-        <SubHeaderLeft
-            currentCollection={currentCollection}
-            isSmall={isSmall}
-            onItemClick={onItemClick}
-            rootId={rootId}
-            rootName={rootName}
-            view={view}
-        />
-        <SubHeaderRight
-            canCreateNewFolder={canCreateNewFolder}
-            canUpload={canUpload}
-            currentCollection={currentCollection}
-            gridColumnCount={gridColumnCount}
-            gridMaxColumns={gridMaxColumns}
-            gridMinColumns={gridMinColumns}
-            maxGridColumnCountForWidth={maxGridColumnCountForWidth}
-            onCreate={onCreate}
-            onGridViewSliderChange={onGridViewSliderChange}
-            onSortChange={onSortChange}
-            onUpload={onUpload}
-            onViewModeChange={onViewModeChange}
-            view={view}
-            viewMode={viewMode}
-        />
+    <div>
+        <div className="be-sub-header" data-testid="be-sub-header">
+            <SubHeaderLeft
+                currentCollection={currentCollection}
+                isSmall={isSmall}
+                onItemClick={onItemClick}
+                rootId={rootId}
+                rootName={rootName}
+                view={view}
+            />
+            {hasSubHeaderRight && (
+                <SubHeaderRight
+                    canCreateNewFolder={canCreateNewFolder}
+                    canUpload={canUpload}
+                    currentCollection={currentCollection}
+                    gridColumnCount={gridColumnCount}
+                    gridMaxColumns={gridMaxColumns}
+                    gridMinColumns={gridMinColumns}
+                    maxGridColumnCountForWidth={maxGridColumnCountForWidth}
+                    onCreate={onCreate}
+                    onGridViewSliderChange={onGridViewSliderChange}
+                    onSortChange={onSortChange}
+                    onUpload={onUpload}
+                    onViewModeChange={onViewModeChange}
+                    view={view}
+                    viewMode={viewMode}
+                    collaborationRole={collaborationRole}
+                />
+            )}
+        </div>
+        <div className="permission-level-mobile">
+            <PermissionLevel level={collaborationRole}></PermissionLevel>
+        </div>   
     </div>
 );
 

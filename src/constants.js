@@ -25,6 +25,7 @@ export const VIEW_UPLOAD_EMPTY: 'upload-empty' = 'upload-empty';
 export const VIEW_UPLOAD_IN_PROGRESS: 'upload-inprogress' = 'upload-inprogress';
 export const VIEW_UPLOAD_SUCCESS: 'upload-success' = 'upload-success';
 export const VIEW_METADATA: 'metadata' = 'metadata';
+export const VIEW_UPLOAD_FAILED_CAUSED_FILE_LOCKED = 'upload-failed-caused-file-locked';
 
 /* ----------------------- ViewModes ---------------------------- */
 export const VIEW_MODE_LIST: 'list' = 'list';
@@ -97,6 +98,7 @@ export const FIELD_PERMISSIONS = 'permissions';
 export const FIELD_PERMISSIONS_CAN_SHARE = `${FIELD_PERMISSIONS}.can_share`;
 export const FIELD_PERMISSIONS_CAN_UPLOAD = `${FIELD_PERMISSIONS}.can_upload`;
 export const FIELD_ITEM_COLLECTION = 'item_collection';
+export const FIELD_COLLECTIONS = 'collections';
 export const FIELD_PATH_COLLECTION = 'path_collection';
 export const FIELD_CONTENT_CREATED_AT: 'content_created_at' = 'content_created_at';
 export const FIELD_CONTENT_MODIFIED_AT: 'content_modified_at' = 'content_modified_at';
@@ -155,6 +157,7 @@ export const FIELD_UPLOADER_DISPLAY_NAME: 'uploader_display_name' = 'uploader_di
 export const FIELD_CLASSIFICATION: 'classification' = 'classification';
 export const FIELD_ENTERPRISE: 'enterprise' = 'enterprise';
 export const FIELD_HOSTNAME: 'hostname' = 'hostname';
+export const FIELD_LOCK = 'lock';
 
 /* ----------------------- Permissions --------------------------- */
 export const PERMISSION_CAN_COMMENT = 'can_comment';
@@ -236,6 +239,7 @@ export const OVERLAY_WRAPPER_CLASS = 'overlay-wrapper';
 export const ERROR_CODE_ITEM_NAME_INVALID = 'item_name_invalid';
 export const ERROR_CODE_ITEM_NAME_TOO_LONG = 'item_name_too_long';
 export const ERROR_CODE_ITEM_NAME_IN_USE = 'item_name_in_use';
+export const ERROR_CODE_ACCESS_DENIED_ITEM_LOCLED = 'access_denied_item_locked';
 export const ERROR_CODE_UPLOAD_FILE_LIMIT = 'upload_file_limit';
 export const ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED = 'child_folder_failed_upload';
 export const ERROR_CODE_UPLOAD_STORAGE_LIMIT_EXCEEDED = 'storage_limit_exceeded';
@@ -243,6 +247,7 @@ export const ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED = 'file_size_limit_excee
 export const ERROR_CODE_UPLOAD_PENDING_APP_FOLDER_SIZE_LIMIT = 'pending_app_folder_size_limit';
 export const ERROR_CODE_UPLOAD_BAD_DIGEST = 'bad_digest';
 export const ERROR_CODE_UPLOAD_FAILED_PACKAGE = 'failed_package_upload';
+
 export const ERROR_CODE_FETCH_ACTIVITY = 'fetch_activity_error';
 export const ERROR_CODE_FETCH_ANNOTATION = 'fetch_annotation_error';
 export const ERROR_CODE_FETCH_ANNOTATIONS = 'fetch_annotations_error';
@@ -500,3 +505,5 @@ export const KEYS = {
 
 /* ----------------- Other ----------------------- */
 export const ONE_HOUR_MS = 3600000; // 60 * 60 * 1000
+
+export const ONLYOFFICE_SUPPORTED_EXTENSIONS = window?.__app_config?.constants?.ONLYOFFICE_SUPPORTED_EXTENSIONS;

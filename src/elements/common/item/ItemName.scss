@@ -1,11 +1,38 @@
 @import '../variables';
 
 .be-item-label {
-    display: block;
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
     text-align: left;
     text-overflow: ellipsis;
     outline: none;
+
+    display: flex;
+    align-items: center;
+}
+
+.be-item-name-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.be-item-name-container {
+    display: flex;
+}
+
+.version-history-badge {
+    display: flex;
+    align-items: center;
+    border: 1px solid #666;
+    border-radius: 2px;
+    color: #666;
+    font-size: 11px;
+    font-weight: 700;
+    height: 15px;
+    letter-spacing: .8px;
+    line-height: 7px;
+    margin-left: 5px;
+    padding: 1px 3px;
 }

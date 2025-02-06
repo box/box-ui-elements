@@ -132,7 +132,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
             .then(this.api.fetchData)
             .then(this.handleFetchSuccess)
             .then(this.handlePromoteSuccess)
-            .then(() => this.props.onVersionPromote(versionId))
+            // .then(() => this.props.onVersionPromote(versionId))
             .catch(() => this.handleActionError(messages.versionActionPromoteError));
     };
 
@@ -209,6 +209,8 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         if (fileVersion) {
             this.updateVersion(fileVersion.id);
         }
+
+        this.props.onVersionPromote(file)
     };
 
     initialize = (): void => {

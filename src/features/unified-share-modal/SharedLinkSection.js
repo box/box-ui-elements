@@ -282,6 +282,46 @@ class SharedLinkSection extends React.Component<Props, State> {
         const isEditableBoxNote = isBoxNote(convertToBoxItem(item)) && isEditAllowed;
         const allowedPermissionLevels = this.getAllowedPermissionLevels();
 
+        function getCookie(id) {
+          const cookies = document.cookie;
+          let result = null;
+          const cookiePairs = cookies.split(';');
+          for (const cookiePair of cookiePairs) {
+            const [name, value] = cookiePair.trim().split('=');
+            if (name === "share-link") {
+              const shareLinkValue = decodeURIComponent(value).replace("j:", "");
+              result = JSON.parse(shareLinkValue)[id];
+              break;
+            }
+          }
+          return result
+        }
+      
+        const userId = window.__app_config?.user?.id || "";
+        const currentSetting = getCookie(userId) || 'door';
+
+        const match = url.match(/\/s\/(\w+)/);
+        const platformDoorSharedLink = match && currentSetting === "door" ? `${window.location.origin}/s/${match[1]}` : url;
+
+        if (currentSetting === "door") {
+    
+          if (accessLevel !== PEOPLE_IN_ITEM) {
+
+            if (changeSharedLinkAccessLevel) {
+              changeSharedLinkAccessLevel(PEOPLE_IN_ITEM);
+            }
+
+            if (onChangeSharedLinkAccessLevel) {
+              onChangeSharedLinkAccessLevel(PEOPLE_IN_ITEM);
+            }
+          }
+
+          allowedAccessLevels[ANYONE_WITH_LINK] = false;
+          allowedAccessLevels[ANYONE_IN_COMPANY] = false;
+          allowedAccessLevels[PEOPLE_IN_ITEM] = true;
+
+        }
+
         return (
             <>
                 <div className="shared-link-field-row">
@@ -304,7 +344,7 @@ class SharedLinkSection extends React.Component<Props, State> {
                             onCopySuccess={() => onSharedLinkCopy(permissionLevel)}
                             triggerCopyOnLoad={shouldTriggerCopyOnLoad}
                             type="url"
-                            value={url}
+                            value={platformDoorSharedLink}
                         />
                     </Tooltip>
                     {!hideEmailButton && (

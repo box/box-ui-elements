@@ -35,10 +35,12 @@ import AnnotationsAPI from './Annotations';
 import OpenWithAPI from './OpenWith';
 import MetadataQueryAPI from './MetadataQuery';
 import BoxEditAPI from './box-edit';
+import CollectionsAPI from './Collections';
 import { DEFAULT_HOSTNAME_API, DEFAULT_HOSTNAME_UPLOAD, TYPE_FOLDER, TYPE_FILE, TYPE_WEBLINK } from '../constants';
 import type { ItemType } from '../common/types/core';
 import type { APIOptions } from '../common/types/api';
 import type APICache from '../utils/Cache';
+import FolderListItemsAPI from './FolderListItems';
 
 type ItemAPI = FolderAPI | FileAPI | WebLinkAPI;
 
@@ -459,8 +461,10 @@ class APIFactory {
      *
      * @return {FolderAPI} FolderAPI instance
      */
-    getFolderAPI(): FolderAPI {
-        this.destroy();
+    getFolderAPI(shouldDestroy: boolean = true): FolderAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
         this.folderAPI = new FolderAPI(this.options);
         return this.folderAPI;
     }
@@ -829,6 +833,36 @@ class APIFactory {
 
         this.annotationsAPI = new AnnotationsAPI(this.options);
         return this.annotationsAPI;
+    }
+
+    /**
+     * API for the App Colleciton endpoint
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {AppIntegrationsAPI} AppIntegrationsAPI instance
+     */
+    getCollectionAPI(shouldDestroy: boolean): CollectionsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.collectionsAPI = new CollectionsAPI(this.options);
+        return this.collectionsAPI;
+    }
+
+    /**
+     * API for the List items in folder endpoint
+     *
+     * @param {boolean} shouldDestroy - true if the factory should destroy before returning the call
+     * @return {AppIntegrationsAPI} AppIntegrationsAPI instance
+     */
+    getFolderListItemsAPI(shouldDestroy: boolean): FolderListItemsAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
+
+        this.folderListItemsAPI = new FolderListItemsAPI(this.options);
+        return this.folderListItemsAPI;
     }
 }
 

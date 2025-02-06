@@ -15,6 +15,8 @@ import { VIEW_ERROR, VIEW_UPLOAD_EMPTY, VIEW_UPLOAD_IN_PROGRESS, VIEW_UPLOAD_SUC
 import type { View } from '../../common/types/core';
 
 import './UploadState.scss';
+import type { UploadFile } from 'common/types/upload';
+import InlineNotice from '../../components/inline-notice';
 
 type Props = {
     canDrop: boolean,
@@ -24,11 +26,13 @@ type Props = {
     isTouch: boolean,
     onSelect: Function,
     view: View,
+    conflictedItems: UploadFile,
 };
 
-const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFolderUploadEnabled }: Props) => {
+const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFolderUploadEnabled, conflictedItems }: Props) => {
     let icon;
     let content;
+
     switch (view) {
         case VIEW_ERROR:
             icon = <ErrorEmptyState />;
@@ -71,15 +75,27 @@ const UploadState = ({ canDrop, hasItems, isOver, isTouch, view, onSelect, isFol
         case VIEW_UPLOAD_SUCCESS:
             icon = <UploadSuccessState />;
             content = (
-                <UploadStateContent
-                    fileInputLabel={<FormattedMessage {...messages.uploadSuccessFileInput} />}
-                    folderInputLabel={
-                        isFolderUploadEnabled && <FormattedMessage {...messages.uploadSuccessFolderInput} />
-                    }
-                    message={<FormattedMessage {...messages.uploadSuccess} />}
-                    onChange={onSelect}
-                    useButton={isTouch}
-                />
+                <>
+                    <UploadStateContent
+                        fileInputLabel={<FormattedMessage {...messages.uploadSuccessFileInput} />}
+                        folderInputLabel={
+                            isFolderUploadEnabled && <FormattedMessage {...messages.uploadSuccessFolderInput} />
+                        }
+                        message={<FormattedMessage {...messages.uploadSuccess} />}
+                        onChange={onSelect}
+                        useButton={isTouch}
+                    />
+                    <div className="pal">
+                        {conflictedItems.map(item => {
+                            return (
+                                <InlineNotice type="info">
+                                    <b>{item.name}</b>
+                                    <FormattedMessage {...messages.createNewFile} />
+                                </InlineNotice>
+                            );
+                        })}
+                    </div>
+                </>
             );
             break;
         default:

@@ -11,4 +11,12 @@
     .bdl-ViewModeChangeButton {
         margin-left: 7px;
     }
+
+    .header-right-permission-level {
+        display: block;
+        
+        @media screen and (max-width: 768px) {
+            display: none;
+        }
+    }
 }

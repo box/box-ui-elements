@@ -22,4 +22,15 @@
         font: inherit;
         -webkit-appearance: none;
     }
+
+    .be-btn-refresh {
+        padding: 8px 9px;
+        margin-right: 0;
+    }
+}
+
+.be-is-small {
+    .be-header {
+        padding-right: 18px;
+    }
 }

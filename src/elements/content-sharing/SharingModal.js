@@ -98,6 +98,7 @@ function SharingModal({
     // Handle successful GET requests to /files or /folders
     const handleGetItemSuccess = React.useCallback((itemData: ContentSharingItemAPIResponse) => {
         const { item: itemFromAPI, sharedLink: sharedLinkFromAPI } = convertItemResponse(itemData);
+
         setItem(itemFromAPI);
         setSharedLink(sharedLinkFromAPI);
         setIsLoading(false);
@@ -148,6 +149,9 @@ function SharingModal({
 
     // Get initial data for the item
     React.useEffect(() => {
+        // Unset Send invite callback
+        setSendInvites(null);
+
         const getItem = () => {
             if (itemType === TYPE_FILE) {
                 api.getFileAPI().getFile(itemID, handleGetItemSuccess, getError, {

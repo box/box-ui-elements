@@ -10,6 +10,8 @@ import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
 import type { View } from '../../../common/types/core';
+import Button from '../../../components/button';
+import IconRefresh from '../../../icons/general/IconRefresh';
 
 import './Header.scss';
 
@@ -19,12 +21,13 @@ type Props = {
     isSmall: boolean,
     logoUrl?: string,
     onSearch: Function,
+    onRefresh: Function,
     searchQuery: string,
     view: View,
 };
 
 // eslint-disable-next-line react/prop-types
-const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSearch, logoUrl, intl }: Props) => {
+const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSearch, logoUrl, intl, onRefresh }: Props) => {
     const { formatMessage } = intl;
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
     const searchMessage = formatMessage(messages.searchPlaceholder);
@@ -45,6 +48,9 @@ const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSear
                     value={searchQuery}
                 />
             </div>
+            <Button className={'be-btn-refresh'} onClick={onRefresh}>
+                <IconRefresh></IconRefresh>
+            </Button>
         </div>
     );
 };

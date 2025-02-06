@@ -53,12 +53,23 @@ const messages = defineMessages({
             'Message that appears when collaborators cannot be added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitesError',
     },
+    sendExternalCollaborationInvitesError: {
+      defaultMessage: 'Your invitation could not be sent because external collaboration is restricted by the applied security policy.',
+      description:
+          'Message that appears when external collaborators cannot be added to the shared link in the ContentSharing Element.',
+      id: 'be.contentSharing.sendExternalCollaborationInvitesError',
+  },
     sendInvitesSuccess: {
         defaultMessage: 'Successfully invited collaborators.',
         description:
             'Message that appears when collaborators were added to the shared link in the ContentSharing Element.',
         id: 'be.contentSharing.sendInvitesSuccess',
     },
+    collaborationInviteRestricted: {
+        defaultMessage: 'Only owners and co-owners can invite collaborators into this folder.',
+        description:'collaborationInviteRestricted',
+        id: 'be.contentSharing.collaborationInviteRestricted',
+    }
 });
 
 export default messages;

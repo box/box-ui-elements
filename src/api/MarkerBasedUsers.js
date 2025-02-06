@@ -15,7 +15,7 @@ class MarkerBasedUsers extends MarkerBasedApi {
      * @returns {string} URL for fetching users
      */
     getUrl(): string {
-        return `${this.getBaseApiUrl()}/users`;
+        return `/api/enterpriseUsers`;
     }
 
     /**

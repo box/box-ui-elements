@@ -161,6 +161,13 @@ class ES6Wrapper extends EventEmitter {
 
         return false;
     }
+
+    refresh(): void {
+        const component = this.getComponent();
+        if (component && typeof component.refresh === 'function') {
+            component.refresh();
+        }
+    }
 }
 
 export default ES6Wrapper;

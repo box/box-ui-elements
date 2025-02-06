@@ -94,6 +94,7 @@ class Sidebar extends React.Component<Props, State> {
         };
 
         this.setForcedByLocation();
+        this.isForced(false)
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -111,6 +112,15 @@ class Sidebar extends React.Component<Props, State> {
             this.setForcedByLocation();
             this.setState({ isDirty: true });
         }
+
+        if (fileId !== prevFileId) {
+            this.isForced(false);
+        }
+
+    }
+
+    componentWillUnmount(): void {
+      this.isForced(false);
     }
 
     getUrlPrefix = (pathname: string) => {

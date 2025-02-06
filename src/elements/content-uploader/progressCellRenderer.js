@@ -18,6 +18,7 @@ import {
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     ERROR_CODE_UPLOAD_BAD_DIGEST,
     ERROR_CODE_UPLOAD_FAILED_PACKAGE,
+    ERROR_CODE_ACCESS_DENIED_ITEM_LOCLED,
     STATUS_IN_PROGRESS,
     STATUS_STAGED,
     STATUS_ERROR,
@@ -56,6 +57,8 @@ const getErrorMessage = (errorCode: ?string, itemName: ?string, shouldShowUpgrad
             return <FormattedMessage {...messages.uploadsPendingFolderSizeLimitErrorMessage} />;
         case ERROR_CODE_UPLOAD_FAILED_PACKAGE:
             return <FormattedMessage {...messages.uploadsPackageUploadErrorMessage} />;
+        case ERROR_CODE_ACCESS_DENIED_ITEM_LOCLED:
+            return <FormattedMessage {...messages.uploadFailedCausedItemLocked} />;
         default:
             return <FormattedMessage {...messages.uploadsDefaultErrorMessage} />;
     }

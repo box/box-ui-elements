@@ -8,6 +8,7 @@ export type CommonGridViewFunctions = {
     onItemRename: (item: BoxItem) => void,
     onItemSelect: (item: BoxItem, callback: Function) => void,
     onItemShare: (item: BoxItem) => void,
+    onItemEdit: (item: BoxItem) => void,
 };
 export type ItemGridProps = {
     canDelete: boolean,

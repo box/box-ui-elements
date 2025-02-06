@@ -522,7 +522,6 @@ export const convertUserContactsResponse = (
             ({ id, login: email, status }) =>
                 id !== currentUserID &&
                 email &&
-                !APP_USERS_DOMAIN_REGEXP.test(email) &&
                 status &&
                 status !== STATUS_INACTIVE,
         )

@@ -69,32 +69,28 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false,
         return <span />;
     }
 
-    // The crumbs given may have ancestors higher than the root. We need to filter them out.
-    const filteredCrumbs = filterCrumbs(rootId, crumbs);
-
     // Make sure "All Files" crumb is localized
-    const defaultRootCrumb = filteredCrumbs.find(({ id }) => id === DEFAULT_ROOT);
+    const defaultRootCrumb = crumbs.find(({ id }) => id === DEFAULT_ROOT);
     if (defaultRootCrumb) {
         defaultRootCrumb.name = intl.formatMessage(messages.rootBreadcrumb);
     }
 
-    const { length } = filteredCrumbs;
+    const { length } = crumbs;
 
     // Always show the last/leaf breadcrumb.
-    const crumb = filteredCrumbs[length - 1];
+    const crumb = crumbs[length - 1];
     const onClick = crumb.id ? () => onCrumbClick(crumb.id) : undefined;
     const lastBreadcrumb = <Breadcrumb isLast name={crumb.name} onClick={onClick} />;
 
     // Always show the second last/parent breadcrumb when there are at least 2 crumbs.
-    const secondLastBreadcrumb =
-        length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter) : null;
+    const secondLastBreadcrumb = length > 1 ? getBreadcrumb(crumbs[length - 2], false, onCrumbClick, delimiter) : null;
 
     // Only show the more dropdown when there were at least 4 crumbs.
     const moreBreadcrumbs =
-        length > 3 ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter) : null;
+        length > 3 ? getBreadcrumb(crumbs.slice(1, length - 2), false, onCrumbClick, delimiter) : null;
 
     // Only show the root breadcrumb when there are at least 3 crumbs.
-    const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;
+    const firstBreadcrumb = length > 2 ? getBreadcrumb(crumbs[0], false, onCrumbClick, delimiter) : null;
 
     return (
         <div className="be-breadcrumbs">

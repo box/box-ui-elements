@@ -14,7 +14,7 @@ class MarkerBasedGroups extends MarkerBasedAPI {
      * @returns {string} URL for fetching groups
      */
     getUrl(): string {
-        return `${this.getBaseApiUrl()}/groups`;
+        return `/api/groups`;
     }
 
     /**

@@ -8,6 +8,7 @@
     padding: 0 20px 0 25px;
     border-bottom: 1px solid $bdl-gray-10;
     box-shadow: 0 4px 6px -2px $transparent-black;
+    min-height: 50px;
 
     .be-is-small & {
         padding: 0 15px 0 18px;
@@ -20,4 +21,14 @@
     .bce.be-is-small & {
         border-bottom: 0 none;
     }
+}
+
+.permission-level-mobile {
+  display: none;
+
+  @media screen and (max-width: 768px) {
+      display: block;
+      margin-right: 18px;
+      text-align: end;
+  }
 }

@@ -13,7 +13,7 @@ import {
     DEFAULT_HOSTNAME_UPLOAD_GOV,
 } from '../../constants';
 
-const MAX_RETRY = 5;
+const MAX_RETRY = 50;
 // Note: We may have to change this number if we add a lot more fast upload hosts.
 const MAX_REACHABILITY_RETRY = 10;
 
@@ -43,6 +43,9 @@ class BaseUpload extends Base {
     retryTimeout: TimeoutID;
 
     isUploadFallbackLogicEnabled: boolean = false;
+
+    newFilename: string;
+    hasConflict: boolean;
 
     /**
      * Sends an upload pre-flight request. If a file ID is available,
@@ -157,6 +160,15 @@ class BaseUpload extends Base {
 
         if (this.retryCount >= MAX_RETRY) {
             this.errorCallback(errorData);
+        } else if (errorData && errorData.status === 403) {
+            this.hasConflict = true;
+            this.fileName = this.incrementFilename(this.fileName);
+            this.newFilename = this.fileName;
+            this.fileId = null;
+            this.overwrite = false;
+            this.makePreflightRequest();
+            this.retryCount += 1;
+
             // Automatically handle name conflict errors
         } else if (errorData && errorData.status === 409) {
             if (this.overwrite) {
@@ -169,10 +181,11 @@ class BaseUpload extends Base {
                 // conflictCallback handler for setting new file name
                 this.fileName = this.conflictCallback(this.fileName);
             } else {
-                // Otherwise, reupload and append timestamp
-                // 'test.jpg' becomes 'test-TIMESTAMP.jpg'
-                const extension = this.fileName.substr(this.fileName.lastIndexOf('.')) || '';
-                this.fileName = `${this.fileName.substr(0, this.fileName.lastIndexOf('.'))}-${Date.now()}${extension}`;
+                // Otherwise, reupload and append number
+                // 'test.jpg' becomes 'test (1).jpg'
+                this.fileName = this.incrementFilename(this.newFilename ?? this.fileName);
+                this.newFilename = this.fileName;
+                this.hasConflict = true;
             }
             this.makePreflightRequest();
             this.retryCount += 1;
@@ -241,6 +254,38 @@ class BaseUpload extends Base {
         const uploadHost = `${splitUrl[0]}//${splitUrl[2]}/`;
         return uploadHost;
     }
+
+    /**
+     * Detect " (n)" suffixed string. Return "n"
+     * @param {String} name
+     * @return {String|null} The integer string or null
+     */
+    isFilenameIncremented = name => {
+        const m = /\s\((\d+)\)$/.exec(name);
+        return m && m[1];
+    };
+
+    /**
+     * Increment unsuffixed or " (n)" suffixed string
+     * @dependency {Function} isFilenameIncremented
+     * @param {String} name
+     * @return {String} The " ((n|0)+1)" suffixed filename
+     */
+    incrementFilename = name => {
+        const [filename, ext] = this.extractFilenameAndExtension(name);
+        const isInc = this.isFilenameIncremented(filename);
+        const newFilename = isInc ? filename.replace(/\d+(?=\)$)/, m => +m + 1) : `${filename} (1)`;
+
+        return `${newFilename}.${ext}`;
+    };
+
+    extractFilenameAndExtension = name => {
+        const filenameExtension = name.replace(/^.*[\\\/]/, '');
+        const filename = filenameExtension.substring(0, filenameExtension.lastIndexOf('.'));
+        const ext = filenameExtension.split('.').pop();
+
+        return [filename, ext];
+    };
 }
 
 export default BaseUpload;

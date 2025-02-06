@@ -42,6 +42,8 @@ type Props = {
     isMedium: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    onItemAddFavoriteCollection: Function,
+    onItemRemoveFromFavoriteCollection: Function,
     onItemClick: Function,
     onItemDelete: Function,
     onItemDownload: Function,
@@ -49,6 +51,7 @@ type Props = {
     onItemRename: Function,
     onItemSelect: Function,
     onItemShare: Function,
+    onItemEdit: Function,
     onMetadataUpdate: Function,
     onSortChange: Function,
     rootElement?: HTMLElement,
@@ -75,6 +78,7 @@ const Content = ({
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
     const isGridView = !isMetadataBasedView && viewMode === VIEW_MODE_GRID; // Folder view or Recents view
+    
 
     return (
         <div className="bce-content">

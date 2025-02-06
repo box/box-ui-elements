@@ -32,6 +32,11 @@ const messages = defineMessages({
         description: 'Label for preview action.',
         defaultMessage: 'Preview',
     },
+    previewInNewTab: {
+        id: 'be.previewInNewTab',
+        description: 'Label for preview in new tab action.',
+        defaultMessage: 'Preview in new tab',
+    },
     previewError: {
         id: 'be.previewError',
         description: 'Error message when Preview fails due to the files call.',
@@ -742,10 +747,35 @@ const messages = defineMessages({
         description: 'Default error message shown when upload fails',
         defaultMessage: 'Something went wrong with the upload. Please try again.',
     },
+    uploadFailedCausedItemLocked: {
+        id: 'be.uploadFailedCausedItemLocked',
+        description: 'Error message to display when upload failed caused item locked',
+        defaultMessage: 'ロックされているためアップロードできません。',
+    },
     errorOccured: {
         id: 'be.errorOccured',
         defaultMessage: 'An error occurred',
         description: 'Title when an error occurs',
+    },
+    addToFavoritesLabel: {
+        id: 'be.addToFavoritesLabel',
+        defaultMessage: 'Add to Favorites',
+        description: 'Label for an add to favorites action',
+    },
+    addToFavoritesMessage: {
+      id: 'be.addToFavoritesMessage',
+      defaultMessage: 'Added to favorites.',
+      description: 'Message for an add to favorites action',
+    },
+    removeFavoritesLabel: {
+        id: 'be.removeFavoritesLabel',
+        defaultMessage: 'Remove Favorites',
+        description: 'Label for an remove favorites action',
+    },
+    removeFavoritesMessage: {
+      id: 'be.removeFavoritesMessage',
+      defaultMessage: 'Removed from Favorites.',
+      description: 'Message for an remove favorites action',
     },
     editLabel: {
         id: 'be.editLabel',
@@ -1005,6 +1035,16 @@ const messages = defineMessages({
         description: 'Icon title for a Box item of type folder that is private and has no collaborators',
         defaultMessage: 'Personal Folder',
     },
+    createNewFile: {
+        id: 'be.createNewFile',
+        description: 'This file is locked so I created a new one.',
+        defaultMessage: 'This file is locked so I created a new one.',
+    },
+    currentVersion: {
+      id: 'be.sidebarVersions.current',
+      description: 'Current Version',
+      defaultMessage: 'Current Version',
+    }
 });
 
 export default messages;

@@ -49,11 +49,7 @@ class CollaboratorList extends React.Component<Props> {
     render() {
         const { collaborators, onDoneClick, maxCollaboratorListSize, trackingProps } = this.props;
         const { usernameProps, emailProps, manageLinkProps, viewAdditionalProps, doneButtonProps } = trackingProps;
-        const manageAllBtn = (
-            <span className="manage-all-btn">
-                <FormattedMessage {...messages.manageAllLinkText} />
-            </span>
-        );
+        const manageAllBtn = null;
         const maxListSizeToRender = Math.min(maxCollaboratorListSize, MAX_COLLABORATOR_LIST_SIZE);
 
         return (

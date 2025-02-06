@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  box-ui-elements:
+    container_name: box-ui-elements
+    build: .
+    environment:
+      - TOKEN=${TOKEN}
+      - FOLDERID=${FOLDERID}
+      - FILEID=${FILEID}
+    ports:
+      - "6060:6060"
+    volumes:
+      - .:/usr/src/node-app
+      - /usr/src/node-app/node_modules

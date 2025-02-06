@@ -25,7 +25,6 @@ import API from '../../api';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
 import Footer from './Footer';
 import PreviewDialog from './PreviewDialog';
-import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
@@ -65,6 +64,7 @@ import {
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     TYPED_ID_FOLDER_PREFIX,
     VIEW_MODE_GRID,
+    CLIENT_NAME_CONTENT_SHARING,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
@@ -86,9 +86,22 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+import notiMessages from '../common/messages';
+import SharingModal from '../../elements/content-sharing/SharingModal';
+import Notification from '../../components/notification/Notification';
+import { DURATION_SHORT, TYPE_ERROR, TYPE_INFO } from '../../components/notification/constants';
+import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
+import Button from '../../components/button';
+import PrimaryButton from '../../components/primary-button';
+import FileCollaborationsAPI from '../../api/FileCollaborations';
+import keyBy from 'lodash/keyBy';
+import { FormattedMessage } from 'react-intl';
+import TokenService from '../../utils/TokenService';
+import { getTypedFileId } from '../../utils/file';
 
 const GRID_VIEW_MAX_COLUMNS = 7;
 const GRID_VIEW_MIN_COLUMNS = 1;
+const LIMIT_COLLECTION_NUMBER = 100;
 
 type Props = {
     apiHost: string,
@@ -165,6 +178,10 @@ type State = {
     sortBy: SortBy,
     sortDirection: SortDirection,
     view: View,
+    favoriteCollection: Object,
+    notification: typeof Notification,
+    notificationID: number,
+    collaborationRole?: string,
 };
 
 const localStoreViewMode = 'bce.defaultViewMode';
@@ -265,6 +282,8 @@ class ContentExplorer extends Component<Props, State> {
             uploadHost,
         });
 
+        this.contentSharingAPI = null;
+
         this.id = uniqueid('bce_');
 
         this.state = {
@@ -288,7 +307,44 @@ class ContentExplorer extends Component<Props, State> {
             sortBy,
             sortDirection,
             view: VIEW_FOLDER,
+            favoriteCollection: null,
+            notification: null,
+            notificationID: 0,
+            collaborationRole: null,
         };
+
+        this.initAPIs();
+    }
+
+    closeNotification = () => {
+        this.setState({ notification: null });
+    };
+
+    addNotification = (content, type) => {
+        // const type = [undefined, 'info', 'warn', 'error'][id % 4];
+        const notification = (
+            <Notification
+                duration={DURATION_SHORT}
+                key={Date.now()}
+                onClose={() => this.closeNotification()}
+                type={type}
+            >
+                <span>{content}</span>
+            </Notification>
+        );
+
+        this.setState({
+            notification: notification,
+        });
+    };
+
+    makeContentSharingAPI(apiHost, itemType, itemID, token) {
+        return new API({
+            apiHost,
+            clientName: CLIENT_NAME_CONTENT_SHARING,
+            id: `${itemType}_${itemID}`,
+            token,
+        });
     }
 
     /**
@@ -299,6 +355,10 @@ class ContentExplorer extends Component<Props, State> {
      */
     clearCache(): void {
         this.api.destroy(true);
+    }
+
+    refresh() {
+        this.refreshCollection();
     }
 
     /**
@@ -334,6 +394,15 @@ class ContentExplorer extends Component<Props, State> {
             default:
                 this.fetchFolder(currentFolderId);
         }
+
+        this.api
+            .getCollectionAPI()
+            .getFavoriteCollection()
+            .then(data => {
+                this.setState({
+                    favoriteCollection: data,
+                });
+            });
     }
 
     /**
@@ -349,6 +418,15 @@ class ContentExplorer extends Component<Props, State> {
         const {
             currentCollection: { id },
         }: State = prevState;
+
+        if (prevState.selected?.id !== this.state.selected?.id) {
+            this.contentSharingAPI = this.makeContentSharingAPI(
+                this.props.apiHost,
+                this.state.selected?.type,
+                this.state.selected?.id,
+                this.props.token,
+            );
+        }
 
         if (prevFolderId === currentFolderId) {
             return;
@@ -504,6 +582,22 @@ class ContentExplorer extends Component<Props, State> {
         }
     };
 
+    forceRefreshCollection = () => {
+        if (this.state.isPreviewModalOpen) {
+            return;
+        }
+
+        this.api.destroy(true);
+        this.initAPIs();
+
+        this.refreshCollection();
+    };
+
+    initAPIs() {
+        this.fileCollaborationsAPI = this.api.getFileCollaborationsAPI();
+        this.folderCollaborationsAPI = this.api.getFolderCollaborationsAPI();
+    }
+
     /**
      * Folder fetch success callback
      *
@@ -512,26 +606,35 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} triggerNavigationEvent - To trigger navigate event and focus grid
      * @return {void}
      */
-    fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
+    async fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
         const { onNavigate, rootFolderId }: Props = this.props;
-        const { boxItem, id, name }: Collection = collection;
-        const { selected }: State = this.state;
+        const { boxItem, id, name, items = [] }: Collection = collection;
+        // const folderListItemsAPI = this.api.getFolderListItemsAPI(false);
+        // const { selected }: State = this.state;
         const rootName = id === rootFolderId ? name : '';
+        const collaborationRole = await this.folderCollaborationsAPI.getCollaborationsRole(boxItem);
+        // const fileItems = items.filter(item => item.type === TYPE_FILE);
+        // const folderItems = items.filter(item => item.type === TYPE_FOLDER);
 
         // Close any open modals
         this.closeModals();
 
-        this.updateCollection(collection, selected, () => {
+        // const collectionFileDetails =  await folderListItemsAPI.getAllEntries(id).then(items => items.filter(item => item.type === TYPE_FILE)).then(
+        //   folderListFileItems => this.mergeArraysByCommonId(fileItems, folderListFileItems, 'id'))
+
+        // const newCollection = collectionFileDetails.length > 0 ? {...collection, items: [...folderItems, ...collectionFileDetails] } : collection
+
+        this.updateCollection(collection, undefined, () => {
             if (triggerNavigationEvent) {
                 // Fire folder navigation event
-                this.setState({ rootName }, this.finishNavigation);
+                this.setState({ rootName, collaborationRole }, this.finishNavigation);
                 if (boxItem) {
                     onNavigate(cloneDeep(boxItem));
                 }
             } else {
-                this.setState({ rootName });
+                this.setState({ rootName, collaborationRole });
             }
-        });
+        }, true);
     }
 
     /**
@@ -571,6 +674,7 @@ class ContentExplorer extends Component<Props, State> {
             view: VIEW_FOLDER,
             currentCollection: this.currentUnloadedCollection(),
             currentOffset: offset,
+            selected: undefined
         });
 
         // Fetch the folder using folder API
@@ -596,6 +700,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     onItemClick = (item: BoxItem | string) => {
+        const { currentCollection: { percentLoaded }}: State = this.state;
         // If the id was passed in, just use that
         if (typeof item === 'string') {
             this.fetchFolder(item);
@@ -612,6 +717,10 @@ class ContentExplorer extends Component<Props, State> {
 
         if (isTouch) {
             return;
+        }
+
+        if (percentLoaded < 100) {
+          return;
         }
 
         this.preview(item);
@@ -835,6 +944,36 @@ class ContentExplorer extends Component<Props, State> {
         }
     };
 
+     mergeArraysByCommonId(arrayA:Object[], arrayB: Object[], idKey: String): Object[] {
+      const mergedArray = [];
+    
+      // Create a map for quick lookups based on the idKey
+      const mapB = new Map(arrayB.map(itemB => [itemB[idKey], itemB]));
+    
+      for (const itemA of arrayA) {
+        const id = itemA[idKey];
+    
+        if (mapB.has(id)) {
+          // Merge properties from arrayB's item with arrayA's item
+          const mergedItem = { ...itemA, ...mapB.get(id) };
+          mergedArray.push(mergedItem);
+        } else {
+          // If no match found, just add the item from arrayA
+          mergedArray.push(itemA);
+        }
+      }
+    
+      // Add items from arrayB that were not present in arrayA
+      for (const itemB of arrayB) {
+        const id = itemB[idKey];
+        if (!mapB.has(id)) {
+          mergedArray.push(itemB);
+        }
+      }
+    
+      return mergedArray;
+    }
+
     /**
      * Sets state with currentCollection updated to have items.selected properties
      * set according to the given selected param. Also updates the selected item in the
@@ -847,29 +986,68 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Function} [callback] - callback function that should be called after setState occurs
      * @return {void}
      */
-    async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
+    async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop, isItemsWithDetail: boolean = false): Object {
         const newCollection: Collection = cloneDeep(collection);
         const { items = [] } = newCollection;
         const fileAPI = this.api.getFileAPI(false);
+        const folderAPI = this.api.getFolderAPI(false);
         const selectedId = selectedItem ? selectedItem.id : null;
         let newSelectedItem: ?BoxItem;
 
+        const fileItems = items.filter(item => item.type === TYPE_FILE);
+
         const itemThumbnails = await Promise.all(
-            items.map(item => {
-                return item.type === TYPE_FILE ? fileAPI.getThumbnailUrl(item) : null;
+            fileItems.map(item => {
+                return fileAPI.getThumbnailUrl(item);
             }),
         );
 
+        let itemsWithDetail = keyBy(items, 'id');
+        
+        if (selectedId) {
+          itemsWithDetail[selectedId] = selectedItem
+        }
+
+        const getLockStatus = id => {
+            const file = itemsWithDetail[id];
+
+            return file?.lock ?? null;
+        };
+
+        const isFavorite = id => {
+            const item = itemsWithDetail[id];
+            const collections = item?.collections || [];
+
+            return !!collections.find(({ collection_type }) => collection_type === 'favorites');
+        };
+
+        // const filesWithCollaborationsRole = await Promise.all(
+        //     fileItems.map(file => {
+        //         const fileDetail = filesWithDetail[file.id];
+        //         return this.fileCollaborationsAPI.getCollaborationsRole(fileDetail);
+        //     }),
+        // );
+
         newCollection.items = items.map((item, index) => {
             const isSelected = item.id === selectedId;
-            const currentItem = isSelected ? selectedItem : item;
             const thumbnailUrl = itemThumbnails[index];
+            const role = isSelected ? selectedItem.role : null;
+            const itemDetail = itemsWithDetail[item.id];
 
+            const oldItem = isSelected ? selectedItem : item;
             const newItem = {
-                ...currentItem,
-                selected: isSelected,
-                thumbnailUrl,
-            };
+              ...oldItem,  
+              selected: isSelected,
+              thumbnailUrl,
+              lock: getLockStatus(item.id),
+              is_favorite: isFavorite(item.id),
+              collaboration_role: role,
+              version_number: itemDetail?.version_number,
+              permissions: itemsWithDetail[item.id]?.permissions || item.permissions,
+              classification: itemsWithDetail[item.id]?.classification || null,
+              representations: itemsWithDetail[item.id]?.representations || undefined,
+              watermark_info: itemsWithDetail[item.id]?.watermark_info || undefined
+            }
 
             if (item.type === TYPE_FILE && thumbnailUrl && !isThumbnailReady(newItem)) {
                 this.attemptThumbnailGeneration(newItem);
@@ -882,6 +1060,7 @@ class ContentExplorer extends Component<Props, State> {
 
             return newItem;
         });
+
         this.setState({ currentCollection: newCollection, selected: newSelectedItem }, callback);
     }
 
@@ -932,17 +1111,31 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Function|void} [onSelect] - optional on select callback
      * @return {void}
      */
-    select = (item: BoxItem, callback: Function = noop): void => {
+    select = async (item: BoxItem, callback: Function = noop, isMoreOptionBtnClick: Boolean = false): void => {
         const { selected, currentCollection }: State = this.state;
         const { items = [] } = currentCollection;
         const { onSelect }: Props = this.props;
 
-        if (item === selected) {
+        if (item === selected && item.role) {
             callback(item);
             return;
         }
 
-        const selectedItem: BoxItem = { ...item, selected: true };
+        let selectedItem: BoxItem = { ...item, selected: true}
+
+        if (isMoreOptionBtnClick) {
+          const selectedItemRole = item.type === 'file' ? await this.fileCollaborationsAPI.getCollaborationsRole(item) : await this.folderCollaborationsAPI.getCollaborationsRole(item)
+          if (item.type === 'file') {
+            const selectedFile = await this.api.getFileAPI(false).getFileInformation(item.id, {
+              fields: ['lock', 'collections', 'accessible_by', 'version_number', 'permissions', 'classification', 'representations', 'watermark_info'], forceFetch: true
+            })
+            selectedItem = { ...selectedFile, selected: true, role: selectedItemRole?.role || 'no-role' }
+          }
+          if (item.type === 'folder') {
+            selectedItem = { ...item, selected: true, role: selectedItemRole || 'no-role' }
+          }
+
+        }
 
         this.updateCollection(currentCollection, selectedItem, () => {
             onSelect(cloneDeep([selectedItem]));
@@ -1006,9 +1199,45 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Object} item - file or folder object
      * @return {void}
      */
-    download = (item: BoxItem): void => {
-        this.select(item, this.downloadCallback);
+    download = (item: BoxItem, isDownloadRepresentation: boolean = false): void => {
+
+        if (isDownloadRepresentation) {
+          this.select(item, this.downloadRepresentationCallback);
+        } else {
+          this.select(item, this.downloadCallback);
+        }
+        
     };
+
+    downloadRepresentationCallback = async () => {
+      const { selected }: State = this.state;
+      const { token } = this.props
+      const representations = selected?.representations?.entries || []
+      const contentUrl = representations.find(item => item.representation === 'pdf')?.content?.url_template || '';
+      const downloadUrl= contentUrl.replace("{+asset_path}", "")
+
+      if (downloadUrl !== "") {
+        const fileName = selected?.name ? selected?.name.replace('.pdf', '') + '.pdf' : 'download.pdf'
+        const accessToken = await TokenService.getReadToken(getTypedFileId(selected.id), token);
+        axios.get(downloadUrl, 
+        { responseType: 'arraybuffer', 
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/pdf',
+            Authorization: `Bearer ${accessToken}` 
+          } }
+        ).then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch((error) => console.log(error));
+      }
+    }
 
     /**
      * Downloads a file
@@ -1032,6 +1261,10 @@ class ContentExplorer extends Component<Props, State> {
         if (!can_download) {
             return;
         }
+
+        onDownload(cloneDeep([selected]));
+
+        return;
 
         const openUrl: Function = (url: string) => {
             openUrlInsideIframe(url);
@@ -1567,6 +1800,56 @@ class ContentExplorer extends Component<Props, State> {
         });
     };
 
+    handleAddFavorite = async (item: BoxItem) => {
+        const api = item.type === TYPE_FILE ? this.api.getFileAPI() : this.api.getFolderAPI();
+        const notiContent = <FormattedMessage {...notiMessages.addToFavoritesMessage} />
+        this.api
+        .getCollectionAPI()
+        .getFavoriteCollectionItems(this.state.favoriteCollection.id).then(async (data) => {
+            // console.log({getFavoriteCollectionItems: data, favoriteCollection: this.state.favoriteCollection})
+            if(data?.total_count >= LIMIT_COLLECTION_NUMBER) {
+                this.addNotification('さらに1項目を追加すると、100項目の制限を超過します。', 'error');
+                return;
+            }
+
+            await api.addToCollection(
+                item,
+                this.state.favoriteCollection.id,
+                updatedItem => {
+                    this.updateCollection(this.state.currentCollection, updatedItem);
+                    this.addNotification(notiContent, 'info');
+                    document.querySelector('.bce-item-row.bce-item-row-selected .bce-more-options .btn:focus')?.blur();
+                },
+                () => this.addNotification('failed', 'error'),
+            );
+        });
+    };
+
+    handleRemoveFavorite = async (item: BoxItem) => {
+        const api = item.type === TYPE_FILE ? this.api.getFileAPI() : this.api.getFolderAPI();
+        const notiContent = <FormattedMessage {...notiMessages.removeFavoritesMessage} />
+
+        await api.removeFromToCollection(
+            item,
+            this.state.favoriteCollection.id,
+            updatedItem => {
+                this.updateCollection(this.state.currentCollection, updatedItem);
+                this.addNotification(notiContent, 'info');
+                document.querySelector('.bce-item-row.bce-item-row-selected .bce-more-options .btn:focus')?.blur();
+            },
+            () => this.addNotification('failed', 'error'),
+        );
+    };
+
+    /**
+     * Handle edit file
+     *
+     * @param item
+     */
+    edit = (item: BoxItem) => {
+        window.open(`/editor/${item.id}`, '_blank');
+    };
+
     /**
      * Renders the file picker
      *
@@ -1632,6 +1915,7 @@ class ContentExplorer extends Component<Props, State> {
             searchQuery,
             selected,
             view,
+            collaborationRole,
         }: State = this.state;
 
         const { id, offset, permissions, totalCount }: Collection = currentCollection;
@@ -1653,6 +1937,9 @@ class ContentExplorer extends Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
+                    {this.state.notification && (
+                        <NotificationsWrapper>{[this.state.notification]}</NotificationsWrapper>
+                    )}
                     <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                         {!isDefaultViewMetadata && (
                             <>
@@ -1662,6 +1949,7 @@ class ContentExplorer extends Component<Props, State> {
                                     searchQuery={searchQuery}
                                     logoUrl={logoUrl}
                                     onSearch={this.search}
+                                    onRefresh={this.forceRefreshCollection}
                                 />
                                 <SubHeader
                                     view={view}
@@ -1682,6 +1970,7 @@ class ContentExplorer extends Component<Props, State> {
                                     onItemClick={this.fetchFolder}
                                     onSortChange={this.sort}
                                     onViewModeChange={this.changeViewMode}
+                                    collaborationRole={collaborationRole}
                                 />
                             </>
                         )}
@@ -1691,6 +1980,8 @@ class ContentExplorer extends Component<Props, State> {
                             canPreview={canPreview}
                             canRename={canRename}
                             canShare={canShare}
+                            onItemAddFavoriteCollection={this.handleAddFavorite}
+                            onItemRemoveFromFavoriteCollection={this.handleRemoveFavorite}
                             currentCollection={currentCollection}
                             focusedRow={focusedRow}
                             gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
@@ -1705,6 +1996,7 @@ class ContentExplorer extends Component<Props, State> {
                             onItemRename={this.rename}
                             onItemSelect={this.select}
                             onItemShare={this.share}
+                            onItemEdit={this.edit}
                             onMetadataUpdate={this.updateMetadata}
                             onSortChange={this.sort}
                             rootElement={this.rootElement}
@@ -1744,7 +2036,30 @@ class ContentExplorer extends Component<Props, State> {
                             contentUploaderProps={contentUploaderProps}
                             requestInterceptor={requestInterceptor}
                             responseInterceptor={responseInterceptor}
-                        />
+                            subHeader={
+                                <SubHeader
+                                    view={view}
+                                    viewMode={viewMode}
+                                    rootId={rootFolderId}
+                                    isSmall={isSmall}
+                                    rootName={rootName}
+                                    currentCollection={currentCollection}
+                                    canUpload={allowUpload}
+                                    canCreateNewFolder={allowCreate}
+                                    gridColumnCount={gridColumnCount}
+                                    gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                    gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                    maxGridColumnCountForWidth={maxGridColumnCount}
+                                    onUpload={this.upload}
+                                    onCreate={this.createFolder}
+                                    onGridViewSliderChange={this.onGridViewSliderChange}
+                                    onItemClick={this.fetchFolder}
+                                    onSortChange={this.sort}
+                                    onViewModeChange={this.changeViewMode}
+                                    hasSubHeaderRight={false}
+                                />
+                            }
+                        ></UploadDialog>
                     ) : null}
                     {allowCreate && !!this.appElement ? (
                         <CreateFolderDialog
@@ -1780,17 +2095,22 @@ class ContentExplorer extends Component<Props, State> {
                             appElement={this.appElement}
                         />
                     ) : null}
-                    {canShare && selected && !!this.appElement ? (
-                        <ShareDialog
-                            isOpen={isShareModalOpen}
-                            canSetShareAccess={canSetShareAccess}
-                            onShareAccessChange={this.changeShareAccess}
-                            onCancel={this.refreshCollection}
-                            item={selected}
-                            isLoading={isLoading}
-                            parentElement={this.rootElement}
-                            appElement={this.appElement}
-                        />
+                    {canShare && selected && this.contentSharingAPI && !!this.appElement ? (
+                        <SharingModal
+                            isVisible={isShareModalOpen}
+                            api={this.contentSharingAPI}
+                            config={{ showEmailSharedLinkForm: false, showInviteCollaboratorMessageSection: true }}
+                            displayInModal={true}
+                            itemID={selected.id}
+                            itemType={selected.type}
+                            language={language}
+                            messages={messages}
+                            setIsVisible={isVisible =>
+                                this.setState({
+                                    isShareModalOpen: isVisible,
+                                })
+                            }
+                        ></SharingModal>
                     ) : null}
                     {canPreview && selected && !!this.appElement ? (
                         <PreviewDialog

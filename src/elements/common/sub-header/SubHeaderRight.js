@@ -13,6 +13,7 @@ import { VIEW_FOLDER, VIEW_MODE_GRID } from '../../../constants';
 import type { ViewMode } from '../flowTypes';
 import type { View, Collection } from '../../../common/types/core';
 import './SubHeaderRight.scss';
+import { PermissionLevel } from '../../../components/permission-level/PermissionLevel';
 
 type Props = {
     canCreateNewFolder: boolean,
@@ -46,6 +47,7 @@ const SubHeaderRight = ({
     onViewModeChange,
     view,
     viewMode,
+    collaborationRole = '',
 }: Props) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
     const hasGridView: boolean = !!gridColumnCount;
@@ -55,6 +57,9 @@ const SubHeaderRight = ({
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
     return (
         <div className="be-sub-header-right">
+            <div style={{ marginRight: 30 }} className="header-right-permission-level">
+                <PermissionLevel level={collaborationRole}></PermissionLevel>
+            </div>
             {hasItems && viewMode === VIEW_MODE_GRID && (
                 <GridViewSlider
                     columnCount={gridColumnCount}

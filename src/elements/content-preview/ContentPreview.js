@@ -55,6 +55,7 @@ import {
     ORIGIN_PREVIEW,
     ORIGIN_CONTENT_PREVIEW,
     ERROR_CODE_UNKNOWN,
+    TYPE_FILE,
 } from '../../constants';
 import type { Annotation } from '../../common/types/feed';
 import type { TargetingApi } from '../../features/targeting/types';
@@ -69,6 +70,13 @@ import type APICache from '../../utils/Cache';
 import '../common/fonts.scss';
 import '../common/base.scss';
 import './ContentPreview.scss';
+import Notification from 'components/notification/Notification';
+import { DURATION_SHORT, TYPE_ERROR, TYPE_INFO } from 'components/notification/constants';
+import { FormattedMessage } from 'react-intl';
+import NotificationsWrapper from '../../components/notification/NotificationsWrapper';
+import Button from '../../components/button';
+import axios from 'axios';
+import { isEmpty } from 'lodash';
 
 type StartAt = {
     unit: 'pages' | 'seconds',
@@ -125,6 +133,7 @@ type Props = {
     staticPath: string,
     token: Token,
     useHotkeys: boolean,
+    shouldDownload: boolean,
 } & ErrorContextProps &
     WithLoggerProps &
     WithAnnotationsProps &
@@ -142,6 +151,8 @@ type State = {
     prevFileIdProp?: string, // the previous value of the "fileId" prop. Needed to implement getDerivedStateFromProps
     selectedVersion?: BoxItemVersion,
     startAt?: StartAt,
+    favoriteCollection: Object,
+    collaborationRole?: string,
 };
 
 // Emitted by preview's 'load' event
@@ -220,6 +231,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         isLoading: true,
         isReloadNotificationVisible: false,
         isThumbnailSidebarOpen: false,
+        favoriteCollection: null,
+        notification: null,
+        collaborationRole: null,
     };
 
     static defaultProps = {
@@ -231,7 +245,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         collection: [],
         contentOpenWithProps: {},
         contentSidebarProps: {},
-        enableThumbnailsSidebar: false,
+        enableThumbnailsSidebar: true,
         hasHeader: false,
         language: DEFAULT_LOCALE,
         onAnnotator: noop,
@@ -248,6 +262,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         staticHost: DEFAULT_HOSTNAME_STATIC,
         staticPath: DEFAULT_PATH_STATIC_PREVIEW,
         useHotkeys: true,
+        shouldDownload: true,
     };
 
     /**
@@ -291,6 +306,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
             sharedLinkPassword,
             token,
         });
+
+        this.fileCollaborationsAPI = this.api.getFileCollaborationsAPI();
+
         this.state = {
             ...this.initialState,
             currentFileId: fileId,
@@ -309,9 +327,18 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentWillUnmount(): void {
+        document.removeEventListener('keydown', this.handleKeyDown);
+
         // Don't destroy the cache while unmounting
         this.api.destroy(false);
         this.destroyPreview();
+        if (window.innerWidth >= 768) {
+          document.body.style.marginLeft = '270px';
+        }
+
+        if (document.getElementsByClassName('app-header')[0]?.style) {
+          document.getElementsByClassName('app-header')[0].style.display = 'block';
+        }
     }
 
     /**
@@ -344,12 +371,40 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     componentDidMount(): void {
+        document.addEventListener('keydown', this.handleKeyDown);
         this.loadStylesheet();
         this.loadScript();
 
+        // this.fetchFavoriteCollection()
         this.fetchFile(this.state.currentFileId);
         this.focusPreview();
+        const currentUser = window.__app_config.user
+        document.body.style.marginLeft = '0px';
+        if (document.getElementsByClassName('app-header')[0]?.style) {
+          document.getElementsByClassName('app-header')[0].style.display = 'none';
+        } 
+        if (currentUser) {
+          this.setState({
+            currentUser: currentUser
+          })
+        }
     }
+
+    handleKeyDown = event => {
+        if (event.keyCode === 116) {
+            // Do something when F5 is pressed
+            event.preventDefault(); // Prevent the default browser refresh
+            this.api.destroy(true);
+            this.setState(
+                {
+                    file: null,
+                },
+                () => {
+                    this.fetchFile(this.state.currentFileId);
+                },
+            );
+        }
+    };
 
     static getDerivedStateFromProps(props: Props, state: State) {
         const { fileId } = props;
@@ -401,6 +456,18 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (advancedContentInsights && haveContentInsightsChanged && this.preview?.updateContentInsightsOptions) {
             this.preview.updateContentInsightsOptions(advancedContentInsights);
         }
+    }
+
+    fetchFavoriteCollection() {
+        this.api
+            .getCollectionAPI()
+            .getFavoriteCollection()
+            .then(data => {
+                this.initialState.favoriteCollection = data;
+                this.setState({
+                    favoriteCollection: data,
+                });
+            });
     }
 
     /**
@@ -689,8 +756,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     onPreviewLoad = (data: Object): void => {
         const { onLoad, collection }: Props = this.props;
-        const currentIndex = this.getFileIndex();
-        const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
+        // const currentIndex = this.getFileIndex();
+        // const filesToPrefetch = collection.slice(currentIndex + 1, currentIndex + 5);
         const previewTimeMetrics = getProp(data, 'metrics.time');
         let loadData = data;
 
@@ -710,9 +777,9 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.setState({ isLoading: false });
         this.focusPreview();
 
-        if (this.preview && filesToPrefetch.length) {
-            this.prefetch(filesToPrefetch);
-        }
+        // if (this.preview && filesToPrefetch.length) {
+        //     this.prefetch(filesToPrefetch);
+        // }
 
         this.handleCanPrint();
     };
@@ -724,10 +791,34 @@ class ContentPreview extends React.PureComponent<Props, State> {
      */
     canDownload(): boolean {
         const { canDownload }: Props = this.props;
-        const { file }: State = this.state;
+        const { file, collaborationRole }: State = this.state;
         const isFileDownloadable =
             getProp(file, 'permissions.can_download', false) && getProp(file, 'is_download_available', false);
-        return isFileDownloadable && !!canDownload;
+        
+        const classification = getProp(file, 'classification.name', null);
+        const isViewerRole = collaborationRole === "viewer"; 
+        const unenableDownloadLablesStr = sessionStorage.getItem("unenableDownloadViewerLables") || '';
+        const unenableDownloadLables = unenableDownloadLablesStr.split(",");
+        return isFileDownloadable && !!canDownload && !(unenableDownloadLables.includes(classification) || (unenableDownloadLablesStr === "UNENABLE_DOWNLOAD_VIEWER_LABELS_ALL"));
+    }
+    /**
+     * Returns whether file can be downloaded based on file properties, permissions, and user-defined options.
+     *
+     * @return {boolean}
+     */
+    canDownloadRepresentation(): boolean {
+        const { file, collaborationRole }: State = this.state;
+        const isWatermarked = getProp(file, 'watermark_info.is_watermarked', false);
+        const classification = getProp(file, 'classification.name', null);
+        const isViewerRole = collaborationRole === "viewer"; 
+        const unenableDownloadLablesStr = sessionStorage.getItem("unenableDownloadViewerLables") || '';
+        const unenableDownloadLables = unenableDownloadLablesStr.split(",");
+        const downloadLablesStr = sessionStorage.getItem("enableWatermarkingDownloadLables") || '';
+        const downloadLables = downloadLablesStr.split(",");
+        const representations = file?.representations?.entries || []
+        const contentUrl = representations.find(item => item.representation === 'pdf')
+       
+        return contentUrl && isWatermarked && isViewerRole && (downloadLables.includes(classification) || (downloadLablesStr === "ENABLE_WATERMARKING_DOWNLOAD_LABELS_ALL")) && !(unenableDownloadLables.includes(classification) || (unenableDownloadLablesStr === "UNENABLE_DOWNLOAD_VIEWER_LABELS_ALL"));
     }
 
     /**
@@ -839,6 +930,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
         this.preview.show(file.id, token, {
             ...previewOptions,
             ...omit(rest, Object.keys(previewOptions)),
+            collection: [],
         });
         if (advancedContentInsights) {
             this.preview.addListener('advanced_insights_report', onContentInsightsEventReport);
@@ -884,26 +976,33 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @param {Object} file - Box file
      * @return {void}
      */
-    fetchFileSuccessCallback = (file: BoxItem): void => {
+    fetchFileSuccessCallback = async (file: BoxItem): void => {
         this.fetchFileEndTime = performance.now();
 
         const { file: currentFile }: State = this.state;
         const isExistingFile = currentFile ? currentFile.id === file.id : false;
         const isWatermarked = getProp(file, 'watermark_info.is_watermarked', false);
 
+        const { role: collaborationRole } = await this.fileCollaborationsAPI.getCollaborationsRole(file);
+
+        await this.fetchFavoriteCollection();
+
         // If the file is watermarked or if its a new file, then update the state
         // In this case preview should reload without prompting the user
         if (isWatermarked || !isExistingFile) {
-            this.setState({ ...this.initialState, file });
+            this.setState({ ...this.initialState, file, collaborationRole });
             // $FlowFixMe file version and sha1 should exist at this point
-        } else if (currentFile.file_version.sha1 !== file.file_version.sha1) {
+        } else if ((currentFile.file_version.sha1 !== file.file_version.sha1) || (currentFile.file_version.id !== file.file_version.id)) {
             // If we are already prevewing the file that got updated then show the
             // user a notification to reload the file only if its sha1 changed
-            this.stagedFile = file;
-            this.setState({
-                ...this.initialState,
-                isReloadNotificationVisible: true,
-            });
+            
+            // this.stagedFile = file;
+            // this.setState({
+            //     ...this.initialState,
+            //     isReloadNotificationVisible: true,
+            //     collaborationRole,
+            // });
+            this.setState({ ...this.initialState, file, collaborationRole });
         }
     };
 
@@ -956,6 +1055,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                 {
                     ...fetchOptions,
                     fields: PREVIEW_FIELDS_TO_FETCH,
+                    forceFetch: true,
                 },
             );
     }
@@ -1071,12 +1171,44 @@ class ContentPreview extends React.PureComponent<Props, State> {
      * @return {void}
      */
     download = () => {
-        const { onDownload }: Props = this.props;
+        const { onDownload, shouldDownload }: Props = this.props;
         const { file }: State = this.state;
         if (this.preview) {
-            this.preview.download();
+            if (shouldDownload) {
+                this.preview.download();
+            }
             onDownload(cloneDeep(file));
         }
+    };
+
+    downloadRepresentation = async () => {
+      const { file, currentFileId }: State = this.state;
+      const { token } = this.props
+      const representations = file?.representations?.entries || []
+      const contentUrl = representations.find(item => item.representation === 'pdf')?.content?.url_template || '';
+      const downloadUrl= contentUrl.replace("{+asset_path}", "")
+
+      if (downloadUrl !== "") {
+        const fileName = file?.name ? file?.name.replace('.pdf', '') + '.pdf' : 'download.pdf'
+        const accessToken = await TokenService.getReadToken(getTypedFileId(currentFileId), token);
+        axios.get(downloadUrl, 
+        { responseType: 'arraybuffer', 
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/pdf',
+            Authorization: `Bearer ${accessToken}` 
+          } }
+        ).then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch((error) => console.log(error));
+      }
     };
 
     /**
@@ -1089,6 +1221,35 @@ class ContentPreview extends React.PureComponent<Props, State> {
         if (this.preview) {
             this.preview.print();
         }
+    };
+
+    printRepresentation = async () => {
+      const { file, currentFileId }: State = this.state;
+      const { token } = this.props
+      const representations = file?.representations?.entries || []
+      const contentUrl = representations.find(item => item.representation === 'pdf')?.content?.url_template || '';
+      const downloadUrl= contentUrl.replace("{+asset_path}", "")
+
+      if (downloadUrl !== "") {
+        const accessToken = await TokenService.getReadToken(getTypedFileId(currentFileId), token);
+        axios.get(downloadUrl, 
+        { responseType: 'arraybuffer', 
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/pdf',
+            Authorization: `Bearer ${accessToken}` 
+          } }
+        ).then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data], {type:'application/pdf'}));
+          const link = document.createElement('a');
+          link.href = url;
+          link.target = '_blank';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch((error) => console.log(error));
+      }
     };
 
     /**
@@ -1247,6 +1408,59 @@ class ContentPreview extends React.PureComponent<Props, State> {
         return null;
     };
 
+    handleAddFavorite = async (item: BoxItem) => {
+        const api = item.type === TYPE_FILE ? this.api.getFileAPI() : this.api.getFolderAPI();
+
+        await api.addToCollection(
+            item,
+            this.state.favoriteCollection?.id,
+            updatedItem => {
+                this.setState({
+                    file: updatedItem,
+                });
+                this.addNotification('項目をコレクションに追加しました。', 'info');
+            },
+            () => this.addNotification('failed', 'error'),
+        );
+    };
+
+    handleRemoveFavorite = async (item: BoxItem) => {
+        const api = item.type === TYPE_FILE ? this.api.getFileAPI() : this.api.getFolderAPI();
+
+        await api.removeFromToCollection(
+            item,
+            this.state.favoriteCollection?.id,
+            updatedItem => {
+                this.setState({
+                    file: updatedItem,
+                });
+                this.addNotification('1個の項目をコレクションから削除しました。', 'info');
+            },
+            () => this.addNotification('failed', 'error'),
+        );
+    };
+
+    closeNotification = () => {
+        this.setState({ notification: null });
+    };
+
+    addNotification = (content, type) => {
+        const notification = (
+            <Notification
+                duration={DURATION_SHORT}
+                key={Date.now()}
+                onClose={() => this.closeNotification()}
+                type={type}
+            >
+                <span>{content}</span>
+            </Notification>
+        );
+
+        this.setState({
+            notification: notification,
+        });
+    };
+
     /**
      * Renders the file preview
      *
@@ -1285,6 +1499,8 @@ class ContentPreview extends React.PureComponent<Props, State> {
             isReloadNotificationVisible,
             isThumbnailSidebarOpen,
             selectedVersion,
+            collaborationRole,
+            currentUser
         }: State = this.state;
 
         const styleClassName = classNames(
@@ -1305,11 +1521,17 @@ class ContentPreview extends React.PureComponent<Props, State> {
         const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
         const onHeaderClose = currentVersionId === selectedVersionId ? onClose : this.updateVersionToCurrent;
 
+        const isFavorite = getProp(file, 'collections')?.find(({ collection_type }) => collection_type === 'favorites');
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
                 <div id={this.id} className={styleClassName} ref={measureRef} onKeyDown={this.onKeyDown} tabIndex={0}>
+                    {this.state.notification && (
+                        <NotificationsWrapper>{[this.state.notification]}</NotificationsWrapper>
+                    )}
+
                     {hasHeader && (
                         <PreviewHeader
                             file={file}
@@ -1317,12 +1539,24 @@ class ContentPreview extends React.PureComponent<Props, State> {
                             token={token}
                             onClose={onHeaderClose}
                             onPrint={this.print}
+                            onPrintRepresentation={this.printRepresentation}
                             canDownload={this.canDownload()}
+                            canDownloadRepresentation={this.canDownloadRepresentation()}
                             canPrint={canPrint}
                             onDownload={this.download}
+                            onDownloadRepresentation={this.downloadRepresentation}
                             contentOpenWithProps={contentOpenWithProps}
                             canAnnotate={this.canAnnotate()}
                             selectedVersion={selectedVersion}
+                            canAddToFavoriteCollection={!isFavorite}
+                            canRemoveFromFavoriteCollection={isFavorite}
+                            onItemAddFavoriteCollection={() => this.handleAddFavorite(file)}
+                            onItemRemoveFromFavoriteCollection={() => this.handleRemoveFavorite(file)}
+                            collaborationRole={collaborationRole}
+                            onVersionChange={this.onVersionChange}
+                            history={history}
+                            currentUser={currentUser}
+                            isLoading={isLoading}
                         />
                     )}
                     <div className="bcpr-body">
@@ -1350,7 +1584,7 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 getPreview={this.getPreview}
                                 getViewer={this.getViewer}
                                 history={history}
-                                isDefaultOpen={isLarge || isVeryLarge}
+                                isDefaultOpen={false}
                                 language={language}
                                 ref={this.contentSidebar}
                                 sharedLink={sharedLink}
@@ -1359,6 +1593,12 @@ class ContentPreview extends React.PureComponent<Props, State> {
                                 responseInterceptor={responseInterceptor}
                                 onAnnotationSelect={this.handleAnnotationSelect}
                                 onVersionChange={this.onVersionChange}
+                                currentUser={this.state.currentUser}
+                                versionsSidebarProps={
+                                  {
+                                    onVersionPromote: this.fetchFileSuccessCallback
+                                  }
+                                }
                             />
                         )}
                     </div>

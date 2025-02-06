@@ -203,6 +203,139 @@ class File extends Item {
     }
 
     /**
+     * Add a file to a given collection
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {string} collectionID - The collection to add the folder to
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     *
+     * @return {Promise}
+     */
+    addToCollection(
+        file: BoxItem,
+        collectionID: string,
+        successCallback: Function,
+        errorCallback: Function,
+    ): Promise<void> {
+        const { id, permissions } = file;
+
+        if (!id || !permissions) {
+            errorCallback(getBadItemError());
+            return Promise.reject();
+        }
+
+        this.getFileInformation(id, { fields: ['collections'] })
+            .then((data: any) => {
+                let collections = data.collections || [];
+
+                // Convert to correct format
+                collections = collections.map((c: any /* FIXME */) => ({ id: c.id }));
+
+                if (!collections.find((c: any /* FIXME */) => c.id === collectionID)) {
+                    collections.push({ id: collectionID });
+                }
+
+                return this.xhr
+                    .put({
+                        id: getTypedFileId(id),
+                        url: this.getUrl(id),
+                        data: { collections },
+                        params: {
+                            fields: 'collections',
+                        },
+                    })
+                    .then(({ data }: { data: BoxItem }) => {
+                        if (!this.isDestroyed()) {
+                            const updatedFile = this.merge(this.getCacheKey(id), 'collections', data.collections);
+                            console.log(updatedFile);
+                            successCallback(updatedFile);
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
+
+                        if (!this.isDestroyed()) {
+                            const originalFile = this.merge(this.getCacheKey(id), 'collections', file.collections);
+                            errorCallback(originalFile);
+                        }
+                    });
+            })
+            .catch(e => {
+                console.log(e);
+
+                const originalFile = this.merge(this.getCacheKey(id), 'collections', file.collections);
+                errorCallback(originalFile);
+            });
+    }
+
+    /**
+     * Remove a file from a given collection
+     *
+     * @param {BoxItem} file - File object for which we are changing the description
+     * @param {string} collectionID - The collection to add the folder to
+     * @param {Function} successCallback - Success callback
+     * @param {Function} errorCallback - Error callback
+     *
+     * @return {Promise}
+     */
+    removeFromToCollection(
+        file: BoxItem,
+        collectionID: string,
+        successCallback: Function,
+        errorCallback: Function,
+    ): Promise<void> {
+        const { id, permissions } = file;
+
+        if (!id || !permissions) {
+            errorCallback(getBadItemError());
+            return Promise.reject();
+        }
+
+        this.getFileInformation(id, { fields: ['collections'] })
+            .then((data: any) => {
+                let collections = data.collections || [];
+
+                // Convert to correct object format and remove the specified collection
+                collections = collections
+                    .map((c: any /* FIXME */) => ({ id: c.id }))
+                    .filter((c: any /* FIXME */) => c.id !== collectionID);
+
+                return this.xhr
+                    .put({
+                        id: getTypedFileId(id),
+                        url: this.getUrl(id),
+                        data: { collections },
+                        params: {
+                            fields: 'collections',
+                        },
+                    })
+                    .then(({ data }: { data: BoxItem }) => {
+                        if (!this.isDestroyed()) {
+                            this.cache.set(this.getCacheKey(id), {
+                                ...this.cache.get(this.getCacheKey(id)),
+                                collections: data.collections,
+                            });
+                            successCallback(this.cache.get(this.getCacheKey(id)));
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        if (!this.isDestroyed()) {
+                            const originalFile = this.merge(this.getCacheKey(id), 'collections', file.collections);
+                            errorCallback(originalFile);
+                        }
+                    });
+            })
+            .catch(e => {
+                console.log(e);
+
+                const originalFile = this.merge(this.getCacheKey(id), 'collections', file.collections);
+                errorCallback(originalFile);
+            });
+    }
+
+    /**
      * Gets a box file
      *
      * @param {string} id - File id
@@ -277,6 +410,76 @@ class File extends Item {
             this.successHandler(cache.get(key));
         } catch (e) {
             this.errorHandler(e);
+        }
+    }
+
+    /**
+     * Gets a box file
+     *
+     * @param {string} id - File id
+     * @param {boolean|void} [options.fields] - Optionally include specific fields
+     * @param {boolean|void} [options.forceFetch] - Optionally Bypasses the cache
+     * @param {boolean|void} [options.refreshCache] - Optionally Updates the cache
+     * @return {Promise}
+     */
+    async getFileInformation(id: string, options: RequestOptions = {}): Promise<void> {
+        if (this.isDestroyed()) {
+            return;
+        }
+
+        const cache: APICache = this.getCache();
+        const key: string = this.getCacheKey(id);
+        const isCached: boolean = !options.forceFetch && cache.has(key);
+        const file: BoxItem = isCached ? cache.get(key) : { id };
+        let missingFields: Array<string> = findMissingProperties(file, options.fields);
+        const xhrOptions: Object = {
+            id: getTypedFileId(id),
+            url: this.getUrl(id),
+            headers: { 'X-Rep-Hints': X_REP_HINTS },
+        };
+        this.errorCode = ERROR_CODE_FETCH_FILE;
+
+        // If the file was cached and there are no missing fields
+        // then just return the cached file and optionally refresh
+        // the cache with new data if required
+        if (isCached && missingFields.length === 0) {
+            missingFields = options.fields || [];
+            return file;
+        }
+
+        // If there are missing fields to fetch, add it to the params
+        if (missingFields.length > 0) {
+            const hasPermissionsField = options.fields.includes('permissions')
+            if (hasPermissionsField) {
+              missingFields.push('permissions')
+            }
+            xhrOptions.params = {
+                fields: missingFields.toString(),
+            };
+        }
+
+        try {
+            const { data } = await this.xhr.get(xhrOptions);
+            if (this.isDestroyed()) {
+                return;
+            }
+
+            // Merge fields that were requested but were actually not returned.
+            // This part is mostly useful for metadata.foo.bar fields since the API
+            // returns { metadata: null } instead of { metadata: { foo: { bar: null } } }
+            const dataWithMissingFields = fillMissingProperties(data, missingFields);
+
+            // Cache check is again done since this code is executed async
+            if (cache.has(key)) {
+                cache.merge(key, dataWithMissingFields);
+            } else {
+                // If there was nothing in the cache
+                cache.set(key, dataWithMissingFields);
+            }
+
+            return cache.get(key);
+        } catch (e) {
+            return undefined;
         }
     }
 

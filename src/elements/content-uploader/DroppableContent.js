@@ -22,6 +22,7 @@ type Props = {
     items: UploadItem[],
     onClick: Function,
     view: View,
+    conflictedItems: UploadItem[],
 };
 
 /**
@@ -53,7 +54,7 @@ const dropDefinition = {
 };
 
 const DroppableContent = makeDroppable(dropDefinition)(
-    ({ canDrop, isOver, isTouch, view, items, addFiles, onClick, isFolderUploadEnabled }: Props) => {
+    ({ canDrop, isOver, isTouch, view, items, addFiles, onClick, isFolderUploadEnabled, conflictedItems }: Props) => {
         const handleSelectFiles = ({ target: { files } }: any) => addFiles(files);
         const hasItems = items.length > 0;
 
@@ -68,6 +69,7 @@ const DroppableContent = makeDroppable(dropDefinition)(
                     isTouch={isTouch}
                     onSelect={handleSelectFiles}
                     view={view}
+                    conflictedItems={conflictedItems}
                 />
             </div>
         );

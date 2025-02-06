@@ -1240,7 +1240,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <SidebarContent
-                actions={this.renderActions()}
+                // actions={this.renderActions()}
                 className={classNames('bcs-activity', { 'bcs-activity--full': hasReplies })}
                 elementId={elementId}
                 sidebarView={SIDEBAR_VIEW_ACTIVITY}
