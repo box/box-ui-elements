@@ -25,6 +25,7 @@ import { ORIGIN_BOXAI_SIDEBAR, SIDEBAR_VIEW_BOXAI } from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
+import BoxAISidebarTitle from './BoxAISidebarTitle';
 
 import messages from '../common/messages';
 
@@ -102,6 +103,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
     const renderBoxAISidebarTitle = () => {
         return (
             <div className="bcs-BoxAISidebar-title-part">
+                <BoxAISidebarTitle isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled} />
                 {isAIStudioAgentSelectorEnabled && (
                     <div className="bcs-BoxAISidebar-agentSelector">
                         <BoxAiAgentSelectorWithApi
@@ -170,9 +172,11 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                     getAIStudioAgents={getAIStudioAgents}
                     hostAppName={hostAppName}
                     isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                    isResetChatEnabled={isResetChatEnabled}
                     isStopResponseEnabled={isStopResponseEnabled}
                     items={items}
                     itemSize={itemSize}
+                    onClearAction={onClearAction}
                     onModalClose={handleModalClose}
                     onOpenChange={handleModalClose}
                     onSelectAgent={onSelectAgent}
