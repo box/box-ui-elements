@@ -26,7 +26,11 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { useFeatureEnabled } from '../common/feature-checking';
-import { ORIGIN_METADATA_SIDEBAR_REDESIGN, SIDEBAR_VIEW_METADATA } from '../../constants';
+import {
+    ORIGIN_METADATA_SIDEBAR_REDESIGN,
+    SIDEBAR_VIEW_METADATA,
+    ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
+} from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
@@ -47,10 +51,12 @@ mark(MARK_NAME_JS_READY);
 
 export interface ExternalProps {
     isFeatureEnabled: boolean;
+    getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
 }
 
 interface PropsWithoutContext extends ExternalProps {
     elementId: string;
+    fileExtension?: string;
     fileId: string;
     filteredTemplateIds?: string[];
     hasSidebarInitialized?: boolean;
@@ -76,12 +82,14 @@ export interface MetadataSidebarRedesignProps
 function MetadataSidebarRedesign({
     api,
     elementId,
+    fileExtension,
     fileId,
     filteredTemplateIds = [],
     history,
     onError,
     onSuccess,
     isFeatureEnabled,
+    getStructuredTextRep,
 }: MetadataSidebarRedesignProps) {
     const {
         extractSuggestions,
@@ -104,6 +112,32 @@ function MetadataSidebarRedesign({
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
+    const shouldFetchStructuredTextRep =
+        isBoxAiSuggestionsEnabled &&
+        fileExtension?.toLowerCase() === 'pdf' &&
+        api.options?.token &&
+        !!getStructuredTextRep;
+
+    // Fetch structured text representation for Box AI
+    React.useEffect(() => {
+        if (shouldFetchStructuredTextRep) {
+            api.options.token(fileId).then(({ read }) => {
+                getStructuredTextRep(fileId, read)
+                    .then()
+                    .catch(error => {
+                        onError(error, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP);
+                    });
+            });
+        }
+    }, [
+        api.options,
+        fileExtension,
+        fileId,
+        getStructuredTextRep,
+        isBoxAiSuggestionsEnabled,
+        onError,
+        shouldFetchStructuredTextRep,
+    ]);
 
     React.useEffect(() => {
         // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
