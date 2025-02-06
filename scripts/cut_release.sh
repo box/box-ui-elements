@@ -240,11 +240,8 @@ push_new_release() {
     # Check untracked files
     check_untracked_files || return 1
 
-    # Run the release
-    if ! HUSKY_SKIP_HOOKS=1 BRANCH=$BRANCH DIST=$DIST yarn semantic-release --no-ci; then
-        printf "${red}Failed semantic release!${end}"
-        return 1
-    fi
+    npm version 21.0.1 --no-git-tag-version
+    yarn prettier --write --parser=json package.json
 
     # Get the latest version from uncommitted package.json
     VERSION=$(./node_modules/@box/frontend/shell/version.sh)
