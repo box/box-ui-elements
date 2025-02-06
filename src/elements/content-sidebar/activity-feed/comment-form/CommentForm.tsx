@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Component for Approval comment form
  */
 
@@ -23,39 +22,39 @@ import type { SelectorItems, User } from '../../../../common/types/core';
 
 import './CommentForm.scss';
 
-type Props = {
-    className: string,
-    contactsLoaded?: boolean,
-    createComment?: Function,
-    entityId?: string,
-    getAvatarUrl?: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
-    intl: IntlShape,
-    isDisabled?: boolean,
-    isEditing?: boolean,
-    isOpen: boolean,
-    mentionSelectorContacts?: SelectorItems<>,
-    onCancel: Function,
-    onFocus?: Function,
-    onSubmit?: Function,
-    placeholder?: string,
-    shouldFocusOnOpen: boolean,
-    showTip?: boolean,
-    tagged_message?: string,
-    updateComment?: Function,
-    user?: User,
-};
+export interface CommentFormProps {
+    className: string;
+    contactsLoaded?: boolean;
+    createComment?: ({ text, hasMention }: { text: string; hasMention: boolean }) => void;
+    entityId?: string;
+    getAvatarUrl?: GetAvatarUrlCallback;
+    getMentionWithQuery?: (query: string) => Promise<Array<User>>;
+    intl: IntlShape;
+    isDisabled?: boolean;
+    isEditing?: boolean;
+    isOpen: boolean;
+    mentionSelectorContacts?: SelectorItems<User>;
+    onCancel: () => void;
+    onFocus?: () => void;
+    onSubmit?: () => void;
+    placeholder?: string;
+    shouldFocusOnOpen: boolean;
+    showTip?: boolean;
+    tagged_message?: string;
+    updateComment?: ({ id, text, hasMention }: { id: string; text: string; hasMention: boolean }) => void;
+    user?: User;
+}
 
 const getEditorState = (shouldFocusOnOpen: boolean, message?: string): EditorState =>
     shouldFocusOnOpen
         ? EditorState.moveFocusToEnd(createMentionSelectorState(message))
         : createMentionSelectorState(message);
 
-type State = {
-    commentEditorState: any,
-};
+interface State {
+    commentEditorState: EditorState;
+}
 
-class CommentForm extends React.Component<Props, State> {
+class CommentForm extends React.Component<CommentFormProps, State> {
     static defaultProps = {
         isOpen: false,
         shouldFocusOnOpen: false,
@@ -65,7 +64,7 @@ class CommentForm extends React.Component<Props, State> {
         commentEditorState: getEditorState(this.props.shouldFocusOnOpen, this.props.tagged_message),
     };
 
-    componentDidUpdate({ isOpen: prevIsOpen }: Props): void {
+    componentDidUpdate({ isOpen: prevIsOpen }: CommentFormProps): void {
         const { isOpen } = this.props;
 
         if (isOpen !== prevIsOpen && !isOpen) {
@@ -99,7 +98,7 @@ class CommentForm extends React.Component<Props, State> {
         });
     };
 
-    onMentionSelectorChangeHandler = (nextEditorState: any): void =>
+    onMentionSelectorChangeHandler = (nextEditorState: EditorState): void =>
         this.setState({ commentEditorState: nextEditorState });
 
     /**
@@ -107,13 +106,13 @@ class CommentForm extends React.Component<Props, State> {
      *
      * @returns {Object}
      */
-    getFormattedCommentText = (): { hasMention: boolean, text: string } => {
+    getFormattedCommentText = (): { hasMention: boolean; text: string } => {
         const { commentEditorState } = this.state;
 
         return getFormattedCommentText(commentEditorState);
     };
 
-    render(): React.Node {
+    render(): React.ReactNode {
         const {
             className,
             getMentionWithQuery,
