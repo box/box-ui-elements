@@ -172,7 +172,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                     getAIStudioAgents={getAIStudioAgents}
                     hostAppName={hostAppName}
                     isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
-                    isResetChatEnabled
+                    isResetChatEnabled={isResetChatEnabled}
                     isStopResponseEnabled={isStopResponseEnabled}
                     items={items}
                     itemSize={itemSize}
