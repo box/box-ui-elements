@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from '../../../test-utils/testing-library';
 import selectionCellRenderer from '../selectionCellRenderer';
 
 const rowData = {
@@ -10,22 +10,24 @@ const rowData = {
 
 describe('selectionCellRenderer', () => {
     test.each([
-        ['Checkbox', false],
-        ['RadioButton', true],
-    ])('should render %s if isRadio is %s', (type, isRadio) => {
+        [true, 'radio'],
+        [false, 'checkbox'],
+    ])('should render %s when isRadio is %s', (isRadio, expectedRole) => {
         const Element = selectionCellRenderer(() => {}, 'file, web_link', [], false, isRadio);
 
-        const wrapper = shallow(<Element rowData={rowData} />);
-        expect(wrapper.exists(type)).toBe(true);
+        render(<Element rowData={rowData} />);
+        expect(screen.getByRole(expectedRole)).toBeInTheDocument();
     });
 
     test.each([
-        ['isSelected', true],
-        ['isChecked', false],
-    ])('should render %s if isRadio is %s', (type, isRadio) => {
+        [true, 'radio'],
+        [false, 'checkbox'],
+    ])('should render %s with correct checked state when isRadio is %s', (isRadio, expectedRole) => {
         const Element = selectionCellRenderer(() => {}, 'file, web_link', [], false, isRadio);
 
-        const wrapper = shallow(<Element rowData={rowData} />);
-        expect(wrapper.prop(type)).toBe(true);
+        render(<Element rowData={rowData} />);
+        const input = screen.getByRole(expectedRole);
+        expect(input).toBeInTheDocument();
+        expect(input).toBeChecked();
     });
 });
