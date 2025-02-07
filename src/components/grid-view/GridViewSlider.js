@@ -41,5 +41,4 @@ const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, maxColumn
     );
 };
 
-export { GridViewSlider as GridViewSliderBase };
 export default GridViewSlider;

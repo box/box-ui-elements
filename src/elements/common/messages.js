@@ -682,6 +682,11 @@ const messages = defineMessages({
         description: 'Message shown when folder items are still fetching.',
         defaultMessage: 'Please wait while the items load...',
     },
+    breadcrumbLabel: {
+        id: 'be.breadcrumb.breadcrumbLabel',
+        description: 'Aria label for describing "breadcrumb"',
+        defaultMessage: 'Breadcrumb',
+    },
     errorBreadcrumb: {
         id: 'be.errorBreadcrumb',
         description: 'Default label for signifying error in the sub header.',

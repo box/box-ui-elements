@@ -21,4 +21,8 @@
     color: var(--text-text-on-light);
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    &:not(:last-child) {
+        color: var(--text-text-on-light-tertiary);
+    }
 }

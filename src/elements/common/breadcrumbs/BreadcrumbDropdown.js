@@ -9,6 +9,8 @@ import { DropdownMenu, IconButton } from '@box/blueprint-web';
 import { Ellipsis } from '@box/blueprint-web-assets/icons/Fill';
 import type { Crumb } from '../../../common/types/core';
 
+import messages from '../messages';
+
 type Props = {
     className: string,
     crumbs: Crumb[],
@@ -18,7 +20,7 @@ type Props = {
 const BreadcrumbDropdown = ({ crumbs, onCrumbClick }: Props) => (
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-            <IconButton icon={Ellipsis} />
+            <IconButton aria-label={messages.breadcrumbLabel.defaultMessage} icon={Ellipsis} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
             {crumbs.map(({ id, name }: Crumb) => (

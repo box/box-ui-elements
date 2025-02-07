@@ -1,9 +1,9 @@
 // @flow
 import { shallow } from 'enzyme';
-import { BreadcrumbsBase } from '../Breadcrumbs';
+import Breadcrumbs from '../Breadcrumbs';
 
 describe('Breadcrumbs', () => {
-    const getWrapper = (props = {}) => shallow(BreadcrumbsBase(props));
+    const getWrapper = (props = {}) => shallow(Breadcrumbs(props));
 
     test('should render "All Files" breadcrumb in localized string', () => {
         const crumbs = [{ id: '0', name: 'All Files' }];

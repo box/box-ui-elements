@@ -110,5 +110,4 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
     );
 };
 
-export { Breadcrumbs as BreadcrumbsBase };
 export default Breadcrumbs;
