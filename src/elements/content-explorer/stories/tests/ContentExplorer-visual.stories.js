@@ -204,6 +204,16 @@ export const searchEmptyState = {
     },
 };
 
+export const withTheming = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitFor(async () => {
+            expect(await canvas.getByText('Preview Test Folder')).toBeInTheDocument();
+        });
+    },
+};
+
 export default {
     title: 'Elements/ContentExplorer/tests/ContentExplorer/visual',
     component: ContentExplorer,

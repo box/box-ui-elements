@@ -1,4 +1,4 @@
-import { DEFAULT_HOSTNAME_API } from '../../constants';
+import { DEFAULT_HOSTNAME_API } from '../../../constants';
 
 const apiV2Path = `${DEFAULT_HOSTNAME_API}/2.0`;
 
