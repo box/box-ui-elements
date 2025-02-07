@@ -38,6 +38,45 @@ export const openExistingFolder = {
     },
 };
 
+export const openCreateFolderDialog = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addButton = await canvas.findByRole('button', { name: 'Add' });
+        await userEvent.click(addButton);
+
+        const dropdown = await screen.findByRole('menu');
+        const newFolderButton = within(dropdown).getByText('New Folder');
+        expect(newFolderButton).toBeInTheDocument();
+        await userEvent.click(newFolderButton);
+
+        expect(await screen.findByText('Please enter a name.')).toBeInTheDocument();
+    },
+};
+
+export const closeCreateFolderDialog = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const addButton = await canvas.findByRole('button', { name: 'Add' });
+        await userEvent.click(addButton);
+
+        const dropdown = await screen.findByRole('menu');
+        const newFolderButton = within(dropdown).getByText('New Folder');
+        expect(newFolderButton).toBeInTheDocument();
+        await userEvent.click(newFolderButton);
+
+        expect(await screen.findByText('Please enter a name.')).toBeInTheDocument();
+
+        const cancelButton = screen.getByText('Cancel');
+        await userEvent.click(cancelButton);
+
+        await waitFor(() => {
+            expect(screen.queryByText('Please enter a name.')).not.toBeInTheDocument();
+        });
+    },
+};
+
 export const openDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
