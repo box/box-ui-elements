@@ -7,6 +7,7 @@ import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
+
 import type { IntlShape } from 'react-intl';
 import Avatar from '../Avatar';
 import CommentFormControls from './CommentFormControls';
@@ -16,7 +17,10 @@ import DraftJSMentionSelector, {
 } from '../../../../components/form-elements/draft-js-mention-selector';
 import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
+
+
 import messages from './messages';
+
 import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
 import type { SelectorItems, User } from '../../../../common/types/core';
 
