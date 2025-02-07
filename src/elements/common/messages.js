@@ -172,11 +172,6 @@ const messages = defineMessages({
         description: 'Label for switching to grid view',
         defaultMessage: 'Switch to Grid View',
     },
-    gridViewColumnSize: {
-        id: 'be.gridView.columnSize',
-        description: 'Label for the size of columns in grid view',
-        defaultMessage: 'Column size',
-    },
     gridViewIncreaseColumnSize: {
         id: 'be.gridView.increaseColumnSize',
         description: 'Label for increasing the size of columns in grid view',
@@ -686,6 +681,11 @@ const messages = defineMessages({
         id: 'be.loadingState',
         description: 'Message shown when folder items are still fetching.',
         defaultMessage: 'Please wait while the items load...',
+    },
+    breadcrumbLabel: {
+        id: 'be.breadcrumb.breadcrumbLabel',
+        description: 'Aria label for describing "breadcrumb"',
+        defaultMessage: 'Breadcrumb',
     },
     errorBreadcrumb: {
         id: 'be.errorBreadcrumb',

@@ -372,6 +372,7 @@ class SidebarPanels extends React.Component<Props, State> {
                             return isMetadataSidebarRedesignEnabled ? (
                                 <LoadableMetadataSidebarRedesigned
                                     elementId={elementId}
+                                    fileExtension={file.extension}
                                     fileId={fileId}
                                     filteredTemplateIds={
                                         match.params.filteredTemplateIds

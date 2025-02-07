@@ -5,16 +5,15 @@
  */
 
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
-import messages from '../messages';
+import { useIntl } from 'react-intl';
 import { Breadcrumbs } from '../breadcrumbs';
-import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../../constants';
 import type { View, Collection } from '../../../common/types/core';
+import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../../constants';
+
+import messages from '../messages';
 
 type Props = {
     currentCollection: Collection,
-    intl: IntlShape,
     isSmall: boolean,
     onItemClick: Function,
     rootId: string,
@@ -22,8 +21,9 @@ type Props = {
     view: View,
 };
 
-const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick, intl }: Props) => {
+const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick }: Props) => {
     let crumbs;
+    const { formatMessage } = useIntl();
 
     if (view === VIEW_FOLDER || view === VIEW_SEARCH) {
         const { id, name = '', breadcrumbs = [] } = currentCollection;
@@ -34,21 +34,21 @@ const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onI
         if (view === VIEW_SEARCH) {
             crumbs = crumbs.concat({
                 id: undefined,
-                name: intl.formatMessage(messages.searchBreadcrumb),
+                name: formatMessage(messages.searchBreadcrumb),
             });
         }
     } else {
         crumbs = [
             {
                 id: undefined,
-                name: intl.formatMessage(messages[`${view}Breadcrumb`]),
+                name: formatMessage(messages[`${view}Breadcrumb`]),
             },
         ];
 
         if (view !== VIEW_RECENTS) {
             crumbs.unshift({
                 id: rootId,
-                name: rootName || intl.formatMessage(messages.rootBreadcrumb),
+                name: rootName || formatMessage(messages.rootBreadcrumb),
             });
         }
     }
@@ -64,4 +64,4 @@ const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onI
     );
 };
 
-export default injectIntl(SubHeaderLeft);
+export default SubHeaderLeft;

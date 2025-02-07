@@ -1,53 +1,44 @@
 // @flow
 
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
-
-import Button from '../../../components/button';
-import IconGridViewInverted from '../../../icons/general/IconGridViewInverted';
-import IconListView from '../../../icons/general/IconListView';
-import messages from '../messages';
-import Tooltip from '../Tooltip';
+import { Tooltip, IconButton } from '@box/blueprint-web';
+import { Grid, Hamburger } from '@box/blueprint-web-assets/icons/Fill';
 import type { ViewMode } from '../flowTypes';
 import { VIEW_MODE_GRID, VIEW_MODE_LIST } from '../../../constants';
-import { bdlGray65 } from '../../../styles/variables';
+
 import './ViewModeChangeButton.scss';
+
+import messages from '../messages';
 
 type Props = {
     className?: string,
-    intl: IntlShape,
     onViewModeChange?: (viewMode: ViewMode) => void,
     viewMode: ViewMode,
 };
 
-const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, intl, viewMode, ...rest }: Props) => {
+const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, viewMode, ...rest }: Props) => {
+    const { formatMessage } = useIntl();
     const isGridView = viewMode === VIEW_MODE_GRID;
-    const viewMessage = isGridView ? intl.formatMessage(messages.listView) : intl.formatMessage(messages.gridView);
+    const viewMessage = isGridView ? formatMessage(messages.listView) : formatMessage(messages.gridView);
     const onClick = () => {
         onViewModeChange(isGridView ? VIEW_MODE_LIST : VIEW_MODE_GRID);
     };
 
     return (
-        <Tooltip text={viewMessage}>
-            <Button
+        <Tooltip content={viewMessage}>
+            <IconButton
                 aria-label={viewMessage}
                 data-testid="view-mode-change-button"
                 className={classNames('bdl-ViewModeChangeButton', className)}
-                type="button"
+                icon={isGridView ? Hamburger : Grid}
                 onClick={onClick}
                 {...rest}
-            >
-                {isGridView ? (
-                    <IconListView color={bdlGray65} width={17} height={17} />
-                ) : (
-                    <IconGridViewInverted color={bdlGray65} width={17} height={17} />
-                )}
-            </Button>
+            />
         </Tooltip>
     );
 };
 
-export default injectIntl(ViewModeChangeButton);
+export default ViewModeChangeButton;
