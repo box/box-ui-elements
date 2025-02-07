@@ -55,11 +55,13 @@ describe('util/uploads', () => {
             ${{ lastModified: 'not a number' }}                           | ${null}
             ${{ lastModified: new Date('2017-01-02T03:04:05.678Z') }}     | ${'2017-01-02T03:04:05Z'}
             ${{ lastModified: new Date('not valid') }}                    | ${null}
+            ${{ lastModified: -11644473600 }}                             | ${null}
             ${{}}                                                         | ${null}
             ${{ lastModifiedDate: 1483326245678 }}                        | ${'2017-01-02T03:04:05Z'}
             ${{ lastModifiedDate: 'not a number' }}                       | ${null}
             ${{ lastModifiedDate: new Date('2017-01-02T03:04:05.678Z') }} | ${'2017-01-02T03:04:05Z'}
             ${{ lastModifiedDate: new Date('not valid') }}                | ${null}
+            ${{ lastModifiedDate: -11644473600 }}                         | ${null}
             ${{}}                                                         | ${null}
         `(
             'should return the properly formatted date when possible and return null otherwise',
