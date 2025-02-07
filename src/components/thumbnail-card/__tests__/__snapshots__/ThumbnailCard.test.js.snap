@@ -4,7 +4,7 @@ exports[`components/thumbnail-card/ThumbnailCard should pass down actionItem, ic
 <div
   className="thumbnail-card"
   role="button"
-  tabIndex="0"
+  tabIndex={0}
 >
   <ThumbnailCardThumbnail
     thumbnail={
@@ -44,7 +44,7 @@ exports[`components/thumbnail-card/ThumbnailCard should render 1`] = `
 <div
   className="thumbnail-card"
   role="button"
-  tabIndex="0"
+  tabIndex={0}
 >
   <ThumbnailCardThumbnail
     thumbnail={
@@ -67,7 +67,7 @@ exports[`components/thumbnail-card/ThumbnailCard should use additional className
 <div
   className="thumbnail-card fooBar"
   role="button"
-  tabIndex="0"
+  tabIndex={0}
 >
   <ThumbnailCardThumbnail
     thumbnail={

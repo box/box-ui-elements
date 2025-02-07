@@ -20,6 +20,21 @@ describe('components/thumbnail-card/ThumbnailCard', () => {
         expect(wrapper).toMatchSnapshot();
     });
 
+    test('should have role and tabIndex when onKeyDown prop does not exist', () => {
+        const wrapper = getWrapper();
+
+        expect(wrapper.find('.thumbnail-card').prop('role')).toBe('button');
+        expect(wrapper.find('.thumbnail-card').prop('tabIndex')).toBe(0);
+    });
+
+    test('should not have role and tabIndex when onKeyDown prop exists', () => {
+        const onKeyDown = () => {};
+        const wrapper = getWrapper({ onKeyDown });
+
+        expect(wrapper.find('.thumbnail-card').prop('role')).toBe(null);
+        expect(wrapper.find('.thumbnail-card').prop('tabIndex')).toBe(null);
+    });
+
     test('should pass down actionItem, icon, and subtitle', () => {
         const icon = <img alt="icon" />;
         const subtitle = <div>Subtitle!</div>;
