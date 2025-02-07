@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {
+    FileAdobeExpress,
     FileAudio,
     FileBookmark,
     FileBoxNote,
@@ -40,6 +41,7 @@ import { useIntl } from 'react-intl';
 import messages from '../../elements/common/messages';
 
 const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element } = {
+    FileAdobeExpress,
     FileAudio,
     FileBookmark,
     FileBoxNote,
@@ -83,6 +85,7 @@ const mirror = (values: Array<string>) =>
     }, {});
 
 export const EXTENSIONS: { [key: string]: { [key: string]: string } } = {
+    FileAdobeExpress: mirror(['adobeexpress']),
     FileAudio: mirror([
         'aac',
         'aif',
