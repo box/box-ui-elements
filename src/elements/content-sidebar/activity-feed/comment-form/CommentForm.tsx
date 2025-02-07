@@ -18,7 +18,6 @@ import DraftJSMentionSelector, {
 import Form from '../../../../components/form-elements/form/Form';
 import Media from '../../../../components/media';
 
-
 import messages from './messages';
 
 import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
