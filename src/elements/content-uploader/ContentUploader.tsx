@@ -6,6 +6,7 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { TooltipProvider } from '@box/blueprint-web';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import DroppableContent from './DroppableContent';
 import Footer from './Footer';
 import UploadsManager from './UploadsManager';
@@ -90,8 +91,8 @@ export interface ContentUploaderProps {
     onUpgradeCTAClick?: () => void;
     onUpload: (item?: UploadItem | BoxItem) => void;
     overwrite: boolean;
-    requestInterceptor?: Function;
-    responseInterceptor?: Function;
+    requestInterceptor?: (response: AxiosResponse) => void;
+    responseInterceptor?: (config: AxiosRequestConfig) => void;
     rootFolderId: string;
     sharedLink?: string;
     sharedLinkPassword?: string;
