@@ -48,7 +48,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
         <MetadataInstanceForm
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
-            iaBetaLanguageEnabled={isBetaLanguageEnabled}
+            isBetaLanguageEnabled={isBetaLanguageEnabled}
             isDeleteButtonDisabled={isDeleteButtonDisabled}
             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
             onCancel={onCancel}
