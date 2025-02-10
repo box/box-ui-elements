@@ -1,14 +1,10 @@
-/**
- * @file Component for Approval comment form
- */
-
 import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
 import type { IntlShape } from 'react-intl';
+
 import Avatar from '../Avatar';
 import CommentFormControls from './CommentFormControls';
 import DraftJSMentionSelector, {
@@ -145,7 +141,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </Media.Figure>
                 )}
-
                 <Media.Body className="bcs-CommentForm-body" data-testid="bcs-CommentForm-body">
                     <Form onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
@@ -170,7 +165,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                                 <FormattedMessage {...messages.atMentionTip} />
                             </div>
                         )}
-
                         {isOpen && <CommentFormControls onCancel={onCancel} />}
                     </Form>
                 </Media.Body>

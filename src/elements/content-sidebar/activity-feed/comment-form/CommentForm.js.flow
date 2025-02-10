@@ -1,4 +1,5 @@
 /**
+ * @flow
  * @file Component for Approval comment form
  */
 
