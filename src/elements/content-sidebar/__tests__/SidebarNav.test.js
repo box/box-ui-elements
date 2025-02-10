@@ -167,7 +167,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
     test('should render the Box Sign entry point if its feature is enabled', () => {
         const props = {
-            signSideBarProps: {
+            signSidebarProps: {
                 enabled: true,
                 onClick: () => {},
             },

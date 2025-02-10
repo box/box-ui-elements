@@ -1,24 +1,22 @@
 import * as React from 'react';
-
 import { userEvent } from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import SidebarNavSign from '../SidebarNavSign';
 
 describe('elements/content-sidebar/SidebarNavSign', () => {
-    const onClickRequestSignature = jest.fn();
-    const onClickSignMyself = jest.fn();
+    const renderComponent = (props = {}) => {
+        const defaultProps = {
+            blockedReason: '',
+            enabled: true,
+            targetingApi: null,
+            onClick: jest.fn(),
+            onClickSignMyself: jest.fn(),
+        };
 
-    const defaultSignSideBarProps = {
-        blockedReason: '',
-        enabled: true,
-        onClick: onClickRequestSignature,
-        onClickSignMyself,
-        targetingApi: null,
+        render(<SidebarNavSign {...defaultProps} {...props} />);
     };
 
-    const renderComponent = () => render(<SidebarNavSign {...defaultSignSideBarProps} />, {});
-
-    test('should render sign button', async () => {
+    test('should render sign button', () => {
         renderComponent();
 
         expect(screen.getByRole('button', { name: 'Request Signature' })).toBeInTheDocument();
@@ -34,20 +32,26 @@ describe('elements/content-sidebar/SidebarNavSign', () => {
     });
 
     test('should call correct handler when request signature option is clicked', async () => {
-        renderComponent();
+        const onClickRequestSignatureMock = jest.fn();
+        renderComponent({ onClick: onClickRequestSignatureMock });
+
+        expect(onClickRequestSignatureMock).not.toHaveBeenCalled();
 
         await userEvent.click(screen.getByRole('button', { name: 'Request Signature' }));
         await userEvent.click(screen.getByRole('menuitem', { name: 'Request Signature' }));
 
-        expect(onClickRequestSignature).toHaveBeenCalled();
+        expect(onClickRequestSignatureMock).toHaveBeenCalledTimes(1);
     });
 
     test('should call correct handler when sign myself option is clicked', async () => {
-        renderComponent();
+        const onClickSignMyselfMock = jest.fn();
+        renderComponent({ onClickSignMyself: onClickSignMyselfMock });
+
+        expect(onClickSignMyselfMock).not.toHaveBeenCalled();
 
         await userEvent.click(screen.getByRole('button', { name: 'Request Signature' }));
         await userEvent.click(screen.getByRole('menuitem', { name: 'Sign Myself' }));
 
-        expect(onClickSignMyself).toHaveBeenCalled();
+        expect(onClickSignMyselfMock).toHaveBeenCalledTimes(1);
     });
 });

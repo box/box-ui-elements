@@ -18,21 +18,21 @@ import './SidebarNavSign.scss';
 // @ts-ignore Module is written in Flow
 import type { TargetingApi } from '../../features/targeting/types';
 
-export interface SignSideBarProps {
+export interface SignSidebarProps {
     blockedReason: string;
     enabled: boolean;
     onClick: () => void;
     onClickSignMyself: () => void;
-    targetingApi: TargetingApi | null;
+    targetingApi?: TargetingApi;
 }
 
-export function SidebarNavSign(signSideBarProps: SignSideBarProps) {
+export function SidebarNavSign(signSidebarProps: SignSidebarProps) {
     const {
         blockedReason: boxSignBlockedReason,
         onClick: onBoxClickRequestSignature,
         onClickSignMyself: onBoxClickSignMyself,
         targetingApi: boxSignTargetingApi,
-    } = signSideBarProps;
+    } = signSidebarProps;
 
     return (
         <DropdownMenu isResponsive constrainToWindow isRightAligned>
