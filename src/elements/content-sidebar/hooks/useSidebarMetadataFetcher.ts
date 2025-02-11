@@ -211,6 +211,7 @@ function useSidebarMetadataFetcher(
         [api, file, onApiError, onSuccess],
     );
 
+    const [, setError] = React.useState();
     const extractSuggestions = React.useCallback(
         async (templateKey: string, scope: string): Promise<MetadataTemplateField[]> => {
             const aiAPI = api.getIntelligenceAPI();
@@ -236,6 +237,10 @@ function useSidebarMetadataFetcher(
                     onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
                 } else {
                     onError(error, ERROR_CODE_UNKNOWN);
+                    // react way of throwing errors from async callbacks - https://github.com/facebook/react/issues/14981#issuecomment-468460187
+                    setError(() => {
+                        throw error;
+                    });
                 }
                 return [];
             }
