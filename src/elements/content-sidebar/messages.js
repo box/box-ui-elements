@@ -57,11 +57,6 @@ const messages = defineMessages({
         defaultMessage: 'Sign Myself',
         description: 'One of the dropdown options that opens a Box Sign sign myself experience',
     },
-    boxSignSignature: {
-        id: 'be.contentSidebar.boxSignSignature',
-        defaultMessage: 'Sign',
-        description: 'label for button that opens a Box Sign signature fulfillment experience',
-    },
     boxSignSecurityBlockedTooltip: {
         defaultMessage: 'This action is unavailable due to a security policy.',
         description: 'Tooltip text for when Box Sign is blocked due to a security policy',
