@@ -20,6 +20,7 @@ export interface MetadataInstanceEditorProps {
     isBetaLanguageEnabled: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
+    isLargeFile: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
