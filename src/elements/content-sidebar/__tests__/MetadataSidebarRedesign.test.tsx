@@ -127,6 +127,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
     });
 
@@ -151,6 +152,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -193,6 +195,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -216,6 +219,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             },
             status: STATUS.ERROR,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
@@ -236,6 +240,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.LOADING,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -275,6 +280,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -297,6 +303,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -320,6 +327,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -346,6 +354,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
                 errorMessage: null,
                 status: STATUS.SUCCESS,
                 file: mockFile,
+                extractErrorCode: null,
             });
 
             renderComponent();
@@ -365,6 +374,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         const filteredTemplateIds = [mockVisibleTemplateInstance.id];
@@ -387,6 +397,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         const filteredTemplateIds = ['non-existing-template-id'];
