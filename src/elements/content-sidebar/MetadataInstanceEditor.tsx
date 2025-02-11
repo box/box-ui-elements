@@ -11,6 +11,7 @@ import React from 'react';
 
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
+    isBetaLanguageEnabled: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isUnsavedChangesModalOpen: boolean;
@@ -31,6 +32,7 @@ export interface MetadataInstanceEditorProps {
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
+    isBetaLanguageEnabled,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isUnsavedChangesModalOpen,
@@ -46,6 +48,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
         <MetadataInstanceForm
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+            isBetaLanguageEnabled={isBetaLanguageEnabled}
             isDeleteButtonDisabled={isDeleteButtonDisabled}
             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
             onCancel={onCancel}

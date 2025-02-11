@@ -62,6 +62,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
         fileId: fileIdWithoutMetadata,
         metadataSidebarProps: {
             isBoxAiSuggestionsEnabled: true,
+            isBetaLanguageEnabled: false,
             isFeatureEnabled: true,
             onError: fn(),
             onSuccess: fn(),
@@ -191,6 +192,7 @@ export const EmptyStateWithBoxAiEnabled: StoryObj<typeof MetadataSidebarRedesign
         features: {
             ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
+            'metadata.betalanguage.enabled': false,
         },
     },
 };
@@ -201,6 +203,7 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
         metadataSidebarProps: {
             ...defaultMetadataSidebarProps,
             isBoxAiSuggestionsEnabled: false,
+            isBetaLanguageEnabled: false,
         },
     },
 };
@@ -399,6 +402,7 @@ export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRed
         features: {
             ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
+            'metadata.betalanguage.enabled': false,
         },
     },
     play: async ({ canvasElement }) => {
@@ -420,6 +424,7 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         features: {
             ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
+            'metadata.betalanguage.enabled': false,
         },
     },
     parameters: {
@@ -451,6 +456,7 @@ export const SuggestionsWhenAIAPIResponses: StoryObj<typeof MetadataSidebarRedes
         features: {
             ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
+            'metadata.betalanguage.enabled': false,
         },
     },
     parameters: {
@@ -487,6 +493,7 @@ export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof Metadata
         features: {
             ...mockFeatures,
             'metadata.aiSuggestions.enabled': true,
+            'metadata.betalanguage.enabled': false,
         },
     },
     parameters: {
