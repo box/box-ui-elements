@@ -1528,10 +1528,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^0.88.1":
-  version "0.88.1"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.88.1.tgz#6beedb9e7c73cdd8824f9f52e641ac1ff1899967"
-  integrity sha512-Q6GXv9B0wSbDh9Uy7tLOg9lMeBiNx3d2WYoEZsf8Jm9kC2w8dWIGbHRqiD3E6GpvomhSrWfHzt2Zy/Bn7BRXDg==
+"@box/metadata-editor@0.91.0":
+  version "0.91.0"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.91.0.tgz#f7562f4cefd224aad491e955adefce2147c2a803"
+  integrity sha512-TyJD6n8jS5MW9rericaLlG7h203+xWpjt9deqkrYiQ9K6Vu79FqAmrW3sbBRHJFREy6Os34SruvSqL71qCPclw==
 
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"

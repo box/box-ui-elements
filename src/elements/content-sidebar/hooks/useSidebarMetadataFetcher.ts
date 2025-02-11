@@ -15,6 +15,9 @@ import { isUserCorrectableError } from '../../../utils/error';
 import {
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+    ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
+    ERROR_CODE_UNKNOWN,
+    ERROR_CODE_METADATA_PRECONDITION_FAILED,
     FIELD_IS_EXTERNALLY_OWNED,
     FIELD_PERMISSIONS_CAN_UPLOAD,
     FIELD_PERMISSIONS,
@@ -36,6 +39,11 @@ export enum STATUS {
 
 interface DataFetcher {
     errorMessage: MessageDescriptor | null;
+    extractErrorCode:
+        | ERROR_CODE_METADATA_AUTOFILL_TIMEOUT
+        | ERROR_CODE_METADATA_PRECONDITION_FAILED
+        | ERROR_CODE_UNKNOWN
+        | null;
     extractSuggestions: (templateKey: string, scope: string) => Promise<MetadataTemplateField[]>;
     file: BoxItem | null;
     handleCreateMetadataInstance: (
@@ -65,6 +73,7 @@ function useSidebarMetadataFetcher(
     const [templates, setTemplates] = React.useState(null);
     const [errorMessage, setErrorMessage] = React.useState<MessageDescriptor | null>(null);
     const [templateInstances, setTemplateInstances] = React.useState<Array<MetadataTemplateInstance>>([]);
+    const [extractErrorCode, setExtractErrorCode] = React.useState<string | null>(null);
 
     const onApiError = React.useCallback(
         (error: ElementsXhrError, code: string, message: MessageDescriptor) => {
@@ -202,10 +211,10 @@ function useSidebarMetadataFetcher(
         [api, file, onApiError, onSuccess],
     );
 
-    const [, setError] = React.useState();
     const extractSuggestions = React.useCallback(
         async (templateKey: string, scope: string): Promise<MetadataTemplateField[]> => {
             const aiAPI = api.getIntelligenceAPI();
+            setExtractErrorCode(null);
 
             let answer = null;
             try {
@@ -214,15 +223,20 @@ function useSidebarMetadataFetcher(
                     metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
                 })) as Record<string, MetadataFieldValue>;
             } catch (error) {
-                if (isUserCorrectableError(error.status)) {
+                if (error.status === 408) {
+                    onError(error, ERROR_CODE_METADATA_AUTOFILL_TIMEOUT);
+                    setExtractErrorCode(ERROR_CODE_METADATA_AUTOFILL_TIMEOUT);
+                } else if (error.status === 412) {
+                    onError(error, ERROR_CODE_METADATA_PRECONDITION_FAILED);
+                    setExtractErrorCode(ERROR_CODE_METADATA_PRECONDITION_FAILED);
+                } else if (error.status === 500) {
+                    onError(error, ERROR_CODE_UNKNOWN);
+                    setExtractErrorCode(ERROR_CODE_UNKNOWN);
+                } else if (isUserCorrectableError(error.status)) {
                     onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
                 } else {
-                    // react way of throwing errors from async callbacks - https://github.com/facebook/react/issues/14981#issuecomment-468460187
-                    setError(() => {
-                        throw error;
-                    });
+                    onError(error, ERROR_CODE_UNKNOWN);
                 }
-
                 return [];
             }
 
@@ -265,6 +279,7 @@ function useSidebarMetadataFetcher(
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
+        extractErrorCode,
         errorMessage,
         file,
         status,

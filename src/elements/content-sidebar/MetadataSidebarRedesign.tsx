@@ -98,6 +98,7 @@ function MetadataSidebarRedesign({
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
         templates,
+        extractErrorCode,
         errorMessage,
         status,
         templateInstances,
@@ -290,6 +291,7 @@ function MetadataSidebarRedesign({
                             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
+                            errorCode={extractErrorCode}
                         />
                     )}
                     {showList && (
