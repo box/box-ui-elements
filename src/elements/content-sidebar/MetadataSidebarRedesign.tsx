@@ -105,6 +105,7 @@ function MetadataSidebarRedesign({
 
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
+    const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
@@ -278,6 +279,7 @@ function MetadataSidebarRedesign({
                     {editingTemplate && (
                         <MetadataInstanceEditor
                             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDeleteButtonDisabled={isDeleteButtonDisabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
@@ -294,6 +296,7 @@ function MetadataSidebarRedesign({
                         <MetadataInstanceList
                             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
                             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                            isBetaLanguageEnabled={isBetaLanguageEnabled}
                             onEdit={templateInstance => {
                                 setEditingTemplate(templateInstance);
                                 setIsDeleteButtonDisabled(false);

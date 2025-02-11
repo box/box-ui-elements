@@ -93,6 +93,20 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
             sendQuestion({ prompt: cacheQuestions[cacheQuestions.length - 1].prompt });
         }
 
+        if (recordAction) {
+            recordAction({
+                action: 'programmatic',
+                component: 'sidebar',
+                feature: 'answers',
+                target: 'loaded',
+                data: {
+                    items: items.map(item => {
+                        return { status: item.status, fileType: item.fileType };
+                    }),
+                },
+            });
+        }
+
         return () => {
             // stop API request on unmount (e.g. during switching to another tab)
             stopQuestion();

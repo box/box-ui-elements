@@ -71,6 +71,7 @@ describe('MetadataInstanceEditor', () => {
 
     const defaultProps: MetadataInstanceEditorProps = {
         areAiSuggestionsAvailable: true,
+        isBetaLanguageEnabled: false,
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
         isUnsavedChangesModalOpen: false,
