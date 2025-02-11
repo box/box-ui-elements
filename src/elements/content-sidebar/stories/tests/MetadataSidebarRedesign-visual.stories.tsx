@@ -17,7 +17,7 @@ import {
     mockGlobalMetadataTemplates,
     mockMetadataInstances,
 } from '../__mocks__/MetadataSidebarRedesignedMocks';
-import { mockUserRequest } from '../../../__mocks__/mockRequests';
+import { mockUserRequest } from '../../../common/__mocks__/mockRequests';
 
 const token = global.TOKEN;
 
