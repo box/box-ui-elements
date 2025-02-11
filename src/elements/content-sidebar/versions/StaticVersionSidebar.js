@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Text } from '@box/blueprint-web';
 
 import BoxDrive140 from '../../../illustration/BoxDrive140';
 
@@ -52,12 +53,12 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props)
             data-resin-feature="versions"
         >
             <div className="bcs-StaticVersionSidebar-header">
-                <h3 className="bcs-StaticVersionSidebar-title">
+                <Text as="h3" className="bcs-StaticVersionSidebar-title">
                     <>
                         <BackButton data-resin-target="back" to={`/${parentName}`} />
                         <FormattedMessage {...messages.versionsTitle} />
                     </>
-                </h3>
+                </Text>
             </div>
 
             <div className="bcs-StaticVersionSidebar-content-wrapper">
@@ -73,12 +74,12 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props)
             <div className="bcs-StaticVersionSidebar-upsell-wrapper">
                 <div className="bcs-StaticVersionSidebar-upsell">
                     <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />
-                    <p className="bcs-StaticVersionSidebar-upsell-header">
+                    <Text as="p" className="bcs-StaticVersionSidebar-upsell-header">
                         <FormattedMessage {...messages.versionUpgradeLink} />
-                    </p>
-                    <p>
+                    </Text>
+                    <Text as="p">
                         <FormattedMessage {...messages.versionUpsell} />
-                    </p>
+                    </Text>
                     <PrimaryButton
                         className="bcs-StaticVersionSidebar-upsell-button"
                         data-resin-target="versioning_error_upgrade_cta"
