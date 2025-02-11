@@ -75,6 +75,15 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         getAnswerStreaming: jest.fn(),
         getSuggestedQuestions: jest.fn(),
         hostAppName: 'appName',
+        items: [
+            {
+                id: '1',
+                type: 'type',
+                fileType: 'pdf',
+                name: 'test.pdf',
+                status: 'supported',
+            },
+        ],
         itemSize: '1234',
         isAgentSelectorEnabled: false,
         isAIStudioAgentSelectorEnabled: true,
@@ -138,6 +147,21 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         await renderComponent({ isResetChatEnabled: false });
 
         expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument();
+    });
+
+    test('should call recordAction on load if provided', async () => {
+        const mockRecordAction = jest.fn();
+        await renderComponent({ recordAction: mockRecordAction });
+
+        expect(mockRecordAction).toHaveBeenCalledWith({
+            action: 'programmatic',
+            component: 'sidebar',
+            feature: 'answers',
+            target: 'loaded',
+            data: {
+                items: [{ fileType: 'pdf', status: 'supported' }],
+            },
+        });
     });
 
     test('should call onClearClick when click "Clear" button', async () => {
