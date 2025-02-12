@@ -164,6 +164,8 @@ const ItemList = ({
         return result;
     };
 
+    const isRowLoaded = ({ index }) => !items[index]?.isLoading;
+
     const renderRow = rendererParams => {
         const { index, key, style, className: rowClassName, columns } = rendererParams;
         const item = items[index];
@@ -203,7 +205,7 @@ const ItemList = ({
     if (onLoadMoreItems) {
         TableComponent = InfiniteLoaderTable;
         tableProps.infiniteLoaderProps = {
-            isRowLoaded: getRow,
+            isRowLoaded,
             loadMoreRows: onLoadMoreItems,
             minimumBatchSize: numItemsPerPage,
             rowCount: numTotalItems,

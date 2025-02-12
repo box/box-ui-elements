@@ -98,7 +98,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
                 { id: '2', name: 'item2' },
                 { id: '3', name: 'item3' },
             ];
-            const selectedItems = { '1': items[0] };
+            const selectedItems = { 1: items[0] };
             const wrapper = renderComponent({
                 items,
                 selectedItems,
@@ -187,10 +187,7 @@ describe('features/content-explorer/item-list/ItemList', () => {
                 onItemNameClick: onItemNameClickSpy,
             });
 
-            wrapper
-                .find('.item-list-name')
-                .hostNodes()
-                .simulate('click');
+            wrapper.find('.item-list-name').hostNodes().simulate('click');
 
             expect(onItemNameClickSpy.calledOnce).toBe(true);
         });
@@ -337,6 +334,49 @@ describe('features/content-explorer/item-list/ItemList', () => {
             });
             const headerRow = wrapper.find("[data-testid='customHeader']");
             expect(headerRow.length).not.toBe(1);
+        });
+    });
+
+    describe('infinite scroll', () => {
+        test.each([
+            // threshold item is (nLoadedItems - numItemsPerPage)th item
+            {
+                description:
+                    'should call onLoadMoreItems initially when threshold item is visible and there are loading items',
+                nLoadedItems: 100,
+                nLoadingItems: 10,
+                numItemsPerPage: 100,
+                expectedCallCount: 1,
+            },
+            {
+                description: 'should not call onLoadMoreItems initially when threshold item is not visible',
+                nLoadedItems: 100,
+                nLoadingItems: 10,
+                numItemsPerPage: 10,
+                expectedCallCount: 0,
+            },
+            {
+                description: 'should not call onLoadMoreItems initially when there are no loading items',
+                nLoadedItems: 100,
+                nLoadingItems: 0,
+                numItemsPerPage: 10,
+                expectedCallCount: 0,
+            },
+        ])('$description', ({ nLoadedItems, nLoadingItems, numItemsPerPage, expectedCallCount }) => {
+            const onLoadMoreItemsSpy = sandbox.spy();
+            const items = [
+                ...Array.from({ length: nLoadedItems }, () => ({ isLoading: false })),
+                ...Array.from({ length: nLoadingItems }, () => ({ isLoading: true })),
+            ];
+
+            renderComponent({
+                onLoadMoreItems: onLoadMoreItemsSpy,
+                items,
+                numItemsPerPage,
+                numTotalItems: items.length,
+            });
+
+            expect(onLoadMoreItemsSpy.callCount).toBe(expectedCallCount);
         });
     });
 });
