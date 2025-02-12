@@ -8,7 +8,7 @@ import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
 import { IconButton, Tooltip } from '@box/blueprint-web';
-import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Line';
+import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Fill';
 import {
     BoxAiContentAnswers,
     ClearConversationButton,

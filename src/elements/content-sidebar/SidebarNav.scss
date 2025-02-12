@@ -21,7 +21,12 @@
     }
 
     .bcs-SidebarNav-icon {
-        @include bdl-SidebarNavIcon;
+        width: 20px;
+        height: 20px;
+
+        path {
+            fill: $bdl-gray-65;
+        }
     }
 
     .bcs-SidebarNav-overflow {
