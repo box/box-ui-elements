@@ -432,7 +432,7 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
             handlers: [
                 ...defaultMockHandlers,
                 http.post(aiSuggestionsForMyAttribute.url, () => {
-                    return new HttpResponse('Internal Server Error', { status: 500 });
+                    return new HttpResponse('Not Found', { status: 404 });
                 }),
             ],
         },
