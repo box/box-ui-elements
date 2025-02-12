@@ -9,11 +9,13 @@ import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
-import { EllipsisBubble, InfoDoc, MetadataBadge } from '@box/blueprint-web-assets/icons/Line';
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
+import IconChatRound from '../../icons/general/IconChatRound';
+import IconDocInfo from '../../icons/general/IconDocInfo';
 import IconMagicWand from '../../icons/general/IconMagicWand';
+import IconMetadataThick from '../../icons/general/IconMetadataThick';
 import SidebarNavButton from './SidebarNavButton';
 import SidebarNavSign from './SidebarNavSign';
 import SidebarNavTablist from './SidebarNavTablist';
@@ -103,7 +105,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
-                            <EllipsisBubble className="bcs-SidebarNav-icon" />
+                            <IconChatRound className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasDetails && (
@@ -115,7 +117,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
-                            <InfoDoc className="bcs-SidebarNav-icon" />
+                            <IconDocInfo className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasSkills && (
@@ -139,7 +141,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
-                            <MetadataBadge className="bcs-SidebarNav-icon" />
+                            <IconMetadataThick className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasDocGen && (
