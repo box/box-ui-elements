@@ -226,16 +226,16 @@ function useSidebarMetadataFetcher(
                 })) as Record<string, MetadataFieldValue>;
             } catch (error) {
                 // Axios makes the status code nested under the response object
-                if (error.response.status === 408) {
+                if (error.response?.status === 408) {
                     onError(error, ERROR_CODE_METADATA_AUTOFILL_TIMEOUT);
                     setExtractErrorCode(ERROR_CODE_METADATA_AUTOFILL_TIMEOUT);
-                } else if (error.response.status === 412) {
+                } else if (error.response?.status === 412) {
                     onError(error, ERROR_CODE_METADATA_PRECONDITION_FAILED);
                     setExtractErrorCode(ERROR_CODE_METADATA_PRECONDITION_FAILED);
-                } else if (error.response.status === 500) {
+                } else if (error.response?.status === 500) {
                     onError(error, ERROR_CODE_UNKNOWN);
                     setExtractErrorCode(ERROR_CODE_UNKNOWN);
-                } else if (isUserCorrectableError(error.response.status)) {
+                } else if (isUserCorrectableError(error.response?.status)) {
                     onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
                 } else {
                     onError(error, ERROR_CODE_UNKNOWN, { showNotification: true });
