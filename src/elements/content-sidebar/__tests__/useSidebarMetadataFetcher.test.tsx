@@ -370,7 +370,7 @@ describe('useSidebarMetadataFetcher', () => {
         });
 
         test('should handle user correctable error during suggestions extraction', async () => {
-            mockAPI.extractStructured.mockRejectedValue(mockRateLimitError);
+            mockAPI.extractStructured.mockRejectedValue({ response: mockRateLimitError });
 
             const { result } = setupHook();
             const suggestions = await result.current.extractSuggestions('templateKey', 'global');
@@ -378,7 +378,7 @@ describe('useSidebarMetadataFetcher', () => {
             expect(suggestions).toEqual([]);
             expect(onSuccessMock).not.toHaveBeenCalled();
             expect(onErrorMock).toHaveBeenCalledWith(
-                mockRateLimitError,
+                { response: mockRateLimitError },
                 ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
                 expect.objectContaining({
                     showNotification: true,
@@ -388,11 +388,11 @@ describe('useSidebarMetadataFetcher', () => {
         });
 
         test.each`
-            description                               | error                          | expectedErrorCode
-            ${'metadata autofill timeout error'}      | ${mockTimeoutError}            | ${ERROR_CODE_METADATA_AUTOFILL_TIMEOUT}
-            ${'metadata pre-condition failure error'} | ${mockPreconditionFailedError} | ${ERROR_CODE_METADATA_PRECONDITION_FAILED}
-            ${'internal server error'}                | ${mockInternalServerError}     | ${ERROR_CODE_UNKNOWN}
-        `('should set extract error code for $description', async ({ error, expectedErrorCode }) => {
+            description                               | error                                        | expectedErrorCode
+            ${'metadata autofill timeout error'}      | ${{ response: mockTimeoutError }}            | ${ERROR_CODE_METADATA_AUTOFILL_TIMEOUT}
+            ${'metadata pre-condition failure error'} | ${{ response: mockPreconditionFailedError }} | ${ERROR_CODE_METADATA_PRECONDITION_FAILED}
+            ${'internal server error'}                | ${{ response: mockInternalServerError }}     | ${ERROR_CODE_UNKNOWN}
+        `('should set extract error code for $description and get cleared', async ({ error, expectedErrorCode }) => {
             mockAPI.extractStructured.mockRejectedValue(error);
 
             const { result } = setupHook();
@@ -402,6 +402,9 @@ describe('useSidebarMetadataFetcher', () => {
             expect(onSuccessMock).not.toHaveBeenCalled();
             expect(onErrorMock).toHaveBeenCalledWith(error, expectedErrorCode);
             await waitFor(() => expect(result.current.extractErrorCode).toEqual(expectedErrorCode));
+
+            await result.current.clearExtractError();
+            await waitFor(() => expect(result.current.extractErrorCode).toBeNull());
         });
 
         test('should handle empty suggestions', async () => {

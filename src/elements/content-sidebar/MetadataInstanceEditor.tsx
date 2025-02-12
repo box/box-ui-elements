@@ -54,6 +54,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     return (
         <MetadataInstanceForm
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+            errorCode={errorCode}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
             isBetaLanguageEnabled={isBetaLanguageEnabled}
             isDeleteButtonDisabled={isDeleteButtonDisabled}
@@ -65,7 +66,6 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             selectedTemplateInstance={template}
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
-            errorCode={errorCode}
         />
     );
 };

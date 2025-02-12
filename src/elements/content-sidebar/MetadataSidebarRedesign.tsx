@@ -92,6 +92,7 @@ function MetadataSidebarRedesign({
     getStructuredTextRep,
 }: MetadataSidebarRedesignProps) {
     const {
+        clearExtractError,
         extractSuggestions,
         file,
         handleCreateMetadataInstance,
@@ -157,6 +158,8 @@ function MetadataSidebarRedesign({
     }, [editingTemplate, templateInstances, templateInstances.length]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
+        clearExtractError();
+
         if (editingTemplate) {
             setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
             setIsUnsavedChangesModalOpen(true);
@@ -167,6 +170,7 @@ function MetadataSidebarRedesign({
     };
 
     const handleCancel = () => {
+        clearExtractError();
         setEditingTemplate(null);
     };
 
@@ -190,6 +194,7 @@ function MetadataSidebarRedesign({
         } catch {
             // ignore error, handled in useSidebarMetadataFetcher
         }
+        clearExtractError();
         setEditingTemplate(null);
     };
 
@@ -280,6 +285,7 @@ function MetadataSidebarRedesign({
                     {editingTemplate && (
                         <MetadataInstanceEditor
                             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            errorCode={extractErrorCode}
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDeleteButtonDisabled={isDeleteButtonDisabled}
@@ -291,7 +297,6 @@ function MetadataSidebarRedesign({
                             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
-                            errorCode={extractErrorCode}
                         />
                     )}
                     {showList && (

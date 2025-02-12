@@ -118,6 +118,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -143,6 +144,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should have accessible "All templates" combobox trigger button', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -186,6 +188,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should have accessible "All templates" combobox trigger button', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -207,6 +210,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -231,6 +235,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with loading indicator', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -271,6 +276,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render empty state when no visible template instances are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -294,6 +300,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata instance list when templates are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -318,6 +325,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render filter dropdown when more than one templates are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -345,6 +353,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         'should not render filter dropdown when only one or none visible template is present',
         (templateInstances: MetadataTemplateInstance[]) => {
             mockUseSidebarMetadataFetcher.mockReturnValue({
+                clearExtractError: jest.fn(),
                 extractSuggestions: jest.fn(),
                 handleCreateMetadataInstance: jest.fn(),
                 handleDeleteMetadataInstance: jest.fn(),
@@ -365,6 +374,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata filterd instance list when fileterd templates are present and matching', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -388,6 +398,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata unfiltered instance list when fileterd templates are present and do not match existing templates', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),

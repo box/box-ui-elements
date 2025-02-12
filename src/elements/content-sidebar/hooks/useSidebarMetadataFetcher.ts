@@ -38,6 +38,7 @@ export enum STATUS {
 }
 
 interface DataFetcher {
+    clearExtractError: () => void;
     errorMessage: MessageDescriptor | null;
     extractErrorCode:
         | ERROR_CODE_METADATA_AUTOFILL_TIMEOUT
@@ -224,19 +225,20 @@ function useSidebarMetadataFetcher(
                     metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
                 })) as Record<string, MetadataFieldValue>;
             } catch (error) {
-                if (error.status === 408) {
+                // Axios makes the status code nested under the response object
+                if (error.response.status === 408) {
                     onError(error, ERROR_CODE_METADATA_AUTOFILL_TIMEOUT);
                     setExtractErrorCode(ERROR_CODE_METADATA_AUTOFILL_TIMEOUT);
-                } else if (error.status === 412) {
+                } else if (error.response.status === 412) {
                     onError(error, ERROR_CODE_METADATA_PRECONDITION_FAILED);
                     setExtractErrorCode(ERROR_CODE_METADATA_PRECONDITION_FAILED);
-                } else if (error.status === 500) {
+                } else if (error.response.status === 500) {
                     onError(error, ERROR_CODE_UNKNOWN);
                     setExtractErrorCode(ERROR_CODE_UNKNOWN);
-                } else if (isUserCorrectableError(error.status)) {
+                } else if (isUserCorrectableError(error.response.status)) {
                     onError(error, ERROR_CODE_FETCH_METADATA_SUGGESTIONS, { showNotification: true });
                 } else {
-                    onError(error, ERROR_CODE_UNKNOWN);
+                    onError(error, ERROR_CODE_UNKNOWN, { showNotification: true });
                     // react way of throwing errors from async callbacks - https://github.com/facebook/react/issues/14981#issuecomment-468460187
                     setError(() => {
                         throw error;
@@ -280,6 +282,7 @@ function useSidebarMetadataFetcher(
     }, [api, fetchFileErrorCallback, fetchFileSuccessCallback, fileId, status]);
 
     return {
+        clearExtractError: () => setExtractErrorCode(null),
         extractSuggestions,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
