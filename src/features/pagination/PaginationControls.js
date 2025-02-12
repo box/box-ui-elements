@@ -9,16 +9,17 @@ import IconPageForward from '../../icons/general/IconPageForward';
 import Tooltip from '../../elements/common/Tooltip';
 import messages from '../../elements/common/messages';
 
-/** @typedef {Object} Props
- * @property {() => void} handleNextClick
- * @property {() => void} handlePreviousClick
- * @property {boolean} hasNextPage
- * @property {boolean} hasPreviousPage
- * @property {boolean} [isOffsetBasedPagination]
- * @property {(page: number) => void} [onPageClick]
- * @property {number} [pageCount]
- * @property {number} [pageNumber]
- */
+// @flow
+type Props = {|
+    handleNextClick: () => void,
+    handlePreviousClick: () => void,
+    hasNextPage: boolean,
+    hasPreviousPage: boolean,
+    isOffsetBasedPagination?: boolean,
+    onPageClick?: (page: number) => void,
+    pageCount?: number,
+    pageNumber?: number,
+|};
 
 const PAGE_ICON_STYLE = {
     height: 9,
@@ -34,7 +35,7 @@ const PaginationControls = ({
     onPageClick,
     pageCount = 0,
     pageNumber = 0,
-}: Props) => {
+}) => {
     return (
         <div className="bdl-Pagination">
             {isOffsetBasedPagination && (

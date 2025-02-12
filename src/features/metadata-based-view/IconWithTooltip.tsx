@@ -37,7 +37,7 @@ const IconWithTooltip = ({
             iconBtn = (
                 <ButtonAdapter 
                     className={className} 
-                    type="button" 
+                    type={ButtonType.BUTTON} 
                     onClick={onClick}
                     aria-label={intl.formatMessage(tooltipText.props)}
                 >
@@ -49,7 +49,7 @@ const IconWithTooltip = ({
             iconBtn = (
                 <ButtonAdapter 
                     className={className} 
-                    type="button" 
+                    type={ButtonType.BUTTON} 
                     onClick={onClick}
                     aria-label={intl.formatMessage(tooltipText.props)}
                 >
@@ -62,7 +62,7 @@ const IconWithTooltip = ({
                 <ButtonAdapter 
                     className={className} 
                     isLoading={isUpdating} 
-                    type="button" 
+                    type={ButtonType.BUTTON} 
                     onClick={onClick}
                     aria-label={intl.formatMessage(tooltipText.props)}
                 >

@@ -8,19 +8,21 @@ import IconMinus from '../../icons/general/IconMinusThin';
 import IconPlus from '../../icons/general/IconPlusThin';
 import Field from './MetadataField';
 import messages from './messages';
-import type { MetadataFieldValue } from '../../common/types/metadata';
+// @flow
+import { type MetadataFieldValue } from '../../common/types/metadata';
 import './CustomMetadataField.scss';
 
-interface Props {
-    canEdit: boolean;
-    dataKey: string;
-    dataValue: MetadataFieldValue;
-    intl: IntlShape;
-    isLast: boolean;
-    onAdd: () => void;
-    onChange: (key: string, value: MetadataFieldValue) => void;
-    onRemove: (key: string) => void;
-}
+// @flow
+type Props = {|
+    canEdit: boolean,
+    dataKey: string,
+    dataValue: MetadataFieldValue,
+    intl: Object,
+    isLast: boolean,
+    onAdd: () => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
+    onRemove: (key: string) => void,
+|};
 
 const COLOR_999 = '#999';
 
