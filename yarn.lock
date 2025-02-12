@@ -1494,15 +1494,15 @@
     tabbable "^4.0.0"
     type-fest "^3.2.0"
 
-"@box/box-ai-agent-selector@^0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.22.0.tgz#d91e4270766a9f7e95166808c4ed735247d196c2"
-  integrity sha512-eDj088pwuG9OIj+Ut4g7tz1jgdOcZjUDH+vt+hAazCIZJRBnzft6thDVUlrh4XeQ00cdoopIxfNkP1Un937SxA==
+"@box/box-ai-agent-selector@^0.26.4":
+  version "0.26.4"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.26.4.tgz#76d78550648779fea1376272a2131b101bab822b"
+  integrity sha512-ct2Sg62UEKQIy8YPGOI5CcI7ov+QW/+IHL5pted/hD5BxbzXAApHOLHk4AlVMTsaidHDalz62E8nA3bus6b3Bw==
 
-"@box/box-ai-content-answers@^0.86.0":
-  version "0.86.2"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.86.2.tgz#757143a6cb97447bfb12e797bccbd86b09921022"
-  integrity sha512-3Dlf10D36ZeM7uOokdiS/AyKj0rAa0HlrnNKFA+CEeJQS+2lv+ICRjd7fmE4lf5moix5zfPEKq+MDOQTQ7dyxA==
+"@box/box-ai-content-answers@^0.95.0":
+  version "0.95.0"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.95.0.tgz#37bcd2545991d76fa9fbe525c22b863f76873979"
+  integrity sha512-67H93EPLmQBvDqtqScZpHHz7UglBE4LUoKWyAA6J3EaWIUSZAMv4m2iAmbgkjYkXPCvUUafVYoSZ0osPcdcPiw==
 
 "@box/cldr-data@^34.2.0":
   version "34.8.0"
@@ -1528,10 +1528,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@0.91.0":
-  version "0.91.0"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.91.0.tgz#f7562f4cefd224aad491e955adefce2147c2a803"
-  integrity sha512-TyJD6n8jS5MW9rericaLlG7h203+xWpjt9deqkrYiQ9K6Vu79FqAmrW3sbBRHJFREy6Os34SruvSqL71qCPclw==
+"@box/metadata-editor@0.92.0":
+  version "0.92.0"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.92.0.tgz#df484131655f35e49e355af2b07340eaaddfe905"
+  integrity sha512-AibiQMlCVV2kTbvhH2ZkgseLjyu89oZkmekuANg6y7tFh0633OVdn0eo5NXaCAASfff6THbH2gxWir7fd/r6tA==
 
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"
