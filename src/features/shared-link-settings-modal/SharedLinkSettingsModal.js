@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../components/button';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ButtonType } from '../../components/button/Button';
 import PrimaryButton from '../../components/primary-button';
 import { Modal, ModalActions } from '../../components/modal';
 import InlineNotice from '../../components/inline-notice';
@@ -293,13 +294,8 @@ class SharedLinkSettingsModal extends Component {
     }
 
     renderExpirationSection() {
-        const {
-            canChangeExpiration,
-            dateDisplayFormat,
-            dateFormat,
-            expirationCheckboxProps,
-            expirationInputProps,
-        } = this.props;
+        const { canChangeExpiration, dateDisplayFormat, dateFormat, expirationCheckboxProps, expirationInputProps } =
+            this.props;
         const { expirationDate, isExpirationEnabled, expirationError } = this.state;
 
         return (
@@ -434,12 +430,18 @@ class SharedLinkSettingsModal extends Component {
                     {this.renderVanityNameSection()}
                     {this.renderAllowDownloadSection()}
                     <ModalActions>
-                        <Button isDisabled={submitting} onClick={onRequestClose} type="button" {...cancelButtonProps}>
+                        <ButtonAdapter
+                            isDisabled={submitting}
+                            onClick={onRequestClose}
+                            type={ButtonType.BUTTON}
+                            {...cancelButtonProps}
+                        >
                             <FormattedMessage {...commonMessages.cancel} />
-                        </Button>
+                        </ButtonAdapter>
                         <PrimaryButton
                             isDisabled={submitting || disableSaveBtn}
                             isLoading={submitting}
+                            type={ButtonType.BUTTON}
                             {...saveButtonProps}
                         >
                             <FormattedMessage {...commonMessages.save} />

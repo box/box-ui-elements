@@ -38,11 +38,7 @@ const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessag
                     >
                         <FormattedMessage {...messages.metadataCancel} />
                     </ButtonAdapter>
-                    <PrimaryButton
-                        data-resin-target="metadata-confirmremove"
-                        onClick={onConfirm}
-                        type={ButtonType.BUTTON}
-                    >
+                    <PrimaryButton data-resin-target="metadata-confirmremove" onClick={onConfirm} type={ButtonType.BUTTON}>
                         <FormattedMessage {...messages.customRemove} />
                     </PrimaryButton>
                 </div>

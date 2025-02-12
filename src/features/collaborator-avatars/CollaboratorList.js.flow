@@ -92,12 +92,7 @@ class CollaboratorList extends React.Component<Props> {
                     )}
                 </ul>
                 <ModalActions>
-                    <ButtonAdapter
-                        className="btn-done"
-                        onClick={onDoneClick}
-                        type={ButtonType.BUTTON}
-                        {...doneButtonProps}
-                    >
+                    <ButtonAdapter className="btn-done" onClick={onDoneClick} type={ButtonType.BUTTON} {...doneButtonProps}>
                         <FormattedMessage {...commonMessages.done} />
                     </ButtonAdapter>
                 </ModalActions>

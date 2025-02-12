@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 
 import ButtonAdapter from '../../components/button/ButtonAdapter';
 import { ButtonType } from '../../components/button/Button';
@@ -24,7 +24,7 @@ interface Props {
 
 const COLOR_999 = '#999';
 
-const CustomMetadataField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChange, onRemove }: Props): JSX.Element => {
+const CustomMetadataField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChange, onRemove }: Props) => {
     const addBtn = (
         <ButtonAdapter
             aria-label={intl.formatMessage(messages.customAdd)}
@@ -60,7 +60,7 @@ const CustomMetadataField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd,
                 displayName={dataKey}
                 onChange={onChange}
                 // Custom metadata doesn't allow removing of props if the value is emptied out, leave it as empty string
-                onRemove={(key) => onChange(key, '')}
+                onRemove={(key: string) => onChange(key, '')}
                 type="string"
             />
             {canEdit && (

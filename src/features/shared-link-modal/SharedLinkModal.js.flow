@@ -1,0 +1,38 @@
+/* @flow */
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import Button from '../../components/button/Button';
+import Modal from '../../components/modal/Modal';
+import { ModalActions } from '../../components/modal';
+import commonMessages from '../../common/messages';
+
+import messages from './messages';
+
+type Props = {
+    isOpen?: boolean,
+    onRequestClose: () => void,
+    onSubmit: () => void,
+    submitting?: boolean,
+};
+
+const SharedLinkModal = ({ isOpen, onRequestClose, onSubmit, submitting }: Props) => (
+    <Modal
+        className="shared-link-modal"
+        isOpen={isOpen}
+        onRequestClose={onRequestClose}
+        title={<FormattedMessage {...messages.sharedLinkModalTitle} />}
+    >
+        <FormattedMessage {...messages.sharedLinkModalDescription} />
+        <ModalActions>
+            <Button isDisabled={submitting} onClick={onRequestClose} type="button">
+                <FormattedMessage {...commonMessages.cancel} />
+            </Button>
+            <Button isDisabled={submitting} isLoading={submitting} onClick={onSubmit} type="button" isSelected>
+                <FormattedMessage {...commonMessages.okay} />
+            </Button>
+        </ModalActions>
+    </Modal>
+);
+
+export default SharedLinkModal;

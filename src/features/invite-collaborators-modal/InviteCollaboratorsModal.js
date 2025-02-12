@@ -5,7 +5,8 @@ import throttle from 'lodash/throttle';
 import { FormattedMessage, injectIntl } from 'react-intl';
 
 import { UpgradeBadge } from '../../components/badge';
-import Button from '../../components/button';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ButtonType } from '../../components/button/Button';
 import InlineNotice from '../../components/inline-notice';
 import PrimaryButton from '../../components/primary-button';
 import Select from '../../components/select';
@@ -377,14 +378,20 @@ class InviteCollaboratorsModal extends Component {
                 {itemType === 'file' ? this.renderFileCollabComponents() : this.renderFolderCollabComponents()}
                 {isEligibleForReferAFriendProgram && <ReferAFriendAd />}
                 <ModalActions>
-                    <Button data-resin-target="cancel" isDisabled={submitting} onClick={this.closeModal} type="button">
+                    <ButtonAdapter
+                        data-resin-target="cancel"
+                        isDisabled={submitting}
+                        onClick={this.closeModal}
+                        type={ButtonType.BUTTON}
+                    >
                         <FormattedMessage {...messages.inviteCollaboratorsModalCancelButton} />
-                    </Button>
+                    </ButtonAdapter>
                     <PrimaryButton
                         {...inviteButtonProps}
                         isDisabled={submitting}
                         isLoading={submitting}
                         onClick={this.sendInvites}
+                        type={ButtonType.BUTTON}
                     >
                         <FormattedMessage {...messages.inviteCollaboratorsModalSendInvitesButton} />
                     </PrimaryButton>

@@ -1,4 +1,3 @@
-// @ts-check
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -10,13 +9,13 @@ import PrimaryButton from '../../components/primary-button/PrimaryButton';
 import messages from './messages';
 import './Footer.scss';
 
-/** @type {React.FC<{
+interface Props {
     onCancel: () => void;
     onRemove: () => void;
     showSave: boolean;
-}>} */
+}
 
-const Footer = ({ onCancel, onRemove, showSave }) => (
+const Footer: React.FC<Props> = ({ onCancel, onRemove, showSave }) => (
     <div className="metadata-instance-editor-footer">
         <div className="metadata-instance-editor-footer-delete">
             <PlainButton data-resin-target="metadata-instanceremove" onClick={onRemove} type={ButtonType.BUTTON}>

@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 
@@ -11,20 +12,20 @@ import messages from './messages';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import './CustomMetadataField.scss';
 
-interface Props {
-    canEdit: boolean;
-    dataKey: string;
-    dataValue: MetadataFieldValue;
-    intl: IntlShape;
-    isLast: boolean;
-    onAdd: () => void;
-    onChange: (key: string, value: MetadataFieldValue) => void;
-    onRemove: (key: string) => void;
-}
+type Props = {
+    canEdit: boolean,
+    dataKey: string,
+    dataValue: MetadataFieldValue,
+    intl: any,
+    isLast: boolean,
+    onAdd: () => void,
+    onChange: (key: string, value: MetadataFieldValue) => void,
+    onRemove: (key: string) => void,
+};
 
 const COLOR_999 = '#999';
 
-const CustomMetadataField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChange, onRemove }: Props): JSX.Element => {
+const CustomMetadataField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd, onChange, onRemove }: Props) => {
     const addBtn = (
         <ButtonAdapter
             aria-label={intl.formatMessage(messages.customAdd)}
@@ -60,7 +61,7 @@ const CustomMetadataField = ({ intl, canEdit, isLast, dataKey, dataValue, onAdd,
                 displayName={dataKey}
                 onChange={onChange}
                 // Custom metadata doesn't allow removing of props if the value is emptied out, leave it as empty string
-                onRemove={(key) => onChange(key, '')}
+                onRemove={(key: string) => onChange(key, '')}
                 type="string"
             />
             {canEdit && (

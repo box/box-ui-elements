@@ -1,4 +1,3 @@
-// @flow
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -10,19 +9,19 @@ import commonMessages from '../../common/messages';
 
 import messages from './messages';
 
-type Props = {
-    cancelButtonProps?: Object,
-    isOpen: boolean,
-    modalProps?: Object,
-    okayButtonProps?: Object,
-    onLoad?: Function,
-    onRequestClose: Function,
-    removeLink: Function,
-    submitting: boolean,
-};
+interface Props {
+    cancelButtonProps?: Record<string, unknown>;
+    isOpen: boolean;
+    modalProps?: Record<string, unknown>;
+    okayButtonProps?: Record<string, unknown>;
+    onLoad?: () => void;
+    onRequestClose: () => void;
+    removeLink: () => void;
+    submitting: boolean;
+}
 
 class RemoveLinkConfirmModal extends Component<Props> {
-    componentDidMount() {
+    componentDidMount(): void {
         const { onLoad } = this.props;
 
         if (onLoad) {
@@ -30,9 +29,16 @@ class RemoveLinkConfirmModal extends Component<Props> {
         }
     }
 
-    render() {
-        const { isOpen, onRequestClose, removeLink, submitting, okayButtonProps, modalProps, cancelButtonProps } =
-            this.props;
+    render(): JSX.Element {
+        const {
+            isOpen,
+            onRequestClose,
+            removeLink,
+            submitting,
+            okayButtonProps,
+            modalProps,
+            cancelButtonProps,
+        } = this.props;
 
         return (
             <Modal
@@ -46,19 +52,13 @@ class RemoveLinkConfirmModal extends Component<Props> {
             >
                 <FormattedMessage {...messages.removeLinkConfirmationDescription} />
                 <ModalActions>
-                    <ButtonAdapter
-                        isDisabled={submitting}
-                        onClick={onRequestClose}
-                        type={ButtonType.BUTTON}
-                        {...cancelButtonProps}
-                    >
+                    <ButtonAdapter isDisabled={submitting} onClick={onRequestClose} type={ButtonType.BUTTON} {...cancelButtonProps}>
                         <FormattedMessage {...commonMessages.cancel} />
                     </ButtonAdapter>
                     <PrimaryButton
                         isDisabled={submitting}
                         isLoading={submitting}
                         onClick={removeLink}
-                        type={ButtonType.BUTTON}
                         {...okayButtonProps}
                     >
                         <FormattedMessage {...commonMessages.okay} />

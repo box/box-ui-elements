@@ -1,0 +1,23 @@
+// @flow
+import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import { Modal, ModalActions } from '../../components/modal';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import PrimaryButton from '../../components/primary-button';
+import commonMessages from '../../common/messages';
+
+import messages from './messages';
+
+type Props = {
+    cancelButtonProps?: Object,
+    isOpen: boolean,
+    modalProps?: Object,
+    okayButtonProps?: Object,
+    onLoad?: Function,
+    onRequestClose: Function,
+    removeLink: Function,
+    submitting: boolean,
+};
+
+declare export default React.ComponentType<Props>;

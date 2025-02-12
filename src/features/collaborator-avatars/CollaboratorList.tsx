@@ -1,11 +1,10 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ModalActions } from '../../components/modal';
-import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ModalActions, type ModalActionsProps } from '../../components/modal';
 import { ButtonType } from '../../components/button/Button';
-import { Link } from '../../components/link';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { Link, type LinkProps } from '../../components/link';
 import CollaborationBadge from '../../icons/badges/CollaborationBadge';
 import type {
     collaboratorListTrackingType,
@@ -21,21 +20,27 @@ import './CollaboratorList.scss';
 
 const MAX_COLLABORATOR_LIST_SIZE = 90;
 
-type Props = {
-    collaborators: Array<collaboratorType>,
-    doneButtonProps?: Object,
-    item: ItemType,
-    maxCollaboratorListSize: number,
-    onDoneClick: Function,
-    trackingProps: collaboratorListTrackingType,
-};
+interface Props {
+    collaborators: Array<collaboratorType>;
+    doneButtonProps?: Record<string, unknown>;
+    item: ItemType;
+    maxCollaboratorListSize: number;
+    onDoneClick: () => void;
+    trackingProps: {
+        usernameProps?: Record<string, unknown>;
+        emailProps?: Record<string, unknown>;
+        manageLinkProps?: Record<string, unknown>;
+        viewAdditionalProps?: Record<string, unknown>;
+        doneButtonProps?: Record<string, unknown>;
+    };
+}
 
 class CollaboratorList extends React.Component<Props> {
     static defaultProps = {
         maxCollaboratorListSize: MAX_COLLABORATOR_LIST_SIZE,
     };
 
-    createCollaboratorPageLink(children: React.Node, trackingProp: ?Object) {
+    createCollaboratorPageLink(children: React.ReactNode, trackingProp?: Partial<LinkProps>) {
         const { item } = this.props;
         const { type, id } = item;
         const collaboratorsPageLink = `/${type}/${id}/collaborators/`;
@@ -71,8 +76,8 @@ class CollaboratorList extends React.Component<Props> {
                                 collaborator={collaborator}
                                 index={index}
                                 trackingProps={{
-                                    usernameProps,
-                                    emailProps,
+                                    usernameProps: usernameProps || null,
+                                    emailProps: emailProps || null,
                                 }}
                             />
                         );
@@ -91,13 +96,8 @@ class CollaboratorList extends React.Component<Props> {
                         </li>
                     )}
                 </ul>
-                <ModalActions>
-                    <ButtonAdapter
-                        className="btn-done"
-                        onClick={onDoneClick}
-                        type={ButtonType.BUTTON}
-                        {...doneButtonProps}
-                    >
+                <ModalActions className="collaborator-list-actions" data-testid="collaborator-list-actions">
+                    <ButtonAdapter className="btn-done" onClick={onDoneClick} type={ButtonType.BUTTON} {...doneButtonProps}>
                         <FormattedMessage {...commonMessages.done} />
                     </ButtonAdapter>
                 </ModalActions>

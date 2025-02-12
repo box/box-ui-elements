@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from '../../components/button';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ButtonType } from '../../components/button/Button';
 import { Modal, ModalActions } from '../../components/modal';
 import commonMessages from '../../common/messages';
 
@@ -127,15 +128,8 @@ class SharedLinkModal extends Component<Props, State> {
     }
 
     renderEmailSharedLink() {
-        const {
-            contacts,
-            defaultEmailMessage,
-            emailMessageProps,
-            getContacts,
-            onRequestClose,
-            sendEmail,
-            submitting,
-        } = this.props;
+        const { contacts, defaultEmailMessage, emailMessageProps, getContacts, onRequestClose, sendEmail, submitting } =
+            this.props;
 
         if (!getContacts || !contacts || !sendEmail) {
             return null;
@@ -181,9 +175,9 @@ class SharedLinkModal extends Component<Props, State> {
                 {this.renderEmailSharedLink()}
                 {!isEmailSharedLinkExpanded && (
                     <ModalActions>
-                        <Button isDisabled={submitting} onClick={onRequestClose} type="button">
+                        <ButtonAdapter isDisabled={submitting} onClick={onRequestClose} type={ButtonType.BUTTON}>
                             <FormattedMessage {...commonMessages.close} />
-                        </Button>
+                        </ButtonAdapter>
                     </ModalActions>
                 )}
             </Modal>

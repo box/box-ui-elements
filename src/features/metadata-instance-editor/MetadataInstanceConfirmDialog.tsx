@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -10,18 +9,18 @@ import messages from './messages';
 
 import './MetadataInstanceConfirmDialog.scss';
 
-type Props = {
-    confirmationMessage: string | React.Node,
-    onCancel: Function,
-    onConfirm: Function,
-};
+interface Props {
+    confirmationMessage: string | React.ReactNode;
+    onCancel: () => void;
+    onConfirm: () => void;
+}
 
 const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessage }: Props) => {
-    const cancelButtonRef = React.useRef<any | null>(null);
+    const cancelButtonRef = React.useRef<HTMLButtonElement | null>(null);
 
     React.useEffect(() => {
         if (cancelButtonRef.current) {
-            cancelButtonRef.current.btnElement.focus();
+            cancelButtonRef.current.focus();
         }
     }, []);
 
@@ -38,11 +37,7 @@ const MetadataInstanceConfirmDialog = ({ onCancel, onConfirm, confirmationMessag
                     >
                         <FormattedMessage {...messages.metadataCancel} />
                     </ButtonAdapter>
-                    <PrimaryButton
-                        data-resin-target="metadata-confirmremove"
-                        onClick={onConfirm}
-                        type={ButtonType.BUTTON}
-                    >
+                    <PrimaryButton data-resin-target="metadata-confirmremove" onClick={onConfirm} type={ButtonType.BUTTON}>
                         <FormattedMessage {...messages.customRemove} />
                     </PrimaryButton>
                 </div>

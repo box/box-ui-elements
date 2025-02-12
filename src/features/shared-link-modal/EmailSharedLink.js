@@ -8,7 +8,8 @@ import ContactDatalistItem from '../../components/contact-datalist-item';
 import TextArea from '../../components/text-area';
 import PrimaryButton from '../../components/primary-button';
 import { ModalActions } from '../../components/modal';
-import Button from '../../components/button';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ButtonType } from '../../components/button/Button';
 import parseEmails from '../../utils/parseEmails';
 import commonMessages from '../../common/messages';
 
@@ -203,10 +204,10 @@ class EmailSharedLink extends Component {
                 />
                 {isExpanded && (
                     <ModalActions>
-                        <Button isDisabled={submitting} onClick={onRequestClose} type="button">
+                        <ButtonAdapter isDisabled={submitting} onClick={onRequestClose} type={ButtonType.BUTTON}>
                             <FormattedMessage {...commonMessages.cancel} />
-                        </Button>
-                        <PrimaryButton isDisabled={submitting} isLoading={submitting} type="submit">
+                        </ButtonAdapter>
+                        <PrimaryButton isDisabled={submitting} isLoading={submitting} type={ButtonType.SUBMIT}>
                             <FormattedMessage {...commonMessages.send} />
                         </PrimaryButton>
                     </ModalActions>

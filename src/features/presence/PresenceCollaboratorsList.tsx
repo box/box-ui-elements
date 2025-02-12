@@ -1,8 +1,7 @@
 import * as React from 'react';
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
+import { FormattedMessage, type IntlShape } from 'react-intl';
 import throttle from 'lodash/throttle';
-import { FormattedMessage, injectIntl } from 'react-intl';
 
 import ButtonAdapter from '../../components/button/ButtonAdapter';
 import { ButtonType } from '../../components/button/Button';
@@ -11,34 +10,41 @@ import messages from './messages';
 
 import './PresenceCollaboratorsList.scss';
 
-class PresenceCollaboratorsList extends React.Component {
-    static propTypes = {
-        collaborators: PropTypes.arrayOf(
-            PropTypes.shape({
-                /** Url to avatar image. If passed in, component will render the avatar image instead of the initials */
-                avatarUrl: PropTypes.string,
-                /** Users id */
-                id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-                isActive: PropTypes.bool,
-                /** Unix timestamp of when the user last interacted with the document */
-                interactedAt: PropTypes.number,
-                /** The type of interaction by the user */
-                interactionType: PropTypes.string,
-                /** User's full name */
-                name: PropTypes.string.isRequired,
-                /** Custom Profile URL */
-                profileUrl: PropTypes.string,
-            }),
-        ).isRequired,
-        /* Get Link button callback. also controls visibility of button */
-        getLinkCallback: PropTypes.func,
-        /* Show Invite button callback. also controls visibility of button */
-        inviteCallback: PropTypes.func,
-        /* Callback for Dropdown onScroll event */
-        onScroll: PropTypes.func,
-        /* Intl object */
-        intl: PropTypes.any,
-    };
+interface Collaborator {
+    /** Url to avatar image. If passed in, component will render the avatar image instead of the initials */
+    avatarUrl?: string;
+    /** Users id */
+    id: string | number;
+    isActive?: boolean;
+    /** Unix timestamp of when the user last interacted with the document */
+    interactedAt?: number;
+    /** The type of interaction by the user */
+    interactionType?: string;
+    /** User's full name */
+    name: string;
+    /** Custom Profile URL */
+    profileUrl?: string;
+}
+
+interface Props {
+    collaborators: Array<Collaborator>;
+    /* Get Link button callback. also controls visibility of button */
+    getLinkCallback?: () => void;
+    /* Show Invite button callback. also controls visibility of button */
+    inviteCallback?: () => void;
+    /* Callback for Dropdown onScroll event */
+    onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
+    /* Intl object */
+    intl: IntlShape;
+}
+
+interface State {
+    isScrollableAbove: boolean;
+    isScrollableBelow: boolean;
+}
+
+class PresenceCollaboratorsList extends React.Component<Props, State> {
+    elDropdownList: HTMLDivElement | null = null;
 
     state = {
         isScrollableAbove: false,
@@ -46,27 +52,25 @@ class PresenceCollaboratorsList extends React.Component {
     };
 
     componentDidMount() {
-        const overflow = this.calculateOverflow(this.elDropdownList);
-        // eslint-disable-next-line react/no-did-mount-set-state
-        this.setState(overflow);
-    }
-
-    componentDidUpdate() {
-        const overflow = this.calculateOverflow(this.elDropdownList);
-        /**
-         * recalculate overflow when dropdown is visible and new collabs are added
-         * This will not go into an infinite loop because we check for changes in local component state
-         */
-        if (
-            overflow.isScrollableAbove !== this.state.isScrollableAbove ||
-            overflow.isScrollableBelow !== this.state.isScrollableBelow
-        ) {
-            // eslint-disable-next-line react/no-did-update-set-state
+        if (this.elDropdownList) {
+            const overflow = this.calculateOverflow(this.elDropdownList);
             this.setState(overflow);
         }
     }
 
-    calculateOverflow = elem => {
+    componentDidUpdate() {
+        if (this.elDropdownList) {
+            const overflow = this.calculateOverflow(this.elDropdownList);
+            if (
+                overflow.isScrollableAbove !== this.state.isScrollableAbove ||
+                overflow.isScrollableBelow !== this.state.isScrollableBelow
+            ) {
+                this.setState(overflow);
+            }
+        }
+    }
+
+    calculateOverflow = (elem: HTMLDivElement) => {
         const isScrollableAbove = elem.scrollTop > 0;
         const isScrollableBelow = elem.scrollTop < elem.scrollHeight - elem.clientHeight;
         return {
@@ -75,7 +79,7 @@ class PresenceCollaboratorsList extends React.Component {
         };
     };
 
-    handleScroll = event => {
+    handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const { onScroll } = this.props;
         if (this.elDropdownList) {
             this.setState(this.calculateOverflow(this.elDropdownList));
@@ -156,4 +160,4 @@ class PresenceCollaboratorsList extends React.Component {
 }
 
 export { PresenceCollaboratorsList as PresenceCollaboratorsListComponent };
-export default injectIntl(PresenceCollaboratorsList);
+export default PresenceCollaboratorsList;

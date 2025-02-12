@@ -1,29 +1,24 @@
-/**
- * @flow strict
- * @file Pagination controls for navigation
- * @author Box
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PaginationMenu from './PaginationMenu';
-import Button from '../../components/button';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ButtonType } from '../../components/button/Button';
 import ButtonGroup from '../../components/button-group';
 import IconPageBack from '../../icons/general/IconPageBack';
 import IconPageForward from '../../icons/general/IconPageForward';
 import Tooltip from '../../elements/common/Tooltip';
 import messages from '../../elements/common/messages';
 
-type Props = {
-    handleNextClick: () => void,
-    handlePreviousClick: () => void,
-    hasNextPage: boolean,
-    hasPreviousPage: boolean,
-    isOffsetBasedPagination?: boolean,
-    onPageClick?: number => void,
-    pageCount?: number,
-    pageNumber?: number,
-};
+/** @typedef {Object} Props
+ * @property {() => void} handleNextClick
+ * @property {() => void} handlePreviousClick
+ * @property {boolean} hasNextPage
+ * @property {boolean} hasPreviousPage
+ * @property {boolean} [isOffsetBasedPagination]
+ * @property {(page: number) => void} [onPageClick]
+ * @property {number} [pageCount]
+ * @property {number} [pageNumber]
+ */
 
 const PAGE_ICON_STYLE = {
     height: 9,
@@ -49,14 +44,14 @@ const PaginationControls = ({
             )}
             <ButtonGroup className="bdl-Pagination-nav">
                 <Tooltip isDisabled={!hasPreviousPage} text={<FormattedMessage {...messages.previousPage} />}>
-                    <Button isDisabled={!hasPreviousPage} onClick={handlePreviousClick}>
+                    <ButtonAdapter isDisabled={!hasPreviousPage} onClick={handlePreviousClick} type={ButtonType.BUTTON}>
                         <IconPageBack {...PAGE_ICON_STYLE} />
-                    </Button>
+                    </ButtonAdapter>
                 </Tooltip>
                 <Tooltip isDisabled={!hasNextPage} text={<FormattedMessage {...messages.nextPage} />}>
-                    <Button isDisabled={!hasNextPage} onClick={handleNextClick}>
+                    <ButtonAdapter isDisabled={!hasNextPage} onClick={handleNextClick} type={ButtonType.BUTTON}>
                         <IconPageForward {...PAGE_ICON_STYLE} />
-                    </Button>
+                    </ButtonAdapter>
                 </Tooltip>
             </ButtonGroup>
         </div>

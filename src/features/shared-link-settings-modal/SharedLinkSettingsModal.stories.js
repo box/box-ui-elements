@@ -2,7 +2,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react';
 
-import Button from '../../components/button/Button';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ButtonType } from '../../components/button/Button';
 
 import SharedLinkSettingsModal from './SharedLinkSettingsModal';
 import notes from './SharedLinkSettingsModal.stories.md';
@@ -71,7 +72,9 @@ export const basic = () => {
                     warnOnPublic={false}
                 />
             )}
-            <Button onClick={() => setIsOpen(true)}>Shared Link Settings Modal</Button>
+            <ButtonAdapter onClick={() => setIsOpen(true)} type={ButtonType.BUTTON}>
+                Shared Link Settings Modal
+            </ButtonAdapter>
         </div>
     );
 };

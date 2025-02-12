@@ -1,0 +1,67 @@
+/**
+ * @file Pagination Controls component
+ * @author Box
+ */
+
+import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+
+import Button from '../../components/button/Button';
+import IconPageBack from '../../icons/general/IconPageBack';
+import IconPageForward from '../../icons/general/IconPageForward';
+import PaginationMenu from './PaginationMenu';
+import messages from '../../elements/common/messages';
+
+import './PaginationControls.scss';
+
+type Props = {
+    hasNextPage?: boolean,
+    hasPreviousPage?: boolean,
+    isOffsetBasedPagination?: boolean,
+    onPageClick: (pageNumber: number) => void,
+    pageCount: number,
+    pageNumber: number,
+};
+
+const PaginationControls = ({
+    hasNextPage = false,
+    hasPreviousPage = false,
+    isOffsetBasedPagination = false,
+    onPageClick,
+    pageCount,
+    pageNumber,
+}: Props) => {
+    const handleNextClick = () => {
+        onPageClick(pageNumber + 1);
+    };
+
+    const handlePreviousClick = () => {
+        onPageClick(pageNumber - 1);
+    };
+
+    return (
+        <div className="bdl-Pagination">
+            <Button
+                aria-label={<FormattedMessage {...messages.previousPage} />}
+                className="bdl-Pagination-button"
+                isDisabled={!hasPreviousPage}
+                onClick={handlePreviousClick}
+                type="button"
+            >
+                <IconPageBack height={9} width={6} />
+            </Button>
+            <PaginationMenu onPageClick={onPageClick} pageCount={pageCount} pageNumber={pageNumber} />
+            <Button
+                aria-label={<FormattedMessage {...messages.nextPage} />}
+                className="bdl-Pagination-button"
+                isDisabled={!hasNextPage}
+                onClick={handleNextClick}
+                type="button"
+            >
+                <IconPageForward height={9} width={6} />
+            </Button>
+        </div>
+    );
+};
+
+export default PaginationControls;

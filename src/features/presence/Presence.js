@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import Button from '../../components/button';
+import ButtonAdapter from '../../components/button/ButtonAdapter';
+import { ButtonType } from '../../components/button/Button';
 import messages from './messages';
 import PresenceAvatarList from './PresenceAvatarList';
 import PresenceCollaboratorsList from './PresenceCollaboratorsList';
@@ -179,9 +180,9 @@ class Presence extends Component {
         const overlayContent = showActivityPrompt ? (
             <>
                 <FormattedMessage {...messages.previewPresenceFlyoutCopy} />
-                <Button className="btn-primary" onClick={this._showRecentsFlyout}>
+                <ButtonAdapter isSelected onClick={this._showRecentsFlyout} type={ButtonType.BUTTON}>
                     <FormattedMessage {...messages.previewPresenceFlyoutActivityCTA} />
-                </Button>
+                </ButtonAdapter>
             </>
         ) : (
             <PresenceCollaboratorsList
