@@ -164,7 +164,7 @@ const ItemList = ({
         return result;
     };
 
-    const isRowLoaded = ({ index }) => !items[index]?.isLoading;
+    const isRowLoaded = ({ index }) => index >= 0 && index < items.length && !items[index].isLoading;
 
     const renderRow = rendererParams => {
         const { index, key, style, className: rowClassName, columns } = rendererParams;
