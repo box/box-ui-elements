@@ -42,6 +42,7 @@ import type { VersionsSidebarProps } from './versions';
 import type { User, BoxItem } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
+import type { BoxAISidebarCache } from './types/BoxAISidebarTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
@@ -133,7 +134,12 @@ class SidebarPanels extends React.Component<Props, State> {
 
     versionsSidebar: ElementRefType = React.createRef();
 
-    boxAiSidebarCache: { encodedSession?: string | null, questions?: QuestionType[] } = {
+    boxAiSidebarCache: BoxAISidebarCache = {
+        agents: {
+            agents: [],
+            selectedAgent: null,
+            requestState: 'not_started',
+        },
         encodedSession: null,
         questions: [],
     };
@@ -166,7 +172,7 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (key: 'encodedSession' | 'questions', value: any) => {
+    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'questions', value: any) => {
         this.boxAiSidebarCache[key] = value;
     };
 
