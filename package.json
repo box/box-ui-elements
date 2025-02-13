@@ -134,7 +134,7 @@
         "@box/frontend": "^10.0.0",
         "@box/item-icon": "^0.9.58",
         "@box/languages": "^1.0.0",
-        "@box/metadata-editor": "0.92.0",
+        "@box/metadata-editor": "^0.92.1",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@chromatic-com/storybook": "^1.6.1",
