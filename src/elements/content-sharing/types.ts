@@ -130,14 +130,17 @@ export type GetContactsFnType = () => (filterTerm: string) => Promise<Array<cont
 export type ContactByEmailObject = { [key: string]: contactType | UserMini | [] };
 
 export type GetContactsByEmailFnType = () => (filterTerm: {
-    [emails: string]: string;
+    emails: string[];
 }) => Promise<ContactByEmailObject | Array<UserMini>> | null;
 
 export type SendInvitesFnType = () => (request: InviteCollaboratorsRequest) => Promise<null | Array<Function>>;
 
-export interface ConnectToItemShareFnType {
-    (options: { access?: Access; errorFn?: Function; requestOptions?: RequestOptions; successFn?: Function }): Function;
-}
+export type ConnectToItemShareFnType = (options: {
+    access?: Access;
+    errorFn?: Function;
+    requestOptions?: RequestOptions;
+    successFn?: Function;
+}) => Function;
 
 export type AvatarURLMap = { [key: number | string]: string | null };
 
