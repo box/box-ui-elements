@@ -1,0 +1,522 @@
+[
+  {
+    "id": "boxui.unifiedShare.contentSharedWithExternalCollaborators",
+    "description": "Text shown in share modal when there is at least one external collaborators",
+    "defaultMessage": "This content will be shared with external collaborators."
+  },
+  {
+    "id": "boxui.unifiedShare.disabledShareLinkPermission",
+    "description": "Tooltip text for when shared permission option is not available due to restriction or classification",
+    "defaultMessage": "This option is not available due to a security policy."
+  },
+  {
+    "id": "boxui.unifiedShare.disabledMaliciousContentShareLinkPermission",
+    "description": "Tooltip text for when shared permission option is not available due to security policy",
+    "defaultMessage": "This option isn’t available for this item due to a security policy."
+  },
+  {
+    "id": "boxui.unifiedShare.enterAtLeastOneEmail",
+    "description": "Error message when user tries to send Shared Link as email without entering any recipients",
+    "defaultMessage": "Enter at least one valid email"
+  },
+  {
+    "id": "boxui.unifiedShare.contactsExceedLimitError",
+    "description": "Error message when more than the maximum number of contacts is entered",
+    "defaultMessage": "Oops! The maximum number of collaborators that can be added at once is {maxContacts} collaborators. Please try again by splitting your invitations into batches."
+  },
+  {
+    "id": "boxui.unifiedShare.enterEmailAddressesCalloutText",
+    "description": "Tooltip text shown in the share modal, encouraging users to enter email addresses to share the item with",
+    "defaultMessage": "Share this item with coworkers by entering their email addresses"
+  },
+  {
+    "id": "boxui.unifiedShare.ftuxNewUsmUserTitle",
+    "description": "This title appears in the callout when loading the modal, to let users know about the new UI",
+    "defaultMessage": "Simplified sharing for files and folders"
+  },
+  {
+    "id": "boxui.unifiedShare.ftuxNewUSMUserBody",
+    "description": "This text describes the purpose of the new UI, using the button label to open the modal",
+    "defaultMessage": "We’ve simplified the sharing experience when you click 'Share'. Invite people to this item here and toggle the link on or off below for easy sharing."
+  },
+  {
+    "id": "boxui.unifiedShare.ftuxLinkText",
+    "description": "Text on the link which allows to learn more about link security",
+    "defaultMessage": "Read more about shared link security here."
+  },
+  {
+    "id": "boxui.unifiedShare.ftuxConfirmLabel",
+    "description": "This is label for the button so a user understands the new interface",
+    "defaultMessage": "Got it"
+  },
+  {
+    "id": "boxui.unifiedShare.ftuxEditPermissionTooltipBody",
+    "description": "Text for the body of the tooltip for the ftux experience when the edit option is available for the user",
+    "defaultMessage": "Select the new edit option to easily share your file with people or groups."
+  },
+  {
+    "id": "boxui.unifiedShare.ftuxEditPermissionTooltipTitle",
+    "description": "Text for the title of the tooltip for the ftux experience when the edit option is available for the user",
+    "defaultMessage": "Collaboration made easy"
+  },
+  {
+    "id": "boxui.unifiedShare.collaboratorListTitle",
+    "description": "Title for collaborator list modal",
+    "defaultMessage": "People in ‘{itemName}’"
+  },
+  {
+    "id": "boxui.unifiedShare.collaborators.expirationTooltipClickableText",
+    "description": "This string is displayed as tooltip on hovering over expire icon for collab",
+    "defaultMessage": "Access expires on {date}. Click for details."
+  },
+  {
+    "id": "boxui.unifiedShare.groupLabel",
+    "description": "Label for a Group contact type",
+    "defaultMessage": "Group"
+  },
+  {
+    "id": "boxui.unifiedShare.modalTitle",
+    "description": "Title of the Unified Share Modal. {itemName} is the name of the file / folder being shared",
+    "defaultMessage": "Share ‘{itemName}’"
+  },
+  {
+    "id": "boxui.unifiedShare.emailModalTitle",
+    "description": "The message to show when you have clicked the button to send the email to a new collaborator (title case)",
+    "defaultMessage": "Send Link to ‘{itemName}’"
+  },
+  {
+    "id": "boxui.unifiedShare.inviteDisabledTooltip",
+    "description": "Invite Collaborators disabled state tooltip",
+    "defaultMessage": "You do not have permission to invite collaborators."
+  },
+  {
+    "id": "boxui.unifiedShare.inviteDisabledWeblinkTooltip",
+    "description": "Invite Collaborators disabled state tooltip due to item being weblink",
+    "defaultMessage": "Collaborators cannot be added to bookmarks."
+  },
+  {
+    "id": "boxui.unifiedShare.inviteFieldLabel",
+    "description": "Label of the field where a user designates who to invite to collaborate on an item",
+    "defaultMessage": "Invite People"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkSectionLabel",
+    "description": "Label for the shared link section of the unified share modal",
+    "defaultMessage": "Share Link"
+  },
+  {
+    "id": "boxui.share.sharedLinkURLLabel",
+    "description": "Accessible label for shared link input field",
+    "defaultMessage": "URL"
+  },
+  {
+    "id": "boxui.unifiedShare.linkShareOff",
+    "description": "Call to action text for allowing the user to create a new shared link",
+    "defaultMessage": "Create shared link"
+  },
+  {
+    "id": "boxui.unifiedShare.linkShareOn",
+    "description": "Call to action text for allowing the user to remove an existing shared link",
+    "defaultMessage": "Shared link is created"
+  },
+  {
+    "id": "boxui.unifiedShare.message",
+    "description": "Label for \"Message\" text box to email the shared Link",
+    "defaultMessage": "Message"
+  },
+  {
+    "id": "boxui.unifiedShare.suggestedCollabsTitle",
+    "description": "Title for suggested collaborators that can be added to the form",
+    "defaultMessage": "Suggested"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInEnterpriseName",
+    "description": "Label for \"People in {enterpriseName}\" option",
+    "defaultMessage": "People in {enterpriseName}"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInYourCompany",
+    "description": "Label for \"People in your company\" option",
+    "defaultMessage": "People in your company"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInThisFolder",
+    "description": "Label for \"People in this folder\" option",
+    "defaultMessage": "Invited people only"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInThisFile",
+    "description": "Label for \"People in this file\" option",
+    "defaultMessage": "Invited people only"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleWithTheLinkText",
+    "description": "Text to show that those having the link will have access",
+    "defaultMessage": "People with the link"
+  },
+  {
+    "id": "boxui.unifiedShare.removeLinkConfirmationTitle",
+    "description": "Label for confirmation modal to remove a shared link (title-case)",
+    "defaultMessage": "Remove Shared Link"
+  },
+  {
+    "id": "boxui.unifiedShare.removeLinkConfirmationDescription",
+    "description": "Description for confirmation modal to remove a shared link",
+    "defaultMessage": "This will permanently remove the shared link. If this item is embedded on other sites it will also become inaccessible. Any custom properties, settings and expirations will be removed as well. Do you want to continue?"
+  },
+  {
+    "id": "boxui.unifiedShare.removeLinkTooltip",
+    "description": "Tooltip description for not having access to remove link",
+    "defaultMessage": "You do not have permission to remove the link."
+  },
+  {
+    "id": "boxui.unifiedShare.disabledCreateLinkTooltip",
+    "description": "Tooltip description for users who do not have permission for link creation",
+    "defaultMessage": "You do not have permission to create the link."
+  },
+  {
+    "id": "boxui.unifiedShare.sendSharedLink",
+    "description": "Tooltip text for email shared link button (title-case)",
+    "defaultMessage": "Send Shared Link"
+  },
+  {
+    "id": "boxui.unifiedShare.sendSharedLinkFieldLabel",
+    "description": "Field label for shared link recipient list (title-case)",
+    "defaultMessage": "Email Shared Link"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkExpirationTooltip",
+    "description": "Tooltip describing when this shared link will expire. {expiration, date, long} is the formatted date",
+    "defaultMessage": "This link will expire and be inaccessible on {expiration, date, long}."
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkPermissionsViewDownload",
+    "description": "Label for a shared link permission level",
+    "defaultMessage": "Can view and download"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkPermissionsViewOnly",
+    "description": "Label for a shared link permission level",
+    "defaultMessage": "Can view only"
+  },
+  {
+    "id": "boxui.unifiedShare.ftuxSharedLinkPermissionsEditTag",
+    "description": "Label for the LabelPill that is shown when the user first opens the SharedLinkPermissions dropdown and sees the Can Edit option",
+    "defaultMessage": "NEW"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkPermissionsEdit",
+    "description": "Label for a shared link permission to show for an editable box note / file",
+    "defaultMessage": "Can edit"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkPermissionsEditTooltip",
+    "description": "Text to use in the tooltip when presenting an editable Box Note (DO NOT TRANSLATE \"Box Notes\")",
+    "defaultMessage": "This permission can only be changed in Box Notes"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkDisabledTooltipCopy",
+    "description": "This tooltip appears over the shared link toggle, explaining what happens when it is clicked",
+    "defaultMessage": "Create and copy link for sharing"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkSettingsCalloutText",
+    "description": "Tooltip text shown in the share modal, next to the settings gear, describing what settings can be changed",
+    "defaultMessage": "Create a custom URL, enable password protection, enable link expiration, and much more"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkPubliclyAvailable",
+    "description": "Text shown in share modal when shared link is open to public access",
+    "defaultMessage": "This content is publicly available to anyone with the link."
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkEditablePubliclyAvailable",
+    "description": "Text shown in share modal when shared link is editable and is open to public access",
+    "defaultMessage": "Publicly available for anyone to view and download. Any logged in users with the link can edit."
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkElevatedEditableCompanyAvailable",
+    "description": "Text shown in share modal when shared link is editable and is open to company access",
+    "defaultMessage": "People who have access to this link can edit."
+  },
+  {
+    "id": "boxui.unifiedShare.upgradeGetMoreAccessControlsDescription",
+    "description": "Description for cta to upgrade to get more access controls for inviting collaborators to an item",
+    "defaultMessage": "62% of customers on your plan {upgradeGetMoreAccessControlsLink} to manage collaborators’ access and permission settings"
+  },
+  {
+    "id": "boxui.unifiedShare.upgradeGetMoreAccessControlsLink",
+    "description": "Label for link to upgrade to get more access controls for inviting collaborators to an item",
+    "defaultMessage": "upgrade"
+  },
+  {
+    "id": "boxui.unifiedShare.upgradeLink",
+    "description": "Label for link to upgrade account",
+    "defaultMessage": "Upgrade now"
+  },
+  {
+    "id": "boxui.unifiedShare.upgradeInlineNoticeTitle",
+    "description": "Title for the upgrade inline notice for upgrade user plan",
+    "defaultMessage": "Upgrade Your Plan"
+  },
+  {
+    "id": "boxui.unifiedShare.sharedLinkSettings",
+    "description": "Description of the shared link settings modal entry point. This shows link-specific options.",
+    "defaultMessage": "Link Settings"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleWithLinkDescription",
+    "description": "Description of an open shared link",
+    "defaultMessage": "Publicly accessible and no sign-in required"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessFolder",
+    "description": "Description of a specific company shared link for a folder. {company} is the company name",
+    "defaultMessage": "Anyone at {company} with the link or people invited to this folder can access"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInCompanyCanAccessFolder",
+    "description": "Description of a company shared link for a folder.",
+    "defaultMessage": "Anyone in your company with the link or people invited to this folder can access"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessFile",
+    "description": "Description of a specific company shared link for a file. {company} is the company name",
+    "defaultMessage": "Anyone at {company} with the link or people invited to this file can access"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInCompanyCanAccessFile",
+    "description": "Description of a company shared link for a file.",
+    "defaultMessage": "Anyone in your company with the link or people invited to this file can access"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInSpecifiedCompanyCanAccessHub",
+    "description": "Description of a specific company shared link for a hub. {company} is the company name",
+    "defaultMessage": "Anyone at {company} with the link or people invited to this hub can access"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInCompanyCanAccessHub",
+    "description": "Description of a company shared link for a hub.",
+    "defaultMessage": "Anyone in your company with the link or people invited to this hub can access"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInItemCanAccessFolder",
+    "description": "Description of a collaborator-only shared link for a folder",
+    "defaultMessage": "Only invited people can access this folder"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInItemCanAccessFile",
+    "description": "Description of a collaborator-only shared link for a file",
+    "defaultMessage": "Only invited people can access this file"
+  },
+  {
+    "id": "boxui.unifiedShare.peopleInItemCanAccessHub",
+    "description": "Description of a collaborator-only shared link for a hub",
+    "defaultMessage": "Only invited people can access this hub"
+  },
+  {
+    "id": "boxui.unifiedShare.coownerLevelButtonLabel",
+    "description": "Text used in button label to describe permission level - co-owner",
+    "defaultMessage": "Invite as Co-owner"
+  },
+  {
+    "id": "boxui.unifiedShare.coownerLevelText",
+    "description": "Text for Co-owner permission level in permissions table",
+    "defaultMessage": "Co-owner"
+  },
+  {
+    "id": "boxui.unifiedShare.coownerLevelDescription",
+    "description": "Description for Co-owner permission level in permissions table",
+    "defaultMessage": "Manage security, upload, download, preview, share, edit, and delete"
+  },
+  {
+    "id": "boxui.unifiedShare.editorLevelButtonLabel",
+    "description": "Text used in button label to describe permission level - editor",
+    "defaultMessage": "Invite as Editor"
+  },
+  {
+    "id": "boxui.unifiedShare.editorLevelText",
+    "description": "Text for Editor permission level in invitee permission dropdown",
+    "defaultMessage": "Editor"
+  },
+  {
+    "id": "boxui.unifiedShare.editorLevelDescription",
+    "description": "Description for Editor permission level in invitee permission dropdown",
+    "defaultMessage": "Upload, download, preview, share, edit, and delete"
+  },
+  {
+    "id": "boxui.unifiedShare.editorLevelFileDescription",
+    "description": "Description for Editor permission level in invitee permission dropdown for files",
+    "defaultMessage": "Upload, download, preview, share, and edit"
+  },
+  {
+    "id": "boxui.unifiedShare.previewerLevelButtonLabel",
+    "description": "Text used in button label to describe permission level - previewer",
+    "defaultMessage": "Invite as Previewer"
+  },
+  {
+    "id": "boxui.unifiedShare.previewerLevelText",
+    "description": "Text for Previewer permission level in invitee permission dropdown",
+    "defaultMessage": "Previewer"
+  },
+  {
+    "id": "boxui.unifiedShare.previewerLevelDescription",
+    "description": "Description for Previewer permission level in invitee permission dropdown",
+    "defaultMessage": "Preview only"
+  },
+  {
+    "id": "boxui.unifiedShare.previewerUploaderLevelButtonLabel",
+    "description": "Text used in button label to describe permission level - previewer uploader",
+    "defaultMessage": "Invite as Previewer Uploader"
+  },
+  {
+    "id": "boxui.unifiedShare.previewerUploaderLevelText",
+    "description": "Text for Previewer Uploader permission level in invitee permission dropdown",
+    "defaultMessage": "Previewer Uploader"
+  },
+  {
+    "id": "boxui.unifiedShare.previewerUploaderLevelDescription",
+    "description": "Description for Previewer Uploader permission level in invitee permission dropdown",
+    "defaultMessage": "Upload and preview"
+  },
+  {
+    "id": "boxui.unifiedShare.viewerLevelButtonLabel",
+    "description": "Text used in button label to describe permission level - viewer",
+    "defaultMessage": "Invite as Viewer"
+  },
+  {
+    "id": "boxui.unifiedShare.viewerLevelText",
+    "description": "Text for Viewer permission level in invitee permission dropdown",
+    "defaultMessage": "Viewer"
+  },
+  {
+    "id": "boxui.unifiedShare.viewerLevelDescription",
+    "description": "Description for Viewer permission level in invitee permission dropdown",
+    "defaultMessage": "Download, preview, and share"
+  },
+  {
+    "id": "boxui.unifiedShare.viewerUploaderLevelButtonLabel",
+    "description": "Text used in button label to describe permission level - viewer uploader",
+    "defaultMessage": "Invite as Viewer Uploader"
+  },
+  {
+    "id": "boxui.unifiedShare.viewerUploaderLevelText",
+    "description": "Text for Viewer Uploader permission level in invitee permission dropdown",
+    "defaultMessage": "Viewer Uploader"
+  },
+  {
+    "id": "boxui.unifiedShare.viewerUploaderLevelDescription",
+    "description": "Text for Viewer Uploader permission level in invitee permission dropdown",
+    "defaultMessage": "Upload, download, preview, share, and edit"
+  },
+  {
+    "id": "boxui.unifiedShare.uploaderLevelButtonLabel",
+    "description": "Text used in button label to describe permission level - uploader",
+    "defaultMessage": "Invite as Uploader"
+  },
+  {
+    "id": "boxui.unifiedShare.uploaderLevelText",
+    "description": "Text for Uploader permission level in invitee permission dropdown",
+    "defaultMessage": "Uploader"
+  },
+  {
+    "id": "boxui.unifiedShare.uploaderLevelDescription",
+    "description": "Description for Uploader permission level in invitee permission dropdown",
+    "defaultMessage": "Upload only"
+  },
+  {
+    "id": "boxui.unifiedShare.collaboration.userCollabText",
+    "description": "Text to display for individual users who have accepted an invitation to collaborate",
+    "defaultMessage": "User"
+  },
+  {
+    "id": "boxui.unifiedShare.collaboration.groupCollabText",
+    "description": "Text to display for a group of users who have accepted an invitation to collaborate",
+    "defaultMessage": "Group"
+  },
+  {
+    "id": "boxui.unifiedShare.recommendedSharingTooltipCalloutText",
+    "description": "Tooltip description to explain recommendation for sharing tooltip",
+    "defaultMessage": "Based on your usage, we think {fullName} would be interested in this file."
+  },
+  {
+    "id": "boxui.unifiedShare.justificationSelectPlaceholder",
+    "description": "The placeholder text of the select field that allows selecting a business justification reason",
+    "defaultMessage": "Select Justification"
+  },
+  {
+    "id": "boxui.unifiedShare.justificationRequiredError",
+    "description": "The error message that is displayed when a user tries to send invitations to external collaborators, but a business justification is required before proceeding",
+    "defaultMessage": "Select a justification or remove to continue"
+  },
+  {
+    "id": "boxui.unifiedShare.restrictedContactsError",
+    "description": "The error message that is displayed when a user tries to send invitations to external collaborators, but restricted contacts need to be removed before proceeding",
+    "defaultMessage": "Remove to continue"
+  },
+  {
+    "id": "boxui.unifiedShare.justifiableContactRestrictionNotice",
+    "description": "Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts and business justifications are allowed for bypassing restrictions",
+    "defaultMessage": "This content requires a business justification for {count, plural, one {{count} invitation} other {{count} invitations}}. Please select a business justification below."
+  },
+  {
+    "id": "boxui.unifiedShare.justifiableContactRestrictionNoticeSingular",
+    "description": "Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts and business justifications are allowed for bypassing restrictions",
+    "defaultMessage": "This content requires a business justification to invite {email}. Please select a business justification below."
+  },
+  {
+    "id": "boxui.unifiedShare.justifiableContactRestrictionRemoveButtonLabel",
+    "description": "Label for the button that removes restricted contacts on the contact restriction notice when business justifications are allowed for bypassing restrictions",
+    "defaultMessage": "Alternatively, remove to continue"
+  },
+  {
+    "id": "boxui.unifiedShare.contactRestrictionNotice",
+    "description": "Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts",
+    "defaultMessage": "{count, plural, one {{count} invitation} other {{count} invitations}} cannot be sent because external collaboration is restricted due to the applied security policy."
+  },
+  {
+    "id": "boxui.unifiedShare.contactRestrictionNoticeSingular",
+    "description": "Text for the notice that is displayed when there are collaboration restrictions that apply to one or more of the selected contacts",
+    "defaultMessage": "Invitations cannot be sent to {email} because external collaboration is restricted due to the applied security policy."
+  },
+  {
+    "id": "boxui.unifiedShare.contactRestrictionNoticeInformationBarrier",
+    "description": "Text for the notice that is displayed when there are Information Barrier collaboration restrictions that apply to one or more of the selected contacts",
+    "defaultMessage": "{count, plural, one {{count} invitation} other {{count} invitations}} cannot be sent due to a security policy."
+  },
+  {
+    "id": "boxui.unifiedShare.contactRestrictionNoticeInformationBarrierSingular",
+    "description": "Text for the notice that is displayed when there are Information Barrier collaboration restrictions that apply to only one of the selected contacts",
+    "defaultMessage": "Invitations cannot be sent to {email} due to a security policy."
+  },
+  {
+    "id": "boxui.unifiedShare.contactRestrictionNoticeInformationBarrierSingularGroup",
+    "description": "Text for the notice that is displayed when there are Information Barrier collaboration restrictions that apply to only one of the selected contacts, which is a group",
+    "defaultMessage": "Invitations cannot be sent to \"{groupName}\" due to a security policy."
+  },
+  {
+    "id": "boxui.unifiedShare.contactRestrictionRemoveButtonLabel",
+    "description": "Label for the button that removes restricted contacts on the contact restriction notice",
+    "defaultMessage": "Remove to continue"
+  },
+  {
+    "id": "boxui.unifiedShare.contactEmailsTooltipText",
+    "description": "Text to show when the number of contact email addresses displayed on a tooltip exceeds the maximum amount that can be displayed",
+    "defaultMessage": "{emails}, and {remainingEmailsCount} more"
+  },
+  {
+    "id": "boxui.unifiedShare.expiresMessage",
+    "description": "Label for tooltips or other components that display expiration icons",
+    "defaultMessage": "Expires"
+  },
+  {
+    "id": "boxui.unifiedShare.levelOfCollabAccess",
+    "description": "Used in a dialog box that urges the user to upgrade. The collaboratorAccess variable is replaced with the words \"collaborator access\" from the string with the id boxui.unifiedShare.collabAccess",
+    "defaultMessage": "Set the level of {collaboratorAccess} and increase security through one of our paid plans. {upgradeLink}"
+  },
+  {
+    "id": "boxui.unifiedShare.collabAccess",
+    "description": "Used in a dialog box that urges the user to upgrade. This is substituted into the middle of the sentence in the string with id boxui.unifiedShare.levelOfCollabAccess",
+    "defaultMessage": "collaborator access"
+  }
+]

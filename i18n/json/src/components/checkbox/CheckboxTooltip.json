@@ -1,0 +1,7 @@
+[
+  {
+    "id": "boxui.checkboxTooltip.iconInfoText",
+    "description": "Icon to display more information on the checkbox",
+    "defaultMessage": "Info"
+  }
+]
