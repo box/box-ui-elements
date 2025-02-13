@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Table } from '@box/react-virtualized/dist/es/Table';
-import EmptyState from '../common/empty-state';
+import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemGrid from '../common/item-grid';
 import ItemList from './ItemList';
@@ -80,7 +80,7 @@ const Content = ({
                 <ProgressBar percent={currentCollection.percentLoaded} />
             )}
 
-            {isViewEmpty && <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />}
+            {isViewEmpty && <EmptyView view={view} isLoading={currentCollection.percentLoaded !== 100} />}
             {!isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList currentCollection={currentCollection} fieldsToShow={fieldsToShow} {...rest} />
             )}
