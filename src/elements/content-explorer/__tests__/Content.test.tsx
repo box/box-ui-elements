@@ -55,7 +55,7 @@ describe('Content Component', () => {
         expect(screen.getByRole('progressbar')).toBeInTheDocument();
     });
 
-    test('renders EmptyState when view is empty', () => {
+    test('renders error message in empty view when there is an error', () => {
         renderComponent({ view: VIEW_ERROR });
         expect(screen.getByText('A network error has occurred while trying to load.')).toBeInTheDocument();
     });

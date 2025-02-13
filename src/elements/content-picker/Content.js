@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import EmptyState from '../common/empty-state';
+import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
@@ -67,7 +67,7 @@ const Content = ({
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}
         {isEmpty(view, currentCollection) ? (
-            <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />
+            <EmptyView view={view} isLoading={currentCollection.percentLoaded !== 100} />
         ) : (
             <ItemList
                 view={view}
