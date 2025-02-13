@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+// $FlowFixMe TypeScript file
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
