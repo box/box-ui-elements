@@ -1,11 +1,22 @@
 import * as React from 'react';
 import { Table } from '@box/react-virtualized/dist/es/Table';
-import EmptyState from '../common/empty-state';
+import { EmptyState, Text } from '@box/blueprint-web';
+import { Files, FolderFloat, HatWand, OpenBook } from '@box/blueprint-web-assets/illustrations/Medium';
+import { FormattedMessage } from 'react-intl';
 import ProgressBar from '../common/progress-bar';
 import ItemGrid from '../common/item-grid';
 import ItemList from './ItemList';
 import MetadataBasedItemList from '../../features/metadata-based-view';
-import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
+import {
+    VIEW_ERROR,
+    VIEW_METADATA,
+    VIEW_MODE_LIST,
+    VIEW_MODE_GRID,
+    VIEW_SELECTED,
+    VIEW_SEARCH,
+    VIEW_FOLDER,
+} from '../../constants';
+import messages from '../common/messages';
 import type { ViewMode } from '../common/flowTypes';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
@@ -59,6 +70,25 @@ export interface ContentProps {
     viewMode?: ViewMode;
 }
 
+const getIllustrationByView = (view: View) => {
+    switch (view) {
+        case VIEW_ERROR:
+            return HatWand;
+        case VIEW_SELECTED:
+            return Files;
+        case VIEW_SEARCH:
+            return OpenBook;
+        default:
+            return FolderFloat;
+    }
+};
+
+const getMessageByView = (view: View, percentLoaded: number) => {
+    if (percentLoaded !== 100 && (view === VIEW_FOLDER || view === VIEW_METADATA)) {
+        return <FormattedMessage {...messages.loadingState} />;
+    }
+    return <FormattedMessage {...messages[`${view}State`]} />;
+};
 const Content = ({
     currentCollection,
     fieldsToShow = [],
@@ -80,7 +110,13 @@ const Content = ({
                 <ProgressBar percent={currentCollection.percentLoaded} />
             )}
 
-            {isViewEmpty && <EmptyState view={view} isLoading={currentCollection.percentLoaded !== 100} />}
+            {isViewEmpty && (
+                <EmptyState
+                    illustration={getIllustrationByView(view)}
+                    body={<Text as="p">{getMessageByView(view, currentCollection.percentLoaded)}</Text>}
+                    size="large"
+                />
+            )}
             {!isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList currentCollection={currentCollection} fieldsToShow={fieldsToShow} {...rest} />
             )}
