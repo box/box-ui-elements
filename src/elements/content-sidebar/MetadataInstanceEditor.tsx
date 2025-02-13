@@ -43,6 +43,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBetaLanguageEnabled,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
+    isLargeFile,
     isUnsavedChangesModalOpen,
     onCancel,
     onDelete,
@@ -59,6 +60,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
             isBetaLanguageEnabled={isBetaLanguageEnabled}
             isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isLargeFile={isLargeFile}
             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
             onCancel={onCancel}
             onDelete={onDelete}
