@@ -192,7 +192,6 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                     items={items}
                     itemSize={itemSize}
                     onClearAction={onClearAction}
-                    onModalClose={handleModalClose}
                     onOpenChange={handleModalClose}
                     onSelectAgent={onSelectAgent}
                     open={isModalOpen}

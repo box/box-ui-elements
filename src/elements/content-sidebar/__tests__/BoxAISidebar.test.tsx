@@ -181,8 +181,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
     test('should render welcome message', async () => {
         await renderComponent();
-
-        expect(screen.getByText('Welcome to Box AI')).toBeInTheDocument();
+        expect(screen.getByText('Welcome to Box AI', { exact: false })).toBeInTheDocument();
     });
 
     test('should not set questions that are in progress', async () => {

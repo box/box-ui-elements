@@ -23,8 +23,8 @@ export const basic = {
         expect(dialog).toBeInTheDocument();
 
         const modal = within(dialog);
-        expect(modal.getByText('Welcome to Box AI')).toBeInTheDocument();
-        expect(modal.getByText('Ask questions about')).toBeInTheDocument();
+        expect(modal.getByText(/Welcome to Box AI/i)).toBeInTheDocument();
+        expect(modal.getByText('Ask Box AI')).toBeInTheDocument();
         expect(modal.getByText('This chat will be cleared when you close this pdf')).toBeInTheDocument();
 
         expect(modal.getByText('Summarize this document')).toBeInTheDocument();
@@ -32,7 +32,7 @@ export const basic = {
         expect(modal.getByText('How can this document be improved?')).toBeInTheDocument();
         expect(modal.getByText('Are there any next steps defined?')).toBeInTheDocument();
 
-        expect(modal.getByText('Ask anything about this pdf')).toBeInTheDocument();
+        expect(modal.getByText('Ask Box AI')).toBeInTheDocument();
     },
 };
 
@@ -63,7 +63,7 @@ export const submitAnswer = {
         expect(dialog).toBeInTheDocument();
 
         const modal = within(dialog);
-        const textInput = modal.getByRole('textbox', { name: 'Ask anything about this pdf' });
+        const textInput = modal.getByRole('textbox', { name: 'Ask Box AI' });
         expect(textInput).toBeInTheDocument();
         textInput.focus();
         await userEvent.keyboard('Why are public APIs important?');
@@ -116,7 +116,8 @@ export const hoverOverCitation = {
 
         expect(modal.getByText('Based on:')).toBeInTheDocument();
 
-        const citation = await modal.getByRole('button', { name: 'Reference 1' });
+        const citations = await modal.getAllByTestId('content-answers-citation-status')
+        const citation = citations[0];
         expect(citation).toBeInTheDocument();
         await userEvent.hover(citation);
 
@@ -193,7 +194,7 @@ export const markdownEnabled = {
         expect(dialog).toBeInTheDocument();
 
         const modal = within(dialog);
-        const textInput = modal.getByRole('textbox', { name: 'Ask anything about this pdf' });
+        const textInput = modal.getByRole('textbox', { name: 'Ask Box AI' });
         expect(textInput).toBeInTheDocument();
         textInput.focus();
         await userEvent.keyboard('table summarizing the highlights from the document');
@@ -222,7 +223,7 @@ export const markdownDisabled = {
         expect(dialog).toBeInTheDocument();
 
         const modal = within(dialog);
-        const textInput = modal.getByRole('textbox', { name: 'Ask anything about this pdf' });
+        const textInput = modal.getByRole('textbox', { name: 'Ask Box AI' });
         expect(textInput).toBeInTheDocument();
         textInput.focus();
         await userEvent.keyboard('table summarizing the highlights from the document');
