@@ -92,11 +92,7 @@
             "last 2 Edge versions",
             "last 2 iOS versions"
         ],
-        "development": [
-            "last 1 Chrome versions",
-            "last 1 Firefox versions",
-            "last 1 Safari versions"
-        ]
+        "development": ["last 1 Chrome versions", "last 1 Firefox versions", "last 1 Safari versions"]
     },
     "husky": {
         "hooks": {
@@ -134,7 +130,7 @@
         "@box/frontend": "^10.0.0",
         "@box/item-icon": "^0.9.58",
         "@box/languages": "^1.0.0",
-        "@box/metadata-editor": "^0.92.1",
+        "@box/metadata-editor": "^0.92.3",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@cfaester/enzyme-adapter-react-18": "^0.8.0",
         "@chromatic-com/storybook": "^1.6.1",
@@ -314,7 +310,7 @@
         "@box/box-ai-content-answers": "^0.86.0",
         "@box/cldr-data": ">=34.2.0",
         "@box/item-icon": "^0.9.58",
-        "@box/metadata-editor": "^0.88.1",
+        "@box/metadata-editor": "^0.92.2",
         "@box/react-virtualized": "9.22.3-rc-box.9",
         "@hapi/address": "^2.1.4",
         "axios": "^0.25.0",
@@ -374,8 +370,6 @@
         }
     },
     "msw": {
-        "workerDirectory": [
-            ".storybook/public"
-        ]
+        "workerDirectory": [".storybook/public"]
     }
 }
