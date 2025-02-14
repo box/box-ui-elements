@@ -17,7 +17,7 @@ export const selectedEmptyState = {
         const selectedButton = canvas.getByRole('button', { name: '0 Selected' });
         await userEvent.click(selectedButton);
         await waitFor(() => {
-            expect(canvas.getByText('You haven’t selected any items yet.')).toBeInTheDocument();
+            expect(canvas.getByText("You haven't selected any items yet.")).toBeInTheDocument();
         });
     },
 };
