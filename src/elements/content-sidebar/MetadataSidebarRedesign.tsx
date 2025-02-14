@@ -44,6 +44,7 @@ import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemp
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
+import { isFileLargerThan } from './utils/isFileLargerThan';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -109,7 +110,7 @@ function MetadataSidebarRedesign({
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
 
-    const isLargeFile = file ? file.size > 1000000 : false; // 1 MB = 1000000 bytes
+    const isLargeFile = isFileLargerThan(file, 1000000); // 1 MB = 1000000 bytes
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
