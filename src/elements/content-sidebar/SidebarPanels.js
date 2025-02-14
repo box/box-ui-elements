@@ -8,7 +8,6 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import noop from 'lodash/noop';
 import { matchPath, Redirect, Route, Switch, type Location } from 'react-router-dom';
-import { type QuestionType } from '@box/box-ai-content-answers';
 import SidebarUtils from './SidebarUtils';
 import withSidebarAnnotations from './withSidebarAnnotations';
 import { withAnnotatorContext } from '../common/annotator-context';
