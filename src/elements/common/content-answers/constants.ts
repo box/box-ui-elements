@@ -78,6 +78,31 @@ export const DOCUMENT_FILE_EXTENSIONS = [
     'xlsx',
 ];
 
+export const IMAGE_FILE_EXTENSIONS = [ 'ai',
+    'cr2',
+    'crw',
+    'dcm',
+    'dicm',
+    'dicom',
+    'dng',
+    'webp',
+    'bmp',
+    'gif',
+    'eps',
+    'heic',
+    'jpeg',
+    'jpg',
+    'nef',
+    'png',
+    'ps',
+    'psd',
+    'raf',
+    'raw',
+    'svg',
+    'tga',
+    'tif',
+    'tiff'];
+
 export const TEXT_FILE_EXTENSIONS = [
     'as',
     'as3',
@@ -128,6 +153,19 @@ export const TEXT_FILE_EXTENSIONS = [
 ];
 
 export const SPREADSHEET_FILE_EXTENSIONS = ['xls', 'xlsx', 'xlsm', 'xlsb', 'csv', 'ods', 'gsheet'];
+
+export const IMAGE_SUGGESTED_QUESTIONS = [
+    {
+        id: 'suggested-question-1',
+        labelId: 'imageSuggestedQuestionLabel1',
+        promptId: 'imageSuggestedQuestionPrompt1'
+    },
+    {
+        id: 'suggested-question-2',
+        labelId: 'imageSuggestedQuestionLabel2',
+        promptId: 'imageSuggestedQuestionPrompt2'
+    },
+]
 
 export const DOCUMENT_SUGGESTED_QUESTIONS = [
     {

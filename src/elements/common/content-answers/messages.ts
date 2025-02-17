@@ -62,6 +62,26 @@ const messages = defineMessages({
         description: 'Actual prompt for the fourth suggested question for documents',
         id: 'boxui.contentAnswers.documentSuggestedQuestionPrompt4',
     },
+    imageSuggestedQuestionLabel1: {
+        defaultMessage: 'Describe this image',
+        description: 'Text inside the chip for the first suggested question for images',
+        id: 'boxui.contentAnswers.imageSuggestedQuestionLabel1',
+    },
+    imageSuggestedQuestionPrompt1: {
+        defaultMessage: 'Describe this image',
+        description: 'Actual prompt for the first suggested question for images',
+        id: 'boxui.contentAnswers.imageSuggestedQuestionPrompt1',
+    },
+    imageSuggestedQuestionLabel2: {
+        defaultMessage: 'What stands out in this image?',
+        description: 'Text inside the chip for the second suggested question for images',
+        id: 'boxui.contentAnswers.imageSuggestedQuestionLabel2',
+    },
+    imageSuggestedQuestionPrompt2: {
+        defaultMessage: 'What stands out in this image?',
+        description: 'Actual prompt for the second suggested question for images',
+        id: 'boxui.contentAnswers.imageSuggestedQuestionPrompt2',
+    },
     welcomeMessageIntelligentQueryNotice: {
         defaultMessage: 
             'You can ask Box AI both simple and complex questions in your spreadsheet: total counts, averages, advanced comparisons, trend analyses and so on. Try it out today!',

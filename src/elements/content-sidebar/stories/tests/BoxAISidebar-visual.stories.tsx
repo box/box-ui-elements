@@ -26,6 +26,33 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
     },
 };
 
+export const withImageFile: StoryObj<typeof BoxAISidebar> = {
+    args: {
+        items: [{ id: '123', name: 'image.png', type: 'file', fileType: 'png', status: 'supported' }],
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                http.get(mockImageRequest.url, () => {
+                    return HttpResponse.json(mockImageRequest.response);
+                }),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        const clearButton = await canvas.findByRole('button', { name: 'Clear conversation' });
+        expect(clearButton).toBeInTheDocument();
+
+        expect(await canvas.findByText(/Welcome to Box AI/i)).toBeInTheDocument();
+        expect(await canvas.findByText(/Ask questions about/i)).toBeInTheDocument();
+        expect(await canvas.findByText('This chat will be cleared when you close this content')).toBeInTheDocument();
+        expect(await canvas.findByPlaceholderText('Ask Box AI')).toBeInTheDocument();
+        expect(await canvas.findByText('Describe this image')).toBeInTheDocument();
+        expect(await canvas.findByText('What stands out in this image?')).toBeInTheDocument();
+    },
+};
+
 export default {
     title: 'Elements/ContentSidebar/BoxAISidebar/tests/visual-regression-tests',
     component: ContentSidebar,
