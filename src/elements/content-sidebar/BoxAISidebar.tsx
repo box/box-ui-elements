@@ -9,8 +9,6 @@ import { AgentsProvider , RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import {
-    DOCUMENT_SUGGESTED_QUESTIONS,
-    IMAGE_FILE_EXTENSIONS, IMAGE_SUGGESTED_QUESTIONS,
     SPREADSHEET_FILE_EXTENSIONS
 } from '../common/content-answers/constants';
 import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from './types/BoxAISidebarTypes';
@@ -55,6 +53,7 @@ export interface BoxAISidebarProps {
     items: Array<ItemType>;
     itemSize?: string;
     userInfo: { name: string; avatarURL: string };
+    localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
 }
@@ -75,6 +74,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         recordAction,
         setCacheValue,
         userInfo,
+        localizedQuestions,
         ...rest
     } = props;
     const { questions } = cache;
@@ -113,16 +113,6 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         // pass only fully completed questions to not show loading indicator of question where we canceled API request
         questionsWithoutInProgress = questionsWithoutInProgress.slice(0, -1);
     }
-
-    const suggestedQuestions = IMAGE_FILE_EXTENSIONS.includes(fileExtension)
-        ? IMAGE_SUGGESTED_QUESTIONS
-        : DOCUMENT_SUGGESTED_QUESTIONS;
-
-    const localizedQuestions = suggestedQuestions.map(question => ({
-        id: question.id,
-        label: formatMessage(messages[question.labelId]),
-        prompt: formatMessage(messages[question.promptId]),
-    }));
 
     const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(fileExtension);
 
