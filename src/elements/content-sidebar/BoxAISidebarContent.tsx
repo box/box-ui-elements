@@ -203,6 +203,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                 recordAction={isModalOpen ? recordAction : undefined}
                 showLoadingIndicator={false}
                 stopPropagationOnEsc
+                stopQuestion={stopQuestion}
                 submitQuestion={sendQuestion}
                 userInfo={userInfo}
                 variant="collapsible"
