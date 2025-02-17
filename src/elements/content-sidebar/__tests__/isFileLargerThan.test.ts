@@ -7,7 +7,7 @@ describe('isFileLargerThan', () => {
         [{ size: 51 }, 50, true],
         [{}, 50, false],
         [null, 50, false],
-    ])('tete', (file, breakpoint, expected) => {
+    ])('Should correctly check if file is larger than benchmark', (file, breakpoint, expected) => {
         const result = isFileLargerThan(file, breakpoint);
 
         expect(result).toEqual(expected);
