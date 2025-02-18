@@ -1,75 +1,77 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
+import { render, screen } from '../../../test-utils/testing-library';
 import Footer from '../Footer';
+import type { Collection, BoxItem } from '../../../common/types/core';
 
 describe('elements/content-picker/Footer', () => {
     const defaultProps = {
         children: <div className="footer-child" />,
-        currentCollection: { id: '123', name: 'Folder' },
+        currentCollection: { id: '123', name: 'Folder' } as Collection,
         hasHitSelectionLimit: false,
         isSingleSelect: false,
-        onCancel: () => {},
-        onChoose: () => {},
-        onSelectedClick: () => {},
+        onCancel: jest.fn(),
+        onChoose: jest.fn(),
+        onSelectedClick: jest.fn(),
         selectedCount: 0,
-        selectedItems: [],
+        selectedItems: [] as BoxItem[],
+        showSelectedButton: true,
     };
 
-    const getWrapper = props => mount(<Footer {...defaultProps} {...props} />);
+    const renderComponent = (props = {}) => {
+        render(<Footer {...defaultProps} {...props} />);
+    };
 
-    describe('render()', () => {
-        test('should render Footer', () => {
-            const wrapper = getWrapper();
+    test('should render Footer', () => {
+        renderComponent();
 
-            expect(wrapper.find('ButtonGroup').length).toBe(1);
-            expect(wrapper.find('.footer-child').length).toBe(1);
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument();
+        expect(screen.getByTestId('footer-child')).toBeInTheDocument();
+        expect(screen.getByRole('group', { name: /actions/i })).toBeInTheDocument();
+    });
+
+    test('should render footer with disabled button', () => {
+        renderComponent();
+
+        const chooseButton = screen.getByRole('button', { name: /choose/i });
+        expect(chooseButton).toHaveAttribute('aria-disabled', 'true');
+        expect(chooseButton).toBeDisabled();
+    });
+
+    test('should render Footer buttons with aria-label', () => {
+        renderComponent();
+
+        expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /choose/i })).toBeInTheDocument();
+    });
+
+    test('should render Footer with custom action button', () => {
+        const renderCustomActionButtons = jest.fn().mockReturnValue(<div data-testid="custom-button" />);
+
+        renderComponent({
+            renderCustomActionButtons,
         });
 
-        test('should render footer with disabled button', () => {
-            const buttons = getWrapper().find('Button');
-            const chooseButton = buttons.at(1);
-
-            // https://www.w3.org/WAI/ARIA/apg/patterns/button/
-            // When the action associated with a button is unavailable, the button has aria-disabled set to true.
-            expect(chooseButton.html().includes('aria-disabled')).toBe(true);
-            expect(chooseButton.prop('disabled')).toBe(true);
+        expect(screen.getByTestId('custom-button')).toBeInTheDocument();
+        expect(renderCustomActionButtons).toHaveBeenCalledWith({
+            currentFolderId: defaultProps.currentCollection.id,
+            currentFolderName: defaultProps.currentCollection.name,
+            onCancel: defaultProps.onCancel,
+            onChoose: defaultProps.onChoose,
+            selectedCount: defaultProps.selectedCount,
+            selectedItems: defaultProps.selectedItems,
         });
+    });
 
-        test('should render Footer buttons with aria-label', () => {
-            const buttons = getWrapper().find('Button');
+    test.each`
+        showSelectedButton | isSingleSelect | shown    | should
+        ${false}          | ${false}       | ${false} | ${'should not show selected button'}
+        ${false}          | ${true}        | ${false} | ${'should not show selected button'}
+        ${true}           | ${false}       | ${true}  | ${'should show selected button'}
+        ${true}           | ${true}        | ${false} | ${'should not show selected button'}
+    `('$should', ({ isSingleSelect, shown, showSelectedButton }) => {
+        renderComponent({ isSingleSelect, showSelectedButton });
 
-            expect(buttons.at(0).prop('aria-label')).toBe('Cancel');
-            expect(buttons.at(1).prop('aria-label')).toBe('Choose');
-        });
-
-        test('should render Footer with custom action button', () => {
-            const renderCustomActionButtons = jest.fn();
-
-            const wrapper = getWrapper({
-                renderCustomActionButtons: renderCustomActionButtons.mockReturnValue(<div className="custom-button" />),
-            });
-
-            expect(wrapper.find('.custom-button').length).toBe(1);
-            expect(renderCustomActionButtons).toHaveBeenCalledWith({
-                currentFolderId: defaultProps.currentCollection.id,
-                currentFolderName: defaultProps.currentCollection.name,
-                onCancel: defaultProps.onCancel,
-                onChoose: defaultProps.onChoose,
-                selectedCount: defaultProps.selectedCount,
-                selectedItems: defaultProps.selectedItems,
-            });
-        });
-
-        test.each`
-            showSelectedButton | isSingleSelect | shown    | should
-            ${false}           | ${false}       | ${false} | ${'should not show selected button'}
-            ${false}           | ${true}        | ${false} | ${'should not show selected button'}
-            ${true}            | ${false}       | ${true}  | ${'should show selected button'}
-            ${true}            | ${true}        | ${false} | ${'should not show selected button'}
-        `('$should', ({ isSingleSelect, shown, showSelectedButton }) => {
-            const wrapper = getWrapper({ isSingleSelect, showSelectedButton });
-
-            expect(wrapper.exists('.bcp-selected')).toBe(shown);
-        });
+        const selectedButton = screen.queryByRole('button', { name: /selected/i });
+        expect(!!selectedButton).toBe(shown);
     });
 });
