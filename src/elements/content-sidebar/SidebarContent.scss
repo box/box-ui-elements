@@ -16,8 +16,8 @@ $sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
         align-items: center;
         justify-content: space-between;
         height: $sidebarHeaderHeight;
-        margin: 0 $sidebarActivityFeedSpacingHorizontal;
-        padding: 0;
+        margin: 0;
+        padding: 0 $sidebarActivityFeedSpacingHorizontal;
         border-bottom: 1px solid $bdl-gray-10;
 
         .bcs-title {

@@ -6,10 +6,9 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import AddButton from './AddButton';
-import DropdownMenu from '../../../components/dropdown-menu/DropdownMenu';
-import Menu from '../../../components/menu/Menu';
-import MenuItem from '../../../components/menu/MenuItem';
+import { DropdownMenu, IconButton } from '@box/blueprint-web';
+import { Plus } from '@box/blueprint-web-assets/icons/Fill';
+
 import messages from '../messages';
 
 type Props = {
@@ -20,21 +19,23 @@ type Props = {
 };
 
 const Add = ({ onUpload, onCreate, showUpload = true, showCreate = true }: Props) => (
-    <DropdownMenu isRightAligned>
-        <AddButton />
-        <Menu>
+    <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+            <IconButton aria-label={messages.add.defaultMessage} className="be-btn-add" icon={Plus} />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
             {showUpload && (
-                <MenuItem onClick={onUpload}>
+                <DropdownMenu.Item onClick={onUpload}>
                     <FormattedMessage {...messages.upload} />
-                </MenuItem>
+                </DropdownMenu.Item>
             )}
             {showCreate && (
-                <MenuItem onClick={onCreate}>
+                <DropdownMenu.Item onClick={onCreate}>
                     <FormattedMessage {...messages.newFolder} />
-                </MenuItem>
+                </DropdownMenu.Item>
             )}
-        </Menu>
-    </DropdownMenu>
+        </DropdownMenu.Content>
+    </DropdownMenu.Root>
 );
 
 export default Add;

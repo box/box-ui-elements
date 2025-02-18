@@ -71,8 +71,10 @@ describe('MetadataInstanceEditor', () => {
 
     const defaultProps: MetadataInstanceEditorProps = {
         areAiSuggestionsAvailable: true,
+        isBetaLanguageEnabled: false,
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
+        isLargeFile: false,
         isUnsavedChangesModalOpen: false,
         onCancel: mockOnCancel,
         onDelete: jest.fn(),

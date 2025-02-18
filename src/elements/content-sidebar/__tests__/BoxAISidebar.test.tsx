@@ -47,10 +47,22 @@ jest.mock('@box/box-ai-content-answers', () => ({
     ),
 }));
 
+jest.mock('../BoxAISidebarTitle', () => () => <div data-testid="boxai-sidebar-title" />);
+
 describe('elements/content-sidebar/BoxAISidebar', () => {
+    const mockAgents = {
+        agents: [],
+        requestState: 'success',
+        selectedAgent: null,
+    };
+
     const mockProps = {
         contentName: 'testName.txt',
-        cache: { encodedSession: '', questions: [] },
+        cache: {
+            encodedSession: '',
+            questions: [],
+            agents: mockAgents,
+        },
         createSessionRequest: jest.fn(() => ({ encodedSession: '1234' })),
         elementId: '123',
         fetchTimeout: {},
@@ -73,6 +85,15 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         getAnswerStreaming: jest.fn(),
         getSuggestedQuestions: jest.fn(),
         hostAppName: 'appName',
+        items: [
+            {
+                id: '1',
+                type: 'type',
+                fileType: 'pdf',
+                name: 'test.pdf',
+                status: 'supported',
+            },
+        ],
         itemSize: '1234',
         isAgentSelectorEnabled: false,
         isAIStudioAgentSelectorEnabled: true,
@@ -108,6 +129,12 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         jest.clearAllMocks();
     });
 
+    test('should render BoxAISidebarTitle', async () => {
+        await renderComponent();
+
+        expect(screen.queryByTestId('boxai-sidebar-title')).toBeInTheDocument();
+    });
+
     test('should have accessible Agent selector if isAIStudioAgentSelectorEnabled is true', async () => {
         await renderComponent();
 
@@ -132,6 +159,21 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument();
     });
 
+    test('should call recordAction on load if provided', async () => {
+        const mockRecordAction = jest.fn();
+        await renderComponent({ recordAction: mockRecordAction });
+
+        expect(mockRecordAction).toHaveBeenCalledWith({
+            action: 'programmatic',
+            component: 'sidebar',
+            feature: 'answers',
+            target: 'loaded',
+            data: {
+                items: [{ fileType: 'pdf', status: 'supported' }],
+            },
+        });
+    });
+
     test('should call onClearClick when click "Clear" button', async () => {
         await renderComponent();
 
@@ -149,8 +191,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
     test('should render welcome message', async () => {
         await renderComponent();
-
-        expect(screen.getByText('Welcome to Box AI')).toBeInTheDocument();
+        expect(screen.getByText('Welcome to Box AI', { exact: false })).toBeInTheDocument();
     });
 
     test('should not set questions that are in progress', async () => {
@@ -169,6 +210,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                         prompt: 'not completed question',
                     },
                 ],
+                agents: mockAgents,
             },
         });
 
@@ -214,29 +256,5 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         await userEvent.click(switchToSidebarButton);
 
         expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
-    });
-
-    describe('BoxAISidebar handleKeyPress', () => {
-        test('should prevent default behavior and stop propagation for ArrowLeft and ArrowRight keys', async () => {
-            await renderComponent();
-
-            const eventLeft = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
-            const preventDefaultSpy = jest.spyOn(eventLeft, 'preventDefault');
-            const stopPropagationSpy = jest.spyOn(eventLeft, 'stopPropagation');
-
-            document.dispatchEvent(eventLeft);
-
-            expect(preventDefaultSpy).toHaveBeenCalled();
-            expect(stopPropagationSpy).toHaveBeenCalled();
-
-            const eventRight = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-            const preventDefaultSpyRight = jest.spyOn(eventRight, 'preventDefault');
-            const stopPropagationSpyRight = jest.spyOn(eventRight, 'stopPropagation');
-
-            document.dispatchEvent(eventRight);
-
-            expect(preventDefaultSpyRight).toHaveBeenCalled();
-            expect(stopPropagationSpyRight).toHaveBeenCalled();
-        });
     });
 });

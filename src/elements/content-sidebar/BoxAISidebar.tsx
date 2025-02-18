@@ -4,17 +4,18 @@
  */
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { type ItemType, type QuestionType } from '@box/box-ai-content-answers';
-import { RecordActionType } from '@box/box-ai-agent-selector';
+import { type ItemType } from '@box/box-ai-content-answers';
+import { AgentsProvider , RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
+import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from './types/BoxAISidebarTypes';
 
 import messages from '../common/content-answers/messages';
 
 export interface BoxAISidebarProps {
     contentName: string;
-    cache: { encodedSession?: string | null; questions?: QuestionType[] };
+    cache: BoxAISidebarCache;
     createSessionRequest: (payload: Record<string, unknown>, itemID: string) => Promise<unknown>;
     elementId: string;
     fetchTimeout: Record<string, unknown>;
@@ -51,7 +52,7 @@ export interface BoxAISidebarProps {
     itemSize?: string;
     userInfo: { name: string; avatarURL: string };
     recordAction: (params: RecordActionType) => void;
-    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
+    setCacheValue: BoxAISidebarCacheSetter;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -109,20 +110,6 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         questionsWithoutInProgress = questionsWithoutInProgress.slice(0, -1);
     }
 
-    const handleKeyPress = React.useCallback((event: KeyboardEvent) => {
-        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    }, []);
-
-    React.useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress, { capture: true });
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress, { capture: true });
-        };
-    }, [handleKeyPress]);
-
     const localizedQuestions = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
         id: question.id,
         label: formatMessage(messages[question.labelId]),
@@ -141,21 +128,23 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     return (
         // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
         // that's why we need to use provider to pass other props
-        <BoxAISidebarContext.Provider value={contextValue}>
-            <BoxAISidebarContent
-                getSuggestedQuestions={getSuggestedQuestions}
-                isOpen
-                isStopResponseEnabled={isStopResponseEnabled}
-                itemID={fileID}
-                itemIDs={[fileID]}
-                restoredQuestions={questionsWithoutInProgress}
-                restoredSession={cache.encodedSession}
-                suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
-                warningNotice={spreadsheetNotice}
-                warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
-                {...rest}
-            />
-        </BoxAISidebarContext.Provider>
+        <AgentsProvider value={cache.agents}>
+            <BoxAISidebarContext.Provider value={contextValue}>
+                <BoxAISidebarContent
+                    getSuggestedQuestions={getSuggestedQuestions}
+                    isOpen
+                    isStopResponseEnabled={isStopResponseEnabled}
+                    itemID={fileID}
+                    itemIDs={[fileID]}
+                    restoredQuestions={questionsWithoutInProgress}
+                    restoredSession={cache.encodedSession}
+                    suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
+                    warningNotice={spreadsheetNotice}
+                    warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
+                    {...rest}
+                />
+            </BoxAISidebarContext.Provider>
+        </AgentsProvider>
     );
 };
 

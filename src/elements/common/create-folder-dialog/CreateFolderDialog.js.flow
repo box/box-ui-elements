@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Content Explorer Create Folder Dialog
- * @author Box
- */
-
 import * as React from 'react';
 import Modal from 'react-modal';
 import { injectIntl, FormattedMessage } from 'react-intl';
@@ -25,9 +19,9 @@ type Props = {
     intl: IntlShape,
     isLoading: boolean,
     isOpen: boolean,
-    onCancel: Function,
-    onCreate: Function,
-    parentElement: HTMLElement,
+    onCancel: any,
+    onCreate: any,
+    parentElement: HTMLElement
 };
 
 /* eslint-disable jsx-a11y/label-has-for */

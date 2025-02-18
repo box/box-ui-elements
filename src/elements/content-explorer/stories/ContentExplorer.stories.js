@@ -1,6 +1,7 @@
 // @flow
 
 import ContentExplorer from '../ContentExplorer';
+import mockTheme from '../../common/__mocks__/mockTheme';
 
 export const basic = {};
 
@@ -22,6 +23,12 @@ export const withSidebar = {
                 hasSkills: true,
             },
         },
+    },
+};
+
+export const withTheming = {
+    args: {
+        theme: mockTheme,
     },
 };
 

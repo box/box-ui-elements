@@ -4,6 +4,7 @@ import FileIcon from '../FileIcon';
 
 describe('icons/file-icon/FileIcon', () => {
     test.each([
+        { name: 'FileAdobeExpress', ext: 'adobeexpress', label: 'ADOBEEXPRESS File' },
         { name: 'FileAudio', ext: 'aac', label: 'AAC File' },
         { name: 'FileAudio', ext: 'aif', label: 'AIF File' },
         { name: 'FileAudio', ext: 'aifc', label: 'AIFC File' },

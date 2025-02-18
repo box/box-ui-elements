@@ -48,7 +48,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         const { answer = '', prompt } = mockQuestionsWithAnswer[0];
         renderComponent(mockApi, { onAsk: onAskMock });
 
-        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
         await userEvent.type(textArea, prompt);
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });
@@ -66,7 +66,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         const { prompt } = mockQuestionsWithError[0];
         renderComponent(mockApiReturnError);
 
-        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
         await userEvent.type(textArea, prompt);
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });
@@ -92,7 +92,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         };
         renderComponent(apiMock);
 
-        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
         await userEvent.type(textArea, prompt);
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });
@@ -112,7 +112,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
 
         renderComponent(mockApi, { onAsk: onAskMock });
 
-        let textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        let textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
         await userEvent.type(textArea, prompt);
 
         let submitButton = screen.getByRole('button', { name: 'Ask' });
@@ -122,7 +122,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
             include_citations: true,
         });
 
-        textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
 
         await userEvent.type(textArea, 'Another question?');
         submitButton = screen.getByRole('button', { name: 'Ask' });

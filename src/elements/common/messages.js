@@ -172,11 +172,6 @@ const messages = defineMessages({
         description: 'Label for switching to grid view',
         defaultMessage: 'Switch to Grid View',
     },
-    gridViewColumnSize: {
-        id: 'be.gridView.columnSize',
-        description: 'Label for the size of columns in grid view',
-        defaultMessage: 'Column size',
-    },
     gridViewIncreaseColumnSize: {
         id: 'be.gridView.increaseColumnSize',
         description: 'Label for increasing the size of columns in grid view',
@@ -652,40 +647,10 @@ const messages = defineMessages({
         description: 'Size descending option shown in the share access drop down select.',
         defaultMessage: 'Size: Largest → Smallest',
     },
-    searchState: {
-        id: 'be.searchState',
-        description: 'Message shown when there are no search results.',
-        defaultMessage: 'Sorry, we couldn’t find what you’re looking for.',
-    },
-    selectedState: {
-        id: 'be.selectedState',
-        description: 'Message shown when there are no selected items.',
-        defaultMessage: 'You haven’t selected any items yet.',
-    },
-    errorState: {
-        id: 'be.errorState',
-        description: 'Message shown when there is an error.',
-        defaultMessage: 'A network error has occurred while trying to load.',
-    },
-    folderState: {
-        id: 'be.folderState',
-        description: 'Message shown when there are no folder items.',
-        defaultMessage: 'There are no items in this folder.',
-    },
-    metadataState: {
-        id: 'be.metadataState',
-        description: 'Message shown when there are no items for provided metadata query.',
-        defaultMessage: 'There are no items in this folder.',
-    },
-    recentsState: {
-        id: 'be.recentsState',
-        description: 'Message shown when there are no recent items.',
-        defaultMessage: 'There are no recent items yet.',
-    },
-    loadingState: {
-        id: 'be.loadingState',
-        description: 'Message shown when folder items are still fetching.',
-        defaultMessage: 'Please wait while the items load...',
+    breadcrumbLabel: {
+        id: 'be.breadcrumb.breadcrumbLabel',
+        description: 'Aria label for describing "breadcrumb"',
+        defaultMessage: 'Breadcrumb',
     },
     errorBreadcrumb: {
         id: 'be.errorBreadcrumb',
