@@ -110,7 +110,8 @@ function MetadataSidebarRedesign({
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
 
-    const isLargeFile = isFileLargerThan(file, 1000000); // 1 MB = 1000000 bytes
+    const oneMegaByte = 1000000;
+    const isLargeFile = isFileLargerThan(file, oneMegaByte);
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
