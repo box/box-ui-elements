@@ -1244,7 +1244,6 @@ class ContentPicker extends Component<Props, State> {
                         <Header
                             view={view}
                             isHeaderLogoVisible={isHeaderLogoVisible}
-                            isSmall={isSmall}
                             searchQuery={searchQuery}
                             logoUrl={logoUrl}
                             onSearch={this.search}
