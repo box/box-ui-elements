@@ -1,7 +1,7 @@
 import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
 import ContentPicker from '../../ContentPicker';
-import { mockRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
+import { mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 

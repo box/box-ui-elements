@@ -1,7 +1,14 @@
 // @flow
 import ContentUploader from '../ContentUploader';
+import mockTheme from '../../common/__mocks__/mockTheme';
 
 export const basic = {};
+
+export const withTheming = {
+    args: {
+        theme: mockTheme,
+    },
+};
 
 export default {
     title: 'Elements/ContentUploader',
