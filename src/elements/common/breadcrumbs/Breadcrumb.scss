@@ -8,14 +8,6 @@
     &:only-child {
         min-width: 64px;
     }
-
-    .be & .btn-plain {
-        color: $bdl-gray-65;
-
-        &:last-child {
-            color: $bdl-gray;
-        }
-    }
 }
 
 .be-breadcrumb-seperator {
@@ -26,6 +18,11 @@
 .bdl-Breadcrumb-title {
     width: 100%;
     overflow: hidden;
+    color: var(--text-text-on-light);
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    &:not(:last-child) {
+        color: var(--text-text-on-light-tertiary);
+    }
 }

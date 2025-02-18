@@ -38,7 +38,7 @@ describe('elements/common/content-answers/ContentAnswers', () => {
         const modal = screen.getByTestId('content-answers-modal');
         expect(modal).toBeInTheDocument();
 
-        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
         fireEvent.change(textArea, { target: { value: prompt } });
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });
@@ -59,7 +59,7 @@ describe('elements/common/content-answers/ContentAnswers', () => {
         const button = screen.getByRole('button', { name: 'Box AI' });
         await userEvent.click(button);
 
-        const textArea = screen.getByRole('textbox', { name: 'Ask anything about this doc' });
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
         fireEvent.change(textArea, { target: { value: 'Sample question?' } });
 
         const submitButton = screen.getByRole('button', { name: 'Ask' });

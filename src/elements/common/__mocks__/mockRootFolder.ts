@@ -73,7 +73,7 @@ const mockRootFolder = {
     parent: null,
     permissions: {
         can_download: true,
-        can_upload: false,
+        can_upload: true,
         can_rename: false,
         can_delete: false,
         can_share: false,

@@ -5,9 +5,10 @@
  */
 
 import * as React from 'react';
-import IconChevron from '../../../icons/general/IconChevron';
-import { DELIMITER_CARET, COLOR_999 } from '../../../constants';
+import { PointerChevronRight } from '@box/blueprint-web-assets/icons/Fill';
+import { Gray50, Size3 } from '@box/blueprint-web-assets/tokens/tokens';
 import type { Delimiter } from '../../../common/types/core';
+import { DELIMITER_CARET } from '../../../constants';
 
 type Props = {
     delimiter?: Delimiter,
@@ -15,7 +16,13 @@ type Props = {
 
 const BreadcrumbDelimiter = ({ delimiter }: Props) =>
     delimiter === DELIMITER_CARET ? (
-        <IconChevron className="be-breadcrumb-seperator" color={COLOR_999} direction="right" size="7px" />
+        <PointerChevronRight
+            className="be-breadcrumb-seperator"
+            color={Gray50}
+            height={Size3}
+            role="presentation"
+            width={Size3}
+        />
     ) : (
         <span>/</span>
     );

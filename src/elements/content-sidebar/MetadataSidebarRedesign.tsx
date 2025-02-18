@@ -26,7 +26,11 @@ import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
 import { withLogger } from '../common/logger';
 import { useFeatureEnabled } from '../common/feature-checking';
-import { ORIGIN_METADATA_SIDEBAR_REDESIGN, SIDEBAR_VIEW_METADATA } from '../../constants';
+import {
+    ORIGIN_METADATA_SIDEBAR_REDESIGN,
+    SIDEBAR_VIEW_METADATA,
+    ERROR_CODE_METADATA_STRUCTURED_TEXT_REP,
+} from '../../constants';
 import { EVENT_JS_READY } from '../common/logger/constants';
 import { mark } from '../../utils/performance';
 import useSidebarMetadataFetcher, { STATUS } from './hooks/useSidebarMetadataFetcher';
@@ -40,6 +44,7 @@ import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemp
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
+import { isFileLargerThan } from './utils/isFileLargerThan';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -47,10 +52,12 @@ mark(MARK_NAME_JS_READY);
 
 export interface ExternalProps {
     isFeatureEnabled: boolean;
+    getStructuredTextRep?: (fileId: string, accessToken: string) => Promise<string>;
 }
 
 interface PropsWithoutContext extends ExternalProps {
     elementId: string;
+    fileExtension?: string;
     fileId: string;
     filteredTemplateIds?: string[];
     hasSidebarInitialized?: boolean;
@@ -76,20 +83,24 @@ export interface MetadataSidebarRedesignProps
 function MetadataSidebarRedesign({
     api,
     elementId,
+    fileExtension,
     fileId,
     filteredTemplateIds = [],
     history,
     onError,
     onSuccess,
     isFeatureEnabled,
+    getStructuredTextRep,
 }: MetadataSidebarRedesignProps) {
     const {
+        clearExtractError,
         extractSuggestions,
         file,
         handleCreateMetadataInstance,
         handleDeleteMetadataInstance,
         handleUpdateMetadataInstance,
         templates,
+        extractErrorCode,
         errorMessage,
         status,
         templateInstances,
@@ -97,6 +108,10 @@ function MetadataSidebarRedesign({
 
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
+    const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
+
+    const oneMegaByte = 1000000;
+    const isLargeFile = isFileLargerThan(file, oneMegaByte);
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
@@ -104,6 +119,32 @@ function MetadataSidebarRedesign({
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
         React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
     const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
+    const shouldFetchStructuredTextRep =
+        isBoxAiSuggestionsEnabled &&
+        fileExtension?.toLowerCase() === 'pdf' &&
+        api.options?.token &&
+        !!getStructuredTextRep;
+
+    // Fetch structured text representation for Box AI
+    React.useEffect(() => {
+        if (shouldFetchStructuredTextRep) {
+            api.options.token(fileId).then(({ read }) => {
+                getStructuredTextRep(fileId, read)
+                    .then()
+                    .catch(error => {
+                        onError(error, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP);
+                    });
+            });
+        }
+    }, [
+        api.options,
+        fileExtension,
+        fileId,
+        getStructuredTextRep,
+        isBoxAiSuggestionsEnabled,
+        onError,
+        shouldFetchStructuredTextRep,
+    ]);
 
     React.useEffect(() => {
         // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
@@ -121,6 +162,8 @@ function MetadataSidebarRedesign({
     }, [editingTemplate, templateInstances, templateInstances.length]);
 
     const handleTemplateSelect = (selectedTemplate: MetadataTemplate) => {
+        clearExtractError();
+
         if (editingTemplate) {
             setPendingTemplateToEdit(convertTemplateToTemplateInstance(file, selectedTemplate));
             setIsUnsavedChangesModalOpen(true);
@@ -131,6 +174,7 @@ function MetadataSidebarRedesign({
     };
 
     const handleCancel = () => {
+        clearExtractError();
         setEditingTemplate(null);
     };
 
@@ -154,6 +198,7 @@ function MetadataSidebarRedesign({
         } catch {
             // ignore error, handled in useSidebarMetadataFetcher
         }
+        clearExtractError();
         setEditingTemplate(null);
     };
 
@@ -244,8 +289,11 @@ function MetadataSidebarRedesign({
                     {editingTemplate && (
                         <MetadataInstanceEditor
                             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            errorCode={extractErrorCode}
+                            isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDeleteButtonDisabled={isDeleteButtonDisabled}
+                            isLargeFile={isLargeFile}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                             onCancel={handleCancel}
                             onDelete={handleDeleteInstance}
@@ -260,6 +308,7 @@ function MetadataSidebarRedesign({
                         <MetadataInstanceList
                             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
                             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+                            isBetaLanguageEnabled={isBetaLanguageEnabled}
                             onEdit={templateInstance => {
                                 setEditingTemplate(templateInstance);
                                 setIsDeleteButtonDisabled(false);

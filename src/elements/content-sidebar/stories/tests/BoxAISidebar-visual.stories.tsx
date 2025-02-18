@@ -3,7 +3,7 @@ import { type StoryObj } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
-import { mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
+import { mockFileRequest, mockUserRequest } from '../../../common/__mocks__/mockRequests';
 
 const mockFeatures = {
     'boxai.sidebar.enabled': true,
@@ -15,10 +15,10 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
         const clearButton = await canvas.findByRole('button', { name: 'Clear conversation' });
         expect(clearButton).toBeInTheDocument();
 
-        expect(await canvas.findByText('Welcome to Box AI')).toBeInTheDocument();
-        expect(await canvas.findByText('Ask questions about')).toBeInTheDocument();
+        expect(await canvas.findByText(/Welcome to Box AI/i)).toBeInTheDocument();
+        expect(await canvas.findByText(/Ask questions about/i)).toBeInTheDocument();
         expect(await canvas.findByText('This chat will be cleared when you close this content')).toBeInTheDocument();
-        expect(await canvas.findByPlaceholderText('Ask anything about this content')).toBeInTheDocument();
+        expect(await canvas.findByPlaceholderText('Ask Box AI')).toBeInTheDocument();
         expect(await canvas.findByText('Summarize this document')).toBeInTheDocument();
         expect(await canvas.findByText('What are the key takeaways?')).toBeInTheDocument();
         expect(await canvas.findByText('How can this document be improved?')).toBeInTheDocument();

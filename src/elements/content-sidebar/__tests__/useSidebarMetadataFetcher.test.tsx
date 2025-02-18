@@ -4,15 +4,33 @@ import messages from '../../common/messages';
 import {
     ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
     ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
+    ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
+    ERROR_CODE_METADATA_PRECONDITION_FAILED,
+    ERROR_CODE_UNKNOWN,
     FIELD_PERMISSIONS_CAN_UPLOAD,
     SUCCESS_CODE_DELETE_METADATA_TEMPLATE_INSTANCE,
     SUCCESS_CODE_UPDATE_METADATA_TEMPLATE_INSTANCE,
 } from '../../../constants';
 import useSidebarMetadataFetcher, { STATUS } from '../hooks/useSidebarMetadataFetcher';
 
-const mockError = {
+const mockRateLimitError = {
+    status: 429,
+    message: 'Rate Limit Exceeded',
+};
+
+const mockInternalServerError = {
     status: 500,
     message: 'Internal Server Error',
+};
+
+const mockTimeoutError = {
+    status: 408,
+    message: 'Request Timeout',
+};
+
+const mockPreconditionFailedError = {
+    status: 412,
+    message: 'Precondition Failed',
 };
 
 const mockFile = {
@@ -147,7 +165,7 @@ describe('useSidebarMetadataFetcher', () => {
 
     test('should handle file fetching error', async () => {
         mockAPI.getFile.mockImplementation((id, successCallback, errorCallback) =>
-            errorCallback(mockError, 'file_fetch_error'),
+            errorCallback(mockInternalServerError, 'file_fetch_error'),
         );
 
         const { result } = setupHook();
@@ -158,10 +176,10 @@ describe('useSidebarMetadataFetcher', () => {
         expect(result.current.errorMessage).toBe(messages.sidebarMetadataEditingErrorContent);
         expect(onSuccessMock).not.toHaveBeenCalled();
         expect(onErrorMock).toHaveBeenCalledWith(
-            mockError,
+            mockInternalServerError,
             'file_fetch_error',
             expect.objectContaining({
-                error: mockError,
+                error: mockInternalServerError,
                 isErrorDisplayed: true,
             }),
         );
@@ -172,7 +190,7 @@ describe('useSidebarMetadataFetcher', () => {
             successCallback(mockFile);
         });
         mockAPI.getMetadata.mockImplementation((file, successCallback, errorCallback) => {
-            errorCallback(mockError, 'metadata_fetch_error');
+            errorCallback(mockInternalServerError, 'metadata_fetch_error');
         });
         const { result } = setupHook();
 
@@ -182,10 +200,10 @@ describe('useSidebarMetadataFetcher', () => {
         expect(result.current.errorMessage).toBe(messages.sidebarMetadataFetchingErrorContent);
         expect(onSuccessMock).not.toHaveBeenCalled();
         expect(onErrorMock).toHaveBeenCalledWith(
-            mockError,
+            mockInternalServerError,
             'metadata_fetch_error',
             expect.objectContaining({
-                error: mockError,
+                error: mockInternalServerError,
                 isErrorDisplayed: true,
             }),
         );
@@ -215,7 +233,7 @@ describe('useSidebarMetadataFetcher', () => {
             successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
         });
         mockAPI.deleteMetadata.mockImplementation((file, template, successCallback, errorCallback) => {
-            errorCallback(mockError, 'metadata_remove_error');
+            errorCallback(mockInternalServerError, 'metadata_remove_error');
         });
 
         const { result } = setupHook();
@@ -226,10 +244,10 @@ describe('useSidebarMetadataFetcher', () => {
         expect(result.current.status).toEqual(STATUS.ERROR);
         expect(onSuccessMock).not.toHaveBeenCalled();
         expect(onErrorMock).toHaveBeenCalledWith(
-            mockError,
+            mockInternalServerError,
             'metadata_remove_error',
             expect.objectContaining({
-                error: mockError,
+                error: mockInternalServerError,
                 isErrorDisplayed: true,
             }),
         );
@@ -259,7 +277,7 @@ describe('useSidebarMetadataFetcher', () => {
             successCallback({ templateInstances: mockTemplateInstances, templates: mockTemplates });
         });
         mockAPI.createMetadataRedesign.mockImplementation((file, template, successCallback, errorCallback) => {
-            errorCallback(mockError, 'metadata_creation_error');
+            errorCallback(mockInternalServerError, 'metadata_creation_error');
         });
 
         const { result } = setupHook();
@@ -270,10 +288,10 @@ describe('useSidebarMetadataFetcher', () => {
         expect(result.current.status).toBe(STATUS.ERROR);
         expect(onSuccessMock).not.toHaveBeenCalled();
         expect(onErrorMock).toHaveBeenCalledWith(
-            mockError,
+            mockInternalServerError,
             'metadata_creation_error',
             expect.objectContaining({
-                error: mockError,
+                error: mockInternalServerError,
                 isErrorDisplayed: true,
             }),
         );
@@ -302,7 +320,7 @@ describe('useSidebarMetadataFetcher', () => {
     test('should handle metadata update error', async () => {
         mockAPI.updateMetadataRedesign.mockImplementation(
             (_file, _metadataInstance, _JSONPatch, successCallback, errorCallback) => {
-                errorCallback(mockError, 'metadata_update_error');
+                errorCallback(mockInternalServerError, 'metadata_update_error');
             },
         );
         const ops = [{ op: 'add', path: '/foo', value: 'bar' }];
@@ -322,10 +340,10 @@ describe('useSidebarMetadataFetcher', () => {
         expect(result.current.templates).toEqual(mockTemplates);
         expect(result.current.errorMessage).toEqual(messages.sidebarMetadataEditingErrorContent);
         expect(onErrorMock).toHaveBeenCalledWith(
-            mockError,
+            mockInternalServerError,
             'metadata_update_error',
             expect.objectContaining({
-                error: mockError,
+                error: mockInternalServerError,
                 isErrorDisplayed: true,
             }),
         );
@@ -351,8 +369,8 @@ describe('useSidebarMetadataFetcher', () => {
             ]);
         });
 
-        test('should handle error during suggestions extraction', async () => {
-            mockAPI.extractStructured.mockRejectedValue(mockError);
+        test('should handle user correctable error during suggestions extraction', async () => {
+            mockAPI.extractStructured.mockRejectedValue({ response: mockRateLimitError });
 
             const { result } = setupHook();
             const suggestions = await result.current.extractSuggestions('templateKey', 'global');
@@ -360,12 +378,33 @@ describe('useSidebarMetadataFetcher', () => {
             expect(suggestions).toEqual([]);
             expect(onSuccessMock).not.toHaveBeenCalled();
             expect(onErrorMock).toHaveBeenCalledWith(
-                mockError,
+                { response: mockRateLimitError },
                 ERROR_CODE_FETCH_METADATA_SUGGESTIONS,
                 expect.objectContaining({
                     showNotification: true,
                 }),
             );
+            await waitFor(() => expect(result.current.extractErrorCode).toBeNull());
+        });
+
+        test.each`
+            description                               | error                                        | expectedErrorCode
+            ${'metadata autofill timeout error'}      | ${{ response: mockTimeoutError }}            | ${ERROR_CODE_METADATA_AUTOFILL_TIMEOUT}
+            ${'metadata pre-condition failure error'} | ${{ response: mockPreconditionFailedError }} | ${ERROR_CODE_METADATA_PRECONDITION_FAILED}
+            ${'internal server error'}                | ${{ response: mockInternalServerError }}     | ${ERROR_CODE_UNKNOWN}
+        `('should set extract error code for $description and get cleared', async ({ error, expectedErrorCode }) => {
+            mockAPI.extractStructured.mockRejectedValue(error);
+
+            const { result } = setupHook();
+            const suggestions = await result.current.extractSuggestions('templateKey', 'global');
+
+            expect(suggestions).toEqual([]);
+            expect(onSuccessMock).not.toHaveBeenCalled();
+            expect(onErrorMock).toHaveBeenCalledWith(error, expectedErrorCode);
+            await waitFor(() => expect(result.current.extractErrorCode).toEqual(expectedErrorCode));
+
+            await result.current.clearExtractError();
+            await waitFor(() => expect(result.current.extractErrorCode).toBeNull());
         });
 
         test('should handle empty suggestions', async () => {

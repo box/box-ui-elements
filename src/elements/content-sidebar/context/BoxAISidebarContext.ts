@@ -1,10 +1,21 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { RecordActionType } from '@box/box-ai-agent-selector';
-import type { ItemType, QuestionType } from '@box/box-ai-content-answers';
+import { RecordActionType as AgentSelectorRecordActionType } from '@box/box-ai-agent-selector';
+import { RecordActionType as ContentAnswersRecordActionType } from '@box/box-ai-content-answers';
+import type { ItemType } from '@box/box-ai-content-answers';
+import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from '../types/BoxAISidebarTypes';
+
+type BoxAISidebarRecordActionType =
+    | AgentSelectorRecordActionType
+    | ContentAnswersRecordActionType
+    | (Omit<ContentAnswersRecordActionType, 'data'> & {
+          data: {
+              items: Array<Pick<ItemType, 'fileType' | 'status'>>;
+          };
+      });
 
 export interface BoxAISidebarContextValues {
-    cache: { encodedSession?: string | null; questions?: QuestionType[] };
+    cache: BoxAISidebarCache;
     contentName: string;
     elementId: string;
     fileExtension: string;
@@ -12,8 +23,8 @@ export interface BoxAISidebarContextValues {
     isStopResponseEnabled: boolean;
     items: Array<ItemType>;
     itemSize?: string;
-    recordAction: (params: RecordActionType) => void;
-    setCacheValue: (key: 'encodedSession' | 'questions', value: string | null | QuestionType[]) => void;
+    recordAction: (params: BoxAISidebarRecordActionType) => void;
+    setCacheValue: BoxAISidebarCacheSetter;
     userInfo: { name: string; avatarURL: string };
 }
 

@@ -323,6 +323,9 @@ export const ERROR_CODE_UPLOAD = 'upload_error';
 export const ERROR_CODE_UNEXPECTED_EXCEPTION = 'unexpected_exception_error';
 export const ERROR_CODE_SEARCH = 'search_error';
 export const ERROR_CODE_METADATA_QUERY = 'metadata_query_error';
+export const ERROR_CODE_METADATA_STRUCTURED_TEXT_REP = 'metadata_structured_text_rep_error';
+export const ERROR_CODE_METADATA_AUTOFILL_TIMEOUT = 'metadata_autofill_timeout_error';
+export const ERROR_CODE_METADATA_PRECONDITION_FAILED = 'metadata_precondition_failed_error';
 export const ERROR_CODE_UNKNOWN = 'unknown_error';
 
 /* ------------------ Origins ---------------------- */

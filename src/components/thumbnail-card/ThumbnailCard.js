@@ -30,9 +30,9 @@ const ThumbnailCard = ({
     ...rest
 }: Props) => (
     <div
-        role="button"
-        tabIndex="0"
         className={classNames('thumbnail-card', className, { 'is-highlight-applied': highlightOnHover })}
+        role={onKeyDown ? null : 'button'}
+        tabIndex={onKeyDown ? null : 0}
         {...rest}
     >
         <ThumbnailCardThumbnail thumbnail={thumbnail} />

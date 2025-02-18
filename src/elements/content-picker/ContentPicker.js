@@ -35,7 +35,6 @@ import {
     DEFAULT_SEARCH_DEBOUNCE,
     DEFAULT_VIEW_FILES,
     DEFAULT_VIEW_RECENTS,
-    ERROR_CODE_ITEM_NAME_IN_USE,
     ERROR_CODE_ITEM_NAME_INVALID,
     ERROR_CODE_ITEM_NAME_TOO_LONG,
     FIELD_NAME,
@@ -818,9 +817,9 @@ class ContentPicker extends Component<Props, State> {
             () => {
                 this.fetchFolder(id);
             },
-            ({ response: { status } }) => {
+            ({ code }) => {
                 this.setState({
-                    errorCode: status === 409 ? ERROR_CODE_ITEM_NAME_IN_USE : ERROR_CODE_ITEM_NAME_INVALID,
+                    errorCode: code,
                     isLoading: false,
                 });
             },

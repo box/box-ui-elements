@@ -8,11 +8,19 @@ import {
     type PaginationQueryInput,
 } from '@box/metadata-editor';
 import React from 'react';
+import {
+    ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
+    ERROR_CODE_UNKNOWN,
+    ERROR_CODE_METADATA_PRECONDITION_FAILED,
+} from '../../constants';
 
 export interface MetadataInstanceEditorProps {
     areAiSuggestionsAvailable: boolean;
+    errorCode?: ERROR_CODE_METADATA_AUTOFILL_TIMEOUT | ERROR_CODE_METADATA_PRECONDITION_FAILED | ERROR_CODE_UNKNOWN;
+    isBetaLanguageEnabled: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
+    isLargeFile: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
@@ -31,8 +39,11 @@ export interface MetadataInstanceEditorProps {
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     areAiSuggestionsAvailable,
+    errorCode,
+    isBetaLanguageEnabled,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
+    isLargeFile,
     isUnsavedChangesModalOpen,
     onCancel,
     onDelete,
@@ -45,8 +56,11 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     return (
         <MetadataInstanceForm
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+            errorCode={errorCode}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
+            isBetaLanguageEnabled={isBetaLanguageEnabled}
             isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isLargeFile={isLargeFile}
             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
             onCancel={onCancel}
             onDelete={onDelete}

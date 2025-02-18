@@ -9,7 +9,7 @@ import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
-import { Size5 } from '@box/blueprint-web-assets/tokens/tokens';
+import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -93,7 +93,7 @@ const SidebarNav = ({
                                     : intl.formatMessage(messages.sidebarBoxAITitle)
                             }
                         >
-                            <BoxAiLogo height={Size5} width={Size5} />
+                            <BoxAiLogo height={Size6} width={Size6} />
                         </SidebarNavButton>
                     )}
                     {hasActivity && (
@@ -105,7 +105,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
-                            <IconChatRound />
+                            <IconChatRound className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasDetails && (
@@ -117,7 +117,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
-                            <IconDocInfo />
+                            <IconDocInfo className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasSkills && (
@@ -129,7 +129,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                         >
-                            <IconMagicWand />
+                            <IconMagicWand className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasMetadata && (
@@ -141,7 +141,7 @@ const SidebarNav = ({
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
-                            <IconMetadataThick />
+                            <IconMetadataThick className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasDocGen && (

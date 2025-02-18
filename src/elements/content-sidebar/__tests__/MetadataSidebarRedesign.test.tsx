@@ -2,8 +2,8 @@ import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { RouteComponentProps } from 'react-router-dom';
 import { type MetadataTemplate, type MetadataTemplateInstance } from '@box/metadata-editor';
-import { FIELD_PERMISSIONS_CAN_UPLOAD } from '../../../constants';
-import { screen, render } from '../../../test-utils/testing-library';
+import { FIELD_PERMISSIONS_CAN_UPLOAD, ERROR_CODE_METADATA_STRUCTURED_TEXT_REP } from '../../../constants';
+import { screen, render, waitFor } from '../../../test-utils/testing-library';
 import {
     MetadataSidebarRedesignComponent as MetadataSidebarRedesign,
     type MetadataSidebarRedesignProps,
@@ -14,6 +14,16 @@ jest.mock('../hooks/useSidebarMetadataFetcher');
 const mockUseSidebarMetadataFetcher = useSidebarMetadataFetcher as jest.MockedFunction<
     typeof useSidebarMetadataFetcher
 >;
+
+const getStructuredTextRep = jest.fn().mockResolvedValue('structured-text-rep');
+const api = {
+    options: {
+        token: jest.fn().mockResolvedValue({
+            read: 'read-token-value',
+            write: 'write-token-value',
+        }),
+    },
+};
 
 describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
     const mockTemplates: MetadataTemplate[] = [
@@ -91,7 +101,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         const emptyFilteredTemplateIds = [];
         const routeComponentProps = {} as RouteComponentProps;
         const defaultProps = {
-            api: {},
+            api,
+            fileExtension: 'pdf',
+            getStructuredTextRep,
             fileId: 'test-file-id-1',
             elementId: 'element-1',
             filteredTemplateIds: emptyFilteredTemplateIds,
@@ -106,6 +118,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     beforeEach(() => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -115,6 +128,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
     });
 
@@ -130,6 +144,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should have accessible "All templates" combobox trigger button', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -139,6 +154,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -172,6 +188,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should have accessible "All templates" combobox trigger button', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -181,6 +198,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -192,6 +210,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with error', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -204,6 +223,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             },
             status: STATUS.ERROR,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         const errorMessage = { id: 'error', defaultMessage: 'error message' };
@@ -215,6 +235,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata sidebar with loading indicator', async () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -224,6 +245,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.LOADING,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -235,11 +257,9 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should correctly render empty state when AI feature is enabled', () => {
         renderComponent({}, { 'metadata.aiSuggestions.enabled': true });
-        expect(screen.getByRole('heading', { level: 2, name: 'Autofill Metadata with Box AI' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2, name: 'Add Metadata Templates' })).toBeInTheDocument();
         expect(
-            screen.getByText(
-                'Use the power of Box AI to quickly capture document metadata, with ever-increasing accuracy.',
-            ),
+            screen.getByText('Add Metadata to your file to support business operations, workflows, and more!'),
         ).toBeInTheDocument();
     });
 
@@ -256,6 +276,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render empty state when no visible template instances are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -265,6 +286,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -278,6 +300,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata instance list when templates are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -287,6 +310,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -301,6 +325,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render filter dropdown when more than one templates are present', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -310,6 +335,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         renderComponent();
@@ -327,6 +353,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         'should not render filter dropdown when only one or none visible template is present',
         (templateInstances: MetadataTemplateInstance[]) => {
             mockUseSidebarMetadataFetcher.mockReturnValue({
+                clearExtractError: jest.fn(),
                 extractSuggestions: jest.fn(),
                 handleCreateMetadataInstance: jest.fn(),
                 handleDeleteMetadataInstance: jest.fn(),
@@ -336,6 +363,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
                 errorMessage: null,
                 status: STATUS.SUCCESS,
                 file: mockFile,
+                extractErrorCode: null,
             });
 
             renderComponent();
@@ -346,6 +374,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata filterd instance list when fileterd templates are present and matching', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -355,6 +384,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         const filteredTemplateIds = [mockVisibleTemplateInstance.id];
@@ -368,6 +398,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
 
     test('should render metadata unfiltered instance list when fileterd templates are present and do not match existing templates', () => {
         mockUseSidebarMetadataFetcher.mockReturnValue({
+            clearExtractError: jest.fn(),
             extractSuggestions: jest.fn(),
             handleCreateMetadataInstance: jest.fn(),
             handleDeleteMetadataInstance: jest.fn(),
@@ -377,6 +408,7 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             errorMessage: null,
             status: STATUS.SUCCESS,
             file: mockFile,
+            extractErrorCode: null,
         });
 
         const filteredTemplateIds = ['non-existing-template-id'];
@@ -389,5 +421,36 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
         expect(screen.getByText(mockCustomTemplateInstance.fields[1].key)).toBeInTheDocument();
 
         expect(screen.getByRole('heading', { level: 4, name: 'Visible Template' })).toBeInTheDocument();
+    });
+
+    test('should call getStructuredTextRep', async () => {
+        renderComponent({ api }, { 'metadata.aiSuggestions.enabled': true });
+
+        await waitFor(() => expect(getStructuredTextRep).toHaveBeenCalledTimes(1));
+    });
+
+    test.each`
+        description                                                            | isFeatureEnabled | fileExtension
+        ${'isBoxAiSuggestionsEnabled is false'}                                | ${false}         | ${'pdf'}
+        ${'fileExtension is not a pdf'}                                        | ${true}          | ${'docx'}
+        ${'isBoxAiSuggestionsEnabled is false and fileExtension is not a pdf'} | ${false}         | ${'docx'}
+    `('should not call getStructuredTextRep when $description', async ({ isFeatureEnabled, fileExtension }) => {
+        renderComponent({ api, fileExtension }, { 'metadata.aiSuggestions.enabled': isFeatureEnabled });
+
+        await waitFor(() => expect(getStructuredTextRep).not.toHaveBeenCalled());
+    });
+
+    test('should call onError when getStructuredTextRep fails', async () => {
+        const getStructuredTextRepError = jest.fn().mockRejectedValue(new Error('Failed to fetch structured text'));
+        const onError = jest.fn();
+
+        renderComponent(
+            { getStructuredTextRep: getStructuredTextRepError, api, onError },
+            { 'metadata.aiSuggestions.enabled': true },
+        );
+
+        await waitFor(() => {
+            expect(onError).toHaveBeenCalledWith(expect.any(Error), ERROR_CODE_METADATA_STRUCTURED_TEXT_REP);
+        });
     });
 });

@@ -42,7 +42,6 @@ export interface ContentAnswersModalProps extends ExternalProps {
 
 const ContentAnswersModal = ({
     api,
-    currentUser,
     file,
     isOpen,
     onAsk,
@@ -166,7 +165,6 @@ const ContentAnswersModal = ({
 
     const fileName = getProp(file, 'name');
     const fileExtension = getProp(file, 'extension');
-    const userInfo = { name: getProp(currentUser, 'name', ''), avatarURL: getProp(currentUser, 'avatarURL', '') };
 
     const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(fileExtension);
     const spreadsheetNotice = isSpreadsheet ? formatMessage(messages.welcomeMessageSpreadsheetNotice) : '';
@@ -180,16 +178,15 @@ const ContentAnswersModal = ({
             isMarkdownEnabled={isMarkdownEnabled}
             isResetChatEnabled={isResetChatEnabled}
             onClearAction={handleClearConversation}
-            onModalClose={handleOnRequestClose}
             onOpenChange={handleOnRequestClose}
             open={isOpen}
             questions={questions}
             retryQuestion={handleRetry}
+            setAnswerFeedback={undefined}
             submitQuestion={handleAsk}
             suggestedQuestions={suggestedQuestions || localizedQuestions}
             warningNotice={spreadsheetNotice}
             warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
-            userInfo={userInfo}
         />
     );
 };

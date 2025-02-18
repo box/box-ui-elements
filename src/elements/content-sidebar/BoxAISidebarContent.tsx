@@ -6,9 +6,9 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
-import { AgentsProvider, BoxAiAgentSelectorWithApi } from '@box/box-ai-agent-selector';
+import { BoxAiAgentSelectorWithApi, useAgents } from '@box/box-ai-agent-selector';
 import { IconButton, Tooltip } from '@box/blueprint-web';
-import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Line';
+import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Fill';
 import {
     BoxAiContentAnswers,
     ClearConversationButton,
@@ -65,6 +65,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         setCacheValue,
         userInfo,
     } = React.useContext(BoxAISidebarContext);
+    const { agents, requestState, selectedAgent } = useAgents();
     const { questions: cacheQuestions } = cache;
 
     if (cache.encodedSession !== encodedSession) {
@@ -73,6 +74,10 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
 
     if (cache.questions !== questions) {
         setCacheValue('questions', questions);
+    }
+
+    if (cache.agents.selectedAgent !== selectedAgent) {
+        setCacheValue('agents', { agents, requestState, selectedAgent });
     }
 
     const handleModalClose = () => {
@@ -91,6 +96,20 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         if (cacheQuestions.length > 0 && cacheQuestions[cacheQuestions.length - 1].isCompleted === false) {
             // if we have cache with question that is not completed resend it to trigger an API
             sendQuestion({ prompt: cacheQuestions[cacheQuestions.length - 1].prompt });
+        }
+
+        if (recordAction) {
+            recordAction({
+                action: 'programmatic',
+                component: 'sidebar',
+                feature: 'answers',
+                target: 'loaded',
+                data: {
+                    items: items.map(item => {
+                        return { status: item.status, fileType: item.fileType };
+                    }),
+                },
+            });
         }
 
         return () => {
@@ -138,61 +157,60 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
     );
 
     return (
-        <AgentsProvider>
-            <>
-                <SidebarContent
-                    actions={renderActions()}
-                    className={classNames('bcs-BoxAISidebar', { 'with-modal-open': isModalOpen })}
-                    elementId={elementId}
-                    sidebarView={SIDEBAR_VIEW_BOXAI}
-                >
-                    <div className="bcs-BoxAISidebar-content">
-                        <BoxAiContentAnswers
-                            className="bcs-BoxAISidebar-contentAnswers"
-                            contentType={formatMessage(messages.sidebarBoxAIContent)}
-                            hostAppName={hostAppName}
-                            isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
-                            isFeedbackEnabled={isFeedbackEnabled}
-                            isStopResponseEnabled={isStopResponseEnabled}
-                            items={items}
-                            questions={questions}
-                            stopQuestion={stopQuestion}
-                            submitQuestion={sendQuestion}
-                            userInfo={userInfo}
-                            variant="sidebar"
-                            recordAction={recordAction}
-                            {...rest}
-                        />
-                    </div>
-                </SidebarContent>
-                <IntelligenceModal
-                    contentName={contentName}
-                    contentType={formatMessage(messages.sidebarBoxAIContent)}
-                    extension={fileExtension}
-                    getAIStudioAgents={getAIStudioAgents}
-                    hostAppName={hostAppName}
-                    isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
-                    isResetChatEnabled={isResetChatEnabled}
-                    isStopResponseEnabled={isStopResponseEnabled}
-                    items={items}
-                    itemSize={itemSize}
-                    onClearAction={onClearAction}
-                    onModalClose={handleModalClose}
-                    onOpenChange={handleModalClose}
-                    onSelectAgent={onSelectAgent}
-                    open={isModalOpen}
-                    questions={questions}
-                    recordAction={isModalOpen ? recordAction : undefined}
-                    showLoadingIndicator={false}
-                    stopPropagationOnEsc
-                    submitQuestion={sendQuestion}
-                    userInfo={userInfo}
-                    variant="collapsible"
-                    {...rest}
-                    shouldRenderProviders={false}
-                />
-            </>
-        </AgentsProvider>
+        <>
+            <SidebarContent
+                actions={renderActions()}
+                className={classNames('bcs-BoxAISidebar', { 'with-modal-open': isModalOpen })}
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_BOXAI}
+            >
+                <div className="bcs-BoxAISidebar-content">
+                    <BoxAiContentAnswers
+                        className="bcs-BoxAISidebar-contentAnswers"
+                        contentType={formatMessage(messages.sidebarBoxAIContent)}
+                        hostAppName={hostAppName}
+                        isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                        isFeedbackEnabled={isFeedbackEnabled}
+                        isStopResponseEnabled={isStopResponseEnabled}
+                        items={items}
+                        questions={questions}
+                        stopQuestion={stopQuestion}
+                        submitQuestion={sendQuestion}
+                        userInfo={userInfo}
+                        variant="sidebar"
+                        recordAction={recordAction}
+                        {...rest}
+                    />
+                </div>
+            </SidebarContent>
+            <IntelligenceModal
+                contentName={contentName}
+                contentType={formatMessage(messages.sidebarBoxAIContent)}
+                extension={fileExtension}
+                getAIStudioAgents={getAIStudioAgents}
+                hostAppName={hostAppName}
+                isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
+                isFeedbackEnabled={isFeedbackEnabled}
+                isResetChatEnabled={isResetChatEnabled}
+                isStopResponseEnabled={isStopResponseEnabled}
+                items={items}
+                itemSize={itemSize}
+                onClearAction={onClearAction}
+                onOpenChange={handleModalClose}
+                onSelectAgent={onSelectAgent}
+                open={isModalOpen}
+                questions={questions}
+                recordAction={isModalOpen ? recordAction : undefined}
+                showLoadingIndicator={false}
+                stopPropagationOnEsc
+                stopQuestion={stopQuestion}
+                submitQuestion={sendQuestion}
+                userInfo={userInfo}
+                variant="collapsible"
+                {...rest}
+                shouldRenderProviders={false}
+            />
+        </>
     );
 }
 
