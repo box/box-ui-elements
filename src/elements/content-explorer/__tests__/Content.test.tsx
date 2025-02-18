@@ -26,7 +26,11 @@ const mockProps: ContentProps = {
     canPreview: true,
     canRename: true,
     canShare: true,
-    currentCollection: { items: [], percentLoaded: 100 } as Collection,
+    currentCollection: {
+        boxItem: { id: '123', type: 'folder' },
+        items: [],
+        percentLoaded: 100,
+    } as Collection,
     focusedRow: 0,
     isMedium: false,
     isSmall: false,
@@ -61,7 +65,12 @@ describe('Content Component', () => {
     });
 
     test('renders MetadataBasedItemList when view is VIEW_METADATA', () => {
-        const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+        const collection = {
+            boxItem: { id: '123', type: 'folder' },
+            id: '0',
+            items: [{ id: '1', type: 'file' }],
+            name: 'name',
+        };
         renderComponent({ view: VIEW_METADATA, fieldsToShow: ['id'], currentCollection: collection });
 
         expect(screen.getByTestId('metadata-based-item-list')).toBeInTheDocument();
@@ -69,9 +78,18 @@ describe('Content Component', () => {
 
     test('renders ItemList when viewMode is VIEW_MODE_LIST', () => {
         const collection = {
-            boxItem: {},
+            boxItem: { id: '123', type: 'folder' },
             id: '0',
-            items: [{ id: 1, name: 'Item 1', size: 1000, modified_at: '2023-10-10T10:00:00Z', type: 'file' }],
+            items: [
+                {
+                    id: '1',
+                    name: 'Item 1',
+                    size: 1000,
+                    modified_at: '2023-10-10T10:00:00Z',
+                    type: 'file',
+                    modified_by: { id: '123', name: 'Test User', type: 'user' as const },
+                },
+            ],
             name: 'name',
             percentLoaded: 100,
         };
@@ -79,13 +97,26 @@ describe('Content Component', () => {
 
         expect(screen.getByText('Item 1')).toBeInTheDocument();
         expect(screen.getByText('1000 Bytes')).toBeInTheDocument();
-        expect(screen.getByText('Tue Oct 10 2023')).toBeInTheDocument();
+        expect(screen.getByText(/Oct 10 2023/)).toBeInTheDocument();
         expect(screen.getByLabelText('File')).toBeInTheDocument();
     });
 
     test('renders ItemGrid when viewMode is VIEW_MODE_GRID', () => {
-        const item1 = { id: 1, name: 'Item 1', size: 1000, modified_at: '2023-10-10T10:00:00Z', type: 'file' };
-        const collection = { boxItem: {}, id: '0', items: [item1], name: 'name', percentLoaded: 100 };
+        const item1 = {
+            id: '1',
+            name: 'Item 1',
+            size: 1000,
+            modified_at: '2023-10-10T10:00:00Z',
+            type: 'file',
+            modified_by: { id: '123', name: 'Test User', type: 'user' as const },
+        };
+        const collection = {
+            boxItem: { id: '123', type: 'folder' },
+            id: '0',
+            items: [item1],
+            name: 'name',
+            percentLoaded: 100,
+        };
         render(<Content {...mockProps} viewMode={VIEW_MODE_GRID} currentCollection={collection} />);
 
         expect(screen.getByText('Item 1')).toBeInTheDocument();

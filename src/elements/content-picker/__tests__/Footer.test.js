@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
+import { render, screen } from '../../../test-utils/testing-library';
 import Footer from '../Footer';
 
 describe('elements/content-picker/Footer', () => {
@@ -15,61 +15,59 @@ describe('elements/content-picker/Footer', () => {
         selectedItems: [],
     };
 
-    const getWrapper = props => mount(<Footer {...defaultProps} {...props} />);
+    const renderComponent = (props = {}) => render(<Footer {...defaultProps} {...props} />);
 
-    describe('render()', () => {
-        test('should render Footer', () => {
-            const wrapper = getWrapper();
+    test('should render Footer', () => {
+        renderComponent();
+        expect(screen.getByRole('contentinfo')).toBeInTheDocument(); // Footer
+        expect(document.querySelector('.footer-child')).toBeInTheDocument();
+        expect(document.querySelector('.btn-group')).toBeInTheDocument(); // ButtonGroup
+    });
 
-            expect(wrapper.find('ButtonGroup').length).toBe(1);
-            expect(wrapper.find('.footer-child').length).toBe(1);
+    test('should render footer with disabled button', () => {
+        renderComponent();
+        const chooseButton = screen.getByRole('button', { name: 'Choose' });
+
+        // https://www.w3.org/WAI/ARIA/apg/patterns/button/
+        // When the action associated with a button is unavailable, the button has aria-disabled set to true.
+        expect(chooseButton).toHaveAttribute('aria-disabled', 'true');
+        expect(chooseButton).toHaveClass('is-disabled');
+    });
+
+    test('should render Footer buttons with aria-label', () => {
+        renderComponent();
+        expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Choose' })).toBeInTheDocument();
+    });
+
+    test('should render Footer with custom action button', () => {
+        const renderCustomActionButtons = jest.fn();
+        renderComponent({
+            renderCustomActionButtons: renderCustomActionButtons.mockReturnValue(
+                <div className="custom-button">Custom Button</div>,
+            ),
         });
 
-        test('should render footer with disabled button', () => {
-            const buttons = getWrapper().find('Button');
-            const chooseButton = buttons.at(1);
-
-            // https://www.w3.org/WAI/ARIA/apg/patterns/button/
-            // When the action associated with a button is unavailable, the button has aria-disabled set to true.
-            expect(chooseButton.html().includes('aria-disabled')).toBe(true);
-            expect(chooseButton.prop('disabled')).toBe(true);
+        expect(screen.getByText('Custom Button')).toBeInTheDocument();
+        expect(renderCustomActionButtons).toHaveBeenCalledWith({
+            currentFolderId: defaultProps.currentCollection.id,
+            currentFolderName: defaultProps.currentCollection.name,
+            onCancel: defaultProps.onCancel,
+            onChoose: defaultProps.onChoose,
+            selectedCount: defaultProps.selectedCount,
+            selectedItems: defaultProps.selectedItems,
         });
+    });
 
-        test('should render Footer buttons with aria-label', () => {
-            const buttons = getWrapper().find('Button');
-
-            expect(buttons.at(0).prop('aria-label')).toBe('Cancel');
-            expect(buttons.at(1).prop('aria-label')).toBe('Choose');
-        });
-
-        test('should render Footer with custom action button', () => {
-            const renderCustomActionButtons = jest.fn();
-
-            const wrapper = getWrapper({
-                renderCustomActionButtons: renderCustomActionButtons.mockReturnValue(<div className="custom-button" />),
-            });
-
-            expect(wrapper.find('.custom-button').length).toBe(1);
-            expect(renderCustomActionButtons).toHaveBeenCalledWith({
-                currentFolderId: defaultProps.currentCollection.id,
-                currentFolderName: defaultProps.currentCollection.name,
-                onCancel: defaultProps.onCancel,
-                onChoose: defaultProps.onChoose,
-                selectedCount: defaultProps.selectedCount,
-                selectedItems: defaultProps.selectedItems,
-            });
-        });
-
-        test.each`
-            showSelectedButton | isSingleSelect | shown    | should
-            ${false}           | ${false}       | ${false} | ${'should not show selected button'}
-            ${false}           | ${true}        | ${false} | ${'should not show selected button'}
-            ${true}            | ${false}       | ${true}  | ${'should show selected button'}
-            ${true}            | ${true}        | ${false} | ${'should not show selected button'}
-        `('$should', ({ isSingleSelect, shown, showSelectedButton }) => {
-            const wrapper = getWrapper({ isSingleSelect, showSelectedButton });
-
-            expect(wrapper.exists('.bcp-selected')).toBe(shown);
-        });
+    test.each`
+        showSelectedButton | isSingleSelect | shown    | should
+        ${false}           | ${false}       | ${false} | ${'should not show selected button'}
+        ${false}           | ${true}        | ${false} | ${'should not show selected button'}
+        ${true}            | ${false}       | ${true}  | ${'should show selected button'}
+        ${true}            | ${true}        | ${false} | ${'should not show selected button'}
+    `('$should', ({ isSingleSelect, shown, showSelectedButton }) => {
+        renderComponent({ isSingleSelect, showSelectedButton });
+        const selectedButton = screen.queryByRole('button', { name: /selected/i });
+        expect(!!selectedButton).toBe(shown);
     });
 });

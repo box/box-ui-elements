@@ -5,14 +5,18 @@ import Date, { DateProps } from '../Date';
 import { FIELD_INTERACTED_AT } from '../../../constants';
 
 const itemWithModifiedBy = {
+    id: '123',
     modified_at: '2023-10-01T12:00:00Z',
     interacted_at: '2023-10-02T12:00:00Z',
-    modified_by: { name: 'John Doe' },
+    modified_by: { id: '456', name: 'John Doe', type: 'user' as const },
+    type: 'file',
 };
 
 const itemWithoutModifiedBy = {
+    id: '789',
     modified_at: '2023-10-01T12:00:00Z',
     interacted_at: '2023-10-02T12:00:00Z',
+    type: 'file',
 };
 
 describe('elements/content-explorer/Date', () => {

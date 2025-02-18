@@ -2,6 +2,7 @@ import * as React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import ShareDialog, { ShareDialogProps } from '../ShareDialog';
+import { ACCESS_OPEN } from '../../../constants';
 
 jest.mock('react-modal', () => {
     return jest.fn(({ children }) => <div aria-label="Share">{children}</div>);
@@ -13,7 +14,7 @@ describe('elements/content-explorer/ShareDialog', () => {
         canSetShareAccess: true,
         isLoading: false,
         isOpen: true,
-        item: { shared_link: { url: 'http://example.com' } },
+        item: { id: '123', type: 'file', shared_link: { url: 'http://example.com', access: ACCESS_OPEN } },
         onCancel: jest.fn(),
         onShareAccessChange: jest.fn(),
         parentElement: document.createElement('div'),
@@ -47,7 +48,7 @@ describe('elements/content-explorer/ShareDialog', () => {
     });
 
     test('renders with empty input when item has no shared link', async () => {
-        renderComponent({ item: { shared_link: null } });
+        renderComponent({ item: { id: '456', type: 'file', shared_link: null } });
         expect(await screen.findByRole('textbox')).toHaveValue('None');
     });
 });
