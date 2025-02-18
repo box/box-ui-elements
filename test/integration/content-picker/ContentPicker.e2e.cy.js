@@ -13,34 +13,21 @@ const helpers = {
     },
     getRow: rowNum => cy.getByTestId('content-picker').find(`.bcp-item-row-${rowNum}`),
     selectRow(rowNum, rowType = 'checkbox') {
-        this.getRow(rowNum)
-            .as('row')
-            .click()
-            .find(`input[type="${rowType}"]`)
-            .should('be.checked');
+        this.getRow(rowNum).as('row').click().find(`input[type="${rowType}"]`).should('be.checked');
 
         cy.get('@row').find('.bcp-shared-access-select');
 
         return cy.get('@row');
     },
     unselectRow(rowNum, rowType = 'checkbox') {
-        this.getRow(rowNum)
-            .as('row')
-            .click()
-            .find(`input[type="${rowType}"]`)
-            .should('not.be.checked');
+        this.getRow(rowNum).as('row').click().find(`input[type="${rowType}"]`).should('not.be.checked');
 
-        cy.get('@row')
-            .find('.bcp-shared-access-select')
-            .should('not.exist');
+        cy.get('@row').find('.bcp-shared-access-select').should('not.exist');
 
         return cy.get('@row');
     },
     getPaginationArrows: () => {
-        return cy
-            .getByTestId('content-picker')
-            .find('.bdl-Pagination-nav')
-            .children();
+        return cy.getByTestId('content-picker').find('.bdl-Pagination-nav').children();
     },
     getPaginationCountButton: pageNumber => {
         return cy
@@ -48,10 +35,7 @@ const helpers = {
             .contains(localize('be.pagination.pageStatus', { pageNumber, pageCount: 2 }));
     },
     getPaginationDropdown: () => {
-        return cy
-            .get('.bdl-Pagination-dropdownMenu')
-            .first()
-            .children();
+        return cy.get('.bdl-Pagination-dropdownMenu').first().children();
     },
 };
 
@@ -76,10 +60,7 @@ describe('ContentPicker', () => {
             cy.intercept('GET', '**/folders/*', SECOND_PAGE);
 
             // Click the right arrow
-            helpers
-                .getPaginationArrows()
-                .eq(1)
-                .click();
+            helpers.getPaginationArrows().eq(1).click();
 
             // Confirm that the Content Picker now shows the second page
             helpers.getRow(0).contains(FIRST_ITEM_OF_SECOND_PAGE);
@@ -88,10 +69,7 @@ describe('ContentPicker', () => {
             cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/folder-page-1.json' });
 
             // Click the left arrow
-            helpers
-                .getPaginationArrows()
-                .eq(0)
-                .click();
+            helpers.getPaginationArrows().eq(0).click();
 
             // Confirm that the Content Picker now shows the first page
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
@@ -110,10 +88,7 @@ describe('ContentPicker', () => {
             cy.intercept('GET', '**/folders/*', SECOND_PAGE);
 
             // Click the second option in the dropdown menu
-            helpers
-                .getPaginationDropdown()
-                .eq(1)
-                .click();
+            helpers.getPaginationDropdown().eq(1).click();
 
             // Confirm that the Content Picker now shows the second page
             helpers.getRow(0).contains(FIRST_ITEM_OF_SECOND_PAGE);
@@ -125,10 +100,7 @@ describe('ContentPicker', () => {
             helpers.getPaginationCountButton(2).click();
 
             // Click the first option in the dropdown menu
-            helpers
-                .getPaginationDropdown()
-                .eq(0)
-                .click();
+            helpers.getPaginationDropdown().eq(0).click();
 
             // Confirm that the pagination count button says "1 of 2"
             // and that the Content Picker now shows the first page
@@ -162,17 +134,11 @@ describe('ContentPicker', () => {
             helpers.load();
 
             // Select row 2
-            helpers
-                .getRow(2)
-                .find('input[type="checkbox"]')
-                .should('not.be.checked');
+            helpers.getRow(2).find('input[type="checkbox"]').should('not.be.checked');
             helpers.selectRow(2);
 
             // Select row 3
-            helpers
-                .getRow(3)
-                .find('input[type="checkbox"]')
-                .should('not.be.checked');
+            helpers.getRow(3).find('input[type="checkbox"]').should('not.be.checked');
             helpers.selectRow(3);
 
             // Unselect row 2
@@ -192,10 +158,7 @@ describe('ContentPicker', () => {
             cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/sample-folder.json' });
 
             // Explore folder (row 1)
-            helpers
-                .getRow(1)
-                .find('button.be-item-label')
-                .click();
+            helpers.getRow(1).find('button.be-item-label').click();
 
             cy.getByTestId('be-sub-header').contains('Sample Folder');
 
@@ -208,26 +171,18 @@ describe('ContentPicker', () => {
             // Unselect the rows
             helpers.getRow(1).click();
             helpers.getRow(0).click();
-            cy.contains('You haven’t selected any items yet.');
+            cy.contains("You haven't selected any items yet.");
         });
 
         it('Should not allow more than the maximum selected prop', () => {
             helpers.load({ maxSelectable: 2 });
 
             // Select row 2
-            helpers
-                .getRow(2)
-                .as('rowTwo')
-                .find('input[type="checkbox"]')
-                .should('not.be.checked');
+            helpers.getRow(2).as('rowTwo').find('input[type="checkbox"]').should('not.be.checked');
             helpers.selectRow(2);
 
             // Select row 3
-            helpers
-                .getRow(3)
-                .as('rowThree')
-                .find('input[type="checkbox"]')
-                .should('not.be.checked');
+            helpers.getRow(3).as('rowThree').find('input[type="checkbox"]').should('not.be.checked');
             helpers.selectRow(3);
 
             cy.contains('2 Selected').find('.bcp-selected-max');
@@ -243,25 +198,15 @@ describe('ContentPicker', () => {
             helpers.load({ maxSelectable: 1 });
 
             // Select row 2
-            helpers
-                .getRow(2)
-                .as('rowTwo')
-                .find('input[type="radio"]')
-                .should('not.be.checked');
+            helpers.getRow(2).as('rowTwo').find('input[type="radio"]').should('not.be.checked');
             helpers.selectRow(2, 'radio');
 
             // Select row 3
-            helpers
-                .getRow(3)
-                .as('rowThree')
-                .find('input[type="radio"]')
-                .should('not.be.checked');
+            helpers.getRow(3).as('rowThree').find('input[type="radio"]').should('not.be.checked');
             helpers.selectRow(3, 'radio');
 
             // Row 2 should now be unchecked
-            cy.get('@rowTwo')
-                .find('input[type="radio"]')
-                .should('not.be.checked');
+            cy.get('@rowTwo').find('input[type="radio"]').should('not.be.checked');
 
             // Unselect row 3
             helpers.unselectRow(3, 'radio');
