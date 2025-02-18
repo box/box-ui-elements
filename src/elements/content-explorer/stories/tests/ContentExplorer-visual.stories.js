@@ -239,7 +239,7 @@ export const searchEmptyState = {
         const searchBar = canvas.getByRole('searchbox', { name: 'Search files and folders' });
         await userEvent.type(searchBar, 'foo');
 
-        expect(canvas.getByText('Sorry, we couldn’t find what you’re looking for.')).toBeInTheDocument();
+        expect(canvas.getByText("Sorry, we couldn't find what you're looking for.")).toBeInTheDocument();
     },
 };
 

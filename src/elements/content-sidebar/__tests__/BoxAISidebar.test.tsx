@@ -50,9 +50,19 @@ jest.mock('@box/box-ai-content-answers', () => ({
 jest.mock('../BoxAISidebarTitle', () => () => <div data-testid="boxai-sidebar-title" />);
 
 describe('elements/content-sidebar/BoxAISidebar', () => {
+    const mockAgents = {
+        agents: [],
+        requestState: 'success',
+        selectedAgent: null,
+    };
+
     const mockProps = {
         contentName: 'testName.txt',
-        cache: { encodedSession: '', questions: [] },
+        cache: {
+            encodedSession: '',
+            questions: [],
+            agents: mockAgents,
+        },
         createSessionRequest: jest.fn(() => ({ encodedSession: '1234' })),
         elementId: '123',
         fetchTimeout: {},
@@ -200,6 +210,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                         prompt: 'not completed question',
                     },
                 ],
+                agents: mockAgents,
             },
         });
 
