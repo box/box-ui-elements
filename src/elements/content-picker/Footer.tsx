@@ -93,7 +93,8 @@ const Footer = ({
                         <Tooltip isDisabled={isChooseButtonDisabled} text={chooseButtonLabel || chooseMessage}>
                             <PrimaryButton
                                 aria-label={chooseMessage}
-                                isDisabled={isChooseButtonDisabled}
+                                disabled={isChooseButtonDisabled} // sets disabled attribute for native HTML button
+                                isDisabled={isChooseButtonDisabled} // used in Button component
                                 onClick={onChoose}
                                 type={ButtonType.BUTTON}
                             >
