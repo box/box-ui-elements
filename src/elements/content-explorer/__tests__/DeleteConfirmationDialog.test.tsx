@@ -5,8 +5,8 @@ import DeleteConfirmationDialog, { DeleteConfirmationDialogProps } from '../Dele
 
 import { TYPE_FOLDER } from '../../../constants';
 
-const mockItem = { type: 'pdf', name: 'Test File' };
-const mockFolderItem = { type: TYPE_FOLDER, name: 'Test Folder' };
+const mockItem = { id: '123', type: 'file', name: 'Test File' };
+const mockFolderItem = { id: '456', type: TYPE_FOLDER, name: 'Test Folder' };
 
 jest.mock('react-modal', () => {
     return jest.fn(({ children }) => <div aria-label="Delete">{children}</div>);

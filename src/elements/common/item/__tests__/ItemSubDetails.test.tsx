@@ -8,7 +8,7 @@ const mockItem = {
     id: '1',
     name: 'Test Item',
     modified_at: '2023-10-10T10:00:00Z',
-    modified_by: { name: 'John Doe' },
+    modified_by: { id: '123', name: 'John Doe', type: 'user' as const },
     interacted_at: '',
     size: 12345,
 };

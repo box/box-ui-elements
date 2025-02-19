@@ -131,6 +131,7 @@ function useSidebarMetadataFetcher(
 
     const fetchFileSuccessCallback = React.useCallback(
         (fetchedFile: BoxItem) => {
+            // @ts-expect-error Property 'currentFile' is not defined in BoxItem - needs clarification on correct type
             const { currentFile } = file ?? {};
             const currentFileCanUpload = getProp(currentFile, FIELD_PERMISSIONS_CAN_UPLOAD, false);
             const newFileCanUpload = getProp(fetchedFile, FIELD_PERMISSIONS_CAN_UPLOAD, false);

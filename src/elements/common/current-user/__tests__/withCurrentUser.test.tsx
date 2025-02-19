@@ -33,6 +33,8 @@ describe('elements/common/current-user/withCurrentUser', () => {
 
     const currentUser = {
         id: 'foo',
+        name: 'Test User',
+        type: 'user' as const,
     };
 
     let instance: React.Component<{}, {}, {}> & ComponentWithCurrentUser;

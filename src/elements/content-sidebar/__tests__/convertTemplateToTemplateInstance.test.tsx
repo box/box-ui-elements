@@ -5,6 +5,8 @@ import { type BoxItem } from '../../../common/types/core';
 describe('convertTemplateToTemplateInstance', () => {
     it('should correctly convert template to template instance', () => {
         const mockFile: BoxItem = {
+            id: '123',
+            type: 'file',
             permissions: {
                 can_upload: true,
             },

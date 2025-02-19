@@ -14,7 +14,7 @@ const defaultProps = {
     errorCode: '',
     isLoading: false,
     isOpen: true,
-    item: { name: 'test.txt', extension: 'txt' },
+    item: { id: '123', name: 'test.txt', extension: 'txt', type: 'file' },
     onCancel: jest.fn(),
     onRename: jest.fn(),
     parentElement: document.createElement('div'),
