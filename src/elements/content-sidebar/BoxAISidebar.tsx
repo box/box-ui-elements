@@ -8,9 +8,7 @@ import { type ItemType } from '@box/box-ai-content-answers';
 import { AgentsProvider , RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
-import {
-    SPREADSHEET_FILE_EXTENSIONS
-} from '../common/content-answers/constants';
+import { SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from './types/BoxAISidebarTypes';
 
 import messages from '../common/content-answers/messages';
@@ -52,10 +50,10 @@ export interface BoxAISidebarProps {
     isStreamingEnabled: boolean;
     items: Array<ItemType>;
     itemSize?: string;
-    userInfo: { name: string; avatarURL: string };
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
+    userInfo: { name: string; avatarURL: string };
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -71,10 +69,10 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         isStopResponseEnabled,
         items,
         itemSize,
+        localizedQuestions,
         recordAction,
         setCacheValue,
         userInfo,
-        localizedQuestions,
         ...rest
     } = props;
     const { questions } = cache;
