@@ -1,45 +1,37 @@
-/**
- * @flow
- * @file Footer list component
- * @author Box
- */
-
 import * as React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import type { Node } from 'react';
-
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { Collection, BoxItem } from '../../common/types/core';
-import Button from '../../components/button';
+import Button, { ButtonType } from '../../components/button';
 import ButtonGroup from '../../components/button-group';
 import IconCheck from '../../icons/general/IconCheck';
 import IconClose from '../../icons/general/IconClose';
 import messages from '../common/messages';
-
 import PrimaryButton from '../../components/primary-button';
 import Tooltip from '../common/Tooltip';
 import './Footer.scss';
 
-type Props = {
-    cancelButtonLabel?: string,
-    children?: any,
-    chooseButtonLabel?: string,
-    currentCollection: Collection,
-    hasHitSelectionLimit: boolean,
-    intl: any,
-    isSingleSelect: boolean,
-    onCancel: Function,
-    onChoose: Function,
-    onSelectedClick: Function,
-    renderCustomActionButtons?: ({
-        onCancel: Function,
-        onChoose: Function,
-        selectedCount: number,
-        selectedItems: BoxItem[],
-    }) => Node,
-    selectedCount: number,
-    selectedItems: BoxItem[],
-    showSelectedButton: boolean,
-};
+interface Props {
+    cancelButtonLabel?: string;
+    children?: React.ReactNode;
+    chooseButtonLabel?: string;
+    currentCollection: Collection;
+    hasHitSelectionLimit: boolean;
+    isSingleSelect: boolean;
+    onCancel: () => void;
+    onChoose: () => void;
+    onSelectedClick: () => void;
+    renderCustomActionButtons?: (options: {
+        currentFolderId: string;
+        currentFolderName: string;
+        onCancel: () => void;
+        onChoose: () => void;
+        selectedCount: number;
+        selectedItems: BoxItem[];
+    }) => React.ReactNode;
+    selectedCount: number;
+    selectedItems: BoxItem[];
+    showSelectedButton: boolean;
+}
 
 const Footer = ({
     currentCollection,
@@ -47,7 +39,6 @@ const Footer = ({
     selectedItems,
     onSelectedClick,
     hasHitSelectionLimit,
-    intl,
     isSingleSelect,
     onCancel,
     onChoose,
@@ -56,15 +47,17 @@ const Footer = ({
     children,
     renderCustomActionButtons,
     showSelectedButton,
-}: Props) => {
-    const cancelMessage = intl.formatMessage(messages.cancel);
-    const chooseMessage = intl.formatMessage(messages.choose);
+}: Props): React.ReactElement => {
+    const { formatMessage } = useIntl();
+    const cancelMessage = formatMessage(messages.cancel);
+    const chooseMessage = formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
+
     return (
         <footer className="bcp-footer">
             <div className="bcp-footer-left">
                 {showSelectedButton && !isSingleSelect && (
-                    <Button className="bcp-selected" onClick={onSelectedClick} type="button">
+                    <Button className="bcp-selected" onClick={onSelectedClick} type={ButtonType.BUTTON}>
                         <FormattedMessage
                             className="bcp-selected-count"
                             {...messages.selected}
@@ -80,7 +73,6 @@ const Footer = ({
             </div>
             <div className="bcp-footer-right">
                 {children}
-
                 {renderCustomActionButtons ? (
                     renderCustomActionButtons({
                         currentFolderId: currentCollection.id,
@@ -93,17 +85,17 @@ const Footer = ({
                 ) : (
                     <ButtonGroup className="bcp-footer-actions">
                         <Tooltip text={cancelButtonLabel || cancelMessage}>
-                            <Button aria-label={cancelMessage} onClick={onCancel} type="button">
+                            <Button aria-label={cancelMessage} onClick={onCancel} type={ButtonType.BUTTON}>
                                 <IconClose height={16} width={16} />
                             </Button>
                         </Tooltip>
                         <Tooltip isDisabled={isChooseButtonDisabled} text={chooseButtonLabel || chooseMessage}>
                             <PrimaryButton
                                 aria-label={chooseMessage}
-                                disabled={isChooseButtonDisabled} // sets disabled attribute
-                                isDisabled={isChooseButtonDisabled} // used in Button component
+                                isDisabled={isChooseButtonDisabled}
                                 onClick={onChoose}
-                                type="button"
+                                type={ButtonType.BUTTON}
+                                {...{ disabled: isChooseButtonDisabled }} // sets disabled attribute for native HTML button
                             >
                                 <IconCheck color="#fff" height={16} width={16} />
                             </PrimaryButton>
@@ -115,4 +107,4 @@ const Footer = ({
     );
 };
 
-export default injectIntl(Footer);
+export default Footer;
