@@ -9,10 +9,16 @@ export interface ButtonGroupProps {
     className?: string;
     /** Boolean describing whether the button is disabled or not */
     isDisabled?: boolean;
+    /** ARIA role for the button group */
+    role?: string;
+    /** ARIA label for the button group */
+    'aria-label'?: string;
 }
 
-const ButtonGroup = ({ children, className = '', isDisabled }: ButtonGroupProps) => (
-    <div className={`btn-group ${className} ${isDisabled ? 'is-disabled' : ''}`}>{children}</div>
+const ButtonGroup = ({ children, className = '', isDisabled, role, 'aria-label': ariaLabel }: ButtonGroupProps) => (
+    <div className={`btn-group ${className} ${isDisabled ? 'is-disabled' : ''}`} role={role} aria-label={ariaLabel}>
+        {children}
+    </div>
 );
 
 export default ButtonGroup;

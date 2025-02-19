@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import type { Collection, BoxItem } from '../../common/types/core';
 import Button, { ButtonType } from '../../components/button';
 import ButtonGroup from '../../components/button-group';
@@ -48,9 +48,9 @@ const Footer = ({
     renderCustomActionButtons,
     showSelectedButton,
 }: Props): React.ReactElement => {
-    const intl = useIntl();
-    const cancelMessage = intl.formatMessage(messages.cancel);
-    const chooseMessage = intl.formatMessage(messages.choose);
+    const { formatMessage } = useIntl();
+    const cancelMessage = formatMessage(messages.cancel);
+    const chooseMessage = formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
     return (
         <footer className="bcp-footer">
@@ -83,7 +83,7 @@ const Footer = ({
                         selectedItems,
                     })
                 ) : (
-                    <ButtonGroup className="bcp-footer-actions">
+                    <ButtonGroup className="bcp-footer-actions" role="group" aria-label="Actions">
                         <Tooltip text={cancelButtonLabel || cancelMessage}>
                             <Button aria-label={cancelMessage} onClick={onCancel} type={ButtonType.BUTTON}>
                                 <IconClose height={16} width={16} />

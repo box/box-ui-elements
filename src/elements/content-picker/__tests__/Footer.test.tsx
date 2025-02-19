@@ -5,7 +5,7 @@ import type { Collection, BoxItem } from '../../../common/types/core';
 
 describe('elements/content-picker/Footer', () => {
     const defaultProps = {
-        children: <div className="footer-child" />,
+        children: <div data-testid="footer-child" />,
         currentCollection: { id: '123', name: 'Folder' } as Collection,
         hasHitSelectionLimit: false,
         isSingleSelect: false,
@@ -26,13 +26,13 @@ describe('elements/content-picker/Footer', () => {
 
         expect(screen.getByRole('contentinfo')).toBeInTheDocument();
         expect(screen.getByTestId('footer-child')).toBeInTheDocument();
-        expect(screen.getByRole('group', { name: /actions/i })).toBeInTheDocument();
+        expect(screen.getByRole('group', { name: 'Actions' })).toBeInTheDocument();
     });
 
     test('should render footer with disabled button', () => {
         renderComponent();
 
-        const chooseButton = screen.getByRole('button', { name: /choose/i });
+        const chooseButton = screen.getByRole('button', { name: 'Choose' });
         expect(chooseButton).toHaveAttribute('aria-disabled', 'true');
         expect(chooseButton).toBeDisabled();
     });
@@ -40,8 +40,8 @@ describe('elements/content-picker/Footer', () => {
     test('should render Footer buttons with aria-label', () => {
         renderComponent();
 
-        expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /choose/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Choose' })).toBeInTheDocument();
     });
 
     test('should render Footer with custom action button', () => {
@@ -64,14 +64,14 @@ describe('elements/content-picker/Footer', () => {
 
     test.each`
         showSelectedButton | isSingleSelect | shown    | should
-        ${false}          | ${false}       | ${false} | ${'should not show selected button'}
-        ${false}          | ${true}        | ${false} | ${'should not show selected button'}
-        ${true}           | ${false}       | ${true}  | ${'should show selected button'}
-        ${true}           | ${true}        | ${false} | ${'should not show selected button'}
+        ${false}           | ${false}       | ${false} | ${'should not show selected button'}
+        ${false}           | ${true}        | ${false} | ${'should not show selected button'}
+        ${true}            | ${false}       | ${true}  | ${'should show selected button'}
+        ${true}            | ${true}        | ${false} | ${'should not show selected button'}
     `('$should', ({ isSingleSelect, shown, showSelectedButton }) => {
         renderComponent({ isSingleSelect, showSelectedButton });
 
-        const selectedButton = screen.queryByRole('button', { name: /selected/i });
+        const selectedButton = screen.queryByRole('button', { name: '0 Selected' });
         expect(!!selectedButton).toBe(shown);
     });
 });
