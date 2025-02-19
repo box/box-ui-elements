@@ -26,7 +26,6 @@ describe('elements/content-picker/Footer', () => {
 
         expect(screen.getByRole('contentinfo')).toBeInTheDocument();
         expect(screen.getByTestId('footer-child')).toBeInTheDocument();
-        expect(screen.getByRole('group', { name: 'Actions' })).toBeInTheDocument();
     });
 
     test('should render footer with disabled button', () => {

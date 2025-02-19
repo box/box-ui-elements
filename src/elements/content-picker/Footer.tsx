@@ -52,6 +52,7 @@ const Footer = ({
     const cancelMessage = formatMessage(messages.cancel);
     const chooseMessage = formatMessage(messages.choose);
     const isChooseButtonDisabled = !selectedCount;
+
     return (
         <footer className="bcp-footer">
             <div className="bcp-footer-left">
@@ -72,7 +73,6 @@ const Footer = ({
             </div>
             <div className="bcp-footer-right">
                 {children}
-
                 {renderCustomActionButtons ? (
                     renderCustomActionButtons({
                         currentFolderId: currentCollection.id,
@@ -83,7 +83,7 @@ const Footer = ({
                         selectedItems,
                     })
                 ) : (
-                    <ButtonGroup className="bcp-footer-actions" role="group" aria-label="Actions">
+                    <ButtonGroup className="bcp-footer-actions">
                         <Tooltip text={cancelButtonLabel || cancelMessage}>
                             <Button aria-label={cancelMessage} onClick={onCancel} type={ButtonType.BUTTON}>
                                 <IconClose height={16} width={16} />
