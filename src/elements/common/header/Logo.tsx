@@ -10,7 +10,7 @@ export interface LogoProps {
 
 function getLogo(url?: string) {
     if (url === 'box') {
-        return <BoxLogo width={45} height={25} />;
+        return <BoxLogo height={25} width={45} />;
     }
 
     if (typeof url === 'string') {

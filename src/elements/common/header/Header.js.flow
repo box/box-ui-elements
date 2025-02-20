@@ -12,15 +12,12 @@ type HeaderProps = {
     isHeaderLogoVisible?: boolean,
     logoUrl?: string,
     onSearch: any,
-    searchQuery: string,
     view: View
 };
 
-// eslint-disable-next-line react/prop-types
 const Header = ({
     isHeaderLogoVisible = true,
     view,
-    searchQuery,
     onSearch,
     logoUrl,
 }: HeaderProps) => {
@@ -34,14 +31,11 @@ const Header = ({
             {isHeaderLogoVisible && <Logo url={logoUrl} />}
             <div className="be-search">
                 <SearchInput
-                    className="my-class"
-                    defaultValue=""
                     disabled={!isFolder && !isSearch}
                     onChange={onSearch}
                     placeholder={searchMessage}
                     searchInputAriaLabel={searchMessage}
                     searchInputClearAriaLabel={formatMessage(messages.searchClear)}
-                    value={searchQuery}
                     variant="global"
                 />
             </div>

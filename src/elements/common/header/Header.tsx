@@ -15,7 +15,6 @@ export interface HeaderProps {
     view: View;
 }
 
-// eslint-disable-next-line react/prop-types
 const Header = ({ isHeaderLogoVisible = true, logoUrl, onSearch, view }: HeaderProps) => {
     const { formatMessage } = useIntl();
     const searchMessage = formatMessage(messages.searchPlaceholder);
@@ -27,7 +26,6 @@ const Header = ({ isHeaderLogoVisible = true, logoUrl, onSearch, view }: HeaderP
             {isHeaderLogoVisible && <Logo url={logoUrl} />}
             <div className="be-search">
                 <SearchInput
-                    defaultValue=""
                     disabled={!isFolder && !isSearch}
                     onChange={onSearch}
                     placeholder={searchMessage}
