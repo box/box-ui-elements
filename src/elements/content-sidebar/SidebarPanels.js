@@ -447,8 +447,6 @@ class SidebarPanels extends React.Component<Props, State> {
 
                         if (showDefaultPanel) {
                             redirect = defaultPanel;
-                        } else if (canShowBoxAISidebarPanel) {
-                            redirect = SIDEBAR_VIEW_BOXAI;
                         } else if (hasDocGen) {
                             redirect = SIDEBAR_VIEW_DOCGEN;
                         } else if (hasSkills) {
@@ -459,6 +457,8 @@ class SidebarPanels extends React.Component<Props, State> {
                             redirect = SIDEBAR_VIEW_DETAILS;
                         } else if (hasMetadata) {
                             redirect = SIDEBAR_VIEW_METADATA;
+                        } else if (canShowBoxAISidebarPanel) {
+                            redirect = SIDEBAR_VIEW_BOXAI;
                         }
 
                         return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;
