@@ -1,8 +1,7 @@
-// @flow
-
 import React, { act } from 'react';
 import { mount } from 'enzyme';
 import API from '../../../api';
+import { GetContactsByEmailFnType } from '../types';
 import useContactsByEmail from '../hooks/useContactsByEmail';
 import {
     MOCK_CONTACTS_API_RESPONSE,
@@ -14,12 +13,12 @@ const handleSuccess = jest.fn();
 const handleError = jest.fn();
 const transformUsersSpy = jest.fn().mockReturnValue(MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE);
 
-const createAPIMock = markerBasedUsersAPI => ({
+const createAPIMock = (markerBasedUsersAPI: Record<string, unknown>): { getMarkerBasedUsersAPI: jest.Mock } => ({
     getMarkerBasedUsersAPI: jest.fn().mockReturnValue(markerBasedUsersAPI),
 });
 
-function FakeComponent({ api, transformUsers }: { api: API, transformUsers: Function }) {
-    const [getContactsByEmail, setGetContactsByEmail] = React.useState(null);
+function FakeComponent({ api, transformUsers }: { api: API; transformUsers?: Function }) {
+    const [getContactsByEmail, setGetContactsByEmail] = React.useState<GetContactsByEmailFnType | null>(null);
 
     const updatedGetContactsByEmailFn = useContactsByEmail(api, MOCK_ITEM_ID, {
         handleSuccess,
@@ -63,12 +62,9 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
 
             const contacts = fakeComponent.find('button').invoke('onClick')({ emails: [MOCK_EMAIL] });
 
-            expect(getUsersInEnterprise).toHaveBeenCalledWith(
-                MOCK_ITEM_ID,
-                expect.anything(Function),
-                expect.anything(Function),
-                { filter_term: MOCK_EMAIL },
-            );
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_EMAIL,
+            });
             expect(handleSuccess).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
             expect(transformUsersSpy).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
             return expect(contacts).resolves.toEqual(MOCK_CONTACTS_BY_EMAIL_CONVERTED_RESPONSE);
@@ -83,12 +79,9 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
 
             const contacts = fakeComponent.find('button').invoke('onClick')({ emails: [MOCK_EMAIL] });
 
-            expect(getUsersInEnterprise).toHaveBeenCalledWith(
-                MOCK_ITEM_ID,
-                expect.anything(Function),
-                expect.anything(Function),
-                { filter_term: MOCK_EMAIL },
-            );
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_EMAIL,
+            });
             expect(handleSuccess).toHaveBeenCalledWith(MOCK_CONTACTS_API_RESPONSE);
             expect(transformUsersSpy).not.toHaveBeenCalled();
             expect(contacts).resolves.toEqual(MOCK_CONTACTS_API_RESPONSE.entries);
@@ -154,12 +147,9 @@ describe('elements/content-sharing/hooks/useContactsByEmail', () => {
 
             const contacts = fakeComponent.find('button').invoke('onClick')({ emails: [MOCK_EMAIL] });
 
-            expect(getUsersInEnterprise).toHaveBeenCalledWith(
-                MOCK_ITEM_ID,
-                expect.anything(Function),
-                expect.anything(Function),
-                { filter_term: MOCK_EMAIL },
-            );
+            expect(getUsersInEnterprise).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything(), {
+                filter_term: MOCK_EMAIL,
+            });
             expect(handleError).toHaveBeenCalled();
             expect(contacts).resolves.toBeFalsy();
         });

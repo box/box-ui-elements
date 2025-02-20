@@ -1,11 +1,9 @@
-// @flow
-
 import * as React from 'react';
 import noop from 'lodash/noop';
 import API from '../../../api';
 import { TYPE_FILE, TYPE_FOLDER } from '../../../constants';
-import type { Collaborations, ItemType } from '../../../common/types/core';
-import type { ContentSharingHooksOptions } from '../types';
+import { Collaborations, ItemType } from '../../../common/types/core';
+import { ContentSharingHooksOptions } from '../types';
 
 /**
  * Get the item's collaborators
@@ -33,17 +31,24 @@ function useCollaborators(
     React.useEffect(() => {
         if (collaboratorsList) return;
 
-        const handleGetCollaborationsSuccess = (response: Collaborations) => {
+        const handleGetCollaborationsSuccess = (response: Collaborations): void => {
             setCollaboratorsList(response);
             handleSuccess(response);
         };
 
-        const handleGetCollaborationsError = () => {
+        const handleGetCollaborationsError = (): void => {
             setCollaboratorsList({ entries: [], next_marker: null });
             handleError();
         };
 
-        let collabAPIInstance;
+        interface CollabAPI {
+            getCollaborations: (
+                itemID: string,
+                successCallback: (response: Collaborations) => void,
+                errorCallback: () => void,
+            ) => void;
+        }
+        let collabAPIInstance: CollabAPI | undefined;
         if (itemType === TYPE_FILE) {
             collabAPIInstance = api.getFileCollaborationsAPI(false);
         } else if (itemType === TYPE_FOLDER) {

@@ -13,34 +13,63 @@ import {
 } from '../../../features/unified-share-modal/utils/__mocks__/USMMocks';
 import { ANYONE_IN_COMPANY, CAN_VIEW_DOWNLOAD, PEOPLE_IN_ITEM } from '../../../features/unified-share-modal/constants';
 import { CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS } from '../constants';
-import type { BoxItemPermission } from '../../../common/types/core';
+import { BoxItemPermission } from '../../../common/types/core';
+import { SharedLinkUpdateLevelFnType } from '../types';
+
+type MockSuccessCallback = (data: MockAPIResponse) => void;
+type MockFailureCallback = () => void;
+
+type ShareMockType = jest.Mock<
+    void,
+    [Record<string, unknown>, string, MockSuccessCallback, MockFailureCallback, Record<string, unknown>]
+>;
+type UpdateSharedLinkMockType = jest.Mock<
+    void,
+    [
+        Record<string, unknown>,
+        Record<string, unknown>,
+        MockSuccessCallback,
+        MockFailureCallback,
+        Record<string, unknown>,
+    ]
+>;
+
+interface MockAPIInstance {
+    share: ShareMockType;
+    updateSharedLink: UpdateSharedLinkMockType;
+}
+
+type MockAPIResponse = typeof MOCK_ITEM_API_RESPONSE;
+
+interface MockAPI {
+    getFileAPI: jest.Mock<MockAPIInstance, []>;
+    getFolderAPI: jest.Mock<MockAPIInstance, []>;
+}
 
 const handleRemoveSharedLinkError = jest.fn();
-const handleUpdateSharedLinkError = jest.fn();
-const handleRemoveSharedLinkSuccess = jest.fn().mockReturnValue(MOCK_ITEM_API_RESPONSE);
-const handleUpdateSharedLinkSuccess = jest.fn().mockReturnValue(MOCK_ITEM_API_RESPONSE);
+const handleUpdateSharedLinkError = jest.fn<void, []>();
+const handleRemoveSharedLinkSuccess = jest.fn<MockAPIResponse, []>().mockReturnValue(MOCK_ITEM_API_RESPONSE);
+const handleUpdateSharedLinkSuccess = jest.fn<MockAPIResponse, []>().mockReturnValue(MOCK_ITEM_API_RESPONSE);
 
-function FakeComponent({
-    api,
-    itemType,
-    permissions = MOCK_ITEM_PERMISSIONS,
-    options,
-}: {
-    api: API,
-    itemType: string,
-    options: Object,
-    permissions: BoxItemPermission,
-}) {
-    const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] = React.useState<null | SharedLinkUpdateFnType>(
-        null,
-    );
-    const [
-        changeSharedLinkPermissionLevel,
-        setChangeSharedLinkPermissionLevel,
-    ] = React.useState<null | SharedLinkUpdateFnType>(null);
-    const [onSubmitSettings, setOnSubmitSettings] = React.useState<null | Function>(null);
+// Removing unused type
+
+interface FakeComponentProps {
+    api: API;
+    itemType: string;
+    options: Record<string, unknown>;
+    permissions?: BoxItemPermission;
+}
+
+function FakeComponent({ api, itemType, permissions = MOCK_ITEM_PERMISSIONS, options }: FakeComponentProps) {
+    const [onAddLink, setOnAddLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [onRemoveLink, setOnRemoveLink] = React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [changeSharedLinkAccessLevel, setChangeSharedLinkAccessLevel] =
+        React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [changeSharedLinkPermissionLevel, setChangeSharedLinkPermissionLevel] =
+        React.useState<null | SharedLinkUpdateLevelFnType>(null);
+    const [onSubmitSettings, setOnSubmitSettings] = React.useState<
+        null | ((settings: Record<string, unknown>) => Promise<void>)
+    >(null);
     const [generatedFunctions, setGeneratedFunctions] = React.useState<boolean>(false);
 
     const {
@@ -70,19 +99,30 @@ function FakeComponent({
     return (
         generatedFunctions && (
             <>
-                <button onClick={changeSharedLinkAccessLevel} type="submit">
+                <button
+                    onClick={() => changeSharedLinkAccessLevel && changeSharedLinkAccessLevel(ANYONE_IN_COMPANY)}
+                    type="submit"
+                >
                     &#9835; changeSharedLinkAccessLevel &#9835;
                 </button>
-                <button onClick={changeSharedLinkPermissionLevel} type="submit">
+                <button
+                    onClick={() =>
+                        changeSharedLinkPermissionLevel && changeSharedLinkPermissionLevel(CAN_VIEW_DOWNLOAD)
+                    }
+                    type="submit"
+                >
                     &#9835; changeSharedLinkPermissionLevel &#9835;
                 </button>
-                <button onClick={onAddLink} type="submit">
+                <button onClick={() => onAddLink && onAddLink()} type="submit">
                     &#9835; onAddLink &#9835;
                 </button>
-                <button onClick={onRemoveLink} type="submit">
+                <button onClick={() => onRemoveLink && onRemoveLink()} type="submit">
                     &#9835; onRemoveLink &#9835;
                 </button>
-                <button onClick={onSubmitSettings} type="submit">
+                <button
+                    onClick={() => onSubmitSettings && onSubmitSettings(MOCK_SETTINGS_WITH_ALL_FEATURES)}
+                    type="submit"
+                >
                     &#9835; onSubmitSettings &#9835;
                 </button>
             </>
@@ -95,27 +135,66 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
         id: MOCK_ITEM_ID,
         permissions: MOCK_ITEM_PERMISSIONS,
     };
-    let mockAPI;
-    let share;
-    let updateSharedLink;
+    let mockAPI: MockAPI;
+    let share: jest.Mock<
+        void,
+        [Record<string, unknown>, string, MockSuccessCallback, MockFailureCallback, Record<string, unknown>]
+    >;
+    let updateSharedLink: jest.Mock<
+        void,
+        [
+            Record<string, unknown>,
+            Record<string, unknown>,
+            MockSuccessCallback,
+            MockFailureCallback,
+            Record<string, unknown>,
+        ]
+    >;
+
+    const transformAccess = jest.fn((accessType: string) => {
+        if (accessType === ANYONE_IN_COMPANY) return 'peopleInYourCompany';
+        return accessType;
+    });
+    const transformPermissions = jest.fn((permissionLevel: string) => {
+        if (permissionLevel === CAN_VIEW_DOWNLOAD) return 'canViewDownload';
+        return permissionLevel;
+    });
+    const transformSettings = jest.fn((settings: Record<string, unknown>) => settings);
 
     describe('with successful API calls', () => {
-        beforeAll(() => {
+        beforeEach(() => {
+            transformAccess.mockClear();
+            transformPermissions.mockClear();
+            transformSettings.mockClear();
             share = jest
                 .fn()
-                .mockImplementation((dataForAPI, accessType, successFn) => successFn(MOCK_ITEM_API_RESPONSE));
+                .mockImplementation(
+                    (dataForAPI: Record<string, unknown>, accessType: string, successFn: MockSuccessCallback) => {
+                        successFn(MOCK_ITEM_API_RESPONSE);
+                    },
+                );
             updateSharedLink = jest
                 .fn()
-                .mockImplementation((dataForAPI, sharedLinkParams, successFn) => successFn(MOCK_ITEM_API_RESPONSE));
+                .mockImplementation(
+                    (
+                        dataForAPI: Record<string, unknown>,
+                        sharedLinkParams: Record<string, unknown>,
+                        successFn: MockSuccessCallback,
+                    ) => {
+                        successFn(MOCK_ITEM_API_RESPONSE);
+                    },
+                );
+            transformPermissions.mockReturnValue('can_download');
+            transformAccess.mockReturnValue('can_download');
+            transformSettings.mockReturnValue({ permissions: 'can_download' });
+            const apiMethods: MockAPIInstance = {
+                share,
+                updateSharedLink,
+            };
+            const getAPI = jest.fn().mockReturnValue(apiMethods) as jest.Mock<MockAPIInstance>;
             mockAPI = {
-                getFileAPI: jest.fn().mockReturnValue({
-                    share,
-                    updateSharedLink,
-                }),
-                getFolderAPI: jest.fn().mockReturnValue({
-                    share,
-                    updateSharedLink,
-                }),
+                getFileAPI: getAPI,
+                getFolderAPI: getAPI,
             };
         });
 
@@ -127,7 +206,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
             ${TYPE_FOLDER} | ${2}        | ${undefined}         | ${undefined}         | ${'onAddLink'}
         `(
             'should set $description() and call success functions when invoked for a $itemType',
-            ({ itemType, buttonIndex, invokedFunctionArg, shareAccess }) => {
+            ({ itemType, buttonIndex }) => {
                 let fakeComponent;
 
                 act(() => {
@@ -145,12 +224,11 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                 const btn = fakeComponent.find('button').at(buttonIndex);
                 expect(btn.prop('onClick')).toBeDefined();
 
-                btn.invoke('onClick')(invokedFunctionArg);
-
+                btn.invoke('onClick')();
                 expect(share).toHaveBeenCalledWith(
                     MOCK_ITEM_DATA,
-                    shareAccess,
-                    expect.anything(Function),
+                    ANYONE_IN_COMPANY,
+                    expect.anything(),
                     handleUpdateSharedLinkError,
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
@@ -183,7 +261,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                 expect(share).toHaveBeenCalledWith(
                     MOCK_ITEM_DATA,
                     ACCESS_NONE,
-                    expect.anything(Function),
+                    expect.anything(),
                     handleRemoveSharedLinkError,
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
@@ -199,7 +277,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
             ${TYPE_FOLDER} | ${4}        | ${MOCK_SETTINGS_WITH_ALL_FEATURES} | ${MOCK_SETTINGS_WITH_ALL_FEATURES}          | ${MOCK_ITEM_PERMISSIONS}   | ${'onSubmitSettings'}
         `(
             'should set $description() and call success functions when invoked for a $itemType',
-            ({ itemType, buttonIndex, invokedFunctionArg, sharedLinkData, permissions }) => {
+            ({ itemType, buttonIndex, permissions }) => {
                 let fakeComponent;
 
                 act(() => {
@@ -217,22 +295,17 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                 const btn = fakeComponent.find('button').at(buttonIndex);
                 expect(btn.prop('onClick')).toBeDefined();
 
-                btn.invoke('onClick')(invokedFunctionArg);
-
+                btn.prop('onClick')();
                 expect(updateSharedLink).toHaveBeenCalledWith(
-                    { id: MOCK_ITEM_ID, permissions },
-                    sharedLinkData,
-                    expect.anything(Function),
+                    { id: MOCK_ITEM_ID, permissions: MOCK_ITEM_PERMISSIONS },
+                    { permissions: 'can_download' },
+                    expect.anything(),
                     handleUpdateSharedLinkError,
                     CONTENT_SHARING_SHARED_LINK_UPDATE_PARAMS,
                 );
                 expect(handleUpdateSharedLinkSuccess).toHaveBeenCalled();
             },
         );
-
-        const transformAccess = jest.fn();
-        const transformPermissions = jest.fn();
-        const transformSettings = jest.fn();
 
         test('should call transformAccess() when changeSharedLinkAccessLevel() is invoked', () => {
             let fakeComponent;
@@ -296,21 +369,44 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
     });
 
     describe('with failed API calls', () => {
-        const createShareFailureMock = () =>
-            jest.fn().mockImplementation((dataForAPI, accessType, successFn, failureFn) => failureFn());
+        const createShareFailureMock = () => {
+            return jest
+                .fn()
+                .mockImplementation(
+                    (
+                        _dataForAPI: Record<string, unknown>,
+                        _accessType: string,
+                        _successFn: MockSuccessCallback,
+                        failureFn: MockFailureCallback,
+                    ) => failureFn(),
+                ) as ShareMockType;
+        };
+
+        const createUpdateSharedLinkFailureMock = () => {
+            return jest
+                .fn()
+                .mockImplementation(
+                    (
+                        _dataForAPI: Record<string, unknown>,
+                        _sharedLinkParams: Record<string, unknown>,
+                        _successFn: MockSuccessCallback,
+                        failureFn: MockFailureCallback,
+                    ) => failureFn(),
+                ) as UpdateSharedLinkMockType;
+        };
+
         beforeAll(() => {
             share = createShareFailureMock();
-            updateSharedLink = createShareFailureMock();
+            updateSharedLink = createUpdateSharedLinkFailureMock();
 
+            const apiMethods: MockAPIInstance = {
+                share,
+                updateSharedLink,
+            };
+            const getAPI = jest.fn().mockReturnValue(apiMethods) as jest.Mock<MockAPIInstance>;
             mockAPI = {
-                getFileAPI: jest.fn().mockReturnValue({
-                    share,
-                    updateSharedLink,
-                }),
-                getFolderAPI: jest.fn().mockReturnValue({
-                    share,
-                    updateSharedLink,
-                }),
+                getFileAPI: getAPI,
+                getFolderAPI: getAPI,
             };
         });
 
@@ -328,7 +424,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
             ${TYPE_FOLDER} | ${4}        | ${MOCK_SETTINGS_WITH_ALL_FEATURES} | ${handleUpdateSharedLinkError} | ${'onSubmitSettings'}
         `(
             'should set $description() and call handleUpdateSharedLinkError() when invoked',
-            ({ itemType, buttonIndex, invokedFunctionArg, errorFn }) => {
+            ({ itemType, buttonIndex, errorFn }) => {
                 let fakeComponent;
 
                 act(() => {
@@ -336,6 +432,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
                         <FakeComponent
                             api={mockAPI}
                             itemType={itemType}
+                            permissions={MOCK_ITEM_PERMISSIONS}
                             options={{ handleUpdateSharedLinkError, handleRemoveSharedLinkError }}
                         />,
                     );
@@ -344,7 +441,7 @@ describe('elements/content-sharing/hooks/useSharedLink', () => {
 
                 const btn = fakeComponent.find('button').at(buttonIndex);
                 expect(btn.prop('onClick')).toBeDefined();
-                btn.invoke('onClick')(invokedFunctionArg);
+                btn.prop('onClick')();
                 expect(errorFn).toHaveBeenCalled();
             },
         );

@@ -13,7 +13,7 @@ import {
 const handleSuccess = jest.fn().mockReturnValue(MOCK_COLLABS_CONVERTED_RESPONSE);
 const handleError = jest.fn();
 
-function FakeComponent({ api, itemType }: { api: API, itemType: string }) {
+function FakeComponent({ api, itemType }: { api: API; itemType: string }) {
     const [collaboratorsList, setCollaboratorsList] = React.useState(null);
 
     const collabsResponse = useCollaborators(api, MOCK_ITEM_ID, itemType, { handleSuccess, handleError });
@@ -53,11 +53,7 @@ describe('elements/content-sharing/hooks/useCollaborators', () => {
                 fakeComponent = mount(<FakeComponent api={mockAPI} itemType={itemType} />);
             });
             fakeComponent.update();
-            expect(getCollaborations).toHaveBeenCalledWith(
-                MOCK_ITEM_ID,
-                expect.anything(Function),
-                expect.anything(Function),
-            );
+            expect(getCollaborations).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything());
             expect(handleSuccess).toHaveBeenCalled();
             expect(fakeComponent.find('div').text()).toBe(STRINGIFIED_MOCK_RESPONSE);
         });
@@ -85,11 +81,7 @@ describe('elements/content-sharing/hooks/useCollaborators', () => {
                 fakeComponent = mount(<FakeComponent api={mockAPI} itemType={itemType} />);
             });
             fakeComponent.update();
-            expect(getCollaborations).toHaveBeenCalledWith(
-                MOCK_ITEM_ID,
-                expect.anything(Function),
-                expect.anything(Function),
-            );
+            expect(getCollaborations).toHaveBeenCalledWith(MOCK_ITEM_ID, expect.anything(), expect.anything());
             expect(handleError).toHaveBeenCalled();
             expect(fakeComponent.find('div').text()).toBe(JSON.stringify({ entries: [], next_marker: null }));
         });
