@@ -1,49 +1,38 @@
-/**
- * @flow
- * @file File picker header and list component
- * @author Box
- */
-
 import * as React from 'react';
-// $FlowFixMe TypeScript file
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
-import type { View, Collection } from '../../common/types/core';
+import { View, Collection } from '../../common/types/core';
 
 import './Content.scss';
 
-type Props = {
-    canSetShareAccess: boolean,
-    currentCollection: Collection,
-    extensionsWhitelist: string[],
-    focusedRow: number,
-    hasHitSelectionLimit: boolean,
-    isSingleSelect: boolean,
-    isSmall: boolean,
-    onFocusChange: Function,
-    onItemClick: Function,
-    onItemSelect: Function,
-    onShareAccessChange: Function,
-    rootElement?: HTMLElement,
-    rootId: string,
-    selectableType: string,
-    tableRef: Function,
-    view: View,
-};
+export interface ContentProps {
+    canSetShareAccess: boolean;
+    currentCollection: Collection;
+    extensionsWhitelist: string[];
+    focusedRow: number;
+    hasHitSelectionLimit: boolean;
+    isSingleSelect: boolean;
+    isSmall: boolean;
+    onFocusChange: (row: number) => void;
+    onItemClick: (item: Record<string, unknown>) => void;
+    onItemSelect: (item: Record<string, unknown>) => void;
+    onShareAccessChange: (access: string) => void;
+    rootElement?: HTMLElement;
+    rootId: string;
+    selectableType: string;
+    tableRef: (ref: HTMLElement) => void;
+    view: View;
+}
 
 /**
  * Determines if we should show the empty state
- *
- * @param {string} view the current view
- * @param {Object} currentCollection the current collection
- * @return {boolean} empty or not
  */
-function isEmpty(view: View, currentCollection: Collection): boolean {
+const isEmpty = (view: View, currentCollection: Collection): boolean => {
     const { items = [] } = currentCollection;
     return view === VIEW_ERROR || items.length === 0;
-}
+};
 
 const Content = ({
     view,
@@ -62,7 +51,7 @@ const Content = ({
     onShareAccessChange,
     onFocusChange,
     extensionsWhitelist,
-}: Props) => (
+}: ContentProps): React.ReactElement => (
     <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
             <ProgressBar percent={currentCollection.percentLoaded} />
