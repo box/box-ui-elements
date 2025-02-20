@@ -5,6 +5,7 @@
  */
 
 import * as React from 'react';
+// $FlowFixMe TypeScript file
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
@@ -47,15 +48,17 @@ function isEmpty(view: View, currentCollection: Collection): boolean {
 const Content = ({
     view,
     rootId,
+    isSmall,
     rootElement,
+    focusedRow,
+    hasHitSelectionLimit,
+    selectableType,
     currentCollection,
     tableRef,
-    isSmall,
-    isSingleSelect,
-    hasHitSelectionLimit,
     canSetShareAccess,
-    onItemSelect,
+    isSingleSelect,
     onItemClick,
+    onItemSelect,
     onShareAccessChange,
     onFocusChange,
     extensionsWhitelist,
@@ -65,22 +68,24 @@ const Content = ({
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}
         {isEmpty(view, currentCollection) ? (
-            <EmptyView />
+            <EmptyView view={view} isLoading={currentCollection.percentLoaded !== 100} />
         ) : (
             <ItemList
                 view={view}
                 rootId={rootId}
+                isSmall={isSmall}
                 rootElement={rootElement}
+                focusedRow={focusedRow}
                 currentCollection={currentCollection}
                 tableRef={tableRef}
-                isSmall={isSmall}
-                isSingleSelect={isSingleSelect}
-                hasHitSelectionLimit={hasHitSelectionLimit}
                 canSetShareAccess={canSetShareAccess}
+                hasHitSelectionLimit={hasHitSelectionLimit}
+                isSingleSelect={isSingleSelect}
+                selectableType={selectableType}
                 onItemSelect={onItemSelect}
                 onItemClick={onItemClick}
-                onShareAccessChange={onShareAccessChange}
                 onFocusChange={onFocusChange}
+                onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
             />
         )}

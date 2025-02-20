@@ -39,22 +39,22 @@ const isEmpty = (view: View, currentCollection: Collection): boolean => {
 };
 
 const Content = ({
-    view,
-    rootId,
-    isSmall,
-    rootElement,
+    canSetShareAccess,
+    currentCollection,
+    extensionsWhitelist,
     focusedRow,
     hasHitSelectionLimit,
-    selectableType,
-    currentCollection,
-    tableRef,
-    canSetShareAccess,
     isSingleSelect,
+    isSmall,
+    onFocusChange,
     onItemClick,
     onItemSelect,
     onShareAccessChange,
-    onFocusChange,
-    extensionsWhitelist,
+    rootElement,
+    rootId,
+    selectableType,
+    tableRef,
+    view,
 }: ContentProps): React.ReactElement => (
     <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
@@ -64,22 +64,22 @@ const Content = ({
             <EmptyView view={view} isLoading={currentCollection.percentLoaded !== 100} />
         ) : (
             <ItemList
-                view={view}
-                rootId={rootId}
-                isSmall={isSmall}
-                rootElement={rootElement}
-                focusedRow={focusedRow}
-                currentCollection={currentCollection}
-                tableRef={tableRef}
                 canSetShareAccess={canSetShareAccess}
+                currentCollection={currentCollection}
+                extensionsWhitelist={extensionsWhitelist}
+                focusedRow={focusedRow}
                 hasHitSelectionLimit={hasHitSelectionLimit}
                 isSingleSelect={isSingleSelect}
-                selectableType={selectableType}
-                onItemSelect={onItemSelect}
-                onItemClick={onItemClick}
+                isSmall={isSmall}
                 onFocusChange={onFocusChange}
+                onItemClick={onItemClick}
+                onItemSelect={onItemSelect}
                 onShareAccessChange={onShareAccessChange}
-                extensionsWhitelist={extensionsWhitelist}
+                rootElement={rootElement}
+                rootId={rootId}
+                selectableType={selectableType}
+                tableRef={tableRef}
+                view={view}
             />
         )}
     </div>
