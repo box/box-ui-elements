@@ -1,0 +1,52 @@
+[
+  {
+    "id": "boxui.shareMenu.inviteCollabs",
+    "description": "Label for menu option to invite collaborators to item",
+    "defaultMessage": "Invite Collaborators"
+  },
+  {
+    "id": "boxui.shareMenu.insufficientPermissionsTooltip",
+    "description": "Tooltip to show when user does not have permission to invite collaborators to item",
+    "defaultMessage": "You have insufficient permissions to invite collaborators."
+  },
+  {
+    "id": "boxui.shareMenu.ownerCoownerOnlyTooltip",
+    "description": "Tooltip to show when only owners and co-owners are allowed to invite collaborators to item",
+    "defaultMessage": "You have insufficient permissions to invite collaborators. Only the owner and co-owners can invite collaborators."
+  },
+  {
+    "id": "boxui.shareMenu.editAndComment",
+    "description": "Description of permissions granted when inviting a collab to this item",
+    "defaultMessage": "Edit and Comment"
+  },
+  {
+    "id": "boxui.shareMenu.getSharedLink",
+    "description": "Label for menu option to get shared link for item (title-case)",
+    "defaultMessage": "Get Shared Link"
+  },
+  {
+    "id": "boxui.shareMenu.viewAndDownload",
+    "description": "Description of permissions granted to users who have access to the shared link",
+    "defaultMessage": "View and Download"
+  },
+  {
+    "id": "boxui.shareMenu.viewOnly",
+    "description": "Description of permissions granted to users who have access to the shared link",
+    "defaultMessage": "View Only"
+  },
+  {
+    "id": "boxui.shareMenu.downloadOnly",
+    "description": "Description of permissions granted to users who have access to the shared link",
+    "defaultMessage": "Download Only"
+  },
+  {
+    "id": "boxui.shareMenu.shortcutOnly",
+    "description": "Description of permissions granted to users who have access to the shared link",
+    "defaultMessage": "Shortcut Only"
+  },
+  {
+    "id": "boxui.shareMenu.insufficientPermissionsMenuOption",
+    "description": "Label for disabled menu option when user does not have permission to get shared link for item",
+    "defaultMessage": "Insufficient sharing permissions. Please contact the folder owner."
+  }
+]

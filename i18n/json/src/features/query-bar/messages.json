@@ -1,0 +1,102 @@
+[
+  {
+    "id": "boxui.queryBar.tooltipEnterValueError",
+    "description": "Text displayed on the Tooltip for an input field",
+    "defaultMessage": "Please Enter a Value"
+  },
+  {
+    "id": "boxui.queryBar.tooltipInvalidFloatError",
+    "description": "Text displayed on the Tooltip for an input field of type float",
+    "defaultMessage": "Please Enter a Decimal Number"
+  },
+  {
+    "id": "boxui.queryBar.tooltipInvalidNumberError",
+    "description": "Text displayed on the Tooltip for an input field of type number",
+    "defaultMessage": "Please Enter an Integer"
+  },
+  {
+    "id": "boxui.queryBar.tooltipSelectValueError",
+    "description": "Text displayed on the Tooltip for a value field",
+    "defaultMessage": "Please Select a Value"
+  },
+  {
+    "id": "boxui.queryBar.tooltipSelectDateError",
+    "description": "Text displayed on the Tooltip for a date field",
+    "defaultMessage": "Please Select a Date"
+  },
+  {
+    "id": "boxui.queryBar.metadataViewTemplateListHeaderTitle",
+    "description": "Header text shown in template dropdown",
+    "defaultMessage": "METADATA TEMPLATES"
+  },
+  {
+    "id": "boxui.queryBar.selectValuePlaceholderText",
+    "description": "Placeholder text on the value button, on click should open a dropdown",
+    "defaultMessage": "Select value"
+  },
+  {
+    "id": "boxui.queryBar.connectorWhereText",
+    "description": "Text on the label, the first condition will show WHERE",
+    "defaultMessage": "WHERE"
+  },
+  {
+    "id": "boxui.queryBar.connectorAndText",
+    "description": "Text on the connector dropdown, on click should open a dropdown showing either AND or OR",
+    "defaultMessage": "AND"
+  },
+  {
+    "id": "boxui.queryBar.connectorOrText",
+    "description": "Text on the connector dropdown, on click should open a dropdown showing either AND or OR",
+    "defaultMessage": "OR"
+  },
+  {
+    "id": "boxui.queryBar.addFilterButtonText",
+    "description": "Text on the add filter button, on click generates another filter row",
+    "defaultMessage": "+ Add Filter"
+  },
+  {
+    "id": "boxui.queryBar.applyFiltersButtonText",
+    "description": "Text on the apply filter button, on click applies the filters",
+    "defaultMessage": "Apply"
+  },
+  {
+    "id": "boxui.queryBar.templatesLoadingButtonText",
+    "description": "Text on the templates button when templates are still being loaded",
+    "defaultMessage": "Template Name"
+  },
+  {
+    "id": "boxui.queryBar.noTemplatesText",
+    "description": "Text on the templates button when templates have been loaded and there are no templates in the enterprise",
+    "defaultMessage": "No Templates Available"
+  },
+  {
+    "id": "boxui.queryBar.templatesButtonText",
+    "description": "Text on the templates button, on click opens a menu which allows users to select a metadata templates",
+    "defaultMessage": "Select Metadata"
+  },
+  {
+    "id": "boxui.queryBar.filtersButtonText",
+    "description": "Text on the filters button, on click opens a menu which allows users to filter through the files",
+    "defaultMessage": "Modify Filters"
+  },
+  {
+    "id": "boxui.queryBar.multipleFiltersButtonText",
+    "description": "Text on the filters button, will display a number in front of the filters text indicating how many filters are applied",
+    "defaultMessage": "{number} Filters"
+  },
+  {
+    "id": "boxui.queryBar.noFiltersAppliedText",
+    "description": "Text on the filters dropdown that is displayed when no filters have been inserted",
+    "defaultMessage": "No Filters Applied"
+  },
+  {
+    "id": "boxui.queryBar.columnsButtonText",
+    "description": "Text on the columns button, on click opens a menu which allows users to choose which columns to render",
+    "defaultMessage": "Columns"
+  },
+  {
+    "id": "boxui.queryBar.columnsHiddenButtonText",
+    "description": "Text on the columns button, if one or more columns have been hidden then it will display this text",
+    "defaultMessage": "{count, plural, one {1 Column Hidden} other {{count} Columns Hidden}}"
+  }
+]
