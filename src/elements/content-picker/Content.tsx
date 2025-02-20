@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file File picker header and list component
- * @author Box
- */
-
 import * as React from 'react';
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
