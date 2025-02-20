@@ -1,4 +1,6 @@
-import type { SelectOptionProp } from '../../../../components/select-field/props';
+export interface Pill {
+    displayText: string;
+    value: string | number;
+}
 
-export type Pill = SelectOptionProp;
-export type Pills = Array<SelectOptionProp>;
+export type Pills = Array<Pill>;
