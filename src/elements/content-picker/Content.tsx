@@ -1,3 +1,9 @@
+/**
+ * @flow
+ * @file File picker header and list component
+ * @author Box
+ */
+
 import * as React from 'react';
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
@@ -28,6 +34,10 @@ export interface ContentProps {
 
 /**
  * Determines if we should show the empty state
+ *
+ * @param {string} view the current view
+ * @param {Object} currentCollection the current collection
+ * @return {boolean} empty or not
  */
 const isEmpty = (view: View, currentCollection: Collection): boolean => {
     const { items = [] } = currentCollection;
