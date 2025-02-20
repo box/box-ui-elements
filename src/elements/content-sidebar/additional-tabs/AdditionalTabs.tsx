@@ -1,39 +1,26 @@
-/**
- * @flow
- * @file Preview sidebar additional tabs component
- * @author Box
- */
-
 import React, { PureComponent } from 'react';
 import AdditionalTab from './AdditionalTab';
 import AdditionalTabsLoading from './AdditionalTabsLoading';
 import type { AdditionalSidebarTab } from '../flowTypes';
-
 import './AdditionalTabs.scss';
 
-type Props = {
-    tabs?: Array<AdditionalSidebarTab>,
-};
+interface Props {
+    tabs?: AdditionalSidebarTab[];
+}
 
-type State = {
-    isLoading: boolean,
-};
+interface State {
+    isLoading: boolean;
+}
 
 class AdditionalTabs extends PureComponent<Props, State> {
-    numLoadedTabs: number = 0;
+    private numLoadedTabs: number = 0;
 
     constructor(props: Props) {
         super(props);
-
         this.state = { isLoading: true };
     }
 
-    /**
-     * Handles an individual icon image load
-     *
-     * @return {void}
-     */
-    onImageLoad = () => {
+    onImageLoad = (): void => {
         const { tabs } = this.props;
 
         if (!tabs) {
@@ -52,7 +39,7 @@ class AdditionalTabs extends PureComponent<Props, State> {
         }
     };
 
-    render() {
+    render(): React.ReactElement {
         const { tabs } = this.props;
         const { isLoading } = this.state;
 

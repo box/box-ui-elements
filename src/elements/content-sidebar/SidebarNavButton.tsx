@@ -1,29 +1,23 @@
-/**
- * @flow
- * @file Preview sidebar nav button component
- * @author Box
- */
-
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 import noop from 'lodash/noop';
 import NavButton from '../common/nav-button';
-import Tooltip from '../../components/tooltip/Tooltip';
+import Tooltip, { TooltipPosition } from '../../components/tooltip/Tooltip';
 import './SidebarNavButton.scss';
 
-type Props = {
-    'data-resin-target'?: string,
-    'data-testid'?: string,
-    children: React.Node,
-    elementId?: string,
-    isDisabled?: boolean,
-    isOpen?: boolean,
-    onClick?: (sidebarView: string) => void,
-    sidebarView: string,
-    tooltip: React.Node,
-};
+interface Props {
+    'data-resin-target'?: string;
+    'data-testid'?: string;
+    children: React.ReactNode;
+    elementId?: string;
+    isDisabled?: boolean;
+    isOpen?: boolean;
+    onClick?: (sidebarView: string) => void;
+    sidebarView: string;
+    tooltip: React.ReactNode;
+}
 
-const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
+const SidebarNavButton = React.forwardRef<HTMLButtonElement, Props>((props, ref) => {
     const {
         'data-resin-target': dataResinTarget,
         'data-testid': dataTestId,
@@ -51,7 +45,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
                 return (
-                    <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
+                    <Tooltip position={TooltipPosition.MIDDLE_LEFT} text={tooltip} isTabbable={false}>
                         <NavButton
                             activeClassName="bcs-is-selected"
                             aria-selected={isActiveValue}
@@ -67,7 +61,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             onClick={handleNavButtonClick}
                             replace={isExactMatch}
                             role="tab"
-                            tabIndex={isActiveValue ? '0' : '-1'}
+                            tabIndex={isActiveValue ? 0 : -1}
                             to={{
                                 pathname: sidebarPath,
                                 state: { open: true },

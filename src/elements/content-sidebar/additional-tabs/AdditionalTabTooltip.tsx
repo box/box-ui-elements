@@ -1,26 +1,25 @@
-/**
- * @flow
- * @file Sidebar Additional Tab FTUX tooltip
- * @author Box
- */
-
 import * as React from 'react';
 import Tooltip from '../../common/Tooltip';
 import TargetedClickThroughGuideTooltip from '../../../features/targeting/TargetedClickThroughGuideTooltip';
 import type { AdditionalSidebarTabFtuxData } from '../flowTypes';
 import './AdditionalTabTooltip.scss';
 
-type Props = {
-    children: React.Node,
-    defaultTooltipText: ?string | React.Node,
-    ftuxTooltipData?: AdditionalSidebarTabFtuxData,
-    isFtuxVisible: boolean,
-};
+interface Props {
+    children: React.ReactNode;
+    defaultTooltipText: React.ReactNode | null;
+    ftuxTooltipData?: AdditionalSidebarTabFtuxData;
+    isFtuxVisible: boolean;
+}
 
-const AdditionalTabTooltip = ({ children, defaultTooltipText, isFtuxVisible, ftuxTooltipData }: Props) => {
+const AdditionalTabTooltip = ({
+    children,
+    defaultTooltipText,
+    isFtuxVisible,
+    ftuxTooltipData,
+}: Props): React.ReactElement => {
     if (!isFtuxVisible || !ftuxTooltipData || !ftuxTooltipData.targetingApi().canShow) {
         return (
-            <Tooltip position="middle-left" text={defaultTooltipText}>
+            <Tooltip position="middle-right" text={defaultTooltipText}>
                 {children}
             </Tooltip>
         );
