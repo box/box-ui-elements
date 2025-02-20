@@ -28,10 +28,6 @@ export interface ContentProps {
 
 /**
  * Determines if we should show the empty state
- *
- * @param {string} view the current view
- * @param {Object} currentCollection the current collection
- * @return {boolean} empty or not
  */
 const isEmpty = (view: View, currentCollection: Collection): boolean => {
     const { items = [] } = currentCollection;
