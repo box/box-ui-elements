@@ -1,5 +1,6 @@
-import React from 'react';
+import * as React from 'react';
 import { render, screen } from '../../../../test-utils/testing-library';
+import '@testing-library/jest-dom';
 import Breadcrumbs from '../Breadcrumbs';
 import type { Crumb } from '../../../../common/types/core';
 
