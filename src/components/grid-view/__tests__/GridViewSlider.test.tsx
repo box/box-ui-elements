@@ -30,12 +30,16 @@ describe('components/grid-view/GridViewSlider', () => {
         expect(screen.queryByRole('slider')).not.toBeInTheDocument();
     });
 
-    test('should call onChange when slider value changes', () => {
+    test('should call onChange when clicking increase/decrease buttons', () => {
         const onChange = jest.fn();
         renderComponent({ onChange });
-        const slider = screen.getByRole('slider');
-        expect(slider).toBeInTheDocument();
-        fireEvent.change(slider, { target: { value: '5' } });
+        const increaseButton = screen.getByRole('button', { name: 'Increase column size' });
+        const decreaseButton = screen.getByRole('button', { name: 'Decrease column size' });
+        expect(increaseButton).toBeInTheDocument();
+        expect(decreaseButton).toBeInTheDocument();
+        fireEvent.click(increaseButton);
         expect(onChange).toHaveBeenCalled();
+        fireEvent.click(decreaseButton);
+        expect(onChange).toHaveBeenCalledTimes(2);
     });
 });
