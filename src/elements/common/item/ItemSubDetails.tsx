@@ -15,11 +15,11 @@ export interface ItemSubDetailsProps {
 }
 
 const ItemSubDetails = ({ item, view }: ItemSubDetailsProps) => {
-    const { modified_at = '', interacted_at = '', modified_by }: BoxItem = item;
+    const { modified_at = '', interacted_at = '', modified_by, size }: BoxItem = item;
     const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = view === VIEW_RECENTS;
     const date: string = isRecents ? interacted_at || modified_at : modified_at;
-    const { size }: BoxItem = item;
+    if (!date) return null;
     const DateValue = <DateField date={date} omitCommas />;
 
     let message = messages.modifiedDateBy;
