@@ -1,24 +1,23 @@
-// @flow
 import * as React from 'react';
 
 import Tooltip from '../tooltip';
 import { useIsContentOverflowed } from '../../utils/dom';
 
-type Props = {
-    actionItem?: React.Element<any>,
-    icon?: React.Node,
-    onKeyDown?: () => void,
-    subtitle?: React.Node,
-    title: React.Node,
-};
+export interface ThumbnailCardDetailsProps {
+    actionItem?: React.ReactElement;
+    icon?: React.ReactNode;
+    onKeyDown?: () => void;
+    subtitle?: React.ReactNode;
+    title: React.ReactNode;
+}
 
-type TitleProps = {
-    onKeyDown?: () => void,
-    title: React.Node,
-};
+interface TitleProps {
+    onKeyDown?: () => void;
+    title: React.ReactNode;
+}
 
 const Title = ({ title, onKeyDown }: TitleProps) => {
-    const textRef: { current: null | HTMLElement } = React.useRef(null);
+    const textRef = React.useRef<HTMLDivElement>(null);
     const isTextOverflowed = useIsContentOverflowed(textRef);
 
     return (
@@ -31,7 +30,7 @@ const Title = ({ title, onKeyDown }: TitleProps) => {
     );
 };
 
-const ThumbnailCardDetails = ({ actionItem, icon, subtitle, title, onKeyDown }: Props) => (
+const ThumbnailCardDetails = ({ actionItem, icon, subtitle, title, onKeyDown }: ThumbnailCardDetailsProps) => (
     <div className="thumbnail-card-details">
         {icon}
         <div className="thumbnail-card-details-content">

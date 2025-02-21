@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 
@@ -7,16 +6,16 @@ import ThumbnailCardThumbnail from './ThumbnailCardThumbnail';
 
 import './ThumbnailCard.scss';
 
-type Props = {
-    actionItem?: React.Element<any>,
-    className?: string,
-    highlightOnHover?: boolean,
-    icon?: React.Node,
-    onKeyDown?: () => void,
-    subtitle?: React.Node,
-    thumbnail: React.Node,
-    title: React.Node,
-};
+export interface ThumbnailCardProps {
+    actionItem?: React.ReactElement;
+    className?: string;
+    highlightOnHover?: boolean;
+    icon?: React.ReactNode;
+    onKeyDown?: () => void;
+    subtitle?: React.ReactNode;
+    thumbnail: React.ReactNode;
+    title: React.ReactNode;
+}
 
 const ThumbnailCard = ({
     actionItem,
@@ -28,7 +27,7 @@ const ThumbnailCard = ({
     thumbnail,
     title,
     ...rest
-}: Props) => (
+}: ThumbnailCardProps) => (
     <div
         className={classNames('thumbnail-card', className, { 'is-highlight-applied': highlightOnHover })}
         role={onKeyDown ? null : 'button'}

@@ -1,11 +1,10 @@
-// @flow
 import * as React from 'react';
 
-type Props = {
-    thumbnail: React.Node,
-};
+export interface ThumbnailCardThumbnailProps {
+    thumbnail: React.ReactNode;
+}
 
-const ThumbnailCardThumbnail = ({ thumbnail }: Props) => (
+const ThumbnailCardThumbnail = ({ thumbnail }: ThumbnailCardThumbnailProps) => (
     <div className="thumbnail-card-thumbnail-container">
         <div className="thumbnail-card-thumbnail-viewport">{thumbnail}</div>
     </div>
