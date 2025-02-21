@@ -1,9 +1,10 @@
 import React from 'react';
-import { render, screen } from '../../../test-utils/testing-library';
+import { render, screen, fireEvent } from '../../../test-utils/testing-library';
+import type { GridViewSliderProps } from '../GridViewSlider';
 import GridViewSlider from '../GridViewSlider';
 
 describe('components/grid-view/GridViewSlider', () => {
-    const renderComponent = (props = {}) => {
+    const renderComponent = (props: Partial<GridViewSliderProps> = {}) => {
         const defaultProps = {
             columnCount: 4,
             gridMaxColumns: 7,
@@ -30,7 +31,9 @@ describe('components/grid-view/GridViewSlider', () => {
     test('should call onChange when slider value changes', () => {
         const onChange = jest.fn();
         renderComponent({ onChange });
-        const slider = screen.getByRole('slider');
+        const slider = screen.getByRole('slider', { name: 'Grid view size' });
         expect(slider).toBeInTheDocument();
+        fireEvent.change(slider, { target: { value: '5' } });
+        expect(onChange).toHaveBeenCalled();
     });
 });
