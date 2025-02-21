@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Component for the details for the item name
- * @author Box
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from '../messages';
@@ -12,20 +6,28 @@ import { DELIMITER_SLASH } from '../../../constants';
 import type { BoxItem } from '../../../common/types/core';
 import './InlineBreadcrumbs.scss';
 
-type Props = {
-    item: BoxItem,
-    onItemClick: Function,
-    rootId: string,
-};
+export interface InlineBreadcrumbsProps {
+    item: BoxItem;
+    onItemClick: (item: BoxItem) => void;
+    rootId: string;
+}
 
-const InlineBreadcrumbs = ({ item, onItemClick, rootId }: Props) => {
+const InlineBreadcrumbs = ({ item, onItemClick, rootId }: InlineBreadcrumbsProps) => {
     const { path_collection }: BoxItem = item;
     const { entries: breadcrumbs = [] } = path_collection || {};
     return (
         <span className="be-inline-breadcrumbs">
             <FormattedMessage {...messages.in} />
             &nbsp;
-            <Breadcrumbs crumbs={breadcrumbs} delimiter={DELIMITER_SLASH} onCrumbClick={onItemClick} rootId={rootId} />
+            <Breadcrumbs
+                crumbs={breadcrumbs}
+                delimiter={DELIMITER_SLASH}
+                onCrumbClick={crumb => {
+                    // Crumbs from path_collection are already BoxItems
+                    onItemClick(crumb as BoxItem);
+                }}
+                rootId={rootId}
+            />
         </span>
     );
 };
