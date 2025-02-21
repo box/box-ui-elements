@@ -61,7 +61,7 @@ const Content = ({
             <ProgressBar percent={currentCollection.percentLoaded} />
         )}
         {isEmpty(view, currentCollection) ? (
-            <EmptyView view={view} isLoading={currentCollection.percentLoaded !== 100} />
+            <EmptyView isLoading={currentCollection.percentLoaded !== 100} view={view} />
         ) : (
             <ItemList
                 canSetShareAccess={canSetShareAccess}
