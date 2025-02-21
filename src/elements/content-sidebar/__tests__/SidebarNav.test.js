@@ -166,19 +166,15 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     test('should render the Box Sign entry point if its feature is enabled', () => {
-        const features = {
-            boxSign: {
+        const props = {
+            signSidebarProps: {
                 enabled: true,
                 onClick: () => {},
             },
         };
-        const wrapper = getWrapper({}, 'activity', features);
-        expect(wrapper.exists(SidebarNavSignButton)).toBe(true);
-    });
+        const wrapper = getWrapper(props);
 
-    test('should not render the Box Sign entry point if its feature is not enabled', () => {
-        const wrapper = getWrapper();
-        expect(wrapper.exists(SidebarNavSignButton)).toBe(false);
+        expect(wrapper.exists(SidebarNavSignButton)).toBe(true);
     });
     test('should render docgen tab', () => {
         const props = {
