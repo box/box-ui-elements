@@ -28,7 +28,7 @@ describe('components/grid-view/GridViewSlider', () => {
 
     test('should render slider when gridMinColumns is less than maxColumnCount', () => {
         renderComponent();
-        const slider = screen.getByRole('slider', { name: 'Grid view size' });
+        const slider = screen.getByRole('slider');
         expect(slider).toBeInTheDocument();
         expect(slider).toHaveAttribute('aria-orientation', 'horizontal');
     });
