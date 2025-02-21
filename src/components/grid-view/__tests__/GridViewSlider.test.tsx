@@ -3,6 +3,12 @@ import { render, screen, fireEvent } from '../../../test-utils/testing-library';
 import type { GridViewSliderProps } from '../GridViewSlider';
 import GridViewSlider from '../GridViewSlider';
 
+jest.mock('react-intl', () => ({
+    useIntl: () => ({
+        formatMessage: ({ defaultMessage }) => defaultMessage,
+    }),
+}));
+
 describe('components/grid-view/GridViewSlider', () => {
     const renderComponent = (props: Partial<GridViewSliderProps> = {}) => {
         const defaultProps = {
