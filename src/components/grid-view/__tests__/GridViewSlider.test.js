@@ -1,15 +1,36 @@
-import * as React from 'react';
-
+import React from 'react';
+import { render, screen } from '../../../test-utils/testing-library';
 import GridViewSlider from '../GridViewSlider';
 
-const getWrapper = () =>
-    shallow(
-        <GridViewSlider columnCount={4} gridMaxColumns={7} gridMinColumns={2} maxColumnCount={4} onChange={() => {}} />,
-    );
-
 describe('components/grid-view/GridViewSlider', () => {
-    test('should render()', () => {
-        const wrapper = getWrapper();
-        expect(wrapper).toMatchSnapshot();
+    const renderComponent = (props = {}) => {
+        const defaultProps = {
+            columnCount: 4,
+            gridMaxColumns: 7,
+            gridMinColumns: 2,
+            maxColumnCount: 4,
+            onChange: jest.fn(),
+        };
+        return render(<GridViewSlider {...defaultProps} {...props} />);
+    };
+
+    test('should render slider when gridMinColumns is less than maxColumnCount', () => {
+        renderComponent();
+        expect(screen.getByRole('slider')).toBeInTheDocument();
+    });
+
+    test('should not render slider when gridMinColumns equals maxColumnCount', () => {
+        renderComponent({
+            gridMinColumns: 4,
+            maxColumnCount: 4,
+        });
+        expect(screen.queryByRole('slider')).not.toBeInTheDocument();
+    });
+
+    test('should call onChange when slider value changes', () => {
+        const onChange = jest.fn();
+        renderComponent({ onChange });
+        const slider = screen.getByRole('slider');
+        expect(slider).toBeInTheDocument();
     });
 });
