@@ -1,0 +1,12 @@
+rules:
+  - name: localize-aria-labels
+    trigger: >-
+      when adding aria-label attributes or other user-facing text, ensure the
+      strings are localized
+
+      for example: aria-label="Expand" should instead use formatMessage(...)
+    solution: >-
+      wrap any user-visible string in formatMessage from useIntl so that it can
+      be properly localized
+
+      e.g. aria-label={formatMessage(messages.someLabel)}
