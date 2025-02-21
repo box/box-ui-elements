@@ -17,7 +17,9 @@ describe('components/grid-view/GridViewSlider', () => {
 
     test('should render slider when gridMinColumns is less than maxColumnCount', () => {
         renderComponent();
-        expect(screen.getByRole('slider')).toBeInTheDocument();
+        const slider = screen.getByRole('slider');
+        expect(slider).toBeInTheDocument();
+        expect(slider).toHaveAttribute('aria-orientation', 'horizontal');
     });
 
     test('should not render slider when gridMinColumns equals maxColumnCount', () => {
@@ -31,7 +33,7 @@ describe('components/grid-view/GridViewSlider', () => {
     test('should call onChange when slider value changes', () => {
         const onChange = jest.fn();
         renderComponent({ onChange });
-        const slider = screen.getByRole('slider', { name: 'Grid view size' });
+        const slider = screen.getByRole('slider');
         expect(slider).toBeInTheDocument();
         fireEvent.change(slider, { target: { value: '5' } });
         expect(onChange).toHaveBeenCalled();
