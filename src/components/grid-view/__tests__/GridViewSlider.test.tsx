@@ -6,6 +6,11 @@ import GridViewSlider from '../GridViewSlider';
 jest.mock('react-intl', () => ({
     useIntl: () => ({
         formatMessage: ({ defaultMessage }) => defaultMessage,
+        formatDate: jest.fn(),
+        formatTime: jest.fn(),
+        formatRelative: jest.fn(),
+        formatNumber: jest.fn(),
+        formatPlural: jest.fn(),
     }),
 }));
 
