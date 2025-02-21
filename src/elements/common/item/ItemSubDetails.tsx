@@ -19,7 +19,6 @@ const ItemSubDetails = ({ item, view }: ItemSubDetailsProps) => {
     const modifiedBy: string = modified_by ? modified_by.name || '' : '';
     const isRecents: boolean = view === VIEW_RECENTS;
     const date: string = isRecents ? interacted_at || modified_at : modified_at;
-    if (!date) return null;
     const DateValue = <DateField date={date} omitCommas />;
 
     let message = messages.modifiedDateBy;
