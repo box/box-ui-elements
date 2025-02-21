@@ -579,6 +579,27 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
         });
     });
 
+    describe('noItemsRenderer', () => {
+        const customEmptyStateClassName = 'custom-empty-state';
+
+        test('should render custom empty state when specified', () => {
+            const wrapper = renderComponent(
+                { noItemsRenderer: () => <div className={customEmptyStateClassName} /> },
+                true,
+            );
+
+            expect(wrapper.exists(`.${customEmptyStateClassName}`)).toBe(true);
+            expect(wrapper.exists('ContentExplorerEmptyState')).toBe(false);
+        });
+
+        test('should render default empty state when not specified', () => {
+            const wrapper = renderComponent({}, true);
+
+            expect(wrapper.exists('ContentExplorerEmptyState')).toBe(true);
+            expect(wrapper.exists(`.${customEmptyStateClassName}`)).toBe(false);
+        });
+    });
+
     describe('handleDocumentClick', () => {
         test('should deselect when the click did not occur inside the content explorer and not in multi select mode', () => {
             const item = { id: 'id', name: 'name' };

@@ -36,6 +36,7 @@ type Props = {
     shouldNotUsePortal?: boolean,
     title?: string,
     infoNoticeText?: string,
+    noItemsRenderer?: Function,
 };
 
 const ContentExplorerModal = ({

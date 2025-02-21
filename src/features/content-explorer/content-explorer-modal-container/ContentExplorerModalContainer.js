@@ -153,6 +153,8 @@ class ContentExplorerModalContainer extends Component {
         chooseButtonText: PropTypes.node,
         /** Text for the informational notice, defaults to empty string, which makes notice not visible */
         infoNoticeText: PropTypes.string,
+        /** Used to render the no items state. Overrides the default no items state. */
+        noItemsRenderer: PropTypes.func,
     };
 
     static defaultProps = {
