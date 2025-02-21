@@ -15,9 +15,9 @@ export interface ItemDateProps {
 }
 
 const ItemDate = ({ item, view }: ItemDateProps) => {
-    const { interacted_at: interactedAt, modified_at: modifiedAt, modified_by: modifiedBy } = item;
-
     const { formatMessage } = useIntl();
+    const { interacted_at: interactedAt, modified_at: modifiedAt, modified_by: modifiedBy } = item;
+    if (!modifiedAt) return null;
 
     if (view === VIEW_RECENTS) {
         return (
