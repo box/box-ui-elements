@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { renderWithIntl } from '../../../../test-utils/intl-test-utils';
+import { renderWithIntl } from '../../../test-utils/intl-test-utils';
 import DateField from '../DateField';
 
 describe('components/DateField', () => {
