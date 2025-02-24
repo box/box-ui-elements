@@ -13,13 +13,21 @@ import './ActivityThreadReplies.scss';
 interface ActivityThreadRepliesProps {
     currentUser?: User;
     getAvatarUrl: GetAvatarUrlCallback;
-    getMentionWithQuery?: Function;
+    getMentionWithQuery?: (searchStr: string) => void;
     getUserProfileUrl?: GetProfileUrlCallback;
     hasNewThreadedReplies?: boolean;
     isRepliesLoading?: boolean;
     mentionSelectorContacts?: SelectorItems<User>;
-    onDelete?: Function;
-    onEdit?: Function;
+    onDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
+    onEdit?: (
+        id: string,
+        text: string,
+        status: string,
+        hasMention: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess?: () => void,
+        onError?: (error: Error) => void,
+    ) => void;
     onSelect?: (isSelected: boolean) => void;
     replies: Array<CommentType>;
     translations?: Translations;
@@ -48,7 +56,23 @@ const ActivityThreadReplies: React.FC<ActivityThreadRepliesProps> = ({
         };
     };
 
-    const handleOnEdit = ({ hasMention, id, onError, onSuccess, permissions, status, text }): void => {
+    const handleOnEdit = ({
+        hasMention,
+        id,
+        onError,
+        onSuccess,
+        permissions,
+        status,
+        text,
+    }: {
+        hasMention: boolean;
+        id: string;
+        onError?: (error: Error) => void;
+        onSuccess?: () => void;
+        permissions: BoxCommentPermission;
+        status: string;
+        text: string;
+    }): void => {
         if (onEdit) {
             onEdit(id, text, status, hasMention, permissions, onSuccess, onError);
         }

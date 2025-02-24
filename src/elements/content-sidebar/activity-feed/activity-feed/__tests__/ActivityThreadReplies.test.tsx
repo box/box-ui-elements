@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import ActivityThreadReplies from '../ActivityThreadReplies';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Comment } from '../../../../../common/types/feed';
 import { replies } from '../fixtures';
 
 describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThreadReplies', () => {
-    const getWrapper = async (
-        props?: Partial<{ replies: Array<Comment>; isExpanded: boolean; isRepliesLoading?: boolean }>,
-    ) => {
+    const getWrapper = async (props?: Partial<React.ComponentProps<typeof ActivityThreadReplies>>) => {
         const result = render(
             <ActivityThreadReplies
                 replies={replies}
-                isExpanded={false}
                 getAvatarUrl={() => Promise.resolve('')}
+                onSelect={jest.fn()}
+                onDelete={jest.fn()}
+                onEdit={jest.fn()}
                 {...props}
             />,
         );

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { IntlProvider } from 'react-intl';
 import ActivityThread from '../ActivityThread';
 import localize from '../../../../../../test/support/i18n';

@@ -10,12 +10,14 @@ import {
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
 } from '../../../../../constants';
-import { User, Annotation, Comment, Version, Task, AppActivity } from '../../../../../common/types/feed';
+import { AppActivityItem, Comment, Task } from '../../../../../common/types/feed';
+import { BoxItemVersion, User } from '../../../../../common/types/core';
+import { Annotation } from '../../../../../common/types/annotations';
 
-const currentUser: User = {
+const currentUser = {
     id: 'user_123445',
     name: 'Rihanna',
-};
+} as User;
 
 const otherUser: User = { name: 'Akon', id: 11 };
 
@@ -43,25 +45,26 @@ const comment: Comment = {
     type: FEED_ITEM_TYPE_COMMENT,
     id: 'c_123',
     created_at: '2018-07-03T14:43:52-07:00',
+    modified_at: '2018-07-03T14:43:52-07:00',
     tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
     created_by: otherUser,
+    permissions: {},
 };
 
-const fileVersion: Version = {
+const fileVersion = {
     type: FEED_ITEM_TYPE_VERSION,
     id: 'f_123',
     created_at: '2018-07-03T14:43:52-07:00',
     trashed_at: '2018-07-03T14:43:52-07:00',
     modified_at: '2018-07-03T14:43:52-07:00',
     modified_by: otherUser,
-};
+} as BoxItemVersion;
 
 const taskWithAssignment: Task = {
     type: FEED_ITEM_TYPE_TASK,
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: { target: otherUser },
-    modified_at: '2018-07-03T14:43:52-07:00',
     description: 'test',
     due_at: '2018-07-03T14:43:52-07:00',
     assigned_to: {
@@ -80,8 +83,6 @@ const taskWithAssignment: Task = {
     },
     status: 'NOT_STARTED',
     permissions: {
-        can_create_task_collaborator: true,
-        can_create_task_link: true,
         can_delete: true,
         can_update: true,
     },
@@ -98,7 +99,7 @@ const taskWithAssignment: Task = {
     },
 };
 
-const appActivity: AppActivity = {
+const appActivity = {
     activity_template: {
         id: 'template_09887654',
     },
@@ -118,7 +119,7 @@ const appActivity: AppActivity = {
     rendered_text: 'this is text and a <a>link</a>',
     type: FEED_ITEM_TYPE_APP_ACTIVITY,
     currentUser,
-};
+} as AppActivityItem;
 
 const activityFeedError = { title: 't', content: 'm' };
 const getShallowWrapper = (params: Partial<React.ComponentProps<typeof ActiveState>> = {}) =>
@@ -146,18 +147,18 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
     test('should render card for item type', () => {
         const wrapper = getShallowWrapper().dive();
-        expect(wrapper.find('[data-testid="comment"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="app-activity"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="annotation-activity"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Comment"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Version"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Task"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="App Activity"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Annotation"]')).toHaveLength(1);
     });
 
     test('should correctly render ActivityThread for annotations and comments if has replies', () => {
         const wrapper = getShallowWrapper({
             hasReplies: true,
         }).dive();
-        expect(wrapper.find('[data-testid="activity-thread"]')).toHaveLength(2);
+        expect(wrapper.find('[role="article"][aria-label="Activity Thread"]')).toHaveLength(2);
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {

@@ -432,10 +432,8 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         });
         const instance = wrapper.instance() as unknown as WrapperInstance;
         const li = document.createElement('li');
-        Object.defineProperty(instance.activeFeedItemRef, 'current', {
-            configurable: true,
-            value: li,
-        });
+        // Use mutable ref object for TypeScript compatibility
+        instance.activeFeedItemRef = { current: li };
         wrapper.setProps({
             feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
         });
@@ -447,10 +445,8 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             activeFeedEntryId: comments.entries[0].id,
         });
         const instance = wrapper.instance() as unknown as WrapperInstance;
-        Object.defineProperty(instance.activeFeedItemRef, 'current', {
-            configurable: true,
-            value: null,
-        });
+        // Use mutable ref object for TypeScript compatibility
+        instance.activeFeedItemRef = { current: null };
         wrapper.setProps({
             feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
         });
