@@ -16,7 +16,7 @@ const ActivityStatus = ({ status }: ActivityStatusProps): React.ReactElement | n
     }
 
     return (
-        <div className="bcs-ActivityStatus" data-testid="bcs-ActivityStatus">
+        <div className="bcs-ActivityStatus">
             <LabelPill.Pill type={LabelPillStatus.SUCCESS}>
                 <LabelPill.Text>
                     <FormattedMessage {...messages.activityStatusResolved} />
