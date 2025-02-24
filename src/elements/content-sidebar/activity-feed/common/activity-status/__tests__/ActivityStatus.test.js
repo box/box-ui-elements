@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { screen } from '@testing-library/react';
-import { IntlProvider } from 'react-intl';
 import { render } from '../../../../../../test-utils/testing-library';
 import { COMMENT_STATUS_RESOLVED } from '../../../../../../constants';
 import ActivityStatus from '../ActivityStatus';
@@ -17,12 +16,9 @@ describe('elements/content-sidebar/activity-feed/common/activity-status/Activity
 
     test('should render when status prop is: resolved', () => {
         render(<ActivityStatus status={COMMENT_STATUS_RESOLVED} />, {
-            wrapper: props => (
-                <IntlProvider
-                    {...props}
-                    messages={{ 'be.contentSidebar.activityFeed.common.activityStatusResolved': 'RESOLVED' }}
-                />
-            ),
+            wrapperProps: {
+                messages: { 'be.contentSidebar.activityFeed.common.activityStatusResolved': 'RESOLVED' },
+            },
         });
         const statusElement = screen.getByRole('status');
         expect(statusElement).toBeInTheDocument();
