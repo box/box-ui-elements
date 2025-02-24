@@ -9,3 +9,15 @@ global.setImmediate = callback => setTimeout(callback, 0);
 Object.defineProperty(global, 'TextEncoder', {
     value: util.TextEncoder,
 });
+
+// Mock ResizeObserver since it's not available in JSDOM
+/* eslint-disable @typescript-eslint/no-empty-function */
+class ResizeObserver {
+    observe() {}
+
+    unobserve() {}
+
+    disconnect() {}
+}
+/* eslint-enable @typescript-eslint/no-empty-function */
+global.ResizeObserver = ResizeObserver;
