@@ -7,6 +7,7 @@
 import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
+import type { SyntheticEvent } from 'react';
 import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
@@ -31,26 +32,33 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
-import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
+import type { AdditionalSidebarTab } from './types';
 import './SidebarNav.scss';
 
-type Props = {
-    additionalTabs?: Array<AdditionalSidebarTab>,
-    elementId: string,
-    fileId: string,
-    hasActivity: boolean,
-    hasAdditionalTabs: boolean,
-    hasBoxAI: boolean,
-    hasDetails: boolean,
-    hasDocGen?: boolean,
-    hasMetadata: boolean,
-    hasSkills: boolean,
-    intl: IntlShape,
-    isOpen?: boolean,
-    onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-    onPanelChange?: (name: string, isInitialState: boolean) => void,
-};
+interface Props {
+    additionalTabs?: AdditionalSidebarTab[];
+    elementId: string;
+    fileId: string;
+    hasActivity: boolean;
+    hasAdditionalTabs: boolean;
+    hasBoxAI: boolean;
+    hasDetails: boolean;
+    hasDocGen?: boolean;
+    hasMetadata: boolean;
+    hasSkills: boolean;
+    intl: IntlShape;
+    isOpen?: boolean;
+    // Note: Original Flow type included NavigateOptions parameter - needs verification
+    onNavigate?: (event: SyntheticEvent) => void;
+    onPanelChange?: (name: string, isInitialState: boolean) => void;
+}
 
+// Note: The following component props need type verification:
+// - SidebarNavButton props and event handlers
+// - useFeatureConfig return type
+// - AdditionalTabs props
+// - SidebarNavSign requirements
+// - SidebarToggle props
 const SidebarNav = ({
     additionalTabs,
     elementId,
