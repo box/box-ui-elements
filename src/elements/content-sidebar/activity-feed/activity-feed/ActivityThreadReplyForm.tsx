@@ -1,31 +1,28 @@
-// @flow
-
 import * as React from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 
 import PlainButton from '../../../../components/plain-button';
+import { ButtonType } from '../../../../components/button/Button';
 import ArrowArcRight from '../../../../icon/fill/ArrowArcRight';
 
-import type { SelectorItems } from '../../../../common/types/core';
+import { SelectorItems, User } from '../../../../common/types/core';
 
 import CommentForm from '../comment-form';
 
 import messages from './messages';
 import './ActivityThreadReplyForm.scss';
 
-type ActivityThreadReplyFromProps = {
-    getMentionWithQuery?: (searchStr: string) => void,
-    intl: IntlShape,
-    isDisabled?: boolean,
-    mentionSelectorContacts?: SelectorItems<>,
-    onFocus: () => void,
-    onHide: () => void,
-    onReplyCreate: (text: string) => void,
-    onShow: () => void,
-};
-
-type Props = ActivityThreadReplyFromProps;
+interface ActivityThreadReplyFormProps {
+    getMentionWithQuery?: (searchStr: string) => void;
+    intl: IntlShape;
+    isDisabled?: boolean;
+    mentionSelectorContacts?: SelectorItems<User>;
+    onFocus: () => void;
+    onHide: () => void;
+    onReplyCreate: (text: string) => void;
+    onShow: () => void;
+}
 
 function ActivityThreadReplyForm({
     mentionSelectorContacts,
@@ -36,7 +33,7 @@ function ActivityThreadReplyForm({
     onReplyCreate,
     onShow,
     intl,
-}: Props) {
+}: ActivityThreadReplyFormProps): React.ReactElement {
     const [showReplyForm, setShowReplyForm] = React.useState(false);
     const placeholder = intl.formatMessage(messages.replyInThread);
 
@@ -73,7 +70,7 @@ function ActivityThreadReplyForm({
         <PlainButton
             className="bcs-ActivityThreadReplyForm-toggle"
             onClick={showForm}
-            type="button"
+            type={ButtonType.BUTTON}
             isDisabled={isDisabled}
         >
             <ArrowArcRight className="bcs-ActivityThreadReplyForm-arrow" />

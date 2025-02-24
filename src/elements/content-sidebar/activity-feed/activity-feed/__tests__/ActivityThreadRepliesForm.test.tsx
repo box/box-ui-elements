@@ -1,11 +1,10 @@
-// @flow
 import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import noop from 'lodash/noop';
 import { IntlProvider } from 'react-intl';
 import localize from '../../../../../../test/support/i18n';
 import messages from '../messages';
-import ActivityThreadReplyForm from '../ActivityThreadReplyForm.js';
+import ActivityThreadReplyForm from '../ActivityThreadReplyForm';
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
 
@@ -14,10 +13,21 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
 
-    const renderComponent = props =>
-        render(<ActivityThreadReplyForm onReplyCreate={noop} onHide={jest.fn()} onShow={jest.fn()} {...props} />, {
-            wrapper: Wrapper,
-        });
+    const renderComponent = (props?: Partial<React.ComponentProps<typeof ActivityThreadReplyForm>>) =>
+        render(
+            <ActivityThreadReplyForm
+                onReplyCreate={noop}
+                onHide={jest.fn()}
+                onShow={jest.fn()}
+                onFocus={() => {
+                    /* intentionally empty for testing */
+                }}
+                {...props}
+            />,
+            {
+                wrapper: Wrapper,
+            },
+        );
 
     test('should disable Reply button if isDisabled property is true', () => {
         const onShow = jest.fn();

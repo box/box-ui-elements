@@ -10,15 +10,16 @@ import {
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
 } from '../../../../../constants';
+import { User, Annotation, Comment, Version, Task, AppActivity } from '../../../../../common/types/feed';
 
-const currentUser = {
+const currentUser: User = {
     id: 'user_123445',
     name: 'Rihanna',
 };
 
-const otherUser = { name: 'Akon', id: 11 };
+const otherUser: User = { name: 'Akon', id: 11 };
 
-const annotation = {
+const annotation: Annotation = {
     type: FEED_ITEM_TYPE_ANNOTATION,
     id: 'anno_123',
     created_at: '2018-07-03T14:43:52-07:00',
@@ -38,7 +39,7 @@ const annotation = {
     created_by: currentUser,
 };
 
-const comment = {
+const comment: Comment = {
     type: FEED_ITEM_TYPE_COMMENT,
     id: 'c_123',
     created_at: '2018-07-03T14:43:52-07:00',
@@ -46,7 +47,7 @@ const comment = {
     created_by: otherUser,
 };
 
-const fileVersion = {
+const fileVersion: Version = {
     type: FEED_ITEM_TYPE_VERSION,
     id: 'f_123',
     created_at: '2018-07-03T14:43:52-07:00',
@@ -55,7 +56,7 @@ const fileVersion = {
     modified_by: otherUser,
 };
 
-const taskWithAssignment = {
+const taskWithAssignment: Task = {
     type: FEED_ITEM_TYPE_TASK,
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
@@ -97,7 +98,7 @@ const taskWithAssignment = {
     },
 };
 
-const appActivity = {
+const appActivity: AppActivity = {
     activity_template: {
         id: 'template_09887654',
     },
@@ -120,7 +121,7 @@ const appActivity = {
 };
 
 const activityFeedError = { title: 't', content: 'm' };
-const getShallowWrapper = (params = {}) =>
+const getShallowWrapper = (params: Partial<React.ComponentProps<typeof ActiveState>> = {}) =>
     shallow(
         <ActiveState
             items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
@@ -173,12 +174,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         ({ currentFileVersionId, isCurrentVersion }) => {
             const wrapper = getShallowWrapper({ currentFileVersionId });
 
-            expect(
-                wrapper
-                    .dive()
-                    .find(AnnotationActivity)
-                    .prop('isCurrentVersion'),
-            ).toBe(isCurrentVersion);
+            expect(wrapper.dive().find(AnnotationActivity).prop('isCurrentVersion')).toBe(isCurrentVersion);
         },
     );
 
@@ -194,21 +190,25 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('Annotation BaseComment has onCommentEdit to edit replies', () => {
-        const onCommentEdit = () => {};
+        const onCommentEdit = () => {
+            /* intentionally empty for testing */
+        };
         const wrapper = getShallowWrapper({ hasNewThreadedReplies: true, items: [annotation], onCommentEdit }).dive();
         const baseComment = wrapper.find('BaseComment');
-        expect(baseComment.props().onCommentEdit).toEqual(onCommentEdit);
+        expect((baseComment.props() as { onCommentEdit: Function }).onCommentEdit).toEqual(onCommentEdit);
     });
 
     test('Annotation BaseComment has onStatusChange from onAnnotationStatusChange', () => {
-        const onAnnotationStatusChange = () => {};
+        const onAnnotationStatusChange = () => {
+            /* intentionally empty for testing */
+        };
         const wrapper = getShallowWrapper({
             hasNewThreadedReplies: true,
             items: [annotation],
             onAnnotationStatusChange,
         }).dive();
         const baseComment = wrapper.find('BaseComment');
-        expect(baseComment.props().onStatusChange).toEqual(onAnnotationStatusChange);
+        expect((baseComment.props() as { onStatusChange: Function }).onStatusChange).toEqual(onAnnotationStatusChange);
     });
 
     test('Comment BaseComment has onStatusChange from onCommentEdit', () => {
@@ -222,7 +222,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
         const wrapper = getShallowWrapper(props).dive();
         const baseComment = wrapper.find('BaseComment');
-        const onStatusChangeProp = baseComment.props().onStatusChange;
+        const onStatusChangeProp = (baseComment.props() as { onStatusChange: Function }).onStatusChange;
         const expectedProps = { hasMention: false, ...props };
 
         onStatusChangeProp(expectedProps);

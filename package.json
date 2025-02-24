@@ -226,6 +226,7 @@
         "formik": "^2.0.3",
         "highlight.js": "^11.10.0",
         "husky": "^4.0.10",
+        "identity-obj-proxy": "^3.0.0",
         "ilib-tree-node": "^1.2.0",
         "immutable": "^3.7.4",
         "intl": "^1.2.5",

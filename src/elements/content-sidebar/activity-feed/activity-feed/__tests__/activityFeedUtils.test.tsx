@@ -1,18 +1,19 @@
 import { collapseFeedState } from '../activityFeedUtils';
 import { FEED_ITEM_TYPE_COMMENT, FEED_ITEM_TYPE_VERSION, PLACEHOLDER_USER } from '../../../../../constants';
+import { User, Version } from '../../../../../common/types/feed';
 
 describe('collapseFeedState', () => {
-    const mario = { id: '1', name: 'mario' };
-    const luigi = { id: '2', name: 'luigi' };
+    const mario: User = { id: '1', name: 'mario' };
+    const luigi: User = { id: '2', name: 'luigi' };
 
-    const version1 = {
+    const version1: Partial<Version> = {
         type: FEED_ITEM_TYPE_VERSION,
         version_number: '2',
         modified_by: mario,
     };
 
     test('should return empty array if no input', () => {
-        expect(collapseFeedState()).toEqual([]);
+        expect(collapseFeedState(null)).toEqual([]);
     });
 
     test('should keep file_version & comment distinct', () => {
@@ -31,7 +32,7 @@ describe('collapseFeedState', () => {
     });
 
     test('should collapse two file_version items into 1', () => {
-        const version2 = {
+        const version2: Partial<Version> = {
             type: FEED_ITEM_TYPE_VERSION,
             version_number: '1',
             modified_by: luigi,
@@ -49,8 +50,8 @@ describe('collapseFeedState', () => {
                 version_start: 1,
                 version_end: 2,
                 collaborators: {
-                    '1': mario,
-                    '2': luigi,
+                    1: mario,
+                    2: luigi,
                 },
                 versions: [version1, version2],
             },
@@ -62,7 +63,7 @@ describe('collapseFeedState', () => {
     });
 
     test('should collapse two file_version items and handle null users', () => {
-        const version2 = {
+        const version2: Partial<Version> = {
             type: FEED_ITEM_TYPE_VERSION,
             version_number: '1',
             modified_by: null,
@@ -80,8 +81,8 @@ describe('collapseFeedState', () => {
                 version_start: 1,
                 version_end: 2,
                 collaborators: {
-                    '1': mario,
-                    '2': PLACEHOLDER_USER,
+                    1: mario,
+                    2: PLACEHOLDER_USER,
                 },
                 versions: [version1, version2],
             },

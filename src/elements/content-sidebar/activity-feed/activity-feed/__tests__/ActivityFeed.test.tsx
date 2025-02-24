@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
-import ActivityFeed from '../ActivityFeed';
+import { shallow, ShallowWrapper } from 'enzyme';
+import ActivityFeed, { ActivityFeedProps } from '../ActivityFeed';
 import { scrollIntoView } from '../../../../../utils/dom';
 import {
     FEED_ITEM_TYPE_ANNOTATION,
@@ -8,13 +8,30 @@ import {
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
 } from '../../../../../constants';
+import { User } from '../../../../../common/types/core';
+import { Comment, FeedItems } from '../../../../../common/types/feed';
+
+type ActivityFeedWrapper = ShallowWrapper<ActivityFeedProps, State, ActivityFeed>;
+
+type WrapperInstance = ActivityFeed & {
+    feedContainer: HTMLDivElement;
+    scrollToActiveFeedItemOrErrorMessage: jest.Mock;
+    hasLoaded: (prevCurrentUser?: User, prevFeedItems?: FeedItems) => boolean;
+    setSelectedItem: (id: string) => void;
+    isFeedItemActive: jest.Mock<boolean, [{ id: string; type: string }]>;
+    isCommentFeedItemActive: (item: { id: string; type: string; replies?: Array<Comment> }) => boolean;
+    setState: jest.Mock<void, [Partial<State>]>;
+    activeFeedItemRef: React.RefObject<HTMLLIElement>;
+    commentFormCancelHandler: () => void;
+    componentDidUpdate: (prevProps: ActivityFeedProps, prevState: State) => void;
+};
 
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 jest.mock('../../../../../utils/dom');
 jest.mock('../../Avatar', () => 'Avatar');
 jest.mock('../ActiveState', () => 'ActiveState');
 
-const otherUser = { name: 'Akon', id: 11 };
+const otherUser: User = { name: 'Akon', id: 11 };
 
 const annotations = {
     entries: [
@@ -117,9 +134,27 @@ const taskWithAssignment = {
 };
 
 const feedItems = [...comments.entries];
-const currentUser = { name: 'Kanye West', id: 10 };
+const currentUser: User = { name: 'Kanye West', id: 10 };
 
-const getWrapper = props => shallow(<ActivityFeed currentUser={currentUser} file={file} {...props} />);
+interface State {
+    isInputOpen: boolean;
+    isScrolled: boolean;
+    selectedItemId: string | null;
+}
+
+const defaultProps: ActivityFeedProps = {
+    currentUser,
+    file,
+    activityFeedError: null,
+    onAnnotationStatusChange: () => {
+        /* intentionally empty for testing */
+    },
+    getAvatarUrl: () => '',
+};
+
+const getWrapper = (props?: Partial<ActivityFeedProps>): ActivityFeedWrapper => {
+    return shallow<ActivityFeed>(<ActivityFeed {...defaultProps} {...props} />);
+};
 
 describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () => {
     test('should correctly render loading state', () => {
@@ -216,11 +251,14 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
     test('should set scrollTop to be the scrollHeight if feedContainer ref is set', () => {
         const wrapper = getWrapper();
-        const instance = wrapper.instance();
-        instance.feedContainer = {
-            scrollTop: 0,
-            scrollHeight: 100,
-        };
+        const instance = wrapper.instance() as unknown as WrapperInstance;
+        const mockDiv = document.createElement('div');
+        Object.defineProperty(mockDiv, 'scrollHeight', {
+            configurable: true,
+            get: () => 100,
+        });
+        mockDiv.scrollTop = 0;
+        instance.feedContainer = mockDiv;
         instance.componentDidMount();
 
         expect(instance.feedContainer.scrollTop).toEqual(100);
@@ -231,18 +269,21 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             const wrapper = getWrapper({
                 feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
             });
-            const instance = wrapper.instance();
-            instance.feedContainer = {
-                scrollTop: 0,
-                scrollHeight: 100,
-            };
+            const instance = wrapper.instance() as unknown as WrapperInstance;
+            instance.feedContainer = document.createElement('div');
+            Object.defineProperty(instance.feedContainer as HTMLDivElement, 'scrollHeight', {
+                configurable: true,
+                get: () => 100,
+            });
+            (instance.feedContainer as HTMLDivElement).scrollTop = 0;
 
             instance.componentDidUpdate(
                 {
+                    ...defaultProps,
                     feedItems: undefined,
                     currentUser,
-                },
-                { isInputOpen: false },
+                } as ActivityFeedProps,
+                { isInputOpen: false, isScrolled: false, selectedItemId: null } as State,
             );
 
             expect(instance.feedContainer.scrollTop).toEqual(100);
@@ -253,18 +294,21 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
                 feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }, { type: FEED_ITEM_TYPE_COMMENT }],
             });
 
-            const instance = wrapper.instance();
-            instance.feedContainer = {
-                scrollTop: 0,
-                scrollHeight: 100,
-            };
+            const instance = wrapper.instance() as unknown as WrapperInstance;
+            instance.feedContainer = document.createElement('div');
+            Object.defineProperty(instance.feedContainer as HTMLDivElement, 'scrollHeight', {
+                configurable: true,
+                get: () => 100,
+            });
+            (instance.feedContainer as HTMLDivElement).scrollTop = 0;
 
             instance.componentDidUpdate(
                 {
+                    ...defaultProps,
                     feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
                     currentUser,
-                },
-                { isInputOpen: false },
+                } as ActivityFeedProps,
+                { isInputOpen: false, isScrolled: false, selectedItemId: null } as State,
             );
 
             expect(instance.feedContainer.scrollTop).toEqual(100);
@@ -274,18 +318,21 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             const wrapper = getWrapper({
                 feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
             });
-            const instance = wrapper.instance();
-            instance.feedContainer = {
-                scrollTop: 0,
-                scrollHeight: 100,
-            };
+            const instance = wrapper.instance() as unknown as WrapperInstance;
+            instance.feedContainer = document.createElement('div');
+            Object.defineProperty(instance.feedContainer as HTMLDivElement, 'scrollHeight', {
+                configurable: true,
+                get: () => 100,
+            });
+            (instance.feedContainer as HTMLDivElement).scrollTop = 0;
 
             instance.componentDidUpdate(
                 {
+                    ...defaultProps,
                     feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
                     currentUser: undefined,
-                },
-                { isInputOpen: false },
+                } as ActivityFeedProps,
+                { isInputOpen: false, isScrolled: false, selectedItemId: null } as State,
             );
 
             expect(instance.feedContainer.scrollTop).toEqual(100);
@@ -298,18 +345,21 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             wrapper.setState({
                 isInputOpen: true,
             });
-            const instance = wrapper.instance();
-            instance.feedContainer = {
-                scrollTop: 0,
-                scrollHeight: 100,
-            };
+            const instance = wrapper.instance() as unknown as WrapperInstance;
+            instance.feedContainer = document.createElement('div');
+            Object.defineProperty(instance.feedContainer as HTMLDivElement, 'scrollHeight', {
+                configurable: true,
+                get: () => 100,
+            });
+            (instance.feedContainer as HTMLDivElement).scrollTop = 0;
 
             instance.componentDidUpdate(
                 {
+                    ...defaultProps,
                     feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
                     currentUser,
-                },
-                { isInputOpen: false },
+                } as ActivityFeedProps,
+                { isInputOpen: false, isScrolled: false, selectedItemId: null } as State,
             );
 
             expect(instance.feedContainer.scrollTop).toEqual(100);
@@ -317,14 +367,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         test('should call scrollToActiveFeedItemOrErrorMessage if feed items loaded', () => {
             const wrapper = getWrapper({ feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }] });
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as unknown as WrapperInstance;
             instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
 
             instance.componentDidUpdate(
                 {
+                    ...defaultProps,
                     feedItems: undefined,
                 },
-                { isInputOpen: false },
+                { isInputOpen: false, isScrolled: false, selectedItemId: null } as State,
             );
 
             expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
@@ -332,14 +383,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         test('should call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
             const wrapper = getWrapper({ activeFeedEntryId: '123' });
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as unknown as WrapperInstance;
             instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
 
             instance.componentDidUpdate(
                 {
+                    ...defaultProps,
                     activeFeedEntryId: '456',
                 },
-                { isInputOpen: false },
+                { isInputOpen: false, isScrolled: false, selectedItemId: null } as State,
             );
 
             expect(instance.scrollToActiveFeedItemOrErrorMessage).toHaveBeenCalled();
@@ -347,14 +399,15 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
 
         test('should not call scrollToActiveFeedItemOrErrorMessage if activeFeedEntryId changed', () => {
             const wrapper = getWrapper({ activeFeedEntryId: '456' });
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as unknown as WrapperInstance;
             instance.scrollToActiveFeedItemOrErrorMessage = jest.fn();
 
             instance.componentDidUpdate(
                 {
+                    ...defaultProps,
                     activeFeedEntryId: '456',
                 },
-                { isInputOpen: false },
+                { isInputOpen: false, isScrolled: false, selectedItemId: null } as State,
             );
 
             expect(instance.scrollToActiveFeedItemOrErrorMessage).not.toHaveBeenCalled();
@@ -377,9 +430,12 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const wrapper = getWrapper({
             activeFeedEntryId: comments.entries[0].id,
         });
-        const instance = wrapper.instance();
+        const instance = wrapper.instance() as unknown as WrapperInstance;
         const li = document.createElement('li');
-        instance.activeFeedItemRef.current = li;
+        Object.defineProperty(instance.activeFeedItemRef, 'current', {
+            configurable: true,
+            value: li,
+        });
         wrapper.setProps({
             feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
         });
@@ -390,9 +446,11 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         const wrapper = getWrapper({
             activeFeedEntryId: comments.entries[0].id,
         });
-        const instance = wrapper.instance();
-
-        instance.activeFeedItemRef.current = null;
+        const instance = wrapper.instance() as unknown as WrapperInstance;
+        Object.defineProperty(instance.activeFeedItemRef, 'current', {
+            configurable: true,
+            value: null,
+        });
         wrapper.setProps({
             feedItems: [{ type: FEED_ITEM_TYPE_COMMENT }],
         });
@@ -434,7 +492,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         instance.commentFormFocusHandler();
         expect(wrapper.state('isInputOpen')).toBe(true);
 
-        commentForm.prop('createComment')({ text: 'foo' });
+        (commentForm.prop('createComment') as Function)({ text: 'foo' });
         expect(wrapper.state('isInputOpen')).toBe(false);
         expect(createCommentSpy).toHaveBeenCalledTimes(1);
     });
@@ -482,7 +540,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
     test('should not render inline error if the type is invalid', () => {
         const wrapper = getWrapper({
             feedItems,
-            activeFeedEntryId: 0,
+            activeFeedEntryId: '0',
             activeFeedEntryType: 'tasksss',
         });
 
@@ -501,7 +559,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
                 currentUser,
                 feedItems,
             });
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as unknown as WrapperInstance;
             expect(instance.hasLoaded(prevCurrentUser, prevFeedItems)).toBe(expected);
         });
     });
@@ -511,7 +569,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             const wrapper = getWrapper({
                 hasReplies: true,
             });
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as unknown as WrapperInstance;
             instance.setState = jest.fn();
 
             instance.setSelectedItem('123');
@@ -527,7 +585,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
             const wrapper = getWrapper({
                 hasReplies,
             });
-            const instance = wrapper.instance();
+            const instance = wrapper.instance() as unknown as WrapperInstance;
             instance.setState = jest.fn();
 
             instance.setSelectedItem('123');
@@ -550,8 +608,8 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
                 activeFeedEntryId: '123',
                 activeFeedEntryType: 'comment',
             });
-            const instance = wrapper.instance();
-            instance.state.selectedItemId = selectedItemId;
+            const instance = wrapper.instance() as unknown as WrapperInstance;
+            (instance.state as { selectedItemId: string | null }).selectedItemId = selectedItemId;
 
             expect(instance.isFeedItemActive({ id, type })).toBe(expected);
         });
@@ -573,7 +631,7 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
                 const wrapper = getWrapper({
                     activeFeedEntryId: '123',
                 });
-                const instance = wrapper.instance();
+                const instance = wrapper.instance() as unknown as WrapperInstance;
                 instance.isFeedItemActive = jest.fn().mockImplementation(() => isFeedItemActiveResult);
                 expect(instance.isCommentFeedItemActive({ id: 'foo', replies, type: 'bar' })).toBe(expected);
             },

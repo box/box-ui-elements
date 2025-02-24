@@ -1,53 +1,53 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import noop from 'lodash/noop';
 
 import PlainButton from '../../../../components/plain-button';
+import { ButtonType } from '../../../../components/button/Button';
 import ActivityThreadReplies from './ActivityThreadReplies';
 import ActivityThreadReplyForm from './ActivityThreadReplyForm';
 
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations } from '../../flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
-import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
+import { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import { Translations } from '../../flowTypes';
+import { SelectorItems, User } from '../../../../common/types/core';
+import { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
 
 import messages from './messages';
 
 import './ActivityThread.scss';
 
-type Props = {
-    children: React.Node,
-    currentUser?: User,
-    getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
-    getUserProfileUrl?: GetProfileUrlCallback,
-    hasNewThreadedReplies?: boolean,
-    hasReplies: boolean,
-    isAlwaysExpanded?: boolean,
-    isPending?: boolean,
-    isRepliesLoading?: boolean,
-    mentionSelectorContacts?: SelectorItems<>,
-    onHideReplies?: (lastReply: CommentType) => void,
-    onReplyCreate?: (text: string) => void,
-    onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
+interface ActivityThreadProps {
+    children: React.ReactNode;
+    currentUser?: User;
+    getAvatarUrl: GetAvatarUrlCallback;
+    getMentionWithQuery?: (searchStr: string) => void;
+    getUserProfileUrl?: GetProfileUrlCallback;
+    hasNewThreadedReplies?: boolean;
+    hasReplies: boolean;
+    isAlwaysExpanded?: boolean;
+    isPending?: boolean;
+    isRepliesLoading?: boolean;
+    mentionSelectorContacts?: SelectorItems<User>;
+    onHideReplies?: (lastReply: CommentType) => void;
+    onReplyCreate?: (text: string) => void;
+    onReplyDelete?: (params: { id: string; permissions: BoxCommentPermission }) => void;
     onReplyEdit?: (
         id: string,
         text: string,
+        permissions: BoxCommentPermission,
         status?: FeedItemStatus,
         hasMention?: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
-    onReplySelect?: (isSelected: boolean) => void,
-    onShowReplies?: () => void,
-    replies?: Array<CommentType>,
-    repliesTotalCount?: number,
-    translations?: Translations,
-};
+        onSuccess?: Function,
+        onError?: Function,
+    ) => void;
+    onReplySelect?: (isSelected: boolean) => void;
+    onShowReplies?: () => void;
+    replies?: Array<CommentType>;
+    repliesTotalCount?: number;
+    translations?: Translations;
+}
 
-const ActivityThread = ({
+const ActivityThread: React.FC<ActivityThreadProps> = ({
     children,
     currentUser,
     getAvatarUrl,
@@ -68,7 +68,7 @@ const ActivityThread = ({
     replies = [],
     repliesTotalCount = 0,
     translations,
-}: Props) => {
+}: ActivityThreadProps) => {
     const { length: repliesLength } = replies;
     const repliesToLoadCount = Math.max(repliesTotalCount - repliesLength, 0);
 
@@ -96,7 +96,7 @@ const ActivityThread = ({
                 <PlainButton
                     className="bcs-ActivityThread-toggle"
                     onClick={onShowReplies}
-                    type="button"
+                    type={ButtonType.BUTTON}
                     data-testid="activity-thread-button"
                 >
                     <FormattedMessage values={{ repliesToLoadCount }} {...messages.showReplies} />
@@ -108,7 +108,7 @@ const ActivityThread = ({
                 <PlainButton
                     className="bcs-ActivityThread-toggle"
                     onClick={onHideRepliesHandler}
-                    type="button"
+                    type={ButtonType.BUTTON}
                     data-testid="activity-thread-button"
                 >
                     <FormattedMessage {...messages.hideReplies} />

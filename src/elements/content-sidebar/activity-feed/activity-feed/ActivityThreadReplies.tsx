@@ -1,32 +1,31 @@
-// @flow
 import * as React from 'react';
 import Comment from '../comment';
 import LoadingIndicator from '../../../../components/loading-indicator';
 import { BaseComment } from '../comment/BaseComment';
 
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations } from '../../flowTypes';
-import type { SelectorItems, User } from '../../../../common/types/core';
-import type { BoxCommentPermission, Comment as CommentType } from '../../../../common/types/feed';
+import { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import { Translations } from '../../flowTypes';
+import { SelectorItems, User } from '../../../../common/types/core';
+import { BoxCommentPermission, Comment as CommentType } from '../../../../common/types/feed';
 
 import './ActivityThreadReplies.scss';
 
-type Props = {
-    currentUser?: User,
-    getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
-    getUserProfileUrl?: GetProfileUrlCallback,
-    hasNewThreadedReplies?: boolean,
-    isRepliesLoading?: boolean,
-    mentionSelectorContacts?: SelectorItems<>,
-    onDelete?: Function,
-    onEdit?: Function,
-    onSelect?: (isSelected: boolean) => void,
-    replies: Array<CommentType>,
-    translations?: Translations,
-};
+interface ActivityThreadRepliesProps {
+    currentUser?: User;
+    getAvatarUrl: GetAvatarUrlCallback;
+    getMentionWithQuery?: Function;
+    getUserProfileUrl?: GetProfileUrlCallback;
+    hasNewThreadedReplies?: boolean;
+    isRepliesLoading?: boolean;
+    mentionSelectorContacts?: SelectorItems<User>;
+    onDelete?: Function;
+    onEdit?: Function;
+    onSelect?: (isSelected: boolean) => void;
+    replies: Array<CommentType>;
+    translations?: Translations;
+}
 
-const ActivityThreadReplies = ({
+const ActivityThreadReplies: React.FC<ActivityThreadRepliesProps> = ({
     currentUser,
     getAvatarUrl,
     getMentionWithQuery,
@@ -39,7 +38,7 @@ const ActivityThreadReplies = ({
     onSelect,
     replies,
     translations,
-}: Props) => {
+}: ActivityThreadRepliesProps) => {
     const getReplyPermissions = (reply: CommentType): BoxCommentPermission => {
         const { permissions: { can_delete = false, can_edit = false, can_resolve = false } = {} } = reply;
         return {

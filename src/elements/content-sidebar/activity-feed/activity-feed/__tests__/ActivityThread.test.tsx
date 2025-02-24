@@ -1,12 +1,12 @@
-// @flow
 import * as React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
-import ActivityThread from '../ActivityThread.js';
+import ActivityThread from '../ActivityThread';
 import localize from '../../../../../../test/support/i18n';
 import { replies as repliesMock } from '../fixtures';
 import messages from '../messages';
+import { Comment } from '../../../../../common/types/feed';
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
 describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThread', () => {
@@ -14,11 +14,17 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
         return <IntlProvider locale="en">{children}</IntlProvider>;
     };
 
-    const getWrapper = props => {
-        const replies = cloneDeep(repliesMock);
+    const getWrapper = (props?: Partial<React.ComponentProps<typeof ActivityThread>>) => {
+        const replies = cloneDeep<Array<Comment>>(repliesMock);
 
         return render(
-            <ActivityThread replies={replies} repliesTotalCount={2} hasReplies {...props}>
+            <ActivityThread
+                replies={replies}
+                repliesTotalCount={2}
+                hasReplies
+                getAvatarUrl={() => Promise.resolve('')}
+                {...props}
+            >
                 Test
             </ActivityThread>,
             { wrapper: Wrapper },
@@ -95,7 +101,11 @@ describe('src/elements/content-sidebar/activity-feed/activity-feed/ActivityThrea
     });
 
     test('should have reply button when onReplyCreate is passed', () => {
-        getWrapper({ onReplyCreate: function someFunction() {} });
+        getWrapper({
+            onReplyCreate: () => {
+                /* intentionally empty for testing */
+            },
+        });
 
         expect(screen.getByRole('button', { name: localize(messages.reply.id) })).toBeInTheDocument();
     });
