@@ -1,5 +1,5 @@
 // @flow
-import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
+import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes/index.js.flow';
 
 export { default } from './AdditionalTabs';
 export type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData };
