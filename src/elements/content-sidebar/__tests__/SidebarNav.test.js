@@ -162,7 +162,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
         const wrapper = getWrapper(props);
         expect(wrapper.find(AdditionalTabs)).toHaveLength(1);
         expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(1);
-        expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(5);
+        expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(3);
     });
 
     test('should render the Box Sign entry point if its feature is enabled', () => {
