@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { render, screen } from '../../../../test-utils/testing-library';
 import Breadcrumbs from '../Breadcrumbs';
-import type { Crumb } from '../../../../common/types/core';
 
 describe('elements/common/breadcrumbs/Breadcrumbs', () => {
     const renderComponent = (props = {}) => {
@@ -31,7 +30,7 @@ describe('elements/common/breadcrumbs/Breadcrumbs', () => {
 
     test('should call onCrumbClick when clicking a breadcrumb', () => {
         const onCrumbClick = jest.fn();
-        const crumbs = [{ id: '0', name: 'All Files' }] as Crumb[];
+        const crumbs = [{ id: '0', name: 'All Files' }];
         renderComponent({ crumbs, onCrumbClick });
         screen.getByRole('button', { name: 'All Files' }).click();
         expect(onCrumbClick).toHaveBeenCalledWith(crumbs[0]);
