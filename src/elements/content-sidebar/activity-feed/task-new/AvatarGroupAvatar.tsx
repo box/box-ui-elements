@@ -20,19 +20,25 @@ interface AvatarGroupAvatarProps {
     user: UserMini;
 }
 
+interface IconProps {
+    className?: string;
+    title?: string | React.ReactElement;
+}
+
 interface StatusIconProps {
     status: TaskCollabStatus;
     className?: string;
-    title?: React.ReactNode;
+    title?: string | React.ReactElement;
 }
 
-const StatusIcon = ({ status, ...rest }: StatusIconProps): JSX.Element | null => {
+const StatusIcon = ({ status, className, title }: StatusIconProps): JSX.Element | null => {
+    const iconProps: IconProps = { className, title };
     switch (status) {
         case TASK_NEW_APPROVED:
         case TASK_NEW_COMPLETED:
-            return <IconComplete {...rest} />;
+            return <IconComplete {...iconProps} />;
         case TASK_NEW_REJECTED:
-            return <IconReject {...rest} />;
+            return <IconReject {...iconProps} />;
         case TASK_NEW_NOT_STARTED:
         default:
             return null;
