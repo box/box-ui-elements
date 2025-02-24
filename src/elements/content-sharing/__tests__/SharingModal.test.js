@@ -366,7 +366,7 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(getFile).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
-            expect(convertItemResponse).not.toHaveBeenCalled();
+            expect(convertItemResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
@@ -380,7 +380,7 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(getFolderFields).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
-            expect(convertItemResponse).not.toHaveBeenCalled();
+            expect(convertItemResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
@@ -438,7 +438,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFile).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
-            expect(convertUserResponse).not.toHaveBeenCalled();
+            expect(convertUserResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
@@ -453,7 +453,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFolderFields).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
-            expect(convertUserResponse).not.toHaveBeenCalled();
+            expect(convertUserResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
