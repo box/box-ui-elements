@@ -75,8 +75,8 @@ To test the Box UI Elements with your own project use local Yarn linking.
 - `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
 - `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
 - `yarn lint` to lint js and css.
-- `yarn lint:js --fix` to lint js and fix issues.
-- `yarn lint:css --fix` to lint styles and fix issues.
+- `yarn lint:code --fix` to lint js, ts and fix issues.
+- `yarn lint:styles --fix` to lint styles and fix issues.
 - `yarn test` to launch tests with jest.
 - `yarn test --watch` to launch tests with jest in watch mode.
 - `yarn test --coverage` to launch tests with jest with coverage.
