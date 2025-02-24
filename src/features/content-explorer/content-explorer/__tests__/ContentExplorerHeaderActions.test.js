@@ -100,6 +100,12 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             expect(wrapper.instance().props.customInput).toEqual(customInput);
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should pass breadcrumbIcon to ContentExplorerBreadcrumbs', () => {
+            const breadcrumbIcon = <div>Icon</div>;
+            const wrapper = renderComponent({ breadcrumbIcon });
+            expect(wrapper.find('ContentExplorerBreadcrumbs').prop('breadcrumbIcon')).toEqual(breadcrumbIcon);
+        });
     });
 
     describe('onEnterFolder', () => {
@@ -202,10 +208,7 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
         test('should call onExitSearch when clicking the breadcrumbs up button to exit search', () => {
             const wrapper = renderComponent({ foldersPath, onExitSearch: onExitSearchSpy }, true);
 
-            wrapper
-                .find('.content-explorer-breadcrumbs-up-button')
-                .hostNodes()
-                .simulate('click');
+            wrapper.find('.content-explorer-breadcrumbs-up-button').hostNodes().simulate('click');
 
             expect(onExitSearchSpy.calledOnce).toBe(true);
         });
@@ -252,10 +255,7 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
 
             const wrapper = renderComponent({ foldersPath, onFoldersPathUpdated: onFoldersPathUpdatedSpy }, true);
 
-            wrapper
-                .find('.content-explorer-breadcrumbs-up-button')
-                .hostNodes()
-                .simulate('click');
+            wrapper.find('.content-explorer-breadcrumbs-up-button').hostNodes().simulate('click');
 
             expect(onFoldersPathUpdatedSpy.calledOnce).toBe(true);
         });

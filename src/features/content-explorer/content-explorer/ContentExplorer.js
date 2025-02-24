@@ -31,6 +31,8 @@ class ContentExplorer extends Component {
         controlledSelectedItems: PropTypes.object,
         /**  Allow users to choose no selections in MULTI_SELECT mode, defaults to false  */
         isNoSelectionAllowed: PropTypes.bool,
+        /** Custom icon for the breadcrumb. Overrides the default icon */
+        breadcrumbIcon: PropTypes.element,
         /** Props for breadcrumbs */
         breadcrumbProps: PropTypes.object,
         /** Props for the cancel button */
@@ -463,6 +465,7 @@ class ContentExplorer extends Component {
             additionalColumns,
             controlledSelectedItems,
             isNoSelectionAllowed = false,
+            breadcrumbIcon,
             breadcrumbProps,
             cancelButtonProps,
             chooseButtonProps,
@@ -561,6 +564,7 @@ class ContentExplorer extends Component {
             >
                 {infoNoticeText && <ContentExplorerInfoNotice infoNoticeText={infoNoticeText} />}
                 <ContentExplorerHeaderActions
+                    breadcrumbIcon={breadcrumbIcon}
                     breadcrumbProps={breadcrumbProps}
                     contentExplorerMode={contentExplorerMode}
                     customInput={customInput}
