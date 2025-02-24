@@ -140,7 +140,9 @@ const ActivityThread: React.FC<ActivityThreadProps> = ({
                             isRepliesLoading={isRepliesLoading}
                             mentionSelectorContacts={mentionSelectorContacts}
                             onDelete={onReplyDelete}
-                            onEdit={onReplyEdit}
+                            onEdit={(id, text, status, hasMention, permissions, onSuccess, onError) => {
+                                onReplyEdit(id, text, permissions, status, hasMention, onSuccess, onError);
+                            }}
                             onSelect={onReplySelect}
                             replies={replies}
                             translations={translations}
