@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -9,13 +8,12 @@ import {
     TASK_NEW_IN_PROGRESS,
 } from '../../../../constants';
 import messages from './messages';
-// $FlowFixMe LabelPill is in typescript
 import LabelPill from '../../../../components/label-pill';
 import type { TaskStatus } from '../../../../common/types/tasks';
 
-type Props = {|
-    status: TaskStatus,
-|};
+interface StatusProps {
+    status: TaskStatus;
+}
 
 const statusMessageKeyMap = {
     [TASK_NEW_APPROVED]: messages.taskFeedApprovedUppercaseLabel,
@@ -33,7 +31,7 @@ const typeKeyMap = {
     [TASK_NEW_IN_PROGRESS]: 'default',
 };
 
-const Status = React.memo<Props>(({ status }: Props) => (
+const Status = React.memo<StatusProps>(({ status }: StatusProps) => (
     <LabelPill.Pill type={typeKeyMap[status]}>
         <LabelPill.Text>
             <FormattedMessage {...statusMessageKeyMap[status]} />
