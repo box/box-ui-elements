@@ -3,5 +3,5 @@ import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flow
 
 export { default } from './AdditionalTabs';
 export type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData };
-export type { Props as AdditionalTabProps } from './AdditionalTab';
-export type { Props as AdditionalTabsProps } from './AdditionalTabs';
+export type { Props as AdditionalTabProps } from './AdditionalTab.js.flow';
+export type { Props as AdditionalTabsProps } from './AdditionalTabs.js.flow';
