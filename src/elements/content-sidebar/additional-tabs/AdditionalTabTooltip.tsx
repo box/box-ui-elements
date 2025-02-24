@@ -22,25 +22,33 @@ const AdditionalTabTooltip = ({
     const text = ftuxTooltipData?.text;
     const targetingApi = ftuxTooltipData?.targetingApi;
 
-    if (isFtuxVisible && text && targetingApi) {
+    const api = targetingApi?.();
+    if (isFtuxVisible && text && api?.canShow) {
+        if (api.onShow) {
+            api.onShow();
+        }
+
         return (
-            <Tooltip
-                className="bdl-AdditionalTabTooltip"
-                isShown
-                showCloseButton
-                text={<FormattedMessage {...{ id: text }} />}
-                position={TooltipPosition.MIDDLE_RIGHT}
-                theme={TooltipTheme.CALLOUT}
-            >
-                {children}
-            </Tooltip>
+            <div className="bdl-AdditionalTabTooltip" data-testid="additional-tab-tooltip">
+                <Tooltip
+                    isShown
+                    showCloseButton
+                    text={<FormattedMessage {...{ id: text }} />}
+                    position={TooltipPosition.MIDDLE_RIGHT}
+                    theme={TooltipTheme.CALLOUT}
+                >
+                    {children}
+                </Tooltip>
+            </div>
         );
     }
 
     return (
-        <Tooltip className="bdl-AdditionalTabTooltip" text={defaultTooltipText} position={TooltipPosition.MIDDLE_RIGHT}>
-            {children}
-        </Tooltip>
+        <div className="bdl-AdditionalTabTooltip" data-testid="additional-tab-tooltip">
+            <Tooltip text={defaultTooltipText} position={TooltipPosition.MIDDLE_RIGHT}>
+                {children}
+            </Tooltip>
+        </div>
     );
 };
 

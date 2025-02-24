@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
-import type { TooltipText } from '../types';
+import { type TooltipText } from '../types';
 import AdditionalTabTooltip from '../AdditionalTabTooltip';
 
 describe('elements/content-sidebar/additional-tabs/AdditionalTabTooltip', () => {
     const getComponent = (
         props: Partial<{
             defaultTooltipText: TooltipText;
-            ftuxTooltipData?: { targetingApi: () => { canShow: boolean }; text: string };
+            ftuxTooltipData?: { targetingApi: () => { canShow: boolean; onShow?: () => void }; text: string };
             isFtuxVisible?: boolean;
         }>,
         children: React.ReactElement,
@@ -22,6 +22,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTabTooltip', () => 
         const children = <div data-testid="additional-tab-tooltip-children">Child content</div>;
         const targetingApi = () => ({
             canShow: true,
+            onShow: jest.fn(),
         });
         const text = 'FTUX Text';
 

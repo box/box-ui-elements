@@ -13,7 +13,16 @@ class AdditionalTabs extends PureComponent<AdditionalTabsProps, State> {
 
     constructor(props: AdditionalTabsProps) {
         super(props);
-        this.state = { isLoading: true };
+        const { tabs } = props;
+        const hasIconTabs = tabs?.some(tab => tab.iconUrl);
+        this.state = { isLoading: hasIconTabs ?? true };
+    }
+
+    componentDidMount() {
+        const { tabs } = this.props;
+        if (!tabs?.some(tab => tab.iconUrl)) {
+            this.setState({ isLoading: false });
+        }
     }
 
     /**
@@ -26,15 +35,11 @@ class AdditionalTabs extends PureComponent<AdditionalTabsProps, State> {
             return;
         }
 
-        const hasMoreTab = tabs.find(tab => tab.id < 0 && !tab.iconUrl);
-        const numTabs = tabs.length - (hasMoreTab ? 1 : 0);
-
+        const tabsWithIcons = tabs.filter(tab => tab.iconUrl);
         this.numLoadedTabs += 1;
 
-        if (this.numLoadedTabs === numTabs) {
-            this.setState({
-                isLoading: false,
-            });
+        if (this.numLoadedTabs >= tabsWithIcons.length || tabsWithIcons.length === 0) {
+            this.setState({ isLoading: false });
         }
     };
 
@@ -42,19 +47,32 @@ class AdditionalTabs extends PureComponent<AdditionalTabsProps, State> {
         const { tabs } = this.props;
         const { isLoading } = this.state;
 
+        if (!tabs) {
+            return <AdditionalTabsLoading data-testid="additional-tabs-loading" />;
+        }
+
+        if (!tabs) {
+            return <AdditionalTabsLoading data-testid="additional-tabs-loading" />;
+        }
+
         return (
-            <div className="bdl-AdditionalTabs">
-                {isLoading && <AdditionalTabsLoading />}
-                {tabs &&
-                    tabs.map(tabData => (
+            <>
+                {isLoading && <AdditionalTabsLoading data-testid="additional-tabs-loading" />}
+                <div
+                    className={`bdl-AdditionalTabs ${isLoading ? 'bdl-is-loading' : ''}`}
+                    data-testid="additional-tabs"
+                    aria-hidden={isLoading ? 'true' : undefined}
+                >
+                    {tabs.map(tabData => (
                         <AdditionalTab
                             key={tabData.id}
-                            onImageLoad={this.onImageLoad}
                             isLoading={isLoading}
+                            onImageLoad={this.onImageLoad}
                             {...tabData}
                         />
                     ))}
-            </div>
+                </div>
+            </>
         );
     }
 }

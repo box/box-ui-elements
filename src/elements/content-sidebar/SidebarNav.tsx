@@ -1,12 +1,5 @@
-/**
- * @flow
- * @file Preview sidebar nav component
- * @author Box
- */
-
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
@@ -31,25 +24,25 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
-import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
+import { type NavigateOptions, type AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
 
-type Props = {
-    additionalTabs?: Array<AdditionalSidebarTab>,
-    elementId: string,
-    fileId: string,
-    hasActivity: boolean,
-    hasAdditionalTabs: boolean,
-    hasBoxAI: boolean,
-    hasDetails: boolean,
-    hasDocGen?: boolean,
-    hasMetadata: boolean,
-    hasSkills: boolean,
-    intl: IntlShape,
-    isOpen?: boolean,
-    onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-    onPanelChange?: (name: string, isInitialState: boolean) => void,
-};
+interface Props {
+    additionalTabs?: Array<AdditionalSidebarTab>;
+    elementId: string;
+    fileId: string;
+    hasActivity: boolean;
+    hasAdditionalTabs: boolean;
+    hasBoxAI: boolean;
+    hasDetails: boolean;
+    hasDocGen?: boolean;
+    hasMetadata: boolean;
+    hasSkills: boolean;
+    intl: IntlShape;
+    isOpen?: boolean;
+    onNavigate?: (event: React.SyntheticEvent, options: NavigateOptions) => void;
+    onPanelChange?: (name: string, isInitialState: boolean) => void;
+}
 
 const SidebarNav = ({
     additionalTabs,

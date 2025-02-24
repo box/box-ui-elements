@@ -88,7 +88,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
         getComponent(props);
 
         const button = screen.getByRole('button', { name: 'test title' });
-        expect(button).toBeDisabled();
+        expect(button).toHaveAttribute('aria-disabled', 'true');
         expect(button).toHaveClass('bdl-is-disabled');
     });
 
@@ -100,14 +100,18 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
             id: 4,
             isLoading: false,
             ftuxTooltipData: {
-                targetingApi: noop,
+                targetingApi: () => ({
+                    canShow: true,
+                    onShow: jest.fn(),
+                }),
                 text: 'ftux tooltip text',
             },
             callback: noop,
         };
 
-        const { container } = getComponent(props);
+        getComponent(props);
 
-        expect(container.querySelector('.bdl-AdditionalTabTooltip')).toBeInTheDocument();
+        // The tooltip should be rendered with the FTUX text
+        expect(screen.getByText('ftux tooltip text')).toBeInTheDocument();
     });
 });

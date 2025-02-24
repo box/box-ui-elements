@@ -33,6 +33,16 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
         return status === BLOCKED_BY_SHEILD;
     }
 
+    getButtonProps() {
+        const { title } = this.props;
+        const isDisabled = this.isDisabled();
+        return {
+            'aria-label': title || undefined,
+            disabled: isDisabled,
+            'aria-disabled': isDisabled,
+        };
+    }
+
     getDisabledReason(): React.ReactElement | string {
         const { status } = this.props;
         if (status === BLOCKED_BY_SHEILD) {
@@ -51,17 +61,23 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
 
         if (id && id > 0 && iconUrl) {
             return (
-                <img
-                    className="bdl-AdditionalTab-icon"
-                    src={iconUrl}
-                    onError={this.onImageError}
-                    onLoad={onImageLoad}
-                    alt={title || ''}
-                />
+                <div className="bdl-AdditionalTabPlaceholder">
+                    <img
+                        className="bdl-AdditionalTab-icon"
+                        src={iconUrl}
+                        onError={this.onImageError}
+                        onLoad={onImageLoad}
+                        alt={title || ''}
+                    />
+                </div>
             );
         }
 
-        return icon || <Apps16 width={20} height={20} {...{ fill: bdlGray50 }} />;
+        return (
+            <div className="bdl-AdditionalTabPlaceholder">
+                {icon || <Apps16 width={20} height={20} {...{ fill: bdlGray50 }} />}
+            </div>
+        );
     }
 
     render() {
@@ -70,12 +86,24 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
         const isDisabled = this.isDisabled();
 
         const className = classNames('bdl-AdditionalTab', {
-            'bdl-is-hidden': isLoading,
             'bdl-is-disabled': isDisabled,
             'bdl-is-overflow': id && id < 0,
         });
 
         const tooltipText = isDisabled ? this.getDisabledReason() : title || '';
+
+        const tooltipWrapper = (
+            <PlainButton
+                className={className}
+                data-testid="additionaltab"
+                type={ButtonType.BUTTON}
+                onClick={() => !this.isDisabled() && callbackFn({ id, callbackData: rest })}
+                aria-label={title || undefined}
+                isDisabled={this.isDisabled()}
+            >
+                {this.getTabIcon()}
+            </PlainButton>
+        );
 
         return (
             <AdditionalTabTooltip
@@ -83,16 +111,7 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
                 ftuxTooltipData={ftuxTooltipData}
                 isFtuxVisible={!isLoading}
             >
-                <PlainButton
-                    aria-label={title || undefined}
-                    className={className}
-                    data-testid="additionaltab"
-                    type={ButtonType.BUTTON}
-                    isDisabled={isDisabled}
-                    onClick={() => callbackFn({ id, callbackData: rest })}
-                >
-                    {this.getTabIcon()}
-                </PlainButton>
+                {tooltipWrapper}
             </AdditionalTabTooltip>
         );
     }
