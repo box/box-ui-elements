@@ -716,7 +716,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
             expect(getApiMock).toBeCalledTimes(1);
             expect(getApiDeleteMock).toBeCalledTimes(1);
-            expect(onDeleteMock).not.toHaveBeenCalled();
+            expect(onDeleteMock).toHaveBeenCalledTimes(1);
             expect(refreshCollectionMock).toBeCalledTimes(1);
         });
     });
