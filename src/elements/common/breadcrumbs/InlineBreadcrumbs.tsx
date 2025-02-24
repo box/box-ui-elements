@@ -8,7 +8,7 @@ import './InlineBreadcrumbs.scss';
 
 export interface InlineBreadcrumbsProps {
     item: BoxItem;
-    onItemClick: (item: BoxItem) => void;
+    onItemClick: (item: BoxItem | string) => void;
     rootId: string;
 }
 
@@ -19,15 +19,7 @@ const InlineBreadcrumbs = ({ item, onItemClick, rootId }: InlineBreadcrumbsProps
         <span className="be-inline-breadcrumbs">
             <FormattedMessage {...messages.in} />
             &nbsp;
-            <Breadcrumbs
-                crumbs={breadcrumbs}
-                delimiter={DELIMITER_SLASH}
-                onCrumbClick={crumb => {
-                    // Crumbs from path_collection are already BoxItems
-                    onItemClick(crumb as BoxItem);
-                }}
-                rootId={rootId}
-            />
+            <Breadcrumbs crumbs={breadcrumbs} delimiter={DELIMITER_SLASH} onCrumbClick={onItemClick} rootId={rootId} />
         </span>
     );
 };
