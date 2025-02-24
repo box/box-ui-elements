@@ -65,7 +65,6 @@ const taskWithAssignment: Task = {
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: { target: otherUser },
-    description: 'test',
     due_at: '2018-07-03T14:43:52-07:00',
     assigned_to: {
         entries: [
@@ -102,6 +101,7 @@ const taskWithAssignment: Task = {
 const appActivity = {
     activity_template: {
         id: 'template_09887654',
+        type: 'activity_template',
     },
     app: {
         id: 'app_123456',
