@@ -1,12 +1,5 @@
-/**
- * @flow
- * @file Preview sidebar nav component
- * @author Box
- */
-
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
@@ -34,22 +27,21 @@ import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
 
-type Props = {
-    additionalTabs?: Array<AdditionalSidebarTab>,
-    elementId: string,
-    fileId: string,
-    hasActivity: boolean,
-    hasAdditionalTabs: boolean,
-    hasBoxAI: boolean,
-    hasDetails: boolean,
-    hasDocGen?: boolean,
-    hasMetadata: boolean,
-    hasSkills: boolean,
-    intl: IntlShape,
-    isOpen?: boolean,
-    onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
-    onPanelChange?: (name: string, isInitialState: boolean) => void,
-};
+interface Props {
+    additionalTabs?: AdditionalSidebarTab[];
+    elementId: string;
+    fileId: string;
+    hasActivity: boolean;
+    hasAdditionalTabs: boolean;
+    hasBoxAI: boolean;
+    hasDetails: boolean;
+    hasDocGen?: boolean;
+    hasMetadata: boolean;
+    hasSkills: boolean;
+    isOpen?: boolean;
+    onNavigate?: (event: React.SyntheticEvent<HTMLElement>, options: NavigateOptions) => void;
+    onPanelChange?: (name: string, isInitialState: boolean) => void;
+}
 
 const SidebarNav = ({
     additionalTabs,
@@ -62,22 +54,22 @@ const SidebarNav = ({
     hasMetadata,
     hasSkills,
     hasDocGen = false,
-    intl,
     isOpen,
     onNavigate,
     onPanelChange = noop,
-}: Props) => {
+}: Props): React.ReactElement => {
+    const { formatMessage } = useIntl();
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
 
-    const handleSidebarNavButtonClick = (sidebarview: string) => {
+    const handleSidebarNavButtonClick = (sidebarview: string): void => {
         onPanelChange(sidebarview, false);
     };
 
     return (
-        <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
-            <div className="bcs-SidebarNav-tabs">
+        <nav className="bcs-SidebarNav" aria-label={formatMessage(messages.sidebarNavLabel)} data-testid="sidebar-nav">
+            <div className="bcs-SidebarNav-tabs" data-testid="sidebar-nav-tabs">
                 <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
                     {hasBoxAI && (
                         <SidebarNavButton
@@ -90,7 +82,7 @@ const SidebarNav = ({
                             tooltip={
                                 showOnlyBoxAINavButton
                                     ? boxAIDisabledTooltip
-                                    : intl.formatMessage(messages.sidebarBoxAITitle)
+                                    : formatMessage(messages.sidebarBoxAITitle)
                             }
                         >
                             <BoxAiLogo height={Size6} width={Size6} />
@@ -103,7 +95,7 @@ const SidebarNav = ({
                             data-testid="sidebaractivity"
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
-                            tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
+                            tooltip={formatMessage(messages.sidebarActivityTitle)}
                         >
                             <IconChatRound className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
@@ -115,7 +107,7 @@ const SidebarNav = ({
                             data-testid="sidebardetails"
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_DETAILS}
-                            tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
+                            tooltip={formatMessage(messages.sidebarDetailsTitle)}
                         >
                             <IconDocInfo className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
@@ -127,7 +119,7 @@ const SidebarNav = ({
                             data-testid="sidebarskills"
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_SKILLS}
-                            tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
+                            tooltip={formatMessage(messages.sidebarSkillsTitle)}
                         >
                             <IconMagicWand className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
@@ -139,7 +131,7 @@ const SidebarNav = ({
                             data-testid="sidebarmetadata"
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_METADATA}
-                            tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
+                            tooltip={formatMessage(messages.sidebarMetadataTitle)}
                         >
                             <IconMetadataThick className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
@@ -150,7 +142,7 @@ const SidebarNav = ({
                             data-target-id="SidebarNavButton-docGen"
                             onClick={handleSidebarNavButtonClick}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
-                            tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
+                            tooltip={formatMessage(messages.sidebarDocGenTooltip)}
                         >
                             <DocGenIcon className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
@@ -172,7 +164,8 @@ const SidebarNav = ({
             <div className="bcs-SidebarNav-footer">
                 <SidebarToggle isOpen={isOpen} />
             </div>
-        </div>
+        </nav>
     );
 };
-export default injectIntl(SidebarNav);
+
+export default SidebarNav;
