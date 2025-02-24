@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { render, screen } from '../../../../test-utils/testing-library';
 import Breadcrumbs from '../Breadcrumbs';
+import messages from '../../messages';
 
 describe('elements/common/breadcrumbs/Breadcrumbs', () => {
     const renderComponent = (props = {}) => {
@@ -18,14 +19,15 @@ describe('elements/common/breadcrumbs/Breadcrumbs', () => {
         expect(screen.getByRole('button', { name: 'All Files' })).toBeInTheDocument();
     });
 
-    test('should render dropdown when there are multiple crumbs', () => {
+    test('should render dropdown when there are three or more crumbs', () => {
         const crumbs = [
             { id: '0', name: 'All Files' },
             { id: '1', name: 'Folder 1' },
+            { id: '2', name: 'Folder 2' },
         ];
         renderComponent({ crumbs });
-        expect(screen.getByRole('button', { name: 'More breadcrumb items' })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Folder 1' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: messages.breadcrumbLabel.defaultMessage })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Folder 2' })).toBeInTheDocument();
     });
 
     test('should call onCrumbClick when clicking a breadcrumb', () => {

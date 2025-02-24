@@ -81,9 +81,9 @@ const Breadcrumbs = ({ crumbs = [], delimiter, isSmall = false, onCrumbClick, ro
     const secondLastBreadcrumb =
         length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter) : null;
 
-    // Only show the more dropdown when there were at least 4 crumbs.
+    // Only show the more dropdown when there were at least 3 crumbs.
     const moreBreadcrumbs =
-        length > 3 ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter) : null;
+        length > 2 ? getBreadcrumb([...filteredCrumbs.slice(0, length - 1)], false, onCrumbClick, delimiter) : null;
 
     // Only show the root breadcrumb when there are at least 3 crumbs.
     const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;
