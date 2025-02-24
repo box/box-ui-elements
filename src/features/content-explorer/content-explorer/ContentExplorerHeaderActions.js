@@ -16,6 +16,7 @@ const isSearchResultsFolder = folder => folder && folder.id === SEARCH_RESULTS_F
 
 class ContentExplorerHeaderActions extends Component {
     static propTypes = {
+        breadcrumbIcon: PropTypes.element,
         breadcrumbProps: BreadcrumbPropType,
         children: PropTypes.node,
         contentExplorerMode: ContentExplorerModePropType.isRequired,
@@ -151,6 +152,7 @@ class ContentExplorerHeaderActions extends Component {
 
     render() {
         const {
+            breadcrumbIcon,
             breadcrumbProps,
             children,
             contentExplorerMode,
@@ -200,6 +202,7 @@ class ContentExplorerHeaderActions extends Component {
                     />
                 ) : (
                     <ContentExplorerBreadcrumbs
+                        breadcrumbIcon={breadcrumbIcon}
                         breadcrumbProps={breadcrumbProps}
                         foldersPath={foldersPath}
                         isUpButtonDisabled={isBreadcrumbButtonDisabled}
