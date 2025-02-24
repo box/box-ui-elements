@@ -20,7 +20,7 @@ describe('elements/Pagination/MarkerBasedPagination', () => {
                     onMarkerBasedPageChange={onMarkerBasedPageChange}
                 />,
             );
-            expect(wrapper.find('Button').props()).toMatchObject({
+            expect(wrapper.find('Button').first().props()).toMatchObject({
                 className: '',
                 isDisabled: false,
                 isLoading: false,

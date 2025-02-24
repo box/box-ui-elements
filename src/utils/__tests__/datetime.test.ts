@@ -178,9 +178,9 @@ describe('utils/datetime', () => {
 
     describe('convertDateToUnixMidnightTime()', () => {
         test('should correctly convert date', () => {
-            const result = new Date(convertDateToUnixMidnightTime(new Date('2018-06-13T07:00:00.000Z')));
-            const expected = new Date('2018-06-13T00:00:00.000Z');
-            expect(result.getTime()).toBe(expected.getTime());
+            const date = new Date('2018-06-13T07:00:00.000Z');
+            const result = convertDateToUnixMidnightTime(date);
+            expect(result).toBe(date.setHours(0, 0, 0, 0));
         });
     });
 

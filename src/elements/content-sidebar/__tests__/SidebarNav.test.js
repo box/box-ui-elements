@@ -117,7 +117,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 await userEvent.hover(button);
 
                 expect(button).toHaveAttribute('aria-disabled', 'true');
-                expect(button).toHaveAttribute('title', expectedTooltip);
+                expect(screen.getByText(expectedTooltip)).toBeInTheDocument();
             },
         );
 
@@ -134,7 +134,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             await userEvent.hover(button);
 
             expect(button).not.toHaveAttribute('aria-disabled');
-            expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
+            expect(screen.getByText('Box AI')).toBeInTheDocument();
         });
     });
 
