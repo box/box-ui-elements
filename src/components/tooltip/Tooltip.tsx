@@ -382,7 +382,7 @@ class Tooltip extends React.Component<TooltipProps, State> {
 
         return (
             <TetherComponent ref={this.tetherRef} {...tetherProps}>
-                {React.cloneElement(React.Children.only(children) as React.ReactElement, componentProps)}
+                {React.Children.only(children)}
                 {showTooltip && tooltip}
             </TetherComponent>
         );

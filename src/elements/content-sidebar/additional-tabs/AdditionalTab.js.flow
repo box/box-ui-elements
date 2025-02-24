@@ -1,0 +1,12 @@
+// @flow
+import * as React from 'react';
+import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
+
+type Props = {
+    ftuxTooltipData?: AdditionalSidebarTabFtuxData,
+    isLoading: boolean,
+    onImageLoad: () => void,
+    status?: string,
+} & AdditionalSidebarTab;
+
+declare export default class AdditionalTab extends React.PureComponent<Props> {}

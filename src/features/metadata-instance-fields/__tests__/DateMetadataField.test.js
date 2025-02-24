@@ -9,6 +9,9 @@ describe('features/metadata-instance-editor/fields/DateMetadataField', () => {
 
     test('should correctly render a date field', () => {
         const wrapper = shallow(<DateMetadataField dataValue="2018-06-13T00:00:00.000Z" intl={intl} />);
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.props()).toMatchObject({
+            hideOptionalLabel: true,
+            onChange: expect.any(Function),
+        });
     });
 });

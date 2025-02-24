@@ -1,0 +1,12 @@
+// @flow
+import * as React from 'react';
+import type { AdditionalSidebarTabFtuxData } from '../flowTypes';
+
+type Props = {
+    children: React.Node,
+    defaultTooltipText: React.Node,
+    ftuxTooltipData?: AdditionalSidebarTabFtuxData,
+    isFtuxVisible?: boolean,
+};
+
+declare export default React.ComponentType<Props>;

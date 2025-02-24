@@ -31,6 +31,7 @@ type AdditionalSidebarTab = {
     id: number,
     title: ?string,
     icon?: React.Node,
+    status?: string,
 };
 
 type Translations = {

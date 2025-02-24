@@ -1,0 +1,12 @@
+// @flow
+export type AdditionalSidebarTab = {
+    callback?: Function,
+    iconUrl?: string,
+    id: string,
+    title: string,
+};
+
+export type AdditionalSidebarTabFtuxData = {
+    targetingApi: Function,
+    targetingData: Object,
+};

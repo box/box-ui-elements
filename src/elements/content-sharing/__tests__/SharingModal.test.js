@@ -91,6 +91,10 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, markerBa
 describe('elements/content-sharing/SharingModal', () => {
     // The visibility of the modal is set in the ContentSharing parent element, so we can only test whether the function for closing the modal was called
     const setIsVisibleMock = jest.fn();
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
     const getWrapper = props =>
         mount(<SharingModal isVisible itemID={MOCK_ITEM_ID} language="" setIsVisible={setIsVisibleMock} {...props} />);
 
@@ -358,6 +362,10 @@ describe('elements/content-sharing/SharingModal', () => {
             api = createAPIMock({ getFile }, { getFolderFields }, { getUser });
         });
 
+        beforeEach(() => {
+            jest.clearAllMocks();
+        });
+
         test('should show the initial data error notification and skip the call to getUser() if the call to getFile() fails', async () => {
             let wrapper;
             await act(async () => {
@@ -366,7 +374,7 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(getFile).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
-            expect(convertItemResponse).not.toHaveBeenCalled();
+            expect(convertItemResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
@@ -380,7 +388,7 @@ describe('elements/content-sharing/SharingModal', () => {
             wrapper.update();
             expect(getFolderFields).toHaveBeenCalled();
             expect(getUser).not.toHaveBeenCalled();
-            expect(convertItemResponse).not.toHaveBeenCalled();
+            expect(convertItemResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
@@ -438,7 +446,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFile).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
-            expect(convertUserResponse).not.toHaveBeenCalled();
+            expect(convertUserResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);
@@ -453,7 +461,7 @@ describe('elements/content-sharing/SharingModal', () => {
             expect(getFolderFields).toHaveBeenCalled();
             expect(convertItemResponse).toHaveBeenCalledWith(MOCK_ITEM_API_RESPONSE);
             expect(getUser).toHaveBeenCalled();
-            expect(convertUserResponse).not.toHaveBeenCalled();
+            expect(convertUserResponse).toHaveBeenCalledTimes(0);
             expect(wrapper.find(Notification).prop('type')).toBe(TYPE_ERROR);
             expect(wrapper.exists(UnifiedShareModal)).toBe(false);
             expect(wrapper.exists(SharingNotification)).toBe(false);

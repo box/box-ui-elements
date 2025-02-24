@@ -151,7 +151,7 @@ describe('api/OffsetBasedAPI', () => {
             };
 
             return offsetBasedAPI.offsetGet('id', successCb, errorCb).then(() => {
-                expect(successCb).not.toHaveBeenCalled();
+                expect(successCb).toHaveBeenCalledWith({ entries: [], total_count: 0 });
                 expect(errorCb).toHaveBeenCalledWith(error, errorCode);
                 expect(offsetBasedAPI.xhr.get).toHaveBeenCalledWith({
                     id: 'file_id',

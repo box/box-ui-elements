@@ -1,12 +1,10 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import AdditionalTabsLoading from '../AdditionalTabsLoading';
 
 describe('elements/content-sidebar/additional-tabs/AdditionalTabs', () => {
-    const getWrapper = props => shallow(<AdditionalTabsLoading {...props} />);
-
     test('should render the correct loading state', () => {
-        const wrapper = getWrapper({});
-        expect(wrapper).toMatchSnapshot();
+        render(<AdditionalTabsLoading />);
+        expect(screen.getAllByTestId('additional-tab-placeholder')).toHaveLength(3);
     });
 });
