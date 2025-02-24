@@ -1,0 +1,39 @@
+// @flow
+import * as React from 'react';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
+
+type Props = {
+    children: React.Node,
+    currentUser?: User,
+    getAvatarUrl: GetAvatarUrlCallback,
+    getMentionWithQuery?: Function,
+    getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
+    hasReplies: boolean,
+    isAlwaysExpanded?: boolean,
+    isPending?: boolean,
+    isRepliesLoading?: boolean,
+    mentionSelectorContacts?: SelectorItems<>,
+    onHideReplies?: (lastReply: CommentType) => void,
+    onReplyCreate?: (text: string) => void,
+    onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
+    onReplyEdit?: ({
+        id: string,
+        text: string,
+        permissions: BoxCommentPermission,
+        status?: FeedItemStatus,
+        hasMention?: boolean,
+        onSuccess?: Function,
+        onError?: Function,
+    }) => void,
+    onReplySelect?: (isSelected: boolean) => void,
+    onShowReplies?: () => void,
+    replies?: Array<CommentType>,
+    repliesTotalCount?: number,
+    translations?: Translations,
+};
+
+declare export default React.ComponentType<Props>;

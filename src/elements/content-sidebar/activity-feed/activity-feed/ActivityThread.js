@@ -31,15 +31,15 @@ type Props = {
     onHideReplies?: (lastReply: CommentType) => void,
     onReplyCreate?: (text: string) => void,
     onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
-    onReplyEdit?: (
+    onReplyEdit?: ({
         id: string,
         text: string,
+        permissions: BoxCommentPermission,
         status?: FeedItemStatus,
         hasMention?: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
+        onSuccess?: Function,
+        onError?: Function,
+    }) => void,
     onReplySelect?: (isSelected: boolean) => void,
     onShowReplies?: () => void,
     replies?: Array<CommentType>,
@@ -140,7 +140,9 @@ const ActivityThread = ({
                             isRepliesLoading={isRepliesLoading}
                             mentionSelectorContacts={mentionSelectorContacts}
                             onDelete={onReplyDelete}
-                            onEdit={onReplyEdit}
+                            onEdit={(id, text, status, hasMention, permissions, onSuccess, onError) =>
+                                onReplyEdit({ id, text, permissions, status, hasMention, onSuccess, onError })
+                            }
                             onSelect={onReplySelect}
                             replies={replies}
                             translations={translations}

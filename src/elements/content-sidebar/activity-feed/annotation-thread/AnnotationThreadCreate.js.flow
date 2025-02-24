@@ -1,0 +1,15 @@
+// @flow
+import * as React from 'react';
+import type { SelectorItems, User } from '../../../../common/types/core';
+
+type Props = {
+    currentUser: User,
+    getAvatarUrl: string => Promise<?string>,
+    getMentionWithQuery: (searchStr: string) => void,
+    isPending: boolean,
+    mentionSelectorContacts: SelectorItems<>,
+    onFormCancel: () => void,
+    onFormSubmit: (text: string) => void,
+};
+
+declare export default React.ComponentType<Props>;

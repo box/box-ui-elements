@@ -20,7 +20,15 @@ type Props = {
     isRepliesLoading?: boolean,
     mentionSelectorContacts?: SelectorItems<>,
     onDelete?: Function,
-    onEdit?: Function,
+    onEdit?: ({
+        id: string,
+        text: string,
+        permissions: BoxCommentPermission,
+        status?: FeedItemStatus,
+        hasMention?: boolean,
+        onSuccess?: Function,
+        onError?: Function,
+    }) => void,
     onSelect?: (isSelected: boolean) => void,
     replies: Array<CommentType>,
     translations?: Translations,
@@ -49,9 +57,17 @@ const ActivityThreadReplies = ({
         };
     };
 
-    const handleOnEdit = ({ hasMention, id, onError, onSuccess, permissions, status, text }): void => {
+    const handleOnEdit = (params: {
+        hasMention?: boolean,
+        id: string,
+        onError?: Function,
+        onSuccess?: Function,
+        permissions: BoxCommentPermission,
+        status?: FeedItemStatus,
+        text: string,
+    }): void => {
         if (onEdit) {
-            onEdit(id, text, status, hasMention, permissions, onSuccess, onError);
+            onEdit(params);
         }
     };
 
