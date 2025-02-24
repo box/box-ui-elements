@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { mount } from 'enzyme';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
-import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
+import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder.tsx';
 import AdditionalTabs from '../additional-tabs';
 import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading.tsx';
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
