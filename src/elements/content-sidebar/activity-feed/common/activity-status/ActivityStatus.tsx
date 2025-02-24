@@ -16,12 +16,14 @@ const ActivityStatus = ({ status }: ActivityStatusProps): React.ReactElement | n
     }
 
     return (
-        <div className="bcs-ActivityStatus" role="status">
-            <LabelPill.Pill type={LabelPillStatus.SUCCESS}>
-                <LabelPill.Text>
-                    <FormattedMessage {...messages.activityStatusResolved} />
-                </LabelPill.Text>
-            </LabelPill.Pill>
+        <div className="bcs-ActivityStatus">
+            <div role="status">
+                <LabelPill.Pill type={LabelPillStatus.SUCCESS}>
+                    <LabelPill.Text>
+                        <FormattedMessage {...messages.activityStatusResolved} />
+                    </LabelPill.Text>
+                </LabelPill.Pill>
+            </div>
         </div>
     );
 };
