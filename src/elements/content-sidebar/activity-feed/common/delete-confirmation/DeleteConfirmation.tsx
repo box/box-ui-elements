@@ -40,8 +40,7 @@ class DeleteConfirmation extends React.Component<DeleteConfirmationProps> {
     };
 
     render() {
-        const { className, isOpen, message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
-        // Destructure isOpen to prevent it from being passed to Overlay component
+        const { intl, message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props;
 
         return (
             <Overlay
