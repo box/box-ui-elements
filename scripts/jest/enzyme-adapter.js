@@ -1,13 +1,14 @@
-import Enzyme, { mount, shallow } from 'enzyme';
-import Adapter from '@cfaester/enzyme-adapter-react-18';
+const Enzyme = require('enzyme');
+const { mount, shallow } = require('enzyme');
+const Adapter = require('@cfaester/enzyme-adapter-react-18');
 
+// Configure Enzyme with React 18 adapter
 Enzyme.configure({ adapter: new Adapter() });
 
-// make Enzyme functions available in all test files without importing
+// Make Enzyme functions available globally
 global.shallow = shallow;
 global.mount = mount;
+global.Enzyme = Enzyme;
 
-// testing utility functions
-
-// accepts a Cheerio jQuery-style wrapper or Enzyme mount wrapper
+// Testing utility functions
 global.queryAllByTestId = (wrapper, testid) => wrapper.find(`[data-testid="${testid}"]`);
