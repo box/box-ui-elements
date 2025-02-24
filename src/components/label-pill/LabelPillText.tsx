@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-export interface LabelPillTextProps {
+export interface LabelPillTextProps extends React.HTMLAttributes<HTMLSpanElement> {
     /** Text content, ie string or FormattedMessage */
     children: React.ReactChild;
     /** Additional CSS classname(s) */
