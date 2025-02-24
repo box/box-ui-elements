@@ -1,0 +1,9 @@
+// @flow
+import * as React from 'react';
+import type { AdditionalSidebarTab } from '../flowTypes';
+
+type Props = {
+    tabs?: Array<AdditionalSidebarTab>,
+};
+
+declare export default class AdditionalTabs extends React.PureComponent<Props> {}
