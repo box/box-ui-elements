@@ -13,9 +13,37 @@ export interface BreadcrumbsProps {
     rootId: string;
 }
 
-const Breadcrumbs = ({ className = '', crumbs = [], delimiter, isSmall = false, onCrumbClick }: BreadcrumbsProps) => {
-    const shouldShowDropdown = crumbs.length > 1;
-    const lastCrumb = crumbs[crumbs.length - 1];
+function filterCrumbs(rootId: string, crumbs: Crumb[]): Crumb[] {
+    const rootIndex = crumbs.findIndex((crumb: Crumb) => crumb.id === rootId);
+    return rootIndex === -1 ? crumbs : crumbs.slice(rootIndex);
+}
+
+function getBreadcrumb(
+    crumbs: Crumb | Crumb[],
+    isLast: boolean,
+    onCrumbClick: (id: string) => void,
+    delimiter: Delimiter,
+) {
+    if (Array.isArray(crumbs)) {
+        return <BreadcrumbDropdown crumbs={crumbs} onCrumbClick={onCrumbClick} />;
+    }
+
+    return (
+        <Breadcrumb delimiter={delimiter} isLast={isLast} name={crumbs.name} onClick={() => onCrumbClick(crumbs.id)} />
+    );
+}
+
+const Breadcrumbs = ({
+    className = '',
+    crumbs = [],
+    delimiter,
+    isSmall = false,
+    onCrumbClick,
+    rootId,
+}: BreadcrumbsProps) => {
+    const filteredCrumbs = filterCrumbs(rootId, crumbs);
+    const shouldShowDropdown = filteredCrumbs.length > 1;
+    const lastCrumb = filteredCrumbs[filteredCrumbs.length - 1];
 
     return (
         <nav
@@ -24,15 +52,8 @@ const Breadcrumbs = ({ className = '', crumbs = [], delimiter, isSmall = false, 
                 'is-small': isSmall,
             })}
         >
-            {shouldShowDropdown && <BreadcrumbDropdown crumbs={crumbs.slice(0, -1)} onCrumbClick={onCrumbClick} />}
-            {lastCrumb && (
-                <Breadcrumb
-                    delimiter={delimiter}
-                    isLast
-                    name={lastCrumb.name}
-                    onClick={() => onCrumbClick(lastCrumb)}
-                />
-            )}
+            {shouldShowDropdown && getBreadcrumb(filteredCrumbs.slice(0, -1), false, onCrumbClick, delimiter)}
+            {lastCrumb && getBreadcrumb(lastCrumb, true, onCrumbClick, delimiter)}
         </nav>
     );
 };
