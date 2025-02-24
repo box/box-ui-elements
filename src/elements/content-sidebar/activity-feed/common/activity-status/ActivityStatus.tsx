@@ -10,13 +10,13 @@ export interface ActivityStatusProps {
     status?: FeedItemStatus;
 }
 
-const ActivityStatus = ({ status }: ActivityStatusProps) => {
+const ActivityStatus = ({ status }: ActivityStatusProps): React.ReactElement | null => {
     if (status !== COMMENT_STATUS_RESOLVED) {
         return null;
     }
 
     return (
-        <div className="bcs-ActivityStatus" data-testid="bcs-ActivityStatus">
+        <div className="bcs-ActivityStatus">
             <LabelPill.Pill type={LabelPillStatus.SUCCESS}>
                 <LabelPill.Text>
                     <FormattedMessage {...messages.activityStatusResolved} />
