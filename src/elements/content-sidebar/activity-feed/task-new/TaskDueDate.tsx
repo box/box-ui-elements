@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import ActivityDatestamp from '../common/activity-datestamp';
 import messages from './messages';
-import LabelPill from '../../../../components/label-pill';
+import LabelPill, { LabelPillStatus } from '../../../../components/label-pill';
 import { TASK_NEW_NOT_STARTED } from '../../../../constants';
 
 import type { TaskStatus } from '../../../../common/types/tasks';
@@ -15,9 +15,11 @@ interface TaskDueDateProps {
 }
 
 const TaskDueDate = ({ dueDate, status }: TaskDueDateProps): JSX.Element => {
-    const isOverdue = dueDate ? status === TASK_NEW_NOT_STARTED && new Date(dueDate) < Date.now() : false;
+    const isOverdue = dueDate ? status === TASK_NEW_NOT_STARTED && new Date(dueDate).getTime() < Date.now() : false;
     const fullDueDate = new Date(dueDate);
-    const pillProps = isOverdue ? { 'data-testid': 'task-overdue-date', type: 'error' } : { type: 'default' };
+    const pillProps = isOverdue
+        ? { 'data-testid': 'task-overdue-date', type: LabelPillStatus.ERROR }
+        : { type: LabelPillStatus.DEFAULT };
     return (
         <div data-testid="task-due-date">
             <LabelPill.Pill {...pillProps}>

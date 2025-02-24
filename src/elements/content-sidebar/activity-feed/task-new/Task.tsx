@@ -32,13 +32,13 @@ import {
     PLACEHOLDER_USER,
     TASK_EDIT_MODE_EDIT,
 } from '../../../../constants';
-import type { TaskAssigneeCollection, TaskNew } from '../../../../common/types/tasks';
+import type { TaskAssigneeCollection, TaskCompletionRule, TaskType, TaskStatus } from '../../../../common/types/tasks';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 import TaskActions from './TaskActions';
 import TaskCompletionRuleIcon from './TaskCompletionRuleIcon';
 import TaskDueDate from './TaskDueDate';
-import TaskStatus from './TaskStatus';
+import TaskStatusComponent from './TaskStatus';
 import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
 import TaskMultiFileIcon from './TaskMultiFileIcon';
@@ -53,7 +53,7 @@ import type { FeatureConfig } from '../../../common/feature-checking';
 
 import './Task.scss';
 
-interface TaskProps extends TaskNew {
+interface TaskProps {
     api: API;
     approverSelectorContacts: SelectorItems<unknown>;
     currentUser: User;
@@ -71,6 +71,28 @@ interface TaskProps extends TaskNew {
     onView?: (id: string, isCreator: boolean) => void;
     translatedTaggedMessage?: string;
     translations?: Translations;
+
+    // TaskNew properties
+    assigned_to: TaskAssigneeCollection;
+    completion_rule?: TaskCompletionRule;
+    created_at: string;
+    created_by: { target: User | null };
+    description: string;
+    due_at?: string;
+    id: string;
+    permissions: {
+        can_delete: boolean;
+        can_update: boolean;
+    };
+    status: TaskStatus;
+    task_links: {
+        entries: Array<{
+            target: {
+                id: string;
+            };
+        }>;
+    };
+    task_type: TaskType;
 }
 
 interface TaskState {
@@ -286,10 +308,12 @@ class Task extends React.Component<TaskProps, TaskState> {
                     <Media.Body>
                         {isMenuVisible && (
                             <TetherComponent
-                                attachment="top right"
                                 className="bcs-Task-deleteConfirmationModal"
-                                constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                attachment="top right"
                                 targetAttachment="bottom right"
+                                constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                renderElementTag="div"
+                                renderElementTo={null}
                             >
                                 <Media.Menu
                                     isDisabled={isConfirmingDelete}
@@ -345,7 +369,7 @@ class Task extends React.Component<TaskProps, TaskState> {
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
                         <div className="bcs-Task-status">
-                            <TaskStatus status={status} />
+                            <TaskStatusComponent status={status} />
                             <TaskMultiFileIcon isMultiFile={isMultiFile} />
                             <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>

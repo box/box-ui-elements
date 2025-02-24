@@ -8,7 +8,7 @@ import {
     TASK_NEW_IN_PROGRESS,
 } from '../../../../constants';
 import messages from './messages';
-import LabelPill from '../../../../components/label-pill';
+import LabelPill, { LabelPillStatus } from '../../../../components/label-pill';
 import type { TaskStatus } from '../../../../common/types/tasks';
 
 interface StatusProps {
@@ -24,11 +24,11 @@ const statusMessageKeyMap = {
 };
 
 const typeKeyMap = {
-    [TASK_NEW_APPROVED]: 'success',
-    [TASK_NEW_COMPLETED]: 'success',
-    [TASK_NEW_REJECTED]: 'error',
-    [TASK_NEW_NOT_STARTED]: 'default',
-    [TASK_NEW_IN_PROGRESS]: 'default',
+    [TASK_NEW_APPROVED]: LabelPillStatus.SUCCESS,
+    [TASK_NEW_COMPLETED]: LabelPillStatus.SUCCESS,
+    [TASK_NEW_REJECTED]: LabelPillStatus.ERROR,
+    [TASK_NEW_NOT_STARTED]: LabelPillStatus.DEFAULT,
+    [TASK_NEW_IN_PROGRESS]: LabelPillStatus.DEFAULT,
 };
 
 const Status = React.memo<StatusProps>(({ status }: StatusProps) => (
