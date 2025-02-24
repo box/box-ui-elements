@@ -142,7 +142,7 @@ const ActivityThread: React.FC<ActivityThreadProps> = ({
                             onDelete={onReplyDelete}
                             onEdit={(id, text, status, hasMention, permissions, onSuccess, onError) => {
                                 if (onReplyEdit) {
-                                    onReplyEdit(id, text, status, hasMention, permissions, onSuccess, onError);
+                                    onReplyEdit(id, text, permissions, status, hasMention, onSuccess, onError);
                                 }
                             }}
                             onSelect={onReplySelect}
