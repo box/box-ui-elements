@@ -1,6 +1,16 @@
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    interactedDate: {
+        id: 'be.item.interactedDate',
+        description: 'Text for interacted date with interacted prefix',
+        defaultMessage: 'Interacted {interactedDate}',
+    },
+    modifiedDate: {
+        id: 'be.item.modifiedDate',
+        description: 'Text for modified date with modified prefix',
+        defaultMessage: 'Modified {date}',
+    },
     archive: {
         id: 'be.item.archive',
         description: 'Label for a Box item icon of type folder and is an archive',

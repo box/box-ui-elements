@@ -1,46 +1,48 @@
-import React from 'react';
+import * as React from 'react';
 import { useIntl } from 'react-intl';
-
-import DateValue from '../date-value';
-
 import { VIEW_RECENTS } from '../../../constants';
-
-import messages from './messages';
-
-import type { BoxItem, View } from '../../../common/types/core';
+import type { BoxItem } from '../../../common/types/core';
 
 export interface ItemDateProps {
     item: BoxItem;
-    view: View;
+    view?: string;
 }
 
 const ItemDate = ({ item, view }: ItemDateProps) => {
-    const { interacted_at: interactedAt, modified_at: modifiedAt, modified_by: modifiedBy } = item;
-
     const { formatMessage } = useIntl();
+    const { interacted_at: interactedAt, modified_at: modifiedAt = '' } = item;
 
     if (view === VIEW_RECENTS) {
         return (
-            <DateValue
-                date={interactedAt || modifiedAt}
-                isRelative
-                messages={{
-                    default: messages.viewedDate,
-                    today: messages.viewedToday,
-                    yesterday: messages.viewedYesterday,
-                }}
-            />
+            <span>
+                {formatMessage(
+                    {
+                        id: 'boxui.itemDate.interactedDate',
+                        defaultMessage: 'Interacted {interactedDate}',
+                        description: 'Text for interacted date with interacted prefix',
+                    },
+                    {
+                        interactedDate: interactedAt,
+                    },
+                )}
+            </span>
         );
     }
 
-    if (modifiedBy?.name) {
-        return formatMessage(messages.modifiedDateBy, {
-            date: <DateValue date={modifiedAt} isRelative />,
-            name: modifiedBy.name,
-        });
-    }
-
-    return <DateValue date={modifiedAt} isRelative />;
+    return (
+        <span>
+            {formatMessage(
+                {
+                    id: 'boxui.itemDate.modifiedDate',
+                    defaultMessage: 'Modified {date}',
+                    description: 'Text for modified date with modified prefix',
+                },
+                {
+                    date: modifiedAt,
+                },
+            )}
+        </span>
+    );
 };
 
 export default ItemDate;
