@@ -30,6 +30,7 @@ export interface AdditionalSidebarTab {
     id: number;
     title: string | null;
     icon?: React.ReactNode;
+    status?: string;
 }
 
 export interface Translations {
