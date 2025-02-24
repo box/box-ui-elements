@@ -1,14 +1,13 @@
-// @flow
 import * as React from 'react';
 import classNames from 'classnames';
 import CollapsableMessageToggle from './CollapsableMessageToggle';
 import './ActivityMessage.scss';
 
-type Props = {
-    children: React.Node,
-};
+export interface CollapsableMessageProps {
+    children: React.ReactNode;
+}
 
-export default function CollapsableMessage({ children }: Props) {
+export default function CollapsableMessage({ children }: CollapsableMessageProps): React.ReactElement {
     const [isCollapsed, setIsCollapsed] = React.useState(true);
     const [shouldCollapse, setShouldCollapse] = React.useState(false);
     const messageContainer = React.useRef<HTMLDivElement | null>(null);
