@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -11,14 +10,14 @@ import type { TaskType } from '../../../../common/types/tasks';
 
 import './TaskActions.scss';
 
-type Props = {|
-    isMultiFile: boolean,
-    onTaskApproval: Function,
-    onTaskComplete: Function,
-    onTaskReject: Function,
-    onTaskView: Function,
-    taskType: TaskType,
-|};
+interface TaskActionsProps {
+    isMultiFile: boolean;
+    onTaskApproval: () => void;
+    onTaskComplete: () => void;
+    onTaskReject: () => void;
+    onTaskView?: () => void;
+    taskType: TaskType;
+}
 
 const TaskActions = ({
     isMultiFile,
@@ -27,7 +26,7 @@ const TaskActions = ({
     onTaskComplete,
     onTaskView,
     taskType,
-}: Props): React.Node => {
+}: TaskActionsProps): JSX.Element => {
     let action = null;
     if (isMultiFile) {
         action = onTaskView && (
