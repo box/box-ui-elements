@@ -63,7 +63,9 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const wrapper = getWrapper();
             const instance = wrapper.instance();
             instance.store.setItem = jest.fn();
-            instance.changeViewMode(VIEW_MODE_GRID);
+            act(() => {
+                instance.changeViewMode(VIEW_MODE_GRID);
+            });
             expect(instance.store.setItem).toHaveBeenCalledWith(localStoreViewMode, VIEW_MODE_GRID);
         });
     });
@@ -146,7 +148,9 @@ describe('elements/content-explorer/ContentExplorer', () => {
             beforeEach(() => {
                 wrapper = getWrapper();
                 instance = wrapper.instance();
-                instance.setState({ currentCollection: collection, selected: undefined });
+                act(() => {
+                    instance.setState({ currentCollection: collection, selected: undefined });
+                });
                 instance.setState = jest.fn();
             });
 
@@ -712,7 +716,7 @@ describe('elements/content-explorer/ContentExplorer', () => {
 
             expect(getApiMock).toBeCalledTimes(1);
             expect(getApiDeleteMock).toBeCalledTimes(1);
-            expect(onDeleteMock).not.toBeCalled();
+            expect(onDeleteMock).not.toHaveBeenCalled();
             expect(refreshCollectionMock).toBeCalledTimes(1);
         });
     });

@@ -70,7 +70,9 @@ describe('elements/content-sidebar/ContentSidebar', () => {
             const newProps = { fileId: '123' };
 
             instance.fetchFile = jest.fn();
-            instance.setState({ view: 'activityFeed' });
+            act(() => {
+                instance.setState({ view: 'activityFeed' });
+            });
             instance.setState = jest.fn();
 
             instance.componentDidUpdate(newProps);
