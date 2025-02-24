@@ -1,3 +1,7 @@
 // @flow
+import type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
+
 export { default } from './AdditionalTabs';
-export type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
+export type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData };
+export type { Props as AdditionalTabProps } from './AdditionalTab';
+export type { Props as AdditionalTabsProps } from './AdditionalTabs';
