@@ -18,11 +18,12 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTabTooltip', () => 
             </AdditionalTabTooltip>,
         );
 
-    test('should render the FTUX tooltip when isFtuxVisible is true and the FTUX can be shown', () => {
+    test('should render the FTUX tooltip when isFtuxVisible is true and the FTUX can be shown', async () => {
         const children = <div data-testid="additional-tab-tooltip-children">Child content</div>;
+        const onShow = jest.fn();
         const targetingApi = () => ({
             canShow: true,
-            onShow: jest.fn(),
+            onShow,
         });
         const text = 'FTUX Text';
 
@@ -30,6 +31,7 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTabTooltip', () => 
 
         expect(screen.getByTestId('additional-tab-tooltip-children')).toBeInTheDocument();
         expect(screen.getByText(text)).toBeInTheDocument();
+        expect(onShow).toHaveBeenCalled();
     });
 
     test('should render the children with the default tooltip when isFtuxVisible is false', () => {
