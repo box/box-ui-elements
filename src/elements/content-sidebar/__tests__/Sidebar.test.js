@@ -158,10 +158,9 @@ describe('elements/content-sidebar/Sidebar', () => {
                     metadataSidebarProps={{ isFeatureEnabled: true }}
                 />,
             );
-            const instance = wrapper.instance();
+            withDocgenFeature.checkDocGenTemplate.mockClear();
             wrapper.setProps({ file: { ...file, id: 'new-file' } });
-            expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(2);
-            expect(instance.componentDidUpdate).toHaveBeenCalled();
+            expect(withDocgenFeature.checkDocGenTemplate).toHaveBeenCalledTimes(1);
         });
         test('should redirect to dogen tab if the new file is a docgen template', () => {
             const historyMock = {
