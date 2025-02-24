@@ -6,8 +6,12 @@ import AnnotationThread from '../AnnotationThread';
 import { BoxItem } from '../../../../../common/types/core';
 
 jest.mock('react-intl', () => jest.requireActual('react-intl'));
-jest.mock('../AnnotationThreadContent', () => () => <div data-testid="annotation-content" />);
-jest.mock('../AnnotationThreadCreate', () => () => <div data-testid="annotation-create" />);
+jest.mock('../AnnotationThreadContent', () => () => (
+    <div className="AnnotationThreadContent" role="article" aria-label="Annotation Content" />
+));
+jest.mock('../AnnotationThreadCreate', () => () => (
+    <div className="AnnotationThreadCreate" role="form" aria-label="Create Annotation" />
+));
 
 jest.mock('../useAnnotationThread', () => ({
     __esModule: true,
@@ -82,14 +86,14 @@ describe('elements/content-sidebar/activity-feed/annotation-thread/AnnotationThr
         render(<AnnotationThread {...defaultProps} {...props} />, { wrapper: IntlWrapper });
 
     test('should render AnnotationThreadCreate if annotationId is undefined', async () => {
-        const { queryByTestId } = getWrapper();
-        expect(queryByTestId('annotation-create')).toBeInTheDocument();
-        expect(queryByTestId('annotation-content')).toBeNull();
+        const { getByRole, queryByRole } = getWrapper();
+        expect(getByRole('form', { name: 'Create Annotation' })).toBeInTheDocument();
+        expect(queryByRole('article', { name: 'Annotation Content' })).toBeNull();
     });
 
     test('should render AnnotationThreadContent if annotationId is defined', () => {
-        const { queryByTestId } = getWrapper({ annotationId: '1' });
-        expect(queryByTestId('annotation-content')).toBeInTheDocument();
-        expect(queryByTestId('annotation-create')).toBeNull();
+        const { getByRole, queryByRole } = getWrapper({ annotationId: '1' });
+        expect(getByRole('article', { name: 'Annotation Content' })).toBeInTheDocument();
+        expect(queryByRole('form', { name: 'Create Annotation' })).toBeNull();
     });
 });

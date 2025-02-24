@@ -109,7 +109,7 @@ const AnnotationThread = ({
     }, DEFAULT_COLLAB_DEBOUNCE);
 
     return (
-        <div className={classNames('AnnotationThread', className)} data-testid="annotation-thread">
+        <div className={classNames('AnnotationThread', className)} role="region" aria-label="Annotation Thread">
             <IntlProvider locale={language} messages={messages}>
                 {!annotationId ? (
                     <AnnotationThreadCreate
