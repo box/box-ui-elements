@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { FormattedMessage, MessageDescriptor } from 'react-intl';
+import { FormattedMessage, MessageDescriptor, injectIntl } from 'react-intl';
+import type { WrappedComponentProps } from 'react-intl';
 
-import Button from '../../../../../components/button';
+import Button, { ButtonType } from '../../../../../components/button';
 import commonMessages from '../../../../common/messages';
 import PrimaryButton from '../../../../../components/primary-button';
 import { KEYS } from '../../../../../constants';
@@ -9,13 +10,15 @@ import { Overlay } from '../../../../../components/flyout';
 import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
 import './DeleteConfirmation.scss';
 
-export interface DeleteConfirmationProps {
+interface Props {
     className?: string;
     isOpen: boolean;
     message: MessageDescriptor;
     onDeleteCancel: () => void;
     onDeleteConfirm: () => void;
 }
+
+type DeleteConfirmationProps = Props & WrappedComponentProps;
 
 class DeleteConfirmation extends React.Component<DeleteConfirmationProps> {
     onKeyDown = (event: React.KeyboardEvent): void => {
@@ -54,21 +57,19 @@ class DeleteConfirmation extends React.Component<DeleteConfirmationProps> {
                 </div>
                 <div>
                     <Button
-                        aria-label={commonMessages.cancel.defaultMessage}
+                        aria-label={intl.formatMessage(commonMessages.cancel)}
                         className="bcs-DeleteConfirmation-cancel"
                         onClick={onDeleteCancel}
-                        // @ts-ignore ButtonType will be fixed in a separate PR
-                        type="button"
+                        type={ButtonType.BUTTON}
                         data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CANCEL}
                     >
                         <FormattedMessage {...commonMessages.cancel} />
                     </Button>
                     <PrimaryButton
-                        aria-label={commonMessages.delete.defaultMessage}
+                        aria-label={intl.formatMessage(commonMessages.delete)}
                         className="bcs-DeleteConfirmation-delete"
                         onClick={onDeleteConfirm}
-                        // @ts-ignore ButtonType will be fixed in a separate PR
-                        type="button"
+                        type={ButtonType.BUTTON}
                         data-resin-target={ACTIVITY_TARGETS.INLINE_DELETE_CONFIRM}
                     >
                         <FormattedMessage {...commonMessages.delete} />
@@ -79,4 +80,5 @@ class DeleteConfirmation extends React.Component<DeleteConfirmationProps> {
     }
 }
 
-export default DeleteConfirmation;
+export { DeleteConfirmation as DeleteConfirmationBase };
+export default injectIntl(DeleteConfirmation);
