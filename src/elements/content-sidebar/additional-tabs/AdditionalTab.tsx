@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Apps16 from '../../../icon/fill/Apps16';
 import { bdlGray50 } from '../../../styles/variables';
 import PlainButton from '../../../components/plain-button';
+import { ButtonType } from '../../../components/button';
 import AdditionalTabTooltip from './AdditionalTabTooltip';
 import AdditionalTabPlaceholder from './AdditionalTabPlaceholder';
 import messages from './messages';
@@ -32,17 +33,12 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
         return status === BLOCKED_BY_SHEILD;
     }
 
-    getDisabledReason(): React.ReactNode {
-        let reason: React.ReactNode = '';
+    getDisabledReason(): React.ReactElement | string {
         const { status } = this.props;
-        switch (status) {
-            case BLOCKED_BY_SHEILD:
-                reason = <FormattedMessage {...messages.blockedByShieldAccessPolicy} />;
-                break;
-            default:
-            // noop
+        if (status === BLOCKED_BY_SHEILD) {
+            return <FormattedMessage {...messages.blockedByShieldAccessPolicy} />;
         }
-        return reason;
+        return '';
     }
 
     getTabIcon() {
@@ -65,7 +61,7 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
             );
         }
 
-        return icon || <Apps16 color={bdlGray50} width={20} height={20} />;
+        return icon || <Apps16 width={20} height={20} {...{ fill: bdlGray50 }} />;
     }
 
     render() {
@@ -79,7 +75,7 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
             'bdl-is-overflow': id && id < 0,
         });
 
-        const tooltipText = isDisabled ? this.getDisabledReason() : title;
+        const tooltipText = isDisabled ? this.getDisabledReason() : title || '';
 
         return (
             <AdditionalTabTooltip
@@ -91,7 +87,7 @@ class AdditionalTab extends React.PureComponent<AdditionalTabProps, State> {
                     aria-label={title || undefined}
                     className={className}
                     data-testid="additionaltab"
-                    type="button"
+                    type={ButtonType.BUTTON}
                     isDisabled={isDisabled}
                     onClick={() => callbackFn({ id, callbackData: rest })}
                 >

@@ -1,15 +1,16 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
+import type { TooltipText } from '../types';
 import AdditionalTabTooltip from '../AdditionalTabTooltip';
 
 describe('elements/content-sidebar/additional-tabs/AdditionalTabTooltip', () => {
     const getComponent = (
         props: Partial<{
-            defaultTooltipText: React.ReactNode;
+            defaultTooltipText: TooltipText;
             ftuxTooltipData?: { targetingApi: () => { canShow: boolean }; text: string };
             isFtuxVisible?: boolean;
         }>,
-        children?: React.ReactNode,
+        children: React.ReactElement,
     ) =>
         render(
             <AdditionalTabTooltip defaultTooltipText="" {...props}>

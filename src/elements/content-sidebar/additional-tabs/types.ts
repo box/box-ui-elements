@@ -1,6 +1,8 @@
 import * as React from 'react';
 import type { UseTargetingApi } from '../../../features/targeting/types';
 
+export type TooltipText = string | React.ReactElement;
+
 export interface AdditionalSidebarTabFtuxData {
     targetingApi: UseTargetingApi;
     text: string;

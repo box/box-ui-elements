@@ -10,6 +10,8 @@ describe('elements/content-sidebar/additional-tabs/AdditionalTab', () => {
         callback: noop,
         id: 1,
         title: '',
+        isLoading: false,
+        onImageLoad: noop,
     };
     const getComponent = (props: Partial<AdditionalTabProps>) => render(<AdditionalTab {...defaultProps} {...props} />);
 
