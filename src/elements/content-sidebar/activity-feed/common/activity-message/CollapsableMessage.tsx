@@ -29,7 +29,6 @@ export default function CollapsableMessage({ children }: CollapsableMessageProps
             >
                 {children}
             </div>
-
             {shouldCollapse && (
                 <CollapsableMessageToggle
                     isMore={isCollapsed}

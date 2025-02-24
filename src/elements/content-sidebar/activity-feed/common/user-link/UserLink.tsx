@@ -16,9 +16,7 @@ interface State {
 }
 
 class UserLink extends React.PureComponent<UserLinkProps, State> {
-    state: State = {
-        profileUrl: undefined,
-    };
+    state: State = {};
 
     getProfileUrlHandler = (profileUrl?: string) => {
         this.setState({
@@ -40,7 +38,8 @@ class UserLink extends React.PureComponent<UserLinkProps, State> {
     }
 
     render() {
-        const { name, getUserProfileUrl, className, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+        const { className, getUserProfileUrl, name, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+        // Destructure getUserProfileUrl to prevent it from being passed to Link component
         const { profileUrl } = this.state;
 
         return profileUrl ? (

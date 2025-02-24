@@ -6,19 +6,17 @@ import PlainButton from '../../../../../components/plain-button';
 import { ButtonType } from '../../../../../components/button';
 import './ActivityError.scss';
 
-export interface ActivityErrorAction {
-    onAction: () => void;
-    text: string;
-}
-
 export interface ActivityErrorProps {
-    action?: ActivityErrorAction;
+    action?: {
+        onAction: () => void;
+        text: string;
+    };
     className?: string;
     message: MessageDescriptor;
     title: MessageDescriptor;
 }
 
-const ActivityError = ({ action, message, title, className, ...rest }: ActivityErrorProps): React.ReactElement => (
+const ActivityError = ({ action, className, message, title, ...rest }: ActivityErrorProps): React.ReactElement => (
     <InlineError
         className={classnames('bcs-ActivityError', className)}
         title={<FormattedMessage {...title} {...rest} />}
