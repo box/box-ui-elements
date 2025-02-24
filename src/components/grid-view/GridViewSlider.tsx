@@ -36,25 +36,10 @@ const GridViewSlider = ({
                 className="bdl-GridViewSlider"
                 max={RANGE_MAX}
                 min={RANGE_MIN}
-                minusButtonLabel={formatMessage({
-                    ...messages.gridViewDecreaseColumnSize,
-                    id: 'be.gridViewDecreaseColumnSize',
-                    description: 'Button tooltip to decrease the size of grid view items',
-                    defaultMessage: 'Decrease size',
-                })}
+                minusButtonLabel={formatMessage(messages.gridViewDecreaseColumnSize)}
                 onValueChange={onChange}
-                plusButtonLabel={formatMessage({
-                    ...messages.gridViewIncreaseColumnSize,
-                    id: 'be.gridViewIncreaseColumnSize',
-                    description: 'Button tooltip to increase the size of grid view items',
-                    defaultMessage: 'Increase size',
-                })}
-                sliderLabel={formatMessage({
-                    ...messages.gridViewSliderLabel,
-                    id: 'be.gridViewSliderLabel',
-                    description: 'Label for the grid view size slider',
-                    defaultMessage: 'Grid view size',
-                })}
+                plusButtonLabel={formatMessage(messages.gridViewIncreaseColumnSize)}
+                sliderLabel={formatMessage(messages.gridViewSliderLabel)}
                 step={RANGE_STEP}
                 value={sliderValue}
             />

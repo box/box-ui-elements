@@ -1,18 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '../../../test-utils/testing-library';
-import type { GridViewSliderProps } from '../GridViewSlider';
-import GridViewSlider from '../GridViewSlider';
-
-jest.mock('react-intl', () => ({
-    useIntl: () => ({
-        formatMessage: ({ defaultMessage }) => defaultMessage,
-        formatDate: jest.fn(),
-        formatTime: jest.fn(),
-        formatRelative: jest.fn(),
-        formatNumber: jest.fn(),
-        formatPlural: jest.fn(),
-    }),
-}));
+import GridViewSlider, { GridViewSliderProps } from '../GridViewSlider';
 
 describe('components/grid-view/GridViewSlider', () => {
     const renderComponent = (props: Partial<GridViewSliderProps> = {}) => {
@@ -49,7 +37,7 @@ describe('components/grid-view/GridViewSlider', () => {
         expect(increaseButton).toBeInTheDocument();
         expect(decreaseButton).toBeInTheDocument();
         fireEvent.click(increaseButton);
-        expect(onChange).toHaveBeenCalled();
+        expect(onChange).toHaveBeenCalledTimes(1);
         fireEvent.click(decreaseButton);
         expect(onChange).toHaveBeenCalledTimes(2);
     });
