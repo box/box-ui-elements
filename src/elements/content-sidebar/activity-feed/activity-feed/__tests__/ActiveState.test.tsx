@@ -65,35 +65,9 @@ const taskWithAssignment: Task = {
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: { target: otherUser },
-    assigned_to: {
-        entries: [
-            {
-                id: 'ta_123',
-                permissions: { can_delete: true, can_update: true },
-                role: 'ASSIGNEE',
-                status: 'NOT_STARTED',
-                target: otherUser,
-                type: 'task_collaborator',
-            },
-        ],
-        limit: 20,
-        next_marker: null,
-    },
-    status: 'NOT_STARTED',
     permissions: {
         can_delete: true,
         can_update: true,
-    },
-    task_type: 'GENERAL',
-    task_links: {
-        entries: [
-            {
-                target: {
-                    id: 'f_123',
-                    type: 'file',
-                },
-            },
-        ],
     },
 };
 
