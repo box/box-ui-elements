@@ -21,3 +21,18 @@ class ResizeObserver {
 }
 /* eslint-enable @typescript-eslint/no-empty-function */
 global.ResizeObserver = ResizeObserver;
+
+// Mock matchMedia since it's not available in JSDOM
+Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation(query => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+    })),
+});
