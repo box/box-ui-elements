@@ -1,4 +1,3 @@
-// @flow strict
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PlainButton from '../../../../components/plain-button';
@@ -13,16 +12,16 @@ import './AssigneeList.scss';
 const DEFAULT_ASSIGNEES_SHOWN = 3;
 const TASKS_PAGE_SIZE = 20; // service does not return the page size to the client at the moment
 
-type Props = {|
-    getAvatarUrl: GetAvatarUrlCallback,
-    initialAssigneeCount: number,
-    isOpen: boolean,
-    onCollapse: () => void | Promise<void>,
-    onExpand: () => void | Promise<void>,
-    users: TaskAssigneeCollection,
-|};
+interface AssigneeListProps {
+    getAvatarUrl: GetAvatarUrlCallback;
+    initialAssigneeCount: number;
+    isOpen: boolean;
+    onCollapse: () => void | Promise<void>;
+    onExpand: () => void | Promise<void>;
+    users: TaskAssigneeCollection;
+}
 
-function AssigneeList(props: Props) {
+function AssigneeList(props: AssigneeListProps): JSX.Element {
     const {
         initialAssigneeCount = DEFAULT_ASSIGNEES_SHOWN,
         users = {},
