@@ -141,7 +141,9 @@ const ActivityThread: React.FC<ActivityThreadProps> = ({
                             mentionSelectorContacts={mentionSelectorContacts}
                             onDelete={onReplyDelete}
                             onEdit={(id, text, status, hasMention, permissions, onSuccess, onError) => {
-                                onReplyEdit(id, text, permissions, status, hasMention, onSuccess, onError);
+                                if (onReplyEdit) {
+                                    onReplyEdit(id, text, permissions, status, hasMention, onSuccess, onError);
+                                }
                             }}
                             onSelect={onReplySelect}
                             replies={replies}
