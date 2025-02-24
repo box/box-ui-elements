@@ -133,7 +133,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             await userEvent.hover(button);
 
             expect(button).not.toHaveAttribute('aria-disabled');
-            expect(screen.getByText('Box AI')).toBeInTheDocument();
+            expect(screen.getByTestId('sidebarboxai')).toBeInTheDocument();
         });
     });
 
@@ -160,7 +160,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(AdditionalTabs)).toHaveLength(1);
-        expect(wrapper.find('AdditionalTabsLoading')).toHaveLength(1);
+        expect(wrapper.find('[data-testid="additional-tabs-loading"]')).toHaveLength(1);
         expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(3);
     });
 
