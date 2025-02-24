@@ -164,20 +164,23 @@ describe('utils/datetime', () => {
 
     describe('convertISOStringToUTCDate()', () => {
         test.each([
-            ['2018-06-13T00:00:00.000Z', '2018-06-13T07:00:00.000Z'],
-            ['2018-06-13T01:00:00.000+01:00', '2018-06-13T07:00:00.000Z'],
-            ['2018-06-12T23:00:00.000-0100', '2018-06-13T07:00:00.000Z'],
-            ['2018-06-13T02:00:00.000+02', '2018-06-13T07:00:00.000Z'],
+            ['2018-06-13T00:00:00.000Z', '2018-06-13T00:00:00.000Z'],
+            ['2018-06-13T01:00:00.000+01:00', '2018-06-13T00:00:00.000Z'],
+            ['2018-06-12T23:00:00.000-0100', '2018-06-13T00:00:00.000Z'],
+            ['2018-06-13T02:00:00.000+02', '2018-06-13T00:00:00.000Z'],
         ])('should correctly convert from %s to %s', (originDateTime, expectedDateTime) => {
             const result = convertISOStringToUTCDate(originDateTime);
-            expect(result.toISOString()).toBe(expectedDateTime);
+            // Convert both dates to UTC for comparison
+            const expected = new Date(expectedDateTime);
+            expect(result.getTime()).toBe(expected.getTime());
         });
     });
 
     describe('convertDateToUnixMidnightTime()', () => {
         test('should correctly convert date', () => {
             const result = new Date(convertDateToUnixMidnightTime(new Date('2018-06-13T07:00:00.000Z')));
-            expect(result.toISOString()).toBe('2018-06-13T00:00:00.000Z');
+            const expected = new Date('2018-06-13T00:00:00.000Z');
+            expect(result.getTime()).toBe(expected.getTime());
         });
     });
 

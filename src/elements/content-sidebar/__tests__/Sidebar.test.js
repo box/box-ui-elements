@@ -90,11 +90,12 @@ describe('elements/content-sidebar/Sidebar', () => {
                     setItem: jest.fn(),
                 }));
 
-                render(
+                const { container } = render(
                     getSidebar({
                         onOpenChange: mockOnOpenChange,
                     }),
                 );
+                expect(container).toBeInTheDocument();
                 expect(mockOnOpenChange).toBeCalledWith(expected, true);
             },
         );

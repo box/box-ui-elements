@@ -218,7 +218,7 @@ describe('elements/content-sidebar/ActivityFeed/comment/Replies', () => {
         fireEvent.click(screen.getByText(`See ${countDifference} replies`));
 
         expect(showReplies).toBeCalledTimes(1);
-        expect(hideReplies).not.toBeCalled();
+        expect(hideReplies).not.toHaveBeenCalled();
     });
 
     test.each`

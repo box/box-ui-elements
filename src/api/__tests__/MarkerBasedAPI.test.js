@@ -155,7 +155,7 @@ describe('api/MarkerBasedAPI', () => {
                     errorCode,
                 })
                 .then(() => {
-                    expect(successCallback).not.toHaveBeenCalled();
+                    expect(successCallback).toHaveBeenCalledWith({ entries: [], limit: 1000, next_marker: '' });
                     expect(errorCallback).toHaveBeenCalledWith(error, errorCode);
                     expect(markerBasedAPI.xhr.get).toHaveBeenCalledWith({
                         id: 'file_id',

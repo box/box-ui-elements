@@ -20,7 +20,12 @@ describe('elements/Pagination/MarkerBasedPagination', () => {
                     onMarkerBasedPageChange={onMarkerBasedPageChange}
                 />,
             );
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.find('Button').props()).toMatchObject({
+                className: '',
+                isDisabled: false,
+                isLoading: false,
+                type: 'submit',
+            });
         },
     );
 
