@@ -14,6 +14,6 @@
         },
         "strict": false
     },
-    "files": [".storybook/typings.d.ts", "src/test-utils/jest.d.ts"],
+    "files": [".storybook/typings.d.ts"],
     "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"]
 }
