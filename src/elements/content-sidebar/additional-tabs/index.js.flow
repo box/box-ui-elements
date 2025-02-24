@@ -1,0 +1,3 @@
+// @flow
+export { default } from './AdditionalTabs';
+export type { AdditionalSidebarTab, AdditionalSidebarTabFtuxData } from '../flowTypes';
