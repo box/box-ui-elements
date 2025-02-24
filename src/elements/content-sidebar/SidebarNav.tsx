@@ -24,7 +24,7 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
-import { type NavigateOptions, type AdditionalSidebarTab } from './flowTypes';
+import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
 
 interface Props {

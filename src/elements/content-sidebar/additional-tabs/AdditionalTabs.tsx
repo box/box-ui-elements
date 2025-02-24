@@ -51,10 +51,6 @@ class AdditionalTabs extends PureComponent<AdditionalTabsProps, State> {
             return <AdditionalTabsLoading data-testid="additional-tabs-loading" />;
         }
 
-        if (!tabs) {
-            return <AdditionalTabsLoading data-testid="additional-tabs-loading" />;
-        }
-
         return (
             <>
                 {isLoading && <AdditionalTabsLoading data-testid="additional-tabs-loading" />}
