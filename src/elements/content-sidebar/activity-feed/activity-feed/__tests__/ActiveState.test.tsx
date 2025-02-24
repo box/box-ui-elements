@@ -65,7 +65,6 @@ const taskWithAssignment: Task = {
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: { target: otherUser },
-    due_at: '2018-07-03T14:43:52-07:00',
     assigned_to: {
         entries: [
             {
@@ -107,6 +106,7 @@ const appActivity = {
         id: 'app_123456',
         icon_url: 'foo.jpg',
         name: 'My App',
+        type: 'app',
     },
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: {
