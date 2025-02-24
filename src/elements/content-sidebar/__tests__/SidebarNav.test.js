@@ -5,7 +5,7 @@ import { mount } from 'enzyme';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
 import AdditionalTabs from '../additional-tabs';
-import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
+import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading.tsx';
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
 import DocGenIcon from '../../../icon/fill/DocGenIcon';
 import IconChatRound from '../../../icons/general/IconChatRound';
