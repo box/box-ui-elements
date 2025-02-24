@@ -21,16 +21,14 @@ function filterCrumbs(rootId: string, crumbs: Crumb[]): Crumb[] {
 function getBreadcrumb(
     crumbs: Crumb | Crumb[],
     isLast: boolean,
-    onCrumbClick: (id: string) => void,
+    onCrumbClick: (crumb: Crumb) => void,
     delimiter: Delimiter,
 ) {
     if (Array.isArray(crumbs)) {
-        return <BreadcrumbDropdown crumbs={crumbs} onCrumbClick={onCrumbClick} />;
+        return <BreadcrumbDropdown crumbs={crumbs} onCrumbClick={id => onCrumbClick(crumbs.find(c => c.id === id)!)} />;
     }
 
-    return (
-        <Breadcrumb delimiter={delimiter} isLast={isLast} name={crumbs.name} onClick={() => onCrumbClick(crumbs.id)} />
-    );
+    return <Breadcrumb delimiter={delimiter} isLast={isLast} name={crumbs.name} onClick={() => onCrumbClick(crumbs)} />;
 }
 
 const Breadcrumbs = ({
