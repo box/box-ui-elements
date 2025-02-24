@@ -91,6 +91,10 @@ const createAPIMock = (fileAPI, folderAPI, usersAPI, collaborationsAPI, markerBa
 describe('elements/content-sharing/SharingModal', () => {
     // The visibility of the modal is set in the ContentSharing parent element, so we can only test whether the function for closing the modal was called
     const setIsVisibleMock = jest.fn();
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
     const getWrapper = props =>
         mount(<SharingModal isVisible itemID={MOCK_ITEM_ID} language="" setIsVisible={setIsVisibleMock} {...props} />);
 
@@ -356,6 +360,10 @@ describe('elements/content-sharing/SharingModal', () => {
             });
             getUser = jest.fn();
             api = createAPIMock({ getFile }, { getFolderFields }, { getUser });
+        });
+
+        beforeEach(() => {
+            jest.clearAllMocks();
         });
 
         test('should show the initial data error notification and skip the call to getUser() if the call to getFile() fails', async () => {

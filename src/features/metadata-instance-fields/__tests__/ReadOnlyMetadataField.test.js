@@ -20,12 +20,12 @@ describe('features/metadata-instance-editor/fields/ReadOnlyMetadataField', () =>
     test('should correctly render with description', () => {
         const wrapper = shallow(<ReadOnlyMetadataField dataValue="value" description="description" />);
         expect(wrapper.find('dd').text()).toBe('value');
-        expect(wrapper.find('dt').text()).toBe('description');
+        expect(wrapper.find('dt').prop('children')).toBe('description');
     });
 
     test('should correctly render multi select field', () => {
         const wrapper = shallow(<ReadOnlyMetadataField dataValue={['value1', 'value2']} description="description" />);
         expect(wrapper.find('dd').text()).toBe('value1, value2');
-        expect(wrapper.find('dt').text()).toBe('description');
+        expect(wrapper.find('dt').prop('children')).toBe('description');
     });
 });

@@ -5,7 +5,6 @@ import { mount } from 'enzyme';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
 import AdditionalTabs from '../additional-tabs';
-import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
 import DocGenIcon from '../../../icon/fill/DocGenIcon';
 import IconChatRound from '../../../icons/general/IconChatRound';
@@ -161,7 +160,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
         };
         const wrapper = getWrapper(props);
         expect(wrapper.find(AdditionalTabs)).toHaveLength(1);
-        expect(wrapper.find(AdditionalTabsLoading)).toHaveLength(1);
+        expect(wrapper.find('AdditionalTabsLoading')).toHaveLength(1);
         expect(wrapper.find(AdditionalTabPlaceholder)).toHaveLength(3);
     });
 
