@@ -11,8 +11,11 @@ import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentUploaderPopup from '../content-uploader/ContentUploaderPopup';
 import WrappedContentUploaderComponent from '../content-uploader/ContentUploader';
+// @ts-ignore
 import type { UploadFileWithAPIOptions } from '../../common/types/upload';
+// @ts-ignore
 import type { BoxItem } from '../../common/types/core';
+// @ts-ignore
 import type { ModalOptions } from '../common/flowTypes';
 
 class ContentUploader extends ES6Wrapper {
@@ -21,6 +24,7 @@ class ContentUploader extends ES6Wrapper {
      *
      * @return {void}
      */
+    // @ts-ignore
     onClose = (): void => {
         this.emit('close');
     };
@@ -31,6 +35,7 @@ class ContentUploader extends ES6Wrapper {
      * @param {Array} data - Completed upload items
      * @return {void}
      */
+    // @ts-ignore
     onComplete = (data: BoxItem[]): void => {
         this.emit('complete', data);
     };
@@ -41,6 +46,7 @@ class ContentUploader extends ES6Wrapper {
      * @param {Object} data - File and error info about failed upload
      * @return {void}
      */
+    // @ts-ignore
     onError = (data: any): void => {
         this.emit('error', data);
     };
@@ -51,6 +57,7 @@ class ContentUploader extends ES6Wrapper {
      * @param {Object} data - Upload item
      * @return {void}
      */
+    // @ts-ignore
     onBeforeUpload = (data: UploadFileWithAPIOptions | File): void => {
         this.emit('beforeupload', data);
     };
@@ -61,12 +68,14 @@ class ContentUploader extends ES6Wrapper {
      * @param {BoxItem} data - Successfully uploaded item
      * @return {void}
      */
+    // @ts-ignore
     onUpload = (data: BoxItem): void => {
         this.emit('upload', data);
     };
 
     /** @inheritdoc */
     render() {
+        // @ts-ignore
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
         const UploaderComponent = modal ? ContentUploaderPopup : WrappedContentUploaderComponent;
 
