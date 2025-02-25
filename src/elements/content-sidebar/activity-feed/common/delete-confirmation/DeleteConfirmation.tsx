@@ -6,11 +6,11 @@ import Button, { ButtonType } from '../../../../../components/button';
 import commonMessages from '../../../../common/messages';
 import PrimaryButton from '../../../../../components/primary-button';
 import { KEYS } from '../../../../../constants';
-import { Overlay } from '../../../../../components/flyout';
+import Overlay from '../../../../../components/flyout/Overlay';
 import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
 import './DeleteConfirmation.scss';
 
-interface Props {
+interface Props extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
     isOpen: boolean;
     message: MessageDescriptor;
     onDeleteCancel: () => void;
