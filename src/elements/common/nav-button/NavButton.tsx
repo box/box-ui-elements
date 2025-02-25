@@ -1,7 +1,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { Route } from 'react-router-dom';
-import type { Location as RouterLocation } from 'history';
+import type { match } from 'react-router';
+import type { Location } from 'history';
 import PlainButton, { PlainButtonProps } from '../../../components/plain-button';
 import { isLeftClick } from '../../../utils/dom';
 
@@ -11,15 +12,12 @@ export interface NavButtonProps {
     className?: string;
     component?: React.ComponentType<PlainButtonProps & { ref?: React.Ref<HTMLButtonElement> }>;
     exact?: boolean;
-    isActive?: (
-        match: { path: string; url: string; isExact: boolean; params: Record<string, string> },
-        location: RouterLocation,
-    ) => boolean | null;
+    isActive?: (match: match, location: Location) => boolean;
     isDisabled?: boolean;
     onClick?: (event: React.SyntheticEvent) => void;
     replace?: boolean;
     strict?: boolean;
-    to: string | RouterLocation;
+    to: string | Location;
 }
 
 const NavButton = React.forwardRef<HTMLButtonElement, NavButtonProps>(
