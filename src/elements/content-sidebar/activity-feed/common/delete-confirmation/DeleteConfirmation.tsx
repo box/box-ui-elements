@@ -1,47 +1,55 @@
 import * as React from 'react';
-import classNames from 'classnames';
 import { FormattedMessage, MessageDescriptor, injectIntl } from 'react-intl';
 import type { WrappedComponentProps } from 'react-intl';
 
 import Button, { ButtonType } from '../../../../../components/button';
 import commonMessages from '../../../../common/messages';
 import PrimaryButton from '../../../../../components/primary-button';
-
+import { KEYS } from '../../../../../constants';
 import { Overlay } from '../../../../../components/flyout';
 import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
 import './DeleteConfirmation.scss';
 
 interface Props {
-    /** Additional CSS class name */
     className?: string;
-    /** Whether the confirmation dialog is shown */
     isOpen: boolean;
-    /** Message to display in the confirmation dialog */
     message: MessageDescriptor;
-    /** Callback when cancel button is clicked */
     onDeleteCancel: () => void;
-    /** Callback when confirm button is clicked */
     onDeleteConfirm: () => void;
 }
 
 type DeleteConfirmationProps = Props & WrappedComponentProps;
 
 class DeleteConfirmation extends React.Component<DeleteConfirmationProps> {
-    render(): React.ReactElement | null {
-        const { className, intl, isOpen, message, onDeleteCancel, onDeleteConfirm } = this.props;
+    onKeyDown = (event: React.KeyboardEvent): void => {
+        const { isOpen, onDeleteCancel } = this.props;
 
-        if (!isOpen) {
-            return null;
+        event.stopPropagation();
+
+        switch (event.key) {
+            case KEYS.escape:
+                event.stopPropagation();
+                event.preventDefault();
+                if (isOpen) {
+                    onDeleteCancel();
+                }
+                break;
+            default:
+                break;
         }
+    };
+
+    render() {
+        const { intl, message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props;
 
         return (
             <Overlay
-                className={classNames('be-modal bcs-DeleteConfirmation', className)}
+                className="be-modal bcs-DeleteConfirmation"
+                onKeyDown={this.onKeyDown}
                 role="dialog"
                 shouldDefaultFocus
                 shouldOutlineFocus={false}
-                data-testid="delete-confirmation"
-                onClose={onDeleteCancel}
+                {...rest}
             >
                 <div className="bcs-DeleteConfirmation-promptMessage">
                     <FormattedMessage {...message} />
