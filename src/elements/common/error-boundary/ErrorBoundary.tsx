@@ -1,13 +1,13 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
+import DefaultError, { ErrorComponentProps } from './DefaultError';
 import { ERROR_CODE_UNEXPECTED_EXCEPTION, IS_ERROR_DISPLAYED } from '../../../constants';
-import DefaultError, { DefaultErrorProps } from './DefaultError';
 import type { ElementsXhrError, ElementsError } from '../../../common/types/api';
 import type { ElementOrigin } from '../flowTypes';
 
 export interface ErrorBoundaryProps {
     children: React.ReactElement;
-    errorComponent: React.ComponentType<DefaultErrorProps>;
+    errorComponent: React.ComponentType<ErrorComponentProps>;
     errorOrigin: ElementOrigin;
     onError: (error: ElementsError) => void;
 }
@@ -70,7 +70,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, State> {
         this.props.onError(elementsError);
     };
 
-    render(): React.ReactNode {
+    render() {
         const { children, errorComponent: ErrorComponent, ...rest } = this.props;
         const { error } = this.state;
         if (error) {

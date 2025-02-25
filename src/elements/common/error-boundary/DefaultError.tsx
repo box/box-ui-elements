@@ -4,11 +4,11 @@ import ErrorMask from '../../../components/error-mask/ErrorMask';
 import messages from '../messages';
 import './DefaultError.scss';
 
-export interface DefaultErrorProps {
+export interface ErrorComponentProps {
     error?: Error;
 }
 
-const DefaultError = (): JSX.Element => (
+const DefaultError = () => (
     <section className="be-default-error">
         <ErrorMask
             errorHeader={<FormattedMessage {...messages.defaultErrorMaskHeaderMessage} />}
