@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import PreviewHeader from '..';
 
 describe('elements/content-preview/preview-header/PreviewHeader', () => {
-    const getWrapper = (props = {}) => shallow(<PreviewHeader {...props} />).dive();
+    const getWrapper = (props = {}) => shallow(<PreviewHeader {...props} />);
 
     it('should render only a logo if logoUrl is provided', () => {
         const wrapper = getWrapper({ logoUrl: 'box' });
