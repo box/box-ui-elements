@@ -1,18 +1,13 @@
-/**
- * @flow
- * @file Logo for the header
- * @author Box
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import IconLogo from '../../../icons/general/IconLogo';
 import messages from '../messages';
 import './Logo.scss';
 
-type Props = {
-    url?: string,
-};
+export interface LogoProps {
+    isSmall?: boolean;
+    url?: string;
+}
 
 function getLogo(url?: string) {
     if (url === 'box') {
@@ -29,7 +24,7 @@ function getLogo(url?: string) {
     );
 }
 
-const Logo = ({ url }: Props) => (
+const Logo = ({ url }: LogoProps) => (
     <div className="be-logo" data-testid="be-Logo">
         {getLogo(url)}
     </div>
