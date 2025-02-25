@@ -1,7 +1,3 @@
-/**
- * @file Component for Approval comment form
- */
-
 import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
@@ -142,7 +138,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                         <Avatar getAvatarUrl={getAvatarUrl} user={user} />
                     </Media.Figure>
                 )}
-
                 <Media.Body className="bcs-CommentForm-body" data-testid="bcs-CommentForm-body">
                     <Form onValidSubmit={this.onFormValidSubmitHandler}>
                         <DraftJSMentionSelector
@@ -167,7 +162,6 @@ class CommentForm extends React.Component<CommentFormProps, State> {
                                 <FormattedMessage {...messages.atMentionTip} />
                             </div>
                         )}
-
                         {isOpen && <CommentFormControls onCancel={onCancel} />}
                     </Form>
                 </Media.Body>

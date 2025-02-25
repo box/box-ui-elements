@@ -1,7 +1,3 @@
-/**
- * @file Comment Input Controls components for CommentForm
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
