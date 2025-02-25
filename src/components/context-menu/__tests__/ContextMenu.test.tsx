@@ -46,7 +46,7 @@ describe('components/context-menu/ContextMenu', () => {
                     <ContextMenu>
                         <FakeButton />
                         <FakeMenu />
-                        {null as unknown as React.ReactElement}
+                        <FakeButton />
                     </ContextMenu>,
                 );
             }).toThrow('ContextMenu must have exactly two children: a target component and a <Menu>');
