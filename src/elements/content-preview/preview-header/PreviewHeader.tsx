@@ -16,6 +16,7 @@ import { bdlGray50 } from '../../../styles/variables';
 import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
 import type { ContentAnswersProps } from '../../common/content-answers/ContentAnswers';
 import type { ContentOpenWithProps } from '../../content-open-with/ContentOpenWith';
+
 import './PreviewHeader.scss';
 
 export interface PreviewHeaderProps {
@@ -33,6 +34,7 @@ export interface PreviewHeaderProps {
     selectedVersion: BoxItemVersion | null;
     token: string | null;
 }
+
 const LoadableContentAnswers = AsyncLoad({
     // @ts-ignore Dynamic import for lazy loading
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-answers" */ '../../common/content-answers'),
@@ -62,6 +64,7 @@ const PreviewHeader = ({
     const currentVersionId = getProp(file, 'file_version.id');
     const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
     const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
+
     // When previewing an older version the close button returns the user to the current version
     const closeMsg = isPreviewingCurrentVersion
         ? intl.formatMessage(messages.close)
@@ -70,6 +73,7 @@ const PreviewHeader = ({
     const downloadMsg = intl.formatMessage(messages.download);
     const drawMsg = intl.formatMessage(messages.drawAnnotation);
     const pointMsg = intl.formatMessage(messages.pointAnnotation);
+
     return (
         <header
             className={classNames('bcpr-PreviewHeader', {
