@@ -23,9 +23,9 @@ function stopPropagationAndPreventDefault(event: React.KeyboardEvent<HTMLElement
 
 interface MenuProps {
     /** children - menu items */
-    children: Array<React.ReactNode> | React.ReactNode;
+    children?: Array<React.ReactNode> | React.ReactNode;
     /** className - CSS class name for the menu */
-    className: string;
+    className?: string;
     /** initialFocusIndex - focuses a specific menu item index when menu is mounted */
     initialFocusIndex?: number;
     /** isHidden - whether the menu’s content is hidden */

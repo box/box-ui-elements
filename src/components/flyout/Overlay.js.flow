@@ -2,11 +2,20 @@
 import * as React from 'react';
 
 export type Props = {
-    children?: React.Node,
+    /** Overlay contents */
+    children: React.Node,
+    /** Component class names */
     className?: string,
-    handleOverlayKeyDown?: Function,
+    /** Function to handle click events */
+    onClick?: (event: SyntheticMouseEvent<HTMLDivElement>) => void,
+    /** Function called when overlay should close */
+    onClose?: () => void,
+    /** Whether to focus the first tabbable element on mount */
     shouldDefaultFocus?: boolean,
+    /** Whether to show focus outline */
     shouldOutlineFocus?: boolean,
+    /** ARIA role for the overlay */
+    role?: string,
 };
 
 declare export default React.ComponentType<Props>;

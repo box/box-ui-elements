@@ -17,9 +17,9 @@ export interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 type OverlayProps = Omit<Props, 'onClose'> & {
-    className: string;
-    onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
-    tabIndex: number;
+    className?: string;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+    tabIndex?: number;
 };
 
 class Overlay extends React.Component<Props> {
