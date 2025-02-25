@@ -1,9 +1,22 @@
-export { default as FeatureConsumer } from './FeatureConsumer';
-export { default as FeatureContext } from './FeatureContext';
-export { default as FeatureFlag } from './FeatureFlag';
-export { default as FeatureProvider } from './FeatureProvider';
-export { default as withFeatureConsumer } from './withFeatureConsumer';
-export { default as withFeatureProvider } from './withFeatureProvider';
-export { isFeatureEnabled, getFeatureConfig } from './util';
+// Import and re-export to avoid TypeScript errors with JSX
+import FeatureConsumer from './FeatureConsumer';
+import FeatureContext from './FeatureContext';
+import FeatureFlag from './FeatureFlag';
+import FeatureProvider from './FeatureProvider';
+import withFeatureConsumer from './withFeatureConsumer';
+import withFeatureProvider from './withFeatureProvider';
+import { isFeatureEnabled, getFeatureConfig } from './util';
+
+// Re-export everything
+export {
+    FeatureConsumer,
+    FeatureContext,
+    FeatureFlag,
+    FeatureProvider,
+    withFeatureConsumer,
+    withFeatureProvider,
+    isFeatureEnabled,
+    getFeatureConfig,
+};
 export * from './flowTypes';
 export * from './hooks';

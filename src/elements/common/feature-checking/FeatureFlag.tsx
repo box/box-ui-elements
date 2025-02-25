@@ -18,16 +18,12 @@ function FeatureFlag({
     children,
     not = false,
 }: FeatureFlagProps) {
-    return (
-        <FeatureConsumer>
-            {features => {
-                const isEnabled = not ? !isFeatureEnabled(features, feature) : isFeatureEnabled(features, feature);
-                const featureConfig = getFeatureConfig(features, feature);
-                if (children) return isEnabled && children;
-                return isEnabled ? enabled(featureConfig) : disabled();
-            }}
-        </FeatureConsumer>
-    );
+    return React.createElement(FeatureConsumer, null, (features: types.FeatureConfig) => {
+        const isEnabled = not ? !isFeatureEnabled(features, feature) : isFeatureEnabled(features, feature);
+        const featureConfig = getFeatureConfig(features, feature);
+        if (children) return isEnabled && children;
+        return isEnabled ? enabled(featureConfig) : disabled();
+    });
 }
 
 export default FeatureFlag;

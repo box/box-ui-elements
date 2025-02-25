@@ -8,7 +8,7 @@ interface FeatureProviderProps {
 }
 
 function FeatureProvider({ features = {}, children }: FeatureProviderProps) {
-    return <FeatureContext.Provider value={features}>{children}</FeatureContext.Provider>;
+    return React.createElement(FeatureContext.Provider, { value: features }, children);
 }
 
 export default FeatureProvider;
