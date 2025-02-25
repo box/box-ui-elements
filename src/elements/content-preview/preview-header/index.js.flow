@@ -1,0 +1,7 @@
+/**
+ * @flow
+ * @file Preview header component
+ * @author Box
+ */
+
+export { default } from './PreviewHeader';
