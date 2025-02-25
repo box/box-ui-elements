@@ -1,8 +1,7 @@
-import React from 'react';
-import { injectIntl } from 'react-intl';
-import type { IntlShape } from 'react-intl';
+import * as React from 'react';
+import { injectIntl, type IntlShape } from 'react-intl';
 import classNames from 'classnames';
-import get from 'lodash/get';
+import getProp from 'lodash/get';
 import AsyncLoad from '../../common/async-load';
 import FileInfo from './FileInfo';
 import IconClose from '../../../icons/general/IconClose';
@@ -17,7 +16,6 @@ import { bdlGray50 } from '../../../styles/variables';
 import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
 import type { ContentAnswersProps } from '../../common/content-answers/ContentAnswers';
 import type { ContentOpenWithProps } from '../../content-open-with/ContentOpenWith';
-
 import './PreviewHeader.scss';
 
 export interface PreviewHeaderProps {
@@ -35,16 +33,14 @@ export interface PreviewHeaderProps {
     selectedVersion: BoxItemVersion | null;
     token: string | null;
 }
-
 const LoadableContentAnswers = AsyncLoad({
-    // @ts-expect-error Dynamic import for lazy loading
+    // @ts-ignore Dynamic import for lazy loading
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-answers" */ '../../common/content-answers'),
-});
+}) as React.ComponentType<ContentAnswersProps>;
 const LoadableContentOpenWith = AsyncLoad({
-    // @ts-expect-error Dynamic import for lazy loading
+    // @ts-ignore Dynamic import for lazy loading
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../../content-open-with'),
-});
-
+}) as React.ComponentType<ContentOpenWithProps>;
 const PreviewHeader = ({
     canAnnotate,
     canDownload,
@@ -63,10 +59,9 @@ const PreviewHeader = ({
     const fileId = file && file.id;
     const shouldRenderAnswers = fileId && contentAnswersProps.show;
     const shouldRenderOpenWith = fileId && contentOpenWithProps.show;
-    const currentVersionId = get(file, 'file_version.id');
-    const selectedVersionId = get(selectedVersion, 'id', currentVersionId);
+    const currentVersionId = getProp(file, 'file_version.id');
+    const selectedVersionId = getProp(selectedVersion, 'id', currentVersionId);
     const isPreviewingCurrentVersion = currentVersionId === selectedVersionId;
-
     // When previewing an older version the close button returns the user to the current version
     const closeMsg = isPreviewingCurrentVersion
         ? intl.formatMessage(messages.close)
@@ -75,7 +70,6 @@ const PreviewHeader = ({
     const downloadMsg = intl.formatMessage(messages.download);
     const drawMsg = intl.formatMessage(messages.drawAnnotation);
     const pointMsg = intl.formatMessage(messages.pointAnnotation);
-
     return (
         <header
             className={classNames('bcpr-PreviewHeader', {
@@ -112,6 +106,7 @@ const PreviewHeader = ({
                                         aria-label={drawMsg}
                                         className="bcpr-PreviewHeader-button bp-btn-annotate-draw bp-is-hidden"
                                         title={drawMsg}
+                                        type="button"
                                     >
                                         <IconDrawAnnotationMode color={bdlGray50} height={18} width={18} />
                                     </PlainButton>
@@ -119,6 +114,7 @@ const PreviewHeader = ({
                                         aria-label={pointMsg}
                                         className="bcpr-PreviewHeader-button bp-btn-annotate-point bp-is-hidden"
                                         title={pointMsg}
+                                        type="button"
                                     >
                                         <IconPointAnnotation color={bdlGray50} height={18} width={18} />
                                     </PlainButton>
@@ -130,6 +126,7 @@ const PreviewHeader = ({
                                     className="bcpr-PreviewHeader-button"
                                     onClick={onPrint}
                                     title={printMsg}
+                                    type="button"
                                 >
                                     <IconPrint color={bdlGray50} height={22} width={22} />
                                 </PlainButton>
@@ -140,18 +137,19 @@ const PreviewHeader = ({
                                     className="bcpr-PreviewHeader-button"
                                     onClick={onDownload}
                                     title={downloadMsg}
+                                    type="button"
                                 >
                                     <IconDownload color={bdlGray50} height={18} width={18} />
                                 </PlainButton>
                             )}
                         </>
                     )}
-
                     {onClose && (
                         <PlainButton
                             aria-label={isPreviewingCurrentVersion && closeMsg}
                             className="bcpr-PreviewHeader-button bcpr-PreviewHeader-button-close"
                             onClick={onClose}
+                            type="button"
                         >
                             {isPreviewingCurrentVersion ? (
                                 <IconClose color={bdlGray50} height={24} width={24} />
