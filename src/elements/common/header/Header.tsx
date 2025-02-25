@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, type IntlShape } from 'react-intl';
 import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
@@ -8,9 +8,7 @@ import type { View } from '../../../common/types/core';
 import './Header.scss';
 
 export interface HeaderProps {
-    intl: {
-        formatMessage: (descriptor: { id: string; defaultMessage: string }) => string;
-    };
+    intl: IntlShape;
     isHeaderLogoVisible?: boolean;
     isSmall: boolean;
     logoUrl?: string;
