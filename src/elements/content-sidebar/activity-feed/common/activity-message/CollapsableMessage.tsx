@@ -18,7 +18,6 @@ export default function CollapsableMessage({ children }: CollapsableMessageProps
             setShouldCollapse(clientHeight !== scrollHeight);
         }
     }, []);
-
     return (
         <>
             <div
