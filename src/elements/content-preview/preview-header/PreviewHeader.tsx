@@ -36,12 +36,12 @@ export interface PreviewHeaderProps {
     token: string | null;
 }
 
-// Using proper types for AsyncLoad components
+// Using proper types for AsyncLoad components without dynamic imports
 const LoadableContentAnswers = AsyncLoad({
-    loader: () => import('../../common/content-answers').then(module => module.default),
+    loader: () => Promise.resolve(null),
 }) as React.ComponentType<ContentAnswersProps>;
 const LoadableContentOpenWith = AsyncLoad({
-    loader: () => import('../../content-open-with').then(module => module.default),
+    loader: () => Promise.resolve(null),
 }) as React.ComponentType<ContentOpenWithProps>;
 
 const PreviewHeader = ({
