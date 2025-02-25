@@ -37,9 +37,11 @@ export interface PreviewHeaderProps {
 }
 
 const LoadableContentAnswers = AsyncLoad({
+    // @ts-expect-error Dynamic import for lazy loading
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-answers" */ '../../common/content-answers'),
 });
 const LoadableContentOpenWith = AsyncLoad({
+    // @ts-expect-error Dynamic import for lazy loading
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../../content-open-with'),
 });
 
