@@ -1,13 +1,7 @@
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
-import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../../../test-utils/testing-library';
 import InlineBreadcrumbs, { InlineBreadcrumbsProps } from '../InlineBreadcrumbs';
-
-jest.mock('react-intl', () => ({
-    ...jest.requireActual('react-intl'),
-    FormattedMessage: ({ defaultMessage }: { defaultMessage: string }) => <span>{defaultMessage}</span>,
-}));
 
 describe('elements/common/breadcrumbs/InlineBreadcrumbs', () => {
     const renderComponent = (props: Partial<InlineBreadcrumbsProps> = {}) => {
@@ -21,11 +15,7 @@ describe('elements/common/breadcrumbs/InlineBreadcrumbs', () => {
                 ],
             },
         };
-        return render(
-            <IntlProvider locale="en">
-                <InlineBreadcrumbs item={item} onItemClick={jest.fn()} rootId={'0'} {...props} />
-            </IntlProvider>,
-        );
+        return render(<InlineBreadcrumbs item={item} onItemClick={jest.fn()} rootId={'0'} {...props} />);
     };
 
     test('should render FormattedMessage and Breadcrumbs components', () => {

@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import Breadcrumb from './Breadcrumb';
 import BreadcrumbDropdown from './BreadcrumbDropdown';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
-import type { Delimiter, Crumb } from '../../../common/types/core';
+import type { Crumb, Delimiter } from '../../../common/types/core';
 import { DELIMITER_CARET, DEFAULT_ROOT, DELIMITER_SLASH } from '../../../constants';
 
 import './Breadcrumbs.scss';
@@ -15,7 +15,7 @@ export interface BreadcrumbsProps {
     crumbs: Crumb[];
     delimiter: Delimiter;
     isSmall?: boolean;
-    onCrumbClick: Function;
+    onCrumbClick: (item: string) => void;
     rootId: string;
 }
 
@@ -41,7 +41,12 @@ function filterCrumbs(rootId: string, crumbs: Crumb[]): Crumb[] {
  * @param {boolean} isLast is this the last crumb
  * @return {Element}
  */
-function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: Function, delimiter: Delimiter) {
+function getBreadcrumb(
+    crumbs: Crumb | Crumb[],
+    isLast: boolean,
+    onCrumbClick: (item: string) => void,
+    delimiter: Delimiter,
+) {
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (

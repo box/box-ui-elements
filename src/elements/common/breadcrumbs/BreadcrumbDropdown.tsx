@@ -7,7 +7,7 @@ import messages from '../messages';
 
 export interface BreadcrumbDropdownProps {
     crumbs: Crumb[];
-    onCrumbClick: Function;
+    onCrumbClick: (item: string) => void;
 }
 
 const BreadcrumbDropdown = ({ crumbs, onCrumbClick }: BreadcrumbDropdownProps) => (
