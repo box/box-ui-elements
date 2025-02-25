@@ -57,7 +57,7 @@ const positions = {
 
 export interface RadarAnimationProps {
     /** A React element to put the radar on */
-    children: React.ReactChild;
+    children: React.ReactElement;
     /** A CSS class for the radar */
     className?: string;
     /** Whether to constrain the radar to the element's scroll parent. Defaults to `false` */
@@ -123,9 +123,12 @@ class RadarAnimation extends React.Component<RadarAnimationProps> {
 
         const { attachment, targetAttachment } = positions[position];
         const child = React.Children.only(children);
-        const referenceElement = React.cloneElement(child as React.ReactElement, {
-            'aria-describedby': this.radarAnimationID,
-        });
+        const referenceElement = React.cloneElement(
+            child as React.ReactElement,
+            {
+                'aria-describedby': this.radarAnimationID,
+            } as React.HTMLAttributes<HTMLElement>,
+        );
 
         // Typescript defs seem busted for older versions of react-tether
         const tetherProps: {

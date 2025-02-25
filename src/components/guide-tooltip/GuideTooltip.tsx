@@ -9,7 +9,7 @@ import messages from './messages';
 
 import './GuideTooltip.scss';
 
-type TooltipProps = Omit<JSX.LibraryManagedAttributes<typeof Tooltip, Tooltip['props']>, 'text' | 'theme'>;
+type TooltipProps = Omit<React.ComponentPropsWithoutRef<typeof Tooltip>, 'text' | 'theme'>;
 
 type Props = TooltipProps & {
     body: React.ReactNode;
@@ -20,8 +20,8 @@ type Props = TooltipProps & {
     image?: React.ReactNode;
     /** displays guide progress e.g. 1 of 4 */
     steps?: [number, number];
-    primaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
-    secondaryButtonProps?: JSX.LibraryManagedAttributes<typeof Button, Button['props']>;
+    primaryButtonProps?: React.ComponentPropsWithoutRef<typeof Button>;
+    secondaryButtonProps?: React.ComponentPropsWithoutRef<typeof Button>;
 };
 
 function GuideTooltip({

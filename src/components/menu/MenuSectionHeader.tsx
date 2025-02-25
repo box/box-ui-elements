@@ -4,7 +4,7 @@ import MenuItem from './MenuItem';
 
 export interface MenuSectionHeaderProps {
     /** children - menu section header content */
-    children?: Array<React.ReactChild> | React.ReactChild;
+    children?: React.ReactNode;
     /** className - CSS class name for the menu section header */
     className?: string;
 }

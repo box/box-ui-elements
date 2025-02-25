@@ -18,7 +18,7 @@ const icon = {
     'margin-right': '20px',
 };
 
-const Icon = ({ children, name }: { children: React.ReactChild; name: string }) => {
+const Icon = ({ children, name }: { children: React.ReactNode; name: string }) => {
     return (
         <div style={icon}>
             {children}

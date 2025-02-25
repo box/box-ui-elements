@@ -23,7 +23,7 @@ function stopPropagationAndPreventDefault(event: React.KeyboardEvent<HTMLElement
 
 interface MenuProps {
     /** children - menu items */
-    children: Array<React.ReactNode> | Array<React.ReactChild> | React.ReactChild;
+    children: Array<React.ReactNode> | React.ReactNode;
     /** className - CSS class name for the menu */
     className: string;
     /** initialFocusIndex - focuses a specific menu item index when menu is mounted */
@@ -283,17 +283,19 @@ class Menu extends React.Component<MenuProps> {
     render() {
         const { children, className, isHidden, setRef, shouldOutlineFocus, ...rest } = this.props;
 
-        const menuProps = omit(rest, ['onClose', 'initialFocusIndex', 'isSubmenu', 'menuItemSelector']) as MenuProps;
-        menuProps.className = classNames('aria-menu', className, {
-            'is-hidden': isHidden,
-            'should-outline-focus': shouldOutlineFocus,
-        });
-        menuProps.ref = (ref: HTMLUListElement | null) => {
-            this.menuEl = ref;
-            if (setRef) {
-                setRef(ref);
-            }
-        };
+        const menuProps = {
+            ...omit(rest, ['onClose', 'initialFocusIndex', 'isSubmenu', 'menuItemSelector']),
+            className: classNames('aria-menu', className, {
+                'is-hidden': isHidden,
+                'should-outline-focus': shouldOutlineFocus,
+            }),
+            ref: (ref: HTMLUListElement | null) => {
+                this.menuEl = ref;
+                if (setRef) {
+                    setRef(ref);
+                }
+            },
+        } as React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
         if (menuProps.role === undefined) {
             menuProps.role = 'menu';
         }

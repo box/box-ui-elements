@@ -9,7 +9,7 @@ export enum LoadingIndicatorWrapperPosition {
 }
 export interface LoadingIndicatorWrapperProps {
     /** The content to wrap */
-    children: React.ReactChild;
+    children: React.ReactNode;
     /** Custom class for the loading indicator wrapper */
     className?: string;
     /** Location of the loading indicator - top, center */

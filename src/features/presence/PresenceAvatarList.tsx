@@ -29,7 +29,7 @@ export type Props = {
     onAvatarMouseLeave?: () => void;
 };
 
-function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): JSX.Element | null {
+function PresenceAvatarList(props: Props, ref: React.Ref<HTMLDivElement>): React.ReactElement | null {
     const {
         avatarAttributes,
         className,

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 export interface LabelPillTextProps {
     /** Text content, ie string or FormattedMessage */
-    children: React.ReactChild;
+    children: React.ReactNode;
     /** Additional CSS classname(s) */
     className?: string;
 }

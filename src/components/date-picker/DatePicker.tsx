@@ -779,7 +779,7 @@ class DatePicker extends React.Component<DatePickerProps, DatePickerState> {
                                         required: isRequired,
                                         ...resinTargetAttr,
                                         ...ariaAttrs,
-                                    })
+                                    } as React.HTMLAttributes<HTMLInputElement>)
                                 ) : (
                                     <input
                                         ref={ref => {

@@ -46,7 +46,6 @@ describe('components/context-menu/ContextMenu', () => {
                     <ContextMenu>
                         <FakeButton />
                         <FakeMenu />
-                        <div />
                     </ContextMenu>,
                 );
             }).toThrow();
@@ -153,12 +152,9 @@ describe('components/context-menu/ContextMenu', () => {
                 </ContextMenu>,
             );
             const instance = wrapper.instance();
-            sandbox
-                .mock(instance)
-                .expects('setState')
-                .withArgs({
-                    isOpen: false,
-                });
+            sandbox.mock(instance).expects('setState').withArgs({
+                isOpen: false,
+            });
             instance.closeMenu();
         });
 
@@ -290,14 +286,8 @@ describe('components/context-menu/ContextMenu', () => {
             );
 
             const documentMock = sandbox.mock(document);
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('contextmenu')
-                .never();
-            documentMock
-                .expects('removeEventListener')
-                .withArgs('click')
-                .never();
+            documentMock.expects('removeEventListener').withArgs('contextmenu').never();
+            documentMock.expects('removeEventListener').withArgs('click').never();
 
             wrapper.unmount();
         });
@@ -411,18 +401,18 @@ describe('components/context-menu/ContextMenu', () => {
                 const instance = wrapper.instance() as ContextMenu;
                 instance.closeMenu = closeMenuSpy;
 
-                const handleContextMenuEvent = ({
+                const handleContextMenuEvent = {
                     clientX: 10,
                     clientY: 15,
                     preventDefault: preventDefaultSpy,
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 act(() => {
                     instance.handleContextMenu(handleContextMenuEvent);
                 });
 
-                const documentClickEvent = ({
+                const documentClickEvent = {
                     target: document.createElement('div'),
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 instance.handleDocumentClick(documentClickEvent);
                 expect(closeMenuSpy).toHaveBeenCalled();
             });
@@ -438,18 +428,18 @@ describe('components/context-menu/ContextMenu', () => {
                 const instance = wrapper.instance() as ContextMenu;
                 instance.closeMenu = closeMenuSpy;
 
-                const handleContextMenuEvent = ({
+                const handleContextMenuEvent = {
                     clientX: 10,
                     clientY: 15,
                     preventDefault: preventDefaultSpy,
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 act(() => {
                     instance.handleContextMenu(handleContextMenuEvent);
                 });
 
-                const documentClickEvent = ({
+                const documentClickEvent = {
                     target: document.getElementById(instance.menuID),
-                } as unknown) as MouseEvent;
+                } as unknown as MouseEvent;
                 instance.handleDocumentClick(documentClickEvent);
                 expect(closeMenuSpy).not.toHaveBeenCalled();
             });

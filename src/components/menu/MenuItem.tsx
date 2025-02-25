@@ -10,7 +10,7 @@ export interface MenuItemProps {
     /** 'aria-disabled' - ARIA attribute describing whether the menu item is disabled */
     'aria-disabled'?: boolean | 'true' | 'false';
     /** children - menu item content */
-    children?: Array<React.ReactChild> | React.ReactChild;
+    children?: React.ReactNode;
     /** className - CSS class name for the menu item */
     className?: string;
     /** isDisabled - whether the menu item is disabled */

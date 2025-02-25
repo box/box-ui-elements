@@ -14,7 +14,7 @@ import './Media.scss';
 
 export interface MediaMenuProps extends PlainButtonProps, WrappedComponentProps {
     /** Child elements */
-    children: Array<React.ReactNode> | React.ReactChild;
+    children: React.ReactNode;
 
     /** Additional class names for the menu button */
     className?: string;

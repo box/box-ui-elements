@@ -40,7 +40,7 @@ import { useIntl } from 'react-intl';
 
 import messages from '../../elements/common/messages';
 
-const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element } = {
+const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => React.ReactElement } = {
     FileAdobeExpress,
     FileAudio,
     FileBookmark,

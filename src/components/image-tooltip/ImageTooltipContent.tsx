@@ -17,15 +17,13 @@ export type ImageTooltipContentProps = {
 };
 
 function cloneTooltipChildWithNewProps(child: React.ReactElement, onImageLoad: OnImageLoad): React.ReactElement {
-    const {
-        props: { className: existingClasses },
-    } = child;
+    const existingClasses = (child.props as { className?: string }).className;
     const className = classNames(existingClasses, 'bdl-ImageTooltipContent-imageChild');
 
     return React.cloneElement(child, {
         className,
         onLoad: onImageLoad,
-    });
+    } as React.HTMLAttributes<HTMLImageElement>);
 }
 
 const ImageTooltipContent = ({ children, content, onImageLoad, title }: ImageTooltipContentProps) => (

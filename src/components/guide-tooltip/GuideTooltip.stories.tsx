@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import GuideTooltip from './GuideTooltip';
-import Button from '../button/Button';
+import Button, { ButtonType } from '../button/Button';
 import FolderShared32 from '../../icon/content/FolderShared32';
 import notes from './GuideTooltip.stories.md';
 // @ts-ignore flow import
 import testImageSrc from './test-image.png';
 
-const addSpacing = (component: JSX.Element) => <div style={{ textAlign: 'center' }}>{component}</div>;
+const addSpacing = (component: React.ReactElement) => <div style={{ textAlign: 'center' }}>{component}</div>;
 
 export const allOptionsWithIcon = () =>
     addSpacing(
@@ -17,8 +17,22 @@ export const allOptionsWithIcon = () =>
             icon={<FolderShared32 />}
             steps={[1, 3]}
             /* eslint-disable no-console */
-            primaryButtonProps={{ children: 'Next', onClick: () => console.log('next') }}
-            secondaryButtonProps={{ children: 'Back', onClick: () => console.log('back') }}
+            primaryButtonProps={{
+                children: 'Next',
+                onClick: () => console.log('next'),
+                className: '',
+                isLoading: false,
+                showRadar: false,
+                type: ButtonType.BUTTON,
+            }}
+            secondaryButtonProps={{
+                children: 'Back',
+                onClick: () => console.log('back'),
+                className: '',
+                isLoading: false,
+                showRadar: false,
+                type: ButtonType.BUTTON,
+            }}
             /* eslint-enable no-console */
         >
             <Button>example</Button>

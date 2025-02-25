@@ -18,13 +18,13 @@ export interface CollapsibleProps {
     /** buttonProps - other props (e.g. resin target names) to be included in the button */
     buttonProps?: Record<string, React.ReactNode>;
     /** children - content to be displayed in the card when it is expanded */
-    children: Array<React.ReactChild> | React.ReactChild;
+    children: React.ReactNode;
     /** className - CSS class for the wrapper div */
     className?: string;
     /** hasStickyHeader - determines look of component */
     hasStickyHeader?: boolean;
     /** headerActionItems - determines stickiness of the header */
-    headerActionItems?: React.ReactChild;
+    headerActionItems?: React.ReactNode;
     /** headerButton - button in the title of the collapsible card */
     headerButton?: React.ReactElement;
     /** isBordered - determines optional header action items */

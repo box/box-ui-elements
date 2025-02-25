@@ -28,7 +28,7 @@ export interface CheckboxProps {
     name: string;
     /** onBlur - blur callback function that takes the event as the argument */
     onBlur?:
-        | ((e: React.SyntheticEvent<HTMLInputElement, Event>) => React.ReactText)
+        | ((e: React.SyntheticEvent<HTMLInputElement, Event>) => void)
         | {
               (e: React.FocusEvent<HTMLInputElement>): void;
           };

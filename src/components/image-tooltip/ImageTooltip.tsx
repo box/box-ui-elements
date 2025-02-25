@@ -12,7 +12,7 @@ type OtherTooltipProps = Omit<TooltipProps, 'text'>;
 
 export type ImageTooltipProps = {
     /** A React element to put the tooltip on */
-    children: React.ReactChild;
+    children: React.ReactElement;
     /** A string to be used in the tooltip's paragraph content */
     content: string;
     /** A React component representing the image used in the visual tooltip */

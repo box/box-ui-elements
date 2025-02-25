@@ -318,7 +318,7 @@ export default function withAnnotations<P extends object>(
             this.annotator = null;
         };
 
-        render(): JSX.Element {
+        render(): React.ReactElement {
             return (
                 <AnnotatorContext.Provider
                     value={{

@@ -10,11 +10,11 @@ export interface MenuHeaderProps {
     /** className - CSS class name for the menu section header */
     className?: string;
     /** children - menu section header content */
-    children?: Array<React.ReactChild> | React.ReactChild;
+    children?: React.ReactNode;
     /** subtitle - Secondary title of header below Title */
-    subtitle?: React.ReactChild;
+    subtitle?: React.ReactNode;
     /** title - Title of header */
-    title?: React.ReactChild;
+    title?: React.ReactNode;
 }
 
 const MenuHeader = ({ className, children, subtitle, title, ...rest }: MenuHeaderProps) => {
