@@ -8,8 +8,12 @@ function withFeatureConsumer<T>(
     WrappedComponent: React.ComponentType<{ features: FeatureConfig } & React.RefAttributes<T>>,
 ) {
     function wrapComponent(props: WrapperProps, ref: React.Ref<T>) {
-        return React.createElement(FeatureConsumer, null, (features: FeatureConfig) =>
-            React.createElement(WrappedComponent, { ...props, ref, features }),
+        return (
+            <FeatureConsumer>
+                {(features: FeatureConfig): React.ReactElement => (
+                    <WrappedComponent {...props} ref={ref} features={features} />
+                )}
+            </FeatureConsumer>
         );
     }
     const wrappedName = WrappedComponent.displayName || WrappedComponent.name || 'component';

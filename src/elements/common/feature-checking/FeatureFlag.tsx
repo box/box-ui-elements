@@ -18,12 +18,17 @@ function FeatureFlag({
     children,
     not = false,
 }: FeatureFlagProps) {
-    return React.createElement(FeatureConsumer, null, (features: types.FeatureConfig) => {
-        const isEnabled = not ? !isFeatureEnabled(features, feature) : isFeatureEnabled(features, feature);
-        const featureConfig = getFeatureConfig(features, feature);
-        if (children) return isEnabled && children;
-        return isEnabled ? enabled(featureConfig) : disabled();
-    });
+    // Using a render function pattern to avoid TypeScript errors with React.createElement
+    return (
+        <FeatureConsumer>
+            {(features: types.FeatureConfig): React.ReactNode => {
+                const isEnabled = not ? !isFeatureEnabled(features, feature) : isFeatureEnabled(features, feature);
+                const featureConfig = getFeatureConfig(features, feature);
+                if (children) return isEnabled && children;
+                return isEnabled ? enabled(featureConfig) : disabled();
+            }}
+        </FeatureConsumer>
+    );
 }
 
 export default FeatureFlag;
