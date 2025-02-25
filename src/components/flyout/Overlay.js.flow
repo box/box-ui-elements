@@ -1,0 +1,12 @@
+// @flow
+import * as React from 'react';
+
+export type Props = {
+    children?: React.Node,
+    className?: string,
+    handleOverlayKeyDown?: Function,
+    shouldDefaultFocus?: boolean,
+    shouldOutlineFocus?: boolean,
+};
+
+declare export default React.ComponentType<Props>;
