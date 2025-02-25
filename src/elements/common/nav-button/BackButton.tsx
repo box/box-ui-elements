@@ -1,30 +1,26 @@
-/**
- * @flow
- * @file Back Button component
- * @author Box
- */
-
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { Route, type Location } from 'react-router-dom';
+import { Route } from 'react-router-dom';
+import type { Location } from 'history';
 import IconNavigateLeft from '../../../icons/general/IconNavigateLeft';
 import messages from '../messages';
 import PlainButton from '../../../components/plain-button';
+import { ButtonType } from '../../../components/button';
 import './BackButton.scss';
 
-type Props = {
-    className?: string,
-    to?: Location,
-};
+export interface BackButtonProps {
+    className?: string;
+    to?: Location;
+}
 
-const BackButton = ({ className, to, ...rest }: Props) => (
+const BackButton = ({ className, to, ...rest }: BackButtonProps) => (
     <Route>
         {({ history }) => (
             <PlainButton
                 className={classNames('bdl-BackButton', className)}
                 onClick={() => (to ? history.push(to) : history.goBack())}
-                type="button"
+                type={ButtonType.BUTTON}
                 {...rest}
             >
                 <IconNavigateLeft height={24} width={24} />
