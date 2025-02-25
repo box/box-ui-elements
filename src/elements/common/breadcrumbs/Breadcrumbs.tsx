@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Component that creates breadcumbs for both the header and name details
- * @author Box
- */
-
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 
@@ -17,13 +11,13 @@ import './Breadcrumbs.scss';
 
 import messages from '../messages';
 
-type Props = {
-    crumbs: Crumb[],
-    delimiter: Delimiter,
-    isSmall?: boolean,
-    onCrumbClick: Function,
-    rootId: string,
-};
+export interface BreadcrumbsProps {
+    crumbs: Crumb[];
+    delimiter: Delimiter;
+    isSmall?: boolean;
+    onCrumbClick: Function;
+    rootId: string;
+}
 
 /**
  * Filters out ancestors to root from the crumbs.
@@ -52,11 +46,7 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
         const condensed = delimiter !== DELIMITER_CARET;
         return (
             <span className="be-breadcrumb-more">
-                <BreadcrumbDropdown
-                    className={condensed ? 'be-breadcrumbs-condensed' : ''}
-                    crumbs={crumbs}
-                    onCrumbClick={onCrumbClick}
-                />
+                <BreadcrumbDropdown crumbs={crumbs} onCrumbClick={onCrumbClick} />
                 <BreadcrumbDelimiter delimiter={condensed ? DELIMITER_SLASH : DELIMITER_CARET} />
             </span>
         );
@@ -66,7 +56,7 @@ function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: F
     return <Breadcrumb delimiter={delimiter} isLast={isLast} name={name} onClick={() => onCrumbClick(id)} />;
 }
 
-const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: Props) => {
+const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: BreadcrumbsProps) => {
     const { formatMessage } = useIntl();
 
     if (!rootId || crumbs.length === 0) {
