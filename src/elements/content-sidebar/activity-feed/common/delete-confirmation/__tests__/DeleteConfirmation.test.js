@@ -30,7 +30,7 @@ describe('elements/content-sidebar/ActivityFeed/common/delete-confirmation', () 
             const onDeleteConfirmMock = jest.fn();
             const wrapper = getWrapper({ onDeleteCancel: onDeleteCancelMock, onDeleteConfirm: onDeleteConfirmMock });
             const overlay = wrapper.find('Overlay');
-            overlay.invoke('onClose')();
+            overlay.prop('onKeyDown')({ key: 'Escape', preventDefault: jest.fn(), stopPropagation: jest.fn() });
             expect(onDeleteCancelMock).toBeCalled();
             expect(onDeleteConfirmMock).not.toBeCalled();
         });
