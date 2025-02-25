@@ -46,9 +46,10 @@ describe('components/context-menu/ContextMenu', () => {
                     <ContextMenu>
                         <FakeButton />
                         <FakeMenu />
+                        <div />
                     </ContextMenu>,
                 );
-            }).toThrow();
+            }).toThrow('ContextMenu must have exactly two children: a target component and a <Menu>');
         });
 
         test('should correctly render a single child button with correct props', () => {
