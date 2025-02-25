@@ -8,13 +8,25 @@ interface WrapperProps {
 
 function withFeatureProvider<T>(WrappedComponent: React.ComponentType<React.RefAttributes<T>>) {
     function wrapComponent({ features, ...props }: WrapperProps, ref: React.Ref<T>) {
-        // Using a function component pattern to avoid TypeScript errors
-        const WrappedWithProvider = () => (
-            <FeatureProvider features={features}>
-                <WrappedComponent {...props} ref={ref} />
-            </FeatureProvider>
-        );
-        return <WrappedWithProvider />;
+        // Using a function component to avoid TypeScript errors
+        const ProviderWrapper = () => {
+            const Provider = FeatureProvider as React.ComponentType<{
+                features: FeatureConfig;
+                children: React.ReactNode;
+            }>;
+
+            const WrappedWithProps = React.createElement(
+                WrappedComponent as React.ComponentType<React.RefAttributes<T>>,
+                {
+                    ...props,
+                    ref,
+                },
+            );
+
+            return React.createElement(Provider, { features }, WrappedWithProps);
+        };
+
+        return React.createElement(ProviderWrapper, null);
     }
     const wrappedName = WrappedComponent.displayName || WrappedComponent.name || 'component';
     wrapComponent.displayName = `withFeatureProvider(${wrappedName})`;
