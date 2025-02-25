@@ -68,11 +68,21 @@ const SidebarNav = ({
     onPanelChange = noop,
 }: Props) => {
     const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
-    const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
-        useFeatureConfig('boxai.sidebar');
+    const {
+        disabledTooltip: boxAIDisabledTooltip,
+        showOnlyNavButton: showOnlyBoxAINavButton,
+        useBoxAISidebarPrompt = () => ({}),
+    } = useFeatureConfig('boxai.sidebar');
+
+    const { focusBoxAISidebarPrompt = noop } = useBoxAISidebarPrompt();
 
     const handleSidebarNavButtonClick = (sidebarview: string) => {
         onPanelChange(sidebarview, false);
+
+        // If the Box AI sidebar is enabled, focus the Box AI sidebar prompt
+        if (sidebarview === SIDEBAR_VIEW_BOXAI) {
+            focusBoxAISidebarPrompt();
+        }
     };
 
     return (
