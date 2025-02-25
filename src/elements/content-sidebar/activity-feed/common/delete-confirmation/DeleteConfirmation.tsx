@@ -11,7 +11,6 @@ import { ACTIVITY_TARGETS } from '../../../../common/interactionTargets';
 import './DeleteConfirmation.scss';
 
 interface Props {
-    className?: string;
     isOpen: boolean;
     message: MessageDescriptor;
     onDeleteCancel: () => void;
@@ -40,7 +39,8 @@ class DeleteConfirmation extends React.Component<DeleteConfirmationProps> {
     };
 
     render() {
-        const { intl, message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props;
+        const { isOpen, message, onDeleteCancel, onDeleteConfirm, ...rest } = this.props; // eslint-disable-line @typescript-eslint/no-unused-vars
+        // Destructure isOpen to prevent it from being passed to Overlay component since it's not a valid prop
 
         return (
             <Overlay
