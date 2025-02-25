@@ -43,6 +43,7 @@ const LoadableContentOpenWith = AsyncLoad({
     // @ts-ignore Dynamic import for lazy loading
     loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../../content-open-with'),
 }) as React.ComponentType<ContentOpenWithProps>;
+
 const PreviewHeader = ({
     canAnnotate,
     canDownload,
