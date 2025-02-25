@@ -1,17 +1,18 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
-import DeleteConfirmation from '../DeleteConfirmation';
+import { DeleteConfirmationBase as DeleteConfirmation } from '../DeleteConfirmation';
 import messages from '../../../comment/messages';
 
 describe('elements/content-sidebar/ActivityFeed/common/delete-confirmation', () => {
     const getWrapper = props =>
-        shallow(
+        mount(
             <DeleteConfirmation
                 isOpen
                 message={messages.commentDeletePrompt}
                 onDeleteCancel={jest.fn()}
                 onDeleteConfirm={jest.fn()}
+                intl={{ formatMessage: jest.fn() }}
                 {...props}
             />,
         );
@@ -28,12 +29,8 @@ describe('elements/content-sidebar/ActivityFeed/common/delete-confirmation', () 
             const onDeleteCancelMock = jest.fn();
             const onDeleteConfirmMock = jest.fn();
             const wrapper = getWrapper({ onDeleteCancel: onDeleteCancelMock, onDeleteConfirm: onDeleteConfirmMock });
-            wrapper.simulate('keydown', {
-                key: 'Escape',
-                preventDefault: jest.fn(),
-                stopPropagation: jest.fn(),
-                nativeEvent: { stopImmediatePropagation: jest.fn() },
-            });
+            const overlay = wrapper.find('Overlay');
+            overlay.invoke('onClose')();
             expect(onDeleteCancelMock).toBeCalled();
             expect(onDeleteConfirmMock).not.toBeCalled();
         });

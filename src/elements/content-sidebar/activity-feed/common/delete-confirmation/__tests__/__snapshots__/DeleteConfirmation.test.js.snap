@@ -7,6 +7,8 @@ exports[`elements/content-sidebar/ActivityFeed/common/delete-confirmation render
   <FormattedMessage
     defaultMessage="Are you sure you want to permanently delete this comment?"
     id="be.contentSidebar.activityFeed.comment.commentDeletePrompt"
-  />
+  >
+    <div />
+  </FormattedMessage>
 </div>
 `;
