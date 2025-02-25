@@ -106,7 +106,6 @@ const PreviewHeader = ({
                                         aria-label={drawMsg}
                                         className="bcpr-PreviewHeader-button bp-btn-annotate-draw bp-is-hidden"
                                         title={drawMsg}
-                                        type="button"
                                     >
                                         <IconDrawAnnotationMode color={bdlGray50} height={18} width={18} />
                                     </PlainButton>
@@ -114,7 +113,6 @@ const PreviewHeader = ({
                                         aria-label={pointMsg}
                                         className="bcpr-PreviewHeader-button bp-btn-annotate-point bp-is-hidden"
                                         title={pointMsg}
-                                        type="button"
                                     >
                                         <IconPointAnnotation color={bdlGray50} height={18} width={18} />
                                     </PlainButton>
@@ -126,7 +124,6 @@ const PreviewHeader = ({
                                     className="bcpr-PreviewHeader-button"
                                     onClick={onPrint}
                                     title={printMsg}
-                                    type="button"
                                 >
                                     <IconPrint color={bdlGray50} height={22} width={22} />
                                 </PlainButton>
@@ -137,7 +134,6 @@ const PreviewHeader = ({
                                     className="bcpr-PreviewHeader-button"
                                     onClick={onDownload}
                                     title={downloadMsg}
-                                    type="button"
                                 >
                                     <IconDownload color={bdlGray50} height={18} width={18} />
                                 </PlainButton>
@@ -149,7 +145,6 @@ const PreviewHeader = ({
                             aria-label={isPreviewingCurrentVersion && closeMsg}
                             className="bcpr-PreviewHeader-button bcpr-PreviewHeader-button-close"
                             onClick={onClose}
-                            type="button"
                         >
                             {isPreviewingCurrentVersion ? (
                                 <IconClose color={bdlGray50} height={24} width={24} />
