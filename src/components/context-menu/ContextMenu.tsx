@@ -6,7 +6,7 @@ import './ContextMenu.scss';
 
 export interface ContextMenuProps {
     /** children - a target component to attach to and a menu */
-    children: React.ReactElement | [React.ReactElement, React.ReactElement];
+    children: React.ReactElement | React.ReactElement[];
     /**
      * constraints - an array of tether constraints
      *
