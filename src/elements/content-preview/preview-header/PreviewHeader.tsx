@@ -36,13 +36,12 @@ export interface PreviewHeaderProps {
     token: string | null;
 }
 
-// Using proper types for AsyncLoad components without dynamic imports
 const LoadableContentAnswers = AsyncLoad({
-    loader: () => Promise.resolve(null),
-}) as React.ComponentType<ContentAnswersProps>;
+    loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-answers" */ '../../common/content-answers'),
+});
 const LoadableContentOpenWith = AsyncLoad({
-    loader: () => Promise.resolve(null),
-}) as React.ComponentType<ContentOpenWithProps>;
+    loader: () => import(/* webpackMode: "lazy", webpackChunkName: "content-open-with" */ '../../content-open-with'),
+});
 
 const PreviewHeader = ({
     canAnnotate,
@@ -87,7 +86,6 @@ const PreviewHeader = ({
             */}
             <div className="bcpr-PreviewHeader-content bp-header bp-base-header">
                 {logoUrl ? <Logo url={logoUrl} /> : <FileInfo file={file || null} version={selectedVersion} />}
-
                 <div className="bcpr-PreviewHeader-controls">
                     {isPreviewingCurrentVersion && (
                         <>

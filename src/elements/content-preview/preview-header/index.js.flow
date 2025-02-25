@@ -1,7 +1,3 @@
-/**
- * @flow
- * @file Preview header component
- * @author Box
- */
+// @flow
 
 export { default } from './PreviewHeader';
