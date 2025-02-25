@@ -44,9 +44,12 @@ describe('components/context-menu/ContextMenu', () => {
             expect(() => {
                 shallow(
                     <ContextMenu>
-                        <FakeButton />
-                        <FakeMenu />
-                        <FakeButton />
+                        {
+                            [<FakeButton key="1" />, <FakeMenu key="2" />, <FakeButton key="3" />] as unknown as [
+                                React.ReactElement,
+                                React.ReactElement,
+                            ]
+                        }
                     </ContextMenu>,
                 );
             }).toThrow('ContextMenu must have exactly two children: a target component and a <Menu>');
