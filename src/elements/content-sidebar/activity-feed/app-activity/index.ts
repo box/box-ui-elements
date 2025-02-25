@@ -1,1 +1,1 @@
-export { default, type AppActivityProps } from './AppActivity';
+export { default } from './AppActivity';
