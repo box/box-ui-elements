@@ -9,6 +9,7 @@ import * as React from 'react';
 // eslint-disable-next-line react/no-deprecated
 import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
+// $FlowFixMe
 import ContentExplorerReactComponent from '../content-explorer';
 import type { BoxItem } from '../../common/types/core';
 
