@@ -63,26 +63,18 @@ describe('features/content-explorer/content-explorer-modal/ContentExplorerModal'
             expect(wrapper).toMatchSnapshot();
         });
 
-        test('should pass onSelectedClick, onSelectItem, infoNoticeText, noItemsRenderer and breadcrumbIcon to ContentExplorer', () => {
+        test('should pass onSelectedClick, onSelectItem, infoNoticeText and noItemsRenderer to ContentExplorer', () => {
             const onSelectedClick = () => {};
             const onSelectItem = () => {};
             const infoNoticeText = 'info notice text';
             const noItemsRenderer = () => <div>No items</div>;
-            const breadcrumbIcon = <div>Icon</div>;
 
-            const wrapper = renderComponent({
-                onSelectedClick,
-                onSelectItem,
-                infoNoticeText,
-                noItemsRenderer,
-                breadcrumbIcon,
-            });
+            const wrapper = renderComponent({ onSelectedClick, onSelectItem, infoNoticeText, noItemsRenderer });
 
             expect(wrapper.find('ContentExplorer').prop('onSelectedClick')).toEqual(onSelectedClick);
             expect(wrapper.find('ContentExplorer').prop('onSelectItem')).toEqual(onSelectItem);
             expect(wrapper.find('ContentExplorer').prop('infoNoticeText')).toEqual(infoNoticeText);
             expect(wrapper.find('ContentExplorer').prop('noItemsRenderer')).toEqual(noItemsRenderer);
-            expect(wrapper.find('ContentExplorer').prop('breadcrumbIcon')).toEqual(breadcrumbIcon);
         });
     });
 });

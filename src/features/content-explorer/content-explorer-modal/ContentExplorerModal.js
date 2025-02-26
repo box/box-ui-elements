@@ -12,7 +12,6 @@ import './ContentExplorerModal.scss';
 
 type Props = {
     additionalColumns?: Array<React.ComponentType<Column>>,
-    breadcrumbIcon?: React.ComponentType<any>,
     breadcrumbProps?: BreadcrumbProps,
     className?: string,
     controlledSelectedItems?: Object,

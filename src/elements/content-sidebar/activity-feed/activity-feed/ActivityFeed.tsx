@@ -1,8 +1,3 @@
-/**
- * @flow
- * @file Component for Activity feed
- */
-
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
@@ -23,7 +18,7 @@ import {
     PERMISSION_CAN_CREATE_ANNOTATIONS,
 } from '../../../../constants';
 import { scrollIntoView } from '../../../../utils/dom';
-import type {
+import {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
@@ -34,76 +29,75 @@ import type {
     FocusableFeedItemType,
     Task,
 } from '../../../../common/types/feed';
-import type { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
-import type { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations } from '../../flowTypes';
-import type { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/types';
+import { SelectorItems, User, GroupMini, BoxItem } from '../../../../common/types/core';
+import { Errors, GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import { Translations } from '../../flowTypes';
+import { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/types';
 
 import './ActivityFeed.scss';
 
-export type ActivityFeedProps = {
-    activeFeedEntryId?: string,
-    activeFeedEntryType?: FocusableFeedItemType,
-    activityFeedError: ?Errors,
-    approverSelectorContacts?: SelectorItems<User | GroupMini>,
-    contactsLoaded?: boolean,
-    currentUser?: User,
-    feedItems?: FeedItems,
-    // $FlowFixMe file.file_version (BoxItem[BoxItemVersion]) has many apparently long-standing type errors
-    file: BoxItem,
-    getApproverWithQuery?: Function,
-    getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
-    getUserProfileUrl?: GetProfileUrlCallback,
-    hasNewThreadedReplies?: boolean,
-    hasReplies?: boolean,
-    hasVersions?: boolean,
-    isDisabled?: boolean,
-    mentionSelectorContacts?: SelectorItems<User>,
-    onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
-    onAnnotationEdit?: OnAnnotationEdit,
-    onAnnotationSelect?: (annotation: Annotation) => void,
-    onAnnotationStatusChange: OnAnnotationStatusChange,
-    onAppActivityDelete?: Function,
-    onCommentCreate?: Function,
-    onCommentDelete?: Function,
+export interface ActivityFeedProps {
+    activeFeedEntryId?: string;
+    activeFeedEntryType?: FocusableFeedItemType;
+    activityFeedError: Errors | null;
+    approverSelectorContacts?: SelectorItems<User | GroupMini>;
+    contactsLoaded?: boolean;
+    currentUser?: User;
+    feedItems?: FeedItems;
+    file: BoxItem;
+    getApproverWithQuery?: Function;
+    getAvatarUrl: GetAvatarUrlCallback;
+    getMentionWithQuery?: Function;
+    getUserProfileUrl?: GetProfileUrlCallback;
+    hasNewThreadedReplies?: boolean;
+    hasReplies?: boolean;
+    hasVersions?: boolean;
+    isDisabled?: boolean;
+    mentionSelectorContacts?: SelectorItems<User>;
+    onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
+    onAnnotationEdit?: OnAnnotationEdit;
+    onAnnotationSelect?: (annotation: Annotation) => void;
+    onAnnotationStatusChange: OnAnnotationStatusChange;
+    onAppActivityDelete?: Function;
+    onCommentCreate?: Function;
+    onCommentDelete?: Function;
     onCommentUpdate?: (
         id: string,
-        text?: string,
-        status?: FeedItemStatus,
-        hasMention: boolean,
+        text: string | undefined,
+        status: FeedItemStatus | undefined,
+        hasMention: boolean | undefined,
         permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
-    onHideReplies?: (id: string, replies: Array<Comment>) => void,
-    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
-    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+        onSuccess: Function | undefined,
+        onError: Function | undefined,
+    ) => void;
+    onHideReplies?: (id: string, replies: Array<Comment>) => void;
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyDelete?: (params: { id: string; parentId: string; permissions: BoxCommentPermission }) => void;
     onReplyUpdate?: (
         id: string,
         parentId: string,
         text: string,
         permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
-    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
-    onTaskAssignmentUpdate?: Function,
-    onTaskCreate?: Function,
-    onTaskDelete?: Function,
-    onTaskModalClose?: Function,
-    onTaskUpdate?: Function,
-    onTaskView?: Function,
-    onVersionHistoryClick?: Function,
-    shouldUseUAA?: boolean,
-    translations?: Translations,
-};
+        onSuccess?: Function,
+        onError?: Function,
+    ) => void;
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void;
+    onTaskAssignmentUpdate?: Function;
+    onTaskCreate?: Function;
+    onTaskDelete?: Function;
+    onTaskModalClose?: Function;
+    onTaskUpdate?: Function;
+    onTaskView?: Function;
+    onVersionHistoryClick?: Function;
+    shouldUseUAA?: boolean;
+    translations?: Translations;
+}
 
-type State = {
-    isInputOpen: boolean,
-    isScrolled: boolean,
-    selectedItemId: string | null,
-};
+interface State {
+    isInputOpen: boolean;
+    isScrolled: boolean;
+    selectedItemId: string | null;
+}
 
 class ActivityFeed extends React.Component<ActivityFeedProps, State> {
     state = {
@@ -112,9 +106,9 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
         selectedItemId: null,
     };
 
-    activeFeedItemRef = React.createRef<null | HTMLElement>();
+    activeFeedItemRef: React.RefObject<HTMLLIElement> = React.createRef();
 
-    feedContainer: null | HTMLElement;
+    feedContainer: HTMLElement | null = null;
 
     componentDidMount() {
         this.resetFeedScroll();
@@ -205,17 +199,17 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
         }
     };
 
-    handleFeedScroll = (event: UIEvent): void => {
-        const { target } = event;
-        if (target instanceof Element) {
-            const { scrollTop } = target;
+    handleFeedScroll = (event: React.UIEvent<HTMLDivElement>): void => {
+        const { currentTarget } = event;
+        if (currentTarget) {
+            const { scrollTop } = currentTarget;
             this.setState({ isScrolled: scrollTop > 0 });
         }
     };
 
     throttledFeedScroll = throttle(this.handleFeedScroll, 100);
 
-    onKeyDown = (event: SyntheticKeyboardEvent<>): void => {
+    onKeyDown = (event: React.KeyboardEvent): void => {
         const { nativeEvent } = event;
         nativeEvent.stopImmediatePropagation();
     };
@@ -229,7 +223,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
 
     commentFormSubmitHandler = (): void => this.setState({ isInputOpen: false });
 
-    onCommentCreate = ({ text, hasMention }: { hasMention: boolean, text: string }) => {
+    onCommentCreate = ({ text, hasMention }: { hasMention: boolean; text: string }) => {
         const { onCommentCreate = noop } = this.props;
         onCommentCreate(text, hasMention);
         this.commentFormSubmitHandler();
@@ -243,7 +237,15 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
      * @param {number} dueAt - Task's due date
      * @return {void}
      */
-    onTaskCreate = ({ text, assignees, dueAt }: { assignees: SelectorItems<>, dueAt: string, text: string }): void => {
+    onTaskCreate = ({
+        text,
+        assignees,
+        dueAt,
+    }: {
+        assignees: SelectorItems<User | GroupMini>;
+        dueAt: string;
+        text: string;
+    }): void => {
         const { onTaskCreate = noop } = this.props;
         onTaskCreate(text, assignees, dueAt);
         this.commentFormSubmitHandler();
@@ -255,7 +257,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
      * @param {Object} data - Version history data
      * @return {void}
      */
-    openVersionHistoryPopup = (data: any): void => {
+    openVersionHistoryPopup = (data: unknown): void => {
         const versionInfoHandler = this.props.onVersionHistoryClick || noop;
         versionInfoHandler(data);
     };
@@ -268,7 +270,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
         this.setState({ selectedItemId: itemId });
     };
 
-    isFeedItemActive = <T, U: { id: string, type: T }>({ id, type }: U): boolean => {
+    isFeedItemActive = <T, U extends { id: string; type: T }>({ id, type }: U): boolean => {
         const { activeFeedEntryId, activeFeedEntryType } = this.props;
         const { selectedItemId } = this.state;
 
@@ -277,7 +279,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
         return selectedItemId ? isSelected : id === activeFeedEntryId && type === activeFeedEntryType;
     };
 
-    isCommentFeedItemActive = <T, U: { id: string, replies?: Array<Comment>, type: T }>(item: U): boolean => {
+    isCommentFeedItemActive = <T, U extends { id: string; replies?: Array<Comment>; type: T }>(item: U): boolean => {
         const { activeFeedEntryId } = this.props;
         const { replies } = item;
 
@@ -285,7 +287,7 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
         return isActive || (!!replies && replies.some(reply => reply.id === activeFeedEntryId));
     };
 
-    render(): React.Node {
+    render(): React.ReactNode {
         const {
             activeFeedEntryType,
             activityFeedError,
@@ -464,7 +466,6 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
                         createComment={hasCommentPermission ? this.onCommentCreate : noop}
                         getMentionWithQuery={getMentionWithQuery}
                         isOpen={isInputOpen}
-                        // $FlowFixMe
                         user={currentUser}
                         onCancel={this.commentFormCancelHandler}
                         onFocus={this.commentFormFocusHandler}

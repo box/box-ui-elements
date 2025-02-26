@@ -3,6 +3,9 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "jsx": "react",
+        "types": ["jest", "@testing-library/jest-dom"],
+        "allowJs": true,
+        "checkJs": false,
         "baseUrl": ".",
         "outDir": "es",
         "allowJs": false, // https://github.com/microsoft/TypeScript/issues/35470

@@ -1,8 +1,3 @@
-/**
- * @flow
- * @file Component for Activity feed empty state
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import ActivityFeedEmptyStateIllustration from '../illustrations/ActivityFeedEmptyStateIllustration';
@@ -10,12 +5,12 @@ import EmptyStatePreviewActivity140 from '../../../../illustration/EmptyStatePre
 import messages from '../../../common/messages';
 import './EmptyState.scss';
 
-type Props = {
-    showAnnotationMessage?: boolean,
-    showCommentMessage?: boolean,
-};
+interface EmptyStateProps {
+    showAnnotationMessage?: boolean;
+    showCommentMessage?: boolean;
+}
 
-const EmptyState = ({ showAnnotationMessage, showCommentMessage }: Props): React.Node => {
+const EmptyState = ({ showAnnotationMessage, showCommentMessage }: EmptyStateProps): React.ReactNode => {
     const showActionMessage = showAnnotationMessage || showCommentMessage;
     const actionMessage = showAnnotationMessage
         ? messages.noActivityAnnotationPrompt
@@ -28,7 +23,7 @@ const EmptyState = ({ showAnnotationMessage, showCommentMessage }: Props): React
             </div>
             <div className="bcs-EmptyState-cta">
                 <FormattedMessage {...messages.noActivity}>
-                    {(text: string) => <span className="bcs-EmptyState-cta-detail">{text}</span>}
+                    {text => <span className="bcs-EmptyState-cta-detail">{text}</span>}
                 </FormattedMessage>
                 {showActionMessage && (
                     <aside className="bcs-EmptyState-cta-message">

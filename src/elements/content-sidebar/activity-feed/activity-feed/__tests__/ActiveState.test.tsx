@@ -10,15 +10,18 @@ import {
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
 } from '../../../../../constants';
+import { AppActivityItem, Comment, Task } from '../../../../../common/types/feed';
+import { BoxItemVersion, User } from '../../../../../common/types/core';
+import { Annotation } from '../../../../../common/types/annotations';
 
 const currentUser = {
     id: 'user_123445',
     name: 'Rihanna',
-};
+} as User;
 
-const otherUser = { name: 'Akon', id: 11 };
+const otherUser: User = { name: 'Akon', id: 11 };
 
-const annotation = {
+const annotation: Annotation = {
     type: FEED_ITEM_TYPE_ANNOTATION,
     id: 'anno_123',
     created_at: '2018-07-03T14:43:52-07:00',
@@ -38,12 +41,14 @@ const annotation = {
     created_by: currentUser,
 };
 
-const comment = {
+const comment: Comment = {
     type: FEED_ITEM_TYPE_COMMENT,
     id: 'c_123',
     created_at: '2018-07-03T14:43:52-07:00',
+    modified_at: '2018-07-03T14:43:52-07:00',
     tagged_message: 'test @[123:Jeezy] @[10:Kanye West]',
     created_by: otherUser,
+    permissions: {},
 };
 
 const fileVersion = {
@@ -53,58 +58,29 @@ const fileVersion = {
     trashed_at: '2018-07-03T14:43:52-07:00',
     modified_at: '2018-07-03T14:43:52-07:00',
     modified_by: otherUser,
-};
+} as BoxItemVersion;
 
-const taskWithAssignment = {
+const taskWithAssignment: Task = {
     type: FEED_ITEM_TYPE_TASK,
     id: 't_345',
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: { target: otherUser },
-    modified_at: '2018-07-03T14:43:52-07:00',
-    description: 'test',
-    due_at: '2018-07-03T14:43:52-07:00',
-    assigned_to: {
-        entries: [
-            {
-                id: 'ta_123',
-                permissions: { can_delete: true, can_update: true },
-                role: 'ASSIGNEE',
-                status: 'NOT_STARTED',
-                target: otherUser,
-                type: 'task_collaborator',
-            },
-        ],
-        limit: 20,
-        next_marker: null,
-    },
-    status: 'NOT_STARTED',
     permissions: {
-        can_create_task_collaborator: true,
-        can_create_task_link: true,
         can_delete: true,
         can_update: true,
-    },
-    task_type: 'GENERAL',
-    task_links: {
-        entries: [
-            {
-                target: {
-                    id: 'f_123',
-                    type: 'file',
-                },
-            },
-        ],
     },
 };
 
 const appActivity = {
     activity_template: {
         id: 'template_09887654',
+        type: 'activity_template',
     },
     app: {
         id: 'app_123456',
         icon_url: 'foo.jpg',
         name: 'My App',
+        type: 'app',
     },
     created_at: '2018-07-03T14:43:52-07:00',
     created_by: {
@@ -117,10 +93,10 @@ const appActivity = {
     rendered_text: 'this is text and a <a>link</a>',
     type: FEED_ITEM_TYPE_APP_ACTIVITY,
     currentUser,
-};
+} as AppActivityItem;
 
 const activityFeedError = { title: 't', content: 'm' };
-const getShallowWrapper = (params = {}) =>
+const getShallowWrapper = (params: Partial<React.ComponentProps<typeof ActiveState>> = {}) =>
     shallow(
         <ActiveState
             items={[annotation, comment, fileVersion, taskWithAssignment, appActivity]}
@@ -145,18 +121,18 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
     test('should render card for item type', () => {
         const wrapper = getShallowWrapper().dive();
-        expect(wrapper.find('[data-testid="comment"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="version"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="task"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="app-activity"]')).toHaveLength(1);
-        expect(wrapper.find('[data-testid="annotation-activity"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Comment"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Version"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Task"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="App Activity"]')).toHaveLength(1);
+        expect(wrapper.find('[role="article"][aria-label="Annotation"]')).toHaveLength(1);
     });
 
     test('should correctly render ActivityThread for annotations and comments if has replies', () => {
         const wrapper = getShallowWrapper({
             hasReplies: true,
         }).dive();
-        expect(wrapper.find('[data-testid="activity-thread"]')).toHaveLength(2);
+        expect(wrapper.find('[role="article"][aria-label="Activity Thread"]')).toHaveLength(2);
     });
 
     test('should correctly render with an inline error if some feed items fail to fetch', () => {
@@ -173,12 +149,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
         ({ currentFileVersionId, isCurrentVersion }) => {
             const wrapper = getShallowWrapper({ currentFileVersionId });
 
-            expect(
-                wrapper
-                    .dive()
-                    .find(AnnotationActivity)
-                    .prop('isCurrentVersion'),
-            ).toBe(isCurrentVersion);
+            expect(wrapper.dive().find(AnnotationActivity).prop('isCurrentVersion')).toBe(isCurrentVersion);
         },
     );
 
@@ -194,21 +165,25 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
     });
 
     test('Annotation BaseComment has onCommentEdit to edit replies', () => {
-        const onCommentEdit = () => {};
+        const onCommentEdit = () => {
+            /* intentionally empty for testing */
+        };
         const wrapper = getShallowWrapper({ hasNewThreadedReplies: true, items: [annotation], onCommentEdit }).dive();
         const baseComment = wrapper.find('BaseComment');
-        expect(baseComment.props().onCommentEdit).toEqual(onCommentEdit);
+        expect((baseComment.props() as { onCommentEdit: Function }).onCommentEdit).toEqual(onCommentEdit);
     });
 
     test('Annotation BaseComment has onStatusChange from onAnnotationStatusChange', () => {
-        const onAnnotationStatusChange = () => {};
+        const onAnnotationStatusChange = () => {
+            /* intentionally empty for testing */
+        };
         const wrapper = getShallowWrapper({
             hasNewThreadedReplies: true,
             items: [annotation],
             onAnnotationStatusChange,
         }).dive();
         const baseComment = wrapper.find('BaseComment');
-        expect(baseComment.props().onStatusChange).toEqual(onAnnotationStatusChange);
+        expect((baseComment.props() as { onStatusChange: Function }).onStatusChange).toEqual(onAnnotationStatusChange);
     });
 
     test('Comment BaseComment has onStatusChange from onCommentEdit', () => {
@@ -222,7 +197,7 @@ describe('elements/content-sidebar/ActiveState/activity-feed/ActiveState', () =>
 
         const wrapper = getShallowWrapper(props).dive();
         const baseComment = wrapper.find('BaseComment');
-        const onStatusChangeProp = baseComment.props().onStatusChange;
+        const onStatusChangeProp = (baseComment.props() as { onStatusChange: Function }).onStatusChange;
         const expectedProps = { hasMention: false, ...props };
 
         onStatusChangeProp(expectedProps);

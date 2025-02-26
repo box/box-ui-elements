@@ -100,12 +100,6 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
             expect(wrapper.instance().props.customInput).toEqual(customInput);
             expect(wrapper).toMatchSnapshot();
         });
-
-        test('should pass breadcrumbIcon to ContentExplorerBreadcrumbs', () => {
-            const breadcrumbIcon = <div>Icon</div>;
-            const wrapper = renderComponent({ breadcrumbIcon });
-            expect(wrapper.find('ContentExplorerBreadcrumbs').prop('breadcrumbIcon')).toEqual(breadcrumbIcon);
-        });
     });
 
     describe('onEnterFolder', () => {

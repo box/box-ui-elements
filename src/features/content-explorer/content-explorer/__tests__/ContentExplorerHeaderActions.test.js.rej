@@ -1,0 +1,13 @@
+diff a/src/features/content-explorer/content-explorer/__tests__/ContentExplorerHeaderActions.test.js b/src/features/content-explorer/content-explorer/__tests__/ContentExplorerHeaderActions.test.js	(rejected hunks)
+@@ -205,4 +205 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
+-            wrapper
+-                .find('.content-explorer-breadcrumbs-up-button')
+-                .hostNodes()
+-                .simulate('click');
++            wrapper.find('.content-explorer-breadcrumbs-up-button').hostNodes().simulate('click');
+@@ -255,4 +252 @@ describe('features/content-explorer/content-explorer/ContentExplorerHeaderAction
+-            wrapper
+-                .find('.content-explorer-breadcrumbs-up-button')
+-                .hostNodes()
+-                .simulate('click');
++            wrapper.find('.content-explorer-breadcrumbs-up-button').hostNodes().simulate('click');

@@ -1,0 +1,7 @@
+diff a/src/features/content-explorer/content-explorer/__tests__/ContentExplorerBreadcrumbs.test.js b/src/features/content-explorer/content-explorer/__tests__/ContentExplorerBreadcrumbs.test.js	(rejected hunks)
+@@ -78,4 +78 @@ describe('features/content-explorer/content-explorer/ContentExplorerBreadcrumbs'
+-            wrapper
+-                .find('[data-testid="breadcrumb-lnk"]')
+-                .at(breadcrumbIndex)
+-                .simulate('click', event);
++            wrapper.find('[data-testid="breadcrumb-lnk"]').at(breadcrumbIndex).simulate('click', event);

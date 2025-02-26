@@ -1,7 +1,3 @@
-/**
- * @flow
- * @file Active state component for Activity Feed
- */
 import * as React from 'react';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
@@ -21,7 +17,7 @@ import {
     FEED_ITEM_TYPE_TASK,
     FEED_ITEM_TYPE_VERSION,
 } from '../../../../constants';
-import type {
+import {
     Annotation,
     AnnotationPermission,
     BoxCommentPermission,
@@ -31,62 +27,56 @@ import type {
     FeedItems,
     FeedItemStatus,
 } from '../../../../common/types/feed';
-import type { SelectorItems, User } from '../../../../common/types/core';
-import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
-import type { Translations } from '../../flowTypes';
-
-import type {
-    OnAnnotationEdit,
-    OnAnnotationStatusChange,
-    OnCommentEdit,
-    OnCommentStatusChange,
-} from '../comment/types';
+import { SelectorItems, User, GroupMini } from '../../../../common/types/core';
+import { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import { Translations } from '../../flowTypes';
+import { OnAnnotationEdit, OnAnnotationStatusChange, OnCommentEdit, OnCommentStatusChange } from '../comment/types';
 import AnnotationActivityLinkProvider from './AnnotationActivityLinkProvider';
 
-type Props = {
-    activeFeedItem: FeedItem,
-    activeFeedItemRef: { current: null | HTMLElement },
-    approverSelectorContacts?: SelectorItems<>,
-    currentFileVersionId: string,
-    currentUser?: User,
-    getApproverWithQuery?: Function,
-    getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
-    getUserProfileUrl?: GetProfileUrlCallback,
-    hasNewThreadedReplies?: boolean,
-    hasReplies?: boolean,
-    hasVersions?: boolean,
-    items: FeedItems,
-    mentionSelectorContacts?: SelectorItems<>,
-    onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => void,
-    onAnnotationEdit?: OnAnnotationEdit,
-    onAnnotationSelect?: (annotation: Annotation) => void,
-    onAnnotationStatusChange: OnAnnotationStatusChange,
-    onAppActivityDelete?: Function,
-    onCommentDelete?: Function,
-    onCommentEdit?: OnCommentEdit,
-    onCommentSelect?: (id: string | null) => void,
-    onHideReplies?: (id: string, replies: Array<CommentType>) => void,
-    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void,
-    onReplyDelete?: ({ id: string, parentId: string, permissions: BoxCommentPermission }) => void,
+interface ActiveStateProps {
+    activeFeedItem: FeedItem;
+    activeFeedItemRef: React.RefObject<HTMLLIElement>;
+    approverSelectorContacts?: SelectorItems<User | GroupMini>;
+    currentFileVersionId: string;
+    currentUser?: User;
+    getApproverWithQuery?: (searchStr: string) => void;
+    getAvatarUrl: GetAvatarUrlCallback;
+    getMentionWithQuery?: (searchStr: string) => void;
+    getUserProfileUrl?: GetProfileUrlCallback;
+    hasNewThreadedReplies?: boolean;
+    hasReplies?: boolean;
+    hasVersions?: boolean;
+    items: FeedItems;
+    mentionSelectorContacts?: SelectorItems<User>;
+    onAnnotationDelete?: (params: { id: string; permissions: AnnotationPermission }) => void;
+    onAnnotationEdit?: OnAnnotationEdit;
+    onAnnotationSelect?: (annotation: Annotation) => void;
+    onAnnotationStatusChange: OnAnnotationStatusChange;
+    onAppActivityDelete?: (id: string) => void;
+    onCommentDelete?: (id: string, permissions: BoxCommentPermission) => void;
+    onCommentEdit?: OnCommentEdit;
+    onCommentSelect?: (id: string | null) => void;
+    onHideReplies?: (id: string, replies: Array<CommentType>) => void;
+    onReplyCreate?: (parentId: string, parentType: CommentFeedItemType, text: string) => void;
+    onReplyDelete?: (params: { id: string; parentId: string; permissions: BoxCommentPermission }) => void;
     onReplyUpdate?: (
         id: string,
         parentId: string,
         text: string,
         permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => void,
-    onShowReplies?: (id: string, type: CommentFeedItemType) => void,
-    onTaskAssignmentUpdate?: Function,
-    onTaskDelete?: Function,
-    onTaskEdit?: Function,
-    onTaskModalClose?: Function,
-    onTaskView?: Function,
-    onVersionInfo?: Function,
-    shouldUseUAA?: boolean,
-    translations?: Translations,
-};
+        onSuccess?: Function,
+        onError?: Function,
+    ) => void;
+    onShowReplies?: (id: string, type: CommentFeedItemType) => void;
+    onTaskAssignmentUpdate?: (taskId: string, taskAssignmentId: string, status: string) => void;
+    onTaskDelete?: (id: string) => void;
+    onTaskEdit?: (id: string, text: string, dueAt: string | null) => void;
+    onTaskModalClose?: () => void;
+    onTaskView?: (id: string) => void;
+    onVersionInfo?: (version: string) => void;
+    shouldUseUAA?: boolean;
+    translations?: Translations;
+}
 
 const ActiveState = ({
     activeFeedItem,
@@ -124,7 +114,7 @@ const ActiveState = ({
     onVersionInfo,
     shouldUseUAA,
     translations,
-}: Props): React.Node => {
+}: ActiveStateProps): React.ReactNode => {
     const onCommentSelectHandler = (itemId: string) => (isSelected: boolean) => {
         onCommentSelect(isSelected ? itemId : null);
     };
@@ -134,27 +124,29 @@ const ActiveState = ({
     const onReplyCreateHandler = (parentId: string, parentType: CommentFeedItemType) => (text: string) => {
         onReplyCreate(parentId, parentType, text);
     };
-    const onReplyDeleteHandler = (parentId: string) => (options: { id: string, permissions: BoxCommentPermission }) => {
+    const onReplyDeleteHandler = (parentId: string) => (options: { id: string; permissions: BoxCommentPermission }) => {
         onReplyDelete({ ...options, parentId });
     };
-    const onReplyUpdateHandler = (parentId: string) => (
-        id: string,
-        text: string,
-        status?: FeedItemStatus,
-        hasMention?: boolean,
-        permissions: BoxCommentPermission,
-        onSuccess: ?Function,
-        onError: ?Function,
-    ) => {
-        onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
-    };
+    const onReplyUpdateHandler =
+        (parentId: string) =>
+        (
+            id: string,
+            text: string,
+            permissions: BoxCommentPermission,
+            status?: FeedItemStatus,
+            hasMention?: boolean,
+            onSuccess?: () => void,
+            onError?: (error: Error) => void,
+        ) => {
+            onReplyUpdate(id, parentId, text, permissions, onSuccess, onError);
+        };
     const onShowRepliesHandler = (id: string, type: CommentFeedItemType) => () => {
         onShowReplies(id, type);
     };
     const onCommentStatusChangeHandler: OnCommentStatusChange = (props: {
-        id: string,
-        permissions: AnnotationPermission | BoxCommentPermission,
-        status: FeedItemStatus,
+        id: string;
+        permissions: AnnotationPermission | BoxCommentPermission;
+        status: FeedItemStatus;
     }) => {
         if (onCommentEdit) {
             onCommentEdit({ hasMention: false, ...props });

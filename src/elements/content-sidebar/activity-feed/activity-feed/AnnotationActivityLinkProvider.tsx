@@ -1,16 +1,13 @@
-// @flow
 import * as React from 'react';
 import AnnotationActivityLink from '../annotations/AnnotationActivityLink';
-
 import annotationsMessages from '../annotations/messages';
+import { Annotation } from '../../../../common/types/feed';
 
-import type { Annotation } from '../../../../common/types/feed';
-
-type AnnotationActivityLinkProviderProps = {
-    isCurrentVersion: boolean,
-    item: Annotation,
-    onSelect: (annotation: Annotation) => void,
-};
+interface AnnotationActivityLinkProviderProps {
+    isCurrentVersion: boolean;
+    item: Annotation;
+    onSelect: (annotation: Annotation) => void;
+}
 
 const AnnotationActivityLinkProvider = ({ isCurrentVersion, item, onSelect }: AnnotationActivityLinkProviderProps) => {
     const { file_version, id, target } = item;

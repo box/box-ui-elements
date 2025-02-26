@@ -90,7 +90,7 @@ import type {
     Tasks,
     ThreadedComments as ThreadedCommentsType,
 } from '../common/types/feed';
-import { collapseFeedState } from '../elements/content-sidebar/activity-feed/activity-feed/activityFeedUtils';
+import { collapseFeedState } from '../elements/content-sidebar/activity-feed/activity-feed/activityFeedUtils.ts';
 
 const TASK_NEW_INITIAL_STATUS = TASK_NEW_NOT_STARTED;
 

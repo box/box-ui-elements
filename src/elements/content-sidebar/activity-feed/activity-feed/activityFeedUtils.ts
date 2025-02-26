@@ -1,17 +1,12 @@
-/**
- * @flow
- * @file Activity feed utility methods
- */
-
 import selectors from '../../../common/selectors/version';
 import { FEED_ITEM_TYPE_VERSION, PLACEHOLDER_USER, VERSION_UPLOAD_ACTION } from '../../../../constants';
-import type { FeedItems } from '../../../../common/types/feed';
+import { FeedItems } from '../../../../common/types/feed';
 
 export const ItemTypes = {
     fileVersion: FEED_ITEM_TYPE_VERSION,
-};
+} as const;
 
-export function collapseFeedState(feedState: ?FeedItems): FeedItems {
+export function collapseFeedState(feedState: FeedItems | null): FeedItems {
     if (!feedState) {
         return [];
     }

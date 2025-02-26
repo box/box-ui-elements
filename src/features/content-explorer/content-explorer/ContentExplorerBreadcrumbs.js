@@ -12,7 +12,6 @@ import { FoldersPathPropType } from '../prop-types';
 import messages from '../messages';
 
 const ContentExplorerBreadcrumbs = ({
-    breadcrumbIcon,
     breadcrumbProps,
     foldersPath,
     intl: { formatMessage },
@@ -40,7 +39,7 @@ const ContentExplorerBreadcrumbs = ({
                         onClick={event => onBreadcrumbClick(i, event)}
                         title={folder.name}
                     >
-                        {i === 0 && (breadcrumbIcon || <IconAllFiles />)}
+                        {i === 0 && <IconAllFiles />}
                         <span>{folder.name}</span>
                     </PlainButton>
                 </div>
