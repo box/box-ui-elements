@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Clickable breadcrumb component
- * @author Box
- */
-
 import * as React from 'react';
 import { TextButton } from '@box/blueprint-web';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
@@ -11,14 +5,14 @@ import type { Delimiter } from '../../../common/types/core';
 
 import './Breadcrumb.scss';
 
-type Props = {
-    delimiter?: Delimiter,
-    isLast?: boolean,
-    name: string,
-    onClick?: Function,
-};
+export interface BreadcrumbProps {
+    delimiter?: Delimiter;
+    isLast?: boolean;
+    name: string;
+    onClick?: () => void;
+}
 
-const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: Props) => {
+const Breadcrumb = ({ name = '', onClick, isLast, delimiter }: BreadcrumbProps) => {
     const title = onClick ? (
         <TextButton className="bdl-Breadcrumb-title" inheritFont onClick={onClick}>
             {name}

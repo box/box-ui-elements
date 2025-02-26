@@ -1,20 +1,14 @@
-/**
- * @flow
- * @file Clickable breadcrumb component
- * @author Box
- */
-
 import * as React from 'react';
 import { PointerChevronRight } from '@box/blueprint-web-assets/icons/Fill';
 import { Gray50, Size3 } from '@box/blueprint-web-assets/tokens/tokens';
 import type { Delimiter } from '../../../common/types/core';
 import { DELIMITER_CARET } from '../../../constants';
 
-type Props = {
-    delimiter?: Delimiter,
-};
+export interface BreadcrumbDelimiterProps {
+    delimiter?: Delimiter;
+}
 
-const BreadcrumbDelimiter = ({ delimiter }: Props) =>
+const BreadcrumbDelimiter = ({ delimiter }: BreadcrumbDelimiterProps) =>
     delimiter === DELIMITER_CARET ? (
         <PointerChevronRight
             className="be-breadcrumb-seperator"
