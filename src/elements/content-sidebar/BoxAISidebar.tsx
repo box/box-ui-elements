@@ -5,7 +5,7 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { type ItemType } from '@box/box-ai-content-answers';
-import { AgentsProvider , RecordActionType } from '@box/box-ai-agent-selector';
+import { AgentsProvider, RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import { SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
@@ -53,7 +53,6 @@ export interface BoxAISidebarProps {
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
-    userInfo: { name: string; avatarURL: string };
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -72,7 +71,6 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         localizedQuestions,
         recordAction,
         setCacheValue,
-        userInfo,
         ...rest
     } = props;
     const { questions } = cache;
@@ -89,7 +87,6 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             itemSize,
             setCacheValue,
             recordAction,
-            userInfo,
         }),
         [
             cache,
@@ -102,7 +99,6 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             itemSize,
             setCacheValue,
             recordAction,
-            userInfo,
         ],
     );
 

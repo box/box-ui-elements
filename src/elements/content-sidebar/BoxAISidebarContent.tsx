@@ -63,7 +63,6 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         itemSize,
         recordAction,
         setCacheValue,
-        userInfo,
     } = React.useContext(BoxAISidebarContext);
     const { agents, requestState, selectedAgent } = useAgents();
     const { questions: cacheQuestions } = cache;
@@ -176,7 +175,6 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         questions={questions}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
-                        userInfo={userInfo}
                         variant="sidebar"
                         recordAction={recordAction}
                         {...rest}
@@ -205,7 +203,6 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                 stopPropagationOnEsc
                 stopQuestion={stopQuestion}
                 submitQuestion={sendQuestion}
-                userInfo={userInfo}
                 variant="collapsible"
                 {...rest}
                 shouldRenderProviders={false}
