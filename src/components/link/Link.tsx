@@ -3,7 +3,7 @@ import * as React from 'react';
 import LinkBase, { LinkBaseProps } from './LinkBase';
 
 export interface LinkProps extends LinkBaseProps {
-    children: React.ReactChild;
+    children: React.ReactNode;
     className: string;
 }
 

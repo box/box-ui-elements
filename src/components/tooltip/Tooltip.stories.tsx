@@ -4,7 +4,7 @@ import Button from '../button/Button';
 import Tooltip, { TooltipPosition, TooltipTheme } from './Tooltip';
 import notes from './Tooltip.stories.md';
 
-const addSpacing = (component: JSX.Element) => (
+const addSpacing = (component: React.ReactElement) => (
     <div style={{ textAlign: 'center', marginTop: '125px', marginBottom: '125px' }}>{component}</div>
 );
 

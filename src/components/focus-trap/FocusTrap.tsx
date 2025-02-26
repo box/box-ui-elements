@@ -1,24 +1,33 @@
-// @flow
 import * as React from 'react';
 import tabbable from 'tabbable';
 import classNames from 'classnames';
 
-type Props = {
-    children: React.Node,
-    className?: string,
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
+    /** Content to be trapped */
+    children: React.ReactNode;
+    /** Additional class name */
+    className?: string;
     /** Function to get the ref to the focus trap wrapper element */
-    getRef?: Function,
+    getRef?: (ref: HTMLDivElement | null) => void;
     /** Function to handle keyboard input passed in from parent component. e.g. close overlay on Escape */
-    handleOverlayKeyDown?: Function,
-    shouldDefaultFocus?: boolean,
-    shouldOutlineFocus?: boolean,
-};
+    handleOverlayKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
+    /** Whether to focus the first tabbable element on mount */
+    shouldDefaultFocus?: boolean;
+    /** Whether to show focus outline */
+    shouldOutlineFocus?: boolean;
+}
 
 class FocusTrap extends React.Component<Props> {
-    componentDidMount() {
+    private el: HTMLDivElement | null = null;
+
+    private previousFocusEl: HTMLElement | null = null;
+
+    private trapEl: HTMLElement | null = null;
+
+    componentDidMount(): void {
         if (this.props.shouldDefaultFocus) {
             setTimeout(() => {
-                this.previousFocusEl = document.activeElement;
+                this.previousFocusEl = document.activeElement as HTMLElement;
                 this.focusFirstElement();
             }, 0);
         } else {
@@ -30,7 +39,7 @@ class FocusTrap extends React.Component<Props> {
         }
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
         setTimeout(() => {
             if (this.previousFocusEl) {
                 this.previousFocusEl.focus();
@@ -38,16 +47,10 @@ class FocusTrap extends React.Component<Props> {
         }, 0);
     }
 
-    el: ?HTMLDivElement;
-
-    previousFocusEl: ?HTMLElement;
-
-    trapEl: ?HTMLElement;
-
     /**
      * Focus the first tabbable element
      */
-    focusFirstElement = () => {
+    focusFirstElement = (): void => {
         if (!this.el) {
             return;
         }
@@ -67,7 +70,7 @@ class FocusTrap extends React.Component<Props> {
     /**
      * Focus the last tabbable element
      */
-    focusLastElement = () => {
+    focusLastElement = (): void => {
         if (!this.el) {
             return;
         }
@@ -84,7 +87,7 @@ class FocusTrap extends React.Component<Props> {
         }
     };
 
-    handleElKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+    handleElKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
         const { handleOverlayKeyDown } = this.props;
         if (this.el === document.activeElement && event.key === 'Tab') {
             this.focusFirstElement();
@@ -97,7 +100,7 @@ class FocusTrap extends React.Component<Props> {
         }
     };
 
-    handleTrapElKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+    handleTrapElKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
         if (event.key !== 'Tab') {
             return;
         }
@@ -105,20 +108,13 @@ class FocusTrap extends React.Component<Props> {
         event.preventDefault();
     };
 
-    render() {
-        const {
-            children,
-            className,
-            getRef,
-            handleOverlayKeyDown,
-            shouldDefaultFocus,
-            shouldOutlineFocus,
-            ...rest
-        } = this.props;
+    render(): React.ReactElement {
+        const { children, className, getRef, shouldOutlineFocus, ...rest } = this.props;
+
         return (
             // eslint-disable-next-line jsx-a11y/no-static-element-interactions
             <div
-                ref={ref => {
+                ref={(ref: HTMLDivElement | null) => {
                     this.el = ref;
                     if (getRef) {
                         getRef(ref);
@@ -131,19 +127,19 @@ class FocusTrap extends React.Component<Props> {
                 {...rest}
             >
                 {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-                <i aria-hidden onFocus={this.focusLastElement} tabIndex="0" />
+                <i aria-hidden onFocus={this.focusLastElement} tabIndex={0} />
                 {children}
                 {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-                <i aria-hidden onFocus={this.focusFirstElement} tabIndex="0" />
+                <i aria-hidden onFocus={this.focusFirstElement} tabIndex={0} />
                 {/* in case children doesn't contain any focusable elements, focus on trap */}
                 <i
-                    ref={ref => {
+                    ref={(ref: HTMLElement | null) => {
                         this.trapEl = ref;
                     }}
                     aria-hidden
                     onKeyDown={this.handleTrapElKeyDown}
                     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-                    tabIndex="0"
+                    tabIndex={0}
                 />
             </div>
         );

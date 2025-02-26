@@ -69,7 +69,7 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
         return button;
     }
 
-    handleTranslate = (event: React.MouseEvent): void => {
+    handleTranslate = (event: React.SyntheticEvent<HTMLButtonElement>): void => {
         const { id, tagged_message, onTranslate = noop, translatedTaggedMessage } = this.props;
         if (!translatedTaggedMessage) {
             this.setState({ isLoading: true });
@@ -80,7 +80,7 @@ class ActivityMessage extends React.Component<ActivityMessageProps, State> {
         event.preventDefault();
     };
 
-    handleShowOriginal = (event: React.MouseEvent): void => {
+    handleShowOriginal = (event: React.SyntheticEvent<HTMLButtonElement>): void => {
         this.setState({ isTranslation: false });
         event.preventDefault();
     };

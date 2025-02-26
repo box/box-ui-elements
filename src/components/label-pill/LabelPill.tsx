@@ -24,7 +24,7 @@ export enum LabelPillSize {
 
 export interface LabelPillProps {
     /** Content, wrapped in either LabelPill.Text or LabelPill.Icon */
-    children: Array<React.ReactChild> | React.ReactChild;
+    children: React.ReactNode;
     /** Type of pill */
     type?: LabelPillStatus;
     /** Size of pill */

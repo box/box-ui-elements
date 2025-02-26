@@ -34,8 +34,8 @@ export default function withAnnotatorContext<P extends {}>(WrappedComponent: Rea
                 state,
             }) => (
                 <WrappedComponent
+                    {...(props as P)}
                     ref={ref}
-                    {...props}
                     annotatorState={state}
                     emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
                     emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}

@@ -15,7 +15,13 @@ export type Props = {
     isActive?: boolean;
 } & WrappedComponentProps;
 
-function PresenceAvatarTooltipContent({ name, interactedAt, interactionType, intl, isActive }: Props): JSX.Element {
+function PresenceAvatarTooltipContent({
+    name,
+    interactedAt,
+    interactionType,
+    intl,
+    isActive,
+}: Props): React.ReactElement {
     const lastActionMessage = determineInteractionMessage(interactionType);
     const { value, unit } = timeFromNow(interactedAt);
     const timeAgo = intl.formatRelativeTime(value, unit as Intl.RelativeTimeFormatUnit);

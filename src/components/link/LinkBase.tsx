@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface LinkBaseProps {
-    children: React.ReactChild;
+    children: React.ReactNode;
     className?: string;
     component?: React.ElementType;
     href?: string;

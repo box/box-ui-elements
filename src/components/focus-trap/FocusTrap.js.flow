@@ -1,0 +1,19 @@
+// @flow
+import * as React from 'react';
+
+type Props = {
+    /** Content to be trapped */
+    children: React.Node,
+    /** Additional class name */
+    className?: string,
+    /** Function to get the ref to the focus trap wrapper element */
+    getRef?: (ref: HTMLDivElement | null) => void,
+    /** Function to handle keyboard input passed in from parent component */
+    handleOverlayKeyDown?: (event: SyntheticKeyboardEvent<HTMLElement>) => void,
+    /** Whether to focus the first tabbable element on mount */
+    shouldDefaultFocus?: boolean,
+    /** Whether to show focus outline */
+    shouldOutlineFocus?: boolean,
+};
+
+declare export default React.ComponentType<Props>;

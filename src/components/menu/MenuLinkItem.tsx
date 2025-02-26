@@ -11,7 +11,7 @@ const MenuLinkItem = ({ children, isSelected = false, isSelectItem = false, ...r
     listItemProps.role = 'none';
 
     const linkProps: MenuItemProps = {
-        className: classNames('menu-item', linkEl ? linkEl.props.className : '', {
+        className: classNames('menu-item', linkEl ? (linkEl.props as { className?: string }).className : '', {
             'is-select-item': isSelectItem,
             'is-selected': isSelected,
         }),

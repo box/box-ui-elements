@@ -48,12 +48,12 @@ class RadioGroup extends React.Component<RadioGroupProps, RadioGroupState> {
         return (
             <div className={`radio-group ${className}`} onChange={this.onChangeHandler}>
                 {React.Children.map(children, (radio: React.ReactElement) => {
-                    const { value } = radio.props;
+                    const { value } = radio.props as { value: string };
 
                     return React.cloneElement(radio, {
                         name,
                         isSelected: value === stateValue,
-                    });
+                    } as React.HTMLAttributes<HTMLInputElement>);
                 })}
             </div>
         );

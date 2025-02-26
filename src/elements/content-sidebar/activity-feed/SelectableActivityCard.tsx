@@ -16,7 +16,13 @@ function isAllowableNode({ target }: React.SyntheticEvent<HTMLDivElement>) {
     return target instanceof HTMLElement && ALLOWABLE_NODENAMES.includes(target.nodeName);
 }
 
-const SelectableActivityCard = ({ children, className, isDisabled = false, onSelect, ...rest }: Props): JSX.Element => {
+const SelectableActivityCard = ({
+    children,
+    className,
+    isDisabled = false,
+    onSelect,
+    ...rest
+}: Props): React.ReactElement => {
     const ref = React.useRef<HTMLDivElement | null>(null);
 
     const handleClick = (event: React.SyntheticEvent<HTMLDivElement>): void => {

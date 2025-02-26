@@ -25,7 +25,7 @@ const AnnotationActivityLink = ({
     message,
     onClick = noop,
     ...rest
-}: AnnotationActivityLinkProps): JSX.Element => {
+}: AnnotationActivityLinkProps): React.ReactElement => {
     const { values, ...messageDescriptor } = message;
     const translatedMessage = intl.formatMessage(messageDescriptor, values);
 

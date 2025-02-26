@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import LinkBase, { LinkBaseProps } from './LinkBase';
 
 export interface LinkButtonProps extends LinkBaseProps {
-    children: React.ReactChild;
+    children: React.ReactNode;
     className?: string;
     size?: 'large';
 }

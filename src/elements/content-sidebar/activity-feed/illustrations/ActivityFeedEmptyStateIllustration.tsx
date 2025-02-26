@@ -8,7 +8,11 @@ type Props = {
     width?: number;
 };
 
-const ActivityFeedEmptyStateIllustration = ({ className = '', width = 140, height = 140 }: Props): JSX.Element => (
+const ActivityFeedEmptyStateIllustration = ({
+    className = '',
+    width = 140,
+    height = 140,
+}: Props): React.ReactElement => (
     <AccessibleSVG
         className={`bcs-ActivityFeedEmptyStateIllustration ${className}`}
         height={height}

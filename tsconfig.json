@@ -10,9 +10,19 @@
         "rootDir": ".",
         "paths": {
             "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"],
-            "react": ["node_modules/@types/react"]
+            "react": ["node_modules/@types/react"],
+            "src/*": ["src/*"],
+            "@box/ui-elements/*": ["src/*"]
         },
-        "strict": false
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "strict": false,
+        "skipLibCheck": true,
+        "types": ["react", "react-dom"],
+        "typeRoots": ["./node_modules/@types"],
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true
     },
     "files": [".storybook/typings.d.ts"],
     "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"]

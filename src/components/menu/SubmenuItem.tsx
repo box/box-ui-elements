@@ -20,7 +20,7 @@ export interface SubmenuItemProps {
     /** bottomBoundaryElement - an HTMLElement defining the bottom boundary for the submenu item */
     bottomBoundaryElement?: HTMLElement;
     /** children - submenu item content */
-    children?: Array<React.ReactChild> | React.ReactChild;
+    children?: [React.ReactNode, React.ReactElement];
     /** className - CSS class name for the submenu item */
     className?: string;
     /** isDisabled - whether the submenu item is disabled */
@@ -201,7 +201,11 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         };
 
         const submenuProps = {
-            className: classNames(submenu.props.className, 'submenu', this.getMenuAlignmentClasses()),
+            className: classNames(
+                (submenu.props as { className?: string }).className,
+                'submenu',
+                this.getMenuAlignmentClasses(),
+            ),
             initialFocusIndex: submenuFocusIndex,
             // Hide the menu instead of unmounting it. Otherwise onMouseLeave won't work.
             isHidden: !isSubmenuOpen,
@@ -213,7 +217,7 @@ class SubmenuItem extends React.Component<SubmenuItemProps, SubmenuItemState> {
         };
 
         return (
-            <li {...menuItemProps}>
+            <li {...(menuItemProps as React.DetailedHTMLProps<React.LiHTMLAttributes<HTMLLIElement>, HTMLLIElement>)}>
                 {submenuTriggerContent}
                 {chevron}
                 {React.cloneElement(submenu, submenuProps)}

@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
+import PresenceAvatarList from '../PresenceAvatarList';
 import collaboratorList from '../__mocks__/collaborators';
 // @ts-ignore flow import
 import PresenceAvatar from '../PresenceAvatar';
 import Tooltip from '../../../components/tooltip';
-import { PresenceAvatarListComponent as PresenceAvatarList } from '../PresenceAvatarList';
 
 describe('features/presence/PresenceAvatarList', () => {
     const getDefaults = () => ({
         collaborators: collaboratorList,
     });
 
-    const getWrapper = (props = {}): ShallowWrapper => shallow(<PresenceAvatarList {...getDefaults()} {...props} />);
+    const getWrapper = (props = {}): ShallowWrapper => {
+        const defaultProps = getDefaults();
+        return shallow(<PresenceAvatarList {...defaultProps} {...props} />);
+    };
 
     describe('render()', () => {
         test('should correctly render empty state', () => {
@@ -61,26 +64,13 @@ describe('features/presence/PresenceAvatarList', () => {
                     onAvatarMouseEnter,
                 });
 
-                expect(
-                    wrapper
-                        .find(Tooltip)
-                        .first()
-                        .prop('isShown'),
-                ).toBe(false);
+                expect(wrapper.find(Tooltip).first().prop('isShown')).toBe(false);
 
                 // Trigger event on the first avatar
-                wrapper
-                    .find(PresenceAvatar)
-                    .first()
-                    .simulate(event);
+                wrapper.find(PresenceAvatar).first().simulate(event);
 
                 expect(onAvatarMouseEnter).toHaveBeenCalledWith('1');
-                expect(
-                    wrapper
-                        .find(Tooltip)
-                        .first()
-                        .prop('isShown'),
-                ).toBe(true);
+                expect(wrapper.find(Tooltip).first().prop('isShown')).toBe(true);
             },
         );
 
@@ -91,31 +81,15 @@ describe('features/presence/PresenceAvatarList', () => {
             });
 
             // Cause the tooltip to show
-            wrapper
-                .find(PresenceAvatar)
-                .first()
-                .simulate('focus');
+            wrapper.find(PresenceAvatar).first().simulate('focus');
 
-            expect(
-                wrapper
-                    .find(Tooltip)
-                    .first()
-                    .prop('isShown'),
-            ).toBe(true);
+            expect(wrapper.find(Tooltip).first().prop('isShown')).toBe(true);
 
             // Trigger event on the first avatar
-            wrapper
-                .find(PresenceAvatar)
-                .first()
-                .simulate(event);
+            wrapper.find(PresenceAvatar).first().simulate(event);
 
             expect(onAvatarMouseLeave).toHaveBeenCalled();
-            expect(
-                wrapper
-                    .find(Tooltip)
-                    .first()
-                    .prop('isShown'),
-            ).toBe(false);
+            expect(wrapper.find(Tooltip).first().prop('isShown')).toBe(false);
         });
 
         test('should pass through additional attributes when specified', () => {
@@ -126,12 +100,7 @@ describe('features/presence/PresenceAvatarList', () => {
             });
 
             expect(wrapper.find('.bdl-PresenceAvatarList').prop('data-resin-feature')).toEqual('presence');
-            expect(
-                wrapper
-                    .find(PresenceAvatar)
-                    .first()
-                    .prop('data-resin-target'),
-            ).toEqual('avatar');
+            expect(wrapper.find(PresenceAvatar).first().prop('data-resin-target')).toEqual('avatar');
         });
 
         test('should correctly render collaborators with additional count when number of collaborators is greater than maxAddionalCollaboratorsNum + maxDisplayedAvatars', () => {

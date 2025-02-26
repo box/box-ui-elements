@@ -37,7 +37,7 @@ import { SVGProps } from '../accessible-svg/AccessibleSVG';
 
 type Config = { color: string; icon: Icon };
 type Configs = { [key: string]: Config }; // { docx: { color: '#333', icon: IconFileWord }
-type Icon = (props: SVGProps) => JSX.Element;
+type Icon = (props: SVGProps) => React.ReactElement;
 
 const configs: Configs = {};
 const register = (icon: Icon, color: string, extensions: string[]): void => {
