@@ -17,7 +17,7 @@ import { bdlGray50 } from '../../../styles/variables';
 
 import messages from '../../common/messages';
 
-import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
+import type { BoxItem, BoxItemVersion, Token } from '../../../common/types/core';
 import type { ContentAnswersProps } from '../../common/content-answers/ContentAnswers';
 import type { ContentOpenWithProps } from '../../content-open-with/ContentOpenWith';
 
@@ -34,8 +34,8 @@ export interface PreviewHeaderProps {
     onClose?: React.MouseEventHandler<HTMLButtonElement>;
     onDownload: React.MouseEventHandler<HTMLButtonElement>;
     onPrint: React.MouseEventHandler<HTMLButtonElement>;
-    selectedVersion: BoxItemVersion | null;
-    token: string | null;
+    selectedVersion?: BoxItemVersion;
+    token: Token;
 }
 
 const LoadableContentAnswers = AsyncLoad({
@@ -88,7 +88,7 @@ const PreviewHeader = ({
                 and must be put one level under bcpr-PreviewHeader
             */}
             <div className="bcpr-PreviewHeader-content bp-header bp-base-header">
-                {logoUrl ? <Logo url={logoUrl} /> : <FileInfo file={file || null} version={selectedVersion} />}
+                {logoUrl ? <Logo url={logoUrl} /> : <FileInfo file={file} version={selectedVersion} />}
                 <div className="bcpr-PreviewHeader-controls">
                     {isPreviewingCurrentVersion && (
                         <>

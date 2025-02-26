@@ -4,8 +4,8 @@ import type { BoxItem, BoxItemVersion } from '../../../common/types/core';
 import './FileInfo.scss';
 
 export interface FileInfoProps {
-    file: BoxItem | null;
-    version: BoxItemVersion | null;
+    file?: BoxItem;
+    version?: BoxItemVersion;
 }
 
 const FileInfo = ({ file, version }: FileInfoProps) => {
