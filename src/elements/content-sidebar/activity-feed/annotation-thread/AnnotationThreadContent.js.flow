@@ -1,0 +1,41 @@
+// @flow
+import * as React from 'react';
+import type {
+    Annotation,
+    AnnotationPermission,
+    BoxCommentPermission,
+    Comment,
+    FeedItemStatus,
+} from '../../../../common/types/feed';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { AnnotationThreadError } from './types';
+import type { OnAnnotationEdit, OnAnnotationStatusChange } from '../comment/types';
+
+type Props = {
+    annotation?: Annotation,
+    currentUser: User,
+    error?: AnnotationThreadError,
+    getAvatarUrl: string => Promise<?string>,
+    getMentionWithQuery: (searchStr: string) => void,
+    getUserProfileUrl?: GetProfileUrlCallback,
+    isLoading: boolean,
+    mentionSelectorContacts: SelectorItems<>,
+    onAnnotationDelete?: ({ id: string, permissions: AnnotationPermission }) => any,
+    onAnnotationEdit?: OnAnnotationEdit,
+    onAnnotationStatusChange: OnAnnotationStatusChange,
+    onReplyCreate?: (text: string) => void,
+    onReplyDelete?: ({ id: string, permissions: BoxCommentPermission }) => void,
+    onReplyEdit?: (
+        id: string,
+        text: string,
+        status?: FeedItemStatus,
+        hasMention?: boolean,
+        permissions: BoxCommentPermission,
+        onSuccess: ?Function,
+        onError: ?Function,
+    ) => void,
+    replies?: Array<Comment>,
+};
+
+declare export default React.ComponentType<Props>;

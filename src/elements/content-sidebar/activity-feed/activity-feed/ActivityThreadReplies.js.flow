@@ -1,0 +1,31 @@
+// @flow
+import * as React from 'react';
+import type { GetAvatarUrlCallback, GetProfileUrlCallback } from '../../../common/flowTypes';
+import type { Translations } from '../../flowTypes';
+import type { SelectorItems, User } from '../../../../common/types/core';
+import type { BoxCommentPermission, Comment as CommentType, FeedItemStatus } from '../../../../common/types/feed';
+
+type Props = {
+    currentUser?: User,
+    getAvatarUrl: GetAvatarUrlCallback,
+    getMentionWithQuery?: Function,
+    getUserProfileUrl?: GetProfileUrlCallback,
+    hasNewThreadedReplies?: boolean,
+    isRepliesLoading?: boolean,
+    mentionSelectorContacts?: SelectorItems<>,
+    onDelete?: Function,
+    onEdit?: ({
+        id: string,
+        text: string,
+        permissions: BoxCommentPermission,
+        status?: FeedItemStatus,
+        hasMention?: boolean,
+        onSuccess?: Function,
+        onError?: Function,
+    }) => void,
+    onSelect?: (isSelected: boolean) => void,
+    replies: Array<CommentType>,
+    translations?: Translations,
+};
+
+declare export default React.ComponentType<Props>;

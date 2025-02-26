@@ -1,0 +1,29 @@
+// @flow
+import * as React from 'react';
+import type { EventEmitter } from 'events';
+import type { APICache } from '../../../../utils/Cache';
+import type { BoxItem, SelectorItems, StringMap, Token, User } from '../../../../common/types/core';
+import type { ElementOrigin, ElementsXhrError } from '../../../../common/types/api';
+import type { Annotation, Target } from '../../../../common/types/annotations';
+import type { GetProfileUrlCallback } from '../../../common/flowTypes';
+
+type Props = {
+    annotationId?: string,
+    apiHost?: string,
+    cache?: APICache,
+    className?: string,
+    clientName: string,
+    currentUser: User,
+    eventEmitter: EventEmitter,
+    file: BoxItem,
+    getUserProfileUrl?: GetProfileUrlCallback,
+    handleCancel: () => void,
+    language?: string,
+    messages?: StringMap,
+    onAnnotationCreate: (annotation: Annotation) => void,
+    onError: (error: ElementsXhrError | Error, code: string, contextInfo?: Object, origin?: ElementOrigin) => void,
+    target: Target,
+    token: Token,
+};
+
+declare export default React.ComponentType<Props>;
