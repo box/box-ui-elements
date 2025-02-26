@@ -105,7 +105,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isResetChatEnabled: true,
         isStopResponseEnabled: true,
         isStreamingEnabled: true,
-        userInfo: { name: 'Test', avatarUrl: undefined },
         recordAction: jest.fn(),
         setCacheValue: jest.fn(),
     } as unknown as BoxAISidebarProps;
