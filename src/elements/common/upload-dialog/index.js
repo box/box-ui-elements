@@ -1,2 +1,2 @@
 // @flow
-export { default } from './UploadDialog';
+export { default } from './index.ts';

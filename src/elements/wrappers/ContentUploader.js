@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Base class for the Content Uploader ES6 wrapper
  * @author Box
  */
@@ -11,9 +10,6 @@ import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentUploaderPopup from '../content-uploader/ContentUploaderPopup';
 import WrappedContentUploaderComponent from '../content-uploader/ContentUploader';
-import type { UploadFileWithAPIOptions } from '../../common/types/upload';
-import type { BoxItem } from '../../common/types/core';
-import type { ModalOptions } from '../common/flowTypes';
 
 class ContentUploader extends ES6Wrapper {
     /**
@@ -21,7 +17,7 @@ class ContentUploader extends ES6Wrapper {
      *
      * @return {void}
      */
-    onClose = (): void => {
+    onClose = () => {
         this.emit('close');
     };
 
@@ -31,7 +27,7 @@ class ContentUploader extends ES6Wrapper {
      * @param {Array} data - Completed upload items
      * @return {void}
      */
-    onComplete = (data: BoxItem[]): void => {
+    onComplete = data => {
         this.emit('complete', data);
     };
 
@@ -41,7 +37,7 @@ class ContentUploader extends ES6Wrapper {
      * @param {Object} data - File and error info about failed upload
      * @return {void}
      */
-    onError = (data: any): void => {
+    onError = data => {
         this.emit('error', data);
     };
 
@@ -51,7 +47,7 @@ class ContentUploader extends ES6Wrapper {
      * @param {Object} data - Upload item
      * @return {void}
      */
-    onBeforeUpload = (data: UploadFileWithAPIOptions | File): void => {
+    onBeforeUpload = data => {
         this.emit('beforeupload', data);
     };
 
@@ -61,13 +57,13 @@ class ContentUploader extends ES6Wrapper {
      * @param {BoxItem} data - Successfully uploaded item
      * @return {void}
      */
-    onUpload = (data: BoxItem): void => {
+    onUpload = data => {
         this.emit('upload', data);
     };
 
     /** @inheritdoc */
     render() {
-        const { modal, ...rest }: { modal?: ModalOptions } = this.options;
+        const { modal, ...rest } = this.options;
         const UploaderComponent = modal ? ContentUploaderPopup : WrappedContentUploaderComponent;
 
         render(
@@ -82,7 +78,7 @@ class ContentUploader extends ES6Wrapper {
                 onError={this.onError}
                 onBeforeUpload={this.onBeforeUpload}
                 onUpload={this.onUpload}
-                modal={((modal: any): ModalOptions)}
+                modal={modal}
                 {...rest}
             />,
             this.container,
