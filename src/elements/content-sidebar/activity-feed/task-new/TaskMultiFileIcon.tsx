@@ -1,20 +1,21 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import messages from './messages';
-// $FlowFixMe LabelPill is in typescript
 import LabelPill from '../../../../components/label-pill';
-import Tooltip from '../../../../components/tooltip';
+import Tooltip, { TooltipPosition } from '../../../../components/tooltip';
 import MoveCopy16 from '../../../../icon/line/MoveCopy16';
 
-type Props = {|
-    isMultiFile: boolean,
-|};
+interface TaskMultiFileIconProps {
+    isMultiFile: boolean;
+}
 
-const TaskMultiFileIcon = ({ isMultiFile }: Props): React.Node => {
+const TaskMultiFileIcon = ({ isMultiFile }: TaskMultiFileIconProps): JSX.Element | null => {
     return (
         isMultiFile && (
-            <Tooltip position="top-center" text={<FormattedMessage {...messages.taskMultipleFilesAffordanceTooltip} />}>
+            <Tooltip
+                position={TooltipPosition.TOP_RIGHT}
+                text={<FormattedMessage {...messages.taskMultipleFilesAffordanceTooltip} />}
+            >
                 <LabelPill.Pill data-testid="multifile-badge">
                     <LabelPill.Icon Component={MoveCopy16} />
                 </LabelPill.Pill>

@@ -190,6 +190,7 @@ exports[`elements/content-sidebar/ActivityFeed/task-new/Task should correctly re
   </Media>
   <TaskModal
     editMode="EDIT"
+    error={null}
     feedbackUrl=""
     isTaskFormOpen={false}
     onModalClose={[Function]}

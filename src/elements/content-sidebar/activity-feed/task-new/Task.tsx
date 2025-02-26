@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
 import flow from 'lodash/flow';
@@ -33,13 +32,13 @@ import {
     PLACEHOLDER_USER,
     TASK_EDIT_MODE_EDIT,
 } from '../../../../constants';
-import type { TaskAssigneeCollection, TaskNew } from '../../../../common/types/tasks';
+import type { TaskAssigneeCollection, TaskCompletionRule, TaskType, TaskStatus } from '../../../../common/types/tasks';
 import { ACTIVITY_TARGETS } from '../../../common/interactionTargets';
 import { bdlGray80 } from '../../../../styles/variables';
 import TaskActions from './TaskActions';
 import TaskCompletionRuleIcon from './TaskCompletionRuleIcon';
 import TaskDueDate from './TaskDueDate';
-import TaskStatus from './TaskStatus';
+import TaskStatusComponent from './TaskStatus';
 import AssigneeList from './AssigneeList';
 import TaskModal from '../../TaskModal';
 import TaskMultiFileIcon from './TaskMultiFileIcon';
@@ -54,70 +53,91 @@ import type { FeatureConfig } from '../../../common/feature-checking';
 
 import './Task.scss';
 
-type Props = {|
-    ...TaskNew,
-    api: API,
-    approverSelectorContacts: SelectorItems<>,
-    currentUser: User,
-    error?: ActionItemError,
-    features?: FeatureConfig,
-    getApproverWithQuery?: Function,
-    getAvatarUrl: GetAvatarUrlCallback,
-    getMentionWithQuery?: Function,
-    getUserProfileUrl?: GetProfileUrlCallback,
-    isPending?: boolean,
-    onAssignmentUpdate: Function,
-    onDelete?: Function,
-    onEdit?: Function,
-    onModalClose?: Function,
-    onView?: Function,
-    translatedTaggedMessage?: string,
-    translations?: Translations,
-|};
+interface TaskProps {
+    api: API;
+    approverSelectorContacts: SelectorItems<unknown>;
+    currentUser: User;
+    error?: ActionItemError;
+    features?: FeatureConfig;
+    getApproverWithQuery?: Function;
+    getAvatarUrl: GetAvatarUrlCallback;
+    getMentionWithQuery?: Function;
+    getUserProfileUrl?: GetProfileUrlCallback;
+    isPending?: boolean;
+    onAssignmentUpdate: (taskId: string, assignmentId: string, taskStatus: string) => void;
+    onDelete?: (args: { id: string; permissions: { can_delete: boolean; can_update: boolean } }) => void;
+    onEdit?: Function;
+    onModalClose?: () => void;
+    onView?: (id: string, isCreator: boolean) => void;
+    translatedTaggedMessage?: string;
+    translations?: Translations;
 
-type State = {
+    // TaskNew properties
+    assigned_to: TaskAssigneeCollection;
+    completion_rule?: TaskCompletionRule;
+    created_at: string;
+    created_by: { target: User | null };
+    description: string;
+    due_at?: string;
+    id: string;
+    permissions: {
+        can_delete: boolean;
+        can_update: boolean;
+    };
+    status: TaskStatus;
+    task_links: {
+        entries: Array<{
+            target: {
+                id: string;
+            };
+        }>;
+    };
+    task_type: TaskType;
+}
+
+interface TaskState {
     // the complete list of assignees (when task.assigned_to is truncated)
-    assignedToFull: TaskAssigneeCollection,
-    isAssigneeListOpen: boolean,
-    isConfirmingDelete: boolean,
-    isEditing: boolean,
-    isLoading: boolean,
-    loadCollabError: ?ActionItemError,
-    modalError: ?ElementsXhrError,
-};
+    assignedToFull: TaskAssigneeCollection;
+    isAssigneeListOpen: boolean;
+    isConfirmingDelete: boolean;
+    isEditing: boolean;
+    isLoading: boolean;
+    loadCollabError: ActionItemError | null;
+    modalError: ElementsXhrError | null;
+}
 
-class Task extends React.Component<Props, State> {
+class Task extends React.Component<TaskProps, TaskState> {
     static defaultProps = {
         completion_rule: TASK_COMPLETION_RULE_ALL,
     };
 
-    state = {
-        loadCollabError: undefined,
+    state: TaskState = {
+        loadCollabError: null,
         assignedToFull: this.props.assigned_to,
-        modalError: undefined,
+        modalError: null,
         isEditing: false,
         isLoading: false,
         isAssigneeListOpen: false,
         isConfirmingDelete: false,
     };
 
-    handleAssigneeListExpand = () => {
+    handleAssigneeListExpand = (): void => {
         this.getAllTaskCollaborators(() => {
             this.setState({ isAssigneeListOpen: true });
         });
     };
 
-    handleAssigneeListCollapse = () => {
+    handleAssigneeListCollapse = (): void => {
         this.setState({ isAssigneeListOpen: false });
     };
 
-    handleEditClick = () => {
+    handleEditClick = (): void => {
         this.getAllTaskCollaborators(() => {
             this.setState({ isEditing: true });
         });
     };
 
-    handleDeleteClick = () => {
+    handleDeleteClick = (): void => {
         this.setState({ isConfirmingDelete: true });
     };
 
@@ -133,20 +153,20 @@ class Task extends React.Component<Props, State> {
         this.setState({ isConfirmingDelete: false });
     };
 
-    handleEditModalClose = () => {
+    handleEditModalClose = (): void => {
         const { onModalClose } = this.props;
-        this.setState({ isEditing: false, modalError: undefined });
+        this.setState({ isEditing: false, modalError: null });
 
         if (onModalClose) {
             onModalClose();
         }
     };
 
-    handleEditSubmitError = (error: ElementsXhrError) => {
+    handleEditSubmitError = (error: ElementsXhrError): void => {
         this.setState({ modalError: error });
     };
 
-    getAllTaskCollaborators = (onSuccess: () => any) => {
+    getAllTaskCollaborators = (onSuccess: () => void): void => {
         const { id, api, task_links, assigned_to } = this.props;
         const { errorOccured } = commonMessages;
         const { taskCollaboratorLoadErrorMessage } = messages;
@@ -177,14 +197,14 @@ class Task extends React.Component<Props, State> {
                     },
                 });
             },
-            successCallback: assignedToFull => {
+            successCallback: (assignedToFull: TaskAssigneeCollection) => {
                 this.setState({ assignedToFull, isLoading: false });
                 onSuccess();
             },
         });
     };
 
-    handleTaskAction = (taskId: string, assignmentId: string, taskStatus: string) => {
+    handleTaskAction = (taskId: string, assignmentId: string, taskStatus: string): void => {
         const { onAssignmentUpdate } = this.props;
 
         this.setState({ isAssigneeListOpen: false });
@@ -275,7 +295,6 @@ class Task extends React.Component<Props, State> {
                 data-resin-tasktype={task_type}
                 data-resin-numassignees={assignments && assignments.length}
             >
-                {/* $FlowFixMe */}
                 {inlineError ? <ActivityError {...inlineError} /> : null}
                 <Media
                     className={classNames('bcs-Task-media', {
@@ -289,10 +308,12 @@ class Task extends React.Component<Props, State> {
                     <Media.Body>
                         {isMenuVisible && (
                             <TetherComponent
-                                attachment="top right"
                                 className="bcs-Task-deleteConfirmationModal"
-                                constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                attachment="top right"
                                 targetAttachment="bottom right"
+                                constraints={[{ to: 'scrollParent', attachment: 'together' }]}
+                                renderElementTag="div"
+                                renderElementTo={null}
                             >
                                 <Media.Menu
                                     isDisabled={isConfirmingDelete}
@@ -348,7 +369,7 @@ class Task extends React.Component<Props, State> {
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
                         <div className="bcs-Task-status">
-                            <TaskStatus status={status} />
+                            <TaskStatusComponent status={status} />
                             <TaskMultiFileIcon isMultiFile={isMultiFile} />
                             <TaskCompletionRuleIcon completionRule={completion_rule} />
                         </div>
@@ -384,14 +405,12 @@ class Task extends React.Component<Props, State> {
                                         isPending
                                             ? noop
                                             : () =>
-                                                  // $FlowFixMe checked by shouldShowActions
                                                   this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_APPROVED)
                                     }
                                     onTaskReject={
                                         isPending
                                             ? noop
                                             : () =>
-                                                  // $FlowFixMe checked by shouldShowActions
                                                   this.handleTaskAction(id, currentUserAssignment.id, TASK_NEW_REJECTED)
                                     }
                                     onTaskComplete={
@@ -400,7 +419,6 @@ class Task extends React.Component<Props, State> {
                                             : () =>
                                                   this.handleTaskAction(
                                                       id,
-                                                      // $FlowFixMe checked by shouldShowActions
                                                       currentUserAssignment.id,
                                                       TASK_NEW_COMPLETED,
                                                   )
@@ -426,7 +444,9 @@ class Task extends React.Component<Props, State> {
                         completionRule: completion_rule,
                         getApproverWithQuery,
                         getAvatarUrl,
-                        createTask: () => {},
+                        createTask: () => {
+                            /* Not used in edit mode */
+                        },
                         editTask: onEdit,
                         dueDate: due_at,
                         message: description,
