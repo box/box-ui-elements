@@ -1,0 +1,17 @@
+[
+  {
+    "id": "boxui.draftjs.mentionSelector.startMention",
+    "description": "Message to display when a user triggers a mention",
+    "defaultMessage": "Mention someone to notify them"
+  },
+  {
+    "id": "boxui.draftjs.mentionSelector.noUsersFound",
+    "description": "Message for screenReader users when trying to tag a user but there are no matches",
+    "defaultMessage": "No users found"
+  },
+  {
+    "id": "boxui.draftjs.mentionSelector.usersFound",
+    "description": "Message for screenReader users when a certain number of users is being tagged",
+    "defaultMessage": "{usersCount, plural, one {one user found} other {{usersCount} users found}}"
+  }
+]
