@@ -33,6 +33,7 @@ import {
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
+import type { SignSidebarProps } from './SidebarNavSign';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
@@ -49,6 +50,7 @@ type Props = {
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
     onPanelChange?: (name: string, isInitialState: boolean) => void,
+    signSidebarProps: SignSidebarProps,
 };
 
 const SidebarNav = ({
@@ -66,8 +68,9 @@ const SidebarNav = ({
     isOpen,
     onNavigate,
     onPanelChange = noop,
+    signSidebarProps,
 }: Props) => {
-    const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
+    const { enabled: hasBoxSign } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
 
@@ -159,7 +162,7 @@ const SidebarNav = ({
 
                 {hasBoxSign && (
                     <div className="bcs-SidebarNav-secondary">
-                        <SidebarNavSign />
+                        <SidebarNavSign {...signSidebarProps} />
                     </div>
                 )}
 

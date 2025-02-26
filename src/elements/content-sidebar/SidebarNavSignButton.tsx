@@ -14,7 +14,6 @@ import './SidebarNavSignButton.scss';
 export type Props = PlainButtonProps & {
     blockedReason?: string;
     intl: IntlShape;
-    status?: string;
     targetingApi?: {
         canShow: boolean;
         onClose: () => void;
@@ -25,11 +24,11 @@ export type Props = PlainButtonProps & {
 
 export const PlaceholderTooltip = ({ children }: { children: React.ReactNode }) => children;
 
-export function SidebarNavSignButton({ blockedReason, intl, status, targetingApi, ...rest }: Props) {
+export function SidebarNavSignButton({ blockedReason, intl, targetingApi, ...rest }: Props) {
     const isSignDisabled = !!blockedReason;
-    const isTargeted = targetingApi && targetingApi.canShow;
+    const isTargeted = targetingApi?.canShow;
     const FtuxTooltip = !isSignDisabled && isTargeted ? TargetedClickThroughGuideTooltip : PlaceholderTooltip;
-    const label = intl.formatMessage(status === 'active' ? messages.boxSignSignature : messages.boxSignRequest);
+    const label = intl.formatMessage(messages.boxSignRequest);
     const buttonClassName = classnames('bcs-SidebarNavSignButton', { 'bdl-is-disabled': isSignDisabled });
 
     let tooltipMessage = label;

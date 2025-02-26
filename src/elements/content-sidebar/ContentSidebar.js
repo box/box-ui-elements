@@ -34,6 +34,7 @@ import type { DetailsSidebarProps } from './DetailsSidebar';
 import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { VersionsSidebarProps } from './versions';
+import type { SignSidebarProps } from './SidebarNavSign';
 import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsXhrError, RequestOptions, ErrorContextProps } from '../../common/types/api';
 import type { MetadataEditor } from '../../common/types/metadata';
@@ -87,6 +88,7 @@ type Props = {
     sharedLink?: string,
     sharedLinkPassword?: string,
     theme?: Theme,
+    signSidebarProps: SignSidebarProps,
     token: Token,
     versionsSidebarProps: VersionsSidebarProps,
 } & ErrorContextProps &
@@ -366,6 +368,7 @@ class ContentSidebar extends React.Component<Props, State> {
             onPanelChange,
             onVersionChange,
             onVersionHistoryClick,
+            signSidebarProps,
             theme,
             versionsSidebarProps,
         }: Props = this.props;
@@ -408,6 +411,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 onPanelChange={onPanelChange}
                                 onVersionChange={onVersionChange}
                                 onVersionHistoryClick={onVersionHistoryClick}
+                                signSidebarProps={signSidebarProps}
                                 theme={theme}
                                 versionsSidebarProps={versionsSidebarProps}
                                 wrappedComponentRef={ref => {
