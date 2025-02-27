@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FeatureContext from './FeatureContext';
-import * as types from './flowTypes';
+import * as types from './types';
 
 interface FeatureProviderProps {
     children: React.ReactNode | null;

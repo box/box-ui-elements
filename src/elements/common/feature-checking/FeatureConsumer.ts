@@ -1,6 +1,6 @@
 import * as React from 'react';
 import FeatureContext from './FeatureContext';
-import type { FeatureConfig } from './flowTypes';
+import type { FeatureConfig } from './types';
 
 // Explicitly type the Consumer to avoid TypeScript errors
 const FeatureConsumer = FeatureContext.Consumer as React.Consumer<FeatureConfig>;
