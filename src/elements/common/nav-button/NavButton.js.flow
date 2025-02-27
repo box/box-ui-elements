@@ -11,6 +11,12 @@ import type { Match, Location } from 'react-router-dom';
 import PlainButton from '../../../components/plain-button';
 import { isLeftClick } from '../../../utils/dom';
 
+// Custom Location type that makes hash optional
+type CustomLocation = {
+    ...Location,
+    hash?: string,
+};
+
 type Props = {
     activeClassName?: string,
     children: React.Node,
@@ -22,7 +28,7 @@ type Props = {
     onClick?: (event: SyntheticEvent<>) => void,
     replace?: boolean,
     strict?: boolean,
-    to: string | Location,
+    to: string | CustomLocation,
 };
 
 const NavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, ref: React.Ref<any>) => {
