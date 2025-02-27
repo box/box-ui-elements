@@ -37,7 +37,7 @@ const Sort = ({ sortBy, sortDirection, onSortChange }: SortProps) => (
                 return (
                     <DropdownMenu.Item
                         key={sortItemKey}
-                        isSelected={isSelected}
+                        data-is-selected={isSelected}
                         onClick={() => onSortChange(sortByValue, sortDirectionValue)}
                     >
                         <FormattedMessage {...messages[sortItemKey]} />
