@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Sort component
- * @author Box
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { DropdownMenu, IconButton } from '@box/blueprint-web';
@@ -13,11 +7,11 @@ import { FIELD_NAME, FIELD_DATE, FIELD_SIZE, SORT_ASC, SORT_DESC } from '../../.
 
 import messages from '../messages';
 
-type Props = {
-    onSortChange: Function,
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-};
+interface SortProps {
+    onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
+    sortBy: SortBy;
+    sortDirection: SortDirection;
+}
 
 type SortItem = [SortBy, SortDirection];
 
@@ -30,7 +24,7 @@ const SORT_ITEMS: Array<SortItem> = [
     [FIELD_SIZE, SORT_DESC],
 ];
 
-const Sort = ({ sortBy, sortDirection, onSortChange }: Props) => (
+const Sort = ({ sortBy, sortDirection, onSortChange }: SortProps) => (
     <DropdownMenu.Root>
         <DropdownMenu.Trigger>
             <IconButton aria-label={messages.sort.defaultMessage} className="be-btn-sort" icon={IconSort} />
