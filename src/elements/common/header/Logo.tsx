@@ -16,14 +16,14 @@ interface LogoProps {
 
 function getLogo(url?: string): React.ReactNode {
     if (url === 'box') {
-        return <IconLogo />;
+        return <IconLogo aria-label="Box logo" role="img" />;
     }
     if (typeof url === 'string') {
-        return <img alt="" className="be-logo-custom" src={url} />;
+        return <img alt="Logo" aria-label="Custom logo" className="be-logo-custom" src={url} />;
     }
 
     return (
-        <div className="be-logo-placeholder">
+        <div className="be-logo-placeholder" role="img" aria-label="Logo placeholder">
             <FormattedMessage {...messages.logo} />
         </div>
     );

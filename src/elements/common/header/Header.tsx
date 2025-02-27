@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import { injectIntl, IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import Logo from './Logo';
 import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
@@ -13,7 +13,6 @@ import { View } from '../../../common/types/core';
 import './Header.scss';
 
 interface HeaderProps {
-    intl: IntlShape;
     isHeaderLogoVisible?: boolean;
     isSmall: boolean;
     logoUrl?: string;
@@ -22,7 +21,6 @@ interface HeaderProps {
     view: View;
 }
 
-// eslint-disable-next-line react/prop-types
 const Header = ({
     isHeaderLogoVisible = true,
     view,
@@ -30,9 +28,8 @@ const Header = ({
     searchQuery,
     onSearch,
     logoUrl,
-    intl,
 }: HeaderProps): JSX.Element => {
-    const { formatMessage } = intl;
+    const { formatMessage } = useIntl();
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }): void => onSearch(currentTarget.value);
     const searchMessage = formatMessage(messages.searchPlaceholder);
     const isFolder = view === VIEW_FOLDER;
@@ -57,4 +54,4 @@ const Header = ({
 };
 
 export { Header as HeaderBase };
-export default injectIntl(Header);
+export default Header;
