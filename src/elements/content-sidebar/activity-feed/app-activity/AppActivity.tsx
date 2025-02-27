@@ -1,7 +1,5 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import getProp from 'lodash/get';
-import noop from 'lodash/noop';
 import TetherComponent from 'react-tether';
 import { FormattedMessage, injectIntl, IntlShape } from 'react-intl';
 
@@ -17,6 +15,12 @@ import { MenuItem } from '../../../../components/menu';
 import type { AppItem, ActivityTemplateItem, ActionItemError } from '../../../../common/types/feed';
 import type { User, BoxItemPermission } from '../../../../common/types/core';
 import './AppActivity.scss';
+// @ts-ignore: Using require for CommonJS modules
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const getProp = require('lodash/get');
+// @ts-ignore: Using require for CommonJS modules
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const noop = require('lodash/noop');
 
 export interface AppActivityProps {
     activity_template: ActivityTemplateItem;
