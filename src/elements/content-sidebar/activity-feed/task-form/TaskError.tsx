@@ -2,10 +2,12 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import getProp from 'lodash/get';
 
-import messages from './messages';
-import apiMessages from '../../../../api/messages';
-import { TASK_EDIT_MODE_EDIT, TASK_MAX_GROUP_ASSIGNEES, ERROR_CODE_GROUP_EXCEEDS_LIMIT } from '../../../../constants';
 import InlineNotice from '../../../../components/inline-notice/InlineNotice';
+
+import { TASK_EDIT_MODE_EDIT, TASK_MAX_GROUP_ASSIGNEES, ERROR_CODE_GROUP_EXCEEDS_LIMIT } from '../../../../constants';
+
+import apiMessages from '../../../../api/messages';
+import messages from './messages';
 
 import type { TaskType, TaskEditMode } from '../../../../common/types/tasks';
 
