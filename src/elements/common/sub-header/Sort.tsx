@@ -44,6 +44,7 @@ const Sort = ({ onSortChange, sortBy, sortDirection }: Props) => (
                         key={sortItemKey}
                         data-is-selected={isSelected}
                         // @ts-expect-error isSelected is used by tests but not in the type definition
+                        isSelected={isSelected}
                         onClick={() => onSortChange(sortByValue, sortDirectionValue)}
                     >
                         <FormattedMessage {...messages[sortItemKey]} />
