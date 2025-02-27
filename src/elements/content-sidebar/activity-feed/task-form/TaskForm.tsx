@@ -5,9 +5,7 @@ import isEmpty from 'lodash/isEmpty';
 import classNames from 'classnames';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
-import commonMessages from '../../../../common/messages';
-import messages from './messages';
-import commentFormMessages from '../comment-form/messages';
+
 import Form from '../../../../components/form-elements/form/Form';
 import ModalActions from '../../../../components/modal/ModalActions';
 import ContactDatalistItem from '../../../../components/contact-datalist-item/ContactDatalistItem';
@@ -16,10 +14,11 @@ import DatePicker from '../../../../components/date-picker/DatePicker';
 import Checkbox from '../../../../components/checkbox';
 import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/PillSelectorDropdown';
 import Button from '../../../../components/button/Button';
-import { FeatureFlag } from '../../../common/feature-checking';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
 import { ButtonType } from '../../../../components/button';
 import { TooltipPosition } from '../../../../components/tooltip';
+import { FeatureFlag } from '../../../common/feature-checking';
+
 import {
     TASK_COMPLETION_RULE_ANY,
     TASK_COMPLETION_RULE_ALL,
@@ -27,6 +26,12 @@ import {
     TASK_EDIT_MODE_EDIT,
 } from '../../../../constants';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
+
+import commonMessages from '../../../../common/messages';
+import messages from './messages';
+import commentFormMessages from '../comment-form/messages';
+import TaskError from './TaskError';
+
 import type {
     TaskCompletionRule,
     TaskCollabAssignee,
@@ -34,7 +39,6 @@ import type {
     TaskEditMode,
     TaskUpdatePayload,
 } from '../../../../common/types/tasks';
-import TaskError from './TaskError';
 import type { GetAvatarUrlCallback } from '../../../common/flowTypes';
 import type { ElementsXhrError } from '../../../../common/types/api';
 import type { SelectorItems, SelectorItem, UserMini, GroupMini } from '../../../../common/types/core';
