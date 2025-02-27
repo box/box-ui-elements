@@ -1,3 +1,4 @@
+import type { MessageDescriptor } from 'react-intl';
 import {
     ORIGIN_CONTENT_SIDEBAR,
     ORIGIN_PREVIEW,
@@ -9,7 +10,32 @@ import {
     ORIGIN_METADATA_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
     ORIGIN_OPEN_WITH,
+    VIEW_MODE_GRID,
+    VIEW_MODE_LIST,
 } from '../../constants';
+
+export type ViewMode = typeof VIEW_MODE_GRID | typeof VIEW_MODE_LIST;
+
+export type ErrorType = {
+    code: string;
+    details?: Record<string, unknown>;
+    displayMessage?: string;
+    message?: string;
+};
+
+export type GetAvatarUrlCallback = (id: string) => Promise<string | null>;
+
+export type GetProfileUrlCallback = (id: string) => Promise<string>;
+
+export type Page = {
+    type: 'page';
+    value: number;
+};
+
+export type AdditionalVersionInfo = {
+    currentVersionId?: string | null;
+    updateVersionToCurrent: () => void;
+};
 
 export type ElementOrigin =
     | typeof ORIGIN_CONTENT_SIDEBAR
@@ -22,3 +48,28 @@ export type ElementOrigin =
     | typeof ORIGIN_METADATA_SIDEBAR
     | typeof ORIGIN_METADATA_SIDEBAR_REDESIGN
     | typeof ORIGIN_OPEN_WITH;
+
+export type Alignment = 'left' | 'right';
+
+export type ModalOptions = {
+    buttonClassName: string;
+    buttonLabel: string;
+    modalClassName: string;
+    overlayClassName: string;
+};
+
+export type MaskError = {
+    errorHeader: MessageDescriptor;
+    errorSubHeader?: MessageDescriptor;
+};
+
+export type InlineError = {
+    content: MessageDescriptor;
+    title: MessageDescriptor;
+};
+
+export type Errors = {
+    error?: MessageDescriptor;
+    inlineError?: InlineError;
+    maskError?: MaskError;
+};

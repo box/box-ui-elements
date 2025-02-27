@@ -6,7 +6,7 @@ import ItemGrid from '../common/item-grid';
 import ItemList from './ItemList';
 import MetadataBasedItemList from '../../features/metadata-based-view';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
-import type { ViewMode } from '../common/flowTypes';
+import type { ViewMode } from '../common/types';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
 import type { MetadataFieldValue } from '../../common/types/metadata';

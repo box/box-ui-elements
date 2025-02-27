@@ -12,7 +12,7 @@ import { withFeatureConsumer, isFeatureEnabled } from '../../../../common/featur
 
 import messages from './messages';
 
-import type { GetProfileUrlCallback } from '../../../../common/flowTypes';
+import type { GetProfileUrlCallback } from '../../../../common/types';
 import type { FeatureConfig } from '../../../../common/feature-checking';
 
 import './ActivityMessage.scss';
