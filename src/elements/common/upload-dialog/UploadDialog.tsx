@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Content Explorer Delete Confirmation Dialog
  * @author Box
  */
@@ -9,27 +8,29 @@ import Modal from 'react-modal';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import ContentUploader from '../../content-uploader';
+import type { ContentUploaderProps } from '../../content-uploader';
 import messages from '../messages';
 import { CLASS_MODAL_CONTENT_FULL_BLEED, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../../constants';
 import type { Token } from '../../../common/types/core';
+import type { UploadItem } from '../../../common/types/upload';
 
-type Props = {
-    apiHost: string,
-    appElement: HTMLElement,
-    contentUploaderProps: ContentUploaderProps,
-    currentFolderId: ?string,
-    intl: IntlShape,
-    isOpen: boolean,
-    onClose: Function,
-    onUpload?: Function,
-    parentElement: HTMLElement,
-    requestInterceptor?: Function,
-    responseInterceptor?: Function,
-    sharedLink?: string,
-    sharedLinkPassword?: string,
-    token: Token,
-    uploadHost: string,
-};
+interface Props {
+    apiHost: string;
+    appElement: HTMLElement;
+    contentUploaderProps: ContentUploaderProps;
+    currentFolderId: string | null;
+    intl: IntlShape;
+    isOpen: boolean;
+    onClose: () => void;
+    onUpload?: (items: UploadItem[]) => void;
+    parentElement: HTMLElement;
+    requestInterceptor?: (request: Record<string, unknown>) => Record<string, unknown>;
+    responseInterceptor?: (response: Record<string, unknown>) => Record<string, unknown>;
+    sharedLink?: string;
+    sharedLinkPassword?: string;
+    token: Token;
+    uploadHost: string;
+}
 
 const UploadDialog = ({
     isOpen,
