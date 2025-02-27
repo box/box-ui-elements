@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Content sub header component
  * @author Box
  */
@@ -7,21 +6,21 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { Breadcrumbs } from '../breadcrumbs';
-import type { View, Collection } from '../../../common/types/core';
+import { View, Collection } from '../../../common/types/core';
 import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../../constants';
 
 import messages from '../messages';
 
-type Props = {
-    currentCollection: Collection,
-    isSmall: boolean,
-    onItemClick: Function,
-    rootId: string,
-    rootName?: string,
-    view: View,
-};
+interface SubHeaderLeftProps {
+    currentCollection: Collection;
+    isSmall: boolean;
+    onItemClick: (id: string) => void;
+    rootId: string;
+    rootName?: string;
+    view: View;
+}
 
-const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick }: Props) => {
+const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick }: SubHeaderLeftProps) => {
     let crumbs;
     const { formatMessage } = useIntl();
 

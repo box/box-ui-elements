@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Content sub header component
  * @author Box
  */
@@ -10,26 +9,26 @@ import Add from './Add';
 import GridViewSlider from '../../../components/grid-view/GridViewSlider';
 import ViewModeChangeButton from './ViewModeChangeButton';
 import { VIEW_FOLDER, VIEW_MODE_GRID } from '../../../constants';
-import type { ViewMode } from '../flowTypes';
-import type { View, Collection } from '../../../common/types/core';
+import { ViewMode } from '../types';
+import { View, Collection, SortBy, SortDirection } from '../../../common/types/core';
 import './SubHeaderRight.scss';
 
-type Props = {
-    canCreateNewFolder: boolean,
-    canUpload: boolean,
-    currentCollection: Collection,
-    gridColumnCount: number,
-    gridMaxColumns: number,
-    gridMinColumns: number,
-    maxGridColumnCountForWidth: number,
-    onCreate: Function,
-    onGridViewSliderChange: (newSliderValue: number) => void,
-    onSortChange: Function,
-    onUpload: Function,
-    onViewModeChange?: (viewMode: ViewMode) => void,
-    view: View,
-    viewMode: ViewMode,
-};
+interface SubHeaderRightProps {
+    canCreateNewFolder: boolean;
+    canUpload: boolean;
+    currentCollection: Collection;
+    gridColumnCount: number;
+    gridMaxColumns: number;
+    gridMinColumns: number;
+    maxGridColumnCountForWidth: number;
+    onCreate: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onGridViewSliderChange: (newSliderValue: number) => void;
+    onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
+    onUpload: (event: React.MouseEvent<HTMLDivElement>) => void;
+    onViewModeChange?: (viewMode: ViewMode) => void;
+    view: View;
+    viewMode: ViewMode;
+}
 
 const SubHeaderRight = ({
     canCreateNewFolder,
@@ -46,7 +45,7 @@ const SubHeaderRight = ({
     onViewModeChange,
     view,
     viewMode,
-}: Props) => {
+}: SubHeaderRightProps) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
     const hasGridView: boolean = !!gridColumnCount;
     const hasItems: boolean = items.length > 0;
