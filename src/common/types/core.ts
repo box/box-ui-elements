@@ -22,7 +22,7 @@ export type View =
     | 'metadata';
 
 export type BoxItem = {
-    id: string;
+    id?: string;
     name?: string;
     type?: ItemType;
     [key: string]: unknown;
