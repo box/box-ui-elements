@@ -52,7 +52,7 @@ function mapActivityNodes(node: HTMLLinkElement): React.ReactNode {
                     data-resin-target={dataset.resinTarget}
                     data-resin-action={dataset.resinAction}
                     key={`app_actvity_link_${href}`}
-                    rel="roreferrer noopener"
+                    rel="noreferrer noopener"
                     className="bcs-AppActivity-link"
                     target="_blank"
                 >
