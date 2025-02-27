@@ -32,11 +32,14 @@ interface State {
 const CROSS_OVER_WIDTH_SMALL = 700;
 const CROSS_OVER_WIDTH_MEDIUM = 1000;
 const CROSS_OVER_WIDTH_LARGE = 1500;
-// @ts-ignore DocumentTouch is not in the TypeScript types but exists in some browsers
+// DocumentTouch is not in the TypeScript types but exists in some browsers
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HAS_TOUCH = !!(
     'ontouchstart' in window ||
-    ((window as Record<string, unknown>).DocumentTouch &&
-        document instanceof ((window as Record<string, unknown>).DocumentTouch as unknown as { new (): Document }))
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((window as any).DocumentTouch &&
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        document instanceof (window as any).DocumentTouch)
 );
 
 function makeResponsive<Props extends PropsShape>(
