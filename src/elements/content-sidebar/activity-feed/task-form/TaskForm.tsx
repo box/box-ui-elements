@@ -15,6 +15,7 @@ import Checkbox from '../../../../components/checkbox';
 import PillSelectorDropdown from '../../../../components/pill-selector-dropdown/PillSelectorDropdown';
 import Button from '../../../../components/button/Button';
 import PrimaryButton from '../../../../components/primary-button/PrimaryButton';
+import TaskError from './TaskError';
 import { ButtonType } from '../../../../components/button';
 import { TooltipPosition } from '../../../../components/tooltip';
 import { FeatureFlag } from '../../../common/feature-checking';
@@ -27,10 +28,9 @@ import {
 } from '../../../../constants';
 import { ACTIVITY_TARGETS, INTERACTION_TARGET } from '../../../common/interactionTargets';
 
+import commentFormMessages from '../comment-form/messages';
 import commonMessages from '../../../../common/messages';
 import messages from './messages';
-import commentFormMessages from '../comment-form/messages';
-import TaskError from './TaskError';
 
 import type {
     TaskCompletionRule,
