@@ -55,7 +55,7 @@ const SubHeader = ({
     view,
     viewMode = VIEW_MODE_LIST,
 }: Props) => (
-    <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="default">
+    <PageHeader.Root className="be-sub-header" variant="default">
         <PageHeader.StartElements>
             <SubHeaderLeft
                 view={view}

@@ -31,7 +31,6 @@ const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, viewMod
         <Tooltip content={tooltipText}>
             <IconButton
                 aria-label={tooltipText}
-                data-testid="view-mode-change-button"
                 className={classNames('bdl-ViewModeChangeButton', className)}
                 icon={Icon}
                 onClick={handleClick}
