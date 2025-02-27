@@ -1,14 +1,13 @@
-// @flow
 import * as React from 'react';
 
-type Props = {
-    children: React.Node,
-    component: React.ComponentType<any>,
-};
+interface Props {
+    children: React.ReactNode;
+    component: React.ComponentType<{ error: Error }>;
+}
 
-type State = {
-    error: ?Error,
-};
+interface State {
+    error: Error | null;
+}
 
 class AsyncError extends React.Component<Props, State> {
     static defaultProps = {
