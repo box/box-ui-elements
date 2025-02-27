@@ -43,13 +43,15 @@ const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onI
             ];
         }
     } else {
-        title = <FormattedMessage {...messages[view]} />;
+        title = React.createElement(FormattedMessage, { ...messages[view] });
     }
 
-    return (
-        <div className={classNames('be-sub-header-left', { 'be-sub-header-left--small': isSmall })}>
-            {crumbs ? <Breadcrumbs crumbs={crumbs} /> : <span className="be-sub-header-title">{title}</span>}
-        </div>
+    return React.createElement(
+        'div',
+        { className: classNames('be-sub-header-left', { 'be-sub-header-left--small': isSmall }) },
+        crumbs
+            ? React.createElement(Breadcrumbs, { crumbs })
+            : React.createElement('span', { className: 'be-sub-header-title' }, title),
     );
 };
 

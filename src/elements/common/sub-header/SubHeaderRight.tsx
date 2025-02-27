@@ -52,27 +52,39 @@ const SubHeaderRight = ({
     const isFolder: boolean = view === VIEW_FOLDER;
     const showSort: boolean = isFolder && hasItems;
     const showAdd: boolean = (!!canUpload || !!canCreateNewFolder) && isFolder;
-    return (
-        <div className="be-sub-header-right">
-            {hasItems && viewMode === VIEW_MODE_GRID && (
-                <GridViewSlider
-                    columnCount={gridColumnCount}
-                    gridMaxColumns={gridMaxColumns}
-                    gridMinColumns={gridMinColumns}
-                    maxColumnCount={maxGridColumnCountForWidth}
-                    onChange={onGridViewSliderChange}
-                />
-            )}
-            {hasItems && hasGridView && (
-                <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />
-            )}
-            {showSort && !!sortBy && !!sortDirection && (
-                <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />
-            )}
-            {showAdd && (
-                <Add onCreate={onCreate} onUpload={onUpload} showCreate={canCreateNewFolder} showUpload={canUpload} />
-            )}
-        </div>
+    return React.createElement(
+        'div',
+        { className: 'be-sub-header-right' },
+        hasItems &&
+            viewMode === VIEW_MODE_GRID &&
+            React.createElement(GridViewSlider, {
+                columnCount: gridColumnCount,
+                gridMaxColumns,
+                gridMinColumns,
+                maxColumnCount: maxGridColumnCountForWidth,
+                onChange: onGridViewSliderChange,
+            }),
+        hasItems &&
+            hasGridView &&
+            React.createElement(ViewModeChangeButton, {
+                viewMode,
+                onViewModeChange,
+            }),
+        showSort &&
+            !!sortBy &&
+            !!sortDirection &&
+            React.createElement(Sort, {
+                onSortChange,
+                sortBy,
+                sortDirection,
+            }),
+        showAdd &&
+            React.createElement(Add, {
+                onCreate,
+                onUpload,
+                showCreate: canCreateNewFolder,
+                showUpload: canUpload,
+            }),
     );
 };
 
