@@ -1,23 +1,22 @@
 import * as React from 'react';
-import { injectIntl, type IntlShape } from 'react-intl';
+import { useIntl } from 'react-intl';
 import Logo from './Logo';
-import messages from '../messages';
 import { VIEW_FOLDER, VIEW_SEARCH } from '../../../constants';
+import messages from '../messages';
 import type { View } from '../../../common/types/core';
 
 import './Header.scss';
 
 export interface HeaderProps {
-    intl: IntlShape;
     isHeaderLogoVisible?: boolean;
-    isSmall: boolean;
     logoUrl?: string;
     onSearch: Function;
     searchQuery: string;
     view: View;
 }
 
-const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSearch, logoUrl, intl }: HeaderProps) => {
+const Header = ({ isHeaderLogoVisible = true, view, searchQuery, onSearch, logoUrl }: HeaderProps) => {
+    const intl = useIntl();
     const { formatMessage } = intl;
     const search = ({ currentTarget }: { currentTarget: HTMLInputElement }) => onSearch(currentTarget.value);
     const searchMessage = formatMessage(messages.searchPlaceholder);
@@ -26,7 +25,7 @@ const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSear
 
     return (
         <div className="be-header">
-            {isHeaderLogoVisible && <Logo isSmall={isSmall} url={logoUrl} />}
+            {isHeaderLogoVisible && <Logo url={logoUrl} />}
             <div className="be-search">
                 <input
                     aria-label={searchMessage}
@@ -43,4 +42,4 @@ const Header = ({ isHeaderLogoVisible = true, view, isSmall, searchQuery, onSear
 };
 
 export { Header as HeaderBase };
-export default injectIntl(Header);
+export default Header;

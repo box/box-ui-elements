@@ -5,7 +5,6 @@ import messages from '../messages';
 import './Logo.scss';
 
 export interface LogoProps {
-    isSmall?: boolean;
     url?: string;
 }
 
