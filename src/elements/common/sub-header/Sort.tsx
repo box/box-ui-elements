@@ -38,6 +38,8 @@ const Sort = ({ sortBy, sortDirection, onSortChange }: SortProps) => (
                     <DropdownMenu.Item
                         key={sortItemKey}
                         data-is-selected={isSelected}
+                        // @ts-ignore isSelected is used by tests but not in the component's type definition
+                        isSelected={isSelected}
                         onClick={() => onSortChange(sortByValue, sortDirectionValue)}
                     >
                         <FormattedMessage {...messages[sortItemKey]} />
