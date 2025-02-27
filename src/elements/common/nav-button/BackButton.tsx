@@ -11,7 +11,7 @@ import './BackButton.scss';
 
 export interface BackButtonProps {
     className?: string;
-    to?: Location;
+    to?: string | Location;
 }
 
 const BackButton = ({ className, to, ...rest }: BackButtonProps) => (
