@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Content sub header component
- * @author Box
- */
-
 import * as React from 'react';
 import Sort from './Sort';
 import Add from './Add';
@@ -14,21 +8,21 @@ import type { ViewMode } from '../flowTypes';
 import type { View, Collection } from '../../../common/types/core';
 import './SubHeaderRight.scss';
 
-type Props = {
-    canCreateNewFolder: boolean,
-    canUpload: boolean,
-    currentCollection: Collection,
-    gridColumnCount: number,
-    gridMaxColumns: number,
-    gridMinColumns: number,
-    maxGridColumnCountForWidth: number,
-    onCreate: Function,
-    onGridViewSliderChange: (newSliderValue: number) => void,
-    onSortChange: Function,
-    onUpload: Function,
-    onViewModeChange?: (viewMode: ViewMode) => void,
-    view: View,
-    viewMode: ViewMode,
+type SubHeaderRightProps = {
+    canCreateNewFolder: boolean;
+    canUpload: boolean;
+    currentCollection: Collection;
+    gridColumnCount: number;
+    gridMaxColumns: number;
+    gridMinColumns: number;
+    maxGridColumnCountForWidth: number;
+    onCreate: React.MouseEventHandler<HTMLDivElement>;
+    onGridViewSliderChange: (newSliderValue: number) => void;
+    onSortChange: (sortBy: string, sortDirection: string) => void;
+    onUpload: React.MouseEventHandler<HTMLDivElement>;
+    onViewModeChange?: (viewMode: ViewMode) => void;
+    view: View;
+    viewMode: ViewMode;
 };
 
 const SubHeaderRight = ({
@@ -46,7 +40,7 @@ const SubHeaderRight = ({
     onViewModeChange,
     view,
     viewMode,
-}: Props) => {
+}: SubHeaderRightProps) => {
     const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
     const hasGridView: boolean = !!gridColumnCount;
     const hasItems: boolean = items.length > 0;
@@ -73,8 +67,8 @@ const SubHeaderRight = ({
             {showAdd && (
                 <Add
                     isDisabled={!isFolder}
-                    onCreate={onCreate}
-                    onUpload={onUpload}
+                    onCreate={onCreate as React.MouseEventHandler<HTMLDivElement>}
+                    onUpload={onUpload as React.MouseEventHandler<HTMLDivElement>}
                     showCreate={canCreateNewFolder}
                     showUpload={canUpload}
                 />
