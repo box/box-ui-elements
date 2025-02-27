@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file HOC to make responsive Box UI Elements
  * @author Box
  */
@@ -17,41 +16,45 @@ import {
     SIZE_SMALL,
     SIZE_VERY_LARGE,
 } from '../../constants';
-import type { Size } from '../../common/types/core';
+import { Size } from '../../common/types/core';
 
-type PropsShape = {
-    className: string,
-    componentRef?: Function,
-    isTouch: boolean,
-    size?: Size,
-};
+interface PropsShape {
+    className: string;
+    componentRef?: (ref: unknown) => void;
+    isTouch: boolean;
+    size?: Size;
+}
 
-type State = {
-    size: Size,
-};
+interface State {
+    size: Size;
+}
 
 const CROSS_OVER_WIDTH_SMALL = 700;
 const CROSS_OVER_WIDTH_MEDIUM = 1000;
 const CROSS_OVER_WIDTH_LARGE = 1500;
-const HAS_TOUCH = !!('ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch));
+// @ts-ignore DocumentTouch is not in the TypeScript types but exists in some browsers
+const HAS_TOUCH = !!(
+    'ontouchstart' in window ||
+    ((window as Record<string, unknown>).DocumentTouch &&
+        document instanceof ((window as Record<string, unknown>).DocumentTouch as unknown as { new (): Document }))
+);
 
-function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): React.ComponentType<any> {
-    return class extends React.PureComponent<Props, State> {
-        props: Props;
-
-        state: State;
-
-        innerElement: ?HTMLElement;
-
-        static defaultProps = {
+function makeResponsive<Props extends PropsShape>(
+    Wrapped: React.ComponentType<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
+): React.ComponentType<Props> {
+    // Using type assertion to handle the complex HOC return type
+    const ResponsiveComponent = class extends React.PureComponent<Props, State> {
+        static defaultProps: Partial<PropsShape> = {
             className: '',
             isTouch: HAS_TOUCH,
         };
 
+        innerElement: HTMLElement | null = null;
+
         /**
          * [constructor]
          *
-         * @param {*} data
+         * @param {Props} props
          * @return {void}
          */
         constructor(props: Props) {
@@ -65,10 +68,10 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
          * Calculates the new size
          *
          * @private
-         * @param {Component} react component
-         * @return {void}
+         * @param {number} width - width of the component
+         * @return {Size} - size category
          */
-        getSize(width: number) {
+        getSize(width: number): Size {
             let size = SIZE_VERY_LARGE;
             if (width <= CROSS_OVER_WIDTH_SMALL) {
                 size = SIZE_SMALL;
@@ -85,38 +88,39 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
          * Resizing function
          *
          * @private
-         * @param {Component} react component
+         * @param {Object} bounds - measurement bounds
          * @return {void}
          */
-        onResize = debounce(({ bounds: { width } }: { bounds: ClientRect }) => {
+        onResize = debounce(({ bounds: { width } }: { bounds: ClientRect }): void => {
             this.setState({ size: this.getSize(width) });
         }, 500);
 
         /**
          * Callback function for setting the ref which measureRef is attached to
          *
+         * @param {HTMLElement} el - The HTML element
          * @return {void}
          */
-        innerRef = el => {
+        innerRef = (el: HTMLElement | null): void => {
             this.innerElement = el;
         };
 
         /**
          * Gets the ref element which measureRef is attached to
          *
-         * @return {?HTMLElement} - the HTML element
+         * @return {HTMLElement | null} - the HTML element
          */
-        getInnerElement = () => this.innerElement;
+        getInnerElement = (): HTMLElement | null => this.innerElement;
 
         /**
          * Renders the Box UI Element
          *
          * @private
          * @inheritdoc
-         * @return {Element}
+         * @return {React.ReactElement}
          */
-        render() {
-            const { isTouch, size, className, componentRef, ...rest }: Props = this.props;
+        render(): React.ReactElement {
+            const { isTouch, size, className, componentRef, ...rest } = this.props;
 
             let isLarge: boolean = size === SIZE_LARGE;
             let isMedium: boolean = size === SIZE_MEDIUM;
@@ -143,7 +147,7 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
                 );
             }
 
-            const { size: sizeFromState }: State = this.state;
+            const { size: sizeFromState } = this.state;
             isSmall = sizeFromState === SIZE_SMALL;
             isMedium = sizeFromState === SIZE_MEDIUM;
             isLarge = sizeFromState === SIZE_LARGE;
@@ -177,6 +181,8 @@ function makeResponsive<Props: PropsShape>(Wrapped: React.ComponentType<any>): R
             );
         }
     };
+
+    return ResponsiveComponent as unknown as React.ComponentType<Props>;
 }
 
 export default makeResponsive;

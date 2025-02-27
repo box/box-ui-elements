@@ -58,11 +58,9 @@ const Footer = ({
             <div className="bcp-footer-left">
                 {showSelectedButton && !isSingleSelect && (
                     <Button className="bcp-selected" onClick={onSelectedClick} type={ButtonType.BUTTON}>
-                        <FormattedMessage
-                            className="bcp-selected-count"
-                            {...messages.selected}
-                            values={{ count: selectedCount }}
-                        />
+                        <span className="bcp-selected-count">
+                            <FormattedMessage {...messages.selected} values={{ count: selectedCount }} />
+                        </span>
                         {hasHitSelectionLimit && (
                             <span className="bcp-selected-max">
                                 (<FormattedMessage {...messages.max} />)

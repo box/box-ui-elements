@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Wrapper to conditionally add a tooltip
  * @author Box
  */
@@ -7,16 +6,13 @@
 import * as React from 'react';
 import TooltipCore from '../../components/tooltip/Tooltip';
 
-const Tooltip = ({
-    children,
-    isDisabled,
-    text,
-    ...rest
-}: {
-    children: React.Node,
-    isDisabled?: boolean,
-    text?: ?string | React.Node,
-}) => {
+interface TooltipProps {
+    children: React.ReactChild;
+    isDisabled?: boolean;
+    text?: string | React.ReactNode | null;
+}
+
+const Tooltip = ({ children, isDisabled, text, ...rest }: TooltipProps): React.ReactElement | React.ReactChild => {
     if (isDisabled || !text) {
         return children;
     }
