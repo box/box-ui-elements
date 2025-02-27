@@ -1,42 +1,37 @@
-// @flow
-
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import noop from 'lodash/noop';
 import { Tooltip, IconButton } from '@box/blueprint-web';
 import { Grid, Hamburger } from '@box/blueprint-web-assets/icons/Fill';
-import type { ViewMode } from '../flowTypes';
+import { ViewMode } from '../flowTypes';
 import { VIEW_MODE_GRID, VIEW_MODE_LIST } from '../../../constants';
 
 import './ViewModeChangeButton.scss';
 
 import messages from '../messages';
 
-type Props = {
-    className?: string,
-    onViewModeChange?: (viewMode: ViewMode) => void,
-    viewMode: ViewMode,
-};
+interface Props {
+    className?: string;
+    onViewModeChange?: (viewMode: ViewMode) => void;
+    viewMode: ViewMode;
+}
 
 const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, viewMode, ...rest }: Props) => {
     const { formatMessage } = useIntl();
     const isGridView = viewMode === VIEW_MODE_GRID;
-    const viewMessage = isGridView ? formatMessage(messages.listView) : formatMessage(messages.gridView);
-    const onClick = () => {
+    const tooltipText = formatMessage(isGridView ? messages.listView : messages.gridView);
+    const Icon = isGridView ? Hamburger : Grid;
+
+    const handleClick = () => {
         onViewModeChange(isGridView ? VIEW_MODE_LIST : VIEW_MODE_GRID);
     };
 
     return (
-        <Tooltip content={viewMessage}>
-            <IconButton
-                aria-label={viewMessage}
-                data-testid="view-mode-change-button"
-                className={classNames('bdl-ViewModeChangeButton', className)}
-                icon={isGridView ? Hamburger : Grid}
-                onClick={onClick}
-                {...rest}
-            />
+        <Tooltip content={tooltipText}>
+            <IconButton className={classNames('bdl-ViewModeChangeButton', className)} onClick={handleClick} {...rest}>
+                <Icon />
+            </IconButton>
         </Tooltip>
     );
 };
