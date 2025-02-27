@@ -6,7 +6,7 @@ import * as React from 'react';
 import API from '../../../api';
 import APIContext from './APIContext';
 
-interface WithAPIProps {
+export interface WithAPIProps {
     api?: API | null;
     [key: string]: unknown;
 }
