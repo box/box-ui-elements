@@ -1,4 +1,6 @@
+// @flow
 /**
- * TypeScript definitions for core types
+ * Re-export TypeScript definitions from core.ts
  */
-Object.defineProperty(exports, '__esModule', { value: true });
+// This file is kept for backward compatibility
+// The actual types are defined in core.ts
