@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import messages from '../messages';
 import Breadcrumbs from './Breadcrumbs';
 import { DELIMITER_SLASH } from '../../../constants';
+import messages from '../messages';
 import type { BoxItem } from '../../../common/types/core';
 import './InlineBreadcrumbs.scss';
 
