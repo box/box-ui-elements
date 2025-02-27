@@ -109,7 +109,7 @@ function getMessageForAction(
     );
 }
 
-interface CollapsedVersionProps {
+export interface CollapsedVersionProps {
     action_by?: User[];
     action_type?: string;
     collaborators: { [collaborator_id: string]: User };
@@ -121,8 +121,6 @@ interface CollapsedVersionProps {
     version_start: number;
     versions: FileVersions;
 }
-
-export type { CollapsedVersionProps };
 
 const CollapsedVersion = (props: CollapsedVersionProps): React.ReactNode => {
     const {

@@ -18,7 +18,7 @@ import {
 import type { User } from '../../../../common/types/core';
 import './Version.scss';
 
-interface VersionProps {
+export interface VersionProps {
     id: string;
     intl: IntlShape;
     modified_by: User;
@@ -26,8 +26,6 @@ interface VersionProps {
     version_number: string;
     version_promoted?: string;
 }
-
-export type { VersionProps };
 
 const ACTION_MAP = {
     [VERSION_DELETE_ACTION]: messages.versionDeleted,
