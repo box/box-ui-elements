@@ -133,7 +133,6 @@ class AppActivity extends React.PureComponent<AppActivityProps, State> {
                             src={icon_url}
                         />
                     </Media.Figure>
-
                     <Media.Body className="bcs-AppActivity-body">
                         {isMenuVisible && (
                             <TetherComponent
@@ -149,7 +148,6 @@ class AppActivity extends React.PureComponent<AppActivityProps, State> {
                                         <FormattedMessage {...messages.appActivityDeleteMenuItem} />
                                     </MenuItem>
                                 </Media.Menu>
-
                                 {isConfirmingDelete && (
                                     <DeleteConfirmation
                                         isOpen={isConfirmingDelete}
@@ -160,13 +158,10 @@ class AppActivity extends React.PureComponent<AppActivityProps, State> {
                                 )}
                             </TetherComponent>
                         )}
-
                         <figcaption className="bcs-AppActivity-headline">{name}</figcaption>
-
                         <div>
                             <ActivityTimestamp date={createdAtTimestamp} />
                         </div>
-
                         {this.parseActivity().map(mapActivityNodes)}
                     </Media.Body>
                 </Media>
