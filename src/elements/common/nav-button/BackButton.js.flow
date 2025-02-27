@@ -15,7 +15,7 @@ import './BackButton.scss';
 
 type Props = {
     className?: string,
-    to?: Location | string,
+    to?: Location,
 };
 
 const BackButton = ({ className, to, ...rest }: Props) => (
