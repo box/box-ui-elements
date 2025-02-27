@@ -70,13 +70,7 @@ const SubHeaderRight = ({
                 <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />
             )}
             {showAdd && (
-                <Add
-                    isDisabled={!isFolder}
-                    onCreate={onCreate}
-                    onUpload={onUpload}
-                    showCreate={canCreateNewFolder}
-                    showUpload={canUpload}
-                />
+                <Add onCreate={onCreate} onUpload={onUpload} showCreate={canCreateNewFolder} showUpload={canUpload} />
             )}
         </div>
     );

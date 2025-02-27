@@ -6,7 +6,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import { Breadcrumbs } from '@box/blueprint-web';
+import { Breadcrumbs } from '../breadcrumbs';
 import { View, Collection } from '../../../common/types/core';
 import { VIEW_FOLDER } from '../../../constants';
 
