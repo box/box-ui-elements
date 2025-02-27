@@ -3,24 +3,25 @@
  * @author Box
  */
 
-import React, { PureComponent, ComponentType, ReactElement } from 'react';
+import * as React from 'react';
+import { PureComponent, ComponentType, ReactElement } from 'react';
 import { findDOMNode } from 'react-dom';
 import classNames from 'classnames';
 import type { DOMStringList } from '../../../common/types/core';
 
-interface State {
+export interface State {
     canDrop: boolean;
     isDragging: boolean;
     isOver: boolean;
 }
 
 // This interface is intentionally loose to allow for flexibility in the HOC
-interface DropValidatorProps {
+export interface DropValidatorProps {
     allowedTypes?: Array<string>;
     [key: string]: unknown;
 }
 
-interface DropOptions {
+export interface DropOptions {
     dropValidator?: (
         props: DropValidatorProps,
         dataTransfer: { types: Array<string> | DOMStringList } | DataTransfer,
@@ -30,7 +31,7 @@ interface DropOptions {
 
 /* eslint-disable no-plusplus */
 // Define a base interface for props that includes className
-interface BaseProps {
+export interface BaseProps {
     className?: string;
     [key: string]: unknown;
 }
@@ -188,7 +189,7 @@ function makeDroppable({
                     className: classes,
                 } as unknown as P & State;
 
-                return <WrappedComponent {...mergedProps} />;
+                return React.createElement(WrappedComponent, mergedProps);
             }
         };
     };

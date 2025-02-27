@@ -3,7 +3,7 @@ import * as React from 'react';
 import ItemList from './ItemList';
 import UploadState from './UploadState';
 
-import makeDroppable from '../common/droppable';
+import makeDroppable, { DropOptions, DropValidatorProps, BaseProps, State } from '../common/droppable';
 import type { UploadFile, UploadFileWithAPIOptions, UploadItem } from '../../common/types/upload';
 import type { DOMStringList, View } from '../../common/types/core';
 
@@ -25,14 +25,11 @@ export interface DroppableContentProps {
 /**
  * Definition for drag and drop behavior.
  */
-const dropDefinition = {
+const dropDefinition: DropOptions = {
     /**
      * Validates whether a file can be dropped or not.
      */
-    dropValidator: (
-        { allowedTypes }: { allowedTypes: Array<string> },
-        { types }: { types: Array<string> | DOMStringList },
-    ) => {
+    dropValidator: ({ allowedTypes }: DropValidatorProps, { types }: { types: Array<string> | DOMStringList }) => {
         if (types instanceof Array) {
             return Array.from(types).some(type => allowedTypes.indexOf(type) > -1);
         }
@@ -44,13 +41,18 @@ const dropDefinition = {
     /**
      * Determines what happens after a file is dropped
      */
-    onDrop: (event, { addDataTransferItemsToUploadQueue }: DroppableContentProps) => {
+    onDrop: (event: DragEvent, props: DropValidatorProps) => {
         const { dataTransfer } = event;
+        const { addDataTransferItemsToUploadQueue } = props as unknown as DroppableContentProps;
         addDataTransferItemsToUploadQueue(dataTransfer);
     },
-} as const;
+};
 
-const DroppableContent = makeDroppable(dropDefinition)((({
+// Create a type that extends BaseProps and includes DroppableContentProps
+interface DroppableContentBaseProps extends BaseProps, DroppableContentProps {}
+
+// Create the component with the correct type
+const DroppableContentComponent = ({
     addFiles,
     canDrop,
     isFolderUploadEnabled,
@@ -59,8 +61,14 @@ const DroppableContent = makeDroppable(dropDefinition)((({
     items,
     onClick,
     view,
-}: DroppableContentProps) => {
-    const handleSelectFiles = ({ target: { files } }) => addFiles(files);
+}: DroppableContentBaseProps & State) => {
+    const handleSelectFiles = ({ target: { files } }: React.ChangeEvent<HTMLInputElement>) => {
+        // Convert FileList to Array before passing to addFiles
+        if (files) {
+            const fileArray = Array.from(files);
+            addFiles(fileArray);
+        }
+    };
     const hasItems = items.length > 0;
 
     return (
@@ -77,6 +85,9 @@ const DroppableContent = makeDroppable(dropDefinition)((({
             />
         </div>
     );
-}) as unknown as React.ComponentType<DroppableContentProps>);
+};
+
+// Apply the HOC to the component
+const DroppableContent = makeDroppable(dropDefinition)(DroppableContentComponent);
 
 export default DroppableContent;
