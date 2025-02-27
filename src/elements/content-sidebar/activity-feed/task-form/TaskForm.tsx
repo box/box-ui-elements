@@ -423,7 +423,6 @@ class TaskForm extends React.Component<Props, State> {
                                 />
                             ))}
                         </PillSelectorDropdown>
-
                         {shouldShowCompletionRule && (
                             <>
                                 <FeatureFlag feature="activityFeed.tasks.assignToGroup">
