@@ -8,12 +8,19 @@ import APIContext from './APIContext';
 
 export interface WithAPIProps {
     api?: API | null;
-    [key: string]: unknown;
 }
 
-const withAPIContext = <P extends WithAPIProps, T = unknown>(WrappedComponent: React.ComponentType<P>) => {
-    return React.forwardRef<T, Omit<P, 'api'>>((props, ref) => (
-        <APIContext.Consumer>{api => <WrappedComponent ref={ref} {...(props as P)} api={api} />}</APIContext.Consumer>
+/**
+ * Higher-order component that provides API context to the wrapped component
+ * This HOC is used by many components throughout the codebase
+ */
+const withAPIContext = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    WrappedComponent: React.ComponentType<any>,
+) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return React.forwardRef<any, any>((props, ref) => (
+        <APIContext.Consumer>{api => <WrappedComponent ref={ref} {...props} api={api} />}</APIContext.Consumer>
     ));
 };
 
