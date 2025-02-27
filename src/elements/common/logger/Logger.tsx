@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import noop from 'lodash/noop';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,24 +8,8 @@ import {
     METRIC_TYPE_ELEMENTS_LOAD_METRIC,
     METRIC_TYPE_UAA_PARITY_METRIC,
 } from '../../../constants';
-import type { ElementOrigin } from '../flowTypes';
 import type { MetricType, ElementsLoadMetricData, LoggerProps } from '../../../common/types/logging';
-
-type ElementsMetric = {
-    component: ElementOrigin,
-    name: string,
-    sessionId: string,
-    timestamp: string,
-    type: MetricType,
-} & ElementsLoadMetricData;
-
-type Props = {
-    children: React.Element<any>,
-    fileId?: string,
-    onMetric: (data: Object) => void,
-    source: ElementOrigin,
-    startMarkName?: string,
-};
+import type { ElementsMetric, Props } from './types';
 
 const SESSION_ID = uuidv4();
 const uniqueEvents: Set<string> = new Set();
@@ -71,7 +54,6 @@ class Logger extends React.Component<Props> {
     /**
      * Checks to see if the specified event for the component has already been fired.
      *
-     * @param {string} component - the component name
      * @param {string} name - the event name
      * @returns {boolean} True if the event has already been fired
      */
@@ -86,7 +68,7 @@ class Logger extends React.Component<Props> {
      * @param {string} name - the name of the event
      * @param {Object} data  - the event data
      */
-    logMetric(type: MetricType, name: string, data: Object): void {
+    logMetric(type: MetricType, name: string, data: Record<string, unknown>): void {
         const { onMetric, source } = this.props;
         const metric: ElementsMetric = {
             ...data,
@@ -95,7 +77,7 @@ class Logger extends React.Component<Props> {
             timestamp: this.getTimestamp(),
             sessionId: this.sessionId,
             type,
-        };
+        } as ElementsMetric;
 
         onMetric(metric);
     }
@@ -109,7 +91,7 @@ class Logger extends React.Component<Props> {
      * @param {string} [uniqueId] - an optional unique id
      * @returns {void}
      */
-    logUniqueMetric(type: MetricType, name: string, data: Object, uniqueId?: string): void {
+    logUniqueMetric(type: MetricType, name: string, data: Record<string, unknown>, uniqueId?: string): void {
         const eventName = this.createEventName(name, uniqueId);
         if (this.hasLoggedEvent(eventName)) {
             return;
@@ -125,7 +107,7 @@ class Logger extends React.Component<Props> {
      * @param {Object} data - the metric data
      * @returns {void}
      */
-    handlePreviewMetric = (data: Object) => {
+    handlePreviewMetric = (data: Record<string, unknown>): void => {
         const { onMetric } = this.props;
 
         if (data.type === METRIC_TYPE_UAA_PARITY_METRIC) {
@@ -147,7 +129,7 @@ class Logger extends React.Component<Props> {
      * @param {Object} data - the metric data
      * @returns {void}
      */
-    handleDataReadyMetric = (data: ElementsLoadMetricData, uniqueId?: string) => {
+    handleDataReadyMetric = (data: ElementsLoadMetricData, uniqueId?: string): void => {
         if (!isMarkSupported) {
             return;
         }
@@ -161,7 +143,7 @@ class Logger extends React.Component<Props> {
      * @param {Object} data - the metric data
      * @returns {void}
      */
-    handleReadyMetric = (data: ElementsLoadMetricData) => {
+    handleReadyMetric = (data: ElementsLoadMetricData): void => {
         if (!isMarkSupported) {
             return;
         }
@@ -183,7 +165,8 @@ class Logger extends React.Component<Props> {
         return new Date().toISOString();
     }
 
-    render() {
+    render(): React.ReactElement {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { children, onMetric, startMarkName, ...rest } = this.props;
 
         return React.cloneElement(children, {
