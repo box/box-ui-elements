@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Component that creates breadcumbs for both the header and name details
  * @author Box
  */
@@ -10,20 +9,20 @@ import { useIntl } from 'react-intl';
 import Breadcrumb from './Breadcrumb';
 import BreadcrumbDropdown from './BreadcrumbDropdown';
 import BreadcrumbDelimiter from './BreadcrumbDelimiter';
-import type { Delimiter, Crumb } from '../../../common/types/core';
+import { Delimiter, Crumb } from '../../../common/types/core';
 import { DELIMITER_CARET, DEFAULT_ROOT, DELIMITER_SLASH } from '../../../constants';
 
 import './Breadcrumbs.scss';
 
 import messages from '../messages';
 
-type Props = {
-    crumbs: Crumb[],
-    delimiter: Delimiter,
-    isSmall?: boolean,
-    onCrumbClick: Function,
-    rootId: string,
-};
+interface Props {
+    crumbs: Crumb[];
+    delimiter: Delimiter;
+    isSmall?: boolean;
+    onCrumbClick: (id: string) => void;
+    rootId: string;
+}
 
 /**
  * Filters out ancestors to root from the crumbs.
@@ -47,7 +46,12 @@ function filterCrumbs(rootId: string, crumbs: Crumb[]): Crumb[] {
  * @param {boolean} isLast is this the last crumb
  * @return {Element}
  */
-function getBreadcrumb(crumbs: Crumb | Crumb[], isLast: boolean, onCrumbClick: Function, delimiter: Delimiter) {
+function getBreadcrumb(
+    crumbs: Crumb | Crumb[],
+    isLast: boolean,
+    onCrumbClick: (id: string) => void,
+    delimiter: Delimiter,
+): React.ReactElement {
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
