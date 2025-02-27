@@ -453,7 +453,6 @@ class TaskForm extends React.Component<Props, State> {
                                 </FeatureFlag>
                             </>
                         )}
-
                         <TextArea
                             className="bcs-task-name-input"
                             data-testid="task-form-name-input"
