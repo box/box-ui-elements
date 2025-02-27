@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Error Boundary
  * @author Box
  */
@@ -11,28 +10,26 @@ import DefaultError from './DefaultError';
 import type { ElementsXhrError, ElementsError } from '../../../common/types/api';
 import type { ElementOrigin } from '../flowTypes';
 
-type Props = {
-    children: React.Element<any>,
-    errorComponent: React.ComponentType<any>,
-    errorOrigin: ElementOrigin,
-    onError: (error: ElementsError) => void,
-};
+interface Props {
+    children: React.ReactElement;
+    errorComponent: React.ComponentType<{ error: Error }>;
+    errorOrigin: ElementOrigin;
+    onError: (error: ElementsError) => void;
+}
 
-type State = {
-    error?: Error,
-};
+interface State {
+    error?: Error;
+}
 
 class ErrorBoundary extends React.Component<Props, State> {
-    props: Props;
-
-    state: State = {};
-
     static defaultProps = {
         errorComponent: DefaultError,
         onError: noop,
     };
 
-    componentDidCatch(error: Error, info: Object): void {
+    state: State = {};
+
+    componentDidCatch(error: Error, info: Record<string, unknown>): void {
         this.setState({ error }, () => {
             this.handleError(
                 error,
@@ -51,15 +48,15 @@ class ErrorBoundary extends React.Component<Props, State> {
      * @param {Error} error - the error which occurred
      * @param {string} type - the error type to identify where the error occurred
      * @param {string} code - the error code to identify what error occurred
-     * @param {Object} contextInfo - additional information which may be useful for the consumer of the error
+     * @param {Record<string, unknown>} contextInfo - additional information which may be useful for the consumer of the error
      * @return {void}
      */
     handleError = (
         error: ElementsXhrError | Error,
         code: string,
-        contextInfo: Object = {},
+        contextInfo: Record<string, unknown> = {},
         origin: ElementOrigin = this.props.errorOrigin,
-    ) => {
+    ): void => {
         if (!error || !code || !origin) {
             return;
         }
@@ -78,7 +75,7 @@ class ErrorBoundary extends React.Component<Props, State> {
         this.props.onError(elementsError);
     };
 
-    render() {
+    render(): React.ReactElement {
         const { children, errorComponent: ErrorComponent, ...rest } = this.props;
         const { error } = this.state;
         if (error) {

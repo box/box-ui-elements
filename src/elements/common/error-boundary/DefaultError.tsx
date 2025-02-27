@@ -1,11 +1,10 @@
-// @flow
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import ErrorMask from '../../../components/error-mask/ErrorMask';
 import messages from '../messages';
 import './DefaultError.scss';
 
-const DefaultError = () => (
+const DefaultError = (): React.ReactElement => (
     <section className="be-default-error">
         <ErrorMask
             errorHeader={<FormattedMessage {...messages.defaultErrorMaskHeaderMessage} />}
