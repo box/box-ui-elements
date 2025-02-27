@@ -55,32 +55,36 @@ const SubHeader = ({
     view,
     viewMode = VIEW_MODE_LIST,
 }: Props) => (
-    <PageHeader className="be-sub-header">
-        <SubHeaderLeft
-            view={view}
-            isSmall={isSmall}
-            rootId={rootId}
-            rootName={rootName}
-            currentCollection={currentCollection}
-            onItemClick={onItemClick}
-        />
-        <SubHeaderRight
-            view={view}
-            viewMode={viewMode}
-            onViewModeChange={onViewModeChange}
-            gridColumnCount={gridColumnCount}
-            gridMinColumns={gridMinColumns}
-            gridMaxColumns={gridMaxColumns}
-            maxGridColumnCountForWidth={maxGridColumnCountForWidth}
-            onGridViewSliderChange={onGridViewSliderChange}
-            canCreateNewFolder={canCreateNewFolder}
-            canUpload={canUpload}
-            onCreate={onCreate}
-            onUpload={onUpload}
-            onSortChange={onSortChange}
-            currentCollection={currentCollection}
-        />
-    </PageHeader>
+    <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="default">
+        <PageHeader.StartElements>
+            <SubHeaderLeft
+                view={view}
+                isSmall={isSmall}
+                rootId={rootId}
+                rootName={rootName}
+                currentCollection={currentCollection}
+                onItemClick={onItemClick}
+            />
+        </PageHeader.StartElements>
+        <PageHeader.EndElements>
+            <SubHeaderRight
+                view={view}
+                viewMode={viewMode}
+                onViewModeChange={onViewModeChange}
+                gridColumnCount={gridColumnCount}
+                gridMinColumns={gridMinColumns}
+                gridMaxColumns={gridMaxColumns}
+                maxGridColumnCountForWidth={maxGridColumnCountForWidth}
+                onGridViewSliderChange={onGridViewSliderChange}
+                canCreateNewFolder={canCreateNewFolder}
+                canUpload={canUpload}
+                onCreate={onCreate}
+                onUpload={onUpload}
+                onSortChange={onSortChange}
+                currentCollection={currentCollection}
+            />
+        </PageHeader.EndElements>
+    </PageHeader.Root>
 );
 
 export default SubHeader;
