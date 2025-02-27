@@ -16,7 +16,11 @@ interface LogoProps {
 
 function getLogo(url?: string): React.ReactNode {
     if (url === 'box') {
-        return <IconLogo aria-label="Box logo" role="img" />;
+        return (
+            <span role="img" aria-label="Box logo">
+                <IconLogo />
+            </span>
+        );
     }
     if (typeof url === 'string') {
         return <img alt="Logo" aria-label="Custom logo" className="be-logo-custom" src={url} />;
