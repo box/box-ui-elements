@@ -53,6 +53,7 @@ export interface BoxAISidebarProps {
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
+    shouldPreinitSession?: boolean;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -71,6 +72,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         localizedQuestions,
         recordAction,
         setCacheValue,
+        shouldPreinitSession = true,
         ...rest
     } = props;
     const { questions } = cache;
@@ -87,6 +89,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             itemSize,
             setCacheValue,
             recordAction,
+            shouldPreinitSession,
         }),
         [
             cache,
@@ -99,6 +102,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             itemSize,
             setCacheValue,
             recordAction,
+            shouldPreinitSession,
         ],
     );
 
@@ -130,6 +134,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
                     itemIDs={[fileID]}
                     restoredQuestions={questionsWithoutInProgress}
                     restoredSession={cache.encodedSession}
+                    shouldShowCreateSessionError={shouldPreinitSession}
                     suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
                     warningNotice={spreadsheetNotice}
                     warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}

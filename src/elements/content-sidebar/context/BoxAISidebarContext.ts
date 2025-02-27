@@ -25,6 +25,7 @@ export interface BoxAISidebarContextValues {
     itemSize?: string;
     recordAction: (params: BoxAISidebarRecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
+    shouldPreinitSession: boolean;
 }
 
 export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues>({
@@ -37,4 +38,5 @@ export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues
     items: [],
     recordAction: noop,
     setCacheValue: noop,
+    shouldPreinitSession: true,
 });
