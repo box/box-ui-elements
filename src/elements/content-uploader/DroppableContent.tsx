@@ -50,7 +50,7 @@ const dropDefinition = {
     },
 } as const;
 
-const DroppableContent = makeDroppable(dropDefinition)(({
+const DroppableContent = makeDroppable(dropDefinition)((({
     addFiles,
     canDrop,
     isFolderUploadEnabled,
@@ -77,6 +77,6 @@ const DroppableContent = makeDroppable(dropDefinition)(({
             />
         </div>
     );
-});
+}) as unknown as React.ComponentType<DroppableContentProps>);
 
 export default DroppableContent;
