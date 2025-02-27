@@ -18,7 +18,7 @@ import type { AppItem, ActivityTemplateItem, ActionItemError } from '../../../..
 import type { User, BoxItemPermission } from '../../../../common/types/core';
 import './AppActivity.scss';
 
-interface AppActivityProps {
+export interface AppActivityProps {
     activity_template: ActivityTemplateItem;
     app: AppItem;
     created_at: string;
@@ -171,4 +171,3 @@ class AppActivity extends React.PureComponent<AppActivityProps, State> {
 }
 
 export default injectIntl(AppActivity);
-export type { AppActivityProps };
