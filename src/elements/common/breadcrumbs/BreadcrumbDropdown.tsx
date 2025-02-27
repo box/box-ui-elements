@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Drop down part of breadcrumbs
  * @author Box
  */
@@ -7,15 +6,15 @@
 import * as React from 'react';
 import { DropdownMenu, IconButton } from '@box/blueprint-web';
 import { Ellipsis } from '@box/blueprint-web-assets/icons/Fill';
-import type { Crumb } from '../../../common/types/core';
+import { Crumb } from '../../../common/types/core';
 
 import messages from '../messages';
 
-type Props = {
-    className: string,
-    crumbs: Crumb[],
-    onCrumbClick: Function,
-};
+interface Props {
+    className: string;
+    crumbs: Crumb[];
+    onCrumbClick: (id: string) => void;
+}
 
 const BreadcrumbDropdown = ({ crumbs, onCrumbClick }: Props) => (
     <DropdownMenu.Root>
