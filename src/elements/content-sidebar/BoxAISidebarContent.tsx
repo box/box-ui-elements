@@ -150,6 +150,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                 {isAIStudioAgentSelectorEnabled && (
                     <div className="bcs-BoxAISidebar-agentSelector">
                         <BoxAiAgentSelectorWithApi
+                            disabled={props.hasRequestInProgress}
                             fetcher={getAIStudioAgents}
                             hostAppName={hostAppName}
                             onAgentsListOpen={handleUserIntentToUseAI}
