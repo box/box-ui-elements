@@ -138,6 +138,31 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
     });
 
+    test('should call focusBoxAISidebarPrompt when clicked on Box AI Tab', async () => {
+        const mockFocusBoxAISidebarPrompt = jest.fn();
+        const mockUseBoxAISidebarPrompt = () => ({ focusBoxAISidebarPrompt: mockFocusBoxAISidebarPrompt });
+
+        render(
+            getSidebarNav({
+                features: {
+                    boxai: {
+                        sidebar: {
+                            showOnlyNavButton: false,
+                            useBoxAISidebarPrompt: mockUseBoxAISidebarPrompt,
+                        },
+                    },
+                },
+                props: { hasBoxAI: true },
+            }),
+        );
+
+        const button = screen.getByTestId('sidebarboxai');
+
+        await userEvent.click(button);
+
+        expect(mockFocusBoxAISidebarPrompt).toHaveBeenCalled();
+    });
+
     test('should have multiple tabs', () => {
         const props = {
             hasActivity: true,
