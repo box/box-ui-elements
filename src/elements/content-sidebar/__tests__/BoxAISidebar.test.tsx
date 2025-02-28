@@ -2,7 +2,6 @@ import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import BoxAISidebar, { BoxAISidebarProps } from '../BoxAISidebar';
-import { set } from 'lodash';
 
 let MockBoxAiAgentSelectorWithApi: jest.Mock;
 jest.mock('@box/box-ai-agent-selector', () => {
@@ -189,7 +188,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     });
 
     test('should call setHasQuestions on load if questions is not empty', async () => {
-        
         await renderComponent({
             cache: {
                 encodedSession: '1234',
@@ -198,7 +196,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                         error: 'general',
                         isCompleted: true,
                         prompt: 'completed question',
-                    }
+                    },
                 ],
                 agents: mockAgents,
             },
