@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Content sub header component
- * @author Box
- */
-
 import * as React from 'react';
 import Sort from './Sort';
 import Add from './Add';
@@ -11,25 +5,25 @@ import GridViewSlider from '../../../components/grid-view/GridViewSlider';
 import ViewModeChangeButton from './ViewModeChangeButton';
 import { VIEW_FOLDER, VIEW_MODE_GRID } from '../../../constants';
 import type { ViewMode } from '../flowTypes';
-import type { View, Collection } from '../../../common/types/core';
+import type { SortBy, SortDirection, View, Collection } from '../../../common/types/core';
 import './SubHeaderRight.scss';
 
-type Props = {
-    canCreateNewFolder: boolean,
-    canUpload: boolean,
-    currentCollection: Collection,
-    gridColumnCount: number,
-    gridMaxColumns: number,
-    gridMinColumns: number,
-    maxGridColumnCountForWidth: number,
-    onCreate: Function,
-    onGridViewSliderChange: (newSliderValue: number) => void,
-    onSortChange: Function,
-    onUpload: Function,
-    onViewModeChange?: (viewMode: ViewMode) => void,
-    view: View,
-    viewMode: ViewMode,
-};
+export interface SubHeaderRightProps {
+    canCreateNewFolder: boolean;
+    canUpload: boolean;
+    currentCollection: Collection;
+    gridColumnCount: number;
+    gridMaxColumns: number;
+    gridMinColumns: number;
+    maxGridColumnCountForWidth: number;
+    onCreate: () => void;
+    onGridViewSliderChange: (newSliderValue: number) => void;
+    onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
+    onUpload: () => void;
+    onViewModeChange?: (viewMode: ViewMode) => void;
+    view: View;
+    viewMode: ViewMode;
+}
 
 const SubHeaderRight = ({
     canCreateNewFolder,
@@ -46,8 +40,8 @@ const SubHeaderRight = ({
     onViewModeChange,
     view,
     viewMode,
-}: Props) => {
-    const { sortBy, sortDirection, items = [] }: Collection = currentCollection;
+}: SubHeaderRightProps) => {
+    const { items = [] }: Collection = currentCollection;
     const hasGridView: boolean = !!gridColumnCount;
     const hasItems: boolean = items.length > 0;
     const isFolder: boolean = view === VIEW_FOLDER;
@@ -67,9 +61,7 @@ const SubHeaderRight = ({
             {hasItems && hasGridView && (
                 <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />
             )}
-            {showSort && !!sortBy && !!sortDirection && (
-                <Sort onSortChange={onSortChange} sortBy={sortBy} sortDirection={sortDirection} />
-            )}
+            {showSort && <Sort onSortChange={onSortChange} />}
             {showAdd && (
                 <Add
                     isDisabled={!isFolder}
