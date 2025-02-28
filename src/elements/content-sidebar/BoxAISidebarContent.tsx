@@ -83,16 +83,11 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
     }
 
     const handleUserIntentToUseAI = () => {
-        console.log('kktest: USER INTENT RECORDED');
+        // Create session if not already created or loading
         if (!shouldPreinitSession && !encodedSession && !isLoading && createSession) {
-            console.log('kktest: NO SESSION FOUND, CREATING NEW SESSION');
-            createSession();
-        } else if (isLoading) {
-            console.log('kktest: SESSION IS LOADING, NO ACTION TAKEN');
-        } else {
-            console.log('kktest: SESSION IS ALREADY AVAILABLE, NO ACTION TAKEN');
+            createSession(true, false);
         }
-    }
+    };
 
     const handleModalClose = () => {
         setIsModalOpen(false);
@@ -105,10 +100,14 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
 
     React.useEffect(() => {
         if (shouldPreinitSession && !encodedSession && createSession) {
-            createSession();
+            createSession(true, true);
         }
 
-        if (cacheQuestions.length > 0 && cacheQuestions[cacheQuestions.length - 1].isCompleted === false) {
+        if (
+            encodedSession &&
+            cacheQuestions.length > 0 &&
+            cacheQuestions[cacheQuestions.length - 1].isCompleted === false
+        ) {
             // if we have cache with question that is not completed resend it to trigger an API
             sendQuestion({ prompt: cacheQuestions[cacheQuestions.length - 1].prompt });
         }
@@ -138,8 +137,6 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
     React.useEffect(() => {
         const lastQuestion = cacheQuestions[cacheQuestions.length - 1];
         if (!shouldPreinitSession && !isSessionInitiated.current && encodedSession && lastQuestion?.isLoading) {
-            console.log('kktest: SESSION READY');
-            console.log('kktest: RESENDING QUESTION', lastQuestion);
             sendQuestion(lastQuestion, selectedAgent, false);
             isSessionInitiated.current = true;
         }
@@ -155,8 +152,8 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                         <BoxAiAgentSelectorWithApi
                             fetcher={getAIStudioAgents}
                             hostAppName={hostAppName}
+                            onAgentsListOpen={handleUserIntentToUseAI}
                             onSelectAgent={onSelectAgent}
-                            onUserIntentToUseAI={handleUserIntentToUseAI}
                             recordAction={recordAction}
                             shouldHideAgentSelectorOnLoad
                             variant="sidebar"

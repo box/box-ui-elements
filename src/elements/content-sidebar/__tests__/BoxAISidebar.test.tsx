@@ -3,14 +3,19 @@ import { userEvent } from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import BoxAISidebar, { BoxAISidebarProps } from '../BoxAISidebar';
 
-jest.mock('@box/box-ai-agent-selector', () => ({
-    ...jest.requireActual('@box/box-ai-agent-selector'),
-    BoxAiAgentSelectorWithApi: () => <div data-testid="sidebar-agent-selector" />,
-}));
+let MockBoxAiAgentSelectorWithApi: jest.Mock;
+jest.mock('@box/box-ai-agent-selector', () => {
+    MockBoxAiAgentSelectorWithApi = jest.fn();
+    return {
+        ...jest.requireActual('@box/box-ai-agent-selector'),
+        BoxAiAgentSelectorWithApi: MockBoxAiAgentSelectorWithApi,
+    };
+});
 
 const mockOnClearAction = jest.fn();
 jest.mock('@box/box-ai-content-answers', () => ({
     ...jest.requireActual('@box/box-ai-content-answers'),
+    // BoxAiContentAnswers: jest.fn().mockImplementation(() => <div data-testid="content-answers" />),
     withApiWrapper: Component => props => (
         <Component
             createSession={props.createSessionRequest}
@@ -24,7 +29,7 @@ jest.mock('@box/box-ai-content-answers', () => ({
             isCitationsEnabled={props.isCitationsEnabled}
             isDebugModeEnabled={props.isDebugModeEnabled}
             isMarkdownEnabled={props.isMarkdownEnabled}
-            isLoading={false}
+            isLoading={props.isLoading}
             isOpen
             isResetChatEnabled={props.isResetChatEnabled}
             isStreamingEnabled={props.isStreamingEnabled}
@@ -36,7 +41,8 @@ jest.mock('@box/box-ai-content-answers', () => ({
             onAgentEditorToggle={jest.fn()}
             questions={props.restoredQuestions}
             retryQuestion={jest.fn()}
-            sendQuestion={jest.fn()}
+            sendQuestion={props.sendQuestion}
+            shouldPreinitSession={props.shouldPreinitSession}
             shouldRenderProviders={jest.fn()}
             stopQuestion={jest.fn()}
             suggestedQuestionsRequestState="success"
@@ -85,6 +91,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         getAnswerStreaming: jest.fn(),
         getSuggestedQuestions: jest.fn(),
         hostAppName: 'appName',
+        isLoading: false,
         items: [
             {
                 id: '1',
@@ -106,7 +113,9 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isStopResponseEnabled: true,
         isStreamingEnabled: true,
         recordAction: jest.fn(),
+        sendQuestion: jest.fn(),
         setCacheValue: jest.fn(),
+        shouldPreinitSession: true,
     } as unknown as BoxAISidebarProps;
 
     const renderComponent = async (props = {}) => {
@@ -122,6 +131,10 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                 return this.parentNode;
             },
         });
+    });
+
+    beforeEach(() => {
+        MockBoxAiAgentSelectorWithApi.mockImplementation(() => <div data-testid="sidebar-agent-selector" />);
     });
 
     afterEach(() => {
@@ -182,10 +195,16 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         expect(mockOnClearAction).toHaveBeenCalled();
     });
 
-    test('should initialize session', async () => {
+    test('should pre-initialize session', async () => {
         await renderComponent();
 
         expect(mockProps.createSessionRequest).toHaveBeenCalled();
+    });
+
+    test('should not pre-initialize session when shouldPreinitSession = false', async () => {
+        await renderComponent({ shouldPreinitSession: false });
+
+        expect(mockProps.createSessionRequest).not.toHaveBeenCalled();
     });
 
     test('should render welcome message', async () => {
@@ -256,4 +275,124 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
         expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
     });
+
+    describe('given shouldPreinitSession = false, should create session on user intent', () => {
+        test('agents list open', async () => {
+            MockBoxAiAgentSelectorWithApi.mockImplementation(({ onAgentsListOpen }) => {
+                onAgentsListOpen();
+                return <div data-testid="sidebar-agent-selector" />;
+            });
+
+            await renderComponent({ shouldPreinitSession: false });
+
+            expect(mockProps.createSessionRequest).toHaveBeenCalled();
+        });
+
+        test('content answers user action', async () => {
+            await renderComponent({ shouldPreinitSession: false });
+
+            const input = screen.getByTestId('content-answers-question-input');
+            input.focus();
+            await userEvent.keyboard('foo');
+
+            expect(mockProps.createSessionRequest).toHaveBeenCalled();
+        });
+    });
+
+    describe('given shouldPreinitSession = false, should not create session on user intent', () => {
+        test.each`
+            encodedSession | isLoading
+            ${'123'}       | ${true}
+            ${null}        | ${true}
+            ${'123'}       | ${false}
+        `(
+            'agents list open when encodedSession = $encodedSession and isLoading = $isLoading',
+            async ({ encodedSession, isLoading }) => {
+                MockBoxAiAgentSelectorWithApi.mockImplementation(({ onAgentsListOpen }) => {
+                    onAgentsListOpen();
+                    return <div data-testid="sidebar-agent-selector" />;
+                });
+
+                await renderComponent({ restoredSession: encodedSession, isLoading, shouldPreinitSession: false });
+
+                expect(mockProps.createSessionRequest).not.toHaveBeenCalled();
+            },
+        );
+
+        test.each`
+            encodedSession | isLoading
+            ${'123'}       | ${true}
+            ${null}        | ${true}
+            ${'123'}       | ${false}
+        `(
+            'content answers user action when encodedSession = $encodedSession and isLoading = $isLoading',
+            async ({ encodedSession, isLoading }) => {
+                await renderComponent({
+                    cache: { ...mockProps.cache, encodedSession },
+                    isLoading,
+                    shouldPreinitSession: false,
+                });
+
+                const input = screen.getByTestId('content-answers-question-input');
+                input.focus();
+                await userEvent.keyboard('foo');
+
+                expect(mockProps.createSessionRequest).not.toHaveBeenCalled();
+            },
+        );
+    });
+
+    test('given shouldPreinitSession = false, should send question when encodedSession is available and last question is loading', async () => {
+        const mockSendQuestion = jest.fn();
+
+        await renderComponent({
+            cache: {
+                ...mockProps.cache,
+                encodedSession: '123',
+                questions: [
+                    {
+                        error: null,
+                        isCompleted: false,
+                        isLoading: true,
+                        prompt: 'foo',
+                    },
+                ],
+            },
+            sendQuestion: mockSendQuestion,
+            shouldPreinitSession: false,
+        });
+
+        expect(mockSendQuestion).toHaveBeenCalled();
+    });
+
+    test.each`
+        encodedSession | isLoading
+        ${'123'}       | ${false}
+        ${null}        | ${true}
+        ${null}        | ${false}
+    `(
+        'given shouldPreinitSession = false, should not send question when encodedSession = $encodedSession and last question loading state = $isLoading',
+        async ({ encodedSession, isLoading }) => {
+            const mockSendQuestion = jest.fn();
+
+            await renderComponent({
+                cache: {
+                    ...mockProps.cache,
+                    encodedSession,
+                    questions: [
+                        {
+                            error: null,
+                            isCompleted: !isLoading,
+                            isLoading,
+                            prompt: 'foo',
+                        },
+                    ],
+                },
+                sendQuestion: mockSendQuestion,
+                shouldPreinitSession: false,
+            });
+
+            expect(mockSendQuestion).not.toHaveBeenCalled();
+        },
+    );
 });
