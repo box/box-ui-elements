@@ -2,6 +2,7 @@ import React from 'react';
 import { userEvent } from '@testing-library/user-event';
 import { render, screen } from '../../../test-utils/testing-library';
 import BoxAISidebar, { BoxAISidebarProps } from '../BoxAISidebar';
+import { set } from 'lodash';
 
 jest.mock('@box/box-ai-agent-selector', () => ({
     ...jest.requireActual('@box/box-ai-agent-selector'),
@@ -107,6 +108,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isStreamingEnabled: true,
         recordAction: jest.fn(),
         setCacheValue: jest.fn(),
+        setHasQuestions: jest.fn(),
     } as unknown as BoxAISidebarProps;
 
     const renderComponent = async (props = {}) => {
@@ -171,6 +173,25 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                 items: [{ fileType: 'pdf', status: 'supported' }],
             },
         });
+    });
+
+    test('should call setHasQuestions on load if questions is not empty', async () => {
+        
+        await renderComponent({
+            cache: {
+                encodedSession: '1234',
+                questions: [
+                    {
+                        error: 'general',
+                        isCompleted: true,
+                        prompt: 'completed question',
+                    }
+                ],
+                agents: mockAgents,
+            },
+        });
+
+        expect(mockProps.setHasQuestions).toHaveBeenCalledWith(true);
     });
 
     test('should call onClearClick when click "Clear" button', async () => {
