@@ -44,6 +44,7 @@ import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemp
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
+import { isFileLargerThan } from './utils/isFileLargerThan';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -108,6 +109,9 @@ function MetadataSidebarRedesign({
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
+
+    const oneMegaByte = 1000000;
+    const isLargeFile = isFileLargerThan(file, oneMegaByte);
 
     const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
     const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
@@ -289,6 +293,7 @@ function MetadataSidebarRedesign({
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDeleteButtonDisabled={isDeleteButtonDisabled}
+                            isLargeFile={isLargeFile}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
                             onCancel={handleCancel}
                             onDelete={handleDeleteInstance}

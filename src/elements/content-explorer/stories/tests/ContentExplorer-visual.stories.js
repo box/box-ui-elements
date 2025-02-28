@@ -2,8 +2,9 @@ import { http, HttpResponse } from 'msw';
 import { expect, userEvent, waitFor, within, screen } from '@storybook/test';
 
 import ContentExplorer from '../../ContentExplorer';
-import { mockEmptyRootFolder, mockRootFolder } from '../__mocks__/mockRootFolder';
-import mockSubFolder from '../__mocks__/mockSubFolder';
+import { mockEmptyRootFolder, mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
+import mockSubfolder from '../../../common/__mocks__/mockSubfolder';
+import mockRecentItems from '../../../common/__mocks__/mockRecentItems';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
@@ -239,7 +240,17 @@ export const searchEmptyState = {
         const searchBar = canvas.getByRole('searchbox', { name: 'Search files and folders' });
         await userEvent.type(searchBar, 'foo');
 
-        expect(canvas.getByText('Sorry, we couldn’t find what you’re looking for.')).toBeInTheDocument();
+        expect(canvas.getByText("Sorry, we couldn't find what you're looking for.")).toBeInTheDocument();
+    },
+};
+
+export const withTheming = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitFor(async () => {
+            expect(await canvas.getByText('Preview Test Folder')).toBeInTheDocument();
+        });
     },
 };
 
@@ -258,13 +269,16 @@ export default {
                     return HttpResponse.json(mockRootFolder);
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
-                    return HttpResponse.json(mockSubFolder);
+                    return HttpResponse.json(mockSubfolder);
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
                     return HttpResponse.json(mockEmptyRootFolder);
                 }),
                 http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
                     return new HttpResponse('Internal Server Error', { status: 500 });
+                }),
+                http.get(`${DEFAULT_HOSTNAME_API}/2.0/recent_items`, () => {
+                    return HttpResponse.json(mockRecentItems);
                 }),
             ],
         },

@@ -15,6 +15,8 @@ class ContentExplorerModalContainer extends Component {
         additionalColumns: PropTypes.arrayOf(PropTypes.element),
         /**  Allow users to choose no selections in MULTI_SELECT mode, defaults to false */
         isNoSelectionAllowed: PropTypes.bool,
+        /** Custom icon for the breadcrumb. Overrides the default icon */
+        breadcrumbIcon: PropTypes.element,
         /** Breadcrumb component options */
         breadcrumbProps: BreadcrumbPropType,
         /** Adds class name. */
@@ -153,6 +155,8 @@ class ContentExplorerModalContainer extends Component {
         chooseButtonText: PropTypes.node,
         /** Text for the informational notice, defaults to empty string, which makes notice not visible */
         infoNoticeText: PropTypes.string,
+        /** Used to render the no items state. Overrides the default no items state. */
+        noItemsRenderer: PropTypes.func,
     };
 
     static defaultProps = {

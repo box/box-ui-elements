@@ -241,8 +241,8 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
         const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
-
-        const { showOnlyNavButton: showOnlyBoxAINavButton } = getFeatureConfig(features, 'boxai.sidebar');
+        const { shouldBeDefaultPanel: shouldBoxAIBeDefaultPanel, showOnlyNavButton: showOnlyBoxAINavButton } =
+            getFeatureConfig(features, 'boxai.sidebar');
 
         const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
 
@@ -278,7 +278,6 @@ class SidebarPanels extends React.Component<Props, State> {
                                     hasSidebarInitialized={isInitialized}
                                     ref={this.boxAISidebar}
                                     startMarkName={MARK_NAME_JS_LOADING_BOXAI}
-                                    userInfo={{ name: currentUser?.name, avatarURL: currentUser?.avatar_url }}
                                     cache={this.boxAiSidebarCache}
                                     setCacheValue={this.setBoxAiSidebarCacheValue}
                                     {...boxAISidebarProps}
@@ -447,7 +446,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
                         if (showDefaultPanel) {
                             redirect = defaultPanel;
-                        } else if (canShowBoxAISidebarPanel) {
+                        } else if (canShowBoxAISidebarPanel && shouldBoxAIBeDefaultPanel) {
                             redirect = SIDEBAR_VIEW_BOXAI;
                         } else if (hasDocGen) {
                             redirect = SIDEBAR_VIEW_DOCGEN;
@@ -459,6 +458,8 @@ class SidebarPanels extends React.Component<Props, State> {
                             redirect = SIDEBAR_VIEW_DETAILS;
                         } else if (hasMetadata) {
                             redirect = SIDEBAR_VIEW_METADATA;
+                        } else if (canShowBoxAISidebarPanel && !shouldBoxAIBeDefaultPanel) {
+                            redirect = SIDEBAR_VIEW_BOXAI;
                         }
 
                         return <Redirect to={{ pathname: `/${redirect}`, state: { silent: true } }} />;

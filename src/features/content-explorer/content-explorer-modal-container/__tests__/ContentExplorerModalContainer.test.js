@@ -66,22 +66,28 @@ describe('features/content-explorer/content-explorer-modal-container/ContentExpl
             expect(wrapper.find('NewFolderModal').prop('parentFolderName')).toEqual(parentFolderName);
         });
 
-        test('should pass searchInputProps, chooseButtonText, onSelectItem, and onSelectedClick to ContentExplorerModal', () => {
+        test('should pass searchInputProps, chooseButtonText, onSelectItem, onSelectedClick, noItemsRenderer and breadcrumbIcon to ContentExplorerModal', () => {
             const searchInputProps = { placeholder: 'test' };
             const chooseButtonText = 'test';
             const onSelectedClick = () => {};
             const onSelectItem = () => {};
+            const noItemsRenderer = () => <div>No items</div>;
+            const breadcrumbIcon = <div>Icon</div>;
             const wrapper = renderComponent({
                 searchInputProps,
                 chooseButtonText,
                 onSelectedClick,
                 onSelectItem,
+                noItemsRenderer,
+                breadcrumbIcon,
             });
 
             expect(wrapper.find('ContentExplorerModal').prop('searchInputProps')).toEqual(searchInputProps);
             expect(wrapper.find('ContentExplorerModal').prop('chooseButtonText')).toEqual(chooseButtonText);
             expect(wrapper.find('ContentExplorerModal').prop('onSelectedClick')).toEqual(onSelectedClick);
             expect(wrapper.find('ContentExplorerModal').prop('onSelectItem')).toEqual(onSelectItem);
+            expect(wrapper.find('ContentExplorerModal').prop('noItemsRenderer')).toEqual(noItemsRenderer);
+            expect(wrapper.find('ContentExplorerModal').prop('breadcrumbIcon')).toEqual(breadcrumbIcon);
         });
 
         test('should render ContentExplorerModal and NewFolderModal in Portal by default', () => {

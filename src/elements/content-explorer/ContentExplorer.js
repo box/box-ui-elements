@@ -1643,7 +1643,6 @@ class ContentExplorer extends Component<Props, State> {
             isUploadModalOpen,
             markers,
             rootName,
-            searchQuery,
             selected,
             view,
         }: State = this.state;
@@ -1672,13 +1671,7 @@ class ContentExplorer extends Component<Props, State> {
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                             {!isDefaultViewMetadata && (
                                 <>
-                                    <Header
-                                        view={view}
-                                        isSmall={isSmall}
-                                        searchQuery={searchQuery}
-                                        logoUrl={logoUrl}
-                                        onSearch={this.search}
-                                    />
+                                    <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
                                     <SubHeader
                                         view={view}
                                         viewMode={viewMode}

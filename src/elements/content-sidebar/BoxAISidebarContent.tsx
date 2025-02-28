@@ -14,8 +14,8 @@ import {
     ClearConversationButton,
     IntelligenceModal,
     withApiWrapper,
-    // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperProps'.
-    type ApiWrapperProps,
+    // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperWithInjectedProps'.
+    type ApiWrapperWithInjectedProps,
 } from '@box/box-ai-content-answers';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
@@ -35,7 +35,7 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-function BoxAISidebarContent(props: ApiWrapperProps) {
+function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
     const {
         createSession,
         encodedSession,
@@ -43,6 +43,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         getAIStudioAgents,
         hostAppName,
         isAIStudioAgentSelectorEnabled,
+        isLoading,
         isResetChatEnabled,
         onSelectAgent,
         questions,
@@ -51,6 +52,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         ...rest
     } = props;
     const { formatMessage } = useIntl();
+    const isSessionInitiated = React.useRef<boolean>(false);
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const {
         cache,
@@ -63,7 +65,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         itemSize,
         recordAction,
         setCacheValue,
-        userInfo,
+        shouldPreinitSession,
     } = React.useContext(BoxAISidebarContext);
     const { agents, requestState, selectedAgent } = useAgents();
     const { questions: cacheQuestions } = cache;
@@ -80,20 +82,32 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         setCacheValue('agents', { agents, requestState, selectedAgent });
     }
 
+    const handleUserIntentToUseAI = () => {
+        // Create session if not already created or loading
+        if (!shouldPreinitSession && !encodedSession && !isLoading && createSession) {
+            createSession(true, false);
+        }
+    };
+
     const handleModalClose = () => {
         setIsModalOpen(false);
     };
 
     const handleSwitchToModalClick = () => {
+        handleUserIntentToUseAI();
         setIsModalOpen(true);
     };
 
     React.useEffect(() => {
-        if (!encodedSession && createSession) {
-            createSession();
+        if (shouldPreinitSession && !encodedSession && createSession) {
+            createSession(true, true);
         }
 
-        if (cacheQuestions.length > 0 && cacheQuestions[cacheQuestions.length - 1].isCompleted === false) {
+        if (
+            encodedSession &&
+            cacheQuestions.length > 0 &&
+            cacheQuestions[cacheQuestions.length - 1].isCompleted === false
+        ) {
             // if we have cache with question that is not completed resend it to trigger an API
             sendQuestion({ prompt: cacheQuestions[cacheQuestions.length - 1].prompt });
         }
@@ -119,6 +133,16 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Resend the last question (if it was sent before session loaded) after (re-)initializing session
+    React.useEffect(() => {
+        const lastQuestion = cacheQuestions[cacheQuestions.length - 1];
+        if (!shouldPreinitSession && !isSessionInitiated.current && encodedSession && lastQuestion?.isLoading) {
+            sendQuestion(lastQuestion, selectedAgent, false);
+            isSessionInitiated.current = true;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [encodedSession]);
+
     const renderBoxAISidebarTitle = () => {
         return (
             <div className="bcs-BoxAISidebar-title-part">
@@ -128,6 +152,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         <BoxAiAgentSelectorWithApi
                             fetcher={getAIStudioAgents}
                             hostAppName={hostAppName}
+                            onAgentsListOpen={handleUserIntentToUseAI}
                             onSelectAgent={onSelectAgent}
                             recordAction={recordAction}
                             shouldHideAgentSelectorOnLoad
@@ -174,9 +199,10 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                         isStopResponseEnabled={isStopResponseEnabled}
                         items={items}
                         questions={questions}
+                        onUserIntentToUseAI={handleUserIntentToUseAI}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
-                        userInfo={userInfo}
+                        showLoadingIndicator={isLoading && shouldPreinitSession}
                         variant="sidebar"
                         recordAction={recordAction}
                         {...rest}
@@ -198,6 +224,7 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                 onClearAction={onClearAction}
                 onOpenChange={handleModalClose}
                 onSelectAgent={onSelectAgent}
+                onUserIntentToUseAI={handleUserIntentToUseAI}
                 open={isModalOpen}
                 questions={questions}
                 recordAction={isModalOpen ? recordAction : undefined}
@@ -205,7 +232,6 @@ function BoxAISidebarContent(props: ApiWrapperProps) {
                 stopPropagationOnEsc
                 stopQuestion={stopQuestion}
                 submitQuestion={sendQuestion}
-                userInfo={userInfo}
                 variant="collapsible"
                 {...rest}
                 shouldRenderProviders={false}

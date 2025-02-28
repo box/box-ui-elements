@@ -4,8 +4,8 @@
     padding-left: 20px;
 
     .be-logo-custom {
-        max-width: 80px;
-        max-height: 32px;
+        max-width: 240px;
+        max-height: 40px;
 
         .be-is-small & {
             max-width: 75px;
@@ -16,9 +16,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 75px;
-        height: 32px;
-        background-color: $bdl-gray-10;
+        width: 208px;
+        height: 48px;
+        background-color: var(--gray-10);
         border: 1px dashed;
 
         .be-is-small & {

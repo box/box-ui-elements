@@ -5,10 +5,10 @@
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { type ItemType } from '@box/box-ai-content-answers';
-import { AgentsProvider , RecordActionType } from '@box/box-ai-agent-selector';
+import { AgentsProvider, RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
-import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
+import { SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from './types/BoxAISidebarTypes';
 
 import messages from '../common/content-answers/messages';
@@ -50,9 +50,10 @@ export interface BoxAISidebarProps {
     isStreamingEnabled: boolean;
     items: Array<ItemType>;
     itemSize?: string;
-    userInfo: { name: string; avatarURL: string };
+    localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
+    shouldPreinitSession?: boolean;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -68,9 +69,10 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         isStopResponseEnabled,
         items,
         itemSize,
+        localizedQuestions,
         recordAction,
         setCacheValue,
-        userInfo,
+        shouldPreinitSession = true,
         ...rest
     } = props;
     const { questions } = cache;
@@ -87,7 +89,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             itemSize,
             setCacheValue,
             recordAction,
-            userInfo,
+            shouldPreinitSession,
         }),
         [
             cache,
@@ -100,7 +102,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             itemSize,
             setCacheValue,
             recordAction,
-            userInfo,
+            shouldPreinitSession,
         ],
     );
 
@@ -109,12 +111,6 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         // pass only fully completed questions to not show loading indicator of question where we canceled API request
         questionsWithoutInProgress = questionsWithoutInProgress.slice(0, -1);
     }
-
-    const localizedQuestions = DOCUMENT_SUGGESTED_QUESTIONS.map(question => ({
-        id: question.id,
-        label: formatMessage(messages[question.labelId]),
-        prompt: formatMessage(messages[question.promptId]),
-    }));
 
     const isSpreadsheet = SPREADSHEET_FILE_EXTENSIONS.includes(fileExtension);
 
@@ -138,6 +134,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
                     itemIDs={[fileID]}
                     restoredQuestions={questionsWithoutInProgress}
                     restoredSession={cache.encodedSession}
+                    shouldPreinitSession={shouldPreinitSession}
                     suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
                     warningNotice={spreadsheetNotice}
                     warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}

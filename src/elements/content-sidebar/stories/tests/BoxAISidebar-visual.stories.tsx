@@ -3,7 +3,7 @@ import { type StoryObj } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
-import { mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
+import { mockFileRequest, mockUserRequest } from '../../../common/__mocks__/mockRequests';
 
 const mockFeatures = {
     'boxai.sidebar.enabled': true,
@@ -53,6 +53,28 @@ export default {
             isStopResponseEnabled: true,
             isStreamingEnabled: false,
             items: [{ id: '123', name: 'Document (PDF).pdf', type: 'file', fileType: 'pdf', status: 'supported' }],
+            localizedQuestions: [
+                {
+                    id: 'suggested-question-1',
+                    label: 'Summarize this document',
+                    prompt: 'Summarize this document',
+                },
+                {
+                    id: 'suggested-question-2',
+                    label: 'What are the key takeaways?',
+                    prompt: 'What are the key takeaways?',
+                },
+                {
+                    id: 'suggested-question-3',
+                    label: 'How can this document be improved?',
+                    prompt: 'How can this document be improved?',
+                },
+                {
+                    id: 'suggested-question-4',
+                    label: 'Are there any next steps defined?',
+                    prompt: 'Are there any next steps defined?',
+                },
+            ],
             recordAction: () => ({}),
         },
     },

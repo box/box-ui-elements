@@ -5,7 +5,7 @@ import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { Notification } from '@box/blueprint-web';
 import { http, HttpResponse } from 'msw';
 
-import { mockEventRequest, mockFileRequest, mockUserRequest } from '../../../__mocks__/mockRequests';
+import { mockEventRequest, mockFileRequest, mockUserRequest } from '../../../common/__mocks__/mockRequests';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
 import ContentPreview from '../../ContentPreview';

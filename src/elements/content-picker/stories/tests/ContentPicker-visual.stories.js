@@ -1,7 +1,7 @@
 import { expect, userEvent, waitFor, within } from '@storybook/test';
 import { http, HttpResponse } from 'msw';
 import ContentPicker from '../../ContentPicker';
-import { mockRootFolder } from '../../../content-explorer/stories/__mocks__/mockRootFolder';
+import { mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
@@ -17,7 +17,7 @@ export const selectedEmptyState = {
         const selectedButton = canvas.getByRole('button', { name: '0 Selected' });
         await userEvent.click(selectedButton);
         await waitFor(() => {
-            expect(canvas.getByText('You haven’t selected any items yet.')).toBeInTheDocument();
+            expect(canvas.getByText("You haven't selected any items yet.")).toBeInTheDocument();
         });
     },
 };

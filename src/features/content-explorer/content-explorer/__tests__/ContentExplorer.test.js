@@ -130,6 +130,12 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             expect(wrapper).toMatchSnapshot();
         });
 
+        test('should pass breadcrumbIcon to ContentExplorerHeaderActions', () => {
+            const breadcrumbIcon = <div>Icon</div>;
+            const wrapper = renderComponent({ breadcrumbIcon });
+            expect(wrapper.find('ContentExplorerHeaderActions').prop('breadcrumbIcon')).toEqual(breadcrumbIcon);
+        });
+
         [
             {
                 contentExplorerMode: ContentExplorerModes.SELECT_FILE,
@@ -576,6 +582,27 @@ describe('features/content-explorer/content-explorer/ContentExplorer', () => {
             const component = shallow(<Component />);
 
             expect(component.prop('isSearch')).toBe(false);
+        });
+    });
+
+    describe('noItemsRenderer', () => {
+        const customEmptyStateClassName = 'custom-empty-state';
+
+        test('should render custom empty state when specified', () => {
+            const wrapper = renderComponent(
+                { noItemsRenderer: () => <div className={customEmptyStateClassName} /> },
+                true,
+            );
+
+            expect(wrapper.exists(`.${customEmptyStateClassName}`)).toBe(true);
+            expect(wrapper.exists('ContentExplorerEmptyState')).toBe(false);
+        });
+
+        test('should render default empty state when not specified', () => {
+            const wrapper = renderComponent({}, true);
+
+            expect(wrapper.exists('ContentExplorerEmptyState')).toBe(true);
+            expect(wrapper.exists(`.${customEmptyStateClassName}`)).toBe(false);
         });
     });
 

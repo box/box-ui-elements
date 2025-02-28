@@ -12,6 +12,7 @@ import './ContentExplorerModal.scss';
 
 type Props = {
     additionalColumns?: Array<React.ComponentType<Column>>,
+    breadcrumbIcon?: React.ComponentType<any>,
     breadcrumbProps?: BreadcrumbProps,
     className?: string,
     controlledSelectedItems?: Object,
@@ -36,6 +37,7 @@ type Props = {
     shouldNotUsePortal?: boolean,
     title?: string,
     infoNoticeText?: string,
+    noItemsRenderer?: Function,
 };
 
 const ContentExplorerModal = ({
