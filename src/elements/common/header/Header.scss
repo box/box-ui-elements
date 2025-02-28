@@ -5,8 +5,7 @@
     flex: 0 0 70px;
     align-items: center;
     padding: 0 25px 0 0;
-    background: $almost-white;
-    border-bottom: 1px solid $bdl-gray-10;
+    border-bottom: 1px solid var(--border-divider-border);
 
     .be-is-small & {
         padding-right: 20px;
@@ -14,6 +13,7 @@
 
     .be-search {
         flex: 1;
+        max-width: 520px;
         padding-left: 20px;
     }
 
