@@ -2,8 +2,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 // @ts-ignore Module is written in Flow
-import { useFeatureConfig } from '../common/feature-checking';
-// @ts-ignore Module is written in Flow
 import { SIDEBAR_NAV_TARGETS } from '../common/interactionTargets';
 
 // @ts-ignore Module is written in Flow
@@ -17,48 +15,43 @@ import { Menu, MenuItem } from '../../components/menu';
 import messages from './messages';
 
 import './SidebarNavSign.scss';
+// @ts-ignore Module is written in Flow
+import type { TargetingApi } from '../../features/targeting/types';
 
-export function SidebarNavSign() {
+export interface SignSidebarProps {
+    blockedReason: string;
+    enabled: boolean;
+    onClick: () => void;
+    onClickSignMyself: () => void;
+    targetingApi?: TargetingApi;
+}
+
+export function SidebarNavSign(signSidebarProps: SignSidebarProps) {
     const {
         blockedReason: boxSignBlockedReason,
         onClick: onBoxClickRequestSignature,
         onClickSignMyself: onBoxClickSignMyself,
-        status: boxSignStatus,
         targetingApi: boxSignTargetingApi,
-        isSignRemoveInterstitialEnabled,
-    } = useFeatureConfig('boxSign');
+    } = signSidebarProps;
 
     return (
-        <>
-            {isSignRemoveInterstitialEnabled ? (
-                <DropdownMenu isResponsive constrainToWindow isRightAligned>
-                    <SidebarNavSignButton
-                        blockedReason={boxSignBlockedReason}
-                        status={boxSignStatus}
-                        targetingApi={boxSignTargetingApi}
-                        data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
-                    />
-                    <Menu>
-                        <MenuItem data-testid="sign-request-signature-button" onClick={onBoxClickRequestSignature}>
-                            <SignMeOthers32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
-                            <FormattedMessage {...messages.boxSignRequestSignature} />
-                        </MenuItem>
-                        <MenuItem data-testid="sign-sign-myself-button" onClick={onBoxClickSignMyself}>
-                            <SignMe32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
-                            <FormattedMessage {...messages.boxSignSignMyself} />
-                        </MenuItem>
-                    </Menu>
-                </DropdownMenu>
-            ) : (
-                <SidebarNavSignButton
-                    blockedReason={boxSignBlockedReason}
-                    data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
-                    onClick={onBoxClickRequestSignature}
-                    status={boxSignStatus}
-                    targetingApi={boxSignTargetingApi}
-                />
-            )}
-        </>
+        <DropdownMenu isResponsive constrainToWindow isRightAligned>
+            <SidebarNavSignButton
+                blockedReason={boxSignBlockedReason}
+                targetingApi={boxSignTargetingApi}
+                data-resin-target={SIDEBAR_NAV_TARGETS.SIGN}
+            />
+            <Menu>
+                <MenuItem onClick={onBoxClickRequestSignature}>
+                    <SignMeOthers32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
+                    <FormattedMessage {...messages.boxSignRequestSignature} />
+                </MenuItem>
+                <MenuItem onClick={onBoxClickSignMyself}>
+                    <SignMe32 width={16} height={16} className="bcs-SidebarNavSign-icon" />
+                    <FormattedMessage {...messages.boxSignSignMyself} />
+                </MenuItem>
+            </Menu>
+        </DropdownMenu>
     );
 }
 

@@ -382,6 +382,11 @@ const messages = defineMessages({
         description: 'Dropdown select option to remove access.',
         defaultMessage: 'Remove shared link',
     },
+    searchClear: {
+        id: 'be.searchClear',
+        description: 'Aria label for the clear button in the search box.',
+        defaultMessage: 'Clear search',
+    },
     searchPlaceholder: {
         id: 'be.searchPlaceholder',
         description: 'Shown as a placeholder in the search box.',

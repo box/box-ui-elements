@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Content Explorer Component
- * @author Box
- */
-
 import 'regenerator-runtime/runtime';
 import React, { Component } from 'react';
 import classNames from 'classnames';
@@ -14,6 +8,7 @@ import getProp from 'lodash/get';
 import noop from 'lodash/noop';
 import uniqueid from 'lodash/uniqueId';
 import { TooltipProvider } from '@box/blueprint-web';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -22,7 +17,6 @@ import SubHeader from '../common/sub-header/SubHeader';
 import makeResponsive from '../common/makeResponsive';
 import openUrlInsideIframe from '../../utils/iframe';
 import Internationalize from '../common/Internationalize';
-// $FlowFixMe TypeScript file
 import ThemingStyles from '../common/theming';
 import API from '../../api';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
@@ -32,7 +26,6 @@ import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
 import Content from './Content';
-// $FlowFixMe TypeScript file
 import { isThumbnailAvailable } from '../common/utils';
 import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
@@ -71,7 +64,6 @@ import {
     VIEW_MODE_GRID,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
-// $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
@@ -87,6 +79,8 @@ import type {
     BoxItemPermission,
     BoxItem,
 } from '../../common/types/core';
+import type { ContentPreviewProps } from '../content-preview';
+import type { ContentUploaderProps } from '../content-uploader';
 
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -96,96 +90,96 @@ import './ContentExplorer.scss';
 const GRID_VIEW_MAX_COLUMNS = 7;
 const GRID_VIEW_MIN_COLUMNS = 1;
 
-type Props = {
-    apiHost: string,
-    appHost: string,
-    autoFocus: boolean,
-    canCreateNewFolder: boolean,
-    canDelete: boolean,
-    canDownload: boolean,
-    canPreview: boolean,
-    canRename: boolean,
-    canSetShareAccess: boolean,
-    canShare: boolean,
-    canUpload: boolean,
-    className: string,
-    contentPreviewProps: ContentPreviewProps,
-    contentUploaderProps: ContentUploaderProps,
-    currentFolderId?: string,
-    defaultView: DefaultView,
-    features: FeatureConfig,
-    fieldsToShow?: FieldsToShow,
-    initialPage: number,
-    initialPageSize: number,
-    isLarge: boolean,
-    isMedium: boolean,
-    isSmall: boolean,
-    isTouch: boolean,
-    isVeryLarge: boolean,
-    language?: string,
-    logoUrl?: string,
-    measureRef?: Function,
-    messages?: StringMap,
-    metadataQuery?: MetadataQuery,
-    onCreate: Function,
-    onDelete: Function,
-    onDownload: Function,
-    onNavigate: Function,
-    onPreview: Function,
-    onRename: Function,
-    onSelect: Function,
-    onUpload: Function,
-    previewLibraryVersion: string,
-    requestInterceptor?: Function,
-    responseInterceptor?: Function,
-    rootFolderId: string,
-    sharedLink?: string,
-    sharedLinkPassword?: string,
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-    staticHost: string,
-    staticPath: string,
-    theme?: Theme,
-    token: Token,
-    uploadHost: string,
-};
+export interface ContentExplorerProps {
+    apiHost?: string;
+    appHost?: string;
+    autoFocus?: boolean;
+    canCreateNewFolder?: boolean;
+    canDelete?: boolean;
+    canDownload?: boolean;
+    canPreview?: boolean;
+    canRename?: boolean;
+    canSetShareAccess?: boolean;
+    canShare?: boolean;
+    canUpload?: boolean;
+    className?: string;
+    contentPreviewProps?: ContentPreviewProps;
+    contentUploaderProps?: ContentUploaderProps;
+    currentFolderId?: string;
+    defaultView?: DefaultView;
+    features?: FeatureConfig;
+    fieldsToShow?: FieldsToShow;
+    initialPage?: number;
+    initialPageSize?: number;
+    isLarge?: boolean;
+    isMedium?: boolean;
+    isSmall?: boolean;
+    isTouch?: boolean;
+    isVeryLarge?: boolean;
+    language?: string;
+    logoUrl?: string;
+    measureRef?: (ref: Element | null) => void;
+    messages?: StringMap;
+    metadataQuery?: MetadataQuery;
+    onCreate?: (item: BoxItem) => void;
+    onDelete?: (item: BoxItem) => void;
+    onDownload?: (item: BoxItem) => void;
+    onNavigate?: (item: BoxItem) => void;
+    onPreview?: (data: unknown) => void;
+    onRename?: (item: BoxItem) => void;
+    onSelect?: (item: BoxItem) => void;
+    onUpload?: (item: BoxItem) => void;
+    previewLibraryVersion?: string;
+    requestInterceptor?: (response: AxiosResponse) => void;
+    responseInterceptor?: (config: AxiosRequestConfig) => void;
+    rootFolderId?: string;
+    sharedLink?: string;
+    sharedLinkPassword?: string;
+    sortBy?: SortBy;
+    sortDirection?: SortDirection;
+    staticHost?: string;
+    staticPath?: string;
+    theme?: Theme;
+    token: Token;
+    uploadHost?: string;
+}
 
 type State = {
-    currentCollection: Collection,
-    currentOffset: number,
-    currentPageNumber: number,
-    currentPageSize: number,
-    errorCode: string,
-    focusedRow: number,
-    gridColumnCount: number,
-    isCreateFolderModalOpen: boolean,
-    isDeleteModalOpen: boolean,
-    isLoading: boolean,
-    isPreviewModalOpen: boolean,
-    isRenameModalOpen: boolean,
-    isShareModalOpen: boolean,
-    isUploadModalOpen: boolean,
-    markers: Array<?string>,
-    rootName: string,
-    searchQuery: string,
-    selected?: BoxItem,
-    sortBy: SortBy,
-    sortDirection: SortDirection,
-    view: View,
+    currentCollection: Collection;
+    currentOffset: number;
+    currentPageNumber: number;
+    currentPageSize: number;
+    errorCode: string;
+    focusedRow: number;
+    gridColumnCount: number;
+    isCreateFolderModalOpen: boolean;
+    isDeleteModalOpen: boolean;
+    isLoading: boolean;
+    isPreviewModalOpen: boolean;
+    isRenameModalOpen: boolean;
+    isShareModalOpen: boolean;
+    isUploadModalOpen: boolean;
+    markers: Array<string | null | undefined>;
+    rootName: string;
+    searchQuery: string;
+    selected?: BoxItem;
+    sortBy: SortBy;
+    sortDirection: SortDirection;
+    view: View;
 };
 
 const localStoreViewMode = 'bce.defaultViewMode';
 
-class ContentExplorer extends Component<Props, State> {
+class ContentExplorer extends Component<ContentExplorerProps, State> {
     id: string;
 
     api: API;
 
     state: State;
 
-    props: Props;
+    props: ContentExplorerProps;
 
-    table: any;
+    table: React.Component<unknown, unknown>;
 
     rootElement: HTMLElement;
 
@@ -240,7 +234,7 @@ class ContentExplorer extends Component<Props, State> {
      * @private
      * @return {ContentExplorer}
      */
-    constructor(props: Props) {
+    constructor(props: ContentExplorerProps) {
         super(props);
 
         const {
@@ -257,7 +251,7 @@ class ContentExplorer extends Component<Props, State> {
             sortDirection,
             token,
             uploadHost,
-        }: Props = props;
+        }: ContentExplorerProps = props;
 
         this.api = new API({
             apiHost,
@@ -327,9 +321,9 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { currentFolderId, defaultView }: Props = this.props;
-        this.rootElement = ((document.getElementById(this.id): any): HTMLElement);
-        this.appElement = ((this.rootElement.firstElementChild: any): HTMLElement);
+        const { currentFolderId, defaultView }: ContentExplorerProps = this.props;
+        this.rootElement = document.getElementById(this.id) as HTMLElement;
+        this.appElement = this.rootElement.firstElementChild as HTMLElement;
 
         switch (defaultView) {
             case DEFAULT_VIEW_RECENTS:
@@ -351,8 +345,8 @@ class ContentExplorer extends Component<Props, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentDidUpdate({ currentFolderId: prevFolderId }: Props, prevState: State): void {
-        const { currentFolderId }: Props = this.props;
+    componentDidUpdate({ currentFolderId: prevFolderId }: ContentExplorerProps, prevState: State): void {
+        const { currentFolderId }: ContentExplorerProps = this.props;
         const {
             currentCollection: { id },
         }: State = prevState;
@@ -397,7 +391,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     showMetadataQueryResults() {
-        const { metadataQuery = {} }: Props = this.props;
+        const { metadataQuery = {} }: ContentExplorerProps = this.props;
         const { currentPageNumber, markers }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
 
@@ -449,7 +443,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Error} error error object
      * @return {void}
      */
-    errorCallback = (error: any) => {
+    errorCallback = (error: unknown) => {
         this.setState({
             view: VIEW_ERROR,
         });
@@ -465,7 +459,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     finishNavigation() {
-        const { autoFocus }: Props = this.props;
+        const { autoFocus }: ContentExplorerProps = this.props;
         const {
             currentCollection: { percentLoaded },
         }: State = this.state;
@@ -520,7 +514,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     fetchFolderSuccessCallback(collection: Collection, triggerNavigationEvent: boolean): void {
-        const { onNavigate, rootFolderId }: Props = this.props;
+        const { onNavigate, rootFolderId }: ContentExplorerProps = this.props;
         const { boxItem, id, name }: Collection = collection;
         const { selected }: State = this.state;
         const rootName = id === rootFolderId ? name : '';
@@ -549,8 +543,8 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Boolean|void} [triggerNavigationEvent] To trigger navigate event
      * @return {void}
      */
-    fetchFolder = (id?: string, triggerNavigationEvent?: boolean = true) => {
-        const { rootFolderId }: Props = this.props;
+    fetchFolder = (id?: string, triggerNavigationEvent: boolean = true) => {
+        const { rootFolderId }: ContentExplorerProps = this.props;
         const {
             currentCollection: { id: currentId },
             currentOffset,
@@ -610,7 +604,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         const { id, type }: BoxItem = item;
-        const { isTouch }: Props = this.props;
+        const { isTouch }: ContentExplorerProps = this.props;
 
         if (type === TYPE_FOLDER) {
             this.fetchFolder(id);
@@ -667,7 +661,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     search = (query: string) => {
-        const { rootFolderId }: Props = this.props;
+        const { rootFolderId }: ContentExplorerProps = this.props;
         const {
             currentCollection: { id },
             currentOffset,
@@ -733,7 +727,7 @@ class ContentExplorer extends Component<Props, State> {
      * @return {void}
      */
     showRecents(triggerNavigationEvent: boolean = true): void {
-        const { rootFolderId }: Props = this.props;
+        const { rootFolderId }: ContentExplorerProps = this.props;
 
         // Reset search state, the view and show busy indicator
         this.setState({
@@ -765,7 +759,7 @@ class ContentExplorer extends Component<Props, State> {
         const {
             currentCollection: { id, permissions },
         }: State = this.state;
-        const { canUpload }: Props = this.props;
+        const { canUpload }: ContentExplorerProps = this.props;
         if (!canUpload || !id || !permissions) {
             return;
         }
@@ -803,7 +797,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     changeShareAccess = (access: Access) => {
         const { selected }: State = this.state;
-        const { canSetShareAccess }: Props = this.props;
+        const { canSetShareAccess }: ContentExplorerProps = this.props;
         if (!selected || !canSetShareAccess) {
             return;
         }
@@ -843,7 +837,7 @@ class ContentExplorer extends Component<Props, State> {
     };
 
     /**
-     * Sets state with currentCollection updated to have items.selected properties
+     * Sets state with currentCollection updated to have `items.selected` properties
      * set according to the given selected param. Also updates the selected item in the
      * currentCollection. selectedItem will be set to the selected state
      * item if it is in currentCollection, otherwise it will be set to undefined.
@@ -854,12 +848,17 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Function} [callback] - callback function that should be called after setState occurs
      * @return {void}
      */
-    async updateCollection(collection: Collection, selectedItem: ?BoxItem, callback: Function = noop): Object {
+    async updateCollection(
+        collection: Collection,
+        selectedItem?: BoxItem | null,
+        callback: () => void = noop,
+    ): Promise<void> {
         const newCollection: Collection = cloneDeep(collection);
         const { items = [] } = newCollection;
+
         const fileAPI = this.api.getFileAPI(false);
         const selectedId = selectedItem ? selectedItem.id : null;
-        let newSelectedItem: ?BoxItem;
+        let newSelectedItem: BoxItem | null | undefined;
 
         const itemThumbnails = await Promise.all(
             items.map(item => {
@@ -876,7 +875,7 @@ class ContentExplorer extends Component<Props, State> {
                 ...currentItem,
                 selected: isSelected,
                 thumbnailUrl,
-            };
+            } as const;
 
             if (item.type === TYPE_FILE && thumbnailUrl && !isThumbnailAvailable(newItem)) {
                 this.attemptThumbnailGeneration(newItem);
@@ -925,7 +924,7 @@ class ContentExplorer extends Component<Props, State> {
     updateItemInCollection = (newItem: BoxItem): void => {
         const { currentCollection } = this.state;
         const { items = [] } = currentCollection;
-        const newCollection = { ...currentCollection };
+        const newCollection = { ...currentCollection } as const;
 
         newCollection.items = items.map(item => (item.id === newItem.id ? newItem : item));
         this.setState({ currentCollection: newCollection });
@@ -939,10 +938,10 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Function|void} [onSelect] - optional on select callback
      * @return {void}
      */
-    select = (item: BoxItem, callback: Function = noop): void => {
+    select = (item: BoxItem, callback: (item: BoxItem) => void = noop): void => {
         const { selected, currentCollection }: State = this.state;
         const { items = [] } = currentCollection;
-        const { onSelect }: Props = this.props;
+        const { onSelect }: ContentExplorerProps = this.props;
 
         if (item === selected) {
             callback(item);
@@ -988,7 +987,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     previewCallback = (): void => {
         const { selected }: State = this.state;
-        const { canPreview }: Props = this.props;
+        const { canPreview }: ContentExplorerProps = this.props;
         if (!selected || !canPreview) {
             return;
         }
@@ -1025,7 +1024,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     downloadCallback = (): void => {
         const { selected }: State = this.state;
-        const { canDownload, onDownload }: Props = this.props;
+        const { canDownload, onDownload }: ContentExplorerProps = this.props;
         if (!selected || !canDownload) {
             return;
         }
@@ -1040,7 +1039,7 @@ class ContentExplorer extends Component<Props, State> {
             return;
         }
 
-        const openUrl: Function = (url: string) => {
+        const openUrl = (url: string) => {
             openUrlInsideIframe(url);
             onDownload(cloneDeep([selected]));
         };
@@ -1070,7 +1069,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     deleteCallback = (): void => {
         const { selected, isDeleteModalOpen }: State = this.state;
-        const { canDelete, onDelete }: Props = this.props;
+        const { canDelete, onDelete }: ContentExplorerProps = this.props;
         if (!selected || !canDelete) {
             return;
         }
@@ -1122,9 +1121,10 @@ class ContentExplorer extends Component<Props, State> {
      * @param {string} value new item name
      * @return {void}
      */
-    renameCallback = (nameWithoutExt: string, extension: string): void => {
+    renameCallback = (nameWithoutExt?: string, extension?: string): void => {
         const { selected, isRenameModalOpen }: State = this.state;
-        const { canRename, onRename }: Props = this.props;
+        const { canRename, onRename }: ContentExplorerProps = this.props;
+
         if (!selected || !canRename) {
             return;
         }
@@ -1135,6 +1135,7 @@ class ContentExplorer extends Component<Props, State> {
         }
 
         const { can_rename }: BoxItemPermission = permissions;
+
         if (!can_rename) {
             return;
         }
@@ -1188,7 +1189,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     createFolderCallback = (name?: string): void => {
         const { isCreateFolderModalOpen, currentCollection }: State = this.state;
-        const { canCreateNewFolder, onCreate }: Props = this.props;
+        const { canCreateNewFolder, onCreate }: ContentExplorerProps = this.props;
         if (!canCreateNewFolder) {
             return;
         }
@@ -1295,7 +1296,6 @@ class ContentExplorer extends Component<Props, State> {
 
         // if there is no shared link, create one with enterprise default access
         if (!item[FIELD_SHARED_LINK] && getProp(item, FIELD_PERMISSIONS_CAN_SHARE, false)) {
-            // $FlowFixMe
             await this.api.getAPI(item.type).share(item, undefined, (sharedItem: BoxItem) => {
                 updatedItem = sharedItem;
             });
@@ -1312,7 +1312,7 @@ class ContentExplorer extends Component<Props, State> {
      */
     shareCallback = (): void => {
         const { selected }: State = this.state;
-        const { canShare }: Props = this.props;
+        const { canShare }: ContentExplorerProps = this.props;
 
         if (!selected || !canShare) {
             return;
@@ -1338,7 +1338,7 @@ class ContentExplorer extends Component<Props, State> {
      * @param {Component} react component
      * @return {void}
      */
-    tableRef = (table: React$Component<*, *>): void => {
+    tableRef = (table: React.Component<unknown, unknown>): void => {
         this.table = table;
     };
 
@@ -1386,12 +1386,12 @@ class ContentExplorer extends Component<Props, State> {
      * @private
      * @return {void}
      */
-    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
+    onKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
         if (isInputElement(event.target)) {
             return;
         }
 
-        const { rootFolderId }: Props = this.props;
+        const { rootFolderId }: ContentExplorerProps = this.props;
         const key = event.key.toLowerCase();
 
         switch (key) {
@@ -1540,8 +1540,8 @@ class ContentExplorer extends Component<Props, State> {
     updateMetadata = (
         item: BoxItem,
         field: string,
-        oldValue: ?MetadataFieldValue,
-        newValue: ?MetadataFieldValue,
+        oldValue?: MetadataFieldValue | null,
+        newValue?: MetadataFieldValue | null,
     ): void => {
         this.metadataQueryAPIHelper.updateMetadata(
             item,
@@ -1555,7 +1555,7 @@ class ContentExplorer extends Component<Props, State> {
         );
     };
 
-    updateMetadataSuccessCallback = (item: BoxItem, field: string, newValue: ?MetadataFieldValue): void => {
+    updateMetadataSuccessCallback = (item: BoxItem, field: string, newValue?: MetadataFieldValue | null): void => {
         const { currentCollection }: State = this.state;
         const { items = [], nextMarker } = currentCollection;
         const updatedItems = items.map(collectionItem => {
@@ -1625,7 +1625,7 @@ class ContentExplorer extends Component<Props, State> {
             theme,
             token,
             uploadHost,
-        }: Props = this.props;
+        }: ContentExplorerProps = this.props;
 
         const {
             currentCollection,
@@ -1643,7 +1643,6 @@ class ContentExplorer extends Component<Props, State> {
             isUploadModalOpen,
             markers,
             rootName,
-            searchQuery,
             selected,
             view,
         }: State = this.state;
@@ -1672,13 +1671,7 @@ class ContentExplorer extends Component<Props, State> {
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                             {!isDefaultViewMetadata && (
                                 <>
-                                    <Header
-                                        view={view}
-                                        isSmall={isSmall}
-                                        searchQuery={searchQuery}
-                                        logoUrl={logoUrl}
-                                        onSearch={this.search}
-                                    />
+                                    <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
                                     <SubHeader
                                         view={view}
                                         viewMode={viewMode}

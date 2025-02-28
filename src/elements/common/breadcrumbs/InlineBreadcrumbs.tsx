@@ -1,24 +1,20 @@
-/**
- * @flow
- * @file Component for the details for the item name
- * @author Box
- */
-
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import messages from '../messages';
 import Breadcrumbs from './Breadcrumbs';
-import { DELIMITER_SLASH } from '../../../constants';
 import type { BoxItem } from '../../../common/types/core';
+import { DELIMITER_SLASH } from '../../../constants';
+
 import './InlineBreadcrumbs.scss';
 
-type Props = {
-    item: BoxItem,
-    onItemClick: Function,
-    rootId: string,
-};
+import messages from '../messages';
 
-const InlineBreadcrumbs = ({ item, onItemClick, rootId }: Props) => {
+export interface InlineBreadcrumbsProps {
+    item: BoxItem;
+    onItemClick: (item: BoxItem | string) => void;
+    rootId: string;
+}
+
+const InlineBreadcrumbs = ({ item, onItemClick, rootId }: InlineBreadcrumbsProps) => {
     const { path_collection }: BoxItem = item;
     const { entries: breadcrumbs = [] } = path_collection || {};
     return (

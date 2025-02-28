@@ -12,7 +12,7 @@ const allSections = [
     {
         name: 'Elements',
         components: () => [
-            '../src/elements/content-explorer/ContentExplorer.js',
+            '../src/elements/content-explorer/ContentExplorer.tsx',
             '../src/elements/content-picker/ContentPicker.js',
             '../src/elements/content-preview/ContentPreview.js',
             '../src/elements/content-sharing/ContentSharing.js',
