@@ -25,3 +25,4 @@ test/videos
 test/dev.html
 yarn-debug.log
 yarn-error.log
+verdaccio
