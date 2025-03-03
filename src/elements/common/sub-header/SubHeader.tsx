@@ -50,7 +50,7 @@ const SubHeader = ({
     view,
     viewMode = VIEW_MODE_LIST,
 }: SubHeaderProps) => (
-    <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="default">
+    <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="inline">
         <PageHeader.StartElements>
             <SubHeaderLeft
                 currentCollection={currentCollection}
