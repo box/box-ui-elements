@@ -41,6 +41,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
         encodedSession,
         onClearAction,
         getAIStudioAgents,
+        hasRequestInProgress,
         hostAppName,
         isAIStudioAgentSelectorEnabled,
         isLoading,
@@ -150,7 +151,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                 {isAIStudioAgentSelectorEnabled && (
                     <div className="bcs-BoxAISidebar-agentSelector">
                         <BoxAiAgentSelectorWithApi
-                            disabled={props.hasRequestInProgress}
+                            disabled={hasRequestInProgress}
                             fetcher={getAIStudioAgents}
                             hostAppName={hostAppName}
                             onAgentsListOpen={handleUserIntentToUseAI}
@@ -215,6 +216,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                 contentType={formatMessage(messages.sidebarBoxAIContent)}
                 extension={fileExtension}
                 getAIStudioAgents={getAIStudioAgents}
+                hasRequestInProgress={hasRequestInProgress}
                 hostAppName={hostAppName}
                 isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
                 isFeedbackEnabled={isFeedbackEnabled}
