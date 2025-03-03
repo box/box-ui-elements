@@ -187,7 +187,13 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         });
     });
 
-    test('should call setHasQuestions on load if questions is not empty', async () => {
+    test('should call setHasQuestions with "false" on load if questions are empty', async () => {
+        await renderComponent();
+
+        expect(mockProps.setHasQuestions).toHaveBeenCalledWith(false);
+    });
+
+    test('should call setHasQuestions with "true" on load if questions are not empty', async () => {
         await renderComponent({
             cache: {
                 encodedSession: '1234',
