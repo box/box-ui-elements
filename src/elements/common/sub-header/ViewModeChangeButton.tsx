@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
@@ -13,13 +11,18 @@ import './ViewModeChangeButton.scss';
 
 import messages from '../messages';
 
-type Props = {
-    className?: string,
-    onViewModeChange?: (viewMode: ViewMode) => void,
-    viewMode: ViewMode,
-};
+export interface ViewModeChangeButtonProps {
+    className?: string;
+    onViewModeChange?: (viewMode: ViewMode) => void;
+    viewMode: ViewMode;
+}
 
-const ViewModeChangeButton = ({ className = '', onViewModeChange = noop, viewMode, ...rest }: Props) => {
+const ViewModeChangeButton = ({
+    className = '',
+    onViewModeChange = noop,
+    viewMode,
+    ...rest
+}: ViewModeChangeButtonProps) => {
     const { formatMessage } = useIntl();
     const isGridView = viewMode === VIEW_MODE_GRID;
     const viewMessage = isGridView ? formatMessage(messages.listView) : formatMessage(messages.gridView);
