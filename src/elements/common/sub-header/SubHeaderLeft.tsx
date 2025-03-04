@@ -1,9 +1,3 @@
-/**
- * @flow
- * @file Content sub header component
- * @author Box
- */
-
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { Breadcrumbs } from '../breadcrumbs';
@@ -12,16 +6,16 @@ import { VIEW_SEARCH, VIEW_FOLDER, VIEW_RECENTS, DELIMITER_CARET } from '../../.
 
 import messages from '../messages';
 
-type Props = {
-    currentCollection: Collection,
-    isSmall: boolean,
-    onItemClick: Function,
-    rootId: string,
-    rootName?: string,
-    view: View,
-};
+export interface SubHeaderLeftProps {
+    currentCollection: Collection;
+    isSmall: boolean;
+    onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
+    rootId: string;
+    rootName?: string;
+    view: View;
+}
 
-const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick }: Props) => {
+const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick }: SubHeaderLeftProps) => {
     let crumbs;
     const { formatMessage } = useIntl();
 
