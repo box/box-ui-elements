@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { useIntl } from 'react-intl';
 import { Slider } from '@box/blueprint-web';
@@ -7,15 +6,21 @@ import './GridViewSlider.scss';
 
 import messages from '../../elements/common/messages';
 
-type Props = {
-    columnCount: number,
-    gridMaxColumns: number,
-    gridMinColumns: number,
-    maxColumnCount: number,
-    onChange: (newSliderValue: number) => void,
-};
+export interface GridViewSliderProps {
+    columnCount: number;
+    gridMaxColumns: number;
+    gridMinColumns: number;
+    maxColumnCount: number;
+    onChange: (newSliderValue: number) => void;
+}
 
-const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, maxColumnCount, onChange }: Props) => {
+const GridViewSlider = ({
+    columnCount,
+    gridMaxColumns,
+    gridMinColumns,
+    maxColumnCount,
+    onChange,
+}: GridViewSliderProps) => {
     const { formatMessage } = useIntl();
     const RANGE_STEP = 1;
 
@@ -34,6 +39,7 @@ const GridViewSlider = ({ columnCount, gridMaxColumns, gridMinColumns, maxColumn
                 minusButtonLabel={formatMessage(messages.gridViewDecreaseColumnSize)}
                 onValueChange={onChange}
                 plusButtonLabel={formatMessage(messages.gridViewIncreaseColumnSize)}
+                sliderLabel={formatMessage(messages.gridViewSliderLabel)}
                 step={RANGE_STEP}
                 value={sliderValue}
             />
