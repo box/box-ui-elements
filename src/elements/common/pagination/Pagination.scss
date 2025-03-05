@@ -1,0 +1,18 @@
+@import '../../../styles/variables';
+
+.bdl-Pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .bdl-Pagination-buttons {
+        display: flex;
+        gap: 8px;
+
+        .bdl-Pagination-iconButton {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-cta-border-secondary);
+        }
+    }
+}
