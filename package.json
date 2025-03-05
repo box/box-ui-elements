@@ -167,7 +167,7 @@
         "@types/jest": "^29.5.12",
         "@types/jest-image-snapshot": "^6.4.0",
         "@types/lodash": "^4.14.149",
-        "@types/node": "^13.5.2",
+        "@types/node": "^20.17.23",
         "@types/pikaday": "^1.7.4",
         "@types/puppeteer": "^2.0.1",
         "@types/react": "^18.3.0",
