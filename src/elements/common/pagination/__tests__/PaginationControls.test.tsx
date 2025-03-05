@@ -12,11 +12,11 @@ describe('elements/common/pagination/PaginationControls', () => {
         isSmall: false,
     };
 
-    const renderComponent = (props: Partial<PaginationControlsProps>) =>
+    const renderComponent = (props: Partial<PaginationControlsProps> = {}) =>
         render(<PaginationControls {...defaultProps} {...props} />);
 
     test('should render pagination controls correctly', () => {
-        renderComponent({});
+        renderComponent();
 
         expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument();
