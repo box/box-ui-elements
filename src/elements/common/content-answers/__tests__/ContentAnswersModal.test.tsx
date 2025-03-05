@@ -8,7 +8,6 @@ import ContentAnswersModal from '../ContentAnswersModal';
 import {
     mockApi,
     mockApiReturnError,
-    mockCurrentUser,
     mockFile,
     mockQuestionsWithAnswer,
     mockQuestionsWithError,
@@ -24,7 +23,6 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
                 <Notification.Viewport />
                 <APIContext.Provider value={api}>
                     <ContentAnswersModal
-                        currentUser={mockCurrentUser}
                         file={mockFile}
                         isOpen
                         onRequestClose={jest.fn()}
