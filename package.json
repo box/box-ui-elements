@@ -191,7 +191,7 @@
         "babel-plugin-rewire": "^1.0.0",
         "babel-plugin-styled-components": "^1.10.7",
         "babel-preset-react-app": "^9.1.0",
-        "chromatic": "^10.6.1",
+        "chromatic": "^11.26.1",
         "circular-dependency-plugin": "^5.2.2",
         "classnames": "^2.2.6",
         "color": "^3.1.2",
