@@ -116,6 +116,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         sendQuestion: jest.fn(),
         setCacheValue: jest.fn(),
         shouldPreinitSession: true,
+        setHasQuestions: jest.fn(),
     } as unknown as BoxAISidebarProps;
 
     const renderComponent = async (props = {}) => {
@@ -184,6 +185,30 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                 items: [{ fileType: 'pdf', status: 'supported' }],
             },
         });
+    });
+
+    test('should call setHasQuestions with "false" on load if questions are empty', async () => {
+        await renderComponent();
+
+        expect(mockProps.setHasQuestions).toHaveBeenCalledWith(false);
+    });
+
+    test('should call setHasQuestions with "true" on load if questions are not empty', async () => {
+        await renderComponent({
+            cache: {
+                encodedSession: '1234',
+                questions: [
+                    {
+                        error: 'general',
+                        isCompleted: true,
+                        prompt: 'completed question',
+                    },
+                ],
+                agents: mockAgents,
+            },
+        });
+
+        expect(mockProps.setHasQuestions).toHaveBeenCalledWith(true);
     });
 
     test('should call onClearClick when click "Clear" button', async () => {
