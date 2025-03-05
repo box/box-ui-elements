@@ -53,8 +53,8 @@ const OffsetBasedPagination = ({
             handleNextClick={handleNextClick}
             handlePreviousClick={handlePreviousClick}
             hasNextPage={hasNextPage}
+            hasPageEntryStatus={true}
             hasPreviousPage={hasPreviousPage}
-            isOffsetBasedPagination
             isSmall={isSmall}
             offset={offset}
             pageSize={pageSize}

@@ -7,11 +7,9 @@
 
     .bdl-Pagination-buttons {
         display: flex;
-        gap: 8px;
+        gap: var(--space-2);
 
         .bdl-Pagination-iconButton {
-            width: 40px;
-            height: 40px;
             border: 1px solid var(--border-cta-border-secondary);
         }
     }

@@ -11,8 +11,8 @@ export interface PaginationControlsProps {
     handleNextClick: () => void;
     handlePreviousClick: () => void;
     hasNextPage: boolean;
+    hasPageEntryStatus?: boolean;
     hasPreviousPage: boolean;
-    isOffsetBasedPagination?: boolean;
     isSmall: boolean;
     offset?: number;
     pageSize?: number;
@@ -23,8 +23,8 @@ const PaginationControls = ({
     handleNextClick,
     handlePreviousClick,
     hasNextPage,
+    hasPageEntryStatus = true,
     hasPreviousPage,
-    isOffsetBasedPagination = true,
     isSmall,
     offset = 0,
     pageSize = 0,
@@ -36,7 +36,7 @@ const PaginationControls = ({
 
     return (
         <div className="bdl-Pagination">
-            {isOffsetBasedPagination && (
+            {hasPageEntryStatus && (
                 <FormattedMessage
                     {...messages.pageEntryStatus}
                     values={{ startEntryIndex, endEntryIndex, totalCount }}
@@ -49,8 +49,9 @@ const PaginationControls = ({
                             aria-label={formatMessage(messages.previousPageButton)}
                             className="bdl-Pagination-iconButton"
                             disabled={!hasPreviousPage}
-                            onClick={handlePreviousClick}
                             icon={PointerChevronLeft}
+                            onClick={handlePreviousClick}
+                            size="large"
                         />
                     ) : (
                         <Button disabled={!hasPreviousPage} onClick={handlePreviousClick} variant="secondary">
@@ -64,8 +65,9 @@ const PaginationControls = ({
                             aria-label={formatMessage(messages.nextPageButton)}
                             className="bdl-Pagination-iconButton"
                             disabled={!hasNextPage}
-                            onClick={handleNextClick}
                             icon={PointerChevronRight}
+                            onClick={handleNextClick}
+                            size="large"
                         />
                     ) : (
                         <Button disabled={!hasNextPage} onClick={handleNextClick} variant="secondary">

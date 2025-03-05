@@ -59,9 +59,9 @@ describe('elements/common/pagination/PaginationControls', () => {
         expect(buttons[1]).toHaveClass('bdl-Pagination-iconButton');
     });
 
-    test('should display offset-based pagination status when isOffsetBasedPagination is true', () => {
+    test('should display page entry status when hasPageEntryStatus prop is true', () => {
         renderComponent({
-            isOffsetBasedPagination: true,
+            hasPageEntryStatus: true,
             offset: 0,
             pageSize: 10,
             totalCount: 30,
@@ -70,9 +70,9 @@ describe('elements/common/pagination/PaginationControls', () => {
         expect(screen.getByText(/Showing 1 to 10 of 30 entries/i)).toBeInTheDocument();
     });
 
-    test('should not display pagination status when isOffsetBasedPagination is false', () => {
+    test('should not display page entry status when hasPageEntryStatus prop is false', () => {
         renderComponent({
-            isOffsetBasedPagination: false,
+            hasPageEntryStatus: false,
             offset: 0,
             pageSize: 10,
             totalCount: 30,

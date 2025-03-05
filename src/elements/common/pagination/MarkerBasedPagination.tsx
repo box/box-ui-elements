@@ -31,8 +31,8 @@ const MarkerBasedPagination = ({
             handleNextClick={handleNextClick}
             handlePreviousClick={handlePreviousClick}
             hasNextPage={hasNextMarker}
+            hasPageEntryStatus={false}
             hasPreviousPage={hasPrevMarker}
-            isOffsetBasedPagination={false}
             isSmall={isSmall}
         />
     );
