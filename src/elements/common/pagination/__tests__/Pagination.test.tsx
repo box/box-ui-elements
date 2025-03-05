@@ -69,12 +69,10 @@ describe('elements/common/pagination/Pagination', () => {
         expect(onOffsetChange).not.toHaveBeenCalled();
     });
 
-    test('should render OffsetBasedPagination when both hasNextMarker and hasPrevMarker are false', async () => {
+    test('should render OffsetBasedPagination when both hasNextMarker and hasPrevMarker are set to false by default', async () => {
         const onMarkerBasedPageChange = jest.fn();
         const onOffsetChange = jest.fn();
         renderComponent({
-            hasNextMarker: false,
-            hasPrevMarker: false,
             totalCount: DEFAULT_PAGE_SIZE + 1,
             onMarkerBasedPageChange,
             onOffsetChange,

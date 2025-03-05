@@ -4,14 +4,11 @@ import { render, screen } from '../../../../test-utils/testing-library';
 import MarkerBasedPagination, { MarkerBasedPaginationProps } from '../MarkerBasedPagination';
 
 describe('elements/common/pagination/MarkerBasedPagination', () => {
-    const renderComponent = (props: Partial<MarkerBasedPaginationProps>) =>
+    const renderComponent = (props: Partial<MarkerBasedPaginationProps> = {}) =>
         render(<MarkerBasedPagination isSmall={false} {...props} />);
 
-    test('should not render pagination controls when both markers are false', () => {
-        renderComponent({
-            hasNextMarker: false,
-            hasPrevMarker: false,
-        });
+    test('should not render pagination controls when both markers are set to false by default', () => {
+        renderComponent();
 
         expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
