@@ -2,7 +2,7 @@
  * @file Redesigned Metadata sidebar component
  * @author Box
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -113,6 +113,7 @@ function MetadataSidebarRedesign({
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
+    const isSessionInitiated = useRef(false);
 
     const [isLargeFile, setIsLargeFile] = useState<boolean>(false);
 
@@ -271,7 +272,8 @@ function MetadataSidebarRedesign({
         metadataTaxonomyNodeAncestorsFetcher(api, fileId, scope, taxonomyKey, nodeID);
 
     useEffect(() => {
-        if (createSessionRequest && fileId) {
+        if (createSessionRequest && fileId && !isSessionInitiated.current) {
+            isSessionInitiated.current = true;
             createSessionRequest({ items: [{ id: fileId }] }, fileId).then(
                 ({ metadata = { is_large_file: false } }) => {
                     setIsLargeFile(metadata.is_large_file);
