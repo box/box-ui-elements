@@ -10,6 +10,7 @@ import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
+import { usePromptFocus } from '@box/box-ai-content-answers';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -74,8 +75,15 @@ const SidebarNav = ({
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
 
+    const { focusPrompt } = usePromptFocus('.be.bcs');
+
     const handleSidebarNavButtonClick = (sidebarview: string) => {
         onPanelChange(sidebarview, false);
+
+        // If the Box AI sidebar is enabled, focus the Box AI sidebar prompt
+        if (sidebarview === SIDEBAR_VIEW_BOXAI) {
+            focusPrompt();
+        }
     };
 
     return (
