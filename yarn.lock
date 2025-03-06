@@ -1509,6 +1509,13 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
+"@box/combobox-with-api@^0.27.4":
+  version "0.27.4"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.27.4.tgz#f1003180ca520fe54754ceb7fb99e7210a2aa1ac"
+  integrity sha512-OlxCXryQ79Ymu71TwlW3bUkAOo8X4r/kGHX0y/ELPVk5ncJdNitYG/CmENaUmRwt1s9JWogqKpEartQvvtHwMQ==
+  dependencies:
+    "@box/tree" "^0.39.4"
+
 "@box/frontend@^10.0.0":
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-10.0.0.tgz#9c40c05ee3d57f6e830327106203ffc7eca0cb5c"
@@ -1528,10 +1535,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^0.92.3":
-  version "0.92.3"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.92.3.tgz#7f9d14302598f48e6e6d5e11a62e93b771029622"
-  integrity sha512-mbRjn9P4rZWP/ZZIdFgh3uYnfppduyHAlZ/IEhX0fL4KfSZry0AU2/ja37M1a6ipXuZ1q8xur95nz7zQr0/oSA==
+"@box/metadata-editor@^0.96.0":
+  version "0.96.0"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.96.0.tgz#f98c07b12e6ab7c862e5d2438098cf93e35d86da"
+  integrity sha512-WK5J3Fx1DkTK/3puHyv7bsXek9Stc0JmIYu2uAscGKYw6kkEo0rFXdjxfiBvPn3Tzfrq66QGlcZ+obxWDyk97Q==
 
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"
@@ -1544,6 +1551,11 @@
     loose-envify "^1.4.0"
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
+
+"@box/tree@^0.39.4":
+  version "0.39.4"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.39.4.tgz#c10b4277e4732b3808c97d8fc9977ac9506bb6cc"
+  integrity sha512-Vnd63yIqDGfwOXZiTtGoH7yFTPLcYs4t7ctAxSn0c/Jq+G6k4wHGEbw3vUdCAziXDBkBMFA01IsFArCFf5gm3w==
 
 "@bundled-es-modules/cookie@^2.0.0":
   version "2.0.0"
@@ -19883,6 +19895,11 @@ rc@1.2.8, rc@^1.0.1, rc@^1.1.6, rc@^1.2.8:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-accessible-treeview@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/react-accessible-treeview/-/react-accessible-treeview-2.11.0.tgz#20d157ed65839d3c93c70b5116312b19542d3c57"
+  integrity sha512-KgyDQNq64tfy1AOOlxc2qzkDXjQ8dAlPb2jrFlamF2BagkrM3s4qQKg6YaOuAcZLw1wtps4RfFB2sEO3Hh+SvA==
 
 react-animate-height@^3.2.3:
   version "3.2.3"

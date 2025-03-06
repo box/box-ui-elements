@@ -3,10 +3,8 @@ import {
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
-    type FetcherResponse,
-    type BaseOptionType,
-    type PaginationQueryInput,
 } from '@box/metadata-editor';
+import { type TaxonomyOptionsFetcher } from '@box/metadata-editor/dist/types/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types';
 import React from 'react';
 import {
     ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
@@ -27,13 +25,7 @@ export interface MetadataInstanceEditorProps {
     onDiscardUnsavedChanges: () => void;
     onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
-    taxonomyOptionsFetcher: (
-        scope: string,
-        templateKey: string,
-        fieldKey: string,
-        level: number,
-        options: PaginationQueryInput,
-    ) => Promise<FetcherResponse<BaseOptionType>>;
+    taxonomyOptionsFetcher: TaxonomyOptionsFetcher;
     template: MetadataTemplateInstance;
 }
 
@@ -55,6 +47,8 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
 }) => {
     return (
         <MetadataInstanceForm
+            // TODO investigate if this property should be optional and by default false
+            isMultilevelTaxonomyFieldEnabled={false}
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             errorCode={errorCode}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
