@@ -142,6 +142,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
                     itemIDs={[fileID]}
                     restoredQuestions={questionsWithoutInProgress}
                     restoredSession={cache.encodedSession}
+                    restoredShouldShowLandingPage={cache.shouldShowLandingPage}
                     shouldPreinitSession={shouldPreinitSession}
                     suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
                     warningNotice={spreadsheetNotice}
