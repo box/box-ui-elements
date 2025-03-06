@@ -8,6 +8,12 @@ import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
 export const basic = {};
 
+export const withPagination = {
+    args: {
+        initialPageSize: 1,
+    },
+};
+
 export const selectedEmptyState = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
