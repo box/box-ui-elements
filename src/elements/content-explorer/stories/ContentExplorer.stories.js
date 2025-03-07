@@ -5,6 +5,12 @@ import mockTheme from '../../common/__mocks__/mockTheme';
 
 export const basic = {};
 
+export const withPagination = {
+    args: {
+        initialPageSize: 5,
+    },
+};
+
 export const withSidebar = {
     args: {
         contentPreviewProps: {

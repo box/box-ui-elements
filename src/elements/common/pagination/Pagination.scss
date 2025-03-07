@@ -1,0 +1,16 @@
+@import '../../../styles/variables';
+
+.bdl-Pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .bdl-Pagination-buttons {
+        display: flex;
+        gap: var(--space-2);
+
+        .bdl-Pagination-iconButton {
+            border: 1px solid var(--border-cta-border-secondary);
+        }
+    }
+}

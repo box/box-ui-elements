@@ -1,23 +1,13 @@
 @import '../common/variables';
 
 .bce-Footer {
-    display: flex;
-    flex: 0 0 70px;
-    align-items: center;
-    justify-content: flex-end;
-    max-height: 70px;
+    align-content: center;
+    height: 70px;
     padding: 0 20px;
-    background-color: $almost-white;
-    border-top: 1px solid $bdl-gray-10;
+    border-top: 1px solid var(--border-divider-border);
 
     &:empty {
         display: none;
         flex-basis: 0;
-    }
-
-    .bdl-ButtonGroup,
-    .btn-group {
-        margin-right: 5px;
-        margin-left: 5px;
     }
 }

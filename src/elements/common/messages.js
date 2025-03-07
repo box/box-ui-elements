@@ -916,10 +916,20 @@ const messages = defineMessages({
         description: 'Next page button tooltip',
         id: 'be.pagination.nextPage',
     },
+    nextPageButton: {
+        defaultMessage: 'Next',
+        description: 'Next page button',
+        id: 'be.pagination.nextPageButton',
+    },
     pageStatus: {
         defaultMessage: '{pageNumber} of {pageCount}',
         description: 'Pagination menu button with current page number out of total number of pages',
         id: 'be.pagination.pageStatus',
+    },
+    pageEntryStatus: {
+        defaultMessage: 'Showing {startEntryIndex} to {endEntryIndex} of {totalCount} entries',
+        description: 'Pagination menu status with the range of entries shown',
+        id: 'be.pagination.pageEntryStatus',
     },
     previousFile: {
         defaultMessage: 'Previous File',
@@ -930,6 +940,11 @@ const messages = defineMessages({
         defaultMessage: 'Previous Page',
         description: 'Previous page button tooltip',
         id: 'be.pagination.previousPage',
+    },
+    previousPageButton: {
+        defaultMessage: 'Previous',
+        description: 'Previous page button',
+        id: 'be.pagination.previousPageButton',
     },
     previousSegment: {
         id: 'be.previousSegment',
