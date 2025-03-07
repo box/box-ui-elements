@@ -48,6 +48,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
         isResetChatEnabled,
         onSelectAgent,
         questions,
+        shouldShowLandingPage,
         sendQuestion,
         stopQuestion,
         ...rest
@@ -70,6 +71,10 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
     } = React.useContext(BoxAISidebarContext);
     const { agents, requestState, selectedAgent } = useAgents();
     const { questions: cacheQuestions } = cache;
+
+    if (cache.shouldShowLandingPage !== shouldShowLandingPage) {
+        setCacheValue('shouldShowLandingPage', shouldShowLandingPage);
+    }
 
     if (cache.encodedSession !== encodedSession) {
         setCacheValue('encodedSession', encodedSession);
@@ -204,6 +209,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                         onUserIntentToUseAI={handleUserIntentToUseAI}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
+                        shouldShowLandingPage={shouldShowLandingPage}
                         showLoadingIndicator={isLoading && shouldPreinitSession}
                         variant="sidebar"
                         recordAction={recordAction}
@@ -231,6 +237,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                 open={isModalOpen}
                 questions={questions}
                 recordAction={isModalOpen ? recordAction : undefined}
+                shouldShowLandingPage={shouldShowLandingPage}
                 showLoadingIndicator={false}
                 stopPropagationOnEsc
                 stopQuestion={stopQuestion}

@@ -68,6 +68,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             encodedSession: '',
             questions: [],
             agents: mockAgents,
+            shouldShowLandingPage: true,
         },
         createSessionRequest: jest.fn(() => ({ encodedSession: '1234' })),
         elementId: '123',
@@ -205,6 +206,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                     },
                 ],
                 agents: mockAgents,
+                shouldShowLandingPage: false,
             },
         });
 
@@ -254,6 +256,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                     },
                 ],
                 agents: mockAgents,
+                shouldShowLandingPage: false,
             },
         });
 
