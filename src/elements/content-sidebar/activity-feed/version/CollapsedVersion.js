@@ -16,10 +16,6 @@ import type { User, FileVersions } from '../../../../common/types/core';
 import { ACTION_TYPE_CREATED, ACTION_TYPE_RESTORED, ACTION_TYPE_TRASHED } from '../../../../constants';
 import './Version.scss';
 
-const ACTION_MESSAGE_UPLOAD = 'uploaded';
-const ACTION_MESSAGE_RESTORE = 'restored';
-const ACTION_MESSAGE_TRASH = 'deleted';
-
 function getMessageForAction(
     action: string,
     collaborators: { [collaborator_id: string]: User } = {},
@@ -37,19 +33,24 @@ function getMessageForAction(
         return null;
     }
 
-    let actionMessage = '';
+    let singleUserMessage = '';
+    let multipleUsersMessage = '';
     switch (action) {
         case ACTION_TYPE_CREATED:
-            actionMessage = ACTION_MESSAGE_UPLOAD;
+            singleUserMessage = messages.versionUploadCollapsed;
+            multipleUsersMessage = messages.versionMultipleUsersUploaded;
             break;
         case ACTION_TYPE_RESTORED:
-            actionMessage = ACTION_MESSAGE_RESTORE;
+            singleUserMessage = messages.versionRestoredCollapsed;
+            multipleUsersMessage = messages.versionMultipleUsersRestored;
             break;
         case ACTION_TYPE_TRASHED:
-            actionMessage = ACTION_MESSAGE_TRASH;
+            singleUserMessage = messages.versionTrashedCollapsed;
+            multipleUsersMessage = messages.versionMultipleUsersTrashed;
             break;
         default:
-            actionMessage = '';
+            singleUserMessage = '';
+            multipleUsersMessage = '';
             break;
     }
 
@@ -68,11 +69,10 @@ function getMessageForAction(
         if (shouldUseUAA) {
             return (
                 <FormattedMessage
-                    {...messages.versionCollapsed}
+                    {...singleUserMessage}
                     values={{
                         name: <strong>{collaborator?.name}</strong>,
                         versions: versionRange,
-                        actionMessage,
                     }}
                 />
             );
@@ -92,11 +92,10 @@ function getMessageForAction(
     if (shouldUseUAA) {
         return (
             <FormattedMessage
-                {...messages.versionMultipleUsersCollapsed}
+                {...multipleUsersMessage}
                 values={{
                     numberOfCollaborators,
                     versions: versionRange,
-                    actionMessage,
                 }}
             />
         );
