@@ -41,11 +41,11 @@ function getMessageForAction(
             multipleUsersMessage = messages.versionMultipleUsersUploaded;
             break;
         case ACTION_TYPE_RESTORED:
-            singleUserMessage = messages.versionRestoredCollapsed;
+            singleUserMessage = messages.versionRestoreCollapsed;
             multipleUsersMessage = messages.versionMultipleUsersRestored;
             break;
         case ACTION_TYPE_TRASHED:
-            singleUserMessage = messages.versionTrashedCollapsed;
+            singleUserMessage = messages.versionTrashCollapsed;
             multipleUsersMessage = messages.versionMultipleUsersTrashed;
             break;
         default:
