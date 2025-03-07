@@ -839,7 +839,7 @@ const messages = defineMessages({
     },
     versionMultipleUsersTrashed: {
         id: 'be.versionMultipleUsersTrashed',
-        defaultMessage: '{numberOfCollaborators} collaborators trashed v{versions}',
+        defaultMessage: '{numberOfCollaborators} collaborators deleted v{versions}',
         description:
             'Message displayed in the activity feed to represent the range of versions trashed by multiple users. {numberOfCollaborators} is a number. {versions} is a range of versions.',
     },
@@ -856,7 +856,7 @@ const messages = defineMessages({
     },
     versionTrashCollapsed: {
         id: 'be.versionTrashCollapsed',
-        defaultMessage: '{name} trashed v{versions}',
+        defaultMessage: '{name} deleted v{versions}',
         description: 'Message to indicate a user trashed a file',
     },
     versionUploaded: {
