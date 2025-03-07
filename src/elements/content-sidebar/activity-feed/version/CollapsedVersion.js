@@ -33,8 +33,8 @@ function getMessageForAction(
         return null;
     }
 
-    let singleUserMessage = '';
-    let multipleUsersMessage = '';
+    let singleUserMessage = messages.versionUploadCollapsed;
+    let multipleUsersMessage = messages.versionMultipleUsersUploaded;
     switch (action) {
         case ACTION_TYPE_CREATED:
             singleUserMessage = messages.versionUploadCollapsed;
@@ -49,8 +49,6 @@ function getMessageForAction(
             multipleUsersMessage = messages.versionMultipleUsersTrashed;
             break;
         default:
-            singleUserMessage = '';
-            multipleUsersMessage = '';
             break;
     }
 

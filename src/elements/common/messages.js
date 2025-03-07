@@ -852,12 +852,14 @@ const messages = defineMessages({
     versionRestoreCollapsed: {
         id: 'be.versionRestoreCollapsed',
         defaultMessage: '{name} restored v{versions}',
-        description: 'Message to indicate a user restored a file',
+        description:
+            'Message displayed in the activity feed to represent the range of versions restored by a single user. {name} is the user who restored. {versions} is a range of versions.',
     },
     versionTrashCollapsed: {
         id: 'be.versionTrashCollapsed',
         defaultMessage: '{name} deleted v{versions}',
-        description: 'Message to indicate a user trashed a file',
+        description:
+            'Message displayed in the activity feed to represent the range of versions deleted by a single user. {name} is the user who deleted. {versions} is a range of versions.',
     },
     versionUploaded: {
         id: 'be.versionUploaded',
