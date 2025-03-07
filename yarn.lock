@@ -1510,11 +1510,11 @@
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
 "@box/combobox-with-api@^0.27.4":
-  version "0.27.4"
-  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.27.4.tgz#f1003180ca520fe54754ceb7fb99e7210a2aa1ac"
-  integrity sha512-OlxCXryQ79Ymu71TwlW3bUkAOo8X4r/kGHX0y/ELPVk5ncJdNitYG/CmENaUmRwt1s9JWogqKpEartQvvtHwMQ==
+  version "0.27.5"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.27.5.tgz#9c2dcc1db0da6689cc55701026698bbff218d283"
+  integrity sha512-NXEo6OmpaPdKrxrZrl9kKrPquskKcKoAa1utMmEeOR2BMTNPtSMVrMxZ0JnUURn16jo1mttXaTqE8E1mNxa5Gw==
   dependencies:
-    "@box/tree" "^0.39.4"
+    "@box/tree" "^0.39.5"
 
 "@box/frontend@^10.0.0":
   version "10.0.0"
@@ -1552,10 +1552,10 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/tree@^0.39.4":
-  version "0.39.4"
-  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.39.4.tgz#c10b4277e4732b3808c97d8fc9977ac9506bb6cc"
-  integrity sha512-Vnd63yIqDGfwOXZiTtGoH7yFTPLcYs4t7ctAxSn0c/Jq+G6k4wHGEbw3vUdCAziXDBkBMFA01IsFArCFf5gm3w==
+"@box/tree@^0.39.5":
+  version "0.39.5"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.39.5.tgz#6e3e6a4a8a540913948290020954d32ae5b46a7f"
+  integrity sha512-q/xcuWSF/LqSv2ODCwKdSoMmOqkZCOz+sftL7VCoMr1tT8GE9HBJeP5k/HYB5/gzKsMgMjLNAuOxCoh2soEtOw==
 
 "@bundled-es-modules/cookie@^2.0.0":
   version "2.0.0"
