@@ -54,6 +54,7 @@ export interface BoxAISidebarProps {
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldPreinitSession?: boolean;
+    setHasQuestions: (hasQuestions: boolean) => void;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -73,6 +74,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         recordAction,
         setCacheValue,
         shouldPreinitSession = true,
+        setHasQuestions,
         ...rest
     } = props;
     const { questions } = cache;
@@ -105,6 +107,12 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             shouldPreinitSession,
         ],
     );
+
+    React.useEffect(() => {
+        if (setHasQuestions) {
+            setHasQuestions(questions.length > 0);
+        }
+    }, [questions.length, setHasQuestions]);
 
     let questionsWithoutInProgress = questions;
     if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
