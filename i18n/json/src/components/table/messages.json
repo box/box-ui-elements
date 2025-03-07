@@ -1,0 +1,37 @@
+[
+  {
+    "id": "boxui.core.selection.downDescription",
+    "description": "Description for keyboard shortcut to select next item in the file list",
+    "defaultMessage": "Select next item"
+  },
+  {
+    "id": "boxui.core.selection.upDescription",
+    "description": "Description for keyboard shortcut to select previous item in the file list",
+    "defaultMessage": "Select previous item"
+  },
+  {
+    "id": "boxui.core.selection.shiftXDescription",
+    "description": "Description for keyboard shortcut to select previous item in the file list",
+    "defaultMessage": "Select current item"
+  },
+  {
+    "id": "boxui.core.selection.shiftUpDescription",
+    "description": "Description for keyboard shortcut to add previous item to current selection in the file list",
+    "defaultMessage": "Add previous item to current selection"
+  },
+  {
+    "id": "boxui.core.selection.shiftDownDescription",
+    "description": "Description for keyboard shortcut to add next item to current selection in the file list",
+    "defaultMessage": "Add next item to current selection"
+  },
+  {
+    "id": "boxui.core.selection.selectAllDescription",
+    "description": "Description for keyboard shortcut to select all items in the file list",
+    "defaultMessage": "Select all items"
+  },
+  {
+    "id": "boxui.core.selection.deselectAllDescription",
+    "description": "Description for keyboard shortcut to deselect all items in the file list",
+    "defaultMessage": "Deselect all items"
+  }
+]

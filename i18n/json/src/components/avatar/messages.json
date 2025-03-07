@@ -1,0 +1,7 @@
+[
+  {
+    "id": "boxui.avatar.externalUser",
+    "description": "Text for an icon aria label to convey an external user of the enterprise",
+    "defaultMessage": "External user"
+  }
+]
