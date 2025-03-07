@@ -1,5 +1,4 @@
 /**
- * @flow
  * @file Content Explorer Delete Confirmation Dialog
  * @author Box
  */
@@ -59,4 +58,4 @@ const ShareAccessSelect = ({ className, canSetShareAccess, onChange, item, intl 
     );
 };
 
-export default injectIntl(ShareAccessSelect);
+export default injectIntl(ShareAccessSelect); 
