@@ -831,23 +831,35 @@ const messages = defineMessages({
         description:
             'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. {numberOfCollaborators} is a number and {versions} is a range of versions.',
     },
+    versionMultipleUsersRestored: {
+        id: 'be.versionMultipleUsersRestored',
+        defaultMessage: '{numberOfCollaborators} collaborators restored v{versions}',
+        description:
+            'Message displayed in the activity feed to represent the range of versions restored by multiple users. {numberOfCollaborators} is a number. {versions} is a range of versions.',
+    },
+    versionMultipleUsersTrashed: {
+        id: 'be.versionMultipleUsersTrashed',
+        defaultMessage: '{numberOfCollaborators} collaborators deleted v{versions}',
+        description:
+            'Message displayed in the activity feed to represent the range of versions trashed by multiple users. {numberOfCollaborators} is a number. {versions} is a range of versions.',
+    },
     versionUploadCollapsed: {
         id: 'be.versionUploadCollapsed',
         defaultMessage: '{name} uploaded v{versions}',
         description:
             'Message displayed in the activity feed to represent the range of versions uploaded by a single user. {name} is the user who uploaded. {versions} is a range of versions.',
     },
-    versionMultipleUsersCollapsed: {
-        id: 'be.versionMultipleUsersCollapsed',
-        defaultMessage: '{numberOfCollaborators} collaborators {actionMessage} v{versions}',
+    versionRestoreCollapsed: {
+        id: 'be.versionRestoreCollapsed',
+        defaultMessage: '{name} restored v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions actioned by multiple users. {numberOfCollaborators} is a number. {actionMessage} is the action. {versions} is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions restored by a single user. {name} is the user who restored. {versions} is a range of versions.',
     },
-    versionCollapsed: {
-        id: 'be.versionCollapsed',
-        defaultMessage: '{name} {actionMessage} v{versions}',
+    versionTrashCollapsed: {
+        id: 'be.versionTrashCollapsed',
+        defaultMessage: '{name} deleted v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions actioned by a single user. {name} is the user who did the action. {actionMessage} is the action. {versions} is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions deleted by a single user. {name} is the user who deleted. {versions} is a range of versions.',
     },
     versionUploaded: {
         id: 'be.versionUploaded',
