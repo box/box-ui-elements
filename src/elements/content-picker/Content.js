@@ -62,6 +62,7 @@ const Content = ({
     onShareAccessChange,
     onFocusChange,
     extensionsWhitelist,
+    itemActions,
 }: Props) => (
     <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
@@ -87,6 +88,7 @@ const Content = ({
                 onFocusChange={onFocusChange}
                 onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
+                itemActions={itemActions}
             />
         )}
     </div>
