@@ -1211,6 +1211,7 @@ class ContentPicker extends Component<Props, State> {
             renderCustomActionButtons,
             showSelectedButton,
             theme,
+            itemActions,
         }: Props = this.props;
         const {
             view,
@@ -1278,6 +1279,7 @@ class ContentPicker extends Component<Props, State> {
                             onItemClick={this.onItemClick}
                             onFocusChange={this.onFocusChange}
                             onShareAccessChange={this.changeShareAccess}
+                            itemActions={itemActions}
                         />
                         <Footer
                             currentCollection={currentCollection}

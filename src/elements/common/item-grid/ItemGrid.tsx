@@ -7,18 +7,19 @@ import { GridList } from '@box/blueprint-web';
 import { ItemDate, ItemOptions, ItemTypeIcon } from '../item';
 import { isThumbnailAvailable } from '../utils';
 
-import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
+import { TYPE_FOLDER, TYPE_WEBLINK, VIEW_MODE_GRID } from '../../../constants';
 
 import messages from './messages';
 
 import type { BoxItem, View } from '../../../common/types/core';
-import type { ItemEventHandlers, ItemEventPermissions } from '../item';
+import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from '../item';
 
 import './ItemGrid.scss';
 
 export interface ItemGridProps extends ItemEventHandlers, ItemEventPermissions {
     gridColumnCount?: number;
     isTouch?: boolean;
+    itemActions?: ItemAction[];
     items: BoxItem[];
     view: View;
 }
@@ -26,8 +27,8 @@ export interface ItemGridProps extends ItemEventHandlers, ItemEventPermissions {
 const ItemGrid = ({
     canPreview = false,
     gridColumnCount = 1,
-    items,
     isTouch = false,
+    items,
     onItemClick = noop,
     view,
     ...rest
@@ -64,7 +65,7 @@ const ItemGrid = ({
                         <GridList.Subtitle>
                             <ItemDate item={item} view={view} />
                         </GridList.Subtitle>
-                        <ItemOptions canPreview={canPreview} isGridView item={item} {...rest} />
+                        <ItemOptions canPreview={canPreview} item={item} viewMode={VIEW_MODE_GRID} {...rest} />
                     </GridList.Item>
                 );
             })}

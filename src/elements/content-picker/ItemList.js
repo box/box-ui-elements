@@ -20,6 +20,8 @@ import type { View, Collection, BoxItem } from '../../common/types/core';
 import '@box/react-virtualized/styles.css';
 import './ItemList.scss';
 
+import { ItemOptions } from '../common/item';
+
 type Props = {
     canSetShareAccess: boolean,
     currentCollection: Collection,
@@ -56,6 +58,7 @@ const ItemList = ({
     onFocusChange,
     currentCollection,
     tableRef,
+    itemActions,
 }: Props) => {
     const iconCell = iconCellRenderer();
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
@@ -73,6 +76,9 @@ const ItemList = ({
         extensionsWhitelist,
         hasHitSelectionLimit,
     );
+    const itemOptions = ({ rowData }) => {
+        return <ItemOptions item={rowData} itemActions={itemActions} />;
+    };
     const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;
 
@@ -161,6 +167,9 @@ const ItemList = ({
                                     flexShrink={0}
                                 />
                             )}
+                            {itemActions ? (
+                                <Column dataKey={'options'} cellRenderer={itemOptions} width={50} flexShrink={0} />
+                            ) : null}
                             <Column
                                 dataKey={FIELD_ID}
                                 cellRenderer={selectionCell}
