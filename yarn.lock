@@ -1517,10 +1517,10 @@
     "@box/tree" "^0.40.2"
     react-accessible-treeview "2.9.0"
 
-"@box/frontend@^10.0.0":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-10.0.0.tgz#9c40c05ee3d57f6e830327106203ffc7eca0cb5c"
-  integrity sha512-FN6ZbnTNKHWw6EcYGIbbBo7aPPObnWrQBSI1VNUotHvqn2+Pn5qfM3mZ20UieJENxv11o4WZUvPEJJBkNB88Yg==
+"@box/frontend@^10.0.1":
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/@box/frontend/-/frontend-10.0.1.tgz#7b6b7631b2ccb9cf6ab9ce6fd8a96f1f2f01edc2"
+  integrity sha512-k0d/xgVe63oUUELBqyse97+ZTDfFHIy/G13T6DoEH2e9FkSnE+QBIgpIVJLSMVz2CyUphbyJ2fUYs4rE5FJwDA==
   dependencies:
     properties-parser "^0.3.1"
     rimraf "^3.0.0"
@@ -1536,10 +1536,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^0.96.0":
-  version "0.96.0"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.96.0.tgz#f98c07b12e6ab7c862e5d2438098cf93e35d86da"
-  integrity sha512-WK5J3Fx1DkTK/3puHyv7bsXek9Stc0JmIYu2uAscGKYw6kkEo0rFXdjxfiBvPn3Tzfrq66QGlcZ+obxWDyk97Q==
+"@box/metadata-editor@^0.96.1":
+  version "0.96.1"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.96.1.tgz#9f8fe1865ebf4a18769b280a2cbcaca8496b3497"
+  integrity sha512-JJrZk+HbEXn0M2c2S98KIAoh6uSbHdwFbC8oUDVqlqPHDbmUwzX242Px4gZPXzlmNsT78TmJfkOUmEqg4JXgig==
 
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"
