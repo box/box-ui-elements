@@ -2,7 +2,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitFor, within } from '../../../test-utils/testing-library';
 import { ContentExplorerComponent as ContentExplorer, ContentExplorerProps } from '../ContentExplorer';
-import { mockRootFolder, mockRootFolderSharedLink } from '../../common/__mocks__/mockRootFolder';
+import { mockRecentItems, mockRootFolder, mockRootFolderSharedLink } from '../../common/__mocks__/mockRootFolder';
 import { mockMetadata, mockSchema } from '../../common/__mocks__/mockMetadata';
 import mockSubFolder from '../../common/__mocks__/mockSubfolder';
 
@@ -19,6 +19,8 @@ jest.mock('../../../utils/Xhr', () => {
                         });
                     case 'https://api.box.com/2.0/metadata_templates/enterprise/templateName/schema':
                         return Promise.resolve({ data: mockSchema });
+                    case 'https://api.box.com/2.0/recent_items':
+                        return Promise.resolve({ data: mockRecentItems });
                     default:
                         return Promise.reject(new Error('Not Found'));
                 }
@@ -493,6 +495,34 @@ describe('elements/content-explorer/ContentExplorer', () => {
             await userEvent.keyboard('gu');
 
             expect(screen.getByLabelText('Upload')).toHaveFocus();
+        });
+
+        test('should show recents on "r" key press with global modifier', async () => {
+            renderComponent();
+
+            await waitFor(() => {
+                expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
+                expect(screen.getByText('Please wait while the items load...')).toBeInTheDocument();
+            });
+
+            await userEvent.tab();
+            await userEvent.keyboard('gr');
+
+            expect(screen.getByText('Recents')).toBeInTheDocument();
+        });
+
+        test('should open create folder dialog on "n" key press with global modifier', async () => {
+            renderComponent({ canCreateNewFolder: true });
+
+            await waitFor(() => {
+                expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
+                expect(screen.getByText('Please wait while the items load...')).toBeInTheDocument();
+            });
+
+            await userEvent.tab();
+            await userEvent.keyboard('gn');
+
+            expect(screen.getByText('Please enter a name.')).toBeInTheDocument();
         });
     });
 });
