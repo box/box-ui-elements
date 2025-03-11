@@ -1509,12 +1509,13 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/combobox-with-api@^0.27.4":
-  version "0.27.5"
-  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.27.5.tgz#9c2dcc1db0da6689cc55701026698bbff218d283"
-  integrity sha512-NXEo6OmpaPdKrxrZrl9kKrPquskKcKoAa1utMmEeOR2BMTNPtSMVrMxZ0JnUURn16jo1mttXaTqE8E1mNxa5Gw==
+"@box/combobox-with-api@^0.28.3":
+  version "0.28.3"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.28.3.tgz#b1b12fec3397573895749c570b5f4e037a7e2766"
+  integrity sha512-O0eyriJjd4zlaaU0xzu2mk/oU1ccKhsFlu0smtM3yBbrtewJ/zn7wroON1GZncvbxrakDdnqvh3nZ0o9h2a9WQ==
   dependencies:
-    "@box/tree" "^0.39.5"
+    "@box/tree" "^0.40.2"
+    react-accessible-treeview "2.9.0"
 
 "@box/frontend@^10.0.0":
   version "10.0.0"
@@ -1552,10 +1553,10 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/tree@^0.39.5":
-  version "0.39.5"
-  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.39.5.tgz#6e3e6a4a8a540913948290020954d32ae5b46a7f"
-  integrity sha512-q/xcuWSF/LqSv2ODCwKdSoMmOqkZCOz+sftL7VCoMr1tT8GE9HBJeP5k/HYB5/gzKsMgMjLNAuOxCoh2soEtOw==
+"@box/tree@^0.40.2":
+  version "0.40.2"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.40.2.tgz#2c19cfddf58143a75e2e7204e0c42bc3a4cc5735"
+  integrity sha512-r8+sBUfEpaHhaeOoulkMjFp6vwCO1FuyDuJDo1YmI83ki/8B6iFb0M8c+J2Uz2yofv151eKnQPOHy43NMXy9Hw==
 
 "@bundled-es-modules/cookie@^2.0.0":
   version "2.0.0"
@@ -19896,10 +19897,10 @@ rc@1.2.8, rc@^1.0.1, rc@^1.1.6, rc@^1.2.8:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-accessible-treeview@^2.11.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/react-accessible-treeview/-/react-accessible-treeview-2.11.0.tgz#20d157ed65839d3c93c70b5116312b19542d3c57"
-  integrity sha512-KgyDQNq64tfy1AOOlxc2qzkDXjQ8dAlPb2jrFlamF2BagkrM3s4qQKg6YaOuAcZLw1wtps4RfFB2sEO3Hh+SvA==
+react-accessible-treeview@2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-accessible-treeview/-/react-accessible-treeview-2.9.0.tgz#30e8254bcdbc6648d19606f3b905150b562c6c33"
+  integrity sha512-fzUQVtci4TPj0GWpxI6FRGeMTeCFBX/hiTZdO7LelZchviSTNDZzJ6AMWNJNlm8a4Y3uhgr7gTYftKOTHwCKkw==
 
 react-animate-height@^3.2.3:
   version "3.2.3"
