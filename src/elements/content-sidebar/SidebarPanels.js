@@ -140,6 +140,7 @@ class SidebarPanels extends React.Component<Props, State> {
             requestState: 'not_started',
         },
         encodedSession: null,
+        suggestions: [],
         questions: [],
     };
 
@@ -171,7 +172,7 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'questions', value: any) => {
+    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'suggestions' | 'questions', value: any) => {
         this.boxAiSidebarCache[key] = value;
     };
 

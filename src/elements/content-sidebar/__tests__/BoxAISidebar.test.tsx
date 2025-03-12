@@ -68,6 +68,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             encodedSession: '',
             questions: [],
             agents: mockAgents,
+            suggestions: [],
         },
         createSessionRequest: jest.fn(() => ({ encodedSession: '1234' })),
         elementId: '123',
@@ -237,6 +238,28 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         expect(screen.getByText('Welcome to Box AI', { exact: false })).toBeInTheDocument();
     });
 
+    test('should render cached custom suggested questions', async () => {
+        await renderComponent( {
+            cache: {
+                encodedSession: '1234',
+                questions: [],
+                agents: mockAgents,
+                suggestions: [
+                    {
+                        id: 'suggested-question-1',
+                        prompt: 'Summarize this document',
+                        label: 'Please summarize this document',
+                    },
+                ],
+            },
+            hasCustomSuggestedQuestions: true,
+            shouldShowLandingPage: true,
+        });
+
+        expect(screen.queryByText('Summarize this document', { exact: false })).toBeInTheDocument();
+        expect(screen.queryByText('Loading suggestions', { exact: false })).not.toBeInTheDocument();
+    });
+
     test('should not set questions that are in progress', async () => {
         await renderComponent({
             cache: {
@@ -254,6 +277,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                     },
                 ],
                 agents: mockAgents,
+                suggestions: [],
             },
         });
 
