@@ -26,11 +26,6 @@ export const basic = {
         expect(modal.getByText(/Welcome to Box AI/i)).toBeInTheDocument();
         expect(modal.getByText('Chat cleared when you close pdf')).toBeInTheDocument();
 
-        expect(modal.getByText('Summarize this document')).toBeInTheDocument();
-        expect(modal.getByText('What are the key takeaways?')).toBeInTheDocument();
-        expect(modal.getByText('How can this document be improved?')).toBeInTheDocument();
-        expect(modal.getByText('Are there any next steps defined?')).toBeInTheDocument();
-
         expect(modal.getByText('Ask Box AI')).toBeInTheDocument();
     },
 };
@@ -75,27 +70,6 @@ export const submitAnswer = {
     },
 };
 
-export const clickOnSuggestion = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const button = await canvas.findByRole('button', { name: 'Box AI' }, { timeout: WAIT_TIMEOUT });
-        expect(button).toBeInTheDocument();
-        await userEvent.click(button);
-
-        const dialog = await waitFor(() => document.querySelector('[role="dialog"]'));
-        expect(dialog).toBeInTheDocument();
-
-        const modal = within(dialog);
-        const suggestion = modal.getByText('Summarize this document');
-        await userEvent.click(suggestion);
-
-        const answer = await modal.findByText('Public APIs are important because of key and important reasons.');
-        expect(answer).toBeInTheDocument();
-
-        expect(modal.getByText('Based on:')).toBeInTheDocument();
-    },
-};
-
 export const hoverOverCitation = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -107,8 +81,11 @@ export const hoverOverCitation = {
 
         expect(dialog).toBeInTheDocument();
         const modal = within(dialog);
-        const suggestion = modal.getByText('Summarize this document');
-        await userEvent.click(suggestion);
+        const textInput = modal.getByRole('textbox', { name: 'Ask Box AI' });
+        expect(textInput).toBeInTheDocument();
+        textInput.focus();
+        await userEvent.keyboard('Why are public APIs important?');
+        await userEvent.click(modal.getByRole('button', { name: 'Ask' }), { pointerEventsCheck: 0 });
 
         const answer = await modal.findByText('Public APIs are important because of key and important reasons.');
         expect(answer).toBeInTheDocument();
@@ -145,8 +122,11 @@ export const citationDisabled = {
         expect(dialog).toBeInTheDocument();
 
         const modal = within(dialog);
-        const suggestion = modal.getByText('Summarize this document');
-        await userEvent.click(suggestion);
+        const textInput = modal.getByRole('textbox', { name: 'Ask Box AI' });
+        expect(textInput).toBeInTheDocument();
+        textInput.focus();
+        await userEvent.keyboard('Why are public APIs important?');
+        await userEvent.click(modal.getByRole('button', { name: 'Ask' }), { pointerEventsCheck: 0 });
 
         const answer = await modal.findByText('Public APIs are important because of key and important reasons.');
         expect(answer).toBeInTheDocument();
@@ -166,8 +146,11 @@ export const clearConversation = {
         expect(dialog).toBeInTheDocument();
 
         const modal = within(dialog);
-        const suggestion = modal.getByText('Summarize this document');
-        await userEvent.click(suggestion);
+        const textInput = modal.getByRole('textbox', { name: 'Ask Box AI' });
+        expect(textInput).toBeInTheDocument();
+        textInput.focus();
+        await userEvent.keyboard('Why are public APIs important?');
+        await userEvent.click(modal.getByRole('button', { name: 'Ask' }), { pointerEventsCheck: 0 });
 
         const answer = await modal.findByText('Public APIs are important because of key and important reasons.');
         expect(answer).toBeInTheDocument();
