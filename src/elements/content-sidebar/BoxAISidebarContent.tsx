@@ -200,9 +200,10 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                         items={items}
                         questions={questions}
                         onUserIntentToUseAI={handleUserIntentToUseAI}
+                        showLoadingIndicator={isLoading && shouldPreinitSession}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
-                        showLoadingIndicator={isLoading && shouldPreinitSession}
+                        suggestedQuestions={cache.suggestions}
                         variant="sidebar"
                         recordAction={recordAction}
                         {...rest}
@@ -232,6 +233,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                 stopPropagationOnEsc
                 stopQuestion={stopQuestion}
                 submitQuestion={sendQuestion}
+                suggestedQuestions={cache.suggestions}
                 variant="collapsible"
                 {...rest}
                 shouldRenderProviders={false}
