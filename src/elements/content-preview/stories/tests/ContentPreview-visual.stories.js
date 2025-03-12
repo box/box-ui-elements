@@ -116,7 +116,7 @@ export const hoverOverCitation = {
 
         expect(modal.getByText('Based on:')).toBeInTheDocument();
 
-        const citations = await modal.getAllByTestId('content-answers-citation-status')
+        const citations = await modal.getAllByTestId('content-answers-citation-status');
         const citation = citations[0];
         expect(citation).toBeInTheDocument();
         await userEvent.hover(citation);
