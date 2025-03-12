@@ -41,80 +41,77 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         expect(headerIcon).toBeInTheDocument();
     });
 
-    // Since ContentAnswersModal component is outdated, the following tests are skipped
-    describe.skip('Box AI ContentAnswersModal tests', () => {
-        test('should ask for answer when prompt is submitted', async () => {
-            const onAskMock = jest.fn();
-            const { answer = '', prompt } = mockQuestionsWithAnswer[0];
-            renderComponent(mockApi, { onAsk: onAskMock });
+    test('should ask for answer when prompt is submitted', async () => {
+        const onAskMock = jest.fn();
+        const { answer = '', prompt } = mockQuestionsWithAnswer[0];
+        renderComponent(mockApi, { onAsk: onAskMock });
 
-            const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
-            await userEvent.type(textArea, prompt);
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
+        await userEvent.type(textArea, prompt);
 
-            const submitButton = screen.getByRole('button', { name: 'Ask' });
-            await userEvent.click(submitButton);
+        const submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
 
-            expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(
-                mockQuestion,
-                [
-                    {
-                        id: mockFile.id,
-                        type: 'file',
-                    },
-                ],
-                [],
+        expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(
+            mockQuestion,
+            [
                 {
-                    include_citations: true,
+                    id: mockFile.id,
+                    type: 'file',
                 },
-            );
+            ],
+            [],
+            {
+                include_citations: true,
+            },
+        );
 
-            expect(onAskMock).toBeCalled();
-            expect(screen.getByText(answer)).toBeInTheDocument();
-        });
+        expect(onAskMock).toBeCalled();
+        expect(screen.getByText(answer)).toBeInTheDocument();
+    });
 
-        test('should render inlineError when ask function failed', async () => {
-            const { prompt } = mockQuestionsWithError[0];
-            renderComponent(mockApiReturnError);
+    test('should render inlineError when ask function failed', async () => {
+        const { prompt } = mockQuestionsWithError[0];
+        renderComponent(mockApiReturnError);
 
-            const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
-            await userEvent.type(textArea, prompt);
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
+        await userEvent.type(textArea, prompt);
 
-            const submitButton = screen.getByRole('button', { name: 'Ask' });
-            await userEvent.click(submitButton);
+        const submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
 
-            expect(screen.getByText('The Box AI service was unavailable.')).toBeInTheDocument();
-        });
+        expect(screen.getByText('Box AI is having trouble generating a response right now. Please try again.')).toBeInTheDocument();
+    });
 
-        test('should render retry button when ask request fails', async () => {
-            const { prompt } = mockQuestionsWithError[0];
-            const apiMock = {
-                ...mockApi,
-                getIntelligenceAPI: jest.fn().mockReturnValue({
-                    ask: jest
-                        .fn()
-                        .mockImplementationOnce(() => {
-                            throw new Error('error');
-                        })
-                        .mockResolvedValueOnce({
-                            data: mockQuestionsWithAnswer[0],
-                        }),
-                }),
-            };
-            renderComponent(apiMock);
+    test('should render retry button when ask request fails', async () => {
+        const { prompt } = mockQuestionsWithError[0];
+        const apiMock = {
+            ...mockApi,
+            getIntelligenceAPI: jest.fn().mockReturnValue({
+                ask: jest
+                    .fn()
+                    .mockImplementationOnce(() => {
+                        throw new Error('error');
+                    })
+                    .mockResolvedValueOnce({
+                        data: mockQuestionsWithAnswer[0],
+                    }),
+            }),
+        };
+        renderComponent(apiMock);
 
-            const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
-            await userEvent.type(textArea, prompt);
+        const textArea = screen.getByRole('textbox', { name: 'Ask Box AI' });
+        await userEvent.type(textArea, prompt);
 
-            const submitButton = screen.getByRole('button', { name: 'Ask' });
-            await userEvent.click(submitButton);
+        const submitButton = screen.getByRole('button', { name: 'Ask' });
+        await userEvent.click(submitButton);
 
-            const retryButton = screen.getByRole('button', { name: 'Retry' });
-            await userEvent.click(retryButton);
+        const retryButton = screen.getByRole('button', { name: 'Retry' });
+        await userEvent.click(retryButton);
 
-            expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            expect(screen.getByText(mockQuestionsWithAnswer[0].answer!)).toBeInTheDocument();
-        });
+        expect(screen.getByTestId('content-answers-question')).toBeInTheDocument();
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expect(screen.getByText(mockQuestionsWithAnswer[0].answer!)).toBeInTheDocument();
     });
 
     test('should ask with dialogue history when prompt is submitted', async () => {
@@ -149,17 +146,20 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         );
     });
 
-    test('renders suggested questions when provided', () => {
-        const suggestedQuestions = [{ id: '1', label: 'Suggested Question 1', prompt: 'Prompt 1' }];
-        renderComponent(mockApi, { suggestedQuestions });
+    // Skipping those tests, since now suggested questions will be a part of a new landing page, which is turned off for ContentAnswersModal
+    describe.skip('should render suggested questions', () => {
+        test('renders suggested questions when provided', () => {
+            const suggestedQuestions = [{ id: '1', label: 'Suggested Question 1', prompt: 'Prompt 1' }];
+            renderComponent(mockApi, { suggestedQuestions });
 
-        expect(screen.getByText('Suggested Question 1')).toBeInTheDocument();
-    });
+            expect(screen.getByText('Suggested Question 1')).toBeInTheDocument();
+        });
 
-    test('renders localized questions when suggestedQuestions is not provided', () => {
-        renderComponent();
+        test('renders localized questions when suggestedQuestions is not provided', () => {
+            renderComponent();
 
-        expect(screen.getByText('Summarize this document')).toBeInTheDocument();
+            expect(screen.getByText('Summarize this document')).toBeInTheDocument();
+        });
     });
 
     test('should call onClearConversation when the conversation is cleared', async () => {
