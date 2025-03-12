@@ -26,10 +26,6 @@ describe('elements/common/share-access-select/ShareAccessSelect', () => {
         return render(<ShareAccessSelect {...defaultProps} {...props} />);
     };
 
-    beforeEach(() => {
-        jest.resetAllMocks();
-    });
-
     test('should render select with all options when all access levels are allowed', () => {
         renderComponent();
 

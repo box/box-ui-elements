@@ -1,5 +1,5 @@
 /**
- * @file Content Explorer Delete Confirmation Dialog
+ * @file Share Access Select component
  * @author Box
  */
 
