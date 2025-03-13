@@ -1,4 +1,4 @@
-import { MetadataTemplateFieldType } from '@box/metadata-editor/types/lib/types';
+import { MetadataTemplateFieldType } from '@box/metadata-editor';
 import { renderHook, waitFor } from '../../../test-utils/testing-library';
 import messages from '../../common/messages';
 import {

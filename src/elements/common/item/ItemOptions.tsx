@@ -71,7 +71,6 @@ const ItemOptions = ({
 
     return (
         <OptionsGroup>
-            {/* @ts-expect-error - ActionCell doesn't seem to work with onOpenChange */}
             {onOpenChange => (
                 <DropdownMenu.Root onOpenChange={onOpenChange}>
                     <DropdownMenu.Trigger>

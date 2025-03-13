@@ -2,7 +2,7 @@
  * @file Redesigned Metadata sidebar component
  * @author Box
  */
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -44,7 +44,6 @@ import { convertTemplateToTemplateInstance } from './utils/convertTemplateToTemp
 import { isExtensionSupportedForMetadataSuggestions } from './utils/isExtensionSupportedForMetadataSuggestions';
 import { metadataTaxonomyFetcher, metadataTaxonomyNodeAncestorsFetcher } from './fetchers/metadataTaxonomyFetcher';
 import { useMetadataSidebarFilteredTemplates } from './hooks/useMetadataSidebarFilteredTemplates';
-import { isFileLargerThan } from './utils/isFileLargerThan';
 
 const MARK_NAME_JS_READY = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}_${EVENT_JS_READY}`;
 
@@ -78,6 +77,10 @@ export interface MetadataSidebarRedesignProps
         WithLoggerProps,
         RouteComponentProps {
     api: API;
+    createSessionRequest?: (
+        payload: Record<string, unknown>,
+        fileId: string,
+    ) => Promise<{ metadata: { is_large_file: boolean } }>;
 }
 
 function MetadataSidebarRedesign({
@@ -90,6 +93,7 @@ function MetadataSidebarRedesign({
     onError,
     onSuccess,
     isFeatureEnabled,
+    createSessionRequest,
     getStructuredTextRep,
 }: MetadataSidebarRedesignProps) {
     const {
@@ -109,16 +113,16 @@ function MetadataSidebarRedesign({
     const { formatMessage } = useIntl();
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
+    const isSessionInitiated = useRef(false);
 
-    const oneMegaByte = 1000000;
-    const isLargeFile = isFileLargerThan(file, oneMegaByte);
+    const [isLargeFile, setIsLargeFile] = useState<boolean>(false);
 
-    const [editingTemplate, setEditingTemplate] = React.useState<MetadataTemplateInstance | null>(null);
-    const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = React.useState<boolean>(false);
-    const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = React.useState<boolean>(false);
+    const [editingTemplate, setEditingTemplate] = useState<MetadataTemplateInstance | null>(null);
+    const [isUnsavedChangesModalOpen, setIsUnsavedChangesModalOpen] = useState<boolean>(false);
+    const [isDeleteButtonDisabled, setIsDeleteButtonDisabled] = useState<boolean>(false);
     const [appliedTemplateInstances, setAppliedTemplateInstances] =
-        React.useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
-    const [pendingTemplateToEdit, setPendingTemplateToEdit] = React.useState<MetadataTemplateInstance | null>(null);
+        useState<Array<MetadataTemplateInstance | MetadataTemplate>>(templateInstances);
+    const [pendingTemplateToEdit, setPendingTemplateToEdit] = useState<MetadataTemplateInstance | null>(null);
     const shouldFetchStructuredTextRep =
         isBoxAiSuggestionsEnabled &&
         fileExtension?.toLowerCase() === 'pdf' &&
@@ -126,7 +130,7 @@ function MetadataSidebarRedesign({
         !!getStructuredTextRep;
 
     // Fetch structured text representation for Box AI
-    React.useEffect(() => {
+    useEffect(() => {
         if (shouldFetchStructuredTextRep) {
             api.options.token(fileId).then(({ read }) => {
                 getStructuredTextRep(fileId, read)
@@ -146,7 +150,7 @@ function MetadataSidebarRedesign({
         shouldFetchStructuredTextRep,
     ]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         // disable only pre-existing template instances from dropdown if not editing or editing pre-exiting one
         const isEditingTemplateAlreadyExisting =
             editingTemplate &&
@@ -266,6 +270,17 @@ function MetadataSidebarRedesign({
 
     const taxonomyNodeFetcher = async (scope: string, taxonomyKey: string, nodeID: string) =>
         metadataTaxonomyNodeAncestorsFetcher(api, fileId, scope, taxonomyKey, nodeID);
+
+    useEffect(() => {
+        if (createSessionRequest && fileId && !isSessionInitiated.current) {
+            isSessionInitiated.current = true;
+            createSessionRequest({ items: [{ id: fileId }] }, fileId).then(
+                ({ metadata = { is_large_file: false } }) => {
+                    setIsLargeFile(metadata.is_large_file);
+                },
+            );
+        }
+    }, [createSessionRequest, fileId]);
 
     return (
         <SidebarContent
