@@ -48,6 +48,7 @@ export type accessLevelsDisabledReasonType = {
 };
 
 export type contactType = {
+    displayText?: string,
     email?: string,
     id: string,
     isExternalUser?: boolean,
