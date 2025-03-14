@@ -113,6 +113,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isResetChatEnabled: true,
         isStopResponseEnabled: true,
         isStreamingEnabled: true,
+        onUserInteraction: jest.fn(),
         recordAction: jest.fn(),
         sendQuestion: jest.fn(),
         setCacheValue: jest.fn(),
@@ -423,4 +424,14 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             expect(mockSendQuestion).not.toHaveBeenCalled();
         },
     );
+
+    test('should call onUserInteraction when user takes action', async () => {
+        await renderComponent();
+
+        const input = screen.getByTestId('content-answers-question-input');
+        input.focus();
+        await userEvent.keyboard('foo');
+
+        expect(mockProps.onUserInteraction).toHaveBeenCalled();
+    });
 });

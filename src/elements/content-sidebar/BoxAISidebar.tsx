@@ -51,6 +51,7 @@ export interface BoxAISidebarProps {
     items: Array<ItemType>;
     itemSize?: string;
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
+    onUserInteraction?: () => void;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldPreinitSession?: boolean;
@@ -71,6 +72,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         items,
         itemSize,
         localizedQuestions,
+        onUserInteraction,
         recordAction,
         setCacheValue,
         shouldPreinitSession = true,
@@ -89,8 +91,9 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             isStopResponseEnabled,
             items,
             itemSize,
-            setCacheValue,
+            onUserInteraction,
             recordAction,
+            setCacheValue,
             shouldPreinitSession,
         }),
         [
@@ -102,8 +105,9 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             isStopResponseEnabled,
             items,
             itemSize,
-            setCacheValue,
+            onUserInteraction,
             recordAction,
+            setCacheValue,
             shouldPreinitSession,
         ],
     );
