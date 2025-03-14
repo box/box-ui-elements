@@ -34,7 +34,7 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
+function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLandingPage: boolean }) {
     const {
         createSession,
         encodedSession,
