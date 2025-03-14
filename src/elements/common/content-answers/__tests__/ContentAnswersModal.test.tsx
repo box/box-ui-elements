@@ -52,9 +52,19 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
 
-        expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(mockQuestion, [{ id: mockFile.id, type: 'file' }], [], {
-            include_citations: true,
-        });
+        expect(mockApi.getIntelligenceAPI().ask).toBeCalledWith(
+            mockQuestion,
+            [
+                {
+                    id: mockFile.id,
+                    type: 'file',
+                },
+            ],
+            [],
+            {
+                include_citations: true,
+            },
+        );
 
         expect(onAskMock).toBeCalled();
         expect(screen.getByText(answer)).toBeInTheDocument();
@@ -70,7 +80,7 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         const submitButton = screen.getByRole('button', { name: 'Ask' });
         await userEvent.click(submitButton);
 
-        expect(screen.getByText('The Box AI service was unavailable.')).toBeInTheDocument();
+        expect(screen.getByText('Box AI is having trouble generating a response right now. Please try again.')).toBeInTheDocument();
     });
 
     test('should render retry button when ask request fails', async () => {
@@ -136,17 +146,20 @@ describe('elements/common/content-answers/ContentAnswersModal', () => {
         );
     });
 
-    test('renders suggested questions when provided', () => {
-        const suggestedQuestions = [{ id: '1', label: 'Suggested Question 1', prompt: 'Prompt 1' }];
-        renderComponent(mockApi, { suggestedQuestions });
+    // Skipping those tests, since now suggested questions will be a part of a new landing page, which is turned off for ContentAnswersModal
+    describe.skip('should render suggested questions', () => {
+        test('renders suggested questions when provided', () => {
+            const suggestedQuestions = [{ id: '1', label: 'Suggested Question 1', prompt: 'Prompt 1' }];
+            renderComponent(mockApi, { suggestedQuestions });
 
-        expect(screen.getByText('Suggested Question 1')).toBeInTheDocument();
-    });
+            expect(screen.getByText('Suggested Question 1')).toBeInTheDocument();
+        });
 
-    test('renders localized questions when suggestedQuestions is not provided', () => {
-        renderComponent();
+        test('renders localized questions when suggestedQuestions is not provided', () => {
+            renderComponent();
 
-        expect(screen.getByText('Summarize this document')).toBeInTheDocument();
+            expect(screen.getByText('Summarize this document')).toBeInTheDocument();
+        });
     });
 
     test('should call onClearConversation when the conversation is cleared', async () => {

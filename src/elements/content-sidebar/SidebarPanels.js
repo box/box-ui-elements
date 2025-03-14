@@ -141,6 +141,7 @@ class SidebarPanels extends React.Component<Props, State> {
         },
         encodedSession: null,
         questions: [],
+        shouldShowLandingPage: true,
     };
 
     componentDidMount() {
@@ -171,7 +172,7 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'questions', value: any) => {
+    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage', value: any) => {
         this.boxAiSidebarCache[key] = value;
     };
 
