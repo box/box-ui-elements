@@ -1,0 +1,12 @@
+[
+  {
+    "id": "boxui.modalDialog.backModalText",
+    "description": "Button to get back inside modal",
+    "defaultMessage": "Back"
+  },
+  {
+    "id": "boxui.modalDialog.closeModalText",
+    "description": "Button to close modal",
+    "defaultMessage": "Close Modal"
+  }
+]

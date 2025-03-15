@@ -1,0 +1,142 @@
+[
+  {
+    "id": "boxui.share.coownerLevelText",
+    "description": "Text for Co-owner permission level in permissions table",
+    "defaultMessage": "Co-owner"
+  },
+  {
+    "id": "boxui.share.deleteTableHeaderText",
+    "description": "Text for permissions table Delete column",
+    "defaultMessage": "Delete"
+  },
+  {
+    "id": "boxui.share.downloadTableHeaderText",
+    "description": "Text for permissions table Download column",
+    "defaultMessage": "Download"
+  },
+  {
+    "id": "boxui.share.editorLevelText",
+    "description": "Text for Editor permission level in permissions table",
+    "defaultMessage": "Editor"
+  },
+  {
+    "id": "boxui.share.editTableHeaderText",
+    "description": "Text for permissions table Edit column",
+    "defaultMessage": "Edit"
+  },
+  {
+    "id": "boxui.share.getLinkTableHeaderText",
+    "description": "Text for permissions table Get Link column",
+    "defaultMessage": "Get Link"
+  },
+  {
+    "id": "boxui.share.groupLabel",
+    "description": "Label for a Group contact type",
+    "defaultMessage": "Group"
+  },
+  {
+    "id": "boxui.share.inviteCollaboratorsModalCancelButton",
+    "description": "Text on button to cancel and close the invite collaborators modal.",
+    "defaultMessage": "Cancel"
+  },
+  {
+    "id": "boxui.share.inviteCollaboratorsModalSendInvites",
+    "description": "Text on button to send invitations to collaborators for an item",
+    "defaultMessage": "Send Invites"
+  },
+  {
+    "id": "boxui.share.inviteCollaboratorsModalTitle",
+    "description": "Title of the Invite Collaborators Modal. {itemName} is the name of the file / folder being shared",
+    "defaultMessage": "Invite to {itemName}"
+  },
+  {
+    "id": "boxui.share.inviteePermissionsFieldLabel",
+    "description": "Label of the field where a user designates which permissions a collaborator will have on an item",
+    "defaultMessage": "Invitee Permissions"
+  },
+  {
+    "id": "boxui.share.inviteePermissionsLearnMore",
+    "description": "Tooltip text a user can use to learn more about collaborator permission options",
+    "defaultMessage": "Learn More"
+  },
+  {
+    "id": "boxui.share.inviteFieldLabel",
+    "description": "Label of the field where a user designates who to invite to collaborate on an item",
+    "defaultMessage": "Invite"
+  },
+  {
+    "id": "boxui.share.inviteFileEditorsLabel",
+    "description": "Label to invite editors to a file in the invite collab modal",
+    "defaultMessage": "Invite people to become editors of this file."
+  },
+  {
+    "id": "boxui.share.permissionLevelsTableHeaderText",
+    "description": "Text for permissions table Permission Levels column",
+    "defaultMessage": "Permission Levels"
+  },
+  {
+    "id": "boxui.share.personalMessageLabel",
+    "description": "Label for optional personal message to include when inviting collaborators to an item",
+    "defaultMessage": "Personal Message"
+  },
+  {
+    "id": "boxui.share.previewTableHeaderText",
+    "description": "Text for permissions table Preview column",
+    "defaultMessage": "Preview"
+  },
+  {
+    "id": "boxui.share.ownerTableHeaderText",
+    "description": "Text for permissions table Owner column",
+    "defaultMessage": "Owner"
+  },
+  {
+    "id": "boxui.share.previewerLevelText",
+    "description": "Text for Previewer permission level in permissions table",
+    "defaultMessage": "Previewer"
+  },
+  {
+    "id": "boxui.share.previewerUploaderLevelText",
+    "description": "Text for Previewer Uploader permission level in permissions table",
+    "defaultMessage": "Previewer Uploader"
+  },
+  {
+    "id": "boxui.share.referAFriendBadgeText",
+    "description": "Text on a badge encouraging users to refer a friend to sign up for Box",
+    "defaultMessage": "REFER"
+  },
+  {
+    "id": "boxui.share.referAFriendText",
+    "description": "Text encouraging users to refer a friend to sign up for Box",
+    "defaultMessage": "Want a free month of Box? Refer your friend!"
+  },
+  {
+    "id": "boxui.share.referAFriendRewardCenterLinkText",
+    "description": "Text on a link to the \"Reward Center\", where users can refer a friend to sign up for Box",
+    "defaultMessage": "Click Here"
+  },
+  {
+    "id": "boxui.share.upgradeGetMoreAccessControls",
+    "description": "Label for link to upgrade to get more access controls for inviting collaborators to an item",
+    "defaultMessage": "Get More Access Controls"
+  },
+  {
+    "id": "boxui.share.uploaderLevelText",
+    "description": "Text for Uploader permission level in permissions table",
+    "defaultMessage": "Uploader"
+  },
+  {
+    "id": "boxui.share.uploadTableHeaderText",
+    "description": "Text for permissions table Upload column",
+    "defaultMessage": "Upload"
+  },
+  {
+    "id": "boxui.share.viewerLevelText",
+    "description": "Text for Viewer permission level in permissions table",
+    "defaultMessage": "Viewer"
+  },
+  {
+    "id": "boxui.share.viewerUploaderLevelText",
+    "description": "Text for Viewer Uploader permission level in permissions table",
+    "defaultMessage": "Viewer Uploader"
+  }
+]

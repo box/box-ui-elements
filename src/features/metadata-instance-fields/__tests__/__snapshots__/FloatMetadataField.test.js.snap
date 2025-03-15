@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`features/metadata-instance-editor/fields/FloatMetadataField should correctly render a float field 1`] = `
-<TextMetadataField
-  dataValue="value"
-  onChange={[Function]}
-/>
-`;
