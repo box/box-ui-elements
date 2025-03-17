@@ -51,9 +51,11 @@ export interface BoxAISidebarProps {
     items: Array<ItemType>;
     itemSize?: string;
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
+    onUserInteraction?: () => void;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldPreinitSession?: boolean;
+    setHasQuestions: (hasQuestions: boolean) => void;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -70,9 +72,11 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         items,
         itemSize,
         localizedQuestions,
+        onUserInteraction,
         recordAction,
         setCacheValue,
         shouldPreinitSession = true,
+        setHasQuestions,
         ...rest
     } = props;
     const { questions } = cache;
@@ -87,8 +91,9 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             isStopResponseEnabled,
             items,
             itemSize,
-            setCacheValue,
+            onUserInteraction,
             recordAction,
+            setCacheValue,
             shouldPreinitSession,
         }),
         [
@@ -100,11 +105,18 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             isStopResponseEnabled,
             items,
             itemSize,
-            setCacheValue,
+            onUserInteraction,
             recordAction,
+            setCacheValue,
             shouldPreinitSession,
         ],
     );
+
+    React.useEffect(() => {
+        if (setHasQuestions) {
+            setHasQuestions(questions.length > 0);
+        }
+    }, [questions.length, setHasQuestions]);
 
     let questionsWithoutInProgress = questions;
     if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
@@ -134,6 +146,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
                     itemIDs={[fileID]}
                     restoredQuestions={questionsWithoutInProgress}
                     restoredSession={cache.encodedSession}
+                    restoredShouldShowLandingPage={cache.shouldShowLandingPage}
                     shouldPreinitSession={shouldPreinitSession}
                     suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
                     warningNotice={spreadsheetNotice}

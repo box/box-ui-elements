@@ -14,7 +14,6 @@ import {
     ClearConversationButton,
     IntelligenceModal,
     withApiWrapper,
-    // @ts-expect-error - TS2305 - Module '"@box/box-ai-content-answers"' has no exported member 'ApiWrapperWithInjectedProps'.
     type ApiWrapperWithInjectedProps,
 } from '@box/box-ai-content-answers';
 import SidebarContent from './SidebarContent';
@@ -35,7 +34,7 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
+function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLandingPage: boolean }) {
     const {
         createSession,
         encodedSession,
@@ -48,6 +47,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
         isResetChatEnabled,
         onSelectAgent,
         questions,
+        shouldShowLandingPage,
         sendQuestion,
         stopQuestion,
         ...rest
@@ -64,12 +64,17 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
         isStopResponseEnabled,
         items,
         itemSize,
+        onUserInteraction,
         recordAction,
         setCacheValue,
         shouldPreinitSession,
     } = React.useContext(BoxAISidebarContext);
     const { agents, requestState, selectedAgent } = useAgents();
     const { questions: cacheQuestions } = cache;
+
+    if (cache.shouldShowLandingPage !== shouldShowLandingPage) {
+        setCacheValue('shouldShowLandingPage', shouldShowLandingPage);
+    }
 
     if (cache.encodedSession !== encodedSession) {
         setCacheValue('encodedSession', encodedSession);
@@ -83,10 +88,13 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
         setCacheValue('agents', { agents, requestState, selectedAgent });
     }
 
-    const handleUserIntentToUseAI = () => {
+    const handleUserIntentToUseAI = (userHasInteracted: boolean = false) => {
         // Create session if not already created or loading
         if (!shouldPreinitSession && !encodedSession && !isLoading && createSession) {
             createSession(true, false);
+        }
+        if (userHasInteracted && onUserInteraction) {
+            onUserInteraction();
         }
     };
 
@@ -194,6 +202,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                 <div className="bcs-BoxAISidebar-content">
                     <BoxAiContentAnswers
                         className="bcs-BoxAISidebar-contentAnswers"
+                        contentName={contentName}
                         contentType={formatMessage(messages.sidebarBoxAIContent)}
                         hostAppName={hostAppName}
                         isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
@@ -204,6 +213,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                         onUserIntentToUseAI={handleUserIntentToUseAI}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
+                        shouldShowLandingPage={shouldShowLandingPage}
                         showLoadingIndicator={isLoading && shouldPreinitSession}
                         variant="sidebar"
                         recordAction={recordAction}
@@ -231,6 +241,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps) {
                 open={isModalOpen}
                 questions={questions}
                 recordAction={isModalOpen ? recordAction : undefined}
+                shouldShowLandingPage={shouldShowLandingPage}
                 showLoadingIndicator={false}
                 stopPropagationOnEsc
                 stopQuestion={stopQuestion}

@@ -23,6 +23,7 @@ export interface BoxAISidebarContextValues {
     isStopResponseEnabled: boolean;
     items: Array<ItemType>;
     itemSize?: string;
+    onUserInteraction?: () => void;
     recordAction: (params: BoxAISidebarRecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldPreinitSession: boolean;

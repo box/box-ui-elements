@@ -68,6 +68,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             encodedSession: '',
             questions: [],
             agents: mockAgents,
+            shouldShowLandingPage: true,
         },
         createSessionRequest: jest.fn(() => ({ encodedSession: '1234' })),
         elementId: '123',
@@ -112,10 +113,12 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isResetChatEnabled: true,
         isStopResponseEnabled: true,
         isStreamingEnabled: true,
+        onUserInteraction: jest.fn(),
         recordAction: jest.fn(),
         sendQuestion: jest.fn(),
         setCacheValue: jest.fn(),
         shouldPreinitSession: true,
+        setHasQuestions: jest.fn(),
     } as unknown as BoxAISidebarProps;
 
     const renderComponent = async (props = {}) => {
@@ -186,6 +189,31 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         });
     });
 
+    test('should call setHasQuestions with "false" on load if questions are empty', async () => {
+        await renderComponent();
+
+        expect(mockProps.setHasQuestions).toHaveBeenCalledWith(false);
+    });
+
+    test('should call setHasQuestions with "true" on load if questions are not empty', async () => {
+        await renderComponent({
+            cache: {
+                encodedSession: '1234',
+                questions: [
+                    {
+                        error: 'general',
+                        isCompleted: true,
+                        prompt: 'completed question',
+                    },
+                ],
+                agents: mockAgents,
+                shouldShowLandingPage: false,
+            },
+        });
+
+        expect(mockProps.setHasQuestions).toHaveBeenCalledWith(true);
+    });
+
     test('should call onClearClick when click "Clear" button', async () => {
         await renderComponent();
 
@@ -229,6 +257,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                     },
                 ],
                 agents: mockAgents,
+                shouldShowLandingPage: false,
             },
         });
 
@@ -395,4 +424,14 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             expect(mockSendQuestion).not.toHaveBeenCalled();
         },
     );
+
+    test('should call onUserInteraction when user takes action', async () => {
+        await renderComponent();
+
+        const input = screen.getByTestId('content-answers-question-input');
+        input.focus();
+        await userEvent.keyboard('foo');
+
+        expect(mockProps.onUserInteraction).toHaveBeenCalled();
+    });
 });
