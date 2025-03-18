@@ -21,7 +21,7 @@ import ThemingStyles from '../common/theming';
 import API from '../../api';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
 import Footer from './Footer';
-import PreviewDialog from './PreviewDialog';
+import PreviewDialog from '../common/preview-dialog/PreviewDialog';
 import ShareDialog from './ShareDialog';
 import RenameDialog from './RenameDialog';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';

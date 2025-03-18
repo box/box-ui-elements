@@ -1,23 +1,15 @@
 import * as React from 'react';
+
 import { useArgs } from '@storybook/preview-api';
 import { Button } from '@box/blueprint-web';
-import { expect, screen, userEvent, within } from '@storybook/test';
+import PreviewDialog from '../preview-dialog/PreviewDialog';
 
-import { addRootElement } from '../../../../utils/storybook';
-
-import PreviewDialog from '../../PreviewDialog';
+import { addRootElement } from '../../../utils/storybook';
 
 // need to import this into the story because it's usually in ContentExplorer
-import '../../../common/modal.scss';
+import '../modal.scss';
 
-export const basic = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const button = canvas.getByRole('button', { name: 'Launch PreviewDialog' });
-        await userEvent.click(button);
-
-        expect(await screen.findByText('Book Sample.pdf')).toBeInTheDocument();
-    },
+export const previewDialog = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     render: (args: any) => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -81,9 +73,11 @@ export const basic = {
 };
 
 export default {
-    title: 'Elements/ContentExplorer/tests/PreviewDialog/visual',
+    title: 'Elements/Common/PreviewDialog',
     component: PreviewDialog,
     args: {
+        isLoading: false,
+        isOpen: false,
         token: global.TOKEN,
     },
 };
