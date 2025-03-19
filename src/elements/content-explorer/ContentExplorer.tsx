@@ -64,6 +64,7 @@ import {
     VIEW_MODE_GRID,
 } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+import type { ItemAction } from '../common/item';
 import type { Theme } from '../common/theming';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
 import type { MetadataFieldValue } from '../../common/types/metadata';
@@ -116,6 +117,7 @@ export interface ContentExplorerProps {
     isSmall?: boolean;
     isTouch?: boolean;
     isVeryLarge?: boolean;
+    itemActions?: ItemAction[];
     language?: string;
     logoUrl?: string;
     measureRef?: (ref: Element | null) => void;
@@ -1606,6 +1608,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isMedium,
             isSmall,
             isTouch,
+            itemActions,
             language,
             logoUrl,
             measureRef,
@@ -1706,6 +1709,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 isMedium={isMedium}
                                 isSmall={isSmall}
                                 isTouch={isTouch}
+                                itemActions={itemActions}
                                 fieldsToShow={fieldsToShow}
                                 onItemClick={this.onItemClick}
                                 onItemDelete={this.delete}

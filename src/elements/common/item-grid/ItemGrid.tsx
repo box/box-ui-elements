@@ -7,27 +7,28 @@ import { GridList } from '@box/blueprint-web';
 import { ItemDate, ItemOptions, ItemTypeIcon } from '../item';
 import { isThumbnailAvailable } from '../utils';
 
-import { TYPE_FOLDER, TYPE_WEBLINK } from '../../../constants';
+import { TYPE_FOLDER, TYPE_WEBLINK, VIEW_MODE_GRID } from '../../../constants';
 
 import messages from './messages';
 
 import type { BoxItem, View } from '../../../common/types/core';
-import type { ItemEventHandlers, ItemEventPermissions } from '../item';
+import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from '../item';
 
 import './ItemGrid.scss';
 
 export interface ItemGridProps extends ItemEventHandlers, ItemEventPermissions {
     gridColumnCount?: number;
     isTouch?: boolean;
+    itemActions?: ItemAction[];
     items: BoxItem[];
     view: View;
 }
 
 const ItemGrid = ({
-    canPreview = false,
+    canPreview,
     gridColumnCount = 1,
+    isTouch,
     items,
-    isTouch = false,
     onItemClick = noop,
     view,
     ...rest
@@ -50,7 +51,13 @@ const ItemGrid = ({
                 };
 
                 return (
-                    <GridList.Item key={id} onAction={handleAction} textValue={name}>
+                    <GridList.Item
+                        key={id}
+                        className="be-ItemGrid-item"
+                        id={id}
+                        onAction={handleAction}
+                        textValue={name}
+                    >
                         <GridList.Thumbnail>
                             {thumbnailUrl && isThumbnailAvailable(item) ? (
                                 <img alt={name} src={thumbnailUrl} />
@@ -64,7 +71,7 @@ const ItemGrid = ({
                         <GridList.Subtitle>
                             <ItemDate item={item} view={view} />
                         </GridList.Subtitle>
-                        <ItemOptions canPreview={canPreview} isGridView item={item} {...rest} />
+                        <ItemOptions canPreview={canPreview} item={item} viewMode={VIEW_MODE_GRID} {...rest} />
                     </GridList.Item>
                 );
             })}

@@ -3,10 +3,11 @@ import { Table } from '@box/react-virtualized/dist/es/Table';
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemGrid from '../common/item-grid';
-import ItemList from './ItemList';
+import ItemList from '../common/item-list';
 import MetadataBasedItemList from '../../features/metadata-based-view';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+import type { ItemAction } from '../common/item';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
 import type { MetadataFieldValue } from '../../common/types/metadata';
@@ -37,6 +38,7 @@ export interface ContentProps {
     isMedium: boolean;
     isSmall: boolean;
     isTouch: boolean;
+    itemActions?: ItemAction[];
     onItemClick: (item: BoxItem) => void;
     onItemDelete: (item: BoxItem) => void;
     onItemDownload: (item: BoxItem) => void;
@@ -59,16 +61,7 @@ export interface ContentProps {
     viewMode?: ViewMode;
 }
 
-const Content = ({
-    currentCollection,
-    fieldsToShow = [],
-    focusedRow,
-    onSortChange,
-    tableRef,
-    view,
-    viewMode = VIEW_MODE_LIST,
-    ...rest
-}: ContentProps) => {
+const Content = ({ currentCollection, fieldsToShow = [], view, viewMode = VIEW_MODE_LIST, ...rest }: ContentProps) => {
     const isViewEmpty = isEmpty(view, currentCollection, fieldsToShow);
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
@@ -84,16 +77,7 @@ const Content = ({
             {!isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList currentCollection={currentCollection} fieldsToShow={fieldsToShow} {...rest} />
             )}
-            {!isViewEmpty && isListView && (
-                <ItemList
-                    currentCollection={currentCollection}
-                    focusedRow={focusedRow}
-                    onSortChange={onSortChange}
-                    tableRef={tableRef}
-                    view={view}
-                    {...rest}
-                />
-            )}
+            {!isViewEmpty && isListView && <ItemList collection={currentCollection} view={view} {...rest} />}
             {!isViewEmpty && isGridView && <ItemGrid items={currentCollection.items} view={view} {...rest} />}
         </div>
     );
