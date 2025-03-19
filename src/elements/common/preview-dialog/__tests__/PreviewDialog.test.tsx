@@ -1,7 +1,7 @@
 import * as React from 'react';
 import userEvent from '@testing-library/user-event';
-import { render, screen, waitFor } from '../../../test-utils/testing-library';
-import APICache from '../../../utils/Cache';
+import { render, screen, waitFor } from '../../../../test-utils/testing-library';
+import APICache from '../../../../utils/Cache';
 
 import PreviewDialog, { PreviewDialogProps } from '../PreviewDialog';
 
