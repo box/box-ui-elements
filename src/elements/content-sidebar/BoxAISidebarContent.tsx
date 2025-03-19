@@ -48,6 +48,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         onSelectAgent,
         questions,
         shouldShowLandingPage,
+        suggestedQuestions,
         sendQuestion,
         stopQuestion,
         ...rest
@@ -215,7 +216,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                         showLoadingIndicator={isLoading && shouldPreinitSession}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
-                        suggestedQuestions={cache.suggestions}
+                        suggestedQuestions={cache.suggestions.length > 0 ? cache.suggestions : suggestedQuestions}
                         variant="sidebar"
                         recordAction={recordAction}
                         {...rest}
@@ -247,7 +248,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                 stopPropagationOnEsc
                 stopQuestion={stopQuestion}
                 submitQuestion={sendQuestion}
-                suggestedQuestions={cache.suggestions}
+                suggestedQuestions={cache.suggestions.length > 0 ? cache.suggestions : suggestedQuestions}
                 variant="collapsible"
                 {...rest}
                 shouldRenderProviders={false}
