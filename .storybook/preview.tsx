@@ -7,6 +7,7 @@ import '../src/styles/variables';
 import '../src/styles/base.scss';
 
 import { reactIntl } from './reactIntl';
+import { getFontHandlers } from './utils';
 
 // Constants
 global.FEATURE_FLAGS = global.FEATURE_FLAGS || features;
@@ -37,6 +38,9 @@ const preview = {
                 color: /(background|color)$/i,
                 date: /Date$/,
             },
+        },
+        msw: {
+            handlers: [getFontHandlers(['Lato-Regular', 'Lato-Bold', 'Lato-Semibold', 'Lato-Black'])],
         },
         options: {
             storySort: {

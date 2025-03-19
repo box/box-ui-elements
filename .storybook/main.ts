@@ -7,11 +7,11 @@ const language = process.env.LANGUAGE;
 
 const config: {
     stories: string[];
-    addons: (string | { name: string; options: { sass: { implementation: any } } })[],
+    addons: (string | { name: string; options: { sass: { implementation: any } } })[];
     framework: { name: string };
     staticDirs: string[];
     webpackFinal: (config: any) => Promise<any>;
-    typescript: any
+    typescript: any;
 } = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
 
@@ -31,7 +31,7 @@ const config: {
         '@storybook/addon-docs',
         '@storybook/addon-webpack5-compiler-babel',
         '@chromatic-com/storybook',
-        'storybook-react-intl'
+        'storybook-react-intl',
     ],
 
     framework: {
@@ -53,13 +53,22 @@ const config: {
             'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
             'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
             'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
+            '@public': path.resolve(__dirname, '../.storybook/public'),
         };
+
+        config.module.rules.push({
+            test: /\.(woff|woff2)$/,
+            type: 'asset/resource',
+            generator: {
+                filename: 'fonts/[name][ext]',
+            },
+        });
 
         return config;
     },
     typescript: {
-        reactDocgen: 'react-docgen-typescript'
-    }
+        reactDocgen: 'react-docgen-typescript',
+    },
 };
 
 export default config;

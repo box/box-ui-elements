@@ -244,6 +244,9 @@ export const searchEmptyState = {
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
+        await waitFor(() => {
+            expect(canvas.getByText('test')).toBeInTheDocument();
+        });
         const searchBar = canvas.getByRole('searchbox', { name: 'Search files and folders' });
         await userEvent.type(searchBar, 'foo');
 
