@@ -3,7 +3,7 @@ import utils from '../../support/utils';
 
 // <reference types="Cypress" />
 const selectedRowClassName = 'bce-item-row-selected';
-const listViewClass = 'bce-item-grid';
+const listViewClass = 'be-ItemList';
 const gridViewClass = 'be-ItemGrid';
 
 const helpers = {

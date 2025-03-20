@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Table } from '@box/react-virtualized/dist/es/Table';
 import EmptyView from '../common/empty-view';
 import ProgressBar from '../common/progress-bar';
 import ItemGrid from '../common/item-grid';
@@ -56,12 +55,13 @@ export interface ContentProps {
     rootElement?: HTMLElement;
     rootId: string;
     selected?: BoxItem;
-    tableRef: (ref: Table) => void;
     view: View;
     viewMode?: ViewMode;
 }
 
 const Content = ({ currentCollection, fieldsToShow = [], view, viewMode = VIEW_MODE_LIST, ...rest }: ContentProps) => {
+    const { items, percentLoaded, sortBy, sortDirection } = currentCollection;
+
     const isViewEmpty = isEmpty(view, currentCollection, fieldsToShow);
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
@@ -69,16 +69,16 @@ const Content = ({ currentCollection, fieldsToShow = [], view, viewMode = VIEW_M
 
     return (
         <div className="bce-content">
-            {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
-                <ProgressBar percent={currentCollection.percentLoaded} />
-            )}
+            {view === VIEW_ERROR || view === VIEW_SELECTED ? null : <ProgressBar percent={percentLoaded} />}
 
-            {isViewEmpty && <EmptyView view={view} isLoading={currentCollection.percentLoaded !== 100} />}
+            {isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
             {!isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList currentCollection={currentCollection} fieldsToShow={fieldsToShow} {...rest} />
             )}
-            {!isViewEmpty && isListView && <ItemList collection={currentCollection} view={view} {...rest} />}
-            {!isViewEmpty && isGridView && <ItemGrid items={currentCollection.items} view={view} {...rest} />}
+            {!isViewEmpty && isListView && (
+                <ItemList items={items} sortBy={sortBy} sortDirection={sortDirection} view={view} {...rest} />
+            )}
+            {!isViewEmpty && isGridView && <ItemGrid items={items} view={view} {...rest} />}
         </div>
     );
 };

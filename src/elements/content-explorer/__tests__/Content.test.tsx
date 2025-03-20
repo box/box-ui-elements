@@ -41,7 +41,6 @@ const mockProps: ContentProps = {
     onMetadataUpdate: jest.fn(),
     onSortChange: jest.fn(),
     rootId: 'root',
-    tableRef: jest.fn(),
     view: VIEW_RECENTS,
     viewMode: VIEW_MODE_LIST,
 };
@@ -79,7 +78,7 @@ describe('Content Component', () => {
 
         expect(screen.getByText('Item 1')).toBeInTheDocument();
         expect(screen.getByText('1000 Bytes')).toBeInTheDocument();
-        expect(screen.getByText('Tue Oct 10 2023')).toBeInTheDocument();
+        expect(screen.getByText('Viewed Oct 10, 2023')).toBeInTheDocument();
         expect(screen.getByLabelText('File')).toBeInTheDocument();
     });
 

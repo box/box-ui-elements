@@ -181,8 +181,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     props: ContentExplorerProps;
 
-    table: React.Component<unknown, unknown>;
-
     rootElement: HTMLElement;
 
     appElement: HTMLElement;
@@ -1334,17 +1332,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     };
 
     /**
-     * Saves reference to table component
-     *
-     * @private
-     * @param {Component} react component
-     * @return {void}
-     */
-    tableRef = (table: React.Component<unknown, unknown>): void => {
-        this.table = table;
-    };
-
-    /**
      * Closes the modal dialogs that may be open
      *
      * @private
@@ -1373,16 +1360,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     };
 
     /**
-     * Returns whether the currently focused element is an item
-     *
-     * @returns {bool}
-     */
-    isFocusOnItem = () => {
-        const focusedElementClassList = document.activeElement?.classList;
-        return focusedElementClassList && focusedElementClassList.contains('be-item-label');
-    };
-
-    /**
      * Keyboard events
      *
      * @private
@@ -1403,12 +1380,12 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 break;
             case 'arrowdown':
                 if (this.getViewMode() === VIEW_MODE_GRID) {
-                    if (!this.isFocusOnItem()) {
-                        focus(this.rootElement, '.be-item-name .be-item-label', false);
+                    if (document.activeElement && !document.activeElement.closest('.be-ItemGrid')) {
+                        focus(this.rootElement, '.be-ItemGrid-item', false);
                         event.preventDefault();
                     }
-                } else {
-                    focus(this.rootElement, '.bce-item-row', false);
+                } else if (document.activeElement && !document.activeElement.closest('.be-ItemList')) {
+                    focus(this.rootElement, '.be-ItemList-item', false);
                     this.setState({ focusedRow: 0 });
                     event.preventDefault();
                 }
@@ -1723,7 +1700,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 rootElement={this.rootElement}
                                 rootId={rootFolderId}
                                 selected={selected}
-                                tableRef={this.tableRef}
                                 view={view}
                                 viewMode={viewMode}
                             />

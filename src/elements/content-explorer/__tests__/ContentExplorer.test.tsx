@@ -96,15 +96,15 @@ describe('elements/content-explorer/ContentExplorer', () => {
             });
 
             expect(screen.getByRole('button', { name: 'Preview Test Folder' })).toBeInTheDocument();
-            expect(screen.getByText('Name')).toBeInTheDocument();
-            expect(screen.getByText('Modified')).toBeInTheDocument();
-            expect(screen.getByText('Size')).toBeInTheDocument();
-            expect(screen.getByText('An Ordered Folder')).toBeInTheDocument();
-            expect(screen.getByText('Modified Tue Apr 16 2019 by Preview')).toBeInTheDocument();
+            expect(screen.getByRole('columnheader', { name: 'NAME' })).toBeInTheDocument();
+            expect(screen.getByRole('columnheader', { name: 'UPDATED' })).toBeInTheDocument();
+            expect(screen.getByRole('columnheader', { name: 'SIZE' })).toBeInTheDocument();
+            expect(screen.getByRole('rowheader', { name: /An Ordered Folder$/ })).toBeInTheDocument();
+            expect(screen.getByRole('gridcell', { name: 'Apr 16, 2019 by Preview' })).toBeInTheDocument();
             expect(screen.getByRole('gridcell', { name: '191.33 MB' })).toBeInTheDocument();
         });
 
-        test('shoulder render grid view mode', async () => {
+        test('should render grid view mode', async () => {
             renderComponent();
 
             await waitFor(() => {
@@ -117,12 +117,13 @@ describe('elements/content-explorer/ContentExplorer', () => {
             const gridButton = screen.getByRole('button', { name: 'Switch to Grid View' });
             await userEvent.click(gridButton);
 
-            expect(screen.queryByText('Name')).not.toBeInTheDocument();
-            expect(screen.queryByText('Modified')).not.toBeInTheDocument();
-            expect(screen.queryByText('Size')).not.toBeInTheDocument();
+            expect(screen.queryByRole('columnheader', { name: 'NAME' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('columnheader', { name: 'UPDATED' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('columnheader', { name: 'SIZE' })).not.toBeInTheDocument();
 
-            expect(screen.getByText('An Ordered Folder')).toBeInTheDocument();
-            expect(screen.getByText(/Apr 16, 2019\s+by Preview/)).toBeInTheDocument();
+            expect(
+                screen.getByRole('gridcell', { name: /An Ordered Folder Apr 16, 2019 by Preview$/ }),
+            ).toBeInTheDocument();
         });
     });
 
@@ -431,10 +432,6 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(onPreview).toHaveBeenCalled();
         });
     });
-
-    // describe('Search', () => {
-    //     test('should search', async () => {});
-    // });
 
     describe('OnKeyDown', () => {
         test('should focus search input on "/" key press', async () => {
