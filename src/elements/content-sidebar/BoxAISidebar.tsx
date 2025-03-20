@@ -134,8 +134,10 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     }
 
     const handleSuggestedQuestionsFetched = (fetchedSuggestedQuestions: SuggestedQuestionType[]) => {
-        setCacheValue('suggestions', fetchedSuggestedQuestions);
+        setCacheValue('suggestedQuestions', fetchedSuggestedQuestions);
     };
+
+    const suggestedQuestions = getSuggestedQuestions === null ? localizedQuestions : [];
 
     return (
         // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
@@ -143,7 +145,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         <AgentsProvider value={cache.agents}>
             <BoxAISidebarContext.Provider value={contextValue}>
                 <BoxAISidebarContent
-                    cachedSuggestions={cache.suggestions}
+                    cachedSuggestions={cache.suggestedQuestions}
                     getSuggestedQuestions={getSuggestedQuestions}
                     isOpen
                     isStopResponseEnabled={isStopResponseEnabled}
@@ -154,7 +156,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
                     restoredSession={cache.encodedSession}
                     restoredShouldShowLandingPage={cache.shouldShowLandingPage}
                     shouldPreinitSession={shouldPreinitSession}
-                    suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
+                    suggestedQuestions={cache.suggestedQuestions.length > 0 ? cache.suggestedQuestions : suggestedQuestions}
                     warningNotice={spreadsheetNotice}
                     warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
                     {...rest}

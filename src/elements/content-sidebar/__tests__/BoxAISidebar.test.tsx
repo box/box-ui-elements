@@ -69,7 +69,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             questions: [],
             agents: mockAgents,
             shouldShowLandingPage: true,
-            suggestions: [],
+            suggestedQuestions: [],
         },
         createSessionRequest: jest.fn(() => ({ encodedSession: '1234' })),
         elementId: '123',
@@ -247,7 +247,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                 encodedSession: '1234',
                 questions: [],
                 agents: mockAgents,
-                suggestions: [
+                suggestedQuestions: [
                     {
                         id: 'suggested-question-1',
                         prompt: 'Summarize this document',
@@ -260,7 +260,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         });
 
         expect(screen.queryByText('Summarize this document', { exact: false })).toBeInTheDocument();
-        expect(screen.queryByText('Loading suggestions', { exact: false })).not.toBeInTheDocument();
+        expect(screen.queryByText('Loading suggested questions', { exact: false })).not.toBeInTheDocument();
     });
 
     test('should not set questions that are in progress', async () => {
@@ -281,7 +281,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                 ],
                 agents: mockAgents,
                 shouldShowLandingPage: false,
-                suggestions: [],
+                suggestedQuestions: [],
             },
         });
 

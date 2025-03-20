@@ -6,7 +6,7 @@ export type BoxAISidebarCache = {
     encodedSession: string | null,
     questions: QuestionType[],
     shouldShowLandingPage: boolean,
-    suggestions: SuggestedQuestionType[],
+    suggestedQuestions: SuggestedQuestionType[],
 };
 
-export type BoxAISidebarCacheSetter = (key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestions', value: AgentState | QuestionType[] | SuggestedQuestionType[] | string | boolean | null) => void;
+export type BoxAISidebarCacheSetter = (key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestedQuestions', value: AgentState | QuestionType[] | SuggestedQuestionType[] | string | boolean | null) => void;
