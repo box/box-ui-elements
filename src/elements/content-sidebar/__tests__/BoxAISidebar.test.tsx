@@ -209,6 +209,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                 ],
                 agents: mockAgents,
                 shouldShowLandingPage: false,
+                suggestedQuestions: [],
             },
         });
 
