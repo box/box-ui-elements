@@ -145,7 +145,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         <AgentsProvider value={cache.agents}>
             <BoxAISidebarContext.Provider value={contextValue}>
                 <BoxAISidebarContent
-                    cachedSuggestions={cache.suggestedQuestions}
+                    cachedSuggestedQuestions={cache.suggestedQuestions}
                     getSuggestedQuestions={getSuggestedQuestions}
                     isOpen
                     isStopResponseEnabled={isStopResponseEnabled}
