@@ -17,8 +17,8 @@ import {
     type JSONPatchOperations,
     type MetadataTemplate,
     type MetadataTemplateInstance,
-    type PaginationQueryInput,
 } from '@box/metadata-editor';
+import { TreeQueryInput } from '@box/combobox-with-api';
 
 import API from '../../api';
 import SidebarContent from './SidebarContent';
@@ -265,7 +265,7 @@ function MetadataSidebarRedesign({
         templateKey: string,
         fieldKey: string,
         level: number,
-        options: PaginationQueryInput,
+        options: TreeQueryInput,
     ) => metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options);
 
     const taxonomyNodeFetcher = async (scope: string, taxonomyKey: string, nodeID: string) =>
