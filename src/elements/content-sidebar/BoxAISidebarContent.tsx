@@ -211,10 +211,10 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                         items={items}
                         questions={questions}
                         onUserIntentToUseAI={handleUserIntentToUseAI}
-                        stopQuestion={stopQuestion}
-                        submitQuestion={sendQuestion}
                         shouldShowLandingPage={shouldShowLandingPage}
                         showLoadingIndicator={isLoading && shouldPreinitSession}
+                        stopQuestion={stopQuestion}
+                        submitQuestion={sendQuestion}
                         variant="sidebar"
                         recordAction={recordAction}
                         {...rest}

@@ -4,7 +4,7 @@
  */
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { type ItemType } from '@box/box-ai-content-answers';
+import {type ItemType, SuggestedQuestionType} from '@box/box-ai-content-answers';
 import { AgentsProvider, RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
@@ -133,22 +133,30 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         spreadsheetNotice = formatMessage(messages.welcomeMessageSpreadsheetNotice);
     }
 
+    const handleSuggestedQuestionsFetched = (fetchedSuggestedQuestions: SuggestedQuestionType[]) => {
+        setCacheValue('suggestedQuestions', fetchedSuggestedQuestions);
+    };
+
+    const suggestedQuestions = getSuggestedQuestions === null ? localizedQuestions : [];
+
     return (
         // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
         // that's why we need to use provider to pass other props
         <AgentsProvider value={cache.agents}>
             <BoxAISidebarContext.Provider value={contextValue}>
                 <BoxAISidebarContent
+                    cachedSuggestedQuestions={cache.suggestedQuestions}
                     getSuggestedQuestions={getSuggestedQuestions}
                     isOpen
                     isStopResponseEnabled={isStopResponseEnabled}
                     itemID={fileID}
                     itemIDs={[fileID]}
+                    onSuggestedQuestionsFetched={handleSuggestedQuestionsFetched}
                     restoredQuestions={questionsWithoutInProgress}
                     restoredSession={cache.encodedSession}
                     restoredShouldShowLandingPage={cache.shouldShowLandingPage}
                     shouldPreinitSession={shouldPreinitSession}
-                    suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
+                    suggestedQuestions={cache.suggestedQuestions.length > 0 ? cache.suggestedQuestions : suggestedQuestions}
                     warningNotice={spreadsheetNotice}
                     warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
                     {...rest}
