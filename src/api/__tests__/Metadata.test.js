@@ -2926,6 +2926,9 @@ describe('api/Metadata', () => {
                 marker: 'current_marker',
                 signal: abortController.signal,
                 searchInput: 'search_term',
+                onlySelectableOptions: false,
+                ancestorId: '123',
+                level: 1,
             };
 
             const metadataOptions = await metadata.getMetadataOptions(
@@ -2944,9 +2947,11 @@ describe('api/Metadata', () => {
                 url: 'options_url',
                 id: 'file_id',
                 params: {
+                    ancestor_id: '123',
+                    level: 1,
                     marker: 'current_marker',
+                    only_selectable_options: 'false',
                     query_text: 'search_term',
-                    level: 0,
                 },
             });
         });
