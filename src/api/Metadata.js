@@ -195,7 +195,7 @@ class Metadata extends File {
 
         const taxonomyInfo = new Map();
         await Promise.all(
-            levelsMap.keys().map(async taxonomyPath => {
+            [...levelsMap.keys()].map(async taxonomyPath => {
                 const result = await this.xhr.get({
                     url: `${this.getBaseApiUrl()}/${taxonomyPath}`,
                     id: getTypedFileId(id),
@@ -1177,21 +1177,15 @@ class Metadata extends File {
             signal,
         } = options;
 
-        const searchParams = new URLSearchParams();
-        if (marker) {
-            searchParams.append('marker', marker);
-        }
-        if (query_text) {
-            searchParams.append('query_text', query_text);
-        }
-        if (optionsLevel) {
-            searchParams.append('level', optionsLevel);
-        }
-        if (ancestor_id) {
-            searchParams.append('ancestor_id', ancestor_id);
-        }
+        const params = {
+            ...(marker ? { marker } : {}),
+            ...(query_text ? { query_text } : {}),
+            ...(optionsLevel ? { level: optionsLevel } : {}),
+            ...(ancestor_id ? { ancestor_id } : {}),
+        };
+
         if (onlySelectableOptions !== undefined) {
-            searchParams.append('only_selectable_options', Boolean(onlySelectableOptions).toString());
+            params['only_selectable_options'] = Boolean(onlySelectableOptions).toString();
         }
 
         const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
@@ -1203,7 +1197,7 @@ class Metadata extends File {
         const metadataOptions = await this.xhr.get({
             url,
             id: getTypedFileId(id),
-            params: searchParams,
+            params,
         });
 
         return getProp(metadataOptions, 'data', {});
