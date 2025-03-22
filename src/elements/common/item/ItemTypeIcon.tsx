@@ -2,6 +2,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 
 import { ItemIcon } from '@box/item-icon';
+import type { ItemIconProps } from '@box/item-icon';
 
 import { getFileIconType } from './utils';
 
@@ -11,11 +12,11 @@ import messages from './messages';
 
 import type { BoxItem } from '../../../common/types/core';
 
-export interface ItemTypeIconProps {
+export interface ItemTypeIconProps extends Partial<ItemIconProps> {
     item: BoxItem;
 }
 
-const ItemTypeIcon = ({ item }: ItemTypeIconProps) => {
+const ItemTypeIcon = ({ item, ...rest }: ItemTypeIconProps) => {
     const {
         archive_type: archiveType,
         extension = '',
@@ -54,7 +55,13 @@ const ItemTypeIcon = ({ item }: ItemTypeIconProps) => {
         message = messages.bookmark;
     }
 
-    return <ItemIcon ariaLabel={formatMessage(message, { extension: extension.toUpperCase() })} iconType={iconType} />;
+    return (
+        <ItemIcon
+            ariaLabel={formatMessage(message, { extension: extension.toUpperCase() })}
+            iconType={iconType}
+            {...rest}
+        />
+    );
 };
 
 export default ItemTypeIcon;

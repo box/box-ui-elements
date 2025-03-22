@@ -1,10 +1,16 @@
 {
     "type": "folder",
-    "id": "51964781421",
-    "etag": "2",
-    "name": "Codepen",
-    "size": 3017772941,
-    "parent": null,
+    "id": "51965506671",
+    "etag": "0",
+    "name": "Sample Folder",
+    "size": 997690524,
+    "parent": {
+        "type": "folder",
+        "id": "51964781421",
+        "sequence_id": "2",
+        "etag": "2",
+        "name": "CodePen"
+    },
     "permissions": {
         "can_download": false,
         "can_upload": false,
@@ -15,7 +21,7 @@
         "can_set_share_access": true
     },
     "path_collection": {
-        "total_count": 1,
+        "total_count": 2,
         "entries": [
             {
                 "type": "folder",
@@ -23,11 +29,18 @@
                 "sequence_id": null,
                 "etag": null,
                 "name": "All Files"
+            },
+            {
+                "type": "folder",
+                "id": "51964781421",
+                "sequence_id": "2",
+                "etag": "2",
+                "name": "CodePen"
             }
         ]
     },
-    "modified_at": "2018-12-11T12:47:22-08:00",
-    "created_at": "2018-07-30T14:30:43-07:00",
+    "modified_at": "2018-07-30T21:31:48-07:00",
+    "created_at": "2018-07-30T14:54:39-07:00",
     "modified_by": {
         "type": "user",
         "id": "769826773",
@@ -37,20 +50,20 @@
     "has_collaborations": true,
     "is_externally_owned": false,
     "item_collection": {
-        "total_count": 5,
+        "total_count": 3,
         "entries": [
             {
                 "type": "folder",
-                "id": "51965593459",
+                "id": "51966478978",
                 "etag": "0",
-                "name": "Another Sample Folder",
-                "size": 997690524,
+                "name": "Sample Nested Folder",
+                "size": 7108444,
                 "parent": {
                     "type": "folder",
-                    "id": "51964781421",
-                    "sequence_id": "2",
-                    "etag": "2",
-                    "name": "Codepen"
+                    "id": "51965506671",
+                    "sequence_id": "0",
+                    "etag": "0",
+                    "name": "Sample Folder"
                 },
                 "permissions": {
                     "can_download": false,
@@ -62,7 +75,7 @@
                     "can_set_share_access": true
                 },
                 "path_collection": {
-                    "total_count": 2,
+                    "total_count": 3,
                     "entries": [
                         {
                             "type": "folder",
@@ -76,64 +89,19 @@
                             "id": "51964781421",
                             "sequence_id": "2",
                             "etag": "2",
-                            "name": "Codepen"
-                        }
-                    ]
-                },
-                "modified_at": "2018-07-30T21:38:22-07:00",
-                "created_at": "2018-07-30T14:55:03-07:00",
-                "modified_by": {
-                    "type": "user",
-                    "id": "769826773",
-                    "name": "Demo Account",
-                    "login": "foo@bar.com"
-                },
-                "has_collaborations": true,
-                "is_externally_owned": false
-            },
-            {
-                "type": "folder",
-                "id": "51965506671",
-                "etag": "0",
-                "name": "Sample Folder",
-                "size": 997690524,
-                "parent": {
-                    "type": "folder",
-                    "id": "51964781421",
-                    "sequence_id": "2",
-                    "etag": "2",
-                    "name": "Codepen"
-                },
-                "permissions": {
-                    "can_download": false,
-                    "can_upload": false,
-                    "can_rename": false,
-                    "can_delete": false,
-                    "can_share": true,
-                    "can_invite_collaborator": false,
-                    "can_set_share_access": true
-                },
-                "path_collection": {
-                    "total_count": 2,
-                    "entries": [
-                        {
-                            "type": "folder",
-                            "id": "0",
-                            "sequence_id": null,
-                            "etag": null,
-                            "name": "All Files"
+                            "name": "CodePen"
                         },
                         {
                             "type": "folder",
-                            "id": "51964781421",
-                            "sequence_id": "2",
-                            "etag": "2",
-                            "name": "Codepen"
+                            "id": "51965506671",
+                            "sequence_id": "0",
+                            "etag": "0",
+                            "name": "Sample Folder"
                         }
                     ]
                 },
                 "modified_at": "2018-07-30T21:31:48-07:00",
-                "created_at": "2018-07-30T14:54:39-07:00",
+                "created_at": "2018-07-30T14:54:50-07:00",
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
@@ -145,18 +113,18 @@
             },
             {
                 "type": "file",
-                "id": "319004423111",
-                "etag": "4",
-                "name": "Sample 3D.box3d",
-                "size": 10208101,
+                "id": "308409990441",
+                "etag": "0",
+                "name": "Sample Image.jpg",
+                "size": 38149,
                 "parent": {
                     "type": "folder",
-                    "id": "51964781421",
-                    "sequence_id": "2",
-                    "etag": "2",
-                    "name": "Codepen"
+                    "id": "51965506671",
+                    "sequence_id": "0",
+                    "etag": "0",
+                    "name": "Sample Folder"
                 },
-                "extension": "box3d",
+                "extension": "jpg",
                 "permissions": {
                     "can_download": false,
                     "can_preview": true,
@@ -172,7 +140,7 @@
                     "can_view_annotations_self": true
                 },
                 "path_collection": {
-                    "total_count": 2,
+                    "total_count": 3,
                     "entries": [
                         {
                             "type": "folder",
@@ -186,12 +154,84 @@
                             "id": "51964781421",
                             "sequence_id": "2",
                             "etag": "2",
-                            "name": "Codepen"
+                            "name": "CodePen"
+                        },
+                        {
+                            "type": "folder",
+                            "id": "51965506671",
+                            "sequence_id": "0",
+                            "etag": "0",
+                            "name": "Sample Folder"
                         }
                     ]
                 },
-                "modified_at": "2018-09-14T15:13:13-07:00",
-                "created_at": "2018-09-14T13:16:26-07:00",
+                "modified_at": "2018-07-30T21:31:14-07:00",
+                "created_at": "2018-07-30T21:31:14-07:00",
+                "modified_by": {
+                    "type": "user",
+                    "id": "769826773",
+                    "name": "Demo Account",
+                    "login": "foo@bar.com"
+                },
+                "has_collaborations": true,
+                "is_externally_owned": false
+            },
+            {
+                "type": "file",
+                "id": "308409990873",
+                "etag": "0",
+                "name": "Sample Video.mp4",
+                "size": 990543931,
+                "parent": {
+                    "type": "folder",
+                    "id": "51965506671",
+                    "sequence_id": "0",
+                    "etag": "0",
+                    "name": "Sample Folder"
+                },
+                "extension": "mp4",
+                "permissions": {
+                    "can_download": false,
+                    "can_preview": true,
+                    "can_upload": false,
+                    "can_comment": true,
+                    "can_rename": false,
+                    "can_delete": false,
+                    "can_share": true,
+                    "can_set_share_access": true,
+                    "can_invite_collaborator": false,
+                    "can_annotate": false,
+                    "can_view_annotations_all": true,
+                    "can_view_annotations_self": true
+                },
+                "path_collection": {
+                    "total_count": 3,
+                    "entries": [
+                        {
+                            "type": "folder",
+                            "id": "0",
+                            "sequence_id": null,
+                            "etag": null,
+                            "name": "All Files"
+                        },
+                        {
+                            "type": "folder",
+                            "id": "51964781421",
+                            "sequence_id": "2",
+                            "etag": "2",
+                            "name": "CodePen"
+                        },
+                        {
+                            "type": "folder",
+                            "id": "51965506671",
+                            "sequence_id": "0",
+                            "etag": "0",
+                            "name": "Sample Folder"
+                        }
+                    ]
+                },
+                "modified_at": "2018-07-30T21:31:14-07:00",
+                "created_at": "2018-07-30T21:31:14-07:00",
                 "modified_by": {
                     "type": "user",
                     "id": "769826773",
@@ -203,7 +243,7 @@
             }
         ],
         "offset": 0,
-        "limit": 3,
+        "limit": 50,
         "order": [
             {
                 "by": "type",

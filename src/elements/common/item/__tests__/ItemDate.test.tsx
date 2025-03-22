@@ -36,4 +36,10 @@ describe('elements/common/item/ItemDate', () => {
 
         expect(screen.getByText('Oct 18, 2021')).toBeInTheDocument();
     });
+
+    test('renders component with modified date when device screen is small', () => {
+        renderComponent({ isSmall: true });
+
+        expect(screen.getByText('Oct 18, 2021')).toBeInTheDocument();
+    });
 });

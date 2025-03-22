@@ -10,11 +10,12 @@ import messages from './messages';
 import type { BoxItem, View } from '../../../common/types/core';
 
 export interface ItemDateProps {
+    isSmall?: boolean;
     item: BoxItem;
     view: View;
 }
 
-const ItemDate = ({ item, view }: ItemDateProps) => {
+const ItemDate = ({ isSmall, item, view }: ItemDateProps) => {
     const { interacted_at: interactedAt, modified_at: modifiedAt, modified_by: modifiedBy } = item;
 
     const { formatMessage } = useIntl();
@@ -33,7 +34,7 @@ const ItemDate = ({ item, view }: ItemDateProps) => {
         );
     }
 
-    if (modifiedBy?.name) {
+    if (!isSmall && modifiedBy?.name) {
         return formatMessage(messages.modifiedDateBy, {
             date: <DateValue date={modifiedAt} isRelative />,
             name: modifiedBy.name,

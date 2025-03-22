@@ -3,5 +3,9 @@
 .be {
     &.bce {
         min-width: $minimumWidth;
+
+        .bcpr {
+            z-index: 1; // Prevents overlay issues with list-item when a file is previewed
+        }
     }
 }
