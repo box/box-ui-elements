@@ -86,11 +86,11 @@ export const openDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
-
         await waitFor(async () => {
-            const deleteButton = await screenfindByRole('menuitem', { name: 'Delete' });
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.click(moreOptionsButton[0]);
+
+            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
             expect(deleteButton).toBeInTheDocument();
             await userEvent.click(deleteButton);
         });
@@ -105,10 +105,10 @@ export const closeDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
-
         await waitFor(async () => {
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.click(moreOptionsButton[0]);
+
             const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
             expect(deleteButton).toBeInTheDocument();
             await userEvent.click(deleteButton);
@@ -133,10 +133,10 @@ export const openRenameDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
-
         await waitFor(async () => {
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.click(moreOptionsButton[0]);
+
             const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
             expect(renameButton).toBeInTheDocument();
             await userEvent.click(renameButton);
@@ -150,10 +150,10 @@ export const closeRenameDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
-
         await waitFor(async () => {
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.click(moreOptionsButton[0]);
+
             const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
             expect(renameButton).toBeInTheDocument();
             await userEvent.click(renameButton);
@@ -173,10 +173,10 @@ export const openShareDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
-
         await waitFor(async () => {
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.click(moreOptionsButton[0]);
+
             const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
             expect(shareButton).toBeInTheDocument();
             await userEvent.click(shareButton);
@@ -193,10 +193,10 @@ export const closeShareDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
-
         await waitFor(async () => {
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.click(moreOptionsButton[0]);
+
             const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
             expect(shareButton).toBeInTheDocument();
             await userEvent.click(shareButton);
@@ -211,16 +211,6 @@ export const closeShareDialog = {
         });
         const inputElement = screen.queryByDisplayValue('https://example.com/share-link');
         expect(inputElement).not.toBeInTheDocument();
-    },
-};
-
-export const withMoreOptionsAndShareButton = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(async () => {
-            const row = canvas.getByText('Dec 8, 2022 by Preview');
-            await userEvent.click(row);
-        });
     },
 };
 
