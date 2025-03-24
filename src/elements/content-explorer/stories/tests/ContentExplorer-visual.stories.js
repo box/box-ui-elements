@@ -14,16 +14,16 @@ export const basic = {
         await waitFor(async () => {
             const folder = await canvas.findByText('An Ordered Folder');
             expect(folder).toBeInTheDocument();
-            expect(canvas.getByText('Tue Apr 16 2019 by Preview')).toBeInTheDocument();
+            expect(canvas.getByText('Apr 16, 2019 by Preview')).toBeInTheDocument();
 
             expect(canvas.getByText('Archive')).toBeInTheDocument();
-            expect(canvas.getByText('Wed Dec 16 2020 by Preview')).toBeInTheDocument();
+            expect(canvas.getByText('Dec 16, 2020 by Preview')).toBeInTheDocument();
 
             expect(canvas.getByText('Archived Folder')).toBeInTheDocument();
-            expect(canvas.getByText('Thu Dec 17 2020 by Preview')).toBeInTheDocument();
+            expect(canvas.getByText('Dec 17, 2020 by Preview')).toBeInTheDocument();
 
             expect(canvas.getByText('Book Sample.pdf')).toBeInTheDocument();
-            expect(canvas.getByText('Thu Dec 8 2022 by Preview')).toBeInTheDocument();
+            expect(canvas.getByText('Dec 8, 2022 by Preview')).toBeInTheDocument();
         });
     },
 };
@@ -208,7 +208,7 @@ export const withMoreOptionsAndShareButton = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         await waitFor(async () => {
-            const row = canvas.getByText('Thu Dec 8 2022 by Preview');
+            const row = canvas.getByText('Dec 8, 2022 by Preview');
             await userEvent.click(row);
         });
     },
