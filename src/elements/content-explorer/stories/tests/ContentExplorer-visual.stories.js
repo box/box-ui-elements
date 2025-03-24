@@ -90,8 +90,7 @@ export const openDeleteConfirmationDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
+            const deleteButton = await screenfindByRole('menuitem', { name: 'Delete' });
             expect(deleteButton).toBeInTheDocument();
             await userEvent.click(deleteButton);
         });
@@ -110,8 +109,7 @@ export const closeDeleteConfirmationDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
+            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
             expect(deleteButton).toBeInTheDocument();
             await userEvent.click(deleteButton);
         });
@@ -139,8 +137,7 @@ export const openRenameDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
+            const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
             expect(renameButton).toBeInTheDocument();
             await userEvent.click(renameButton);
         });
@@ -157,8 +154,7 @@ export const closeRenameDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
+            const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
             expect(renameButton).toBeInTheDocument();
             await userEvent.click(renameButton);
         });
@@ -181,8 +177,7 @@ export const openShareDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
+            const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
             expect(shareButton).toBeInTheDocument();
             await userEvent.click(shareButton);
         });
@@ -202,8 +197,7 @@ export const closeShareDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
+            const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
             expect(shareButton).toBeInTheDocument();
             await userEvent.click(shareButton);
         });
