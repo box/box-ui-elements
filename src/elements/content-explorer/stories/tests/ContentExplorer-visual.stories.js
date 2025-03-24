@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { expect, userEvent, waitFor, within, screen } from '@storybook/test';
+import { expect, screen, userEvent, waitFor, within } from '@storybook/test';
 
 import ContentExplorer from '../../ContentExplorer';
 import { mockEmptyRootFolder, mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
@@ -46,12 +46,10 @@ export const openCreateFolderDialog = {
         const addButton = await canvas.findByRole('button', { name: 'Add' });
         await userEvent.click(addButton);
 
-        await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
-            expect(newFolderButton).toBeInTheDocument();
-            await userEvent.click(newFolderButton);
-        });
+        const dropdown = await screen.findByRole('menu');
+        const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
+        expect(newFolderButton).toBeInTheDocument();
+        await userEvent.click(newFolderButton);
 
         expect(await screen.findByText('Please enter a name.')).toBeInTheDocument();
     },
@@ -64,12 +62,10 @@ export const closeCreateFolderDialog = {
         const addButton = await canvas.findByRole('button', { name: 'Add' });
         await userEvent.click(addButton);
 
-        await waitFor(async () => {
-            const dropdown = await screen.findByRole('menu');
-            const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
-            expect(newFolderButton).toBeInTheDocument();
-            await userEvent.click(newFolderButton);
-        });
+        const dropdown = await screen.findByRole('menu');
+        const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
+        expect(newFolderButton).toBeInTheDocument();
+        await userEvent.click(newFolderButton);
 
         expect(await screen.findByText('Please enter a name.')).toBeInTheDocument();
 
@@ -86,14 +82,14 @@ export const openDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.click(moreOptionsButton[0]);
+        await canvas.findByRole('grid', { name: 'List view' });
 
-            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
-            expect(deleteButton).toBeInTheDocument();
-            await userEvent.click(deleteButton);
-        });
+        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+        await userEvent.click(moreOptionsButton[0]);
+
+        const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
+        expect(deleteButton).toBeInTheDocument();
+        await userEvent.click(deleteButton);
 
         expect(
             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
@@ -105,14 +101,14 @@ export const closeDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.click(moreOptionsButton[0]);
+        await canvas.findByRole('grid', { name: 'List view' });
 
-            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
-            expect(deleteButton).toBeInTheDocument();
-            await userEvent.click(deleteButton);
-        });
+        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+        await userEvent.click(moreOptionsButton[0]);
+
+        const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
+        expect(deleteButton).toBeInTheDocument();
+        await userEvent.click(deleteButton);
 
         expect(
             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
