@@ -82,14 +82,16 @@ export const openDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        await canvas.findByRole('grid', { name: 'List view' });
+        await waitFor(async () => {
+            await canvas.findByRole('grid', { name: 'List view' });
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.click(moreOptionsButton[0]);
 
-        const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
-        expect(deleteButton).toBeInTheDocument();
-        await userEvent.click(deleteButton);
+            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
+            expect(deleteButton).toBeInTheDocument();
+            await userEvent.click(deleteButton);
+        });
 
         expect(
             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
