@@ -47,7 +47,7 @@ export const openCreateFolderDialog = {
         await userEvent.click(addButton);
 
         const dropdown = await screen.findByRole('menu');
-        const newFolderButton = within(dropdown).getByText('New Folder');
+        const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
         expect(newFolderButton).toBeInTheDocument();
         await userEvent.click(newFolderButton);
 
@@ -63,7 +63,7 @@ export const closeCreateFolderDialog = {
         await userEvent.click(addButton);
 
         const dropdown = await screen.findByRole('menu');
-        const newFolderButton = within(dropdown).getByText('New Folder');
+        const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
         expect(newFolderButton).toBeInTheDocument();
         await userEvent.click(newFolderButton);
 
@@ -86,7 +86,7 @@ export const openDeleteConfirmationDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         const dropdown = await screen.findByRole('menu');
-        const deleteButton = within(dropdown).getByText('Delete');
+        const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
         expect(deleteButton).toBeInTheDocument();
 
         await userEvent.click(deleteButton);
@@ -104,7 +104,7 @@ export const closeDeleteConfirmationDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         const dropdown = await screen.findByRole('menu');
-        const deleteButton = within(dropdown).getByText('Delete');
+        const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
         expect(deleteButton).toBeInTheDocument();
 
         await userEvent.click(deleteButton);
@@ -131,7 +131,7 @@ export const openRenameDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         const dropdown = await screen.findByRole('menu');
-        const renameButton = within(dropdown).getByText('Rename');
+        const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
         expect(renameButton).toBeInTheDocument();
         await userEvent.click(renameButton);
 
@@ -147,7 +147,7 @@ export const closeRenameDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         const dropdown = await screen.findByRole('menu');
-        const renameButton = within(dropdown).getByText('Rename');
+        const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
         expect(renameButton).toBeInTheDocument();
         await userEvent.click(renameButton);
 
@@ -169,7 +169,7 @@ export const openShareDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         const dropdown = await screen.findByRole('menu');
-        const shareButton = within(dropdown).getByText('Share');
+        const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
         expect(shareButton).toBeInTheDocument();
         await userEvent.click(shareButton);
 
@@ -188,7 +188,7 @@ export const closeShareDialog = {
         await userEvent.click(moreOptionsButton[0]);
 
         const dropdown = await screen.findByRole('menu');
-        const shareButton = within(dropdown).getByText('Share');
+        const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
         expect(shareButton).toBeInTheDocument();
         await userEvent.click(shareButton);
 
