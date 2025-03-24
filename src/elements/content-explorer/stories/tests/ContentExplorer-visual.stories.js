@@ -93,9 +93,9 @@ export const openDeleteConfirmationDialog = {
             const dropdown = await screen.findByRole('menu');
             const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
             expect(deleteButton).toBeInTheDocument();
+            await userEvent.click(deleteButton);
         });
 
-        await userEvent.click(deleteButton);
         expect(
             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
         ).toBeInTheDocument();
@@ -113,9 +113,9 @@ export const closeDeleteConfirmationDialog = {
             const dropdown = await screen.findByRole('menu');
             const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
             expect(deleteButton).toBeInTheDocument();
+            await userEvent.click(deleteButton);
         });
 
-        await userEvent.click(deleteButton);
         expect(
             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
         ).toBeInTheDocument();
