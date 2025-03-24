@@ -46,10 +46,12 @@ export const openCreateFolderDialog = {
         const addButton = await canvas.findByRole('button', { name: 'Add' });
         await userEvent.click(addButton);
 
-        const dropdown = await screen.findByRole('menu');
-        const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
-        expect(newFolderButton).toBeInTheDocument();
-        await userEvent.click(newFolderButton);
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
+            expect(newFolderButton).toBeInTheDocument();
+            await userEvent.click(newFolderButton);
+        });
 
         expect(await screen.findByText('Please enter a name.')).toBeInTheDocument();
     },
@@ -62,10 +64,12 @@ export const closeCreateFolderDialog = {
         const addButton = await canvas.findByRole('button', { name: 'Add' });
         await userEvent.click(addButton);
 
-        const dropdown = await screen.findByRole('menu');
-        const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
-        expect(newFolderButton).toBeInTheDocument();
-        await userEvent.click(newFolderButton);
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const newFolderButton = await within(dropdown).findByRole('menuitem', { name: 'New Folder' });
+            expect(newFolderButton).toBeInTheDocument();
+            await userEvent.click(newFolderButton);
+        });
 
         expect(await screen.findByText('Please enter a name.')).toBeInTheDocument();
 
@@ -85,9 +89,11 @@ export const openDeleteConfirmationDialog = {
         const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton[0]);
 
-        const dropdown = await screen.findByRole('menu');
-        const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
-        expect(deleteButton).toBeInTheDocument();
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
+            expect(deleteButton).toBeInTheDocument();
+        });
 
         await userEvent.click(deleteButton);
         expect(
@@ -103,9 +109,11 @@ export const closeDeleteConfirmationDialog = {
         const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton[0]);
 
-        const dropdown = await screen.findByRole('menu');
-        const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
-        expect(deleteButton).toBeInTheDocument();
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const deleteButton = await within(dropdown).findByRole('menuitem', { name: 'Delete' });
+            expect(deleteButton).toBeInTheDocument();
+        });
 
         await userEvent.click(deleteButton);
         expect(
@@ -130,10 +138,12 @@ export const openRenameDialog = {
         const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton[0]);
 
-        const dropdown = await screen.findByRole('menu');
-        const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
-        expect(renameButton).toBeInTheDocument();
-        await userEvent.click(renameButton);
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
+            expect(renameButton).toBeInTheDocument();
+            await userEvent.click(renameButton);
+        });
 
         expect(await screen.findByText('Please enter a new name for An Ordered Folder:')).toBeInTheDocument();
     },
@@ -146,10 +156,12 @@ export const closeRenameDialog = {
         const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton[0]);
 
-        const dropdown = await screen.findByRole('menu');
-        const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
-        expect(renameButton).toBeInTheDocument();
-        await userEvent.click(renameButton);
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const renameButton = await within(dropdown).findByRole('menuitem', { name: 'Rename' });
+            expect(renameButton).toBeInTheDocument();
+            await userEvent.click(renameButton);
+        });
 
         expect(await screen.findByText('Please enter a new name for An Ordered Folder:')).toBeInTheDocument();
         const cancelButton = screen.getByText('Cancel');
@@ -168,10 +180,12 @@ export const openShareDialog = {
         const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton[0]);
 
-        const dropdown = await screen.findByRole('menu');
-        const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
-        expect(shareButton).toBeInTheDocument();
-        await userEvent.click(shareButton);
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
+            expect(shareButton).toBeInTheDocument();
+            await userEvent.click(shareButton);
+        });
 
         expect(await screen.findByText('Shared Link:')).toBeInTheDocument();
 
@@ -187,10 +201,12 @@ export const closeShareDialog = {
         const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
         await userEvent.click(moreOptionsButton[0]);
 
-        const dropdown = await screen.findByRole('menu');
-        const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
-        expect(shareButton).toBeInTheDocument();
-        await userEvent.click(shareButton);
+        await waitFor(async () => {
+            const dropdown = await screen.findByRole('menu');
+            const shareButton = await within(dropdown).findByRole('menuitem', { name: 'Share' });
+            expect(shareButton).toBeInTheDocument();
+            await userEvent.click(shareButton);
+        });
 
         expect(await screen.findByText('Shared Link:')).toBeInTheDocument();
         const closeButton = screen.getByText('Close');
