@@ -104,14 +104,17 @@ export const closeDeleteConfirmationDialog = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        await canvas.findByRole('grid', { name: 'List view' });
+        await waitFor(async () => {
+            await canvas.findByRole('grid', { name: 'List view' });
 
-        const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-        await userEvent.click(moreOptionsButton[0]);
+            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.hover(moreOptionsButton[0]);
+            await userEvent.click(moreOptionsButton[0]);
 
-        const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
-        expect(deleteButton).toBeInTheDocument();
-        await userEvent.click(deleteButton);
+            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
+            await userEvent.hover(deleteButton);
+            await userEvent.click(deleteButton);
+        });
 
         expect(
             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
@@ -133,11 +136,14 @@ export const openRenameDialog = {
         const canvas = within(canvasElement);
 
         await waitFor(async () => {
+            await canvas.findByRole('grid', { name: 'List view' });
+
             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.hover(moreOptionsButton[0]);
             await userEvent.click(moreOptionsButton[0]);
 
             const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
-            expect(renameButton).toBeInTheDocument();
+            await userEvent.hover(renameButton);
             await userEvent.click(renameButton);
         });
 
@@ -150,11 +156,14 @@ export const closeRenameDialog = {
         const canvas = within(canvasElement);
 
         await waitFor(async () => {
+            await canvas.findByRole('grid', { name: 'List view' });
+
             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.hover(moreOptionsButton[0]);
             await userEvent.click(moreOptionsButton[0]);
 
             const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
-            expect(renameButton).toBeInTheDocument();
+            await userEvent.hover(renameButton);
             await userEvent.click(renameButton);
         });
 
@@ -173,11 +182,14 @@ export const openShareDialog = {
         const canvas = within(canvasElement);
 
         await waitFor(async () => {
+            await canvas.findByRole('grid', { name: 'List view' });
+
             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.hover(moreOptionsButton[0]);
             await userEvent.click(moreOptionsButton[0]);
 
             const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
-            expect(shareButton).toBeInTheDocument();
+            await userEvent.hover(shareButton);
             await userEvent.click(shareButton);
         });
 
@@ -193,11 +205,13 @@ export const closeShareDialog = {
         const canvas = within(canvasElement);
 
         await waitFor(async () => {
+            await canvas.findByRole('grid', { name: 'List view' });
+
             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
             await userEvent.click(moreOptionsButton[0]);
 
             const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
-            expect(shareButton).toBeInTheDocument();
+            await userEvent.hover(shareButton);
             await userEvent.click(shareButton);
         });
 
