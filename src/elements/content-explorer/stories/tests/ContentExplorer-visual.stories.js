@@ -86,10 +86,11 @@ export const openDeleteConfirmationDialog = {
             await canvas.findByRole('grid', { name: 'List view' });
 
             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+            await userEvent.hover(moreOptionsButton[0]);
             await userEvent.click(moreOptionsButton[0]);
 
             const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
-            expect(deleteButton).toBeInTheDocument();
+            await userEvent.hover(deleteButton);
             await userEvent.click(deleteButton);
         });
 
