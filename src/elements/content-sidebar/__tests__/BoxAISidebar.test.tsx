@@ -18,12 +18,13 @@ jest.mock('@box/box-ai-content-answers', () => ({
     // BoxAiContentAnswers: jest.fn().mockImplementation(() => <div data-testid="content-answers" />),
     withApiWrapper: Component => props => (
         <Component
+            cachedSuggestedQuestions={props.cachedSuggestedQuestions}
             createSession={props.createSessionRequest}
             encodedSession={props.restoredSession}
             error={null}
             getAIStudioAgents={props.getAIStudioAgents}
+            getSuggestedQuestions={props.getSuggestedQuestions}
             hostAppName={props.hostAppName}
-            hasCustomSuggestedQuestions={false}
             isAgentSelectorEnabled={props.isAgentSelectorEnabled}
             isAIStudioAgentSelectorEnabled={props.isAIStudioAgentSelectorEnabled}
             isCitationsEnabled={props.isCitationsEnabled}
@@ -38,8 +39,10 @@ jest.mock('@box/box-ai-content-answers', () => ({
             onClearAction={mockOnClearAction}
             onCloseModal={jest.fn()}
             onSelectAgent={jest.fn()}
+            onSuggestedQuestionsFetched={props.onSuggestedQuestionsFetched}
             onAgentEditorToggle={jest.fn()}
             questions={props.restoredQuestions}
+            restoredShouldShowLandingPage={props.restoredShouldShowLandingPage}
             retryQuestion={jest.fn()}
             sendQuestion={props.sendQuestion}
             shouldPreinitSession={props.shouldPreinitSession}
@@ -248,6 +251,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                 encodedSession: '1234',
                 questions: [],
                 agents: mockAgents,
+                shouldShowLandingPage: true,
                 suggestedQuestions: [
                     {
                         id: 'suggested-question-1',
@@ -256,11 +260,10 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                     },
                 ],
             },
-            hasCustomSuggestedQuestions: true,
-            shouldShowLandingPage: true,
+            getSuggestedQuestions: jest.fn(),
         });
 
-        expect(screen.queryByText('Summarize this document', { exact: false })).toBeInTheDocument();
+        expect(screen.getByText('Summarize this document', { exact: false })).toBeInTheDocument();
         expect(screen.queryByText('Loading suggested questions', { exact: false })).not.toBeInTheDocument();
     });
 
