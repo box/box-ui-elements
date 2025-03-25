@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { ComponentWithCurrentUser, CurrentUserState, WithCurrentUserProps } from '../withCurrentUser';
-import { withCurrentUser } from '../index';
+import withCurrentUser, { ComponentWithCurrentUser, CurrentUserState, WithCurrentUserProps } from '../withCurrentUser';
 // @ts-ignore no ts defintion
 import messages from '../../messages';
 
