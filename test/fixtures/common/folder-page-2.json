@@ -2,7 +2,7 @@
     "type": "folder",
     "id": "51964781421",
     "etag": "2",
-    "name": "Codepen",
+    "name": "CodePen",
     "size": 3017772941,
     "parent": null,
     "permissions": {
@@ -50,7 +50,7 @@
                     "id": "51964781421",
                     "sequence_id": "2",
                     "etag": "2",
-                    "name": "Codepen"
+                    "name": "CodePen"
                 },
                 "extension": "mp3",
                 "permissions": {
@@ -82,7 +82,7 @@
                             "id": "51964781421",
                             "sequence_id": "2",
                             "etag": "2",
-                            "name": "Codepen"
+                            "name": "CodePen"
                         }
                     ]
                 },
@@ -108,7 +108,7 @@
                     "id": "51964781421",
                     "sequence_id": "2",
                     "etag": "2",
-                    "name": "Codepen"
+                    "name": "CodePen"
                 },
                 "extension": "csv",
                 "permissions": {
@@ -140,7 +140,7 @@
                             "id": "51964781421",
                             "sequence_id": "2",
                             "etag": "2",
-                            "name": "Codepen"
+                            "name": "CodePen"
                         }
                     ]
                 },
