@@ -13,13 +13,6 @@ import {
 // @ts-ignore
 import { Collection } from '../../common/types/core';
 
-jest.mock(
-    '@box/react-virtualized/dist/es/AutoSizer',
-    () =>
-        ({ children }) =>
-            children({ height: 600, width: 600 }),
-);
-
 const mockProps: ContentProps = {
     canDelete: true,
     canDownload: true,
@@ -27,7 +20,6 @@ const mockProps: ContentProps = {
     canRename: true,
     canShare: true,
     currentCollection: { items: [], percentLoaded: 100 } as Collection,
-    focusedRow: 0,
     isMedium: false,
     isSmall: false,
     isTouch: false,
@@ -40,7 +32,6 @@ const mockProps: ContentProps = {
     onItemShare: jest.fn(),
     onMetadataUpdate: jest.fn(),
     onSortChange: jest.fn(),
-    rootId: 'root',
     view: VIEW_RECENTS,
     viewMode: VIEW_MODE_LIST,
 };
