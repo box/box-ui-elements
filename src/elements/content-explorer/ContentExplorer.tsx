@@ -1612,7 +1612,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             currentPageNumber,
             currentPageSize,
             errorCode,
-            focusedRow,
             gridColumnCount,
             isCreateFolderModalOpen,
             isDeleteModalOpen,
@@ -1681,7 +1680,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 canRename={canRename}
                                 canShare={canShare}
                                 currentCollection={currentCollection}
-                                focusedRow={focusedRow}
                                 gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
                                 isMedium={isMedium}
                                 isSmall={isSmall}
@@ -1697,9 +1695,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 onItemShare={this.share}
                                 onMetadataUpdate={this.updateMetadata}
                                 onSortChange={this.sort}
-                                rootElement={this.rootElement}
-                                rootId={rootFolderId}
-                                selected={selected}
                                 view={view}
                                 viewMode={viewMode}
                             />

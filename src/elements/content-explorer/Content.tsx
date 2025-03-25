@@ -1,16 +1,17 @@
 import * as React from 'react';
 import EmptyView from '../common/empty-view';
-import ProgressBar from '../common/progress-bar';
 import ItemGrid from '../common/item-grid';
 import ItemList from '../common/item-list';
+import ProgressBar from '../common/progress-bar';
 import MetadataBasedItemList from '../../features/metadata-based-view';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
-import type { ItemAction } from '../common/item';
+import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from '../common/item';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import './Content.scss';
+
 /**
  * Determines if we should show the empty state
  *
@@ -24,27 +25,14 @@ function isEmpty(view: View, currentCollection: Collection, fieldsToShow: Fields
     return view === VIEW_ERROR || !items.length || (view === VIEW_METADATA && !fieldsToShow.length);
 }
 
-export interface ContentProps {
-    canDelete: boolean;
-    canDownload: boolean;
-    canPreview: boolean;
-    canRename: boolean;
-    canShare: boolean;
+export interface ContentProps extends Required<ItemEventHandlers>, Required<ItemEventPermissions> {
     currentCollection: Collection;
     fieldsToShow?: FieldsToShow;
-    focusedRow: number;
     gridColumnCount?: number;
     isMedium: boolean;
     isSmall: boolean;
     isTouch: boolean;
     itemActions?: ItemAction[];
-    onItemClick: (item: BoxItem) => void;
-    onItemDelete: (item: BoxItem) => void;
-    onItemDownload: (item: BoxItem) => void;
-    onItemPreview: (item: BoxItem) => void;
-    onItemRename: (item: BoxItem) => void;
-    onItemSelect: (item: BoxItem) => void;
-    onItemShare: (item: BoxItem) => void;
     onMetadataUpdate: (
         item: BoxItem,
         field: string,
@@ -52,14 +40,20 @@ export interface ContentProps {
         editedValue: MetadataFieldValue,
     ) => void;
     onSortChange: (sortBy: string, sortDirection: string) => void;
-    rootElement?: HTMLElement;
-    rootId: string;
-    selected?: BoxItem;
     view: View;
     viewMode?: ViewMode;
 }
 
-const Content = ({ currentCollection, fieldsToShow = [], view, viewMode = VIEW_MODE_LIST, ...rest }: ContentProps) => {
+const Content = ({
+    currentCollection,
+    fieldsToShow = [],
+    gridColumnCount,
+    onMetadataUpdate,
+    onSortChange,
+    view,
+    viewMode = VIEW_MODE_LIST,
+    ...rest
+}: ContentProps) => {
     const { items, percentLoaded, sortBy, sortDirection } = currentCollection;
 
     const isViewEmpty = isEmpty(view, currentCollection, fieldsToShow);
@@ -73,12 +67,26 @@ const Content = ({ currentCollection, fieldsToShow = [], view, viewMode = VIEW_M
 
             {isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
             {!isViewEmpty && isMetadataBasedView && (
-                <MetadataBasedItemList currentCollection={currentCollection} fieldsToShow={fieldsToShow} {...rest} />
+                <MetadataBasedItemList
+                    currentCollection={currentCollection}
+                    fieldsToShow={fieldsToShow}
+                    onMetadataUpdate={onMetadataUpdate}
+                    {...rest}
+                />
             )}
             {!isViewEmpty && isListView && (
-                <ItemList items={items} sortBy={sortBy} sortDirection={sortDirection} view={view} {...rest} />
+                <ItemList
+                    items={items}
+                    onSortChange={onSortChange}
+                    sortBy={sortBy}
+                    sortDirection={sortDirection}
+                    view={view}
+                    {...rest}
+                />
             )}
-            {!isViewEmpty && isGridView && <ItemGrid items={items} view={view} {...rest} />}
+            {!isViewEmpty && isGridView && (
+                <ItemGrid gridColumnCount={gridColumnCount} items={items} view={view} {...rest} />
+            )}
         </div>
     );
 };
