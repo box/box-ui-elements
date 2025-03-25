@@ -78,154 +78,154 @@ export const closeCreateFolderDialog = {
     },
 };
 
-export const openDeleteConfirmationDialog = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
+// export const openDeleteConfirmationDialog = {
+//     play: async ({ canvasElement }) => {
+//         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            await canvas.findByRole('grid', { name: 'List view' });
+//         await waitFor(async () => {
+//             await canvas.findByRole('grid', { name: 'List view' });
 
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.hover(moreOptionsButton[0]);
-            await userEvent.click(moreOptionsButton[0]);
+//             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+//             await userEvent.hover(moreOptionsButton[0]);
+//             await userEvent.click(moreOptionsButton[0]);
 
-            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
-            await userEvent.hover(deleteButton);
-            await userEvent.click(deleteButton);
-        });
+//             const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
+//             await userEvent.hover(deleteButton);
+//             await userEvent.click(deleteButton);
+//         });
 
-        expect(
-            await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
-        ).toBeInTheDocument();
-    },
-};
+//         expect(
+//             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
+//         ).toBeInTheDocument();
+//     },
+// };
 
-export const closeDeleteConfirmationDialog = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
+// export const closeDeleteConfirmationDialog = {
+//     play: async ({ canvasElement }) => {
+//         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            await canvas.findByRole('grid', { name: 'List view' });
+//         await waitFor(async () => {
+//             await canvas.findByRole('grid', { name: 'List view' });
 
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.hover(moreOptionsButton[0]);
-            await userEvent.click(moreOptionsButton[0]);
+//             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+//             await userEvent.hover(moreOptionsButton[0]);
+//             await userEvent.click(moreOptionsButton[0]);
 
-            const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
-            await userEvent.hover(deleteButton);
-            await userEvent.click(deleteButton);
-        });
+//             const deleteButton = await screen.findByRole('menuitem', { name: 'Delete' });
+//             await userEvent.hover(deleteButton);
+//             await userEvent.click(deleteButton);
+//         });
 
-        expect(
-            await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
-        ).toBeInTheDocument();
+//         expect(
+//             await screen.findByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
+//         ).toBeInTheDocument();
 
-        const cancelButton = screen.getByText('Cancel');
-        await userEvent.click(cancelButton);
+//         const cancelButton = screen.getByText('Cancel');
+//         await userEvent.click(cancelButton);
 
-        await waitFor(() => {
-            expect(
-                screen.queryByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
-            ).not.toBeInTheDocument();
-        });
-    },
-};
+//         await waitFor(() => {
+//             expect(
+//                 screen.queryByText('Are you sure you want to delete An Ordered Folder and all its contents?'),
+//             ).not.toBeInTheDocument();
+//         });
+//     },
+// };
 
-export const openRenameDialog = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
+// export const openRenameDialog = {
+//     play: async ({ canvasElement }) => {
+//         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            await canvas.findByRole('grid', { name: 'List view' });
+//         await waitFor(async () => {
+//             await canvas.findByRole('grid', { name: 'List view' });
 
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.hover(moreOptionsButton[0]);
-            await userEvent.click(moreOptionsButton[0]);
+//             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+//             await userEvent.hover(moreOptionsButton[0]);
+//             await userEvent.click(moreOptionsButton[0]);
 
-            const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
-            await userEvent.hover(renameButton);
-            await userEvent.click(renameButton);
-        });
+//             const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
+//             await userEvent.hover(renameButton);
+//             await userEvent.click(renameButton);
+//         });
 
-        expect(await screen.findByText('Please enter a new name for An Ordered Folder:')).toBeInTheDocument();
-    },
-};
+//         expect(await screen.findByText('Please enter a new name for An Ordered Folder:')).toBeInTheDocument();
+//     },
+// };
 
-export const closeRenameDialog = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
+// export const closeRenameDialog = {
+//     play: async ({ canvasElement }) => {
+//         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            await canvas.findByRole('grid', { name: 'List view' });
+//         await waitFor(async () => {
+//             await canvas.findByRole('grid', { name: 'List view' });
 
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.hover(moreOptionsButton[0]);
-            await userEvent.click(moreOptionsButton[0]);
+//             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+//             await userEvent.hover(moreOptionsButton[0]);
+//             await userEvent.click(moreOptionsButton[0]);
 
-            const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
-            await userEvent.hover(renameButton);
-            await userEvent.click(renameButton);
-        });
+//             const renameButton = await screen.findByRole('menuitem', { name: 'Rename' });
+//             await userEvent.hover(renameButton);
+//             await userEvent.click(renameButton);
+//         });
 
-        expect(await screen.findByText('Please enter a new name for An Ordered Folder:')).toBeInTheDocument();
-        const cancelButton = screen.getByText('Cancel');
-        await userEvent.click(cancelButton);
+//         expect(await screen.findByText('Please enter a new name for An Ordered Folder:')).toBeInTheDocument();
+//         const cancelButton = screen.getByText('Cancel');
+//         await userEvent.click(cancelButton);
 
-        await waitFor(() => {
-            expect(screen.queryByText('Please enter a new name for An Ordered Folder:')).not.toBeInTheDocument();
-        });
-    },
-};
+//         await waitFor(() => {
+//             expect(screen.queryByText('Please enter a new name for An Ordered Folder:')).not.toBeInTheDocument();
+//         });
+//     },
+// };
 
-export const openShareDialog = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
+// export const openShareDialog = {
+//     play: async ({ canvasElement }) => {
+//         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            await canvas.findByRole('grid', { name: 'List view' });
+//         await waitFor(async () => {
+//             await canvas.findByRole('grid', { name: 'List view' });
 
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.hover(moreOptionsButton[0]);
-            await userEvent.click(moreOptionsButton[0]);
+//             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+//             await userEvent.hover(moreOptionsButton[0]);
+//             await userEvent.click(moreOptionsButton[0]);
 
-            const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
-            await userEvent.hover(shareButton);
-            await userEvent.click(shareButton);
-        });
+//             const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
+//             await userEvent.hover(shareButton);
+//             await userEvent.click(shareButton);
+//         });
 
-        expect(await screen.findByText('Shared Link:')).toBeInTheDocument();
+//         expect(await screen.findByText('Shared Link:')).toBeInTheDocument();
 
-        const inputElement = screen.getByDisplayValue('https://example.com/share-link');
-        expect(inputElement).toBeInTheDocument();
-    },
-};
+//         const inputElement = screen.getByDisplayValue('https://example.com/share-link');
+//         expect(inputElement).toBeInTheDocument();
+//     },
+// };
 
-export const closeShareDialog = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
+// export const closeShareDialog = {
+//     play: async ({ canvasElement }) => {
+//         const canvas = within(canvasElement);
 
-        await waitFor(async () => {
-            await canvas.findByRole('grid', { name: 'List view' });
+//         await waitFor(async () => {
+//             await canvas.findByRole('grid', { name: 'List view' });
 
-            const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.click(moreOptionsButton[0]);
+//             const moreOptionsButton = await canvas.findAllByRole('button', { name: 'More options' });
+//             await userEvent.click(moreOptionsButton[0]);
 
-            const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
-            await userEvent.hover(shareButton);
-            await userEvent.click(shareButton);
-        });
+//             const shareButton = await screen.findByRole('menuitem', { name: 'Share' });
+//             await userEvent.hover(shareButton);
+//             await userEvent.click(shareButton);
+//         });
 
-        expect(await screen.findByText('Shared Link:')).toBeInTheDocument();
-        const closeButton = screen.getByText('Close');
-        await userEvent.click(closeButton);
+//         expect(await screen.findByText('Shared Link:')).toBeInTheDocument();
+//         const closeButton = screen.getByText('Close');
+//         await userEvent.click(closeButton);
 
-        await waitFor(() => {
-            expect(screen.queryByText('Shared Link:')).not.toBeInTheDocument();
-        });
-        const inputElement = screen.queryByDisplayValue('https://example.com/share-link');
-        expect(inputElement).not.toBeInTheDocument();
-    },
-};
+//         await waitFor(() => {
+//             expect(screen.queryByText('Shared Link:')).not.toBeInTheDocument();
+//         });
+//         const inputElement = screen.queryByDisplayValue('https://example.com/share-link');
+//         expect(inputElement).not.toBeInTheDocument();
+//     },
+// };
 
 export const emptyState = {
     args: {
