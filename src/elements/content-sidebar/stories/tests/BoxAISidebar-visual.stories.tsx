@@ -16,8 +16,7 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
         expect(clearButton).toBeInTheDocument();
 
         expect(await canvas.findByText(/Welcome to Box AI/i)).toBeInTheDocument();
-        expect(await canvas.findByText(/Ask questions about/i)).toBeInTheDocument();
-        expect(await canvas.findByText('This chat will be cleared when you close this content')).toBeInTheDocument();
+        expect(await canvas.findByText('Chat cleared when you close content')).toBeInTheDocument();
         expect(await canvas.findByPlaceholderText('Ask Box AI')).toBeInTheDocument();
         expect(await canvas.findByText('Summarize this document')).toBeInTheDocument();
         expect(await canvas.findByText('What are the key takeaways?')).toBeInTheDocument();

@@ -63,7 +63,7 @@ jest.mock(
             children({ height: 600, width: 1200 }),
 );
 
-jest.mock('../PreviewDialog', () => props => {
+jest.mock('../../common/preview-dialog/PreviewDialog', () => props => {
     props.onPreview();
     return 'mock-content-preview';
 });
