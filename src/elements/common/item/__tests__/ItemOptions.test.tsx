@@ -11,11 +11,11 @@ describe('elements/common/item/ItemOptions', () => {
             canPreview: true,
             canRename: true,
             canShare: true,
-            isGridView: true,
             item: {
                 type: 'file',
                 id: '005',
                 name: 'Box file',
+                extension: 'pdf',
                 permissions: {
                     can_delete: true,
                     can_download: true,
@@ -24,6 +24,7 @@ describe('elements/common/item/ItemOptions', () => {
                     can_share: true,
                 },
             },
+            viewMode: 'grid',
         };
         return render(<ItemOptions {...defaultProps} {...props} />);
     };
@@ -70,6 +71,7 @@ describe('elements/common/item/ItemOptions', () => {
             itemActions: [
                 { label: 'Archive', type: 'folder' }, // Should be filtered since there are no folder items
                 { label: 'Email', type: 'file' },
+                { filter: ({ extension }) => extension === 'pdf', label: 'Export' },
                 { label: 'Favorite', type: 'file' },
             ],
         });

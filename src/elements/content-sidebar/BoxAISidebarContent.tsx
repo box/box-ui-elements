@@ -211,10 +211,10 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                         items={items}
                         questions={questions}
                         onUserIntentToUseAI={handleUserIntentToUseAI}
+                        shouldShowLandingPage={cache.shouldShowLandingPage}
+                        showLoadingIndicator={isLoading && shouldPreinitSession}
                         stopQuestion={stopQuestion}
                         submitQuestion={sendQuestion}
-                        shouldShowLandingPage={shouldShowLandingPage}
-                        showLoadingIndicator={isLoading && shouldPreinitSession}
                         variant="sidebar"
                         recordAction={recordAction}
                         {...rest}
@@ -241,7 +241,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                 open={isModalOpen}
                 questions={questions}
                 recordAction={isModalOpen ? recordAction : undefined}
-                shouldShowLandingPage={shouldShowLandingPage}
+                shouldShowLandingPage={cache.shouldShowLandingPage}
                 showLoadingIndicator={false}
                 stopPropagationOnEsc
                 stopQuestion={stopQuestion}
