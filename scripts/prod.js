@@ -11,8 +11,8 @@ const bundleCount = locales.length * 2; // One with react, and one without
 let counter = 0;
 const workers = workerFarm(
     {
-        maxConcurrentWorkers: 2,
-        maxRetries: 0,
+        maxConcurrentWorkers: 1,
+        maxRetries: 3,
     },
     require.resolve('./build_locale.js'),
 );
