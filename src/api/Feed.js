@@ -661,10 +661,6 @@ class Feed extends Base {
 
         if (shouldUseUAA) {
             fileActivitiesPromise.then(response => {
-                if (!response) {
-                    return;
-                }
-
                 const uaaFeedItems = getParsedFileActivitiesResponse(response, permissions);
                 compareV2AndUaaFeedItems(uaaFeedItems, response);
                 handleFeedItems(uaaFeedItems);
