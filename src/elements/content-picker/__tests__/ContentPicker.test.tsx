@@ -352,4 +352,102 @@ describe('elements/content-picker/ContentPicker', () => {
             expect(screen.getAllByRole('row')[0]).toHaveFocus();
         });
     });
+
+    describe('Item Actions', () => {
+        test('should render item actions menu when itemActions prop is provided', async () => {
+            const itemActions = [
+                {
+                    label: 'Test Action',
+                    onAction: jest.fn(),
+                },
+            ];
+            renderComponent({ itemActions });
+
+            await waitFor(() => {
+                expect(screen.getByTestId('content-picker')).toBeInTheDocument();
+            });
+
+            const moreOptionsButtons = screen.getAllByRole('button', { name: 'More options' });
+            expect(moreOptionsButtons.length).toBeGreaterThan(0);
+        });
+
+        test('should not render item actions menu when itemActions prop is not provided', async () => {
+            renderComponent();
+
+            await waitFor(() => {
+                expect(screen.getByTestId('content-picker')).toBeInTheDocument();
+            });
+
+            const moreOptionsButtons = screen.queryAllByRole('button', { name: 'More options' });
+            expect(moreOptionsButtons).toHaveLength(0);
+        });
+
+        test('should call onAction when item action is clicked', async () => {
+            const onAction = jest.fn();
+            const itemActions = [
+                {
+                    label: 'Test Action',
+                    onAction,
+                },
+            ];
+            renderComponent({ itemActions });
+
+            await waitFor(() => {
+                expect(screen.getByTestId('content-picker')).toBeInTheDocument();
+            });
+
+            const moreOptionsButton = screen.getAllByRole('button', { name: 'More options' })[0];
+            await userEvent.click(moreOptionsButton);
+
+            const menuItem = screen.getByRole('menuitem', { name: 'Test Action' });
+            await userEvent.click(menuItem);
+
+            expect(onAction).toHaveBeenCalled();
+        });
+
+        test('should handle item actions with different item types', async () => {
+            const onAction = jest.fn();
+            const itemActions = [
+                {
+                    label: 'Test Action',
+                    onAction,
+                    type: 'folder',
+                },
+            ];
+            renderComponent({ itemActions });
+
+            await waitFor(() => {
+                expect(screen.getByTestId('content-picker')).toBeInTheDocument();
+            });
+
+            const moreOptionsButton = screen.getAllByRole('button', { name: 'More options' })[0];
+            await userEvent.click(moreOptionsButton);
+
+            const menuItem = screen.getByRole('menuitem', { name: 'Test Action' });
+            await userEvent.click(menuItem);
+
+            expect(onAction).toHaveBeenCalled();
+        });
+
+        test('should not render item actions on type that is not specified', async () => {
+            const onAction = jest.fn();
+            const itemActions = [
+                {
+                    label: 'Test Action',
+                    onAction,
+                    type: 'file',
+                },
+            ];
+            renderComponent({ itemActions });
+
+            await waitFor(() => {
+                expect(screen.getByTestId('content-picker')).toBeInTheDocument();
+            });
+
+            const moreOptionsButtons = screen.queryAllByRole('button', { name: 'More options' });
+            const fileCount = mockRootFolder.item_collection.entries.filter(item => item.type !== 'folder').length;
+
+            expect(moreOptionsButtons).toHaveLength(fileCount);
+        });
+    });
 });
