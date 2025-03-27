@@ -19,6 +19,7 @@ export interface MetadataInstanceEditorProps {
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
     isLargeFile: boolean;
+    isMetadataMultiLevelTaxonomyFieldEnabled: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
@@ -36,6 +37,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
     isLargeFile,
+    isMetadataMultiLevelTaxonomyFieldEnabled,
     isUnsavedChangesModalOpen,
     onCancel,
     onDelete,
@@ -48,7 +50,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     return (
         <MetadataInstanceForm
             // TODO investigate if this property should be optional and by default false
-            isMultilevelTaxonomyFieldEnabled={false}
+            isMultilevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             errorCode={errorCode}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}

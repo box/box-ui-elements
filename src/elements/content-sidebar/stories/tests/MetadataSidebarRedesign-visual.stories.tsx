@@ -63,6 +63,7 @@ export const AddTemplateDropdownMenuOnEmpty = {
         metadataSidebarProps: {
             isBoxAiSuggestionsEnabled: true,
             isBetaLanguageEnabled: false,
+            isMetadataMultiLevelTaxonomyFieldEnabled: false,
             isFeatureEnabled: true,
             onError: fn(),
             onSuccess: fn(),
@@ -204,6 +205,7 @@ export const EmptyStateWithBoxAiDisabled: StoryObj<typeof MetadataSidebarRedesig
             ...defaultMetadataSidebarProps,
             isBoxAiSuggestionsEnabled: false,
             isBetaLanguageEnabled: false,
+            isMetadataMultiLevelTaxonomyFieldEnabled: false,
         },
     },
 };

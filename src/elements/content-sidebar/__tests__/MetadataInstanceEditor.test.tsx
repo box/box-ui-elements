@@ -75,6 +75,7 @@ describe('MetadataInstanceEditor', () => {
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
         isLargeFile: false,
+        isMetadataMultiLevelTaxonomyFieldEnabled: false,
         isUnsavedChangesModalOpen: false,
         onCancel: mockOnCancel,
         onDelete: jest.fn(),
