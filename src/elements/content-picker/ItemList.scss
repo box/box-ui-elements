@@ -15,9 +15,35 @@
     border-left: 2px solid transparent;
     outline: none;
 
+    .bcp-more-options {
+        opacity: 0;
+
+        .btn {
+            margin-left: 8px;
+            background-color: $white;
+            border-color: $bdl-gray-10;
+        }
+
+        .be-is-touch & {
+            opacity: 1;
+        }
+    }
+
     &.bcp-item-row-selected {
         background-color: $light-blue;
         border-top-color: $grey-blue;
+
+        .bcp-more-options {
+            opacity: 1;
+
+            .btn {
+                border-color: $grey-blue;
+
+                &:focus {
+                    border-color: $bdl-gray;
+                }
+            }
+        }
 
         .be & .btn-plain,
         .be-item-label {
@@ -75,6 +101,10 @@
     &:focus {
         background-color: $lighter-light-blue;
         border-left-color: $dark-cerulean;
+
+        .bcp-more-options {
+            opacity: 1;
+        }
 
         select {
             &.bcp-shared-access-select {
