@@ -1,4 +1,4 @@
-import type { PaginationQueryInput } from '@box/metadata-editor';
+import { TreeQueryInput } from '@box/combobox-with-api';
 import type API from '../../../api';
 import type { MetadataOptionEntry } from '../../../common/types/metadata';
 
@@ -9,7 +9,7 @@ export const metadataTaxonomyFetcher = async (
     templateKey: string,
     fieldKey: string,
     level: number,
-    options: PaginationQueryInput,
+    options: TreeQueryInput,
 ) => {
     const metadataOptions = await api
         .getMetadataAPI(false)
@@ -20,6 +20,12 @@ export const metadataTaxonomyFetcher = async (
         options: metadataOptions.entries.map((metadataOption: MetadataOptionEntry) => ({
             value: metadataOption.id,
             displayValue: metadataOption.display_name,
+            level: metadataOption.level,
+            ancestors: metadataOption.ancestors?.map(ancestor => ({
+                ...ancestor,
+                displayName: ancestor.display_name,
+            })),
+            selectable: metadataOption.selectable,
         })),
         marker,
     };
