@@ -169,8 +169,8 @@ class ActivityFeed extends React.Component<ActivityFeedProps, State> {
      * @param {object} currentUser - The user that is logged into the account
      * @param {object} feedItems - Items in the activity feed
      */
-    isEmpty = ({ feedItems, shouldUseUAA }: ActivityFeedProps = this.props): boolean => {
-        if (feedItems === undefined) {
+    isEmpty = ({ feedItems, shouldUseUAA, activityFeedError }: ActivityFeedProps = this.props): boolean => {
+        if (feedItems === undefined || (shouldUseUAA && activityFeedError)) {
             return false;
         }
 
