@@ -2,6 +2,7 @@ import { Children, Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { HotkeyPropType } from './HotkeyRecord';
+import HotkeyContext from './HotKeyContext';
 
 class Hotkeys extends Component {
     /* eslint-disable no-underscore-dangle */
@@ -12,12 +13,14 @@ class Hotkeys extends Component {
         configs: PropTypes.arrayOf(HotkeyPropType).isRequired,
     };
 
-    static contextTypes = {
-        hotkeyLayer: PropTypes.object,
-    };
+    static contextType = HotkeyContext;
 
     componentDidMount() {
         const { configs } = this.props;
+
+        // should verify this isn't being mounted too many times after making changes
+        console.log('Hotkeys componentDidMount', this.context.hotkeyLayer);
+        console.log(this.context);
 
         if (!this.context.hotkeyLayer) {
             throw new Error('You must instantiate a HotkeyLayer before using Hotkeys');
