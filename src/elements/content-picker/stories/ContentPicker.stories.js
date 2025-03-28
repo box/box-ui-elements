@@ -9,6 +9,19 @@ export const withPagination = {
     },
 };
 
+export const withCustomActions = {
+    args: {
+        itemActions: [
+            {
+                label: 'alert',
+                onAction: () => {
+                    alert('You clicked me!');
+                },
+            },
+        ],
+    },
+};
+
 export default {
     title: 'Elements/ContentPicker',
     component: ContentPicker,

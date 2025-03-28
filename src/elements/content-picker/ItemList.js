@@ -11,6 +11,7 @@ import AutoSizer from '@box/react-virtualized/dist/es/AutoSizer';
 import KeyBinder from '../common/KeyBinder';
 import nameCellRenderer from '../common/item/nameCellRenderer';
 import iconCellRenderer from '../common/item/iconCellRenderer';
+import { ItemOptions } from '../common/item';
 import { isFocusableElement, focus } from '../../utils/dom';
 import shareAccessCellRenderer from './shareAccessCellRenderer';
 import selectionCellRenderer from './selectionCellRenderer';
@@ -39,6 +40,14 @@ type Props = {
     view: View,
 };
 
+const moreOptionsCellRenderer =
+    props =>
+    ({ rowData }) => (
+        <div className="bcp-more-options">
+            <ItemOptions item={rowData} {...props} />
+        </div>
+    );
+
 const ItemList = ({
     view,
     rootId,
@@ -56,6 +65,7 @@ const ItemList = ({
     onFocusChange,
     currentCollection,
     tableRef,
+    itemActions,
 }: Props) => {
     const iconCell = iconCellRenderer();
     const nameCell = nameCellRenderer(rootId, view, onItemClick);
@@ -73,6 +83,9 @@ const ItemList = ({
         extensionsWhitelist,
         hasHitSelectionLimit,
     );
+    const moreOptionsCell = moreOptionsCellRenderer({
+        itemActions,
+    });
     const { id, items = [] }: Collection = currentCollection;
     const rowCount: number = items.length;
 
@@ -158,6 +171,16 @@ const ItemList = ({
                                     dataKey={FIELD_SHARED_LINK}
                                     cellRenderer={shareAccessCell}
                                     width={260}
+                                    flexShrink={0}
+                                />
+                            )}
+                            {itemActions.length > 0 && (
+                                <Column
+                                    disableSort
+                                    dataKey={FIELD_ID}
+                                    cellRenderer={moreOptionsCell}
+                                    headerRole="gridcell"
+                                    width={58}
                                     flexShrink={0}
                                 />
                             )}
