@@ -61,7 +61,25 @@ const ItemOptions = ({
     const isRenameEnabled = canRename && permissions[PERMISSION_CAN_RENAME];
     const isShareEnabled = canShare && permissions[PERMISSION_CAN_SHARE];
 
-    const hasActions = !!itemActions.length;
+    const actions = itemActions
+        .map(({ filter: actionFilter, label: actionLabel, onAction, type: actionType }) => {
+            if (actionType && actionType !== itemType) {
+                return null;
+            }
+
+            if (actionFilter && !actionFilter(item)) {
+                return null;
+            }
+
+            return (
+                <DropdownMenu.Item key={actionLabel + actionType} onClick={() => onAction(item)}>
+                    {actionLabel}
+                </DropdownMenu.Item>
+            );
+        })
+        .filter(action => action);
+
+    const hasActions = !!actions.length;
     const hasOptions =
         isDeleteEnabled || isDownloadEnabled || isOpenEnabled || isPreviewEnabled || isRenameEnabled || isShareEnabled;
 
@@ -122,21 +140,7 @@ const ItemOptions = ({
                     </DropdownMenu.Item>
                 )}
                 {hasActions && hasOptions && <DropdownMenu.Separator />}
-                {itemActions.map(({ filter: actionFilter, label: actionLabel, onAction, type: actionType }) => {
-                    if (actionType && actionType !== itemType) {
-                        return null;
-                    }
-
-                    if (actionFilter && !actionFilter(item)) {
-                        return null;
-                    }
-
-                    return (
-                        <DropdownMenu.Item key={actionLabel + actionType} onClick={() => onAction(item)}>
-                            {actionLabel}
-                        </DropdownMenu.Item>
-                    );
-                })}
+                {hasActions && actions}
             </DropdownMenu.Content>
         </DropdownMenu.Root>
     );
