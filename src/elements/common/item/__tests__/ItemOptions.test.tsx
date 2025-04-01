@@ -67,12 +67,14 @@ describe('elements/common/item/ItemOptions', () => {
     });
 
     test('renders component with custom actions', async () => {
+        const onAction = jest.fn();
+
         renderComponent({
             itemActions: [
                 { label: 'Archive', type: 'folder' }, // Should be filtered since there are no folder items
                 { label: 'Email', type: 'file' },
                 { filter: ({ extension }) => extension === 'pdf', label: 'Export' },
-                { label: 'Favorite', type: 'file' },
+                { label: 'Favorite', onAction, type: 'file' },
             ],
         });
 
@@ -81,5 +83,27 @@ describe('elements/common/item/ItemOptions', () => {
         expect(screen.queryByRole('menuitem', { name: 'Archive' })).not.toBeInTheDocument();
         expect(screen.getByRole('menuitem', { name: 'Email' })).toBeInTheDocument();
         expect(screen.getByRole('menuitem', { name: 'Favorite' })).toBeInTheDocument();
+
+        expect(onAction).not.toHaveBeenCalled();
+
+        await userEvent.click(screen.getByRole('menuitem', { name: 'Favorite' }));
+
+        expect(onAction).toHaveBeenCalled();
+    });
+
+    test('renders an empty component if there are no applicable custom actions for the item', () => {
+        const { container } = renderComponent({
+            canDelete: false,
+            canDownload: false,
+            canPreview: false,
+            canRename: false,
+            canShare: false,
+            itemActions: [
+                { label: 'Archive', type: 'folder' },
+                { filter: ({ extension }) => extension === 'csv', label: 'Import' },
+            ],
+        });
+
+        expect(container).toBeEmptyDOMElement();
     });
 });
