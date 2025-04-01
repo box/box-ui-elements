@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { shallow } from 'enzyme';
 import selectors from '../../../../common/selectors/version';
 import { VersionBase as Version } from '../Version';
@@ -8,6 +9,8 @@ import messages from '../../../../common/messages';
 const translationProps = {
     intl: { formatMessage: anyString => anyString },
 };
+
+const priorCollaborator = <FormattedMessage {...messages.priorCollaborator} />;
 
 describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
     const defaultDate = new Date('2019-03-01T00:00:00');
@@ -68,7 +71,7 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
         ${defaultUser}      | ${defaultUser.name}
         ${restoreUser}      | ${restoreUser.name}
         ${trashedUser}      | ${trashedUser.name}
-        ${PLACEHOLDER_USER} | ${''}
+        ${PLACEHOLDER_USER} | ${priorCollaborator}
     `('should render the correct user name', ({ expected, versionUser }) => {
         selectors.getVersionUser = jest.fn().mockReturnValueOnce(versionUser);
 
