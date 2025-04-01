@@ -61,23 +61,24 @@ const ItemOptions = ({
     const isRenameEnabled = canRename && permissions[PERMISSION_CAN_RENAME];
     const isShareEnabled = canShare && permissions[PERMISSION_CAN_SHARE];
 
-    const actions = itemActions
-        .map(({ filter: actionFilter, label: actionLabel, onAction, type: actionType }) => {
-            if (actionType && actionType !== itemType) {
-                return null;
-            }
+    const actions = itemActions.reduce((validActions, action) => {
+        const { filter: actionFilter, label: actionLabel, onAction, type: actionType } = action;
 
-            if (actionFilter && !actionFilter(item)) {
-                return null;
-            }
+        if (actionType && actionType !== itemType) {
+            return validActions;
+        }
 
-            return (
-                <DropdownMenu.Item key={actionLabel + actionType} onClick={() => onAction(item)}>
-                    {actionLabel}
-                </DropdownMenu.Item>
-            );
-        })
-        .filter(action => action);
+        if (actionFilter && !actionFilter(item)) {
+            return validActions;
+        }
+
+        return [
+            ...validActions,
+            <DropdownMenu.Item key={actionLabel + actionType} onClick={() => onAction(item)}>
+                {actionLabel}
+            </DropdownMenu.Item>,
+        ];
+    }, []);
 
     const hasActions = !!actions.length;
     const hasOptions =
