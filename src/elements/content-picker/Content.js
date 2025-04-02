@@ -11,6 +11,8 @@ import ProgressBar from '../common/progress-bar';
 import ItemList from './ItemList';
 import { VIEW_ERROR, VIEW_SELECTED } from '../../constants';
 import type { View, Collection } from '../../common/types/core';
+// $FlowFixMe TypeScript file
+import type { ItemAction } from '../common/item';
 
 import './Content.scss';
 
@@ -22,6 +24,7 @@ type Props = {
     hasHitSelectionLimit: boolean,
     isSingleSelect: boolean,
     isSmall: boolean,
+    itemActions?: ItemAction[],
     onFocusChange: Function,
     onItemClick: Function,
     onItemSelect: Function,
@@ -62,6 +65,7 @@ const Content = ({
     onShareAccessChange,
     onFocusChange,
     extensionsWhitelist,
+    itemActions,
 }: Props) => (
     <div className="bcp-content">
         {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
@@ -87,6 +91,7 @@ const Content = ({
                 onFocusChange={onFocusChange}
                 onShareAccessChange={onShareAccessChange}
                 extensionsWhitelist={extensionsWhitelist}
+                itemActions={itemActions}
             />
         )}
     </div>
