@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { DropdownMenu, IconButton } from '@box/blueprint-web';
 import IconSort from '../../../icons/general/IconSort';
 import type { SortBy, SortDirection } from '../../../common/types/core';
@@ -39,7 +39,7 @@ const Sort = ({ onSortChange }: SortProps) => {
                             key={sortItemKey}
                             onClick={() => onSortChange(sortByValue, sortDirectionValue)}
                         >
-                            <FormattedMessage {...messages[sortItemKey]} />
+                            {formatMessage(messages[sortItemKey])}
                         </DropdownMenu.Item>
                     );
                 })}
