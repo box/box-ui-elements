@@ -115,22 +115,22 @@ describe('metadataTaxonomyNodeAncestorsFetcher (old keys naming convention)', ()
 
     test('should fetch taxonomy and node data and return formatted data', async () => {
         const mockTaxonomy = {
-            displayName: 'Geography',
+            display_name: 'Geography',
             namespace: 'my_enterprise',
             id: 'my_id',
             key: 'geography',
             levels: [
-                { level: 1, displayName: 'Level 1', description: 'Description 1' },
-                { level: 2, displayName: 'Level 2', description: 'Description 2' },
-                { level: 3, displayName: 'Level 3', description: 'Description 3' },
+                { level: 1, display_name: 'Level 1', description: 'Description 1' },
+                { level: 2, display_name: 'Level 2', description: 'Description 2' },
+                { level: 3, display_name: 'Level 3', description: 'Description 3' },
             ],
         };
 
         const mockTaxonomyNode = {
             id: 'node_abc',
             level: 1,
-            displayName: 'Node ABC',
-            ancestors: [{ id: 'ancestor_1', level: 2, displayName: 'Ancestor 1' }],
+            display_name: 'Node ABC',
+            ancestors: [{ id: 'ancestor_1', level: 2, display_name: 'Ancestor 1' }],
         };
 
         apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue(mockTaxonomy);
@@ -169,17 +169,17 @@ describe('metadataTaxonomyNodeAncestorsFetcher (old keys naming convention)', ()
 
     test('should handle empty ancestors array', async () => {
         const mockTaxonomy = {
-            displayName: 'Geography',
+            display_name: 'Geography',
             namespace: 'my_enterprise',
             id: 'my_id',
             key: 'geography',
-            levels: [{ level: 1, displayName: 'Level 1', description: 'Description 1' }],
+            levels: [{ level: 1, display_name: 'Level 1', description: 'Description 1' }],
         };
 
         const mockTaxonomyNode = {
             id: 'node_abc',
             level: 1,
-            displayName: 'Node ABC',
+            display_name: 'Node ABC',
             ancestors: [],
         };
 
