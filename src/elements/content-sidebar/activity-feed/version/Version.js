@@ -45,7 +45,7 @@ const Version = (props: Props): React.Node => {
     // $FlowFixMe
     const user = selectors.getVersionUser(props);
     const name = user.name === FILE_REQUEST_NAME ? intl.formatMessage(messages.fileRequestDisplayName) : user.name;
-    const renderName = name || <FormattedMessage {...messages.priorCollaborator} />;
+    const renderName = name || messages.priorCollaborator.defaultMessage;
 
     return (
         <ActivityCard className="bcs-Version">
