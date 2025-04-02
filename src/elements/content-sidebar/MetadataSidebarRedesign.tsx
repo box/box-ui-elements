@@ -2,7 +2,7 @@
  * @file Redesigned Metadata sidebar component
  * @author Box
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import flow from 'lodash/flow';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
@@ -261,13 +261,11 @@ function MetadataSidebarRedesign({
         </InlineError>
     );
 
-    const taxonomyOptionsFetcher = async (
-        scope: string,
-        templateKey: string,
-        fieldKey: string,
-        level: number,
-        options: TreeQueryInput,
-    ) => metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options);
+    const taxonomyOptionsFetcher = useCallback(
+        (scope: string, templateKey: string, fieldKey: string, level: number, options: TreeQueryInput) =>
+            metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options),
+        [],
+    );
 
     const taxonomyNodeFetcher = async (scope: string, taxonomyKey: string, nodeID: string) =>
         metadataTaxonomyNodeAncestorsFetcher(api, fileId, scope, taxonomyKey, nodeID);
