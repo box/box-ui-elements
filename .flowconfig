@@ -12,10 +12,6 @@
 <PROJECT_ROOT>/node_modules/draft-js*
 <PROJECT_ROOT>/node_modules/findup*
 <PROJECT_ROOT>/node_modules/config-chain*
-<PROJECT_ROOT>/node_modules/puppeteer*
-<PROJECT_ROOT>/node_modules/jest-puppeteer*
-<PROJECT_ROOT>/node_modules/start-server-and-test*
-<PROJECT_ROOT>/node_modules/jest-image-snapshot*
 <PROJECT_ROOT>/node_modules/react-styleguidist*
 <PROJECT_ROOT>/node_modules/immer*
 <PROJECT_ROOT>/node_modules/immutable*
