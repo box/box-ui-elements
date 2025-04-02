@@ -68,7 +68,7 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
         ${defaultUser}      | ${defaultUser.name}
         ${restoreUser}      | ${restoreUser.name}
         ${trashedUser}      | ${trashedUser.name}
-        ${PLACEHOLDER_USER} | ${'A Prior Collaborator'}
+        ${PLACEHOLDER_USER} | ${''}
     `('should render the correct user name', ({ expected, versionUser }) => {
         selectors.getVersionUser = jest.fn().mockReturnValueOnce(versionUser);
 
