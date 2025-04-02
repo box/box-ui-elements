@@ -21,10 +21,7 @@ export const metadataTaxonomyFetcher = async (
             value: metadataOption.id,
             displayValue: metadataOption.display_name,
             level: metadataOption.level,
-            ancestors: metadataOption.ancestors?.map(ancestor => ({
-                ...ancestor,
-                displayName: ancestor.display_name,
-            })),
+            ancestors: metadataOption.ancestors?.map(({display_name, ...rest}) => ({...rest, displayName: display_name})),
             selectable: metadataOption.selectable,
         })),
         marker,

@@ -22,8 +22,8 @@ describe('metadataTaxonomyFetcher', () => {
     test('should fetch metadata options and return formatted data', async () => {
         const mockMetadataOptions = {
             entries: [
-                { id: 'opt1', display_name: 'Option 1' },
-                { id: 'opt2', display_name: 'Option 2' },
+                { id: 'opt1', display_name: 'Option 1', level: '1', ancestors: null, selectable: false },
+                { id: 'opt2', display_name: 'Option 2', level: '2', ancestors: [{ display_name: 'Option 1', foo: 'bar' }], selectable: true },
             ],
         };
 
@@ -33,8 +33,8 @@ describe('metadataTaxonomyFetcher', () => {
 
         const expectedResult = {
             options: [
-                { value: 'opt1', displayValue: 'Option 1' },
-                { value: 'opt2', displayValue: 'Option 2' },
+                { value: 'opt1', displayValue: 'Option 1', level: '1', ancestors: undefined, selectable: false },
+                { value: 'opt2', displayValue: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
             ],
             marker: 'marker_1',
         };
