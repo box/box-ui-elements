@@ -9,8 +9,10 @@ import messages from '../../../../common/messages';
 const translationProps = {
     intl: { formatMessage: anyString => anyString },
 };
-
-const priorCollaborator = <FormattedMessage {...messages.priorCollaborator} />;
+const priorCollaborator = {
+    id: 'be.priorCollaborator',
+    defaultMessage: 'A Prior Collaborator',
+};
 
 describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
     const defaultDate = new Date('2019-03-01T00:00:00');
@@ -71,7 +73,7 @@ describe('elements/content-sidebar/ActivityFeed/version/Version', () => {
         ${defaultUser}      | ${defaultUser.name}
         ${restoreUser}      | ${restoreUser.name}
         ${trashedUser}      | ${trashedUser.name}
-        ${PLACEHOLDER_USER} | ${priorCollaborator}
+        ${PLACEHOLDER_USER} | ${(<FormattedMessage {...priorCollaborator} />)}
     `('should render the correct user name', ({ expected, versionUser }) => {
         selectors.getVersionUser = jest.fn().mockReturnValueOnce(versionUser);
 
