@@ -21,6 +21,7 @@ export interface ItemGridProps extends ItemEventHandlers, ItemEventPermissions {
     isTouch?: boolean;
     itemActions?: ItemAction[];
     items: BoxItem[];
+    portalElement?: HTMLElement;
     view: View;
 }
 

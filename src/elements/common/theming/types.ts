@@ -3,5 +3,6 @@ export type Theme = {
 };
 
 export interface ThemingProps {
+    selector?: string;
     theme?: Theme;
 }

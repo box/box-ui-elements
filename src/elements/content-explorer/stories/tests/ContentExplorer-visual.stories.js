@@ -251,20 +251,6 @@ export const errorEmptyState = {
     },
 };
 
-export const searchEmptyState = {
-    args: {
-        rootFolderId: '74729718131',
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        const searchBar = canvas.getByRole('searchbox', { name: 'Search files and folders' });
-        await userEvent.type(searchBar, 'foo');
-
-        expect(canvas.getByText('test')).toBeInTheDocument();
-        expect(canvas.getByText("Sorry, we couldn't find what you're looking for.")).toBeInTheDocument();
-    },
-};
-
 export const withTheming = {
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);

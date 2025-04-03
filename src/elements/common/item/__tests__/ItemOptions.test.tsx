@@ -3,6 +3,11 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../../../test-utils/testing-library';
 import ItemOptions from '../ItemOptions';
 
+jest.mock('@box/blueprint-web', () => ({
+    ...jest.requireActual('@box/blueprint-web'),
+    Cell: () => <div data-testid="be-ItemOptions-cell"></div>,
+}));
+
 describe('elements/common/item/ItemOptions', () => {
     const renderComponent = (props = {}) => {
         const defaultProps = {
@@ -52,6 +57,20 @@ describe('elements/common/item/ItemOptions', () => {
         });
 
         expect(container).toBeEmptyDOMElement();
+    });
+
+    test('renders a cell component if there are no permissions on the item in list view', () => {
+        renderComponent({
+            item: {
+                type: 'file',
+                id: '005',
+                name: 'Box file',
+                permissions: undefined,
+            },
+            viewMode: 'list',
+        });
+
+        expect(screen.getByTestId('be-ItemOptions-cell')).toBeInTheDocument();
     });
 
     test('renders an empty component if there are no options enabled for the item', () => {
@@ -105,5 +124,22 @@ describe('elements/common/item/ItemOptions', () => {
         });
 
         expect(container).toBeEmptyDOMElement();
+    });
+
+    test('renders a cell component if there are no applicable custom actions for the item in list view', () => {
+        renderComponent({
+            canDelete: false,
+            canDownload: false,
+            canPreview: false,
+            canRename: false,
+            canShare: false,
+            itemActions: [
+                { label: 'Archive', type: 'folder' },
+                { filter: ({ extension }) => extension === 'csv', label: 'Import' },
+            ],
+            viewMode: 'list',
+        });
+
+        expect(screen.getByTestId('be-ItemOptions-cell')).toBeInTheDocument();
     });
 });

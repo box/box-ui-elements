@@ -1644,7 +1644,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
             <Internationalize language={language} messages={messages}>
-                <TooltipProvider>
+                <TooltipProvider container={this.rootElement}>
                     <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                         <ThemingStyles theme={theme} />
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
@@ -1695,6 +1695,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 onItemShare={this.share}
                                 onMetadataUpdate={this.updateMetadata}
                                 onSortChange={this.sort}
+                                portalElement={this.rootElement}
                                 view={view}
                                 viewMode={viewMode}
                             />
