@@ -40,6 +40,7 @@ export interface ContentProps extends Required<ItemEventHandlers>, Required<Item
         editedValue: MetadataFieldValue,
     ) => void;
     onSortChange: (sortBy: string, sortDirection: string) => void;
+    portalElement: HTMLElement;
     view: View;
     viewMode?: ViewMode;
 }

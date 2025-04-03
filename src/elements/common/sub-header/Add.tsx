@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { DropdownMenu, IconButton } from '@box/blueprint-web';
 import { Plus } from '@box/blueprint-web-assets/icons/Fill';
 
@@ -28,14 +28,10 @@ const Add = ({ isDisabled, onUpload, onCreate, showUpload = true, showCreate = t
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
                 {showUpload && (
-                    <DropdownMenu.Item onClick={onUpload}>
-                        <FormattedMessage {...messages.upload} />
-                    </DropdownMenu.Item>
+                    <DropdownMenu.Item onClick={onUpload}>{formatMessage(messages.upload)}</DropdownMenu.Item>
                 )}
                 {showCreate && (
-                    <DropdownMenu.Item onClick={onCreate}>
-                        <FormattedMessage {...messages.newFolder} />
-                    </DropdownMenu.Item>
+                    <DropdownMenu.Item onClick={onCreate}>{formatMessage(messages.newFolder)}</DropdownMenu.Item>
                 )}
             </DropdownMenu.Content>
         </DropdownMenu.Root>

@@ -32,6 +32,7 @@ const mockProps: ContentProps = {
     onItemShare: jest.fn(),
     onMetadataUpdate: jest.fn(),
     onSortChange: jest.fn(),
+    portalElement: null,
     view: VIEW_RECENTS,
     viewMode: VIEW_MODE_LIST,
 };
