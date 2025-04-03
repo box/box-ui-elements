@@ -180,7 +180,17 @@ class Metadata extends File {
         };
     }
 
-    async getTaxonomiesLevelsForTemplates(metadataTemplates: any, id: string): Promise<Map<string, any>> {
+    /**
+     * API URL for taxonomies levels for templates
+     *
+     * @param {string} taxonomyPath - taxonomy path
+     * @return {string} base url for files
+     */
+    getTaxonomyLevelsForTemplatesUrl(taxonomyPath: string): string {
+        return `${this.getBaseApiUrl()}/${taxonomyPath}`;
+    }
+
+    async getTaxonomyLevelsForTemplates(metadataTemplates: any, id: string): Promise<Map<string, any>> {
         let levelsMap = new Map();
         metadataTemplates.forEach(template => {
             template.fields?.forEach(field => {
@@ -197,14 +207,22 @@ class Metadata extends File {
         await Promise.all(
             [...levelsMap.keys()].map(async taxonomyPath => {
                 const result = await this.xhr.get({
-                    url: `${this.getBaseApiUrl()}/${taxonomyPath}`,
+                    url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
                     id: getTypedFileId(id),
                 });
                 taxonomyInfo.set(taxonomyPath, result.data.levels || []);
             }),
         );
 
-        return taxonomyInfo;
+        metadataTemplates.forEach(template => {
+            template.fields?.forEach(field => {
+                if (field.type === 'taxonomy' && !field.levels) {
+                    field.levels = taxonomyInfo.get(`metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`);
+                }
+            });
+        });
+
+        return metadataTemplates;
     }
 
     /**
@@ -238,17 +256,9 @@ class Metadata extends File {
         }
 
         templates = getProp(templates, 'data.entries', []);
-        const levelsMap = await this.getTaxonomiesLevelsForTemplates(templates, id);
+        const templatesWithTaxonomies = await this.getTaxonomyLevelsForTemplates(templates, id);
 
-        templates.forEach(template => {
-            template.fields?.forEach(field => {
-                if (field.type === 'taxonomy') {
-                    field.levels = levelsMap.get(`metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`);
-                }
-            });
-        });
-
-        return templates;
+        return templatesWithTaxonomies;
     }
 
     /**
@@ -1303,6 +1313,7 @@ class Metadata extends File {
         const url = this.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, includeAncestors);
 
         const metadataTaxonomyNode = await this.xhr.get({ url, id: getTypedFileId(id) });
+        console.log('kjarosz test taxonomy node', metadataTaxonomyNode);
 
         return getProp(metadataTaxonomyNode, 'data', {});
     }
