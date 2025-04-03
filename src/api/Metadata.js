@@ -4,6 +4,7 @@
  * @author Box
  */
 
+import { TreeQueryInput } from '@box/combobox-with-api';
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
@@ -190,10 +191,17 @@ class Metadata extends File {
         return `${this.getBaseApiUrl()}/${taxonomyPath}`;
     }
 
-    async getTaxonomyLevelsForTemplates(metadataTemplates: any, id: string): Promise<Map<string, any>> {
+    async getTaxonomyLevelsForTemplates(
+        metadataTemplates: Array<MetadataTemplate>,
+        id: string,
+    ): Promise<Array<MetadataTemplate>> {
         let levelsMap = new Map();
         metadataTemplates.forEach(template => {
-            template.fields?.forEach(field => {
+            if (!template.fields) {
+                return;
+            }
+
+            template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
                     const taxonomyPath = `metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`;
                     if (!levelsMap.has(taxonomyPath)) {
@@ -215,7 +223,11 @@ class Metadata extends File {
         );
 
         metadataTemplates.forEach(template => {
-            template.fields?.forEach(field => {
+            if (!template.fields) {
+                return;
+            }
+
+            template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
                     field.levels = taxonomyInfo.get(`metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`);
                 }
@@ -1187,16 +1199,15 @@ class Metadata extends File {
             signal,
         } = options;
 
-        const params = {
+        let params: {} = {
             ...(marker ? { marker } : {}),
             ...(query_text ? { query_text } : {}),
             ...(optionsLevel ? { level: optionsLevel } : {}),
             ...(ancestor_id ? { ancestor_id } : {}),
+            ...(onlySelectableOptions !== undefined
+                ? { only_selectable_options: Boolean(onlySelectableOptions).toString() }
+                : {}),
         };
-
-        if (onlySelectableOptions !== undefined) {
-            params['only_selectable_options'] = Boolean(onlySelectableOptions).toString();
-        }
 
         const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
 
