@@ -1,5 +1,6 @@
 // @flow
 
+import { TreeQueryInput } from '@box/combobox-with-api';
 import Cache from '../../utils/Cache';
 import * as ErrorUtil from '../../utils/error';
 import Metadata from '../Metadata';
@@ -268,6 +269,67 @@ describe('api/Metadata', () => {
         });
     });
 
+    describe('getTaxonomyLevelsForTemplates()', () => {
+        test('should', async () => {
+            const metadataTemplates = [
+                { id: 1, hidden: false, fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }] },
+                { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
+                {
+                    id: 3,
+                    hidden: false,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace3', taxonomyKey: '456', levels: 'levels' }],
+                },
+            ];
+            const fileId = 'id';
+
+            metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
+            metadata.xhr.get = jest.fn().mockReturnValue({
+                data: {
+                    levels: [
+                        { display_name: 'level 1', description: 'This is level' },
+                        { display_name: 'level 2', description: 'Another level' },
+                    ],
+                },
+            });
+
+            const expected = [
+                {
+                    id: 1,
+                    hidden: false,
+                    fields: [
+                        {
+                            type: 'taxonomy',
+                            namespace: 'namespace1',
+                            taxonomyKey: '123',
+                            levels: [
+                                { displayName: 'level 1', description: 'This is level' },
+                                { displayName: 'level 2', description: 'Another level' },
+                            ],
+                        },
+                    ],
+                },
+                { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
+                {
+                    id: 3,
+                    hidden: false,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace3', taxonomyKey: '456', levels: 'levels' }],
+                },
+            ];
+            const result = await metadata.getTaxonomyLevelsForTemplates(metadataTemplates, fileId);
+
+            expect(metadata.getTaxonomyLevelsForTemplatesUrl).toHaveBeenCalledTimes(1);
+            expect(metadata.getTaxonomyLevelsForTemplatesUrl).toHaveBeenCalledWith(
+                'metadata_taxonomies/namespace1/123',
+            );
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'template_url',
+                id: 'file_id',
+            });
+            expect(result).toEqual(expected);
+        });
+    });
+
     describe('getTemplates()', () => {
         test('should return templates with enterprise scope', async () => {
             const templatesFromServer = [
@@ -287,6 +349,7 @@ describe('api/Metadata', () => {
                 },
             ];
             metadata.getMetadataTemplateUrlForScope = jest.fn().mockReturnValueOnce('template_url');
+            metadata.getTaxonomyLevelsForTemplates = jest.fn().mockReturnValueOnce(templatesFromServer);
             metadata.xhr.get = jest.fn().mockReturnValueOnce({
                 data: {
                     entries: templatesFromServer,
@@ -303,19 +366,22 @@ describe('api/Metadata', () => {
                     limit: 1000,
                 },
             });
+            expect(metadata.getTaxonomyLevelsForTemplates).toHaveBeenCalledWith(templatesFromServer, 'id');
         });
 
         test('should return templates scoped to instance id', async () => {
             const templatesFromServer = [{ id: 1, hidden: false }];
             metadata.getMetadataTemplateUrlForInstance = jest.fn().mockReturnValueOnce('template_url');
+            metadata.getTaxonomyLevelsForTemplates = jest.fn().mockReturnValueOnce(templatesFromServer);
             metadata.xhr.get = jest.fn().mockReturnValueOnce({
                 data: {
                     entries: templatesFromServer,
                 },
             });
+            const expected = [{ hidden: false, id: 1 }];
             const templates = await metadata.getTemplates('id', 'scope', 'id');
             expect(metadata.errorCode).toBe(ERROR_CODE_FETCH_METADATA_TEMPLATES);
-            expect(templates).toEqual(templates);
+            expect(templates).toEqual(expected);
             expect(metadata.getMetadataTemplateUrlForInstance).toHaveBeenCalledWith('id');
             expect(metadata.xhr.get).toHaveBeenCalledWith({
                 url: 'template_url',
@@ -324,6 +390,7 @@ describe('api/Metadata', () => {
                     limit: 1000,
                 },
             });
+            expect(metadata.getTaxonomyLevelsForTemplates).toHaveBeenCalledWith(templatesFromServer, 'id');
         });
         test('should return empty array of templates when error is 400', async () => {
             const error = new Error();
@@ -2922,10 +2989,13 @@ describe('api/Metadata', () => {
             metadata.getMetadataOptionsUrl = jest.fn().mockReturnValueOnce('options_url');
             metadata.xhr.get = jest.fn().mockReturnValueOnce({ data: response });
 
-            const options = {
+            const options: TreeQueryInput = {
                 marker: 'current_marker',
                 signal: abortController.signal,
                 searchInput: 'search_term',
+                onlySelectableOptions: false,
+                ancestorId: '123',
+                level: 1,
             };
 
             const metadataOptions = await metadata.getMetadataOptions(
@@ -2944,9 +3014,11 @@ describe('api/Metadata', () => {
                 url: 'options_url',
                 id: 'file_id',
                 params: {
+                    ancestor_id: '123',
+                    level: 1,
                     marker: 'current_marker',
+                    only_selectable_options: 'false',
                     query_text: 'search_term',
-                    level: 0,
                 },
             });
         });
