@@ -1,4 +1,4 @@
-import { TreeQueryInput } from '@box/combobox-with-api';
+import { TreeQueryInput, TreeOptionType, FetcherResponse } from '@box/combobox-with-api';
 import type API from '../../../api';
 import type { MetadataOptionEntry } from '../../../common/types/metadata';
 
@@ -10,7 +10,7 @@ export const metadataTaxonomyFetcher = async (
     fieldKey: string,
     level: number,
     options: TreeQueryInput,
-) => {
+): Promise<FetcherResponse<TreeOptionType>> => {
     const metadataOptions = await api
         .getMetadataAPI(false)
         .getMetadataOptions(fileId, scope, templateKey, fieldKey, level, options);
