@@ -285,7 +285,10 @@ describe('api/Metadata', () => {
             metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
             metadata.xhr.get = jest.fn().mockReturnValue({
                 data: {
-                    levels: 'hydratedLevels',
+                    levels: [
+                        { display_name: 'level 1', description: 'This is level' },
+                        { display_name: 'level 2', description: 'Another level' },
+                    ],
                 },
             });
 
@@ -294,7 +297,15 @@ describe('api/Metadata', () => {
                     id: 1,
                     hidden: false,
                     fields: [
-                        { type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123', levels: 'hydratedLevels' },
+                        {
+                            type: 'taxonomy',
+                            namespace: 'namespace1',
+                            taxonomyKey: '123',
+                            levels: [
+                                { displayName: 'level 1', description: 'This is level' },
+                                { displayName: 'level 2', description: 'Another level' },
+                            ],
+                        },
                     ],
                 },
                 { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },

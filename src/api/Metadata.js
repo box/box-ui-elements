@@ -229,7 +229,9 @@ class Metadata extends File {
 
             template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
-                    field.levels = taxonomyInfo.get(`metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`);
+                    field.levels = taxonomyInfo
+                        .get(`metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`)
+                        .map(({ display_name, ...rest }) => ({ ...rest, displayName: display_name }));
                 }
             });
         });
@@ -1324,7 +1326,6 @@ class Metadata extends File {
         const url = this.getMetadataTaxonomyNodeUrl(scope, taxonomyKey, nodeID, includeAncestors);
 
         const metadataTaxonomyNode = await this.xhr.get({ url, id: getTypedFileId(id) });
-        console.log('kjarosz test taxonomy node', metadataTaxonomyNode);
 
         return getProp(metadataTaxonomyNode, 'data', {});
     }

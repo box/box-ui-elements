@@ -37,7 +37,7 @@ type MetadataTemplateField = {
     key: string, // V2
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
-    levels: Array<TaxonomyLevel>,
+    levels?: Array<TaxonomyLevel>,
 };
 
 type MetadataTemplate = {
@@ -156,6 +156,7 @@ type MetadataTemplateInstanceField = {
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
     value: MetadataFieldValue,
+    levels?: Array<TaxonomyLevel>,
 };
 
 type MetadataTemplateInstance = {
