@@ -27,6 +27,7 @@ export interface ItemListProps extends ItemEventHandlers, ItemEventPermissions {
     itemActions?: ItemAction[];
     items: BoxItem[];
     onSortChange?: (sortBy: SortBy, sortDirection: SortDirection) => void;
+    portalElement?: HTMLElement;
     selectionMode?: SelectionMode;
     sortBy?: SortBy;
     sortDirection?: SortDirection;
