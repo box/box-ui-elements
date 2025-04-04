@@ -53,7 +53,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
     for (const item of metadataTaxonomy.levels) {
         const levelData = {
             level: item.level,
-            levelName: item.displayName,
+            levelName: item.displayName || item.display_name,
             description: item.description,
         };
 
@@ -62,7 +62,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
             levelsMap.set(item.level, {
                 ...levelData,
                 id: metadataTaxonomyNode.id,
-                levelValue: metadataTaxonomyNode.displayName,
+                levelValue: metadataTaxonomyNode.displayName || metadataTaxonomyNode.display_name,
             });
             // If the level is not the metadataTaxonomyNode level, just add the level data
         } else {
@@ -75,7 +75,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
             const levelData = levelsMap.get(ancestor.level);
 
             if (levelData) {
-                levelsMap.set(ancestor.level, { ...levelData, levelValue: ancestor.displayName, id: ancestor.id });
+                levelsMap.set(ancestor.level, { ...levelData, levelValue: ancestor.displayName || ancestor.display_name, id: ancestor.id });
             }
         }
     }
