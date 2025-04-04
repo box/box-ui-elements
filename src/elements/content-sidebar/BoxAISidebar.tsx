@@ -53,6 +53,7 @@ export interface BoxAISidebarProps {
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
     onUserInteraction?: () => void;
     recordAction: (params: RecordActionType) => void;
+    renderBoxAISidebar?: (elementId: string) => React.ReactNode;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldPreinitSession?: boolean;
     setHasQuestions: (hasQuestions: boolean) => void;
@@ -74,6 +75,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         localizedQuestions,
         onUserInteraction,
         recordAction,
+        renderBoxAISidebar,
         setCacheValue,
         shouldPreinitSession = true,
         setHasQuestions,
@@ -117,6 +119,10 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             setHasQuestions(questions.length > 0);
         }
     }, [questions.length, setHasQuestions]);
+
+    if (renderBoxAISidebar) {
+        return <>{renderBoxAISidebar(elementId)}</>;
+    }
 
     let questionsWithoutInProgress = questions;
     if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
