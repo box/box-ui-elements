@@ -235,6 +235,7 @@ export const BaseComment = ({
                     onReplyDelete={onReplyDelete}
                     onReplySelect={onSelect}
                     onShowReplies={onShowReplies}
+                    parentStatus={status}
                     replies={replies}
                     repliesTotalCount={repliesTotalCount}
                 />
@@ -258,6 +259,7 @@ type RepliesProps = {
     onReplyDelete?: ({ id: string, permissions?: BoxCommentPermission }) => void,
     onReplySelect?: (isSelected: boolean) => void,
     onShowReplies?: () => void,
+    parentStatus?: string,
     replies: CommentType[],
     repliesTotalCount?: number,
     translations?: Translations,
@@ -277,6 +279,7 @@ export const Replies = ({
     onReplySelect = noop,
     onShowReplies,
     onHideReplies,
+    parentStatus,
     replies,
     repliesTotalCount = 0,
     translations,
@@ -347,7 +350,7 @@ export const Replies = ({
                     })}
                 </ol>
             </div>
-            {!!onReplyCreate && (
+            {parentStatus !== COMMENT_STATUS_RESOLVED && !!onReplyCreate && (
                 <CreateReply
                     getMentionWithQuery={getMentionWithQuery}
                     isDisabled={isParentPending}
