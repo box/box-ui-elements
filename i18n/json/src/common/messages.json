@@ -1,0 +1,97 @@
+[
+  {
+    "id": "boxui.core.cancel",
+    "description": "Cancel button text",
+    "defaultMessage": "Cancel"
+  },
+  {
+    "id": "boxui.core.close",
+    "description": "Close button text",
+    "defaultMessage": "Close"
+  },
+  {
+    "id": "boxui.core.copy",
+    "description": "Copy button text",
+    "defaultMessage": "Copy"
+  },
+  {
+    "id": "boxui.core.copied",
+    "description": "Copy button text after user clicks on it",
+    "defaultMessage": "Copied"
+  },
+  {
+    "id": "boxui.core.done",
+    "description": "Done button text",
+    "defaultMessage": "Done"
+  },
+  {
+    "id": "boxui.core.okay",
+    "description": "Okay button text",
+    "defaultMessage": "Okay"
+  },
+  {
+    "id": "boxui.core.save",
+    "description": "Save button text",
+    "defaultMessage": "Save"
+  },
+  {
+    "id": "boxui.core.send",
+    "description": "Send button text",
+    "defaultMessage": "Send"
+  },
+  {
+    "id": "boxui.core.optional",
+    "description": "Optional text for labels",
+    "defaultMessage": "optional"
+  },
+  {
+    "id": "boxui.share.pillSelectorPlaceholder",
+    "description": "Placeholder text for the pill selector",
+    "defaultMessage": "Add names or email addresses"
+  },
+  {
+    "id": "boxui.share.messageSelectorPlaceholder",
+    "description": "Placeholder text for message section",
+    "defaultMessage": "Add a message"
+  },
+  {
+    "id": "boxui.validation.genericError",
+    "description": "Generic error message for a field is invalid",
+    "defaultMessage": "Invalid Input"
+  },
+  {
+    "id": "boxui.validation.tooShortError",
+    "description": "Error message for when an input value is too short. {min} is the minimum length",
+    "defaultMessage": "Input must be at least {min} characters"
+  },
+  {
+    "id": "boxui.validation.tooLongError",
+    "description": "Error message for when an input value is too long. {max} is the maximum length",
+    "defaultMessage": "Input cannot exceed {max} characters"
+  },
+  {
+    "id": "boxui.validation.emailError",
+    "description": "Error message for when an invalid email is entered",
+    "defaultMessage": "Invalid Email Address"
+  },
+  {
+    "id": "boxui.validation.URLError",
+    "description": "Error message for when an invalid URL is entered",
+    "defaultMessage": "Invalid URL"
+  },
+  {
+    "id": "boxui.validation.invalidUserError",
+    "description": "Error message for when an invalid user is entered",
+    "defaultMessage": "Invalid User"
+  },
+  {
+    "id": "boxui.validation.requiredError",
+    "description": "Error message for when a required field is missing",
+    "defaultMessage": "Required Field"
+  },
+  {
+    "id": "boxui.validation.invalidDateError",
+    "description": "Error message for when an invalid Date is entered",
+    "defaultMessage": "Invalid Date"
+  }
+]
