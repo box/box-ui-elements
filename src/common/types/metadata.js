@@ -38,6 +38,8 @@ type MetadataTemplateField = {
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
     levels?: Array<TaxonomyLevel>,
+    namespace?: string,
+    taxonomyKey?: string,
 };
 
 type MetadataTemplate = {
