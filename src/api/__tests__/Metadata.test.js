@@ -3016,6 +3016,7 @@ describe('api/Metadata', () => {
                 params: {
                     ancestor_id: '123',
                     level: 1,
+                    limit: 100,
                     marker: 'current_marker',
                     only_selectable_options: 'false',
                     query_text: 'search_term',
