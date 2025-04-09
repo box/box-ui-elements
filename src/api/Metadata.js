@@ -1226,6 +1226,7 @@ class Metadata extends File {
             ...(onlySelectableOptions !== undefined
                 ? { only_selectable_options: Boolean(onlySelectableOptions).toString() }
                 : {}),
+            limit: 100,
         };
 
         const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
