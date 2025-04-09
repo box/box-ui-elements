@@ -219,7 +219,7 @@ textarea {
     background-color: $white;
     border: 1px solid $bdl-gray-20;
     border-radius: $bdl-border-radius-size-med;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px 1px rgb(0 0 0 / 5%);
     -webkit-transition: border-color linear .15s, box-shadow linear .1s;
     transition: border-color linear .15s, box-shadow linear .1s;
 }
@@ -266,7 +266,7 @@ textarea {
 .select-container .select-button:hover,
 .select-container select:hover ~ .select-overlay {
     border: 1px solid #4c4c4c;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 1px 1px rgb(0 0 0 / 10%);
 }
 
 .select-container .bdl-SelectButton:disabled,

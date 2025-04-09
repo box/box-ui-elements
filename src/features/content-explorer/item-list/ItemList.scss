@@ -26,7 +26,7 @@
             opacity: .3;
         }
 
-        &:not(.is-selected):not(.disabled):hover {
+        &:not(.is-selected, .disabled):hover {
             background-color: $hover-blue-background;
         }
 

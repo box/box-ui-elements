@@ -1,4 +1,4 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
+@use '@box/blueprint-web-assets/tokens/tokens';
 
 @mixin BackgroundGradient {
     background: linear-gradient(135deg, #fe01da 0%, tokens.$light-blue-100 100%);

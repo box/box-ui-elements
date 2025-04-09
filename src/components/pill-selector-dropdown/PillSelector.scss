@@ -21,8 +21,7 @@
         width: 262px;
         margin-top: 5px;
         padding: 5px;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden auto;
         background-color: $white;
         border: 1px solid darken($white, 20%);
         border-radius: $bdl-border-radius-size-med;

@@ -17,10 +17,7 @@
 // Container modal div
 .modal {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: $modal-dialog-z-index;
     display: flex;
     flex: 1;
@@ -113,10 +110,7 @@
 
 .modal-backdrop {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: -1; // .modal creates a new stacking context. Let's just make sure that backdrop is below dialog.
     background: fade-out($black, .25);
 }
@@ -143,10 +137,7 @@
 
 .modal-container {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 89;
     display: flex;
 }
@@ -184,7 +175,7 @@
         flex-basis: 100%;
         margin-top: $responsive-modal-header-height;
         margin-bottom: $responsive-modal-actions-height;
-        padding: 24px 16px 12px 16px;
+        padding: 24px 16px 12px;
         overflow: auto;
     }
 

@@ -41,29 +41,20 @@
 }
 
 .bdl-PreviewLoadingRing-border {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     background-color: $bdl-box-blue; // Color of the ring
     animation: bdl-PreviewLoadingRing-spin 1s infinite linear;
 
     &::before {
         position: absolute;
-        top: -1px;
-        right: -1px;
-        bottom: -1px;
-        left: -1px;
+        inset: -1px;
         border-radius: 50%;
         content: '';
     }
 }
 
 .bdl-PreviewLoadingRing-content {
-    top: 3px;
-    right: 3px;
-    bottom: 3px;
-    left: 3px;
+    inset: 3px;
     display: flex;
     flex: 1 1 100%;
     align-items: center;

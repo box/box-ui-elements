@@ -18,13 +18,13 @@ $scroll-shadow-height: 6px;
     &::before {
         top: -$scroll-shadow-height * 2;
         z-index: 20;
-        box-shadow: 0 $scroll-shadow-height $scroll-shadow-height -2px rgba(0, 0, 0, .2);
+        box-shadow: 0 $scroll-shadow-height $scroll-shadow-height -2px rgb(0 0 0 / 20%);
     }
 
     &::after {
         bottom: -$scroll-shadow-height * 2;
         z-index: 30;
-        box-shadow: 0 (-$scroll-shadow-height) $scroll-shadow-height -2px rgba(0, 0, 0, .2);
+        box-shadow: 0 (-$scroll-shadow-height) $scroll-shadow-height -2px rgb(0 0 0 / 20%);
     }
 
     &.style--cover {

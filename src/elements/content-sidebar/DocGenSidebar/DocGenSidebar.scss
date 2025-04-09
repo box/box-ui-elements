@@ -1,5 +1,4 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
-
+@use '@box/blueprint-web-assets/tokens/tokens';
 @import '../../common/variables';
 
 .bcs-DocGenSidebar {
@@ -34,8 +33,7 @@
     width: '100%';
     min-width: 'fit-content';
     height: '100%';
-    overflow-x: 'auto';
-    overflow-y: 'auto';
+    overflow: 'auto' 'auto';
 }
 
 .bcs-DocGen-accordion * {

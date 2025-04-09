@@ -5,7 +5,7 @@
 @import './mixins';
 
 .bdl-RoundPill {
-    @include bdl-RoundPill();
+    @include bdl-RoundPill;
 }
 
 .bdl-RoundPill-avatar,
