@@ -120,7 +120,7 @@
     &.bdl-is-disabled,
     &.is-disabled {
         &::before {
-            opacity: .2;
+            opacity: 0.2;
         }
     }
 }
@@ -142,7 +142,7 @@
     &.bdl-is-disabled,
     &.is-disabled {
         &::after {
-            opacity: .2;
+            opacity: 0.2;
         }
     }
 }
@@ -165,7 +165,7 @@
 
     th,
     td {
-        width: 14.285714285714286%;
+        width: 14.2857%;
     }
 
     > thead > tr {
@@ -203,6 +203,6 @@
 .bdl-is-disabled .pika-button,
 .is-outside-current-month .pika-button {
     cursor: default;
-    opacity: .3;
+    opacity: 0.3;
     pointer-events: none;
 }
