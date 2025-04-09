@@ -191,10 +191,23 @@ class Metadata extends File {
         return `${this.getBaseApiUrl()}/${taxonomyPath}`;
     }
 
+    /**
+     * Returns taxonomy path for API calls and level mapping
+     *
+     * @param {string | undefined} namespace
+     * @param {string | undefined} taxonomyKey
+     * @returns {string}
+     */
     getTaxonomyPath(namespace?: string = '', taxonomyKey?: string = ''): string {
         return `metadata_taxonomies/${namespace}/${taxonomyKey}`;
     }
 
+    /**
+     *
+     * @param {Array<MetadataTemplate>} metadataTemplates
+     * @param {string} id
+     * @returns {Array<MetadataTemplate>}
+     */
     async getTaxonomyLevelsForTemplates(
         metadataTemplates: Array<MetadataTemplate>,
         id: string,
