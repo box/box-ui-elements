@@ -264,7 +264,7 @@ function MetadataSidebarRedesign({
     const taxonomyOptionsFetcher = useCallback(
         (scope: string, templateKey: string, fieldKey: string, level: number, options: TreeQueryInput) =>
             metadataTaxonomyFetcher(api, fileId, scope, templateKey, fieldKey, level, options),
-        [],
+        [api, fileId],
     );
 
     const taxonomyNodeFetcher = async (scope: string, taxonomyKey: string, nodeID: string) =>

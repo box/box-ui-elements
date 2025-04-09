@@ -212,7 +212,7 @@ class Metadata extends File {
         metadataTemplates: Array<MetadataTemplate>,
         id: string,
     ): Promise<Array<MetadataTemplate>> {
-        let levelsMap = new Map();
+        const levelsMap = new Map();
         metadataTemplates.forEach(template => {
             if (!template.fields) {
                 return;
@@ -1218,7 +1218,7 @@ class Metadata extends File {
             signal,
         } = options;
 
-        let params: {} = {
+        const params: {} = {
             ...(marker ? { marker } : {}),
             ...(query_text ? { query_text } : {}),
             ...(optionsLevel ? { level: optionsLevel } : {}),
