@@ -191,6 +191,10 @@ class Metadata extends File {
         return `${this.getBaseApiUrl()}/${taxonomyPath}`;
     }
 
+    getTaxonomyPath(namespace?: string = '', taxonomyKey?: string = ''): string {
+        return `metadata_taxonomies/${namespace}/${taxonomyKey}`;
+    }
+
     async getTaxonomyLevelsForTemplates(
         metadataTemplates: Array<MetadataTemplate>,
         id: string,
@@ -203,7 +207,7 @@ class Metadata extends File {
 
             template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
-                    const taxonomyPath = `metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`;
+                    const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey);
                     if (!levelsMap.has(taxonomyPath)) {
                         levelsMap.set(taxonomyPath, []);
                     }
@@ -229,9 +233,9 @@ class Metadata extends File {
 
             template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
-                    field.levels = taxonomyInfo
-                        .get(`metadata_taxonomies/${field.namespace}/${field.taxonomyKey}`)
-                        .map(({ display_name, ...rest }) => ({ ...rest, displayName: display_name }));
+                    field.levels = (
+                        taxonomyInfo.get(this.getTaxonomyPath(field.namespace, field.taxonomyKey)) || []
+                    ).map(({ display_name, ...rest }) => ({ ...rest, displayName: display_name }));
                 }
             });
         });
