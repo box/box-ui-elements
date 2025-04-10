@@ -1,0 +1,37 @@
+[
+  {
+    "id": "be.messageCenter.title",
+    "description": "Title for the message center modal",
+    "defaultMessage": "What's New"
+  },
+  {
+    "id": "be.messageCenter.all",
+    "description": "Title for all categories",
+    "defaultMessage": "All"
+  },
+  {
+    "id": "be.messageCenter.product",
+    "description": "Title for product category",
+    "defaultMessage": "Product"
+  },
+  {
+    "id": "be.messageCenter.events",
+    "description": "Title for product category",
+    "defaultMessage": "Events"
+  },
+  {
+    "id": "be.messageCenter.boxEducation",
+    "description": "Title for Box education category",
+    "defaultMessage": "Box Education"
+  },
+  {
+    "id": "be.messageCenter.noPosts",
+    "description": "Displayed when there are no posts to display",
+    "defaultMessage": "There are no posts for this category at the moment."
+  },
+  {
+    "id": "be.messageCenter.errorFetchingPosts",
+    "description": "Displayed when there was an error fetching posts",
+    "defaultMessage": "Sorry, we are having trouble showing posts at the moment. It may help to refresh the page."
+  }
+]
