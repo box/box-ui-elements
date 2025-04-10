@@ -47,3 +47,17 @@ pull_request_rules:
     conditions: []
     actions:
       queue:
+priority_rules:
+  - name: priority for queue `Automatic boxmoji merge`
+    conditions:
+      - author=boxmoji
+      - files~=^i18n/
+      - title~=^(fix)\(i18n\)?:\supdate translations$
+    priority: 2500
+  - name: priority for queue `Automatic strict merge`
+    conditions:
+      - "#approved-reviews-by>=2"
+      - "#changes-requested-reviews-by=0"
+      - "#review-requested=0"
+      - status-success=license/cla
+    priority: 2250
