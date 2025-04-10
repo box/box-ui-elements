@@ -354,9 +354,6 @@
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
         }
     },
-    "resolutions": {
-        "ip": "1.1.8"
-    },
     "overrides": {
         "react-tether": {
             "react": "$react",
