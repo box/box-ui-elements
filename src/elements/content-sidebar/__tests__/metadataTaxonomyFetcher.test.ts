@@ -19,11 +19,43 @@ describe('metadataTaxonomyFetcher', () => {
         };
     });
 
-    test('should fetch metadata options and return formatted data', async () => {
+    test('should fetch metadata options and return formatted data - new naming convention', async () => {
         const mockMetadataOptions = {
             entries: [
                 { id: 'opt1', display_name: 'Option 1', level: '1', ancestors: null, selectable: false },
                 { id: 'opt2', display_name: 'Option 2', level: '2', ancestors: [{ display_name: 'Option 1', foo: 'bar' }], selectable: true },
+            ],
+        };
+
+        apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
+
+        const result = await metadataTaxonomyFetcher(apiMock, fileId, scope, templateKey, fieldKey, level, options);
+
+        const expectedResult = {
+            options: [
+                { value: 'opt1', displayValue: 'Option 1', level: '1', ancestors: undefined, selectable: false },
+                { value: 'opt2', displayValue: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
+            ],
+            marker: 'marker_1',
+        };
+
+        expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
+        expect(apiMock.getMetadataAPI(false).getMetadataOptions).toHaveBeenCalledWith(
+            fileId,
+            scope,
+            templateKey,
+            fieldKey,
+            level,
+            options,
+        );
+        expect(result).toEqual(expectedResult);
+    });
+
+    test('should fetch metadata options and return formatted data - old naming convention', async () => {
+        const mockMetadataOptions = {
+            entries: [
+                { id: 'opt1', displayName: 'Option 1', level: '1', ancestors: null, selectable: false },
+                { id: 'opt2', displayName: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
             ],
         };
 

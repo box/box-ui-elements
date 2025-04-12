@@ -270,15 +270,10 @@ describe('api/Metadata', () => {
     });
 
     describe('getTaxonomyLevelsForTemplates()', () => {
-        test('should', async () => {
+        test('should return array of template instances with taxonomy levels data - old API with camelCase', async () => {
             const metadataTemplates = [
                 { id: 1, hidden: false, fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }] },
                 { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
-                {
-                    id: 3,
-                    hidden: false,
-                    fields: [{ type: 'taxonomy', namespace: 'namespace3', taxonomyKey: '456', levels: 'levels' }],
-                },
             ];
             const fileId = 'id';
 
@@ -286,11 +281,13 @@ describe('api/Metadata', () => {
             metadata.xhr.get = jest.fn().mockReturnValue({
                 data: {
                     levels: [
-                        { display_name: 'level 1', description: 'This is level' },
-                        { display_name: 'level 2', description: 'Another level' },
+                        { displayName: 'level 1', description: 'This is level' },
+                        { displayName: 'level 2', description: 'Another level' },
                     ],
                 },
             });
+
+            const result = await metadata.getTaxonomyLevelsForTemplates(metadataTemplates, fileId);
 
             const expected = [
                 {
@@ -309,13 +306,56 @@ describe('api/Metadata', () => {
                     ],
                 },
                 { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
-                {
-                    id: 3,
-                    hidden: false,
-                    fields: [{ type: 'taxonomy', namespace: 'namespace3', taxonomyKey: '456', levels: 'levels' }],
-                },
             ];
+
+            expect(metadata.getTaxonomyLevelsForTemplatesUrl).toHaveBeenCalledTimes(1);
+            expect(metadata.getTaxonomyLevelsForTemplatesUrl).toHaveBeenCalledWith(
+                'metadata_taxonomies/namespace1/123',
+            );
+            expect(metadata.xhr.get).toHaveBeenCalledTimes(1);
+            expect(metadata.xhr.get).toHaveBeenCalledWith({
+                url: 'template_url',
+                id: 'file_id',
+            });
+            expect(result).toEqual(expected);
+        });
+        test('should return array of template instances with taxonomy levels data - new API with snake_case', async () => {
+            const metadataTemplates = [
+                { id: 1, hidden: false, fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomy_key: '123' }] },
+                { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
+            ];
+            const fileId = 'id';
+
+            metadata.getTaxonomyLevelsForTemplatesUrl = jest.fn().mockReturnValue('template_url');
+            metadata.xhr.get = jest.fn().mockReturnValue({
+                data: {
+                    levels: [
+                        { display_name: 'level 1', description: 'This is level' },
+                        { display_name: 'level 2', description: 'Another level' },
+                    ],
+                },
+            });
+
             const result = await metadata.getTaxonomyLevelsForTemplates(metadataTemplates, fileId);
+
+            const expected = [
+                {
+                    id: 1,
+                    hidden: false,
+                    fields: [
+                        {
+                            type: 'taxonomy',
+                            namespace: 'namespace1',
+                            taxonomyKey: '123',
+                            levels: [
+                                { displayName: 'level 1', description: 'This is level' },
+                                { displayName: 'level 2', description: 'Another level' },
+                            ],
+                        },
+                    ],
+                },
+                { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
+            ];
 
             expect(metadata.getTaxonomyLevelsForTemplatesUrl).toHaveBeenCalledTimes(1);
             expect(metadata.getTaxonomyLevelsForTemplatesUrl).toHaveBeenCalledWith(

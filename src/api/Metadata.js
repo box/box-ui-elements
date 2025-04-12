@@ -220,7 +220,7 @@ class Metadata extends File {
 
             template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
-                    const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey);
+                    const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key);
                     if (!levelsMap.has(taxonomyPath)) {
                         levelsMap.set(taxonomyPath, []);
                     }
@@ -247,8 +247,15 @@ class Metadata extends File {
             template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
                     field.levels = (
-                        taxonomyInfo.get(this.getTaxonomyPath(field.namespace, field.taxonomyKey)) || []
-                    ).map(({ display_name, ...rest }) => ({ ...rest, displayName: display_name }));
+                        taxonomyInfo.get(
+                            this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key),
+                        ) || []
+                    ).map(({ displayName, display_name, ...rest }) => ({
+                        ...rest,
+                        displayName: display_name || displayName,
+                    }));
+                    field.taxonomyKey = field.taxonomyKey || field.taxonomy_key;
+                    delete field.taxonomy_key;
                 }
             });
         });
