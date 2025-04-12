@@ -212,7 +212,7 @@ class Metadata extends File {
         metadataTemplates: Array<MetadataTemplate>,
         id: string,
     ): Promise<Array<MetadataTemplate>> {
-        const levelsMap = new Map();
+        const levelsArray = [];
         metadataTemplates.forEach(template => {
             if (!template.fields) {
                 return;
@@ -221,16 +221,14 @@ class Metadata extends File {
             template.fields.forEach(field => {
                 if (field.type === 'taxonomy' && !field.levels) {
                     const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key);
-                    if (!levelsMap.has(taxonomyPath)) {
-                        levelsMap.set(taxonomyPath, []);
-                    }
+                    levelsArray.push(taxonomyPath);
                 }
             });
         });
 
         const taxonomyInfo = new Map();
         await Promise.all(
-            [...levelsMap.keys()].map(async taxonomyPath => {
+            levelsArray.map(async taxonomyPath => {
                 const result = await this.xhr.get({
                     url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
                     id: getTypedFileId(id),
