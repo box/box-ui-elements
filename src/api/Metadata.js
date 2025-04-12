@@ -194,11 +194,11 @@ class Metadata extends File {
     /**
      * Returns taxonomy path for API calls and level mapping
      *
-     * @param {string | undefined} namespace
-     * @param {string | undefined} taxonomyKey
+     * @param {string} namespace
+     * @param {string} taxonomyKey
      * @returns {string}
      */
-    getTaxonomyPath(namespace?: string = '', taxonomyKey?: string = ''): string {
+    getTaxonomyPath(namespace: string, taxonomyKey: string): string {
         return `metadata_taxonomies/${namespace}/${taxonomyKey}`;
     }
 
