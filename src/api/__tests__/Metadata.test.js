@@ -3058,7 +3058,7 @@ describe('api/Metadata', () => {
                     level: 1,
                     limit: 100,
                     marker: 'current_marker',
-                    only_selectable_options: 'false',
+                    only_selectable_options: false,
                     query_text: 'search_term',
                 },
             });

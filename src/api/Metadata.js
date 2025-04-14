@@ -1228,9 +1228,7 @@ class Metadata extends File {
             ...(query_text ? { query_text } : {}),
             ...(optionsLevel ? { level: optionsLevel } : {}),
             ...(ancestor_id ? { ancestor_id } : {}),
-            ...(onlySelectableOptions !== undefined
-                ? { only_selectable_options: Boolean(onlySelectableOptions).toString() }
-                : {}),
+            ...(onlySelectableOptions !== undefined ? { only_selectable_options: !!onlySelectableOptions } : {}),
             limit: 100,
         };
 
