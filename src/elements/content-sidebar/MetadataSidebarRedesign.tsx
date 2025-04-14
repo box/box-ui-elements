@@ -267,8 +267,11 @@ function MetadataSidebarRedesign({
         [api, fileId],
     );
 
-    const taxonomyNodeFetcher = async (scope: string, taxonomyKey: string, nodeID: string) =>
-        metadataTaxonomyNodeAncestorsFetcher(api, fileId, scope, taxonomyKey, nodeID);
+    const taxonomyNodeFetcher = useCallback(
+        (scope: string, taxonomyKey: string, nodeID: string) =>
+            metadataTaxonomyNodeAncestorsFetcher(api, fileId, scope, taxonomyKey, nodeID),
+        [api, fileId],
+    );
 
     useEffect(() => {
         if (createSessionRequest && fileId && !isSessionInitiated.current) {
