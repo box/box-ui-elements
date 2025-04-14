@@ -4,10 +4,11 @@
  * @author Box
  */
 
+import { cloneDeep, flatMap, filter, isEmpty, uniq, keyBy, map as lodashMap } from 'lodash';
 import { TreeQueryInput } from '@box/combobox-with-api';
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
-import isEmpty from 'lodash/isEmpty';
+// import isEmpty from 'lodash/isEmpty';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
 import { handleOnAbort, formatMetadataFieldValue } from './utils';
@@ -213,52 +214,73 @@ class Metadata extends File {
         id: string,
     ): Promise<Array<MetadataTemplate>> {
         const levelsArray = [];
-        metadataTemplates.forEach(template => {
-            if (!template.fields) {
-                return;
-            }
 
-            template.fields.forEach(field => {
-                if (field.type === 'taxonomy' && !field.levels) {
-                    const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key);
-                    levelsArray.push(taxonomyPath);
-                }
-            });
-        });
+        const templates = cloneDeep(metadataTemplates);
 
-        const taxonomyInfo = new Map();
-        await Promise.all(
-            levelsArray.map(async taxonomyPath => {
+        const taxonomyFields = flatMap(templates, template =>
+            filter(template.fields, field => field.type === 'taxonomy' && !field.levels),
+        );
+
+        if (isEmpty(taxonomyFields)) {
+            return templates;
+        }
+
+        const taxonomyPaths = uniq(
+            taxonomyFields.map(field => this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key)),
+        );
+
+        const fetchPromises = taxonomyPaths.map(async taxonomyPath => {
+            try {
+                console.log('kjarosz test taxonomy path', taxonomyPath);
                 const result = await this.xhr.get({
                     url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
                     id: getTypedFileId(id),
                 });
-                taxonomyInfo.set(taxonomyPath, result.data.levels || []);
-            }),
-        );
-
-        metadataTemplates.forEach(template => {
-            if (!template.fields) {
-                return;
+                return {
+                    path: taxonomyPath,
+                    levels: result.data.levels || [],
+                };
+            } catch (error) {
+                console.error(`Failed to fetch taxonomy for path: ${taxonomyPath}`, error);
+                // Return empty levels instead of throwing
+                return { path: taxonomyPath, levels: [] };
             }
-
-            template.fields.forEach(field => {
-                if (field.type === 'taxonomy' && !field.levels) {
-                    field.levels = (
-                        taxonomyInfo.get(
-                            this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key),
-                        ) || []
-                    ).map(({ displayName, display_name, ...rest }) => ({
-                        ...rest,
-                        displayName: display_name || displayName,
-                    }));
-                    field.taxonomyKey = field.taxonomyKey || field.taxonomy_key;
-                    delete field.taxonomy_key;
-                }
-            });
         });
 
-        return metadataTemplates;
+        const fetchResults = await Promise.all(fetchPromises);
+
+        const taxonomyInfo = keyBy(fetchResults, 'path');
+
+        return lodashMap(templates, template => {
+            if (!template.fields) return template;
+
+            const fieldsToUpdate = filter(template.fields, field => field.type === 'taxonomy' && !field.levels);
+
+            if (isEmpty(fieldsToUpdate)) return template;
+
+            const updatedFields = lodashMap(fieldsToUpdate, field => {
+                const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key);
+                const levels = taxonomyInfo[taxonomyPath]?.levels || [];
+
+                const taxonomyKey = field.taxonomyKey || field.taxonomy_key;
+
+                delete field.taxonomy_key;
+
+                return {
+                    ...field,
+                    levels: lodashMap(levels, ({ displayName, display_name, ...rest }) => ({
+                        ...rest,
+                        displayName: displayName || display_name,
+                    })),
+                    taxonomyKey,
+                };
+            });
+
+            return {
+                ...template,
+                fields: updatedFields,
+            };
+        });
     }
 
     /**
