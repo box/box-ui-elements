@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import { cloneDeep, flatMap, filter, isEmpty, uniq, keyBy, map as lodashMap } from 'lodash';
+import * as _ from 'lodash';
 import { TreeQueryInput } from '@box/combobox-with-api';
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
@@ -212,19 +212,17 @@ class Metadata extends File {
         metadataTemplates: Array<MetadataTemplate>,
         id: string,
     ): Promise<Array<MetadataTemplate>> {
-        const levelsArray = [];
+        const templates = _.cloneDeep(metadataTemplates);
 
-        const templates = cloneDeep(metadataTemplates);
-
-        const taxonomyFields = flatMap(templates, template =>
-            filter(template.fields, field => field.type === 'taxonomy' && !field.levels),
+        const taxonomyFields = _.flatMap(templates, template =>
+            _.filter(template.fields, field => field.type === 'taxonomy' && !field.levels),
         );
 
-        if (isEmpty(taxonomyFields)) {
+        if (_.isEmpty(taxonomyFields)) {
             return templates;
         }
 
-        const taxonomyPaths = uniq(
+        const taxonomyPaths = _.uniq(
             taxonomyFields.map(field => this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key)),
         );
 
@@ -239,23 +237,22 @@ class Metadata extends File {
                     levels: result.data.levels || [],
                 };
             } catch (error) {
-                console.error(`Failed to fetch taxonomy for path: ${taxonomyPath}`, error);
-                return { path: taxonomyPath, levels: [] };
+                throw new Error(`Failed to fetch taxonomy for path: ${taxonomyPath}`, error);
             }
         });
 
         const fetchResults = await Promise.all(fetchPromises);
 
-        const taxonomyInfo = keyBy(fetchResults, 'path');
+        const taxonomyInfo = _.keyBy(fetchResults, 'path');
 
-        return lodashMap(templates, template => {
+        return _.map(templates, template => {
             if (!template.fields) return template;
 
-            const fieldsToUpdate = filter(template.fields, field => field.type === 'taxonomy' && !field.levels);
+            const fieldsToUpdate = _.filter(template.fields, field => field.type === 'taxonomy' && !field.levels);
 
-            if (isEmpty(fieldsToUpdate)) return template;
+            if (_.isEmpty(fieldsToUpdate)) return template;
 
-            const updatedFields = lodashMap(fieldsToUpdate, field => {
+            const updatedFields = _.map(fieldsToUpdate, field => {
                 const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key);
                 const levels = taxonomyInfo[taxonomyPath]?.levels || [];
 
@@ -265,7 +262,7 @@ class Metadata extends File {
 
                 return {
                     ...field,
-                    levels: lodashMap(levels, ({ displayName, display_name, ...rest }) => ({
+                    levels: _.map(levels, ({ displayName, display_name, ...rest }) => ({
                         ...rest,
                         displayName: displayName || display_name,
                     })),
@@ -1171,7 +1168,7 @@ class Metadata extends File {
             }
         }
 
-        if (!isEmpty(suggestionsResponse) && getProp(suggestionsResponse, 'data.suggestions').length === 0) {
+        if (!_.isEmpty(suggestionsResponse) && getProp(suggestionsResponse, 'data.suggestions').length === 0) {
             this.errorCode = ERROR_CODE_EMPTY_METADATA_SUGGESTIONS;
             throw new Error('No suggestions found.');
         }
