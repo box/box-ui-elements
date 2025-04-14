@@ -40,6 +40,7 @@ type MetadataTemplateField = {
     levels?: Array<TaxonomyLevel>,
     namespace?: string,
     taxonomyKey?: string,
+    taxonomy_key?: string,
 };
 
 type MetadataTemplate = {
