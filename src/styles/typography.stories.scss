@@ -2,8 +2,7 @@
 
 .typography {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-flow: column wrap;
     margin-top: 25px;
 
     .weights {
@@ -24,7 +23,7 @@
 
     .weights .bold .preview {
         font-weight: bold;
-        font-family: 'Lato', sans-serif;
+        font-family: Lato, sans-serif;
     }
 
     .font-container,

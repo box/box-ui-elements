@@ -1,8 +1,8 @@
 @import '../../../styles/variables';
-@import '../../../styles/common/animations.scss';
+@import '../../../styles/common/animations';
 @import '../mixins';
 
-$bdl-AdditionalTabs-fade-in-time: .5s;
+$bdl-AdditionalTabs-fade-in-time: 0.5s;
 
 .bdl-AdditionalTabPlaceholder {
     @include bdl-SidebarNavButton;

@@ -30,6 +30,7 @@
 
     &.bcs-is-scrolled::before {
         position: absolute;
+
         // position it behind bcs-content-header
         top: -$sidebarHeaderHeight;
         right: $sidebarActivityFeedSpacingHorizontal;
@@ -50,8 +51,7 @@
         flex-direction: column;
         width: 100%; // Explicit width required since flex-direction is column
         min-height: $sidebarContentMinHeight;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden auto;
 
         > .inline-alert-error {
             margin: 9px 20px;
@@ -140,7 +140,7 @@
         background-color: $white;
 
         &.bcs-is-disabled {
-            opacity: .4;
+            opacity: 0.4;
             pointer-events: none;
         }
 

@@ -9,7 +9,7 @@
     padding: 8px;
     border: 1px solid #d2d2d2;
     border-radius: $bdl-border-radius-size-med;
-    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px 1px rgb(0 0 0 / 5%);
 }
 
 @mixin error-border {
@@ -110,7 +110,7 @@
             }
 
             input {
-                @include dropdown-input();
+                @include dropdown-input;
             }
         }
 
@@ -130,7 +130,7 @@
             }
 
             input {
-                @include dropdown-input();
+                @include dropdown-input;
             }
         }
 
@@ -158,23 +158,23 @@
         .select-container {
             button.bdl-SelectButton,
             button.select-button {
-                @include error-border();
+                @include error-border;
             }
         }
 
         .filter-dropdown-text-field-container {
             .text-input-container input {
-                @include error-border();
+                @include error-border;
             }
         }
 
         .date-picker-wrapper input {
-            @include error-border();
+            @include error-border;
         }
 
         .bdl-SelectButton.placeholder,
         .select-button.placeholder {
-            @include error-border();
+            @include error-border;
         }
     }
 

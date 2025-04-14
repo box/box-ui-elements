@@ -6,7 +6,7 @@
  **************************************/
 @keyframes popup_bounce_in {
     0% {
-        transform: scale3d(.1, .1, 1);
+        transform: scale3d(0.1, 0.1, 1);
     }
 
     100% {
@@ -17,10 +17,7 @@
 // Container modal div
 .modal {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: $modal-dialog-z-index;
     display: flex;
     flex: 1;
@@ -32,7 +29,7 @@
     .modal-dialog {
         border: none;
         box-shadow: none;
-        animation: popup_bounce_in .3s;
+        animation: popup_bounce_in 0.3s;
     }
 
     .modal-header {
@@ -63,7 +60,7 @@
     background-color: $white;
     background-clip: padding-box;
     border-radius: $bdl-border-radius-size-xlarge;
-    box-shadow: 0 1px 1px 1px fade-out($black, .95);
+    box-shadow: 0 1px 1px 1px fade-out($black, 0.95);
 }
 
 .modal-title {
@@ -113,12 +110,9 @@
 
 .modal-backdrop {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: -1; // .modal creates a new stacking context. Let's just make sure that backdrop is below dialog.
-    background: fade-out($black, .25);
+    background: fade-out($black, 0.25);
 }
 
 .modal-actions {
@@ -143,10 +137,7 @@
 
 .modal-container {
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 89;
     display: flex;
 }
@@ -184,7 +175,7 @@
         flex-basis: 100%;
         margin-top: $responsive-modal-header-height;
         margin-bottom: $responsive-modal-actions-height;
-        padding: 24px 16px 12px 16px;
+        padding: 24px 16px 12px;
         overflow: auto;
     }
 

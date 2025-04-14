@@ -12,7 +12,7 @@
         color: $bdl-gray-65;
         font-weight: normal;
         font-size: 14px;
-        letter-spacing: .035em;
+        letter-spacing: 0.035em;
         text-transform: none;
     }
 
@@ -23,10 +23,10 @@
 
     .table-row {
         &.disabled .table-cell {
-            opacity: .3;
+            opacity: 0.3;
         }
 
-        &:not(.is-selected):not(.disabled):hover {
+        &:not(.is-selected, .disabled):hover {
             background-color: $hover-blue-background;
         }
 
