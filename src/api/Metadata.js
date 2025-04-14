@@ -230,7 +230,6 @@ class Metadata extends File {
 
         const fetchPromises = taxonomyPaths.map(async taxonomyPath => {
             try {
-                console.log('kjarosz test taxonomy path', taxonomyPath);
                 const result = await this.xhr.get({
                     url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
                     id: getTypedFileId(id),

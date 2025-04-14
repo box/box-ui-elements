@@ -23,8 +23,8 @@ type MetadataTemplateFieldOption = {
 };
 
 export type TaxonomyLevel = {
-    displayName: string,
     description: string,
+    displayName: string,
     level: number,
 };
 
@@ -155,10 +155,10 @@ type MetadataTemplateInstanceField = {
     hidden?: boolean,
     id?: string,
     key: string, // V2
+    levels?: Array<TaxonomyLevel>,
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
     value: MetadataFieldValue,
-    levels?: Array<TaxonomyLevel>,
 };
 
 type MetadataTemplateInstance = {
