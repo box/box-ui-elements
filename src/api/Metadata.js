@@ -237,7 +237,7 @@ class Metadata extends File {
                     levels: result.data.levels || [],
                 };
             } catch (error) {
-                throw new Error(`Failed to fetch taxonomy for path: ${taxonomyPath}`, error);
+                throw new Error(`Failed to fetch taxonomy for path: ${taxonomyPath}`);
             }
         });
 
