@@ -8,7 +8,6 @@ import { cloneDeep, flatMap, filter, isEmpty, uniq, keyBy, map as lodashMap } fr
 import { TreeQueryInput } from '@box/combobox-with-api';
 import getProp from 'lodash/get';
 import uniqueId from 'lodash/uniqueId';
-// import isEmpty from 'lodash/isEmpty';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
 import { handleOnAbort, formatMetadataFieldValue } from './utils';
@@ -242,7 +241,6 @@ class Metadata extends File {
                 };
             } catch (error) {
                 console.error(`Failed to fetch taxonomy for path: ${taxonomyPath}`, error);
-                // Return empty levels instead of throwing
                 return { path: taxonomyPath, levels: [] };
             }
         });
