@@ -198,7 +198,10 @@ class Metadata extends File {
      * @param {string} taxonomyKey
      * @returns {string}
      */
-    getTaxonomyPath(namespace: string, taxonomyKey: string): string {
+    getTaxonomyPath(namespace?: string, taxonomyKey?: string): string | null {
+        if (!namespace || !taxonomyKey) {
+            return null;
+        }
         return `metadata_taxonomies/${namespace}/${taxonomyKey}`;
     }
 
@@ -215,7 +218,10 @@ class Metadata extends File {
         const templates = _.cloneDeep(metadataTemplates);
 
         const taxonomyFields = _.flatMap(templates, template =>
-            _.filter(template.fields, field => field.type === 'taxonomy' && !field.levels),
+            _.filter(
+                template.fields,
+                field => field.type === 'taxonomy' && !field.levels && (field.taxonomyKey || field.taxonomy_key),
+            ),
         );
 
         if (_.isEmpty(taxonomyFields)) {
@@ -223,7 +229,9 @@ class Metadata extends File {
         }
 
         const taxonomyPaths = _.uniq(
-            taxonomyFields.map(field => this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key)),
+            taxonomyFields
+                .map(field => this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key))
+                .filter(Boolean),
         );
 
         const fetchPromises = taxonomyPaths.map(async taxonomyPath => {
