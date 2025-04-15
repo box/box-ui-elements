@@ -22,6 +22,12 @@ type MetadataTemplateFieldOption = {
     key: string,
 };
 
+export type TaxonomyLevel = {
+    description: string,
+    displayName: string,
+    level: number,
+};
+
 type MetadataTemplateField = {
     description?: string,
     displayName: string,
@@ -31,6 +37,10 @@ type MetadataTemplateField = {
     key: string, // V2
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
+    levels?: Array<TaxonomyLevel>,
+    namespace?: string,
+    taxonomyKey?: string,
+    taxonomy_key?: string,
 };
 
 type MetadataTemplate = {
@@ -128,7 +138,7 @@ type MetadataOptionEntryAncestor = {
 type MetadataOptionEntry = {
     id: string,
     display_name: string,
-    level: string,
+    level: number,
     ancestors: MetadataOptionEntryAncestor[],
     deprecated: boolean,
     selectable: boolean,
@@ -146,6 +156,7 @@ type MetadataTemplateInstanceField = {
     hidden?: boolean,
     id?: string,
     key: string, // V2
+    levels?: Array<TaxonomyLevel>,
     options?: Array<MetadataTemplateFieldOption>, // V3
     type: MetadataFieldType,
     value: MetadataFieldValue,
