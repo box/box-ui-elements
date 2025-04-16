@@ -20,7 +20,7 @@ $scroll-shadow-height: 30px;
             height: $scroll-shadow-height;
             border-radius: inherit;
             opacity: 0;
-            transition: opacity .1s ease-in-out;
+            transition: opacity 0.1s ease-in-out;
             content: '';
         }
 
@@ -28,13 +28,13 @@ $scroll-shadow-height: 30px;
         &::before {
             top: -$scroll-shadow-height;
             z-index: 20;
-            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .1);
+            box-shadow: 0 2px 8px 0 rgb(0 0 0 / 10%);
         }
 
         &::after {
             bottom: -$scroll-shadow-height;
             z-index: 30;
-            box-shadow: 0 -2px 8px 0 rgba(0, 0, 0, .1);
+            box-shadow: 0 -2px 8px 0 rgb(0 0 0 / 10%);
         }
     }
 

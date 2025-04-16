@@ -5,11 +5,14 @@
         $base-row-shadow: 0 -1px 1px $bdl-gray-10;
 
         background-color: $white;
+
         // Allows row to have both top and bottom borders when dragging
         box-shadow: $base-row-shadow;
 
         &.is-dragging {
-            box-shadow: $base-row-shadow, 0 1px 3px $bdl-gray-20;
+            box-shadow:
+                $base-row-shadow,
+                0 1px 3px $bdl-gray-20;
         }
     }
 

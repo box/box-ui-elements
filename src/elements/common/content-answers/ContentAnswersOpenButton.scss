@@ -1,19 +1,17 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
-
 @mixin BackgroundGradient {
-    background: linear-gradient(135deg, #fe01da 0%, tokens.$light-blue-100 100%);
-    border: tokens.$border-1 solid tokens.$white-opacity-30;
+    background: linear-gradient(135deg, #fe01da 0%, var(--light-blue-100) 100%);
+    border: var(--border-1) solid var(--white-opacity-30);
 }
 
 @mixin BackgroundGradientHover {
-    background: linear-gradient(0deg, #2223, #2223), linear-gradient(135deg, #fe01da 0%, tokens.$light-blue-100 100%);
-    border: tokens.$border-1 solid #2222224d;
+    background: linear-gradient(0deg, #2223, #2223), linear-gradient(135deg, #fe01da 0%, var(--light-blue-100) 100%);
+    border: var(--border-1 solid #2222224d);
 }
 
 .be-ContentAnswersOpenButton {
     &:not(:disabled):focus,
     &:not(:disabled):hover {
-        background-color: tokens.$gray-10;
+        background-color: var(--gray-10);
     }
 
     &.be-ContentAnswersOpenButton--hasQuestions {
@@ -21,7 +19,7 @@
 
         svg {
             path {
-                fill: tokens.$gray-white;
+                fill: var(--gray-white);
             }
         }
 
@@ -33,8 +31,8 @@
             @include BackgroundGradientHover;
 
             box-shadow:
-                0 0 0 1px tokens.$gray-white,
-                0 0 0 3px tokens.$light-blue-100;
+                0 0 0 1px var(--gray-white),
+                0 0 0 3px var(--light-blue-100);
         }
     }
 }

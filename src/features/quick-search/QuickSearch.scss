@@ -3,7 +3,7 @@
 .quick-search {
     display: inline-block;
     width: 100%;
-    transition: width .25s linear;
+    transition: width 0.25s linear;
 
     .selector-dropdown-wrapper {
         width: 100%;
@@ -14,8 +14,7 @@
 
         margin-top: $bdl-grid-unit * 2;
         padding: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden auto;
         transform: scaleY(0);
     }
 
