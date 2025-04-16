@@ -112,11 +112,13 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         isCitationsEnabled: true,
         isDebugModeEnabled: true,
         isFeedbackEnabled: true,
+        isFeedbackFormEnabled: true,
         isIntelligentQueryMode: true,
         isMarkdownEnabled: true,
         isResetChatEnabled: true,
         isStopResponseEnabled: true,
         isStreamingEnabled: true,
+        onFeedbackFormSubmit: jest.fn(),
         onUserInteraction: jest.fn(),
         recordAction: jest.fn(),
         sendQuestion: jest.fn(),
@@ -246,7 +248,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
     });
 
     test('should render cached custom suggested questions', async () => {
-        await renderComponent( {
+        await renderComponent({
             cache: {
                 encodedSession: '1234',
                 questions: [],
