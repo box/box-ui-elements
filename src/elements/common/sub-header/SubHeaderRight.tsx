@@ -21,6 +21,7 @@ export interface SubHeaderRightProps {
     onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
+    portalElement?: HTMLElement;
     view: View;
     viewMode: ViewMode;
 }
@@ -38,6 +39,7 @@ const SubHeaderRight = ({
     onSortChange,
     onUpload,
     onViewModeChange,
+    portalElement,
     view,
     viewMode,
 }: SubHeaderRightProps) => {
@@ -61,12 +63,13 @@ const SubHeaderRight = ({
             {hasItems && hasGridView && (
                 <ViewModeChangeButton viewMode={viewMode} onViewModeChange={onViewModeChange} />
             )}
-            {showSort && <Sort onSortChange={onSortChange} />}
+            {showSort && <Sort onSortChange={onSortChange} portalElement={portalElement} />}
             {showAdd && (
                 <Add
                     isDisabled={!isFolder}
                     onCreate={onCreate}
                     onUpload={onUpload}
+                    portalElement={portalElement}
                     showCreate={canCreateNewFolder}
                     showUpload={canUpload}
                 />
