@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 declare const global: {
-    FEATURES: Record<string, boolean>;
+    FEATURE_FLAGS: Record<string, boolean>;
     FILE_ID: string;
     FOLDER_ID: string;
     TOKEN: string;

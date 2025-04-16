@@ -13,7 +13,7 @@ export default {
             hasClassification: true,
             hasRetentionPolicy: true,
         },
-        features: global.FEATURES,
+        features: global.FEATURE_FLAGS,
         fileId: global.FILE_ID,
         hasActivityFeed: true,
         hasMetadata: true,
@@ -26,7 +26,7 @@ export default {
 export const ContentSidebarWithBoxAIDisabled: StoryObj<typeof BoxAISidebar> = {
     args: {
         features: {
-            ...global.FEATURES,
+            ...global.FEATURE_FLAGS,
             'boxai.sidebar.enabled': false,
             'metadata.redesign.enabled': true,
         },
@@ -36,7 +36,7 @@ export const ContentSidebarWithBoxAIDisabled: StoryObj<typeof BoxAISidebar> = {
 export const ContentSidebarWithBoxAIEnabled: StoryObj<typeof BoxAISidebar> = {
     args: {
         features: {
-            ...global.FEATURES,
+            ...global.FEATURE_FLAGS,
             'boxai.sidebar.enabled': true,
             'metadata.redesign.enabled': true,
         },
