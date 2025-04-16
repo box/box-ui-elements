@@ -66,12 +66,6 @@
 .be {
     @include reset;
 
-    // links have tag styles
-    @import '../../styles/common/links';
-
-    // Forms have tag styles
-    @import '../../styles/common/forms';
-    @include be-content;
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
     width: 100%;
@@ -83,6 +77,16 @@
     background: $white;
     border: 0 none;
     outline: none;
+
+    // Elements migrated to Blueprint should not use base styles
+    &:not(.bce) {
+        // links have tag styles
+        @import '../../styles/common/links';
+
+        // Forms have tag styles
+        @import '../../styles/common/forms';
+        @include be-content;
+    }
 
     .ReactModal__Body--open & {
         position: relative;
