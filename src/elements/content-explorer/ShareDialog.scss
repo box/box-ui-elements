@@ -1,10 +1,8 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
-
 .be-modal.be-modal-share {
     .bce-shared-access-select {
         height: 27px;
         line-height: 15px;
-        border-radius: tokens.$radius-2;
+        border-radius: var(--radius-2);
     }
 
     .be-modal-input-group {
@@ -15,7 +13,7 @@
             max-width: 296px;
             text-overflow: ellipsis;
             border-right: 0 none;
-            border-radius: tokens.$radius-2 0 0 tokens.$radius-2;
+            border-radius: var(--radius-2) 0 0 var(--radius-2);
 
             .be-is-small & {
                 width: 237px;
@@ -33,7 +31,7 @@
         line-height: 34px;
         letter-spacing: 1px;
         text-transform: uppercase;
-        border-radius: 0 tokens.$radius-2 tokens.$radius-2 0;
+        border-radius: 0 var(--radius-2) var(--radius-2) 0;
     }
 
     .be-modal-btns {

@@ -7,6 +7,7 @@
 
     .bcs-ActivityThreadReplyForm-arrow {
         margin-right: $bdl-grid-unit;
+
         // in design arrow is turning left, but we only have ArrowArcRight, so will transfrom it to left one
         transform: matrix(-1, 0, 0, 1, 0, 0);
     }

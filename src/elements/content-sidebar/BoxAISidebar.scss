@@ -1,5 +1,3 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
-
 @import '../common/variables';
 
 $agentSelectorSidebarWidth: 211px;
@@ -14,7 +12,7 @@ $agentSelectorSidebarWidth: 211px;
         }
 
         .bcs-content-header {
-            padding: 0 tokens.$space-4;
+            padding: 0 var(--space-4);
         }
 
         .bcs-scroll-content {
@@ -34,10 +32,10 @@ $agentSelectorSidebarWidth: 211px;
             margin: 0;
             padding: 0;
             font-weight: normal;
-            font-size: tokens.$title-medium-font-size;
+            font-size: var(--title-medium-font-size);
 
             .bcs-title {
-                margin-right: tokens.$space-2;
+                margin-right: var(--space-2);
                 white-space: nowrap;
             }
         }
@@ -68,7 +66,7 @@ $agentSelectorSidebarWidth: 211px;
         }
 
         .bcs-BoxAISidebar-expand {
-            margin-left: tokens.$space-2;
+            margin-left: var(--space-2);
         }
     }
 }

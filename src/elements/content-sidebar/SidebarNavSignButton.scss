@@ -11,7 +11,7 @@
 
 .bcs-SidebarNavSignButton-icon--grayscale {
     display: none;
-    margin-top: 2px; //for visual alignment
+    margin-top: 2px; // for visual alignment
 }
 
 @include breakpoint($medium-screen) {

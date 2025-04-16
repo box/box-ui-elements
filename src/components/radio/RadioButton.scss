@@ -26,8 +26,10 @@
             background-color: $white;
             border: 7px solid $white;
             border-radius: 9001px;
-            box-shadow: 0 0 0 1px $bdl-gray-50, 0 -1px 1px rgba(0, 0, 0, .4);
-            transition: border-width .1s;
+            box-shadow:
+                0 0 0 1px $bdl-gray-50,
+                0 -1px 1px rgb(0 0 0 / 40%);
+            transition: border-width 0.1s;
             content: '';
         }
 
