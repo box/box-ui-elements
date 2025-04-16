@@ -4,7 +4,7 @@
  */
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import {type ItemType, SuggestedQuestionType} from '@box/box-ai-content-answers';
+import { type FeedbackFormData, type ItemType, SuggestedQuestionType } from '@box/box-ai-content-answers';
 import { AgentsProvider, RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
@@ -43,6 +43,7 @@ export interface BoxAISidebarProps {
     isCitationsEnabled: boolean;
     isDebugModeEnabled: boolean;
     isFeedbackEnabled: boolean;
+    isFeedbackFormEnabled: boolean;
     isIntelligentQueryMode: boolean;
     isMarkdownEnabled: boolean;
     isResetChatEnabled: boolean;
@@ -51,6 +52,7 @@ export interface BoxAISidebarProps {
     items: Array<ItemType>;
     itemSize?: string;
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
+    onFeedbackFormSubmit?: (data: FeedbackFormData, onSuccess: () => void) => void;
     onUserInteraction?: () => void;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
@@ -68,10 +70,12 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         getSuggestedQuestions,
         isIntelligentQueryMode,
         isFeedbackEnabled,
+        isFeedbackFormEnabled,
         isStopResponseEnabled,
         items,
         itemSize,
         localizedQuestions,
+        onFeedbackFormSubmit,
         onUserInteraction,
         recordAction,
         setCacheValue,
@@ -88,9 +92,11 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             elementId,
             fileExtension,
             isFeedbackEnabled,
+            isFeedbackFormEnabled,
             isStopResponseEnabled,
             items,
             itemSize,
+            onFeedbackFormSubmit,
             onUserInteraction,
             recordAction,
             setCacheValue,
@@ -102,9 +108,11 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             elementId,
             fileExtension,
             isFeedbackEnabled,
+            isFeedbackFormEnabled,
             isStopResponseEnabled,
             items,
             itemSize,
+            onFeedbackFormSubmit,
             onUserInteraction,
             recordAction,
             setCacheValue,
@@ -156,7 +164,9 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
                     restoredSession={cache.encodedSession}
                     restoredShouldShowLandingPage={cache.shouldShowLandingPage}
                     shouldPreinitSession={shouldPreinitSession}
-                    suggestedQuestions={cache.suggestedQuestions.length > 0 ? cache.suggestedQuestions : suggestedQuestions}
+                    suggestedQuestions={
+                        cache.suggestedQuestions.length > 0 ? cache.suggestedQuestions : suggestedQuestions
+                    }
                     warningNotice={spreadsheetNotice}
                     warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
                     {...rest}
