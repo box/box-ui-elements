@@ -1646,7 +1646,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             <Internationalize language={language} messages={messages}>
                 <TooltipProvider container={this.rootElement}>
                     <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
-                        <ThemingStyles theme={theme} />
+                        <ThemingStyles selector={`#${this.id}`} theme={theme} />
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
                             {!isDefaultViewMetadata && (
                                 <>
@@ -1670,6 +1670,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                         onItemClick={this.fetchFolder}
                                         onSortChange={this.sort}
                                         onViewModeChange={this.changeViewMode}
+                                        portalElement={this.rootElement}
                                     />
                                 </>
                             )}

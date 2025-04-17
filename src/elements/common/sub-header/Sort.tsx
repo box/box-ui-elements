@@ -9,6 +9,7 @@ import messages from '../messages';
 
 export interface SortProps {
     onSortChange: (sortBy: SortBy, sortDirection: SortDirection) => void;
+    portalElement?: HTMLElement;
 }
 
 type SortItem = [SortBy, SortDirection];
@@ -22,7 +23,7 @@ const SORT_ITEMS: Array<SortItem> = [
     [FIELD_SIZE, SORT_DESC],
 ];
 
-const Sort = ({ onSortChange }: SortProps) => {
+const Sort = ({ onSortChange, portalElement }: SortProps) => {
     const { formatMessage } = useIntl();
 
     return (
@@ -30,7 +31,7 @@ const Sort = ({ onSortChange }: SortProps) => {
             <DropdownMenu.Trigger>
                 <IconButton aria-label={formatMessage(messages.sort)} className="be-btn-sort" icon={IconSort} />
             </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
+            <DropdownMenu.Content container={portalElement}>
                 {SORT_ITEMS.map(([sortByValue, sortDirectionValue]) => {
                     const sortItemKey = `${sortByValue}${sortDirectionValue}`;
 
