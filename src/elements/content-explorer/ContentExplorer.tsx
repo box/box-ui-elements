@@ -1582,6 +1582,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             contentPreviewProps,
             contentUploaderProps,
             defaultView,
+            features,
             isMedium,
             isSmall,
             isTouch,
@@ -1681,6 +1682,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 canRename={canRename}
                                 canShare={canShare}
                                 currentCollection={currentCollection}
+                                features={features}
                                 gridColumnCount={Math.min(gridColumnCount, maxGridColumnCount)}
                                 isMedium={isMedium}
                                 isSmall={isSmall}
