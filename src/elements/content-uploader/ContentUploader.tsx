@@ -1273,7 +1273,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 <TooltipProvider>
                     {useUploadsManager ? (
                         <div ref={measureRef} className={styleClassName} id={this.id}>
-                            <ThemingStyles theme={theme} />
+                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
                             <UploadsManager
                                 isDragging={isDraggingItemsToUploadsManager}
                                 isExpanded={isUploadsManagerExpanded}
@@ -1290,7 +1290,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                         </div>
                     ) : (
                         <div ref={measureRef} className={styleClassName} id={this.id}>
-                            <ThemingStyles theme={theme} />
+                            <ThemingStyles selector={`#${this.id}`} theme={theme} />
                             <DroppableContent
                                 addDataTransferItemsToUploadQueue={this.addDroppedItemsToUploadQueue}
                                 addFiles={this.addFilesToUploadQueue}
