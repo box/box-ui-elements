@@ -4,6 +4,8 @@ export { default as FeatureFlag } from './FeatureFlag';
 export { default as FeatureProvider } from './FeatureProvider';
 export { default as withFeatureConsumer } from './withFeatureConsumer';
 export { default as withFeatureProvider } from './withFeatureProvider';
+export { default as useFeatureEnabled } from './useFeatureEnabled';
+export { default as useFeatureConfig } from './useFeatureConfig';
 export { isFeatureEnabled, getFeatureConfig } from './util';
 export * from './flowTypes';
 export * from './hooks';
