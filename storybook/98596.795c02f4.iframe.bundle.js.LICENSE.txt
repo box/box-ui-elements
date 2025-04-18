@@ -1,0 +1,21 @@
+/*
+ * [js-sha1]{@link https://github.com/emn178/js-sha1}
+ *
+ * @version 0.6.0
+ * @author Chen, Yi-Cyuan [emn178@gmail.com]
+ * @copyright Chen, Yi-Cyuan 2014-2017
+ * @license MIT
+ */
+
+/*!
+ * jsUri
+ * https://github.com/derek-watson/jsUri
+ *
+ * Copyright 2013, Derek Watson
+ * Released under the MIT license.
+ *
+ * Includes parseUri regular expressions
+ * http://blog.stevenlevithan.com/archives/parseuri
+ * Copyright 2007, Steven Levithan
+ * Released under the MIT license.
+ */

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "boxui.quickSearch.bookmark",
+    "description": "Icon title for a Box item of type bookmark or web-link",
+    "defaultMessage": "Bookmark"
+  },
+  {
+    "id": "boxui.quickSearch.collaboratedFolder",
+    "description": "Icon title for a Box item of type folder that has collaborators",
+    "defaultMessage": "Collaborated Folder"
+  },
+  {
+    "id": "boxui.quickSearch.externalFolder",
+    "description": "Icon title for a Box item of type folder that has collaborators outside of the user's enterprise",
+    "defaultMessage": "External Folder"
+  },
+  {
+    "id": "boxui.quickSearch.file",
+    "description": "Icon title for a Box item of type file",
+    "defaultMessage": "File"
+  },
+  {
+    "id": "boxui.quickSearch.parentFolder",
+    "description": "Title for a parent folder icon next to the name of the parent folder for a quick search result item",
+    "defaultMessage": "Parent Folder"
+  },
+  {
+    "id": "boxui.quickSearch.personalFolder",
+    "description": "Icon title for a Box item of type folder that is private and has no collaborators",
+    "defaultMessage": "Personal Folder"
+  },
+  {
+    "id": "boxui.quickSearch.updatedText",
+    "description": "Text for a quick search result describing the date when the user last updated the item",
+    "defaultMessage": "{date, date, medium} by {user}"
+  },
+  {
+    "id": "boxui.quickSearch.updatedTextToday",
+    "description": "Statement describing when and who last updated a quick search result item, capitalize if appropriate",
+    "defaultMessage": "Today by {user}"
+  },
+  {
+    "id": "boxui.quickSearch.updatedTextYesterday",
+    "description": "Statement describing when and who last updated a quick search result item, capitalize if appropriate",
+    "defaultMessage": "Yesterday by {user}"
+  }
+]

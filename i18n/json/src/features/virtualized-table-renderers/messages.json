@@ -1,0 +1,32 @@
+[
+  {
+    "id": "boxui.features.VirtualizedTableRenderers.unknownUser",
+    "description": "The user is unknown in the database.",
+    "defaultMessage": "Unknown User"
+  },
+  {
+    "id": "boxui.features.VirtualizedTableRenderers.anonymousUser",
+    "description": "The user is an anonymous user",
+    "defaultMessage": "Anonymous User"
+  },
+  {
+    "id": "boxui.features.VirtualizedTableRenderers.externalFile",
+    "description": "Text to show when a file is external",
+    "defaultMessage": "External File"
+  },
+  {
+    "id": "boxui.features.VirtualizedTableRenderers.externalFolder",
+    "description": "Text to show when a folder is external",
+    "defaultMessage": "External Folder"
+  },
+  {
+    "id": "boxui.features.VirtualizedTableRenderers.allFiles",
+    "description": "Text to show when root folder is external",
+    "defaultMessage": "All Files"
+  },
+  {
+    "id": "boxui.features.VirtualizedTableRenderers.lastModifiedBy",
+    "description": "Text to show on \"modified by\" table cell. Note that \"lastModified\" will contain additional localized text. Example: 2 days ago by John Smith",
+    "defaultMessage": "{lastModified} by {user}"
+  }
+]
