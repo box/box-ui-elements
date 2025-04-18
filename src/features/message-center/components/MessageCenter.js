@@ -16,7 +16,7 @@ import Internationalize from '../../../elements/common/Internationalize';
 
 type Props = {|
     apiHost: string,
-    buttonComponent: React.ComponentType<{ render: () => React.Node }>,
+    buttonComponent: React.ComponentType<{ render: () => React.Node, badgeCount: null | number }>,
     contentPreviewProps?: ContentPreviewProps,
     getEligibleMessages: () => Promise<GetEligibleMessageCenterMessages>,
     getToken: (fileId: string) => Promise<Token>,
@@ -102,6 +102,7 @@ function MessageCenter({
 
     const icon = (
         <ButtonComponent
+            badgeCount={unreadMessageCount}
             data-resin-target="messageCenterOpenModal"
             data-testid="message-center-unread-count"
             onClick={handleOnClick}
