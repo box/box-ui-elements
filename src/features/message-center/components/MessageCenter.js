@@ -105,6 +105,7 @@ function MessageCenter({
             data-resin-target="messageCenterOpenModal"
             data-testid="message-center-unread-count"
             onClick={handleOnClick}
+            badgeCount={unreadMessageCount}
             render={() => (
                 <Badgeable
                     className="icon-bell-badge"
