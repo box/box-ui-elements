@@ -172,4 +172,14 @@ describe('components/message-center/MessageCenter.integration', () => {
 
         expect(wrapper.find(Message)).toHaveLength(2);
     });
+
+    test('should render ButtonComponent with badgeCount prop passed from MessageCenter', async () => {
+        const wrapper = await getWrapper();
+        const badgeCount = countResponse.count;
+
+        await actWait();
+        wrapper.update();
+
+        expect(wrapper.find('ButtonComponent').props().badgeCount).toBe(badgeCount);
+    });
 });
