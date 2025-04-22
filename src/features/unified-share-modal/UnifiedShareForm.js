@@ -563,30 +563,32 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     renderCollaboratorMessage(resinTarget: string) {
         const { openUpgradePlanModal = () => {} } = this.props;
         return (
-            <FormattedMessage
-                values={{
-                    collaboratorAccess: (
-                        <Link
-                            className="upgrade-link"
-                            href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
-                            target="_blank"
-                        >
-                            <FormattedMessage {...messages.collabAccess} />
-                        </Link>
-                    ),
-                    upgradeLink: (
-                        <PlainButton
-                            className="upgrade-link"
-                            data-resin-target={resinTarget}
-                            onClick={openUpgradePlanModal}
-                            type="button"
-                        >
-                            <FormattedMessage {...messages.upgradeLink} />
-                        </PlainButton>
-                    ),
-                }}
-                {...messages.setLevelOfCollabAccess}
-            />
+            <>
+                <FormattedMessage
+                    values={{
+                        collaboratorAccess: (
+                            <Link
+                                className="upgrade-link"
+                                href="https://support.box.com/hc/en-us/articles/360044196413-Understanding-Collaborator-Permission-Levels"
+                                target="_blank"
+                            >
+                                <FormattedMessage {...messages.collabAccess} />
+                            </Link>
+                        ),
+                        upgradeLink: (
+                            <PlainButton
+                                className="upgrade-link"
+                                data-resin-target={resinTarget}
+                                onClick={openUpgradePlanModal}
+                                type="button"
+                            >
+                                <FormattedMessage {...messages.upgradeLink} />
+                            </PlainButton>
+                        ),
+                    }}
+                    {...messages.setLevelOfCollabAccess}
+                />
+            </>
         );
     }
 

@@ -99,8 +99,8 @@
         margin-bottom: 20px;
     }
 
-    .bdl-PillSelectorDropdown .bdl-PillSelector,
     // need both selectors for specificity
+    .bdl-PillSelectorDropdown .bdl-PillSelector,
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
