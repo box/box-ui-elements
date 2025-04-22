@@ -3,7 +3,6 @@
 $width: 610px;
 $supported-width: 1.1 * $width;
 $supported-height: 400px;
-
 $button-height: 32px;
 
 // tweak button so primary button and its clickable area is larger and secondary button is smaller
@@ -22,7 +21,7 @@ $secondary-button-margin-right: 15px;
         display: none;
     }
 
-    letter-spacing: .3px;
+    letter-spacing: 0.3px;
 
     .overlay {
         border: 1px solid $bdl-gray-10;

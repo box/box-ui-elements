@@ -16,6 +16,7 @@ export interface BreadcrumbsProps {
     delimiter: Delimiter;
     isSmall?: boolean;
     onCrumbClick: (item: string) => void;
+    portalElement?: HTMLElement;
     rootId: string;
 }
 
@@ -46,12 +47,13 @@ function getBreadcrumb(
     isLast: boolean,
     onCrumbClick: (item: string) => void,
     delimiter: Delimiter,
+    portalElement?: HTMLElement,
 ) {
     if (Array.isArray(crumbs)) {
         const condensed = delimiter !== DELIMITER_CARET;
         return (
             <span className="be-breadcrumb-more">
-                <BreadcrumbDropdown crumbs={crumbs} onCrumbClick={onCrumbClick} />
+                <BreadcrumbDropdown crumbs={crumbs} onCrumbClick={onCrumbClick} portalElement={portalElement} />
                 <BreadcrumbDelimiter delimiter={condensed ? DELIMITER_SLASH : DELIMITER_CARET} />
             </span>
         );
@@ -61,7 +63,7 @@ function getBreadcrumb(
     return <Breadcrumb delimiter={delimiter} isLast={isLast} name={name} onClick={() => onCrumbClick(id)} />;
 }
 
-const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false }: BreadcrumbsProps) => {
+const Breadcrumbs = ({ crumbs, delimiter, isSmall = false, onCrumbClick, portalElement, rootId }: BreadcrumbsProps) => {
     const { formatMessage } = useIntl();
 
     if (!rootId || crumbs.length === 0) {
@@ -86,14 +88,17 @@ const Breadcrumbs = ({ rootId, crumbs, onCrumbClick, delimiter, isSmall = false 
 
     // Always show the second last/parent breadcrumb when there are at least 2 crumbs.
     const secondLastBreadcrumb =
-        length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter) : null;
+        length > 1 ? getBreadcrumb(filteredCrumbs[length - 2], false, onCrumbClick, delimiter, portalElement) : null;
 
     // Only show the more dropdown when there were at least 4 crumbs.
     const moreBreadcrumbs =
-        length > 3 ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter) : null;
+        length > 3
+            ? getBreadcrumb(filteredCrumbs.slice(1, length - 2), false, onCrumbClick, delimiter, portalElement)
+            : null;
 
     // Only show the root breadcrumb when there are at least 3 crumbs.
-    const firstBreadcrumb = length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter) : null;
+    const firstBreadcrumb =
+        length > 2 ? getBreadcrumb(filteredCrumbs[0], false, onCrumbClick, delimiter, portalElement) : null;
 
     return (
         <div className="be-breadcrumbs">

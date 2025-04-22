@@ -9,11 +9,12 @@ export interface AddProps {
     isDisabled: boolean;
     onCreate: () => void;
     onUpload: () => void;
+    portalElement?: HTMLElement;
     showCreate: boolean;
     showUpload: boolean;
 }
 
-const Add = ({ isDisabled, onUpload, onCreate, showUpload = true, showCreate = true }: AddProps) => {
+const Add = ({ isDisabled, onUpload, onCreate, portalElement, showCreate = true, showUpload = true }: AddProps) => {
     const { formatMessage } = useIntl();
 
     return (
@@ -26,7 +27,7 @@ const Add = ({ isDisabled, onUpload, onCreate, showUpload = true, showCreate = t
                     icon={Plus}
                 />
             </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
+            <DropdownMenu.Content container={portalElement}>
                 {showUpload && (
                     <DropdownMenu.Item onClick={onUpload}>{formatMessage(messages.upload)}</DropdownMenu.Item>
                 )}

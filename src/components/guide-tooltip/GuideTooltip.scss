@@ -26,7 +26,7 @@ $bdl-guide-tooltip-max-width: 408px;
 .bdl-GuideTooltip-image {
     margin-right: -($bdl-grid-unit * 6);
     margin-left: -($bdl-grid-unit * 6);
-    padding: ($bdl-grid-unit * 4) 0 ($bdl-grid-unit * 5) 0;
+    padding: ($bdl-grid-unit * 4) 0 ($bdl-grid-unit * 5);
     text-align: center;
 
     img {
@@ -48,7 +48,7 @@ $bdl-guide-tooltip-max-width: 408px;
 
 .bdl-GuideTooltip-title,
 .bdl-GuideTooltip-body {
-    letter-spacing: .3px;
+    letter-spacing: 0.3px;
 }
 
 button.bdl-GuideTooltip-previousButton,

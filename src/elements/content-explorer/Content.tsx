@@ -4,6 +4,8 @@ import ItemGrid from '../common/item-grid';
 import ItemList from '../common/item-list';
 import ProgressBar from '../common/progress-bar';
 import MetadataBasedItemList from '../../features/metadata-based-view';
+import MetadataView from './MetadataView';
+import { isFeatureEnabled, type FeatureConfig } from '../common/feature-checking';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from '../common/item';
@@ -27,6 +29,7 @@ function isEmpty(view: View, currentCollection: Collection, fieldsToShow: Fields
 
 export interface ContentProps extends Required<ItemEventHandlers>, Required<ItemEventPermissions> {
     currentCollection: Collection;
+    features?: FeatureConfig;
     fieldsToShow?: FieldsToShow;
     gridColumnCount?: number;
     isMedium: boolean;
@@ -47,6 +50,7 @@ export interface ContentProps extends Required<ItemEventHandlers>, Required<Item
 
 const Content = ({
     currentCollection,
+    features,
     fieldsToShow = [],
     gridColumnCount,
     onMetadataUpdate,
@@ -67,13 +71,16 @@ const Content = ({
             {view === VIEW_ERROR || view === VIEW_SELECTED ? null : <ProgressBar percent={percentLoaded} />}
 
             {isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
-            {!isViewEmpty && isMetadataBasedView && (
+            {!isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList
                     currentCollection={currentCollection}
                     fieldsToShow={fieldsToShow}
                     onMetadataUpdate={onMetadataUpdate}
                     {...rest}
                 />
+            )}
+            {isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
+                <MetadataView />
             )}
             {!isViewEmpty && isListView && (
                 <ItemList

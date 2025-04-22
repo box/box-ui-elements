@@ -1,17 +1,15 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
-
 .bcs-MetadataSidebarRedesign {
-    border-left: 1px solid tokens.$gray-10;
+    border-left: 1px solid var(--gray-10);
 
     .bcs-MetadataSidebarRedesign-content {
         position: absolute;
         top: 0;
         right: 0;
         left: 0;
-        padding: tokens.$space-4;
+        padding: var(--space-4);
     }
 
     .bcs-MetadataSidebarRedesign-inline-error {
-        margin-bottom: tokens.$space-4;
+        margin-bottom: var(--space-4);
     }
 }
