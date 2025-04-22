@@ -66,6 +66,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             removeLinkConfirmModalTracking: {},
             sharedLinkEmailTracking: {},
             sharedLinkTracking: {},
+            removeCollaboratorConfirmModalTracking: {},
         },
     };
 

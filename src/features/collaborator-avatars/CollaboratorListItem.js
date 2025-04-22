@@ -5,12 +5,13 @@ import { FormattedMessage } from 'react-intl';
 
 import { Link } from '../../components/link';
 import PlainButton from '../../components/plain-button';
-import Tooltip, { TooltipPosition } from '../../components/tooltip';
+import Tooltip from '../../components/tooltip';
 import IconClose from '../../icon/fill/X16';
 import { COLLAB_GROUP_TYPE, COLLAB_PENDING_TYPE } from './constants';
 import messages from './messages';
 import commonMessages from '../../elements/common/messages';
 import CollaboratorAvatarItem from './CollaboratorAvatarItem';
+import type { collaboratorType } from '../unified-share-modal/flowTypes';
 import './CollaboratorListItem.scss';
 
 type Props = {
@@ -22,7 +23,7 @@ type Props = {
 };
 
 const CollaboratorListItem = (props: Props) => {
-    const { index, trackingProps, canRemoveCollaborators, onRemoveCollaborator } = props;
+    const { index, trackingProps, canRemoveCollaborators = false, onRemoveCollaborator } = props;
     const { usernameProps, emailProps } = trackingProps;
     const {
         email,
@@ -87,11 +88,7 @@ const CollaboratorListItem = (props: Props) => {
                     <div className="user-actions">
                         {roleNodeContent}
                         {isRemovable && (
-                            <Tooltip
-                                isTabbable={false}
-                                position={TooltipPosition.TOP_CENTER}
-                                text={<FormattedMessage {...commonMessages.remove} />}
-                            >
+                            <Tooltip isTabbable={false} text={<FormattedMessage {...commonMessages.remove} />}>
                                 <PlainButton
                                     className="remove-button"
                                     onClick={() => onRemoveCollaborator?.(props.collaborator)}

@@ -49,7 +49,7 @@ const RemoveCollaboratorConfirmModal = ({
             <FormattedMessage
                 {...messages.removeCollaboratorConfirmationDescription}
                 values={{
-                    name: collaborator.email ?? collaborator.name,
+                    name: collaborator?.email ?? collaborator?.name,
                 }}
             />
             <ModalActions>

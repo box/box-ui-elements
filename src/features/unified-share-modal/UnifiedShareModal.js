@@ -160,7 +160,10 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
 
     removeCollaborator = async () => {
         const { onRemoveCollaborator } = this.props;
-        await onRemoveCollaborator?.(this.state.collaboratorToRemove);
+        if (this.state.collaboratorToRemove) {
+            await onRemoveCollaborator?.(this.state.collaboratorToRemove);
+        }
+
         this.closeRemoveCollaboratorConfirmModal();
     };
 

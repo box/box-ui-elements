@@ -22,7 +22,7 @@ const MAX_COLLABORATOR_LIST_SIZE = 90;
 
 type Props = {
     collaborators: Array<collaboratorType>,
-    canRemoveCollaborators: boolean,
+    canRemoveCollaborators?: boolean,
     doneButtonProps?: Object,
     item: ItemType,
     maxCollaboratorListSize: number,
