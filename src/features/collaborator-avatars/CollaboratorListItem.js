@@ -4,20 +4,25 @@ import classnames from 'classnames';
 import { FormattedMessage } from 'react-intl';
 
 import { Link } from '../../components/link';
-
+import PlainButton from '../../components/plain-button';
+import Tooltip, { TooltipPosition } from '../../components/tooltip';
+import IconClose from '../../icon/fill/X16';
 import { COLLAB_GROUP_TYPE, COLLAB_PENDING_TYPE } from './constants';
 import messages from './messages';
+import commonMessages from '../../elements/common/messages';
 import CollaboratorAvatarItem from './CollaboratorAvatarItem';
 import './CollaboratorListItem.scss';
 
 type Props = {
     collaborator: Object,
     index: number,
+    canRemoveCollaborators?: boolean,
+    onRemoveCollaborator?: (collaborator: collaboratorType) => void,
     trackingProps: { emailProps: ?Object, usernameProps: ?Object },
 };
 
 const CollaboratorListItem = (props: Props) => {
-    const { index, trackingProps } = props;
+    const { index, trackingProps, canRemoveCollaborators, onRemoveCollaborator } = props;
     const { usernameProps, emailProps } = trackingProps;
     const {
         email,
@@ -30,6 +35,7 @@ const CollaboratorListItem = (props: Props) => {
         profileURL,
         translatedRole,
         userID,
+        isRemovable = false,
     } = props.collaborator;
 
     const userOrGroupNameContent =
@@ -52,6 +58,12 @@ const CollaboratorListItem = (props: Props) => {
             </div>
         ) : null;
 
+    const roleNodeContent = (
+        <div className="role">
+            {type === COLLAB_PENDING_TYPE ? <FormattedMessage {...messages.pendingCollabText} /> : translatedRole}
+        </div>
+    );
+
     return (
         <li>
             <div className="collaborator-list-item">
@@ -71,13 +83,28 @@ const CollaboratorListItem = (props: Props) => {
                         name={name}
                     />
                 </div>
-                <div className="role">
-                    {type === COLLAB_PENDING_TYPE ? (
-                        <FormattedMessage {...messages.pendingCollabText} />
-                    ) : (
-                        translatedRole
-                    )}
-                </div>
+                {canRemoveCollaborators ? (
+                    <div className="user-actions">
+                        {roleNodeContent}
+                        {isRemovable && (
+                            <Tooltip
+                                isTabbable={false}
+                                position={TooltipPosition.TOP_CENTER}
+                                text={<FormattedMessage {...commonMessages.remove} />}
+                            >
+                                <PlainButton
+                                    className="remove-button"
+                                    onClick={() => onRemoveCollaborator?.(props.collaborator)}
+                                    type="button"
+                                >
+                                    <IconClose color="##6f6f6f" height={16} width={16} />
+                                </PlainButton>
+                            </Tooltip>
+                        )}
+                    </div>
+                ) : (
+                    roleNodeContent
+                )}
             </div>
         </li>
     );

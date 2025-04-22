@@ -1,6 +1,6 @@
 ### Description
 
-This is the simplified sharing modal, interally referred to as the Unified Share Modal
+This is the simplified sharing modal, internally referred to as the Unified Share Modal
 (a combination of the previous invite collaborators modal and the shared link modal).
 
 ### Examples

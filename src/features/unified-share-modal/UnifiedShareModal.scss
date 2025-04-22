@@ -53,7 +53,7 @@
 }
 
 .unified-share-modal {
-    /** title and classifiction label */
+    /** title and classification label */
     .bdl-UnifiedShareModalTitle-classification {
         display: inline;
     }
@@ -99,7 +99,8 @@
         margin-bottom: 20px;
     }
 
-    .bdl-PillSelectorDropdown .bdl-PillSelector, // need both selectors for specificity
+    .bdl-PillSelectorDropdown .bdl-PillSelector,
+    // need both selectors for specificity
     textarea {
         /* override for DOM element in `TextArea` which provides no id/class for targeting */
         width: 100%;
@@ -325,6 +326,12 @@
         .toggle-simple-label {
             cursor: pointer;
         }
+    }
+}
+
+.remove-collaborator-confirm-modal {
+    & .modal-content {
+        word-break: break-word;
     }
 }
 

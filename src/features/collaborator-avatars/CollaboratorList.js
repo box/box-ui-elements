@@ -22,11 +22,13 @@ const MAX_COLLABORATOR_LIST_SIZE = 90;
 
 type Props = {
     collaborators: Array<collaboratorType>,
+    canRemoveCollaborators: boolean,
     doneButtonProps?: Object,
     item: ItemType,
     maxCollaboratorListSize: number,
     onDoneClick: Function,
     trackingProps: collaboratorListTrackingType,
+    onRemoveCollaboratorClick?: (collaborator: collaboratorType) => void,
 };
 
 class CollaboratorList extends React.Component<Props> {
@@ -47,7 +49,14 @@ class CollaboratorList extends React.Component<Props> {
     }
 
     render() {
-        const { collaborators, onDoneClick, maxCollaboratorListSize, trackingProps } = this.props;
+        const {
+            collaborators,
+            onDoneClick,
+            maxCollaboratorListSize,
+            trackingProps,
+            canRemoveCollaborators,
+            onRemoveCollaboratorClick,
+        } = this.props;
         const { usernameProps, emailProps, manageLinkProps, viewAdditionalProps, doneButtonProps } = trackingProps;
         const manageAllBtn = (
             <span className="manage-all-btn">
@@ -73,6 +82,8 @@ class CollaboratorList extends React.Component<Props> {
                                     usernameProps,
                                     emailProps,
                                 }}
+                                canRemoveCollaborators={canRemoveCollaborators}
+                                onRemoveCollaborator={onRemoveCollaboratorClick}
                             />
                         );
                     })}

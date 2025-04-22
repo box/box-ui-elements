@@ -131,7 +131,11 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
         });
 
         test('should render a default component with confirm modal open', () => {
-            const wrapper = getWrapper({ isConfirmModalOpen: true, isFetching: false, closeConfirmModal: () => null });
+            const wrapper = getWrapper({
+                isRemoveLinkConfirmModalOpen: true,
+                isFetching: false,
+                closeConfirmModal: () => null,
+            });
             expect(wrapper).toMatchSnapshot();
         });
 
@@ -375,6 +379,35 @@ describe('features/unified-share-modal/UnifiedShareForm', () => {
         test('should not render a default component with ACI toggle if disabled ', () => {
             const wrapper = getWrapper();
             expect(wrapper.exists('AdvancedContentInsightsToggle')).toBe(false);
+        });
+
+        test('should render a collaborator list when canRemoveCollaborators prop is set to true and onRemoveCollaboratorClick is defined', () => {
+            const onRemoveCollaboratorMock = jest.fn();
+            const collaborators = [
+                { name: 'test a', hasCustomAvatar: false },
+                { name: 'test b', hasCustomAvatar: false, isRemovable: true },
+            ];
+
+            const wrapper = getWrapper({
+                collaboratorsList: {
+                    ...collaboratorsList,
+                    collaborators,
+                },
+                canRemoveCollaborators: true,
+                onRemoveCollaboratorClick: onRemoveCollaboratorMock,
+                trackingProps: {
+                    collaboratorListTracking: {},
+                    modalTracking: {},
+                    inviteCollabTracking: {},
+                },
+            });
+
+            wrapper.setState({ showCollaboratorList: false });
+            wrapper.instance().showCollaboratorList();
+
+            expect(wrapper.find('CollaboratorList').exists()).toBe(true);
+            expect(wrapper.find('CollaboratorList').prop('canRemoveCollaborators')).toBe(true);
+            expect(wrapper.find('CollaboratorList').prop('onRemoveCollaboratorClick')).toBe(onRemoveCollaboratorMock);
         });
     });
 

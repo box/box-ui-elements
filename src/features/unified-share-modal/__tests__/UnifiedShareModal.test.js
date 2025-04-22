@@ -117,7 +117,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
 
         test('should render a default component with confirm modal open', () => {
             const wrapper = getWrapper();
-            wrapper.setState({ isFetching: false, isConfirmModalOpen: true });
+            wrapper.setState({ isFetching: false, isRemoveLinkConfirmModalOpen: true });
             expect(wrapper).toMatchSnapshot();
         });
 
@@ -260,6 +260,35 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
             wrapper.setState({ showCollaboratorList: true });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should render a default component with confirm remove collaborator modal open', () => {
+            const wrapper = getWrapper({ canRemoveCollaborators: true, onRemoveCollaborator: jest.fn() });
+            wrapper.setState({
+                isFetching: false,
+                isRemoveCollaboratorConfirmModalOpen: true,
+                collaboratorToRemove: {
+                    name: 'Collaborator a',
+                    hasCustomAvatar: false,
+                },
+            });
+            expect(wrapper).toMatchSnapshot();
+        });
+
+        test('should render a default component with collaborator list when showCollaboratorList state is true', () => {
+            const collaborators = [
+                { name: 'test a', hasCustomAvatar: false, isRemovable: false },
+                { name: 'test b', hasCustomAvatar: false, isRemovable: true },
+            ];
+
+            const wrapper = getWrapper({
+                collaboratorsList: { ...collaboratorsList, collaborators },
+                canRemoveCollaborators: true,
+                onRemoveCollaborator: jest.fn(),
+            });
+            wrapper.setState({ showCollaboratorList: true });
+
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 
     describe('getInitialData()', () => {
@@ -321,7 +350,7 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
 
             wrapper.instance().closeConfirmModal();
 
-            expect(wrapper.state('isConfirmModalOpen')).toBe(false);
+            expect(wrapper.state('isRemoveLinkConfirmModalOpen')).toBe(false);
         });
 
         test('should set the state to closed if it was formerly open', () => {
@@ -329,11 +358,52 @@ describe('features/unified-share-modal/UnifiedShareModal', () => {
 
             wrapper.instance().openConfirmModal();
 
-            expect(wrapper.state('isConfirmModalOpen')).toBe(true);
+            expect(wrapper.state('isRemoveLinkConfirmModalOpen')).toBe(true);
 
             wrapper.instance().closeConfirmModal();
 
-            expect(wrapper.state('isConfirmModalOpen')).toBe(false);
+            expect(wrapper.state('isRemoveLinkConfirmModalOpen')).toBe(false);
+        });
+    });
+
+    describe('closeRemoveCollaboratorConfirmModal()', () => {
+        test('should keep the state as closed when called', () => {
+            const wrapper = getWrapper({
+                canRemoveCollaborators: true,
+                onRemoveCollaborator: jest.fn(),
+            });
+
+            wrapper.instance().closeRemoveCollaboratorConfirmModal();
+
+            expect(wrapper.state('isRemoveCollaboratorConfirmModalOpen')).toBe(false);
+            expect(wrapper.state('collaboratorToRemove')).toBe(null);
+            expect(wrapper.state('shouldRenderFTUXTooltip')).toBe(false);
+        });
+
+        test('should set the state to closed when it was previously open', () => {
+            const wrapper = getWrapper({
+                canRemoveCollaborators: true,
+                onRemoveCollaborator: jest.fn(),
+            });
+
+            wrapper.instance().openRemoveCollaboratorConfirmModal();
+
+            expect(wrapper.state('isRemoveCollaboratorConfirmModalOpen')).toBe(true);
+            expect(wrapper.state('collaboratorToRemove')).not.toBe(null);
+
+            wrapper.instance().closeRemoveCollaboratorConfirmModal();
+
+            expect(wrapper.state('isRemoveCollaboratorConfirmModalOpen')).toBe(false);
+            expect(wrapper.state('collaboratorToRemove')).toBe(null);
+        });
+
+        test('should not set the state to open when canRemoveCollaborators prop is not defined', () => {
+            const wrapper = getWrapper();
+
+            wrapper.instance().openRemoveCollaboratorConfirmModal();
+
+            expect(wrapper.state('isRemoveCollaboratorConfirmModalOpen')).toBe(false);
+            expect(wrapper.state('collaboratorToRemove')).toBe(null);
         });
     });
 });

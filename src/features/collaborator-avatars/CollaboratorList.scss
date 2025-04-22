@@ -1,6 +1,9 @@
 @import '../../styles/variables';
 
 .usm-collaborator-list {
+    display: flex;
+    flex-direction: column;
+
     .collaborator-list {
         height: 210px;
         margin: 0;
