@@ -82,21 +82,11 @@ const messages = defineMessages({
         description: 'Label for confirmation modal to remove a shared link (title-case)',
         id: 'boxui.share.removeLinkConfirmationTitle',
     },
-    removeCollaboratorConfirmationTitle: {
-        defaultMessage: 'Remove Collaborator',
-        description: 'Label for confirmation modal to remove a collaborator (title-case)',
-        id: 'boxui.share.removeCollaboratorConfirmationTitle',
-    },
     removeLinkConfirmationDescription: {
         defaultMessage:
             'This will permanently remove the shared link. If this item is embedded on other sites it will also become inaccessible. Any custom properties, settings and expirations will be removed as well. Do you want to continue?',
         description: 'Description for confirmation modal to remove a shared link',
         id: 'boxui.share.removeLinkConfirmationDescription',
-    },
-    removeCollaboratorConfirmationDescription: {
-        defaultMessage: 'Are you sure you want to remove {name} as a collaborator on this App?',
-        description: 'Description for confirmation modal to remove a collaborator',
-        id: 'boxui.share.removeCollaboratorConfirmationDescription',
     },
     sharedLinkExpirationTooltip: {
         defaultMessage: 'This link will expire on {expiration, date, long}',

@@ -1,60 +1,64 @@
 import * as React from 'react';
-import sinon from 'sinon';
-
+import userEvent from '@testing-library/user-event';
+import { screen, render } from '../../../test-utils/testing-library';
 import RemoveCollaboratorConfirmModal from '../RemoveCollaboratorConfirmModal';
 
-const sandbox = sinon.sandbox.create();
-
 describe('features/unified-share-modal/RemoveCollaboratorConfirmModal', () => {
-    const getWrapper = (props = {}) =>
-        shallow(
-            <RemoveCollaboratorConfirmModal
-                isOpen
-                onRequestClose={sandbox.stub()}
-                onSubmit={sandbox.stub()}
-                {...props}
-            />,
+    const renderComponent = (props = {}) =>
+        render(<RemoveCollaboratorConfirmModal isOpen onRequestClose={jest.fn()} onSubmit={jest.fn()} {...props} />);
+
+    test('should render a confirmation Modal', async () => {
+        const collaborator = { email: 'dt@example.com' };
+        const onRequestClose = jest.fn();
+        renderComponent({
+            onRequestClose,
+            collaborator,
+        });
+
+        const modal = screen.queryByRole('alertdialog');
+        expect(modal).toBeInTheDocument();
+
+        const title = screen.queryByRole('heading', { name: 'Remove Collaborator' });
+        expect(title).toBeInTheDocument();
+
+        const description = screen.queryByRole('paragraph');
+        expect(description).toHaveTextContent(
+            `Are you sure you want to remove ${collaborator.email} as a collaborator?`,
         );
 
-    afterEach(() => {
-        sandbox.verifyAndRestore();
+        const submitButton = screen.queryByRole('button', { name: 'Okay' });
+        expect(submitButton).toBeInTheDocument();
+
+        const cancelButton = screen.queryByRole('button', { name: 'Cancel' });
+        expect(cancelButton).toBeInTheDocument();
+        await userEvent.click(cancelButton);
+
+        expect(onRequestClose).toHaveBeenCalledTimes(1);
     });
 
-    test('should render a confirmation Modal', () => {
-        const wrapper = getWrapper({
-            onRequestClose: sandbox.mock(),
-            onSubmit: sandbox.mock(),
+    test('should call onSubmit callback when submit button is clicked', async () => {
+        const onSubmit = jest.fn();
+        renderComponent({
+            onSubmit,
             collaborator: { email: 'dt@example.com' },
         });
 
-        const modal = wrapper.find('Modal');
+        const submitButton = screen.queryByRole('button', { name: 'Okay' });
+        await userEvent.click(submitButton);
 
-        expect(modal.length).toBe(1);
-        expect(modal.prop('isOpen')).toBe(true);
-        expect(modal.prop('onRequestClose')).toBeTruthy();
-
-        const closeBtn = wrapper.find('Button');
-        expect(closeBtn.length).toBe(1);
-        closeBtn.simulate('click');
-
-        const okayBtn = wrapper.find('PrimaryButton');
-        expect(okayBtn.length).toBe(1);
-        okayBtn.simulate('click');
+        expect(onSubmit).toHaveBeenCalledTimes(1);
     });
 
-    test('should disable modal closing and set loading state when props.submitting is true', () => {
-        const wrapper = getWrapper({
-            collaborator: { email: 'dt@example.com' },
+    test('should disable modal buttons and set loading state when props.submitting is true', () => {
+        renderComponent({
             submitting: true,
+            collaborator: { email: 'dt@example.com' },
         });
 
-        const modal = wrapper.find('Modal');
-        expect(modal.prop('onRequestClose')).toBeFalsy();
+        const submitButton = screen.queryByRole('button', { name: 'Okay' });
+        expect(submitButton).toHaveAttribute('aria-disabled', 'true');
 
-        expect(wrapper.find('Button').prop('isDisabled')).toBe(true);
-
-        const okayBtn = wrapper.find('PrimaryButton');
-        expect(okayBtn.prop('isDisabled')).toBe(true);
-        expect(okayBtn.prop('isLoading')).toBe(true);
+        const cancelButton = screen.queryByRole('button', { name: 'Cancel' });
+        expect(cancelButton).toHaveAttribute('aria-disabled', 'true');
     });
 });

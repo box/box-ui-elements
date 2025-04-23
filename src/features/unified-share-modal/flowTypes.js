@@ -186,10 +186,10 @@ export type collaboratorType = {
     hasCustomAvatar: boolean,
     imageURL: ?string,
     isExternalCollab?: boolean,
+    isRemovable?: boolean,
     name: string,
     type: collaboratorGroupType,
     userID: ?number,
-    isRemovable?: boolean,
 };
 
 export type collaboratorsListType = {
@@ -307,12 +307,12 @@ type SharedLinkSectionTypes = {
 
 // Prop types used in the collaborator avatars section of the Unified Share Form
 type CollaboratorAvatarsTypes = {
+    /** Flag to control the ability to remove collaborators directly within the modal */
+    canRemoveCollaborators?: boolean,
     /** List of existing collaborators */
     collaboratorsList?: collaboratorsListType,
     /** User ID of currently logged in user */
     currentUserID: string,
-    /** Flag to control the ability to remove collaborators directly within the modal */
-    canRemoveCollaborators?: boolean,
     /** An action triggered when a user confirms the removal of a collaborator */
     onRemoveCollaborator?: (collaborator: collaboratorType) => Promise<void>,
 };

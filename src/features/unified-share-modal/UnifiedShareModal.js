@@ -14,12 +14,12 @@ import type { USMProps, collaboratorType } from './flowTypes';
 import './UnifiedShareModal.scss';
 
 type State = {
-    getInitialDataCalled: boolean,
-    isRemoveLinkConfirmModalOpen: boolean,
-    isRemoveCollaboratorConfirmModalOpen: boolean,
     collaboratorToRemove: ?collaboratorType,
+    getInitialDataCalled: boolean,
     isEmailLinkSectionExpanded: boolean,
     isFetching: boolean,
+    isRemoveCollaboratorConfirmModalOpen: boolean,
+    isRemoveLinkConfirmModalOpen: boolean,
     sharedLinkLoaded: boolean,
     shouldRenderFTUXTooltip: boolean,
     showCollaboratorList: boolean,
@@ -27,6 +27,7 @@ type State = {
 
 class UnifiedShareModal extends React.Component<USMProps, State> {
     static defaultProps = {
+        canRemoveCollaborators: false,
         displayInModal: true,
         initiallySelectedContacts: [],
         isAllowEditSharedLinkForFileEnabled: false,
@@ -34,7 +35,6 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         focusSharedLinkOnLoad: false,
         restrictedCollabEmails: [],
         restrictedGroups: [],
-        canRemoveCollaborators: false,
         trackingProps: {
             inviteCollabsEmailTracking: {},
             sharedLinkEmailTracking: {},
@@ -53,6 +53,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         const { initialDataReceived } = props;
 
         this.state = {
+            collaboratorToRemove: null,
             getInitialDataCalled: !!initialDataReceived,
             isRemoveLinkConfirmModalOpen: false,
             isRemoveCollaboratorConfirmModalOpen: false,
@@ -61,7 +62,6 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
             sharedLinkLoaded: false,
             shouldRenderFTUXTooltip: false,
             showCollaboratorList: false,
-            collaboratorToRemove: null,
         };
     }
 

@@ -183,7 +183,7 @@ const messages = defineMessages({
         id: 'boxui.unifiedShare.removeLinkConfirmationDescription',
     },
     removeCollaboratorConfirmationDescription: {
-        defaultMessage: 'Are you sure you want to remove {name} as a collaborator on this App?',
+        defaultMessage: 'Are you sure you want to remove {name} as a collaborator?',
         description: 'Description for confirmation modal to remove a collaborator',
         id: 'boxui.unifiedShare.removeCollaboratorConfirmationDescription',
     },

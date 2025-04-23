@@ -15,9 +15,9 @@ import type { collaboratorType } from '../unified-share-modal/flowTypes';
 import './CollaboratorListItem.scss';
 
 type Props = {
+    canRemoveCollaborators?: boolean,
     collaborator: Object,
     index: number,
-    canRemoveCollaborators?: boolean,
     onRemoveCollaborator?: (collaborator: collaboratorType) => void,
     trackingProps: { emailProps: ?Object, usernameProps: ?Object },
 };

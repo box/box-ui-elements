@@ -11,6 +11,7 @@ import type { collaboratorType } from './flowTypes';
 
 type Props = {
     cancelButtonProps?: Object,
+    collaborator: ?collaboratorType,
     isOpen: boolean,
     modalProps?: Object,
     okayButtonProps?: Object,
@@ -18,7 +19,6 @@ type Props = {
     onRequestClose: Function,
     onSubmit: Function,
     submitting: boolean,
-    collaborator: ?collaboratorType,
 };
 
 const RemoveCollaboratorConfirmModal = ({
