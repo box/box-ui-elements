@@ -10,12 +10,21 @@ export interface SubHeaderLeftProps {
     currentCollection: Collection;
     isSmall: boolean;
     onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
+    portalElement?: HTMLElement;
     rootId: string;
     rootName?: string;
     view: View;
 }
 
-const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onItemClick }: SubHeaderLeftProps) => {
+const SubHeaderLeft = ({
+    currentCollection,
+    isSmall,
+    onItemClick,
+    portalElement,
+    rootId,
+    rootName,
+    view,
+}: SubHeaderLeftProps) => {
     let crumbs;
     const { formatMessage } = useIntl();
 
@@ -53,6 +62,7 @@ const SubHeaderLeft = ({ view, isSmall, rootId, rootName, currentCollection, onI
             delimiter={DELIMITER_CARET}
             isSmall={isSmall}
             onCrumbClick={onItemClick}
+            portalElement={portalElement}
             rootId={rootId}
         />
     );

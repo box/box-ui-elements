@@ -24,6 +24,7 @@ export interface SubHeaderProps {
     onSortChange: (sortBy: string, sortDirection: string) => void;
     onUpload: () => void;
     onViewModeChange?: (viewMode: ViewMode) => void;
+    portalElement?: HTMLElement;
     rootId: string;
     rootName?: string;
     view: View;
@@ -45,6 +46,7 @@ const SubHeader = ({
     onSortChange,
     onUpload,
     onViewModeChange,
+    portalElement,
     rootId,
     rootName,
     view,
@@ -56,6 +58,7 @@ const SubHeader = ({
                 currentCollection={currentCollection}
                 isSmall={isSmall}
                 onItemClick={onItemClick}
+                portalElement={portalElement}
                 rootId={rootId}
                 rootName={rootName}
                 view={view}
@@ -75,6 +78,7 @@ const SubHeader = ({
                 onSortChange={onSortChange}
                 onUpload={onUpload}
                 onViewModeChange={onViewModeChange}
+                portalElement={portalElement}
                 view={view}
                 viewMode={viewMode}
             />

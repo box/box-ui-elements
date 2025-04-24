@@ -13,12 +13,10 @@
 
 @mixin bdl-fadeIn($fade-in-time) {
     @warn 'This mixin is deprecated. Use `bdl-openComponentAnimation` in mixins/animations';
-
     @include bdl-openComponentAnimation($fade-in-time);
 }
 
 @mixin bdl-loadingPulse($start-color, $end-color, $fade-in-time) {
     @warn 'This mixin is deprecated. Use `bdl-loadingPulseAnimation` in mixins/animations';
-
     @include bdl-loadingPulseAnimation($start-color, $end-color, $fade-in-time);
 }

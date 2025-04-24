@@ -61,9 +61,11 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         elementId,
         fileExtension,
         isFeedbackEnabled,
+        isFeedbackFormEnabled,
         isStopResponseEnabled,
         items,
         itemSize,
+        onFeedbackFormSubmit,
         onUserInteraction,
         recordAction,
         setCacheValue,
@@ -207,9 +209,11 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                         hostAppName={hostAppName}
                         isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
                         isFeedbackEnabled={isFeedbackEnabled}
+                        isFeedbackFormEnabled={isFeedbackFormEnabled}
                         isStopResponseEnabled={isStopResponseEnabled}
                         items={items}
                         questions={questions}
+                        onFeedbackFormSubmit={onFeedbackFormSubmit}
                         onUserIntentToUseAI={handleUserIntentToUseAI}
                         shouldShowLandingPage={cache.shouldShowLandingPage}
                         showLoadingIndicator={isLoading && shouldPreinitSession}
@@ -230,11 +234,13 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                 hostAppName={hostAppName}
                 isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled}
                 isFeedbackEnabled={isFeedbackEnabled}
+                isFeedbackFormEnabled={isFeedbackFormEnabled}
                 isResetChatEnabled={isResetChatEnabled}
                 isStopResponseEnabled={isStopResponseEnabled}
                 items={items}
                 itemSize={itemSize}
                 onClearAction={onClearAction}
+                onFeedbackFormSubmit={onFeedbackFormSubmit}
                 onOpenChange={handleModalClose}
                 onSelectAgent={onSelectAgent}
                 onUserIntentToUseAI={handleUserIntentToUseAI}

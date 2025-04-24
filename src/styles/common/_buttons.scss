@@ -19,7 +19,7 @@
     font-weight: bold;
     font-size: $bdl-fontSize;
     line-height: $bdl-btn-height - 2 * $bdl-btn-border-width - 2 * $bdl-btn-padding-vertical;
-    letter-spacing: .035em;
+    letter-spacing: 0.035em;
     white-space: nowrap;
     text-align: center;
     text-decoration: none;
@@ -31,8 +31,13 @@
     border-width: $bdl-btn-border-width;
     border-radius: $bdl-border-radius-size-med;
     cursor: pointer;
-    -webkit-transition: border-color linear .15s, box-shadow linear .15s, background-color linear .15s;
-    transition: background-color .05s ease-in-out, border-color .05s ease-in-out;
+    -webkit-transition:
+        border-color linear 0.15s,
+        box-shadow linear 0.15s,
+        background-color linear 0.15s;
+    transition:
+        background-color 0.05s ease-in-out,
+        border-color 0.05s ease-in-out;
     -webkit-appearance: none;
     zoom: 1;
     -webkit-font-smoothing: antialiased;
@@ -56,12 +61,13 @@
 
         .bdl-btn-icon {
             // Icon without text:
-            margin: ($bdl-btn-height - $bdl-btn-icon-size) * .5 - $bdl-btn-border-width;
+            margin: ($bdl-btn-height - $bdl-btn-icon-size) * 0.5 - $bdl-btn-border-width;
 
             // Icon with text:
             & + .btn-content {
                 // Buttons with icons have a smaller margin on the icon side for optical alignment:
                 margin-right: $bdl-grid-unit * 3;
+
                 // Spacing between button and text:
                 margin-left: $bdl-grid-unit * 2;
             }
@@ -71,7 +77,7 @@
             height: $bdl-btn-height-large;
 
             .bdl-btn-icon {
-                margin: ($bdl-btn-height-large - $bdl-btn-icon-size) * .5 - $bdl-btn-border-width;
+                margin: ($bdl-btn-height-large - $bdl-btn-icon-size) * 0.5 - $bdl-btn-border-width;
             }
         }
     }
@@ -96,7 +102,7 @@
 
         &:focus {
             border-color: $bdl-gray;
-            box-shadow: 0 1px 2px fade-out($black, .9);
+            box-shadow: 0 1px 2px fade-out($black, 0.9);
         }
     }
 
@@ -128,7 +134,7 @@
     &.bdl-is-disabled,
     &.is-disabled {
         box-shadow: none;
-        opacity: .4;
+        opacity: 0.4;
     }
 }
 

@@ -83,4 +83,34 @@ describe('Content Component', () => {
         expect(screen.getByText('Viewed Oct 10, 2023')).toBeInTheDocument();
         expect(screen.getByLabelText('File')).toBeInTheDocument();
     });
+
+    describe('contentExplorer.metadataViewV2 feature', () => {
+        const features = {
+            contentExplorer: { metadataViewV2: true },
+        };
+
+        test('does not render MetadataBasedItemList when contentExplorer.metadataViewV2 is enabled', () => {
+            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+            renderComponent({
+                features,
+                currentCollection: collection,
+                fieldsToShow: ['id'],
+                view: VIEW_METADATA,
+            });
+
+            expect(screen.queryByTestId('metadata-based-item-list')).not.toBeInTheDocument();
+        });
+
+        test('renders new metadata view when contentExplorer.metadataViewV2 is enabled', () => {
+            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+            renderComponent({
+                features,
+                currentCollection: collection,
+                fieldsToShow: ['id'],
+                view: VIEW_METADATA,
+            });
+
+            expect(screen.getByText('new Metadata')).toBeInTheDocument();
+        });
+    });
 });

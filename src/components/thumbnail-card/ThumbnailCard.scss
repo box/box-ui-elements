@@ -10,7 +10,7 @@
     height: 200px;
     border: $thumbnail-card-border solid $bdl-gray-10;
     border-radius: $bdl-border-radius-size-large;
-    box-shadow: 0 5px 10px 0 rgba(198, 198, 198, .2);
+    box-shadow: 0 5px 10px 0 rgb(198 198 198 / 20%);
 }
 
 // We should apply border to the card only when it is hovered
@@ -24,7 +24,7 @@
     display: flex;
     flex: 1;
     align-items: center;
-    padding: 0 12px 0 12px;
+    padding: 0 12px;
     line-height: 16px;
     border-top: 1px solid $bdl-gray-05;
     border-bottom-right-radius: 8px;
@@ -82,7 +82,7 @@
         }
 
         img {
-            box-shadow: 0 0 8px 0 rgba(177, 177, 177, .5);
+            box-shadow: 0 0 8px 0 rgb(177 177 177 / 50%);
         }
     }
 }
