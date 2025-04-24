@@ -15,21 +15,21 @@ describe('features/unified-share-modal/RemoveCollaboratorConfirmModal', () => {
             collaborator,
         });
 
-        const modal = screen.queryByRole('alertdialog');
+        const modal = screen.getByRole('alertdialog');
         expect(modal).toBeInTheDocument();
 
-        const title = screen.queryByRole('heading', { name: 'Remove Collaborator' });
+        const title = screen.getByRole('heading', { name: 'Remove Collaborator' });
         expect(title).toBeInTheDocument();
 
-        const description = screen.queryByRole('paragraph');
+        const description = screen.getByRole('paragraph');
         expect(description).toHaveTextContent(
             `Are you sure you want to remove ${collaborator.email} as a collaborator?`,
         );
 
-        const submitButton = screen.queryByRole('button', { name: 'Okay' });
+        const submitButton = screen.getByRole('button', { name: 'Okay' });
         expect(submitButton).toBeInTheDocument();
 
-        const cancelButton = screen.queryByRole('button', { name: 'Cancel' });
+        const cancelButton = screen.getByRole('button', { name: 'Cancel' });
         expect(cancelButton).toBeInTheDocument();
         await userEvent.click(cancelButton);
 
@@ -43,7 +43,7 @@ describe('features/unified-share-modal/RemoveCollaboratorConfirmModal', () => {
             collaborator: { email: 'dt@example.com' },
         });
 
-        const submitButton = screen.queryByRole('button', { name: 'Okay' });
+        const submitButton = screen.getByRole('button', { name: 'Okay' });
         await userEvent.click(submitButton);
 
         expect(onSubmit).toHaveBeenCalledTimes(1);
@@ -55,10 +55,10 @@ describe('features/unified-share-modal/RemoveCollaboratorConfirmModal', () => {
             collaborator: { email: 'dt@example.com' },
         });
 
-        const submitButton = screen.queryByRole('button', { name: 'Okay' });
+        const submitButton = screen.getByRole('button', { name: 'Okay' });
         expect(submitButton).toHaveAttribute('aria-disabled', 'true');
 
-        const cancelButton = screen.queryByRole('button', { name: 'Cancel' });
+        const cancelButton = screen.getByRole('button', { name: 'Cancel' });
         expect(cancelButton).toHaveAttribute('aria-disabled', 'true');
     });
 });
