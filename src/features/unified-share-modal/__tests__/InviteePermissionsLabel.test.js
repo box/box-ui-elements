@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { EDITOR, CO_OWNER, PREVIEWER, PREVIEWER_UPLOADER, VIEWER, VIEWER_UPLOADER, UPLOADER } from '../constants';
 import InviteePermissionsLabel from '../InviteePermissionsLabel';
+import InviteePermissionsDescription from '../InviteePermissionsDescription';
 
 describe('features/unified-share-modal/InviteePermissionsLabel', () => {
     [
@@ -72,5 +73,21 @@ describe('features/unified-share-modal/InviteePermissionsLabel', () => {
 
             expect(inviteePermissionLabel).toMatchSnapshot();
         });
+    });
+
+    test('should render custom description when supplied', () => {
+        const inviteePermissionDescription = 'Upload, download, preview, share, and edit';
+
+        const inviteePermissionLabel = shallow(
+            <InviteePermissionsLabel
+                hasDescription
+                inviteePermissionDescription={inviteePermissionDescription}
+                inviteePermissionLevel={EDITOR}
+            />,
+        );
+
+        expect(inviteePermissionLabel.find(InviteePermissionsDescription).prop('customDescription')).toBe(
+            inviteePermissionDescription,
+        );
     });
 });

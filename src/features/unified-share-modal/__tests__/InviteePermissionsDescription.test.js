@@ -45,4 +45,19 @@ describe('features/unified-share-modal/InviteePermissionsDescription', () => {
             'Upload, download, preview, share, and edit',
         );
     });
+
+    test('should render custom description when supplied', () => {
+        const customDescription = 'Upload, download, preview, share, and edit';
+        const inviteePermissionDescription = shallow(
+            <InviteePermissionsDescription
+                inviteePermissionLevel={EDITOR}
+                itemType="file"
+                customDescription={customDescription}
+            />,
+        );
+
+        const description = inviteePermissionDescription.find('small').text();
+
+        expect(description).toBe(customDescription);
+    });
 });
