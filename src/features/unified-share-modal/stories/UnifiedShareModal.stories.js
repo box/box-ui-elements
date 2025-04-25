@@ -1017,7 +1017,12 @@ export const withRemoveCollaborators = () => {
                     getInitialData={getInitialData}
                     inviteePermissions={[
                         { default: false, text: 'Co-owner', value: 'Co-owner' },
-                        { default: true, text: 'Editor', value: 'Editor' },
+                        {
+                            default: true,
+                            text: 'Editor',
+                            value: 'Editor',
+                            description: 'Custom description: Upload, download, preview, share and edit',
+                        },
                         { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
                         { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
                         { default: false, text: 'Viewer', value: 'Viewer' },
