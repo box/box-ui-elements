@@ -86,7 +86,7 @@ describe('features/unified-share-modal/InviteePermissionsLabel', () => {
             />,
         );
 
-        expect(inviteePermissionLabel.find(InviteePermissionsDescription).prop('customDescription')).toBe(
+        expect(inviteePermissionLabel.find(InviteePermissionsDescription).prop('description')).toBe(
             inviteePermissionDescription,
         );
     });

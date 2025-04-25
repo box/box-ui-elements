@@ -47,7 +47,7 @@ const InviteePermissionsLabel = ({
                 <FormattedMessage {...permissionOptionsTexts[inviteePermissionLevel]} />{' '}
             </strong>
             <InviteePermissionsDescription
-                customDescription={inviteePermissionDescription}
+                description={inviteePermissionDescription}
                 inviteePermissionLevel={inviteePermissionLevel}
                 itemType={itemType}
             />

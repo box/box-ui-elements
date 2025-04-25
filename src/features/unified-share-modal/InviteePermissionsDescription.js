@@ -8,12 +8,16 @@ import { EDITOR, CO_OWNER, PREVIEWER, PREVIEWER_UPLOADER, VIEWER, VIEWER_UPLOADE
 import messages from './messages';
 
 type Props = {
-    customDescription?: string,
+    description?: string,
     inviteePermissionLevel: string,
     itemType: ItemType,
 };
 
-const InviteePermissionDescription = ({ customDescription, inviteePermissionLevel, itemType }: Props) => {
+const InviteePermissionDescription = ({ description, inviteePermissionLevel, itemType }: Props) => {
+    if (description) {
+        return <small className="usm-menu-description">{description}</small>;
+    }
+
     const permissionDescriptions = {
         [EDITOR]: itemType === 'folder' ? messages.editorLevelDescription : messages.editorLevelFileDescription,
         [CO_OWNER]: messages.coownerLevelDescription,
@@ -24,9 +28,13 @@ const InviteePermissionDescription = ({ customDescription, inviteePermissionLeve
         [UPLOADER]: messages.uploaderLevelDescription,
     };
 
-    const description = permissionDescriptions[inviteePermissionLevel];
+    const defaultDescription = permissionDescriptions[inviteePermissionLevel];
 
-    return <small className="usm-menu-description">{customDescription || <FormattedMessage {...description} />}</small>;
+    return (
+        <small className="usm-menu-description">
+            <FormattedMessage {...defaultDescription} />
+        </small>
+    );
 };
 
 export default InviteePermissionDescription;

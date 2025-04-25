@@ -47,12 +47,12 @@ describe('features/unified-share-modal/InviteePermissionsDescription', () => {
     });
 
     test('should render custom description when supplied', () => {
-        const customDescription = 'Upload, download, preview, share, and edit';
+        const customDescription = 'Custom description for editor';
         const inviteePermissionDescription = shallow(
             <InviteePermissionsDescription
                 inviteePermissionLevel={EDITOR}
                 itemType="file"
-                customDescription={customDescription}
+                description={customDescription}
             />,
         );
 
