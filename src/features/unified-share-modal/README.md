@@ -1,6 +1,6 @@
 ### Description
 
-This is the simplified sharing modal, interally referred to as the Unified Share Modal
+This is the simplified sharing modal, internally referred to as the Unified Share Modal
 (a combination of the previous invite collaborators modal and the shared link modal).
 
 ### Examples
@@ -95,6 +95,7 @@ class USMExample extends React.Component {
     }
 
     getInitialData() {
+        const { canRemoveCollaborators } = this.props;
         const initialPromise = this.fakeRequest();
         const fetchCollaborators = new Promise(resolved => {
             setTimeout(() => {
@@ -110,6 +111,10 @@ class USMExample extends React.Component {
                             contact.expiration = {
                                 executeAt: "November 27, 2022",
                             }
+                        }
+
+                        if (canRemoveCollaborators) {
+                            contact.isRemovable = contact.translatedRole !== 'Owner';
                         }
 
                         return contact;
@@ -248,6 +253,8 @@ class USMExample extends React.Component {
                         modalTracking: {},
                         collaboratorListTracking: {},
                     } }
+                    canRemoveCollaborators={this.props.canRemoveCollaborators}
+                    onRemoveCollaborator={this.props.onRemoveCollaborator}
                 /> }
                 <Button
                     onClick={ () =>
@@ -309,6 +316,10 @@ class USMSharedLinkExample extends USMExample {
     <div>
         This shows the Unified share modal when it needs to generate a shared link, and should auto-focus.
         <USMExample buttonText="Open USM Modal" shouldFocusSharedLinkOnLoad shouldCreateSharedLinkOnLoad />
+    </div>
+    <div>
+        This shows the Unified share modal with functionality to remove collaborators
+        <USMExample buttonText="Open USM Modal" canRemoveCollaborators onRemoveCollaborator={() => {}} />
     </div>
 </div>
 

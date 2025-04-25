@@ -67,5 +67,16 @@ describe('features/collaborator-avatars/CollaboratorList', () => {
             });
             expect(wrapper).toMatchSnapshot();
         });
+
+        test('should render component when canRemoveCollaborators prop is true', () => {
+            const onRemoveCollaboratorClickMock = jest.fn();
+            const wrapper = getWrapper({
+                canRemoveCollaborators: true,
+                onRemoveCollaboratorClick: onRemoveCollaboratorClickMock,
+            });
+
+            expect(wrapper.find('CollaboratorListItem')).toHaveLength(collaborators.length);
+            expect(wrapper).toMatchSnapshot();
+        });
     });
 });
