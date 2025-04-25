@@ -140,7 +140,7 @@ const contacts: Array<contactType> = [
         collabID: '8',
         name: 'Wenbo',
         email: 'w@example.com',
-        type: 'user',
+        type: 'pending',
         hasCustomAvatar: false,
         translatedRole: 'Editor',
         userID: '8',
@@ -199,7 +199,7 @@ export const basic = () => {
                 const collaborators: Array<collaboratorType> = contacts.slice().map(contact => {
                     // convert the existing contact entries to compatible collaborator entries in this example
                     const collaborator: collaboratorType = {
-                        collabID: 1234,
+                        collabID: contact.collabID,
                         email: contact.email,
                         id: contact.id,
                         name: contact.name || '',
@@ -209,6 +209,7 @@ export const basic = () => {
                         expiration: { executeAt: contact.isExternalUser ? 'November 27, 2022' : '' },
                         hasCustomAvatar: false,
                         imageURL: null,
+                        translatedRole: contact.translatedRole,
                     };
 
                     return collaborator;
@@ -766,7 +767,7 @@ export const withFormOnly = () => {
                 const collaborators: Array<collaboratorType> = contacts.slice().map(contact => {
                     // convert the existing contact entries to compatible collaborator entries in this example
                     const collaborator: collaboratorType = {
-                        collabID: 1234,
+                        collabID: contact.collabID,
                         email: contact.email,
                         expiration: { executeAt: contact.isExternalUser ? 'November 27, 2022' : '' },
                         imageURL: null,
@@ -917,6 +918,210 @@ export const withFormOnly = () => {
                 sharedLinkTracking: {},
             }}
         />
+    );
+};
+
+export const withRemoveCollaborators = () => {
+    const currentUserId = '0';
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [sharedLink, setSharedLink] = React.useState<sharedLinkType>(DEFAULT_SHARED_LINK_STATE);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [collaboratorsList, setCollaboratorsList] = React.useState<collaboratorsListType>(
+        INITIAL_STATE.collaboratorsList,
+    );
+
+    const closeModal = () => {
+        setIsOpen(false);
+        setSharedLink(DEFAULT_SHARED_LINK_STATE);
+        setCollaboratorsList({ collaborators: [] });
+    };
+
+    const fakeRequest = () => {
+        // submitting is used to disable input fields, and not to show the loading indicator
+        setIsSubmitting(true);
+        return new Promise(resolve => {
+            setTimeout(() => {
+                setIsSubmitting(false);
+                resolve();
+            }, 500);
+        });
+    };
+
+    const getInitialData = () => {
+        const initialPromise = fakeRequest();
+        const fetchCollaborators = new Promise(resolved => {
+            setTimeout(() => {
+                const collaborators: Array<collaboratorType> = contacts.slice().map(contact => {
+                    // convert the existing contact entries to compatible collaborator entries in this example
+                    const collaborator: collaboratorType = {
+                        collabID: contact.collabID,
+                        email: contact.email,
+                        id: contact.id,
+                        name: contact.name || '',
+                        type: contact.type,
+                        isExternalCollab: contact.isExternalUser || false,
+                        userID: parseInt(contact.id, 10),
+                        expiration: { executeAt: contact.isExternalUser ? 'November 27, 2022' : '' },
+                        hasCustomAvatar: false,
+                        imageURL: null,
+                        translatedRole: contact.translatedRole,
+                        isRemovable: currentUserId !== contact.userID,
+                    };
+
+                    return collaborator;
+                });
+
+                setCollaboratorsList({
+                    collaborators,
+                });
+                resolved();
+            }, 1000);
+        });
+        return Promise.all([initialPromise, fetchCollaborators]);
+    };
+
+    return (
+        <div>
+            {isOpen && (
+                <UnifiedShareModal
+                    canInvite
+                    changeSharedLinkAccessLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                accessLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    changeSharedLinkPermissionLevel={newLevel => {
+                        return fakeRequest().then(() => {
+                            const newSharedLink = {
+                                ...sharedLink,
+                                permissionLevel: newLevel,
+                            };
+                            setSharedLink(newSharedLink);
+                            return newSharedLink;
+                        });
+                    }}
+                    collaboratorsList={collaboratorsList}
+                    collaborationRestrictionWarning="Collaboration invitations can only be sent to people within Box Corporate"
+                    currentUserID={currentUserId}
+                    getCollaboratorContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getSharedLinkContacts={() => {
+                        return Promise.resolve(contacts);
+                    }}
+                    getInitialData={getInitialData}
+                    inviteePermissions={[
+                        { default: false, text: 'Co-owner', value: 'Co-owner' },
+                        { default: true, text: 'Editor', value: 'Editor' },
+                        { default: false, text: 'Viewer Uploader', value: 'Viewer Uploader' },
+                        { default: false, text: 'Previewer Uploader', value: 'Previewer Uploader' },
+                        { default: false, text: 'Viewer', value: 'Viewer' },
+                        { default: false, text: 'Previewer', value: 'Previewer' },
+                        { default: false, text: 'Uploader', value: 'Uploader' },
+                    ]}
+                    isOpen={isOpen}
+                    isToggleEnabled
+                    item={ITEM}
+                    onAddLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink({
+                                accessLevel: 'peopleInYourCompany',
+                                allowedAccessLevels: {
+                                    peopleWithTheLink: true,
+                                    peopleInYourCompany: true,
+                                    peopleInThisItem: true,
+                                },
+                                canChangeAccessLevel: true,
+                                enterpriseName: 'Box',
+                                expirationTimestamp: 1509173940,
+                                isDownloadAllowed: true,
+                                isDownloadSettingAvailable: true,
+                                isEditAllowed: true,
+                                isEditSettingAvailable: true,
+                                isNewSharedLink: true,
+                                isPreviewAllowed: true,
+                                permissionLevel: 'canViewDownload',
+                                url: 'https://box.com/s/abcdefg',
+                            });
+                        });
+                    }}
+                    onRemoveLink={() => {
+                        fakeRequest().then(() => {
+                            setSharedLink(DEFAULT_SHARED_LINK_STATE);
+                            closeModal();
+                        });
+                    }}
+                    onRemoveCollaborator={async (collaborator: collaboratorType) => {
+                        await fakeRequest();
+                        const collaborators = collaboratorsList.collaborators.filter(
+                            ({ collabID }) => collabID !== collaborator.collabID,
+                        );
+                        setCollaboratorsList({ collaborators });
+                    }}
+                    onRequestClose={closeModal}
+                    /* eslint-disable-next-line no-alert */
+                    onSettingsClick={() => alert('hi!')}
+                    recommendedSharingTooltipCalloutName=""
+                    sendInvites={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendInvitesError=""
+                    sendSharedLink={() =>
+                        fakeRequest().then(() => {
+                            closeModal();
+                        })
+                    }
+                    sendSharedLinkError=""
+                    sharedLink={sharedLink}
+                    showCalloutForUser
+                    showUpgradeOptions
+                    submitting={isSubmitting}
+                    suggestedCollaborators={{
+                        '2': {
+                            id: '2',
+                            userScore: 0.1,
+                            name: 'David',
+                            email: 'dt@example.com',
+                            type: 'user',
+                        },
+                        '5': {
+                            id: '5',
+                            userScore: 0.2,
+                            name: 'Will',
+                            email: 'wy@example.com',
+                            type: 'user',
+                        },
+                        '1': {
+                            id: '1',
+                            userScore: 0.5,
+                            name: 'Jeff',
+                            email: 'jt@example.com',
+                            type: 'user',
+                        },
+                        '3': { id: '3', userScore: 2, name: 'Yang', email: 'yz@example.com', type: 'user' },
+                    }}
+                    trackingProps={{
+                        collaboratorListTracking: {},
+                        inviteCollabsEmailTracking: {},
+                        inviteCollabTracking: {},
+                        modalTracking: {},
+                        removeLinkConfirmModalTracking: {},
+                        removeCollaboratorConfirmModalTracking: {},
+                        sharedLinkEmailTracking: {},
+                        sharedLinkTracking: {},
+                    }}
+                    canRemoveCollaborators
+                />
+            )}
+            <Button onClick={() => setIsOpen(true)}>Open USM Modal</Button>
+        </div>
     );
 };
 

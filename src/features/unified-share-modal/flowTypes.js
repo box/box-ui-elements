@@ -149,6 +149,12 @@ export type trackingPropsType = {
         okayButtonProps?: Object,
         onLoad?: Function,
     },
+    removeCollaboratorConfirmModalTracking: {
+        cancelButtonProps?: Object,
+        modalProps?: Object,
+        okayButtonProps?: Object,
+        onLoad?: Function,
+    },
     sharedLinkEmailTracking: emailFormTrackingType,
     sharedLinkTracking: sharedLinkTrackingType,
 };
@@ -180,6 +186,7 @@ export type collaboratorType = {
     hasCustomAvatar: boolean,
     imageURL: ?string,
     isExternalCollab?: boolean,
+    isRemovable?: boolean,
     name: string,
     type: collaboratorGroupType,
     userID: ?number,
@@ -300,10 +307,14 @@ type SharedLinkSectionTypes = {
 
 // Prop types used in the collaborator avatars section of the Unified Share Form
 type CollaboratorAvatarsTypes = {
+    /** Flag to control the ability to remove collaborators directly within the modal */
+    canRemoveCollaborators?: boolean,
     /** List of existing collaborators */
     collaboratorsList?: collaboratorsListType,
     /** User ID of currently logged in user */
     currentUserID: string,
+    /** An action triggered when a user confirms the removal of a collaborator */
+    onRemoveCollaborator?: (collaborator: collaboratorType) => Promise<void>,
 };
 
 type EmailFormTypes = {
@@ -406,6 +417,8 @@ export type USFProps = BaseUnifiedShareProps & {
     openConfirmModal: () => void,
     /** Function for opening the Upgrade Plan Modal */
     openUpgradePlanModal: () => void,
+    /** An action triggered when the remove collaborator button is clicked */
+    onRemoveCollaboratorClick?: (collaborator: collaboratorType) => void,
     /** Whether the FTUX tag should be rendered for the Can Edit option */
     sharedLinkEditTagTargetingApi?: TargetingApi,
     /** Whether the FTUX tooltip should be rendered for Editable Shared Links  */
