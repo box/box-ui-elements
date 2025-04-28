@@ -1453,17 +1453,17 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@4.36.0":
-  version "4.36.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.36.0.tgz#4bd12f00f193af300fcbca0db291bff85dd95c96"
-  integrity sha512-iMFyNzRWW7bI+u/CrKYDxFMmcWjouU5UKNPJG8kWKlJwYZ25H0bwcqcZAvs/daPyIqtVuzdlcDvE3sJHBF3rfg==
+"@box/blueprint-web-assets@4.39.0":
+  version "4.39.0"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.39.0.tgz#725c3fabe0e5f4e98debe446eb60c648a8ddeb74"
+  integrity sha512-1fCX4wYIj9XI4W0bYjwc+ijSsgjc3GvHvJkLeXmB/WXrqks+i879wUfkLOD1jI0n4BD1hprPtIS+e2hXF9tWfQ==
 
 "@box/blueprint-web-assets@^4.39.0":
   version "4.41.6"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.41.6.tgz#b0fae4020120bb752c1eb6063fcd32c15745dac5"
   integrity sha512-UuyT6F5maBTqLxsfsOAdddGwrSzniYvC8yW8hBWLOXCE2JTrMdxHO5+HHs1MZh5PQDujiaDtK0TkcRA2ylGscw==
 
-"@box/blueprint-web@^10.3.1":
+"@box/blueprint-web@^10.4.0":
   version "10.5.0"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-10.5.0.tgz#fa183e6f3c629b3f6356e1d6571554992fce37e8"
   integrity sha512-MboedOGB3Omgc90MtnpRkZQDUL7a14Mgnv4JIjGOxo6kvvZ/ETwu/JLgcHbjqhJnvuPW6XxbPbkF5xM1g37CCw==
@@ -21510,6 +21510,13 @@ use-sync-external-store@^1.4.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.5.0.tgz#55122e2a3edd2a6c106174c27485e0fd59bcfca0"
   integrity sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==
+
+user-home@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/user-home/-/user-home-2.0.0.tgz#9c70bfd8169bc1dcbf48604e0f04b8b49cde9e9f"
+  integrity sha512-KMWqdlOcjCYdtIJpicDSFBQ8nFwS2i9sslAd6f4+CBGcU4gist2REnr2fxj2YocvJFxSF3ZOHLYLVZnUxv4BZQ==
+  dependencies:
+    os-homedir "^1.0.0"
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
