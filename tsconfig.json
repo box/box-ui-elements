@@ -2,7 +2,6 @@
     "extends": "./node_modules/@box/frontend/ts/tsconfig",
     "compilerOptions": {
         "esModuleInterop": true,
-        "moduleResolution": "bundler",
         "jsx": "react",
         "baseUrl": ".",
         "outDir": "es",
