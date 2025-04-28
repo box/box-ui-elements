@@ -1461,17 +1461,17 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@4.41.1":
-  version "4.41.1"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.41.1.tgz#5fade1a927ec95819dfa05c9b15f4c65eed1b0e3"
-  integrity sha512-55HK7a0kghwdq9BxqVzs7w2zm4hqrnMZHuzDzWA/o2p5CWivtWsSkFF9fzwtG1xBRDh7tNuT3VzOoDLcE8777g==
+"@box/blueprint-web-assets@4.16.0":
+  version "4.16.0"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.16.0.tgz#abee9e16dc4f2639d05d254221f4a6dcdacdcf10"
+  integrity sha512-Ki2kSCdLSWN4O2+8KcLQEhlzLYb2Q2eJ7BLSyTkSYVG+I8BKsd8fgtE8fGL8NdJ44EWdM/5jLjB2hMoyHn5cKg==
 
 "@box/blueprint-web-assets@^4.39.0":
   version "4.41.6"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.41.6.tgz#b0fae4020120bb752c1eb6063fcd32c15745dac5"
   integrity sha512-UuyT6F5maBTqLxsfsOAdddGwrSzniYvC8yW8hBWLOXCE2JTrMdxHO5+HHs1MZh5PQDujiaDtK0TkcRA2ylGscw==
 
-"@box/blueprint-web@^10.4.0":
+"@box/blueprint-web@^10.3.1":
   version "10.5.0"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-10.5.0.tgz#fa183e6f3c629b3f6356e1d6571554992fce37e8"
   integrity sha512-MboedOGB3Omgc90MtnpRkZQDUL7a14Mgnv4JIjGOxo6kvvZ/ETwu/JLgcHbjqhJnvuPW6XxbPbkF5xM1g37CCw==
@@ -1522,12 +1522,12 @@
   resolved "https://registry.yarnpkg.com/@box/cldr-data/-/cldr-data-34.8.0.tgz#36e6ddcea8e20653326aba2e0d13e07f34b7704f"
   integrity sha512-jsTnhhpFy/eMossMr3cP9+1VFqOxOzO1GX/csw0LzasPl0Dg2Jhn8ypeNTBnFwlOB2Dp6XoxdvQHkBG4eVQe/Q==
 
-"@box/combobox-with-api@^0.29.7":
-  version "0.29.11"
-  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.29.11.tgz#95079f02c805795e0dc6cf90786236a8be201527"
-  integrity sha512-JGfXXSVZJn4qAy5Od1YhmuCJMxJ0uz7G6QRr/WdEtLuqixCkdGjGQKPjl91/EYYSy18NNx4aCTgpw8TurvvDdw==
+"@box/combobox-with-api@^0.34.9":
+  version "0.34.9"
+  resolved "https://registry.yarnpkg.com/@box/combobox-with-api/-/combobox-with-api-0.34.9.tgz#0620ac1ef80719a3c6d95f27f731ec92e03bb05c"
+  integrity sha512-jE257A/6rlN5GydNWh+T+K4w8xmoaDaPb+J6MOh8pz4AkTJuZXOSp9jhfHP7KRwrQs849moBDpWowF0xOnQ2+g==
   dependencies:
-    "@box/tree" "^0.41.10"
+    "@box/tree" "^0.45.4"
     react-accessible-treeview "2.9.0"
 
 "@box/frontend@^11.0.0":
@@ -1566,10 +1566,10 @@
     prop-types "^15.7.2"
     react-lifecycles-compat "^3.0.4"
 
-"@box/tree@^0.41.10":
-  version "0.41.10"
-  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.41.10.tgz#f4a6f884b49b929fa1aa4aaf908a29c8dd73b4b2"
-  integrity sha512-UJzC6FsCbStpDA4cOc5+NAFUtnCOrrxiHjiBGjE28S5j77hI/tplx6LEbs2bW9QXzYfXctMBwztn0x8mczFr2Q==
+"@box/tree@^0.45.4":
+  version "0.45.4"
+  resolved "https://registry.yarnpkg.com/@box/tree/-/tree-0.45.4.tgz#605051e77e64ebb3c03ceefc9ee99f0a0d2ed4ae"
+  integrity sha512-gJLYz4bF+xci7o0e8oM2qAtc0lSRQYGrlOYMtZO5QvoLY0JjtAHtNaI9axmL7leJsy7VuCCxFoSFUoSXMHVRMA==
 
 "@bundled-es-modules/cookie@^2.0.0":
   version "2.0.0"
