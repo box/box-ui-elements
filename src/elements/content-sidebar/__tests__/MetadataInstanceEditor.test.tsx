@@ -74,6 +74,7 @@ describe('MetadataInstanceEditor', () => {
         isBetaLanguageEnabled: false,
         isBoxAiSuggestionsEnabled: true,
         isDeleteButtonDisabled: false,
+        isDeleteConfirmationModalCheckboxEnabled: false,
         isLargeFile: false,
         isMetadataMultiLevelTaxonomyFieldEnabled: false,
         isUnsavedChangesModalOpen: false,

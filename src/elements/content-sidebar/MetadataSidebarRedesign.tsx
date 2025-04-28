@@ -114,6 +114,9 @@ function MetadataSidebarRedesign({
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
     const isMetadataMultiLevelTaxonomyFieldEnabled: boolean = useFeatureEnabled('metadata.multilevelTaxonomy.enabled');
+    const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
+        'metadata.deleteConfirmationModalCheckbox.enabled',
+    );
     const isSessionInitiated = useRef(false);
 
     const [isLargeFile, setIsLargeFile] = useState<boolean>(false);
@@ -310,6 +313,7 @@ function MetadataSidebarRedesign({
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
                             isBoxAiSuggestionsEnabled={isBoxAiSuggestionsEnabled}
                             isDeleteButtonDisabled={isDeleteButtonDisabled}
+                            isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
                             isLargeFile={isLargeFile}
                             isMetadataMultiLevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
                             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
