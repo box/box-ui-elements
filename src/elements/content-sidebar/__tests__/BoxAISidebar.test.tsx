@@ -123,6 +123,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         recordAction: jest.fn(),
         sendQuestion: jest.fn(),
         setCacheValue: jest.fn(),
+        shouldFeedbackFormIncludeFeedbackText: false,
         shouldPreinitSession: true,
         setHasQuestions: jest.fn(),
     } as unknown as BoxAISidebarProps;
