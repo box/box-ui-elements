@@ -8,6 +8,7 @@ import type { JSONPatchOperations } from '../../common/types/api';
 type Props = {
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
+    isMetadataAIFolderExtraction?: boolean,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
     onSave?: (
@@ -21,6 +22,7 @@ type Props = {
 
 const Instances = ({
     isCascadingPolicyApplicable = false,
+    isMetadataAIFolderExtraction = false,
     editors = [],
     onModification,
     onRemove,
@@ -40,6 +42,7 @@ const Instances = ({
                     id={instance.id}
                     isCascadingPolicyApplicable={isCascadingPolicyApplicable}
                     isDirty={isDirty}
+                    isMetadataAIFolderExtraction={isMetadataAIFolderExtraction}
                     isOpen={isOpen}
                     key={`${instance.id}-${templateKey}`}
                     onModification={onModification}

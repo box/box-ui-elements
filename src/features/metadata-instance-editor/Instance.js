@@ -71,6 +71,7 @@ type State = {
     errors: { [string]: React.Node },
     isBusy: boolean,
     isCascadingEnabled: boolean,
+    isMetadataAIFolderExtractionEnabled: boolean,
     isCascadingOverwritten: boolean,
     isEditing: boolean,
     shouldConfirmRemove: boolean,
@@ -579,13 +580,21 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { cascadePolicy = {}, isDirty, isCascadingPolicyApplicable, isOpen, template }: Props = this.props;
+        const {
+            cascadePolicy = {},
+            isDirty,
+            isCascadingPolicyApplicable,
+            isMetadataAIFolderExtraction,
+            isOpen,
+            template,
+        }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
             errors,
             isBusy,
             isCascadingEnabled,
+            isMetadataAIFolderExtractionEnabled,
             shouldConfirmRemove,
             shouldShowCascadeOptions,
             isCascadingOverwritten,
@@ -631,6 +640,8 @@ class Instance extends React.PureComponent<Props, State> {
                                             canEdit={isEditing && !!cascadePolicy.canEdit}
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
+                                            isMetadataAIFolderExtraction={isMetadataAIFolderExtraction}
+                                            isMetadataAIFolderExtractionEnabled={isMetadataAIFolderExtractionEnabled}
                                             isCustomMetadata={isProperties}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}

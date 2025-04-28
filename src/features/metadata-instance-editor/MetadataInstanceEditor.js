@@ -17,6 +17,7 @@ type Props = {
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
+    isMetadataAIFolderExtraction?: Boolean,
     onAdd?: (template: MetadataTemplate) => void,
     onModification?: (id: string, isDirty: boolean) => void,
     onRemove?: (id: string) => void,
@@ -36,6 +37,7 @@ const MetadataInstanceEditor = ({
     blurExceptionClassNames,
     canAdd,
     isCascadingPolicyApplicable = false,
+    isMetadataAIFolderExtraction = true,
     isDropdownBusy,
     editors = [],
     onModification,
@@ -63,6 +65,7 @@ const MetadataInstanceEditor = ({
                     <Instances
                         editors={editors}
                         isCascadingPolicyApplicable={isCascadingPolicyApplicable}
+                        isMetadataAIFolderExtraction={isMetadataAIFolderExtraction}
                         onModification={onModification}
                         onRemove={onRemove}
                         onSave={onSave}
