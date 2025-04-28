@@ -1461,10 +1461,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@4.39.0":
-  version "4.39.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.39.0.tgz#725c3fabe0e5f4e98debe446eb60c648a8ddeb74"
-  integrity sha512-1fCX4wYIj9XI4W0bYjwc+ijSsgjc3GvHvJkLeXmB/WXrqks+i879wUfkLOD1jI0n4BD1hprPtIS+e2hXF9tWfQ==
+"@box/blueprint-web-assets@4.41.1":
+  version "4.41.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.41.1.tgz#5fade1a927ec95819dfa05c9b15f4c65eed1b0e3"
+  integrity sha512-55HK7a0kghwdq9BxqVzs7w2zm4hqrnMZHuzDzWA/o2p5CWivtWsSkFF9fzwtG1xBRDh7tNuT3VzOoDLcE8777g==
 
 "@box/blueprint-web-assets@^4.39.0":
   version "4.41.6"
