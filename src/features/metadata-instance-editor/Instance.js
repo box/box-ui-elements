@@ -339,16 +339,18 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {Object} - react state
      */
     getState(props: Props): State {
+        const isCascadingEnabled = this.isCascadingEnabled(props);
+
         return {
             data: cloneDeep(props.data),
             errors: {},
             isAIFolderExtractionEnabled: false,
             isBusy: false,
-            isCascadingEnabled: this.isCascadingEnabled(props),
+            isCascadingEnabled,
             isCascadingOverwritten: false,
             isEditing: false,
             shouldConfirmRemove: false,
-            shouldShowCascadeOptions: false,
+            shouldShowCascadeOptions: isCascadingEnabled,
         };
     }
 
