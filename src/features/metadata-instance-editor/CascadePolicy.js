@@ -2,6 +2,9 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { InlineNotice } from '@box/blueprint-web';
+import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
+
 import Toggle from '../../components/toggle';
 import { RadioButton, RadioGroup } from '../../components/radio';
 import Link from '../../components/link/Link';
@@ -13,6 +16,7 @@ const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-C
 
 type Props = {
     canEdit: boolean,
+    canUseMetadataAIFolderExtraction: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
     isCustomMetadata: boolean,
@@ -23,9 +27,11 @@ type Props = {
 
 const CascadePolicy = ({
     canEdit,
+    canUseMetadataAIFolderExtraction,
     isCascadingEnabled,
     isCascadingOverwritten,
     isCustomMetadata,
+    isMetadataAIFolderExtractionEnabled,
     onCascadeToggle,
     onCascadeModeChange,
     shouldShowCascadeOptions,
@@ -93,6 +99,28 @@ const CascadePolicy = ({
                                 value="overwrite"
                             />
                         </RadioGroup>
+                    </div>
+                </div>
+            )}
+            {shouldShowCascadeOptions && canUseMetadataAIFolderExtraction && (
+                <div className="metadata-cascade-editor">
+                    <div className="metadata-cascade-enable">
+                        <div>
+                            <BoxAiLogo className="metadata-cascade-ai-logo" width={16} height={16} />
+                            <FormattedMessage tagName="strong" {...messages.enableAIAutofill} />
+                            <Toggle
+                                className="metadata-cascade-toggle"
+                                isOn={isMetadataAIFolderExtractionEnabled}
+                                label=""
+                                onChange={() => {}}
+                            />
+                        </div>
+                        <div className="cascade-policy-text">
+                            <FormattedMessage {...messages.AIAutofillDescription} />
+                        </div>
+                        <InlineNotice className="metadata-cascade-ai-notice" variant="info">
+                            <FormattedMessage {...messages.AIAutofillNotice} />
+                        </InlineNotice>
                     </div>
                 </div>
             )}

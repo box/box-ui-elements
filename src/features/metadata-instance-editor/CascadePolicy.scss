@@ -40,6 +40,16 @@ $cascade-policy-background: #f1e2fd;
 .metadata-cascade-enable {
     margin: 10px 0;
     padding: 14px 15px;
+
+    .metadata-cascade-ai-logo {
+        position: relative;
+        top: 3px;
+        margin-right: 3px;
+    }
+
+    .metadata-cascade-ai-notice {
+        margin-top: 12px;
+    }
 }
 
 .toggle-container.metadata-cascade-toggle {

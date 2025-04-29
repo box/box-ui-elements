@@ -47,6 +47,7 @@ import './Instance.scss';
 
 type Props = {
     canEdit: boolean,
+    canUseMetadataAIFolderExtraction?: boolean,
     cascadePolicy?: MetadataCascadePolicy, // eslint-disable-line
     data: MetadataFields,
     hasError: boolean,
@@ -581,10 +582,10 @@ class Instance extends React.PureComponent<Props, State> {
 
     render() {
         const {
+            canUseMetadataAIFolderExtraction,
             cascadePolicy = {},
             isDirty,
             isCascadingPolicyApplicable,
-            isMetadataAIFolderExtraction,
             isOpen,
             template,
         }: Props = this.props;
@@ -638,9 +639,9 @@ class Instance extends React.PureComponent<Props, State> {
                                     {isCascadingPolicyApplicable && (
                                         <CascadePolicy
                                             canEdit={isEditing && !!cascadePolicy.canEdit}
+                                            canUseMetadataAIFolderExtraction={canUseMetadataAIFolderExtraction}
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
-                                            isMetadataAIFolderExtraction={isMetadataAIFolderExtraction}
                                             isMetadataAIFolderExtractionEnabled={isMetadataAIFolderExtractionEnabled}
                                             isCustomMetadata={isProperties}
                                             onCascadeModeChange={this.onCascadeModeChange}
