@@ -4,7 +4,7 @@ exports[`features/metadata-editor-editor/Instances should correctly render edito
 [
   <Instance
     canEdit={true}
-    canUseMetadataAIFolderExtraction={false}
+    canUseAIFolderExtraction={false}
     data={
       {
         "datefield": "2018-06-20T00:00:00.000Z",
@@ -109,7 +109,7 @@ exports[`features/metadata-editor-editor/Instances should correctly render edito
   />,
   <Instance
     canEdit={false}
-    canUseMetadataAIFolderExtraction={false}
+    canUseAIFolderExtraction={false}
     data={
       {
         "datefield": "2018-06-20T00:00:00.000Z",
