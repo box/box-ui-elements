@@ -6,7 +6,7 @@ import type { MetadataEditor, MetadataCascadingPolicyData } from '../../common/t
 import type { JSONPatchOperations } from '../../common/types/api';
 
 type Props = {
-    canUseMetadataAIFolderExtraction?: boolean,
+    canUseAIFolderExtraction?: boolean,
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     onModification?: (id: string, isDirty: boolean) => void,
@@ -21,7 +21,7 @@ type Props = {
 };
 
 const Instances = ({
-    canUseMetadataAIFolderExtraction = false,
+    canUseAIFolderExtraction = false,
     isCascadingPolicyApplicable = false,
     editors = [],
     onModification,
@@ -36,7 +36,7 @@ const Instances = ({
             return (
                 <Instance
                     canEdit={instance.canEdit}
-                    canUseMetadataAIFolderExtraction={canUseMetadataAIFolderExtraction}
+                    canUseAIFolderExtraction={canUseAIFolderExtraction}
                     cascadePolicy={instance.cascadePolicy}
                     data={instance.data}
                     hasError={hasError}

@@ -16,10 +16,12 @@ const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-C
 
 type Props = {
     canEdit: boolean,
-    canUseMetadataAIFolderExtraction: boolean,
+    canUseAIFolderExtraction: boolean,
+    isAIFolderExtractionEnabled: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
     isCustomMetadata: boolean,
+    onAIFolderExtractionToggle: (value: boolean) => void,
     onCascadeModeChange: (value: boolean) => void,
     onCascadeToggle: (value: boolean) => void,
     shouldShowCascadeOptions: boolean,
@@ -27,11 +29,12 @@ type Props = {
 
 const CascadePolicy = ({
     canEdit,
-    canUseMetadataAIFolderExtraction,
+    canUseAIFolderExtraction,
     isCascadingEnabled,
     isCascadingOverwritten,
     isCustomMetadata,
-    isMetadataAIFolderExtractionEnabled,
+    isAIFolderExtractionEnabled,
+    onAIFolderExtractionToggle,
     onCascadeToggle,
     onCascadeModeChange,
     shouldShowCascadeOptions,
@@ -102,7 +105,7 @@ const CascadePolicy = ({
                     </div>
                 </div>
             )}
-            {shouldShowCascadeOptions && canUseMetadataAIFolderExtraction && (
+            {shouldShowCascadeOptions && canUseAIFolderExtraction && (
                 <div className="metadata-cascade-editor">
                     <div className="metadata-cascade-enable">
                         <div>
@@ -110,9 +113,9 @@ const CascadePolicy = ({
                             <FormattedMessage tagName="strong" {...messages.enableAIAutofill} />
                             <Toggle
                                 className="metadata-cascade-toggle"
-                                isOn={isMetadataAIFolderExtractionEnabled}
+                                isOn={isAIFolderExtractionEnabled}
                                 label=""
-                                onChange={() => {}}
+                                onChange={e => onAIFolderExtractionToggle(e.target.checked)}
                             />
                         </div>
                         <div className="cascade-policy-text">

@@ -47,7 +47,7 @@ import './Instance.scss';
 
 type Props = {
     canEdit: boolean,
-    canUseMetadataAIFolderExtraction?: boolean,
+    canUseAIFolderExtraction?: boolean,
     cascadePolicy?: MetadataCascadePolicy, // eslint-disable-line
     data: MetadataFields,
     hasError: boolean,
@@ -72,7 +72,7 @@ type State = {
     errors: { [string]: React.Node },
     isBusy: boolean,
     isCascadingEnabled: boolean,
-    isMetadataAIFolderExtractionEnabled: boolean,
+    isAIFolderExtractionEnabled: boolean,
     isCascadingOverwritten: boolean,
     isEditing: boolean,
     shouldConfirmRemove: boolean,
@@ -329,6 +329,10 @@ class Instance extends React.PureComponent<Props, State> {
         );
     };
 
+    onAIFolderExtractionToggle = (value: boolean) => {
+        this.setState({ isAIFolderExtractionEnabled: value }, this.setDirty);
+    };
+
     /**
      * Returns the state from props
      *
@@ -338,6 +342,7 @@ class Instance extends React.PureComponent<Props, State> {
         return {
             data: cloneDeep(props.data),
             errors: {},
+            isAIFolderExtractionEnabled: false,
             isBusy: false,
             isCascadingEnabled: this.isCascadingEnabled(props),
             isCascadingOverwritten: false,
@@ -582,7 +587,7 @@ class Instance extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            canUseMetadataAIFolderExtraction,
+            canUseAIFolderExtraction,
             cascadePolicy = {},
             isDirty,
             isCascadingPolicyApplicable,
@@ -594,8 +599,8 @@ class Instance extends React.PureComponent<Props, State> {
             data,
             errors,
             isBusy,
+            isAIFolderExtractionEnabled,
             isCascadingEnabled,
-            isMetadataAIFolderExtractionEnabled,
             shouldConfirmRemove,
             shouldShowCascadeOptions,
             isCascadingOverwritten,
@@ -639,11 +644,12 @@ class Instance extends React.PureComponent<Props, State> {
                                     {isCascadingPolicyApplicable && (
                                         <CascadePolicy
                                             canEdit={isEditing && !!cascadePolicy.canEdit}
-                                            canUseMetadataAIFolderExtraction={canUseMetadataAIFolderExtraction}
+                                            canUseAIFolderExtraction={canUseAIFolderExtraction}
+                                            isAIFolderExtractionEnabled={isAIFolderExtractionEnabled}
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
-                                            isMetadataAIFolderExtractionEnabled={isMetadataAIFolderExtractionEnabled}
                                             isCustomMetadata={isProperties}
+                                            onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}
                                             shouldShowCascadeOptions={shouldShowCascadeOptions}
