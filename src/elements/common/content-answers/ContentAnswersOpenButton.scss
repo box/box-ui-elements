@@ -5,7 +5,7 @@
 
 @mixin BackgroundGradientHover {
     background: linear-gradient(0deg, #2223, #2223), linear-gradient(135deg, #fe01da 0%, var(--light-blue-100) 100%);
-    border: var(--border-1 solid #2222224d);
+    border: var(--border-1) solid #2222224d;
 }
 
 .be-ContentAnswersOpenButton {
