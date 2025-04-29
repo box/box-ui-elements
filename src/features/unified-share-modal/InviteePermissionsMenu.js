@@ -58,6 +58,7 @@ class InviteePermissionsMenu extends Component<Props> {
                         >
                             <InviteePermissionsLabel
                                 hasDescription
+                                inviteePermissionDescription={level.description}
                                 inviteePermissionLevel={level.value}
                                 inviteePermissions
                                 itemType={itemType}
@@ -70,13 +71,8 @@ class InviteePermissionsMenu extends Component<Props> {
     }
 
     render() {
-        const {
-            inviteePermissions,
-            inviteePermissionsButtonProps,
-            inviteePermissionLevel,
-            disabled,
-            itemType,
-        } = this.props;
+        const { inviteePermissions, inviteePermissionsButtonProps, inviteePermissionLevel, disabled, itemType } =
+            this.props;
         const defaultPermissionLevel = getDefaultPermissionLevel(inviteePermissions);
         const selectedPermissionLevel = inviteePermissionLevel || defaultPermissionLevel;
         const disabledTooltip =

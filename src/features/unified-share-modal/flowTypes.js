@@ -68,6 +68,7 @@ export type SuggestedCollabLookup = {
 
 export type inviteePermissionType = {
     default: boolean,
+    description?: string,
     disabled?: boolean,
     text: string,
     value: string,
