@@ -69,6 +69,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         onUserInteraction,
         recordAction,
         setCacheValue,
+        shouldFeedbackFormIncludeFeedbackText,
         shouldPreinitSession,
     } = React.useContext(BoxAISidebarContext);
     const { agents, requestState, selectedAgent } = useAgents();
@@ -215,6 +216,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                         questions={questions}
                         onFeedbackFormSubmit={onFeedbackFormSubmit}
                         onUserIntentToUseAI={handleUserIntentToUseAI}
+                        shouldFeedbackFormIncludeFeedbackText={shouldFeedbackFormIncludeFeedbackText}
                         shouldShowLandingPage={cache.shouldShowLandingPage}
                         showLoadingIndicator={isLoading && shouldPreinitSession}
                         stopQuestion={stopQuestion}
@@ -247,6 +249,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                 open={isModalOpen}
                 questions={questions}
                 recordAction={isModalOpen ? recordAction : undefined}
+                shouldFeedbackFormIncludeFeedbackText={shouldFeedbackFormIncludeFeedbackText}
                 shouldShowLandingPage={cache.shouldShowLandingPage}
                 showLoadingIndicator={false}
                 stopPropagationOnEsc

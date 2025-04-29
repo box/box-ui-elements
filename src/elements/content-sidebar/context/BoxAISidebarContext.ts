@@ -28,6 +28,7 @@ export interface BoxAISidebarContextValues {
     onUserInteraction?: () => void;
     recordAction: (params: BoxAISidebarRecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
+    shouldFeedbackFormIncludeFeedbackText?: boolean;
     shouldPreinitSession: boolean;
 }
 
@@ -42,5 +43,6 @@ export const BoxAISidebarContext = React.createContext<BoxAISidebarContextValues
     items: [],
     recordAction: noop,
     setCacheValue: noop,
+    shouldFeedbackFormIncludeFeedbackText: false,
     shouldPreinitSession: true,
 });
