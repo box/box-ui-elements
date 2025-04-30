@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { screen, render } from '../../../test-utils/testing-library';
+
 import CascadePolicy from '../CascadePolicy';
 
 describe('features/metadata-instance-editor/CascadePolicy', () => {
@@ -48,4 +50,28 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
         );
         expect(wrapper).toMatchSnapshot();
     });
+
+    test('should render AI folder extraction toggle when canEdit, canUseAIFolderExtraction, and shouldShowCascadeOptions are true', () => {
+        render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
+        expect(screen.getByText('Box AI Autofill')).toBeInTheDocument();
+    });
+
+    test.each([
+        [false, false, false],
+        [true, false, false],
+        [false, true, false],
+        [true, true, false],
+    ])(
+        'should not render AI folder extraction toggle when canEdit, canUseAIFolderExtraction, and shouldShowCascadeOptions are %s, %s, and %s',
+        (canEdit, canUseAIFolderExtraction, shouldShowCascadeOptions) => {
+            render(
+                <CascadePolicy
+                    canEdit={canEdit}
+                    canUseAIFolderExtraction={canUseAIFolderExtraction}
+                    shouldShowCascadeOptions={shouldShowCascadeOptions}
+                />,
+            );
+            expect(screen.queryByText('Box AI Autofill')).not.toBeInTheDocument();
+        },
+    );
 });
