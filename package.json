@@ -218,7 +218,7 @@
         "filesize": "^4.1.2",
         "flow-bin": "^0.95.1",
         "flow-copy-source": "^2.0.9",
-        "flow-typed": "^2.6.2",
+        "flow-typed": "^4.1.0",
         "form-serialize": "^0.7.2",
         "formik": "^2.0.3",
         "highlight.js": "^11.10.0",
