@@ -16,7 +16,7 @@ const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-C
 
 type Props = {
     canEdit: boolean,
-    canUseAIFolderExtraction: boolean,
+    canUseAIFolderExtraction?: boolean,
     isAIFolderExtractionEnabled: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
@@ -29,7 +29,7 @@ type Props = {
 
 const CascadePolicy = ({
     canEdit,
-    canUseAIFolderExtraction,
+    canUseAIFolderExtraction = false,
     isCascadingEnabled,
     isCascadingOverwritten,
     isCustomMetadata,
