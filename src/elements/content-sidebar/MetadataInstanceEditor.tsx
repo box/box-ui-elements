@@ -18,6 +18,7 @@ export interface MetadataInstanceEditorProps {
     isBetaLanguageEnabled: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
+    isDeleteConfirmationModalCheckboxEnabled: boolean;
     isLargeFile: boolean;
     isMetadataMultiLevelTaxonomyFieldEnabled: boolean;
     isUnsavedChangesModalOpen: boolean;
@@ -36,6 +37,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBetaLanguageEnabled,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
+    isDeleteConfirmationModalCheckboxEnabled,
     isLargeFile,
     isMetadataMultiLevelTaxonomyFieldEnabled,
     isUnsavedChangesModalOpen,
@@ -56,6 +58,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
             isBetaLanguageEnabled={isBetaLanguageEnabled}
             isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
             isLargeFile={isLargeFile}
             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
             onCancel={onCancel}
