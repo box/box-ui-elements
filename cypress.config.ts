@@ -10,7 +10,7 @@ export default defineConfig({
     viewportHeight: 1260,
     viewportWidth: 1600,
     e2e: {
-        baseUrl: 'http://localhost:6060/#',
+        baseUrl: 'http://localhost:6061',
         specPattern: 'test/integration/**/*.cy.{js,jsx,ts,tsx}',
         supportFile: 'test/support/index.js',
     },
