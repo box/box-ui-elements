@@ -1,5 +1,6 @@
 import React, { Children } from 'react';
 import { Notification, TooltipProvider } from '@box/blueprint-web';
+import Portal from '../../components/portal';
 
 export interface ProvideProps {
     children: React.ReactNode;
@@ -10,7 +11,9 @@ const Providers = ({ children, hasProviders = true }: ProvideProps) => {
     if (hasProviders) {
         return (
             <Notification.Provider>
-                <Notification.Viewport />
+                <Portal>
+                    <Notification.Viewport />
+                </Portal>
                 <TooltipProvider>{children}</TooltipProvider>
             </Notification.Provider>
         );

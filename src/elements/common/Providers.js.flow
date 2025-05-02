@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Notification, TooltipProvider } from '@box/blueprint-web';
+import Portal from '../../components/portal';
 
 export interface ProvideProps {
     children: React.Node;
@@ -11,7 +12,9 @@ const Provide = ({ children, hasProviders }: ProvideProps) => {
     if (hasProviders) {
         return (
             <Notification.Provider>
-                <Notification.Viewport />
+                <Portal>
+                    <Notification.Viewport />
+                </Portal>
                 <TooltipProvider>{children}</TooltipProvider>
             </Notification.Provider>
         );
