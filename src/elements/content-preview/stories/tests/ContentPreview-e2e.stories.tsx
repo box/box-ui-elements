@@ -1,4 +1,3 @@
-// @flow
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ContentPreview from '../../ContentPreview';
@@ -52,7 +51,7 @@ export const withSidebar = {
 export default {
     title: 'Elements/ContentPreview/tests/e2e',
     component: ContentPreview,
-    render: ({ ...args }: any) => (
+    render: ({ ...args }) => (
         <Router>
             <ContentPreview key={`${args.fileId}-${args.token}`} {...args} />
         </Router>

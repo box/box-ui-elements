@@ -1,5 +1,3 @@
-// @flow
-
 import ContentExplorer from '../../ContentExplorer';
 
 export const basic = {};

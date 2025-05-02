@@ -12,7 +12,7 @@ const defaultArgs = {
         hasProperties: true,
         hasRetentionPolicy: true,
     },
-    features: global.FEATURES,
+    features: global.FEATURE_FLAGS,
     fileId: global.FILE_ID,
     hasActivityFeed: true,
     hasMetadata: true,

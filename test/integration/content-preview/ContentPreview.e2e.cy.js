@@ -92,8 +92,12 @@ describe('ContentPreview', () => {
             cy.getByTestId('sidebartoggle').click();
             cy.getByTestId('bcs-content').should('not.exist');
 
+            // Closing the sidebar sometimes leaves the focus on the Show/Hide Sidebar button
+            // Where the label covers the "Next File" element. This fix prevents flakiness.
+            cy.get('.bcpr-PreviewMask').should('exist');
+            cy.get('.bcpr-PreviewMask').type('{rightarrow}');
+
             // Navigating between files in a collection should retain the prior closed state
-            cy.getByTitle('Next File').click();
             cy.getByTestId('bcs-content').should('not.exist');
             cy.getByTitle('Previous File').click();
             cy.getByTestId('bcs-content').should('not.exist');

@@ -1,4 +1,3 @@
-// @flow
 import ContentPicker from '../../ContentPicker';
 
 export const basic = {
