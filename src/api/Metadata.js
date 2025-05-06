@@ -12,6 +12,7 @@ import getProp from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import keyBy from 'lodash/keyBy';
 import lodashMap from 'lodash/map';
+import partition from 'lodash/partition';
 import uniq from 'lodash/uniq';
 import uniqueId from 'lodash/uniqueId';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
@@ -223,6 +224,12 @@ class Metadata extends File {
     ): Promise<Array<MetadataTemplate>> {
         const templates = cloneDeep(metadataTemplates);
 
+        // const allFields = flatMap(templates, template => template.fields);
+        // const [taxonomyFields, otherFields] = partition(
+        //     allFields,
+        //     field => field.type === 'taxonomy' && !field.levels && (field.taxonomyKey || field.taxonomy_key),
+        // );
+
         const taxonomyFields = flatMap(templates, template =>
             lodashFilter(
                 template.fields,
@@ -262,7 +269,10 @@ class Metadata extends File {
         return lodashMap(templates, template => {
             if (!template.fields) return template;
 
-            const fieldsToUpdate = lodashFilter(template.fields, field => field.type === 'taxonomy' && !field.levels);
+            const [fieldsToUpdate, restFields] = partition(
+                template.fields,
+                field => field.type === 'taxonomy' && !field.levels,
+            );
 
             if (isEmpty(fieldsToUpdate)) return template;
 
@@ -286,7 +296,7 @@ class Metadata extends File {
 
             return {
                 ...template,
-                fields: updatedFields,
+                fields: restFields.concat(updatedFields),
             };
         });
     }
@@ -322,7 +332,9 @@ class Metadata extends File {
         }
 
         templates = getProp(templates, 'data.entries', []);
+        console.log('kjarosz test templates raw', templates);
         const templatesWithTaxonomies = await this.getTaxonomyLevelsForTemplates(templates, id);
+        console.log('kjarosz test templates with taxinomies', templatesWithTaxonomies);
 
         return templatesWithTaxonomies;
     }
@@ -640,6 +652,7 @@ class Metadata extends File {
                       !!permissions.can_upload,
                   )
                 : [];
+            console.log('kjarosz test templateInstances API reposnse', templateInstances);
             const editors = !isMetadataRedesign
                 ? await this.getEditors(
                       id,
