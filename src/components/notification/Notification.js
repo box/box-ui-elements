@@ -68,6 +68,7 @@ type Props = {
      */
     overflow?: 'wrap' | 'ellipsis',
     type: NotificationType,
+    className?: string,
 };
 
 class Notification extends React.Component<Props> {
@@ -100,9 +101,9 @@ class Notification extends React.Component<Props> {
 
     render() {
         const contents = this.getChildren();
-        const { intl, type, overflow } = this.props;
+        const { intl, type, overflow, className } = this.props;
         const { formatMessage } = intl;
-        const classes = classNames('notification', type, overflow);
+        const classes = classNames('notification', type, overflow, className);
 
         return (
             <div className={classes}>
