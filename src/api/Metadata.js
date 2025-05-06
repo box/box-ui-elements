@@ -224,12 +224,6 @@ class Metadata extends File {
     ): Promise<Array<MetadataTemplate>> {
         const templates = cloneDeep(metadataTemplates);
 
-        // const allFields = flatMap(templates, template => template.fields);
-        // const [taxonomyFields, otherFields] = partition(
-        //     allFields,
-        //     field => field.type === 'taxonomy' && !field.levels && (field.taxonomyKey || field.taxonomy_key),
-        // );
-
         const taxonomyFields = flatMap(templates, template =>
             lodashFilter(
                 template.fields,
