@@ -332,9 +332,7 @@ class Metadata extends File {
         }
 
         templates = getProp(templates, 'data.entries', []);
-        console.log('kjarosz test templates raw', templates);
         const templatesWithTaxonomies = await this.getTaxonomyLevelsForTemplates(templates, id);
-        console.log('kjarosz test templates with taxinomies', templatesWithTaxonomies);
 
         return templatesWithTaxonomies;
     }
@@ -652,7 +650,6 @@ class Metadata extends File {
                       !!permissions.can_upload,
                   )
                 : [];
-            console.log('kjarosz test templateInstances API reposnse', templateInstances);
             const editors = !isMetadataRedesign
                 ? await this.getEditors(
                       id,
