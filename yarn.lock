@@ -1504,10 +1504,10 @@
   resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.31.0.tgz#a2ef6c3c7284529ae268b609d04b6000348bb294"
   integrity sha512-4+M/4g8LHJfZkP+7ISBKveQs2q5HeGvXv8B6/N8yFb9cpYuOjpKFxRvHyILdQWjwictHZbgY2XrNrpxbYGEXRQ==
 
-"@box/box-ai-content-answers@^0.122.0":
-  version "0.122.0"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.122.0.tgz#9563992ba35e3e7db974bb0db780907684f5a4e8"
-  integrity sha512-XnptCYAcNrxJKcy++oyvzTDUQmKe8YQPj/ttlpvD89j3T0HyjT3M2q9ne9bDZHz3PydhPdMfSrvqR3cMVu45WQ==
+"@box/box-ai-content-answers@^0.124.1":
+  version "0.124.1"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-content-answers/-/box-ai-content-answers-0.124.1.tgz#3248b33bb0605b376b1ff7acf1ac658055aa4cac"
+  integrity sha512-NrQ+JWi1JCO5vdLi/kdJEmFOCKpE8Xa4mo6D/aXtREo+acEEC/VE8vJk6jgGdyrgP6wvgc//TCL2d2L51Tr/jg==
 
 "@box/cldr-data@^34.2.0":
   version "34.8.0"
