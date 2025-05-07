@@ -36,7 +36,7 @@ type Props = {
 const MetadataInstanceEditor = ({
     blurExceptionClassNames,
     canAdd,
-    canUseAIFolderExtraction = false,
+    canUseAIFolderExtraction = true,
     isCascadingPolicyApplicable = false,
     isDropdownBusy,
     editors = [],

@@ -13,7 +13,8 @@ import messages from './messages';
 import './CascadePolicy.scss';
 
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
-
+const AI_LINK = 'https://www.box.com/ai';
+const PRICING_LINK = 'https://www.box.com/pricing';
 type Props = {
     canEdit: boolean,
     canUseAIFolderExtraction?: boolean,
@@ -66,7 +67,7 @@ const CascadePolicy = ({
                         <div className="cascade-policy-text">
                             <FormattedMessage {...messages.applyCascadePolicyText} />
                             &nbsp;
-                            <Link className="cascade-policy-learnmore-link" href={COMMUNITY_LINK} target="_blank">
+                            <Link className="cascade-policy-link" href={COMMUNITY_LINK} target="_blank">
                                 <FormattedMessage {...messages.cascadePolicyLearnMore} />
                             </Link>
                         </div>
@@ -106,7 +107,7 @@ const CascadePolicy = ({
                 </div>
             )}
             {shouldShowCascadeOptions && canUseAIFolderExtraction && (
-                <div className="metadata-cascade-editor">
+                <div className="metadata-cascade-editor" data-testid="ai-folder-extraction">
                     <div className="metadata-cascade-enable">
                         <div>
                             <BoxAiLogo className="metadata-cascade-ai-logo" width={16} height={16} />
@@ -120,9 +121,22 @@ const CascadePolicy = ({
                         </div>
                         <div className="cascade-policy-text">
                             <FormattedMessage {...messages.AIAutofillDescription} />
+                            &nbsp;
+                            <Link className="cascade-policy-link" href={AI_LINK} target="_blank">
+                                <FormattedMessage {...messages.AIAutofillLearnMore} />
+                            </Link>
                         </div>
                         <InlineNotice className="metadata-cascade-ai-notice" variant="info">
-                            <FormattedMessage {...messages.AIAutofillNotice} />
+                            <FormattedMessage
+                                {...messages.AIAutofillNotice}
+                                values={{
+                                    pricingLink: (
+                                        <Link className="cascade-policy-link" href={PRICING_LINK} target="_blank">
+                                            <FormattedMessage {...messages.AIAutofillPricingDetails} />
+                                        </Link>
+                                    ),
+                                }}
+                            />
                         </InlineNotice>
                     </div>
                 </div>

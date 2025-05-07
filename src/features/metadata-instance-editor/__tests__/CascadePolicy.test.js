@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { screen, render } from '../../../test-utils/testing-library';
+import { screen, render, within } from '../../../test-utils/testing-library';
 
 import CascadePolicy from '../CascadePolicy';
 
@@ -74,4 +74,22 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             expect(screen.queryByText('Box AI Autofill')).not.toBeInTheDocument();
         },
     );
+
+    describe('AI Autofill Links', () => {
+        test('should render AI and pricing links when AI features are enabled', () => {
+            render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
+
+            // Find link within the AI autofill section since there are two links with the same text in the component
+            const aiSection = screen.getByTestId('ai-folder-extraction');
+            const aiLink = within(aiSection).getByText('Learn more');
+            expect(aiLink).toBeInTheDocument();
+            expect(aiLink.closest('a')).toHaveAttribute('href', 'https://www.box.com/ai');
+            expect(aiLink.closest('a')).toHaveAttribute('target', '_blank');
+
+            const pricingLink = screen.getByText('pricing details');
+            expect(pricingLink).toBeInTheDocument();
+            expect(pricingLink.closest('a')).toHaveAttribute('href', 'https://www.box.com/pricing');
+            expect(pricingLink.closest('a')).toHaveAttribute('target', '_blank');
+        });
+    });
 });
