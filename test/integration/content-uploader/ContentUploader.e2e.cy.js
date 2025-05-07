@@ -1,14 +1,6 @@
 // <reference types="Cypress" />
 
 const helpers = {
-    load({ props, features } = {}) {
-        cy.visit('/Elements/ContentUploader', {
-            onBeforeLoad: contentWindow => {
-                contentWindow.PROPS = props;
-                contentWindow.FEATURES = features;
-            },
-        });
-    },
     getTestFile(filename, type) {
         const fixturePath = `content-uploader/${filename}`;
         return cy.window().then(win =>
@@ -28,7 +20,7 @@ const helpers = {
 describe('ContentUploader', () => {
     describe('Add files', () => {
         beforeEach(() => {
-            helpers.load();
+            cy.visitStorybook('elements-contentuploader--basic');
         });
 
         it('Should not have duplicated file name', () => {

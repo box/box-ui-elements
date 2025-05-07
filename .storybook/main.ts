@@ -5,13 +5,16 @@ import path from 'path';
 
 const language = process.env.LANGUAGE;
 
+const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin');
+const { translationDependencies } = require('../i18n.config');
+
 const config: {
     stories: string[];
-    addons: (string | { name: string; options: { sass: { implementation: any } } })[],
+    addons: (string | { name: string; options: { sass: { implementation: any } } })[];
     framework: { name: string };
     staticDirs: string[];
     webpackFinal: (config: any) => Promise<any>;
-    typescript: any
+    typescript: any;
 } = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
 
@@ -31,7 +34,7 @@ const config: {
         '@storybook/addon-docs',
         '@storybook/addon-webpack5-compiler-babel',
         '@chromatic-com/storybook',
-        'storybook-react-intl'
+        'storybook-react-intl',
     ],
 
     framework: {
@@ -55,11 +58,18 @@ const config: {
             'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
         };
 
+        config.plugins.push(
+            new TranslationsPlugin({
+                generateBundles: true,
+                additionalMessageData: translationDependencies.map(pkg => `${pkg}/i18n/[language]`),
+            }),
+        );
+
         return config;
     },
     typescript: {
-        reactDocgen: 'react-docgen-typescript'
-    }
+        reactDocgen: 'react-docgen-typescript',
+    },
 };
 
 export default config;
