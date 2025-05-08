@@ -120,19 +120,19 @@ const CascadePolicy = ({
                             />
                         </div>
                         <div className="cascade-policy-text">
-                            <FormattedMessage {...messages.aIAutofillDescription} />
+                            <FormattedMessage {...messages.aiAutofillDescription} />
                             &nbsp;
                             <Link className="cascade-policy-link" href={AI_LINK} target="_blank">
-                                <FormattedMessage {...messages.aIAutofillLearnMore} />
+                                <FormattedMessage {...messages.aiAutofillLearnMore} />
                             </Link>
                         </div>
                         <InlineNotice className="metadata-cascade-ai-notice" variant="info">
                             <FormattedMessage
-                                {...messages.aIAutofillNotice}
+                                {...messages.aiAutofillNotice}
                                 values={{
                                     pricingLink: (
                                         <Link className="cascade-policy-link" href={PRICING_LINK} target="_blank">
-                                            <FormattedMessage {...messages.aIAutofillPricingDetails} />
+                                            <FormattedMessage {...messages.aiAutofillPricingDetails} />
                                         </Link>
                                     ),
                                 }}
