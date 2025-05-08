@@ -17,7 +17,7 @@ const AI_LINK = 'https://www.box.com/ai';
 const PRICING_LINK = 'https://www.box.com/pricing';
 type Props = {
     canEdit: boolean,
-    canUseAIFolderExtraction?: boolean,
+    canUseAIFolderExtraction: boolean,
     isAIFolderExtractionEnabled: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
@@ -30,7 +30,7 @@ type Props = {
 
 const CascadePolicy = ({
     canEdit,
-    canUseAIFolderExtraction = false,
+    canUseAIFolderExtraction,
     isCascadingEnabled,
     isCascadingOverwritten,
     isCustomMetadata,
@@ -120,19 +120,19 @@ const CascadePolicy = ({
                             />
                         </div>
                         <div className="cascade-policy-text">
-                            <FormattedMessage {...messages.AIAutofillDescription} />
+                            <FormattedMessage {...messages.aIAutofillDescription} />
                             &nbsp;
                             <Link className="cascade-policy-link" href={AI_LINK} target="_blank">
-                                <FormattedMessage {...messages.AIAutofillLearnMore} />
+                                <FormattedMessage {...messages.aIAutofillLearnMore} />
                             </Link>
                         </div>
                         <InlineNotice className="metadata-cascade-ai-notice" variant="info">
                             <FormattedMessage
-                                {...messages.AIAutofillNotice}
+                                {...messages.aIAutofillNotice}
                                 values={{
                                     pricingLink: (
                                         <Link className="cascade-policy-link" href={PRICING_LINK} target="_blank">
-                                            <FormattedMessage {...messages.AIAutofillPricingDetails} />
+                                            <FormattedMessage {...messages.aIAutofillPricingDetails} />
                                         </Link>
                                     ),
                                 }}

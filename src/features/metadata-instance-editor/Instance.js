@@ -70,9 +70,9 @@ type Props = {
 type State = {
     data: Object,
     errors: { [string]: React.Node },
+    isAIFolderExtractionEnabled: boolean,
     isBusy: boolean,
     isCascadingEnabled: boolean,
-    isAIFolderExtractionEnabled: boolean,
     isCascadingOverwritten: boolean,
     isEditing: boolean,
     shouldConfirmRemove: boolean,

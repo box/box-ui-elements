@@ -173,26 +173,26 @@ const messages = defineMessages({
         description: 'Label for enable AI autofill toggle switch',
         id: 'boxui.metadataInstanceEditor.enableAIAutofill',
     },
-    AIAutofillDescription: {
+    aIAutofillDescription: {
         defaultMessage: 'Use Box AI to automatically extract metadata values.',
         description: 'Description for AI autofill toggle switch',
-        id: 'boxui.metadataInstanceEditor.AIAutofillDescription',
+        id: 'boxui.metadataInstanceEditor.aIAutofillDescription',
     },
-    AIAutofillNotice: {
+    aIAutofillNotice: {
         defaultMessage:
             'Enabling this feature may involve additional charges. Please review our {pricingLink} for more information.',
         description: 'Notice for AI autofill toggle switch',
-        id: 'boxui.metadataInstanceEditor.AIAutofillNotice',
+        id: 'boxui.metadataInstanceEditor.aIAutofillNotice',
     },
-    AIAutofillLearnMore: {
+    aIAutofillLearnMore: {
         defaultMessage: 'Learn more',
         description: 'Learn more link for AI autofill',
-        id: 'boxui.metadataInstanceEditor.AIAutofillLearnMore',
+        id: 'boxui.metadataInstanceEditor.aIAutofillLearnMore',
     },
-    AIAutofillPricingDetails: {
+    aIAutofillPricingDetails: {
         defaultMessage: 'pricing details',
         description: 'Pricing details link for AI autofill',
-        id: 'boxui.metadataInstanceEditor.AIAutofillPricingDetails',
+        id: 'boxui.metadataInstanceEditor.aIAutofillPricingDetails',
     },
     applyCascadePolicyText: {
         defaultMessage:
