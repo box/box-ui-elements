@@ -336,10 +336,7 @@ describe('components/flyout/Flyout', () => {
                 if (shouldCloseOverlay) {
                     sandbox.mock(instance).expects('handleOverlayClose');
                 } else {
-                    sandbox
-                        .mock(instance)
-                        .expects('handleOverlayClose')
-                        .never();
+                    sandbox.mock(instance).expects('handleOverlayClose').never();
                 }
                 act(() => {
                     instance.handleOverlayClick(event);
@@ -432,10 +429,7 @@ describe('components/flyout/Flyout', () => {
 
             const instance = wrapper.instance();
             setTimeout(() => {
-                sandbox
-                    .mock(instance)
-                    .expects('openOverlay')
-                    .never();
+                sandbox.mock(instance).expects('openOverlay').never();
             }, 310); // default timeout is 300ms
 
             instance.handleButtonHover(event);
@@ -452,10 +446,7 @@ describe('components/flyout/Flyout', () => {
 
             const instance = wrapper.instance();
             setTimeout(() => {
-                sandbox
-                    .mock(instance)
-                    .expects('openOverlay')
-                    .never();
+                sandbox.mock(instance).expects('openOverlay').never();
             }, timeout - 10);
 
             setTimeout(() => {
@@ -482,6 +473,32 @@ describe('components/flyout/Flyout', () => {
             }, 310);
 
             instance.handleButtonHoverLeave({});
+        });
+    });
+
+    describe('handleKeyDown()', () => {
+        test('should call openOverlay() and focusButton() when enter key is pressed', () => {
+            const wrapper = shallow(
+                <Flyout>
+                    <FakeButton />
+                    <FakeOverlay />
+                </Flyout>,
+            );
+
+            const instance = wrapper.instance();
+            const openOverlaySpy = sandbox.spy(instance, 'openOverlay');
+            const focusButtonSpy = sandbox.spy(instance, 'focusButton');
+
+            const event = {
+                key: 'Enter',
+                preventDefault: sandbox.spy(),
+            };
+
+            instance.handleKeyDown(event);
+
+            expect(openOverlaySpy.calledOnce).toBe(true);
+            expect(focusButtonSpy.calledOnce).toBe(true);
+            expect(event.preventDefault.calledOnce).toBe(true);
         });
     });
 
@@ -803,10 +820,7 @@ describe('components/flyout/Flyout', () => {
                         if (shouldCallCloseOverlay) {
                             sandbox.mock(instance).expects('closeOverlay');
                         } else {
-                            sandbox
-                                .mock(instance)
-                                .expects('closeOverlay')
-                                .never();
+                            sandbox.mock(instance).expects('closeOverlay').never();
                         }
 
                         if (isInsideToggleButton) {
@@ -833,10 +847,7 @@ describe('components/flyout/Flyout', () => {
                 const el = document.createElement('div');
                 el.innerHTML = '<div class="class"><div class="target"></div></div>';
 
-                sandbox
-                    .mock(instance)
-                    .expects('closeOverlay')
-                    .never();
+                sandbox.mock(instance).expects('closeOverlay').never();
 
                 instance.handleDocumentClickOrWindowBlur({
                     target: el.querySelector('.target'),
