@@ -51,13 +51,14 @@ type Props = {
      * - Notification buttons must be the `<Button />` component.
      */
     children: React.Node,
-    /** Function that gets executed when close button is clicked or when duration expires. */
+    className?: string,
     duration?: 'short' | 'long',
     /** `duration`: When set, dictates how long the notification will exist before calling `onClose`.
      *  If unset, the notification will not automatically call `onClose`.
      * - `short`: 5s
      * - `long`: 10s */
     intl: Object,
+    /** Function that gets executed when close button is clicked or when duration expires. */
     onClose?: Function,
     /**
      * Determines notification colors
@@ -66,8 +67,8 @@ type Props = {
      * - `warn`: yellow
      * - `error`: red
      */
-    overflow?: 'wrap' | 'ellipsis',
     type: NotificationType,
+    overflow?: 'wrap' | 'ellipsis',
 };
 
 class Notification extends React.Component<Props> {
@@ -100,9 +101,9 @@ class Notification extends React.Component<Props> {
 
     render() {
         const contents = this.getChildren();
-        const { intl, type, overflow } = this.props;
+        const { intl, type, overflow, className } = this.props;
         const { formatMessage } = intl;
-        const classes = classNames('notification', type, overflow);
+        const classes = classNames('notification', type, overflow, className);
 
         return (
             <div className={classes}>
