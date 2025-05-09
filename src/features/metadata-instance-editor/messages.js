@@ -194,6 +194,16 @@ const messages = defineMessages({
         description: 'Pricing details link for AI autofill',
         id: 'boxui.metadataInstanceEditor.aiAutofillPricingDetails',
     },
+    aiAgentBasic: {
+        defaultMessage: 'Basic',
+        description: 'Basic AI agent',
+        id: 'boxui.metadataInstanceEditor.aiAgentBasic',
+    },
+    aiAgentEnhanced: {
+        defaultMessage: 'Enhanced (Gemini 2.5 Pro)',
+        description: 'Enhanced AI agent',
+        id: 'boxui.metadataInstanceEditor.aiAgentEnhanced',
+    },
     applyCascadePolicyText: {
         defaultMessage:
             'Apply template and its values to all new and existing items in this folder and its subfolders.',

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
 import { InlineNotice, TooltipProvider } from '@box/blueprint-web';
@@ -16,19 +16,6 @@ import './CascadePolicy.scss';
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
 const PRICING_LINK = 'https://www.box.com/pricing';
-
-const agents = [
-    {
-        id: '1',
-        name: 'Basic',
-        isEnterpriseDefault: true,
-    },
-    {
-        id: '2',
-        name: 'Enhanced (Gemini 2.5 Pro)',
-        isEnterpriseDefault: false,
-    },
-];
 
 type Props = {
     canEdit: boolean,
@@ -55,6 +42,21 @@ const CascadePolicy = ({
     onCascadeModeChange,
     shouldShowCascadeOptions,
 }: Props) => {
+    const intl = useIntl();
+
+    const agents = [
+        {
+            id: '1',
+            name: intl.formatMessage(messages.aiAgentBasic),
+            isEnterpriseDefault: true,
+        },
+        {
+            id: '2',
+            name: intl.formatMessage(messages.aiAgentEnhanced),
+            isEnterpriseDefault: false,
+        },
+    ];
+
     const readOnlyState = isCascadingEnabled ? (
         <div className="metadata-cascade-notice">
             <FormattedMessage {...messages.metadataCascadePolicyEnabledInfo} />
