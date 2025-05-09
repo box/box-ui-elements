@@ -130,30 +130,27 @@ push_to_npm() {
     printf "${green}Published npm using dist-tag=${DISTTAG}!${end}"
 }
 
-build_examples() {
-    printf "${blue}Building styleguide...${end}"
-    yarn build:prod:examples || return 1
-    printf "${green}Built styleguide!${end}"
+build_storybook() {
     printf "${blue}Building storybook...${end}"
     yarn build:prod:storybook || return 1
     printf "${green}Built storybook!${end}"
 }
 
 push_to_gh_pages() {
-    printf "${blue}Pushing styleguide to gh-pages...${end}"
+    printf "${blue}Pushing storybook to gh-pages...${end}"
     if [[ $(git branch | grep -w "gh-pages") != "" ]] ; then
         git branch -D gh-pages || return 1
         printf "${green}Deleted existing gh-pages branch!${end}"
     fi
     git checkout -b gh-pages || return 1
     rm -rf build
-    cp -R styleguide/. ./ || return 1
-    cp examples/gitignore .gitignore || return 1
+    cp -R storybook/. ./ || return 1
+    cp examples/gitignore .gitignore || return 1 # Move this when we remove styleguidist
     git rm -rf --cached . || return 1
     git add -A || return 1
-    git commit --no-verify -am "build(examples): v$VERSION" || return 1
+    git commit --no-verify -am "build(storybook): v$VERSION" || return 1
     git push release gh-pages --force --no-verify || return 1
-    printf "${blue}Pushed styleguide to gh-pages...${end}"
+    printf "${blue}Pushed storybook to gh-pages...${end}"
 }
 
 check_untracked_files() {
@@ -272,15 +269,15 @@ push_new_release() {
     # Check untracked files
     check_untracked_files || return 1
 
-    # Build examples
-    if ! build_examples; then
-        printf "${red}Failed building styleguide!${end}"
+    # Build storybook
+    if ! build_storybook; then
+        printf "${red}Failed building storybook!${end}"
         return 1
     fi
 
     # Publish gh-pages
     if ! push_to_gh_pages; then
-        printf "${red}Failed pushing styleguide to gh-pages!${end}"
+        printf "${red}Failed pushing storybook to gh-pages!${end}"
         return 1
     fi
 
