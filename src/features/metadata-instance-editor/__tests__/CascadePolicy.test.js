@@ -92,4 +92,11 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             expect(pricingLink.closest('a')).toHaveAttribute('target', '_blank');
         });
     });
+
+    describe('AI Agent Selector', () => {
+        test('should render AI agent selector with default to basic when AI features are enabled', () => {
+            render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
+            expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+        });
+    });
 });
