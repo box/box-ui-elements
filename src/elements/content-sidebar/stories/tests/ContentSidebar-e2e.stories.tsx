@@ -1,5 +1,7 @@
 // @flow
 import { http, HttpResponse } from 'msw';
+import type { HttpHandler } from 'msw';
+import type { Meta } from '@storybook/react';
 import ContentSidebar from '../../ContentSidebar';
 import { mockFileRequest } from '../__mocks__/ContentSidebarMocks';
 import { testFileIds } from '../../../../../test/support/constants';
@@ -33,7 +35,7 @@ export const fileVersion = {
     },
 };
 
-export default {
+const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
     title: 'Elements/ContentSidebar/tests/e2e',
     component: ContentSidebar,
     args: defaultArgs,
@@ -47,3 +49,5 @@ export default {
         },
     },
 };
+
+export default meta;
