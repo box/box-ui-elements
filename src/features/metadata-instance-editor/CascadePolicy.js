@@ -2,7 +2,8 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { InlineNotice } from '@box/blueprint-web';
+import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
+import { InlineNotice, TooltipProvider } from '@box/blueprint-web';
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 
 import Toggle from '../../components/toggle';
@@ -15,6 +16,22 @@ import './CascadePolicy.scss';
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
 const PRICING_LINK = 'https://www.box.com/pricing';
+
+const agents = [
+    {
+        id: '1',
+        name: 'Basic',
+        description: 'General support for all queries and documents.',
+        isEnterpriseDefault: true,
+    },
+    {
+        id: '2',
+        name: 'Advanced',
+        description: 'Advanced support for all queries and documents.',
+        isEnterpriseDefault: false,
+    },
+];
+
 type Props = {
     canEdit: boolean,
     canUseAIFolderExtraction: boolean,
@@ -126,6 +143,15 @@ const CascadePolicy = ({
                                 <FormattedMessage {...messages.aiAutofillLearnMore} />
                             </Link>
                         </div>
+                        <TooltipProvider>
+                            <BoxAiAgentSelector
+                                agents={agents}
+                                onErrorAction={() => {}}
+                                requestState="success"
+                                selectedAgent={agents[0]}
+                                variant="sidebar"
+                            />
+                        </TooltipProvider>
                         <InlineNotice className="metadata-cascade-ai-notice" variant="info">
                             <FormattedMessage
                                 {...messages.aiAutofillNotice}
