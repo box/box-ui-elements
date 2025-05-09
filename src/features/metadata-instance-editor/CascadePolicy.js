@@ -143,15 +143,17 @@ const CascadePolicy = ({
                                 <FormattedMessage {...messages.aiAutofillLearnMore} />
                             </Link>
                         </div>
-                        <TooltipProvider>
-                            <BoxAiAgentSelector
-                                agents={agents}
-                                onErrorAction={() => {}}
-                                requestState="success"
-                                selectedAgent={agents[0]}
-                                variant="sidebar"
-                            />
-                        </TooltipProvider>
+                        <div className="metadata-cascade-ai-agent-selector">
+                            <TooltipProvider>
+                                <BoxAiAgentSelector
+                                    agents={agents}
+                                    onErrorAction={() => {}}
+                                    requestState="success"
+                                    selectedAgent={agents[0]}
+                                    variant="sidebar"
+                                />
+                            </TooltipProvider>
+                        </div>
                         <InlineNotice className="metadata-cascade-ai-notice" variant="info">
                             <FormattedMessage
                                 {...messages.aiAutofillNotice}
