@@ -47,6 +47,7 @@ import './Instance.scss';
 
 type Props = {
     canEdit: boolean,
+    canUseAIFolderExtraction?: boolean,
     cascadePolicy?: MetadataCascadePolicy, // eslint-disable-line
     data: MetadataFields,
     hasError: boolean,
@@ -69,6 +70,7 @@ type Props = {
 type State = {
     data: Object,
     errors: { [string]: React.Node },
+    isAIFolderExtractionEnabled: boolean,
     isBusy: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
@@ -327,21 +329,28 @@ class Instance extends React.PureComponent<Props, State> {
         );
     };
 
+    onAIFolderExtractionToggle = (value: boolean) => {
+        this.setState({ isAIFolderExtractionEnabled: value }, this.setDirty);
+    };
+
     /**
      * Returns the state from props
      *
      * @return {Object} - react state
      */
     getState(props: Props): State {
+        const isCascadingEnabled = this.isCascadingEnabled(props);
+
         return {
             data: cloneDeep(props.data),
             errors: {},
+            isAIFolderExtractionEnabled: false,
             isBusy: false,
-            isCascadingEnabled: this.isCascadingEnabled(props),
+            isCascadingEnabled,
             isCascadingOverwritten: false,
             isEditing: false,
             shouldConfirmRemove: false,
-            shouldShowCascadeOptions: false,
+            shouldShowCascadeOptions: isCascadingEnabled,
         };
     }
 
@@ -579,12 +588,20 @@ class Instance extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const { cascadePolicy = {}, isDirty, isCascadingPolicyApplicable, isOpen, template }: Props = this.props;
+        const {
+            canUseAIFolderExtraction = false,
+            cascadePolicy = {},
+            isDirty,
+            isCascadingPolicyApplicable,
+            isOpen,
+            template,
+        }: Props = this.props;
         const { fields = [] } = template;
         const {
             data,
             errors,
             isBusy,
+            isAIFolderExtractionEnabled,
             isCascadingEnabled,
             shouldConfirmRemove,
             shouldShowCascadeOptions,
@@ -629,9 +646,12 @@ class Instance extends React.PureComponent<Props, State> {
                                     {isCascadingPolicyApplicable && (
                                         <CascadePolicy
                                             canEdit={isEditing && !!cascadePolicy.canEdit}
+                                            canUseAIFolderExtraction={canUseAIFolderExtraction}
+                                            isAIFolderExtractionEnabled={isAIFolderExtractionEnabled}
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
                                             isCustomMetadata={isProperties}
+                                            onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}
                                             shouldShowCascadeOptions={shouldShowCascadeOptions}
