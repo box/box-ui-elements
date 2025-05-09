@@ -589,7 +589,7 @@ class Instance extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            canUseAIFolderExtraction,
+            canUseAIFolderExtraction = false,
             cascadePolicy = {},
             isDirty,
             isCascadingPolicyApplicable,

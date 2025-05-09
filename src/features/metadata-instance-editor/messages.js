@@ -182,7 +182,7 @@ const messages = defineMessages({
         defaultMessage:
             'Enabling this feature may involve additional charges. Please review our {pricingLink} for more information.',
         description: 'Notice for AI autofill toggle switch',
-        id: 'boxui.metadataInstanceEditor.aIAutofillNotice',
+        id: 'boxui.metadataInstanceEditor.aiAutofillNotice',
     },
     aiAutofillLearnMore: {
         defaultMessage: 'Learn more',
