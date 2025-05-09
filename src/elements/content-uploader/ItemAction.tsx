@@ -1,4 +1,5 @@
 import * as React from 'react';
+import type { ForwardRefExoticComponent, RefAttributes, SVGProps } from 'react';
 import { useIntl } from 'react-intl';
 import { AxiosError } from 'axios';
 import { Button, IconButton, LoadingIndicator, Tooltip } from '@box/blueprint-web';
@@ -30,6 +31,8 @@ export interface ItemActionProps {
     status: UploadStatus;
 }
 
+type IconComponent = ForwardRefExoticComponent<SVGProps<SVGSVGElement> & RefAttributes<SVGSVGElement>>;
+
 const ItemAction = ({
     error,
     isFolder = false,
@@ -41,11 +44,11 @@ const ItemAction = ({
     const { formatMessage } = useIntl();
     const { code } = error || {};
 
-    const LoadingIndicatorIcon = () => (
+    const LoadingIndicatorIcon = React.forwardRef<SVGSVGElement>(() => (
         <LoadingIndicator aria-label={formatMessage(messages.loading)} className="bcu-ItemAction-loading" />
-    );
+    ));
 
-    let Icon = XMark;
+    let Icon: IconComponent = XMark;
     let tooltip;
 
     if (isFolder && status !== STATUS_PENDING) {
@@ -54,14 +57,14 @@ const ItemAction = ({
 
     switch (status) {
         case STATUS_COMPLETE:
-            Icon = () => (
+            Icon = React.forwardRef<SVGSVGElement>(() => (
                 <Checkmark
                     aria-label={formatMessage(messages.complete)}
                     color={SurfaceStatusSurfaceSuccess}
                     height={Size5}
                     width={Size5}
                 />
-            );
+            ));
             if (!isResumableUploadsEnabled) {
                 tooltip = messages.remove;
             }
@@ -75,7 +78,7 @@ const ItemAction = ({
             if (isResumableUploadsEnabled) {
                 Icon = LoadingIndicatorIcon;
             } else {
-                Icon = IconInProgress;
+                Icon = IconInProgress as IconComponent;
                 tooltip = messages.uploadsCancelButtonTooltip;
             }
             break;
