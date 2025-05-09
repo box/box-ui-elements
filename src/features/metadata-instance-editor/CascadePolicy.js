@@ -21,13 +21,11 @@ const agents = [
     {
         id: '1',
         name: 'Basic',
-        description: 'General support for all queries and documents.',
         isEnterpriseDefault: true,
     },
     {
         id: '2',
-        name: 'Advanced',
-        description: 'Advanced support for all queries and documents.',
+        name: 'Enhanced (Gemini 2.5 Pro)',
         isEnterpriseDefault: false,
     },
 ];
