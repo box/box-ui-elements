@@ -1,7 +1,8 @@
 import { act, type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
 import { expect, userEvent, waitFor, within, fn, screen } from '@storybook/test';
-import { type StoryObj } from '@storybook/react';
+import { type StoryObj, Meta } from '@storybook/react';
+import type { HttpHandler } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
@@ -451,7 +452,7 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         const autofillButton = await canvas.findByRole('button', { name: 'Autofill My Template with Box AI' });
         await userEvent.click(autofillButton);
 
-        const errorAlert = await canvas.findByText('We’re sorry, something went wrong.');
+        const errorAlert = await canvas.findByText("We're sorry, something went wrong.");
         expect(errorAlert).toBeInTheDocument();
     },
 };
@@ -720,7 +721,7 @@ export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     },
 };
 
-export default {
+const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
@@ -739,3 +740,5 @@ export default {
         },
     },
 };
+
+export default meta;
