@@ -56,6 +56,7 @@ export interface BoxAISidebarProps {
     onUserInteraction?: () => void;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
+    shouldFeedbackFormIncludeFeedbackText?: boolean;
     shouldPreinitSession?: boolean;
     setHasQuestions: (hasQuestions: boolean) => void;
 }
@@ -79,6 +80,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         onUserInteraction,
         recordAction,
         setCacheValue,
+        shouldFeedbackFormIncludeFeedbackText,
         shouldPreinitSession = true,
         setHasQuestions,
         ...rest
@@ -100,6 +102,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             onUserInteraction,
             recordAction,
             setCacheValue,
+            shouldFeedbackFormIncludeFeedbackText,
             shouldPreinitSession,
         }),
         [
@@ -116,6 +119,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             onUserInteraction,
             recordAction,
             setCacheValue,
+            shouldFeedbackFormIncludeFeedbackText,
             shouldPreinitSession,
         ],
     );

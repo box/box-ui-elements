@@ -272,7 +272,11 @@ describe('api/Metadata', () => {
     describe('getTaxonomyLevelsForTemplates()', () => {
         test('should return array of template instances with taxonomy levels data - old API with camelCase', async () => {
             const metadataTemplates = [
-                { id: 1, hidden: false, fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }] },
+                {
+                    id: 1,
+                    hidden: false,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomyKey: '123' }, { type: 'string' }],
+                },
                 { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
             ];
             const fileId = 'id';
@@ -294,6 +298,7 @@ describe('api/Metadata', () => {
                     id: 1,
                     hidden: false,
                     fields: [
+                        { type: 'string' },
                         {
                             type: 'taxonomy',
                             namespace: 'namespace1',
@@ -321,7 +326,11 @@ describe('api/Metadata', () => {
         });
         test('should return array of template instances with taxonomy levels data - new API with snake_case', async () => {
             const metadataTemplates = [
-                { id: 1, hidden: false, fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomy_key: '123' }] },
+                {
+                    id: 1,
+                    hidden: false,
+                    fields: [{ type: 'taxonomy', namespace: 'namespace1', taxonomy_key: '123' }, { type: 'string' }],
+                },
                 { id: 2, hidden: false, fields: [{ type: 'string', namespace: 'namespace2' }] },
             ];
             const fileId = 'id';
@@ -343,6 +352,7 @@ describe('api/Metadata', () => {
                     id: 1,
                     hidden: false,
                     fields: [
+                        { type: 'string' },
                         {
                             type: 'taxonomy',
                             namespace: 'namespace1',

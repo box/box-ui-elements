@@ -1,12 +1,8 @@
 /// <reference types="Cypress" />
 
 const helpers = {
-    load(props = {}) {
-        cy.visit('/Elements/ContentExplorer', {
-            onBeforeLoad: contentWindow => {
-                contentWindow.PROPS = props;
-            },
-        });
+    load() {
+        cy.visitStorybook('elements-contentexplorer-tests-e2e--basic');
     },
     getElementByLabel(label, role) {
         if (role) {

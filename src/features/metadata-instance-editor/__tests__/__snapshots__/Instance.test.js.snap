@@ -413,12 +413,15 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
           className="metadata-instance-editor-instance"
         >
           <CascadePolicy
+            canUseAIFolderExtraction={false}
+            isAIFolderExtractionEnabled={false}
             isCascadingEnabled={true}
             isCascadingOverwritten={false}
             isCustomMetadata={false}
+            onAIFolderExtractionToggle={[Function]}
             onCascadeModeChange={[Function]}
             onCascadeToggle={[Function]}
-            shouldShowCascadeOptions={false}
+            shouldShowCascadeOptions={true}
           />
           <TemplatedInstance
             data={

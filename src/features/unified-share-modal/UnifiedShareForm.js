@@ -66,6 +66,7 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
             removeLinkConfirmModalTracking: {},
             sharedLinkEmailTracking: {},
             sharedLinkTracking: {},
+            removeCollaboratorConfirmModalTracking: {},
         },
     };
 
@@ -647,7 +648,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
     }
 
     renderCollaboratorList() {
-        const { item, collaboratorsList, trackingProps } = this.props;
+        const { item, collaboratorsList, trackingProps, canRemoveCollaborators, onRemoveCollaboratorClick } =
+            this.props;
         const { name, type } = item;
         const { collaboratorListTracking } = trackingProps;
         let listContent = null;
@@ -663,6 +665,8 @@ class UnifiedShareForm extends React.Component<USFProps, State> {
                     item={item}
                     collaborators={collaborators}
                     trackingProps={collaboratorListTracking}
+                    canRemoveCollaborators={canRemoveCollaborators}
+                    onRemoveCollaboratorClick={onRemoveCollaboratorClick}
                 />
             );
         }

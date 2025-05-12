@@ -8,15 +8,18 @@ import { Modal } from '../../components/modal';
 import UnifiedShareModalTitle from './UnifiedShareModalTitle';
 import UnifiedShareForm from './UnifiedShareForm';
 import RemoveLinkConfirmModal from './RemoveLinkConfirmModal';
-import type { USMProps } from './flowTypes';
+import RemoveCollaboratorConfirmModal from './RemoveCollaboratorConfirmModal';
+import type { USMProps, collaboratorType } from './flowTypes';
 
 import './UnifiedShareModal.scss';
 
 type State = {
+    collaboratorToRemove: ?collaboratorType,
     getInitialDataCalled: boolean,
-    isConfirmModalOpen: boolean,
     isEmailLinkSectionExpanded: boolean,
     isFetching: boolean,
+    isRemoveCollaboratorConfirmModalOpen: boolean,
+    isRemoveLinkConfirmModalOpen: boolean,
     sharedLinkLoaded: boolean,
     shouldRenderFTUXTooltip: boolean,
     showCollaboratorList: boolean,
@@ -24,6 +27,7 @@ type State = {
 
 class UnifiedShareModal extends React.Component<USMProps, State> {
     static defaultProps = {
+        canRemoveCollaborators: false,
         displayInModal: true,
         initiallySelectedContacts: [],
         isAllowEditSharedLinkForFileEnabled: false,
@@ -38,6 +42,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
             inviteCollabTracking: {},
             modalTracking: {},
             removeLinkConfirmModalTracking: {},
+            removeCollaboratorConfirmModalTracking: {},
             collaboratorListTracking: {},
         },
     };
@@ -48,8 +53,10 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         const { initialDataReceived } = props;
 
         this.state = {
+            collaboratorToRemove: null,
             getInitialDataCalled: !!initialDataReceived,
-            isConfirmModalOpen: false,
+            isRemoveLinkConfirmModalOpen: false,
+            isRemoveCollaboratorConfirmModalOpen: false,
             isEmailLinkSectionExpanded: false,
             isFetching: !initialDataReceived,
             sharedLinkLoaded: false,
@@ -121,11 +128,26 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     };
 
     openConfirmModal = () => {
-        this.setState({ isConfirmModalOpen: true });
+        this.setState({ isRemoveLinkConfirmModalOpen: true });
+    };
+
+    openRemoveCollaboratorConfirmModal = (collaborator: collaboratorType) => {
+        const { canRemoveCollaborators } = this.props;
+        if (canRemoveCollaborators) {
+            this.setState({ isRemoveCollaboratorConfirmModalOpen: true, collaboratorToRemove: collaborator });
+        }
     };
 
     closeConfirmModal = () => {
-        this.setState({ isConfirmModalOpen: false });
+        this.setState({ isRemoveLinkConfirmModalOpen: false });
+    };
+
+    closeRemoveCollaboratorConfirmModal = () => {
+        this.setState({
+            isRemoveCollaboratorConfirmModalOpen: false,
+            collaboratorToRemove: null,
+            shouldRenderFTUXTooltip: false,
+        });
     };
 
     removeLink = () => {
@@ -134,6 +156,15 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
         if (!displayInModal) {
             this.closeConfirmModal();
         }
+    };
+
+    removeCollaborator = async () => {
+        const { onRemoveCollaborator } = this.props;
+        if (this.state.collaboratorToRemove) {
+            await onRemoveCollaborator?.(this.state.collaboratorToRemove);
+        }
+
+        this.closeRemoveCollaboratorConfirmModal();
     };
 
     renderUSF = () => {
@@ -146,6 +177,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                 {...this.props}
                 onCollaboratorAvatarsClick={onCollaboratorAvatarsClick}
                 handleFtuxCloseClick={this.handleFtuxCloseClick}
+                onRemoveCollaboratorClick={this.openRemoveCollaboratorConfirmModal}
                 isFetching={isFetching}
                 openConfirmModal={this.openConfirmModal}
                 sharedLinkEditTagTargetingApi={sharedLinkEditTagTargetingApi}
@@ -159,14 +191,19 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
     render() {
         // Shared link section props
         const { canInvite, displayInModal, isOpen, item, onRequestClose, submitting, trackingProps } = this.props;
-        const { modalTracking, removeLinkConfirmModalTracking } = trackingProps;
+        const { modalTracking, removeLinkConfirmModalTracking, removeCollaboratorConfirmModalTracking } = trackingProps;
         const { modalProps } = modalTracking;
-        const { isEmailLinkSectionExpanded, isConfirmModalOpen, showCollaboratorList } = this.state;
+        const {
+            isEmailLinkSectionExpanded,
+            isRemoveLinkConfirmModalOpen,
+            isRemoveCollaboratorConfirmModalOpen,
+            showCollaboratorList,
+        } = this.state;
 
         // focus logic at modal level
         const extendedModalProps = {
             focusElementSelector: canInvite
-                ? '.bdl-PillSelector-input' // focus on invite collabs field
+                ? '.bdl-PillSelector-input' // focus on invite collaborators field
                 : '.toggle-simple', // focus on shared link toggle
             ...modalProps,
         };
@@ -176,7 +213,7 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                 {displayInModal ? (
                     <Modal
                         className="be-modal unified-share-modal"
-                        isOpen={isConfirmModalOpen ? false : isOpen}
+                        isOpen={isRemoveLinkConfirmModalOpen || isRemoveCollaboratorConfirmModalOpen ? false : isOpen}
                         onRequestClose={submitting ? undefined : onRequestClose}
                         title={
                             <UnifiedShareModalTitle
@@ -192,13 +229,24 @@ class UnifiedShareModal extends React.Component<USMProps, State> {
                 ) : (
                     <div className="bdl-UnifiedShareForm-container">{this.renderUSF()}</div>
                 )}
-                {isConfirmModalOpen && (
+                {isRemoveLinkConfirmModalOpen && (
                     <RemoveLinkConfirmModal
-                        isOpen={isConfirmModalOpen}
+                        isOpen={isRemoveLinkConfirmModalOpen}
                         onRequestClose={this.closeConfirmModal}
                         removeLink={this.removeLink}
                         submitting={submitting}
                         {...removeLinkConfirmModalTracking}
+                    />
+                )}
+                {isRemoveCollaboratorConfirmModalOpen && (
+                    <RemoveCollaboratorConfirmModal
+                        isOpen={isRemoveCollaboratorConfirmModalOpen}
+                        onRequestClose={this.closeRemoveCollaboratorConfirmModal}
+                        onSubmit={this.removeCollaborator}
+                        submitting={submitting}
+                        collaborator={this.state.collaboratorToRemove}
+                        modalProps={{ className: 'remove-collaborator-confirm-modal' }}
+                        {...removeCollaboratorConfirmModalTracking}
                     />
                 )}
             </>
