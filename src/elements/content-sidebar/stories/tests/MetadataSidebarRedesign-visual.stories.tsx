@@ -452,7 +452,7 @@ export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRed
         const autofillButton = await canvas.findByRole('button', { name: 'Autofill My Template with Box AI' });
         await userEvent.click(autofillButton);
 
-        const errorAlert = await canvas.findByText("We're sorry, something went wrong.");
+        const errorAlert = await canvas.findByText('We’re sorry, something went wrong.');
         expect(errorAlert).toBeInTheDocument();
     },
 };
