@@ -210,7 +210,13 @@ class Instance extends React.PureComponent<Props, State> {
             isCascadingPolicyApplicable,
             onSave,
         }: Props = this.props;
-        const { data: currentData, errors, isCascadingEnabled, isCascadingOverwritten }: State = this.state;
+        const {
+            data: currentData,
+            errors,
+            isAIFolderExtractionEnabled,
+            isCascadingEnabled,
+            isCascadingOverwritten,
+        }: State = this.state;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
             return;
@@ -230,6 +236,7 @@ class Instance extends React.PureComponent<Props, State> {
                       id: cascadePolicy ? cascadePolicy.id : undefined,
                       isEnabled: isCascadingEnabled,
                       overwrite: isCascadingOverwritten,
+                      isAIFolderExtractionEnabled,
                   }
                 : undefined,
             cloneDeep(currentData),
@@ -344,7 +351,7 @@ class Instance extends React.PureComponent<Props, State> {
         return {
             data: cloneDeep(props.data),
             errors: {},
-            isAIFolderExtractionEnabled: false,
+            isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabled(props),
             isBusy: false,
             isCascadingEnabled,
             isCascadingOverwritten: false,
@@ -451,6 +458,20 @@ class Instance extends React.PureComponent<Props, State> {
     isCascadingEnabled(props: Props) {
         if (props.cascadePolicy) {
             return !!props.cascadePolicy.id;
+        }
+        return false;
+    }
+
+    /**
+     * Determines if ai extraction is enabled based on
+     * if cascade policy type is ai_extract
+     *
+     * @param {Object} props - component props
+     * @return {boolean} true if ai extraction is enabled
+     */
+    isAIFolderExtractionEnabled(props: Props) {
+        if (props.cascadePolicy) {
+            return props.cascadePolicy.cascadePolicyType === 'ai_extract';
         }
         return false;
     }
