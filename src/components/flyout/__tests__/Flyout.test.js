@@ -476,7 +476,7 @@ describe('components/flyout/Flyout', () => {
         });
     });
 
-    describe('handleKeyDown()', () => {
+    describe('handleKeyPress()', () => {
         test('should call openOverlay() and focusButton() when enter key is pressed', () => {
             const wrapper = shallow(
                 <Flyout>
@@ -494,7 +494,7 @@ describe('components/flyout/Flyout', () => {
                 preventDefault: sandbox.spy(),
             };
 
-            instance.handleKeyDown(event);
+            instance.handleKeyPress(event);
 
             expect(openOverlaySpy.calledOnce).toBe(true);
             expect(focusButtonSpy.calledOnce).toBe(true);
