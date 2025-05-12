@@ -33,6 +33,7 @@ const agents = [
 type Props = {
     canEdit: boolean,
     canUseAIFolderExtraction: boolean,
+    canUseAIFolderExtractionAgentSelector: boolean,
     isAIFolderExtractionEnabled: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
@@ -46,6 +47,7 @@ type Props = {
 const CascadePolicy = ({
     canEdit,
     canUseAIFolderExtraction,
+    canUseAIFolderExtractionAgentSelector,
     isCascadingEnabled,
     isCascadingOverwritten,
     isCustomMetadata,
@@ -141,17 +143,19 @@ const CascadePolicy = ({
                                 <FormattedMessage {...messages.aiAutofillLearnMore} />
                             </Link>
                         </div>
-                        <div className="metadata-cascade-ai-agent-selector">
-                            <TooltipProvider>
-                                <BoxAiAgentSelector
-                                    agents={agents}
-                                    onErrorAction={() => {}}
-                                    requestState="success"
-                                    selectedAgent={agents[0]}
-                                    variant="sidebar"
-                                />
-                            </TooltipProvider>
-                        </div>
+                        {canUseAIFolderExtractionAgentSelector && (
+                            <div className="metadata-cascade-ai-agent-selector">
+                                <TooltipProvider>
+                                    <BoxAiAgentSelector
+                                        agents={agents}
+                                        onErrorAction={() => {}}
+                                        requestState="success"
+                                        selectedAgent={agents[0]}
+                                        variant="sidebar"
+                                    />
+                                </TooltipProvider>
+                            </div>
+                        )}
                         <InlineNotice className="metadata-cascade-ai-notice" variant="info">
                             <FormattedMessage
                                 {...messages.aiAutofillNotice}
