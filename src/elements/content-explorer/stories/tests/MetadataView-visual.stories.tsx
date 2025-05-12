@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import type { Meta, StoryObj } from '@storybook/react';
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
@@ -34,7 +35,9 @@ const fieldsToShow = [
 ];
 const defaultView = 'metadata'; // Required prop to paint the metadata view. If not provided, you'll get regular folder view.
 
-export const metadataView = {
+type Story = StoryObj<typeof ContentExplorer>;
+
+export const metadataView: Story = {
     args: {
         metadataQuery,
         fieldsToShow,
@@ -42,7 +45,7 @@ export const metadataView = {
     },
 };
 
-export const withNewMetadataView = {
+export const withNewMetadataView: Story = {
     args: {
         metadataQuery,
         fieldsToShow,
@@ -55,7 +58,7 @@ export const withNewMetadataView = {
     },
 };
 
-export default {
+const meta: Meta<typeof ContentExplorer> = {
     title: 'Elements/ContentExplorer/tests/ContentExplorer/visual/MetadataView',
     component: ContentExplorer,
     args: {
@@ -76,3 +79,5 @@ export default {
         },
     },
 };
+
+export default meta;

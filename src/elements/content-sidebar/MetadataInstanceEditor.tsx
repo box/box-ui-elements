@@ -4,7 +4,7 @@ import {
     type JSONPatchOperations,
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
-import { type TaxonomyOptionsFetcher } from '@box/metadata-editor/dist/types/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types';
+import { TaxonomyOptionsFetcher } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import React from 'react';
 import {
     ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
