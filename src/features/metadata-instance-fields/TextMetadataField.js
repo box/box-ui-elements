@@ -14,6 +14,7 @@ type Props = {
     description?: string,
     displayName: string,
     error?: React.Node,
+    isDisabled?: boolean,
     intl: any,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
@@ -27,6 +28,7 @@ const TextMetadataField = ({
     description,
     error,
     intl,
+    isDisabled,
     onChange,
     onRemove,
     type = 'text',
@@ -45,6 +47,7 @@ const TextMetadataField = ({
             description={description}
             error={error}
             hideOptionalLabel
+            disabled={isDisabled}
             label={displayName}
             name={dataKey}
             onChange={(event: SyntheticKeyboardEvent<HTMLInputElement>) => {

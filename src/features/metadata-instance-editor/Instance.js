@@ -692,6 +692,7 @@ class Instance extends React.PureComponent<Props, State> {
                                             canEdit={isEditing}
                                             data={data}
                                             errors={errors}
+                                            isDisabled={isAIFolderExtractionEnabled}
                                             onFieldChange={this.onFieldChange}
                                             onFieldRemove={this.onFieldRemove}
                                             template={template}

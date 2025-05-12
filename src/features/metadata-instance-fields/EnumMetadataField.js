@@ -20,6 +20,7 @@ type Props = {
     dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
+    isDisabled?: boolean,
     intl: any,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
@@ -32,6 +33,7 @@ const EnumMetadataField = ({
     dataValue,
     displayName,
     description,
+    isDisabled,
     intl,
     onChange,
     onRemove,
@@ -58,6 +60,7 @@ const EnumMetadataField = ({
                 <SingleSelectField
                     blurExceptionClassNames={blurExceptionClassNames}
                     isEscapedWithReference
+                    isDisabled={isDisabled}
                     isScrollable
                     onChange={(option: Option) => {
                         if (option.isSelectable) {

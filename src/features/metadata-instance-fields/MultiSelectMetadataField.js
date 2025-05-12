@@ -29,6 +29,7 @@ const MultiSelectMetadataField = ({
     dataValue,
     displayName,
     description,
+    isDisabled,
     onChange,
     onRemove,
     options = [],
@@ -41,6 +42,7 @@ const MultiSelectMetadataField = ({
                 {!!description && <i className="bdl-MultiSelectMetadataField-desc">{description}</i>}
                 <MultiSelect
                     blurExceptionClassNames={blurExceptionClassNames}
+                    isDisabled={isDisabled}
                     isEscapedWithReference
                     isScrollable
                     onChange={(selectedOptions: Array<SelectOptionProp>) => {

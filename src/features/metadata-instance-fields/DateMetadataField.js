@@ -18,7 +18,16 @@ type Props = {
     onRemove: (key: string) => void,
 };
 
-const DateMetadataField = ({ dataKey, dataValue, displayName, description, intl, onChange, onRemove }: Props) => (
+const DateMetadataField = ({
+    dataKey,
+    dataValue,
+    displayName,
+    description,
+    isDisabled,
+    intl,
+    onChange,
+    onRemove,
+}: Props) => (
     <DatePicker
         className="bdl-DateMetadataField"
         dateFormat="utcISOString"
@@ -29,6 +38,7 @@ const DateMetadataField = ({ dataKey, dataValue, displayName, description, intl,
             year: 'numeric',
         }}
         hideOptionalLabel
+        isDisabled={isDisabled}
         label={displayName}
         onChange={(date: Date, isoDate: string) => {
             if (isoDate) {
