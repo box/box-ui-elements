@@ -1,6 +1,5 @@
 /*
 !.gitignore
 !LICENSE
-!package.json
 !THIRD_PARTY_LICENSES
-!storybook
+!docs
