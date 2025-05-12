@@ -77,6 +77,7 @@ type State = {
     isEditing: boolean,
     shouldConfirmRemove: boolean,
     shouldShowCascadeOptions: boolean,
+    shouldShowCascadeOverwriteOptions: boolean,
 };
 
 const createFieldKeyToTypeMap = (fields?: Array<MetadataTemplateField> = []) =>
@@ -427,13 +428,16 @@ class Instance extends React.PureComponent<Props, State> {
      */
     setDirty = (type?: string): void => {
         const { id, isCascadingPolicyApplicable, onModification }: Props = this.props;
-        const { data, isCascadingEnabled, isCascadingOverwritten } = this.state;
+        const { data, isCascadingEnabled, isCascadingOverwritten, isAIFolderExtractionEnabled } = this.state;
         const hasDataChanged = !isEqual(data, this.props.data);
         let hasCascadingChanged = false;
 
         if (isCascadingPolicyApplicable) {
             // isCascadingOverwritten always starts out as false, so true signifies a change
-            hasCascadingChanged = isCascadingOverwritten || isCascadingEnabled !== this.isCascadingEnabled(this.props);
+            hasCascadingChanged =
+                isCascadingOverwritten ||
+                isCascadingEnabled !== this.isCascadingEnabled(this.props) ||
+                isAIFolderExtractionEnabled !== this.isAIFolderExtractionEnabled(this.props);
         }
 
         // Callback to parent to tell that something is dirty
