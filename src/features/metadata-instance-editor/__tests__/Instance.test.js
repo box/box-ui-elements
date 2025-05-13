@@ -1,8 +1,13 @@
 import * as React from 'react';
 
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { createIntl } from 'react-intl';
 import TEMPLATE_CUSTOM_PROPERTIES from '../constants';
 import { InstanceBase as Instance } from '../Instance';
 import { isValidValue } from '../../metadata-instance-fields/validateMetadataField';
+
+// Add RTL imports
 
 jest.mock('../../metadata-instance-fields/validateMetadataField');
 
@@ -715,6 +720,208 @@ describe('features/metadata-instance-editor/fields/Instance', () => {
                 expect(wrapper.state('isBusy')).toEqual(false);
                 expect(wrapper.state('isCascadingOverwritten')).toEqual(false);
             });
+        });
+    });
+});
+
+// New RTL tests
+const testFields = [
+    {
+        id: 'field1',
+        type: 'string',
+        key: 'stringfield',
+        displayName: 'String Field',
+        description: 'example of a string field',
+    },
+    {
+        id: 'field2',
+        type: 'float',
+        key: 'floatfield',
+        displayName: 'Float Field',
+        description: 'example of a float field',
+    },
+];
+
+const testData = {
+    stringfield: 'some string',
+    floatfield: 1.0,
+};
+
+const getBaseProps = (props = {}) => ({
+    id: 'test-instance',
+    canEdit: true,
+    data: { ...testData },
+    template: {
+        id: 'template-1',
+        displayName: 'Test Template',
+        fields: [...testFields],
+        templateKey: 'testTemplateKey',
+    },
+    intl: createIntl({ locale: 'en' }),
+    onSave: jest.fn(),
+    onModification: jest.fn(),
+    onRemove: jest.fn(),
+    isDirty: false,
+    hasError: false,
+    isCascadingPolicyApplicable: true,
+    cascadePolicy: {
+        id: 'policy-1',
+        canEdit: true,
+        isEnabled: true,
+        scope: 'enterprise_123',
+        cascadePolicyType: 'regular', // default to non-AI
+    },
+    canUseAIFolderExtraction: true, // Assume feature flag is on
+    canUseAIFolderExtractionAgentSelector: false,
+    ...props,
+});
+
+describe('Instance Component - React Testing Library', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        isValidValue.mockReturnValue(true); // Default mock for isValidValue
+    });
+
+    describe('Initialization based on cascadePolicy.cascadePolicyType', () => {
+        test('should initialize with AI folder extraction enabled and fields disabled if cascadePolicyType is "ai_extract"', async () => {
+            render(
+                <Instance
+                    {...getBaseProps({
+                        cascadePolicy: {
+                            id: 'policy-ai',
+                            canEdit: true,
+                            isEnabled: true,
+                            scope: 'enterprise_123',
+                            cascadePolicyType: 'ai_extract',
+                        },
+                    })}
+                />,
+            );
+
+            // Click Edit button to enable editing
+            const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
+            await userEvent.click(editButton);
+
+            // Fields should be disabled because AI extraction is on by default from policy
+            // Input fields are part of TemplatedInstance, which is only rendered if Collapsible is open.
+            // Default state has isOpen true if not specified or based on single field length.
+            // Let's assume it's open.
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).toBeDisabled();
+            expect(screen.getByRole('textbox', { name: 'Float Field example of a float field' })).toBeDisabled();
+        });
+
+        test('should initialize with AI folder extraction disabled and fields enabled if cascadePolicyType is not "ai_extract"', async () => {
+            render(<Instance {...getBaseProps()} />); // default policy is not 'ai_extract'
+
+            // Click Edit button to enable editing
+            const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
+            await userEvent.click(editButton);
+
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).not.toBeDisabled();
+            expect(screen.getByRole('textbox', { name: 'Float Field example of a float field' })).not.toBeDisabled();
+        });
+
+        test('should initialize with AI folder extraction disabled if cascadePolicy is undefined', async () => {
+            render(<Instance {...getBaseProps({ cascadePolicy: undefined, isCascadingPolicyApplicable: false })} />);
+
+            // Click Edit button to enable editing
+            const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
+            await userEvent.click(editButton);
+
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).not.toBeDisabled();
+            expect(screen.getByRole('textbox', { name: 'Float Field example of a float field' })).not.toBeDisabled();
+        });
+    });
+
+    describe('AI Folder Extraction Toggle Interaction', () => {
+        test('should toggle AI folder extraction, disable/enable fields', async () => {
+            const props = getBaseProps();
+            render(<Instance {...props} />);
+
+            // Click Edit button to enable editing
+            const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
+            await userEvent.click(editButton);
+
+            // Initially, fields are enabled as default policy is not 'ai_extract'
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).not.toBeDisabled();
+
+            const aiSection = screen.getByTestId('ai-folder-extraction');
+            const aiToggle = within(aiSection).getByRole('switch');
+
+            // Turn AI toggle ON
+            await userEvent.click(aiToggle);
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).toBeDisabled();
+
+            // Turn AI toggle OFF
+            await userEvent.click(aiToggle);
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).not.toBeDisabled();
+        });
+    });
+
+    describe('Props passed to CascadePolicy', () => {
+        test('should pass canUseAIFolderExtractionAgentSelector to CascadePolicy', async () => {
+            render(<Instance {...getBaseProps({ canUseAIFolderExtractionAgentSelector: true })} />);
+
+            const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
+            if (editButton) await userEvent.click(editButton); // Enter edit mode to ensure CascadePolicy options are visible
+
+            expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+        });
+
+        test('should pass isExistingAIExtractionCascadePolicy=true to CascadePolicy if policy is ai_extract', async () => {
+            render(
+                <Instance
+                    {...getBaseProps({
+                        cascadePolicy: {
+                            id: 'policy-ai',
+                            canEdit: true,
+                            isEnabled: true,
+                            scope: 'enterprise_123',
+                            cascadePolicyType: 'ai_extract',
+                        },
+                    })}
+                />,
+            );
+            const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
+            if (editButton) await userEvent.click(editButton);
+
+            const aiSection = screen.getByTestId('ai-folder-extraction');
+            const aiToggle = within(aiSection).getByRole('switch');
+            expect(aiToggle).toBeDisabled();
+        });
+
+        test('should pass isExistingAIExtractionCascadePolicy=false to CascadePolicy if policy is not ai_extract', async () => {
+            render(<Instance {...getBaseProps()} />);
+            const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
+            if (editButton) await userEvent.click(editButton);
+
+            const aiSection = screen.getByTestId('ai-folder-extraction');
+            const aiToggle = within(aiSection).getByRole('switch');
+            expect(aiToggle).not.toBeDisabled();
+        });
+    });
+
+    describe('Props passed to TemplatedInstance', () => {
+        test('should pass isDisabled=true to TemplatedInstance when AI folder extraction is enabled', async () => {
+            render(<Instance {...getBaseProps()} />);
+            const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
+            await userEvent.click(editButton);
+
+            const aiSection = screen.getByTestId('ai-folder-extraction');
+            const aiToggle = within(aiSection).getByRole('switch');
+
+            await userEvent.click(aiToggle); // Turn AI ON
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).toBeDisabled();
+        });
+
+        test('should pass isDisabled=false to TemplatedInstance when AI folder extraction is disabled', async () => {
+            render(<Instance {...getBaseProps()} />);
+            const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
+            // If instance starts in non-edit mode, fields might not be interactive until edit is clicked
+            if (editButton) await userEvent.click(editButton);
+
+            // AI is off by default
+            expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).not.toBeDisabled();
         });
     });
 });
