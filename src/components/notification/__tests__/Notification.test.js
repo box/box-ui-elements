@@ -46,7 +46,7 @@ describe('components/notification/Notification', () => {
             expect(component.find('div.notification').hasClass(type)).toBe(true);
         });
 
-        test('should render a correct icon when initialized', () => {
+        test('should render local icons per notification type', () => {
             const component = mount(<Notification type={type}>test</Notification>);
             const infoBadge16Count = type === TYPE_DEFAULT ? 1 : 0;
             const CircleCheck16Count = type === TYPE_INFO ? 1 : 0;
@@ -57,6 +57,25 @@ describe('components/notification/Notification', () => {
             expect(component.find('XBadge16').length).toBe(XBadge16Count);
             expect(component.find('CircleCheck16').length).toBe(CircleCheck16Count);
             expect(component.find('TriangleAlert16').length).toBe(TriangleAlert16Count);
+
+            // Does not render v2 icons
+            expect(component.find(`svg[role="img"]`).length).toBe(0);
+        });
+
+        test('should render v2 icons when useV2Icons is true', () => {
+            const component = mount(
+                <Notification type={type} useV2Icons={true}>
+                    test
+                </Notification>,
+            );
+
+            expect(component.find(`svg[role="img"]`).length).toBe(1);
+
+            // Does not render local icons
+            expect(component.find('InfoBadge16').length).toBe(0);
+            expect(component.find('XBadge16').length).toBe(0);
+            expect(component.find('CircleCheck16').length).toBe(0);
+            expect(component.find('TriangleAlert16').length).toBe(0);
         });
     });
 
