@@ -69,7 +69,8 @@ describe('components/notification/Notification', () => {
                 </Notification>,
             );
 
-            expect(component.find(`svg[role="img"]`).length).toBe(1);
+            // Type icon and Close button
+            expect(component.find(`svg[role="img"]`).length).toBe(2);
 
             // Does not render local icons
             expect(component.find('InfoBadge16').length).toBe(0);
