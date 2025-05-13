@@ -7,6 +7,7 @@ import Information from '@box/blueprint-web-assets/icons/Medium/Information';
 import Check from '@box/blueprint-web-assets/icons/Medium/Check';
 import AlertTriangle from '@box/blueprint-web-assets/icons/Medium/AlertTriangle';
 import AlertBadge from '@box/blueprint-web-assets/icons/Medium/AlertBadge';
+import XMark from '@box/blueprint-web-assets/icons/Medium/XMark';
 
 import InfoBadge16 from '../../icon/line/InfoBadge16';
 import CircleCheck16 from '../../icon/line/CircleCheck16';
@@ -36,17 +37,10 @@ const DURATION_TIMES = {
 };
 
 const ICON_RENDERER: { [string]: Function } = {
-    [TYPE_DEFAULT]: () => <InfoBadge16 />,
-    [TYPE_ERROR]: () => <XBadge16 />,
-    [TYPE_INFO]: () => <CircleCheck16 />,
-    [TYPE_WARN]: () => <TriangleAlert16 />,
-};
-
-const ICON_RENDERER_V2: { [string]: Function } = {
-    [TYPE_DEFAULT]: () => <Information />,
-    [TYPE_ERROR]: () => <AlertBadge />,
-    [TYPE_INFO]: () => <Check />,
-    [TYPE_WARN]: () => <AlertTriangle />,
+    [TYPE_DEFAULT]: useV2Icons => (useV2Icons ? <Information /> : <InfoBadge16 />),
+    [TYPE_ERROR]: useV2Icons => (useV2Icons ? <AlertBadge /> : <XBadge16 />),
+    [TYPE_INFO]: useV2Icons => (useV2Icons ? <Check /> : <CircleCheck16 />),
+    [TYPE_WARN]: useV2Icons => (useV2Icons ? <AlertTriangle /> : <TriangleAlert16 />),
 };
 
 const messages = defineMessages({
@@ -118,12 +112,12 @@ class Notification extends React.Component<Props> {
         const { intl, type, overflow, className, useV2Icons } = this.props;
         const { formatMessage } = intl;
         const classes = classNames('notification', type, overflow, className);
-        const iconRenderer = useV2Icons ? ICON_RENDERER_V2[type] : ICON_RENDERER[type];
+        const iconRenderer = ICON_RENDERER[type](useV2Icons);
         const iconColor = useV2Icons ? '#222' : '#fff';
 
         return (
             <div className={classes}>
-                {React.cloneElement(iconRenderer(), {
+                {React.cloneElement(iconRenderer, {
                     color: iconColor,
                     height: 20,
                     width: 20,
@@ -135,7 +129,7 @@ class Notification extends React.Component<Props> {
                     onClick={this.onClose}
                     type="button"
                 >
-                    <X16 />
+                    {useV2Icons ? <XMark height={32} width={32} /> : <X16 />}
                 </button>
             </div>
         );
