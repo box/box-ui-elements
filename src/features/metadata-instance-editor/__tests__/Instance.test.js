@@ -835,8 +835,7 @@ describe('Instance Component - React Testing Library', () => {
 
     describe('AI Folder Extraction Toggle Interaction', () => {
         test('should toggle AI folder extraction, disable/enable fields', async () => {
-            const props = getBaseProps();
-            render(<Instance {...props} />);
+            render(<Instance {...getBaseProps()} />);
 
             // Click Edit button to enable editing
             const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
