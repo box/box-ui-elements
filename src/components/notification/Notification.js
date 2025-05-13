@@ -3,11 +3,8 @@ import * as React from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
-import Information from '@box/blueprint-web-assets/icons/Medium/Information';
-import Check from '@box/blueprint-web-assets/icons/Medium/Check';
-import AlertTriangle from '@box/blueprint-web-assets/icons/Medium/AlertTriangle';
-import AlertBadge from '@box/blueprint-web-assets/icons/Medium/AlertBadge';
-import XMark from '@box/blueprint-web-assets/icons/Medium/XMark';
+// $FlowFixMe
+import { Information, Check, AlertTriangle, AlertBadge, XMark } from '@box/blueprint-web-assets/icons/Medium';
 
 import InfoBadge16 from '../../icon/line/InfoBadge16';
 import CircleCheck16 from '../../icon/line/CircleCheck16';
