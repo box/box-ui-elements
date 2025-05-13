@@ -227,6 +227,8 @@ class Instance extends React.PureComponent<Props, State> {
         this.setState({
             isBusy: true,
             isEditing: false,
+            // reset state if cascading policy is removed
+            isAIFolderExtractionEnabled: isCascadingEnabled ? isAIFolderExtractionEnabled : false,
         });
         onSave(
             id,
