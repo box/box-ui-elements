@@ -95,8 +95,20 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
     describe('AI Agent Selector', () => {
         test('should render AI agent selector with default to basic when AI features are enabled', () => {
-            render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
+            render(
+                <CascadePolicy
+                    canEdit
+                    canUseAIFolderExtraction
+                    canUseAIFolderExtractionAgentSelector
+                    shouldShowCascadeOptions
+                />,
+            );
             expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+        });
+
+        test('should not render AI agent selector when canUseAIFolderExtractionAgentSelector is false', () => {
+            render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
+            expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
         });
     });
 });

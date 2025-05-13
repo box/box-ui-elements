@@ -69,6 +69,7 @@ exports[`features/metadata-instance-editor/fields/Instance collapsible isOpen pr
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -255,6 +256,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -414,10 +416,12 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
         >
           <CascadePolicy
             canUseAIFolderExtraction={false}
+            canUseAIFolderExtractionAgentSelector={false}
             isAIFolderExtractionEnabled={false}
             isCascadingEnabled={true}
             isCascadingOverwritten={false}
             isCustomMetadata={false}
+            isExistingAIExtractionCascadePolicy={false}
             onAIFolderExtractionToggle={[Function]}
             onCascadeModeChange={[Function]}
             onCascadeToggle={[Function]}
@@ -437,6 +441,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -609,6 +614,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -799,6 +805,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -994,6 +1001,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -1098,6 +1106,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -1169,6 +1178,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
@@ -1346,6 +1356,7 @@ exports[`features/metadata-instance-editor/fields/Instance should not render foo
               }
             }
             errors={{}}
+            isDisabled={false}
             onFieldChange={[Function]}
             onFieldRemove={[Function]}
             template={
