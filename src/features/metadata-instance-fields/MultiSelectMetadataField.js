@@ -18,6 +18,7 @@ type Props = {
     dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
+    isDisabled?: boolean,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     options?: Array<MetadataTemplateFieldOption>,

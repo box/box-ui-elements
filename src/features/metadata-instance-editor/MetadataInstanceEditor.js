@@ -15,7 +15,7 @@ type Props = {
     blurExceptionClassNames?: Array<string>,
     canAdd: boolean,
     canUseAIFolderExtraction?: boolean,
-    canUseAIFolderExtractionAgentSelector?: Boolean,
+    canUseAIFolderExtractionAgentSelector?: boolean,
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,

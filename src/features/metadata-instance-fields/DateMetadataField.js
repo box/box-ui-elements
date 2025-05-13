@@ -14,6 +14,7 @@ type Props = {
     description?: string,
     displayName: string,
     intl: any,
+    isDisabled?: boolean,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
 };
