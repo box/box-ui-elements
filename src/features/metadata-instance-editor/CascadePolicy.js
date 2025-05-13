@@ -38,6 +38,7 @@ type Props = {
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
     isCustomMetadata: boolean,
+    isExistingAIExtractionCascadePolicy: boolean,
     onAIFolderExtractionToggle: (value: boolean) => void,
     onCascadeModeChange: (value: boolean) => void,
     onCascadeToggle: (value: boolean) => void,
@@ -52,6 +53,7 @@ const CascadePolicy = ({
     isCascadingOverwritten,
     isCustomMetadata,
     isAIFolderExtractionEnabled,
+    isExistingAIExtractionCascadePolicy,
     onAIFolderExtractionToggle,
     onCascadeToggle,
     onCascadeModeChange,
@@ -132,6 +134,7 @@ const CascadePolicy = ({
                             <Toggle
                                 className="metadata-cascade-toggle"
                                 isOn={isAIFolderExtractionEnabled}
+                                isDisabled={isExistingAIExtractionCascadePolicy}
                                 label=""
                                 onChange={e => onAIFolderExtractionToggle(e.target.checked)}
                             />

@@ -227,7 +227,6 @@ class Instance extends React.PureComponent<Props, State> {
         this.setState({
             isBusy: true,
             isEditing: false,
-            shouldShowCascadeOptions: false,
         });
         onSave(
             id,
@@ -348,16 +347,18 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {Object} - react state
      */
     getState(props: Props): State {
+        const isCascadingEnabled = this.isCascadingEnabled(props);
+
         return {
             data: cloneDeep(props.data),
             errors: {},
             isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabled(props),
             isBusy: false,
-            isCascadingEnabled: this.isCascadingEnabled(props),
+            isCascadingEnabled,
             isCascadingOverwritten: false,
             isEditing: false,
             shouldConfirmRemove: false,
-            shouldShowCascadeOptions: false,
+            shouldShowCascadeOptions: isCascadingEnabled,
         };
     }
 
@@ -642,6 +643,9 @@ class Instance extends React.PureComponent<Props, State> {
         // Animate short and tall cards at consistent speeds.
         const animationDuration = (fields.length + 1) * 50;
 
+        const isExistingAIExtractionCascadePolicy =
+            this.isCascadingEnabled(this.props) && this.isAIFolderExtractionEnabled(this.props);
+
         return (
             <div ref={this.collapsibleRef}>
                 <Collapsible
@@ -679,6 +683,7 @@ class Instance extends React.PureComponent<Props, State> {
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
                                             isCustomMetadata={isProperties}
+                                            isExistingAIExtractionCascadePolicy={isExistingAIExtractionCascadePolicy}
                                             onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}
