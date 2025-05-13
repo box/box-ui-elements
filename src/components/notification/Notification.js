@@ -3,9 +3,13 @@ import * as React from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
+// $FlowFixMe
+import { Information, Check, AlertTriangle, AlertBadge, XMark } from '@box/blueprint-web-assets/icons/Medium';
+
 import InfoBadge16 from '../../icon/line/InfoBadge16';
 import CircleCheck16 from '../../icon/line/CircleCheck16';
 import TriangleAlert16 from '../../icon/line/TriangleAlert16';
+
 import XBadge16 from '../../icon/line/XBadge16';
 import X16 from '../../icon/fill/X16';
 
@@ -30,10 +34,10 @@ const DURATION_TIMES = {
 };
 
 const ICON_RENDERER: { [string]: Function } = {
-    [TYPE_DEFAULT]: () => <InfoBadge16 />,
-    [TYPE_ERROR]: () => <XBadge16 />,
-    [TYPE_INFO]: () => <CircleCheck16 />,
-    [TYPE_WARN]: () => <TriangleAlert16 />,
+    [TYPE_DEFAULT]: useV2Icons => (useV2Icons ? <Information /> : <InfoBadge16 />),
+    [TYPE_ERROR]: useV2Icons => (useV2Icons ? <AlertBadge /> : <XBadge16 />),
+    [TYPE_INFO]: useV2Icons => (useV2Icons ? <Check /> : <CircleCheck16 />),
+    [TYPE_WARN]: useV2Icons => (useV2Icons ? <AlertTriangle /> : <TriangleAlert16 />),
 };
 
 const messages = defineMessages({
@@ -69,6 +73,7 @@ type Props = {
      */
     type: NotificationType,
     overflow?: 'wrap' | 'ellipsis',
+    useV2Icons?: boolean,
 };
 
 class Notification extends React.Component<Props> {
@@ -101,14 +106,16 @@ class Notification extends React.Component<Props> {
 
     render() {
         const contents = this.getChildren();
-        const { intl, type, overflow, className } = this.props;
+        const { intl, type, overflow, className, useV2Icons } = this.props;
         const { formatMessage } = intl;
         const classes = classNames('notification', type, overflow, className);
+        const iconRenderer = ICON_RENDERER[type](useV2Icons);
+        const iconColor = useV2Icons ? '#222' : '#fff';
 
         return (
             <div className={classes}>
-                {React.cloneElement(ICON_RENDERER[type](), {
-                    color: '#fff',
+                {React.cloneElement(iconRenderer, {
+                    color: iconColor,
                     height: 20,
                     width: 20,
                 })}
@@ -119,7 +126,7 @@ class Notification extends React.Component<Props> {
                     onClick={this.onClose}
                     type="button"
                 >
-                    <X16 />
+                    {useV2Icons ? <XMark height={32} width={32} /> : <X16 />}
                 </button>
             </div>
         );
