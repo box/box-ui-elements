@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
-import { createIntl } from 'react-intl';
-
+import { render, screen } from '../../../test-utils/testing-library';
 import TemplatedInstance from '../TemplatedInstance';
 
 const data = {
@@ -166,7 +164,6 @@ const getTemplatedInstanceBaseProps = (props = {}) => ({
     onFieldChange: jest.fn(),
     onFieldRemove: jest.fn(),
     canEdit: true,
-    intl: createIntl({ locale: 'en' }),
     isDisabled: false,
     ...props,
 });

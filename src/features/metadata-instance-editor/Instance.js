@@ -348,12 +348,12 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {Object} - react state
      */
     getState(props: Props): State {
-        const isCascadingEnabled = this.isCascadingEnabled(props);
+        const isCascadingEnabled = this.isCascadingEnabledThroughProps(props);
 
         return {
             data: cloneDeep(props.data),
             errors: {},
-            isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabled(props),
+            isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabledThroughProps(props),
             isBusy: false,
             isCascadingEnabled,
             isCascadingOverwritten: false,
@@ -437,8 +437,8 @@ class Instance extends React.PureComponent<Props, State> {
             // isCascadingOverwritten always starts out as false, so true signifies a change
             hasCascadingChanged =
                 isCascadingOverwritten ||
-                isCascadingEnabled !== this.isCascadingEnabled(this.props) ||
-                isAIFolderExtractionEnabled !== this.isAIFolderExtractionEnabled(this.props);
+                isCascadingEnabled !== this.isCascadingEnabledThroughProps(this.props) ||
+                isAIFolderExtractionEnabled !== this.isAIFolderExtractionEnabledThroughProps(this.props);
         }
 
         // Callback to parent to tell that something is dirty
@@ -454,13 +454,13 @@ class Instance extends React.PureComponent<Props, State> {
     fieldKeyToTypeMap: Object;
 
     /**
-     * Determines if cascading policy is enabled based on
+     * Determines if cascading policy is enabled through props based on
      * whether it has an id or not.
      *
      * @param {Object} props - component props
      * @return {boolean} true if cascading policy is enabled
      */
-    isCascadingEnabled(props: Props) {
+    isCascadingEnabledThroughProps(props: Props) {
         if (props.cascadePolicy) {
             return !!props.cascadePolicy.id;
         }
@@ -474,11 +474,8 @@ class Instance extends React.PureComponent<Props, State> {
      * @param {Object} props - component props
      * @return {boolean} true if ai extraction is enabled
      */
-    isAIFolderExtractionEnabled(props: Props) {
-        if (props.cascadePolicy) {
-            return props.cascadePolicy.cascadePolicyType === CASCADE_POLICY_TYPE_AI_EXTRACT;
-        }
-        return false;
+    isAIFolderExtractionEnabledThroughProps({ cascadePolicy }: Props) {
+        return cascadePolicy?.cascadePolicyType === CASCADE_POLICY_TYPE_AI_EXTRACT;
     }
 
     /**
@@ -645,7 +642,7 @@ class Instance extends React.PureComponent<Props, State> {
         const animationDuration = (fields.length + 1) * 50;
 
         const isExistingAIExtractionCascadePolicy =
-            this.isCascadingEnabled(this.props) && this.isAIFolderExtractionEnabled(this.props);
+            this.isCascadingEnabledThroughProps(this.props) && this.isAIFolderExtractionEnabledThroughProps(this.props);
 
         return (
             <div ref={this.collapsibleRef}>

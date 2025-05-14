@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import TextInput from '../../components/text-input';
 
@@ -15,7 +15,6 @@ type Props = {
     displayName: string,
     error?: React.Node,
     isDisabled?: boolean,
-    intl: any,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     type?: string,
@@ -27,12 +26,13 @@ const TextMetadataField = ({
     displayName,
     description,
     error,
-    intl,
     isDisabled,
     onChange,
     onRemove,
     type = 'text',
 }: Props) => {
+    const { formatMessage } = useIntl();
+
     let value = '';
 
     if (typeof dataValue === 'number') {
@@ -58,12 +58,11 @@ const TextMetadataField = ({
                     onRemove(dataKey);
                 }
             }}
-            placeholder={intl.formatMessage(messages.metadataFieldSetValue)}
+            placeholder={formatMessage(messages.metadataFieldSetValue)}
             type={type}
             value={value}
         />
     );
 };
 
-export { TextMetadataField as TextMetadataFieldBase };
-export default injectIntl(TextMetadataField);
+export default TextMetadataField;

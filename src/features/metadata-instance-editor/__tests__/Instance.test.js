@@ -1,8 +1,7 @@
 import * as React from 'react';
-
-import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createIntl } from 'react-intl';
+import { render, screen, within } from '../../../test-utils/testing-library';
 import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from '../constants';
 import { InstanceBase as Instance } from '../Instance';
 import { isValidValue } from '../../metadata-instance-fields/validateMetadataField';

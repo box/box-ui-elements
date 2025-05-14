@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import DatePicker from '../../components/date-picker';
 import { convertISOStringToUTCDate } from '../../utils/datetime';
@@ -13,45 +13,38 @@ type Props = {
     dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
-    intl: any,
     isDisabled?: boolean,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
 };
 
-const DateMetadataField = ({
-    dataKey,
-    dataValue,
-    displayName,
-    description,
-    isDisabled,
-    intl,
-    onChange,
-    onRemove,
-}: Props) => (
-    <DatePicker
-        className="bdl-DateMetadataField"
-        dateFormat="utcISOString"
-        description={description}
-        displayFormat={{
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        }}
-        hideOptionalLabel
-        isDisabled={isDisabled}
-        label={displayName}
-        onChange={(date: Date, isoDate: string) => {
-            if (isoDate) {
-                onChange(dataKey, isoDate);
-            } else {
-                onRemove(dataKey);
-            }
-        }}
-        placeholder={intl.formatMessage(messages.metadataFieldSetDate)}
-        value={typeof dataValue === 'string' ? convertISOStringToUTCDate(dataValue) : undefined}
-    />
-);
+const DateMetadataField = ({ dataKey, dataValue, displayName, description, isDisabled, onChange, onRemove }: Props) => {
+    const { formatMessage } = useIntl();
 
-export { DateMetadataField as DateMetadataFieldBase };
-export default injectIntl(DateMetadataField);
+    return (
+        <DatePicker
+            className="bdl-DateMetadataField"
+            dateFormat="utcISOString"
+            description={description}
+            displayFormat={{
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            }}
+            hideOptionalLabel
+            isDisabled={isDisabled}
+            label={displayName}
+            onChange={(date: Date, isoDate: string) => {
+                if (isoDate) {
+                    onChange(dataKey, isoDate);
+                } else {
+                    onRemove(dataKey);
+                }
+            }}
+            placeholder={formatMessage(messages.metadataFieldSetDate)}
+            value={typeof dataValue === 'string' ? convertISOStringToUTCDate(dataValue) : undefined}
+        />
+    );
+};
+
+export default DateMetadataField;

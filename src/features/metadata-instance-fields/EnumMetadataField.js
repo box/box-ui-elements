@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import Label from '../../components/label/Label';
 import SingleSelectField from '../../components/select-field/SingleSelectField';
@@ -21,7 +21,6 @@ type Props = {
     description?: string,
     displayName: string,
     isDisabled?: boolean,
-    intl: any,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     options?: Array<MetadataTemplateFieldOption>,
@@ -34,7 +33,6 @@ const EnumMetadataField = ({
     displayName,
     description,
     isDisabled,
-    intl,
     onChange,
     onRemove,
     options = [],
@@ -45,7 +43,9 @@ const EnumMetadataField = ({
         isSelectable: true,
     }));
 
-    const defaultValue = intl.formatMessage(messages.metadataFieldSelectValue);
+    const { formatMessage } = useIntl();
+
+    const defaultValue = formatMessage(messages.metadataFieldSelectValue);
 
     selectOptions.unshift({
         displayText: defaultValue,
@@ -80,5 +80,4 @@ const EnumMetadataField = ({
     );
 };
 
-export { EnumMetadataField as EnumMetadataFieldBase };
-export default injectIntl(EnumMetadataField);
+export default EnumMetadataField;

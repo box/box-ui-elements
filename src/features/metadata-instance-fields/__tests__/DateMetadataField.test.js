@@ -1,32 +1,51 @@
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
-import { createIntl } from 'react-intl';
+import { render, screen } from '../../../test-utils/testing-library';
 
-import { DateMetadataFieldBase as DateMetadataField } from '../DateMetadataField';
+import DateMetadataField from '../DateMetadataField';
 
-describe('features/metadata-instance-editor/fields/DateMetadataField', () => {
-    const intl = {
-        formatMessage: jest.fn(),
-    };
-
-    test('should correctly render a date field', () => {
-        const wrapper = shallow(<DateMetadataField dataValue="2018-06-13T00:00:00.000Z" intl={intl} />);
-        expect(wrapper).toMatchSnapshot();
+describe('DateMetadataField', () => {
+    const getDateFieldBaseProps = (props = {}) => ({
+        dataKey: 'testKeyDate',
+        displayName: 'Test Date Field',
+        onChange: jest.fn(),
+        onRemove: jest.fn(),
+        dataValue: '2023-01-15T00:00:00.000Z',
+        canEdit: true,
+        ...props,
     });
-});
 
-const getDateFieldBaseProps = (props = {}) => ({
-    dataKey: 'testKeyDate',
-    displayName: 'Test Date Field',
-    intl: createIntl({ locale: 'en' }),
-    onChange: jest.fn(),
-    onRemove: jest.fn(),
-    dataValue: '2023-01-01T00:00:00.000Z',
-    canEdit: true,
-    ...props,
-});
+    test('should correctly render a date field with its value', () => {
+        const testDate = '2024-07-26T00:00:00.000Z';
+        render(
+            <DateMetadataField
+                {...getDateFieldBaseProps({
+                    dataValue: testDate,
+                    displayName: 'My Test Date',
+                })}
+            />,
+        );
 
-describe('DateMetadataField isDisabled prop', () => {
+        const dateInput = screen.getByRole('textbox', { name: 'My Test Date' });
+        expect(dateInput).toBeInTheDocument();
+        expect(dateInput).toHaveValue('July 26, 2024');
+    });
+
+    test('should display description when provided', () => {
+        const descriptionText = 'This is a date field description.';
+        render(
+            <DateMetadataField
+                {...getDateFieldBaseProps({
+                    displayName: 'My Date With Desc',
+                    description: descriptionText,
+                })}
+            />,
+        );
+
+        const dateInput = screen.getByRole('textbox', { name: 'My Date With Desc This is a date field description.' });
+        expect(dateInput).toBeInTheDocument();
+        expect(screen.getByText(descriptionText)).toBeInTheDocument();
+    });
+
     test('should render as disabled when isDisabled is true', () => {
         render(<DateMetadataField {...getDateFieldBaseProps({ isDisabled: true })} />);
         expect(screen.getByRole('textbox', { name: 'Test Date Field' })).toBeDisabled();

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
-import { createIntl } from 'react-intl';
 import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../../test-utils/testing-library';
 
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
@@ -500,7 +499,6 @@ const getMetadataEditorBaseProps = (props = {}) => ({
     onModification: jest.fn(),
     onRemove: jest.fn(),
     onAdd: jest.fn(),
-    intl: createIntl({ locale: 'en' }),
     canAdd: true,
     canUseAIFolderExtraction: true,
     isCascadingPolicyApplicable: true,
