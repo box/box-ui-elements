@@ -3,7 +3,7 @@ import * as React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createIntl } from 'react-intl';
-import TEMPLATE_CUSTOM_PROPERTIES from '../constants';
+import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from '../constants';
 import { InstanceBase as Instance } from '../Instance';
 import { isValidValue } from '../../metadata-instance-fields/validateMetadataField';
 
@@ -792,7 +792,7 @@ describe('Instance Component - React Testing Library', () => {
                             canEdit: true,
                             isEnabled: true,
                             scope: 'enterprise_123',
-                            cascadePolicyType: 'ai_extract',
+                            cascadePolicyType: CASCADE_POLICY_TYPE_AI_EXTRACT,
                         },
                     })}
                 />,
@@ -876,7 +876,7 @@ describe('Instance Component - React Testing Library', () => {
                             canEdit: true,
                             isEnabled: true,
                             scope: 'enterprise_123',
-                            cascadePolicyType: 'ai_extract',
+                            cascadePolicyType: CASCADE_POLICY_TYPE_AI_EXTRACT,
                         },
                     })}
                 />,

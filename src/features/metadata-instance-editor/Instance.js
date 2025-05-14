@@ -24,7 +24,7 @@ import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
-import TEMPLATE_CUSTOM_PROPERTIES from './constants';
+import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from './constants';
 import {
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
@@ -78,7 +78,6 @@ type State = {
     isEditing: boolean,
     shouldConfirmRemove: boolean,
     shouldShowCascadeOptions: boolean,
-    shouldShowCascadeOverwriteOptions: boolean,
 };
 
 const createFieldKeyToTypeMap = (fields?: Array<MetadataTemplateField> = []) =>
@@ -477,7 +476,7 @@ class Instance extends React.PureComponent<Props, State> {
      */
     isAIFolderExtractionEnabled(props: Props) {
         if (props.cascadePolicy) {
-            return props.cascadePolicy.cascadePolicyType === 'ai_extract';
+            return props.cascadePolicy.cascadePolicyType === CASCADE_POLICY_TYPE_AI_EXTRACT;
         }
         return false;
     }
