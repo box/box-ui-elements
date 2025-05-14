@@ -34,10 +34,12 @@ const agents = [
 type Props = {
     canEdit: boolean,
     canUseAIFolderExtraction: boolean,
+    canUseAIFolderExtractionAgentSelector: boolean,
     isAIFolderExtractionEnabled: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
     isCustomMetadata: boolean,
+    isExistingAIExtractionCascadePolicy: boolean,
     onAIFolderExtractionToggle: (value: boolean) => void,
     onCascadeModeChange: (value: boolean) => void,
     onCascadeToggle: (value: boolean) => void,
@@ -47,10 +49,12 @@ type Props = {
 const CascadePolicy = ({
     canEdit,
     canUseAIFolderExtraction,
+    canUseAIFolderExtractionAgentSelector,
     isCascadingEnabled,
     isCascadingOverwritten,
     isCustomMetadata,
     isAIFolderExtractionEnabled,
+    isExistingAIExtractionCascadePolicy,
     onAIFolderExtractionToggle,
     onCascadeToggle,
     onCascadeModeChange,
@@ -65,7 +69,7 @@ const CascadePolicy = ({
     return canEdit ? (
         <>
             <div className="metadata-cascade-editor">
-                <div className="metadata-cascade-enable">
+                <div className="metadata-cascade-enable" data-testid="metadata-cascade-enable">
                     <div>
                         <FormattedMessage tagName="strong" {...messages.enableCascadePolicy} />
                         {!isCustomMetadata && (
@@ -131,6 +135,7 @@ const CascadePolicy = ({
                             <Toggle
                                 className="metadata-cascade-toggle"
                                 isOn={isAIFolderExtractionEnabled}
+                                isDisabled={isExistingAIExtractionCascadePolicy}
                                 label=""
                                 onChange={e => onAIFolderExtractionToggle(e.target.checked)}
                             />
@@ -142,17 +147,19 @@ const CascadePolicy = ({
                                 <FormattedMessage {...messages.aiAutofillLearnMore} />
                             </Link>
                         </div>
-                        <div className="metadata-cascade-ai-agent-selector">
-                            <TooltipProvider>
-                                <BoxAiAgentSelector
-                                    agents={agents}
-                                    onErrorAction={() => {}}
-                                    requestState="success"
-                                    selectedAgent={agents[0]}
-                                    variant="sidebar"
-                                />
-                            </TooltipProvider>
-                        </div>
+                        {canUseAIFolderExtractionAgentSelector && (
+                            <div className="metadata-cascade-ai-agent-selector">
+                                <TooltipProvider>
+                                    <BoxAiAgentSelector
+                                        agents={agents}
+                                        onErrorAction={() => {}}
+                                        requestState="success"
+                                        selectedAgent={agents[0]}
+                                        variant="sidebar"
+                                    />
+                                </TooltipProvider>
+                            </div>
+                        )}
                         <InlineNotice className="metadata-cascade-ai-notice" variant="info">
                             <FormattedMessage
                                 {...messages.aiAutofillNotice}

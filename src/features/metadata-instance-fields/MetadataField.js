@@ -31,6 +31,7 @@ type Props = {
     description?: string,
     displayName: string,
     error?: React.Node,
+    isDisabled?: boolean,
     isHidden?: boolean,
     onChange?: (key: string, value: MetadataFieldValue) => void,
     onRemove?: (key: string) => void,
@@ -45,6 +46,7 @@ const MetadataField = ({
     displayName,
     description,
     error,
+    isDisabled,
     isHidden,
     canEdit,
     onChange,
@@ -79,6 +81,7 @@ const MetadataField = ({
                     dataValue={dataValue}
                     description={description}
                     displayName={displayName}
+                    isDisabled={isDisabled}
                     onChange={onChange}
                     onRemove={onRemove}
                 />
@@ -92,6 +95,7 @@ const MetadataField = ({
                     description={description}
                     displayName={displayName}
                     error={error}
+                    isDisabled={isDisabled}
                     onChange={onChange}
                     onRemove={onRemove}
                     type={type}
@@ -106,6 +110,7 @@ const MetadataField = ({
                     description={description}
                     displayName={displayName}
                     error={error}
+                    isDisabled={isDisabled}
                     onChange={onChange}
                     onRemove={onRemove}
                     type={type}
@@ -120,6 +125,7 @@ const MetadataField = ({
                     dataValue={dataValue}
                     description={description}
                     displayName={displayName}
+                    isDisabled={isDisabled}
                     onChange={onChange}
                     onRemove={onRemove}
                     options={options}
@@ -134,6 +140,7 @@ const MetadataField = ({
                     dataValue={dataValue}
                     description={description}
                     displayName={displayName}
+                    isDisabled={isDisabled}
                     onChange={onChange}
                     onRemove={onRemove}
                     options={options}
@@ -147,6 +154,7 @@ const MetadataField = ({
                     dataValue={dataValue}
                     description={description}
                     displayName={displayName}
+                    isDisabled={isDisabled}
                     onChange={onChange}
                     onRemove={onRemove}
                 />

@@ -2,9 +2,10 @@
 
 exports[`features/metadata-editor-editor/Instances should correctly render editors 1`] = `
 [
-  <Instance
+  <injectIntl(Instance)
     canEdit={true}
     canUseAIFolderExtraction={false}
+    canUseAIFolderExtractionAgentSelector={false}
     data={
       {
         "datefield": "2018-06-20T00:00:00.000Z",
@@ -107,9 +108,10 @@ exports[`features/metadata-editor-editor/Instances should correctly render edito
       }
     }
   />,
-  <Instance
+  <injectIntl(Instance)
     canEdit={false}
     canUseAIFolderExtraction={false}
+    canUseAIFolderExtractionAgentSelector={false}
     data={
       {
         "datefield": "2018-06-20T00:00:00.000Z",

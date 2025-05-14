@@ -90,6 +90,7 @@ type MetadataType = {
 type MetadataCascadePolicy = {
     canEdit?: boolean,
     id?: string,
+    cascadePolicyType?: string,
 };
 
 type MetadataCascadingPolicyData = {

@@ -11,6 +11,7 @@ type Props = {
     description?: string,
     displayName: string,
     error?: React.Node,
+    isDisabled?: boolean,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     type: string,
@@ -22,6 +23,7 @@ const IntegerMetadataField = ({
     displayName,
     description,
     error,
+    isDisabled,
     onChange,
     onRemove,
     type,
@@ -32,6 +34,7 @@ const IntegerMetadataField = ({
         description={description}
         displayName={displayName}
         error={error}
+        isDisabled={isDisabled}
         onChange={(key: string, value: MetadataFieldValue) => {
             if (isValidValue(type, value)) {
                 onChange(key, value);

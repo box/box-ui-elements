@@ -772,6 +772,7 @@ exports[`features/metadata-editor-editor/MetadataInstanceEditor should correctly
     >
       <Instances
         canUseAIFolderExtraction={false}
+        canUseAIFolderExtractionAgentSelector={false}
         editors={
           [
             {

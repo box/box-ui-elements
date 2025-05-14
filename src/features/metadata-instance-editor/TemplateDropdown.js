@@ -13,7 +13,7 @@ import { Flyout, Overlay } from '../../components/flyout';
 
 import MenuToggle from '../../components/dropdown-menu/MenuToggle';
 import messages from './messages';
-import TEMPLATE_CUSTOM_PROPERTIES from './constants';
+import { TEMPLATE_CUSTOM_PROPERTIES } from './constants';
 import type { MetadataTemplate } from '../../common/types/metadata';
 import './TemplateDropdown.scss';
 

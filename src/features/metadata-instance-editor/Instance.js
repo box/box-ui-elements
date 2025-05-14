@@ -24,7 +24,7 @@ import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
-import TEMPLATE_CUSTOM_PROPERTIES from './constants';
+import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from './constants';
 import {
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
@@ -48,6 +48,7 @@ import './Instance.scss';
 type Props = {
     canEdit: boolean,
     canUseAIFolderExtraction?: boolean,
+    canUseAIFolderExtractionAgentSelector?: boolean,
     cascadePolicy?: MetadataCascadePolicy, // eslint-disable-line
     data: MetadataFields,
     hasError: boolean,
@@ -210,7 +211,13 @@ class Instance extends React.PureComponent<Props, State> {
             isCascadingPolicyApplicable,
             onSave,
         }: Props = this.props;
-        const { data: currentData, errors, isCascadingEnabled, isCascadingOverwritten }: State = this.state;
+        const {
+            data: currentData,
+            errors,
+            isAIFolderExtractionEnabled,
+            isCascadingEnabled,
+            isCascadingOverwritten,
+        }: State = this.state;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
             return;
@@ -219,7 +226,8 @@ class Instance extends React.PureComponent<Props, State> {
         this.setState({
             isBusy: true,
             isEditing: false,
-            shouldShowCascadeOptions: false,
+            // reset state if cascading policy is removed
+            isAIFolderExtractionEnabled: isCascadingEnabled ? isAIFolderExtractionEnabled : false,
         });
         onSave(
             id,
@@ -230,6 +238,7 @@ class Instance extends React.PureComponent<Props, State> {
                       id: cascadePolicy ? cascadePolicy.id : undefined,
                       isEnabled: isCascadingEnabled,
                       overwrite: isCascadingOverwritten,
+                      isAIFolderExtractionEnabled,
                   }
                 : undefined,
             cloneDeep(currentData),
@@ -339,12 +348,12 @@ class Instance extends React.PureComponent<Props, State> {
      * @return {Object} - react state
      */
     getState(props: Props): State {
-        const isCascadingEnabled = this.isCascadingEnabled(props);
+        const isCascadingEnabled = this.isCascadingEnabledThroughProps(props);
 
         return {
             data: cloneDeep(props.data),
             errors: {},
-            isAIFolderExtractionEnabled: false,
+            isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabledThroughProps(props),
             isBusy: false,
             isCascadingEnabled,
             isCascadingOverwritten: false,
@@ -420,13 +429,16 @@ class Instance extends React.PureComponent<Props, State> {
      */
     setDirty = (type?: string): void => {
         const { id, isCascadingPolicyApplicable, onModification }: Props = this.props;
-        const { data, isCascadingEnabled, isCascadingOverwritten } = this.state;
+        const { data, isCascadingEnabled, isCascadingOverwritten, isAIFolderExtractionEnabled } = this.state;
         const hasDataChanged = !isEqual(data, this.props.data);
         let hasCascadingChanged = false;
 
         if (isCascadingPolicyApplicable) {
             // isCascadingOverwritten always starts out as false, so true signifies a change
-            hasCascadingChanged = isCascadingOverwritten || isCascadingEnabled !== this.isCascadingEnabled(this.props);
+            hasCascadingChanged =
+                isCascadingOverwritten ||
+                isCascadingEnabled !== this.isCascadingEnabledThroughProps(this.props) ||
+                isAIFolderExtractionEnabled !== this.isAIFolderExtractionEnabledThroughProps(this.props);
         }
 
         // Callback to parent to tell that something is dirty
@@ -442,17 +454,28 @@ class Instance extends React.PureComponent<Props, State> {
     fieldKeyToTypeMap: Object;
 
     /**
-     * Determines if cascading policy is enabled based on
+     * Determines if cascading policy is enabled through props based on
      * whether it has an id or not.
      *
      * @param {Object} props - component props
      * @return {boolean} true if cascading policy is enabled
      */
-    isCascadingEnabled(props: Props) {
+    isCascadingEnabledThroughProps(props: Props) {
         if (props.cascadePolicy) {
             return !!props.cascadePolicy.id;
         }
         return false;
+    }
+
+    /**
+     * Determines if ai extraction is enabled based on
+     * if cascade policy type is ai_extract
+     *
+     * @param {Object} props - component props
+     * @return {boolean} true if ai extraction is enabled
+     */
+    isAIFolderExtractionEnabledThroughProps({ cascadePolicy }: Props) {
+        return cascadePolicy?.cascadePolicyType === CASCADE_POLICY_TYPE_AI_EXTRACT;
     }
 
     /**
@@ -590,6 +613,7 @@ class Instance extends React.PureComponent<Props, State> {
     render() {
         const {
             canUseAIFolderExtraction = false,
+            canUseAIFolderExtractionAgentSelector = false,
             cascadePolicy = {},
             isDirty,
             isCascadingPolicyApplicable,
@@ -616,6 +640,9 @@ class Instance extends React.PureComponent<Props, State> {
 
         // Animate short and tall cards at consistent speeds.
         const animationDuration = (fields.length + 1) * 50;
+
+        const isExistingAIExtractionCascadePolicy =
+            this.isCascadingEnabledThroughProps(this.props) && this.isAIFolderExtractionEnabledThroughProps(this.props);
 
         return (
             <div ref={this.collapsibleRef}>
@@ -647,10 +674,14 @@ class Instance extends React.PureComponent<Props, State> {
                                         <CascadePolicy
                                             canEdit={isEditing && !!cascadePolicy.canEdit}
                                             canUseAIFolderExtraction={canUseAIFolderExtraction}
+                                            canUseAIFolderExtractionAgentSelector={
+                                                canUseAIFolderExtractionAgentSelector
+                                            }
                                             isAIFolderExtractionEnabled={isAIFolderExtractionEnabled}
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
                                             isCustomMetadata={isProperties}
+                                            isExistingAIExtractionCascadePolicy={isExistingAIExtractionCascadePolicy}
                                             onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}
@@ -669,6 +700,7 @@ class Instance extends React.PureComponent<Props, State> {
                                             canEdit={isEditing}
                                             data={data}
                                             errors={errors}
+                                            isDisabled={isAIFolderExtractionEnabled}
                                             onFieldChange={this.onFieldChange}
                                             onFieldRemove={this.onFieldRemove}
                                             template={template}
