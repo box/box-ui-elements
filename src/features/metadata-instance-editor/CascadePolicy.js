@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
 import { InlineNotice, TooltipProvider } from '@box/blueprint-web';
+// $FlowFixMe
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 
 import Toggle from '../../components/toggle';

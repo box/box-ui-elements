@@ -143,9 +143,9 @@ push_to_gh_pages() {
         printf "${green}Deleted existing gh-pages branch!${end}"
     fi
     git checkout -b gh-pages || return 1
-    rm -rf build
-    cp -R storybook/. ./ || return 1
-    cp examples/gitignore .gitignore || return 1 # Move this when we remove styleguidist
+    rm -rf docs
+    cp .storybook/gitignore .gitignore || return 1
+    mv storybook docs || return 1
     git rm -rf --cached . || return 1
     git add -A || return 1
     git commit --no-verify -am "build(storybook): v$VERSION" || return 1

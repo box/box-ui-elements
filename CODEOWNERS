@@ -8,12 +8,13 @@
 
 # Source
 /src/                                       @box/webapp
-/src/*                                      @box/preview @box/ui-elements
-/src/api/                                   @box/preview @box/ui-elements
+/src/*                                      @box/ui-elements
+/src/api/                                   @box/ui-elements
 /src/api/box-edit/                          @box/partners
 /src/api/Feed.js                            @box/preview
 /src/api/uploads/                           @box/create-communicate
-/src/elements/                              @box/preview @box/ui-elements
+/src/components/                            @box/ui-elements
+/src/elements/                              @box/ui-elements
 /src/elements/content-explorer/             @box/ui-elements
 /src/elements/content-open-with/            @box/partners
 /src/elements/content-picker/               @box/ui-elements

@@ -1,6 +1,7 @@
 import { expect, within } from '@storybook/test';
-import { type StoryObj } from '@storybook/react';
+import { type StoryObj, type Meta } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
+import type { HttpHandler } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
 import { mockFileRequest, mockUserRequest } from '../../../common/__mocks__/mockRequests';
@@ -25,7 +26,7 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
     },
 };
 
-export default {
+const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
     title: 'Elements/ContentSidebar/BoxAISidebar/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
@@ -90,3 +91,5 @@ export default {
         },
     },
 };
+
+export default meta;
