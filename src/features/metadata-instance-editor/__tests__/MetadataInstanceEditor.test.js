@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { render, screen } from '@testing-library/react';
+import { createIntl } from 'react-intl';
+import userEvent from '@testing-library/user-event';
 
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
@@ -443,6 +446,67 @@ const templatesOnServer = [template1, template2, template3, template4, template5
 // State of editors from server
 const editorsOnServer = [editor1, editor2, editor3, editor4, editor5];
 
+const testGrandchildInstanceFields = [
+    {
+        id: 'field1',
+        type: 'string',
+        key: 'stringfield',
+        displayName: 'String Field',
+        description: 'example of a string field',
+    },
+];
+
+const getMetadataEditorBaseProps = (props = {}) => ({
+    editors: [
+        {
+            instance: {
+                id: 'test-instance-editor-child-1',
+                canEdit: true,
+                data: { stringfield: 'valueForEditor' },
+                isDirty: false,
+                hasError: false,
+                isCascadingPolicyApplicable: true,
+                cascadePolicy: {
+                    id: 'policy-for-editor-1',
+                    canEdit: true,
+                    isEnabled: true,
+                    scope: 'enterprise_123',
+                    cascadePolicyType: 'regular',
+                },
+            },
+            template: {
+                id: 'template-for-editor-1',
+                displayName: 'Test Template In Editor',
+                fields: testGrandchildInstanceFields,
+                templateKey: 'editorChildTemplateKey',
+            },
+        },
+    ],
+    templates: [
+        {
+            id: 'template-for-editor-1',
+            templateKey: 'editorChildTemplateKey',
+            displayName: 'Test Template In Editor',
+            fields: testGrandchildInstanceFields,
+        },
+        {
+            id: 'template-for-editor-2',
+            templateKey: 'anotherEditorTemplateKey',
+            displayName: 'Another Test Template',
+            fields: [],
+        },
+    ],
+    onSave: jest.fn(),
+    onModification: jest.fn(),
+    onRemove: jest.fn(),
+    onAdd: jest.fn(),
+    intl: createIntl({ locale: 'en' }),
+    canAdd: true,
+    canUseAIFolderExtraction: true,
+    isCascadingPolicyApplicable: true,
+    ...props,
+});
+
 describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
     test('should correctly render editors', () => {
         const wrapper = shallow(<MetadataInstanceEditor editors={editorsOnServer} templates={templatesOnServer} />);
@@ -469,5 +533,48 @@ describe('features/metadata-editor-editor/MetadataInstanceEditor', () => {
         const instances = wrapper.find(Instances);
         expect(instances).toHaveLength(1);
         expect(instances.prop('selectedTemplateKey')).toBe(selectedTemplateKey);
+    });
+});
+
+describe('MetadataInstanceEditor - canUseAIFolderExtractionAgentSelector prop', () => {
+    test('should propagate canUseAIFolderExtractionAgentSelector, showing agent selector', async () => {
+        render(
+            <MetadataInstanceEditor
+                {...getMetadataEditorBaseProps({
+                    canUseAIFolderExtractionAgentSelector: true,
+                })}
+            />,
+        );
+
+        const editButton = await screen.findByRole('button', { name: 'Edit Metadata' }, { timeout: 3000 });
+        await userEvent.click(editButton);
+
+        expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+    });
+
+    test('should not show agent selector if canUseAIFolderExtractionAgentSelector is false', async () => {
+        render(
+            <MetadataInstanceEditor
+                {...getMetadataEditorBaseProps({
+                    canUseAIFolderExtractionAgentSelector: false,
+                })}
+            />,
+        );
+
+        const editButton = await screen.findByRole('button', { name: 'Edit Metadata' });
+        await userEvent.click(editButton);
+
+        expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
+    });
+
+    test('should not show agent selector if canUseAIFolderExtractionAgentSelector is undefined', async () => {
+        const props = getMetadataEditorBaseProps();
+        delete props.canUseAIFolderExtractionAgentSelector;
+        render(<MetadataInstanceEditor {...props} />);
+
+        const editButton = await screen.findByRole('button', { name: 'Edit Metadata' });
+        await userEvent.click(editButton);
+
+        expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
     });
 });
