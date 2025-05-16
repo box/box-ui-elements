@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
-import { InlineNotice, TooltipProvider } from '@box/blueprint-web';
+import { TooltipProvider } from '@box/blueprint-web';
 // $FlowFixMe
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 
@@ -16,7 +16,6 @@ import './CascadePolicy.scss';
 
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
-const PRICING_LINK = 'https://www.box.com/pricing';
 
 const agents = [
     {
@@ -160,18 +159,6 @@ const CascadePolicy = ({
                                 </TooltipProvider>
                             </div>
                         )}
-                        <InlineNotice className="metadata-cascade-ai-notice" variant="info">
-                            <FormattedMessage
-                                {...messages.aiAutofillNotice}
-                                values={{
-                                    pricingLink: (
-                                        <Link className="cascade-policy-link" href={PRICING_LINK} target="_blank">
-                                            <FormattedMessage {...messages.aiAutofillPricingDetails} />
-                                        </Link>
-                                    ),
-                                }}
-                            />
-                        </InlineNotice>
                     </div>
                 </div>
             )}
