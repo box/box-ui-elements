@@ -335,6 +335,33 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
         expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
     });
+    describe('remote sidebar component', () => {
+        const MockRemoteSidebar = jest.fn(() => <div data-testid="remote-sidebar" />);
+
+        test('should render remote sidebar component when provided', async () => {
+            await renderComponent({ remoteSideBarComponent: MockRemoteSidebar });
+
+            expect(MockRemoteSidebar).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    items: mockProps.items,
+                    elementId: mockProps.elementId,
+                    cache: mockProps.cache,
+                    setCacheValue: mockProps.setCacheValue,
+                    shouldPreinitSession: mockProps.shouldPreinitSession,
+                }),
+                expect.any(Object),
+            );
+            expect(screen.getByTestId('remote-sidebar')).toBeInTheDocument();
+        });
+
+        test('should not render default sidebar when remote component is provided', async () => {
+            await renderComponent({ remoteSideBarComponent: MockRemoteSidebar });
+
+            expect(screen.queryByTestId('boxai-sidebar-title')).not.toBeInTheDocument();
+            expect(screen.queryByTestId('sidebar-agent-selector')).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: 'Clear conversation' })).not.toBeInTheDocument();
+        });
+    });
 
     describe('given shouldPreinitSession = false, should create session on user intent', () => {
         test('agents list open', async () => {
