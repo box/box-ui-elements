@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
-import { TooltipProvider } from '@box/blueprint-web';
 // $FlowFixMe
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 
@@ -148,15 +147,13 @@ const CascadePolicy = ({
                         </div>
                         {canUseAIFolderExtractionAgentSelector && (
                             <div className="metadata-cascade-ai-agent-selector">
-                                <TooltipProvider>
-                                    <BoxAiAgentSelector
-                                        agents={agents}
-                                        onErrorAction={() => {}}
-                                        requestState="success"
-                                        selectedAgent={agents[0]}
-                                        variant="sidebar"
-                                    />
-                                </TooltipProvider>
+                                <BoxAiAgentSelector
+                                    agents={agents}
+                                    onErrorAction={() => {}}
+                                    requestState="success"
+                                    selectedAgent={agents[0]}
+                                    variant="sidebar"
+                                />
                             </div>
                         )}
                     </div>
