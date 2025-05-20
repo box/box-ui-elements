@@ -4,6 +4,7 @@
  */
 import * as React from 'react';
 import flow from 'lodash/flow';
+import isEqual from 'lodash/isEqual';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
 import { BoxAiAgentSelectorWithApi, useAgents } from '@box/box-ai-agent-selector';
@@ -83,32 +84,39 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         setCacheValue('encodedSession', encodedSession);
     }
 
-    if (cache.questions !== questions) {
+    if (!isEqual(cache.questions, questions)) {
         setCacheValue('questions', questions);
     }
 
-    if (cache.agents.selectedAgent !== selectedAgent) {
+    if (
+        !isEqual(cache.agents?.selectedAgent, selectedAgent) ||
+        !isEqual(cache.agents?.agents, agents) ||
+        !isEqual(cache.agents?.requestState, requestState)
+    ) {
         setCacheValue('agents', { agents, requestState, selectedAgent });
     }
 
-    const handleUserIntentToUseAI = (userHasInteracted: boolean = false) => {
-        // Create session if not already created or loading
-        if (!shouldPreinitSession && !encodedSession && !isLoading && createSession) {
-            createSession(true, false);
-        }
-        if (userHasInteracted && onUserInteraction) {
-            onUserInteraction();
-        }
-    };
+    const handleUserIntentToUseAI = React.useCallback(
+        (userHasInteracted: boolean = false) => {
+            // Create session if not already created or loading
+            if (!shouldPreinitSession && !encodedSession && !isLoading && createSession) {
+                createSession(true, false);
+            }
+            if (userHasInteracted && onUserInteraction) {
+                onUserInteraction();
+            }
+        },
+        [shouldPreinitSession, encodedSession, isLoading, createSession, onUserInteraction],
+    );
 
     const handleModalClose = () => {
         setIsModalOpen(false);
     };
 
-    const handleSwitchToModalClick = () => {
+    const handleSwitchToModalClick = React.useCallback(() => {
         handleUserIntentToUseAI();
         setIsModalOpen(true);
-    };
+    }, [handleUserIntentToUseAI]);
 
     React.useEffect(() => {
         if (shouldPreinitSession && !encodedSession && createSession) {
@@ -155,7 +163,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [encodedSession]);
 
-    const renderBoxAISidebarTitle = () => {
+    const renderBoxAISidebarTitle = React.useCallback(() => {
         return (
             <div className="bcs-BoxAISidebar-title-part">
                 <BoxAISidebarTitle isAIStudioAgentSelectorEnabled={isAIStudioAgentSelectorEnabled} />
@@ -175,23 +183,34 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
                 )}
             </div>
         );
-    };
+    }, [
+        isAIStudioAgentSelectorEnabled,
+        hasRequestInProgress,
+        getAIStudioAgents,
+        hostAppName,
+        handleUserIntentToUseAI,
+        onSelectAgent,
+        recordAction,
+    ]);
 
-    const renderActions = () => (
-        <>
-            {renderBoxAISidebarTitle()}
-            {isResetChatEnabled && <ClearConversationButton onClick={onClearAction} />}
-            <Tooltip content={formatMessage(messages.sidebarBoxAISwitchToModalView)} variant="standard">
-                <IconButton
-                    aria-label={formatMessage(messages.sidebarBoxAISwitchToModalView)}
-                    className="bcs-BoxAISidebar-expand"
-                    data-target-id="IconButton-expandBoxAISidebar"
-                    icon={ArrowsExpand}
-                    onClick={handleSwitchToModalClick}
-                    size="small"
-                />
-            </Tooltip>
-        </>
+    const renderActions = React.useCallback(
+        () => (
+            <>
+                {renderBoxAISidebarTitle()}
+                {isResetChatEnabled && <ClearConversationButton onClick={onClearAction} />}
+                <Tooltip content={formatMessage(messages.sidebarBoxAISwitchToModalView)} variant="standard">
+                    <IconButton
+                        aria-label={formatMessage(messages.sidebarBoxAISwitchToModalView)}
+                        className="bcs-BoxAISidebar-expand"
+                        data-target-id="IconButton-expandBoxAISidebar"
+                        icon={ArrowsExpand}
+                        onClick={handleSwitchToModalClick}
+                        size="small"
+                    />
+                </Tooltip>
+            </>
+        ),
+        [renderBoxAISidebarTitle, isResetChatEnabled, onClearAction, formatMessage, handleSwitchToModalClick],
     );
 
     return (
