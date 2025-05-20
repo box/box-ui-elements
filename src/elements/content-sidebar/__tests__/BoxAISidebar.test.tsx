@@ -335,6 +335,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
         expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
     });
+
     describe('remote sidebar component', () => {
         const MockRemoteSidebar = jest.fn(() => <div data-testid="remote-sidebar" />);
 
@@ -349,7 +350,6 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                     setCacheValue: mockProps.setCacheValue,
                     shouldPreinitSession: mockProps.shouldPreinitSession,
                 }),
-                expect.any(Object),
             );
             expect(screen.getByTestId('remote-sidebar')).toBeInTheDocument();
         });
