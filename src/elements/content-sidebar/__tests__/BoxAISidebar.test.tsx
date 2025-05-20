@@ -350,6 +350,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
                     setCacheValue: mockProps.setCacheValue,
                     shouldPreinitSession: mockProps.shouldPreinitSession,
                 }),
+                expect.any(Object),
             );
             expect(screen.getByTestId('remote-sidebar')).toBeInTheDocument();
         });
