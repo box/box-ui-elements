@@ -88,11 +88,7 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         setCacheValue('questions', questions);
     }
 
-    if (
-        !isEqual(cache.agents?.selectedAgent, selectedAgent) ||
-        !isEqual(cache.agents?.agents, agents) ||
-        !isEqual(cache.agents?.requestState, requestState)
-    ) {
+    if (!isEqual(cache.agents, { agents, requestState, selectedAgent })) {
         setCacheValue('agents', { agents, requestState, selectedAgent });
     }
 
