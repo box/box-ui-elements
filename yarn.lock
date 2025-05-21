@@ -1494,10 +1494,10 @@
     tabbable "^4.0.0"
     type-fest "^3.2.0"
 
-"@box/box-ai-agent-selector@^0.31.0":
-  version "0.31.0"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.31.0.tgz#a2ef6c3c7284529ae268b609d04b6000348bb294"
-  integrity sha512-4+M/4g8LHJfZkP+7ISBKveQs2q5HeGvXv8B6/N8yFb9cpYuOjpKFxRvHyILdQWjwictHZbgY2XrNrpxbYGEXRQ==
+"@box/box-ai-agent-selector@^0.41.10":
+  version "0.41.10"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.41.10.tgz#922c7e234b2a7913d11710b9b44f887b24e52599"
+  integrity sha512-6s7mBRhh2RpH7A06ziJXaJeHAlm6InLBpHvt4Q3yWP7Zi6C7L7AyClCd8ReupnRnIgSkxqRhI7RmvG4L5/zWHA==
 
 "@box/box-ai-content-answers@^0.124.1":
   version "0.124.1"

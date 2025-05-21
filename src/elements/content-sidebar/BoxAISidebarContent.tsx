@@ -16,6 +16,7 @@ import {
     withApiWrapper,
     type ApiWrapperWithInjectedProps,
 } from '@box/box-ai-content-answers';
+import isEqual from 'lodash/isEqual';
 import SidebarContent from './SidebarContent';
 import { withAPIContext } from '../common/api-context';
 import { withErrorBoundary } from '../common/error-boundary';
@@ -83,11 +84,10 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         setCacheValue('encodedSession', encodedSession);
     }
 
-    if (cache.questions !== questions) {
+    if (!isEqual(cache.questions, questions)) {
         setCacheValue('questions', questions);
     }
-
-    if (cache.agents.selectedAgent !== selectedAgent) {
+    if (!isEqual(cache.agents.selectedAgent, selectedAgent)) {
         setCacheValue('agents', { agents, requestState, selectedAgent });
     }
 
