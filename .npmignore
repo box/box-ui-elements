@@ -47,7 +47,6 @@ postcss.config.js
 release.config.js
 reports
 scripts
-styleguide
 stylelint.config.js
 test
 Thumbs.db

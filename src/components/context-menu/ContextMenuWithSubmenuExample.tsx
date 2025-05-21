@@ -1,10 +1,9 @@
-/* eslint-disable no-unused-expressions */
 import * as React from 'react';
 
-import { Menu, SubmenuItem, MenuItem } from '../../src/components/menu';
-import ContextMenu from '../../src/components/context-menu';
+import { Menu, SubmenuItem, MenuItem } from '../menu';
+import ContextMenu from './ContextMenu';
 
-class ContextMenuWithSubmenuWithBoundariesElementExample extends React.Component {
+class ContextMenuWithSubmenuExample extends React.Component {
     state = {
         rightBoundaryElement: undefined,
         bottomBoundaryElement: undefined,
@@ -59,4 +58,4 @@ class ContextMenuWithSubmenuWithBoundariesElementExample extends React.Component
     }
 }
 
-export default ContextMenuWithSubmenuWithBoundariesElementExample;
+export default ContextMenuWithSubmenuExample;

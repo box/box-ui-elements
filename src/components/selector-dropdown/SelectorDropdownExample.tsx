@@ -1,21 +1,34 @@
-import PropTypes from 'prop-types';
-import React, { Children, Component } from 'react';
+import * as React from 'react';
+import { Children, Component } from 'react';
 
-import DatalistItem from '../../src/components/datalist-item';
-import SelectorDropdown from '../../src/components/selector-dropdown';
-import TextInput from '../../src/components/text-input';
+import DatalistItem from '../datalist-item';
+import SelectorDropdown from './SelectorDropdown';
+import TextInput, { TextInputProps } from '../text-input';
 
-const InputContainer = ({ inputProps, ...rest }) => <TextInput {...inputProps} {...rest} />;
-InputContainer.propTypes = { inputProps: PropTypes.object };
+interface InputContainerProps extends Omit<TextInputProps, 'onInput'> {
+    inputProps?: Partial<TextInputProps>;
+    onInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-class SelectorDropdownContainer extends Component {
-    static propTypes = {
-        initialItems: PropTypes.array.isRequired,
-        placeholder: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-    };
+const InputContainer: React.FC<InputContainerProps> = ({ inputProps = {}, ...rest }) => (
+    <TextInput {...inputProps} {...rest} />
+);
 
-    constructor(props) {
+interface SelectorDropdownContainerProps {
+    initialItems: string[];
+    placeholder: string;
+    title: string;
+}
+
+interface SelectorDropdownContainerState {
+    filterText: string;
+    items: string[];
+    showTitle: boolean;
+    remainOpen: boolean;
+}
+
+class SelectorDropdownContainer extends Component<SelectorDropdownContainerProps, SelectorDropdownContainerState> {
+    constructor(props: SelectorDropdownContainerProps) {
         super(props);
         this.state = {
             filterText: '',
@@ -33,30 +46,23 @@ class SelectorDropdownContainer extends Component {
         this.setState({ remainOpen: !this.state.remainOpen });
     };
 
-    handleUserInput = event => {
+    handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         this.filterByItem(event.target.value);
     };
 
-    handleItemSelection = i => {
+    handleItemSelection = (i: number) => {
         this.setState({ filterText: this.state.items[i] });
     };
 
-    filterByItem(item) {
+    filterByItem(item: string) {
         this.setState({ filterText: item });
         this.filterItems(item);
     }
 
-    filterItems(filterText) {
+    filterItems(filterText: string) {
         const { initialItems } = this.props;
         const filterTextLowerCase = filterText.toLowerCase();
-        const items = [];
-
-        initialItems.forEach(item => {
-            if (item.toLowerCase().indexOf(filterTextLowerCase) !== -1) {
-                items.push(item);
-            }
-        });
-
+        const items = initialItems.filter(item => item.toLowerCase().includes(filterTextLowerCase));
         this.setState({ items });
     }
 
@@ -67,24 +73,24 @@ class SelectorDropdownContainer extends Component {
 
         return (
             <div style={{ paddingBottom: '330px' }}>
-                <label labelFor="title-check">
+                <label htmlFor="title-check">
                     <input
                         type="checkbox"
                         name="title-check"
                         id="title-check"
-                        value={showTitle}
-                        onClick={this.handleShowTitle}
+                        checked={showTitle}
+                        onChange={this.handleShowTitle}
                     />
                     <span style={{ paddingLeft: '4px' }}>Add title to overlay</span>
                 </label>
                 <br />
-                <label labelFor="remain-open-check">
+                <label htmlFor="remain-open-check">
                     <input
                         type="checkbox"
                         name="remain-open-check"
                         id="remain-open-check"
-                        value={remainOpen}
-                        onClick={this.handleRemainOpen}
+                        checked={remainOpen}
+                        onChange={this.handleRemainOpen}
                     />
                     <span style={{ paddingLeft: '4px' }}>Overlay should remain open</span>
                 </label>
@@ -113,7 +119,7 @@ class SelectorDropdownContainer extends Component {
     }
 }
 
-const SelectorDropdownExamples = () => (
+const SelectorDropdownExample: React.FC = () => (
     <SelectorDropdownContainer
         initialItems={[
             'Illmatic',
@@ -132,6 +138,4 @@ const SelectorDropdownExamples = () => (
     />
 );
 
-SelectorDropdownExamples.displayName = 'SelectorDropdownExamples';
-
-export default SelectorDropdownExamples;
+export default SelectorDropdownExample;

@@ -1,6 +1,6 @@
 # Development Setup
 
-Our development setup assumes a LINUX/BSD environemnt.
+Our development setup assumes a LINUX/BSD environment.
 
 ## Project Setup
 
@@ -12,23 +12,20 @@ Our development setup assumes a LINUX/BSD environemnt.
 6. Add the upstream repo to your remotes `git remote add upstream git@github.com:box/box-ui-elements.git`.
 7. Verify your remotes are properly set up `git remote -v`. You should pull updates from the `upstream` box repo and push changes to your fork `origin`.
 
-## Examples Page (aka the Style Guide)
+## Storybook
 
-A published version of the style guide can be seen at https://opensource.box.com/box-ui-elements/. The style guide uses **_live_** demo data within the UI Elements. Due to security restrictions this data is read-only. You can run a local version of the style guide as follows:
+We use Storybook (https://storybook.js.org/). A published version of our Storybook is available at https://opensource.box.com/box-ui-elements/.
 
-1. Start the style guide server via `yarn start`.
-2. Navigate to `http://localhost:6060/` to see the UI Elements in action. If testing on a different machine or VM, you can instead use the IP address shown on your terminal window.
+## Local development
 
-**_NOTE:_** _This note applies to testing top level UI Elements only and not the lower level components. If you want to use your own live data for the style guide, then start the style guide server using [your own developer auth token](https://developer.box.com/docs/authenticate-with-developer-token) and a file or folder ID via_
-
-- `TOKEN=<YOUR_TOKEN> FILEID=<YOUR_FILE_ID> yarn start` or
-- `TOKEN=<YOUR_TOKEN> FOLDERID=<YOUR_FOLDER_ID> yarn start`
+1. Start your local Storybook instance via `yarn start`.
+2. Navigate to `http://localhost:6061/` to see the UI Elements in action. If testing on a different machine or VM, you can instead use the IP address shown on your terminal window.
 
 ## Testing UI Elements in a Parent Project
 
 ### Webpack Setup
 
-`box-ui-elements` must use the same `react` and `react-dom` instances as the parent application for React hooks to work properly. Application repositories must add the following webpack `resolve` alias configuration to satify this requirement:
+`box-ui-elements` must use the same `react` and `react-dom` instances as the parent application for React hooks to work properly. Application repositories must add the following webpack `resolve` alias configuration to satisfy this requirement:
 
 ```js
 // webpack.config.js
@@ -44,7 +41,7 @@ A published version of the style guide can be seen at https://opensource.box.com
 }
 ```
 
-This will ensure that `box-ui-elements` does not use it's own `react` and `react-dom` modules when linked. Improper setup is the primary reason for "**Invalid Hook**" errors due to React version mismatch.
+This will ensure that `box-ui-elements` does not use its own `react` and `react-dom` modules when linked. Improper setup is the primary reason for "**Invalid Hook**" errors due to React version mismatch.
 
 We also recommend using `yarn resolutions` to fix the version of `react` and `react-dom` in your application:
 
@@ -71,7 +68,7 @@ To test the Box UI Elements with your own project use local Yarn linking.
 
 ## Common Script Commands
 
-- `yarn start` to launch a local style guide examples server. Uses demo live data for Elements.
+- `yarn start` to launch a local Storybook server. Uses demo live data for Elements.
 - `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
 - `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
 - `yarn lint` to lint js and css.
@@ -102,23 +99,11 @@ For more information, please see https://flow.org/en/docs/react/components/#toc-
 Install the following plugins in your preferred editor
 
 - Editor Config (standardizes basic editor configuration)
-- ESLint (Javascript linting)
+- ESLint (JavaScript linting)
 - Stylelint (CSS linting)
-- Prettier (Javscript formatting)
+- Prettier (JavaScript formatting)
 - Sass (Stylesheets)
 - Babel (Transpiler)
-
-## Testing Embedded UI Elements With Your Data
-
-Under most circumstances you should be using the style guide as mentioned earlier. This section is primarily for testing the Box UI Elements embedded in a custom HTML page with your own box data and auth token. For this, launch a local webpack dev server via `yarn start:dev` and navigate to `http://localhost:8080/`. HTML test files for local development are located inside the [test folder](http://localhost:8080/test).
-
-1. Open a test file, such as http://localhost:8080/test/sidebar.html
-2. When prompted, enter a file id and developer token.
-   1. Developer tokens can be created at https://app.box.com/developers/console.
-   2. Select `Custom App` and choose `Oauth 2.0 with JWT (Server Authentication)`.
-   3. Select `View Your App` > `Configuration` > `CORS Domains` and add `http://localhost:8080` to the domain whitelist. Save the configuration.
-   4. The developer token will be regenerated once the configuration is saved. Copy the token and paste into the prompt in the localhost test page. The token will be valid for an hour; return to the app configuration page to generate a new token.
-   5. For additional information about developing on the Box Platform, see the [Platform docs](https://developer.box.com/docs/box-ui-elements#section-using-the-box-ui-elements).
 
 ## Unit Testing
 
