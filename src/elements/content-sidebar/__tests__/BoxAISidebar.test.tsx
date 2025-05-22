@@ -345,6 +345,7 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
             expect(MockRemoteSidebar).toHaveBeenCalledWith(
                 expect.objectContaining({
                     items: mockProps.items,
+                    itemSize: mockProps.itemSize,
                     elementId: mockProps.elementId,
                     cache: mockProps.cache,
                     setCacheValue: mockProps.setCacheValue,

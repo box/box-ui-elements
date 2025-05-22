@@ -62,6 +62,7 @@ export interface BoxAISidebarProps {
         elementId: string;
         cache: BoxAISidebarCache;
         setCacheValue: BoxAISidebarCacheSetter;
+        itemSize?: string;
         setHasQuestions?: (hasQuestions: boolean) => void;
         shouldPreinitSession?: boolean;
     }>;
@@ -144,6 +145,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         return (
             <RemoteSidebarComponent
                 items={items}
+                itemSize={itemSize}
                 elementId={elementId}
                 cache={cache}
                 setCacheValue={setCacheValue}
