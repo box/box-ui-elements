@@ -2,14 +2,9 @@ import localize from '../../support/i18n';
 
 // <reference types="Cypress" />
 const helpers = {
-    load(additionalProps = {}) {
-        cy.visit('/Elements/ContentPicker', {
-            onBeforeLoad: contentWindow => {
-                contentWindow.PROPS = additionalProps;
-            },
-        });
-
-        cy.getByTestId('be-sub-header').contains('Codepen');
+    loadBasic(args = '') {
+        cy.visitStorybook(`elements-contentpicker-tests-e2e--basic&args=${args}`);
+        cy.getByTestId('be-sub-header').contains('CodePen');
     },
     getRow: rowNum => cy.getByTestId('content-picker').find(`.bcp-item-row-${rowNum}`),
     selectRow(rowNum, rowType = 'checkbox') {
@@ -41,18 +36,19 @@ const helpers = {
 
 describe('ContentPicker', () => {
     describe('Pagination', () => {
-        const FIRST_PAGE = { fixture: 'content-picker/folder-page-1.json' };
-        const SECOND_PAGE = { fixture: 'content-picker/folder-page-2.json' };
+        const FIRST_PAGE = { fixture: 'common/folder-page-1.json' };
+        const SECOND_PAGE = { fixture: 'common/folder-page-2.json' };
         const FIRST_ITEM_OF_FIRST_PAGE = 'Another Sample Folder';
         const FIRST_ITEM_OF_SECOND_PAGE = 'Sample Audio.mp3';
 
         beforeEach(() => {
             cy.intercept('GET', '**/folders/*', FIRST_PAGE);
+
+            cy.visitStorybook('elements-contentpicker-tests-e2e--with-pagination');
+            cy.getByTestId('be-sub-header').contains('CodePen');
         });
 
         it('Should be able to navigate between pages using arrows', () => {
-            helpers.load({ initialPageSize: 3 });
-
             // Confirm that the Content Picker shows the first page
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
 
@@ -66,7 +62,7 @@ describe('ContentPicker', () => {
             helpers.getRow(0).contains(FIRST_ITEM_OF_SECOND_PAGE);
 
             // Stub call to first page
-            cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/folder-page-1.json' });
+            cy.intercept('GET', '**/folders/*', { fixture: 'common/folder-page-1.json' });
 
             // Click the left arrow
             helpers.getPaginationArrows().eq(0).click();
@@ -76,8 +72,6 @@ describe('ContentPicker', () => {
         });
 
         it('Should be able to navigate to the next page using count button', () => {
-            helpers.load({ initialPageSize: 3 });
-
             // Confirm that the Content Picker shows the first page
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
 
@@ -111,7 +105,7 @@ describe('ContentPicker', () => {
 
     describe('Selection', () => {
         beforeEach(() => {
-            cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/root-folder.json' });
+            cy.intercept('GET', '**/folders/*', { fixture: 'common/root-folder.json' });
 
             ['319004423111', '308566419514', '308409990441'].forEach(fileId => {
                 cy.fixture('content-picker/get-sharedlink.json').then(getSharedLinkJson => {
@@ -131,7 +125,7 @@ describe('ContentPicker', () => {
         });
 
         it('Should be able to select and deselect items', () => {
-            helpers.load();
+            helpers.loadBasic();
 
             // Select row 2
             helpers.getRow(2).find('input[type="checkbox"]').should('not.be.checked');
@@ -149,13 +143,13 @@ describe('ContentPicker', () => {
         });
 
         it('Should show all the selected items across folders', () => {
-            helpers.load();
+            helpers.loadBasic();
 
             // Select row 2
             helpers.selectRow(2);
 
             // Override the route stubbing for a sub folder
-            cy.intercept('GET', '**/folders/*', { fixture: 'content-picker/sample-folder.json' });
+            cy.intercept('GET', '**/folders/*', { fixture: 'common/sample-folder.json' });
 
             // Explore folder (row 1)
             helpers.getRow(1).find('button.be-item-label').click();
@@ -175,7 +169,7 @@ describe('ContentPicker', () => {
         });
 
         it('Should not allow more than the maximum selected prop', () => {
-            helpers.load({ maxSelectable: 2 });
+            helpers.loadBasic('maxSelectable:2');
 
             // Select row 2
             helpers.getRow(2).as('rowTwo').find('input[type="checkbox"]').should('not.be.checked');
@@ -195,7 +189,7 @@ describe('ContentPicker', () => {
         });
 
         it('Should only keep one checked if in single select mode', () => {
-            helpers.load({ maxSelectable: 1 });
+            helpers.loadBasic('maxSelectable:1');
 
             // Select row 2
             helpers.getRow(2).as('rowTwo').find('input[type="radio"]').should('not.be.checked');

@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { mount } from 'enzyme';
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
+import { usePromptFocus } from '@box/box-ai-content-answers';
 import AdditionalTabPlaceholder from '../additional-tabs/AdditionalTabPlaceholder';
 import AdditionalTabs from '../additional-tabs';
 import AdditionalTabsLoading from '../additional-tabs/AdditionalTabsLoading';
@@ -17,7 +18,17 @@ import SidebarNavButton from '../SidebarNavButton';
 import SidebarNavSignButton from '../SidebarNavSignButton';
 import { render, screen } from '../../../test-utils/testing-library';
 
+jest.mock('@box/box-ai-content-answers');
+
 describe('elements/content-sidebar/SidebarNav', () => {
+    const focusBoxAISidebarPromptMock = jest.fn();
+
+    beforeEach(() => {
+        usePromptFocus.mockReturnValue({
+            focusPrompt: focusBoxAISidebarPromptMock,
+        });
+    });
+
     const getWrapper = (props = {}, active = '', features = {}) =>
         mount(
             <MemoryRouter initialEntries={[`/${active}`]}>
@@ -138,6 +149,31 @@ describe('elements/content-sidebar/SidebarNav', () => {
         });
     });
 
+    test('should call focusBoxAISidebarPrompt when clicked on Box AI Tab', async () => {
+        render(
+            getSidebarNav({
+                features: {
+                    boxai: {
+                        sidebar: {
+                            showOnlyNavButton: false,
+                        },
+                    },
+                },
+                props: { hasBoxAI: true },
+            }),
+        );
+
+        const button = screen.getByTestId('sidebarboxai');
+
+        await userEvent.click(button);
+
+        expect(usePromptFocus).toHaveBeenCalledTimes(1);
+        expect(usePromptFocus).toHaveBeenCalledWith('.be.bcs');
+
+        expect(focusBoxAISidebarPromptMock).toHaveBeenCalledTimes(1);
+        expect(focusBoxAISidebarPromptMock).toHaveBeenCalledWith();
+    });
+
     test('should have multiple tabs', () => {
         const props = {
             hasActivity: true,
@@ -166,19 +202,15 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     test('should render the Box Sign entry point if its feature is enabled', () => {
-        const features = {
-            boxSign: {
+        const props = {
+            signSidebarProps: {
                 enabled: true,
                 onClick: () => {},
             },
         };
-        const wrapper = getWrapper({}, 'activity', features);
-        expect(wrapper.exists(SidebarNavSignButton)).toBe(true);
-    });
+        const wrapper = getWrapper(props);
 
-    test('should not render the Box Sign entry point if its feature is not enabled', () => {
-        const wrapper = getWrapper();
-        expect(wrapper.exists(SidebarNavSignButton)).toBe(false);
+        expect(wrapper.exists(SidebarNavSignButton)).toBe(true);
     });
     test('should render docgen tab', () => {
         const props = {

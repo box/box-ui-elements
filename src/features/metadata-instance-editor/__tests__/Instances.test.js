@@ -1,4 +1,6 @@
 import * as React from 'react';
+import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../../test-utils/testing-library';
 
 import Instances from '../Instances';
 
@@ -182,6 +184,50 @@ const editor2 = {
 // State of editors from server
 const editorsOnServer = [editor1, editor2];
 
+const testInstanceFields = [
+    {
+        id: 'field1',
+        type: 'string',
+        key: 'stringfield',
+        displayName: 'String Field',
+        description: 'example of a string field',
+    },
+];
+
+const getInstancesBaseProps = (props = {}) => ({
+    editors: [
+        {
+            instance: {
+                id: 'test-instance-1',
+                canEdit: true,
+                data: { stringfield: 'value1' },
+                isDirty: false,
+                hasError: false,
+                isCascadingPolicyApplicable: true,
+                cascadePolicy: {
+                    id: 'policy-1',
+                    canEdit: true,
+                    isEnabled: true,
+                    scope: 'enterprise_123',
+                    cascadePolicyType: 'regular',
+                },
+            },
+            template: {
+                id: 'template-1',
+                displayName: 'Test Template Editor',
+                fields: testInstanceFields,
+                templateKey: 'editorTemplateKey',
+            },
+        },
+    ],
+    onSave: jest.fn(),
+    onModification: jest.fn(),
+    onRemove: jest.fn(),
+    canUseAIFolderExtraction: true,
+    isCascadingPolicyApplicable: true,
+    ...props,
+});
+
 describe('features/metadata-editor-editor/Instances', () => {
     test('should correctly render editors', () => {
         const wrapper = shallow(<Instances editors={editorsOnServer} />);
@@ -190,18 +236,61 @@ describe('features/metadata-editor-editor/Instances', () => {
 
     test('should correctly render instances with editors and a selected template', () => {
         const wrapper = shallow(<Instances editors={editorsOnServer} selectedTemplateKey="template1" />);
-        const selectedTemplate = wrapper.find('Instance').at(0);
+        const selectedTemplate = wrapper.find('injectIntl(Instance)').at(0);
         expect(selectedTemplate.prop('isOpen')).toBe(true);
         expect(selectedTemplate.prop('id')).toBe('editor1');
     });
 
     test('should correctly render instances with a selected template and multiple editors', () => {
         const wrapper = shallow(<Instances editors={editorsOnServer} selectedTemplateKey="template2" />);
-        const selectedTemplate = wrapper.find('Instance').at(1);
+        const selectedTemplate = wrapper.find('injectIntl(Instance)').at(1);
         expect(selectedTemplate.prop('isOpen')).toBe(true);
         expect(selectedTemplate.prop('id')).toBe('editor2');
-        const unselectedTemplate = wrapper.find('Instance').at(0);
+        const unselectedTemplate = wrapper.find('injectIntl(Instance)').at(0);
         expect(unselectedTemplate.prop('isOpen')).toBe(false);
         expect(unselectedTemplate.prop('id')).toBe('editor1');
+    });
+});
+
+describe('Instances component - canUseAIFolderExtractionAgentSelector prop', () => {
+    test('should pass canUseAIFolderExtractionAgentSelector to child Instance components, showing agent selector', async () => {
+        render(
+            <Instances
+                {...getInstancesBaseProps({
+                    canUseAIFolderExtractionAgentSelector: true,
+                })}
+            />,
+        );
+
+        const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
+        await userEvent.click(editButton);
+
+        expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+    });
+
+    test('should not show agent selector in child Instance if canUseAIFolderExtractionAgentSelector is false', async () => {
+        render(
+            <Instances
+                {...getInstancesBaseProps({
+                    canUseAIFolderExtractionAgentSelector: false,
+                })}
+            />,
+        );
+
+        const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
+        await userEvent.click(editButton);
+
+        expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
+    });
+
+    test('should not show agent selector in child Instance if canUseAIFolderExtractionAgentSelector is undefined', async () => {
+        const props = getInstancesBaseProps();
+        delete props.canUseAIFolderExtractionAgentSelector;
+        render(<Instances {...props} />);
+
+        const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
+        await userEvent.click(editButton);
+
+        expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
     });
 });

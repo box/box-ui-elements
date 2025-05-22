@@ -9,7 +9,7 @@ import { mockApi, mockFile } from '../__mocks__/mocks';
 import APIContext from '../../api-context';
 
 describe('elements/common/content-answers/ContentAnswers', () => {
-    const renderComponent = (props?: {}) =>
+    const renderComponent = (props = {}) =>
         render(
             <Notification.Provider>
                 <Notification.Viewport />

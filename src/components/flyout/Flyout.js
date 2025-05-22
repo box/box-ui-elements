@@ -305,8 +305,9 @@ class Flyout extends React.Component<Props, State> {
         }
     };
 
-    handleKeyPress = () => {
-        if (KEYS.enter) {
+    handleKeyPress = (event: SyntheticKeyboardEvent<>) => {
+        if (event.key === KEYS.enter) {
+            event.preventDefault();
             this.openOverlay();
             this.focusButton();
         }

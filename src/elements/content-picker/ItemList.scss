@@ -15,6 +15,10 @@
     border-left: 2px solid transparent;
     outline: none;
 
+    .bcp-more-options {
+        opacity: 1;
+    }
+
     &.bcp-item-row-selected {
         background-color: $light-blue;
         border-top-color: $grey-blue;

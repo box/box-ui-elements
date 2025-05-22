@@ -10,7 +10,7 @@
 @mixin be-content {
     color: $bdl-gray;
     line-height: 20px;
-    letter-spacing: .3px;
+    letter-spacing: 0.3px;
 
     // TODO: Remove when border-color in src/styles/_inputs.scss is accessible
     input[type='text'],
@@ -66,12 +66,6 @@
 .be {
     @include reset;
 
-    // links have tag styles
-    @import '../../styles/common/links';
-    // Forms have tag styles
-    @import '../../styles/common/forms';
-
-    @include be-content;
     /* stylelint-disable declaration-no-important */
     box-sizing: border-box !important;
     width: 100%;
@@ -87,6 +81,20 @@
     .ReactModal__Body--open & {
         position: relative;
     }
+}
+
+// Elements migrated to Blueprint should not use base styles
+.bcow,
+.bcp,
+.bcpr,
+.bcs,
+.bdl-UnifiedShareForm {
+    // links have tag styles
+    @import '../../styles/common/links';
+
+    // Forms have tag styles
+    @import '../../styles/common/forms';
+    @include be-content;
 }
 
 .be-modal {

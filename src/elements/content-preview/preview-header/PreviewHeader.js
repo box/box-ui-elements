@@ -145,6 +145,7 @@ const PreviewHeader = ({
                                 <PlainButton
                                     aria-label={downloadMsg}
                                     className="bcpr-PreviewHeader-button"
+                                    data-target-id="PreviewHeader-downloadButton"
                                     onClick={onDownload}
                                     title={downloadMsg}
                                     type="button"

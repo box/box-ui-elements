@@ -453,4 +453,20 @@ describe('elements/content-sidebar/Metadata/MetadataSidebarRedesign', () => {
             expect(onError).toHaveBeenCalledWith(expect.any(Error), ERROR_CODE_METADATA_STRUCTURED_TEXT_REP);
         });
     });
+
+    test('should call createSessionRequest once', async () => {
+        const createSessionRequest = jest.fn().mockResolvedValue({});
+        renderComponent({ api, createSessionRequest }, { 'metadata.aiSuggestions.enabled': true });
+
+        expect(createSessionRequest).toHaveBeenCalledTimes(1);
+        expect(createSessionRequest).toHaveBeenCalledWith({ items: [{ id: 'test-file-id-1' }] }, 'test-file-id-1');
+    });
+
+    test('should not call createSessionRequest once when fileId is not provided', async () => {
+        const createSessionRequest = jest.fn().mockResolvedValue({});
+        renderComponent({ api, createSessionRequest, fileId: undefined }, { 'metadata.aiSuggestions.enabled': true });
+
+        expect(createSessionRequest).not.toHaveBeenCalledTimes(1);
+        expect(createSessionRequest).not.toHaveBeenCalledWith({ items: [{ id: undefined }] }, undefined);
+    });
 });

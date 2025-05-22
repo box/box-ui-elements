@@ -39,10 +39,7 @@
         margin-right: $bdl-grid-unit * 3;
 
         &::before {
-            top: $sidebarTabResponsiveSize;
-            right: 0;
-            bottom: 0;
-            left: 0;
+            inset: $sidebarTabResponsiveSize 0 0 0;
             width: auto;
             height: 2px;
         }

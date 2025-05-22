@@ -14,6 +14,8 @@ import './MetadataInstanceEditor.scss';
 type Props = {
     blurExceptionClassNames?: Array<string>,
     canAdd: boolean,
+    canUseAIFolderExtraction?: boolean,
+    canUseAIFolderExtractionAgentSelector?: boolean,
     editors?: Array<MetadataEditor>,
     isCascadingPolicyApplicable?: boolean,
     isDropdownBusy?: boolean,
@@ -35,6 +37,8 @@ type Props = {
 const MetadataInstanceEditor = ({
     blurExceptionClassNames,
     canAdd,
+    canUseAIFolderExtraction = false,
+    canUseAIFolderExtractionAgentSelector = false,
     isCascadingPolicyApplicable = false,
     isDropdownBusy,
     editors = [],
@@ -61,6 +65,8 @@ const MetadataInstanceEditor = ({
             ) : (
                 <ScrollWrapper>
                     <Instances
+                        canUseAIFolderExtraction={canUseAIFolderExtraction}
+                        canUseAIFolderExtractionAgentSelector={canUseAIFolderExtractionAgentSelector}
                         editors={editors}
                         isCascadingPolicyApplicable={isCascadingPolicyApplicable}
                         onModification={onModification}

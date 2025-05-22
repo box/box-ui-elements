@@ -1,12 +1,10 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
-
 @import '../variables';
 
 .be-item-label {
     display: block;
     width: 100%;
     overflow: hidden;
-    color: tokens.$gray-black;
+    color: var(--gray-black);
     white-space: nowrap;
     text-align: left;
     text-overflow: ellipsis;

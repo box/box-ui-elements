@@ -1,9 +1,7 @@
-@use '@box/blueprint-web-assets/tokens/tokens.scss';
-
 @import '../../common/variables';
 
 .bcs-DocGenSidebar {
-    padding: 0 tokens.$space-6 0 tokens.$space-6;
+    padding: 0 var(--space-6) 0 var(--space-6);
 }
 
 .bcs-DocGen--center {
@@ -12,14 +10,14 @@
 }
 
 .bcs-TagsSection {
-    margin-top: tokens.$space-6;
-    padding-bottom: tokens.$space-6;
-    border-bottom: tokens.$border-1 solid tokens.$gray-10;
+    margin-top: var(--space-6);
+    padding-bottom: var(--space-6);
+    border-bottom: var(--border-1) solid var(--gray-10);
 }
 
 .bcs-TagsSection-header {
-    font-size: tokens.$caption-default-font-size;
-    line-height: tokens.$caption-default-line-height;
+    font-size: var(--caption-default-font-size);
+    line-height: var(--caption-default-line-height);
 }
 
 .bcs-DocGen-accordion {
@@ -34,14 +32,13 @@
     width: '100%';
     min-width: 'fit-content';
     height: '100%';
-    overflow-x: 'auto';
-    overflow-y: 'auto';
+    overflow: 'auto' 'auto';
 }
 
 .bcs-DocGen-accordion * {
     width: auto;
     padding: 0;
-    font-size: tokens.$body-default-bold-font-size;
+    font-size: var(--body-default-bold-font-size);
 
     .bcs-DocGen-tagPath {
         padding-left: 0;
@@ -50,13 +47,13 @@
 }
 
 .bcs-DocGen-collapsible {
-    padding-top: tokens.$space-3;
-    padding-right: tokens.$space-6;
+    padding-top: var(--space-3);
+    padding-right: var(--space-6);
     border: none;
 }
 
 .bcs-DocGenSidebar-loading {
-    margin-top: tokens.$space-4;
+    margin-top: var(--space-4);
 }
 
 .bcs-DocGen-emptyState {
@@ -66,8 +63,8 @@
 }
 
 .bcs-DocGen-emptyState--icon {
-    margin-top: tokens.$space-15;
-    margin-bottom: tokens.$space-4;
+    margin-top: var(--space-15);
+    margin-bottom: var(--space-4);
 }
 
 .bcs-DocGen-error-state {
@@ -76,8 +73,8 @@
     align-items: center;
 
     &--icon {
-        margin-top: tokens.$space-15;
-        margin-bottom: tokens.$space-4;
+        margin-top: var(--space-15);
+        margin-bottom: var(--space-4);
     }
 
     &--message {

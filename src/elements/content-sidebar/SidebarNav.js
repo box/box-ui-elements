@@ -8,8 +8,11 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
+// $FlowFixMe
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
+// $FlowFixMe
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
+import { usePromptFocus } from '@box/box-ai-content-answers';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -33,6 +36,7 @@ import {
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
 import './SidebarNav.scss';
+import type { SignSidebarProps } from './SidebarNavSign';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
@@ -49,6 +53,7 @@ type Props = {
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
     onPanelChange?: (name: string, isInitialState: boolean) => void,
+    signSidebarProps: SignSidebarProps,
 };
 
 const SidebarNav = ({
@@ -66,13 +71,21 @@ const SidebarNav = ({
     isOpen,
     onNavigate,
     onPanelChange = noop,
+    signSidebarProps,
 }: Props) => {
-    const { enabled: hasBoxSign } = useFeatureConfig('boxSign');
+    const { enabled: hasBoxSign } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
 
+    const { focusPrompt } = usePromptFocus('.be.bcs');
+
     const handleSidebarNavButtonClick = (sidebarview: string) => {
         onPanelChange(sidebarview, false);
+
+        // If the Box AI sidebar is enabled, focus the Box AI sidebar prompt
+        if (sidebarview === SIDEBAR_VIEW_BOXAI) {
+            focusPrompt();
+        }
     };
 
     return (
@@ -159,7 +172,7 @@ const SidebarNav = ({
 
                 {hasBoxSign && (
                     <div className="bcs-SidebarNav-secondary">
-                        <SidebarNavSign />
+                        <SidebarNavSign {...signSidebarProps} />
                     </div>
                 )}
 
