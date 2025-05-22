@@ -1,27 +1,8 @@
 // <reference types="Cypress" />
 import l from '../../support/i18n';
 
-const COLLECTION = [
-    Cypress.env('FILE_ID_DOC_VERSIONED'),
-    Cypress.env('FILE_ID_DOC'),
-    Cypress.env('FILE_ID_SKILLS'),
-    Cypress.env('FILE_ID_VIDEO'),
-];
-
 describe('ContentPreview', () => {
     const helpers = {
-        load({ features, fileId, props } = {}) {
-            cy.visit('/Elements/ContentPreview', {
-                onBeforeLoad: contentWindow => {
-                    contentWindow.FEATURES = features;
-                    contentWindow.FILE_ID = fileId;
-                    contentWindow.PROPS = {
-                        collection: COLLECTION,
-                        ...props,
-                    };
-                },
-            });
-        },
         checkPreviewHeader() {
             cy.get('.bcpr-PreviewHeader').should('be.visible');
         },
@@ -29,20 +10,15 @@ describe('ContentPreview', () => {
             cy.get('.bcpr-PreviewHeader--basic').should('be.visible');
         },
         selectVersion(versionName) {
-            cy.getByTestId('versions-item-button')
-                .contains(versionName)
-                .click();
+            cy.getByTestId('versions-item-button').contains(versionName).click();
         },
     };
 
+    const storybookIdWithSidebar = 'elements-contentpreview-tests-e2e--with-sidebar';
+
     describe('Sanity', () => {
         it('The sidebar should not render when sidebar props are omitted', () => {
-            helpers.load({
-                fileId: Cypress.env('FILE_ID_SKILLS'),
-                props: {
-                    contentSidebarProps: null,
-                },
-            });
+            cy.visitStorybook('elements-contentpreview-tests-e2e--no-sidebar');
 
             // Gives time for sidebar chunk to potentially load, it shouldn't in this case
             cy.wait(3000); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -50,16 +26,9 @@ describe('ContentPreview', () => {
         });
 
         it('The sidebar should render when given sidebar props', () => {
-            helpers.load({
-                fileId: Cypress.env('FILE_ID_SKILLS'),
-                props: {
-                    contentSidebarProps: {
-                        hasActivityFeed: true,
-                    },
-                },
-            });
+            cy.visitStorybook(storybookIdWithSidebar);
 
-            // Sidebar should not exist
+            // Sidebar should exist
             cy.get('.bcs').should('exist');
         });
 
@@ -80,14 +49,7 @@ describe('ContentPreview', () => {
                 [300, 'not.exist'],
             ];
 
-            helpers.load({
-                fileId: Cypress.env('FILE_ID_DOC'),
-                props: {
-                    contentSidebarProps: {
-                        hasActivityFeed: true,
-                    },
-                },
-            });
+            cy.visitStorybook(storybookIdWithSidebar);
 
             breakpoints.forEach(([width, assertion]) => {
                 cy.viewport(width, 600);
@@ -95,20 +57,15 @@ describe('ContentPreview', () => {
             });
         });
 
-        it('The sidebar should open on a small screen if a user clicks a tab', () => {
-            helpers.load({
-                fileId: Cypress.env('FILE_ID_DOC'),
-                props: {
-                    contentSidebarProps: {
-                        hasActivityFeed: true,
-                    },
-                },
-            });
+        it('The sidebar should open on a small screen if a user clicks a sidebar tab', () => {
+            cy.visitStorybook(storybookIdWithSidebar);
 
             cy.viewport(800, 600);
             cy.getByTestId('bcs-content').should('not.exist');
             cy.getByTestId('sidebaractivity').click();
             cy.getByTestId('bcs-content').should('exist');
+
+            // Sidebar should stay open if you click Next File in a collection
             cy.getByTitle('Next File').click();
             cy.getByTestId('bcs-content').should('exist');
         });
@@ -116,10 +73,7 @@ describe('ContentPreview', () => {
 
     describe('Navigation', () => {
         beforeEach(() => {
-            helpers.load({
-                features: { versions: true },
-                fileId: Cypress.env('FILE_ID_SKILLS'),
-            });
+            cy.visitStorybook(storybookIdWithSidebar);
         });
 
         it('Navigation within a collection keeps sidebar open', () => {
@@ -138,8 +92,12 @@ describe('ContentPreview', () => {
             cy.getByTestId('sidebartoggle').click();
             cy.getByTestId('bcs-content').should('not.exist');
 
+            // Closing the sidebar sometimes leaves the focus on the Show/Hide Sidebar button
+            // Where the label covers the "Next File" element. This fix prevents flakiness.
+            cy.get('.bcpr-PreviewMask').should('exist');
+            cy.get('.bcpr-PreviewMask').type('{rightarrow}');
+
             // Navigating between files in a collection should retain the prior closed state
-            cy.getByTitle('Next File').click();
             cy.getByTestId('bcs-content').should('not.exist');
             cy.getByTitle('Previous File').click();
             cy.getByTestId('bcs-content').should('not.exist');
@@ -192,10 +150,7 @@ describe('ContentPreview', () => {
 
     describe('Previous Versions', () => {
         beforeEach(() => {
-            helpers.load({
-                features: { versions: true },
-                fileId: Cypress.env('FILE_ID_DOC_VERSIONED'),
-            });
+            cy.visitStorybook('elements-contentpreview-tests-e2e--file-version');
 
             // Preview an older version via the sidebar
             cy.getByTestId('sidebardetails').click();

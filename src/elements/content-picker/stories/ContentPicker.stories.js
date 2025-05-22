@@ -3,6 +3,12 @@ import ContentPicker from '../ContentPicker';
 
 export const basic = {};
 
+export const withPagination = {
+    args: {
+        initialPageSize: 5,
+    },
+};
+
 export default {
     title: 'Elements/ContentPicker',
     component: ContentPicker,

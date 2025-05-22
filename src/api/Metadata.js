@@ -4,9 +4,17 @@
  * @author Box
  */
 
+import { TreeQueryInput } from '@box/combobox-with-api';
+import cloneDeep from 'lodash/cloneDeep';
+import lodashFilter from 'lodash/filter';
+import flatMap from 'lodash/flatMap';
 import getProp from 'lodash/get';
-import uniqueId from 'lodash/uniqueId';
 import isEmpty from 'lodash/isEmpty';
+import keyBy from 'lodash/keyBy';
+import lodashMap from 'lodash/map';
+import partition from 'lodash/partition';
+import uniq from 'lodash/uniq';
+import uniqueId from 'lodash/uniqueId';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
 import { getTypedFileId } from '../utils/file';
 import { handleOnAbort, formatMetadataFieldValue } from './utils';
@@ -181,6 +189,113 @@ class Metadata extends File {
     }
 
     /**
+     * API URL for taxonomies levels for templates
+     *
+     * @param {string} taxonomyPath - taxonomy path
+     * @return {string} base url for files
+     */
+    getTaxonomyLevelsForTemplatesUrl(taxonomyPath: string): string {
+        return `${this.getBaseApiUrl()}/${taxonomyPath}`;
+    }
+
+    /**
+     * Returns taxonomy path for API calls and level mapping
+     *
+     * @param {string} namespace
+     * @param {string} taxonomyKey
+     * @returns {string}
+     */
+    getTaxonomyPath(namespace?: string, taxonomyKey?: string): string | null {
+        if (!namespace || !taxonomyKey) {
+            return null;
+        }
+        return `metadata_taxonomies/${namespace}/${taxonomyKey}`;
+    }
+
+    /**
+     *
+     * @param {Array<MetadataTemplate>} metadataTemplates
+     * @param {string} id
+     * @returns {Array<MetadataTemplate>}
+     */
+    async getTaxonomyLevelsForTemplates(
+        metadataTemplates: Array<MetadataTemplate>,
+        id: string,
+    ): Promise<Array<MetadataTemplate>> {
+        const templates = cloneDeep(metadataTemplates);
+
+        const taxonomyFields = flatMap(templates, template =>
+            lodashFilter(
+                template.fields,
+                field => field.type === 'taxonomy' && !field.levels && (field.taxonomyKey || field.taxonomy_key),
+            ),
+        );
+
+        if (isEmpty(taxonomyFields)) {
+            return templates;
+        }
+
+        const taxonomyPaths = uniq(
+            taxonomyFields
+                .map(field => this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key))
+                .filter(Boolean),
+        );
+
+        const fetchPromises = taxonomyPaths.map(async taxonomyPath => {
+            try {
+                const result = await this.xhr.get({
+                    url: this.getTaxonomyLevelsForTemplatesUrl(taxonomyPath),
+                    id: getTypedFileId(id),
+                });
+                return {
+                    path: taxonomyPath,
+                    levels: result.data.levels || [],
+                };
+            } catch (error) {
+                throw new Error(`Failed to fetch taxonomy for path: ${taxonomyPath}`);
+            }
+        });
+
+        const fetchResults = await Promise.all(fetchPromises);
+
+        const taxonomyInfo = keyBy(fetchResults, 'path');
+
+        return lodashMap(templates, template => {
+            if (!template.fields) return template;
+
+            const [fieldsToUpdate, restFields] = partition(
+                template.fields,
+                field => field.type === 'taxonomy' && !field.levels,
+            );
+
+            if (isEmpty(fieldsToUpdate)) return template;
+
+            const updatedFields = lodashMap(fieldsToUpdate, field => {
+                const taxonomyPath = this.getTaxonomyPath(field.namespace, field.taxonomyKey || field.taxonomy_key);
+                const levels = taxonomyInfo[taxonomyPath]?.levels || [];
+
+                const taxonomyKey = field.taxonomyKey || field.taxonomy_key;
+
+                delete field.taxonomy_key;
+
+                return {
+                    ...field,
+                    levels: lodashMap(levels, ({ displayName, display_name, ...rest }) => ({
+                        ...rest,
+                        displayName: displayName || display_name,
+                    })),
+                    taxonomyKey,
+                };
+            });
+
+            return {
+                ...template,
+                fields: restFields.concat(updatedFields),
+            };
+        });
+    }
+
+    /**
      * Gets metadata templates for enterprise
      *
      * @param {string} id - file id
@@ -210,7 +325,10 @@ class Metadata extends File {
             }
         }
 
-        return getProp(templates, 'data.entries', []);
+        templates = getProp(templates, 'data.entries', []);
+        const templatesWithTaxonomies = await this.getTaxonomyLevelsForTemplates(templates, id);
+
+        return templatesWithTaxonomies;
     }
 
     /**
@@ -1105,7 +1223,7 @@ class Metadata extends File {
         templateKey: string,
         fieldKey: string,
         level: number,
-        options: { marker?: string, searchInput?: string, signal?: AbortSignal },
+        options: TreeQueryInput,
     ) {
         this.errorCode = ERROR_CODE_FETCH_METADATA_OPTIONS;
 
@@ -1130,13 +1248,25 @@ class Metadata extends File {
             throw new Error('Missing level');
         }
 
-        const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
-        const { marker, searchInput: query_text, signal } = options;
-        const params = {
+        const {
+            marker,
+            searchInput: query_text,
+            onlySelectableOptions,
+            ancestorId: ancestor_id,
+            level: optionsLevel,
+            signal,
+        } = options;
+
+        const params: {} = {
             ...(marker ? { marker } : {}),
             ...(query_text ? { query_text } : {}),
-            ...(level || level === 0 ? { level } : {}),
+            ...(optionsLevel ? { level: optionsLevel } : {}),
+            ...(ancestor_id ? { ancestor_id } : {}),
+            ...(onlySelectableOptions !== undefined ? { only_selectable_options: !!onlySelectableOptions } : {}),
+            limit: 100,
         };
+
+        const url = this.getMetadataOptionsUrl(scope, templateKey, fieldKey);
 
         if (signal) {
             signal.onabort = () => handleOnAbort(this.xhr);
@@ -1202,7 +1332,12 @@ class Metadata extends File {
      * @param {boolean} includeAncestors
      * @returns {`${string}/metadata_taxonomies/${string}/${string}/nodes/${string}`}
      */
-    getMetadataTaxonomyNodeUrl(scope: string, taxonomyKey: string, nodeID: string, includeAncestors?: boolean): string {
+    getMetadataTaxonomyNodeUrl(
+        scope: string,
+        taxonomyKey: string,
+        nodeID: string,
+        includeAncestors?: boolean = false,
+    ): string {
         const includeAncestorsParam = includeAncestors ? '?include-ancestors=true' : '';
 
         return `${this.getBaseApiUrl()}/metadata_taxonomies/${scope}/${taxonomyKey}/nodes/${nodeID}${includeAncestorsParam}`;

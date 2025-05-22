@@ -23,12 +23,10 @@
     .bdl-DropdownMenu--responsive {
         &.dropdown-menu-enabled {
             position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
+            inset: 0;
             margin-top: 0;
             margin-bottom: $bdl-header-height;
+
             // cancels out the tether inline styling without having to set enabled=false
             transform: none !important;
         }
@@ -49,16 +47,13 @@
                 left: 0;
                 display: flex;
                 height: $bdl-header-height;
-                padding: ($bdl-grid-unit * 3) ($bdl-grid-unit * 3);
+                padding: ($bdl-grid-unit * 3);
                 background-color: $white;
                 box-shadow: $bdl-header-box-shadow;
             }
 
             .submenu:not(.is-hidden) {
-                top: 100%;
-                right: 0;
-                bottom: auto;
-                left: auto;
+                inset: 100% 0 auto auto;
 
                 &.is-right-bottom-aligned {
                     top: auto;

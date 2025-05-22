@@ -41,7 +41,7 @@ exports[`elements/content-sidebar/additional-tabs/AdditionalTab should render ic
     onClick={[Function]}
     type="button"
   >
-    <SvgPlus />
+    <ForwardRef(SvgPlus) />
   </PlainButton>
 </AdditionalTabTooltip>
 `;

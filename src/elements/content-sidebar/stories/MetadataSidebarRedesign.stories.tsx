@@ -1,7 +1,8 @@
-import { type StoryObj } from '@storybook/react';
+import { type StoryObj, Meta } from '@storybook/react';
 import { fn, userEvent, within } from '@storybook/test';
 import React, { type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
+import type { HttpHandler } from 'msw';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';
 import ContentSidebar from '../ContentSidebar';
 import {
@@ -25,12 +26,14 @@ const mockLogger = {
 const defaultMetadataSidebarProps: ComponentProps<typeof MetadataSidebarRedesign> = {
     isBoxAiSuggestionsEnabled: true,
     isBetaLanguageEnabled: false,
+    isDeleteConfirmationModalCheckboxEnabled: false,
+    isMetadataMultiLevelTaxonomyFieldEnabled: false,
     isFeatureEnabled: true,
     onError: fn(),
     onSuccess: fn(),
 };
 
-export default {
+const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign',
     component: ContentSidebar,
     args: {
@@ -63,6 +66,8 @@ export default {
         return <ContentSidebar {...args} />;
     },
 };
+
+export default meta;
 
 export const Basic: StoryObj<typeof MetadataSidebarRedesign> = {
     play: async ({ canvasElement }) => {

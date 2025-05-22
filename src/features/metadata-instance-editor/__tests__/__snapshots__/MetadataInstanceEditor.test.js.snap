@@ -771,6 +771,8 @@ exports[`features/metadata-editor-editor/MetadataInstanceEditor should correctly
       shadowSize="cover"
     >
       <Instances
+        canUseAIFolderExtraction={false}
+        canUseAIFolderExtractionAgentSelector={false}
         editors={
           [
             {

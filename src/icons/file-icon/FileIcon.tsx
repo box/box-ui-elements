@@ -1,4 +1,5 @@
 import * as React from 'react';
+import type { ForwardRefExoticComponent, RefAttributes, SVGProps } from 'react';
 
 import {
     FileAdobeExpress,
@@ -40,7 +41,9 @@ import { useIntl } from 'react-intl';
 
 import messages from '../../elements/common/messages';
 
-const Components: { [key: string]: (props: React.SVGProps<SVGSVGElement>) => JSX.Element } = {
+type FileIconComponent = ForwardRefExoticComponent<SVGProps<SVGSVGElement> & RefAttributes<SVGSVGElement>>;
+
+const Components: { [key: string]: FileIconComponent } = {
     FileAdobeExpress,
     FileAudio,
     FileBookmark,

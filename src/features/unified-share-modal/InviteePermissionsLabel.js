@@ -10,11 +10,17 @@ import messages from './messages';
 
 type Props = {
     hasDescription?: boolean,
+    inviteePermissionDescription?: string,
     inviteePermissionLevel: string,
     itemType: ItemType,
 };
 
-const InviteePermissionsLabel = ({ hasDescription, inviteePermissionLevel, itemType }: Props) => {
+const InviteePermissionsLabel = ({
+    hasDescription,
+    inviteePermissionDescription,
+    inviteePermissionLevel,
+    itemType,
+}: Props) => {
     const permissionOptionsTexts = {
         [EDITOR]: messages.editorLevelText,
         [CO_OWNER]: messages.coownerLevelText,
@@ -40,7 +46,11 @@ const InviteePermissionsLabel = ({ hasDescription, inviteePermissionLevel, itemT
             <strong>
                 <FormattedMessage {...permissionOptionsTexts[inviteePermissionLevel]} />{' '}
             </strong>
-            <InviteePermissionsDescription inviteePermissionLevel={inviteePermissionLevel} itemType={itemType} />
+            <InviteePermissionsDescription
+                description={inviteePermissionDescription}
+                inviteePermissionLevel={inviteePermissionLevel}
+                itemType={itemType}
+            />
         </span>
     ) : (
         <FormattedMessage {...permissionLabelTexts[inviteePermissionLevel]} />

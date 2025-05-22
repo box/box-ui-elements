@@ -5,7 +5,7 @@
 @import './mixins';
 
 .bdl-RoundPill {
-    @include bdl-RoundPill();
+    @include bdl-RoundPill;
 }
 
 .bdl-RoundPill-avatar,
@@ -45,7 +45,7 @@
 }
 
 .bdl-RoundPill--disabled {
-    opacity: .5;
+    opacity: 0.5;
 
     .bdl-RoundPill-closeBtn {
         cursor: default;

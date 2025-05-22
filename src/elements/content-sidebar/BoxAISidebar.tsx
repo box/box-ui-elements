@@ -4,7 +4,7 @@
  */
 import * as React from 'react';
 import { useIntl } from 'react-intl';
-import { type ItemType } from '@box/box-ai-content-answers';
+import { type FeedbackFormData, type ItemType, SuggestedQuestionType } from '@box/box-ai-content-answers';
 import { AgentsProvider, RecordActionType } from '@box/box-ai-agent-selector';
 import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
@@ -43,6 +43,7 @@ export interface BoxAISidebarProps {
     isCitationsEnabled: boolean;
     isDebugModeEnabled: boolean;
     isFeedbackEnabled: boolean;
+    isFeedbackFormEnabled: boolean;
     isIntelligentQueryMode: boolean;
     isMarkdownEnabled: boolean;
     isResetChatEnabled: boolean;
@@ -51,8 +52,13 @@ export interface BoxAISidebarProps {
     items: Array<ItemType>;
     itemSize?: string;
     localizedQuestions: Array<{ id: string; label: string; prompt: string }>;
+    onFeedbackFormSubmit?: (data: FeedbackFormData, onSuccess: () => void) => void;
+    onUserInteraction?: () => void;
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
+    shouldFeedbackFormIncludeFeedbackText?: boolean;
+    shouldPreinitSession?: boolean;
+    setHasQuestions: (hasQuestions: boolean) => void;
 }
 
 const BoxAISidebar = (props: BoxAISidebarProps) => {
@@ -65,12 +71,18 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         getSuggestedQuestions,
         isIntelligentQueryMode,
         isFeedbackEnabled,
+        isFeedbackFormEnabled,
         isStopResponseEnabled,
         items,
         itemSize,
         localizedQuestions,
+        onFeedbackFormSubmit,
+        onUserInteraction,
         recordAction,
         setCacheValue,
+        shouldFeedbackFormIncludeFeedbackText,
+        shouldPreinitSession = true,
+        setHasQuestions,
         ...rest
     } = props;
     const { questions } = cache;
@@ -82,11 +94,16 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             elementId,
             fileExtension,
             isFeedbackEnabled,
+            isFeedbackFormEnabled,
             isStopResponseEnabled,
             items,
             itemSize,
-            setCacheValue,
+            onFeedbackFormSubmit,
+            onUserInteraction,
             recordAction,
+            setCacheValue,
+            shouldFeedbackFormIncludeFeedbackText,
+            shouldPreinitSession,
         }),
         [
             cache,
@@ -94,13 +111,24 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             elementId,
             fileExtension,
             isFeedbackEnabled,
+            isFeedbackFormEnabled,
             isStopResponseEnabled,
             items,
             itemSize,
-            setCacheValue,
+            onFeedbackFormSubmit,
+            onUserInteraction,
             recordAction,
+            setCacheValue,
+            shouldFeedbackFormIncludeFeedbackText,
+            shouldPreinitSession,
         ],
     );
+
+    React.useEffect(() => {
+        if (setHasQuestions) {
+            setHasQuestions(questions.length > 0);
+        }
+    }, [questions.length, setHasQuestions]);
 
     let questionsWithoutInProgress = questions;
     if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
@@ -117,20 +145,32 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         spreadsheetNotice = formatMessage(messages.welcomeMessageSpreadsheetNotice);
     }
 
+    const handleSuggestedQuestionsFetched = (fetchedSuggestedQuestions: SuggestedQuestionType[]) => {
+        setCacheValue('suggestedQuestions', fetchedSuggestedQuestions);
+    };
+
+    const suggestedQuestions = getSuggestedQuestions === null ? localizedQuestions : [];
+
     return (
         // BoxAISidebarContent is using withApiWrapper that is not passing all provided props,
         // that's why we need to use provider to pass other props
         <AgentsProvider value={cache.agents}>
             <BoxAISidebarContext.Provider value={contextValue}>
                 <BoxAISidebarContent
+                    cachedSuggestedQuestions={cache.suggestedQuestions}
                     getSuggestedQuestions={getSuggestedQuestions}
                     isOpen
                     isStopResponseEnabled={isStopResponseEnabled}
                     itemID={fileID}
                     itemIDs={[fileID]}
+                    onSuggestedQuestionsFetched={handleSuggestedQuestionsFetched}
                     restoredQuestions={questionsWithoutInProgress}
                     restoredSession={cache.encodedSession}
-                    suggestedQuestions={getSuggestedQuestions === null ? localizedQuestions : []}
+                    restoredShouldShowLandingPage={cache.shouldShowLandingPage}
+                    shouldPreinitSession={shouldPreinitSession}
+                    suggestedQuestions={
+                        cache.suggestedQuestions.length > 0 ? cache.suggestedQuestions : suggestedQuestions
+                    }
                     warningNotice={spreadsheetNotice}
                     warningNoticeAriaLabel={formatMessage(messages.welcomeMessageSpreadsheetNoticeAriaLabel)}
                     {...rest}

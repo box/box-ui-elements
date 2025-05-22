@@ -1,4 +1,4 @@
-import type { PaginationQueryInput } from '@box/metadata-editor';
+import { TreeQueryInput, TreeOptionType, FetcherResponse } from '@box/combobox-with-api';
 import type API from '../../../api';
 import type { MetadataOptionEntry } from '../../../common/types/metadata';
 
@@ -9,8 +9,8 @@ export const metadataTaxonomyFetcher = async (
     templateKey: string,
     fieldKey: string,
     level: number,
-    options: PaginationQueryInput,
-) => {
+    options: TreeQueryInput,
+): Promise<FetcherResponse<TreeOptionType>> => {
     const metadataOptions = await api
         .getMetadataAPI(false)
         .getMetadataOptions(fileId, scope, templateKey, fieldKey, level, options);
@@ -19,7 +19,10 @@ export const metadataTaxonomyFetcher = async (
     return {
         options: metadataOptions.entries.map((metadataOption: MetadataOptionEntry) => ({
             value: metadataOption.id,
-            displayValue: metadataOption.display_name,
+            displayValue: metadataOption.display_name || metadataOption.displayName,
+            level: metadataOption.level,
+            ancestors: metadataOption.ancestors?.map(({display_name, displayName, ...rest}) => ({...rest, displayName: display_name || displayName })),
+            selectable: metadataOption.selectable,
         })),
         marker,
     };
@@ -48,12 +51,13 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
     if (!metadataTaxonomy?.levels) {
         return [];
     }
+
     // Create a hashmap of levels to easily hydrate with data from metadataTaxonomyNode
     const levelsMap = new Map();
     for (const item of metadataTaxonomy.levels) {
         const levelData = {
             level: item.level,
-            levelName: item.displayName,
+            levelName: item.displayName || item.display_name,
             description: item.description,
         };
 
@@ -62,7 +66,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
             levelsMap.set(item.level, {
                 ...levelData,
                 id: metadataTaxonomyNode.id,
-                levelValue: metadataTaxonomyNode.displayName,
+                levelValue: metadataTaxonomyNode.displayName || metadataTaxonomyNode.display_name,
             });
             // If the level is not the metadataTaxonomyNode level, just add the level data
         } else {
@@ -75,7 +79,7 @@ export const metadataTaxonomyNodeAncestorsFetcher = async (
             const levelData = levelsMap.get(ancestor.level);
 
             if (levelData) {
-                levelsMap.set(ancestor.level, { ...levelData, levelValue: ancestor.displayName, id: ancestor.id });
+                levelsMap.set(ancestor.level, { ...levelData, levelValue: ancestor.displayName || ancestor.display_name, id: ancestor.id });
             }
         }
     }

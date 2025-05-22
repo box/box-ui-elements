@@ -13,7 +13,7 @@ import messages from '../messages';
 import './IconCell.scss';
 
 export interface IconCellProps {
-    dimension?: number;
+    dimension: number;
     rowData: BoxItem;
 }
 

@@ -16,7 +16,7 @@ export const withAnnotations = {
                 hasRetentionPolicy: true,
                 hasVersions: true,
             },
-            features: global.FEATURES,
+            features: global.FEATURE_FLAGS,
             hasActivityFeed: true,
             hasMetadata: true,
             hasSkills: true,
