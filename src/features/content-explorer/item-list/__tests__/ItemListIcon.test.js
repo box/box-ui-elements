@@ -6,11 +6,18 @@ import { render, screen } from '../../../../test-utils/testing-library';
 describe('features/content-explorer/item-list/ItemListIcon', () => {
     const renderComponent = props => render(<ItemListIcon {...props} />);
 
+    const expectIconWithDefaultSize = icon => {
+        expect(icon).toBeVisible();
+        expect(icon).toHaveAttribute('width', '32');
+        expect(icon).toHaveAttribute('height', '32');
+    };
+
     describe('render()', () => {
         test('should render default file icon', () => {
             renderComponent({});
 
-            expect(screen.getByLabelText('File')).toBeInTheDocument();
+            const fileIcon = screen.getByLabelText('File');
+            expectIconWithDefaultSize(fileIcon);
         });
 
         test('should render archive icon', () => {
@@ -22,7 +29,8 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             };
             renderComponent(rowData);
 
-            expect(screen.getByLabelText('Archive')).toBeVisible();
+            const archiveIcon = screen.getByLabelText('Archive');
+            expectIconWithDefaultSize(archiveIcon);
         });
 
         test('should render archived folder icon', () => {
@@ -34,7 +42,8 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             };
             renderComponent(rowData);
 
-            expect(screen.getByLabelText('Archived Folder')).toBeVisible();
+            const archivedFolderIcon = screen.getByLabelText('Archived Folder');
+            expectIconWithDefaultSize(archivedFolderIcon);
         });
 
         test.each([
@@ -68,7 +77,8 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
         ])('should render $label folder icon', ({ rowData, label }) => {
             renderComponent(rowData);
 
-            expect(screen.getByLabelText(label)).toBeInTheDocument();
+            const folderIcon = screen.getByLabelText(label);
+            expectIconWithDefaultSize(folderIcon);
         });
 
         test('should render correct file icon', () => {
@@ -76,14 +86,16 @@ describe('features/content-explorer/item-list/ItemListIcon', () => {
             const rowData = { type: 'file', extension };
             renderComponent(rowData);
 
-            expect(screen.getByLabelText('BOXNOTE File')).toBeInTheDocument();
+            const fileIcon = screen.getByLabelText('BOXNOTE File');
+            expectIconWithDefaultSize(fileIcon);
         });
 
         test('should render correct bookmark icon', () => {
             const rowData = { type: 'web_link' };
             renderComponent(rowData);
 
-            expect(screen.getByLabelText('Bookmark')).toBeInTheDocument();
+            const bookmarkIcon = screen.getByLabelText('Bookmark');
+            expectIconWithDefaultSize(bookmarkIcon);
         });
     });
 });

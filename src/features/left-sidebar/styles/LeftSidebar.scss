@@ -8,7 +8,9 @@
     width: $lsb-width;
     height: 100vh;
     padding: 0;
-    transition: left .4s cubic-bezier(.215, .61, .355, 1), width .4s cubic-bezier(.215, .61, .355, 1);
+    transition:
+        left 0.4s cubic-bezier(0.215, 0.61, 0.355, 1),
+        width 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
 
     &.is-forced-open {
         left: 0;
@@ -116,6 +118,7 @@
         flex-direction: column;
         flex-grow: 1;
         max-width: 100%;
+
         // If the window is squished, this shows the header + 5 items in scrollable list
         min-height: calc(6 * #{$lsb-item-height});
         margin-bottom: 0;
@@ -123,8 +126,7 @@
         ul {
             flex-grow: 1;
             height: 0;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow: hidden auto;
 
             &::before {
                 position: absolute;
@@ -134,9 +136,9 @@
                 display: block;
                 width: 85%;
                 height: $lsb-scroll-shadow-height;
-                box-shadow: 0 4px 6px -4px rgba(0, 0, 0, .35);
+                box-shadow: 0 4px 6px -4px rgb(0 0 0 / 35%);
                 opacity: 0;
-                transition: opacity .1s ease-in-out;
+                transition: opacity 0.1s ease-in-out;
                 content: '';
             }
 
@@ -148,9 +150,9 @@
                 width: 85%;
                 height: $lsb-scroll-shadow-height;
                 margin-bottom: -$lsb-scroll-shadow-height;
-                box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
+                box-shadow: 0 -4px 6px -4px rgb(0 0 0 / 35%);
                 opacity: 0;
-                transition: opacity .1s ease-in-out;
+                transition: opacity 0.1s ease-in-out;
                 content: '';
             }
         }
@@ -241,7 +243,7 @@
     color: $light-charcoal;
     font-size: $lsb-font-size;
     line-height: 28px;
-    letter-spacing: .3px;
+    letter-spacing: 0.3px;
 
     .scaled-icon svg {
         transform: scale(1.4, 1.4);
@@ -288,7 +290,7 @@
         }
 
         .is-selected .fill-color {
-            fill: currentColor;
+            fill: currentcolor;
         }
     }
 

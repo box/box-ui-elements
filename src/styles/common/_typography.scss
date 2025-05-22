@@ -6,7 +6,7 @@ html,
 a {
     @include font-aliasing;
 
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .004);
+    text-shadow: 1px 1px 1px rgb(0 0 0 / 0.4%);
 }
 
 html {
@@ -38,7 +38,7 @@ h6 {
     font-weight: normal;
     font-family: inherit;
     line-height: 20px;
-    text-rendering: optimizeLegibility;
+    text-rendering: optimizelegibility;
 }
 
 h1 {

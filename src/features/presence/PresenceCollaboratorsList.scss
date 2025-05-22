@@ -5,8 +5,7 @@
 
     .dropshadow-list,
     .dropshadow-list-with-buttons {
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden auto;
     }
 
     .dropshadow-list::before,
@@ -19,7 +18,7 @@
         width: 85%;
         height: 10px;
         opacity: 0;
-        transition: opacity .1s ease-in-out;
+        transition: opacity 0.1s ease-in-out;
         content: '';
     }
 
@@ -34,19 +33,19 @@
     .dropshadow-list-with-buttons::before {
         top: 41px;
         z-index: 999;
-        box-shadow: 0 4px 6px -4px rgba(0, 0, 0, .35);
+        box-shadow: 0 4px 6px -4px rgb(0 0 0 / 35%);
     }
 
     .dropshadow-list::after {
         bottom: 11px;
         z-index: 999;
-        box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
+        box-shadow: 0 -4px 6px -4px rgb(0 0 0 / 35%);
     }
 
     .dropshadow-list-with-buttons::after {
         bottom: 72px;
         z-index: 999;
-        box-shadow: 0 -4px 6px -4px rgba(0, 0, 0, .35);
+        box-shadow: 0 -4px 6px -4px rgb(0 0 0 / 35%);
     }
 
     /* GROWTH-382 */
@@ -85,8 +84,7 @@
 
 .bdl-PresenceCollaboratorsList-list {
     max-height: 200px;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
 }
 
 .bdl-PresenceCollaboratorsList-title {

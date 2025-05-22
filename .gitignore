@@ -20,6 +20,7 @@ npm-error.log
 reports
 scripts/rsync.json
 styleguide
+storybook
 test/screenshots
 test/videos
 test/dev.html

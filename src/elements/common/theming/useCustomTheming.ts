@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { convertTokensToCustomProperties } from './utils';
 import { ThemingProps } from './types';
 
-const useCustomTheming = ({ theme = {} }: ThemingProps) => {
+const useCustomTheming = ({ selector, theme = {} }: ThemingProps) => {
     const { tokens } = theme;
 
     const customProperties = convertTokensToCustomProperties(tokens);
@@ -18,12 +18,12 @@ const useCustomTheming = ({ theme = {} }: ThemingProps) => {
         const styleEl = document.createElement('style');
         document.head.appendChild(styleEl);
 
-        styleEl.sheet.insertRule(`:root { ${styles} }`);
+        styleEl.sheet.insertRule(`${selector ?? ':root'} { ${styles} }`);
 
         return () => {
             document.head.removeChild(styleEl);
         };
-    }, [styles]);
+    }, [selector, styles]);
 };
 
 export default useCustomTheming;

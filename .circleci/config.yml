@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: cimg/node:18.18
+      - image: cimg/node:20.18
         user: root
     resource_class: large
     working_directory: ~/buie
@@ -111,6 +111,7 @@ jobs:
    steps:
      - checkout
      - setup-workspace
+     - build-locales
      - run:
          name: Cypress run
          command: yarn --cwd /buie test:e2e

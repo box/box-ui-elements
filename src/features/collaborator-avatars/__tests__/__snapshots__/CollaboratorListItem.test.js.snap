@@ -1,5 +1,315 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`features/collaborator-avatars/CollaboratorListItem render() should call onRemoveCollaborator when onRemoveCollaborator prop is passed 1`] = `
+<li>
+  <div
+    className="collaborator-list-item"
+  >
+    <div
+      className="bdl-CollaboratorListItem-user user"
+    >
+      <div
+        className="info"
+      >
+        <div
+          className="name"
+        >
+          <Link
+            className=""
+            href="/profile/undefined"
+            rel="noopener"
+            target="_blank"
+          >
+            test c
+          </Link>
+        </div>
+        <div
+          className="email"
+        >
+          <Link
+            className=""
+            href="mailto:testc@example.com"
+          >
+            testc@example.com
+          </Link>
+        </div>
+      </div>
+      <CollaboratorAvatarItem
+        allowBadging={true}
+        email="testc@example.com"
+        expiration={
+          {
+            "expiresAt": "Jan 1, 1966",
+          }
+        }
+        hasCustomAvatar={true}
+        id={1}
+        name="test c"
+      />
+    </div>
+    <div
+      className="user-actions"
+    >
+      <div
+        className="role"
+      />
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        isTabbable={false}
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="Remove"
+            id="be.remove"
+          />
+        }
+        theme="default"
+      >
+        <PlainButton
+          className="remove-button"
+          onClick={[Function]}
+          type="button"
+        >
+          <X16
+            color="##6f6f6f"
+            height={16}
+            width={16}
+          />
+        </PlainButton>
+      </Tooltip>
+    </div>
+  </div>
+</li>
+`;
+
+exports[`features/collaborator-avatars/CollaboratorListItem render() should not call onRemoveCollaborator when onRemoveCollaborator prop is undefined 1`] = `
+<li>
+  <div
+    className="collaborator-list-item"
+  >
+    <div
+      className="bdl-CollaboratorListItem-user user"
+    >
+      <div
+        className="info"
+      >
+        <div
+          className="name"
+        >
+          <Link
+            className=""
+            href="/profile/undefined"
+            rel="noopener"
+            target="_blank"
+          >
+            test c
+          </Link>
+        </div>
+        <div
+          className="email"
+        >
+          <Link
+            className=""
+            href="mailto:testc@example.com"
+          >
+            testc@example.com
+          </Link>
+        </div>
+      </div>
+      <CollaboratorAvatarItem
+        allowBadging={true}
+        email="testc@example.com"
+        expiration={
+          {
+            "expiresAt": "Jan 1, 1966",
+          }
+        }
+        hasCustomAvatar={true}
+        id={1}
+        name="test c"
+      />
+    </div>
+    <div
+      className="user-actions"
+    >
+      <div
+        className="role"
+      />
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        isTabbable={false}
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="Remove"
+            id="be.remove"
+          />
+        }
+        theme="default"
+      >
+        <PlainButton
+          className="remove-button"
+          onClick={[Function]}
+          type="button"
+        >
+          <X16
+            color="##6f6f6f"
+            height={16}
+            width={16}
+          />
+        </PlainButton>
+      </Tooltip>
+    </div>
+  </div>
+</li>
+`;
+
+exports[`features/collaborator-avatars/CollaboratorListItem render() should render component when canRemoveCollaborators prop is true and collaborator is not removable 1`] = `
+<li>
+  <div
+    className="collaborator-list-item"
+  >
+    <div
+      className="bdl-CollaboratorListItem-user user"
+    >
+      <div
+        className="info"
+      >
+        <div
+          className="name"
+        >
+          <Link
+            className=""
+            href="/profile/undefined"
+            rel="noopener"
+            target="_blank"
+          >
+            test c
+          </Link>
+        </div>
+        <div
+          className="email"
+        >
+          <Link
+            className=""
+            href="mailto:testc@example.com"
+          >
+            testc@example.com
+          </Link>
+        </div>
+      </div>
+      <CollaboratorAvatarItem
+        allowBadging={true}
+        email="testc@example.com"
+        expiration={
+          {
+            "expiresAt": "Jan 1, 1966",
+          }
+        }
+        hasCustomAvatar={true}
+        id={1}
+        name="test c"
+      />
+    </div>
+    <div
+      className="user-actions"
+    >
+      <div
+        className="role"
+      />
+    </div>
+  </div>
+</li>
+`;
+
+exports[`features/collaborator-avatars/CollaboratorListItem render() should render component when canRemoveCollaborators prop is true and collaborator is removable 1`] = `
+<li>
+  <div
+    className="collaborator-list-item"
+  >
+    <div
+      className="bdl-CollaboratorListItem-user user"
+    >
+      <div
+        className="info"
+      >
+        <div
+          className="name"
+        >
+          <Link
+            className=""
+            href="/profile/undefined"
+            rel="noopener"
+            target="_blank"
+          >
+            test c
+          </Link>
+        </div>
+        <div
+          className="email"
+        >
+          <Link
+            className=""
+            href="mailto:testc@example.com"
+          >
+            testc@example.com
+          </Link>
+        </div>
+      </div>
+      <CollaboratorAvatarItem
+        allowBadging={true}
+        email="testc@example.com"
+        expiration={
+          {
+            "expiresAt": "Jan 1, 1966",
+          }
+        }
+        hasCustomAvatar={true}
+        id={1}
+        name="test c"
+      />
+    </div>
+    <div
+      className="user-actions"
+    >
+      <div
+        className="role"
+      />
+      <Tooltip
+        constrainToScrollParent={false}
+        constrainToWindow={true}
+        isDisabled={false}
+        isTabbable={false}
+        position="top-center"
+        text={
+          <FormattedMessage
+            defaultMessage="Remove"
+            id="be.remove"
+          />
+        }
+        theme="default"
+      >
+        <PlainButton
+          className="remove-button"
+          onClick={[Function]}
+          type="button"
+        >
+          <X16
+            color="##6f6f6f"
+            height={16}
+            width={16}
+          />
+        </PlainButton>
+      </Tooltip>
+    </div>
+  </div>
+</li>
+`;
+
 exports[`features/collaborator-avatars/CollaboratorListItem render() should render default component 1`] = `
 <li>
   <div

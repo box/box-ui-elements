@@ -9,10 +9,10 @@
 // the comment activity item
 .bcs-AnnotationActivity-media {
     opacity: 1;
-    transition: opacity .33s;
+    transition: opacity 0.33s;
 
     &.bcs-is-pending {
-        opacity: .4;
+        opacity: 0.4;
         pointer-events: none;
     }
 }
@@ -25,6 +25,7 @@
     // Because the annotation menu is absolutely positioned,
     // this padding reserves that space so long headlines won't overlap with the menu
     margin-right: 26px;
+
     // target only Edge because this breaks other browsers
     // but fixes Edge
     @supports (-ms-ime-align: auto) {

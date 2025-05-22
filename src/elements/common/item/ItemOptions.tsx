@@ -2,8 +2,9 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import noop from 'lodash/noop';
 
-import { ActionCell, DropdownMenu, GridList, IconButton } from '@box/blueprint-web';
+import { ActionCell, Cell, DropdownMenu, GridList, IconButton } from '@box/blueprint-web';
 import { Ellipsis } from '@box/blueprint-web-assets/icons/Fill';
+import type { IconButtonProps } from '@box/blueprint-web';
 
 import Browser from '../../../utils/Browser';
 
@@ -15,6 +16,8 @@ import {
     PERMISSION_CAN_SHARE,
     TYPE_FILE,
     TYPE_WEBLINK,
+    VIEW_MODE_GRID,
+    VIEW_MODE_LIST,
 } from '../../../constants';
 
 import messages from '../messages';
@@ -23,9 +26,10 @@ import type { BoxItem } from '../../../common/types/core';
 import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from './types';
 
 export interface ItemOptionsProps extends ItemEventHandlers, ItemEventPermissions {
-    isGridView?: boolean;
     item: BoxItem;
     itemActions?: ItemAction[];
+    portalElement?: HTMLElement;
+    viewMode?: VIEW_MODE_GRID | VIEW_MODE_LIST;
 }
 
 const ItemOptions = ({
@@ -34,7 +38,6 @@ const ItemOptions = ({
     canPreview = false,
     canRename = false,
     canShare = false,
-    isGridView = false,
     item,
     itemActions = [],
     onItemDelete = noop,
@@ -42,12 +45,17 @@ const ItemOptions = ({
     onItemPreview = noop,
     onItemRename = noop,
     onItemShare = noop,
+    portalElement,
+    viewMode,
 }: ItemOptionsProps) => {
     const { permissions, type: itemType } = item;
     const { formatMessage } = useIntl();
 
+    const isListView = viewMode === VIEW_MODE_LIST;
+    const isGridView = viewMode === VIEW_MODE_GRID;
+
     if (!permissions) {
-        return null;
+        return isListView ? <Cell /> : null;
     }
 
     const isDeleteEnabled = canDelete && permissions[PERMISSION_CAN_DELETE];
@@ -58,72 +66,96 @@ const ItemOptions = ({
     const isRenameEnabled = canRename && permissions[PERMISSION_CAN_RENAME];
     const isShareEnabled = canShare && permissions[PERMISSION_CAN_SHARE];
 
-    const hasActions = !!itemActions.length;
+    const actions = itemActions.reduce((validActions, action) => {
+        const { filter: actionFilter, label: actionLabel, onAction, type: actionType } = action;
+
+        if (actionType && actionType !== itemType) {
+            return validActions;
+        }
+
+        if (actionFilter && !actionFilter(item)) {
+            return validActions;
+        }
+
+        return [
+            ...validActions,
+            <DropdownMenu.Item key={actionLabel + actionType} onClick={() => onAction(item)}>
+                {actionLabel}
+            </DropdownMenu.Item>,
+        ];
+    }, []);
+
+    const hasActions = !!actions.length;
     const hasOptions =
         isDeleteEnabled || isDownloadEnabled || isOpenEnabled || isPreviewEnabled || isRenameEnabled || isShareEnabled;
 
     if (!hasActions && !hasOptions) {
-        return null;
+        return isListView ? <Cell /> : null;
     }
+
+    const iconButtonProps = {
+        onPointerDown: event => {
+            event.stopPropagation();
+        },
+        size: 'large',
+    };
 
     const OptionsGroup = isGridView ? GridList.Actions : ActionCell;
     const OptionsTrigger = isGridView ? GridList.ActionIconButton : IconButton;
+    const optionsTriggerProps = isGridView ? {} : iconButtonProps;
 
-    return (
-        <OptionsGroup>
-            {/* @ts-expect-error - ActionCell doesn't seem to work with onOpenChange */}
-            {onOpenChange => (
-                <DropdownMenu.Root onOpenChange={onOpenChange}>
-                    <DropdownMenu.Trigger>
-                        <OptionsTrigger aria-label={formatMessage(messages.moreOptions)} icon={Ellipsis} />
-                    </DropdownMenu.Trigger>
-                    <DropdownMenu.Content align="end">
-                        {isPreviewEnabled && (
-                            <DropdownMenu.Item onClick={() => onItemPreview(item)}>
-                                {formatMessage(messages.preview)}
-                            </DropdownMenu.Item>
-                        )}
-                        {isOpenEnabled && (
-                            <DropdownMenu.Item onClick={() => onItemPreview(item)}>
-                                {formatMessage(messages.open)}
-                            </DropdownMenu.Item>
-                        )}
-                        {isDeleteEnabled && (
-                            <DropdownMenu.Item onClick={() => onItemDelete(item)}>
-                                {formatMessage(messages.delete)}
-                            </DropdownMenu.Item>
-                        )}
-                        {isDownloadEnabled && (
-                            <DropdownMenu.Item onClick={() => onItemDownload(item)}>
-                                {formatMessage(messages.download)}
-                            </DropdownMenu.Item>
-                        )}
-                        {isRenameEnabled && (
-                            <DropdownMenu.Item onClick={() => onItemRename(item)}>
-                                {formatMessage(messages.rename)}
-                            </DropdownMenu.Item>
-                        )}
-                        {isShareEnabled && (
-                            <DropdownMenu.Item onClick={() => onItemShare(item)}>
-                                {formatMessage(messages.share)}
-                            </DropdownMenu.Item>
-                        )}
-                        {hasActions && hasOptions && <DropdownMenu.Separator />}
-                        {itemActions.map(({ label: actionLabel, onAction, type: actionType }) => {
-                            if (actionType && actionType !== itemType) {
-                                return null;
-                            }
-                            return (
-                                <DropdownMenu.Item key={actionLabel + actionType} onClick={() => onAction(item)}>
-                                    {actionLabel}
-                                </DropdownMenu.Item>
-                            );
-                        })}
-                    </DropdownMenu.Content>
-                </DropdownMenu.Root>
-            )}
-        </OptionsGroup>
+    const OptionsDropdownMenu = ({ onOpenChange = noop }) => (
+        <DropdownMenu.Root onOpenChange={onOpenChange}>
+            <DropdownMenu.Trigger>
+                <OptionsTrigger
+                    aria-label={formatMessage(messages.moreOptions)}
+                    icon={Ellipsis}
+                    {...(optionsTriggerProps as IconButtonProps)}
+                />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content align="end" container={portalElement}>
+                {isPreviewEnabled && (
+                    <DropdownMenu.Item onClick={() => onItemPreview(item)}>
+                        {formatMessage(messages.preview)}
+                    </DropdownMenu.Item>
+                )}
+                {isOpenEnabled && (
+                    <DropdownMenu.Item onClick={() => onItemPreview(item)}>
+                        {formatMessage(messages.open)}
+                    </DropdownMenu.Item>
+                )}
+                {isDeleteEnabled && (
+                    <DropdownMenu.Item onClick={() => onItemDelete(item)}>
+                        {formatMessage(messages.delete)}
+                    </DropdownMenu.Item>
+                )}
+                {isDownloadEnabled && (
+                    <DropdownMenu.Item onClick={() => onItemDownload(item)}>
+                        {formatMessage(messages.download)}
+                    </DropdownMenu.Item>
+                )}
+                {isRenameEnabled && (
+                    <DropdownMenu.Item onClick={() => onItemRename(item)}>
+                        {formatMessage(messages.rename)}
+                    </DropdownMenu.Item>
+                )}
+                {isShareEnabled && (
+                    <DropdownMenu.Item onClick={() => onItemShare(item)}>
+                        {formatMessage(messages.share)}
+                    </DropdownMenu.Item>
+                )}
+                {hasActions && hasOptions && <DropdownMenu.Separator />}
+                {hasActions && actions}
+            </DropdownMenu.Content>
+        </DropdownMenu.Root>
     );
+
+    // TODO: Update to one `return` statement after ContentPicker has been migrated to Blueprint
+    if (viewMode) {
+        return <OptionsGroup>{onOpenChange => <OptionsDropdownMenu onOpenChange={onOpenChange} />}</OptionsGroup>;
+    }
+
+    return <OptionsDropdownMenu />;
 };
 
 export default ItemOptions;

@@ -3,10 +3,8 @@ import {
     type FormValues,
     type JSONPatchOperations,
     type MetadataTemplateInstance,
-    type FetcherResponse,
-    type BaseOptionType,
-    type PaginationQueryInput,
 } from '@box/metadata-editor';
+import { TaxonomyOptionsFetcher } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import React from 'react';
 import {
     ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
@@ -20,20 +18,16 @@ export interface MetadataInstanceEditorProps {
     isBetaLanguageEnabled: boolean;
     isBoxAiSuggestionsEnabled: boolean;
     isDeleteButtonDisabled: boolean;
+    isDeleteConfirmationModalCheckboxEnabled: boolean;
     isLargeFile: boolean;
+    isMetadataMultiLevelTaxonomyFieldEnabled: boolean;
     isUnsavedChangesModalOpen: boolean;
     onCancel: () => void;
     onDelete: (metadataInstance: MetadataTemplateInstance) => void;
     onDiscardUnsavedChanges: () => void;
     onSubmit: (values: FormValues, operations: JSONPatchOperations) => Promise<void>;
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
-    taxonomyOptionsFetcher: (
-        scope: string,
-        templateKey: string,
-        fieldKey: string,
-        level: number,
-        options: PaginationQueryInput,
-    ) => Promise<FetcherResponse<BaseOptionType>>;
+    taxonomyOptionsFetcher: TaxonomyOptionsFetcher;
     template: MetadataTemplateInstance;
 }
 
@@ -43,7 +37,9 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     isBetaLanguageEnabled,
     isBoxAiSuggestionsEnabled,
     isDeleteButtonDisabled,
+    isDeleteConfirmationModalCheckboxEnabled,
     isLargeFile,
+    isMetadataMultiLevelTaxonomyFieldEnabled,
     isUnsavedChangesModalOpen,
     onCancel,
     onDelete,
@@ -55,11 +51,14 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
 }) => {
     return (
         <MetadataInstanceForm
+            // TODO investigate if this property should be optional and by default false
+            isMultilevelTaxonomyFieldEnabled={isMetadataMultiLevelTaxonomyFieldEnabled}
             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
             errorCode={errorCode}
             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
             isBetaLanguageEnabled={isBetaLanguageEnabled}
             isDeleteButtonDisabled={isDeleteButtonDisabled}
+            isDeleteConfirmationModalCheckboxEnabled={isDeleteConfirmationModalCheckboxEnabled}
             isLargeFile={isLargeFile}
             isUnsavedChangesModalOpen={isUnsavedChangesModalOpen}
             onCancel={onCancel}

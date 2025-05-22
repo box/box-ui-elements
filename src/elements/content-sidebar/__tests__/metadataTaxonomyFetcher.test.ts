@@ -19,11 +19,11 @@ describe('metadataTaxonomyFetcher', () => {
         };
     });
 
-    test('should fetch metadata options and return formatted data', async () => {
+    test('should fetch metadata options and return formatted data - new naming convention', async () => {
         const mockMetadataOptions = {
             entries: [
-                { id: 'opt1', display_name: 'Option 1' },
-                { id: 'opt2', display_name: 'Option 2' },
+                { id: 'opt1', display_name: 'Option 1', level: '1', ancestors: null, selectable: false },
+                { id: 'opt2', display_name: 'Option 2', level: '2', ancestors: [{ display_name: 'Option 1', foo: 'bar' }], selectable: true },
             ],
         };
 
@@ -33,8 +33,40 @@ describe('metadataTaxonomyFetcher', () => {
 
         const expectedResult = {
             options: [
-                { value: 'opt1', displayValue: 'Option 1' },
-                { value: 'opt2', displayValue: 'Option 2' },
+                { value: 'opt1', displayValue: 'Option 1', level: '1', ancestors: undefined, selectable: false },
+                { value: 'opt2', displayValue: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
+            ],
+            marker: 'marker_1',
+        };
+
+        expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
+        expect(apiMock.getMetadataAPI(false).getMetadataOptions).toHaveBeenCalledWith(
+            fileId,
+            scope,
+            templateKey,
+            fieldKey,
+            level,
+            options,
+        );
+        expect(result).toEqual(expectedResult);
+    });
+
+    test('should fetch metadata options and return formatted data - old naming convention', async () => {
+        const mockMetadataOptions = {
+            entries: [
+                { id: 'opt1', displayName: 'Option 1', level: '1', ancestors: null, selectable: false },
+                { id: 'opt2', displayName: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
+            ],
+        };
+
+        apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
+
+        const result = await metadataTaxonomyFetcher(apiMock, fileId, scope, templateKey, fieldKey, level, options);
+
+        const expectedResult = {
+            options: [
+                { value: 'opt1', displayValue: 'Option 1', level: '1', ancestors: undefined, selectable: false },
+                { value: 'opt2', displayValue: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
             ],
             marker: 'marker_1',
         };
@@ -95,7 +127,8 @@ describe('metadataTaxonomyFetcher', () => {
     });
 });
 
-describe('metadataNodeTaxonomiesFetcher', () => {
+// TODO: delete whole section during clean up as for now we have to handle both new and old naming convention
+describe('metadataTaxonomyNodeAncestorsFetcher (old keys naming convention)', () => {
     const fileID = '12345';
     const scope = 'global';
     const taxonomyKey = 'taxonomy_123';
@@ -114,22 +147,22 @@ describe('metadataNodeTaxonomiesFetcher', () => {
 
     test('should fetch taxonomy and node data and return formatted data', async () => {
         const mockTaxonomy = {
-            displayName: 'Geography',
+            display_name: 'Geography',
             namespace: 'my_enterprise',
             id: 'my_id',
             key: 'geography',
             levels: [
-                { level: 1, displayName: 'Level 1', description: 'Description 1' },
-                { level: 2, displayName: 'Level 2', description: 'Description 2' },
-                { level: 3, displayName: 'Level 3', description: 'Description 3' },
+                { level: 1, display_name: 'Level 1', description: 'Description 1' },
+                { level: 2, display_name: 'Level 2', description: 'Description 2' },
+                { level: 3, display_name: 'Level 3', description: 'Description 3' },
             ],
         };
 
         const mockTaxonomyNode = {
             id: 'node_abc',
             level: 1,
-            displayName: 'Node ABC',
-            ancestors: [{ id: 'ancestor_1', level: 2, displayName: 'Ancestor 1' }],
+            display_name: 'Node ABC',
+            ancestors: [{ id: 'ancestor_1', level: 2, display_name: 'Ancestor 1' }],
         };
 
         apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue(mockTaxonomy);
@@ -168,17 +201,123 @@ describe('metadataNodeTaxonomiesFetcher', () => {
 
     test('should handle empty ancestors array', async () => {
         const mockTaxonomy = {
-            displayName: 'Geography',
+            display_name: 'Geography',
             namespace: 'my_enterprise',
             id: 'my_id',
             key: 'geography',
-            levels: [{ level: 1, displayName: 'Level 1', description: 'Description 1' }],
+            levels: [{ level: 1, display_name: 'Level 1', description: 'Description 1' }],
         };
 
         const mockTaxonomyNode = {
             id: 'node_abc',
             level: 1,
-            displayName: 'Node ABC',
+            display_name: 'Node ABC',
+            ancestors: [],
+        };
+
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue(mockTaxonomy);
+        apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockResolvedValue(mockTaxonomyNode);
+
+        const result = await metadataTaxonomyNodeAncestorsFetcher(apiMock, fileID, scope, taxonomyKey, nodeID);
+
+        const expectedResult = [
+            {
+                level: 1,
+                levelName: 'Level 1',
+                description: 'Description 1',
+                id: 'node_abc',
+                levelValue: 'Node ABC',
+            },
+        ];
+
+        expect(result).toEqual(expectedResult);
+    });
+});
+
+describe('metadataTaxonomyNodeAncestorsFetcher (new keys naming convention)', () => {
+    const fileID = '12345';
+    const scope = 'global';
+    const taxonomyKey = 'taxonomy_123';
+    const nodeID = 'node_abc';
+
+    let apiMock: jest.Mocked<API>;
+
+    beforeEach(() => {
+        apiMock = {
+            getMetadataAPI: jest.fn().mockReturnValue({
+                getMetadataTaxonomy: jest.fn(),
+                getMetadataTaxonomyNode: jest.fn(),
+            }),
+        };
+    });
+
+    test('should fetch taxonomy and node data and return formatted data', async () => {
+        const mockTaxonomy = {
+            display_name: 'Geography',
+            namespace: 'my_enterprise',
+            id: 'my_id',
+            key: 'geography',
+            levels: [
+                { level: 1, display_name: 'Level 1', description: 'Description 1' },
+                { level: 2, display_name: 'Level 2', description: 'Description 2' },
+                { level: 3, display_name: 'Level 3', description: 'Description 3' },
+            ],
+        };
+
+        const mockTaxonomyNode = {
+            id: 'node_abc',
+            level: 1,
+            display_name: 'Node ABC',
+            ancestors: [{ id: 'ancestor_1', level: 2, display_name: 'Ancestor 1' }],
+        };
+
+        apiMock.getMetadataAPI(false).getMetadataTaxonomy.mockResolvedValue(mockTaxonomy);
+        apiMock.getMetadataAPI(false).getMetadataTaxonomyNode.mockResolvedValue(mockTaxonomyNode);
+
+        const result = await metadataTaxonomyNodeAncestorsFetcher(apiMock, fileID, scope, taxonomyKey, nodeID);
+
+        const expectedResult = [
+            {
+                level: 1,
+                levelName: 'Level 1',
+                description: 'Description 1',
+                id: 'node_abc',
+                levelValue: 'Node ABC',
+            },
+            {
+                level: 2,
+                levelName: 'Level 2',
+                description: 'Description 2',
+                id: 'ancestor_1',
+                levelValue: 'Ancestor 1',
+            },
+        ];
+
+        expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomy).toHaveBeenCalledWith(fileID, scope, taxonomyKey);
+        expect(apiMock.getMetadataAPI(false).getMetadataTaxonomyNode).toHaveBeenCalledWith(
+            fileID,
+            scope,
+            taxonomyKey,
+            nodeID,
+            true,
+        );
+        expect(result).toEqual(expectedResult);
+    });
+
+    test('should handle empty ancestors array', async () => {
+        const mockTaxonomy = {
+            display_name: 'Geography',
+            namespace: 'my_enterprise',
+            id: 'my_id',
+            key: 'geography',
+            levels: [{ level: 1, display_name: 'Level 1', description: 'Description 1' }],
+        };
+
+        const mockTaxonomyNode = {
+            id: 'node_abc',
+            level: 1,
+            display_name: 'Node ABC',
             ancestors: [],
         };
 

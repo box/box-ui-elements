@@ -1,3 +1,299 @@
+const mockFiles = [
+    {
+        type: 'file',
+        id: '416044542013',
+        etag: '1',
+        name: 'Book Sample.pdf',
+        size: 144481,
+        parent: {
+            type: 'folder',
+            id: '69083462919',
+            sequence_id: '2',
+            etag: '2',
+            name: 'Preview Test Folder',
+        },
+        extension: 'pdf',
+        permissions: {
+            can_download: true,
+            can_preview: true,
+            can_upload: false,
+            can_comment: true,
+            can_rename: true,
+            can_delete: true,
+            can_share: false,
+            can_set_share_access: false,
+            can_invite_collaborator: false,
+            can_annotate: false,
+            can_view_annotations_all: true,
+            can_view_annotations_self: true,
+            can_create_annotations: true,
+            can_view_annotations: true,
+        },
+        path_collection: {
+            total_count: 2,
+            entries: [
+                {
+                    type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files',
+                },
+                {
+                    type: 'folder',
+                    id: '69083462919',
+                    sequence_id: '2',
+                    etag: '2',
+                    name: 'Preview Test Folder',
+                },
+            ],
+        },
+        modified_at: '2022-12-07T22:13:30-08:00',
+        created_at: '2019-03-05T12:47:51-08:00',
+        modified_by: {
+            type: 'user',
+            id: '7503712462',
+            name: 'Preview',
+            login: 'preview@boxdemo.com',
+        },
+        has_collaborations: true,
+        is_externally_owned: false,
+        authenticated_download_url: 'https://dl.boxcloud.com/api/2.0/files/416044542013/content',
+        is_download_available: true,
+        representations: {
+            entries: [
+                {
+                    representation: 'jpg',
+                    properties: {
+                        dimensions: '1024x1024',
+                        paged: 'false',
+                        thumb: 'false',
+                    },
+                    info: {
+                        url: 'https://api.box.com/2.0/internal_files/416044542013/versions/439751948413/representations/jpg_1024x1024',
+                    },
+                    status: {
+                        state: 'success',
+                    },
+                    content: {
+                        url_template:
+                            'https://dl.boxcloud.com/api/2.0/internal_files/416044542013/versions/439751948413/representations/jpg_1024x1024/content/{+asset_path}',
+                    },
+                },
+            ],
+        },
+        file_version: {
+            type: 'file_version',
+            id: '439751948413',
+            sha1: '81fa3796742c6d194ddc54e9424f855f78009cf1',
+        },
+        sha1: '81fa3796742c6d194ddc54e9424f855f78009cf1',
+        shared_link: {
+            url: 'https://example.com/share-link',
+            permissions: {
+                can_preview: true,
+                can_download: true,
+                can_edit: false,
+            },
+        },
+        watermark_info: {
+            is_watermarked: false,
+        },
+    },
+    {
+        type: 'file',
+        id: '415542803939',
+        etag: '3',
+        name: 'Document (PDF).pdf',
+        size: 792687,
+        parent: {
+            type: 'folder',
+            id: '69083462919',
+            sequence_id: '2',
+            etag: '2',
+            name: 'Preview Test Folder',
+        },
+        extension: 'pdf',
+        permissions: {
+            can_download: true,
+            can_preview: true,
+            can_upload: false,
+            can_comment: true,
+            can_rename: false,
+            can_delete: false,
+            can_share: false,
+            can_set_share_access: false,
+            can_invite_collaborator: false,
+            can_annotate: false,
+            can_view_annotations_all: true,
+            can_view_annotations_self: true,
+            can_create_annotations: true,
+            can_view_annotations: true,
+        },
+        path_collection: {
+            total_count: 2,
+            entries: [
+                {
+                    type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files',
+                },
+                {
+                    type: 'folder',
+                    id: '69083462919',
+                    sequence_id: '2',
+                    etag: '2',
+                    name: 'Preview Test Folder',
+                },
+            ],
+        },
+        modified_at: '2022-12-17T23:59:57-08:00',
+        created_at: '2019-03-04T15:16:01-08:00',
+        modified_by: {
+            type: 'user',
+            id: '7503712462',
+            name: 'Preview',
+            login: 'preview@boxdemo.com',
+        },
+        has_collaborations: true,
+        is_externally_owned: false,
+        authenticated_download_url: 'https://dl.boxcloud.com/api/2.0/files/415542803939/content',
+        is_download_available: true,
+        representations: {
+            entries: [
+                {
+                    representation: 'jpg',
+                    properties: {
+                        dimensions: '1024x1024',
+                        paged: 'false',
+                        thumb: 'false',
+                    },
+                    info: {
+                        url: 'https://api.box.com/2.0/internal_files/415542803939/versions/780895440222/representations/jpg_1024x1024',
+                    },
+                    status: {
+                        state: 'success',
+                    },
+                    content: {
+                        url_template:
+                            'https://dl.boxcloud.com/api/2.0/internal_files/415542803939/versions/780895440222/representations/jpg_1024x1024/content/{+asset_path}',
+                    },
+                },
+            ],
+        },
+        file_version: {
+            type: 'file_version',
+            id: '780895440222',
+            sha1: '9650d7a6213181771fd38e761e2c2a330848a5fc',
+        },
+        sha1: '9650d7a6213181771fd38e761e2c2a330848a5fc',
+        shared_link: null,
+        watermark_info: {
+            is_watermarked: false,
+        },
+    },
+    {
+        type: 'file',
+        id: '415537552367',
+        etag: '1',
+        name: 'Document (Powerpoint).pptx',
+        size: 57947,
+        parent: {
+            type: 'folder',
+            id: '69083462919',
+            sequence_id: '2',
+            etag: '2',
+            name: 'Preview Test Folder',
+        },
+        extension: 'pptx',
+        permissions: {
+            can_download: true,
+            can_preview: true,
+            can_upload: false,
+            can_comment: true,
+            can_rename: false,
+            can_delete: false,
+            can_share: false,
+            can_set_share_access: false,
+            can_invite_collaborator: false,
+            can_annotate: false,
+            can_view_annotations_all: true,
+            can_view_annotations_self: true,
+            can_create_annotations: true,
+            can_view_annotations: true,
+        },
+        path_collection: {
+            total_count: 2,
+            entries: [
+                {
+                    type: 'folder',
+                    id: '0',
+                    sequence_id: null,
+                    etag: null,
+                    name: 'All Files',
+                },
+                {
+                    type: 'folder',
+                    id: '69083462919',
+                    sequence_id: '2',
+                    etag: '2',
+                    name: 'Preview Test Folder',
+                },
+            ],
+        },
+        modified_at: '2019-03-04T15:16:00-08:00',
+        created_at: '2019-03-04T15:16:00-08:00',
+        modified_by: {
+            type: 'user',
+            id: '7503712462',
+            name: 'Preview',
+            login: 'preview@boxdemo.com',
+        },
+        has_collaborations: true,
+        is_externally_owned: false,
+        authenticated_download_url: 'https://dl.boxcloud.com/api/2.0/files/415537552367/content',
+        is_download_available: true,
+        representations: {
+            entries: [
+                {
+                    representation: 'jpg',
+                    properties: {
+                        dimensions: '1024x1024',
+                        paged: 'false',
+                        thumb: 'false',
+                    },
+                    info: {
+                        url: 'https://api.box.com/2.0/internal_files/415537552367/versions/439202730767/representations/jpg_1024x1024',
+                    },
+                    status: {
+                        state: 'success',
+                    },
+                    content: {
+                        url_template:
+                            'https://dl.boxcloud.com/api/2.0/internal_files/415537552367/versions/439202730767/representations/jpg_1024x1024/content/{+asset_path}',
+                    },
+                },
+                {
+                    representation: 'pdf',
+                    properties: {},
+                    info: {
+                        url: 'https://api.box.com/2.0/internal_files/415537552367/versions/439202730767/representations/pdf',
+                    },
+                    status: {
+                        state: 'success',
+                    },
+                    content: {
+                        url_template:
+                            'https://dl.boxcloud.com/api/2.0/internal_files/415537552367/versions/439202730767/representations/pdf/content/{+asset_path}',
+                    },
+                },
+            ],
+        },
+    },
+];
+
 const mockEmptyRootFolder = {
     type: 'folder',
     id: '74729718131',
@@ -74,10 +370,305 @@ const mockRootFolder = {
     permissions: {
         can_download: true,
         can_upload: true,
-        can_rename: false,
-        can_delete: false,
+        can_rename: true,
+        can_delete: true,
         can_share: false,
-        can_invite_collaborator: false,
+        can_invite_collaborator: true,
+        can_set_share_access: false,
+    },
+    path_collection: {
+        total_count: 1,
+        entries: [
+            {
+                type: 'folder',
+                id: '0',
+                sequence_id: null,
+                etag: null,
+                name: 'All Files',
+            },
+        ],
+    },
+    modified_at: '2024-01-16T09:50:27-08:00',
+    created_at: '2019-03-04T11:23:26-08:00',
+    modified_by: {
+        type: 'user',
+        id: '7505500060',
+        name: 'Preview',
+        login: 'preview@boxdemo.com',
+    },
+    has_collaborations: true,
+    is_externally_owned: false,
+    shared_link: null,
+    watermark_info: {
+        is_watermarked: false,
+    },
+    item_collection: {
+        total_count: 2,
+        entries: [
+            {
+                type: 'folder',
+                id: '73426618530',
+                etag: '3',
+                name: 'An Ordered Folder',
+                size: 200621773,
+                parent: {
+                    type: 'folder',
+                    id: '69083462919',
+                    sequence_id: '2',
+                    etag: '2',
+                    name: 'Preview Test Folder',
+                },
+                permissions: {
+                    can_download: true,
+                    can_upload: true,
+                    can_rename: true,
+                    can_delete: true,
+                    can_share: true,
+                    can_invite_collaborator: true,
+                    can_set_share_access: false,
+                },
+                path_collection: {
+                    total_count: 2,
+                    entries: [
+                        {
+                            type: 'folder',
+                            id: '0',
+                            sequence_id: null,
+                            etag: null,
+                            name: 'All Files',
+                        },
+                        {
+                            type: 'folder',
+                            id: '69083462919',
+                            sequence_id: '2',
+                            etag: '2',
+                            name: 'Preview Test Folder',
+                        },
+                    ],
+                },
+                modified_at: '2019-04-16T15:44:44-07:00',
+                created_at: '2019-04-16T15:44:14-07:00',
+                modified_by: {
+                    type: 'user',
+                    id: '7503712462',
+                    name: 'Preview',
+                    login: 'preview@boxdemo.com',
+                },
+                has_collaborations: true,
+                is_externally_owned: false,
+                shared_link: {
+                    url: 'https://example.com/share-link',
+                    permissions: {
+                        can_preview: true,
+                        can_download: true,
+                        can_edit: false,
+                    },
+                },
+                watermark_info: {
+                    is_watermarked: false,
+                },
+            },
+            {
+                type: 'folder',
+                id: '73426618531',
+                etag: '3',
+                name: 'Archive',
+                size: 1231231,
+                parent: {
+                    type: 'folder',
+                    id: '69083462919',
+                    sequence_id: '2',
+                    etag: '2',
+                    name: 'Preview Test Folder',
+                },
+                permissions: {
+                    can_download: true,
+                    can_upload: true,
+                    can_rename: true,
+                    can_delete: true,
+                    can_share: false,
+                    can_invite_collaborator: true,
+                    can_set_share_access: false,
+                },
+                path_collection: {
+                    total_count: 2,
+                    entries: [
+                        {
+                            type: 'folder',
+                            id: '0',
+                            sequence_id: null,
+                            etag: null,
+                            name: 'All Files',
+                        },
+                        {
+                            type: 'folder',
+                            id: '69083462919',
+                            sequence_id: '2',
+                            etag: '2',
+                            name: 'Preview Test Folder',
+                        },
+                    ],
+                },
+                modified_at: '2020-12-16T03:21:44-07:00',
+                created_at: '2020-11-12T09:33:22-07:00',
+                modified_by: {
+                    type: 'user',
+                    id: '7503712462',
+                    name: 'Preview',
+                    login: 'preview@boxdemo.com',
+                },
+                has_collaborations: true,
+                is_externally_owned: false,
+                shared_link: null,
+                watermark_info: {
+                    is_watermarked: false,
+                },
+                archive_type: 'archive',
+            },
+            {
+                type: 'folder',
+                id: '73426618532',
+                etag: '3',
+                name: 'Archived Folder',
+                size: 1031231,
+                parent: {
+                    type: 'folder',
+                    id: '69083462919',
+                    sequence_id: '2',
+                    etag: '2',
+                    name: 'Preview Test Folder',
+                },
+                permissions: {
+                    can_download: true,
+                    can_upload: false,
+                    can_rename: false,
+                    can_delete: false,
+                    can_share: false,
+                    can_invite_collaborator: false,
+                    can_set_share_access: false,
+                },
+                path_collection: {
+                    total_count: 2,
+                    entries: [
+                        {
+                            type: 'folder',
+                            id: '0',
+                            sequence_id: null,
+                            etag: null,
+                            name: 'All Files',
+                        },
+                        {
+                            type: 'folder',
+                            id: '69083462919',
+                            sequence_id: '2',
+                            etag: '2',
+                            name: 'Preview Test Folder',
+                        },
+                    ],
+                },
+                modified_at: '2020-12-17T05:21:44-07:00',
+                created_at: '2020-11-12T12:33:22-07:00',
+                modified_by: {
+                    type: 'user',
+                    id: '7503712462',
+                    name: 'Preview',
+                    login: 'preview@boxdemo.com',
+                },
+                has_collaborations: true,
+                is_externally_owned: false,
+                shared_link: null,
+                watermark_info: {
+                    is_watermarked: false,
+                },
+                archive_type: 'folder_archive',
+            },
+            ...mockFiles,
+            {
+                type: 'folder',
+                id: '118171106008',
+                etag: '0',
+                name: 'Annotations',
+                size: 772687,
+                parent: {
+                    type: 'folder',
+                    id: '69083462919',
+                    sequence_id: '2',
+                    etag: '2',
+                    name: 'Preview Test Folder',
+                },
+                permissions: {
+                    can_download: true,
+                    can_upload: false,
+                    can_rename: false,
+                    can_delete: false,
+                    can_share: false,
+                    can_invite_collaborator: false,
+                    can_set_share_access: false,
+                },
+                path_collection: {
+                    total_count: 2,
+                    entries: [
+                        {
+                            type: 'folder',
+                            id: '0',
+                            sequence_id: null,
+                            etag: null,
+                            name: 'All Files',
+                        },
+                        {
+                            type: 'folder',
+                            id: '69083462919',
+                            sequence_id: '2',
+                            etag: '2',
+                            name: 'Preview Test Folder',
+                        },
+                    ],
+                },
+                modified_at: '2023-08-03T15:55:16-07:00',
+                created_at: '2020-07-17T15:13:58-07:00',
+                modified_by: {
+                    type: 'user',
+                    id: '9588453240',
+                    name: 'Preview',
+                    login: 'preview-scrum@boxdemo.com',
+                },
+                has_collaborations: true,
+                is_externally_owned: false,
+                shared_link: null,
+                watermark_info: {
+                    is_watermarked: false,
+                },
+            },
+        ],
+        offset: 0,
+        limit: 50,
+        order: [
+            {
+                by: 'type',
+                direction: 'ASC',
+            },
+            {
+                by: 'name',
+                direction: 'ASC',
+            },
+        ],
+    },
+};
+
+const mockRootFolderSharedLink = {
+    type: 'folder',
+    id: '69083462919',
+    etag: '2',
+    name: 'Preview Test Folder',
+    size: 1301485279,
+    parent: null,
+    permissions: {
+        can_download: true,
+        can_upload: true,
+        can_rename: true,
+        can_delete: true,
+        can_share: false,
+        can_invite_collaborator: true,
         can_set_share_access: false,
     },
     path_collection: {
@@ -124,11 +715,11 @@ const mockRootFolder = {
                 },
                 permissions: {
                     can_download: true,
-                    can_upload: false,
-                    can_rename: false,
-                    can_delete: false,
-                    can_share: false,
-                    can_invite_collaborator: false,
+                    can_upload: true,
+                    can_rename: true,
+                    can_delete: true,
+                    can_share: true,
+                    can_invite_collaborator: true,
                     can_set_share_access: false,
                 },
                 path_collection: {
@@ -160,7 +751,14 @@ const mockRootFolder = {
                 },
                 has_collaborations: true,
                 is_externally_owned: false,
-                shared_link: null,
+                shared_link: {
+                    url: 'https://example.com/share-link',
+                    permissions: {
+                        can_preview: true,
+                        can_download: true,
+                        can_edit: false,
+                    },
+                },
                 watermark_info: {
                     is_watermarked: false,
                 },
@@ -180,11 +778,11 @@ const mockRootFolder = {
                 },
                 permissions: {
                     can_download: true,
-                    can_upload: false,
-                    can_rename: false,
-                    can_delete: false,
+                    can_upload: true,
+                    can_rename: true,
+                    can_delete: true,
                     can_share: false,
-                    can_invite_collaborator: false,
+                    can_invite_collaborator: true,
                     can_set_share_access: false,
                 },
                 path_collection: {
@@ -227,7 +825,7 @@ const mockRootFolder = {
                 id: '73426618532',
                 etag: '3',
                 name: 'Archived Folder',
-                size: 1231231,
+                size: 1201231,
                 parent: {
                     type: 'folder',
                     id: '69083462919',
@@ -280,94 +878,7 @@ const mockRootFolder = {
                 archive_type: 'folder_archive',
             },
             {
-                type: 'file',
-                id: '416044542013',
-                etag: '1',
-                name: 'Book Sample.pdf',
-                size: 144481,
-                parent: {
-                    type: 'folder',
-                    id: '69083462919',
-                    sequence_id: '2',
-                    etag: '2',
-                    name: 'Preview Test Folder',
-                },
-                extension: 'pdf',
-                permissions: {
-                    can_download: true,
-                    can_preview: true,
-                    can_upload: false,
-                    can_comment: true,
-                    can_rename: true,
-                    can_delete: true,
-                    can_share: true,
-                    can_set_share_access: false,
-                    can_invite_collaborator: false,
-                    can_annotate: false,
-                    can_view_annotations_all: true,
-                    can_view_annotations_self: true,
-                    can_create_annotations: true,
-                    can_view_annotations: true,
-                },
-                path_collection: {
-                    total_count: 2,
-                    entries: [
-                        {
-                            type: 'folder',
-                            id: '0',
-                            sequence_id: null,
-                            etag: null,
-                            name: 'All Files',
-                        },
-                        {
-                            type: 'folder',
-                            id: '69083462919',
-                            sequence_id: '2',
-                            etag: '2',
-                            name: 'Preview Test Folder',
-                        },
-                    ],
-                },
-                modified_at: '2022-12-07T22:13:30-08:00',
-                created_at: '2019-03-05T12:47:51-08:00',
-                modified_by: {
-                    type: 'user',
-                    id: '7503712462',
-                    name: 'Preview',
-                    login: 'preview@boxdemo.com',
-                },
-                has_collaborations: true,
-                is_externally_owned: false,
-                authenticated_download_url: 'https://dl.boxcloud.com/api/2.0/files/416044542013/content',
-                is_download_available: true,
-                representations: {
-                    entries: [
-                        {
-                            representation: 'jpg',
-                            properties: {
-                                dimensions: '1024x1024',
-                                paged: 'false',
-                                thumb: 'false',
-                            },
-                            info: {
-                                url: 'https://api.box.com/2.0/internal_files/416044542013/versions/439751948413/representations/jpg_1024x1024',
-                            },
-                            status: {
-                                state: 'success',
-                            },
-                            content: {
-                                url_template:
-                                    'https://dl.boxcloud.com/api/2.0/internal_files/416044542013/versions/439751948413/representations/jpg_1024x1024/content/{+asset_path}',
-                            },
-                        },
-                    ],
-                },
-                file_version: {
-                    type: 'file_version',
-                    id: '439751948413',
-                    sha1: '81fa3796742c6d194ddc54e9424f855f78009cf1',
-                },
-                sha1: '81fa3796742c6d194ddc54e9424f855f78009cf1',
+                ...mockFiles[0],
                 shared_link: {
                     url: 'https://example.com/share-link',
                     permissions: {
@@ -375,9 +886,6 @@ const mockRootFolder = {
                         can_download: true,
                         can_edit: false,
                     },
-                },
-                watermark_info: {
-                    is_watermarked: false,
                 },
             },
         ],
@@ -396,4 +904,22 @@ const mockRootFolder = {
     },
 };
 
-export { mockEmptyRootFolder, mockRootFolder };
+const mockRecentItems = {
+    next_marker: '',
+    limit: 100,
+    order: {
+        by: 'interacted_at',
+        direction: 'DESC',
+    },
+    entries: [
+        {
+            type: 'recent_item',
+            interaction_type: 'item_preview',
+            interacted_at: '2025-03-04T06:41:43-08:00',
+            item: mockFiles[0],
+            interaction_shared_link: null,
+        },
+    ],
+};
+
+export { mockEmptyRootFolder, mockRecentItems, mockRootFolder, mockRootFolderSharedLink };

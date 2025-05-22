@@ -9,8 +9,7 @@
 // the media content, ie, an avatar
 .bdl-Media-figure {
     flex: 0 0 auto;
-    align-self: flex-start;
-    justify-self: flex-start;
+    place-self: flex-start flex-start;
     margin: 0 10px 0 0;
     padding: 0;
 }

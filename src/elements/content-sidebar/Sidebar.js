@@ -31,6 +31,7 @@ import type { VersionsSidebarProps } from './versions';
 import type { AdditionalSidebarTab } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
+import type { SignSidebarProps } from './SidebarNavSign';
 import type { Errors } from '../common/flowTypes';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
@@ -69,6 +70,7 @@ type Props = {
     onPanelChange?: (name: string, isInitialState: boolean) => void,
     onVersionChange?: Function,
     onVersionHistoryClick?: Function,
+    signSidebarProps: SignSidebarProps,
     theme?: Theme,
     versionsSidebarProps: VersionsSidebarProps,
 };
@@ -309,6 +311,7 @@ class Sidebar extends React.Component<Props, State> {
             metadataSidebarProps,
             onAnnotationSelect,
             onVersionChange,
+            signSidebarProps,
             theme,
             versionsSidebarProps,
         }: Props = this.props;
@@ -348,6 +351,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
                                 onPanelChange={this.handlePanelChange}
+                                signSidebarProps={signSidebarProps}
                             />
                         )}
                         <SidebarPanels

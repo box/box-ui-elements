@@ -45,12 +45,8 @@ $sidebarScrollContentIncreasedWidth: $sidebarScrollContentWidth + 40px;
 
     .bcs-scroll-content-wrapper {
         position: absolute; // Prevents non-sidebar parts from re-painting
-        top: $sidebarHeaderHeight; // Same as title above
-        right: 0;
-        bottom: 0;
-        left: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
+        inset: $sidebarHeaderHeight 0 0 0; // Same as title above
+        overflow: hidden auto;
     }
 
     .bcs-scroll-content {

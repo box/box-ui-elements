@@ -30,6 +30,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -74,6 +75,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -126,6 +128,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -170,6 +173,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should not rend
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -222,6 +226,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -266,6 +271,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -321,6 +327,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -365,6 +372,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -417,6 +425,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -461,6 +470,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -512,6 +522,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -556,6 +567,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -608,6 +620,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
   >
     <UnifiedShareForm
       canInvite={false}
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -652,6 +665,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "web_link",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -704,6 +718,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
   >
     <UnifiedShareForm
       canInvite={false}
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -748,6 +763,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "folder",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -800,6 +816,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
   >
     <UnifiedShareForm
       canInvite={true}
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -844,6 +861,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -896,6 +914,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
   >
     <UnifiedShareForm
       canInvite={true}
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -940,6 +959,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -991,6 +1011,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -1044,6 +1065,116 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
+      openConfirmModal={[Function]}
+      restrictedCollabEmails={[]}
+      restrictedGroups={[]}
+      sharedLink={{}}
+      sharedLinkLoaded={false}
+      shouldRenderFTUXTooltip={false}
+      trackingProps={
+        {
+          "inviteCollabTracking": {},
+          "inviteCollabsEmailTracking": {},
+          "modalTracking": {},
+          "removeLinkConfirmModalTracking": {},
+          "sharedLinkEmailTracking": {},
+          "sharedLinkTracking": {},
+        }
+      }
+    />
+  </Modal>
+</Fragment>
+`;
+
+exports[`features/unified-share-modal/UnifiedShareModal render() should render a default component with collaborator list when showCollaboratorList state is true 1`] = `
+<Fragment>
+  <Modal
+    className="be-modal unified-share-modal"
+    focusElementSelector=".toggle-simple"
+    style={
+      {
+        "backdrop": {},
+        "dialog": {},
+      }
+    }
+    title={
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          {
+            "grantedPermissions": {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
+          }
+        }
+        showCollaboratorList={true}
+      />
+    }
+  >
+    <UnifiedShareForm
+      canRemoveCollaborators={true}
+      classification={
+        {
+          "definition": undefined,
+          "name": undefined,
+        }
+      }
+      collaborationRestrictionWarning=""
+      collaboratorsList={
+        {
+          "collaborators": [
+            {
+              "hasCustomAvatar": false,
+              "isRemovable": false,
+              "name": "test a",
+            },
+            {
+              "hasCustomAvatar": false,
+              "isRemovable": true,
+              "name": "test b",
+            },
+          ],
+        }
+      }
+      createSharedLinkOnLoad={false}
+      displayInModal={true}
+      focusSharedLinkOnLoad={false}
+      getInitialData={[MockFunction]}
+      handleFtuxCloseClick={[Function]}
+      initiallySelectedContacts={[]}
+      intl={
+        {
+          "formatMessage": [MockFunction],
+        }
+      }
+      inviteePermissions={
+        [
+          {
+            "text": "Editor",
+            "value": "Editor",
+          },
+        ]
+      }
+      isAllowEditSharedLinkForFileEnabled={false}
+      isFetching={true}
+      item={
+        {
+          "grantedPermissions": {
+            "itemShare": true,
+          },
+          "hideCollaborators": false,
+          "id": "111",
+          "name": "test file",
+          "type": "file",
+        }
+      }
+      onRemoveCollaborator={[MockFunction]}
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -1096,6 +1227,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -1140,6 +1272,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -1162,6 +1295,121 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     isOpen={true}
     onRequestClose={[Function]}
     removeLink={[Function]}
+  />
+</Fragment>
+`;
+
+exports[`features/unified-share-modal/UnifiedShareModal render() should render a default component with confirm remove collaborator modal open 1`] = `
+<Fragment>
+  <Modal
+    className="be-modal unified-share-modal"
+    focusElementSelector=".toggle-simple"
+    isOpen={false}
+    style={
+      {
+        "backdrop": {},
+        "dialog": {},
+      }
+    }
+    title={
+      <UnifiedShareModalTitle
+        isEmailLinkSectionExpanded={false}
+        item={
+          {
+            "grantedPermissions": {
+              "itemShare": true,
+            },
+            "hideCollaborators": false,
+            "id": "111",
+            "name": "test file",
+            "type": "file",
+          }
+        }
+        showCollaboratorList={false}
+      />
+    }
+  >
+    <UnifiedShareForm
+      canRemoveCollaborators={true}
+      classification={
+        {
+          "definition": undefined,
+          "name": undefined,
+        }
+      }
+      collaborationRestrictionWarning=""
+      collaboratorsList={
+        {
+          "collaborators": [],
+        }
+      }
+      createSharedLinkOnLoad={false}
+      displayInModal={true}
+      focusSharedLinkOnLoad={false}
+      getInitialData={[MockFunction]}
+      handleFtuxCloseClick={[Function]}
+      initiallySelectedContacts={[]}
+      intl={
+        {
+          "formatMessage": [MockFunction],
+        }
+      }
+      inviteePermissions={
+        [
+          {
+            "text": "Editor",
+            "value": "Editor",
+          },
+        ]
+      }
+      isAllowEditSharedLinkForFileEnabled={false}
+      isFetching={false}
+      item={
+        {
+          "grantedPermissions": {
+            "itemShare": true,
+          },
+          "hideCollaborators": false,
+          "id": "111",
+          "name": "test file",
+          "type": "file",
+        }
+      }
+      onRemoveCollaborator={[MockFunction]}
+      onRemoveCollaboratorClick={[Function]}
+      openConfirmModal={[Function]}
+      restrictedCollabEmails={[]}
+      restrictedGroups={[]}
+      sharedLink={{}}
+      sharedLinkLoaded={false}
+      shouldRenderFTUXTooltip={false}
+      trackingProps={
+        {
+          "inviteCollabTracking": {},
+          "inviteCollabsEmailTracking": {},
+          "modalTracking": {},
+          "removeLinkConfirmModalTracking": {},
+          "sharedLinkEmailTracking": {},
+          "sharedLinkTracking": {},
+        }
+      }
+    />
+  </Modal>
+  <RemoveCollaboratorConfirmModal
+    collaborator={
+      {
+        "hasCustomAvatar": false,
+        "name": "Collaborator a",
+      }
+    }
+    isOpen={true}
+    modalProps={
+      {
+        "className": "remove-collaborator-confirm-modal",
+      }
+    }
+    onRequestClose={[Function]}
+    onSubmit={[Function]}
   />
 </Fragment>
 `;
@@ -1196,6 +1444,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -1240,6 +1489,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -1295,6 +1545,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
     }
   >
     <UnifiedShareForm
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -1339,6 +1590,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -1391,6 +1643,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
   >
     <UnifiedShareForm
       canInvite={true}
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -1432,6 +1685,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -1485,6 +1739,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
   >
     <UnifiedShareForm
       canInvite={true}
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -1529,6 +1784,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}
@@ -1586,6 +1842,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
   >
     <UnifiedShareForm
       canInvite={true}
+      canRemoveCollaborators={false}
       classification={
         {
           "definition": undefined,
@@ -1630,6 +1887,7 @@ exports[`features/unified-share-modal/UnifiedShareModal render() should render a
           "type": "file",
         }
       }
+      onRemoveCollaboratorClick={[Function]}
       openConfirmModal={[Function]}
       restrictedCollabEmails={[]}
       restrictedGroups={[]}

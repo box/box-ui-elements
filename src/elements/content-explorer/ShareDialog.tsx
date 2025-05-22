@@ -6,7 +6,7 @@ import { Button, Modal as BlueprintModal, Text } from '@box/blueprint-web';
 
 import ShareAccessSelect from '../common/share-access-select';
 import { CLASS_MODAL_CONTENT, CLASS_MODAL_OVERLAY, CLASS_MODAL } from '../../constants';
-import type { BoxItem } from '../../common/types/core';
+import type { Access, BoxItem } from '../../common/types/core';
 
 import messages from '../common/messages';
 
@@ -19,7 +19,7 @@ export interface ShareDialogProps {
     isOpen: boolean;
     item: BoxItem;
     onCancel: () => void;
-    onShareAccessChange: () => void;
+    onShareAccessChange: (access: Access) => void;
     parentElement: HTMLElement;
 }
 
