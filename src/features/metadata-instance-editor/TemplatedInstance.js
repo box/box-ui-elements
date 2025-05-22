@@ -13,12 +13,21 @@ type Props = {
     canEdit: boolean,
     data: MetadataFields,
     errors: { [string]: React.Node },
+    isDisabled?: boolean,
     onFieldChange?: (key: string, value: MetadataFieldValue, type: string) => void,
     onFieldRemove?: (key: string) => void,
     template: MetadataTemplate,
 };
 
-const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldRemove, template }: Props) => {
+const TemplatedInstance = ({
+    canEdit,
+    data = {},
+    errors,
+    isDisabled,
+    onFieldChange,
+    onFieldRemove,
+    template,
+}: Props) => {
     const { fields = [] } = template;
     const hasFields = fields.length > 0;
     const hasVisibleFields = hasFields && fields.some(field => !isHidden(field));
@@ -39,6 +48,7 @@ const TemplatedInstance = ({ canEdit, data = {}, errors, onFieldChange, onFieldR
                         description={field.description}
                         displayName={field.displayName}
                         error={errors[field.key]}
+                        isDisabled={isDisabled}
                         isHidden={isHidden(field)} // Checking both isHidden and hidden attributes due to differences in V2 and V3 APIs
                         onChange={(key: string, value: MetadataFieldValue) => {
                             if (canEdit && onFieldChange) {

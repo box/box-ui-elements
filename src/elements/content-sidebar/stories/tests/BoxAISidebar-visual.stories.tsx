@@ -1,6 +1,7 @@
 import { expect, within } from '@storybook/test';
-import { type StoryObj } from '@storybook/react';
+import { type StoryObj, type Meta } from '@storybook/react';
 import { http, HttpResponse } from 'msw';
+import type { HttpHandler } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import BoxAISidebar from '../../BoxAISidebar';
 import { mockFileRequest, mockUserRequest } from '../../../common/__mocks__/mockRequests';
@@ -16,8 +17,7 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
         expect(clearButton).toBeInTheDocument();
 
         expect(await canvas.findByText(/Welcome to Box AI/i)).toBeInTheDocument();
-        expect(await canvas.findByText(/Ask questions about/i)).toBeInTheDocument();
-        expect(await canvas.findByText('This chat will be cleared when you close this content')).toBeInTheDocument();
+        expect(await canvas.findByText('Chat cleared when you close content')).toBeInTheDocument();
         expect(await canvas.findByPlaceholderText('Ask Box AI')).toBeInTheDocument();
         expect(await canvas.findByText('Summarize this document')).toBeInTheDocument();
         expect(await canvas.findByText('What are the key takeaways?')).toBeInTheDocument();
@@ -26,7 +26,7 @@ export const basic: StoryObj<typeof BoxAISidebar> = {
     },
 };
 
-export default {
+const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
     title: 'Elements/ContentSidebar/BoxAISidebar/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
@@ -91,3 +91,5 @@ export default {
         },
     },
 };
+
+export default meta;

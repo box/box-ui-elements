@@ -1,7 +1,8 @@
 import { act, type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
 import { expect, userEvent, waitFor, within, fn, screen } from '@storybook/test';
-import { type StoryObj } from '@storybook/react';
+import { type StoryObj, Meta } from '@storybook/react';
+import type { HttpHandler } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
@@ -18,6 +19,11 @@ import {
     mockMetadataInstances,
 } from '../__mocks__/MetadataSidebarRedesignedMocks';
 import { mockUserRequest } from '../../../common/__mocks__/mockRequests';
+import {
+    mockMetadataTemplatesWithMultilevelTaxonomy,
+    mockMetadataTemplatesWithSinglelevelTaxonomy,
+    taxonomyMockHandlers,
+} from '../__mocks__/TaxonomyMocks';
 
 const token = global.TOKEN;
 
@@ -561,7 +567,161 @@ export const ShowErrorOnDelete: StoryObj<typeof MetadataSidebarRedesign> = {
     },
 };
 
-export default {
+export const ViewMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.multilevelTaxonomy.enabled': true,
+        },
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                ...taxonomyMockHandlers,
+                http.get(mockMetadataTemplatesWithMultilevelTaxonomy.url, () => {
+                    return HttpResponse.json(mockMetadataTemplatesWithMultilevelTaxonomy.response);
+                }),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitFor(async () => {
+            const multilevelOptionButton = canvas.getByRole('button', { name: 'London' });
+
+            expect(multilevelOptionButton).toBeInTheDocument();
+
+            await userEvent.click(multilevelOptionButton);
+
+            const multilevelDialog = screen.getByRole('dialog');
+
+            expect(multilevelDialog).toBeInTheDocument();
+        });
+    },
+};
+
+export const ViewSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = {
+    parameters: {
+        msw: {
+            handlers: [
+                ...taxonomyMockHandlers,
+                http.get(mockMetadataTemplatesWithSinglelevelTaxonomy.url, () => {
+                    return HttpResponse.json(mockMetadataTemplatesWithSinglelevelTaxonomy.response);
+                }),
+            ],
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await waitFor(async () => {
+            const singlelevelOptionButton = canvas.getByRole('button', { name: 'Blue' });
+
+            expect(singlelevelOptionButton).toBeInTheDocument();
+
+            await userEvent.click(singlelevelOptionButton);
+
+            const singlelevelDialog = screen.getByRole('dialog');
+
+            expect(singlelevelDialog).toBeInTheDocument();
+        });
+    },
+};
+
+export const EditMultilevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = {
+    ...ViewMultilevelTaxonomy,
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const editButton = await waitFor(() => canvas.getByRole('button', { name: 'Edit My Taxonomy' }));
+
+        await userEvent.click(editButton);
+
+        const multilevelInput = canvas.getByRole('combobox');
+        const optionChip = canvas.getByRole('button', { name: 'London' });
+
+        expect(multilevelInput).toBeInTheDocument();
+        expect(optionChip).toBeInTheDocument();
+
+        await userEvent.click(multilevelInput);
+
+        const listbox = await waitFor(() => canvas.getByRole('listbox'));
+        expect(listbox).toBeInTheDocument();
+
+        let expandButtons = await waitFor(() => canvas.getAllByRole('button', { name: 'Expand branch' }));
+
+        await userEvent.click(expandButtons[1]);
+
+        const hokkaidoOption = await waitFor(() => canvas.getByText('Hokkaido'));
+        expect(hokkaidoOption).toBeInTheDocument();
+
+        expandButtons = await waitFor(() => screen.getAllByRole('button', { name: 'Expand branch' }));
+
+        await userEvent.click(expandButtons[2]);
+
+        const sapporoOption = await waitFor(() => canvas.getByRole('treeitem', { name: 'Sapporo' }));
+
+        expect(sapporoOption).toBeInTheDocument();
+        expect(sapporoOption).toHaveAttribute('aria-selected', 'false');
+
+        await userEvent.click(sapporoOption);
+
+        const sapporoSelection = await waitFor(() => canvas.getByRole('gridcell', { name: 'Sapporo' }));
+
+        expect(sapporoOption).toBeInTheDocument();
+        expect(sapporoOption).toHaveAttribute('aria-selected', 'true');
+        expect(sapporoSelection).toBeInTheDocument();
+    },
+};
+
+export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> = {
+    ...ViewSinglelevelTaxonomy,
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        const editButton = await waitFor(() => canvas.getByRole('button', { name: 'Edit My Taxonomy' }));
+
+        await userEvent.click(editButton);
+
+        const singlelevelInput = canvas.getByRole('combobox');
+        const blueSelection = canvas.getByRole('gridcell', { name: 'Blue' });
+
+        expect(singlelevelInput).toBeInTheDocument();
+        expect(blueSelection).toBeInTheDocument();
+
+        await userEvent.click(singlelevelInput);
+
+        const listbox = await waitFor(() => canvas.getByRole('listbox'));
+        expect(listbox).toBeInTheDocument();
+
+        const blueOption = await waitFor(() => canvas.getByRole('option', { name: 'Blue' }));
+        const redOption = await waitFor(() => canvas.getByRole('option', { name: 'Red' }));
+        const greenOption = await waitFor(() => canvas.getByRole('option', { name: 'Green' }));
+
+        expect(blueOption).toBeInTheDocument();
+        expect(redOption).toBeInTheDocument();
+        expect(greenOption).toBeInTheDocument();
+        expect(blueOption).toHaveAttribute('aria-selected', 'true');
+        expect(redOption).toHaveAttribute('aria-selected', 'false');
+        expect(greenOption).toHaveAttribute('aria-selected', 'false');
+
+        await userEvent.click(redOption);
+
+        const redSelection = await waitFor(() => canvas.getByRole('gridcell', { name: 'Red' }));
+
+        expect(redSelection).toBeInTheDocument();
+        expect(blueSelection).toBeInTheDocument();
+        expect(blueOption).toBeInTheDocument();
+        expect(redOption).toBeInTheDocument();
+        expect(greenOption).toBeInTheDocument();
+        expect(blueOption).toHaveAttribute('aria-selected', 'true');
+        expect(redOption).toHaveAttribute('aria-selected', 'true');
+        expect(greenOption).toHaveAttribute('aria-selected', 'false');
+    },
+};
+
+const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
@@ -580,3 +740,5 @@ export default {
         },
     },
 };
+
+export default meta;

@@ -54,9 +54,32 @@
             text-overflow: ellipsis;
         }
 
+        .user-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-left: auto;
+        }
+
         .role {
             color: $bdl-gray-65;
             line-height: 32px;
+        }
+
+        .remove-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: $bdl-btn-height;
+            height: $bdl-btn-height;
+            background: none;
+            border: 0;
+            cursor: pointer;
+
+            &:hover {
+                background: $bdl-gray-05;
+                border-radius: $bdl-border-radius-size;
+            }
         }
     }
 

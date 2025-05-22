@@ -68,6 +68,8 @@ import type {
     BoxItem,
     Collection,
 } from '../../common/types/core';
+// $FlowFixMe TypeScript file
+import type { ItemAction } from '../common/item';
 
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -96,6 +98,7 @@ type Props = {
     isPaginationVisible?: boolean,
     isSmall: boolean,
     isTouch: boolean,
+    itemActions?: ItemAction[],
     language?: string,
     logoUrl?: string,
     maxSelectable: number,
@@ -186,6 +189,7 @@ class ContentPicker extends Component<Props, State> {
         clearSelectedItemsOnNavigation: false,
         isHeaderLogoVisible: true,
         isPaginationVisible: true,
+        itemActions: [],
     };
 
     /**
@@ -1211,6 +1215,7 @@ class ContentPicker extends Component<Props, State> {
             renderCustomActionButtons,
             showSelectedButton,
             theme,
+            itemActions,
         }: Props = this.props;
         const {
             view,
@@ -1244,7 +1249,6 @@ class ContentPicker extends Component<Props, State> {
                         <Header
                             view={view}
                             isHeaderLogoVisible={isHeaderLogoVisible}
-                            isSmall={isSmall}
                             searchQuery={searchQuery}
                             logoUrl={logoUrl}
                             onSearch={this.search}
@@ -1279,6 +1283,7 @@ class ContentPicker extends Component<Props, State> {
                             onItemClick={this.onItemClick}
                             onFocusChange={this.onFocusChange}
                             onShareAccessChange={this.changeShareAccess}
+                            itemActions={itemActions}
                         />
                         <Footer
                             currentCollection={currentCollection}

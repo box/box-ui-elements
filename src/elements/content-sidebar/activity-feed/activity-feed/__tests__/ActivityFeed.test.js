@@ -149,6 +149,16 @@ describe('elements/content-sidebar/ActivityFeed/activity-feed/ActivityFeed', () 
         expect(wrapper.find('EmptyState').exists()).toBe(true);
     });
 
+    test('should not render empty state when UAA is enabled and there is an error', () => {
+        const wrapper = getWrapper({
+            feedItems: [],
+            shouldUseUAA: true,
+            activityFeedError: { error: new Error() },
+        });
+        expect(wrapper.find('EmptyState').exists()).toBe(false);
+        expect(wrapper.find('ActiveState')).toHaveLength(1);
+    });
+
     test('should render empty state when UAA is enabled and there is 1 version event (current version of file) and the start and end version are the same', () => {
         const wrapper = getWrapper({
             currentUser,

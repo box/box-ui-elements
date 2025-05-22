@@ -168,6 +168,21 @@ const messages = defineMessages({
         description: 'Label for enable cascade policy toggle switch',
         id: 'boxui.metadataInstanceEditor.enableCascadePolicy',
     },
+    enableAIAutofill: {
+        defaultMessage: 'Box AI Autofill',
+        description: 'Label for enable AI autofill toggle switch',
+        id: 'boxui.metadataInstanceEditor.enableAIAutofill',
+    },
+    aiAutofillDescription: {
+        defaultMessage: 'Use Box AI to automatically extract metadata values.',
+        description: 'Description for AI autofill toggle switch',
+        id: 'boxui.metadataInstanceEditor.aiAutofillDescription',
+    },
+    aiAutofillLearnMore: {
+        defaultMessage: 'Learn more',
+        description: 'Learn more link for AI autofill',
+        id: 'boxui.metadataInstanceEditor.aiAutofillLearnMore',
+    },
     applyCascadePolicyText: {
         defaultMessage:
             'Apply template and its values to all new and existing items in this folder and its subfolders.',

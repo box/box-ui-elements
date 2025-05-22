@@ -13,13 +13,6 @@ import {
 // @ts-ignore
 import { Collection } from '../../common/types/core';
 
-jest.mock(
-    '@box/react-virtualized/dist/es/AutoSizer',
-    () =>
-        ({ children }) =>
-            children({ height: 600, width: 600 }),
-);
-
 const mockProps: ContentProps = {
     canDelete: true,
     canDownload: true,
@@ -27,7 +20,6 @@ const mockProps: ContentProps = {
     canRename: true,
     canShare: true,
     currentCollection: { items: [], percentLoaded: 100 } as Collection,
-    focusedRow: 0,
     isMedium: false,
     isSmall: false,
     isTouch: false,
@@ -40,8 +32,7 @@ const mockProps: ContentProps = {
     onItemShare: jest.fn(),
     onMetadataUpdate: jest.fn(),
     onSortChange: jest.fn(),
-    rootId: 'root',
-    tableRef: jest.fn(),
+    portalElement: null,
     view: VIEW_RECENTS,
     viewMode: VIEW_MODE_LIST,
 };
@@ -79,7 +70,7 @@ describe('Content Component', () => {
 
         expect(screen.getByText('Item 1')).toBeInTheDocument();
         expect(screen.getByText('1000 Bytes')).toBeInTheDocument();
-        expect(screen.getByText('Tue Oct 10 2023')).toBeInTheDocument();
+        expect(screen.getByText('Viewed Oct 10, 2023')).toBeInTheDocument();
         expect(screen.getByLabelText('File')).toBeInTheDocument();
     });
 
@@ -91,5 +82,35 @@ describe('Content Component', () => {
         expect(screen.getByText('Item 1')).toBeInTheDocument();
         expect(screen.getByText('Viewed Oct 10, 2023')).toBeInTheDocument();
         expect(screen.getByLabelText('File')).toBeInTheDocument();
+    });
+
+    describe('contentExplorer.metadataViewV2 feature', () => {
+        const features = {
+            contentExplorer: { metadataViewV2: true },
+        };
+
+        test('does not render MetadataBasedItemList when contentExplorer.metadataViewV2 is enabled', () => {
+            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+            renderComponent({
+                features,
+                currentCollection: collection,
+                fieldsToShow: ['id'],
+                view: VIEW_METADATA,
+            });
+
+            expect(screen.queryByTestId('metadata-based-item-list')).not.toBeInTheDocument();
+        });
+
+        test('renders new metadata view when contentExplorer.metadataViewV2 is enabled', () => {
+            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+            renderComponent({
+                features,
+                currentCollection: collection,
+                fieldsToShow: ['id'],
+                view: VIEW_METADATA,
+            });
+
+            expect(screen.getByText('new Metadata')).toBeInTheDocument();
+        });
     });
 });

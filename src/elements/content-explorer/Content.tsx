@@ -1,16 +1,19 @@
 import * as React from 'react';
-import { Table } from '@box/react-virtualized/dist/es/Table';
 import EmptyView from '../common/empty-view';
-import ProgressBar from '../common/progress-bar';
 import ItemGrid from '../common/item-grid';
-import ItemList from './ItemList';
+import ItemList from '../common/item-list';
+import ProgressBar from '../common/progress-bar';
 import MetadataBasedItemList from '../../features/metadata-based-view';
+import MetadataView from './MetadataView';
+import { isFeatureEnabled, type FeatureConfig } from '../common/feature-checking';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
+import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from '../common/item';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
 import type { MetadataFieldValue } from '../../common/types/metadata';
 import './Content.scss';
+
 /**
  * Determines if we should show the empty state
  *
@@ -24,26 +27,15 @@ function isEmpty(view: View, currentCollection: Collection, fieldsToShow: Fields
     return view === VIEW_ERROR || !items.length || (view === VIEW_METADATA && !fieldsToShow.length);
 }
 
-export interface ContentProps {
-    canDelete: boolean;
-    canDownload: boolean;
-    canPreview: boolean;
-    canRename: boolean;
-    canShare: boolean;
+export interface ContentProps extends Required<ItemEventHandlers>, Required<ItemEventPermissions> {
     currentCollection: Collection;
+    features?: FeatureConfig;
     fieldsToShow?: FieldsToShow;
-    focusedRow: number;
     gridColumnCount?: number;
     isMedium: boolean;
     isSmall: boolean;
     isTouch: boolean;
-    onItemClick: (item: BoxItem) => void;
-    onItemDelete: (item: BoxItem) => void;
-    onItemDownload: (item: BoxItem) => void;
-    onItemPreview: (item: BoxItem) => void;
-    onItemRename: (item: BoxItem) => void;
-    onItemSelect: (item: BoxItem) => void;
-    onItemShare: (item: BoxItem) => void;
+    itemActions?: ItemAction[];
     onMetadataUpdate: (
         item: BoxItem,
         field: string,
@@ -51,24 +43,24 @@ export interface ContentProps {
         editedValue: MetadataFieldValue,
     ) => void;
     onSortChange: (sortBy: string, sortDirection: string) => void;
-    rootElement?: HTMLElement;
-    rootId: string;
-    selected?: BoxItem;
-    tableRef: (ref: Table) => void;
+    portalElement: HTMLElement;
     view: View;
     viewMode?: ViewMode;
 }
 
 const Content = ({
     currentCollection,
+    features,
     fieldsToShow = [],
-    focusedRow,
+    gridColumnCount,
+    onMetadataUpdate,
     onSortChange,
-    tableRef,
     view,
     viewMode = VIEW_MODE_LIST,
     ...rest
 }: ContentProps) => {
+    const { items, percentLoaded, sortBy, sortDirection } = currentCollection;
+
     const isViewEmpty = isEmpty(view, currentCollection, fieldsToShow);
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
@@ -76,25 +68,33 @@ const Content = ({
 
     return (
         <div className="bce-content">
-            {view === VIEW_ERROR || view === VIEW_SELECTED ? null : (
-                <ProgressBar percent={currentCollection.percentLoaded} />
-            )}
+            {view === VIEW_ERROR || view === VIEW_SELECTED ? null : <ProgressBar percent={percentLoaded} />}
 
-            {isViewEmpty && <EmptyView view={view} isLoading={currentCollection.percentLoaded !== 100} />}
-            {!isViewEmpty && isMetadataBasedView && (
-                <MetadataBasedItemList currentCollection={currentCollection} fieldsToShow={fieldsToShow} {...rest} />
+            {isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
+            {!isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
+                <MetadataBasedItemList
+                    currentCollection={currentCollection}
+                    fieldsToShow={fieldsToShow}
+                    onMetadataUpdate={onMetadataUpdate}
+                    {...rest}
+                />
+            )}
+            {isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
+                <MetadataView />
             )}
             {!isViewEmpty && isListView && (
                 <ItemList
-                    currentCollection={currentCollection}
-                    focusedRow={focusedRow}
+                    items={items}
                     onSortChange={onSortChange}
-                    tableRef={tableRef}
+                    sortBy={sortBy}
+                    sortDirection={sortDirection}
                     view={view}
                     {...rest}
                 />
             )}
-            {!isViewEmpty && isGridView && <ItemGrid items={currentCollection.items} view={view} {...rest} />}
+            {!isViewEmpty && isGridView && (
+                <ItemGrid gridColumnCount={gridColumnCount} items={items} view={view} {...rest} />
+            )}
         </div>
     );
 };

@@ -182,6 +182,11 @@ const messages = defineMessages({
         description: 'Label for decreasing the size of columns in grid view',
         defaultMessage: 'Decrease column size',
     },
+    gridViewSliderLabel: {
+        id: 'be.gridView.sliderLabel',
+        description: 'Label for the grid view size slider',
+        defaultMessage: 'Grid view size',
+    },
     listView: {
         id: 'be.listView',
         description: 'Label for switching to list view',
@@ -376,6 +381,11 @@ const messages = defineMessages({
         id: 'be.shareAccessRemove',
         description: 'Dropdown select option to remove access.',
         defaultMessage: 'Remove shared link',
+    },
+    searchClear: {
+        id: 'be.searchClear',
+        description: 'Aria label for the clear button in the search box.',
+        defaultMessage: 'Clear search',
     },
     searchPlaceholder: {
         id: 'be.searchPlaceholder',
@@ -821,23 +831,35 @@ const messages = defineMessages({
         description:
             'Message displayed in the activity feed to represent the range of versions uploaded by multiple users. {numberOfCollaborators} is a number and {versions} is a range of versions.',
     },
+    versionMultipleUsersRestored: {
+        id: 'be.versionMultipleUsersRestored',
+        defaultMessage: '{numberOfCollaborators} collaborators restored v{versions}',
+        description:
+            'Message displayed in the activity feed to represent the range of versions restored by multiple users. {numberOfCollaborators} is a number. {versions} is a range of versions.',
+    },
+    versionMultipleUsersTrashed: {
+        id: 'be.versionMultipleUsersTrashed',
+        defaultMessage: '{numberOfCollaborators} collaborators deleted v{versions}',
+        description:
+            'Message displayed in the activity feed to represent the range of versions trashed by multiple users. {numberOfCollaborators} is a number. {versions} is a range of versions.',
+    },
     versionUploadCollapsed: {
         id: 'be.versionUploadCollapsed',
         defaultMessage: '{name} uploaded v{versions}',
         description:
             'Message displayed in the activity feed to represent the range of versions uploaded by a single user. {name} is the user who uploaded. {versions} is a range of versions.',
     },
-    versionMultipleUsersCollapsed: {
-        id: 'be.versionMultipleUsersCollapsed',
-        defaultMessage: '{numberOfCollaborators} collaborators {actionMessage} v{versions}',
+    versionRestoreCollapsed: {
+        id: 'be.versionRestoreCollapsed',
+        defaultMessage: '{name} restored v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions actioned by multiple users. {numberOfCollaborators} is a number. {actionMessage} is the action. {versions} is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions restored by a single user. {name} is the user who restored. {versions} is a range of versions.',
     },
-    versionCollapsed: {
-        id: 'be.versionCollapsed',
-        defaultMessage: '{name} {actionMessage} v{versions}',
+    versionTrashCollapsed: {
+        id: 'be.versionTrashCollapsed',
+        defaultMessage: '{name} deleted v{versions}',
         description:
-            'Message displayed in the activity feed to represent the range of versions actioned by a single user. {name} is the user who did the action. {actionMessage} is the action. {versions} is a range of versions.',
+            'Message displayed in the activity feed to represent the range of versions deleted by a single user. {name} is the user who deleted. {versions} is a range of versions.',
     },
     versionUploaded: {
         id: 'be.versionUploaded',
@@ -906,10 +928,20 @@ const messages = defineMessages({
         description: 'Next page button tooltip',
         id: 'be.pagination.nextPage',
     },
+    nextPageButton: {
+        defaultMessage: 'Next',
+        description: 'Next page button',
+        id: 'be.pagination.nextPageButton',
+    },
     pageStatus: {
         defaultMessage: '{pageNumber} of {pageCount}',
         description: 'Pagination menu button with current page number out of total number of pages',
         id: 'be.pagination.pageStatus',
+    },
+    pageEntryStatus: {
+        defaultMessage: 'Showing {startEntryIndex} to {endEntryIndex} of {totalCount} entries',
+        description: 'Pagination menu status with the range of entries shown',
+        id: 'be.pagination.pageEntryStatus',
     },
     previousFile: {
         defaultMessage: 'Previous File',
@@ -920,6 +952,11 @@ const messages = defineMessages({
         defaultMessage: 'Previous Page',
         description: 'Previous page button tooltip',
         id: 'be.pagination.previousPage',
+    },
+    previousPageButton: {
+        defaultMessage: 'Previous',
+        description: 'Previous page button',
+        id: 'be.pagination.previousPageButton',
     },
     previousSegment: {
         id: 'be.previousSegment',

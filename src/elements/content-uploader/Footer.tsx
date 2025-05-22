@@ -19,7 +19,7 @@ export interface FooterProps {
 }
 
 const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, fileLimit, isDone }: FooterProps) => {
-    const intl = useIntl();
+    const { formatMessage } = useIntl();
     const isCloseButtonDisabled = hasFiles;
     const isCancelButtonDisabled = !hasFiles || isDone;
     const isUploadButtonDisabled = !hasFiles;
@@ -35,24 +35,24 @@ const Footer = ({ isLoading, hasFiles, errorCode, onCancel, onClose, onUpload, f
             <div className="bcu-footer-left">
                 {onClose ? (
                     <Button disabled={isCloseButtonDisabled} onClick={onClose} size="large" variant="secondary">
-                        {intl.formatMessage(messages.close)}
+                        {formatMessage(messages.close)}
                     </Button>
                 ) : null}
             </div>
             {message && <div className="bcu-footer-message">{message}</div>}
             <div className="bcu-footer-right">
                 <Button disabled={isCancelButtonDisabled} onClick={onCancel} size="large" variant="secondary">
-                    {intl.formatMessage(messages.cancel)}
+                    {formatMessage(messages.cancel)}
                 </Button>
                 <Button
                     disabled={isUploadButtonDisabled}
                     loading={isLoading}
-                    loadingAriaLabel={intl.formatMessage(messages.loading)}
+                    loadingAriaLabel={formatMessage(messages.loading)}
                     onClick={onUpload}
                     size="large"
                     variant="primary"
                 >
-                    {intl.formatMessage(messages.upload)}
+                    {formatMessage(messages.upload)}
                 </Button>
             </div>
         </div>

@@ -79,6 +79,21 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
 
         test.each`
+            path           | sidebar
+            ${'/nonsense'} | ${'BoxAISidebar'}
+            ${'/'}         | ${'BoxAISidebar'}
+        `(
+            'should render $sidebar given feature boxai.sidebar.shouldBeDefaultPanel = true and the path $path',
+            ({ path, sidebar }) => {
+                const wrapper = getWrapper({
+                    features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
+                    path,
+                });
+                expect(wrapper.exists(sidebar)).toBe(true);
+            },
+        );
+
+        test.each`
             defaultPanel  | sidebar               | expectedPanelName
             ${'activity'} | ${'activity-sidebar'} | ${'activity'}
             ${'docgen'}   | ${'docgen-sidebar'}   | ${'docgen'}
@@ -95,6 +110,26 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 render(
                     getSidebarPanels({
                         defaultPanel,
+                        onPanelChange,
+                    }),
+                );
+                expect(screen.getByTestId(sidebar)).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+            },
+        );
+
+        test.each`
+            defaultPanel  | sidebar            | expectedPanelName
+            ${'nonsense'} | ${'boxai-sidebar'} | ${'boxai'}
+            ${undefined}  | ${'boxai-sidebar'} | ${'boxai'}
+        `(
+            'should render $sidebar and call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = "/" and defaultPanel = $defaultPanel',
+            ({ defaultPanel, sidebar, expectedPanelName }) => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        defaultPanel,
+                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
                         onPanelChange,
                     }),
                 );
@@ -130,6 +165,55 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 render(
                     getSidebarPanels({
                         features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
+                        defaultPanel,
+                        hasActivity,
+                        hasDetails,
+                        hasMetadata,
+                        hasSkills,
+                        hasDocGen,
+                        hasBoxAI,
+                        onPanelChange,
+                    }),
+                );
+                expect(screen.getByTestId(expectedSidebar)).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+            },
+        );
+
+        test.each`
+            defaultPanel  | expectedSidebar     | hasActivity | hasDetails | hasMetadata | hasSkills | hasDocGen | hasBoxAI | showOnlyBoxAINavButton | expectedPanelName
+            ${'activity'} | ${'boxai-sidebar'}  | ${false}    | ${true}    | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'details'}  | ${'boxai-sidebar'}  | ${true}     | ${false}   | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'metadata'} | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${false}    | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'skills'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'docgen'}   | ${'boxai-sidebar'}  | ${true}     | ${true}    | ${true}     | ${false}  | ${false}  | ${true}  | ${false}               | ${'boxai'}
+            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${false} | ${false}               | ${'docgen'}
+            ${'boxai'}    | ${'docgen-sidebar'} | ${true}     | ${true}    | ${true}     | ${true}   | ${true}   | ${true}  | ${true}                | ${'docgen'}
+        `(
+            'should render first available panel and call onPanelChange with $expectedPanelName for users without rights to render default panel, given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = "/" and defaultPanel = $defaultPanel',
+            ({
+                defaultPanel,
+                expectedSidebar,
+                hasActivity,
+                hasDetails,
+                hasMetadata,
+                hasSkills,
+                hasDocGen,
+                hasBoxAI,
+                showOnlyBoxAINavButton,
+                expectedPanelName,
+            }) => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        features: {
+                            boxai: {
+                                sidebar: {
+                                    shouldBeDefaultPanel: true,
+                                    showOnlyNavButton: showOnlyBoxAINavButton,
+                                },
+                            },
+                        },
                         defaultPanel,
                         hasActivity,
                         hasDetails,
@@ -215,6 +299,25 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
 
         test.each`
+            path           | expectedPanelName
+            ${'/nonsense'} | ${'boxai'}
+            ${'/'}         | ${'boxai'}
+        `(
+            'should call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = $path',
+            ({ path, expectedPanelName }) => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
+                        path,
+                        onPanelChange,
+                    }),
+                );
+                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+            },
+        );
+
+        test.each`
             path                                 | hasActivity | hasDetails | hasVersions | hasMetadata | hasSkills | hasDocGen | hasBoxAI | showOnlyBoxAINavButton | expectedPanelName
             ${'/activity'}                       | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'docgen'}
             ${'/activity/comments'}              | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'docgen'}
@@ -252,6 +355,66 @@ describe('elements/content-sidebar/SidebarPanels', () => {
                 render(
                     getSidebarPanels({
                         features: { boxai: { sidebar: { showOnlyNavButton: showOnlyBoxAINavButton } } },
+                        hasActivity,
+                        hasBoxAI,
+                        hasDetails,
+                        hasDocGen,
+                        hasMetadata,
+                        hasSkills,
+                        hasVersions,
+                        onPanelChange,
+                        path,
+                    }),
+                );
+                expect(onPanelChange).toHaveBeenCalledWith(expectedPanelName, true);
+            },
+        );
+
+        test.each`
+            path                                 | hasActivity | hasDetails | hasVersions | hasMetadata | hasSkills | hasDocGen | hasBoxAI | showOnlyBoxAINavButton | expectedPanelName
+            ${'/activity'}                       | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/comments'}              | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/comments/1234'}         | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/tasks'}                 | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/tasks/1234'}            | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/annotations/1234/5678'} | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/annotations/1234'}      | ${false}    | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/versions'}              | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/activity/versions/1234'}         | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/details'}                        | ${true}     | ${false}   | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/details/versions'}               | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/details/versions/1234'}          | ${true}     | ${true}    | ${false}    | ${true}     | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/metadata'}                       | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/metadata/filteredTemplates/1,3'} | ${true}     | ${true}    | ${true}     | ${false}    | ${true}   | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/skills'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${false}  | ${true}   | ${true}  | ${false}               | ${'boxai'}
+            ${'/docgen'}                         | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${false}  | ${true}  | ${false}               | ${'boxai'}
+            ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${false} | ${false}               | ${'docgen'}
+            ${'/boxai'}                          | ${true}     | ${true}    | ${true}     | ${true}     | ${true}   | ${true}   | ${true}  | ${true}                | ${'docgen'}
+        `(
+            'should call onPanelChange with $expectedPanelName given feature boxai.sidebar.shouldBeDefaultPanel = true and the path = $path for users without rights to render the panel for given path',
+            ({
+                path,
+                hasActivity,
+                hasDetails,
+                hasVersions,
+                hasMetadata,
+                hasSkills,
+                hasDocGen,
+                hasBoxAI,
+                showOnlyBoxAINavButton,
+                expectedPanelName,
+            }) => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        features: {
+                            boxai: {
+                                sidebar: {
+                                    shouldBeDefaultPanel: true,
+                                    showOnlyNavButton: showOnlyBoxAINavButton,
+                                },
+                            },
+                        },
                         hasActivity,
                         hasBoxAI,
                         hasDetails,
@@ -372,11 +535,10 @@ describe('elements/content-sidebar/SidebarPanels', () => {
         });
 
         describe('boxai sidebar', () => {
-            // Skipped temporarily due to Box AI not being the default sidebar panel
-            test.skip('should render, given hasBoxAI = true and feature boxai.sidebar.showOnlyNavButton = false', () => {
+            test('should render, given feature boxai.sidebar.shouldBeDefaultPanel = true and hasBoxAI = true and feature boxai.sidebar.showOnlyNavButton = false', () => {
                 render(
                     getSidebarPanels({
-                        features: { boxai: { sidebar: { showOnlyNavButton: false } } },
+                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true, showOnlyNavButton: false } } },
                         hasBoxAI: true,
                     }),
                 );

@@ -18,6 +18,7 @@ type Props = {
     dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
+    isDisabled?: boolean,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     options?: Array<MetadataTemplateFieldOption>,
@@ -29,6 +30,7 @@ const MultiSelectMetadataField = ({
     dataValue,
     displayName,
     description,
+    isDisabled,
     onChange,
     onRemove,
     options = [],
@@ -41,6 +43,7 @@ const MultiSelectMetadataField = ({
                 {!!description && <i className="bdl-MultiSelectMetadataField-desc">{description}</i>}
                 <MultiSelect
                     blurExceptionClassNames={blurExceptionClassNames}
+                    isDisabled={isDisabled}
                     isEscapedWithReference
                     isScrollable
                     onChange={(selectedOptions: Array<SelectOptionProp>) => {

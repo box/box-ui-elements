@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import getProp from 'lodash/get';
+import noop from 'lodash/noop';
 import { AxiosResponse } from 'axios';
 
 import {
@@ -11,15 +12,15 @@ import {
     SuggestedQuestionType,
 } from '@box/box-ai-content-answers';
 
+import { withAPIContext } from '../api-context';
 import { DOCUMENT_SUGGESTED_QUESTIONS, SPREADSHEET_FILE_EXTENSIONS } from './constants';
-import withCurrentUser from '../current-user';
 
-// @ts-ignore: no ts definition
-import { BoxItem, User } from '../../../common/types/core';
 // @ts-ignore: no ts definition
 import APIFactory from '../../../api';
 // @ts-ignore: no ts definition
 import { ElementsXhrError } from '../../common/types/api';
+// @ts-ignore: no ts definition
+import { BoxItem } from '../../../common/types/core';
 
 import messages from './messages';
 
@@ -35,7 +36,6 @@ export interface ExternalProps {
 
 export interface ContentAnswersModalProps extends ExternalProps {
     api: APIFactory;
-    currentUser?: User;
     file: BoxItem;
     isOpen: boolean;
 }
@@ -182,7 +182,7 @@ const ContentAnswersModal = ({
             open={isOpen}
             questions={questions}
             retryQuestion={handleRetry}
-            setAnswerFeedback={undefined}
+            setAnswerFeedback={noop}
             submitQuestion={handleAsk}
             suggestedQuestions={suggestedQuestions || localizedQuestions}
             warningNotice={spreadsheetNotice}
@@ -191,4 +191,4 @@ const ContentAnswersModal = ({
     );
 };
 
-export default withCurrentUser(ContentAnswersModal);
+export default withAPIContext(ContentAnswersModal);
