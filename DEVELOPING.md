@@ -16,10 +16,10 @@ Our development setup assumes a LINUX/BSD environment.
 
 We use Storybook (https://storybook.js.org/). A published version of our Storybook is available at https://opensource.box.com/box-ui-elements/.
 
-## Local development
+## Local Development
 
 1. Start your local Storybook instance via `yarn start`.
-2. Navigate to `http://localhost:6061/` to see the UI Elements in action. If testing on a different machine or VM, you can instead use the IP address shown on your terminal window.
+2. Navigate to `http://localhost:6060/` to see the UI Elements in action. If testing on a different machine or VM, you can instead use the IP address shown on your terminal window.
 
 ## Testing UI Elements in a Parent Project
 
@@ -70,7 +70,6 @@ To test the Box UI Elements with your own project use local Yarn linking.
 
 - `yarn start` to launch a local Storybook server. Uses demo live data for Elements.
 - `yarn start:npm` to symlink Elements via `yarn link` to a parent project.
-- `yarn start:dev` to launch a local webpack dev server. Uses your own data for Elements.
 - `yarn lint` to lint js and css.
 - `yarn lint:js --fix` to lint js and fix issues.
 - `yarn lint:css --fix` to lint styles and fix issues.
@@ -107,7 +106,7 @@ Install the following plugins in your preferred editor
 
 ## Unit Testing
 
-### `jest` and `enzyme`
+### `Jest` and `Enzyme`
 
 The project uses the `jest` testing framework and `enzyme` for component testing.
 
@@ -116,7 +115,7 @@ Please refer to the relevant documentation pages for tutorials and troubleshooti
 - Jest: https://jestjs.io
 - Enzyme: https://airbnb.io/enzyme/
 
-### Testing Hooks with `enzyme`
+### Testing Hooks with `Enzyme`
 
 Most hooks can be tested with `shallow` rendering except for lifecycle hooks such as `useEffect` and `useLayoutEffect`.
 

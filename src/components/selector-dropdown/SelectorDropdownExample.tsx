@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { Children, Component } from 'react';
+import React, { Children, Component } from 'react';
 
 import DatalistItem from '../datalist-item';
 import SelectorDropdown from './SelectorDropdown';
