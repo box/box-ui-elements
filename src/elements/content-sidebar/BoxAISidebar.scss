@@ -69,8 +69,4 @@ $agentSelectorSidebarWidth: 211px;
             margin-left: var(--space-2);
         }
     }
-
-    div[class*='_bcsBoxAISidebar'][role='tabpanel'] {
-        width: $sidebarContentIncreasedWidth + 1px;
-    }
 }

@@ -57,7 +57,7 @@ export interface BoxAISidebarProps {
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldFeedbackFormIncludeFeedbackText?: boolean;
-    remoteSideBarComponent?: React.ComponentType<{
+    remoteModule?: React.ComponentType<{
         items: Array<ItemType>;
         elementId: string;
         cache: BoxAISidebarCache;
@@ -88,7 +88,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         onFeedbackFormSubmit,
         onUserInteraction,
         recordAction,
-        remoteSideBarComponent,
+        remoteModule,
         setCacheValue,
         shouldFeedbackFormIncludeFeedbackText,
         shouldPreinitSession = true,
@@ -140,10 +140,10 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         }
     }, [questions.length, setHasQuestions]);
 
-    if (remoteSideBarComponent) {
-        const RemoteSidebarComponent = remoteSideBarComponent;
+    if (remoteModule) {
+        const RemoteModuleComponent = remoteModule;
         return (
-            <RemoteSidebarComponent
+            <RemoteModuleComponent
                 items={items}
                 itemSize={itemSize}
                 elementId={elementId}
