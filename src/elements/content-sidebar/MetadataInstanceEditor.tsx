@@ -29,6 +29,7 @@ export interface MetadataInstanceEditorProps {
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
     taxonomyOptionsFetcher: TaxonomyOptionsFetcher;
     template: MetadataTemplateInstance;
+    isAdvancedExtractAgentEnabled?: boolean;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
@@ -48,6 +49,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     setIsUnsavedChangesModalOpen,
     taxonomyOptionsFetcher,
     template,
+    isAdvancedExtractAgentEnabled,
 }) => {
     return (
         <MetadataInstanceForm
@@ -68,6 +70,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             selectedTemplateInstance={template}
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
+            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
         />
     );
 };
