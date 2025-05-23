@@ -10,7 +10,6 @@ import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import { SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from './types/BoxAISidebarTypes';
-import './BoxAISidebar.scss';
 import messages from '../common/content-answers/messages';
 
 export interface BoxAISidebarProps {
