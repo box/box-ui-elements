@@ -77,8 +77,8 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
         },
     );
 
-    describe('AI Autofill Links', () => {
-        test('should render AI and pricing links when AI features are enabled', () => {
+    describe('AI Autofill Learn More Link', () => {
+        test('should render AI learn more link when AI features are enabled', () => {
             render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
 
             // Find link within the AI autofill section since there are two links with the same text in the component
@@ -87,11 +87,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             expect(aiLink).toBeInTheDocument();
             expect(aiLink.closest('a')).toHaveAttribute('href', 'https://www.box.com/ai');
             expect(aiLink.closest('a')).toHaveAttribute('target', '_blank');
-
-            const pricingLink = screen.getByText('pricing details');
-            expect(pricingLink).toBeInTheDocument();
-            expect(pricingLink.closest('a')).toHaveAttribute('href', 'https://www.box.com/pricing');
-            expect(pricingLink.closest('a')).toHaveAttribute('target', '_blank');
         });
     });
 

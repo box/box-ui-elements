@@ -1,11 +1,11 @@
 // @flow
 import * as React from 'react';
 
-import SelectorDropdownExamples from '../../../examples/src/SelectorDropdownExamples';
+import SelectorDropdownExample from './SelectorDropdownExample';
 import SelectorDropdown from './SelectorDropdown';
 import notes from './SelectorDropdown.stories.md';
 
-export const basic = () => <SelectorDropdownExamples />;
+export const basic = () => <SelectorDropdownExample />;
 
 export default {
     title: 'Components/SelectorDropdown',

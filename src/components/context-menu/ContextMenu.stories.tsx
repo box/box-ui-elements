@@ -6,9 +6,9 @@ import MenuItem from '../menu/MenuItem';
 import ContextMenu from './ContextMenu';
 import notes from './ContextMenu.stories.md';
 
-import ContextMenuWithSubmenuWithBoundariesElementExample from '../../../examples/src/ContextMenuWithSubmenuWithBoundariesElementExample';
+import ContextMenuWithSubmenuExample from './ContextMenuWithSubmenuExample';
 
-import '../../../examples/styles/ContextMenuExamples.scss';
+import './ContextMenuExample.scss';
 
 export const basic = () => (
     <ContextMenu>
@@ -20,7 +20,7 @@ export const basic = () => (
     </ContextMenu>
 );
 
-export const withSubmenu = () => <ContextMenuWithSubmenuWithBoundariesElementExample />;
+export const withSubmenu = () => <ContextMenuWithSubmenuExample />;
 
 export default {
     title: 'Components/ContextMenu',
