@@ -10,7 +10,6 @@ import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import { SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from './types/BoxAISidebarTypes';
-
 import messages from '../common/content-answers/messages';
 
 export interface BoxAISidebarProps {
@@ -57,6 +56,15 @@ export interface BoxAISidebarProps {
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldFeedbackFormIncludeFeedbackText?: boolean;
+    remoteModule?: React.ComponentType<{
+        items: Array<ItemType>;
+        elementId: string;
+        cache: BoxAISidebarCache;
+        setCacheValue: BoxAISidebarCacheSetter;
+        itemSize?: string;
+        setHasQuestions?: (hasQuestions: boolean) => void;
+        shouldPreinitSession?: boolean;
+    }>;
     shouldPreinitSession?: boolean;
     setHasQuestions: (hasQuestions: boolean) => void;
 }
@@ -79,6 +87,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         onFeedbackFormSubmit,
         onUserInteraction,
         recordAction,
+        remoteModule,
         setCacheValue,
         shouldFeedbackFormIncludeFeedbackText,
         shouldPreinitSession = true,
@@ -129,6 +138,20 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             setHasQuestions(questions.length > 0);
         }
     }, [questions.length, setHasQuestions]);
+
+    if (remoteModule) {
+        const RemoteModuleComponent = remoteModule;
+        return (
+            <RemoteModuleComponent
+                items={items}
+                itemSize={itemSize}
+                elementId={elementId}
+                cache={cache}
+                setCacheValue={setCacheValue}
+                shouldPreinitSession={shouldPreinitSession}
+            />
+        );
+    }
 
     let questionsWithoutInProgress = questions;
     if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
