@@ -34,6 +34,7 @@ import {
     CLIENT_NAME_CONTENT_UPLOADER,
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_UPLOAD,
+    ERROR_CODE_ITEM_NAME_IN_USE,
     ERROR_CODE_UPLOAD_FILE_LIMIT,
     STATUS_COMPLETE,
     STATUS_ERROR,
@@ -90,7 +91,7 @@ export interface ContentUploaderProps {
     onResume: (item: UploadItem) => void;
     onUpgradeCTAClick?: () => void;
     onUpload: (item?: UploadItem | BoxItem) => void;
-    overwrite: boolean;
+    overwrite: boolean | 'error';
     requestInterceptor?: (response: AxiosResponse) => void;
     responseInterceptor?: (config: AxiosRequestConfig) => void;
     rootFolderId: string;
@@ -1083,7 +1084,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
      */
     onClick = (item: UploadItem) => {
         const { chunked, isResumableUploadsEnabled, onClickCancel, onClickResume, onClickRetry } = this.props;
-        const { file, status } = item;
+        const { file, status, error } = item;
         const isChunkedUpload =
             chunked && !item.isFolder && file.size > CHUNKED_UPLOAD_MIN_SIZE_BYTES && isMultiputSupported();
         const isResumable = isResumableUploadsEnabled && isChunkedUpload && item.api.sessionId;
@@ -1097,7 +1098,10 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
                 onClickCancel(item);
                 break;
             case STATUS_ERROR:
-                if (isResumable) {
+                if (error?.code === ERROR_CODE_ITEM_NAME_IN_USE) {
+                    this.removeFileFromUploadQueue(item);
+                    onClickCancel(item);
+                } else if (isResumable) {
                     item.bytesUploadedOnLastResume = item.api.totalUploadedBytes;
                     this.resumeFile(item);
                     onClickResume(item);

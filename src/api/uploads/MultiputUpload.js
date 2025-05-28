@@ -182,7 +182,7 @@ class MultiputUpload extends BaseMultiput {
         file: File,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
     }): void {
@@ -227,7 +227,7 @@ class MultiputUpload extends BaseMultiput {
         fileDescription: ?string,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
     }): void {
@@ -446,7 +446,7 @@ class MultiputUpload extends BaseMultiput {
         file: File,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         sessionId: string,
         successCallback?: Function,
@@ -598,9 +598,7 @@ class MultiputUpload extends BaseMultiput {
 
             await retryNumOfTimes(
                 (resolve: Function, reject: Function): void => {
-                    this.logEvent(logEventType, logMessage)
-                        .then(resolve)
-                        .catch(reject);
+                    this.logEvent(logEventType, logMessage).then(resolve).catch(reject);
                 },
                 this.config.retries,
                 this.config.initialRetryDelayMs,
@@ -1240,6 +1238,11 @@ class MultiputUpload extends BaseMultiput {
      * @return {Promise}
      */
     async resolveConflict(data: Object): Promise<any> {
+        if (this.overwrite === 'error') {
+            this.errorCallback(data);
+            return;
+        }
+
         if (this.overwrite && data.context_info) {
             this.fileId = data.context_info.conflicts.id;
             return;
