@@ -182,7 +182,7 @@ class MultiputUpload extends BaseMultiput {
         file: File,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
     }): void {
@@ -227,7 +227,7 @@ class MultiputUpload extends BaseMultiput {
         fileDescription: ?string,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
     }): void {
@@ -446,7 +446,7 @@ class MultiputUpload extends BaseMultiput {
         file: File,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         sessionId: string,
         successCallback?: Function,

@@ -95,7 +95,7 @@ type Props = {
     onResume: Function,
     onUpgradeCTAClick?: Function,
     onUpload: Function,
-    overwrite: boolean,
+    overwrite: boolean | 'error',
     requestInterceptor?: Function,
     responseInterceptor?: Function,
     rootFolderId: string,
