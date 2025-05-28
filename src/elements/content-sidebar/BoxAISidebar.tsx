@@ -56,15 +56,7 @@ export interface BoxAISidebarProps {
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldFeedbackFormIncludeFeedbackText?: boolean;
-    remoteModule?: React.ComponentType<{
-        items: Array<ItemType>;
-        elementId: string;
-        cache: BoxAISidebarCache;
-        setCacheValue: BoxAISidebarCacheSetter;
-        itemSize?: string;
-        setHasQuestions?: (hasQuestions: boolean) => void;
-        shouldPreinitSession?: boolean;
-    }>;
+    renderRemoteModule?: (elementId: string) => React.ReactNode;
     shouldPreinitSession?: boolean;
     setHasQuestions: (hasQuestions: boolean) => void;
 }
@@ -87,7 +79,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         onFeedbackFormSubmit,
         onUserInteraction,
         recordAction,
-        remoteModule,
+        renderRemoteModule,
         setCacheValue,
         shouldFeedbackFormIncludeFeedbackText,
         shouldPreinitSession = true,
@@ -139,18 +131,8 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         }
     }, [questions.length, setHasQuestions]);
 
-    if (remoteModule) {
-        const RemoteModuleComponent = remoteModule;
-        return (
-            <RemoteModuleComponent
-                items={items}
-                itemSize={itemSize}
-                elementId={elementId}
-                cache={cache}
-                setCacheValue={setCacheValue}
-                shouldPreinitSession={shouldPreinitSession}
-            />
-        );
+    if (renderRemoteModule) {
+        return <>{renderRemoteModule(elementId)}</>;
     }
 
     let questionsWithoutInProgress = questions;

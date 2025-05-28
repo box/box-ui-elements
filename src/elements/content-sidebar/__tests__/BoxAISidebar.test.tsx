@@ -338,26 +338,17 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
     describe('remote sidebar component', () => {
         const MockRemoteSidebar = jest.fn(() => <div data-testid="remote-sidebar" />);
+        const renderRemoteModule = jest.fn(() => <MockRemoteSidebar elementId={mockProps.elementId} />);
 
         test('should render remote sidebar component when provided', async () => {
-            await renderComponent({ remoteModule: MockRemoteSidebar });
+            await renderComponent({ renderRemoteModule });
 
-            expect(MockRemoteSidebar).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    items: mockProps.items,
-                    itemSize: mockProps.itemSize,
-                    elementId: mockProps.elementId,
-                    cache: mockProps.cache,
-                    setCacheValue: mockProps.setCacheValue,
-                    shouldPreinitSession: mockProps.shouldPreinitSession,
-                }),
-                expect.any(Object),
-            );
+            expect(renderRemoteModule).toHaveBeenCalledWith(mockProps.elementId);
             expect(screen.getByTestId('remote-sidebar')).toBeInTheDocument();
         });
 
         test('should not render default sidebar when remote component is provided', async () => {
-            await renderComponent({ remoteModule: MockRemoteSidebar });
+            await renderComponent({ renderRemoteModule });
 
             expect(screen.queryByTestId('boxai-sidebar-title')).not.toBeInTheDocument();
             expect(screen.queryByTestId('sidebar-agent-selector')).not.toBeInTheDocument();
