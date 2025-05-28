@@ -288,7 +288,7 @@
         "webpack": "^5.92.0",
         "webpack-bundle-analyzer": "^4.10.2",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.0.4",
+        "webpack-dev-server": "^5.2.1",
         "worker-farm": "^1.7.0"
     },
     "peerDependencies": {
