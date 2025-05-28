@@ -296,6 +296,20 @@ describe('api/uploads/BaseUpload', () => {
             expect(upload.makePreflightRequest).not.toHaveBeenCalled();
         });
 
+        test('should call error callback on file on 409 if overwrite property is "error"', () => {
+            const error = new Error();
+            error.status = 409;
+            
+            upload.fileId = '123';
+            upload.overwrite = 'error';
+            upload.makePreflightRequest = jest.fn();
+            upload.errorCallback = jest.fn();
+
+            upload.preflightErrorHandler(error, () => {});
+
+            expect(upload.errorCallback).toHaveBeenCalledWith(error);
+        });
+
         test('should overwrite file on 409 if overwrite property is true', () => {
             upload.fileId = '123';
             upload.overwrite = true;
