@@ -132,7 +132,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
     }, [questions.length, setHasQuestions]);
 
     if (renderRemoteModule) {
-        return <>{renderRemoteModule(elementId)}</>;
+        return renderRemoteModule(elementId);
     }
 
     let questionsWithoutInProgress = questions;
