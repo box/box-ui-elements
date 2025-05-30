@@ -8,6 +8,7 @@ import { Size5, SurfaceStatusSurfaceSuccess } from '@box/blueprint-web-assets/to
 import IconInProgress from './IconInProgress';
 
 import {
+    ERROR_CODE_ITEM_NAME_IN_USE,
     ERROR_CODE_UPLOAD_FILE_SIZE_LIMIT_EXCEEDED,
     STATUS_COMPLETE,
     STATUS_ERROR,
@@ -70,8 +71,13 @@ const ItemAction = ({
             }
             break;
         case STATUS_ERROR:
-            Icon = ArrowCurveForward;
-            tooltip = isResumableUploadsEnabled ? messages.resume : messages.retry;
+            if (code === ERROR_CODE_ITEM_NAME_IN_USE) {
+                Icon = XMark;
+                tooltip = messages.uploadsCancelButtonTooltip;
+            } else {
+                Icon = ArrowCurveForward;
+                tooltip = isResumableUploadsEnabled ? messages.resume : messages.retry;
+            }
             break;
         case STATUS_IN_PROGRESS:
         case STATUS_STAGED:
