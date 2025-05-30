@@ -12,7 +12,6 @@
 <PROJECT_ROOT>/node_modules/draft-js*
 <PROJECT_ROOT>/node_modules/findup*
 <PROJECT_ROOT>/node_modules/config-chain*
-<PROJECT_ROOT>/node_modules/react-styleguidist*
 <PROJECT_ROOT>/node_modules/immer*
 <PROJECT_ROOT>/node_modules/immutable*
 <PROJECT_ROOT>/node_modules/react-animate-height*
