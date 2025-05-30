@@ -80,7 +80,13 @@ const config: {
             }),
         );
 
-        return config;
+        return {
+            ...config,
+            cache: {
+                type: 'filesystem',
+                hashAlgorithm: 'sha256',
+            },
+        };
     },
     typescript: {
         reactDocgen: 'react-docgen-typescript',
