@@ -80,6 +80,8 @@ const config: {
             }),
         );
 
+        config.cache.hashAlgorithms = 'sha256';
+
         return config;
     },
     typescript: {
