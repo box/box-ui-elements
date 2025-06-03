@@ -10,7 +10,6 @@ import BoxAISidebarContent from './BoxAISidebarContent';
 import { BoxAISidebarContext } from './context/BoxAISidebarContext';
 import { SPREADSHEET_FILE_EXTENSIONS } from '../common/content-answers/constants';
 import type { BoxAISidebarCache, BoxAISidebarCacheSetter } from './types/BoxAISidebarTypes';
-
 import messages from '../common/content-answers/messages';
 
 export interface BoxAISidebarProps {
@@ -57,6 +56,7 @@ export interface BoxAISidebarProps {
     recordAction: (params: RecordActionType) => void;
     setCacheValue: BoxAISidebarCacheSetter;
     shouldFeedbackFormIncludeFeedbackText?: boolean;
+    renderRemoteModule?: (elementId: string) => React.ReactNode;
     shouldPreinitSession?: boolean;
     setHasQuestions: (hasQuestions: boolean) => void;
 }
@@ -79,6 +79,7 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
         onFeedbackFormSubmit,
         onUserInteraction,
         recordAction,
+        renderRemoteModule,
         setCacheValue,
         shouldFeedbackFormIncludeFeedbackText,
         shouldPreinitSession = true,
@@ -129,6 +130,10 @@ const BoxAISidebar = (props: BoxAISidebarProps) => {
             setHasQuestions(questions.length > 0);
         }
     }, [questions.length, setHasQuestions]);
+
+    if (renderRemoteModule) {
+        return renderRemoteModule(elementId);
+    }
 
     let questionsWithoutInProgress = questions;
     if (questions.length > 0 && !questions[questions.length - 1].isCompleted) {
