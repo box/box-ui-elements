@@ -49,7 +49,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     setIsUnsavedChangesModalOpen,
     taxonomyOptionsFetcher,
     template,
-    isAdvancedExtractAgentEnabled,
+    isAdvancedExtractAgentEnabled = false,
 }) => {
     return (
         <MetadataInstanceForm

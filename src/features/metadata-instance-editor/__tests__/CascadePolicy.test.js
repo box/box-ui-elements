@@ -92,6 +92,8 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
     describe('AI Agent Selector', () => {
         test('should render AI agent selector with default to basic when AI features are enabled', () => {
+            // reset any previous test usage of localStorage
+            localStorage.removeItem('aiAgent');
             render(
                 <CascadePolicy
                     canEdit
@@ -100,7 +102,7 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                     shouldShowCascadeOptions
                 />,
             );
-            expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+            expect(screen.getByRole('combobox', { name: 'Basic' })).toBeInTheDocument();
         });
 
         test('should not render AI agent selector when canUseAIFolderExtractionAgentSelector is false', () => {
