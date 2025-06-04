@@ -144,7 +144,7 @@ class FolderUploadNode {
             if (error.code === ERROR_CODE_ITEM_NAME_IN_USE) {
                 this.folderId = error.context_info.conflicts[0].id;
             } else if (error.status === 429 && retryCount < MAX_RETRIES) {
-                let retryAfterMs = DEFAULT_RETRY_DELAY_MS * retryCount + Math.random() * 1000;
+                let retryAfterMs = DEFAULT_RETRY_DELAY_MS * 2 ** retryCount + Math.floor(Math.random() * 1000);
                 if (error.headers) {
                     const retryAfterHeaderSec = parseInt(
                         error.headers['retry-after'] || error.headers.get('Retry-After'),

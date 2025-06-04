@@ -200,7 +200,7 @@ describe('api/uploads/FolderUploadNode', () => {
 
         test.each`
             headersMock                                                  | description
-            ${{ 'retry-after': '2' }}                                    | ${'lower casse plain object'}
+            ${{ 'retry-after': '2' }}                                    | ${'lower case plain object'}
             ${{ get: key => (key === 'Retry-After' ? '2' : undefined) }} | ${'capitalized map object'}
         `('should handle $description headers', async ({ headersMock }) => {
             const error = { status: 429, headers: headersMock };
