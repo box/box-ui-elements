@@ -100,6 +100,7 @@ class FolderUploadNode {
      */
     uploadChildFolders = async (errorCallback: Function) => {
         // Gets FolderUploadNode values from this.folders key value pairs object
+        // $FlowFixMe
         const folders: Array<FolderUploadNode> = Object.values(this.folders);
 
         // Worker function: picks the next folder from the array and uploads until no more folders are available
