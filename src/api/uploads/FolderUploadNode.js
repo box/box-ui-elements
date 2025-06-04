@@ -155,8 +155,7 @@ class FolderUploadNode {
                     }
                 }
                 await sleep(retryAfterMs);
-                this.createAndUploadFolder(errorCallback, isRoot, retryCount + 1);
-                return;
+                return this.createAndUploadFolder(errorCallback, isRoot, retryCount + 1);
             } else if (isRoot) {
                 errorCallback(error);
             } else {
@@ -172,7 +171,7 @@ class FolderUploadNode {
 
         // The root folder has already been added to the upload queue in ContentUploader
         if (isRoot) {
-            return;
+            return undefined;
         }
 
         const folderObject: FolderUploadItem = {
@@ -190,6 +189,7 @@ class FolderUploadNode {
         }
 
         this.addFolderToUploadQueue(folderObject);
+        return undefined;
     };
 
     /**
