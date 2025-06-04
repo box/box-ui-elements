@@ -7,6 +7,11 @@ import { screen, render, within } from '../../../test-utils/testing-library';
 import CascadePolicy from '../CascadePolicy';
 
 describe('features/metadata-instance-editor/CascadePolicy', () => {
+    beforeEach(() => {
+        // reset any previous tests that may have set localStorage
+        localStorage.removeItem('aiAgent');
+    });
+
     test('should correctly render cascade policy read only mode', () => {
         const wrapper = shallow(<CascadePolicy id="fakeId" isCascadingEnabled shouldShowCascadeOptions />);
         expect(wrapper).toMatchSnapshot();
@@ -92,8 +97,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
     describe('AI Agent Selector', () => {
         test('should render AI agent selector with default to basic when AI features are enabled', () => {
-            // reset any previous test usage of localStorage
-            localStorage.removeItem('aiAgent');
             render(
                 <CascadePolicy
                     canEdit
@@ -107,7 +110,7 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
         test('should not render AI agent selector when canUseAIFolderExtractionAgentSelector is false', () => {
             render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
-            expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('combobox', { name: 'Basic' })).not.toBeInTheDocument();
         });
     });
 

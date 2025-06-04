@@ -265,7 +265,7 @@ describe('Instances component - canUseAIFolderExtractionAgentSelector prop', () 
         const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
         await userEvent.click(editButton);
 
-        expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+        expect(screen.getByRole('combobox', { name: 'Basic' })).toBeInTheDocument();
     });
 
     test('should not show agent selector in child Instance if canUseAIFolderExtractionAgentSelector is false', async () => {
@@ -280,7 +280,7 @@ describe('Instances component - canUseAIFolderExtractionAgentSelector prop', () 
         const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
         await userEvent.click(editButton);
 
-        expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('combobox', { name: 'Basic' })).not.toBeInTheDocument();
     });
 
     test('should not show agent selector in child Instance if canUseAIFolderExtractionAgentSelector is undefined', async () => {
@@ -291,6 +291,6 @@ describe('Instances component - canUseAIFolderExtractionAgentSelector prop', () 
         const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
         await userEvent.click(editButton);
 
-        expect(screen.queryByRole('button', { name: 'Agent Basic' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('combobox', { name: 'Basic' })).not.toBeInTheDocument();
     });
 });
