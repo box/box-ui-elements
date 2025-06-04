@@ -12,14 +12,17 @@ let counter = 0;
 const workers = workerFarm(
     {
         maxConcurrentWorkers: 3,
-        maxRetries: 0
+        maxRetries: 0,
+        workerOptions: {
+            execArgv: ['--max-old-space-size=2048'],
+        },
     },
-    require.resolve('./build_locale.js')
+    require.resolve('./build_locale.js'),
 );
 
-[true, false].forEach((react) => {
-    locales.forEach((locale) => {
-        workers(locale, react, (error) => {
+[true, false].forEach(react => {
+    locales.forEach(locale => {
+        workers(locale, react, error => {
             if (++counter === bundleCount || error) {
                 // terminate after all locales have been processed
                 workerFarm.end(workers);
