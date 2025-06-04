@@ -32,6 +32,10 @@ describe('api/uploads/FolderUploadNode', () => {
         }));
     });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     describe('upload()', () => {
         test('should call createAndUploadFolder(), addFilesToUploadQueue() and uploadChildFolders()', async () => {
             const errorCallback = () => 'errorCallback';
