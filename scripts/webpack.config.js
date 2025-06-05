@@ -138,10 +138,9 @@ function getConfig(isReactExternalized) {
         stats,
     };
 
-    config.plugins.push(Translations);
-
     if (isDev) {
         config.devtool = 'source-map';
+        config.plugins.push(Translations);
         config.plugins.push(
             new CircularDependencyPlugin({
                 exclude: /node_modules/,

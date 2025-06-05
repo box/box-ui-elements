@@ -14,7 +14,7 @@ module.exports = (locale, react, callback) => {
         execSync(`time LANGUAGE=${locale} REACT=${react} yarn build:prod:dist`);
         callback();
     } catch (error) {
-        console.error(`Error: Failed to build ${locale}`);
+        console.error(`Error: Failed to build ${locale}`, error);
         callback(true);
     }
 };
