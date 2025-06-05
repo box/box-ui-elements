@@ -114,6 +114,7 @@ function MetadataSidebarRedesign({
     const isBoxAiSuggestionsEnabled: boolean = useFeatureEnabled('metadata.aiSuggestions.enabled');
     const isBetaLanguageEnabled: boolean = useFeatureEnabled('metadata.betaLanguage.enabled');
     const isMetadataMultiLevelTaxonomyFieldEnabled: boolean = useFeatureEnabled('metadata.multilevelTaxonomy.enabled');
+    const isAdvancedExtractAgentEnabled: boolean = useFeatureEnabled('metadata.extractAdvancedAgents.enabled');
     const isDeleteConfirmationModalCheckboxEnabled: boolean = useFeatureEnabled(
         'metadata.deleteConfirmationModalCheckbox.enabled',
     );
@@ -324,11 +325,13 @@ function MetadataSidebarRedesign({
                             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
                             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
                             template={editingTemplate}
+                            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
                         />
                     )}
                     {showList && (
                         <MetadataInstanceList
                             areAiSuggestionsAvailable={areAiSuggestionsAvailable}
+                            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
                             isAiSuggestionsFeatureEnabled={isBoxAiSuggestionsEnabled}
                             isBetaLanguageEnabled={isBetaLanguageEnabled}
                             onEdit={templateInstance => {

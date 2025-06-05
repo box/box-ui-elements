@@ -80,8 +80,14 @@ const config: {
             }),
         );
 
+        // Add FIPS-compliant configuration
         return {
             ...config,
+            output: {
+                ...config.output,
+                hashFunction: 'sha256',
+                hashDigest: 'hex',
+            },
             cache: {
                 type: 'filesystem',
                 hashAlgorithm: 'sha256',
