@@ -145,6 +145,8 @@ class FolderUploadNode {
             if (error.code === ERROR_CODE_ITEM_NAME_IN_USE) {
                 this.folderId = error.context_info.conflicts[0].id;
             } else if (error.status === 429 && retryCount < MAX_RETRIES) {
+                // Set a default exponential backoff delay with a random jitter(0–999 ms) to avoid all requests being sent at once
+                // This will be overridden if the Retry-After header is present in the response
                 let retryAfterMs = DEFAULT_RETRY_DELAY_MS * 2 ** retryCount + Math.floor(Math.random() * 1000);
                 if (error.headers) {
                     const retryAfterHeaderSec = parseInt(
