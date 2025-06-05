@@ -13,6 +13,9 @@ const workers = workerFarm(
     {
         maxConcurrentWorkers: 5,
         maxRetries: 0,
+        workerOptions: {
+            execArgv: ['--max-old-space-size=1024'],
+        },
     },
     require.resolve('./build_locale.js'),
 );

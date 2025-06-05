@@ -12,8 +12,8 @@ chromatic-diagnostics.json
 dist
 es
 i18n/*.js
-i18n/json
 i18n/bundles
+i18n/json
 node_modules
 npm-debug.log
 npm-error.log
