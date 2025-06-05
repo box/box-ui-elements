@@ -4,7 +4,7 @@
  * @author Box
  */
 
-import { TreeQueryInput } from '@box/combobox-with-api';
+import type { TreeQueryInput } from '@box/combobox-with-api';
 import cloneDeep from 'lodash/cloneDeep';
 import lodashFilter from 'lodash/filter';
 import flatMap from 'lodash/flatMap';
