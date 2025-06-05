@@ -21,6 +21,7 @@ import {
     FIELD_TYPE_STRING,
     FIELD_TYPE_DATE,
     FIELD_TYPE_MULTISELECT,
+    FIELD_TYPE_TAXONOMY,
 } from './constants';
 
 type Props = {
@@ -157,6 +158,19 @@ const MetadataField = ({
                     isDisabled={isDisabled}
                     onChange={onChange}
                     onRemove={onRemove}
+                />
+            );
+
+        // The taxonomy field is a valid field type which,
+        // although not yet supported here, should not trigger an error message.
+        // For this reason, we are currently setting it to read-only.
+        case FIELD_TYPE_TAXONOMY:
+            return (
+                <ReadOnlyMetadataField
+                    dataValue={dataValue}
+                    description={description}
+                    displayName={displayName}
+                    type={type}
                 />
             );
 

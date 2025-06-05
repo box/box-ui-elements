@@ -37,6 +37,13 @@ exports[`features/metadata-instance-editor/fields/MetadataField should correctly
 />
 `;
 
+exports[`features/metadata-instance-editor/fields/MetadataField should correctly render a taxonomy field - for the time being, in read-only mode 1`] = `
+<ReadOnlyMetadataField
+  dataValue="value"
+  type="taxonomy"
+/>
+`;
+
 exports[`features/metadata-instance-editor/fields/MetadataField should correctly render a text field 1`] = `
 <TextMetadataField
   dataValue="value"

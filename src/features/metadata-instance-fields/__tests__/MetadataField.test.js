@@ -33,6 +33,12 @@ describe('features/metadata-instance-editor/fields/MetadataField', () => {
         );
         expect(wrapper).toMatchSnapshot();
     });
+    test('should correctly render a taxonomy field - for the time being, in read-only mode', () => {
+        const wrapper = shallow(
+            <MetadataField canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="taxonomy" />,
+        );
+        expect(wrapper).toMatchSnapshot();
+    });
     test('should correctly render a float field', () => {
         const wrapper = shallow(
             <MetadataField canEdit dataValue="value" onChange={onChange} onRemove={onRemove} type="float" />,
