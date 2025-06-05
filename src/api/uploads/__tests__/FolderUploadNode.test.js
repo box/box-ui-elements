@@ -1,6 +1,7 @@
 import noop from 'lodash/noop';
 import FolderUploadNode from '../FolderUploadNode';
 import FolderAPI from '../../Folder';
+import sleep from '../../../utils/sleep';
 import {
     ERROR_CODE_ITEM_NAME_IN_USE,
     STATUS_COMPLETE,
@@ -12,6 +13,7 @@ jest.mock('../../../utils/uploads', () => ({
     ...jest.requireActual('../../../utils/uploads'),
     getFileFromEntry: jest.fn(entry => entry),
 }));
+jest.mock('../../../utils/sleep', () => jest.fn(() => Promise.resolve()));
 
 let folderUploadNodeInstance;
 let folderCreateMock;
@@ -28,6 +30,10 @@ describe('api/uploads/FolderUploadNode', () => {
         FolderAPI.mockImplementation(() => ({
             create: folderCreateMock,
         }));
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
     });
 
     describe('upload()', () => {
@@ -181,6 +187,49 @@ describe('api/uploads/FolderUploadNode', () => {
             await folderUploadNodeInstance.createAndUploadFolder(errorCallback, isRoot);
 
             expect(folderUploadNodeInstance.addFolderToUploadQueue).not.toHaveBeenCalled();
+        });
+
+        test('should retry on 429 with default delay', async () => {
+            const error = { status: 429 };
+            const success = { id: '123' };
+            const createFolder = jest.fn().mockRejectedValueOnce(error).mockResolvedValueOnce(success);
+            folderUploadNodeInstance.createFolder = createFolder;
+            folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
+
+            await folderUploadNodeInstance.createAndUploadFolder(jest.fn(), false, 0);
+
+            expect(createFolder).toHaveBeenCalledTimes(2);
+            expect(folderUploadNodeInstance.folderId).toBe('123');
+        });
+
+        test.each`
+            headersMock                                                  | description
+            ${{ 'retry-after': '2' }}                                    | ${'lower case plain object'}
+            ${{ get: key => (key === 'Retry-After' ? '2' : undefined) }} | ${'capitalized map object'}
+        `('should handle $description headers', async ({ headersMock }) => {
+            const error = { status: 429, headers: headersMock };
+            const success = { id: '123' };
+            const createFolder = jest.fn().mockRejectedValueOnce(error).mockResolvedValueOnce(success);
+            folderUploadNodeInstance.createFolder = createFolder;
+            folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
+
+            await folderUploadNodeInstance.createAndUploadFolder(jest.fn(), false, 0);
+
+            expect(sleep).toHaveBeenCalledWith(2000);
+            expect(createFolder).toHaveBeenCalledTimes(2);
+            expect(folderUploadNodeInstance.folderId).toBe('123');
+        });
+
+        test('should stop retrying after max retries', async () => {
+            const error = { status: 429 };
+            const createFolder = jest.fn().mockRejectedValue(error);
+            folderUploadNodeInstance.createFolder = createFolder;
+            folderUploadNodeInstance.addFolderToUploadQueue = jest.fn();
+
+            await folderUploadNodeInstance.createAndUploadFolder(jest.fn(), false, 3);
+
+            expect(createFolder).toHaveBeenCalledTimes(1);
+            expect(folderUploadNodeInstance.folderId).toBeUndefined();
         });
     });
 
