@@ -863,7 +863,7 @@ describe('Instance Component - React Testing Library', () => {
             const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
             if (editButton) await userEvent.click(editButton); // Enter edit mode to ensure CascadePolicy options are visible
 
-            expect(screen.getByRole('button', { name: 'Agent Basic' })).toBeInTheDocument();
+            expect(screen.getByRole('combobox', { name: 'Basic' })).toBeInTheDocument();
         });
 
         test('should pass isExistingAIExtractionCascadePolicy=true to CascadePolicy if policy is ai_extract', async () => {
