@@ -136,7 +136,7 @@ class PlainUpload extends BaseUpload {
         fileDescription: ?string,
         fileId: ?string,
         folderId: string,
-        overwrite: boolean,
+        overwrite: boolean | 'error',
         progressCallback: Function,
         successCallback: Function,
     }): void {
