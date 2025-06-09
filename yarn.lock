@@ -1437,19 +1437,19 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@^4.44.0", "@box/blueprint-web-assets@^4.44.1":
-  version "4.44.1"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.44.1.tgz#c674784f3a4b10f47bbea6be64e1e6dfb512d8b0"
-  integrity sha512-v88exZ1HWzEi4TBFDyHuM/yE29ID1U3gQTAgzSaKJseZCrhIDdgygHMIEsEwswDEUvLLFznRme4sgrbKlrT5Rg==
+"@box/blueprint-web-assets@^4.48.0", "@box/blueprint-web-assets@^4.48.4":
+  version "4.48.4"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.48.4.tgz#2fc9ed248b05c9969da6364605b37b969a71ef1d"
+  integrity sha512-74CA5X/81owelMLl4vXQIokS5QF6WpsCq5aS3y6BDtii9wi5EIkMx+R6LrjfZ2pfNToh7vkr+oZVvtcFlo53Qg==
 
-"@box/blueprint-web@^11.12.0":
-  version "11.12.0"
-  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-11.12.0.tgz#7b03eaa111554df8efb8dad240432f7db9f8cf66"
-  integrity sha512-uTSBZ4eXdmlw7wOAxjL6brWQIkDnCwZq2gSM44iqCRZlUnUjvqIXuK6NUA1Py0oOFMsu/EYl7sUKHwIeS3g/4w==
+"@box/blueprint-web@^12.7.1":
+  version "12.7.1"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web/-/blueprint-web-12.7.1.tgz#5e85f95ed55ed3e40048aa20441d57174e38596e"
+  integrity sha512-4L2aSXwDA9R3Taf3d+YqEKj8ayQggcvh6ROUD3qnDZgbJhfgWaQ3QaCKmdRGqSQ8BwmHPFDofVwsgK/Rgm2D7g==
   dependencies:
     "@ariakit/react" "0.4.15"
     "@ariakit/react-core" "0.4.15"
-    "@box/blueprint-web-assets" "^4.44.0"
+    "@box/blueprint-web-assets" "^4.48.0"
     "@internationalized/date" "^3.7.0"
     "@radix-ui/react-accordion" "1.1.2"
     "@radix-ui/react-checkbox" "1.0.4"
@@ -1478,10 +1478,10 @@
     tabbable "^4.0.0"
     type-fest "^3.2.0"
 
-"@box/box-ai-agent-selector@^0.31.0":
-  version "0.31.0"
-  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.31.0.tgz#a2ef6c3c7284529ae268b609d04b6000348bb294"
-  integrity sha512-4+M/4g8LHJfZkP+7ISBKveQs2q5HeGvXv8B6/N8yFb9cpYuOjpKFxRvHyILdQWjwictHZbgY2XrNrpxbYGEXRQ==
+"@box/box-ai-agent-selector@^0.41.10":
+  version "0.41.16"
+  resolved "https://registry.yarnpkg.com/@box/box-ai-agent-selector/-/box-ai-agent-selector-0.41.16.tgz#041d83f4c438080d6d845db94811c35069f38f1a"
+  integrity sha512-q8cMjv/rU/yzwiyBp2/toRw0jXAX1HbmbE3oM9PWCnsS0cyBJtxKokLkcyw8hRbfXHcgi+KcRBpGhjOPYG+0cQ==
 
 "@box/box-ai-content-answers@^0.124.1":
   version "0.124.1"
@@ -1520,10 +1520,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^0.104.2":
-  version "0.104.2"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.104.2.tgz#07cc27ce992d510a7ada2cff482b2c4d748bee71"
-  integrity sha512-71BhSFHJc5SrgGb3LjGvOpuTeuPzw0Epg9OUr8FX2/vjH8Z5maf1UVaG3W9FXm0gmIgRqZJ8zqXxW76UaF4brQ==
+"@box/metadata-editor@^0.110.1":
+  version "0.110.1"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.110.1.tgz#73fe32f1f6068df62abecefa5c3b7afe065ddb26"
+  integrity sha512-C/GbyxtWxE8urU0RSakWrcksua8ObwDR/+SOmiTIZfcG9/jKHsftNPqLhcxxFJ1HRMPLQy7XN56ey9Y7ObiI0Q==
 
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"
@@ -18254,7 +18254,7 @@ string-replace-loader@^3.1.0:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
 
-"string-width-cjs@npm:string-width@^4.2.0":
+"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -18288,15 +18288,6 @@ string-width@^3.0.0, string-width@^3.1.0:
     emoji-regex "^7.0.1"
     is-fullwidth-code-point "^2.0.0"
     strip-ansi "^5.1.0"
-
-string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
-  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.1"
 
 string-width@^5.0.1, string-width@^5.1.2:
   version "5.1.2"
@@ -18404,7 +18395,7 @@ stringify-object@^3.3.0:
     is-obj "^1.0.1"
     is-regexp "^1.0.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -18431,13 +18422,6 @@ strip-ansi@^5.0.0, strip-ansi@^5.1.0, strip-ansi@^5.2.0:
   integrity sha512-DuRs1gKbBqsMKIZlrffwlug8MHkcnpjs5VPmL1PAh+mA30U0DTotfDZ0d2UUsXpPmPmMMJ6W773MaA3J+lbiWA==
   dependencies:
     ansi-regex "^4.1.0"
-
-strip-ansi@^6.0.0, strip-ansi@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
-  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
-  dependencies:
-    ansi-regex "^5.0.1"
 
 strip-ansi@^7.0.1, strip-ansi@^7.1.0:
   version "7.1.0"
@@ -20020,7 +20004,7 @@ worker-farm@^1.7.0:
   dependencies:
     errno "~0.1.7"
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
@@ -20050,15 +20034,6 @@ wrap-ansi@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
   integrity sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==
-  dependencies:
-    ansi-styles "^4.0.0"
-    string-width "^4.1.0"
-    strip-ansi "^6.0.0"
-
-wrap-ansi@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
-  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
   dependencies:
     ansi-styles "^4.0.0"
     string-width "^4.1.0"
