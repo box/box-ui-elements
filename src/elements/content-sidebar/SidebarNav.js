@@ -8,7 +8,9 @@ import * as React from 'react';
 import { injectIntl } from 'react-intl';
 import type { IntlShape } from 'react-intl';
 import noop from 'lodash/noop';
+// $FlowFixMe
 import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
+// $FlowFixMe
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
 import { usePromptFocus } from '@box/box-ai-content-answers';
 import AdditionalTabs from './additional-tabs';

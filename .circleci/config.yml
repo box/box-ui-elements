@@ -111,6 +111,7 @@ jobs:
    steps:
      - checkout
      - setup-workspace
+     - build-locales
      - run:
          name: Cypress run
          command: yarn --cwd /buie test:e2e

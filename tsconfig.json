@@ -8,6 +8,7 @@
         "allowJs": false, // https://github.com/microsoft/TypeScript/issues/35470
         "checkJs": false,
         "rootDir": ".",
+        "moduleResolution": "bundler",
         "paths": {
             "box-locale-data": ["node_modules/@box/cldr-data/locale-data/en-US"],
             "react": ["node_modules/@types/react"]
@@ -15,5 +16,5 @@
         "strict": false
     },
     "files": [".storybook/typings.d.ts"],
-    "include": ["src/**/*.ts", "src/**/*.tsx", "examples/src/**.tsx", "types.ts", "scripts/jest/jest-setup.ts"]
+    "include": ["src/**/*.ts", "src/**/*.tsx", "types.ts", "scripts/jest/jest-setup.ts"]
 }

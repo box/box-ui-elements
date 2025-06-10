@@ -1,4 +1,6 @@
 // @flow
 
+const CASCADE_POLICY_TYPE_AI_EXTRACT = 'ai_extract';
 const TEMPLATE_CUSTOM_PROPERTIES: 'properties' = 'properties';
-export default TEMPLATE_CUSTOM_PROPERTIES;
+
+export { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES };

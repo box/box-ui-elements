@@ -1,7 +1,8 @@
 import { act, type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
 import { expect, userEvent, waitFor, within, fn, screen } from '@storybook/test';
-import { type StoryObj } from '@storybook/react';
+import { type StoryObj, Meta } from '@storybook/react';
+import type { HttpHandler } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
 import MetadataSidebarRedesign from '../../MetadataSidebarRedesign';
 import {
@@ -424,6 +425,30 @@ export const MetadataInstanceEditorAIEnabled: StoryObj<typeof MetadataSidebarRed
     },
 };
 
+export const MetadataInstanceEditorAIEnabledAdvancedExtractAgent: StoryObj<typeof MetadataSidebarRedesign> = {
+    args: {
+        features: {
+            ...mockFeatures,
+            'metadata.aiSuggestions.enabled': true,
+            'metadata.extractAdvancedAgents.enabled': true,
+        },
+    },
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        // Edit one instance
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Template' });
+        await userEvent.click(editButton);
+
+        // Find the SplitButton
+        const splitButton = await canvas.findByRole('button', { name: /Autofill/ });
+        expect(splitButton).toBeVisible();
+
+        await userEvent.hover(splitButton);
+        const dropdownButton = await canvas.findByRole('button', { name: 'See agent options.' });
+        expect(dropdownButton).toBeVisible();
+    },
+};
+
 export const ShowErrorWhenAIAPIIsUnavailable: StoryObj<typeof MetadataSidebarRedesign> = {
     args: {
         features: {
@@ -720,7 +745,7 @@ export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     },
 };
 
-export default {
+const meta: Meta<typeof ContentSidebar> & { parameters: { msw: { handlers: HttpHandler[] } } } = {
     title: 'Elements/ContentSidebar/MetadataSidebarRedesign/tests/visual-regression-tests',
     component: ContentSidebar,
     args: {
@@ -739,3 +764,5 @@ export default {
         },
     },
 };
+
+export default meta;

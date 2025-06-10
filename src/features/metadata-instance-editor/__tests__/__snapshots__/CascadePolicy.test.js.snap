@@ -4,7 +4,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
 <div
   className="metadata-cascade-notice"
 >
-  <FormattedMessage
+  <MemoizedFormattedMessage
     defaultMessage="This template and its values are being cascaded to all items in this folder and its subfolders."
     id="boxui.metadataInstanceEditor.metadataCascadePolicyEnabledInfo"
   />
@@ -15,7 +15,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
 <div
   className="metadata-cascade-notice"
 >
-  <FormattedMessage
+  <MemoizedFormattedMessage
     defaultMessage="This template and its values are being cascaded to all items in this folder and its subfolders."
     id="boxui.metadataInstanceEditor.metadataCascadePolicyEnabledInfo"
   />
@@ -26,7 +26,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
 <div
   className="metadata-cascade-notice"
 >
-  <FormattedMessage
+  <MemoizedFormattedMessage
     defaultMessage="This template and its values are being cascaded to all items in this folder and its subfolders."
     id="boxui.metadataInstanceEditor.metadataCascadePolicyEnabledInfo"
   />
@@ -40,16 +40,17 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
   >
     <div
       className="metadata-cascade-enable"
+      data-testid="metadata-cascade-enable"
     >
       <div>
-        <FormattedMessage
+        <MemoizedFormattedMessage
           defaultMessage="Enable Cascade Policy"
           id="boxui.metadataInstanceEditor.enableCascadePolicy"
           tagName="strong"
         />
       </div>
       <div>
-        <FormattedMessage
+        <MemoizedFormattedMessage
           defaultMessage="Cascade policy cannot be applied to custom metadata at this time."
           id="boxui.metadataInstanceEditor.cannotApplyCascadePolicyText"
         />
@@ -62,7 +63,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
     <div
       className="metadata-cascading-mode"
     >
-      <FormattedMessage
+      <MemoizedFormattedMessage
         defaultMessage="In the case of conflicts when applying this template and its values to existing items, what would you like to do? This is a one time action."
         id="boxui.metadataInstanceEditor.cascadePolicyModeQuestion"
       />
@@ -71,7 +72,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
       >
         <IconAlertDefault />
         <span>
-          <FormattedMessage
+          <MemoizedFormattedMessage
             defaultMessage="This operation is not immediate and may take some time."
             id="boxui.metadataInstanceEditor.operationNotImmediate"
           />
@@ -84,7 +85,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
       >
         <RadioButton
           label={
-            <FormattedMessage
+            <Memo(MemoizedFormattedMessage)
               defaultMessage="Skip and keep all existing template values"
               id="boxui.metadataInstanceEditor.cascadePolicySkipMode"
             />
@@ -93,7 +94,7 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
         />
         <RadioButton
           label={
-            <FormattedMessage
+            <Memo(MemoizedFormattedMessage)
               defaultMessage="Overwrite all existing template values"
               id="boxui.metadataInstanceEditor.cascadePolicyOverwriteMode"
             />

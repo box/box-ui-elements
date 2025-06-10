@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { injectIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import Label from '../../components/label/Label';
 import SingleSelectField from '../../components/select-field/SingleSelectField';
@@ -20,7 +20,7 @@ type Props = {
     dataValue?: MetadataFieldValue,
     description?: string,
     displayName: string,
-    intl: any,
+    isDisabled?: boolean,
     onChange: (key: string, value: MetadataFieldValue) => void,
     onRemove: (key: string) => void,
     options?: Array<MetadataTemplateFieldOption>,
@@ -32,7 +32,7 @@ const EnumMetadataField = ({
     dataValue,
     displayName,
     description,
-    intl,
+    isDisabled,
     onChange,
     onRemove,
     options = [],
@@ -43,7 +43,9 @@ const EnumMetadataField = ({
         isSelectable: true,
     }));
 
-    const defaultValue = intl.formatMessage(messages.metadataFieldSelectValue);
+    const { formatMessage } = useIntl();
+
+    const defaultValue = formatMessage(messages.metadataFieldSelectValue);
 
     selectOptions.unshift({
         displayText: defaultValue,
@@ -58,6 +60,7 @@ const EnumMetadataField = ({
                 <SingleSelectField
                     blurExceptionClassNames={blurExceptionClassNames}
                     isEscapedWithReference
+                    isDisabled={isDisabled}
                     isScrollable
                     onChange={(option: Option) => {
                         if (option.isSelectable) {
@@ -77,5 +80,4 @@ const EnumMetadataField = ({
     );
 };
 
-export { EnumMetadataField as EnumMetadataFieldBase };
-export default injectIntl(EnumMetadataField);
+export default EnumMetadataField;

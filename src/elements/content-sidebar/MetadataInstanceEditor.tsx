@@ -4,7 +4,7 @@ import {
     type JSONPatchOperations,
     type MetadataTemplateInstance,
 } from '@box/metadata-editor';
-import { type TaxonomyOptionsFetcher } from '@box/metadata-editor/dist/types/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types';
+import { TaxonomyOptionsFetcher } from '@box/metadata-editor/lib/components/metadata-editor-fields/components/metadata-taxonomy-field/types.js';
 import React from 'react';
 import {
     ERROR_CODE_METADATA_AUTOFILL_TIMEOUT,
@@ -29,6 +29,7 @@ export interface MetadataInstanceEditorProps {
     setIsUnsavedChangesModalOpen: (isUnsavedChangesModalOpen: boolean) => void;
     taxonomyOptionsFetcher: TaxonomyOptionsFetcher;
     template: MetadataTemplateInstance;
+    isAdvancedExtractAgentEnabled?: boolean;
 }
 
 const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
@@ -48,6 +49,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
     setIsUnsavedChangesModalOpen,
     taxonomyOptionsFetcher,
     template,
+    isAdvancedExtractAgentEnabled = false,
 }) => {
     return (
         <MetadataInstanceForm
@@ -68,6 +70,7 @@ const MetadataInstanceEditor: React.FC<MetadataInstanceEditorProps> = ({
             selectedTemplateInstance={template}
             setIsUnsavedChangesModalOpen={setIsUnsavedChangesModalOpen}
             taxonomyOptionsFetcher={taxonomyOptionsFetcher}
+            isAdvancedExtractAgentEnabled={isAdvancedExtractAgentEnabled}
         />
     );
 };

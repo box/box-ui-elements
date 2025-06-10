@@ -2,13 +2,8 @@ import localize from '../../support/i18n';
 
 // <reference types="Cypress" />
 const helpers = {
-    load(additionalProps = {}) {
-        cy.visit('/Elements/ContentPicker', {
-            onBeforeLoad: contentWindow => {
-                contentWindow.PROPS = additionalProps;
-            },
-        });
-
+    loadBasic(args = '') {
+        cy.visitStorybook(`elements-contentpicker-tests-e2e--basic&args=${args}`);
         cy.getByTestId('be-sub-header').contains('CodePen');
     },
     getRow: rowNum => cy.getByTestId('content-picker').find(`.bcp-item-row-${rowNum}`),
@@ -48,11 +43,12 @@ describe('ContentPicker', () => {
 
         beforeEach(() => {
             cy.intercept('GET', '**/folders/*', FIRST_PAGE);
+
+            cy.visitStorybook('elements-contentpicker-tests-e2e--with-pagination');
+            cy.getByTestId('be-sub-header').contains('CodePen');
         });
 
         it('Should be able to navigate between pages using arrows', () => {
-            helpers.load({ initialPageSize: 3 });
-
             // Confirm that the Content Picker shows the first page
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
 
@@ -76,8 +72,6 @@ describe('ContentPicker', () => {
         });
 
         it('Should be able to navigate to the next page using count button', () => {
-            helpers.load({ initialPageSize: 3 });
-
             // Confirm that the Content Picker shows the first page
             helpers.getRow(0).contains(FIRST_ITEM_OF_FIRST_PAGE);
 
@@ -131,7 +125,7 @@ describe('ContentPicker', () => {
         });
 
         it('Should be able to select and deselect items', () => {
-            helpers.load();
+            helpers.loadBasic();
 
             // Select row 2
             helpers.getRow(2).find('input[type="checkbox"]').should('not.be.checked');
@@ -149,7 +143,7 @@ describe('ContentPicker', () => {
         });
 
         it('Should show all the selected items across folders', () => {
-            helpers.load();
+            helpers.loadBasic();
 
             // Select row 2
             helpers.selectRow(2);
@@ -175,7 +169,7 @@ describe('ContentPicker', () => {
         });
 
         it('Should not allow more than the maximum selected prop', () => {
-            helpers.load({ maxSelectable: 2 });
+            helpers.loadBasic('maxSelectable:2');
 
             // Select row 2
             helpers.getRow(2).as('rowTwo').find('input[type="checkbox"]').should('not.be.checked');
@@ -195,7 +189,7 @@ describe('ContentPicker', () => {
         });
 
         it('Should only keep one checked if in single select mode', () => {
-            helpers.load({ maxSelectable: 1 });
+            helpers.loadBasic('maxSelectable:1');
 
             // Select row 2
             helpers.getRow(2).as('rowTwo').find('input[type="radio"]').should('not.be.checked');

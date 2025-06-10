@@ -12,6 +12,7 @@ import getProp from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import keyBy from 'lodash/keyBy';
 import lodashMap from 'lodash/map';
+import partition from 'lodash/partition';
 import uniq from 'lodash/uniq';
 import uniqueId from 'lodash/uniqueId';
 import { getBadItemError, getBadPermissionsError, isUserCorrectableError } from '../utils/error';
@@ -262,7 +263,10 @@ class Metadata extends File {
         return lodashMap(templates, template => {
             if (!template.fields) return template;
 
-            const fieldsToUpdate = lodashFilter(template.fields, field => field.type === 'taxonomy' && !field.levels);
+            const [fieldsToUpdate, restFields] = partition(
+                template.fields,
+                field => field.type === 'taxonomy' && !field.levels,
+            );
 
             if (isEmpty(fieldsToUpdate)) return template;
 
@@ -286,7 +290,7 @@ class Metadata extends File {
 
             return {
                 ...template,
-                fields: updatedFields,
+                fields: restFields.concat(updatedFields),
             };
         });
     }

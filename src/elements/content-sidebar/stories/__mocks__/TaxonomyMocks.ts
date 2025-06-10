@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw';
+import type { HttpHandler } from 'msw';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 import { fileIdWithMetadata, mockFileRequest } from './MetadataSidebarRedesignedMocks';
@@ -46,6 +47,13 @@ export const mockMetadataTemplatesWithMultilevelTaxonomy = {
                 copyInstanceOnItemCopy: false,
                 fields: [
                     {
+                        id: 'another-field-id',
+                        type: 'string',
+                        key: 'anotherAttribute',
+                        displayName: 'Another Attribute',
+                        hidden: false,
+                    },
+                    {
                         id: 'multilevel-taxonomy-field-id',
                         type: 'taxonomy',
                         key: 'multiLevel',
@@ -88,6 +96,13 @@ export const mockMetadataTemplatesWithSinglelevelTaxonomy = {
                         taxonomyKey: 'singlelevel-taxonomy',
                         optionsRules: { multiSelect: true, selectableLevels: [1] },
                     },
+                    {
+                        id: 'another-field-id',
+                        type: 'string',
+                        key: 'anotherAttribute',
+                        displayName: 'Another Attribute',
+                        hidden: false,
+                    },
                 ],
             },
         ],
@@ -109,6 +124,7 @@ export const mockMetadataInstancesWithTaxonomy = {
                 $template: 'myTaxonomy',
                 $scope: 'enterprise_173733877',
                 $canEdit: true,
+                anotherAttribute: 'test value',
                 singleLevel: [
                     {
                         displayName: 'Blue',
@@ -116,7 +132,7 @@ export const mockMetadataInstancesWithTaxonomy = {
                         level: '1',
                         nodePath: null,
                         parentId: null,
-                    }
+                    },
                 ],
                 multiLevel: [
                     {
@@ -124,7 +140,7 @@ export const mockMetadataInstancesWithTaxonomy = {
                         id: 'london-l3-id',
                         level: '3',
                         nodePath: ['england-l2-id', 'uk-l1-id'],
-                        parentId: 'england-l2-id'
+                        parentId: 'england-l2-id',
                     },
                 ],
             },
@@ -258,19 +274,6 @@ export const mockMultilevelTaxonomyOptions = {
                     selectable: true,
                 },
                 {
-                    id: 'fukushima-l2-id',
-                    ancestors: [
-                        {
-                            id: 'japan-l1-id',
-                            display_name: 'Japan',
-                            level: 1,
-                        },
-                    ],
-                    display_name: 'Fukushima',
-                    level: 2,
-                    selectable: true,
-                },
-                {
                     id: 'nagano-l2-id',
                     ancestors: [
                         {
@@ -283,7 +286,6 @@ export const mockMultilevelTaxonomyOptions = {
                     level: 2,
                     selectable: true,
                 },
-
             ],
             taxonomy_id: 'multilevel-taxonomy-id',
         },
@@ -309,8 +311,8 @@ export const mockMultilevelTaxonomyOptions = {
                 },
             ],
             taxonomy_id: 'multilevel-taxonomy-id',
-        }
-    }
+        },
+    },
 };
 
 export const mockSinglelevelTaxonomyOptions = {
@@ -365,17 +367,19 @@ export const mockSinglelevelTaxonomy = {
     },
 };
 
-
 export const mockMultilevelTaxonomyNodes = {
     url: `${apiV2Path}/metadata_taxonomies/testNamespace/multilevel-taxonomy/nodes/london-l3-id?include-ancestors=true`,
     response: {
         id: 'london-l3-id',
-        ancestors: [{ level: 2, id: 'england-l2-id', display_name: 'England' }, { level: 1, id: 'uk-l1-id', display_name: 'United Kingdom' }],
+        ancestors: [
+            { level: 2, id: 'england-l2-id', display_name: 'England' },
+            { level: 1, id: 'uk-l1-id', display_name: 'United Kingdom' },
+        ],
         display_name: 'London',
         level: 3,
         selectable: true,
         parent_id: 'england-l2-id',
-        node_path: ['uk-l1-id', 'england-l2-id']
+        node_path: ['uk-l1-id', 'england-l2-id'],
     },
 };
 
@@ -388,11 +392,11 @@ export const mockSinglelevelTaxonomyNodes = {
         level: 1,
         selectable: true,
         parent_id: null,
-        node_path: []
+        node_path: [],
     },
 };
 
-export const taxonomyMockHandlers = [
+export const taxonomyMockHandlers: HttpHandler[] = [
     http.get(mockFileRequest.url, () => {
         return HttpResponse.json(mockFileRequest.response);
     }),
@@ -418,7 +422,7 @@ export const taxonomyMockHandlers = [
         if (!ancestorId) {
             return HttpResponse.json(mockMultilevelTaxonomyOptions.response.firstLevel);
         }
-        return HttpResponse.json(mockMultilevelTaxonomyOptions.response[ancestorId]);        
+        return HttpResponse.json(mockMultilevelTaxonomyOptions.response[ancestorId]);
     }),
     http.get(mockSinglelevelTaxonomyOptions.url, () => {
         return HttpResponse.json(mockSinglelevelTaxonomyOptions.response);

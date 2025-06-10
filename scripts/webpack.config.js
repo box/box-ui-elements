@@ -19,12 +19,8 @@ const isRelease = process.env.NODE_ENV === 'production';
 const isDev = process.env.NODE_ENV === 'development';
 const language = process.env.LANGUAGE;
 const react = process.env.REACT === 'true';
-const examples = process.env.EXAMPLES === 'true';
 const shouldAnalyzeBundles = process.env.BUNDLE_ANALYSIS === 'true';
 const shouldIncludeAllSupportedBrowsers = isRelease || process.env.BROWSERSLIST_ENV === 'production';
-const token = process.env.TOKEN; // used for examples only
-const folderId = process.env.FOLDERID; // used for examples only
-const fileId = process.env.FILEID; // used for examples only
 const outputDir = process.env.OUTPUT;
 const version = isRelease ? packageJSON.version : 'dev';
 const outputPath = outputDir ? path.resolve(outputDir) : path.resolve('dist', version, language);
@@ -67,17 +63,13 @@ function getConfig(isReactExternalized) {
             path: outputPath,
             filename: `[name]${isReactExternalized ? noReactSuffix : ''}.js`,
             publicPath: `/${version}/${language}/`,
-            hashFunction: 'xxhash64',
         },
         resolve: {
             modules: ['src', 'node_modules'],
             extensions: ['.tsx', '.ts', '.js'],
             alias: {
-                'box-ui-elements/es': path.join(__dirname, '../src'), // for examples only
-                examples: path.join(__dirname, '../examples/src'), // for examples only
                 'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
                 'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
-                'rsg-components/Wrapper': path.join(__dirname, '../examples/Wrapper'), // for examples only
             },
         },
         devServer: {
@@ -100,7 +92,7 @@ function getConfig(isReactExternalized) {
                     // For webpack dev build perf we want to exclude node_modules unless we want to support legacy browsers like IE11
                     exclude: shouldIncludeAllSupportedBrowsers
                         ? /@babel(?:\/|\\{1,2})runtime|pikaday|core-js/
-                        : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for styleguidist
+                        : /node_modules\/(?!@box\/cldr-data)/, // Exclude node_modules except for @box/cldr-data which is needed for i18n
                 },
                 {
                     test: /\.s?css$/,
@@ -116,9 +108,6 @@ function getConfig(isReactExternalized) {
             new DefinePlugin({
                 __LANGUAGE__: JSON.stringify(language),
                 __VERSION__: JSON.stringify(version),
-                __TOKEN__: JSON.stringify(token), // used for examples only
-                __FOLDERID__: JSON.stringify(folderId), // used for examples only
-                __FILEID__: JSON.stringify(fileId), // used for examples only
                 'process.env': {
                     NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                     BABEL_ENV: JSON.stringify(process.env.BABEL_ENV),
@@ -153,14 +142,12 @@ function getConfig(isReactExternalized) {
 
     if (isDev) {
         config.devtool = 'source-map';
-        if (!examples) {
-            config.plugins.push(
-                new CircularDependencyPlugin({
-                    exclude: /node_modules/,
-                    failOnError: true,
-                }),
-            );
-        }
+        config.plugins.push(
+            new CircularDependencyPlugin({
+                exclude: /node_modules/,
+                failOnError: true,
+            }),
+        );
     }
 
     if (isRsync) {
