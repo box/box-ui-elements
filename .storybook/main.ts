@@ -23,14 +23,29 @@ const config: {
         '@storybook/addon-essentials',
         '@storybook/addon-interactions',
         {
-            name: '@storybook/addon-styling',
+            name: '@storybook/addon-styling-webpack',
             options: {
-                sass: {
-                    implementation: require('sass'),
-                },
+                rules: [
+                    {
+                        test: /\.css$/,
+                        use: ['style-loader', 'css-loader'],
+                    },
+                    {
+                        test: /\.scss$/,
+                        use: [
+                            'style-loader',
+                            'css-loader',
+                            {
+                                loader: 'sass-loader',
+                                options: {
+                                    implementation: require('sass'),
+                                },
+                            },
+                        ],
+                    },
+                ],
             },
         },
-        '@storybook/addon-styling-webpack',
         '@storybook/addon-docs',
         '@storybook/addon-webpack5-compiler-babel',
         '@chromatic-com/storybook',
@@ -65,7 +80,19 @@ const config: {
             }),
         );
 
-        return config;
+        // Add FIPS-compliant configuration
+        return {
+            ...config,
+            output: {
+                ...config.output,
+                hashFunction: 'sha256',
+                hashDigest: 'hex',
+            },
+            cache: {
+                type: 'filesystem',
+                hashAlgorithm: 'sha256',
+            },
+        };
     },
     typescript: {
         reactDocgen: 'react-docgen-typescript',

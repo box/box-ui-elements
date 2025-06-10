@@ -17,7 +17,6 @@ module.exports = [
             'i18n/',
             'node_modules/',
             'reports/',
-            'styleguide/',
             '**/__snapshots__/',
             '**/*.json',
             '**/*.png',

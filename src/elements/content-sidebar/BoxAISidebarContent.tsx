@@ -6,7 +6,7 @@ import * as React from 'react';
 import flow from 'lodash/flow';
 import { useIntl } from 'react-intl';
 import classNames from 'classnames';
-import { BoxAiAgentSelectorWithApi, useAgents } from '@box/box-ai-agent-selector';
+import { BoxAiAgentSelectorWithApi, useAgents, type AgentType } from '@box/box-ai-agent-selector';
 import { IconButton, Tooltip } from '@box/blueprint-web';
 import { ArrowsExpand } from '@box/blueprint-web-assets/icons/Fill';
 import {
@@ -34,11 +34,17 @@ const MARK_NAME_JS_READY: string = `${ORIGIN_BOXAI_SIDEBAR}_${EVENT_JS_READY}`;
 
 mark(MARK_NAME_JS_READY);
 
-function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLandingPage: boolean }) {
+function BoxAISidebarContent(
+    props: ApiWrapperWithInjectedProps & {
+        onSelectedAgentCallback: (selectedAgent: AgentType) => void;
+        shouldShowLandingPage: boolean;
+    },
+) {
     const {
         createSession,
         encodedSession,
         onClearAction,
+        onSelectedAgentCallback,
         getAIStudioAgents,
         hasRequestInProgress,
         hostAppName,
@@ -154,6 +160,11 @@ function BoxAISidebarContent(props: ApiWrapperWithInjectedProps & { shouldShowLa
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [encodedSession]);
+
+    React.useEffect(() => {
+        onSelectedAgentCallback?.(selectedAgent);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedAgent?.id]);
 
     const renderBoxAISidebarTitle = () => {
         return (

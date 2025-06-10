@@ -1,6 +1,10 @@
 .bcpr-FileInfo {
     display: flex;
     align-items: center;
+
+    svg {
+        flex-shrink: 0;
+    }
 }
 
 .bcpr-FileInfo-name {

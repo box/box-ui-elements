@@ -4,11 +4,15 @@ import { render, screen } from '../../../test-utils/testing-library';
 import BoxAISidebar, { BoxAISidebarProps } from '../BoxAISidebar';
 
 let MockBoxAiAgentSelectorWithApi: jest.Mock;
+let mockUseAgents: jest.Mock;
+
 jest.mock('@box/box-ai-agent-selector', () => {
     MockBoxAiAgentSelectorWithApi = jest.fn();
+    mockUseAgents = jest.fn();
     return {
         ...jest.requireActual('@box/box-ai-agent-selector'),
         BoxAiAgentSelectorWithApi: MockBoxAiAgentSelectorWithApi,
+        useAgents: mockUseAgents,
     };
 });
 
@@ -39,6 +43,7 @@ jest.mock('@box/box-ai-content-answers', () => ({
             onClearAction={mockOnClearAction}
             onCloseModal={jest.fn()}
             onSelectAgent={jest.fn()}
+            onSelectedAgentCallback={props.onSelectedAgentCallback}
             onSuggestedQuestionsFetched={props.onSuggestedQuestionsFetched}
             onAgentEditorToggle={jest.fn()}
             questions={props.restoredQuestions}
@@ -145,6 +150,12 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
 
     beforeEach(() => {
         MockBoxAiAgentSelectorWithApi.mockImplementation(() => <div data-testid="sidebar-agent-selector" />);
+        mockUseAgents.mockReturnValue({
+            agents: [],
+            selectedAgent: { id: '1', config: {}, name: 'Test Agent' },
+            setSelectedAgent: jest.fn(),
+            requestState: 'success',
+        });
     });
 
     afterEach(() => {
@@ -336,6 +347,26 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         expect(screen.queryByTestId('content-answers-modal')).not.toBeInTheDocument();
     });
 
+    describe('remote sidebar component', () => {
+        const MockRemoteSidebar = jest.fn(() => <div data-testid="remote-sidebar" />);
+        const renderRemoteModule = jest.fn(() => <MockRemoteSidebar elementId={mockProps.elementId} />);
+
+        test('should render remote sidebar component when provided', async () => {
+            await renderComponent({ renderRemoteModule });
+
+            expect(renderRemoteModule).toHaveBeenCalledWith(mockProps.elementId);
+            expect(screen.getByTestId('remote-sidebar')).toBeInTheDocument();
+        });
+
+        test('should not render default sidebar when remote component is provided', async () => {
+            await renderComponent({ renderRemoteModule });
+
+            expect(screen.queryByTestId('boxai-sidebar-title')).not.toBeInTheDocument();
+            expect(screen.queryByTestId('sidebar-agent-selector')).not.toBeInTheDocument();
+            expect(screen.queryByRole('button', { name: 'Clear conversation' })).not.toBeInTheDocument();
+        });
+    });
+
     describe('given shouldPreinitSession = false, should create session on user intent', () => {
         test('agents list open', async () => {
             MockBoxAiAgentSelectorWithApi.mockImplementation(({ onAgentsListOpen }) => {
@@ -464,5 +495,15 @@ describe('elements/content-sidebar/BoxAISidebar', () => {
         await userEvent.keyboard('foo');
 
         expect(mockProps.onUserInteraction).toHaveBeenCalled();
+    });
+
+    test('Should call onSelectedAgentCallback on agent selected change', async () => {
+        const mockOnSelectedAgentCallback = jest.fn();
+
+        await renderComponent({
+            onSelectedAgentCallback: mockOnSelectedAgentCallback,
+        });
+
+        expect(mockOnSelectedAgentCallback).toHaveBeenCalled();
     });
 });
