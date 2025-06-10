@@ -45,7 +45,7 @@ interface DataFetcher {
         | ERROR_CODE_METADATA_PRECONDITION_FAILED
         | ERROR_CODE_UNKNOWN
         | null;
-    extractSuggestions: (templateKey: string, scope: string) => Promise<MetadataTemplateField[]>;
+    extractSuggestions: (templateKey: string, scope: string, agentId?: string) => Promise<MetadataTemplateField[]>;
     file: BoxItem | null;
     handleCreateMetadataInstance: (
         templateInstance: MetadataTemplateInstance,
@@ -214,15 +214,16 @@ function useSidebarMetadataFetcher(
 
     const [, setError] = React.useState();
     const extractSuggestions = React.useCallback(
-        async (templateKey: string, scope: string): Promise<MetadataTemplateField[]> => {
+        async (templateKey: string, scope: string, agentId?: string): Promise<MetadataTemplateField[]> => {
             const aiAPI = api.getIntelligenceAPI();
             setExtractErrorCode(null);
-
             let answer = null;
+            const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
             try {
                 answer = (await aiAPI.extractStructured({
                     items: [{ id: file.id, type: file.type }],
                     metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
+                    ...customAiAgent,
                 })) as Record<string, MetadataFieldValue>;
             } catch (error) {
                 // Axios makes the status code nested under the response object

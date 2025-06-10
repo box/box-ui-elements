@@ -147,29 +147,15 @@ const CascadePolicy = ({
                         </div>
                         {canUseAIFolderExtractionAgentSelector && (
                             <div className="metadata-cascade-ai-agent-selector">
-                                <TooltipProvider>
-                                    <BoxAiAgentSelector
-                                        agents={agents}
-                                        onErrorAction={() => {}}
-                                        requestState="success"
-                                        selectedAgent={agents[0]}
-                                        variant="sidebar"
-                                    />
-                                </TooltipProvider>
+                                <BoxAiAgentSelector
+                                    agents={agents}
+                                    onErrorAction={() => {}}
+                                    requestState="success"
+                                    selectedAgent={agents[0]}
+                                    variant="sidebar"
+                                />
                             </div>
                         )}
-                        <InlineNotice className="metadata-cascade-ai-notice" variant="info">
-                            <FormattedMessage
-                                {...messages.aiAutofillNotice}
-                                values={{
-                                    pricingLink: (
-                                        <Link className="cascade-policy-link" href={PRICING_LINK} target="_blank">
-                                            <FormattedMessage {...messages.aiAutofillPricingDetails} />
-                                        </Link>
-                                    ),
-                                }}
-                            />
-                        </InlineNotice>
                     </div>
                 </div>
             )}

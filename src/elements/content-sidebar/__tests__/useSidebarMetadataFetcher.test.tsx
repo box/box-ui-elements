@@ -36,6 +36,7 @@ const mockPreconditionFailedError = {
 const mockFile = {
     id: '123',
     permissions: { [FIELD_PERMISSIONS_CAN_UPLOAD]: true },
+    type: 'file',
 };
 
 const mockTemplates = [
@@ -420,6 +421,63 @@ describe('useSidebarMetadataFetcher', () => {
                 ERROR_CODE_EMPTY_METADATA_SUGGESTIONS,
                 expect.objectContaining({
                     showNotification: true,
+                }),
+            );
+        });
+
+        test('should call extractStructured with custom AI agent ID', async () => {
+            const { result } = setupHook();
+            const agentId = 'custom-agent-123';
+
+            await result.current.extractSuggestions('templateKey', 'global', agentId);
+
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+                ai_agent: { type: 'ai_agent_id', id: agentId },
+            });
+        });
+
+        test('should not call extractStructured with custom AI agent ID', async () => {
+            const { result } = setupHook();
+
+            await result.current.extractSuggestions('templateKey', 'global');
+
+            // Assert that ai_agent is NOT present
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    ai_agent: expect.anything(),
+                }),
+            );
+            // Also verify what IS present
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+            });
+        });
+
+        test('should handle undefined agentIDs', async () => {
+            const { result } = setupHook();
+
+            await result.current.extractSuggestions('templateKey', 'global', undefined);
+
+            // Assert that ai_agent is NOT present
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    ai_agent: expect.anything(),
+                }),
+            );
+            // Also verify what IS present
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith({
+                items: [{ id: mockFile.id, type: mockFile.type }],
+                metadata_template: { template_key: 'templateKey', scope: 'global', type: 'metadata_template' },
+            });
+            mockAPI.extractStructured.mockClear();
+
+            await result.current.extractSuggestions('templateKey', 'global', '');
+            expect(mockAPI.extractStructured).toHaveBeenCalledWith(
+                expect.not.objectContaining({
+                    ai_agent: expect.anything(),
                 }),
             );
         });
