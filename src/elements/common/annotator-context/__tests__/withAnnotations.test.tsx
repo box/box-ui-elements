@@ -3,6 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { createMemoryHistory, History, Location } from 'history';
 import { Action, Annotator, AnnotatorContext, withAnnotations, Status } from '../index';
 import { WithAnnotationsProps, ComponentWithAnnotations } from '../withAnnotations';
+import { FeedEntryType, ViewType } from '../../types/SidebarNavigation';
 
 type ComponentProps = {
     className?: string;
@@ -49,6 +50,37 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             const wrapper = getWrapper({ history, location: history.location });
             expect(wrapper.state('activeAnnotationId')).toBe(null);
         });
+
+        test('should use sidebarNavigation prop to initialize state with activeAnnotationId if routerDisabled is true', () => {
+            const wrapper = getWrapper({
+                routerDisabled: true,
+                sidebarNavigation: {
+                    activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                    activeFeedEntryId: '456',
+                    sidebar: ViewType.ACTIVITY,
+                    fileVersionId: '123',
+                },
+            });
+            expect(wrapper.state('activeAnnotationId')).toBe('456');
+        });
+
+        test('should use sidebarNavigation prop to initialize state with activeAnnotationId if routerDisabled is true in feature flags', () => {
+            const wrapper = getWrapper({
+                features: { routerDisabled: { value: true } },
+                sidebarNavigation: {
+                    activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                    activeFeedEntryId: '456',
+                    sidebar: ViewType.ACTIVITY,
+                    fileVersionId: '123',
+                },
+            });
+            expect(wrapper.state('activeAnnotationId')).toBe('456');
+        });
+
+        test('should not initialize state with activeAnnotationId if routerDisabled is true and sidebarNavigation is not provided', () => {
+            const wrapper = getWrapper({ routerDisabled: true });
+            expect(wrapper.state('activeAnnotationId')).toBe(null);
+        });
     });
 
     test('should pass onAnnotator and onPreviewDestroy as props on the wrapped component', () => {
@@ -91,6 +123,20 @@ describe('elements/common/annotator-context/withAnnotations', () => {
             error: null,
             meta: null,
         });
+    });
+
+    test('should not pass annotations router props if routerDisabled is true', () => {
+        const wrapper = getWrapper({ routerDisabled: true });
+        const contextProvider = getContextProvider(wrapper);
+        expect(contextProvider.prop('value').getAnnotationsMatchPath).toBeUndefined();
+        expect(contextProvider.prop('value').getAnnotationsPath).toBeUndefined();
+    });
+
+    test('should not pass annotations router props if routerDisabled is true in feature flags', () => {
+        const wrapper = getWrapper({ features: { routerDisabled: { value: true } } });
+        const contextProvider = getContextProvider(wrapper);
+        expect(contextProvider.prop('value').getAnnotationsMatchPath).toBeUndefined();
+        expect(contextProvider.prop('value').getAnnotationsPath).toBeUndefined();
     });
 
     describe('emitActiveAnnotationChangeEvent', () => {

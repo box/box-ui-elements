@@ -3,6 +3,7 @@ import getProp from 'lodash/get';
 import { generatePath, match as matchType, matchPath } from 'react-router-dom';
 import { Location } from 'history';
 import AnnotatorContext from './AnnotatorContext';
+import { isFeatureEnabled, type FeatureConfig } from '../feature-checking';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
 import { FeedEntryType, SidebarNavigation } from '../types/SidebarNavigation';
 
@@ -42,6 +43,7 @@ export type ComponentWithAnnotations = {
 };
 
 export type WithAnnotationsProps = {
+    features?: FeatureConfig;
     location?: Location;
     onAnnotator: (annotator: Annotator) => void;
     onError?: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
@@ -77,8 +79,11 @@ export default function withAnnotations<P extends object>(
             const { routerDisabled, sidebarNavigation } = props;
             let activeAnnotationId = null;
 
+            const isRouterDisabled = routerDisabled || isFeatureEnabled(props?.features, 'routerDisabled.value');
+
             if (
-                routerDisabled &&
+                isRouterDisabled &&
+                sidebarNavigation &&
                 'activeFeedEntryType' in sidebarNavigation &&
                 sidebarNavigation.activeFeedEntryType === FeedEntryType.ANNOTATIONS &&
                 'activeFeedEntryId' in sidebarNavigation
@@ -335,6 +340,14 @@ export default function withAnnotations<P extends object>(
         };
 
         render(): JSX.Element {
+            const isRouterDisabled =
+                this.props?.routerDisabled || isFeatureEnabled(this.props?.features, 'routerDisabled.value');
+            const annotationsRouterProps = isRouterDisabled
+                ? {}
+                : {
+                      getAnnotationsMatchPath: this.getMatchPath,
+                      getAnnotationsPath: this.getAnnotationsPath,
+                  };
             return (
                 <AnnotatorContext.Provider
                     value={{
@@ -346,12 +359,7 @@ export default function withAnnotations<P extends object>(
                             emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
                             emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
                         },
-                        ...(this.props?.routerDisabled
-                            ? {}
-                            : {
-                                  getAnnotationsMatchPath: this.getMatchPath,
-                                  getAnnotationsPath: this.getAnnotationsPath,
-                              }),
+                        ...annotationsRouterProps,
                         ...{ state: this.state },
                     }}
                 >
