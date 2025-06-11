@@ -48,11 +48,11 @@ export type ComponentWithAnnotations = {
         isStartEvent?: boolean
     ) => void,
     getAction: (eventData: AnnotationActionEvent) => Action,
-    getAnnotationsPath: (
+    getAnnotationsPath?: (
         fileVersionId?: string,
         annotationId?: string | null
     ) => string,
-    getMatchPath: GetMatchPath,
+    getMatchPath?: GetMatchPath,
     handleActiveChange: ActiveChangeEventHandler,
     handleAnnotationChangeEvent: (id: string | null) => void,
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void,
@@ -78,7 +78,9 @@ export type WithAnnotationsProps = {
         contextInfo?: { [key: string]: mixed, ... }
     ) => void,
     onPreviewDestroy: (shouldReset?: boolean) => void,
-    ...
+    routerDisabled?: boolean;
+    sidebarNavigation?: Object;
+     ...
 };
 export type WithAnnotationsComponent<P> = React.ComponentClass<
     P & WithAnnotationsProps

@@ -4,6 +4,7 @@ import { generatePath, match as matchType, matchPath } from 'react-router-dom';
 import { Location } from 'history';
 import AnnotatorContext from './AnnotatorContext';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
+import { FeedEntryType, SidebarNavigation } from '../types/SidebarNavigation';
 
 export type ActiveChangeEvent = {
     annotationId: string | null;
@@ -45,6 +46,8 @@ export type WithAnnotationsProps = {
     onAnnotator: (annotator: Annotator) => void;
     onError?: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
     onPreviewDestroy: (shouldReset?: boolean) => void;
+    routerDisabled?: boolean;
+    sidebarNavigation?: SidebarNavigation;
 };
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
@@ -71,10 +74,22 @@ export default function withAnnotations<P extends object>(
         constructor(props: P & WithAnnotationsProps) {
             super(props);
 
-            // Determine by url if there is already a deeply linked annotation
-            const { location } = props;
-            const match = this.getMatchPath(location);
-            const activeAnnotationId = getProp(match, 'params.annotationId', null);
+            const { routerDisabled, sidebarNavigation } = props;
+            let activeAnnotationId = null;
+
+            if (
+                routerDisabled &&
+                'activeFeedEntryType' in sidebarNavigation &&
+                sidebarNavigation.activeFeedEntryType === FeedEntryType.ANNOTATIONS &&
+                'activeFeedEntryId' in sidebarNavigation
+            ) {
+                activeAnnotationId = sidebarNavigation.activeFeedEntryId;
+            } else {
+                // Determine by url if there is already a deeply linked annotation
+                const { location } = props;
+                const match = this.getMatchPath(location);
+                activeAnnotationId = getProp(match, 'params.annotationId', null);
+            }
 
             // Seed the initial state with the activeAnnotationId if any from the location path
             this.state = { ...defaultState, activeAnnotationId };
@@ -192,6 +207,7 @@ export default function withAnnotations<P extends object>(
             });
         }
 
+        // remove this method with routerDisabled swith
         getMatchPath(location?: Location): matchType<MatchParams> | null {
             const pathname = getProp(location, 'pathname', '');
             return matchPath<MatchParams>(pathname, {
@@ -322,15 +338,21 @@ export default function withAnnotations<P extends object>(
             return (
                 <AnnotatorContext.Provider
                     value={{
-                        emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
-                        emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
-                        emitAnnotationReplyCreateEvent: this.emitAnnotationReplyCreateEvent,
-                        emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
-                        emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
-                        emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
-                        getAnnotationsMatchPath: this.getMatchPath,
-                        getAnnotationsPath: this.getAnnotationsPath,
-                        state: this.state,
+                        ...{
+                            emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
+                            emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
+                            emitAnnotationReplyCreateEvent: this.emitAnnotationReplyCreateEvent,
+                            emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
+                            emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
+                            emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
+                        },
+                        ...(this.props?.routerDisabled
+                            ? {}
+                            : {
+                                  getAnnotationsMatchPath: this.getMatchPath,
+                                  getAnnotationsPath: this.getAnnotationsPath,
+                              }),
+                        ...{ state: this.state },
                     }}
                 >
                     <WrappedComponent

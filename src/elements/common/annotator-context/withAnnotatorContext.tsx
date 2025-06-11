@@ -20,33 +20,62 @@ export interface WithAnnotatorContextProps {
 }
 
 export default function withAnnotatorContext<P extends {}>(WrappedComponent: React.ComponentType<P>) {
-    return React.forwardRef<React.ComponentType<P>, P>((props, ref) => (
-        <AnnotatorContext.Consumer>
-            {({
-                emitActiveAnnotationChangeEvent,
-                emitAnnotationRemoveEvent,
-                emitAnnotationReplyCreateEvent,
-                emitAnnotationReplyDeleteEvent,
-                emitAnnotationReplyUpdateEvent,
-                emitAnnotationUpdateEvent,
-                getAnnotationsMatchPath,
-                getAnnotationsPath,
-                state,
-            }) => (
-                <WrappedComponent
-                    ref={ref}
-                    {...props}
-                    annotatorState={state}
-                    emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
-                    emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}
-                    emitAnnotationReplyCreateEvent={emitAnnotationReplyCreateEvent}
-                    emitAnnotationReplyDeleteEvent={emitAnnotationReplyDeleteEvent}
-                    emitAnnotationReplyUpdateEvent={emitAnnotationReplyUpdateEvent}
-                    emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
-                    getAnnotationsMatchPath={getAnnotationsMatchPath}
-                    getAnnotationsPath={getAnnotationsPath}
-                />
-            )}
-        </AnnotatorContext.Consumer>
-    ));
+    return React.forwardRef<React.ComponentType<P>, P & { routerDisabled?: boolean }>((props, ref) => {
+        if (props?.routerDisabled === true) {
+            return (
+                <AnnotatorContext.Consumer>
+                    {({
+                        emitActiveAnnotationChangeEvent,
+                        emitAnnotationRemoveEvent,
+                        emitAnnotationReplyCreateEvent,
+                        emitAnnotationReplyDeleteEvent,
+                        emitAnnotationReplyUpdateEvent,
+                        emitAnnotationUpdateEvent,
+                        state,
+                    }) => (
+                        <WrappedComponent
+                            ref={ref}
+                            {...props}
+                            annotatorState={state}
+                            emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
+                            emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}
+                            emitAnnotationReplyCreateEvent={emitAnnotationReplyCreateEvent}
+                            emitAnnotationReplyDeleteEvent={emitAnnotationReplyDeleteEvent}
+                            emitAnnotationReplyUpdateEvent={emitAnnotationReplyUpdateEvent}
+                            emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
+                        />
+                    )}
+                </AnnotatorContext.Consumer>
+            );
+        }
+        return (
+            <AnnotatorContext.Consumer>
+                {({
+                    emitActiveAnnotationChangeEvent,
+                    emitAnnotationRemoveEvent,
+                    emitAnnotationReplyCreateEvent,
+                    emitAnnotationReplyDeleteEvent,
+                    emitAnnotationReplyUpdateEvent,
+                    emitAnnotationUpdateEvent,
+                    getAnnotationsMatchPath,
+                    getAnnotationsPath,
+                    state,
+                }) => (
+                    <WrappedComponent
+                        ref={ref}
+                        {...props}
+                        annotatorState={state}
+                        emitActiveAnnotationChangeEvent={emitActiveAnnotationChangeEvent}
+                        emitAnnotationRemoveEvent={emitAnnotationRemoveEvent}
+                        emitAnnotationReplyCreateEvent={emitAnnotationReplyCreateEvent}
+                        emitAnnotationReplyDeleteEvent={emitAnnotationReplyDeleteEvent}
+                        emitAnnotationReplyUpdateEvent={emitAnnotationReplyUpdateEvent}
+                        emitAnnotationUpdateEvent={emitAnnotationUpdateEvent}
+                        getAnnotationsMatchPath={getAnnotationsMatchPath}
+                        getAnnotationsPath={getAnnotationsPath}
+                    />
+                )}
+            </AnnotatorContext.Consumer>
+        );
+    });
 }
