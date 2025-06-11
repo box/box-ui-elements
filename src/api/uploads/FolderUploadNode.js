@@ -11,6 +11,8 @@ import {
     STATUS_ERROR,
     ERROR_CODE_UPLOAD_CHILD_FOLDER_FAILED,
     ERROR_CODE_ITEM_NAME_IN_USE,
+    DEFAULT_RETRY_DELAY_MS,
+    MS_IN_S,
 } from '../../constants';
 import type {
     UploadFileWithAPIOptions,
@@ -18,6 +20,10 @@ import type {
     FolderUploadItem,
     DirectoryReader,
 } from '../../common/types/upload';
+import sleep from '../../utils/sleep';
+
+const CHILD_FOLDER_UPLOAD_CONCURRENCY = 3;
+const MAX_RETRIES = 3;
 
 class FolderUploadNode {
     addFolderToUploadQueue: Function;
@@ -93,11 +99,30 @@ class FolderUploadNode {
      * @returns {Promise}
      */
     uploadChildFolders = async (errorCallback: Function) => {
+        // Gets FolderUploadNode values from this.folders key value pairs object
         // $FlowFixMe
         const folders: Array<FolderUploadNode> = Object.values(this.folders);
-        const promises = folders.map(folder => folder.upload(this.folderId, errorCallback));
 
-        await Promise.all(promises);
+        // Worker function: picks the next folder from the array and uploads until no more folders are available
+        const worker = async () => {
+            while (folders.length > 0) {
+                const folder = folders.pop();
+                if (folder) {
+                    // Await is needed to help ensure rate limit is respected
+                    // eslint-disable-next-line no-await-in-loop
+                    await folder.upload(this.folderId, errorCallback);
+                }
+            }
+        };
+
+        // Spawns up to CHILD_FOLDER_UPLOAD_CONCURRENCY workers that upload folders in parallel until folders array is empty
+        const workers = [];
+        for (let i = 0; i < CHILD_FOLDER_UPLOAD_CONCURRENCY && i < folders.length; i += 1) {
+            workers.push(worker());
+        }
+
+        // Waits for all workers to finish
+        await Promise.all(workers);
     };
 
     /**
@@ -108,7 +133,7 @@ class FolderUploadNode {
      * @param {boolean} isRoot
      * @returns {Promise}
      */
-    createAndUploadFolder = async (errorCallback: Function, isRoot: boolean) => {
+    createAndUploadFolder = async (errorCallback: Function, isRoot: boolean, retryCount: number = 0) => {
         await this.buildCurrentFolderFromEntry();
 
         let errorEncountered = false;
@@ -117,9 +142,23 @@ class FolderUploadNode {
             const data = await this.createFolder();
             this.folderId = data.id;
         } catch (error) {
-            // @TODO: Handle 429
             if (error.code === ERROR_CODE_ITEM_NAME_IN_USE) {
                 this.folderId = error.context_info.conflicts[0].id;
+            } else if (error.status === 429 && retryCount < MAX_RETRIES) {
+                // Set a default exponential backoff delay with a random jitter(0–999 ms) to avoid all requests being sent at once
+                // This will be overridden if the Retry-After header is present in the response
+                let retryAfterMs = DEFAULT_RETRY_DELAY_MS * 2 ** retryCount + Math.floor(Math.random() * 1000);
+                if (error.headers) {
+                    const retryAfterHeaderSec = parseInt(
+                        error.headers['retry-after'] || error.headers.get('Retry-After'),
+                        10,
+                    );
+                    if (!Number.isNaN(retryAfterHeaderSec)) {
+                        retryAfterMs = retryAfterHeaderSec * MS_IN_S;
+                    }
+                }
+                await sleep(retryAfterMs);
+                return this.createAndUploadFolder(errorCallback, isRoot, retryCount + 1);
             } else if (isRoot) {
                 errorCallback(error);
             } else {
@@ -135,7 +174,7 @@ class FolderUploadNode {
 
         // The root folder has already been added to the upload queue in ContentUploader
         if (isRoot) {
-            return;
+            return undefined;
         }
 
         const folderObject: FolderUploadItem = {
@@ -153,6 +192,7 @@ class FolderUploadNode {
         }
 
         this.addFolderToUploadQueue(folderObject);
+        return undefined;
     };
 
     /**
