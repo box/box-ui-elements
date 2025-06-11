@@ -82,8 +82,9 @@ export interface AiExtractStructured {
      */
     +agent_config?: string;
     /**
-     * The AI Agent to be used for extraction. Use AiAgentExtractStructured to customize Basic Text or Long Text agents.
-     * Use AiAgentReference to pass a custom AI Agent ID.
+     * * AI agent definition to use for extraction.
+     * – `AiAgentExtractStructured`: customise Basic-Text / Long-Text agents
+     * – `AiAgentReference`        : reference a custom AI-Agent by ID
      */
     +ai_agent?: AiAgentExtractStructured | AiAgentReference;
 }

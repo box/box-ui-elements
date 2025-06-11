@@ -29,6 +29,7 @@ import messages from '../../common/messages';
 
 import { type BoxItem } from '../../../common/types/core';
 import { type ErrorContextProps, type ExternalProps, type SuccessContextProps } from '../MetadataSidebarRedesign';
+import { type AiExtractStructured } from '../../../api/schemas/AiExtractStructured';
 
 export enum STATUS {
     IDLE = 'idle',
@@ -219,12 +220,14 @@ function useSidebarMetadataFetcher(
             setExtractErrorCode(null);
             let answer = null;
             const customAiAgent = agentId ? { ai_agent: { type: 'ai_agent_id', id: agentId } } : {};
+            const requestBody: AiExtractStructured = {
+                items: [{ id: file.id, type: file.type }],
+                metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
+                ...customAiAgent,
+            };
+
             try {
-                answer = (await aiAPI.extractStructured({
-                    items: [{ id: file.id, type: file.type }],
-                    metadata_template: { template_key: templateKey, scope, type: 'metadata_template' },
-                    ...customAiAgent,
-                })) as Record<string, MetadataFieldValue>;
+                answer = (await aiAPI.extractStructured(requestBody)) as Record<string, MetadataFieldValue>;
             } catch (error) {
                 // Axios makes the status code nested under the response object
                 if (error.response?.status === 408) {
