@@ -352,16 +352,14 @@ export default function withAnnotations<P extends object>(
             return (
                 <AnnotatorContext.Provider
                     value={{
-                        ...{
-                            emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
-                            emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
-                            emitAnnotationReplyCreateEvent: this.emitAnnotationReplyCreateEvent,
-                            emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
-                            emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
-                            emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
-                        },
+                        emitActiveAnnotationChangeEvent: this.emitActiveAnnotationChangeEvent,
+                        emitAnnotationRemoveEvent: this.emitAnnotationRemoveEvent,
+                        emitAnnotationReplyCreateEvent: this.emitAnnotationReplyCreateEvent,
+                        emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
+                        emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
+                        emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
                         ...annotationsRouterProps,
-                        ...{ state: this.state },
+                        state: this.state,
                     }}
                 >
                     <WrappedComponent
