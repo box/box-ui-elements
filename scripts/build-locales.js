@@ -1,6 +1,6 @@
 const locales = require('@box/languages');
 const { execSync } = require('child_process');
-const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
+const { Worker, isMainThread, parentPort, threadId, workerData } = require('worker_threads');
 
 if (isMainThread) {
     const totalBundleCount = locales.length * 2; // with and without React
@@ -50,7 +50,7 @@ if (isMainThread) {
     }
 } else {
     const { locale, react } = workerData;
-    parentPort.postMessage(`Building ${locale} assets with react=${react}...`);
+    parentPort.postMessage(`[${threadId}] Building ${locale} assets with react=${react}...`);
 
     try {
         execSync(`time LANGUAGE=${locale} REACT=${react} yarn build:prod:dist`);
