@@ -3,9 +3,11 @@ const { execSync } = require('child_process');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 
 if (isMainThread) {
-    const MAX_CONCURRENT_WORKERS = 5;
+    const totalBundleCount = locales.length * 2; // with and without React
+    const maxActiveWorkers = 5;
     const activeWorkers = new Set();
 
+    let bundleCount = 0;
     let hasError = false;
 
     const workerQueue = [
@@ -14,7 +16,21 @@ if (isMainThread) {
     ];
 
     const handleNextWorker = () => {
-        if (activeWorkers.size >= MAX_CONCURRENT_WORKERS || workerQueue.length === 0 || hasError) {
+        if (activeWorkers.size >= maxActiveWorkers) {
+            return;
+        }
+
+        if (hasError) {
+            console.log('Skipped next worker due to earlier failure(s)');
+            return;
+        }
+
+        if (workerQueue.length === 0) {
+            if (bundleCount === totalBundleCount) {
+                console.log(`Completed building ${totalBundleCount} locale bundles`);
+            } else {
+                console.error(`ERROR: Missing ${totalBundleCount - bundleCount} locale bundles in build process`);
+            }
             return;
         }
 
@@ -24,7 +40,7 @@ if (isMainThread) {
 
         worker.on('message', message => console.log(message));
         worker.on('error', error => {
-            console.log('ERROR:', error.message);
+            console.error('ERROR:', error.message);
             hasError = true;
             activeWorkers.forEach(activeWorker => {
                 activeWorker.terminate();
@@ -32,11 +48,14 @@ if (isMainThread) {
         });
         worker.on('exit', () => {
             activeWorkers.delete(worker);
+            bundleCount += 1;
             handleNextWorker();
         });
     };
 
-    for (let i = 0; i < MAX_CONCURRENT_WORKERS; i += 1) {
+    console.log(`Starting to build ${totalBundleCount} locale bundles. This will take several minutes.`);
+
+    for (let i = 0; i < maxActiveWorkers; i += 1) {
         handleNextWorker();
     }
 } else {
