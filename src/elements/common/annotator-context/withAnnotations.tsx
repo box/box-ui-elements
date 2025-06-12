@@ -81,14 +81,15 @@ export default function withAnnotations<P extends object>(
 
             const isRouterDisabled = routerDisabled || isFeatureEnabled(props?.features, 'routerDisabled.value');
 
-            if (
-                isRouterDisabled &&
-                sidebarNavigation &&
-                'activeFeedEntryType' in sidebarNavigation &&
-                sidebarNavigation.activeFeedEntryType === FeedEntryType.ANNOTATIONS &&
-                'activeFeedEntryId' in sidebarNavigation
-            ) {
-                activeAnnotationId = sidebarNavigation.activeFeedEntryId;
+            if (isRouterDisabled) {
+                if (
+                    sidebarNavigation &&
+                    'activeFeedEntryType' in sidebarNavigation &&
+                    sidebarNavigation.activeFeedEntryType === FeedEntryType.ANNOTATIONS &&
+                    'activeFeedEntryId' in sidebarNavigation
+                ) {
+                    activeAnnotationId = sidebarNavigation.activeFeedEntryId;
+                }
             } else {
                 // Determine by url if there is already a deeply linked annotation
                 const { location } = props;
@@ -212,7 +213,7 @@ export default function withAnnotations<P extends object>(
             });
         }
 
-        // remove this method with routerDisabled swith
+        // remove this method with routerDisabled switch
         getMatchPath(location?: Location): matchType<MatchParams> | null {
             const pathname = getProp(location, 'pathname', '');
             return matchPath<MatchParams>(pathname, {
