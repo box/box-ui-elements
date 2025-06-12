@@ -36,9 +36,9 @@ type ActivityCommentsSidebarView = {
 };
 
 export type SidebarNavigation =
-    | {
+    | {|
           sidebar: ViewTypeValues,
-      }
+      |}
     | VersionSidebarView
     | ActivityCommentsSidebarView
     | ActivityAnnotationsSidebarView;
