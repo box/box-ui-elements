@@ -8,7 +8,6 @@ if (isMainThread) {
     const activeWorkers = new Set();
 
     let bundleCount = 0;
-    let hasError = false;
 
     const workerQueue = [
         ...locales.map(locale => ({ locale, react: true })),
@@ -20,16 +19,9 @@ if (isMainThread) {
             return;
         }
 
-        if (hasError) {
-            console.log('Skipped next worker due to earlier failure(s)');
-            return;
-        }
-
         if (workerQueue.length === 0) {
             if (bundleCount === totalBundleCount) {
                 console.log(`Completed building ${totalBundleCount} locale bundles`);
-            } else {
-                console.error(`ERROR: Missing ${totalBundleCount - bundleCount} locale bundles in build process`);
             }
             return;
         }
@@ -41,10 +33,8 @@ if (isMainThread) {
         worker.on('message', message => console.log(message));
         worker.on('error', error => {
             console.error('ERROR:', error.message);
-            hasError = true;
-            activeWorkers.forEach(activeWorker => {
-                activeWorker.terminate();
-            });
+            execSync(`ps ax | grep "build:prod:dist" | grep -v grep | awk '{print $1}' | xargs kill`); // terminate all processes
+            process.exit(1);
         });
         worker.on('exit', () => {
             activeWorkers.delete(worker);
