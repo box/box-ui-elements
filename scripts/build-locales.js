@@ -21,7 +21,7 @@ if (isMainThread) {
 
         if (workerQueue.length === 0) {
             if (bundleCount === totalBundleCount) {
-                console.log(`Completed building ${totalBundleCount} locale bundles`);
+                console.log(`Finished building ${totalBundleCount} locale bundles`);
             }
             return;
         }
