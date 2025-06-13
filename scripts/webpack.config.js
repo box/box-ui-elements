@@ -9,14 +9,15 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const license = require('../license');
 const packageJson = require('../package.json');
 
-const hasBundleAnalysis = process.env.BUNDLE_ANALYSIS === 'true';
-const hasReact = process.env.REACT === 'true';
 const isDevBuild = process.env.NODE_ENV === 'development';
 const isProdBuild = process.env.NODE_ENV === 'production';
+const version = isProdBuild ? packageJson.version : 'dev';
 
 const hasAllBrowserSupport = isProdBuild || process.env.BROWSERSLIST_ENV === 'production';
+const hasBundleAnalysis = process.env.BUNDLE_ANALYSIS === 'true';
+const hasReact = process.env.REACT === 'true';
+
 const language = process.env.LANGUAGE;
-const version = isProdBuild ? packageJson.version : 'dev';
 const entryPoint = process.env.ENTRY;
 const outputDir = process.env.OUTPUT;
 
@@ -34,7 +35,7 @@ const getConfig = isReactBundle => {
     const config = {
         bail: true,
 
-        entry: typeof entryPoint === 'string' ? { [entryPoint]: entries[entryPoint] } : entries,
+        entry: entries[entryPoint] ? { [entryPoint]: entries[entryPoint] } : entries,
 
         output: {
             filename: `[name]${isReactBundle ? '' : '.no.react'}.js`,
