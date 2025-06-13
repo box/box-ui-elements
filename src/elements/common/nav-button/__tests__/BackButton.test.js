@@ -1,43 +1,60 @@
 import * as React from 'react';
-import { MemoryRouter, Router } from 'react-router-dom';
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BackButton } from '..';
 
+jest.mock('react-intl', () => ({
+    ...jest.requireActual('react-intl'),
+    FormattedMessage: ({ defaultMessage }) => <span>{defaultMessage}</span>,
+}));
+
 describe('elements/common/nav-button/BackButton', () => {
-    const getWrapper = (props = {}) =>
-        mount(
-            <MemoryRouter initialEntries={['/start', '/test']}>
-                <BackButton {...props} />
-            </MemoryRouter>,
-        );
-    const getHistory = wrapper => wrapper.find(Router).prop('history');
+    const mockOnClick = jest.fn();
+    let user;
 
-    test('should match its snapshot', () => {
-        const wrapper = getWrapper();
-        const button = wrapper.find(BackButton).first();
-
-        expect(button).toMatchSnapshot();
+    beforeEach(() => {
+        mockOnClick.mockClear();
+        user = userEvent.setup();
     });
 
-    test('should call history back on click if no path is defined', () => {
-        const wrapper = getWrapper();
-        const history = getHistory(wrapper);
+    test('should render back button with navigation icon and accessible text', () => {
+        render(<BackButton onClick={mockOnClick} />);
 
-        history.goBack = jest.fn();
+        const button = screen.getByRole('button');
+        expect(button).toBeInTheDocument();
+        expect(button).toHaveClass('bdl-BackButton');
 
-        wrapper.simulate('click');
+        expect(screen.getByText('Back')).toBeInTheDocument();
 
-        expect(history.goBack).toHaveBeenCalled();
+        const icon = button.querySelector('svg');
+        expect(icon).toBeInTheDocument();
+        expect(icon).toHaveClass('icon-navigate-left');
     });
 
-    test('should call history.push on click if a path is defined', () => {
-        const wrapper = getWrapper({ to: '/new' });
-        const history = getHistory(wrapper);
+    test('should call onClick handler when clicked', async () => {
+        const customOnClick = jest.fn();
 
-        history.push = jest.fn();
+        render(<BackButton onClick={customOnClick} />);
 
-        wrapper.simulate('click');
+        const button = screen.getByRole('button');
+        await user.click(button);
 
-        expect(history.push).toHaveBeenCalledWith('/new');
+        expect(customOnClick).toHaveBeenCalledTimes(1);
+    });
+
+    test('should pass through additional props', () => {
+        render(<BackButton onClick={mockOnClick} data-testid="test-back-button" data-resin-target="back" />);
+
+        const button = screen.getByTestId('test-back-button');
+        expect(button).toBeInTheDocument();
+        expect(button).toHaveAttribute('data-resin-target', 'back');
+    });
+
+    test('should apply custom className alongside default class', () => {
+        render(<BackButton onClick={mockOnClick} className="custom-class" />);
+
+        const button = screen.getByRole('button');
+        expect(button).toHaveClass('bdl-BackButton');
+        expect(button).toHaveClass('custom-class');
     });
 });

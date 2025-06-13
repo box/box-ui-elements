@@ -7,7 +7,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { Route, type Location } from 'react-router-dom';
 import IconNavigateLeft from '../../../icons/general/IconNavigateLeft';
 import messages from '../messages';
 import PlainButton from '../../../components/plain-button';
@@ -15,25 +14,16 @@ import './BackButton.scss';
 
 type Props = {
     className?: string,
-    to?: Location,
+    onClick: () => void,
 };
 
-const BackButton = ({ className, to, ...rest }: Props) => (
-    <Route>
-        {({ history }) => (
-            <PlainButton
-                className={classNames('bdl-BackButton', className)}
-                onClick={() => (to ? history.push(to) : history.goBack())}
-                type="button"
-                {...rest}
-            >
-                <IconNavigateLeft height={24} width={24} />
-                <span className="accessibility-hidden">
-                    <FormattedMessage {...messages.back} />
-                </span>
-            </PlainButton>
-        )}
-    </Route>
+const BackButton = ({ className, onClick, ...rest }: Props) => (
+    <PlainButton className={classNames('bdl-BackButton', className)} onClick={onClick} type="button" {...rest}>
+        <IconNavigateLeft height={24} width={24} />
+        <span className="accessibility-hidden">
+            <FormattedMessage {...messages.back} />
+        </span>
+    </PlainButton>
 );
 
 export default BackButton;
