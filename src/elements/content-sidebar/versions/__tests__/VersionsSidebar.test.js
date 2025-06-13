@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Route } from 'react-router-dom';
 import messages from '../messages';
 import VersionsSidebar from '../VersionsSidebar';
 
@@ -83,7 +84,7 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
         });
 
         test('should show max versions text if max versions provided', () => {
-            const versions = Array.from({ length: 1000 }).map((item, index) => ({ id: index }));
+            const versions = Array.from({ length: 1000 }, (_, index) => ({ id: index }));
             renderComponent({ versions });
 
             expect(screen.getByTestId('max-versions')).toBeInTheDocument();
@@ -112,6 +113,33 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
 
             const versionsMenu = screen.getByTestId('versions-menu');
             expect(versionsMenu).toHaveTextContent('Versions: 1, FileId: 123, Count: 1, Limit: 10');
+        });
+    });
+
+    describe('navigation', () => {
+        test('should navigate to parent name when back button is clicked', async () => {
+            const user = userEvent.setup();
+
+            render(
+                <MemoryRouter initialEntries={['/versions']}>
+                    <Route
+                        path="*"
+                        render={({ location }) => (
+                            <>
+                                <VersionsSidebar {...defaultProps} parentName="activity" />
+                                <div data-testid="current-location">{location.pathname}</div>
+                            </>
+                        )}
+                    />
+                </MemoryRouter>,
+            );
+
+            expect(screen.getByTestId('current-location')).toHaveTextContent('/versions');
+
+            const backButton = screen.getByTestId('back-button');
+            await user.click(backButton);
+
+            expect(screen.getByTestId('current-location')).toHaveTextContent('/activity');
         });
     });
 });
