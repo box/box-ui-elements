@@ -4,6 +4,7 @@
  */
 
 import { AiAgentExtractStructured } from './AiAgentExtractStructured';
+import { AiAgentReference } from './AiAgentReference';
 import { AiItemBase } from './AiItemBase';
 
 export type AiExtractStructuredMetadataTemplateTypeField = 'metadata_template';
@@ -80,5 +81,10 @@ export interface AiExtractStructured {
      * The JSON blob that contains overrides for the agent config.
      */
     +agent_config?: string;
-    +ai_agent?: AiAgentExtractStructured;
+    /**
+     * * AI agent definition to use for extraction.
+     * – `AiAgentExtractStructured`: customise Basic-Text / Long-Text agents
+     * – `AiAgentReference`        : reference a custom AI-Agent by ID
+     */
+    +ai_agent?: AiAgentExtractStructured | AiAgentReference;
 }
