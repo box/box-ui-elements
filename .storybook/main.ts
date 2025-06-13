@@ -1,21 +1,20 @@
-/* eslint-disable */
-// @ts-nocheck
-
+import crypto from 'crypto';
 import path from 'path';
+import sass from 'sass';
+import type { StorybookConfig } from '@storybook/react-webpack5';
+import type { Configuration } from 'webpack';
+
+import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
+import { translationDependencies } from '../scripts/i18n.config';
+
+// Resolve issues with pipeline failures due to FIPS compliance
+// https://github.com/webpack/webpack/issues/13572#issuecomment-923736472
+const crypto_orig_createHash = crypto.createHash;
+crypto.createHash = algorithm => crypto_orig_createHash(algorithm === 'md4' ? 'sha256' : algorithm);
 
 const language = process.env.LANGUAGE;
 
-const TranslationsPlugin = require('@box/frontend/webpack/TranslationsPlugin');
-const { translationDependencies } = require('../i18n.config');
-
-const config: {
-    stories: string[];
-    addons: (string | { name: string; options: { sass: { implementation: any } } })[];
-    framework: { name: string };
-    staticDirs: string[];
-    webpackFinal: (config: any) => Promise<any>;
-    typescript: any;
-} = {
+const config: StorybookConfig = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
 
     addons: [
@@ -38,7 +37,7 @@ const config: {
                             {
                                 loader: 'sass-loader',
                                 options: {
-                                    implementation: require('sass'),
+                                    implementation: sass,
                                 },
                             },
                         ],
@@ -54,40 +53,31 @@ const config: {
 
     framework: {
         name: '@storybook/react-webpack5',
+        options: {},
     },
 
     staticDirs: ['public'],
 
-    webpackFinal: async (config: any) => {
-        // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
-        // You can change the configuration based on that.
-        // 'PRODUCTION' is used when building the static version of storybook.
-
-        // It's okay, Typescript. We know it's defined in this case.
-        // @ts-ignore
-        config.resolve.alias = {
-            // @ts-ignore
-            ...config.resolve.alias,
+    webpackFinal: async (webpack: Configuration = {}) => {
+        webpack.resolve = webpack.resolve ?? {};
+        webpack.resolve.alias = {
+            ...webpack.resolve.alias,
             'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
             'box-locale-data': path.resolve(`node_modules/@box/cldr-data/locale-data/${language}`),
             'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
         };
 
-        config.plugins.push(
+        webpack.plugins = webpack.plugins ?? [];
+        webpack.plugins.push(
             new TranslationsPlugin({
                 generateBundles: true,
                 additionalMessageData: translationDependencies.map(pkg => `${pkg}/i18n/[language]`),
             }),
         );
 
-        return {
-            ...config,
-            cache: {
-                type: 'filesystem',
-                hashAlgorithm: 'sha256',
-            },
-        };
+        return webpack;
     },
+
     typescript: {
         reactDocgen: 'react-docgen-typescript',
     },
