@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const locales = require('@box/languages');
 const { execSync } = require('child_process');
 const { Worker, isMainThread, parentPort, threadId, workerData } = require('worker_threads');
