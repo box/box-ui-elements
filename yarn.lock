@@ -1437,10 +1437,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@box/blueprint-web-assets@^4.48.0", "@box/blueprint-web-assets@^4.48.4":
+"@box/blueprint-web-assets@^4.48.0":
   version "4.48.4"
   resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.48.4.tgz#2fc9ed248b05c9969da6364605b37b969a71ef1d"
   integrity sha512-74CA5X/81owelMLl4vXQIokS5QF6WpsCq5aS3y6BDtii9wi5EIkMx+R6LrjfZ2pfNToh7vkr+oZVvtcFlo53Qg==
+
+"@box/blueprint-web-assets@^4.53.0":
+  version "4.53.4"
+  resolved "https://registry.yarnpkg.com/@box/blueprint-web-assets/-/blueprint-web-assets-4.53.4.tgz#b15dbecdd3aabb07254809fe93bf6c58549c095a"
+  integrity sha512-ySGrDAl0DO8YG1MgGudlp3c7uJeCKZ1NlTbFu+8qMjzJ6OfOCy0IyDXduBHgpGZWLZJdO90Fd3t78XAhVG7Osw==
 
 "@box/blueprint-web@^12.7.1":
   version "12.7.1"
@@ -1520,10 +1525,10 @@
   resolved "https://registry.yarnpkg.com/@box/languages/-/languages-1.1.2.tgz#cd4266b3da62da18560d881e10b429653186be29"
   integrity sha512-d64TGosx+KRmrLZj4CIyLp42LUiEbgBJ8n8cviMQwTJmfU0g+UwZqLjmQZR1j+Q9D64yV4xHzY9K1t5nInWWeQ==
 
-"@box/metadata-editor@^0.110.1":
-  version "0.110.1"
-  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.110.1.tgz#73fe32f1f6068df62abecefa5c3b7afe065ddb26"
-  integrity sha512-C/GbyxtWxE8urU0RSakWrcksua8ObwDR/+SOmiTIZfcG9/jKHsftNPqLhcxxFJ1HRMPLQy7XN56ey9Y7ObiI0Q==
+"@box/metadata-editor@^0.112.0":
+  version "0.112.0"
+  resolved "https://registry.yarnpkg.com/@box/metadata-editor/-/metadata-editor-0.112.0.tgz#f4a32ff3da48c7def94292020e3aba180285d5b4"
+  integrity sha512-LQlmDUBIHqyTdN2YtlaDjxP06zh0CIjP50KTYqmgmjAW9cLGvqt9mlm/NwieGNObCeLporbgRwsBrAkO5NcT8A==
 
 "@box/react-virtualized@9.22.3-rc-box.9":
   version "9.22.3-rc-box.9"
