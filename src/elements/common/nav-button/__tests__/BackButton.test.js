@@ -1,20 +1,12 @@
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, userEvent } from 'src/test-utils/testing-library';
 import { BackButton } from '..';
-
-jest.mock('react-intl', () => ({
-    ...jest.requireActual('react-intl'),
-    FormattedMessage: ({ defaultMessage }) => <span>{defaultMessage}</span>,
-}));
 
 describe('elements/common/nav-button/BackButton', () => {
     const mockOnClick = jest.fn();
-    let user;
 
     beforeEach(() => {
         mockOnClick.mockClear();
-        user = userEvent.setup();
     });
 
     test('should render back button with navigation icon and accessible text', () => {
@@ -37,7 +29,7 @@ describe('elements/common/nav-button/BackButton', () => {
         render(<BackButton onClick={customOnClick} />);
 
         const button = screen.getByRole('button');
-        await user.click(button);
+        await userEvent.click(button);
 
         expect(customOnClick).toHaveBeenCalledTimes(1);
     });

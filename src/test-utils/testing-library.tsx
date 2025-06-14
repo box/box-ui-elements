@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
+import userEventInit from '@testing-library/user-event';
 
 // Data Providers
 import { TooltipProvider } from '@box/blueprint-web';
@@ -26,5 +27,7 @@ const renderConnected = (element, options: RenderConnectedOptions = {}) =>
         ...options,
     });
 
+const userEvent = userEventInit.setup(); // enable userEvent APIs
+
 export * from '@testing-library/react';
-export { renderConnected as render };
+export { renderConnected as render, userEvent };

@@ -1,13 +1,7 @@
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route } from 'react-router-dom';
+import { render, screen, userEvent } from 'src/test-utils/testing-library';
 import StaticVersionSidebar from '../StaticVersionSidebar';
-
-jest.mock('react-intl', () => ({
-    ...jest.requireActual('react-intl'),
-    FormattedMessage: ({ defaultMessage }) => <span>{defaultMessage}</span>,
-}));
 
 jest.mock('../../../common/nav-button', () => ({
     BackButton: ({ onClick, 'data-resin-target': dataResinTarget }) => (
@@ -62,8 +56,6 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         onUpgradeClick: jest.fn(),
         parentName: 'activity',
     };
-    let user;
-
     const renderComponent = (props = {}) => {
         return render(
             <MemoryRouter initialEntries={['/versions']}>
@@ -74,7 +66,6 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        user = userEvent.setup();
     });
 
     test('should render with all main sections', () => {
@@ -135,7 +126,7 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         expect(currentLocation.pathname).toBe('/versions');
 
         const backButton = screen.getByTestId('back-button');
-        await user.click(backButton);
+        await userEvent.click(backButton);
 
         expect(currentLocation.pathname).toBe('/details');
     });
@@ -161,7 +152,7 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         renderComponent({ onUpgradeClick: mockOnUpgradeClick });
 
         const upgradeButton = screen.getByTestId('upgrade-button');
-        await user.click(upgradeButton);
+        await userEvent.click(upgradeButton);
 
         expect(mockOnUpgradeClick).toHaveBeenCalledTimes(1);
     });
