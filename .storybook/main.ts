@@ -11,8 +11,18 @@ const language = process.env.LANGUAGE;
 const config: StorybookConfig = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
 
+    framework: {
+        name: '@storybook/react-webpack5',
+        options: {
+            builder: {
+                fsCache: true,
+            },
+        },
+    },
+
     addons: [
-        '@storybook/addon-links',
+        '@chromatic-com/storybook',
+        '@storybook/addon-docs',
         '@storybook/addon-essentials',
         '@storybook/addon-interactions',
         {
@@ -39,18 +49,10 @@ const config: StorybookConfig = {
                 ],
             },
         },
-        '@storybook/addon-docs',
+        '@storybook/addon-links',
         '@storybook/addon-webpack5-compiler-babel',
-        '@chromatic-com/storybook',
         'storybook-react-intl',
     ],
-
-    framework: {
-        name: '@storybook/react-webpack5',
-        options: {},
-    },
-
-    staticDirs: ['public'],
 
     webpackFinal: async (webpack: Configuration = {}) => {
         webpack.resolve = webpack.resolve ?? {};
@@ -72,9 +74,15 @@ const config: StorybookConfig = {
         return webpack;
     },
 
+    core: {
+        disableTelemetry: true,
+    },
+
     typescript: {
         reactDocgen: 'react-docgen-typescript',
     },
+
+    staticDirs: ['public'],
 };
 
 export default config;
