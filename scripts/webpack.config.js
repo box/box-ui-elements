@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BannerPlugin, DefinePlugin, IgnorePlugin } = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
-const license = require('../license');
+const license = require('./license');
 const packageJson = require('../package.json');
 
 const isDevBuild = process.env.NODE_ENV === 'development';
