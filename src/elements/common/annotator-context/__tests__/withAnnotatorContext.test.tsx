@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render } from '@testing-library/react';
+import { render } from '../../../../test-utils/testing-library';
 import withAnnotatorContext, { WithAnnotatorContextProps } from '../withAnnotatorContext';
 import { Action } from '../types';
 
