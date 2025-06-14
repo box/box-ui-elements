@@ -61,7 +61,7 @@
         "build:prod:dist": "NODE_ENV=production webpack --config scripts/webpack.config.js --mode production",
         "build:prod:es": "NODE_ENV=production BABEL_ENV=npm yarn build:es --source-maps --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
         "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
-        "build:prod:storybook": "NODE_ENV=development BABEL_ENV=development BROWSERSLIST_ENV=production LANGUAGE=en-US REACT=true storybook build -c .storybook -o storybook",
+        "build:prod:storybook": "NODE_ENV=production BABEL_ENV=production BROWSERSLIST_ENV=production LANGUAGE=en-US REACT=true storybook build -c .storybook -o storybook",
         "chromatic": "chromatic",
         "clean": "rm -rf dist es i18n/bundles i18n/json i18n/*.js reports storybook",
         "copy:flow": "flow-copy-source --ignore \"**/__tests__/**\" --ignore \"**/__mocks__/**\" --ignore \"**/*.ts\" ./src ./es && copyfiles './src/**/*.js.flow' es --up 1",
