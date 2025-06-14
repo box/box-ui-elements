@@ -6,23 +6,6 @@ import type { Configuration } from 'webpack';
 import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
 import { translationDependencies } from '../scripts/i18n.config';
 
-// Resolve issues with pipeline failures due to FIPS compliance
-// https://github.com/webpack/webpack/issues/13572#issuecomment-923736472
-const crypto = require('crypto'); // eslint-disable-line
-const crypto_createHash = crypto.createHash;
-crypto.createHash = algorithm => {
-    console.log('setting crypto in main.ts:', algorithm);
-    // Force all hash algorithms to use sha256 which is FIPS compliant
-    return crypto_createHash('sha256');
-};
-
-// Also patch the crypto module to handle other hash-related functions
-const originalDigest = crypto.createHash.prototype.digest;
-crypto.createHash.prototype.digest = function digest(encoding?: string): string | Buffer {
-    console.log('intercepting digest call with encoding:', encoding);
-    return originalDigest.call(this, encoding);
-};
-
 const language = process.env.LANGUAGE;
 
 const config: StorybookConfig = {
