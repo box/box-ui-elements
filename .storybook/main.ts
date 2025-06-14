@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import path from 'path';
 import sass from 'sass';
 import type { StorybookConfig } from '@storybook/react-webpack5';
@@ -6,11 +5,6 @@ import type { Configuration } from 'webpack';
 
 import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
 import { translationDependencies } from '../scripts/i18n.config';
-
-// Resolve issues with pipeline failures due to FIPS compliance
-// https://github.com/webpack/webpack/issues/13572#issuecomment-923736472
-const crypto_orig_createHash = crypto.createHash;
-crypto.createHash = algorithm => crypto_orig_createHash(algorithm === 'md4' ? 'sha256' : algorithm);
 
 const language = process.env.LANGUAGE;
 
