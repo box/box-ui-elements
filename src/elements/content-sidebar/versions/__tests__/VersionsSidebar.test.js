@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
-import { render, screen, userEvent } from 'src/test-utils/testing-library';
+import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import messages from '../messages';
 import VersionsSidebar from '../VersionsSidebar';
 

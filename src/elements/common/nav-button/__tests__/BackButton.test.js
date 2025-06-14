@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render, screen, userEvent } from 'src/test-utils/testing-library';
+import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import { BackButton } from '..';
 
 describe('elements/common/nav-button/BackButton', () => {
