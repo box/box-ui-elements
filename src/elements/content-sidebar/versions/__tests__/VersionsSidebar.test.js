@@ -129,7 +129,8 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
             expect(screen.getByTestId('current-location')).toHaveTextContent('/versions');
 
             const backButton = screen.getByTestId('back-button');
-            await userEvent.click(backButton);
+            const user = userEvent();
+            await user.click(backButton);
 
             expect(screen.getByTestId('current-location')).toHaveTextContent('/activity');
         });

@@ -25,11 +25,12 @@ describe('elements/common/nav-button/BackButton', () => {
 
     test('should call onClick handler when clicked', async () => {
         const customOnClick = jest.fn();
+        const user = userEvent();
 
         render(<BackButton onClick={customOnClick} />);
 
         const button = screen.getByRole('button');
-        await userEvent.click(button);
+        await user.click(button);
 
         expect(customOnClick).toHaveBeenCalledTimes(1);
     });

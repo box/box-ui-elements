@@ -27,7 +27,7 @@ const renderConnected = (element, options: RenderConnectedOptions = {}) =>
         ...options,
     });
 
-const userEvent = userEventInit.setup(); // enable userEvent APIs
+const createUserEvent = () => userEventInit.setup(); // factory function to create isolated userEvent instances
 
 export * from '@testing-library/react';
-export { renderConnected as render, userEvent };
+export { renderConnected as render, createUserEvent as userEvent };

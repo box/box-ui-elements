@@ -126,7 +126,8 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         expect(currentLocation.pathname).toBe('/versions');
 
         const backButton = screen.getByTestId('back-button');
-        await userEvent.click(backButton);
+        const user = userEvent();
+        await user.click(backButton);
 
         expect(currentLocation.pathname).toBe('/details');
     });
@@ -149,10 +150,11 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
 
     test('should call onUpgradeClick when upgrade button is clicked', async () => {
         const mockOnUpgradeClick = jest.fn();
+        const user = userEvent();
         renderComponent({ onUpgradeClick: mockOnUpgradeClick });
 
         const upgradeButton = screen.getByTestId('upgrade-button');
-        await userEvent.click(upgradeButton);
+        await user.click(upgradeButton);
 
         expect(mockOnUpgradeClick).toHaveBeenCalledTimes(1);
     });
