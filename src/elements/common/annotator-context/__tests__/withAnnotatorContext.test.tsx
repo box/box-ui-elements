@@ -43,7 +43,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             getAnnotationsPath: mockGetAnnotationsPath,
         });
 
-        const MockComponent = jest.fn<JSX.Element | null, [WrappedComponentProps]>();
+        const MockComponent = jest.fn<JSX.Element | null, [WrappedComponentProps]>(() => null);
         const WrappedWithMockComponent = withAnnotatorContext(MockComponent);
 
         render(<WrappedWithMockComponent />);
