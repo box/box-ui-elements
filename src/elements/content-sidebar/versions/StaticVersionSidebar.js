@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Route } from 'react-router-dom';
 
 import BoxDrive140 from '../../../illustration/BoxDrive140';
 
@@ -45,51 +46,55 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props)
     });
 
     return (
-        <div
-            className="bcs-StaticVersionSidebar"
-            role="tabpanel"
-            data-resin-component="preview"
-            data-resin-feature="versions"
-        >
-            <div className="bcs-StaticVersionSidebar-header">
-                <h3 className="bcs-StaticVersionSidebar-title">
-                    <>
-                        <BackButton data-resin-target="back" to={`/${parentName}`} />
-                        <FormattedMessage {...messages.versionsTitle} />
-                    </>
-                </h3>
-            </div>
-
-            <div className="bcs-StaticVersionSidebar-content-wrapper">
-                <LoadingIndicatorWrapper
-                    className="bcs-StaticVersionSidebar-content"
-                    crawlerPosition="top"
-                    isLoading={isLoading}
+        <Route>
+            {({ history }) => (
+                <div
+                    className="bcs-StaticVersionSidebar"
+                    role="tabpanel"
+                    data-resin-component="preview"
+                    data-resin-feature="versions"
                 >
-                    <VersionsMenu versions={versions} fileId="1" versionCount={3} versionLimit={3} />
-                </LoadingIndicatorWrapper>
-            </div>
+                    <div className="bcs-StaticVersionSidebar-header">
+                        <h3 className="bcs-StaticVersionSidebar-title">
+                            <>
+                                <BackButton data-resin-target="back" onClick={() => history.push(`/${parentName}`)} />
+                                <FormattedMessage {...messages.versionsTitle} />
+                            </>
+                        </h3>
+                    </div>
 
-            <div className="bcs-StaticVersionSidebar-upsell-wrapper">
-                <div className="bcs-StaticVersionSidebar-upsell">
-                    <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />
-                    <p className="bcs-StaticVersionSidebar-upsell-header">
-                        <FormattedMessage {...messages.versionUpgradeLink} />
-                    </p>
-                    <p>
-                        <FormattedMessage {...messages.versionUpsell} />
-                    </p>
-                    <PrimaryButton
-                        className="bcs-StaticVersionSidebar-upsell-button"
-                        data-resin-target="versioning_error_upgrade_cta"
-                        onClick={onUpgradeClick}
-                        type="button"
-                    >
-                        <FormattedMessage {...messages.upgradeButton} />
-                    </PrimaryButton>
+                    <div className="bcs-StaticVersionSidebar-content-wrapper">
+                        <LoadingIndicatorWrapper
+                            className="bcs-StaticVersionSidebar-content"
+                            crawlerPosition="top"
+                            isLoading={isLoading}
+                        >
+                            <VersionsMenu versions={versions} fileId="1" versionCount={3} versionLimit={3} />
+                        </LoadingIndicatorWrapper>
+                    </div>
+
+                    <div className="bcs-StaticVersionSidebar-upsell-wrapper">
+                        <div className="bcs-StaticVersionSidebar-upsell">
+                            <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />
+                            <p className="bcs-StaticVersionSidebar-upsell-header">
+                                <FormattedMessage {...messages.versionUpgradeLink} />
+                            </p>
+                            <p>
+                                <FormattedMessage {...messages.versionUpsell} />
+                            </p>
+                            <PrimaryButton
+                                className="bcs-StaticVersionSidebar-upsell-button"
+                                data-resin-target="versioning_error_upgrade_cta"
+                                onClick={onUpgradeClick}
+                                type="button"
+                            >
+                                <FormattedMessage {...messages.upgradeButton} />
+                            </PrimaryButton>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+        </Route>
     );
 };
 
