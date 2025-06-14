@@ -51,8 +51,6 @@ const config: StorybookConfig = {
     ],
 
     webpackFinal: async (webpack: Configuration = {}) => {
-        webpack.cache = false;
-
         webpack.resolve = webpack.resolve || {};
         webpack.resolve.alias = {
             ...webpack.resolve.alias,
