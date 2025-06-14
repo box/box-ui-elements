@@ -6,6 +6,12 @@ import type { Configuration } from 'webpack';
 import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
 import { translationDependencies } from '../scripts/i18n.config';
 
+// Resolve issues with pipeline failures due to FIPS compliance
+// https://github.com/webpack/webpack/issues/13572#issuecomment-923736472
+const crypto = require('crypto'); // eslint-disable-line
+const crypto_createHash = crypto.createHash;
+crypto.createHash = () => crypto_createHash('sha256');
+
 const language = process.env.LANGUAGE;
 
 const config: StorybookConfig = {
