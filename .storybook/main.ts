@@ -15,7 +15,7 @@ const config: StorybookConfig = {
         name: '@storybook/react-webpack5',
         options: {
             builder: {
-                fsCache: true,
+                fsCache: false,
             },
         },
     },
