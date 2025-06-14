@@ -1,6 +1,3 @@
-/* eslint-disable */
-console.log('main.ts - imports');
-
 import path from 'path';
 import sass from 'sass';
 import type { StorybookConfig } from '@storybook/react-webpack5';
@@ -11,8 +8,6 @@ import { translationDependencies } from '../scripts/i18n.config';
 
 const language = process.env.LANGUAGE;
 
-console.log('main.ts - config');
-
 const config: StorybookConfig = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
 
@@ -22,6 +17,10 @@ const config: StorybookConfig = {
     },
 
     addons: [
+        '@chromatic-com/storybook',
+        '@storybook/addon-docs',
+        '@storybook/addon-essentials',
+        '@storybook/addon-interactions',
         {
             name: '@storybook/addon-styling-webpack',
             options: {
@@ -46,11 +45,14 @@ const config: StorybookConfig = {
                 ],
             },
         },
+        '@storybook/addon-links',
         '@storybook/addon-webpack5-compiler-babel',
         'storybook-react-intl',
     ],
 
     webpackFinal: async (webpack: Configuration = {}) => {
+        webpack.cache = false;
+
         webpack.resolve = webpack.resolve || {};
         webpack.resolve.alias = {
             ...webpack.resolve.alias,
