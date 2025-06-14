@@ -13,11 +13,7 @@ const config: StorybookConfig = {
 
     framework: {
         name: '@storybook/react-webpack5',
-        options: {
-            builder: {
-                fsCache: false,
-            },
-        },
+        options: {},
     },
 
     addons: [
@@ -55,7 +51,9 @@ const config: StorybookConfig = {
     ],
 
     webpackFinal: async (webpack: Configuration = {}) => {
-        webpack.resolve = webpack.resolve ?? {};
+        webpack.cache = false;
+
+        webpack.resolve = webpack.resolve || {};
         webpack.resolve.alias = {
             ...webpack.resolve.alias,
             'box-ui-elements-locale-data': path.resolve(`i18n/${language}`),
@@ -63,7 +61,7 @@ const config: StorybookConfig = {
             'msw/native': path.resolve('node_modules/msw/lib/native/index.mjs'),
         };
 
-        webpack.plugins = webpack.plugins ?? [];
+        webpack.plugins = webpack.plugins || [];
         webpack.plugins.push(
             new TranslationsPlugin({
                 generateBundles: true,
