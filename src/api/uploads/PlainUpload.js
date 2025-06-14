@@ -116,7 +116,7 @@ class PlainUpload extends BaseUpload {
      * @param {Function} [options.errorCallback] - Function to call with errors
      * @param {Function} [options.progressCallback] - Function to call with progress
      * @param {Function} [options.conflictCallback] - Function to call on conflicting file names
-     * @param {boolean} [overwrite] - Should upload overwrite file with same name
+     * @param {boolean|'error'} [overwrite] - Should upload overwrite file with same name, throw error, or call conflictCallback to rename
      * @return {void}
      */
     upload({
@@ -128,7 +128,7 @@ class PlainUpload extends BaseUpload {
         errorCallback = noop,
         progressCallback = noop,
         conflictCallback,
-        overwrite = true,
+        overwrite = (true: boolean | 'error'),
     }: {
         conflictCallback?: Function,
         errorCallback: Function,
@@ -136,7 +136,7 @@ class PlainUpload extends BaseUpload {
         fileDescription: ?string,
         fileId: ?string,
         folderId: string,
-        overwrite: boolean,
+        overwrite: boolean | 'error',
         progressCallback: Function,
         successCallback: Function,
     }): void {
