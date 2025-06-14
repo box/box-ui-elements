@@ -35,7 +35,7 @@ const getConfig = isReactBundle => {
     const config = {
         bail: true,
 
-        entry: entries[entryPoint] ? { [entryPoint]: entries[entryPoint] } : entries,
+        entry: typeof entryPoint === 'string' ? { [entryPoint]: entries[entryPoint] } : entries,
 
         output: {
             filename: `[name]${isReactBundle ? '' : '.no.react'}.js`,

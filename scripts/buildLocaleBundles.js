@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
 const locales = require('@box/languages');
 const { execSync } = require('child_process');
 const { Worker, isMainThread, parentPort, threadId, workerData } = require('worker_threads');
