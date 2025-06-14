@@ -128,7 +128,7 @@ class PlainUpload extends BaseUpload {
         errorCallback = noop,
         progressCallback = noop,
         conflictCallback,
-        overwrite = true,
+        overwrite = (true: boolean | 'error'),
     }: {
         conflictCallback?: Function,
         errorCallback: Function,

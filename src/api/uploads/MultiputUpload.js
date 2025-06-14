@@ -173,7 +173,7 @@ class MultiputUpload extends BaseMultiput {
         errorCallback,
         progressCallback,
         successCallback,
-        overwrite = true,
+        overwrite = (true: boolean | 'error'),
         conflictCallback,
         fileId,
     }: {
@@ -217,7 +217,7 @@ class MultiputUpload extends BaseMultiput {
         errorCallback,
         progressCallback,
         successCallback,
-        overwrite = true,
+        overwrite = (true: boolean | 'error'),
         conflictCallback,
         fileId,
     }: {
@@ -437,7 +437,7 @@ class MultiputUpload extends BaseMultiput {
         progressCallback,
         sessionId,
         successCallback,
-        overwrite = true,
+        overwrite = (true: boolean | 'error'),
         conflictCallback,
         fileId,
     }: {
