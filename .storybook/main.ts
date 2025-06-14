@@ -10,7 +10,10 @@ import { translationDependencies } from '../scripts/i18n.config';
 // https://github.com/webpack/webpack/issues/13572#issuecomment-923736472
 const crypto = require('crypto'); // eslint-disable-line
 const crypto_createHash = crypto.createHash;
-crypto.createHash = () => crypto_createHash('sha256');
+crypto.createHash = algorithm => {
+    console.log('this is the algorithm used by crypto', algorithm);
+    crypto_createHash('sha256');
+};
 
 const language = process.env.LANGUAGE;
 
