@@ -50,9 +50,9 @@ const preview = {
 
     initialGlobals: {
         locale: reactIntl.defaultLocale,
-        locales: Object.keys(boxLanguages).reduce((acc, key) => {
-            acc[key] = boxLanguages[key].name;
-            return acc;
+        locales: Object.keys(boxLanguages).reduce((locales, language) => {
+            locales[language] = boxLanguages[language].name;
+            return locales;
         }, {}),
     },
 };
