@@ -11,8 +11,8 @@ import { translationDependencies } from '../scripts/i18n.config';
 const crypto = require('crypto'); // eslint-disable-line
 const crypto_createHash = crypto.createHash;
 crypto.createHash = algorithm => {
-    console.log('this is the algorithm used by crypto', algorithm);
-    crypto_createHash('sha256');
+    console.log('setting crypto in main.ts:', algorithm);
+    return crypto_createHash('sha256');
 };
 
 const language = process.env.LANGUAGE;
