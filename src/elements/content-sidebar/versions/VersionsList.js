@@ -8,33 +8,60 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import VersionsItem from './VersionsItem';
 import type { BoxItemVersion } from '../../../common/types/core';
+import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation.flow';
 import './VersionsList.scss';
 
 type Props = {
     currentId?: string,
     fileId: string,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    routerDisabled?: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsList = ({ currentId, versions, ...rest }: Props) => (
-    <ul className="bcs-VersionsList">
-        {versions.map(version => (
-            <li className="bcs-VersionsList-item" key={version.id}>
-                <Route
-                    render={({ match }) => (
-                        <VersionsItem
-                            isCurrent={currentId === version.id}
-                            isSelected={match.params.versionId === version.id}
-                            version={version}
-                            {...rest}
-                        />
-                    )}
+const VersionsList = ({ currentId, internalSidebarNavigation, routerDisabled = false, versions, ...rest }: Props) => {
+    const getSelectedVersionId = () => {
+        if (internalSidebarNavigation && internalSidebarNavigation.versionId) {
+            return internalSidebarNavigation.versionId;
+        }
+        return null;
+    };
+
+    const selectedVersionId = getSelectedVersionId();
+
+    const renderVersionItemWithoutRouter = (version: BoxItemVersion) => (
+        <VersionsItem
+            isCurrent={currentId === version.id}
+            isSelected={selectedVersionId === version.id}
+            version={version}
+            {...rest}
+        />
+    );
+
+    const renderVersionItemWithRouter = (version: BoxItemVersion) => (
+        <Route
+            render={({ match }) => (
+                <VersionsItem
+                    isCurrent={currentId === version.id}
+                    isSelected={match.params.versionId === version.id}
+                    version={version}
+                    {...rest}
                 />
-            </li>
-        ))}
-    </ul>
-);
+            )}
+        />
+    );
+
+    return (
+        <ul className="bcs-VersionsList">
+            {versions.map(version => (
+                <li className="bcs-VersionsList-item" key={version.id}>
+                    {routerDisabled ? renderVersionItemWithoutRouter(version) : renderVersionItemWithRouter(version)}
+                </li>
+            ))}
+        </ul>
+    );
+};
 
 export default VersionsList;
