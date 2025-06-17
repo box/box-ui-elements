@@ -7,6 +7,7 @@
 import * as React from "react";
 import AnnotatorContext from "./AnnotatorContext";
 import { AnnotatorState, GetMatchPath } from "./types";
+
 export interface WithAnnotatorContextProps {
     annotatorState?: AnnotatorState;
     emitActiveAnnotationChangeEvent?: (id: string) => void;
