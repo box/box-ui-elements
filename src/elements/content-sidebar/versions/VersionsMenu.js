@@ -16,6 +16,8 @@ import './VersionsMenu.scss';
 type Props = {
     fileId: string,
     intl: any,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    routerDisabled?: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
