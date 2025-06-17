@@ -505,7 +505,9 @@ describe('elements/content-preview/ContentPreview', () => {
             props = {
                 token: 'token',
                 fileId: file.id,
-                contentSidebarProps: {},
+                contentSidebarProps: {
+                    hasSkills: true,
+                },
             };
             const wrapper = getWrapper(props);
             instance = wrapper.instance();
