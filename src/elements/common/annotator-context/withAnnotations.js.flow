@@ -18,6 +18,10 @@ import {
     MatchParams,
     Status
 } from "./types";
+import { SidebarNavigation } from '../types/SidebarNavigation';
+import { type FeatureConfig } from '../feature-checking';
+
+
 export type ActiveChangeEvent = {
     annotationId: string | null,
     fileVersionId: string,
@@ -48,11 +52,11 @@ export type ComponentWithAnnotations = {
         isStartEvent?: boolean
     ) => void,
     getAction: (eventData: AnnotationActionEvent) => Action,
-    getAnnotationsPath: (
+    getAnnotationsPath?: (
         fileVersionId?: string,
         annotationId?: string | null
     ) => string,
-    getMatchPath: GetMatchPath,
+    getMatchPath?: GetMatchPath,
     handleActiveChange: ActiveChangeEventHandler,
     handleAnnotationChangeEvent: (id: string | null) => void,
     handleAnnotationCreate: (eventData: AnnotationActionEvent) => void,
@@ -70,6 +74,7 @@ export type ComponentWithAnnotations = {
     ...
 };
 export type WithAnnotationsProps = {
+    features?: FeatureConfig;
     location?: Location,
     onAnnotator: (annotator: Annotator) => void,
     onError?: (
@@ -78,7 +83,9 @@ export type WithAnnotationsProps = {
         contextInfo?: { [key: string]: mixed, ... }
     ) => void,
     onPreviewDestroy: (shouldReset?: boolean) => void,
-    ...
+    routerDisabled?: boolean;
+    sidebarNavigation?: SidebarNavigation;
+     ...
 };
 export type WithAnnotationsComponent<P> = React.ComponentClass<
     P & WithAnnotationsProps

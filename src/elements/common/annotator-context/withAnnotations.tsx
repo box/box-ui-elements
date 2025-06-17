@@ -3,7 +3,9 @@ import getProp from 'lodash/get';
 import { generatePath, match as matchType, matchPath } from 'react-router-dom';
 import { Location } from 'history';
 import AnnotatorContext from './AnnotatorContext';
+import { isFeatureEnabled, type FeatureConfig } from '../feature-checking';
 import { Action, Annotator, AnnotationActionEvent, AnnotatorState, GetMatchPath, MatchParams, Status } from './types';
+import { FeedEntryType, SidebarNavigation } from '../types/SidebarNavigation';
 
 export type ActiveChangeEvent = {
     annotationId: string | null;
@@ -41,10 +43,13 @@ export type ComponentWithAnnotations = {
 };
 
 export type WithAnnotationsProps = {
+    features?: FeatureConfig;
     location?: Location;
     onAnnotator: (annotator: Annotator) => void;
     onError?: (error: Error, code: string, contextInfo?: Record<string, unknown>) => void;
     onPreviewDestroy: (shouldReset?: boolean) => void;
+    routerDisabled?: boolean;
+    sidebarNavigation?: SidebarNavigation;
 };
 
 export type WithAnnotationsComponent<P> = React.ComponentClass<P & WithAnnotationsProps>;
@@ -71,10 +76,26 @@ export default function withAnnotations<P extends object>(
         constructor(props: P & WithAnnotationsProps) {
             super(props);
 
-            // Determine by url if there is already a deeply linked annotation
-            const { location } = props;
-            const match = this.getMatchPath(location);
-            const activeAnnotationId = getProp(match, 'params.annotationId', null);
+            const { routerDisabled, sidebarNavigation } = props;
+            let activeAnnotationId = null;
+
+            const isRouterDisabled = routerDisabled || isFeatureEnabled(props?.features, 'routerDisabled.value');
+
+            if (isRouterDisabled) {
+                if (
+                    sidebarNavigation &&
+                    'activeFeedEntryType' in sidebarNavigation &&
+                    sidebarNavigation.activeFeedEntryType === FeedEntryType.ANNOTATIONS &&
+                    'activeFeedEntryId' in sidebarNavigation
+                ) {
+                    activeAnnotationId = sidebarNavigation.activeFeedEntryId;
+                }
+            } else {
+                // Determine by url if there is already a deeply linked annotation
+                const { location } = props;
+                const match = this.getMatchPath(location);
+                activeAnnotationId = getProp(match, 'params.annotationId', null);
+            }
 
             // Seed the initial state with the activeAnnotationId if any from the location path
             this.state = { ...defaultState, activeAnnotationId };
@@ -192,6 +213,7 @@ export default function withAnnotations<P extends object>(
             });
         }
 
+        // remove this method with routerDisabled switch
         getMatchPath(location?: Location): matchType<MatchParams> | null {
             const pathname = getProp(location, 'pathname', '');
             return matchPath<MatchParams>(pathname, {
@@ -319,6 +341,14 @@ export default function withAnnotations<P extends object>(
         };
 
         render(): JSX.Element {
+            const isRouterDisabled =
+                this.props?.routerDisabled || isFeatureEnabled(this.props?.features, 'routerDisabled.value');
+            const annotationsRouterProps = isRouterDisabled
+                ? {}
+                : {
+                      getAnnotationsMatchPath: this.getMatchPath,
+                      getAnnotationsPath: this.getAnnotationsPath,
+                  };
             return (
                 <AnnotatorContext.Provider
                     value={{
@@ -328,8 +358,7 @@ export default function withAnnotations<P extends object>(
                         emitAnnotationReplyDeleteEvent: this.emitAnnotationReplyDeleteEvent,
                         emitAnnotationReplyUpdateEvent: this.emitAnnotationReplyUpdateEvent,
                         emitAnnotationUpdateEvent: this.emitAnnotationUpdateEvent,
-                        getAnnotationsMatchPath: this.getMatchPath,
-                        getAnnotationsPath: this.getAnnotationsPath,
+                        ...annotationsRouterProps,
                         state: this.state,
                     }}
                 >
