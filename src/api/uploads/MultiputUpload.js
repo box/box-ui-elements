@@ -339,6 +339,10 @@ class MultiputUpload extends BaseMultiput {
             }
 
             if (errorData && errorData.status === 409) {
+                if (this.overwrite === 'error') {
+                    this.errorCallback(errorData);
+                    return;
+                }
                 this.resolveConflict(errorData);
                 this.createSessionRetry();
                 return;
@@ -1241,11 +1245,6 @@ class MultiputUpload extends BaseMultiput {
      * @return {Promise}
      */
     async resolveConflict(data: Object): Promise<any> {
-        if (this.overwrite === 'error') {
-            this.errorCallback(data);
-            return;
-        }
-
         if (this.overwrite && data.context_info) {
             this.fileId = data.context_info.conflicts.id;
             return;
