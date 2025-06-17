@@ -22,19 +22,10 @@ type Props = {
 };
 
 const VersionsList = ({ currentId, internalSidebarNavigation, routerDisabled = false, versions, ...rest }: Props) => {
-    const getSelectedVersionId = () => {
-        if (internalSidebarNavigation && internalSidebarNavigation.versionId) {
-            return internalSidebarNavigation.versionId;
-        }
-        return null;
-    };
-
-    const selectedVersionId = getSelectedVersionId();
-
     const renderVersionItemWithoutRouter = (version: BoxItemVersion) => (
         <VersionsItem
             isCurrent={currentId === version.id}
-            isSelected={selectedVersionId === version.id}
+            isSelected={internalSidebarNavigation?.versionId === version.id}
             version={version}
             {...rest}
         />
