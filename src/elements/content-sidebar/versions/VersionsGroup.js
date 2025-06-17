@@ -7,7 +7,7 @@
 import * as React from 'react';
 import VersionsList from './VersionsList';
 import type { BoxItemVersion } from '../../../common/types/core';
-import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation.flow';
+import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation';
 import './VersionsGroup.scss';
 
 type Props = {

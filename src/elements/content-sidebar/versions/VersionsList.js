@@ -8,7 +8,7 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import VersionsItem from './VersionsItem';
 import type { BoxItemVersion } from '../../../common/types/core';
-import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation.flow';
+import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation';
 import './VersionsList.scss';
 
 type Props = {

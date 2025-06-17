@@ -11,7 +11,7 @@ import * as util from '../../../utils/datetime';
 import messages from './messages';
 import VersionsGroup from './VersionsGroup';
 import type { BoxItemVersion } from '../../../common/types/core';
-import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation.flow';
+import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation';
 import './VersionsMenu.scss';
 
 type Props = {

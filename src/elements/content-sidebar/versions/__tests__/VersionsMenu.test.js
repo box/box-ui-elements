@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
 import { render, screen } from '../../../../test-utils/testing-library';
-import messages from '../messages';
 import VersionsMenu from '../VersionsMenu';
-
-jest.unmock('react-intl');
 
 jest.mock('../VersionsGroup', () => {
     const MockVersionsGroup = jest.fn(
@@ -46,12 +42,7 @@ describe('elements/content-sidebar/versions/VersionsMenu', () => {
         modified_by: { name: 'Test User', id: '098765' },
     };
     const getVersion = (overrides = {}) => ({ ...defaultVersion, ...overrides });
-    const renderComponent = (props = {}) =>
-        render(
-            <IntlProvider locale="en" messages={messages}>
-                <VersionsMenu {...props} />
-            </IntlProvider>,
-        );
+    const renderComponent = (props = {}) => render(<VersionsMenu {...props} />);
     const GlobalDate = Date;
 
     beforeEach(() => {
