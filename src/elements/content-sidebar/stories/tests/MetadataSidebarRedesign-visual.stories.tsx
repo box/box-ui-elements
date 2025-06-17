@@ -704,7 +704,7 @@ export const EditSinglelevelTaxonomy: StoryObj<typeof MetadataSidebarRedesign> =
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
 
-        const editButton = await waitFor(() => canvas.getByRole('button', { name: 'Edit My Taxonomy' }));
+        const editButton = await canvas.findByRole('button', { name: 'Edit My Taxonomy' }, { timeout: 30000 });
 
         await userEvent.click(editButton);
 
