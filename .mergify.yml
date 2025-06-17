@@ -11,12 +11,14 @@ queue_rules:
       - status-success="Validate"
       - status-success=lint_test_build
     merge_method: squash
+
   - name: Automatic strict merge
     queue_conditions:
       - base=master
       - "#approved-reviews-by>=2"
       - "#changes-requested-reviews-by=0"
       - "#review-requested=0"
+      - "#review-threads-unresolved=0"
       - status-success="Validate"
       - status-success=license/cla
       - status-success=lint_test_build
@@ -28,8 +30,9 @@ queue_rules:
       - status-success=license/cla
       - status-success=lint_test_build
     merge_method: squash
+
 pull_request_rules:
-  - name: Automatic merge
+  - name: Automatic merge queue
     conditions: []
     actions:
       queue:
