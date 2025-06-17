@@ -1,5 +1,3 @@
-// @flow
-
 import { domainNameValidator, emailValidator, hostnameValidator, ipv4AddressValidator } from '../validators';
 
 describe('util/validators', () => {
@@ -17,7 +15,7 @@ describe('util/validators', () => {
             ['1.1.1', false],
             ['1.1', false],
             ['a', false],
-        ])('domainNameValidator(%s) should return %s', (domain, expected) => {
+        ])('domainNameValidator(%s) should return %s', (domain: string, expected: boolean) => {
             expect(domainNameValidator(domain)).toBe(expected);
         });
     });
@@ -36,7 +34,7 @@ describe('util/validators', () => {
             ['1.1.1', true],
             ['1.1', true],
             ['a', true],
-        ])('hostnameValidator(%s) should return %s', (hostname, expected) => {
+        ])('hostnameValidator(%s) should return %s', (hostname: string, expected: boolean) => {
             expect(hostnameValidator(hostname)).toBe(expected);
         });
     });
@@ -61,7 +59,7 @@ describe('util/validators', () => {
             ['1.1.', false],
             ['1.', false],
             ['a', false],
-        ])('ipv4AddressValidator(%s) should return %s', (address, expected) => {
+        ])('ipv4AddressValidator(%s) should return %s', (address: string, expected: boolean) => {
             expect(ipv4AddressValidator(address)).toBe(expected);
         });
     });
@@ -100,7 +98,7 @@ describe('util/validators', () => {
             ['1.1.', false],
             ['1.', false],
             ['a', false],
-        ])('emailValidator(%s) should return %s', (email, expected) => {
+        ])('emailValidator(%s) should return %s', (email: string, expected: boolean) => {
             expect(emailValidator(email)).toBe(expected);
         });
     });

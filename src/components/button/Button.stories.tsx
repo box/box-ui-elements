@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { action } from '@storybook/addon-actions';
-import { boolean, select } from '@storybook/addon-knobs';
+import { action } from 'storybook/actions';
 
 import * as vars from '../../styles/variables';
 
@@ -14,18 +13,15 @@ import Button from './Button';
 import notes from './Button.stories.md';
 
 export const regular = () => {
-    const selectIcon = select('icon', { None: undefined, Icon: 'Icon' }, undefined);
-    const selectChildren = select('children', { None: undefined, Text: 'Click Here' }, 'Click Here');
     return (
         <Button
-            icon={selectIcon === 'Icon' ? <Icon /> : undefined}
-            isDisabled={boolean('isDisabled', false)}
-            isLoading={boolean('isLoading', false)}
+            icon={<Icon />}
+            isDisabled={false}
+            isLoading={false}
             onClick={action('onClick called')}
-            showRadar={boolean('showRadar', false)}
-            size={select('size', { None: undefined, Large: 'large' }, undefined)}
+            showRadar={false}
         >
-            {selectChildren ? 'Click Here' : null}
+            button
         </Button>
     );
 };

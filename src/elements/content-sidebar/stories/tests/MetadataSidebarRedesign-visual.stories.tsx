@@ -1,6 +1,6 @@
 import { type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
-import { expect, userEvent, waitFor, within, fn, screen } from '@storybook/test';
+import { expect, userEvent, waitFor, within, fn, screen } from 'storybook/test';
 import { type StoryObj, Meta } from '@storybook/react';
 import type { HttpHandler } from 'msw';
 import ContentSidebar from '../../ContentSidebar';

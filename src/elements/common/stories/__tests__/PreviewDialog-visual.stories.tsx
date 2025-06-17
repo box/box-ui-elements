@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { expect, screen, userEvent, within } from '@storybook/test';
+import { expect, screen, userEvent, within } from 'storybook/test';
 import { Button } from '@box/blueprint-web';
-import { useArgs } from '@storybook/preview-api';
+import { useArgs } from 'storybook/preview-api';
 import PreviewDialog from '../../preview-dialog';
 
 import { addRootElement } from '../../../../utils/storybook';

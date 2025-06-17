@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { expect, screen, userEvent, waitFor, within } from '@storybook/test';
+import { expect, screen, userEvent, waitFor, within } from 'storybook/test';
 
 import ContentExplorer from '../../ContentExplorer';
 import { mockEmptyRootFolder, mockRootFolder } from '../../../common/__mocks__/mockRootFolder';

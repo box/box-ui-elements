@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { select, number, text } from '@storybook/addon-knobs';
+
 import ItemIcon, { ItemIconProps } from './item-icon';
 import ItemIconMonotone from './item-icon-monotone';
 import Tooltip, { TooltipPosition } from '../components/tooltip';
@@ -47,12 +47,7 @@ export const itemIcons = () => {
                 <span style={{ padding: 8 }} key={t}>
                     <Tooltip text={t}>
                         <span style={{ display: 'inline-block' }}>
-                            <Icon
-                                iconType={t}
-                                dimension={number('dimension', 32, { range: true, min: 10, max: 64, step: 2 })}
-                                title={text('title', '')}
-                                className={text('className', '')}
-                            />
+                            <Icon iconType={t} dimension="32" />
                         </span>
                     </Tooltip>
                 </span>

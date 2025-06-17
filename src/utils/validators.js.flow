@@ -1,4 +1,3 @@
-// @flow
 import Address from '@hapi/address';
 import tldsHapi from '@hapi/address/lib/tlds';
 
@@ -43,4 +42,4 @@ const emailValidator = (value: string): boolean =>
         tlds: { allow: new Set([...tldsHapi, ...tldSupplements.map(tld => tld.toLowerCase())]) },
     });
 
-export { domainNameValidator, emailValidator, hostnameValidator, ipv4AddressValidator };
+export { domainNameValidator, emailValidator, hostnameValidator, ipv4AddressValidator }; 

@@ -1,16 +1,11 @@
 import * as React from 'react';
-import { action } from '@storybook/addon-actions';
-import { boolean } from '@storybook/addon-knobs';
+import { action } from 'storybook/actions';
 
 import PrimaryButton from './PrimaryButton';
 import notes from './PrimaryButton.stories.md';
 
 export const regular = () => (
-    <PrimaryButton
-        isDisabled={boolean('isDisabled', false)}
-        isLoading={boolean('isLoading', false)}
-        onClick={action('onClick called')}
-    >
+    <PrimaryButton isDisabled={false} isLoading={false} onClick={action('onClick called')}>
         Click Here
     </PrimaryButton>
 );
