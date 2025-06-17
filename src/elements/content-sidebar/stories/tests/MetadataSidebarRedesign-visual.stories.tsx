@@ -1,4 +1,4 @@
-import { act, type ComponentProps } from 'react';
+import { type ComponentProps } from 'react';
 import { http, HttpResponse } from 'msw';
 import { expect, userEvent, waitFor, within, fn, screen } from '@storybook/test';
 import { type StoryObj, Meta } from '@storybook/react';
@@ -239,14 +239,10 @@ export const MetadataInstanceEditorWithCustomTemplate: StoryObj<typeof MetadataS
         const canvas = within(canvasElement);
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' }, { timeout: 2000 });
-        await act(async () => {
-            await userEvent.click(addTemplateButton);
-        });
+        await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Custom Metadata' });
-        await act(async () => {
-            await userEvent.click(customMetadataOption);
-        });
+        await userEvent.click(customMetadataOption);
     },
 };
 
@@ -289,15 +285,11 @@ export const DeleteButtonIsDisabledWhenAddingNewMetadataTemplate: StoryObj<typeo
 
         const addTemplateButton = await canvas.findByRole('button', { name: 'Add template' });
         expect(addTemplateButton).toBeInTheDocument();
-        await act(async () => {
-            await userEvent.click(addTemplateButton);
-        });
+        await userEvent.click(addTemplateButton);
 
         const customMetadataOption = canvas.getByRole('option', { name: 'Virus Scan' });
         expect(customMetadataOption).toBeInTheDocument();
-        await act(async () => {
-            await userEvent.click(customMetadataOption);
-        });
+        await userEvent.click(customMetadataOption);
 
         const deleteButton = await canvas.findByRole('button', { name: 'Delete' });
         expect(deleteButton).toBeDisabled();
