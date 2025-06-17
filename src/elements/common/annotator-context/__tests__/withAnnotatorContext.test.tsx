@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { render } from '../../../../test-utils/testing-library';
 import withAnnotatorContext, { WithAnnotatorContextProps } from '../withAnnotatorContext';
 import { Action } from '../types';
 
@@ -13,14 +13,7 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
         className?: string | undefined;
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    type WrappedComponentProps<T> = ComponentProps & WithAnnotatorContextProps; // T is supposed to be allowed component props
-
-    const Component = (props: WrappedComponentProps<HTMLDivElement>) => <div {...props} />;
-
-    const WrappedComponent = withAnnotatorContext(Component);
-
-    const getWrapper = (props?: WrappedComponentProps<HTMLDivElement>) => shallow(<WrappedComponent {...props} />);
+    type WrappedComponentProps = ComponentProps & WithAnnotatorContextProps;
 
     beforeEach(() => jest.resetAllMocks());
 
@@ -50,22 +43,125 @@ describe('elements/common/annotator-context/withAnnotatorContext', () => {
             getAnnotationsPath: mockGetAnnotationsPath,
         });
 
-        const wrapper = getWrapper();
-        const wrappedComponent = wrapper.dive().find(Component);
-        const props = wrappedComponent.props() as WrappedComponentProps<HTMLDivElement>;
+        const MockComponent = jest.fn<JSX.Element | null, [WrappedComponentProps]>(() => null);
+        const WrappedWithMockComponent = withAnnotatorContext(MockComponent);
 
-        expect(wrappedComponent.exists()).toBeTruthy();
+        render(<WrappedWithMockComponent />);
+
+        expect(MockComponent).toHaveBeenCalledTimes(1);
+        const props = MockComponent.mock.calls[0][0];
+
         expect(props.annotatorState).toEqual({
             annotation: { foo: 'bar' },
             action: Action.CREATE_START,
         });
-        expect(props.emitActiveAnnotationChangeEvent).toEqual(mockEmitActiveAnnotationChangeEvent);
-        expect(props.emitAnnotationRemoveEvent).toEqual(mockEmitAnnotationRemoveEvent);
-        expect(props.emitAnnotationReplyCreateEvent).toEqual(mockEmitAnnotationReplyCreateEvent);
-        expect(props.emitAnnotationReplyDeleteEvent).toEqual(mockEmitAnnotationReplyDeleteEvent);
-        expect(props.emitAnnotationReplyUpdateEvent).toEqual(mockMmitAnnotationReplyUpdateEvent);
-        expect(props.emitAnnotationUpdateEvent).toEqual(mockEmitAnnotationUpdateEvent);
-        expect(props.getAnnotationsMatchPath).toEqual(mockGetAnnotationsMatchPath);
-        expect(props.getAnnotationsPath).toEqual(mockGetAnnotationsPath);
+        expect(props.emitActiveAnnotationChangeEvent).toBe(mockEmitActiveAnnotationChangeEvent);
+        expect(props.emitAnnotationRemoveEvent).toBe(mockEmitAnnotationRemoveEvent);
+        expect(props.emitAnnotationReplyCreateEvent).toBe(mockEmitAnnotationReplyCreateEvent);
+        expect(props.emitAnnotationReplyDeleteEvent).toBe(mockEmitAnnotationReplyDeleteEvent);
+        expect(props.emitAnnotationReplyUpdateEvent).toBe(mockMmitAnnotationReplyUpdateEvent);
+        expect(props.emitAnnotationUpdateEvent).toBe(mockEmitAnnotationUpdateEvent);
+        expect(props.getAnnotationsMatchPath).toBe(mockGetAnnotationsMatchPath);
+        expect(props.getAnnotationsPath).toBe(mockGetAnnotationsPath);
+    });
+
+    test('should apply the annotator context to the wrapped component without router props when routerDisabled is true', () => {
+        const annotatorState = {
+            annotation: { foo: 'bar' },
+            action: Action.CREATE_START,
+        };
+        const mockEmitActiveAnnotationChangeEvent = jest.fn();
+        const mockEmitAnnotationRemoveEvent = jest.fn();
+        const mockEmitAnnotationReplyCreateEvent = jest.fn();
+        const mockEmitAnnotationReplyDeleteEvent = jest.fn();
+        const mockMmitAnnotationReplyUpdateEvent = jest.fn();
+        const mockEmitAnnotationUpdateEvent = jest.fn();
+        const mockGetAnnotationsMatchPath = jest.fn();
+        const mockGetAnnotationsPath = jest.fn();
+
+        mockContext.mockReturnValue({
+            state: annotatorState,
+            emitActiveAnnotationChangeEvent: mockEmitActiveAnnotationChangeEvent,
+            emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent,
+            emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent,
+            emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent,
+            emitAnnotationReplyUpdateEvent: mockMmitAnnotationReplyUpdateEvent,
+            emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
+            getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
+            getAnnotationsPath: mockGetAnnotationsPath,
+        });
+
+        const MockComponent = jest.fn<JSX.Element | null, [WrappedComponentProps]>(() => null);
+        const WrappedWithMockComponent = withAnnotatorContext(MockComponent);
+
+        render(<WrappedWithMockComponent routerDisabled={true} />);
+
+        expect(MockComponent).toHaveBeenCalledTimes(1);
+        const props = MockComponent.mock.calls[0][0];
+
+        expect(props.annotatorState).toEqual({
+            annotation: { foo: 'bar' },
+            action: Action.CREATE_START,
+        });
+        expect(props.emitActiveAnnotationChangeEvent).toBe(mockEmitActiveAnnotationChangeEvent);
+        expect(props.emitAnnotationRemoveEvent).toBe(mockEmitAnnotationRemoveEvent);
+        expect(props.emitAnnotationReplyCreateEvent).toBe(mockEmitAnnotationReplyCreateEvent);
+        expect(props.emitAnnotationReplyDeleteEvent).toBe(mockEmitAnnotationReplyDeleteEvent);
+        expect(props.emitAnnotationReplyUpdateEvent).toBe(mockMmitAnnotationReplyUpdateEvent);
+        expect(props.emitAnnotationUpdateEvent).toBe(mockEmitAnnotationUpdateEvent);
+
+        // Router-related props should not be passed when routerDisabled is true
+        expect(props.getAnnotationsMatchPath).toBeUndefined();
+        expect(props.getAnnotationsPath).toBeUndefined();
+    });
+
+    test('should apply the annotator context to the wrapped component without router props when routerDisabled in feature flags is true', () => {
+        const annotatorState = {
+            annotation: { foo: 'bar' },
+            action: Action.CREATE_START,
+        };
+        const mockEmitActiveAnnotationChangeEvent = jest.fn();
+        const mockEmitAnnotationRemoveEvent = jest.fn();
+        const mockEmitAnnotationReplyCreateEvent = jest.fn();
+        const mockEmitAnnotationReplyDeleteEvent = jest.fn();
+        const mockMmitAnnotationReplyUpdateEvent = jest.fn();
+        const mockEmitAnnotationUpdateEvent = jest.fn();
+        const mockGetAnnotationsMatchPath = jest.fn();
+        const mockGetAnnotationsPath = jest.fn();
+
+        mockContext.mockReturnValue({
+            state: annotatorState,
+            emitActiveAnnotationChangeEvent: mockEmitActiveAnnotationChangeEvent,
+            emitAnnotationRemoveEvent: mockEmitAnnotationRemoveEvent,
+            emitAnnotationReplyCreateEvent: mockEmitAnnotationReplyCreateEvent,
+            emitAnnotationReplyDeleteEvent: mockEmitAnnotationReplyDeleteEvent,
+            emitAnnotationReplyUpdateEvent: mockMmitAnnotationReplyUpdateEvent,
+            emitAnnotationUpdateEvent: mockEmitAnnotationUpdateEvent,
+            getAnnotationsMatchPath: mockGetAnnotationsMatchPath,
+            getAnnotationsPath: mockGetAnnotationsPath,
+        });
+
+        const MockComponent = jest.fn<JSX.Element | null, [WrappedComponentProps]>(() => null);
+        const WrappedWithMockComponent = withAnnotatorContext(MockComponent);
+
+        render(<WrappedWithMockComponent features={{ routerDisabled: { value: true } }} />);
+
+        expect(MockComponent).toHaveBeenCalledTimes(1);
+        const props = MockComponent.mock.calls[0][0];
+
+        expect(props.annotatorState).toEqual({
+            annotation: { foo: 'bar' },
+            action: Action.CREATE_START,
+        });
+        expect(props.emitActiveAnnotationChangeEvent).toBe(mockEmitActiveAnnotationChangeEvent);
+        expect(props.emitAnnotationRemoveEvent).toBe(mockEmitAnnotationRemoveEvent);
+        expect(props.emitAnnotationReplyCreateEvent).toBe(mockEmitAnnotationReplyCreateEvent);
+        expect(props.emitAnnotationReplyDeleteEvent).toBe(mockEmitAnnotationReplyDeleteEvent);
+        expect(props.emitAnnotationReplyUpdateEvent).toBe(mockMmitAnnotationReplyUpdateEvent);
+        expect(props.emitAnnotationUpdateEvent).toBe(mockEmitAnnotationUpdateEvent);
+
+        // Router-related props should not be passed when routerDisabled is true
+        expect(props.getAnnotationsMatchPath).toBeUndefined();
+        expect(props.getAnnotationsPath).toBeUndefined();
     });
 });
