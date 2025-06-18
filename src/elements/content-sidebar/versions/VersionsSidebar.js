@@ -6,6 +6,7 @@
 
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Route } from 'react-router-dom';
 import type { MessageDescriptor } from 'react-intl';
 import InlineError from '../../../components/inline-error';
 import messages from './messages';
@@ -36,47 +37,55 @@ const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Pr
     const showError = !!error;
 
     return (
-        <SidebarContent
-            className="bcs-Versions"
-            data-resin-component="preview"
-            data-resin-feature="versions"
-            title={
-                <>
-                    <BackButton data-resin-target="back" to={`/${parentName}`} />
-                    <FormattedMessage {...messages.versionsTitle} />
-                </>
-            }
-        >
-            <LoadingIndicatorWrapper className="bcs-Versions-content" crawlerPosition="top" isLoading={isLoading}>
-                {showError && (
-                    <InlineError title={<FormattedMessage {...messages.versionServerError} />}>
-                        <FormattedMessage {...error} />
-                    </InlineError>
-                )}
+        <Route>
+            {({ history }) => (
+                <SidebarContent
+                    className="bcs-Versions"
+                    data-resin-component="preview"
+                    data-resin-feature="versions"
+                    title={
+                        <>
+                            <BackButton data-resin-target="back" onClick={() => history.push(`/${parentName}`)} />
+                            <FormattedMessage {...messages.versionsTitle} />
+                        </>
+                    }
+                >
+                    <LoadingIndicatorWrapper
+                        className="bcs-Versions-content"
+                        crawlerPosition="top"
+                        isLoading={isLoading}
+                    >
+                        {showError && (
+                            <InlineError title={<FormattedMessage {...messages.versionServerError} />}>
+                                <FormattedMessage {...error} />
+                            </InlineError>
+                        )}
 
-                {showEmpty && (
-                    <div className="bcs-Versions-empty">
-                        <FormattedMessage {...messages.versionsEmpty} />
-                    </div>
-                )}
+                        {showEmpty && (
+                            <div className="bcs-Versions-empty">
+                                <FormattedMessage {...messages.versionsEmpty} />
+                            </div>
+                        )}
 
-                {showVersions && (
-                    <div className="bcs-Versions-menu" data-testid="bcs-Versions-menu">
-                        <VersionsMenu versions={versions} {...rest} />
-                    </div>
-                )}
-                {showLimit && (
-                    <div className="bcs-Versions-maxEntries" data-testid="max-versions">
-                        <FormattedMessage
-                            {...messages.versionMaxEntries}
-                            values={{
-                                maxVersions: MAX_VERSIONS,
-                            }}
-                        />
-                    </div>
-                )}
-            </LoadingIndicatorWrapper>
-        </SidebarContent>
+                        {showVersions && (
+                            <div className="bcs-Versions-menu" data-testid="bcs-Versions-menu">
+                                <VersionsMenu versions={versions} {...rest} />
+                            </div>
+                        )}
+                        {showLimit && (
+                            <div className="bcs-Versions-maxEntries" data-testid="max-versions">
+                                <FormattedMessage
+                                    {...messages.versionMaxEntries}
+                                    values={{
+                                        maxVersions: MAX_VERSIONS,
+                                    }}
+                                />
+                            </div>
+                        )}
+                    </LoadingIndicatorWrapper>
+                </SidebarContent>
+            )}
+        </Route>
     );
 };
 
