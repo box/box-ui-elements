@@ -4,32 +4,38 @@
     "description": "Box UI Elements",
     "author": "Box (https://www.box.com/)",
     "license": "SEE LICENSE IN LICENSE",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
     "homepage": "https://developer.box.com/docs/box-ui-elements",
     "main": "es/index.js",
     "module": "es/index.js",
     "jsnext:main": "es/index.js",
     "types": "es/types.d.ts",
-    "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
-    },
     "keywords": [
         "box",
         "box platform",
         "box-platform",
         "box content",
         "box-content",
+        "box ui elements",
+        "box-ui-elements",
         "ui elements",
-        "preview",
-        "uploader",
-        "picker",
+        "ui-elements",
         "explorer",
+        "picker",
+        "preview",
+        "sharing",
+        "sidebar",
+        "uploader",
         "box-content-ui-elements",
-        "box-content-preview",
-        "box-content-uploader",
-        "box-content-picker",
         "box-content-explorer",
+        "box-content-picker",
+        "box-content-preview",
         "box-content-openwith",
-        "box-content-sidebar"
+        "box-content-sharing",
+        "box-content-sidebar",
+        "box-content-uploader"
     ],
     "repository": {
         "type": "git",
@@ -38,23 +44,26 @@
     "bugs": {
         "url": "https://github.com/box/box-ui-elements/issues"
     },
+    "engines": {
+        "node": ">=18.x",
+        "yarn": ">=1.10.0"
+    },
     "scripts": {
         "build": "yarn build:dev:dist",
-        "build:ci:es": "yarn build:prod:es",
         "build:ci:dist": "LANGUAGE=en-US ENTRY=explorer REACT=true yarn build:prod:dist",
-        "build:dev:dist": "LANGUAGE=en-US BABEL_ENV=development NODE_ENV=development webpack --config scripts/webpack.config.js --mode development --progress",
-        "build:dev:es": "BABEL_ENV=development NODE_ENV=development yarn build:es --copy-files --source-maps inline --watch --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
+        "build:ci:es": "yarn build:prod:es",
+        "build:dev:dist": "NODE_ENV=development BABEL_ENV=development LANGUAGE=en-US webpack --config scripts/webpack.config.js --mode development --progress",
+        "build:dev:es": "NODE_ENV=development BABEL_ENV=development yarn build:es --copy-files --source-maps inline --watch --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
         "build:es": "babel src --extensions '.js,.tsx,.ts' --out-dir es",
-        "build:i18n": "props2es",
+        "build:i18n": "node scripts/buildTranslations.js",
         "build:npm": "npm-run-all clean build:i18n build:prod:npm build:prod:es",
         "build:prod:analyze": "BUNDLE_ANALYSIS=true npm-run-all setup build:prod:npm",
-        "build:prod:es": "BABEL_ENV=npm NODE_ENV=production yarn build:es --source-maps --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
         "build:prod:dist": "NODE_ENV=production webpack --config scripts/webpack.config.js --mode production",
+        "build:prod:es": "NODE_ENV=production BABEL_ENV=npm yarn build:es --source-maps --ignore \"**/*.d.ts,**/__tests__/**,**/__mocks__/**\"",
         "build:prod:npm": "BABEL_ENV=production OUTPUT=dist LANGUAGE=en-US REACT=true yarn build:prod:dist",
-        "build:prod:storybook": "LANGUAGE=en-US REACT=true BROWSERSLIST_ENV=production BABEL_ENV=development NODE_ENV=development storybook build -c .storybook -o storybook",
-        "build:sync": "LANGUAGE=en-US BABEL_ENV=development NODE_ENV=development RSYNC=true webpack --config scripts/webpack.config.js --mode development",
+        "build:prod:storybook": "NODE_ENV=production BABEL_ENV=production BROWSERSLIST_ENV=production LANGUAGE=en-US REACT=true storybook build -o storybook",
         "chromatic": "chromatic",
-        "clean": "rm -rf dist es i18n/json i18n/*.js reports storybook",
+        "clean": "rm -rf dist es i18n/bundles i18n/json i18n/*.js reports storybook",
         "copy:flow": "flow-copy-source --ignore \"**/__tests__/**\" --ignore \"**/__mocks__/**\" --ignore \"**/*.ts\" ./src ./es && copyfiles './src/**/*.js.flow' es --up 1",
         "copy:styles": "copyfiles './src/**/*.scss' es --up 1",
         "cy:open": "yarn cy:wait; yarn cypress open",
@@ -66,17 +75,17 @@
         "lint:css": "stylelint \"src/**/*.scss\"",
         "prebuild:es": "npm-run-all copy:styles ts:defs copy:flow",
         "release": "yarn release:beta",
-        "release:beta": "DIST=beta BRANCH=master ./scripts/release.sh",
-        "release:hotfix": "DIST=latest HOTFIX=true ./scripts/release.sh",
-        "release:latest": "DIST=latest BRANCH=master ./scripts/release.sh",
-        "release:next": "DIST=next BRANCH=next ./scripts/release.sh",
-        "release:cdn": "yarn setup; node ./scripts/prod.js",
+        "release:beta": "DIST=beta BRANCH=master scripts/release.sh",
+        "release:hotfix": "DIST=latest HOTFIX=true scripts/release.sh",
+        "release:latest": "DIST=latest BRANCH=master scripts/release.sh",
+        "release:next": "DIST=next BRANCH=next scripts/release.sh",
+        "release:cdn": "yarn setup; node scripts/buildLocaleBundles.js",
         "setup": "yarn install --frozen-lockfile; npm-run-all clean build:i18n",
         "start": "npm-run-all setup start:storybook",
         "start:npm": "yarn setup; yarn build:dev:es",
-        "start:storybook": "LANGUAGE=en-US REACT=true BABEL_ENV=development NODE_ENV=development storybook dev -p 6060",
+        "start:storybook": "NODE_ENV=development BABEL_ENV=development LANGUAGE=en-US storybook dev -p 6060",
         "start:storybook:ci": "yarn start:storybook --ci",
-        "test": "BABEL_ENV=test NODE_ENV=test yarn jest -c scripts/jest/jest.config.js",
+        "test": "NODE_ENV=test BABEL_ENV=test yarn jest -c scripts/jest/jest.config.js",
         "test:e2e": "BROWSERSLIST_ENV=test npm-run-all -p -r start cy:run",
         "test:e2e:open": "BROWSERSLIST_ENV=test npm-run-all -p -r start cy:open",
         "ts:defs": "tsc --declaration --emitDeclarationOnly --declarationDir es --noEmit false"
@@ -97,10 +106,6 @@
             "pre-push": "scripts/prepush.sh",
             "commit-msg": "commitlint -e"
         }
-    },
-    "engines": {
-        "node": ">=18.x",
-        "yarn": ">=1.10.0"
     },
     "devDependencies": {
         "@babel/cli": "^7.24.7",
@@ -287,8 +292,7 @@
         "webpack": "^5.92.0",
         "webpack-bundle-analyzer": "^4.10.2",
         "webpack-cli": "^5.1.4",
-        "webpack-dev-server": "^5.2.1",
-        "worker-farm": "^1.7.0"
+        "webpack-dev-server": "^5.2.1"
     },
     "peerDependencies": {
         "@box/blueprint-web": "^12.7.1",
@@ -346,12 +350,6 @@
     "comments": {
         "dependencies": {
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
-        }
-    },
-    "overrides": {
-        "react-tether": {
-            "react": "$react",
-            "react-dom": "$react-dom"
         }
     },
     "msw": {
