@@ -88,7 +88,9 @@ describe('elements/content-sidebar/versions/VersionsList', () => {
             renderComponent({ versions, routerDisabled: false }, '/activity/versions/12345');
 
             // Version 12345 should be marked as selected based on route
-            expect(screen.getByText('Selected')).toBeInTheDocument();
+            const version12345Container = screen.getByTestId('versions-item-12345');
+            expect(version12345Container).toBeInTheDocument();
+            expect(version12345Container).toHaveTextContent('Selected');
             expect(screen.getAllByText('Selected')).toHaveLength(1);
         });
 
@@ -103,7 +105,9 @@ describe('elements/content-sidebar/versions/VersionsList', () => {
             });
 
             // Version 67890 should be marked as selected based on internal navigation
-            expect(screen.getByText('Selected')).toBeInTheDocument();
+            const version67890Container = screen.getByTestId('versions-item-67890');
+            expect(version67890Container).toBeInTheDocument();
+            expect(version67890Container).toHaveTextContent('Selected');
             expect(screen.getAllByText('Selected')).toHaveLength(1);
         });
 
