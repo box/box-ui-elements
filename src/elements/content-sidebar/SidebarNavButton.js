@@ -7,8 +7,10 @@
 import * as React from 'react';
 import { Route } from 'react-router-dom';
 import noop from 'lodash/noop';
-import NavButton from '../common/nav-button';
+import classNames from 'classnames';
+import PlainButton from '../../components/plain-button';
 import Tooltip from '../../components/tooltip/Tooltip';
+import { isLeftClick } from '../../utils/dom';
 import './SidebarNavButton.scss';
 
 type Props = {
@@ -37,45 +39,48 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
     } = props;
     const sidebarPath = `/${sidebarView}`;
 
-    const handleNavButtonClick = () => {
-        onClick(sidebarView);
-    };
-
     return (
         <Route path={sidebarPath}>
-            {({ match }) => {
+            {({ match, history }) => {
                 const isMatch = !!match;
-                const isActive = () => isMatch && !!isOpen;
-                const isActiveValue = isActive();
+                const isActiveValue = isMatch && !!isOpen;
                 const isExactMatch = isMatch && match.isExact;
                 const id = `${elementId}${elementId === '' ? '' : '_'}${sidebarView}`;
 
+                const handleNavButtonClick = event => {
+                    onClick(sidebarView);
+
+                    if (!event.defaultPrevented && isLeftClick(event)) {
+                        const method = isExactMatch ? history.replace : history.push;
+                        method({
+                            pathname: sidebarPath,
+                            state: { open: true },
+                        });
+                    }
+                };
+
                 return (
                     <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
-                        <NavButton
-                            activeClassName="bcs-is-selected"
+                        <PlainButton
+                            ref={ref}
+                            className={classNames('bcs-NavButton', {
+                                'bcs-is-selected': isActiveValue,
+                                'bdl-is-disabled': isDisabled,
+                            })}
                             aria-selected={isActiveValue}
                             aria-controls={`${id}-content`}
                             aria-label={tooltip}
-                            className="bcs-NavButton"
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}
-                            getDOMRef={ref}
                             id={id}
-                            isActive={isActive}
                             isDisabled={isDisabled}
                             onClick={handleNavButtonClick}
-                            replace={isExactMatch}
                             role="tab"
                             tabIndex={isActiveValue ? '0' : '-1'}
-                            to={{
-                                pathname: sidebarPath,
-                                state: { open: true },
-                            }}
                             type="button"
                         >
                             {children}
-                        </NavButton>
+                        </PlainButton>
                     </Tooltip>
                 );
             }}
