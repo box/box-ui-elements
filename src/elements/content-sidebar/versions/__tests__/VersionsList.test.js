@@ -24,15 +24,9 @@ describe('elements/content-sidebar/versions/VersionsList', () => {
 
     const renderComponent = (props = {}, routePath = '/activity/versions/12345') => {
         if (props.routerDisabled) {
-            // When router is disabled, use simple MemoryRouter
-            return render(
-                <MemoryRouter>
-                    <VersionsList {...props} />
-                </MemoryRouter>,
-            );
+            return render(<VersionsList {...props} />);
         }
 
-        // When router is enabled, use the proper route structure
         return render(
             <MemoryRouter initialEntries={[routePath]}>
                 <Route path="/:sidebar(activity|details)/versions/:versionId?">
