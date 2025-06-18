@@ -10,7 +10,7 @@ import { Route } from 'react-router-dom';
 
 import BoxDrive140 from '../../../illustration/BoxDrive140';
 
-import { BackButton } from '../../common/nav-button';
+import BackButton from '../../common/back-button';
 import PrimaryButton from '../../../components/primary-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import VersionsMenu from './VersionsMenu';

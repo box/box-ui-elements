@@ -62,7 +62,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 return (
                     <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
                         <PlainButton
-                            ref={ref}
+                            getDOMRef={ref}
                             className={classNames('bcs-NavButton', {
                                 'bcs-is-selected': isActiveValue,
                                 'bdl-is-disabled': isDisabled,

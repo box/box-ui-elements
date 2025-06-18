@@ -12,7 +12,7 @@ import InlineError from '../../../components/inline-error';
 import messages from './messages';
 import SidebarContent from '../SidebarContent';
 import VersionsMenu from './VersionsMenu';
-import { BackButton } from '../../common/nav-button';
+import BackButton from '../../common/back-button';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import type { BoxItemVersion } from '../../../common/types/core';
