@@ -16,7 +16,7 @@ import { BackButton } from '../../common/nav-button';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import type { BoxItemVersion } from '../../../common/types/core';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../../common/types/SidebarNavigation';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler, ViewTypeValues } from '../../common/types/SidebarNavigation';
 import './VersionsSidebar.scss';
 
 const { useCallback } = React;
@@ -29,7 +29,7 @@ type Props = {
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isLoading: boolean,
-    parentName: string,
+    parentName: ViewTypeValues,
     routerDisabled?: boolean,
     versionCount: number,
     versionLimit: number,

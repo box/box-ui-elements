@@ -14,7 +14,11 @@ import { BackButton } from '../../common/nav-button';
 import PrimaryButton from '../../../components/primary-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import VersionsMenu from './VersionsMenu';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../../common/types/SidebarNavigation';
+import type { 
+    InternalSidebarNavigation, 
+    InternalSidebarNavigationHandler,
+    ViewTypeValues,
+} from '../../common/types/SidebarNavigation';
 
 import messages from './messages';
 
@@ -27,7 +31,7 @@ type Props = {
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isLoading: boolean,
     onUpgradeClick: () => void,
-    parentName: string,
+    parentName: ViewTypeValues,
     routerDisabled?: boolean,
 };
 

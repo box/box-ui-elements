@@ -24,6 +24,7 @@ import { withAPIContext } from '../../common/api-context';
 import type { FeatureConfig } from '../../common/feature-checking';
 import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
+import type { ViewTypeValues } from '../../common/types/SidebarNavigation';
 
 type Props = {
     api: API,
@@ -40,7 +41,7 @@ type Props = {
     onVersionPreview: VersionActionCallback,
     onVersionPromote: VersionActionCallback,
     onVersionRestore: VersionActionCallback,
-    parentName: string,
+    parentName: ViewTypeValues,
     versionId?: string,
 };
 
@@ -63,7 +64,7 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         onVersionPreview: noop,
         onVersionPromote: noop,
         onVersionRestore: noop,
-        parentName: '',
+        parentName: ViewType.DETAILS,
     };
 
     api: VersionsSidebarAPI;
