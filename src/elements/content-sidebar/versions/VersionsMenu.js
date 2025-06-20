@@ -11,11 +11,14 @@ import * as util from '../../../utils/datetime';
 import messages from './messages';
 import VersionsGroup from './VersionsGroup';
 import type { BoxItemVersion } from '../../../common/types/core';
+import type { InternalSidebarNavigation } from '../../common/types/SidebarNavigation';
 import './VersionsMenu.scss';
 
 type Props = {
     fileId: string,
     intl: any,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    routerDisabled?: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,

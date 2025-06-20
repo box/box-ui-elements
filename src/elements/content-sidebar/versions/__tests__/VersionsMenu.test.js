@@ -1,10 +1,35 @@
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
-import messages from '../messages';
-import VersionsGroup from '../VersionsGroup';
+import { render, screen } from '../../../../test-utils/testing-library';
 import VersionsMenu from '../VersionsMenu';
 
-jest.unmock('react-intl');
+jest.mock('../VersionsGroup', () => {
+    const MockVersionsGroup = jest.fn(
+        ({
+            heading,
+            versions,
+            fileId,
+            versionCount,
+            versionLimit,
+            currentId,
+            routerDisabled,
+            internalSidebarNavigation,
+        }) => (
+            <div>
+                <h1>{heading}</h1>
+                <span>{versions.length} versions</span>
+                {fileId && <span data-testid="fileId">{fileId}</span>}
+                {versionCount !== undefined && <span data-testid="versionCount">{versionCount}</span>}
+                {versionLimit !== undefined && <span data-testid="versionLimit">{versionLimit}</span>}
+                {currentId && <span data-testid="currentId">{currentId}</span>}
+                {routerDisabled !== undefined && <span data-testid="routerDisabled">{String(routerDisabled)}</span>}
+                {internalSidebarNavigation && (
+                    <span data-testid="internalSidebarNavigation">{JSON.stringify(internalSidebarNavigation)}</span>
+                )}
+            </div>
+        ),
+    );
+    return MockVersionsGroup;
+});
 
 describe('elements/content-sidebar/versions/VersionsMenu', () => {
     const defaultDate = '2019-06-20T20:00:00.000Z';
@@ -17,15 +42,11 @@ describe('elements/content-sidebar/versions/VersionsMenu', () => {
         modified_by: { name: 'Test User', id: '098765' },
     };
     const getVersion = (overrides = {}) => ({ ...defaultVersion, ...overrides });
-    const getWrapper = (props = {}) =>
-        shallow(<VersionsMenu {...props} />, {
-            wrappingComponent: wrapperProps => <IntlProvider locale="en" messages={messages} {...wrapperProps} />,
-        })
-            .shallow() // <Memo .../>
-            .dive(); // <ul .../>
+    const renderComponent = (props = {}) => render(<VersionsMenu {...props} />);
     const GlobalDate = Date;
 
     beforeEach(() => {
+        jest.clearAllMocks();
         global.Date = jest.fn(date => new GlobalDate(date || defaultDate));
         global.Date.now = () => defaultDateMs;
     });
@@ -48,20 +69,51 @@ describe('elements/content-sidebar/versions/VersionsMenu', () => {
                 getVersion({ created_at: '2019-02-01T20:00:00.000Z', id: '2' }),
                 getVersion({ created_at: '2018-05-01T20:00:00.000Z', id: '1' }),
             ];
-            const wrapper = getWrapper({ versions });
-            const groups = wrapper.find(VersionsGroup);
+            renderComponent({ versions });
+            const headings = [
+                'Today',
+                'Yesterday',
+                'Tuesday',
+                'Monday',
+                'Last Week',
+                'This Month',
+                'May',
+                'February',
+                '2018',
+            ];
+            const versionCounts = [2, 1, 1, 1, 1, 1, 1, 1, 1];
 
-            expect(groups.length).toBe(9);
-            expect(groups.at(0).prop('versions').length).toBe(2); // Multiple versions collapse into a group
-            expect(groups.at(0).prop('heading')).toBe('Today');
-            expect(groups.at(1).prop('heading')).toBe('Yesterday');
-            expect(groups.at(2).prop('heading')).toBe('Tuesday');
-            expect(groups.at(3).prop('heading')).toBe('Monday');
-            expect(groups.at(4).prop('heading')).toBe('Last Week');
-            expect(groups.at(5).prop('heading')).toBe('This Month');
-            expect(groups.at(6).prop('heading')).toBe('May');
-            expect(groups.at(7).prop('heading')).toBe('February');
-            expect(groups.at(8).prop('heading')).toBe('2018');
+            expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(9);
+
+            headings.forEach((heading, index) => {
+                const headingElement = screen.getByText(heading);
+                const groupContainer = headingElement.parentElement;
+
+                expect(groupContainer).toHaveTextContent(`${versionCounts[index]} versions`);
+            });
+        });
+
+        test('should pass down other props to VersionsGroup', () => {
+            const versions = [getVersion({ id: '10' })];
+            const props = {
+                versions,
+                fileId: 'f_123',
+                versionCount: 10,
+                versionLimit: 100,
+                currentId: '10',
+                routerDisabled: false,
+                internalSidebarNavigation: { open: false, sidebar: 'activity' },
+            };
+            renderComponent(props);
+
+            expect(screen.getByTestId('fileId')).toHaveTextContent('f_123');
+            expect(screen.getByTestId('versionCount')).toHaveTextContent('10');
+            expect(screen.getByTestId('versionLimit')).toHaveTextContent('100');
+            expect(screen.getByTestId('currentId')).toHaveTextContent('10');
+            expect(screen.getByTestId('routerDisabled')).toHaveTextContent('false');
+            expect(screen.getByTestId('internalSidebarNavigation')).toHaveTextContent(
+                JSON.stringify(props.internalSidebarNavigation),
+            );
         });
     });
 });
