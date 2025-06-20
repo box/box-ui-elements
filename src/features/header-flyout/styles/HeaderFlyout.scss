@@ -12,6 +12,7 @@
 .header-flyout-overlay {
     width: $flyout-list-width;
     height: $flyout-list-height;
+    animation: open-flyout-animation 0.25s cubic-bezier(0.32, 0, 0.33, 1.3);
 
     .overlay {
         @include bdl-Overlay-container;
@@ -24,6 +25,18 @@
         padding-bottom: $flyout-header-spacer;
         font-size: $flyout-title-font-size;
         line-height: $flyout-title-line-height;
+    }
+}
+
+@keyframes open-flyout-animation {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 
