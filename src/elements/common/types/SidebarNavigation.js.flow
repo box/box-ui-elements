@@ -1,5 +1,8 @@
 /* @flow */
 
+// flow version is simplified compared to Type Script due to difficult to resolve problems with Union Types
+// Type Script works better with Union Types
+
 export const ViewType = Object.freeze({
     BOXAI: 'boxai',
     SKILLS: 'skills',
@@ -18,30 +21,13 @@ export const FeedEntryType = Object.freeze({
 export type ViewTypeValues = $Values<typeof ViewType>;
 export type FeedEntryTypeValues = $Values<typeof FeedEntryType>;
 
-type VersionSidebarView = {
-    sidebar: 'activity' | 'details',
-    versionId: string,
+export type SidebarNavigation = {
+    sidebar: ViewTypeValues,
+    versionId?: string,
+    activeFeedEntryType?: FeedEntryTypeValues,
+    activeFeedEntryId?: string,
+    fileVersionId?: string,
 };
-
-export type ActivityAnnotationsSidebarView = {
-    sidebar: 'activity',
-    activeFeedEntryType: 'annotations',
-    fileVersionId: string,
-    activeFeedEntryId: string,
-};
-type ActivityCommentsSidebarView = {
-    sidebar: 'activity',
-    activeFeedEntryType: 'comments' | 'tasks',
-    activeFeedEntryId: string,
-};
-
-export type SidebarNavigation =
-    | {|
-          sidebar: ViewTypeValues,
-      |}
-    | VersionSidebarView
-    | ActivityCommentsSidebarView
-    | ActivityAnnotationsSidebarView;
 
 export type InternalSidebarNavigation = SidebarNavigation & {
     open: boolean,
