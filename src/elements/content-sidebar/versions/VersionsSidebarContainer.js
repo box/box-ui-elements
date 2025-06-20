@@ -24,7 +24,7 @@ import { withAPIContext } from '../../common/api-context';
 import type { FeatureConfig } from '../../common/feature-checking';
 import type { VersionActionCallback, VersionChangeCallback, SidebarLoadCallback } from './flowTypes';
 import type { BoxItemVersion, BoxItem, FileVersions } from '../../../common/types/core';
-import type { ViewTypeValues } from '../../common/types/SidebarNavigation';
+import { ViewType, type ViewTypeValues } from '../../common/types/SidebarNavigation';
 
 type Props = {
     api: API,

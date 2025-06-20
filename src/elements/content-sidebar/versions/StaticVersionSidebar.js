@@ -14,8 +14,8 @@ import { BackButton } from '../../common/nav-button';
 import PrimaryButton from '../../../components/primary-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import VersionsMenu from './VersionsMenu';
-import type { 
-    InternalSidebarNavigation, 
+import type {
+    InternalSidebarNavigation,
     InternalSidebarNavigationHandler,
     ViewTypeValues,
 } from '../../common/types/SidebarNavigation';
