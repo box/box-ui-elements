@@ -30,7 +30,7 @@ export type SidebarNavigation = {
 };
 
 export type InternalSidebarNavigation = SidebarNavigation & {
-    open: boolean,
+    open?: boolean,
 };
 
 export type SidebarNavigationHandler = (sidebar: SidebarNavigation, replace?: boolean) => void;

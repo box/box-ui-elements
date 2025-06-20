@@ -16,75 +16,109 @@ import { BackButton } from '../../common/nav-button';
 import { DEFAULT_FETCH_END } from '../../../constants';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import type { BoxItemVersion } from '../../../common/types/core';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../../common/types/SidebarNavigation';
 import './VersionsSidebar.scss';
+
+const { useCallback } = React;
 
 const MAX_VERSIONS = DEFAULT_FETCH_END;
 
 type Props = {
     error?: MessageDescriptor,
     fileId: string,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isLoading: boolean,
     parentName: string,
+    routerDisabled?: boolean,
     versionCount: number,
     versionLimit: number,
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ error, isLoading, parentName, versions, ...rest }: Props) => {
+const VersionsSidebar = ({ 
+    error, 
+    internalSidebarNavigation,
+    internalSidebarNavigationHandler,
+    isLoading, 
+    parentName, 
+    routerDisabled,
+    versions, 
+    ...rest 
+}: Props) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
     const showEmpty = !isLoading && !showVersions;
     const showError = !!error;
 
+    const handleBackClick = useCallback((history?: any) => {
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            internalSidebarNavigationHandler({ sidebar: parentName });
+        } else if (!routerDisabled && history) {
+            history.push(`/${parentName}`);
+        }
+    }, [parentName, routerDisabled, internalSidebarNavigationHandler]);
+
+    const renderContent = (history?: any) => (
+        <SidebarContent
+            className="bcs-Versions"
+            data-resin-component="preview"
+            data-resin-feature="versions"
+            title={
+                <>
+                    <BackButton data-resin-target="back" onClick={() => handleBackClick(history)} />
+                    <FormattedMessage {...messages.versionsTitle} />
+                </>
+            }
+        >
+            <LoadingIndicatorWrapper
+                className="bcs-Versions-content"
+                crawlerPosition="top"
+                isLoading={isLoading}
+            >
+                {showError && (
+                    <InlineError title={<FormattedMessage {...messages.versionServerError} />}>
+                        <FormattedMessage {...error} />
+                    </InlineError>
+                )}
+
+                {showEmpty && (
+                    <div className="bcs-Versions-empty">
+                        <FormattedMessage {...messages.versionsEmpty} />
+                    </div>
+                )}
+
+                {showVersions && (
+                    <div className="bcs-Versions-menu" data-testid="bcs-Versions-menu">
+                        <VersionsMenu 
+                            versions={versions} 
+                            routerDisabled={routerDisabled}
+                            internalSidebarNavigation={internalSidebarNavigation}
+                            {...rest} 
+                        />
+                    </div>
+                )}
+                {showLimit && (
+                    <div className="bcs-Versions-maxEntries" data-testid="max-versions">
+                        <FormattedMessage
+                            {...messages.versionMaxEntries}
+                            values={{
+                                maxVersions: MAX_VERSIONS,
+                            }}
+                        />
+                    </div>
+                )}
+            </LoadingIndicatorWrapper>
+        </SidebarContent>
+    );
+
+    if (routerDisabled) {
+        return renderContent();
+    }
+
     return (
         <Route>
-            {({ history }) => (
-                <SidebarContent
-                    className="bcs-Versions"
-                    data-resin-component="preview"
-                    data-resin-feature="versions"
-                    title={
-                        <>
-                            <BackButton data-resin-target="back" onClick={() => history.push(`/${parentName}`)} />
-                            <FormattedMessage {...messages.versionsTitle} />
-                        </>
-                    }
-                >
-                    <LoadingIndicatorWrapper
-                        className="bcs-Versions-content"
-                        crawlerPosition="top"
-                        isLoading={isLoading}
-                    >
-                        {showError && (
-                            <InlineError title={<FormattedMessage {...messages.versionServerError} />}>
-                                <FormattedMessage {...error} />
-                            </InlineError>
-                        )}
-
-                        {showEmpty && (
-                            <div className="bcs-Versions-empty">
-                                <FormattedMessage {...messages.versionsEmpty} />
-                            </div>
-                        )}
-
-                        {showVersions && (
-                            <div className="bcs-Versions-menu" data-testid="bcs-Versions-menu">
-                                <VersionsMenu versions={versions} {...rest} />
-                            </div>
-                        )}
-                        {showLimit && (
-                            <div className="bcs-Versions-maxEntries" data-testid="max-versions">
-                                <FormattedMessage
-                                    {...messages.versionMaxEntries}
-                                    values={{
-                                        maxVersions: MAX_VERSIONS,
-                                    }}
-                                />
-                            </div>
-                        )}
-                    </LoadingIndicatorWrapper>
-                </SidebarContent>
-            )}
+            {({ history }) => renderContent(history)}
         </Route>
     );
 };

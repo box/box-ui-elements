@@ -14,18 +14,31 @@ import { BackButton } from '../../common/nav-button';
 import PrimaryButton from '../../../components/primary-button';
 import { LoadingIndicatorWrapper } from '../../../components/loading-indicator';
 import VersionsMenu from './VersionsMenu';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../../common/types/SidebarNavigation';
 
 import messages from './messages';
 
 import './StaticVersionsSidebar.scss';
 
+const { useCallback } = React;
+
 type Props = {
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isLoading: boolean,
     onUpgradeClick: () => void,
     parentName: string,
+    routerDisabled?: boolean,
 };
 
-const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props): React.Node => {
+const StaticVersionsSidebar = ({
+    internalSidebarNavigation,
+    internalSidebarNavigationHandler,
+    isLoading,
+    onUpgradeClick,
+    parentName,
+    routerDisabled,
+}: Props): React.Node => {
     const versionTimestamp = new Date();
     versionTimestamp.setDate(versionTimestamp.getDate() - 1);
 
@@ -45,57 +58,77 @@ const StaticVersionsSidebar = ({ isLoading, onUpgradeClick, parentName }: Props)
         };
     });
 
-    return (
-        <Route>
-            {({ history }) => (
-                <div
-                    className="bcs-StaticVersionSidebar"
-                    role="tabpanel"
-                    data-resin-component="preview"
-                    data-resin-feature="versions"
+    const handleBackClick = useCallback((history?: any) => {
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            internalSidebarNavigationHandler({ sidebar: parentName });
+        } else if (!routerDisabled && history) {
+            history.push(`/${parentName}`);
+        }
+    }, [parentName, routerDisabled, internalSidebarNavigationHandler]);
+
+    const renderContent = (history?: any) => (
+        <div
+            className="bcs-StaticVersionSidebar"
+            role="tabpanel"
+            data-resin-component="preview"
+            data-resin-feature="versions"
+        >
+            <div className="bcs-StaticVersionSidebar-header">
+                <h3 className="bcs-StaticVersionSidebar-title">
+                    <>
+                        <BackButton 
+                            data-resin-target="back" 
+                            onClick={() => handleBackClick(history)} 
+                        />
+                        <FormattedMessage {...messages.versionsTitle} />
+                    </>
+                </h3>
+            </div>
+
+            <div className="bcs-StaticVersionSidebar-content-wrapper">
+                <LoadingIndicatorWrapper
+                    className="bcs-StaticVersionSidebar-content"
+                    crawlerPosition="top"
+                    isLoading={isLoading}
                 >
-                    <div className="bcs-StaticVersionSidebar-header">
-                        <h3 className="bcs-StaticVersionSidebar-title">
-                            <>
-                                <BackButton data-resin-target="back" onClick={() => history.push(`/${parentName}`)} />
-                                <FormattedMessage {...messages.versionsTitle} />
-                            </>
-                        </h3>
-                    </div>
+                    <VersionsMenu
+                        versions={versions}
+                        fileId="1"
+                        versionCount={3}
+                        versionLimit={3}
+                        routerDisabled={routerDisabled}
+                        internalSidebarNavigation={internalSidebarNavigation}
+                    />
+                </LoadingIndicatorWrapper>
+            </div>
 
-                    <div className="bcs-StaticVersionSidebar-content-wrapper">
-                        <LoadingIndicatorWrapper
-                            className="bcs-StaticVersionSidebar-content"
-                            crawlerPosition="top"
-                            isLoading={isLoading}
-                        >
-                            <VersionsMenu versions={versions} fileId="1" versionCount={3} versionLimit={3} />
-                        </LoadingIndicatorWrapper>
-                    </div>
-
-                    <div className="bcs-StaticVersionSidebar-upsell-wrapper">
-                        <div className="bcs-StaticVersionSidebar-upsell">
-                            <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />
-                            <p className="bcs-StaticVersionSidebar-upsell-header">
-                                <FormattedMessage {...messages.versionUpgradeLink} />
-                            </p>
-                            <p>
-                                <FormattedMessage {...messages.versionUpsell} />
-                            </p>
-                            <PrimaryButton
-                                className="bcs-StaticVersionSidebar-upsell-button"
-                                data-resin-target="versioning_error_upgrade_cta"
-                                onClick={onUpgradeClick}
-                                type="button"
-                            >
-                                <FormattedMessage {...messages.upgradeButton} />
-                            </PrimaryButton>
-                        </div>
-                    </div>
+            <div className="bcs-StaticVersionSidebar-upsell-wrapper">
+                <div className="bcs-StaticVersionSidebar-upsell">
+                    <BoxDrive140 className="bcs-StaticVersionSidebar-upsell-icon" />
+                    <p className="bcs-StaticVersionSidebar-upsell-header">
+                        <FormattedMessage {...messages.versionUpgradeLink} />
+                    </p>
+                    <p>
+                        <FormattedMessage {...messages.versionUpsell} />
+                    </p>
+                    <PrimaryButton
+                        className="bcs-StaticVersionSidebar-upsell-button"
+                        data-resin-target="versioning_error_upgrade_cta"
+                        onClick={onUpgradeClick}
+                        type="button"
+                    >
+                        <FormattedMessage {...messages.upgradeButton} />
+                    </PrimaryButton>
                 </div>
-            )}
-        </Route>
+            </div>
+        </div>
     );
+
+    if (routerDisabled) {
+        return renderContent();
+    }
+
+    return <Route>{({ history }) => renderContent(history)}</Route>;
 };
 
 export default StaticVersionsSidebar;
