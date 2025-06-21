@@ -1,38 +1,40 @@
+pull_request_rules:
+  - name: Automatic merge queue
+    conditions:
+      - -draft
+      - base = master
+    actions:
+      queue:
+
 queue_rules:
   - name: Automatic boxmoji merge
     queue_conditions:
-      - author=boxmoji
-      - base=master
-      - files~=^i18n/
-      - status-success="Validate"
-      - status-success=lint_test_build
-      - title~=^(fix)\(i18n\)?:\supdate translations$
+      - author = boxmoji
+      - title ~= ^(fix)\(i18n\)?:\supdate translations$
+      - files ~= ^i18n/
+      - label != do-not-merge
+      - status-success = license/cla
+      - status-success = lint_pull_request
+      - status-success = lint_test_build
     merge_conditions:
-      - status-success="Validate"
-      - status-success=lint_test_build
+      - status-success = lint_pull_request
+      - status-success = lint_test_build
     merge_method: squash
 
   - name: Automatic strict merge
     queue_conditions:
-      - base=master
-      - "#approved-reviews-by>=2"
-      - "#changes-requested-reviews-by=0"
-      - "#review-requested=0"
-      - "#review-threads-unresolved=0"
-      - status-success="Validate"
-      - status-success=license/cla
-      - status-success=lint_test_build
-      - label=ready-to-merge
-      - label!=do-not-merge
-      - title~=^(build|ci|chore|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?:\s.+$
+      - title ~= ^(build|ci|chore|docs|feat|fix|perf|refactor|revert|style|test)(\([^)]+\))?:\s.+$
+      - label = ready-to-merge
+      - label != do-not-merge
+      - status-success = license/cla
+      - status-success = lint_pull_request
+      - status-success = lint_test_build
+      - branch-protection-review-decision = APPROVED
+      - "#approved-reviews-by >= 2"
+      - "#changes-requested-reviews-by = 0"
+      - "#review-threads-unresolved = 0"
     merge_conditions:
-      - status-success="Validate"
-      - status-success=license/cla
-      - status-success=lint_test_build
+      - status-success = license/cla
+      - status-success = lint_pull_request
+      - status-success = lint_test_build
     merge_method: squash
-
-pull_request_rules:
-  - name: Automatic merge queue
-    conditions: []
-    actions:
-      queue:
