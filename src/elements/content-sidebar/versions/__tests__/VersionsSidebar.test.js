@@ -134,6 +134,7 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
     });
 
     test('should navigate to parent name when back button is clicked', async () => {
+        const mockNavigationHandler = jest.fn();
         let currentLocation;
 
         const TestWrapper = ({ children }) => (
@@ -150,7 +151,11 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
 
         render(
             <TestWrapper>
-                <VersionsSidebar {...defaultProps} parentName="activity" />
+                <VersionsSidebar 
+                    {...defaultProps} 
+                    parentName="activity"
+                    internalSidebarNavigationHandler={mockNavigationHandler}
+                />
             </TestWrapper>,
         );
 
@@ -161,5 +166,49 @@ describe('elements/content-sidebar/versions/VersionsSidebar', () => {
         await user.click(backButton);
 
         expect(currentLocation.pathname).toBe('/activity');
+        expect(mockNavigationHandler).not.toHaveBeenCalled();
+    });
+
+    describe('when routerDisabled is true', () => {
+        const renderComponentWithoutRouter = (props = {}) => {
+            return render(<VersionsSidebar {...defaultProps} routerDisabled {...props} />);
+        };
+
+        test('should render without React Router', () => {
+            renderComponentWithoutRouter();
+
+            expect(screen.getByText('Version History')).toBeInTheDocument();
+            expect(screen.getByTestId('back-button')).toBeInTheDocument();
+            expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+        });
+
+        test('should use internalSidebarNavigationHandler when BackButton is clicked', async () => {
+            const mockNavigationHandler = jest.fn();
+            const user = userEvent();
+            
+            renderComponentWithoutRouter({
+                internalSidebarNavigationHandler: mockNavigationHandler,
+                parentName: 'details',
+            });
+
+            const backButton = screen.getByTestId('back-button');
+            await user.click(backButton);
+
+            expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
+            expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: 'details' });
+        });
+
+        test('should pass props to VersionsMenu when router is disabled', () => {
+            const mockInternalSidebarNavigation = {
+                sidebar: 'activity',
+                open: true,
+            };
+
+            renderComponentWithoutRouter({
+                internalSidebarNavigation: mockInternalSidebarNavigation,
+            });
+
+            expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+        });
     });
 });

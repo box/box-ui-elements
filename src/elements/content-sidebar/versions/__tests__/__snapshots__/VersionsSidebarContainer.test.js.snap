@@ -12,7 +12,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
   isLoading={false}
   isWatermarked={false}
   onUpgradeClick={[Function]}
-  parentName=""
+  parentName="details"
   versionCount={0}
   versionLimit={Infinity}
   versions={[]}
@@ -36,7 +36,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
   onPreview={[Function]}
   onPromote={[Function]}
   onRestore={[Function]}
-  parentName=""
+  parentName="details"
   versionCount={0}
   versionLimit={Infinity}
   versions={[]}
