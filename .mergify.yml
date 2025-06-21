@@ -36,3 +36,10 @@ pull_request_rules:
     conditions: []
     actions:
       queue:
+priority_rules:
+  - name: priority for queue `Automatic boxmoji merge`
+    conditions:
+      - author=boxmoji
+      - files~=^i18n/
+      - title~=^(fix)\(i18n\)?:\supdate translations$
+    priority: 2250
