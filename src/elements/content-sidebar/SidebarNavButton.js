@@ -62,6 +62,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                 return (
                     <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
                         <Button
+                            accessibleWhenDisabled={true}
                             aria-controls={`${id}-content`}
                             aria-label={tooltip}
                             aria-selected={isActiveValue}

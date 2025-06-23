@@ -32,7 +32,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         expect(button).toHaveAttribute('tabindex', '-1');
         expect(button).toHaveAttribute('type', 'button');
         expect(button).toHaveAttribute('id', 'activity');
-        expect(button).toHaveClass('btn-plain', 'bcs-NavButton');
+        expect(button).toHaveClass('bcs-NavButton');
         expect(button).not.toHaveClass('bcs-is-selected');
         expect(button).toHaveTextContent('test button');
     });
@@ -153,7 +153,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
         },
     );
 
-    test('should forward ref to the PlainButton', () => {
+    test('should forward ref to the Button', () => {
         const ref = React.createRef();
 
         renderWrapper({

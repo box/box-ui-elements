@@ -23,6 +23,11 @@
         }
     }
 
+    // Style disabled buttons with proper visual feedback
+    &[aria-disabled="true"] {
+        cursor: default;
+    }
+
     &.bcs-is-selected {
         &::before {
             background-color: $blue;
