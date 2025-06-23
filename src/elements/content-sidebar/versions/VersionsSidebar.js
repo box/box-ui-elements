@@ -36,8 +36,23 @@ type Props = {
     versions: Array<BoxItemVersion>,
 };
 
-const VersionsSidebar = ({ 
+type VersionsContentProps = {
+    error?: MessageDescriptor,
+    fileId: string,
+    history?: any,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
+    isLoading: boolean,
+    parentName: ViewTypeValues,
+    routerDisabled?: boolean,
+    versionCount: number,
+    versionLimit: number,
+    versions: Array<BoxItemVersion>,
+};
+
+const VersionsContent = ({ 
     error, 
+    history,
     internalSidebarNavigation,
     internalSidebarNavigationHandler,
     isLoading, 
@@ -45,28 +60,28 @@ const VersionsSidebar = ({
     routerDisabled,
     versions, 
     ...rest 
-}: Props) => {
+}: VersionsContentProps) => {
     const showLimit = versions.length >= MAX_VERSIONS;
     const showVersions = !!versions.length;
     const showEmpty = !isLoading && !showVersions;
     const showError = !!error;
 
-    const handleBackClick = useCallback((history?: any) => {
+    const handleBackClick = useCallback(() => {
         if (routerDisabled && internalSidebarNavigationHandler) {
             internalSidebarNavigationHandler({ sidebar: parentName });
         } else if (!routerDisabled && history) {
             history.push(`/${parentName}`);
         }
-    }, [parentName, routerDisabled, internalSidebarNavigationHandler]);
+    }, [parentName, routerDisabled, internalSidebarNavigationHandler, history]);
 
-    const renderContent = (history?: any) => (
+    return (
         <SidebarContent
             className="bcs-Versions"
             data-resin-component="preview"
             data-resin-feature="versions"
             title={
                 <>
-                    <BackButton data-resin-target="back" onClick={() => handleBackClick(history)} />
+                    <BackButton data-resin-target="back" onClick={handleBackClick} />
                     <FormattedMessage {...messages.versionsTitle} />
                 </>
             }
@@ -111,14 +126,18 @@ const VersionsSidebar = ({
             </LoadingIndicatorWrapper>
         </SidebarContent>
     );
+};
+
+const VersionsSidebar = (props: Props) => {
+    const { routerDisabled } = props;
 
     if (routerDisabled) {
-        return renderContent();
+        return <VersionsContent {...props} />;
     }
 
     return (
         <Route>
-            {({ history }) => renderContent(history)}
+            {({ history }) => <VersionsContent {...props} history={history} />}
         </Route>
     );
 };
