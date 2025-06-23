@@ -35,14 +35,25 @@ type Props = {
     routerDisabled?: boolean,
 };
 
-const StaticVersionsSidebar = ({
+type StaticVersionsContentProps = {
+    history?: any,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
+    isLoading: boolean,
+    onUpgradeClick: () => void,
+    parentName: ViewTypeValues,
+    routerDisabled?: boolean,
+};
+
+const StaticVersionsContent = ({
+    history,
     internalSidebarNavigation,
     internalSidebarNavigationHandler,
     isLoading,
     onUpgradeClick,
     parentName,
     routerDisabled,
-}: Props): React.Node => {
+}: StaticVersionsContentProps): React.Node => {
     const versionTimestamp = new Date();
     versionTimestamp.setDate(versionTimestamp.getDate() - 1);
 
@@ -62,15 +73,15 @@ const StaticVersionsSidebar = ({
         };
     });
 
-    const handleBackClick = useCallback((history?: any) => {
+    const handleBackClick = useCallback(() => {
         if (routerDisabled && internalSidebarNavigationHandler) {
             internalSidebarNavigationHandler({ sidebar: parentName });
         } else if (!routerDisabled && history) {
             history.push(`/${parentName}`);
         }
-    }, [parentName, routerDisabled, internalSidebarNavigationHandler]);
+    }, [parentName, routerDisabled, internalSidebarNavigationHandler, history]);
 
-    const renderContent = (history?: any) => (
+    return (
         <div
             className="bcs-StaticVersionSidebar"
             role="tabpanel"
@@ -82,7 +93,7 @@ const StaticVersionsSidebar = ({
                     <>
                         <BackButton 
                             data-resin-target="back" 
-                            onClick={() => handleBackClick(history)} 
+                            onClick={handleBackClick} 
                         />
                         <FormattedMessage {...messages.versionsTitle} />
                     </>
@@ -127,12 +138,20 @@ const StaticVersionsSidebar = ({
             </div>
         </div>
     );
+};
+
+const StaticVersionsSidebar = (props: Props): React.Node => {
+    const { routerDisabled } = props;
 
     if (routerDisabled) {
-        return renderContent();
+        return <StaticVersionsContent {...props} />;
     }
 
-    return <Route>{({ history }) => renderContent(history)}</Route>;
+    return (
+        <Route>
+            {({ history }) => <StaticVersionsContent {...props} history={history} />}
+        </Route>
+    );
 };
 
 export default StaticVersionsSidebar;
