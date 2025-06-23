@@ -12,7 +12,7 @@
 .header-flyout-overlay {
     width: $flyout-list-width;
     height: $flyout-list-height;
-    animation: bdl-open-flyout-animation 0.25s cubic-bezier(0.32, 0, 0.33, 1.3);
+    animation: bdl-open-flyout-animation 0.3s cubic-bezier(0.32, 0, 0.33, 1.3);
     animation-fill-mode: both;
     transform-origin: top right;
 
@@ -33,7 +33,7 @@
 @keyframes bdl-open-flyout-animation {
     from {
         opacity: 0;
-        transform: translateY(-10px) scale(0.98);
+        transform: translateY(-10px) scale(0.95);
     }
 
     to {
