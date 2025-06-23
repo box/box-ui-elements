@@ -8,7 +8,7 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
-import PlainButton from '../../components/plain-button';
+import { Button } from '@box/blueprint-web';
 import Tooltip from '../../components/tooltip/Tooltip';
 import { isLeftClick } from '../../utils/dom';
 import './SidebarNavButton.scss';
@@ -61,7 +61,7 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
 
                 return (
                     <Tooltip position="middle-left" text={tooltip} isTabbable={false}>
-                        <PlainButton
+                        <Button
                             aria-controls={`${id}-content`}
                             aria-label={tooltip}
                             aria-selected={isActiveValue}
@@ -71,16 +71,17 @@ const SidebarNavButton = React.forwardRef<Props, React.Ref<any>>((props: Props, 
                             })}
                             data-resin-target={dataResinTarget}
                             data-testid={dataTestId}
-                            getDOMRef={ref}
+                            ref={ref}
                             id={id}
-                            isDisabled={isDisabled}
+                            disabled={isDisabled}
                             onClick={handleNavButtonClick}
                             role="tab"
                             tabIndex={isActiveValue ? '0' : '-1'}
                             type="button"
+                            variant="tertiary"
                         >
                             {children}
-                        </PlainButton>
+                        </Button>
                     </Tooltip>
                 );
             }}
