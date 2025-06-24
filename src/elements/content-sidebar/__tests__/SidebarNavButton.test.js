@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { MemoryRouter, Router } from 'react-router-dom';
+// Using fireEvent for all click interactions instead of userEvent because 
+// userEvent.pointer with right-click doesn't reliably trigger onClick handlers
 import { render, screen, fireEvent } from '../../../test-utils/testing-library';
 import SidebarNavButton from '../SidebarNavButton';
 
@@ -197,7 +199,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             renderWithRouter({ onClick: mockOnClick }, mockHistoryWithDifferentPath);
 
             const button = screen.getByText('Activity');
-            fireEvent.click(button, { button: 0 });
+            fireEvent.click(button);
 
             expect(mockOnClick).toBeCalledWith('activity');
             expect(mockHistoryPush).toBeCalledWith({
@@ -213,7 +215,7 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
             renderWithRouter({ onClick: mockOnClick });
 
             const button = screen.getByText('Activity');
-            fireEvent.click(button, { button: 0 });
+            fireEvent.click(button);
 
             expect(mockOnClick).toBeCalledWith('activity');
             expect(mockHistoryReplace).toBeCalledWith({
@@ -243,13 +245,163 @@ describe('elements/content-sidebar/SidebarNavButton', () => {
 
             const button = screen.getByText('Activity');
 
-            // Prevent default on the button click
             button.addEventListener('click', e => e.preventDefault());
             fireEvent.click(button, { button: 0 });
 
             expect(mockOnClick).toBeCalledWith('activity');
             expect(mockHistoryPush).not.toBeCalled();
             expect(mockHistoryReplace).not.toBeCalled();
+        });
+    });
+});
+
+describe('elements/content-sidebar/SidebarNavButton - Router Disabled', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    const defaultProps = {
+        routerDisabled: true,
+        tooltip: 'foo',
+        sidebarView: 'activity',
+        internalSidebarNavigation: { sidebar: 'skills' },
+    };
+
+    const renderWithoutRouter = ({ children = 'test button', ref, ...props }) =>
+        render(
+            <SidebarNavButton ref={ref} {...defaultProps} {...props}>
+                {children}
+            </SidebarNavButton>,
+        );
+
+    test('should render nav button properly', () => {
+        renderWithoutRouter({});
+        const button = screen.getByRole('tab');
+
+        expect(button).toHaveAttribute('aria-label', 'foo');
+        expect(button).toHaveAttribute('aria-selected', 'false');
+        expect(button).toHaveAttribute('aria-controls', 'activity-content');
+        expect(button).toHaveAttribute('role', 'tab');
+        expect(button).toHaveAttribute('tabindex', '-1');
+        expect(button).toHaveAttribute('type', 'button');
+        expect(button).toHaveAttribute('id', 'activity');
+        expect(button).toHaveClass('bcs-NavButton');
+        expect(button).not.toHaveClass('bcs-is-selected');
+        expect(button).toHaveTextContent('test button');
+    });
+
+    test.each`
+        internalSidebarNavigation                        | expected
+        ${null}                                         | ${false}
+        ${undefined}                                    | ${false}
+        ${{ sidebar: 'skills' }}                        | ${false}
+        ${{ sidebar: 'activity' }}                      | ${true}
+        ${{ sidebar: 'activity', versionId: '123' }}    | ${true}
+    `('should reflect active state ($expected) correctly based on internal navigation', ({ expected, internalSidebarNavigation }) => {
+        renderWithoutRouter({
+            internalSidebarNavigation,
+            isOpen: true,
+        });
+        const button = screen.getByRole('tab');
+
+        if (expected) {
+            expect(button).toHaveClass('bcs-is-selected');
+            expect(button).toHaveAttribute('aria-selected', 'true');
+            expect(button).toHaveAttribute('tabindex', '0');
+        } else {
+            expect(button).not.toHaveClass('bcs-is-selected');
+            expect(button).toHaveAttribute('aria-selected', 'false');
+            expect(button).toHaveAttribute('tabindex', '-1');
+        }
+    });
+
+    test('should call onClick with sidebarView when clicked', () => {
+        const mockOnClick = jest.fn();
+        const mockSidebarView = 'activity';
+
+        renderWithoutRouter({
+            onClick: mockOnClick,
+            sidebarView: mockSidebarView,
+        });
+        const button = screen.getByRole('tab');
+
+        fireEvent.click(button);
+        expect(mockOnClick).toBeCalledWith(mockSidebarView);
+    });
+
+    describe('navigation on click', () => {
+        const mockInternalSidebarNavigationHandler = jest.fn();
+
+        test('calls onClick handler and internalSidebarNavigationHandler with replace=false when not exact match', () => {
+            const mockOnClick = jest.fn();
+
+            renderWithoutRouter({
+                onClick: mockOnClick,
+                internalSidebarNavigation: { sidebar: 'activity', versionId: '123' },
+                internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
+            });
+
+            const button = screen.getByRole('tab');
+            fireEvent.click(button);
+
+            expect(mockOnClick).toBeCalledWith('activity');
+            expect(mockInternalSidebarNavigationHandler).toBeCalledWith({
+                sidebar: 'activity',
+                open: true,
+            }, false);
+        });
+
+        test('calls internalSidebarNavigationHandler with replace=true when exact match', () => {
+            const mockOnClick = jest.fn();
+
+            renderWithoutRouter({
+                onClick: mockOnClick,
+                internalSidebarNavigation: { sidebar: 'activity' },
+                internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
+            });
+
+            const button = screen.getByRole('tab');
+            fireEvent.click(button);
+
+            expect(mockOnClick).toBeCalledWith('activity');
+            expect(mockInternalSidebarNavigationHandler).toBeCalledWith({
+                sidebar: 'activity',
+                open: true,
+            }, true);
+        });
+
+        test('does not call internalSidebarNavigationHandler on right click', () => {
+            const mockOnClick = jest.fn();
+
+            renderWithoutRouter({
+                onClick: mockOnClick,
+                internalSidebarNavigation: { sidebar: 'activity' },
+                internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
+            });
+
+            const button = screen.getByRole('tab');
+            fireEvent.click(button, { button: 1 });
+
+            expect(mockOnClick).toBeCalledWith('activity');
+            expect(mockInternalSidebarNavigationHandler).not.toBeCalled();
+        });
+
+        test('does not call internalSidebarNavigationHandler on prevented event', () => {
+            const mockOnClick = jest.fn();
+
+            renderWithoutRouter({
+                onClick: mockOnClick,
+                internalSidebarNavigation: { sidebar: 'activity' },
+                internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
+            });
+
+            const button = screen.getByRole('tab');
+
+            button.addEventListener('click', e => e.preventDefault());
+            fireEvent.click(button, { button: 0 });
+
+            expect(mockOnClick).toBeCalledWith('activity');
+            expect(mockInternalSidebarNavigationHandler).not.toBeCalled();
         });
     });
 });
