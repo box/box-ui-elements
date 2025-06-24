@@ -100,7 +100,8 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         expect(backButton).toHaveAttribute('data-resin-target', 'back');
     });
 
-    test('should navigate when BackButton is clicked', async () => {
+    test('should navigate when BackButton is clicked and not use internal handler', async () => {
+        const mockNavigationHandler = jest.fn();
         let currentLocation;
 
         const TestWrapper = ({ children }) => (
@@ -117,7 +118,11 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
 
         render(
             <TestWrapper>
-                <StaticVersionSidebar {...defaultProps} parentName="details" />
+                <StaticVersionSidebar 
+                    {...defaultProps} 
+                    parentName="details"
+                    internalSidebarNavigationHandler={mockNavigationHandler}
+                />
             </TestWrapper>,
         );
 
@@ -127,7 +132,10 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         const user = userEvent();
         await user.click(backButton);
 
+        // Should use router navigation
         expect(currentLocation.pathname).toBe('/details');
+        // Should not use internal handler when router is enabled
+        expect(mockNavigationHandler).not.toHaveBeenCalled();
     });
 
     test('should pass loading state to LoadingIndicatorWrapper', () => {
@@ -166,4 +174,50 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         expect(upgradeButton).toHaveAttribute('type', 'button');
         expect(upgradeButton).toHaveTextContent('Upgrade');
     });
+
+    describe('when routerDisabled is true', () => {
+        const renderComponentWithoutRouter = (props = {}) => {
+            return render(<StaticVersionSidebar {...defaultProps} routerDisabled {...props} />);
+        };
+
+        test('should render without React Router', () => {
+            renderComponentWithoutRouter();
+
+            expect(screen.getByRole('tabpanel')).toBeInTheDocument();
+            expect(screen.getByTestId('back-button')).toBeInTheDocument();
+            expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+        });
+
+        test('should use internalSidebarNavigationHandler when BackButton is clicked', async () => {
+            const mockNavigationHandler = jest.fn();
+            const user = userEvent();
+            
+            renderComponentWithoutRouter({
+                internalSidebarNavigationHandler: mockNavigationHandler,
+                parentName: 'details',
+            });
+
+            const backButton = screen.getByTestId('back-button');
+            await user.click(backButton);
+
+            expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
+            expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: 'details' });
+        });
+
+        test('should pass props to VersionsMenu when router is disabled', () => {
+            const mockInternalSidebarNavigation = {
+                sidebar: 'activity',
+                open: true,
+            };
+
+            renderComponentWithoutRouter({
+                internalSidebarNavigation: mockInternalSidebarNavigation,
+            });
+
+            // Verify VersionsMenu is rendered (props are passed but not visible in mock)
+            expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
+        });
+    });
+
+
 });
