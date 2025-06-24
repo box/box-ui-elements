@@ -3,13 +3,11 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import StaticVersionSidebar from '../StaticVersionSidebar';
 
-jest.mock('../../../common/nav-button', () => ({
-    BackButton: ({ onClick, 'data-resin-target': dataResinTarget }) => (
-        <button type="button" onClick={onClick} data-resin-target={dataResinTarget} data-testid="back-button">
-            Back
-        </button>
-    ),
-}));
+jest.mock('../../../common/back-button', () => ({ onClick, 'data-resin-target': dataResinTarget }) => (
+    <button type="button" onClick={onClick} data-resin-target={dataResinTarget} data-testid="back-button">
+        Back
+    </button>
+));
 
 jest.mock('../VersionsMenu', () => ({ versions, fileId, versionCount, versionLimit }) => (
     <div data-testid="versions-menu">
