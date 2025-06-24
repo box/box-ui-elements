@@ -16,6 +16,10 @@
     animation-fill-mode: both;
     transform-origin: top right;
 
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+
     .overlay {
         @include bdl-Overlay-container;
 
