@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import { Button } from '@box/blueprint-web';
 import Tooltip from '../../components/tooltip/Tooltip';
 import { isLeftClick } from '../../utils/dom';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler, ViewTypeValues } from '../common/types/SidebarNavigation';
 import './SidebarNavButton.scss';
 
 type Props = {
@@ -23,9 +23,9 @@ type Props = {
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isDisabled?: boolean,
     isOpen?: boolean,
-    onClick?: (sidebarView: string) => void,
+    onClick?: (sidebarView: ViewTypeValues) => void,
     routerDisabled?: boolean,
-    sidebarView: string,
+    sidebarView: ViewTypeValues,
     tooltip: React.Node,
 };
 
