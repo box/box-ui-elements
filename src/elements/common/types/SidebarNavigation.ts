@@ -39,7 +39,7 @@ export type SidebarNavigation =
     | ActivityAnnotationsSidebarView;
 
 export type InternalSidebarNavigation = SidebarNavigation & {
-    open: boolean;
+    open?: boolean;
 };
 
 export type SidebarNavigationHandler = (sidebar: SidebarNavigation, replace?: boolean) => void;
