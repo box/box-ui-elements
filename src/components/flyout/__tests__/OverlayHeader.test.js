@@ -52,5 +52,34 @@ describe('components/flyout/OverlayHeader', () => {
             fireEvent.click(screen.getByRole('button'));
             expect(overlayClick).toHaveBeenCalledTimes(0);
         });
+
+        test('should prevent default and stop propagation when elements in handleClick called and isOverlayHeaderActionEnabled is false', () => {
+            const overlayClick = jest.fn();
+            render(
+                <div role="presentation" onClick={overlayClick}>
+                    <OverlayHeader isOverlayHeaderActionEnabled={false}>
+                        <p>Hi</p>
+                    </OverlayHeader>
+                </div>,
+            );
+
+            fireEvent.click(screen.getByRole('button'));
+            expect(overlayClick).toHaveBeenCalledTimes(0);
+        });
+
+        test('should prevent default and stop propagation when elements in handleClick called and isOverlayHeaderActionEnabled is true', () => {
+            const overlayClick = jest.fn();
+
+            render(
+                <div role="presentation" onClick={overlayClick}>
+                    <OverlayHeader isOverlayHeaderActionEnabled={true}>
+                        <p>Hi</p>
+                    </OverlayHeader>
+                </div>,
+            );
+
+            fireEvent.click(screen.getByRole('button'));
+            expect(overlayClick).toHaveBeenCalledTimes(1);
+        });
     });
 });
