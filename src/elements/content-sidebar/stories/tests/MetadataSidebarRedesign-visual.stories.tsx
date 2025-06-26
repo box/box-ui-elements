@@ -344,6 +344,19 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
         fileId: '416047501580',
         metadataSidebarProps: defaultMetadataSidebarProps,
     },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.get(`/2.0/files/416047501580`, () => {
+                    return HttpResponse.json(mockFileRequest.response);
+                }),
+                http.get(`/2.0/files/416047501580/metadata`, () => {
+                    return HttpResponse.json(mockMetadataInstances.response);
+                }),
+            ],
+        },
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         // open and edit a new template
