@@ -67,7 +67,7 @@ describe('components/flyout/OverlayHeader', () => {
             expect(overlayClick).toHaveBeenCalledTimes(0);
         });
 
-        test('should prevent default and stop propagation when elements in handleClick called and isOverlayHeaderActionEnabled is true', () => {
+        test('should allow default and propagation when elements in handleClick called and isOverlayHeaderActionEnabled is true', () => {
             const overlayClick = jest.fn();
 
             render(
