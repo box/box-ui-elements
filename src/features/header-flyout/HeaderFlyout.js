@@ -20,6 +20,8 @@ type Props = FlyoutProps & {
     header?: React.Element<any>,
     /** Optional function to get the scrollRef in parent components */
     scrollRefFn?: any => any,
+    /** Are OverlayHeader actions enabled */
+    isOverlayHeaderActionEnabled?: boolean,
 };
 
 class HeaderFlyout extends React.Component<Props> {
@@ -30,7 +32,16 @@ class HeaderFlyout extends React.Component<Props> {
     };
 
     render() {
-        const { header, footer, flyoutButton, children, scrollRefFn, className, ...rest } = this.props;
+        const {
+            header,
+            footer,
+            flyoutButton,
+            children,
+            scrollRefFn,
+            className,
+            isOverlayHeaderActionEnabled,
+            ...rest
+        } = this.props;
 
         return (
             <Flyout
@@ -42,7 +53,9 @@ class HeaderFlyout extends React.Component<Props> {
             >
                 {flyoutButton}
                 <Overlay className="header-flyout-overlay">
-                    <OverlayHeader>{header && <h4 className="header-flyout-title">{header}</h4>}</OverlayHeader>
+                    <OverlayHeader isOverlayHeaderActionEnabled={isOverlayHeaderActionEnabled}>
+                        {header && <h4 className="header-flyout-title">{header}</h4>}
+                    </OverlayHeader>
                     <div className="header-flyout-list-container">
                         <div
                             className={classNames('flyout-list-container-body', {
