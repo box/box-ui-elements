@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { render } from '@testing-library/react';
+import { render } from '../../../../test-utils/testing-library';
 import withNavRouter from '../withNavRouter';
 import { WithNavRouterProps } from '../types';
 
@@ -33,7 +33,7 @@ describe('src/eleemnts/common/nav-router/withNavRouter', () => {
         expect(getByTestId('test-component')).toHaveTextContent('Test test-value');
     });
 
-    describe('when routerDisabled feature flag is enabled', () => {
+    describe('when routerDisabled feature flag is provided', () => {
         test('should return unwrapped component when feature flag is true', () => {
             const features = { routerDisabled: { value: true } };
             const { getByTestId, queryByTestId } = renderComponent({ features });
@@ -43,7 +43,7 @@ describe('src/eleemnts/common/nav-router/withNavRouter', () => {
             expect(queryByTestId('nav-router-wrapper')).not.toBeInTheDocument();
         });
 
-        test('should pass features prop to NavRouter when router is enabled', () => {
+        test('should wrap component with NavRouter when feature flag is false', () => {
             const features = { routerDisabled: { value: false } };
             const { getByTestId } = renderComponent({ features });
 
@@ -51,7 +51,5 @@ describe('src/eleemnts/common/nav-router/withNavRouter', () => {
             expect(getByTestId('test-component')).toHaveTextContent('Test undefined');
             expect(getByTestId('nav-router-wrapper')).toBeInTheDocument();
         });
-
-
     });
 });
