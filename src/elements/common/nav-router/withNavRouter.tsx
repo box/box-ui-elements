@@ -4,7 +4,8 @@ import { WithNavRouterProps } from './types';
 import { isFeatureEnabled } from '../feature-checking';
 
 const withNavRouter = <P extends object>(Component: React.ComponentType<P>): React.FC<P & WithNavRouterProps> => {
-    function WithNavRouter({ history, initialEntries, features, ...rest }: P & WithNavRouterProps) {
+    function WithNavRouter({ history, initialEntries, ...rest }: P & WithNavRouterProps) {
+        const { features } = rest;
         const isRouterDisabled = isFeatureEnabled(features, 'routerDisabled.value');
         
         if (isRouterDisabled) {
