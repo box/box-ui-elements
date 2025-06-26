@@ -39,7 +39,7 @@ class HeaderFlyout extends React.Component<Props> {
             children,
             scrollRefFn,
             className,
-            isOverlayHeaderActionEnabled,
+            isOverlayHeaderActionEnabled = false,
             ...rest
         } = this.props;
 

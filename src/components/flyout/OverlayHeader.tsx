@@ -16,7 +16,7 @@ export interface OverlayHeaderProps {
     isOverlayHeaderActionEnabled?: boolean;
 }
 
-const OverlayHeader = ({ children, className, isOverlayHeaderActionEnabled }: OverlayHeaderProps) => {
+const OverlayHeader = ({ children, className, isOverlayHeaderActionEnabled = false }: OverlayHeaderProps) => {
     const handleClick = (event: React.SyntheticEvent<HTMLDivElement>): void => {
         if (!isOverlayHeaderActionEnabled) {
             event.preventDefault();
