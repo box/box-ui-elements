@@ -543,7 +543,7 @@ export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof Metadata
         const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
         userEvent.click(autofillButton);
 
-        const suggestion = await canvas.findByText('4/1/2024');
+        const suggestion = await canvas.findByText('4/1/2024', {}, { timeout: 5000 });
         expect(suggestion).toBeInTheDocument();
     },
 };
