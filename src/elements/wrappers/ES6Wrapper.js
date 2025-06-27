@@ -48,7 +48,7 @@ class ES6Wrapper extends EventEmitter {
     messages: StringMap = i18n.messages;
 
     /**
-     * @property {Element}
+     * @property {Object}
      */
     root: any;
 
