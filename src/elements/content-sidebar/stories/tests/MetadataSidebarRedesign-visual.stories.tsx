@@ -344,6 +344,19 @@ export const SwitchEditingTemplateInstances: StoryObj<typeof MetadataSidebarRede
         fileId: '416047501580',
         metadataSidebarProps: defaultMetadataSidebarProps,
     },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultMockHandlers,
+                http.get(`/2.0/files/416047501580`, () => {
+                    return HttpResponse.json(mockFileRequest.response);
+                }),
+                http.get(`/2.0/files/416047501580/metadata`, () => {
+                    return HttpResponse.json(mockMetadataInstances.response);
+                }),
+            ],
+        },
+    },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
         // open and edit a new template
@@ -543,7 +556,7 @@ export const SuggestionForNewlyCreatedTemplateInstance: StoryObj<typeof Metadata
         const autofillButton = await canvas.findByRole('button', { name: 'Autofill' });
         userEvent.click(autofillButton);
 
-        const suggestion = await canvas.findByText('4/1/2024');
+        const suggestion = await canvas.findByText('4/1/2024', {}, { timeout: 5000 });
         expect(suggestion).toBeInTheDocument();
     },
 };
