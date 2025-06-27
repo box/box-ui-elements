@@ -3,6 +3,7 @@ import sass from 'sass';
 import type { StorybookConfig } from '@storybook/react-webpack5';
 import type { Configuration } from 'webpack';
 
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
 import { translationDependencies } from '../scripts/i18n.config';
 
@@ -62,6 +63,7 @@ const config: StorybookConfig = {
                 generateBundles: true,
                 additionalMessageData: translationDependencies.map(pkg => `${pkg}/i18n/[language]`),
             }),
+            new NodePolyfillPlugin(),
         );
 
         return webpack;
