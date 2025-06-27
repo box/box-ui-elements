@@ -73,7 +73,6 @@ class ContentPicker extends ES6Wrapper {
                 {...rest}
             />,
         );
-        this.root = root;
     }
 }
 

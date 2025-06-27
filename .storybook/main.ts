@@ -63,7 +63,9 @@ const config: StorybookConfig = {
                 generateBundles: true,
                 additionalMessageData: translationDependencies.map(pkg => `${pkg}/i18n/[language]`),
             }),
-            new NodePolyfillPlugin(),
+            new NodePolyfillPlugin({
+                additionalAliases: ['process'],
+            }),
         );
 
         return webpack;
