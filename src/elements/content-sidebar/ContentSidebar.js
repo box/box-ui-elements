@@ -349,6 +349,7 @@ class ContentSidebar extends React.Component<Props, State> {
             defaultView,
             detailsSidebarProps,
             docGenSidebarProps,
+            features,
             fileId,
             getPreview,
             getViewer,
@@ -382,7 +383,7 @@ class ContentSidebar extends React.Component<Props, State> {
         return (
             <Internationalize language={language} messages={messages}>
                 <APIContext.Provider value={(this.api: any)}>
-                    <NavRouter history={history} initialEntries={[initialPath]}>
+                    <NavRouter history={history} initialEntries={[initialPath]} features={features}>
                         <TooltipProvider>
                             <Sidebar
                                 activitySidebarProps={activitySidebarProps}
