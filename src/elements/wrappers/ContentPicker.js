@@ -5,9 +5,7 @@
  */
 
 import * as React from 'react';
-// TODO switch to createRoot when upgrading to React 18
-// eslint-disable-next-line react/no-deprecated
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import ES6Wrapper from './ES6Wrapper';
 import ContentPickerPopup from '../content-picker/ContentPickerPopup';
 import ContentPickerReactComponent from '../content-picker/ContentPicker';
@@ -58,7 +56,9 @@ class ContentPicker extends ES6Wrapper {
     render() {
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
         const PickerComponent = modal ? ContentPickerPopup : ContentPickerReactComponent;
-        render(
+
+        this.root = createRoot(this.container);
+        this.root.render(
             <PickerComponent
                 clientName={this.getClientName()}
                 componentRef={this.setComponent}
@@ -72,8 +72,8 @@ class ContentPicker extends ES6Wrapper {
                 type={this.getType()}
                 {...rest}
             />,
-            this.container,
         );
+        this.root = root;
     }
 }
 
