@@ -71,6 +71,7 @@ const description = `
 
 export default {
     title: 'Icons/ItemIcon',
+    component: ItemIcon,
     parameters: {
         componentSubtitle: description,
     },
