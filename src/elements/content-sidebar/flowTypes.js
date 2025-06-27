@@ -46,6 +46,16 @@ type FileAccessStats = {
     preview_count?: number,
 };
 
+export type CustomPanel = {
+    id: string, // Unique identifier for the panel
+    title: string | React.Node, // Panel title
+    component: React.ComponentType<any>, // The component to render
+    isEnabled: boolean, // Whether the panel should be shown
+    index?: number, // Position to insert in the panel order (default: 0)
+    icon?: React.ComponentType<any>, // Optional icon for the nav button
+    navButtonProps?: Object, // Additional props for the nav button
+};
+
 export type {
     ClassificationInfo,
     ContentInsights,
