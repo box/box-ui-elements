@@ -39,7 +39,7 @@ import type { WithLoggerProps } from '../../common/types/logging';
 import type { ElementsXhrError, RequestOptions, ErrorContextProps } from '../../common/types/api';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { StringMap, Token, User, BoxItem } from '../../common/types/core';
-import type { AdditionalSidebarTab } from './flowTypes';
+import type { AdditionalSidebarTab, CustomPanel } from './flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 // $FlowFixMe TypeScript file
 import type { Theme } from '../common/theming';
@@ -58,6 +58,7 @@ type Props = {
     cache?: APICache,
     className: string,
     clientName: string,
+    customPanel?: CustomPanel,
     currentUser?: User,
     defaultView: string,
     detailsSidebarProps: DetailsSidebarProps,
@@ -345,6 +346,7 @@ class ContentSidebar extends React.Component<Props, State> {
             additionalTabs,
             boxAISidebarProps,
             className,
+            customPanel,
             currentUser,
             defaultView,
             detailsSidebarProps,
@@ -390,6 +392,7 @@ class ContentSidebar extends React.Component<Props, State> {
                                 additionalTabs={additionalTabs}
                                 boxAISidebarProps={boxAISidebarProps}
                                 className={className}
+                                customPanel={customPanel}
                                 currentUser={currentUser}
                                 detailsSidebarProps={detailsSidebarProps}
                                 docGenSidebarProps={docGenSidebarProps}
