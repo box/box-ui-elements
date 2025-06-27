@@ -1,4 +1,4 @@
-import { create } from '@storybook/theming/create';
+import { create } from 'storybook/theming/create';
 import * as vars from '../src/styles/variables';
 
 export default create({

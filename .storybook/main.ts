@@ -3,6 +3,7 @@ import sass from 'sass';
 import type { StorybookConfig } from '@storybook/react-webpack5';
 import type { Configuration } from 'webpack';
 
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
 import { translationDependencies } from '../scripts/i18n.config';
 
@@ -19,8 +20,6 @@ const config: StorybookConfig = {
     addons: [
         '@chromatic-com/storybook',
         '@storybook/addon-docs',
-        '@storybook/addon-essentials',
-        '@storybook/addon-interactions',
         {
             name: '@storybook/addon-styling-webpack',
             options: {
@@ -45,7 +44,6 @@ const config: StorybookConfig = {
                 ],
             },
         },
-        '@storybook/addon-links',
         '@storybook/addon-webpack5-compiler-babel',
         'storybook-react-intl',
     ],
@@ -64,6 +62,9 @@ const config: StorybookConfig = {
             new TranslationsPlugin({
                 generateBundles: true,
                 additionalMessageData: translationDependencies.map(pkg => `${pkg}/i18n/[language]`),
+            }),
+            new NodePolyfillPlugin({
+                additionalAliases: ['process'],
             }),
         );
 

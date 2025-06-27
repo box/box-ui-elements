@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import Button from '../button/Button';
 import ButtonGroup from './ButtonGroup';
 import notes from './ButtonGroup.stories.md';
 
 export const regular = () => (
-    <ButtonGroup isDisabled={boolean('isDisabled', false)}>
+    <ButtonGroup>
         <Button>Add</Button>
         <Button>Update</Button>
         <Button>Remove</Button>

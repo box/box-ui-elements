@@ -1,6 +1,6 @@
-import { type StoryObj, Meta } from '@storybook/react';
-import { fn, userEvent, within } from '@storybook/test';
 import React, { type ComponentProps } from 'react';
+import { type StoryObj, Meta } from '@storybook/react';
+import { fn, userEvent, within } from 'storybook/test';
 import { http, HttpResponse } from 'msw';
 import type { HttpHandler } from 'msw';
 import MetadataSidebarRedesign from '../MetadataSidebarRedesign';

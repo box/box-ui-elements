@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { act } from 'react';
 import { shallow, mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
 import { IntlShape } from 'react-intl';
 import { AvatarBase as Avatar } from '../Avatar';
 import AvatarImage from '../AvatarImage';

@@ -189,7 +189,6 @@ class ContentPicker extends Component<Props, State> {
         clearSelectedItemsOnNavigation: false,
         isHeaderLogoVisible: true,
         isPaginationVisible: true,
-        itemActions: [],
     };
 
     /**

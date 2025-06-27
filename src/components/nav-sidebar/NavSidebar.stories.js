@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as React from 'react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import NavSidebar from './NavSidebar';
 import NavListCollapseHeader from './NavListCollapseHeader';
 import NavList from './NavList';

@@ -1,4 +1,4 @@
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { http, HttpResponse } from 'msw';
 
 import ContentUploader from '../../ContentUploader';

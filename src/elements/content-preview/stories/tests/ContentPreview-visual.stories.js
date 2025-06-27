@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Notification } from '@box/blueprint-web';
 import { http, HttpResponse } from 'msw';
 

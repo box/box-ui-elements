@@ -1,6 +1,5 @@
 import * as React from 'react';
-
-import { useArgs } from '@storybook/preview-api';
+import { useArgs } from 'storybook/preview-api';
 import { Button } from '@box/blueprint-web';
 import PreviewDialog from '../preview-dialog/PreviewDialog';
 

@@ -3,6 +3,7 @@ const path = require('path');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const { BannerPlugin, DefinePlugin, IgnorePlugin } = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
@@ -118,6 +119,7 @@ const getConfig = isReactBundle => {
             new IgnorePlugin({
                 resourceRegExp: /moment$/, // Moment is optionally included by Pikaday, but is not needed in our bundle
             }),
+            new NodePolyfillPlugin(),
         ],
 
         stats: {

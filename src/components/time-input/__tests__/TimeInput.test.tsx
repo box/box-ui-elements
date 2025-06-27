@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { act } from 'react-dom/test-utils';
+import React, { act } from 'react';
 import { mount } from 'enzyme';
 import debounce from 'lodash/debounce';
 // @ts-ignore flow import

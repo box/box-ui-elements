@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { boolean } from '@storybook/addon-knobs';
 
 import Icon from '../../icons/general/IconCopy';
 import * as vars from '../../styles/variables';
@@ -9,7 +8,7 @@ import { ButtonType } from '../button';
 import notes from './PlainButton.stories.md';
 
 export const regular = () => (
-    <PlainButton isDisabled={boolean('isDisabled', false)} type={ButtonType.BUTTON}>
+    <PlainButton type={ButtonType.BUTTON}>
         Click Here
     </PlainButton>
 );

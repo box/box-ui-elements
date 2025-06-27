@@ -176,7 +176,7 @@ const ItemList = ({
                                     flexShrink={0}
                                 />
                             )}
-                            {itemActions && (
+                            {!!itemActions?.length && (
                                 <Column
                                     disableSort
                                     dataKey={FIELD_ID}
