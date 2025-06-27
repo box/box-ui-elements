@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { select, number, text } from '@storybook/addon-knobs';
 import ItemIcon, { ItemIconProps } from './item-icon';
-import ItemIconMonotone from './item-icon-monotone';
 import Tooltip, { TooltipPosition } from '../components/tooltip';
 
 const itemTypeOptions: ItemIconProps['iconType'][] = [
@@ -39,20 +37,13 @@ const itemTypeOptions: ItemIconProps['iconType'][] = [
 ];
 
 export const itemIcons = () => {
-    const componentPath = select('Variant', ['icons/item-icon', 'icons/item-icon-monotone'], 'icons/item-icon');
-    const Icon = { 'icons/item-icon': ItemIcon, 'icons/item-icon-monotone': ItemIconMonotone }[componentPath];
     return (
         <>
             {itemTypeOptions.map(t => (
                 <span style={{ padding: 8 }} key={t}>
                     <Tooltip text={t}>
                         <span style={{ display: 'inline-block' }}>
-                            <Icon
-                                iconType={t}
-                                dimension={number('dimension', 32, { range: true, min: 10, max: 64, step: 2 })}
-                                title={text('title', '')}
-                                className={text('className', '')}
-                            />
+                            <ItemIcon dimension={32} iconType={t} />
                         </span>
                     </Tooltip>
                 </span>
@@ -65,7 +56,7 @@ export const itemIcons = () => {
                 </b>
                 <p style={{ display: 'flex', alignItems: 'center', paddingTop: 16, paddingLeft: 8 }}>
                     <Tooltip text="default" isShown position={TooltipPosition.MIDDLE_RIGHT}>
-                        <Icon iconType="default" dimension={32} />
+                        <ItemIcon iconType="default" dimension={32} />
                     </Tooltip>
                 </p>
             </div>
@@ -80,7 +71,6 @@ const description = `
 
 export default {
     title: 'Icons/ItemIcon',
-    subcomponents: { ItemIcon, ItemIconMonotone },
     parameters: {
         componentSubtitle: description,
     },

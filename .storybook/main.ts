@@ -19,8 +19,6 @@ const config: StorybookConfig = {
     addons: [
         '@chromatic-com/storybook',
         '@storybook/addon-docs',
-        '@storybook/addon-essentials',
-        '@storybook/addon-interactions',
         {
             name: '@storybook/addon-styling-webpack',
             options: {
@@ -45,7 +43,6 @@ const config: StorybookConfig = {
                 ],
             },
         },
-        '@storybook/addon-links',
         '@storybook/addon-webpack5-compiler-babel',
         'storybook-react-intl',
     ],
