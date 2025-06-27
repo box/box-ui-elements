@@ -6,9 +6,14 @@
 
 import React from "react";
 import { History } from "history";
+import { type FeatureConfig } from '../feature-checking';
 import NavRouter from "./NavRouter";
+
 export type WithNavRouterProps = {
+  features?: FeatureConfig,
   history?: History,
+  initialEntries?: Array<any>,
   ...
 };
+
 declare export var withNavRouter: any; // /* NO PRINT IMPLEMENTED: ArrowFunction */ any
