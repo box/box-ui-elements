@@ -13,14 +13,7 @@ import Button from './Button';
 import notes from './Button.stories.md';
 
 export const regular = () => {
-    return (
-        <Button
-            icon={<Icon />}
-            onClick={action('onClick called')}
-        >
-            Click Here
-        </Button>
-    );
+    return <Button onClick={action('onClick called')}>Click Here</Button>;
 };
 
 export const loading = () => <Button isLoading>Click Here</Button>;
