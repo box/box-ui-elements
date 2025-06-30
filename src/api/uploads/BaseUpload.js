@@ -30,7 +30,7 @@ class BaseUpload extends Base {
 
     folderId: string;
 
-    overwrite: boolean;
+    overwrite: boolean | 'error';
 
     conflictCallback: ?(fileName: string) => string;
 
@@ -159,6 +159,10 @@ class BaseUpload extends Base {
             this.errorCallback(errorData);
             // Automatically handle name conflict errors
         } else if (errorData && errorData.status === 409) {
+            if (this.overwrite === 'error') {
+                this.errorCallback(errorData);
+                return;
+            }
             if (this.overwrite) {
                 // Error response contains file ID to upload a new file version for
                 const conflictFileId = errorData.context_info.conflicts.id;
