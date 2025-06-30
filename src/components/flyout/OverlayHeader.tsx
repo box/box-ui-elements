@@ -12,12 +12,16 @@ export interface OverlayHeaderProps {
     children?: React.ReactNode;
     /** Set className to the overlay header */
     className?: string;
+    /** Are OverlayHeader actions enabled */
+    isOverlayHeaderActionEnabled?: boolean;
 }
 
-const OverlayHeader = ({ children, className }: OverlayHeaderProps) => {
+const OverlayHeader = ({ children, className, isOverlayHeaderActionEnabled = false }: OverlayHeaderProps) => {
     const handleClick = (event: React.SyntheticEvent<HTMLDivElement>): void => {
-        event.preventDefault();
-        event.stopPropagation();
+        if (!isOverlayHeaderActionEnabled) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
     };
     // @ts-ignore TODO: figure out why this is giving a TS error
     const { closeOverlay } = React.useContext(FlyoutContext);

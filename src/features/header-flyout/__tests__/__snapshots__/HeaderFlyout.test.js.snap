@@ -21,7 +21,9 @@ exports[`components/core/header/components/HeaderFlyout render() should include 
   <Overlay
     className="header-flyout-overlay"
   >
-    <OverlayHeader>
+    <OverlayHeader
+      isOverlayHeaderActionEnabled={false}
+    >
       <h4
         className="header-flyout-title"
       >
@@ -78,7 +80,9 @@ exports[`components/core/header/components/HeaderFlyout render() should render d
   <Overlay
     className="header-flyout-overlay"
   >
-    <OverlayHeader />
+    <OverlayHeader
+      isOverlayHeaderActionEnabled={false}
+    />
     <div
       className="header-flyout-list-container"
     >
@@ -123,7 +127,9 @@ exports[`components/core/header/components/HeaderFlyout render() should render t
   <Overlay
     className="header-flyout-overlay"
   >
-    <OverlayHeader />
+    <OverlayHeader
+      isOverlayHeaderActionEnabled={false}
+    />
     <div
       className="header-flyout-list-container"
     >
