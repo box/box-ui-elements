@@ -13,7 +13,7 @@
 /src/api/box-edit/                          @box/ui-elements @box/partners
 /src/api/Feed.js                            @box/ui-elements @box/preview
 /src/api/uploads/                           @box/ui-elements @box/create-communicate
-/src/components/                            @box/ui-elements @box/webapp
+/src/components/                            @box/ui-elements
 /src/elements/                              @box/ui-elements
 /src/elements/content-explorer/             @box/ui-elements
 /src/elements/content-open-with/            @box/ui-elements @box/partners
@@ -23,10 +23,12 @@
 /src/elements/content-sidebar/              @box/ui-elements @box/preview
 /src/elements/content-uploader/             @box/ui-elements @box/create-communicate
 /src/elements/wrappers/                     @box/ui-elements
-/src/features/                              @box/ui-elements @box/webapp
+/src/features/                              @box/ui-elements
 /src/features/access-stats/                 @box/ui-elements @box/preview
 /src/features/content-insights/             @box/ui-elements @box/preview
 /src/features/item-details/                 @box/ui-elements @box/preview
+/src/features/metadata-based-view/          @box/ui-elements @box/preview
+/src/features/metadata-instance-editor/     @box/ui-elements @box/preview
 /src/styles/                                @box/ui-elements @box/design-system
 
 # Tests
