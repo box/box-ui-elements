@@ -9,7 +9,7 @@ executors:
     working_directory: ~/buie
   cypress-executor:
     docker:
-      - image: cypress/included:13.13.0
+      - image: cypress/included:13.17.0
         user: root
     resource_class: large
     working_directory: ~/buie
