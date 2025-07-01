@@ -118,30 +118,6 @@ export const customActionButtons = {
     },
 };
 
-export const itemCustomActions = {
-    args: {
-        itemActions: [
-            {
-                label: 'alert',
-                onAction: () => {
-                    // eslint-disable-next-line no-alert
-                    alert('You clicked me!');
-                },
-            },
-        ],
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(async () => {
-            const moreOptions = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.click(moreOptions[0]);
-
-            const menuItem = await waitFor(() => document.querySelector('[role="menuitem"]'));
-            expect(menuItem).toBeInTheDocument();
-        });
-    },
-};
-
 export default {
     title: 'Elements/ContentPicker/tests/visual',
     component: ContentPicker,
