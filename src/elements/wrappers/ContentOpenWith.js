@@ -6,7 +6,9 @@
 
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
-import { createRoot } from 'react-dom/client';
+// TODO switch to createRoot when upgrading to React 18
+// eslint-disable-next-line react/no-deprecated
+import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 import ContentOpenWithReactComponent from '../content-open-with';
 
@@ -31,8 +33,7 @@ class ContentOpenWith extends ES6Wrapper {
 
     /** @inheritdoc */
     render() {
-        this.root = createRoot(this.container);
-        this.root.render(
+        render(
             <ContentOpenWithReactComponent
                 componentRef={this.setComponent}
                 fileId={this.id}
@@ -44,6 +45,7 @@ class ContentOpenWith extends ES6Wrapper {
                 token={this.token}
                 {...this.options}
             />,
+            this.container,
         );
     }
 }

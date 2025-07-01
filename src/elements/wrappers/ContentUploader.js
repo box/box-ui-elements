@@ -5,7 +5,9 @@
  */
 
 import * as React from 'react';
-import { createRoot } from 'react-dom/client';
+// TODO switch to createRoot when upgrading to React 18
+// eslint-disable-next-line react/no-deprecated
+import { render } from 'react-dom';
 import ES6Wrapper from './ES6Wrapper';
 // $FlowFixMe
 import ContentUploaderPopup from '../content-uploader/ContentUploaderPopup';
@@ -70,8 +72,7 @@ class ContentUploader extends ES6Wrapper {
         const { modal, ...rest }: { modal?: ModalOptions } = this.options;
         const UploaderComponent = modal ? ContentUploaderPopup : WrappedContentUploaderComponent;
 
-        this.root = createRoot(this.container);
-        this.root.render(
+        render(
             <UploaderComponent
                 language={this.language}
                 messages={this.messages}
@@ -86,6 +87,7 @@ class ContentUploader extends ES6Wrapper {
                 modal={((modal: any): ModalOptions)}
                 {...rest}
             />,
+            this.container,
         );
     }
 }

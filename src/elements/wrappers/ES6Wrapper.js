@@ -5,6 +5,7 @@
  */
 
 import EventEmitter from 'events';
+import ReactDOM from 'react-dom';
 import i18n from '../common/i18n';
 import { DEFAULT_CONTAINER } from '../../constants';
 import type { Token, StringMap } from '../../common/types/core';
@@ -48,11 +49,6 @@ class ES6Wrapper extends EventEmitter {
     messages: StringMap = i18n.messages;
 
     /**
-     * @property {Object}
-     */
-    root: any;
-
-    /**
      * @property {Element}
      */
     component: any;
@@ -88,9 +84,8 @@ class ES6Wrapper extends EventEmitter {
      */
     hide(): void {
         this.removeAllListeners();
-        if (this.root) {
-            this.root.unmount();
-        }
+        // eslint-disable-next-line react/no-deprecated
+        ReactDOM.unmountComponentAtNode(this.container);
         if (this.container) {
             this.container.innerHTML = '';
         }
