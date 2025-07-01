@@ -35,7 +35,11 @@ const RetentionPolicy = ({ dispositionTime, openModal, policyType, retentionPoli
                         <dd>
                             <FormattedDate value={new Date(dispositionTime)} {...datetimeOptions} />
                             {openModal ? (
-                                <PlainButton className="lnk bdl-RetentionLink" onClick={openModal}>
+                                <PlainButton
+                                    className="lnk bdl-RetentionLink"
+                                    onClick={openModal}
+                                    data-target-id="Button-retentionPolicyExtendButton"
+                                >
                                     <FormattedMessage {...messages.retentionPolicyExtend} />
                                 </PlainButton>
                             ) : null}

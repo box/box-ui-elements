@@ -164,10 +164,12 @@ exports[`elements/content-sidebar/SidebarFileProperties render() should render r
               </FormattedDate>
               <PlainButton
                 className="lnk bdl-RetentionLink"
+                data-target-id="Button-retentionPolicyExtendButton"
                 onClick={[MockFunction]}
               >
                 <button
                   className="btn-plain lnk bdl-RetentionLink"
+                  data-target-id="Button-retentionPolicyExtendButton"
                   onClick={[MockFunction]}
                   type="submit"
                 >

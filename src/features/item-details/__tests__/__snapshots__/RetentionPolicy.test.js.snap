@@ -65,6 +65,7 @@ exports[`features/item-details/RetentionPolicy should render retention policy ex
     />
     <PlainButton
       className="lnk bdl-RetentionLink"
+      data-target-id="Button-retentionPolicyExtendButton"
       onClick={[Function]}
     >
       <FormattedMessage
