@@ -4,6 +4,7 @@ import ContentExplorer from '../../ContentExplorer';
 import { mockEmptyRootFolder, mockRootFolder } from '../../../common/__mocks__/mockRootFolder';
 import mockSubfolder from '../../../common/__mocks__/mockSubfolder';
 import mockRecentItems from '../../../common/__mocks__/mockRecentItems';
+import { mockUserRequest } from '../../../common/__mocks__/mockRequests';
 
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
@@ -226,9 +227,37 @@ export const closeCreateFolderDialog = {
 //     },
 // };
 
+const defaultHandlers = [
+    http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
+        return HttpResponse.json(mockRootFolder);
+    }),
+    http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
+        return HttpResponse.json(mockSubfolder);
+    }),
+    http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
+        return HttpResponse.json(mockEmptyRootFolder);
+    }),
+    http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
+        return new HttpResponse('Internal Server Error', { status: 500 });
+    }),
+    http.get(`${DEFAULT_HOSTNAME_API}/2.0/recent_items`, () => {
+        return HttpResponse.json(mockRecentItems);
+    }),
+];
+
 export const emptyState = {
     args: {
         rootFolderId: '74729718131',
+    },
+    parameters: {
+        msw: {
+            handlers: [
+                ...defaultHandlers,
+                http.get(mockUserRequest.url, () => {
+                    return HttpResponse.json(mockUserRequest.response);
+                }),
+            ],
+        },
     },
     play: async ({ canvasElement }) => {
         const canvas = within(canvasElement);
@@ -270,23 +299,7 @@ export default {
     },
     parameters: {
         msw: {
-            handlers: [
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/69083462919`, () => {
-                    return HttpResponse.json(mockRootFolder);
-                }),
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/73426618530`, () => {
-                    return HttpResponse.json(mockSubfolder);
-                }),
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/74729718131`, () => {
-                    return HttpResponse.json(mockEmptyRootFolder);
-                }),
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/folders/191354690948`, () => {
-                    return new HttpResponse('Internal Server Error', { status: 500 });
-                }),
-                http.get(`${DEFAULT_HOSTNAME_API}/2.0/recent_items`, () => {
-                    return HttpResponse.json(mockRecentItems);
-                }),
-            ],
+            handlers: defaultHandlers,
         },
     },
 };

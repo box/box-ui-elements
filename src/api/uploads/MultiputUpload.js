@@ -173,6 +173,7 @@ class MultiputUpload extends BaseMultiput {
         errorCallback,
         progressCallback,
         successCallback,
+        // $FlowFixMe
         overwrite = true,
         conflictCallback,
         fileId,
@@ -182,7 +183,7 @@ class MultiputUpload extends BaseMultiput {
         file: File,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
     }): void {
@@ -217,6 +218,7 @@ class MultiputUpload extends BaseMultiput {
         errorCallback,
         progressCallback,
         successCallback,
+        // $FlowFixMe
         overwrite = true,
         conflictCallback,
         fileId,
@@ -227,7 +229,7 @@ class MultiputUpload extends BaseMultiput {
         fileDescription: ?string,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         successCallback?: Function,
     }): void {
@@ -337,6 +339,10 @@ class MultiputUpload extends BaseMultiput {
             }
 
             if (errorData && errorData.status === 409) {
+                if (this.overwrite === 'error') {
+                    this.errorCallback(errorData);
+                    return;
+                }
                 this.resolveConflict(errorData);
                 this.createSessionRetry();
                 return;
@@ -437,6 +443,7 @@ class MultiputUpload extends BaseMultiput {
         progressCallback,
         sessionId,
         successCallback,
+        // $FlowFixMe
         overwrite = true,
         conflictCallback,
         fileId,
@@ -446,7 +453,7 @@ class MultiputUpload extends BaseMultiput {
         file: File,
         fileId: ?string,
         folderId: string,
-        overwrite?: boolean,
+        overwrite?: boolean | 'error',
         progressCallback?: Function,
         sessionId: string,
         successCallback?: Function,
@@ -598,9 +605,7 @@ class MultiputUpload extends BaseMultiput {
 
             await retryNumOfTimes(
                 (resolve: Function, reject: Function): void => {
-                    this.logEvent(logEventType, logMessage)
-                        .then(resolve)
-                        .catch(reject);
+                    this.logEvent(logEventType, logMessage).then(resolve).catch(reject);
                 },
                 this.config.retries,
                 this.config.initialRetryDelayMs,
