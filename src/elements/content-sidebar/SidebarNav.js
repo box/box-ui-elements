@@ -115,13 +115,14 @@ const SidebarNav = ({
     };
 
     const hasCustomPanel = !!customPanel;
+    const hasBoxAICustomPanel = customPanel?.id === 'boxai';
 
     // Configuration-driven button definitions
     const getButtonConfigs = () => {
         const configs = [];
 
         // BoxAI button (always first)
-        if (hasBoxAI && !hasCustomPanel) {
+        if (hasBoxAI && !hasBoxAICustomPanel) {
             configs.push({
                 key: 'boxai',
                 id: 'boxAI',
