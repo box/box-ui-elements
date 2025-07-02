@@ -65,7 +65,7 @@ type Props = {
 const renderNavButton = (config, handleSidebarNavButtonClick) => (
     <SidebarNavButton
         key={config.key}
-        data-resin-target={config.target}
+        data-resin-target={config.analyticsTarget}
         data-target-id={`SidebarNavButton-${config.id}`}
         data-testid={config.testId}
         isDisabled={config.isDisabled}
@@ -114,25 +114,25 @@ const SidebarNav = ({
         }
     };
 
+    const hasCustomPanel = !!customPanel;
+
     // Configuration-driven button definitions
     const getButtonConfigs = () => {
         const configs = [];
 
         // BoxAI button (always first)
-        // if (hasBoxAI) {
-        //     configs.push({
-        //         key: 'boxai',
-        //         id: 'boxAI',
-        //         view: SIDEBAR_VIEW_BOXAI,
-        //         target: SIDEBAR_NAV_TARGETS.BOXAI,
-        //         testId: 'sidebarboxai',
-        //         tooltip: showOnlyBoxAINavButton
-        //             ? boxAIDisabledTooltip
-        //             : intl.formatMessage(messages.sidebarBoxAITitle),
-        //         isDisabled: showOnlyBoxAINavButton,
-        //         icon: <BoxAiLogo height={Size6} width={Size6} />,
-        //     });
-        // }
+        if (hasBoxAI && !hasCustomPanel) {
+            configs.push({
+                key: 'boxai',
+                id: 'boxAI',
+                view: SIDEBAR_VIEW_BOXAI,
+                analyticsTarget: SIDEBAR_NAV_TARGETS.BOXAI,
+                testId: 'sidebarboxai',
+                tooltip: showOnlyBoxAINavButton ? boxAIDisabledTooltip : intl.formatMessage(messages.sidebarBoxAITitle),
+                isDisabled: showOnlyBoxAINavButton,
+                icon: <BoxAiLogo height={Size6} width={Size6} />,
+            });
+        }
 
         // Default buttons
         const defaultButtons = [
@@ -140,7 +140,7 @@ const SidebarNav = ({
                 key: 'activity',
                 id: 'activity',
                 view: SIDEBAR_VIEW_ACTIVITY,
-                target: SIDEBAR_NAV_TARGETS.ACTIVITY,
+                analyticsTarget: SIDEBAR_NAV_TARGETS.ACTIVITY,
                 testId: 'sidebaractivity',
                 tooltip: intl.formatMessage(messages.sidebarActivityTitle),
                 icon: <IconChatRound className="bcs-SidebarNav-icon" />,
@@ -150,7 +150,7 @@ const SidebarNav = ({
                 key: 'details',
                 id: 'details',
                 view: SIDEBAR_VIEW_DETAILS,
-                target: SIDEBAR_NAV_TARGETS.DETAILS,
+                analyticsTarget: SIDEBAR_NAV_TARGETS.DETAILS,
                 testId: 'sidebardetails',
                 tooltip: intl.formatMessage(messages.sidebarDetailsTitle),
                 icon: <IconDocInfo className="bcs-SidebarNav-icon" />,
@@ -160,7 +160,7 @@ const SidebarNav = ({
                 key: 'skills',
                 id: 'skills',
                 view: SIDEBAR_VIEW_SKILLS,
-                target: SIDEBAR_NAV_TARGETS.SKILLS,
+                analyticsTarget: SIDEBAR_NAV_TARGETS.SKILLS,
                 testId: 'sidebarskills',
                 tooltip: intl.formatMessage(messages.sidebarSkillsTitle),
                 icon: <IconMagicWand className="bcs-SidebarNav-icon" />,
@@ -170,7 +170,7 @@ const SidebarNav = ({
                 key: 'metadata',
                 id: 'metadata',
                 view: SIDEBAR_VIEW_METADATA,
-                target: SIDEBAR_NAV_TARGETS.METADATA,
+                analyticsTarget: SIDEBAR_NAV_TARGETS.METADATA,
                 testId: 'sidebarmetadata',
                 tooltip: intl.formatMessage(messages.sidebarMetadataTitle),
                 icon: <IconMetadataThick className="bcs-SidebarNav-icon" />,
@@ -180,7 +180,7 @@ const SidebarNav = ({
                 key: 'docgen',
                 id: 'docGen',
                 view: SIDEBAR_VIEW_DOCGEN,
-                target: SIDEBAR_NAV_TARGETS.DOCGEN,
+                analyticsTarget: SIDEBAR_NAV_TARGETS.DOCGEN,
                 testId: 'sidebardocgen',
                 tooltip: intl.formatMessage(messages.sidebarDocGenTooltip),
                 icon: <DocGenIcon className="bcs-SidebarNav-icon" />,
@@ -196,7 +196,7 @@ const SidebarNav = ({
         });
 
         // Insert custom panel at the correct position
-        if (customPanel && customPanel.isEnabled) {
+        if (hasCustomPanel) {
             const customPanelIndex = customPanel.index ?? 0;
             const insertPosition = Math.min(customPanelIndex, configs.length);
 
@@ -204,8 +204,8 @@ const SidebarNav = ({
                 key: customPanel.id,
                 id: customPanel.id,
                 view: customPanel.id,
-                target: `${customPanel.id}`,
-                testId: `SidebarNavButton-${customPanel.id}`,
+                analyticsTarget: `sidebar${customPanel.id}`,
+                testId: `sidebar${customPanel.id}`,
                 tooltip: typeof customPanel.title === 'string' ? customPanel.title : customPanel.id,
                 icon: customPanel.icon ? (
                     <customPanel.icon className="bcs-SidebarNav-icon" />
