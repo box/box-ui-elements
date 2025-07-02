@@ -34,7 +34,7 @@ export interface LabelPillProps {
 }
 
 const LabelPillContainer = React.forwardRef((props: LabelPillProps, ref: React.Ref<HTMLSpanElement>) => {
-    const { children, type = LabelPillStatus.DEFAULT, size = LabelPillSize.REGULAR, className, ...rest } = props;
+    const { children, type = LabelPillStatus.DEFAULT, size = LabelPillSize.LARGE, className, ...rest } = props;
     const labelPillClasses = classNames(
         'bdl-LabelPill',
         `bdl-LabelPill--${type}`,
