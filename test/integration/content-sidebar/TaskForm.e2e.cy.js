@@ -1,5 +1,5 @@
 // <reference types="Cypress" />
-import l from '../../support/i18n';
+import localize from '../../support/i18n';
 
 // Similar to ContentSidebar test failures, the comments won't load with local storybook but do load on opensource
 describe.skip('Create Task', () => {
@@ -15,10 +15,10 @@ describe.skip('Create Task', () => {
 
     context('Add Task button', () => {
         it('opens task form', () => {
-            cy.contains(l('be.contentSidebar.addTask')).click();
-            cy.contains(l('be.contentSidebar.addTask.approval')).click();
+            cy.contains(localize('be.contentSidebar.addTask')).click();
+            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
             cy.getByTestId('create-task-modal').within(() => {
-                cy.contains(l('be.contentSidebar.addTask.approval.title')).should('exist');
+                cy.contains(localize('be.contentSidebar.addTask.approval.title')).should('exist');
                 getSubmitButton().should('exist');
                 getCancelButton().should('exist');
             });
@@ -27,16 +27,16 @@ describe.skip('Create Task', () => {
 
     context('Task Modal', () => {
         it('autofocuses first input (assignees)', () => {
-            cy.contains(l('be.contentSidebar.addTask')).click();
-            cy.contains(l('be.contentSidebar.addTask.approval')).click();
+            cy.contains(localize('be.contentSidebar.addTask')).click();
+            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
             cy.focused().should('have.attr', 'data-testid', 'task-form-assignee-input');
         });
     });
 
     context('Task Form', () => {
         beforeEach(() => {
-            cy.contains(l('be.contentSidebar.addTask')).click();
-            cy.contains(l('be.contentSidebar.addTask.approval')).click();
+            cy.contains(localize('be.contentSidebar.addTask')).click();
+            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
         });
         xit('does not allow submitting form without input', () => {
             getMessageField().type('...').clear();
@@ -52,8 +52,8 @@ describe.skip('Create Task', () => {
             getCancelButton().click();
 
             // reopen modal
-            cy.contains(l('be.contentSidebar.addTask')).click();
-            cy.contains(l('be.contentSidebar.addTask.approval')).click();
+            cy.contains(localize('be.contentSidebar.addTask')).click();
+            cy.contains(localize('be.contentSidebar.addTask.approval')).click();
 
             cy.getByTestId('task-assignee-option').should('not.exist');
         });
