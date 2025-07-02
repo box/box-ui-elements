@@ -71,7 +71,7 @@ const Breadcrumb = ({
                 <Crumb
                     className={classNames({ 'no-shrink': hasEllipsis && i === numItemsBeforeOverflow })}
                     isLastCrumb={isLastCrumb}
-                    key={`${item.props.id}-${i}`}
+                    key={`breadcrumb-${i}`}
                 >
                     {item}
                 </Crumb>
