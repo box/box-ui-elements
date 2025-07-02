@@ -52,6 +52,7 @@ export type CustomPanel = {
     component: React.ComponentType<any>, // The component to render
     index?: number, // Position to insert in the panel order (default: 0)
     icon?: React.ComponentType<any>, // Optional icon for the nav button
+    shouldBeDefaultPanel?: boolean, // Whether this panel should be the default panel
     navButtonProps?: Object, // Additional props for the nav button
 };
 
