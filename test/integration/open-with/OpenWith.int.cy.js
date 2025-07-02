@@ -1,5 +1,5 @@
 // <reference types="Cypress" />
-import l from '../../support/i18n';
+import localize from '../../support/i18n';
 
 const getSingleButton = () => cy.getByTestId('singleintegrationbutton');
 const getOpenWithContent = () => cy.getByTestId('bcow-content');
@@ -45,15 +45,9 @@ xdescribe('OpenWith', () => {
         cy.get('[role="menuitem"]').as('menuItem');
 
         // The dropdown should render in sorted order
-        cy.get('@menuItem')
-            .eq(0)
-            .contains('Open');
-        cy.get('@menuItem')
-            .eq(1)
-            .contains('Google Docs (beta)');
-        cy.get('@menuItem')
-            .eq(2)
-            .contains('My custom integration');
+        cy.get('@menuItem').eq(0).contains('Open');
+        cy.get('@menuItem').eq(1).contains('Google Docs (beta)');
+        cy.get('@menuItem').eq(2).contains('My custom integration');
     });
 
     describe('box edit', () => {
@@ -67,12 +61,10 @@ xdescribe('OpenWith', () => {
             // Tooltip should render automatically
             cy.getTooltip()
                 .as('tooltip')
-                .contains(l('be.boxToolsInstallMessage', { boxTools: 'Box Tools' }));
+                .contains(localize('be.boxToolsInstallMessage', { boxTools: 'Box Tools' }));
 
             // Clicking on the close button of the tooltip
-            cy.get('@tooltip')
-                .find('button')
-                .click();
+            cy.get('@tooltip').find('button').click();
 
             // Tooltip should be hidden
             cy.get('@tooltip').should('not.be.visible');
@@ -129,7 +121,7 @@ xdescribe('OpenWith', () => {
             getOpenWithContent().trigger('mouseover');
 
             // Tooltip should render on mouseover
-            cy.getTooltip().contains(l('be.boxEditBlacklistedError'));
+            cy.getTooltip().contains(localize('be.boxEditBlacklistedError'));
         });
 
         it('the box edit integration cannot be executed', () => {
