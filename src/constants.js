@@ -330,7 +330,7 @@ export const ERROR_CODE_UNKNOWN = 'unknown_error';
 
 /* ------------------ Origins ---------------------- */
 export const ORIGIN_CONTENT_PREVIEW: 'content_preview' = 'content_preview';
-export const ORIGIN_CONTENT_SIDEBAR: 'content_sidebar' = 'content_sidebar';
+export const ORIGIN_CONTENT_SIDEBAR: 'content_sidebar' = 'content_sidebar'
 export const ORIGIN_ACTIVITY_SIDEBAR: 'activity_sidebar' = 'activity_sidebar';
 export const ORIGIN_BOXAI_SIDEBAR: 'boxai_sidebar' = 'boxai_sidebar';
 export const ORIGIN_DETAILS_SIDEBAR: 'details_sidebar' = 'details_sidebar';
