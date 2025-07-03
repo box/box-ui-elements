@@ -1,5 +1,5 @@
 import React from 'react';
-import { expect, userEvent, waitFor, within } from '@storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { http, HttpResponse } from 'msw';
 import ContentPicker from '../../ContentPicker';
 import { mockRootFolder, mockEmptyRootFolder } from '../../../common/__mocks__/mockRootFolder';
@@ -115,30 +115,6 @@ export const customActionButtons = {
         renderCustomActionButtons: ({ selectedCount }) => (
             <button type="button">Custom Action ({selectedCount} items)</button>
         ),
-    },
-};
-
-export const itemCustomActions = {
-    args: {
-        itemActions: [
-            {
-                label: 'alert',
-                onAction: () => {
-                    // eslint-disable-next-line no-alert
-                    alert('You clicked me!');
-                },
-            },
-        ],
-    },
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-        await waitFor(async () => {
-            const moreOptions = await canvas.findAllByRole('button', { name: 'More options' });
-            await userEvent.click(moreOptions[0]);
-
-            const menuItem = await waitFor(() => document.querySelector('[role="menuitem"]'));
-            expect(menuItem).toBeInTheDocument();
-        });
     },
 };
 

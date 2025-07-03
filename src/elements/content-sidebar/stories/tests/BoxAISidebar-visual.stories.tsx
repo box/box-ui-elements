@@ -1,5 +1,5 @@
-import { expect, within } from '@storybook/test';
 import { type StoryObj, type Meta } from '@storybook/react';
+import { expect, within } from 'storybook/test';
 import { http, HttpResponse } from 'msw';
 import type { HttpHandler } from 'msw';
 import ContentSidebar from '../../ContentSidebar';
