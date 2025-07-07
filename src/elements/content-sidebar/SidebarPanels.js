@@ -42,12 +42,12 @@ import type { User, BoxItem } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { BoxAISidebarCache } from './types/BoxAISidebarTypes';
-import type { CustomSidebar } from './flowTypes';
+import type { CustomSidebarPanel } from './flowTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     boxAISidebarProps: BoxAISidebarProps,
-    customPanel?: CustomSidebar,
+    customPanel?: CustomSidebarPanel,
     currentUser?: User,
     currentUserError?: Errors,
     defaultPanel?: string,

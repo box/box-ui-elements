@@ -34,14 +34,14 @@ import {
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
-import type { NavigateOptions, AdditionalSidebarTab, CustomPanel } from './flowTypes';
+import type { NavigateOptions, AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
-    customTab?: CustomSidebar,
+    customTab?: CustomSidebarPanel,
     elementId: string,
     fileId: string,
     hasActivity: boolean,
