@@ -47,7 +47,7 @@ type CustomTab = {
     navButtonProps?: Object, // Additional props for the nav button
 };
 
-type CustomSidebar = CustomPanel & CustomTab;
+type CustomSidebarPanel = CustomPanel & CustomTab;
 
 type Translations = {
     onTranslate?: Function,
@@ -70,7 +70,7 @@ export type {
     AdditionalSidebarTabFtuxData,
     CustomTab,
     CustomPanel,
-    CustomSidebar,
+    CustomSidebarPanel,
     Translations,
     FileAccessStats,
 };

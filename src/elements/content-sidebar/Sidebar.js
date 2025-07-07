@@ -28,7 +28,7 @@ import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { VersionsSidebarProps } from './versions';
-import type { AdditionalSidebarTab, CustomSidebar } from './flowTypes';
+import type { AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { SignSidebarProps } from './SidebarNavSign';
@@ -44,7 +44,7 @@ type Props = {
     api: API,
     boxAISidebarProps: BoxAISidebarProps,
     className: string,
-    customSidebar?: CustomSidebar,
+    customSidebarPanel?: CustomSidebarPanel,
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
@@ -296,7 +296,7 @@ class Sidebar extends React.Component<Props, State> {
             additionalTabs,
             boxAISidebarProps,
             className,
-            customSidebar,
+            customSidebarPanel,
             currentUser,
             currentUserError,
             detailsSidebarProps,
@@ -342,7 +342,7 @@ class Sidebar extends React.Component<Props, State> {
                         {hasNav && (
                             <SidebarNav
                                 additionalTabs={additionalTabs}
-                                customTab={customSidebar}
+                                customTab={customSidebarPanel}
                                 elementId={this.id}
                                 fileId={fileId}
                                 hasActivity={hasActivity}
@@ -360,7 +360,7 @@ class Sidebar extends React.Component<Props, State> {
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
                             boxAISidebarProps={boxAISidebarProps}
-                            customPanel={customSidebar}
+                            customPanel={customSidebarPanel}
                             currentUser={currentUser}
                             currentUserError={currentUserError}
                             elementId={this.id}
