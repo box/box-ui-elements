@@ -114,15 +114,15 @@ const SidebarNav = ({
         }
     };
 
-    const hasCustomPanel = !!customTab;
-    const hasBoxAICustomPanel = customTab?.id === 'boxai';
+    const hasCustomTab = !!customTab;
+    const hasBoxAICustomTab = customTab?.id === 'boxai';
 
     // Configuration-driven button definitions
     const getButtonConfigs = () => {
         const configs = [];
 
         // BoxAI button (always first)
-        if (hasBoxAI && !hasBoxAICustomPanel) {
+        if (hasBoxAI && !hasBoxAICustomTab) {
             configs.push({
                 key: 'boxai',
                 id: 'boxAI',
@@ -197,7 +197,7 @@ const SidebarNav = ({
         });
 
         // Insert custom panel at the correct position
-        if (hasCustomPanel) {
+        if (hasCustomTab) {
             const customTabIndex = customTab.index ?? 0;
             const insertPosition = Math.min(customTabIndex, configs.length);
 
