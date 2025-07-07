@@ -28,7 +28,7 @@ import type { DocGenSidebarProps } from './DocGenSidebar/DocGenSidebar';
 import type { MetadataSidebarProps } from './MetadataSidebar';
 import type { BoxAISidebarProps } from './BoxAISidebar';
 import type { VersionsSidebarProps } from './versions';
-import type { AdditionalSidebarTab, CustomPanel } from './flowTypes';
+import type { AdditionalSidebarTab, CustomSidebar } from './flowTypes';
 import type { MetadataEditor } from '../../common/types/metadata';
 import type { BoxItem, User } from '../../common/types/core';
 import type { SignSidebarProps } from './SidebarNavSign';
@@ -44,7 +44,7 @@ type Props = {
     api: API,
     boxAISidebarProps: BoxAISidebarProps,
     className: string,
-    customPanel?: CustomPanel,
+    customSidebar?: CustomSidebar,
     currentUser?: User,
     currentUserError?: Errors,
     detailsSidebarProps: DetailsSidebarProps,
@@ -296,7 +296,7 @@ class Sidebar extends React.Component<Props, State> {
             additionalTabs,
             boxAISidebarProps,
             className,
-            customPanel,
+            customSidebar,
             currentUser,
             currentUserError,
             detailsSidebarProps,
@@ -342,7 +342,7 @@ class Sidebar extends React.Component<Props, State> {
                         {hasNav && (
                             <SidebarNav
                                 additionalTabs={additionalTabs}
-                                customPanel={customPanel}
+                                customTab={customSidebar}
                                 elementId={this.id}
                                 fileId={fileId}
                                 hasActivity={hasActivity}
@@ -360,7 +360,7 @@ class Sidebar extends React.Component<Props, State> {
                         <SidebarPanels
                             activitySidebarProps={activitySidebarProps}
                             boxAISidebarProps={boxAISidebarProps}
-                            customPanel={customPanel}
+                            customPanel={customSidebar}
                             currentUser={currentUser}
                             currentUserError={currentUserError}
                             elementId={this.id}

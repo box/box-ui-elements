@@ -41,7 +41,7 @@ import type { SignSidebarProps } from './SidebarNavSign';
 
 type Props = {
     additionalTabs?: Array<AdditionalSidebarTab>,
-    customPanel?: CustomPanel,
+    customTab?: CustomSidebar,
     elementId: string,
     fileId: string,
     hasActivity: boolean,
@@ -80,7 +80,7 @@ const renderNavButton = (config, handleSidebarNavButtonClick) => (
 
 const SidebarNav = ({
                         additionalTabs,
-                        customPanel,
+                        customTab,
                         elementId,
                         fileId,
                         hasActivity,
@@ -114,8 +114,8 @@ const SidebarNav = ({
         }
     };
 
-    const hasCustomPanel = !!customPanel;
-    const hasBoxAICustomPanel = customPanel?.id === 'boxai';
+    const hasCustomPanel = !!customTab;
+    const hasBoxAICustomPanel = customTab?.id === 'boxai';
 
     // Configuration-driven button definitions
     const getButtonConfigs = () => {
@@ -198,25 +198,25 @@ const SidebarNav = ({
 
         // Insert custom panel at the correct position
         if (hasCustomPanel) {
-            const customPanelIndex = customPanel.index ?? 0;
-            const insertPosition = Math.min(customPanelIndex, configs.length);
+            const customTabIndex = customTab.index ?? 0;
+            const insertPosition = Math.min(customTabIndex, configs.length);
 
-            const customPanelConfig = {
-                key: customPanel.id,
-                id: customPanel.id,
-                view: customPanel.id,
-                analyticsTarget: `sidebar${customPanel.id}`,
-                testId: `sidebar${customPanel.id}`,
-                tooltip: typeof customPanel.title === 'string' ? customPanel.title : customPanel.id,
-                icon: customPanel.icon ? (
-                    <customPanel.icon className="bcs-SidebarNav-icon" />
+            const customTabConfig = {
+                key: customTab.id,
+                id: customTab.id,
+                view: customTab.id,
+                analyticsTarget: `sidebar${customTab.id}`,
+                testId: `sidebar${customTab.id}`,
+                tooltip: typeof customTab.title === 'string' ? customTab.title : customTab.id,
+                icon: customTab.icon ? (
+                    <customTab.icon className="bcs-SidebarNav-icon" />
                 ) : (
                     <BoxAiLogo height={Size6} width={Size6} />
                 ),
-                additionalProps: customPanel.navButtonProps,
+                additionalProps: customTab.navButtonProps,
             };
 
-            configs.splice(insertPosition, 0, customPanelConfig);
+            configs.splice(insertPosition, 0, customTabConfig);
         }
 
         return configs;
