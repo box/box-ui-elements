@@ -42,12 +42,12 @@ import type { User, BoxItem } from '../../common/types/core';
 import type { Errors } from '../common/flowTypes';
 import type { FeatureConfig } from '../common/feature-checking';
 import type { BoxAISidebarCache } from './types/BoxAISidebarTypes';
-import type { CustomPanel } from './flowTypes';
+import type { CustomSidebar } from './flowTypes';
 
 type Props = {
     activitySidebarProps: ActivitySidebarProps,
     boxAISidebarProps: BoxAISidebarProps,
-    customPanel?: CustomPanel,
+    customPanel?: CustomSidebar,
     currentUser?: User,
     currentUserError?: Errors,
     defaultPanel?: string,
@@ -136,7 +136,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
     detailsSidebar: ElementRefType = React.createRef();
 
-    customPanelSidebar: ElementRefType = React.createRef();
+    customSidebar: ElementRefType = React.createRef();
 
     initialPanel: { current: null | string } = React.createRef();
 
@@ -201,7 +201,7 @@ class SidebarPanels extends React.Component<Props, State> {
         const { current: boxAISidebar } = this.boxAISidebar;
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
-        const { current: customPanelSidebar } = this.customPanelSidebar;
+        const { current: customSidebar } = this.customSidebar;
         const { current: metadataSidebar } = this.metadataSidebar;
         const { current: versionsSidebar } = this.versionsSidebar;
 
@@ -217,8 +217,8 @@ class SidebarPanels extends React.Component<Props, State> {
             detailsSidebar.refresh();
         }
 
-        if (customPanelSidebar) {
-            customPanelSidebar.refresh();
+        if (customSidebar) {
+            customSidebar.refresh();
         }
 
         if (metadataSidebar) {
@@ -339,7 +339,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     key={file.id}
                                     fileExtension={file.extension}
                                     hasSidebarInitialized={isInitialized}
-                                    ref={this.customPanelSidebar}
+                                    ref={this.customSidebar}
                                 />
                             );
                         }}
