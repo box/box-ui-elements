@@ -15,4 +15,5 @@
 
 import './commands';
 import './constants';
+import './events';
 import './i18n';
