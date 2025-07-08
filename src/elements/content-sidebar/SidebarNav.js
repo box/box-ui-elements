@@ -68,11 +68,11 @@ const renderNavButton = (config, handleSidebarNavButtonClick) => (
         data-resin-target={config.analyticsTarget}
         data-target-id={`SidebarNavButton-${config.id}`}
         data-testid={config.testId}
-        isDisabled={config.isDisabled}
+        isDisabled={config.isDisabled || false}
         onClick={handleSidebarNavButtonClick}
         sidebarView={config.view}
         tooltip={config.tooltip}
-        {...config.additionalProps}
+        {...(config.additionalProps || {})}
     >
         {config.icon}
     </SidebarNavButton>
@@ -115,7 +115,14 @@ const SidebarNav = ({
     };
 
     const hasCustomTab = !!customTab;
-    const hasBoxAICustomTab = customTab?.id === 'boxai';
+    const {
+        id: customTabId,
+        icon: customTabIcon,
+        index: customTabIndex = 0,
+        title: customTabTitle,
+        navButtonProps,
+    } = customTab || {};
+    const hasBoxAICustomTab = customTabId === 'boxai';
 
     // Configuration-driven button definitions
     const getButtonConfigs = () => {
@@ -198,22 +205,21 @@ const SidebarNav = ({
 
         // Insert custom panel at the correct position
         if (hasCustomTab) {
-            const customTabIndex = customTab.index ?? 0;
             const insertPosition = Math.min(customTabIndex, configs.length);
 
             const customTabConfig = {
-                key: customTab.id,
-                id: customTab.id,
-                view: customTab.id,
-                analyticsTarget: `sidebar${customTab.id}`,
-                testId: `sidebar${customTab.id}`,
-                tooltip: typeof customTab.title === 'string' ? customTab.title : customTab.id,
-                icon: customTab.icon ? (
-                    <customTab.icon className="bcs-SidebarNav-icon" />
+                key: customTabId,
+                id: customTabId,
+                view: customTabId,
+                analyticsTarget: `sidebar${customTabId}`,
+                testId: `sidebar${customTabId}`,
+                tooltip: customTabTitle ?? customTabId,
+                icon: customTabIcon ? (
+                    <customTabIcon className="bcs-SidebarNav-icon" />
                 ) : (
                     <BoxAiLogo height={Size6} width={Size6} />
                 ),
-                additionalProps: customTab.navButtonProps,
+                additionalProps: navButtonProps,
             };
 
             configs.splice(insertPosition, 0, customTabConfig);

@@ -230,9 +230,9 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     }
 
-    getPanelOrder = (customPanel, features): string[] => {
-        const { shouldBeDefaultPanel: shouldBoxAIBeDefaultPanel } = getFeatureConfig(features, 'boxai.sidebar');
-        const hasBoxAICustomPanel = customPanel?.id === SIDEBAR_VIEW_BOXAI;
+    getPanelOrder = (customPanel?: CustomSidebarPanel, shouldBoxAIBeDefaultPanel: boolean): string[] => {
+        const { id: customPanelId, index: insertIndex = 0, shouldBeDefaultPanel } = customPanel || {};
+        const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
 
         // Build base panel list without custom panel
         const getBasePanels = () => {
@@ -248,18 +248,17 @@ class SidebarPanels extends React.Component<Props, State> {
         }
 
         // Custom panel should be default - put it first
-        if (customPanel.shouldBeDefaultPanel) {
-            return [customPanel.id, ...getBasePanels()];
+        if (shouldBeDefaultPanel) {
+            return [customPanelId, ...getBasePanels()];
         }
 
         // Insert custom panel at specified position
         const basePanels = getBasePanels();
-        const insertIndex = customPanel.index ?? 0;
         // put redirect order to last if index is negative or 0 and shouldBeDefaultPanel is false
         const clampedIndex =
             insertIndex <= 0 ? basePanels.length : Math.min(Math.max(0, insertIndex), basePanels.length);
         const result = [...basePanels];
-        result.splice(clampedIndex, 0, customPanel.id);
+        result.splice(clampedIndex, 0, customPanelId);
         return result;
     };
 
@@ -298,7 +297,8 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const isMetadataSidebarRedesignEnabled = isFeatureEnabled(features, 'metadata.redesign.enabled');
         const isMetadataAiSuggestionsEnabled = isFeatureEnabled(features, 'metadata.aiSuggestions.enabled');
-        const { showOnlyNavButton: showOnlyBoxAINavButton } = getFeatureConfig(features, 'boxai.sidebar');
+        const { showOnlyNavButton: showOnlyBoxAINavButton, shouldBeDefaultPanel: shouldBoxAIBeDefaultPanel } =
+            getFeatureConfig(features, 'boxai.sidebar');
 
         const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
         const hasCustomPanel = !!customPanel;
@@ -531,7 +531,7 @@ class SidebarPanels extends React.Component<Props, State> {
                             redirect = defaultPanel;
                         } else {
                             // Use panel order to determine redirect
-                            const panelOrder = this.getPanelOrder(customPanel, features);
+                            const panelOrder = this.getPanelOrder(customPanel, shouldBoxAIBeDefaultPanel);
                             const firstEligiblePanel = panelOrder.find(panel => panelsEligibility[panel]);
                             if (firstEligiblePanel) {
                                 redirect = firstEligiblePanel;
