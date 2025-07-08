@@ -35,6 +35,7 @@ import {
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
+import { ViewType } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
 
@@ -203,7 +204,7 @@ const SidebarNav = ({
             const customTabConfig = {
                 key: customTabId,
                 id: customTabId,
-                view: customTabId,
+                view: (customTabId: ViewType),
                 analyticsTarget: `sidebar${customTabId}`,
                 testId: `sidebar${customTabId}`,
                 tooltip: customTabTitle ?? customTabId,
