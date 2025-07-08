@@ -302,7 +302,9 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
         const hasCustomPanel = !!customPanel;
-        const hasBoxAICustomPanel = customPanel?.id === SIDEBAR_VIEW_BOXAI;
+        const { id: customPanelId, component: CustomPanelComponent } = customPanel || {};
+
+        const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
 
         const panelsEligibility = {
             [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel && !hasBoxAICustomPanel,
@@ -311,7 +313,7 @@ class SidebarPanels extends React.Component<Props, State> {
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
             [SIDEBAR_VIEW_DETAILS]: hasDetails,
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
-            ...(hasCustomPanel ? { [customPanel.id]: true } : {}),
+            ...(hasCustomPanel ? { [customPanelId]: true } : {}),
         };
 
         const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
@@ -328,13 +330,12 @@ class SidebarPanels extends React.Component<Props, State> {
                 {hasCustomPanel && (
                     <Route
                         exact
-                        key={customPanel.id}
-                        path={`/${customPanel.id}`}
+                        key={customPanelId}
+                        path={`/${customPanelId}`}
                         render={() => {
-                            this.handlePanelRender(customPanel.id);
-                            const PanelComponent = customPanel.component;
+                            this.handlePanelRender(customPanelId);
                             return (
-                                <PanelComponent
+                                <CustomPanelComponent
                                     elementId={elementId}
                                     key={file.id}
                                     fileExtension={file.extension}
