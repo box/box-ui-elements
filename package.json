@@ -343,5 +343,8 @@
         "dependencies": {
             "react-tether": "Version 2.x has too many breaking changes and requires forwardRef on all components"
         }
+    },
+    "msw": {
+        "workerDirectory": [".storybook/public"]
     }
 }
