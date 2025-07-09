@@ -118,7 +118,7 @@ const SidebarNav = ({
     const hasCustomTab = !!customTab;
     const {
         id: customTabId,
-        icon: customTabIcon,
+        icon: CustomTabIcon,
         index: customTabIndex = 0,
         title: customTabTitle,
         navButtonProps,
@@ -215,8 +215,8 @@ const SidebarNav = ({
                 analyticsTarget: `sidebar${customTabId}`,
                 testId: `sidebar${customTabId}`,
                 tooltip: customTabTitle ?? customTabId,
-                icon: customTabIcon ? (
-                    <customTabIcon className="bcs-SidebarNav-icon" />
+                icon: CustomTabIcon ? (
+                    <CustomTabIcon className="bcs-SidebarNav-icon" />
                 ) : (
                     <BoxAiLogo height={Size6} width={Size6} />
                 ),

@@ -176,4 +176,199 @@ describe('elements/content-sidebar/SidebarNav', () => {
         const boxSignSection = screen.getByRole('button', { name: /sign/i });
         expect(boxSignSection).toBeInTheDocument();
     });
+
+    describe('customTab functionality', () => {
+        const CustomIcon = () => <div data-testid="custom-icon">Custom Icon</div>;
+
+        test('should render custom tab with basic configuration', () => {
+            const props = {
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel',
+                    component: () => <div>Custom Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            // Should render the custom tab
+            expect(wrapper.find('Button[data-testid="sidebarcustom-panel"]')).toHaveLength(1);
+        });
+
+        test('should render custom tab with custom icon', () => {
+            const props = {
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel',
+                    icon: CustomIcon,
+                    component: () => <div>Custom Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            // Should render the custom icon
+            expect(wrapper.find('[data-testid="custom-icon"]')).toHaveLength(1);
+        });
+
+        test('should render custom tab with default BoxAI logo when no icon provided', () => {
+            const props = {
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel',
+                    component: () => <div>Custom Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            // Should render BoxAI logo as default icon
+            expect(wrapper.find(BoxAiLogo)).toHaveLength(1);
+        });
+
+        test('should render custom tab with string title as tooltip', () => {
+            const props = {
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel Title',
+                    component: () => <div>Custom Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            const customButton = wrapper.find('Button[data-testid="sidebarcustom-panel"]');
+            expect(customButton).toHaveLength(1);
+            expect(customButton.at(0).prop('aria-label')).toBe('Custom Panel Title');
+        });
+
+        test('should position custom tab at specified index', () => {
+            const props = {
+                hasActivity: true,
+                hasDetails: true,
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Box AI Panel',
+                    index: 1, // Should be inserted between activity and details
+                    component: () => <div>Custom Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            const buttons = wrapper.find('Button[role="tab"]');
+            expect(buttons).toHaveLength(3);
+            // Check order: activity, custom-panel, details
+            expect(buttons.at(0).prop('data-testid')).toBe('sidebaractivity');
+            expect(buttons.at(1).prop('data-testid')).toBe('sidebarcustom-panel');
+            expect(buttons.at(2).prop('data-testid')).toBe('sidebardetails');
+        });
+
+        test('should position custom tab at beginning when index is 0', () => {
+            const props = {
+                hasActivity: true,
+                hasDetails: true,
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel',
+                    index: 0,
+                    component: () => <div>Custom Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            const buttons = wrapper.find('Button');
+            expect(buttons.at(0).prop('data-testid')).toBe('sidebarcustom-panel');
+        });
+
+        test('should position custom tab at end when index is greater than available positions', () => {
+            const props = {
+                hasActivity: true,
+                hasDetails: true,
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel',
+                    index: 10, // Greater than available positions
+                    component: () => <div>Custom Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            const buttons = wrapper.find('Button');
+            expect(buttons.at(buttons.length - 1).prop('data-testid')).toBe('sidebarcustom-panel');
+        });
+
+        test('should not render BoxAI tab when custom tab replaces it', () => {
+            const props = {
+                hasBoxAI: true,
+                customTab: {
+                    id: 'boxai', // Same ID as BoxAI
+                    title: 'Custom BoxAI',
+                },
+            };
+            const wrapper = getWrapper(props);
+            // Should not render the default BoxAI button
+            expect(wrapper.find('Button[data-testid="sidebarboxai"]')).toHaveLength(1);
+        });
+
+        test('should apply additional nav button props to custom tab', () => {
+            const props = {
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel',
+                    navButtonProps: {
+                        'data-resin-target': 'custom-resin-target',
+                    },
+                },
+            };
+            const wrapper = getWrapper(props);
+            const customButton = wrapper.find('Button[data-testid="sidebarcustom-panel"]');
+            expect(customButton).toHaveLength(1);
+            expect(customButton.at(0).prop('data-resin-target')).toBe('custom-resin-target');
+        });
+
+        test('should handle custom tab click and call onPanelChange', async () => {
+            const onPanelChangeMock = jest.fn();
+            const props = {
+                customTab: {
+                    id: 'custom-panel',
+                    title: 'Custom Panel',
+                    component: () => <div>Custom Component</div>,
+                },
+                onPanelChange: onPanelChangeMock,
+            };
+            render(getSidebarNav({ props }));
+            const button = screen.getByTestId('sidebarcustom-panel');
+            await userEvent.click(button);
+            expect(onPanelChangeMock).toHaveBeenCalledWith('custom-panel', false);
+        });
+
+        test('should render custom tab with complex configuration', () => {
+            const props = {
+                hasActivity: true,
+                hasBoxAI: true,
+                customTab: {
+                    id: 'advanced-panel',
+                    title: 'Advanced Custom Panel',
+                    icon: CustomIcon,
+                    index: 2,
+                    navButtonProps: {
+                        isDisabled: true,
+                    },
+                    component: () => <div>Advanced Component</div>,
+                },
+            };
+            const wrapper = getWrapper(props);
+            const customButton = wrapper.find('Button[data-testid="sidebaradvanced-panel"]');
+            expect(customButton).toHaveLength(1);
+            console.log(customButton.props());
+            expect(customButton.at(0).prop('disabled')).toBe(true);
+            expect(customButton.at(0).prop('aria-label')).toBe('Advanced Custom Panel');
+            expect(wrapper.find('[data-testid="custom-icon"]')).toHaveLength(1);
+        });
+
+        test('should handle custom tab with undefined optional properties', () => {
+            const props = {
+                customTab: {
+                    id: 'minimal-panel',
+                    component: () => <div>Minimal Component</div>,
+                    // No title, icon, index, or navButtonProps
+                },
+            };
+            const wrapper = getWrapper(props);
+            const customButton = wrapper.find('Button[data-testid="sidebarminimal-panel"]');
+            expect(customButton).toHaveLength(1);
+            expect(customButton.at(0).prop('aria-label')).toBe('minimal-panel');
+            // Should use default BoxAI logo
+            expect(customButton.at(0).find(BoxAiLogo)).toHaveLength(1);
+        });
+    });
 });
