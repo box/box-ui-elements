@@ -90,10 +90,10 @@ describe('Content Component', () => {
         };
 
         test('does not render MetadataBasedItemList when contentExplorer.metadataViewV2 is enabled', () => {
-            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+            const collection = { percentLoaded: 100, boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
             renderComponent({
-                features,
                 currentCollection: collection,
+                features,
                 fieldsToShow: ['id'],
                 view: VIEW_METADATA,
             });
@@ -102,10 +102,10 @@ describe('Content Component', () => {
         });
 
         test('renders new metadata view when contentExplorer.metadataViewV2 is enabled', () => {
-            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
+            const collection = { percentLoaded: 100, boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
             renderComponent({
-                features,
                 currentCollection: collection,
+                features,
                 fieldsToShow: ['id'],
                 view: VIEW_METADATA,
             });
