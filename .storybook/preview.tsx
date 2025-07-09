@@ -13,7 +13,11 @@ global.FOLDER_ID = global.FOLDER_ID || '69083462919';
 // NOTE: The token used is a readonly token accessing public data in a demo enterprise. DO NOT PUT A WRITE TOKEN
 global.TOKEN = global.TOKEN || 'P1n3ID8nYMxHRWvenDatQ9k6JKzWzYrz';
 
-initialize();
+initialize({
+    serviceWorker: {
+        url: './mockServiceWorker.js',
+    },
+});
 
 const preview = {
     parameters: {
