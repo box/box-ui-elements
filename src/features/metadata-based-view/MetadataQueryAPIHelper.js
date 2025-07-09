@@ -20,7 +20,7 @@ import {
     METADATA_FIELD_TYPE_ENUM,
     METADATA_FIELD_TYPE_MULTISELECT,
 } from '../../common/constants';
-import { FIELD_NAME, FIELD_METADATA } from '../../constants';
+import { FIELD_NAME, FIELD_METADATA, FIELD_EXTENSION, FIELD_CREATED_AT } from '../../constants';
 
 import type { MetadataQuery as MetadataQueryType, MetadataQueryResponseData } from '../../common/types/metadataQueries';
 import type {
@@ -54,8 +54,11 @@ export default class MetadataQueryAPIHelper {
 
     metadataQuery: MetadataQueryType;
 
-    constructor(api: API) {
+    isV2: boolean;
+
+    constructor(api: API, isV2: boolean = false) {
         this.api = api;
+        this.isV2 = isV2;
     }
 
     createJSONPatchOperations = (
@@ -153,23 +156,26 @@ export default class MetadataQueryAPIHelper {
         const { metadata } = metadataEntry;
         return {
             ...metadataEntry,
-            metadata: this.flattenMetadata(metadata),
+            metadata: this.isV2 ? metadata : this.flattenMetadata(metadata),
         };
     };
 
     filterMetdataQueryResponse = (response: MetadataQueryResponseData): MetadataQueryResponseData => {
         const { entries = [], next_marker } = response;
         return {
-            entries: entries.filter(entry => getProp(entry, 'type') === ITEM_TYPE_FILE), // return only file items
+            entries: this.isV2 ? entries : entries.filter(entry => getProp(entry, 'type') === ITEM_TYPE_FILE), // return only file items
             next_marker,
         };
     };
 
     getFlattenedDataWithTypes = (templateSchemaResponse?: MetadataTemplateSchemaResponse): Collection => {
         this.metadataTemplate = getProp(templateSchemaResponse, 'data');
+
         const { entries, next_marker }: MetadataQueryResponseData = this.metadataQueryResponseData;
+
         return {
             items: entries.map<BoxItem>(this.flattenResponseEntry),
+            metadataTemplate: this.metadataTemplate,
             nextMarker: next_marker,
         };
     };
@@ -238,6 +244,16 @@ export default class MetadataQueryAPIHelper {
         if (!clonedFields.includes(FIELD_NAME)) {
             clonedFields.push(FIELD_NAME);
         }
+        if (this.isV2) {
+            if (!clonedFields.includes(FIELD_EXTENSION)) {
+                clonedFields.push(FIELD_EXTENSION);
+            }
+
+            if (!clonedFields.includes(FIELD_CREATED_AT)) {
+                clonedFields.push(FIELD_CREATED_AT);
+            }
+        }
+
         clonedQuery.fields = clonedFields;
 
         return clonedQuery;

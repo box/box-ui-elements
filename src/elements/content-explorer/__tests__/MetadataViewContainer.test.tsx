@@ -5,6 +5,11 @@ import type { Collection } from '../../../common/types/core';
 import type { MetadataTemplate, MetadataTemplateField } from '../../../common/types/metadata';
 
 describe('elements/content-explorer/MetadataViewContainer', () => {
+<<<<<<< HEAD
+=======
+    const mockOnSortChange = jest.fn();
+
+>>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
     const mockItems = [
         { id: '1', name: 'File 1.txt', type: 'file' },
         { id: '2', name: 'File 2.pdf', type: 'file' },
@@ -40,6 +45,10 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
     const mockCollection: Collection = {
         id: '0',
         items: mockItems,
+<<<<<<< HEAD
+=======
+        metadataTemplate: mockMetadataTemplate,
+>>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
         percentLoaded: 100,
     };
 
@@ -64,16 +73,30 @@ describe('elements/content-explorer/MetadataViewContainer', () => {
                 maxWidth: 250,
             },
         ],
+<<<<<<< HEAD
         metadataTemplate: mockMetadataTemplate,
+=======
+        onSortChange: mockOnSortChange,
+>>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
     };
 
     const renderComponent = (props: Partial<MetadataViewContainerProps> = {}) => {
         return render(<MetadataViewContainer {...defaultProps} {...props} />);
     };
 
+<<<<<<< HEAD
     test('should render MetadataView component', () => {
         renderComponent();
 
+=======
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test('should render MetadataView component', () => {
+        renderComponent();
+        screen.debug(null, 10000);
+>>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
         expect(screen.getByRole('button', { name: 'All Filters' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Name' })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Industry' })).toBeInTheDocument();

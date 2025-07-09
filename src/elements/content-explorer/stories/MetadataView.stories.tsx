@@ -79,7 +79,11 @@ type Story = StoryObj<typeof ContentExplorer>;
 
 export const metadataView: Story = {
     args: {
+<<<<<<< HEAD
         metadataViewProps: {
+=======
+        metadataProps: {
+>>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
             columns,
             tableProps: {
                 isSelectAllEnabled: true,
