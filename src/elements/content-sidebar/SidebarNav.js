@@ -211,7 +211,7 @@ const SidebarNav = ({
             const customTabConfig = {
                 key: customTabId,
                 id: customTabId,
-                view: (customTabId: ViewTypeValues),
+                view: customTabId,
                 analyticsTarget: `sidebar${customTabId}`,
                 testId: `sidebar${customTabId}`,
                 tooltip: customTabTitle ?? customTabId,
