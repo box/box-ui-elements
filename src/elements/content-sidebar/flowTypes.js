@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { ViewType } from 'elements/common/types/SidebarNavigation';
+import { ViewType } from '../common/types/SidebarNavigation';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
