@@ -231,7 +231,8 @@ class SidebarPanels extends React.Component<Props, State> {
     }
 
     getPanelOrder = (customPanel?: CustomSidebarPanel, shouldBoxAIBeDefaultPanel: boolean): string[] => {
-        const { id: customPanelId, index: insertIndex = 0, shouldBeDefaultPanel } = customPanel || {};
+        const { index: insertIndex = 0, shouldBeDefaultPanel } = customPanel || {};
+        const customPanelId = customPanel?.id?.trim();
         const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
 
         // Build base panel list without custom panel
@@ -243,7 +244,7 @@ class SidebarPanels extends React.Component<Props, State> {
         };
 
         // No custom panel - return base panels
-        if (!customPanel) {
+        if (!customPanel || !customPanelId) {
             return getBasePanels();
         }
 
@@ -301,9 +302,10 @@ class SidebarPanels extends React.Component<Props, State> {
             getFeatureConfig(features, 'boxai.sidebar');
 
         const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
-        const hasCustomPanel = !!customPanel;
-        const { id: customPanelId, component: CustomPanelComponent } = customPanel || {};
-
+        const { component: CustomPanelComponent } = customPanel || {};
+        const customPanelId = customPanel?.id?.trim();
+        // customPanelId should not be undefined or empty string
+        const hasCustomPanel = !!customPanelId;
         const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
 
         const panelsEligibility = {
@@ -334,7 +336,7 @@ class SidebarPanels extends React.Component<Props, State> {
                         path={`/${customPanelId}`}
                         render={() => {
                             this.handlePanelRender(customPanelId);
-                            return (
+                            return CustomPanelComponent ? (
                                 <CustomPanelComponent
                                     elementId={elementId}
                                     key={file.id}
@@ -342,7 +344,7 @@ class SidebarPanels extends React.Component<Props, State> {
                                     hasSidebarInitialized={isInitialized}
                                     ref={this.customSidebar}
                                 />
-                            );
+                            ) : null;
                         }}
                     />
                 )}

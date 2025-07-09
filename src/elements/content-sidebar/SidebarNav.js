@@ -114,15 +114,9 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-
-    const hasCustomTab = !!customTab;
-    const {
-        id: customTabId,
-        icon: CustomTabIcon,
-        index: customTabIndex = 0,
-        title: customTabTitle,
-        navButtonProps,
-    } = customTab || {};
+    const { icon: CustomTabIcon, index: customTabIndex = 0, title: customTabTitle, navButtonProps } = customTab || {};
+    const customTabId = customTab?.id?.trim();
+    const hasCustomTab = !!customTabId;
     const hasBoxAICustomTab = customTabId === 'boxai';
 
     // Configuration-driven button definitions

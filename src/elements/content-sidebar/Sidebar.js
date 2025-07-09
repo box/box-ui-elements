@@ -121,6 +121,7 @@ class Sidebar extends React.Component<Props, State> {
             docGenSidebarProps.checkDocGenTemplate(api, file, metadataSidebarProps.isFeatureEnabled);
         }
         onOpenChange(this.isOpen(), true);
+        this.validateCustomPanel();
     }
 
     componentDidUpdate(prevProps: Props): void {
@@ -145,6 +146,33 @@ class Sidebar extends React.Component<Props, State> {
         }
 
         this.handleDocgenTemplateOnUpdate(prevProps);
+    }
+
+    /**
+     * Validates that customPanel prop is of type CustomSidebarPanel
+     * @returns {void}
+     */
+    validateCustomPanel(): void {
+        const { customPanel } = this.props;
+
+        if (!customPanel) {
+            return; // No custom panel provided, nothing to validate
+        }
+
+        // Check if customPanel has required properties
+        const hasRequiredProps =
+            typeof customPanel === 'object' &&
+            typeof customPanel.id === 'string' &&
+            customPanel.id.trim() !== '' &&
+            typeof customPanel.component === 'function' &&
+            typeof customPanel.title === 'string';
+
+        if (!hasRequiredProps) {
+            console.error(
+                'ContentSidebar: customPanel prop must be a object. ' +
+                    'Expected object with required properties: id (non-empty string), component (React component), title (string). ',
+            );
+        }
     }
 
     handleDocgenTemplateOnUpdate = (prevProps: Props) => {
