@@ -32,7 +32,12 @@ import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from './constants';
 import LocalStore from '../../utils/LocalStore';
-import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
+import {
+    withFeatureConsumer,
+    withFeatureProvider,
+    isFeatureEnabled,
+    type FeatureConfig,
+} from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -88,6 +93,7 @@ import '../common/fonts.scss';
 import '../common/base.scss';
 import '../common/modal.scss';
 import './ContentExplorer.scss';
+import { MetadataViewContainerProps } from './MetadataViewContainer';
 
 const GRID_VIEW_MAX_COLUMNS = 7;
 const GRID_VIEW_MIN_COLUMNS = 1;
@@ -124,6 +130,7 @@ export interface ContentExplorerProps {
     measureRef?: (ref: Element | null) => void;
     messages?: StringMap;
     metadataQuery?: MetadataQuery;
+    metadataProps?: Omit<MetadataViewContainerProps, 'hasError' | 'currentCollection'>;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
@@ -166,7 +173,7 @@ type State = {
     rootName: string;
     searchQuery: string;
     selected?: BoxItem;
-    sortBy: SortBy;
+    sortBy: SortBy | string;
     sortDirection: SortDirection;
     view: View;
 };
@@ -227,6 +234,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             contentSidebarProps: {},
         },
         contentUploaderProps: {},
+        metadataProps: {},
     };
 
     /**
@@ -392,8 +400,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     showMetadataQueryResults() {
-        const { metadataQuery = {} }: ContentExplorerProps = this.props;
-        const { currentPageNumber, markers }: State = this.state;
+        const { features, metadataQuery = {} }: ContentExplorerProps = this.props;
+        const { currentPageNumber, markers, sortBy, sortDirection }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
 
         if (currentPageNumber === 0) {
@@ -410,13 +418,28 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             // Set limit to the query for pagination support
             metadataQueryClone.limit = DEFAULT_PAGE_SIZE;
         }
+
+        if (sortBy && sortDirection) {
+            metadataQueryClone.order_by = [
+                ...(metadataQueryClone.order_by ?? []),
+                {
+                    field_key: sortBy,
+                    direction: sortDirection,
+                },
+            ];
+        }
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
             currentCollection: this.currentUnloadedCollection(),
             view: VIEW_METADATA,
         });
-        this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
+
+        this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(
+            this.api,
+            isFeatureEnabled(features, 'contentExplorer.metadataViewV2'),
+        );
+
         this.metadataQueryAPIHelper.fetchMetadataQueryResults(
             metadataQueryClone,
             this.showMetadataQueryResultsSuccessCallback,
@@ -831,8 +854,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
         const {
             currentCollection: { id },
+            view,
         }: State = this.state;
-        if (id) {
+
+        if (id || view === VIEW_METADATA) {
             this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
     };
@@ -1602,6 +1627,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             measureRef,
             messages,
             fieldsToShow,
+            metadataProps,
             onDownload,
             onPreview,
             onUpload,
@@ -1697,6 +1723,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 isTouch={isTouch}
                                 itemActions={itemActions}
                                 fieldsToShow={fieldsToShow}
+                                metadataProps={metadataProps}
                                 onItemClick={this.onItemClick}
                                 onItemDelete={this.delete}
                                 onItemDownload={this.download}
