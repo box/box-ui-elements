@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { ViewType } from '../common/types/SidebarNavigation';
+import type { ViewTypeValues } from '../common/types/SidebarNavigation';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
@@ -35,7 +35,7 @@ type AdditionalSidebarTab = {
 };
 
 type CustomSidebarPanel = {
-    id: ViewType.BOXAI | string, // Unique identifier for the panel
+    id: ViewTypeValues | string, // Unique identifier for the panel
     component: React.ComponentType<any>, // The component to render
     title: string, // Panel title
     shouldBeDefaultPanel?: boolean, // Whether this panel should be the default panel
