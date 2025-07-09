@@ -349,7 +349,6 @@ describe('elements/content-sidebar/SidebarNav', () => {
             const wrapper = getWrapper(props);
             const customButton = wrapper.find('Button[data-testid="sidebaradvanced-panel"]');
             expect(customButton).toHaveLength(1);
-            console.log(customButton.props());
             expect(customButton.at(0).prop('disabled')).toBe(true);
             expect(customButton.at(0).prop('aria-label')).toBe('Advanced Custom Panel');
             expect(wrapper.find('[data-testid="custom-icon"]')).toHaveLength(1);
