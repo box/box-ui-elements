@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import type { ViewTypeValues } from 'elements/common/types/SidebarNavigation';
 import type { UseTargetingApi } from '../../features/targeting/types';
 
 type ClassificationInfo = {
@@ -34,7 +35,7 @@ type AdditionalSidebarTab = {
 };
 
 type CustomSidebarPanel = {
-    id: string, // Unique identifier for the panel
+    id: ViewTypeValues | string, // Unique identifier for the panel
     component: React.ComponentType<any>, // The component to render
     title: string, // Panel title
     shouldBeDefaultPanel?: boolean, // Whether this panel should be the default panel
