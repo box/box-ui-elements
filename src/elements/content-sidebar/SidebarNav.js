@@ -115,7 +115,7 @@ const SidebarNav = ({
         }
     };
     const { icon: CustomTabIcon, index: customTabIndex = 0, title: customTabTitle, navButtonProps } = customTab || {};
-    const customTabId = customTab?.id?.trim();
+    const customTabId = customTab && typeof customTab.id === 'string' ? customTab.id.trim() : '';
     const hasCustomTab = !!customTabId;
     const hasBoxAICustomTab = customTabId === 'boxai';
 

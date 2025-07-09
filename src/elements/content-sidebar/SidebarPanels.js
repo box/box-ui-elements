@@ -232,7 +232,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
     getPanelOrder = (customPanel?: CustomSidebarPanel, shouldBoxAIBeDefaultPanel: boolean): string[] => {
         const { index: insertIndex = 0, shouldBeDefaultPanel } = customPanel || {};
-        const customPanelId = customPanel?.id?.trim();
+        const customPanelId = customPanel && typeof customPanel.id === 'string' ? customPanel.id.trim() : '';
         const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
 
         // Build base panel list without custom panel
@@ -303,7 +303,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
         const CustomPanelComponent = customPanel?.component;
-        const customPanelId = customPanel?.id?.trim();
+        const customPanelId = customPanel && typeof customPanel.id === 'string' ? customPanel.id.trim() : '';
         // customPanelId should not be undefined or empty string
         const hasCustomPanel = !!customPanelId;
         const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
