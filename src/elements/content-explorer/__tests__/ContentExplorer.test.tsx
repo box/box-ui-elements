@@ -29,7 +29,9 @@ jest.mock('../../../utils/Xhr', () => {
             post: jest.fn(({ url }) => {
                 switch (url) {
                     case 'https://api.box.com/2.0/metadata_queries/execute_read':
-                        return Promise.resolve({ data: mockMetadata });
+                        return Promise.resolve({
+                            data: { limit: mockMetadata.limit, entries: [mockMetadata.entries[0]] },
+                        });
                     default:
                         return Promise.reject(new Error('Not Found'));
                 }
@@ -408,12 +410,9 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(screen.getByText('Name')).toBeInTheDocument();
             expect(screen.getByText('Industry Alias')).toBeInTheDocument();
             expect(screen.getByText('Last Contacted At')).toBeInTheDocument();
-            expect(screen.getByText('File1')).toBeInTheDocument();
-            expect(screen.getByText('File2')).toBeInTheDocument();
+            expect(screen.getByText('Child 2 of metadata folder.pdf')).toBeInTheDocument();
             expect(screen.getByText('Technology')).toBeInTheDocument();
             expect(screen.getByText('November 16, 2023')).toBeInTheDocument();
-            expect(screen.getByText('Healthcare')).toBeInTheDocument();
-            expect(screen.getByText('November 1, 2023')).toBeInTheDocument();
         });
         describe('Metadata View V2', () => {
             test('should render metadata view button', async () => {

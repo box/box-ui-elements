@@ -5,5 +5,8 @@ module.exports = {
         '@box/box-ai-content-answers',
         '@box/item-icon',
         '@box/metadata-editor',
+        '@box/metadata-filter',
+        '@box/metadata-view',
+        '@box/box-item-type-selector',
     ],
 };
