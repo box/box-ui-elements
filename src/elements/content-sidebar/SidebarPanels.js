@@ -302,12 +302,12 @@ class SidebarPanels extends React.Component<Props, State> {
             getFeatureConfig(features, 'boxai.sidebar');
 
         const canShowBoxAISidebarPanel = hasBoxAI && !showOnlyBoxAINavButton;
-        const { component: CustomPanelComponent } = customPanel || {};
+        const CustomPanelComponent = customPanel?.component;
         const customPanelId = customPanel?.id?.trim();
         // customPanelId should not be undefined or empty string
         const hasCustomPanel = !!customPanelId;
         const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
-
+        const canShowCustomPanel = hasCustomPanel && !customPanel?.navButtonProps?.isDisabled;
         const panelsEligibility = {
             [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel && !hasBoxAICustomPanel,
             [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
@@ -315,7 +315,7 @@ class SidebarPanels extends React.Component<Props, State> {
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
             [SIDEBAR_VIEW_DETAILS]: hasDetails,
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
-            ...(hasCustomPanel ? { [customPanelId]: true } : {}),
+            ...(canShowCustomPanel ? { [customPanelId]: true } : {}),
         };
 
         const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
@@ -329,7 +329,7 @@ class SidebarPanels extends React.Component<Props, State> {
 
         return (
             <Switch>
-                {hasCustomPanel && (
+                {canShowCustomPanel && (
                     <Route
                         exact
                         key={customPanelId}
