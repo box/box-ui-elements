@@ -37,7 +37,7 @@ type Props = {
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
     isCustomMetadata: boolean,
-    isExistingAIExtractionCascadePolicy: boolean,
+    isExistingCascadePolicy: boolean,
     onAIFolderExtractionToggle: (value: boolean) => void,
     onCascadeModeChange: (value: boolean) => void,
     onCascadeToggle: (value: boolean) => void,
@@ -52,7 +52,7 @@ const CascadePolicy = ({
     isCascadingOverwritten,
     isCustomMetadata,
     isAIFolderExtractionEnabled,
-    isExistingAIExtractionCascadePolicy,
+    isExistingCascadePolicy,
     onAIFolderExtractionToggle,
     onCascadeToggle,
     onCascadeModeChange,
@@ -113,10 +113,12 @@ const CascadePolicy = ({
                             value={isCascadingOverwritten ? 'overwrite' : 'skip'}
                         >
                             <RadioButton
+                                isDisabled={isExistingCascadePolicy}
                                 label={<FormattedMessage {...messages.cascadePolicySkipMode} />}
                                 value="skip"
                             />
                             <RadioButton
+                                isDisabled={isExistingCascadePolicy}
                                 label={<FormattedMessage {...messages.cascadePolicyOverwriteMode} />}
                                 value="overwrite"
                             />
@@ -133,7 +135,7 @@ const CascadePolicy = ({
                             <Toggle
                                 className="metadata-cascade-toggle"
                                 isOn={isAIFolderExtractionEnabled}
-                                isDisabled={isExistingAIExtractionCascadePolicy}
+                                isDisabled={isExistingCascadePolicy}
                                 label=""
                                 onChange={e => onAIFolderExtractionToggle(e.target.checked)}
                             />
@@ -149,6 +151,7 @@ const CascadePolicy = ({
                             <div className="metadata-cascade-ai-agent-selector">
                                 <BoxAiAgentSelector
                                     agents={agents}
+                                    disabled={isExistingCascadePolicy}
                                     onErrorAction={() => {}}
                                     requestState="success"
                                     selectedAgent={agents[0]}

@@ -641,8 +641,7 @@ class Instance extends React.PureComponent<Props, State> {
         // Animate short and tall cards at consistent speeds.
         const animationDuration = (fields.length + 1) * 50;
 
-        const isExistingAIExtractionCascadePolicy =
-            this.isCascadingEnabledThroughProps(this.props) && this.isAIFolderExtractionEnabledThroughProps(this.props);
+        const isExistingCascadePolicy = this.isCascadingEnabledThroughProps(this.props);
 
         return (
             <div ref={this.collapsibleRef}>
@@ -681,7 +680,7 @@ class Instance extends React.PureComponent<Props, State> {
                                             isCascadingEnabled={isCascadingEnabled}
                                             isCascadingOverwritten={isCascadingOverwritten}
                                             isCustomMetadata={isProperties}
-                                            isExistingAIExtractionCascadePolicy={isExistingAIExtractionCascadePolicy}
+                                            isExistingCascadePolicy={isExistingCascadePolicy}
                                             onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}
