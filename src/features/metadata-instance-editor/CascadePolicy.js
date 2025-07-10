@@ -13,22 +13,10 @@ import Link from '../../components/link/Link';
 import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import messages from './messages';
 import './CascadePolicy.scss';
+import { useIntl } from 'react-intl';
 
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
-
-const agents = [
-    {
-        id: '1',
-        name: 'Basic',
-        isEnterpriseDefault: true,
-    },
-    {
-        id: '2',
-        name: 'Enhanced (Gemini 2.5 Pro)',
-        isEnterpriseDefault: false,
-    },
-];
 
 type Props = {
     canEdit: boolean,
@@ -66,6 +54,20 @@ const CascadePolicy = ({
             <FormattedMessage {...messages.metadataCascadePolicyEnabledInfo} />
         </div>
     ) : null;
+    const { formatMessage } = useIntl();
+
+    const agents = [
+        {
+            id: '1',
+            name: formatMessage(messages.standardAgentName),
+            isEnterpriseDefault: true,
+        },
+        {
+            id: '2',
+            name: formatMessage(messages.enhancedAgentName),
+            isEnterpriseDefault: false,
+        },
+    ];
 
     return canEdit ? (
         <>
