@@ -64,6 +64,7 @@ type Props = {
 
 // Move renderNavButton outside the component
 const renderNavButton = (config, handleSidebarNavButtonClick) => (
+    // $FlowFixMe[incompatible-type] Allow custom panel string ids for sidebarView
     <SidebarNavButton
         key={config.key}
         data-resin-target={config.analyticsTarget}
