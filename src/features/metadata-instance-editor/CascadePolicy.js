@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { Tooltip, TooltipProvider } from '@box/blueprint-web';
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
 // $FlowFixMe
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
@@ -44,6 +45,31 @@ type Props = {
     shouldShowCascadeOptions: boolean,
 };
 
+const MetadataEditorWrapper = ({
+    children,
+    isExistingCascadePolicy,
+    ...rest
+}: {
+    children: React.Node,
+    isExistingCascadePolicy?: boolean,
+}) => {
+    const innerContent = (
+        <div className="metadata-cascade-editor" {...rest}>
+            {children}
+        </div>
+    );
+
+    if (isExistingCascadePolicy) {
+        return (
+            <Tooltip content="Cascade policy cannot be edited. To change the policy, remove the current policy to set up a new one">
+                {innerContent}
+            </Tooltip>
+        );
+    }
+
+    return innerContent;
+};
+
 const CascadePolicy = ({
     canEdit,
     canUseAIFolderExtraction,
@@ -65,7 +91,7 @@ const CascadePolicy = ({
     ) : null;
 
     return canEdit ? (
-        <>
+        <TooltipProvider>
             <div className="metadata-cascade-editor">
                 <div className="metadata-cascade-enable" data-testid="metadata-cascade-enable">
                     <div>
@@ -97,7 +123,7 @@ const CascadePolicy = ({
                 </div>
             </div>
             {shouldShowCascadeOptions && (
-                <div className="metadata-cascade-editor">
+                <MetadataEditorWrapper isExistingCascadePolicy={isExistingCascadePolicy}>
                     <div className="metadata-cascading-mode">
                         <FormattedMessage {...messages.cascadePolicyModeQuestion} />
 
@@ -124,10 +150,13 @@ const CascadePolicy = ({
                             />
                         </RadioGroup>
                     </div>
-                </div>
+                </MetadataEditorWrapper>
             )}
             {shouldShowCascadeOptions && canUseAIFolderExtraction && (
-                <div className="metadata-cascade-editor" data-testid="ai-folder-extraction">
+                <MetadataEditorWrapper
+                    isExistingCascadePolicy={isExistingCascadePolicy}
+                    data-testid="ai-folder-extraction"
+                >
                     <div className="metadata-cascade-enable">
                         <div>
                             <BoxAiLogo className="metadata-cascade-ai-logo" width={16} height={16} />
@@ -160,9 +189,9 @@ const CascadePolicy = ({
                             </div>
                         )}
                     </div>
-                </div>
+                </MetadataEditorWrapper>
             )}
-        </>
+        </TooltipProvider>
     ) : (
         readOnlyState
     );
