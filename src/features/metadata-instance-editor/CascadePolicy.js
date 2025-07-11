@@ -61,7 +61,7 @@ const MetadataEditorWrapper = ({
 
     if (isExistingCascadePolicy) {
         return (
-            <Tooltip content="Cascade policy cannot be edited. To change the policy, remove the current policy to set up a new one">
+            <Tooltip content={<FormattedMessage {...messages.cascadePolicyOptionsDisabledTooltip} />}>
                 {innerContent}
             </Tooltip>
         );
