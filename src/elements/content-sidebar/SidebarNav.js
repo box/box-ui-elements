@@ -62,7 +62,6 @@ type Props = {
     signSidebarProps: SignSidebarProps,
 };
 
-// Move renderNavButton outside the component
 const renderNavButton = (config, handleSidebarNavButtonClick) => (
     // $FlowFixMe[incompatible-type] Allow custom panel string ids for sidebarView
     <SidebarNavButton
