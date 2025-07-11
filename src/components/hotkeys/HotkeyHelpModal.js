@@ -13,6 +13,7 @@ import HotkeyFriendlyModal from './HotkeyFriendlyModal'; // eslint-disable-line 
 import messages from './messages';
 
 import './HotkeyHelpModal.scss';
+import HotkeyContext from './HotKeyContext';
 
 const specialCharacters = {
     backspace: '\u232b',
@@ -35,9 +36,7 @@ class HotkeyHelpModal extends Component {
         onRequestClose: PropTypes.func.isRequired,
     };
 
-    static contextTypes = {
-        hotkeyLayer: PropTypes.object,
-    };
+    static contextType = HotkeyContext;
 
     constructor(props, context) {
         super(props);
