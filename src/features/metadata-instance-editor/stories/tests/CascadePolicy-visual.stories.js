@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { within, userEvent } from 'storybook/test';
+import { TooltipProvider } from '@box/blueprint-web';
 import CascadePolicy from '../../CascadePolicy';
 import messages from '../../messages';
 
@@ -17,14 +18,17 @@ const baseProps = {
     shouldShowCascadeOptions: true,
 };
 
-export const EnabledCascadePolicyOptionsFieldsOnly = args => <CascadePolicy {...baseProps} {...args} />;
+const Template = args => (
+    <TooltipProvider>
+        <CascadePolicy {...baseProps} {...args} />
+    </TooltipProvider>
+);
 
+export const EnabledCascadePolicyOptionsFieldsOnly = Template.bind({});
 EnabledCascadePolicyOptionsFieldsOnly.args = {
     isExistingCascadePolicy: false,
 };
-
 EnabledCascadePolicyOptionsFieldsOnly.storyName = 'Enabled Cascade Policy Options';
-
 EnabledCascadePolicyOptionsFieldsOnly.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const optionsText = canvas.getByText(messages.cascadePolicyModeQuestion.defaultMessage);
@@ -32,22 +36,17 @@ EnabledCascadePolicyOptionsFieldsOnly.play = async ({ canvasElement }) => {
     // No tooltip should appear; Chromatic will snapshot with no tooltip visible
 };
 
-export const DisabledCascadePolicyOptionsFieldsOnly = args => <CascadePolicy {...baseProps} {...args} />;
-
+export const DisabledCascadePolicyOptionsFieldsOnly = Template.bind({});
 DisabledCascadePolicyOptionsFieldsOnly.args = {
     isExistingCascadePolicy: true,
 };
-
 DisabledCascadePolicyOptionsFieldsOnly.storyName = 'Disabled Cascade Policy Options';
 
-export const DisabledCascadePolicyOptionsWithTooltip = args => <CascadePolicy {...baseProps} {...args} />;
-
+export const DisabledCascadePolicyOptionsWithTooltip = Template.bind({});
 DisabledCascadePolicyOptionsWithTooltip.args = {
     isExistingCascadePolicy: true,
 };
-
 DisabledCascadePolicyOptionsWithTooltip.storyName = 'Disabled Cascade Policy Options (Tooltip Visible)';
-
 DisabledCascadePolicyOptionsWithTooltip.play = async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const optionsText = canvas.getByText(messages.cascadePolicyModeQuestion.defaultMessage);
