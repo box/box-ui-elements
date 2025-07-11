@@ -8,6 +8,12 @@ import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 
 export const basic = {};
 
+export const Modernization = {
+    args: {
+        enableModernizedComponents: true,
+    },
+};
+
 export const withPagination = {
     args: {
         initialPageSize: 1,
