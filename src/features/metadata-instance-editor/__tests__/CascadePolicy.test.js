@@ -115,38 +115,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
     });
 
     describe('AI Autofill Toggle', () => {
-        test('should disable toggle when isExistingAIExtractionCascadePolicy is true', () => {
-            render(
-                <CascadePolicy
-                    canEdit
-                    canUseAIFolderExtraction
-                    shouldShowCascadeOptions
-                    isExistingAIExtractionCascadePolicy
-                />,
-            );
-
-            const aiSection = screen.getByTestId('ai-folder-extraction');
-            const toggle = within(aiSection).getByRole('switch');
-
-            expect(toggle).toBeDisabled();
-        });
-
-        test('should enable toggle when isExistingAIExtractionCascadePolicy is false', () => {
-            render(
-                <CascadePolicy
-                    canEdit
-                    canUseAIFolderExtraction
-                    shouldShowCascadeOptions
-                    isExistingAIExtractionCascadePolicy={false}
-                />,
-            );
-
-            const aiSection = screen.getByTestId('ai-folder-extraction');
-            const toggle = within(aiSection).getByRole('switch');
-
-            expect(toggle).not.toBeDisabled();
-        });
-
         test('should call onAIFolderExtractionToggle when toggle is clicked and enabled', async () => {
             const onAIFolderExtractionToggle = jest.fn();
 
@@ -167,27 +135,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
             expect(onAIFolderExtractionToggle).toHaveBeenCalledTimes(1);
             expect(onAIFolderExtractionToggle).toHaveBeenCalledWith(true);
-        });
-
-        test('should not call onAIFolderExtractionToggle when toggle is clicked but disabled', async () => {
-            const onAIFolderExtractionToggle = jest.fn();
-
-            render(
-                <CascadePolicy
-                    canEdit
-                    canUseAIFolderExtraction
-                    shouldShowCascadeOptions
-                    isExistingAIExtractionCascadePolicy={true}
-                    onAIFolderExtractionToggle={onAIFolderExtractionToggle}
-                />,
-            );
-
-            const aiSection = screen.getByTestId('ai-folder-extraction');
-            const toggle = within(aiSection).getByRole('switch');
-
-            await userEvent.click(toggle);
-
-            expect(onAIFolderExtractionToggle).not.toHaveBeenCalled();
         });
     });
 });

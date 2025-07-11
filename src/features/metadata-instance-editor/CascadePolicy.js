@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Tooltip, TooltipProvider } from '@box/blueprint-web';
+import { Tooltip } from '@box/blueprint-web';
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
 // $FlowFixMe
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
@@ -91,7 +91,7 @@ const CascadePolicy = ({
     ) : null;
 
     return canEdit ? (
-        <TooltipProvider>
+        <>
             <div className="metadata-cascade-editor">
                 <div className="metadata-cascade-enable" data-testid="metadata-cascade-enable">
                     <div>
@@ -191,7 +191,7 @@ const CascadePolicy = ({
                     </div>
                 </MetadataEditorWrapper>
             )}
-        </TooltipProvider>
+        </>
     ) : (
         readOnlyState
     );
