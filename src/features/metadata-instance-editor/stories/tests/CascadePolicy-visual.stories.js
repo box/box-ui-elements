@@ -17,6 +17,21 @@ const baseProps = {
     shouldShowCascadeOptions: true,
 };
 
+export const EnabledCascadePolicyOptionsFieldsOnly = args => <CascadePolicy {...baseProps} {...args} />;
+
+EnabledCascadePolicyOptionsFieldsOnly.args = {
+    isExistingCascadePolicy: false,
+};
+
+EnabledCascadePolicyOptionsFieldsOnly.storyName = 'Enabled Cascade Policy Options';
+
+EnabledCascadePolicyOptionsFieldsOnly.play = async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const optionsText = canvas.getByText(messages.cascadePolicyModeQuestion.defaultMessage);
+    await userEvent.hover(optionsText);
+    // No tooltip should appear; Chromatic will snapshot with no tooltip visible
+};
+
 export const DisabledCascadePolicyOptionsFieldsOnly = args => <CascadePolicy {...baseProps} {...args} />;
 
 DisabledCascadePolicyOptionsFieldsOnly.args = {
