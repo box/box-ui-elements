@@ -8,11 +8,14 @@ import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import uniqueid from 'lodash/uniqueId';
 import noop from 'lodash/noop';
+import flow from 'lodash/flow';
 import { FormattedMessage } from 'react-intl';
 import queryString from 'query-string';
 import Internationalize from '../common/Internationalize';
 import messages from '../common/messages';
 import { withErrorBoundary } from '../common/error-boundary';
+// $FlowFixMe
+import { withBlueprintModernization } from '../common/withBlueprintModernization';
 import API from '../../api';
 import IntegrationPortalContainer from './IntegrationPortalContainer';
 import OpenWithDropdownMenu from './OpenWithDropdownMenu';
@@ -587,4 +590,6 @@ class ContentOpenWith extends PureComponent<Props, State> {
 
 export type ContentOpenWithProps = Props & ExternalProps;
 export { ContentOpenWith as ContentOpenWithComponent };
-export default withErrorBoundary(ORIGIN_OPEN_WITH, OpenWithFallbackButton)(ContentOpenWith);
+export default flow([withErrorBoundary(ORIGIN_OPEN_WITH, OpenWithFallbackButton), withBlueprintModernization])(
+    ContentOpenWith,
+);
