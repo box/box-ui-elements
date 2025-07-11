@@ -207,6 +207,12 @@ const messages = defineMessages({
             'Tooltip text that asks the user what they want to do when applying cascading to their metadata policy',
         id: 'boxui.metadataInstanceEditor.cascadePolicyModeQuestion',
     },
+    cascadePolicyOptionsDisabledTooltip: {
+        defaultMessage:
+            'Cascade policy cannot be edited. To change the policy, remove the current policy to set up a new one',
+        description: 'Tooltip text that explains that the cascade policy cannot be edited',
+        id: 'boxui.metadataInstanceEditor.cascadePolicyOptionsDisabledTooltip',
+    },
     cascadePolicySkipMode: {
         defaultMessage: 'Skip and keep all existing template values',
         description: 'Label for radio button that selects skip mode for cascading policy',
