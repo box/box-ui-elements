@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
 import { usePromptFocus } from '@box/box-ai-content-answers';
 
 import FeatureProvider from '../../common/feature-checking/FeatureProvider';
 import SidebarNav from '../SidebarNav';
 
-import { render, screen } from '../../../test-utils/testing-library';
+import { render, screen, userEvent } from '../../../test-utils/testing-library';
 
 jest.mock('@box/box-ai-content-answers');
 
@@ -70,6 +69,8 @@ describe('elements/content-sidebar/SidebarNav', () => {
         `(
             'given feature boxai.sidebar.showOnlyNavButton = true and boxai.sidebar.disabledTooltip = $disabledTooltip, should render box ai tab with disabled state and tooltip = $expectedTooltip',
             async ({ disabledTooltip, expectedTooltip }) => {
+                const user = userEvent();
+
                 renderSidebarNav({
                     features: { boxai: { sidebar: { disabledTooltip, showOnlyNavButton: true } } },
                     props: { hasBoxAI: true },
@@ -77,7 +78,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
                 const button = screen.getByTestId('sidebarboxai');
 
-                await userEvent.hover(button);
+                await user.hover(button);
 
                 expect(button).toHaveAttribute('aria-disabled', 'true');
                 expect(screen.getByText(expectedTooltip)).toBeInTheDocument();
@@ -85,6 +86,8 @@ describe('elements/content-sidebar/SidebarNav', () => {
         );
 
         test('given feature boxai.sidebar.showOnlyNavButton = false, should render box ai tab with default tooltip', async () => {
+            const user = userEvent();
+
             renderSidebarNav({
                 features: { boxai: { sidebar: { showOnlyNavButton: false } } },
                 props: { hasBoxAI: true },
@@ -92,7 +95,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
             const button = screen.getByTestId('sidebarboxai');
 
-            await userEvent.hover(button);
+            await user.hover(button);
 
             expect(button).not.toHaveAttribute('aria-disabled');
             expect(screen.getByText('Box AI')).toBeInTheDocument();
@@ -100,6 +103,8 @@ describe('elements/content-sidebar/SidebarNav', () => {
     });
 
     test('should call focusBoxAISidebarPrompt when clicked on Box AI Tab', async () => {
+        const user = userEvent();
+
         renderSidebarNav({
             features: {
                 boxai: {
@@ -113,7 +118,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
 
         const button = screen.getByTestId('sidebarboxai');
 
-        await userEvent.click(button);
+        await user.click(button);
 
         expect(usePromptFocus).toHaveBeenCalledTimes(1);
         expect(usePromptFocus).toHaveBeenCalledWith('.be.bcs');

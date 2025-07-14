@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen, fireEvent } from '../../../test-utils/testing-library';
+import { render, screen, userEvent } from '../../../test-utils/testing-library';
 import SidebarNavTablist from '../SidebarNavTablist';
 import {
     SIDEBAR_VIEW_SKILLS,
@@ -31,6 +31,7 @@ const MockTabComponent = React.forwardRef(
 );
 
 describe('elements/content-sidebar/SidebarNavTablist', () => {
+    const viewList = [SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_METADATA];
     let testHistory;
 
     beforeEach(() => {
@@ -72,13 +73,12 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
     });
 
     describe('handleKeyDown with router', () => {
-        const viewList = [SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_METADATA];
-
         test.each`
             key               | expectedPath
             ${KEYS.arrowUp}   | ${`/${SIDEBAR_VIEW_ACTIVITY}`}
             ${KEYS.arrowDown} | ${`/${SIDEBAR_VIEW_SKILLS}`}
         `('should navigate to $expectedPath when user presses $key', async ({ key, expectedPath }) => {
+            const user = userEvent();
             const children = viewList.map(view => <MockTabComponent sidebarView={view} key={view} />);
 
             renderSidebarNavTablist({
@@ -89,13 +89,14 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
 
             const tablist = screen.getByRole('tablist');
 
-            tablist.focus();
-            fireEvent.keyDown(tablist, { key });
+            await user.click(tablist);
+            await user.keyboard(`{${key}}`);
 
             expect(testHistory.location.pathname).toBe(expectedPath);
         });
 
         test('should not navigate when user presses arrow right', async () => {
+            const user = userEvent();
             const children = viewList.map(view => <MockTabComponent sidebarView={view} key={view} />);
 
             renderSidebarNavTablist({
@@ -106,16 +107,14 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
 
             const tablist = screen.getByRole('tablist');
 
-            tablist.focus();
-            fireEvent.keyDown(tablist, { key: KEYS.arrowRight });
+            await user.click(tablist);
+            await user.keyboard(`{${KEYS.arrowRight}}`);
 
             expect(testHistory.location.pathname).toBe(`/${SIDEBAR_VIEW_DETAILS}`);
         });
     });
 
     describe('handleKeyDown with routerDisabled', () => {
-        const viewList = [SIDEBAR_VIEW_ACTIVITY, SIDEBAR_VIEW_DETAILS, SIDEBAR_VIEW_SKILLS, SIDEBAR_VIEW_METADATA];
-
         test.each`
             key               | expectedView
             ${KEYS.arrowUp}   | ${SIDEBAR_VIEW_ACTIVITY}
@@ -123,6 +122,7 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
         `(
             'should use internal navigation when routerDisabled=true and user presses $key',
             async ({ key, expectedView }) => {
+                const user = userEvent();
                 const mockInternalSidebarNavigationHandler = jest.fn();
                 const internalSidebarNavigation = {
                     sidebar: SIDEBAR_VIEW_DETAILS,
@@ -141,8 +141,8 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
 
                 const tablist = screen.getByRole('tablist');
 
-                tablist.focus();
-                fireEvent.keyDown(tablist, { key });
+                await user.click(tablist);
+                await user.keyboard(`{${key}}`);
 
                 expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith({
                     sidebar: expectedView,
@@ -151,6 +151,7 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
         );
 
         test('should not call internal navigation handler when user presses arrow right', async () => {
+            const user = userEvent();
             const mockInternalSidebarNavigationHandler = jest.fn();
             const internalSidebarNavigation = {
                 sidebar: SIDEBAR_VIEW_DETAILS,
@@ -169,8 +170,8 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
 
             const tablist = screen.getByRole('tablist');
 
-            tablist.focus();
-            fireEvent.keyDown(tablist, { key: KEYS.arrowRight });
+            await user.click(tablist);
+            await user.keyboard(`{${KEYS.arrowRight}}`);
 
             expect(mockInternalSidebarNavigationHandler).not.toHaveBeenCalled();
         });
