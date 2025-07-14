@@ -14,6 +14,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
     const focusBoxAISidebarPromptMock = jest.fn();
 
     beforeEach(() => {
+        jest.clearAllMocks();
         usePromptFocus.mockReturnValue({
             focusPrompt: focusBoxAISidebarPromptMock,
         });
