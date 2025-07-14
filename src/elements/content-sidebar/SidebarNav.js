@@ -35,6 +35,7 @@ import {
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab } from './flowTypes';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
 
@@ -49,10 +50,13 @@ type Props = {
     hasDocGen?: boolean,
     hasMetadata: boolean,
     hasSkills: boolean,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     intl: IntlShape,
     isOpen?: boolean,
     onNavigate?: (SyntheticEvent<>, NavigateOptions) => void,
     onPanelChange?: (name: string, isInitialState: boolean) => void,
+    routerDisabled?: boolean,
     signSidebarProps: SignSidebarProps,
 };
 
@@ -67,10 +71,13 @@ const SidebarNav = ({
     hasMetadata,
     hasSkills,
     hasDocGen = false,
+    internalSidebarNavigation,
+    internalSidebarNavigationHandler,
     intl,
     isOpen,
     onNavigate,
     onPanelChange = noop,
+    routerDisabled,
     signSidebarProps,
 }: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
@@ -91,14 +98,24 @@ const SidebarNav = ({
     return (
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
             <div className="bcs-SidebarNav-tabs">
-                <SidebarNavTablist elementId={elementId} isOpen={isOpen} onNavigate={onNavigate}>
+                <SidebarNavTablist
+                    elementId={elementId}
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                    isOpen={isOpen}
+                    onNavigate={onNavigate}
+                    routerDisabled={routerDisabled}
+                >
                     {hasBoxAI && (
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.BOXAI}
                             data-target-id="SidebarNavButton-boxAI"
                             data-testid="sidebarboxai"
+                            internalSidebarNavigation={internalSidebarNavigation}
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                             isDisabled={showOnlyBoxAINavButton}
                             onClick={handleSidebarNavButtonClick}
+                            routerDisabled={routerDisabled}
                             sidebarView={SIDEBAR_VIEW_BOXAI}
                             tooltip={
                                 showOnlyBoxAINavButton
@@ -114,7 +131,10 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.ACTIVITY}
                             data-target-id="SidebarNavButton-activity"
                             data-testid="sidebaractivity"
+                            internalSidebarNavigation={internalSidebarNavigation}
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                             onClick={handleSidebarNavButtonClick}
+                            routerDisabled={routerDisabled}
                             sidebarView={SIDEBAR_VIEW_ACTIVITY}
                             tooltip={intl.formatMessage(messages.sidebarActivityTitle)}
                         >
@@ -126,7 +146,10 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.DETAILS}
                             data-target-id="SidebarNavButton-details"
                             data-testid="sidebardetails"
+                            internalSidebarNavigation={internalSidebarNavigation}
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                             onClick={handleSidebarNavButtonClick}
+                            routerDisabled={routerDisabled}
                             sidebarView={SIDEBAR_VIEW_DETAILS}
                             tooltip={intl.formatMessage(messages.sidebarDetailsTitle)}
                         >
@@ -138,7 +161,10 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.SKILLS}
                             data-target-id="SidebarNavButton-skills"
                             data-testid="sidebarskills"
+                            internalSidebarNavigation={internalSidebarNavigation}
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                             onClick={handleSidebarNavButtonClick}
+                            routerDisabled={routerDisabled}
                             sidebarView={SIDEBAR_VIEW_SKILLS}
                             tooltip={intl.formatMessage(messages.sidebarSkillsTitle)}
                         >
@@ -150,7 +176,10 @@ const SidebarNav = ({
                             data-resin-target={SIDEBAR_NAV_TARGETS.METADATA}
                             data-target-id="SidebarNavButton-metadata"
                             data-testid="sidebarmetadata"
+                            internalSidebarNavigation={internalSidebarNavigation}
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                             onClick={handleSidebarNavButtonClick}
+                            routerDisabled={routerDisabled}
                             sidebarView={SIDEBAR_VIEW_METADATA}
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
@@ -161,7 +190,11 @@ const SidebarNav = ({
                         <SidebarNavButton
                             data-resin-target={SIDEBAR_NAV_TARGETS.DOCGEN}
                             data-target-id="SidebarNavButton-docGen"
+                            data-testid="sidebardocgen"
+                            internalSidebarNavigation={internalSidebarNavigation}
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                             onClick={handleSidebarNavButtonClick}
+                            routerDisabled={routerDisabled}
                             sidebarView={SIDEBAR_VIEW_DOCGEN}
                             tooltip={intl.formatMessage(messages.sidebarDocGenTooltip)}
                         >
@@ -177,13 +210,18 @@ const SidebarNav = ({
                 )}
 
                 {hasAdditionalTabs && (
-                    <div className="bcs-SidebarNav-overflow">
+                    <div className="bcs-SidebarNav-overflow" data-testid="additional-tabs-overflow">
                         <AdditionalTabs key={fileId} tabs={additionalTabs} />
                     </div>
                 )}
             </div>
             <div className="bcs-SidebarNav-footer">
-                <SidebarToggle isOpen={isOpen} />
+                <SidebarToggle
+                    internalSidebarNavigation={internalSidebarNavigation}
+                    internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                    isOpen={isOpen}
+                    routerDisabled={routerDisabled}
+                />
             </div>
         </div>
     );
