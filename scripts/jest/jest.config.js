@@ -26,6 +26,6 @@ module.exports = {
     testMatch: ['**/__tests__/**/*.test.+(js|jsx|ts|tsx)'],
     testPathIgnorePatterns: ['stories.test.js$', 'stories.test.tsx$', 'stories.test.d.ts'],
     transformIgnorePatterns: [
-        'node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data|@box/blueprint-web|@box/blueprint-web-assets|@box/metadata-editor|@box/box-ai-content-answers|@box/box-ai-agent-selector|@box/item-icon|@box/combobox-with-api|@box/tree)/)',
+        'node_modules/(?!(@box/react-virtualized/dist/es|@box/cldr-data|@box/blueprint-web|@box/blueprint-web-assets|@box/metadata-editor|@box/box-ai-content-answers|@box/box-ai-agent-selector|@box/item-icon|@box/combobox-with-api|@box/tree|@box/types)/)',
     ],
 };
