@@ -5,6 +5,7 @@ import { ContentExplorerComponent as ContentExplorer, ContentExplorerProps } fro
 import { mockRecentItems, mockRootFolder, mockRootFolderSharedLink } from '../../common/__mocks__/mockRootFolder';
 import { mockMetadata, mockSchema } from '../../common/__mocks__/mockMetadata';
 import mockSubFolder from '../../common/__mocks__/mockSubfolder';
+import { FeatureProvider } from '../../common/feature-checking';
 
 jest.mock('../../../utils/Xhr', () => {
     return jest.fn().mockImplementation(() => {
@@ -71,8 +72,12 @@ jest.mock('../../common/preview-dialog/PreviewDialog', () => props => {
 describe('elements/content-explorer/ContentExplorer', () => {
     let rootElement: HTMLDivElement;
 
-    const renderComponent = (props: Partial<ContentExplorerProps> = {}) => {
-        return render(<ContentExplorer defaultView="list" rootFolderId="69083462919" token="token" {...props} />);
+    const renderComponent = ({ features, ...props }: Partial<ContentExplorerProps> = {}) => {
+        return render(
+            <FeatureProvider features={features}>
+                <ContentExplorer defaultView="list" rootFolderId="69083462919" token="token" {...props} />
+            </FeatureProvider>,
+        );
     };
 
     beforeEach(() => {
@@ -409,6 +414,34 @@ describe('elements/content-explorer/ContentExplorer', () => {
             expect(screen.getByText('November 16, 2023')).toBeInTheDocument();
             expect(screen.getByText('Healthcare')).toBeInTheDocument();
             expect(screen.getByText('November 1, 2023')).toBeInTheDocument();
+        });
+        describe('Metadata View V2', () => {
+            test('should render metadata view button', async () => {
+                renderComponent({
+                    defaultView: 'metadata',
+                    features: {
+                        contentExplorer: {
+                            metadataViewV2: true,
+                        },
+                    },
+                });
+
+                // two separate promises need to be resolved before the component is ready
+                await waitFor(() => {
+                    expect(screen.getByText('Please wait while the items load...')).toBeInTheDocument();
+                });
+
+                await waitFor(() => {
+                    expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
+                });
+
+                expect(screen.queryByRole('searchbox', { name: 'Search files and folders' })).not.toBeInTheDocument();
+                expect(screen.queryByRole('button', { name: 'Preview Test Folder' })).not.toBeInTheDocument();
+                expect(screen.queryByRole('button', { name: 'Switch to Grid View' })).not.toBeInTheDocument();
+                expect(screen.queryByRole('button', { name: 'Sort' })).not.toBeInTheDocument();
+                expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument();
+                expect(screen.getByRole('button', { name: 'Metadata' })).toBeInTheDocument();
+            });
         });
     });
 
