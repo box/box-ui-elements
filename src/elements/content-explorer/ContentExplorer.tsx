@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
@@ -1171,16 +1172,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     };
 
     /**
-     * Creates a new folder
-     *
-     * @private
-     * @return {void}
-     */
-    createFolder = (): void => {
-        this.createFolderCallback();
-    };
-
-    /**
      * New folder callback
      *
      * @private
@@ -1241,6 +1232,22 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 });
             },
         );
+    };
+
+    /**
+     * Throttled version of createFolderCallback to prevent errors from rapid clicking.
+     * @param {string} [name] - folder name
+     */
+    throttledCreateFolderCallback = throttle(this.createFolderCallback, 500);
+
+    /**
+     * Creates a new folder
+     *
+     * @private
+     * @return {void}
+     */
+    createFolder = (): void => {
+        this.throttledCreateFolderCallback();
     };
 
     /**
@@ -1738,7 +1745,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                         {allowCreate && !!this.appElement ? (
                             <CreateFolderDialog
                                 isOpen={isCreateFolderModalOpen}
-                                onCreate={this.createFolderCallback}
+                                onCreate={this.throttledCreateFolderCallback}
                                 onCancel={this.closeModals}
                                 isLoading={isLoading}
                                 errorCode={errorCode}
