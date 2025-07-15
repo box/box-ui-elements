@@ -1649,32 +1649,30 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                     <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                            {!isDefaultViewMetadata && (
-                                <>
-                                    <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
-                                    <SubHeader
-                                        view={view}
-                                        viewMode={viewMode}
-                                        rootId={rootFolderId}
-                                        isSmall={isSmall}
-                                        rootName={rootName}
-                                        currentCollection={currentCollection}
-                                        canUpload={allowUpload}
-                                        canCreateNewFolder={allowCreate}
-                                        gridColumnCount={gridColumnCount}
-                                        gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
-                                        gridMinColumns={GRID_VIEW_MIN_COLUMNS}
-                                        maxGridColumnCountForWidth={maxGridColumnCount}
-                                        onUpload={this.upload}
-                                        onCreate={this.createFolder}
-                                        onGridViewSliderChange={this.onGridViewSliderChange}
-                                        onItemClick={this.fetchFolder}
-                                        onSortChange={this.sort}
-                                        onViewModeChange={this.changeViewMode}
-                                        portalElement={this.rootElement}
-                                    />
-                                </>
-                            )}
+                            {!isDefaultViewMetadata && <Header view={view} logoUrl={logoUrl} onSearch={this.search} />}
+
+                            <SubHeader
+                                view={view}
+                                viewMode={viewMode}
+                                rootId={rootFolderId}
+                                isSmall={isSmall}
+                                rootName={rootName}
+                                currentCollection={currentCollection}
+                                canUpload={allowUpload}
+                                canCreateNewFolder={allowCreate}
+                                gridColumnCount={gridColumnCount}
+                                gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                maxGridColumnCountForWidth={maxGridColumnCount}
+                                onUpload={this.upload}
+                                onCreate={this.createFolder}
+                                onGridViewSliderChange={this.onGridViewSliderChange}
+                                onItemClick={this.fetchFolder}
+                                onSortChange={this.sort}
+                                onViewModeChange={this.changeViewMode}
+                                portalElement={this.rootElement}
+                            />
+
                             <Content
                                 canDelete={canDelete}
                                 canDownload={canDownload}
