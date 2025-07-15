@@ -8,11 +8,15 @@ import { TASK_TYPE_APPROVAL } from '../../constants';
 import type { TaskFormProps } from './activity-feed/task-form/TaskForm';
 import type { TaskType } from '../../common/types/tasks';
 import type { ElementsXhrError } from '../../common/types/api';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 
 type Props = {|
     history: RouterHistory,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isDisabled: boolean,
     onTaskModalClose: () => void,
+    routerDisabled?: boolean,
     taskFormProps: TaskFormProps,
 |};
 
@@ -40,7 +44,20 @@ class AddTaskButton extends React.Component<Props, State> {
     2. Preventing the sidebar from closing keeps the task modal open upon edit and resize
     */
     handleClickMenuItem = (taskType: TaskType) => {
-        this.props.history.replace({ state: { open: true } });
+        const { history, internalSidebarNavigation, internalSidebarNavigationHandler, routerDisabled } = this.props;
+
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            internalSidebarNavigationHandler(
+                {
+                    ...internalSidebarNavigation,
+                    open: true,
+                },
+                true,
+            );
+        } else {
+            history.replace({ state: { open: true } });
+        }
+
         this.setState({ isTaskFormOpen: true, taskType });
     };
 
