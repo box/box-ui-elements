@@ -5,7 +5,8 @@ import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
 import type { View, Collection } from '../../../common/types/core';
-import { VIEW_MODE_LIST } from '../../../constants';
+import { VIEW_MODE_LIST, VIEW_METADATA } from '../../../constants';
+import { useFeatureEnabled } from '../feature-checking';
 
 import './SubHeader.scss';
 
@@ -51,39 +52,49 @@ const SubHeader = ({
     rootName,
     view,
     viewMode = VIEW_MODE_LIST,
-}: SubHeaderProps) => (
-    <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="inline">
-        <PageHeader.StartElements>
-            <SubHeaderLeft
-                currentCollection={currentCollection}
-                isSmall={isSmall}
-                onItemClick={onItemClick}
-                portalElement={portalElement}
-                rootId={rootId}
-                rootName={rootName}
-                view={view}
-            />
-        </PageHeader.StartElements>
-        <PageHeader.EndElements>
-            <SubHeaderRight
-                canCreateNewFolder={canCreateNewFolder}
-                canUpload={canUpload}
-                currentCollection={currentCollection}
-                gridColumnCount={gridColumnCount}
-                gridMaxColumns={gridMaxColumns}
-                gridMinColumns={gridMinColumns}
-                maxGridColumnCountForWidth={maxGridColumnCountForWidth}
-                onCreate={onCreate}
-                onGridViewSliderChange={onGridViewSliderChange}
-                onSortChange={onSortChange}
-                onUpload={onUpload}
-                onViewModeChange={onViewModeChange}
-                portalElement={portalElement}
-                view={view}
-                viewMode={viewMode}
-            />
-        </PageHeader.EndElements>
-    </PageHeader.Root>
-);
+}: SubHeaderProps) => {
+    const isMetadataViewV2Feature = useFeatureEnabled('contentExplorer.metadataViewV2');
+
+    if (view === VIEW_METADATA && !isMetadataViewV2Feature) {
+        return null;
+    }
+
+    return (
+        <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="inline">
+            <PageHeader.StartElements>
+                {view !== VIEW_METADATA && !isMetadataViewV2Feature && (
+                    <SubHeaderLeft
+                        currentCollection={currentCollection}
+                        isSmall={isSmall}
+                        onItemClick={onItemClick}
+                        portalElement={portalElement}
+                        rootId={rootId}
+                        rootName={rootName}
+                        view={view}
+                    />
+                )}
+            </PageHeader.StartElements>
+            <PageHeader.EndElements>
+                <SubHeaderRight
+                    canCreateNewFolder={canCreateNewFolder}
+                    canUpload={canUpload}
+                    currentCollection={currentCollection}
+                    gridColumnCount={gridColumnCount}
+                    gridMaxColumns={gridMaxColumns}
+                    gridMinColumns={gridMinColumns}
+                    maxGridColumnCountForWidth={maxGridColumnCountForWidth}
+                    onCreate={onCreate}
+                    onGridViewSliderChange={onGridViewSliderChange}
+                    onSortChange={onSortChange}
+                    onUpload={onUpload}
+                    onViewModeChange={onViewModeChange}
+                    portalElement={portalElement}
+                    view={view}
+                    viewMode={viewMode}
+                />
+            </PageHeader.EndElements>
+        </PageHeader.Root>
+    );
+};
 
 export default SubHeader;

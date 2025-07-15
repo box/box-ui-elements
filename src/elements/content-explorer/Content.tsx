@@ -65,13 +65,13 @@ const Content = ({
     const isMetadataBasedView = view === VIEW_METADATA;
     const isListView = !isMetadataBasedView && viewMode === VIEW_MODE_LIST; // Folder view or Recents view
     const isGridView = !isMetadataBasedView && viewMode === VIEW_MODE_GRID; // Folder view or Recents view
-
+    const isMetadataViewV2Feature = isFeatureEnabled(features, 'contentExplorer.metadataViewV2');
     return (
         <div className="bce-content">
             {view === VIEW_ERROR || view === VIEW_SELECTED ? null : <ProgressBar percent={percentLoaded} />}
 
             {isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
-            {!isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
+            {!isMetadataViewV2Feature && !isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList
                     currentCollection={currentCollection}
                     fieldsToShow={fieldsToShow}
@@ -79,9 +79,7 @@ const Content = ({
                     {...rest}
                 />
             )}
-            {isFeatureEnabled(features, 'contentExplorer.metadataViewV2') && !isViewEmpty && isMetadataBasedView && (
-                <MetadataView />
-            )}
+            {isMetadataViewV2Feature && !isViewEmpty && isMetadataBasedView && <MetadataView />}
             {!isViewEmpty && isListView && (
                 <ItemList
                     items={items}
