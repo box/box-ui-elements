@@ -1172,6 +1172,16 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     };
 
     /**
+     * Creates a new folder
+     *
+     * @private
+     * @return {void}
+     */
+    createFolder = (): void => {
+        this.throttledCreateFolderCallback();
+    };
+
+    /**
      * New folder callback
      *
      * @private
@@ -1239,16 +1249,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @param {string} [name] - folder name
      */
     throttledCreateFolderCallback = throttle(this.createFolderCallback, 500);
-
-    /**
-     * Creates a new folder
-     *
-     * @private
-     * @return {void}
-     */
-    createFolder = (): void => {
-        this.throttledCreateFolderCallback();
-    };
 
     /**
      * Selects the clicked file and then shares it
