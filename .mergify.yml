@@ -17,7 +17,6 @@ queue_rules:
       - status-success = lint_pull_request
       - status-success = lint_test_build
     merge_conditions:
-      - status-success = lint_pull_request
       - status-success = lint_test_build
     merge_method: squash
 
@@ -35,6 +34,5 @@ queue_rules:
       - "#review-threads-unresolved = 0"
     merge_conditions:
       - status-success = license/cla
-      - status-success = lint_pull_request
       - status-success = lint_test_build
     merge_method: squash
