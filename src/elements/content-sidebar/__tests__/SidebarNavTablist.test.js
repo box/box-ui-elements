@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useHistory } from 'react-router-dom';
 import { render, screen, userEvent } from '../../../test-utils/testing-library';
 import SidebarNavTablist from '../SidebarNavTablist';
 import {
@@ -46,7 +46,7 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
         let historyRef;
 
         const HistoryCapture = () => {
-            const history = require('react-router-dom').useHistory();
+            const history = useHistory();
             historyRef = history;
             return null;
         };
