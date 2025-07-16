@@ -1247,8 +1247,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     /**
      * Throttled version of createFolderCallback to prevent errors from rapid clicking.
      * @param {string} [name] - folder name
+     * @return {void}
      */
-    throttledCreateFolderCallback = throttle(this.createFolderCallback, 500);
+    throttledCreateFolderCallback = throttle(this.createFolderCallback, 500, { trailing: false });
 
     /**
      * Selects the clicked file and then shares it
