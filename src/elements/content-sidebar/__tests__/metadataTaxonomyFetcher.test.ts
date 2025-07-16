@@ -22,9 +22,29 @@ describe('metadataTaxonomyFetcher', () => {
     test('should fetch metadata options and return formatted data - new naming convention', async () => {
         const mockMetadataOptions = {
             entries: [
-                { id: 'opt1', display_name: 'Option 1', level: '1', ancestors: null, selectable: false },
-                { id: 'opt2', display_name: 'Option 2', level: '2', ancestors: [{ display_name: 'Option 1', foo: 'bar' }], selectable: true },
+                { 
+                    id: 'opt1', 
+                    display_name: 'Option 1', 
+                    level: '1', 
+                    parentId: 'parent1',
+                    nodePath: ['node1', 'node2'],
+                    deprecated: false,
+                    ancestors: null, 
+                    selectable: false 
+                },
+                { 
+                    id: 'opt2', 
+                    display_name: 'Option 2', 
+                    level: '2', 
+                    parentId: 'parent2',
+                    nodePath: ['node1', 'node3'],
+                    deprecated: true,
+                    ancestors: [{ display_name: 'Option 1', foo: 'bar' }], 
+                    selectable: true 
+                },
             ],
+            limit: 100,
+            total_result_count: 2,
         };
 
         apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
@@ -33,10 +53,30 @@ describe('metadataTaxonomyFetcher', () => {
 
         const expectedResult = {
             options: [
-                { value: 'opt1', displayValue: 'Option 1', level: '1', ancestors: undefined, selectable: false },
-                { value: 'opt2', displayValue: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
+                { 
+                    value: 'opt1', 
+                    displayValue: 'Option 1', 
+                    level: '1', 
+                    parentId: 'parent1',
+                    nodePath: ['node1', 'node2'],
+                    deprecated: false,
+                    ancestors: undefined, 
+                    selectable: false 
+                },
+                { 
+                    value: 'opt2', 
+                    displayValue: 'Option 2', 
+                    level: '2', 
+                    parentId: 'parent2',
+                    nodePath: ['node1', 'node3'],
+                    deprecated: true,
+                    ancestors: [{ displayName: 'Option 1', foo: 'bar' }], 
+                    selectable: true 
+                },
             ],
             marker: 'marker_1',
+            totalResultCount: 2,
+            limit: 100,
         };
 
         expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
@@ -54,9 +94,29 @@ describe('metadataTaxonomyFetcher', () => {
     test('should fetch metadata options and return formatted data - old naming convention', async () => {
         const mockMetadataOptions = {
             entries: [
-                { id: 'opt1', displayName: 'Option 1', level: '1', ancestors: null, selectable: false },
-                { id: 'opt2', displayName: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
+                { 
+                    id: 'opt1', 
+                    displayName: 'Option 1', 
+                    level: '1', 
+                    parentId: 'parent1',
+                    nodePath: ['node1', 'node2'],
+                    deprecated: false,
+                    ancestors: null, 
+                    selectable: false 
+                },
+                { 
+                    id: 'opt2', 
+                    displayName: 'Option 2', 
+                    level: '2', 
+                    parentId: 'parent2',
+                    nodePath: ['node1', 'node3'],
+                    deprecated: true,
+                    ancestors: [{ displayName: 'Option 1', foo: 'bar' }], 
+                    selectable: true 
+                },
             ],
+            limit: 50,
+            total_result_count: 15,
         };
 
         apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
@@ -65,10 +125,30 @@ describe('metadataTaxonomyFetcher', () => {
 
         const expectedResult = {
             options: [
-                { value: 'opt1', displayValue: 'Option 1', level: '1', ancestors: undefined, selectable: false },
-                { value: 'opt2', displayValue: 'Option 2', level: '2', ancestors: [{ displayName: 'Option 1', foo: 'bar' }], selectable: true },
+                { 
+                    value: 'opt1', 
+                    displayValue: 'Option 1', 
+                    level: '1', 
+                    parentId: 'parent1',
+                    nodePath: ['node1', 'node2'],
+                    deprecated: false,
+                    ancestors: undefined, 
+                    selectable: false 
+                },
+                { 
+                    value: 'opt2', 
+                    displayValue: 'Option 2', 
+                    level: '2', 
+                    parentId: 'parent2',
+                    nodePath: ['node1', 'node3'],
+                    deprecated: true,
+                    ancestors: [{ displayName: 'Option 1', foo: 'bar' }], 
+                    selectable: true 
+                },
             ],
             marker: 'marker_1',
+            totalResultCount: 15,
+            limit: 50,
         };
 
         expect(apiMock.getMetadataAPI).toHaveBeenCalledWith(false);
@@ -102,7 +182,13 @@ describe('metadataTaxonomyFetcher', () => {
 
     test('should set marker to null if not provided in options', async () => {
         const mockMetadataOptions = {
-            entries: [{ id: 'opt1', display_name: 'Option 1' }],
+            entries: [{ 
+                id: 'opt1', 
+                display_name: 'Option 1',
+                parentId: undefined,
+                nodePath: undefined,
+                deprecated: undefined,
+            }],
         };
 
         apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
@@ -110,8 +196,50 @@ describe('metadataTaxonomyFetcher', () => {
         const result = await metadataTaxonomyFetcher(apiMock, fileId, scope, templateKey, fieldKey, level, {});
 
         const expectedResult = {
-            options: [{ value: 'opt1', displayValue: 'Option 1' }],
+            options: [{ 
+                value: 'opt1', 
+                displayValue: 'Option 1',
+                parentId: undefined,
+                nodePath: undefined,
+                deprecated: undefined,
+            }],
             marker: null,
+        };
+
+        expect(result).toEqual(expectedResult);
+    });
+
+    test('should handle missing new fields for backward compatibility', async () => {
+        const mockMetadataOptions = {
+            entries: [
+                { 
+                    id: 'opt1', 
+                    display_name: 'Option 1', 
+                    level: '1', 
+                    ancestors: null, 
+                    selectable: false
+                },
+            ],
+        };
+
+        apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
+
+        const result = await metadataTaxonomyFetcher(apiMock, fileId, scope, templateKey, fieldKey, level, options);
+
+        const expectedResult = {
+            options: [
+                { 
+                    value: 'opt1', 
+                    displayValue: 'Option 1', 
+                    level: '1', 
+                    parentId: undefined,
+                    nodePath: undefined,
+                    deprecated: undefined,
+                    ancestors: undefined, 
+                    selectable: false 
+                },
+            ],
+            marker: 'marker_1',
         };
 
         expect(result).toEqual(expectedResult);
