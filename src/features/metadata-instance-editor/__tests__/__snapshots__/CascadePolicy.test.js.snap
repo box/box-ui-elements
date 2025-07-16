@@ -57,7 +57,9 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
       </div>
     </div>
   </div>
-  <MetadataEditorWrapper>
+  <div
+    className="metadata-cascade-editor"
+  >
     <div
       className="metadata-cascading-mode"
     >
@@ -101,6 +103,6 @@ exports[`features/metadata-instance-editor/CascadePolicy should correctly render
         />
       </RadioGroup>
     </div>
-  </MetadataEditorWrapper>
+  </div>
 </Fragment>
 `;

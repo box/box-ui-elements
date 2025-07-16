@@ -5,11 +5,17 @@ import userEvent from '@testing-library/user-event';
 import { screen, render, within } from '../../../test-utils/testing-library';
 
 import CascadePolicy from '../CascadePolicy';
+import messages from '../messages';
 
 describe('features/metadata-instance-editor/CascadePolicy', () => {
     beforeEach(() => {
         // reset any previous tests that may have set localStorage
         localStorage.removeItem('aiAgent');
+    });
+
+    test('should render InlineNotice when isExistingCascadePolicy is true', () => {
+        render(<CascadePolicy canEdit isExistingCascadePolicy shouldShowCascadeOptions />);
+        expect(screen.getByText(messages.cascadePolicyOptionsDisabledNotice.defaultMessage)).toBeInTheDocument();
     });
 
     test('should correctly render cascade policy read only mode', () => {
