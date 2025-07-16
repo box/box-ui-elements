@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { InlineNotice } from '@box/blueprint-web';
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
@@ -59,6 +59,8 @@ const CascadePolicy = ({
     onCascadeModeChange,
     shouldShowCascadeOptions,
 }: Props) => {
+    const intl = useIntl();
+
     const readOnlyState = isCascadingEnabled ? (
         <div className="metadata-cascade-notice">
             <FormattedMessage {...messages.metadataCascadePolicyEnabledInfo} />
@@ -68,7 +70,10 @@ const CascadePolicy = ({
     return canEdit ? (
         <>
             {isExistingCascadePolicy && (
-                <InlineNotice>
+                <InlineNotice
+                    variant="info"
+                    variantIconAriaLabel={intl.formatMessage(messages.cascadePolicyOptionsDisabledNoticeIconAriaLabel)}
+                >
                     <FormattedMessage {...messages.cascadePolicyOptionsDisabledNotice} />
                 </InlineNotice>
             )}

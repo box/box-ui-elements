@@ -213,6 +213,11 @@ const messages = defineMessages({
         description: 'Notice that explains that the cascade policy cannot be edited',
         id: 'boxui.metadataInstanceEditor.cascadePolicyOptionsDisabledNotice',
     },
+    cascadePolicyOptionsDisabledNoticeIconAriaLabel: {
+        defaultMessage: 'Disabled casccade options information',
+        description: 'Aria label for the disabled casccade options information icon',
+        id: 'boxui.metadataInstanceEditor.cascadePolicyOptionsDisabledNoticeIconAriaLabel',
+    },
     cascadePolicySkipMode: {
         defaultMessage: 'Skip and keep all existing template values',
         description: 'Label for radio button that selects skip mode for cascading policy',
