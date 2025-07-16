@@ -54,8 +54,8 @@ const SidebarNavTablist = ({
                 return;
         }
 
-        const nextSidebar = tablist[nextIndex];
-        history.push(`/${nextSidebar}`);
+        const nextTab = tablist[nextIndex];
+        history.push(`/${nextTab}`);
 
         if (refs.length > nextIndex) {
             refs[nextIndex].focus();
@@ -68,8 +68,8 @@ const SidebarNavTablist = ({
     const handleKeyDownWithoutRouter = (event: SyntheticKeyboardEvent<>): void => {
         if (!internalSidebarNavigationHandler) return;
 
-        const currentSidebar = internalSidebarNavigation?.sidebar;
-        const currentIndex = tablist.indexOf(currentSidebar);
+        const currentTab = internalSidebarNavigation?.sidebar;
+        const currentIndex = tablist.indexOf(currentTab);
         const { length } = tablist;
         let nextIndex = currentIndex;
 
@@ -84,9 +84,9 @@ const SidebarNavTablist = ({
                 return;
         }
 
-        const nextSidebar = tablist[nextIndex];
+        const nextTab = tablist[nextIndex];
         internalSidebarNavigationHandler({
-            sidebar: nextSidebar,
+            sidebar: nextTab,
         });
 
         if (refs.length > nextIndex) {

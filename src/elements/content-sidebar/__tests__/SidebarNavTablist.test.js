@@ -150,6 +150,41 @@ describe('elements/content-sidebar/SidebarNavTablist', () => {
             },
         );
 
+        test.each`
+            currentView              | key               | expectedView
+            ${SIDEBAR_VIEW_ACTIVITY} | ${KEYS.arrowUp}   | ${SIDEBAR_VIEW_METADATA}
+            ${SIDEBAR_VIEW_METADATA} | ${KEYS.arrowDown} | ${SIDEBAR_VIEW_ACTIVITY}
+        `(
+            'should wrap around when navigating beyond tabs range: from $currentView with $key goes to $expectedView',
+            async ({ currentView, key, expectedView }) => {
+                const user = userEvent();
+                const mockInternalSidebarNavigationHandler = jest.fn();
+                const internalSidebarNavigation = {
+                    sidebar: currentView,
+                };
+
+                const children = viewList.map(view => <MockTabComponent sidebarView={view} key={view} />);
+
+                renderSidebarNavTablist({
+                    props: {
+                        routerDisabled: true,
+                        internalSidebarNavigation,
+                        internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
+                    },
+                    children,
+                });
+
+                const tablist = screen.getByRole('tablist');
+
+                await user.click(tablist);
+                await user.keyboard(`{${key}}`);
+
+                expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith({
+                    sidebar: expectedView,
+                });
+            },
+        );
+
         test('should not call internal navigation handler when user presses arrow right', async () => {
             const user = userEvent();
             const mockInternalSidebarNavigationHandler = jest.fn();
