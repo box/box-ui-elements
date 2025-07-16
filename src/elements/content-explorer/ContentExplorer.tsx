@@ -1246,6 +1246,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
     /**
      * Throttled version of createFolderCallback to prevent errors from rapid clicking.
+     *
+     * @private
      * @param {string} [name] - folder name
      * @return {void}
      */
