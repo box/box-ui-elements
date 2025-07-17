@@ -180,6 +180,42 @@ describe('metadataTaxonomyFetcher', () => {
         expect(result).toEqual(expectedResult);
     });
 
+    test('should not include limit and totalResultCount when not provided in metadataOptions', async () => {
+        const mockMetadataOptions = {
+            entries: [
+                { 
+                    id: 'opt1', 
+                    display_name: 'Option 1', 
+                    level: '1', 
+                    parentId: 'parent1',
+                },
+            ],
+        };
+
+        apiMock.getMetadataAPI(false).getMetadataOptions.mockResolvedValue(mockMetadataOptions);
+
+        const result = await metadataTaxonomyFetcher(apiMock, fileId, scope, templateKey, fieldKey, level, options);
+
+        expect(result).toEqual({
+            options: [
+                { 
+                    value: 'opt1', 
+                    displayValue: 'Option 1', 
+                    level: '1', 
+                    parentId: 'parent1',
+                    nodePath: undefined,
+                    deprecated: undefined,
+                    ancestors: undefined,
+                    selectable: undefined,
+                },
+            ],
+            marker: 'marker_1',
+        });
+
+        expect(result).not.toHaveProperty('limit');
+        expect(result).not.toHaveProperty('totalResultCount');
+    });
+
     test('should set marker to null if not provided in options', async () => {
         const mockMetadataOptions = {
             entries: [{ 
