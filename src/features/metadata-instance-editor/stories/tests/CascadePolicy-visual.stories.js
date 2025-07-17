@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { TooltipProvider } from '@box/blueprint-web';
 import CascadePolicy from '../../CascadePolicy';
 
 const baseProps = {
@@ -15,10 +16,16 @@ const baseProps = {
     shouldShowCascadeOptions: true,
 };
 
-const EnabledCascadePolicyOptionsFieldsOnly = () => <CascadePolicy {...baseProps} isExistingCascadePolicy={false} />;
+const Template = props => (
+    <TooltipProvider>
+        <CascadePolicy {...baseProps} {...props} />
+    </TooltipProvider>
+);
+
+const EnabledCascadePolicyOptionsFieldsOnly = () => <Template isExistingCascadePolicy={false} />;
 EnabledCascadePolicyOptionsFieldsOnly.storyName = 'Enabled Cascade Policy Options';
 
-const DisabledCascadePolicyOptionsFieldsOnly = () => <CascadePolicy {...baseProps} isExistingCascadePolicy={true} />;
+const DisabledCascadePolicyOptionsFieldsOnly = () => <Template isExistingCascadePolicy={true} />;
 DisabledCascadePolicyOptionsFieldsOnly.storyName = 'Disabled Cascade Policy Options';
 
 export { EnabledCascadePolicyOptionsFieldsOnly, DisabledCascadePolicyOptionsFieldsOnly };
