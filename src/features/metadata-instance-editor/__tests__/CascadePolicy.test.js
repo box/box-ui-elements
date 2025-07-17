@@ -13,55 +13,57 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
         localStorage.removeItem('aiAgent');
     });
 
+    test('should correctly render cascade policy read only mode', () => {
+        render(<CascadePolicy isCascadingEnabled shouldShowCascadeOptions canEdit={false} />);
+        expect(screen.getByText(messages.metadataCascadePolicyEnabledInfo.defaultMessage)).toBeInTheDocument();
+    });
+
+    test('should correctly render cascade policy in edit mode', () => {
+        render(
+            <CascadePolicy
+                canEdit
+                isCascadingEnabled
+                onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
+                shouldShowCascadeOptions
+            />,
+        );
+        expect(screen.getByTestId('metadata-cascade-enable')).toBeInTheDocument();
+        expect(screen.getByText(messages.enableCascadePolicy.defaultMessage)).toBeInTheDocument();
+    });
+
+    test('should correctly render cascade policy in edit mode and overwrite is on', () => {
+        render(
+            <CascadePolicy
+                canEdit
+                isCascadingEnabled
+                isCascadingOverwritten
+                onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
+                shouldShowCascadeOptions
+            />,
+        );
+        expect(screen.getByTestId('metadata-cascade-enable')).toBeInTheDocument();
+        expect(screen.getByText(messages.enableCascadePolicy.defaultMessage)).toBeInTheDocument();
+        expect(screen.getByLabelText(messages.cascadePolicyOverwriteMode.defaultMessage)).toBeInTheDocument();
+    });
+
+    test('should correctly render cascade policy when the template is Custom Metadata', () => {
+        render(
+            <CascadePolicy
+                canEdit
+                isCustomMetadata
+                onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
+                shouldShowCascadeOptions
+            />,
+        );
+        expect(screen.getByText(messages.cannotApplyCascadePolicyText.defaultMessage)).toBeInTheDocument();
+    });
+
     test('should render InlineNotice when isExistingCascadePolicy is true', () => {
         render(<CascadePolicy canEdit isExistingCascadePolicy shouldShowCascadeOptions />);
         expect(screen.getByText(messages.cascadePolicyOptionsDisabledNotice.defaultMessage)).toBeInTheDocument();
-    });
-
-    test('should correctly render cascade policy read only mode', () => {
-        const wrapper = shallow(<CascadePolicy id="fakeId" isCascadingEnabled shouldShowCascadeOptions />);
-        expect(wrapper).toMatchSnapshot();
-    });
-    test('should correctly render cascade policy in edit mode', () => {
-        const wrapper = shallow(
-            <CascadePolicy
-                id="fakeId"
-                isCascadingEnabled
-                isEditable
-                onCascadeModeChange={jest.fn()}
-                onCascadeToggle={jest.fn()}
-                shouldShowCascadeOptions
-            />,
-        );
-        expect(wrapper).toMatchSnapshot();
-    });
-    test('should correctly render cascade policy in edit mode and overwrite is on', () => {
-        const wrapper = shallow(
-            <CascadePolicy
-                id="fakeId"
-                isCascadingEnabled
-                isEditable
-                onCascadeModeChange={jest.fn()}
-                onCascadeToggle={jest.fn()}
-                shouldCascadeOverwrite
-                shouldShowCascadeOptions
-            />,
-        );
-        expect(wrapper).toMatchSnapshot();
-    });
-    test('should correctly render cascade policy when the template is Custom Metadata', () => {
-        const wrapper = shallow(
-            <CascadePolicy
-                canEdit
-                id="fakeId"
-                isCustomMetadata
-                isEditable
-                onCascadeModeChange={jest.fn()}
-                onCascadeToggle={jest.fn()}
-                shouldShowCascadeOptions
-            />,
-        );
-        expect(wrapper).toMatchSnapshot();
     });
 
     test('should render AI folder extraction toggle when canEdit, canUseAIFolderExtraction, and shouldShowCascadeOptions are true', () => {
@@ -123,7 +125,6 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
     describe('AI Autofill Toggle', () => {
         test('should call onAIFolderExtractionToggle when toggle is clicked and enabled', async () => {
             const onAIFolderExtractionToggle = jest.fn();
-
             render(
                 <CascadePolicy
                     canEdit
@@ -133,12 +134,9 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                     onAIFolderExtractionToggle={onAIFolderExtractionToggle}
                 />,
             );
-
             const aiSection = screen.getByTestId('ai-folder-extraction');
             const toggle = within(aiSection).getByRole('switch');
-
             await userEvent.click(toggle);
-
             expect(onAIFolderExtractionToggle).toHaveBeenCalledTimes(1);
             expect(onAIFolderExtractionToggle).toHaveBeenCalledWith(true);
         });
