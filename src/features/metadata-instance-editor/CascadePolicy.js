@@ -1,7 +1,8 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
+import { InlineNotice } from '@box/blueprint-web';
 import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
 // $FlowFixMe
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
@@ -37,7 +38,7 @@ type Props = {
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
     isCustomMetadata: boolean,
-    isExistingAIExtractionCascadePolicy: boolean,
+    isExistingCascadePolicy: boolean,
     onAIFolderExtractionToggle: (value: boolean) => void,
     onCascadeModeChange: (value: boolean) => void,
     onCascadeToggle: (value: boolean) => void,
@@ -52,12 +53,14 @@ const CascadePolicy = ({
     isCascadingOverwritten,
     isCustomMetadata,
     isAIFolderExtractionEnabled,
-    isExistingAIExtractionCascadePolicy,
+    isExistingCascadePolicy,
     onAIFolderExtractionToggle,
     onCascadeToggle,
     onCascadeModeChange,
     shouldShowCascadeOptions,
 }: Props) => {
+    const { formatMessage } = useIntl();
+
     const readOnlyState = isCascadingEnabled ? (
         <div className="metadata-cascade-notice">
             <FormattedMessage {...messages.metadataCascadePolicyEnabledInfo} />
@@ -66,6 +69,14 @@ const CascadePolicy = ({
 
     return canEdit ? (
         <>
+            {isExistingCascadePolicy && (
+                <InlineNotice
+                    variant="info"
+                    variantIconAriaLabel={formatMessage(messages.cascadePolicyOptionsDisabledNoticeIconAriaLabel)}
+                >
+                    <FormattedMessage {...messages.cascadePolicyOptionsDisabledNotice} />
+                </InlineNotice>
+            )}
             <div className="metadata-cascade-editor">
                 <div className="metadata-cascade-enable" data-testid="metadata-cascade-enable">
                     <div>
@@ -113,10 +124,12 @@ const CascadePolicy = ({
                             value={isCascadingOverwritten ? 'overwrite' : 'skip'}
                         >
                             <RadioButton
+                                isDisabled={isExistingCascadePolicy}
                                 label={<FormattedMessage {...messages.cascadePolicySkipMode} />}
                                 value="skip"
                             />
                             <RadioButton
+                                isDisabled={isExistingCascadePolicy}
                                 label={<FormattedMessage {...messages.cascadePolicyOverwriteMode} />}
                                 value="overwrite"
                             />
@@ -133,7 +146,7 @@ const CascadePolicy = ({
                             <Toggle
                                 className="metadata-cascade-toggle"
                                 isOn={isAIFolderExtractionEnabled}
-                                isDisabled={isExistingAIExtractionCascadePolicy}
+                                isDisabled={isExistingCascadePolicy}
                                 label=""
                                 onChange={e => onAIFolderExtractionToggle(e.target.checked)}
                             />
@@ -149,6 +162,7 @@ const CascadePolicy = ({
                             <div className="metadata-cascade-ai-agent-selector">
                                 <BoxAiAgentSelector
                                     agents={agents}
+                                    disabled={isExistingCascadePolicy}
                                     onErrorAction={() => {}}
                                     requestState="success"
                                     selectedAgent={agents[0]}
