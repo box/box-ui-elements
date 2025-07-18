@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 import flow from 'lodash/flow';
 import getProp from 'lodash/get';
 import noop from 'lodash/noop';
+import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
@@ -1177,7 +1178,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     createFolder = (): void => {
-        this.createFolderCallback();
+        this.throttledCreateFolderCallback();
     };
 
     /**
@@ -1242,6 +1243,15 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             },
         );
     };
+
+    /**
+     * Throttled version of createFolderCallback to prevent errors from rapid clicking.
+     *
+     * @private
+     * @param {string} [name] - folder name
+     * @return {void}
+     */
+    throttledCreateFolderCallback = throttle(this.createFolderCallback, 500, { trailing: false });
 
     /**
      * Selects the clicked file and then shares it
@@ -1649,32 +1659,30 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                     <div id={this.id} className={styleClassName} ref={measureRef} data-testid="content-explorer">
                         <ThemingStyles selector={`#${this.id}`} theme={theme} />
                         <div className="be-app-element" onKeyDown={this.onKeyDown} tabIndex={0}>
-                            {!isDefaultViewMetadata && (
-                                <>
-                                    <Header view={view} logoUrl={logoUrl} onSearch={this.search} />
-                                    <SubHeader
-                                        view={view}
-                                        viewMode={viewMode}
-                                        rootId={rootFolderId}
-                                        isSmall={isSmall}
-                                        rootName={rootName}
-                                        currentCollection={currentCollection}
-                                        canUpload={allowUpload}
-                                        canCreateNewFolder={allowCreate}
-                                        gridColumnCount={gridColumnCount}
-                                        gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
-                                        gridMinColumns={GRID_VIEW_MIN_COLUMNS}
-                                        maxGridColumnCountForWidth={maxGridColumnCount}
-                                        onUpload={this.upload}
-                                        onCreate={this.createFolder}
-                                        onGridViewSliderChange={this.onGridViewSliderChange}
-                                        onItemClick={this.fetchFolder}
-                                        onSortChange={this.sort}
-                                        onViewModeChange={this.changeViewMode}
-                                        portalElement={this.rootElement}
-                                    />
-                                </>
-                            )}
+                            {!isDefaultViewMetadata && <Header view={view} logoUrl={logoUrl} onSearch={this.search} />}
+
+                            <SubHeader
+                                view={view}
+                                viewMode={viewMode}
+                                rootId={rootFolderId}
+                                isSmall={isSmall}
+                                rootName={rootName}
+                                currentCollection={currentCollection}
+                                canUpload={allowUpload}
+                                canCreateNewFolder={allowCreate}
+                                gridColumnCount={gridColumnCount}
+                                gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
+                                gridMinColumns={GRID_VIEW_MIN_COLUMNS}
+                                maxGridColumnCountForWidth={maxGridColumnCount}
+                                onUpload={this.upload}
+                                onCreate={this.createFolder}
+                                onGridViewSliderChange={this.onGridViewSliderChange}
+                                onItemClick={this.fetchFolder}
+                                onSortChange={this.sort}
+                                onViewModeChange={this.changeViewMode}
+                                portalElement={this.rootElement}
+                            />
+
                             <Content
                                 canDelete={canDelete}
                                 canDownload={canDownload}
@@ -1738,7 +1746,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                         {allowCreate && !!this.appElement ? (
                             <CreateFolderDialog
                                 isOpen={isCreateFolderModalOpen}
-                                onCreate={this.createFolderCallback}
+                                onCreate={this.throttledCreateFolderCallback}
                                 onCancel={this.closeModals}
                                 isLoading={isLoading}
                                 errorCode={errorCode}

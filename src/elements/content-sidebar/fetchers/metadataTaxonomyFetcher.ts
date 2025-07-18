@@ -21,11 +21,16 @@ export const metadataTaxonomyFetcher = async (
             value: metadataOption.id,
             displayValue: metadataOption.display_name || metadataOption.displayName,
             level: metadataOption.level,
+            parentId: metadataOption.parentId,
+            nodePath: metadataOption.nodePath,
+            deprecated: metadataOption.deprecated,
             ancestors: metadataOption.ancestors?.map(({display_name, displayName, ...rest}) => ({...rest, displayName: display_name || displayName })),
             selectable: metadataOption.selectable,
         })),
         marker,
-    };
+        ...(metadataOptions.total_result_count !== undefined && { totalResultCount: metadataOptions.total_result_count }),
+        ...(metadataOptions.limit !== undefined && { limit: metadataOptions.limit }),
+    } as FetcherResponse<TreeOptionType>;
 };
 
 type HydratedMetadataTaxonomyLevel = {
