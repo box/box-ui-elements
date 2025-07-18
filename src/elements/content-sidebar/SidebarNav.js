@@ -35,7 +35,6 @@ import {
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
 import type { NavigateOptions, AdditionalSidebarTab, CustomSidebarPanel } from './flowTypes';
-import type { ViewTypeValues } from '../common/types/SidebarNavigation';
 import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 import './SidebarNav.scss';
 import type { SignSidebarProps } from './SidebarNavSign';
@@ -80,26 +79,26 @@ const renderNavButton = (config, handleSidebarNavButtonClick) => (
 );
 
 const SidebarNav = ({
-                        additionalTabs,
-                        customTab,
-                        elementId,
-                        fileId,
-                        hasActivity,
-                        hasAdditionalTabs,
-                        hasBoxAI,
-                        hasDetails,
-                        hasMetadata,
-                        hasSkills,
-                        hasDocGen = false,
-                        internalSidebarNavigation,
-                        internalSidebarNavigationHandler,
-                        intl,
-                        isOpen,
-                        onNavigate,
-                        onPanelChange = noop,
-                        routerDisabled,
-                        signSidebarProps,
-                    }: Props) => {
+    additionalTabs,
+    customTab,
+    elementId,
+    fileId,
+    hasActivity,
+    hasAdditionalTabs,
+    hasBoxAI,
+    hasDetails,
+    hasMetadata,
+    hasSkills,
+    hasDocGen = false,
+    internalSidebarNavigation,
+    internalSidebarNavigationHandler,
+    intl,
+    isOpen,
+    onNavigate,
+    onPanelChange = noop,
+    routerDisabled,
+    signSidebarProps,
+}: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
