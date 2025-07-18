@@ -48,7 +48,7 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
         );
         expect(screen.getByTestId('metadata-cascade-enable')).toBeInTheDocument();
         expect(screen.getByText('Enable Cascade Policy')).toBeInTheDocument();
-        expect(screen.getByLabelText('Overwrite')).toBeInTheDocument();
+        expect(screen.getByLabelText('Overwrite all existing template values')).toBeInTheDocument();
     });
 
     test('should correctly render cascade policy when the template is Custom Metadata', () => {
@@ -62,14 +62,16 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             />,
         );
         expect(
-            screen.getByText("You cannot apply a cascade policy to this item because it's a custom metadata template."),
+            screen.getByText('Cascade policy cannot be applied to custom metadata at this time.'),
         ).toBeInTheDocument();
     });
 
     test('should render InlineNotice when isExistingCascadePolicy is true', () => {
         render(<CascadePolicy canEdit isExistingCascadePolicy shouldShowCascadeOptions />);
         expect(
-            screen.getByText("You cannot apply a cascade policy to this item because it's a custom metadata template."),
+            screen.getByText(
+                'This cascade policy cannot be edited. To modify it, deactivate the current policy and then re-enable it to set up a new one.',
+            ),
         ).toBeInTheDocument();
     });
 
