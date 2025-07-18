@@ -5,10 +5,12 @@
 
 export const ViewType = Object.freeze({
     BOXAI: 'boxai',
-    SKILLS: 'skills',
-    ACTIVITY: 'activity',
     DETAILS: 'details',
     METADATA: 'metadata',
+    METADATA_REDESIGN: 'metadata_redesign',
+    SKILLS: 'skills',
+    ACTIVITY: 'activity',
+    VERSIONS: 'versions',
     DOCGEN: 'docgen',
 });
 
@@ -22,11 +24,12 @@ export type ViewTypeValues = $Values<typeof ViewType>;
 export type FeedEntryTypeValues = $Values<typeof FeedEntryType>;
 
 export type SidebarNavigation = {
-    sidebar: ViewTypeValues,
-    versionId?: string,
     activeFeedEntryType?: FeedEntryTypeValues,
     activeFeedEntryId?: string,
     fileVersionId?: string,
+    filteredTemplateIds?: string,
+    sidebar: ViewTypeValues,
+    versionId?: string,
 };
 
 export type InternalSidebarNavigation = SidebarNavigation & {
