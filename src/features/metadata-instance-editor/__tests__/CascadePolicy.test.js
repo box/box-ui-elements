@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event';
 import { screen, render, within } from '../../../test-utils/testing-library';
 
 import CascadePolicy from '../CascadePolicy';
-import messages from '../messages';
 
 describe('features/metadata-instance-editor/CascadePolicy', () => {
     beforeEach(() => {
@@ -15,7 +14,11 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
     test('should correctly render cascade policy read only mode', () => {
         render(<CascadePolicy isCascadingEnabled shouldShowCascadeOptions canEdit={false} />);
-        expect(screen.getByText(messages.metadataCascadePolicyEnabledInfo.defaultMessage)).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'This template and its values are being cascaded to all items in this folder and its subfolders.',
+            ),
+        ).toBeInTheDocument();
     });
 
     test('should correctly render cascade policy in edit mode', () => {
@@ -29,7 +32,7 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             />,
         );
         expect(screen.getByTestId('metadata-cascade-enable')).toBeInTheDocument();
-        expect(screen.getByText(messages.enableCascadePolicy.defaultMessage)).toBeInTheDocument();
+        expect(screen.getByText('Enable Cascade Policy')).toBeInTheDocument();
     });
 
     test('should correctly render cascade policy in edit mode and overwrite is on', () => {
@@ -44,8 +47,8 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             />,
         );
         expect(screen.getByTestId('metadata-cascade-enable')).toBeInTheDocument();
-        expect(screen.getByText(messages.enableCascadePolicy.defaultMessage)).toBeInTheDocument();
-        expect(screen.getByLabelText(messages.cascadePolicyOverwriteMode.defaultMessage)).toBeInTheDocument();
+        expect(screen.getByText('Enable Cascade Policy')).toBeInTheDocument();
+        expect(screen.getByLabelText('Overwrite')).toBeInTheDocument();
     });
 
     test('should correctly render cascade policy when the template is Custom Metadata', () => {
@@ -58,12 +61,16 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                 shouldShowCascadeOptions
             />,
         );
-        expect(screen.getByText(messages.cannotApplyCascadePolicyText.defaultMessage)).toBeInTheDocument();
+        expect(
+            screen.getByText("You cannot apply a cascade policy to this item because it's a custom metadata template."),
+        ).toBeInTheDocument();
     });
 
     test('should render InlineNotice when isExistingCascadePolicy is true', () => {
         render(<CascadePolicy canEdit isExistingCascadePolicy shouldShowCascadeOptions />);
-        expect(screen.getByText(messages.cascadePolicyOptionsDisabledNotice.defaultMessage)).toBeInTheDocument();
+        expect(
+            screen.getByText("You cannot apply a cascade policy to this item because it's a custom metadata template."),
+        ).toBeInTheDocument();
     });
 
     test('should render AI folder extraction toggle when canEdit, canUseAIFolderExtraction, and shouldShowCascadeOptions are true', () => {

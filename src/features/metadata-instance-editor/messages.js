@@ -214,8 +214,8 @@ const messages = defineMessages({
         id: 'boxui.metadataInstanceEditor.cascadePolicyOptionsDisabledNotice',
     },
     cascadePolicyOptionsDisabledNoticeIconAriaLabel: {
-        defaultMessage: 'Disabled casccade options information',
-        description: 'Aria label for the disabled casccade options information icon',
+        defaultMessage: 'Disabled cascade options information',
+        description: 'Aria label for the disabled cascade options information icon',
         id: 'boxui.metadataInstanceEditor.cascadePolicyOptionsDisabledNoticeIconAriaLabel',
     },
     cascadePolicySkipMode: {

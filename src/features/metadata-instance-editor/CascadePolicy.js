@@ -59,7 +59,7 @@ const CascadePolicy = ({
     onCascadeModeChange,
     shouldShowCascadeOptions,
 }: Props) => {
-    const intl = useIntl();
+    const { formatMessage } = useIntl();
 
     const readOnlyState = isCascadingEnabled ? (
         <div className="metadata-cascade-notice">
@@ -72,7 +72,7 @@ const CascadePolicy = ({
             {isExistingCascadePolicy && (
                 <InlineNotice
                     variant="info"
-                    variantIconAriaLabel={intl.formatMessage(messages.cascadePolicyOptionsDisabledNoticeIconAriaLabel)}
+                    variantIconAriaLabel={formatMessage(messages.cascadePolicyOptionsDisabledNoticeIconAriaLabel)}
                 >
                     <FormattedMessage {...messages.cascadePolicyOptionsDisabledNotice} />
                 </InlineNotice>
