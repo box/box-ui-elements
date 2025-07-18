@@ -626,4 +626,559 @@ describe('elements/content-sidebar/SidebarPanels', () => {
             expect(onVersionChange).toBeCalledWith(null);
         });
     });
+
+    describe('customPanel', () => {
+        const MockCustomPanel = React.forwardRef(({ elementId, fileExtension, hasSidebarInitialized }, ref) => (
+            <div data-testid="custom-panel" ref={ref}>
+                Custom Panel Content
+                <div data-testid="element-id">{elementId}</div>
+                <div data-testid="file-extension">{fileExtension}</div>
+                <div data-testid="sidebar-initialized">{hasSidebarInitialized.toString()}</div>
+            </div>
+        ));
+
+        const customPanel = {
+            id: 'custom',
+            component: MockCustomPanel,
+            title: 'Custom Panel',
+        };
+
+        describe('rendering', () => {
+            test('should render custom panel when provided and path matches', () => {
+                render(
+                    getSidebarPanels({
+                        customPanel,
+                        path: '/custom',
+                    }),
+                );
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+            });
+
+            test('should not render custom panel when path does not match', () => {
+                render(
+                    getSidebarPanels({
+                        customPanel,
+                        path: '/activity',
+                    }),
+                );
+                expect(screen.queryByTestId('custom-panel')).not.toBeInTheDocument();
+            });
+
+            test('should pass correct props to custom panel component', () => {
+                render(
+                    getSidebarPanels({
+                        customPanel,
+                        path: '/custom',
+                        elementId: 'test-element',
+                    }),
+                );
+                expect(screen.getByTestId('element-id')).toHaveTextContent('test-element');
+                expect(screen.getByTestId('sidebar-initialized')).toHaveTextContent('true');
+            });
+
+            test('should call onPanelChange with custom panel id when rendered', () => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel,
+                        onPanelChange,
+                        path: '/custom',
+                    }),
+                );
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+
+            test('should render custom panel even when other sidebars are disabled', () => {
+                render(
+                    getSidebarPanels({
+                        customPanel,
+                        path: '/custom',
+                        hasBoxAI: false,
+                        hasActivity: false,
+                        hasDetails: false,
+                        hasMetadata: false,
+                        hasSkills: false,
+                        hasVersions: false,
+                        hasDocGen: false,
+                    }),
+                );
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+            });
+        });
+
+        describe('panel order logic', () => {
+            test('should include custom panel in panel eligibility when provided', () => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should not redirect to custom panel as first eligible panel when shouldBeDefaultPanel is undefined
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should place custom panel first when shouldBeDefaultPanel is true', () => {
+                const customPanelAsDefault = {
+                    ...customPanel,
+                    shouldBeDefaultPanel: true,
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelAsDefault,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+
+            test('should insert custom panel at specified index when shouldBeDefaultPanel is false', () => {
+                const customPanelWithIndex = {
+                    ...customPanel,
+                    index: 2,
+                    shouldBeDefaultPanel: false,
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithIndex,
+                        onPanelChange,
+                        path: '/',
+                        hasDocGen: false, // Disable docgen to test insertion order
+                    }),
+                );
+                // Should redirect to skills (first available panel) since custom is at index 2
+                expect(onPanelChange).toHaveBeenCalledWith('skills', true);
+            });
+
+            test('should clamp custom panel index to valid range', () => {
+                const customPanelWithHighIndex = {
+                    ...customPanel,
+                    index: 999,
+                    shouldBeDefaultPanel: false,
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithHighIndex,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should still redirect to custom panel as it's eligible
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should place custom panel at end when index is negative or 0 and shouldBeDefaultPanel is false', () => {
+                const customPanelWithZeroIndex = {
+                    ...customPanel,
+                    index: 0,
+                    shouldBeDefaultPanel: false,
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithZeroIndex,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to custom panel as it's eligible
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+        });
+
+        describe('BoxAI custom panel replacement', () => {
+            test('should not render default BoxAI panel when custom panel has BoxAI id', () => {
+                const boxAICustomPanel = {
+                    id: 'boxai',
+                    component: MockCustomPanel,
+                    title: 'Custom BoxAI Panel',
+                };
+                render(
+                    getSidebarPanels({
+                        customPanel: boxAICustomPanel,
+                        path: '/boxai',
+                    }),
+                );
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+                // The default BoxAI panel should not be rendered
+                expect(screen.queryByTestId('boxai-sidebar')).not.toBeInTheDocument();
+            });
+
+            test('should exclude BoxAI from panel eligibility when custom panel replaces it', () => {
+                const boxAICustomPanel = {
+                    id: 'boxai',
+                    component: MockCustomPanel,
+                    title: 'Custom BoxAI Panel',
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: boxAICustomPanel,
+                        onPanelChange,
+                        path: '/',
+                        hasDocGen: false, // Disable docgen to test fallback
+                    }),
+                );
+                // Should redirect to skills (first available panel) since BoxAI is replaced
+                expect(onPanelChange).toHaveBeenCalledWith('skills', true);
+            });
+
+            test('should handle BoxAI custom panel with shouldBeDefaultPanel feature flag', () => {
+                const boxAICustomPanel = {
+                    id: 'boxai',
+                    component: MockCustomPanel,
+                    title: 'Custom BoxAI Panel',
+                    shouldBeDefaultPanel: true,
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: boxAICustomPanel,
+                        features: { boxai: { sidebar: { shouldBeDefaultPanel: true } } },
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to custom BoxAI panel
+                expect(onPanelChange).toHaveBeenCalledWith('boxai', true);
+            });
+        });
+
+        describe('refresh functionality', () => {
+            test('should call refresh on custom panel when refresh method is called', () => {
+                const mockRefresh = jest.fn();
+                const CustomPanelWithRefresh = React.forwardRef((props, ref) => {
+                    React.useImperativeHandle(ref, () => ({
+                        refresh: mockRefresh,
+                    }));
+                    return <div data-testid="custom-panel">Custom Panel</div>;
+                });
+
+                const customPanelWithRefresh = {
+                    ...customPanel,
+                    component: CustomPanelWithRefresh,
+                };
+
+                const wrapper = getWrapper({ customPanel: customPanelWithRefresh });
+                const instance = wrapper.find(SidebarPanels).instance();
+                instance.customSidebar = { current: { refresh: mockRefresh } };
+
+                instance.refresh();
+
+                expect(mockRefresh).toHaveBeenCalled();
+            });
+
+            test('should not call refresh on custom panel when ref is null', () => {
+                const wrapper = getWrapper({ customPanel });
+                const instance = wrapper.find(SidebarPanels).instance();
+                instance.customSidebar = { current: null };
+
+                expect(() => instance.refresh()).not.toThrow();
+            });
+        });
+
+        describe('path precedence', () => {
+            test('should render custom panel when path matches even with defaultPanel set', () => {
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel,
+                        defaultPanel: 'activity',
+                        onPanelChange,
+                        path: '/custom',
+                    }),
+                );
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+
+            test('should redirect to custom panel when no path specified and custom panel is first eligible', () => {
+                const customPanelAsDefault = {
+                    ...customPanel,
+                    shouldBeDefaultPanel: true,
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelAsDefault,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+        });
+
+        describe('edge cases', () => {
+            test('should handle custom panel with undefined index', () => {
+                const customPanelWithoutIndex = {
+                    id: 'custom',
+                    component: MockCustomPanel,
+                    title: 'Custom Panel',
+                    // index is undefined
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithoutIndex,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should use default index of 0 and place at end
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should handle custom panel with null component', () => {
+                const customPanelWithNullComponent = {
+                    id: 'custom',
+                    component: null,
+                    title: 'Custom Panel',
+                };
+                // Should not throw when rendering
+                expect(() => {
+                    render(
+                        getSidebarPanels({
+                            customPanel: customPanelWithNullComponent,
+                            path: '/custom',
+                        }),
+                    );
+                }).not.toThrow();
+            });
+
+            test('should handle custom panel with empty id', () => {
+                const customPanelWithEmptyId = {
+                    id: '',
+                    component: MockCustomPanel,
+                    title: 'Custom Panel',
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithEmptyId,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to first available panel since empty id is not eligible
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should handle custom panel with whitespace-only id', () => {
+                const customPanelWithWhitespaceId = {
+                    id: '   ',
+                    component: MockCustomPanel,
+                    title: 'Custom Panel',
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithWhitespaceId,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to first available panel since trimmed id is empty
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should handle custom panel with id that has leading/trailing whitespace', () => {
+                const customPanelWithTrimmedId = {
+                    id: '  custom  ',
+                    component: MockCustomPanel,
+                    title: 'Custom Panel',
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithTrimmedId,
+                        onPanelChange,
+                        path: '/custom',
+                    }),
+                );
+                // Should render custom panel with trimmed id
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+
+            test('should handle custom panel with undefined id', () => {
+                const customPanelWithUndefinedId = {
+                    id: undefined,
+                    component: MockCustomPanel,
+                    title: 'Custom Panel',
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithUndefinedId,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to first available panel since undefined id is not eligible
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should handle custom panel with null id', () => {
+                const customPanelWithNullId = {
+                    id: null,
+                    component: MockCustomPanel,
+                    title: 'Custom Panel',
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithNullId,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to first available panel since null id is not eligible
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should handle custom panel with undefined component', () => {
+                const customPanelWithUndefinedComponent = {
+                    id: 'custom',
+                    component: undefined,
+                    title: 'Custom Panel',
+                };
+                // Should not throw when rendering
+                expect(() => {
+                    render(
+                        getSidebarPanels({
+                            customPanel: customPanelWithUndefinedComponent,
+                            path: '/custom',
+                        }),
+                    );
+                }).not.toThrow();
+            });
+        });
+
+        describe('navButtonProps.isDisabled functionality', () => {
+            test('should not render custom panel when navButtonProps.isDisabled is true', () => {
+                const disabledCustomPanel = {
+                    ...customPanel,
+                    navButtonProps: {
+                        isDisabled: true,
+                    },
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: disabledCustomPanel,
+                        onPanelChange,
+                        path: '/custom',
+                    }),
+                );
+                // Should not render custom panel when disabled
+                expect(screen.queryByTestId('custom-panel')).not.toBeInTheDocument();
+                // Should redirect to first available panel
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should render custom panel when navButtonProps.isDisabled is false', () => {
+                const enabledCustomPanel = {
+                    ...customPanel,
+                    navButtonProps: {
+                        isDisabled: false,
+                    },
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: enabledCustomPanel,
+                        onPanelChange,
+                        path: '/custom',
+                    }),
+                );
+                // Should render custom panel when enabled
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+
+            test('should render custom panel when navButtonProps.isDisabled is undefined', () => {
+                const customPanelWithUndefinedDisabled = {
+                    ...customPanel,
+                    navButtonProps: {
+                        isDisabled: undefined,
+                    },
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithUndefinedDisabled,
+                        onPanelChange,
+                        path: '/custom',
+                    }),
+                );
+                // Should render custom panel when isDisabled is undefined
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+
+            test('should render custom panel when navButtonProps is undefined', () => {
+                const customPanelWithUndefinedNavButtonProps = {
+                    ...customPanel,
+                    navButtonProps: undefined,
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: customPanelWithUndefinedNavButtonProps,
+                        onPanelChange,
+                        path: '/custom',
+                    }),
+                );
+                // Should render custom panel when navButtonProps is undefined
+                expect(screen.getByTestId('custom-panel')).toBeInTheDocument();
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+
+            test('should not include disabled custom panel in panel eligibility', () => {
+                const disabledCustomPanel = {
+                    ...customPanel,
+                    navButtonProps: {
+                        isDisabled: true,
+                    },
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: disabledCustomPanel,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to first available panel since custom panel is disabled
+                expect(onPanelChange).toHaveBeenCalledWith('docgen', true);
+            });
+
+            test('should include enabled custom panel in panel eligibility', () => {
+                const enabledCustomPanel = {
+                    ...customPanel,
+                    shouldBeDefaultPanel: true,
+                    navButtonProps: {
+                        isDisabled: false,
+                    },
+                };
+                const onPanelChange = jest.fn();
+                render(
+                    getSidebarPanels({
+                        customPanel: enabledCustomPanel,
+                        onPanelChange,
+                        path: '/',
+                    }),
+                );
+                // Should redirect to custom panel as it's enabled and should be default
+                expect(onPanelChange).toHaveBeenCalledWith('custom', true);
+            });
+        });
+    });
 });
