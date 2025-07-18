@@ -106,7 +106,7 @@ const PreviewNavigationWithoutRouter = ({
     }
 
     const handleInternalNavigation = () => {
-        if (internalSidebarNavigationHandler && internalSidebarNavigation?.sidebar) {
+        if (internalSidebarNavigationHandler && internalSidebarNavigation && internalSidebarNavigation.sidebar) {
             const { sidebar, ...rest } = internalSidebarNavigation;
             const hasDeeplink = Object.keys(rest).length > 0;
 
