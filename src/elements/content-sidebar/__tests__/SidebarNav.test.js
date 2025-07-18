@@ -190,7 +190,9 @@ describe('elements/content-sidebar/SidebarNav', () => {
             };
             const wrapper = getWrapper(props);
             // Should render the custom tab
-            expect(wrapper.find('Button[data-testid="sidebarcustom-panel"]')).toHaveLength(1);
+            const customButton = wrapper.find('Button[data-testid="sidebarcustom-panel"]');
+            expect(customButton).toHaveLength(1);
+            expect(customButton.at(0).prop('aria-label')).toBe('Custom Panel');
         });
 
         test('should render custom tab with custom icon', () => {
@@ -207,7 +209,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(wrapper.find('[data-testid="custom-icon"]')).toHaveLength(1);
         });
 
-        test('should render custom tab with default BoxAI logo when no icon provided', () => {
+        test('should not render custom tab icon when no icon provided', () => {
             const props = {
                 customTab: {
                     id: 'custom-panel',
@@ -216,8 +218,8 @@ describe('elements/content-sidebar/SidebarNav', () => {
                 },
             };
             const wrapper = getWrapper(props);
-            // Should render BoxAI logo as default icon
-            expect(wrapper.find(BoxAiLogo)).toHaveLength(1);
+            // Should not render icon
+            expect(wrapper.find('[data-testid="custom-icon"]')).toHaveLength(0);
         });
 
         test('should render custom tab with string title as tooltip', () => {
@@ -367,7 +369,7 @@ describe('elements/content-sidebar/SidebarNav', () => {
             expect(customButton).toHaveLength(1);
             expect(customButton.at(0).prop('aria-label')).toBe('minimal-panel');
             // Should use default BoxAI logo
-            expect(customButton.at(0).find(BoxAiLogo)).toHaveLength(1);
+            expect(customButton.at(0).find(BoxAiLogo)).toHaveLength(0);
         });
     });
 });

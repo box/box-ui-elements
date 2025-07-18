@@ -209,11 +209,7 @@ const SidebarNav = ({
                 analyticsTarget: `sidebar${customTabId}`,
                 testId: `sidebar${customTabId}`,
                 tooltip: customTabTitle ?? customTabId,
-                icon: CustomTabIcon ? (
-                    <CustomTabIcon className="bcs-SidebarNav-icon" />
-                ) : (
-                    <BoxAiLogo height={Size6} width={Size6} />
-                ),
+                icon: CustomTabIcon ? <CustomTabIcon className="bcs-SidebarNav-icon" /> : null,
                 additionalProps: navButtonProps,
             };
 
