@@ -2,6 +2,7 @@ import * as React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import StaticVersionSidebar from '../StaticVersionSidebar';
+import { ViewType } from '../../../common/types/SidebarNavigation';
 
 jest.mock('../../../common/back-button', () => ({ onClick, 'data-resin-target': dataResinTarget }) => (
     <button type="button" onClick={onClick} data-resin-target={dataResinTarget} data-testid="back-button">
@@ -63,7 +64,7 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
     };
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     test('should render with all main sections', () => {
@@ -118,8 +119,8 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
 
         render(
             <TestWrapper>
-                <StaticVersionSidebar 
-                    {...defaultProps} 
+                <StaticVersionSidebar
+                    {...defaultProps}
                     parentName="details"
                     internalSidebarNavigationHandler={mockNavigationHandler}
                 />
@@ -191,7 +192,7 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         test('should use internalSidebarNavigationHandler when BackButton is clicked', async () => {
             const mockNavigationHandler = jest.fn();
             const user = userEvent();
-            
+
             renderComponentWithoutRouter({
                 internalSidebarNavigationHandler: mockNavigationHandler,
                 parentName: 'details',
@@ -201,12 +202,12 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
             await user.click(backButton);
 
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
-            expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: 'details' });
+            expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: ViewType.DETAILS });
         });
 
         test('should pass props to VersionsMenu when router is disabled', () => {
             const mockInternalSidebarNavigation = {
-                sidebar: 'activity',
+                sidebar: ViewType.ACTIVITY,
                 open: true,
             };
 
@@ -218,6 +219,4 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
             expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
         });
     });
-
-
 });
