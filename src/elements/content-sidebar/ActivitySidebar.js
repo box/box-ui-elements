@@ -76,6 +76,7 @@ import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import './ActivitySidebar.scss';
 
 import type { OnAnnotationEdit, OnAnnotationStatusChange } from './activity-feed/comment/types';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
@@ -86,6 +87,8 @@ type ExternalProps = {
     hasReplies?: boolean,
     hasTasks?: boolean,
     hasVersions?: boolean,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
     onCommentUpdate: () => any,
@@ -94,6 +97,7 @@ type ExternalProps = {
     onTaskDelete: (id: string) => any,
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
+    routerDisabled?: boolean,
 } & ErrorContextProps &
     WithAnnotatorContextProps;
 
@@ -1108,18 +1112,32 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getAnnotationsMatchPath,
             getAnnotationsPath,
             history,
+            internalSidebarNavigation,
             location,
             onAnnotationSelect,
+            routerDisabled,
         } = this.props;
         const annotationFileVersionId = getProp(file_version, 'id');
         const currentFileVersionId = getProp(file, 'file_version.id');
-        const match = getAnnotationsMatchPath(location);
-        const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+
+        let selectedFileVersionId = currentFileVersionId;
+        if (routerDisabled && internalSidebarNavigation) {
+            // Use fileVersionId from internal navigation when router is disabled
+            selectedFileVersionId = getProp(internalSidebarNavigation, 'fileVersionId', currentFileVersionId);
+        } else {
+            // Use router-based approach when router is enabled
+            const match = getAnnotationsMatchPath(location);
+            selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+        }
 
         emitActiveAnnotationChangeEvent(nextActiveAnnotationId);
 
         if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
-            history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
+            if (routerDisabled) {
+                // TODO: Handle navigation when router is disabled
+            } else {
+                history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
+            }
         }
 
         onAnnotationSelect(annotation);
@@ -1161,7 +1179,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     renderAddTaskButton = () => {
-        const { isDisabled, hasTasks } = this.props;
+        const { isDisabled, hasTasks, internalSidebarNavigation, internalSidebarNavigationHandler, routerDisabled } =
+            this.props;
         const { approverSelectorContacts } = this.state;
         const { getApprover, getAvatarUrl, createTask, onTaskModalClose } = this;
 
@@ -1171,8 +1190,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <AddTaskButton
+                internalSidebarNavigation={internalSidebarNavigation}
+                internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                 isDisabled={isDisabled}
                 onTaskModalClose={onTaskModalClose}
+                routerDisabled={routerDisabled}
                 taskFormProps={{
                     approvers: [],
                     approverSelectorContacts,
@@ -1248,10 +1270,13 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             file,
             hasReplies,
             hasVersions,
+            internalSidebarNavigation,
+            internalSidebarNavigationHandler,
             isDisabled = false,
             onVersionHistoryClick,
             getUserProfileUrl,
             onTaskView,
+            routerDisabled,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
         const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
