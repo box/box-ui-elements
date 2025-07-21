@@ -24,7 +24,7 @@ import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
-import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES } from './constants';
+import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES, ENHANCED_AGENT_CONFIGURATION } from './constants';
 import {
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
@@ -38,6 +38,7 @@ import type {
     MetadataFields,
     MetadataTemplate,
     MetadataCascadePolicy,
+    MetadataCascadePolicyConfiguration,
     MetadataCascadingPolicyData,
     MetadataTemplateField,
     MetadataFieldValue,
@@ -72,6 +73,7 @@ type State = {
     data: Object,
     errors: { [string]: React.Node },
     isAIFolderExtractionEnabled: boolean,
+    cascadePolicyConfiguration: MetadataCascadePolicyConfiguration | null,
     isBusy: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
@@ -217,6 +219,7 @@ class Instance extends React.PureComponent<Props, State> {
             isAIFolderExtractionEnabled,
             isCascadingEnabled,
             isCascadingOverwritten,
+            cascadePolicyConfiguration,
         }: State = this.state;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
@@ -229,6 +232,7 @@ class Instance extends React.PureComponent<Props, State> {
             // reset state if cascading policy is removed
             isAIFolderExtractionEnabled: isCascadingEnabled ? isAIFolderExtractionEnabled : false,
         });
+
         onSave(
             id,
             this.createJSONPatch(currentData, originalData),
@@ -239,6 +243,7 @@ class Instance extends React.PureComponent<Props, State> {
                       isEnabled: isCascadingEnabled,
                       overwrite: isCascadingOverwritten,
                       isAIFolderExtractionEnabled,
+                      cascadePolicyConfiguration,
                   }
                 : undefined,
             cloneDeep(currentData),
@@ -340,6 +345,23 @@ class Instance extends React.PureComponent<Props, State> {
 
     onAIFolderExtractionToggle = (value: boolean) => {
         this.setState({ isAIFolderExtractionEnabled: value }, this.setDirty);
+    };
+
+    /**
+     * Handles the selection of an AI agent
+     * @param {AgentType | null} agent - The selected agent
+     */
+    onAIAgentSelect = (agent: AgentType | null): void => {
+        // '2' is the id for the enhanced agent
+        if (agent && agent.id === '2') {
+            this.setState({
+                cascadePolicyConfiguration: {
+                    agent: ENHANCED_AGENT_CONFIGURATION,
+                },
+            });
+        } else {
+            this.setState({ cascadePolicyConfiguration: null });
+        }
     };
 
     /**
@@ -684,6 +706,7 @@ class Instance extends React.PureComponent<Props, State> {
                                             onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}
+                                            onAIAgentSelect={this.onAIAgentSelect}
                                             shouldShowCascadeOptions={shouldShowCascadeOptions}
                                         />
                                     )}

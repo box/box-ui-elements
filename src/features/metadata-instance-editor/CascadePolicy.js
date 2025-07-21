@@ -1,10 +1,13 @@
 // @flow
 import * as React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 
 import { InlineNotice } from '@box/blueprint-web';
-import { BoxAiAgentSelector } from '@box/box-ai-agent-selector';
-// $FlowFixMe
+import { useCallback } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { BoxAiAdvancedColor } from '@box/blueprint-web-assets/icons/Medium';
+import { type AgentType } from '@box/box-ai-agent-selector';
+
+import { BoxAiAgentSelectorWithApiContainer } from '@box/box-ai-agent-selector';
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 
 import Toggle from '../../components/toggle';
@@ -13,7 +16,6 @@ import Link from '../../components/link/Link';
 import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import messages from './messages';
 import './CascadePolicy.scss';
-import { useIntl } from 'react-intl';
 
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
@@ -28,6 +30,7 @@ type Props = {
     isCustomMetadata: boolean,
     isExistingCascadePolicy: boolean,
     onAIFolderExtractionToggle: (value: boolean) => void,
+    onAIAgentSelect?: (agent: AgentType | null) => void,
     onCascadeModeChange: (value: boolean) => void,
     onCascadeToggle: (value: boolean) => void,
     shouldShowCascadeOptions: boolean,
@@ -43,6 +46,7 @@ const CascadePolicy = ({
     isAIFolderExtractionEnabled,
     isExistingCascadePolicy,
     onAIFolderExtractionToggle,
+    onAIAgentSelect,
     onCascadeToggle,
     onCascadeModeChange,
     shouldShowCascadeOptions,
@@ -56,18 +60,38 @@ const CascadePolicy = ({
     ) : null;
     const { formatMessage } = useIntl();
 
-    const agents = [
-        {
-            id: '1',
-            name: formatMessage(messages.standardAgentName),
-            isEnterpriseDefault: true,
+    const agents = React.useMemo(
+        () => [
+            {
+                id: '1',
+                name: formatMessage(messages.standardAgentName),
+                isEnterpriseDefault: true,
+            },
+            {
+                id: '2',
+                name: formatMessage(messages.enhancedAgentName),
+                isEnterpriseDefault: false,
+                customIcon: BoxAiAdvancedColor,
+            },
+        ],
+        [formatMessage],
+    );
+
+    // BoxAiAgentSelectorWithApiContainer expects a function that returns a Promise<AgentListResponse>
+    // Since we're passing in our own agents, we don't need to make an API call,
+    // so we wrap the store data in a Promise to satisfy the component's interface requirements.
+    const agentFetcher = useCallback((): Promise<AgentListResponse> => {
+        return Promise.resolve({ agents });
+    }, [agents]);
+
+    const handleAgentSelect = useCallback(
+        (agent: AgentType | null) => {
+            if (onAIAgentSelect) {
+                onAIAgentSelect(agent);
+            }
         },
-        {
-            id: '2',
-            name: formatMessage(messages.enhancedAgentName),
-            isEnterpriseDefault: false,
-        },
-    ];
+        [onAIAgentSelect],
+    );
 
     return canEdit ? (
         <>
@@ -160,15 +184,12 @@ const CascadePolicy = ({
                                 <FormattedMessage {...messages.aiAutofillLearnMore} />
                             </Link>
                         </div>
-                        {canUseAIFolderExtractionAgentSelector && (
+                        {canUseAIFolderExtractionAgentSelector && isAIFolderExtractionEnabled && (
                             <div className="metadata-cascade-ai-agent-selector">
-                                <BoxAiAgentSelector
-                                    agents={agents}
-                                    disabled={isExistingCascadePolicy}
-                                    onErrorAction={() => {}}
-                                    requestState="success"
-                                    selectedAgent={agents[0]}
-                                    variant="sidebar"
+                                <BoxAiAgentSelectorWithApiContainer
+                                    fetcher={agentFetcher}
+                                    onSelectAgent={handleAgentSelect}
+                                    recordAction={() => {}}
                                 />
                             </div>
                         )}

@@ -93,10 +93,15 @@ type MetadataCascadePolicy = {
     cascadePolicyType?: string,
 };
 
+type MetadataCascadePolicyConfiguration = {
+    agent: string,
+};
+
 type MetadataCascadingPolicyData = {
     id?: string,
     isEnabled: boolean,
     overwrite: boolean,
+    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration,
 };
 
 type MetadataInstance = {

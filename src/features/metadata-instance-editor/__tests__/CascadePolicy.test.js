@@ -129,6 +129,23 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
             render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
             expect(screen.queryByRole('combobox', { name: 'Basic' })).not.toBeInTheDocument();
         });
+
+        test('should call onAIAgentSelect when an agent is selected', async () => {
+            const onAIAgentSelect = jest.fn();
+            render(
+                <CascadePolicy
+                    canEdit
+                    canUseAIFolderExtraction
+                    canUseAIFolderExtractionAgentSelector
+                    shouldShowCascadeOptions
+                    onAIAgentSelect={onAIAgentSelect}
+                />,
+            );
+
+            const agentSelector = screen.getByRole('combobox', { name: 'Basic' });
+            await userEvent.selectOptions(agentSelector, 'Advanced');
+            expect(onAIAgentSelect).toHaveBeenCalledWith('advanced_agent');
+        });
     });
 
     describe('AI Autofill Toggle', () => {
