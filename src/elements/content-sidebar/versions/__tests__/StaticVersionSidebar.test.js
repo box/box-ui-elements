@@ -2,7 +2,6 @@ import * as React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { render, screen, userEvent } from '../../../../test-utils/testing-library';
 import StaticVersionSidebar from '../StaticVersionSidebar';
-import { ViewType } from '../../../common/types/SidebarNavigation';
 
 jest.mock('../../../common/back-button', () => ({ onClick, 'data-resin-target': dataResinTarget }) => (
     <button type="button" onClick={onClick} data-resin-target={dataResinTarget} data-testid="back-button">
@@ -64,7 +63,7 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
     };
 
     beforeEach(() => {
-        jest.resetAllMocks();
+        jest.clearAllMocks();
     });
 
     test('should render with all main sections', () => {
@@ -202,12 +201,12 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
             await user.click(backButton);
 
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
-            expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: ViewType.DETAILS });
+            expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: 'details' });
         });
 
         test('should pass props to VersionsMenu when router is disabled', () => {
             const mockInternalSidebarNavigation = {
-                sidebar: ViewType.ACTIVITY,
+                sidebar: 'activity',
                 open: true,
             };
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Router } from 'react-router-dom';
 import noop from 'lodash/noop';
 import { render, screen, userEvent } from '../../../test-utils/testing-library';
-import { PreviewNavigationComponent as PreviewNavigation } from '../PreviewNavigation';
+import PreviewNavigation from '../PreviewNavigation';
 import { ViewType, FeedEntryType } from '../../common/types/SidebarNavigation';
 
 const historyMockDefault = {
@@ -19,7 +19,7 @@ const deeplinkedMetadataHistoryMock = {
     entries: [{}],
 };
 
-const renderComponent = (props = {}) => {
+const renderComponentWithRouter = (props = {}) => {
     const {
         collection = ['a', 'b', 'c'],
         historyMock = historyMockDefault,
@@ -32,13 +32,6 @@ const renderComponent = (props = {}) => {
         <Router history={historyMock}>
             <PreviewNavigation
                 collection={collection}
-                intl={{
-                    formatMessage: jest.fn().mockImplementation(message => {
-                        if (message.id === 'previousFile') return 'Previous File';
-                        if (message.id === 'nextFile') return 'Next File';
-                        return 'Mock Message';
-                    }),
-                }}
                 onNavigateLeft={onNavigateLeft}
                 onNavigateRight={onNavigateRight}
                 {...rest}
@@ -48,24 +41,14 @@ const renderComponent = (props = {}) => {
 };
 
 const renderComponentWithoutRouter = (props = {}) => {
-    const { collection = ['a', 'b', 'c'], onNavigateLeft = noop, onNavigateRight = noop, ...rest } = props;
+    const defaultProps = {
+        collection: ['a', 'b', 'c'],
+        currentIndex: 1,
+        onNavigateLeft: noop,
+        onNavigateRight: noop,
+    };
 
-    return render(
-        <PreviewNavigation
-            collection={collection}
-            intl={{
-                formatMessage: jest.fn().mockImplementation(message => {
-                    if (message.id === 'previousFile') return 'Previous File';
-                    if (message.id === 'nextFile') return 'Next File';
-                    return 'Mock Message';
-                }),
-            }}
-            onNavigateLeft={onNavigateLeft}
-            onNavigateRight={onNavigateRight}
-            routerDisabled
-            {...rest}
-        />,
-    );
+    return render(<PreviewNavigation {...defaultProps} {...props} routerDisabled />);
 };
 
 beforeEach(() => {
@@ -75,7 +58,7 @@ beforeEach(() => {
 describe('elements/content-preview/PreviewNavigation', () => {
     describe('render()', () => {
         test('should render correctly with an empty collection', () => {
-            const { container } = renderComponent({ collection: [], currentIndex: 0 });
+            const { container } = renderComponentWithRouter({ collection: [], currentIndex: 0 });
             expect(container.firstChild).toBeNull();
         });
 
@@ -87,7 +70,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             'should render correctly with a filled collection - $description',
             ({ currentIndex, expectLeft, expectRight }) => {
                 const collection = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-                renderComponent({ collection, currentIndex });
+                renderComponentWithRouter({ collection, currentIndex });
 
                 const leftButton = screen.queryByTestId('preview-navigation-left');
                 const rightButton = screen.queryByTestId('preview-navigation-right');
@@ -110,7 +93,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const onNavigateLeftMock = jest.fn();
             const user = userEvent();
 
-            renderComponent({
+            renderComponentWithRouter({
                 currentIndex: 2,
                 onNavigateLeft: onNavigateLeftMock,
                 historyMock: historyMockDefault,
@@ -130,7 +113,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const onNavigateRightMock = jest.fn();
             const user = userEvent();
 
-            renderComponent({
+            renderComponentWithRouter({
                 currentIndex: 0,
                 onNavigateRight: onNavigateRightMock,
                 historyMock: historyMockDefault,
@@ -150,7 +133,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const onNavigateRightMock = jest.fn();
             const user = userEvent();
 
-            renderComponent({
+            renderComponentWithRouter({
                 currentIndex: 0,
                 historyMock: deeplinkedMetadataHistoryMock,
                 onNavigateRight: onNavigateRightMock,
@@ -170,7 +153,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const onNavigateLeftMock = jest.fn();
             const user = userEvent();
 
-            renderComponent({
+            renderComponentWithRouter({
                 currentIndex: 2,
                 historyMock: deeplinkedMetadataHistoryMock,
                 onNavigateLeft: onNavigateLeftMock,
@@ -188,6 +171,10 @@ describe('elements/content-preview/PreviewNavigation', () => {
     });
 
     describe('when routerDisabled is true', () => {
+        const mockNavigationHandler = jest.fn();
+        const onNavigateLeftMock = jest.fn();
+        const onNavigateRightMock = jest.fn();
+
         test('should render correctly without router', () => {
             renderComponentWithoutRouter({ currentIndex: 1 });
 
@@ -196,17 +183,14 @@ describe('elements/content-preview/PreviewNavigation', () => {
         });
 
         test('should call internalSidebarNavigationHandler when left navigation button is clicked', async () => {
-            const mockNavigationHandler = jest.fn();
             const mockInternalSidebarNavigation = {
                 sidebar: ViewType.ACTIVITY,
                 activeFeedEntryType: FeedEntryType.COMMENTS,
                 activeFeedEntryId: '123',
             };
-            const onNavigateLeftMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                currentIndex: 1,
                 internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
                 onNavigateLeft: onNavigateLeftMock,
@@ -218,20 +202,18 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
             expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: ViewType.ACTIVITY });
             expect(onNavigateLeftMock).toHaveBeenCalledTimes(1);
+            expect(onNavigateRightMock).not.toHaveBeenCalled();
         });
 
         test('should call internalSidebarNavigationHandler when right navigation button is clicked', async () => {
-            const mockNavigationHandler = jest.fn();
             const mockInternalSidebarNavigation = {
                 sidebar: ViewType.ACTIVITY,
                 activeFeedEntryType: FeedEntryType.COMMENTS,
                 activeFeedEntryId: '123',
             };
-            const onNavigateRightMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                currentIndex: 1,
                 internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
                 onNavigateRight: onNavigateRightMock,
@@ -243,19 +225,17 @@ describe('elements/content-preview/PreviewNavigation', () => {
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
             expect(mockNavigationHandler).toHaveBeenCalledWith({ sidebar: ViewType.ACTIVITY });
             expect(onNavigateRightMock).toHaveBeenCalledTimes(1);
+            expect(onNavigateLeftMock).not.toHaveBeenCalled();
         });
 
         test('should call navigation handler with metadata deeplinks when left navigation button is clicked', async () => {
-            const mockNavigationHandler = jest.fn();
             const mockInternalSidebarNavigation = {
                 sidebar: ViewType.METADATA,
                 filteredTemplateIds: '123,124',
             };
-            const onNavigateLeftMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                currentIndex: 1,
                 internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
                 onNavigateLeft: onNavigateLeftMock,
@@ -270,19 +250,17 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 filteredTemplateIds: '123,124',
             });
             expect(onNavigateLeftMock).toHaveBeenCalledTimes(1);
+            expect(onNavigateRightMock).not.toHaveBeenCalled();
         });
 
         test('should call navigation handler with metadata deeplinks when right navigation button is clicked', async () => {
-            const mockNavigationHandler = jest.fn();
             const mockInternalSidebarNavigation = {
                 sidebar: ViewType.METADATA,
                 filteredTemplateIds: '123,124',
             };
-            const onNavigateRightMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                currentIndex: 1,
                 internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
                 onNavigateRight: onNavigateRightMock,
@@ -297,6 +275,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 filteredTemplateIds: '123,124',
             });
             expect(onNavigateRightMock).toHaveBeenCalledTimes(1);
+            expect(onNavigateLeftMock).not.toHaveBeenCalled();
         });
     });
 });

@@ -162,5 +162,4 @@ const PreviewNavigation = (props: Props) => {
     return <PreviewNavigationWithRouter {...props} />;
 };
 
-export { PreviewNavigation as PreviewNavigationComponent };
 export default injectIntl(PreviewNavigation);
