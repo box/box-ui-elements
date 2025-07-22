@@ -79,7 +79,7 @@ const CascadePolicy = ({
     // BoxAiAgentSelectorWithApiContainer expects a function that returns a Promise<AgentListResponse>
     // Since we're passing in our own agents, we don't need to make an API call,
     // so we wrap the store data in a Promise to satisfy the component's interface requirements.
-    const agentFetcher = useCallback((): Promise<AgentListResponse> => {
+    const agentFetcher = useCallback(() => {
         return Promise.resolve({ agents });
     }, [agents]);
 

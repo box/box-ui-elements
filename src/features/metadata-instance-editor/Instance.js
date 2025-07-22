@@ -6,6 +6,7 @@ import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 import noop from 'lodash/noop';
 
+import type { AgentType } from '@box/box-ai-agent-selector';
 import Collapsible from '../../components/collapsible/Collapsible';
 import Form from '../../components/form-elements/form/Form';
 import LoadingIndicatorWrapper from '../../components/loading-indicator/LoadingIndicatorWrapper';
@@ -376,6 +377,7 @@ class Instance extends React.PureComponent<Props, State> {
             data: cloneDeep(props.data),
             errors: {},
             isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabledThroughProps(props),
+            cascadePolicyConfiguration: null,
             isBusy: false,
             isCascadingEnabled,
             isCascadingOverwritten: false,
