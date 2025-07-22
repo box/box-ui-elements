@@ -58,7 +58,6 @@ const CascadePolicy = ({
             <FormattedMessage {...messages.metadataCascadePolicyEnabledInfo} />
         </div>
     ) : null;
-    const { formatMessage } = useIntl();
 
     const agents = React.useMemo(
         () => [
@@ -109,6 +108,7 @@ const CascadePolicy = ({
                         <FormattedMessage tagName="strong" {...messages.enableCascadePolicy} />
                         {!isCustomMetadata && (
                             <Toggle
+                                aria-label={formatMessage(messages.enableCascadePolicy)}
                                 className={`metadata-cascade-toggle ${
                                     isCascadingEnabled ? 'cascade-on' : 'cascade-off'
                                 }`}
@@ -170,6 +170,7 @@ const CascadePolicy = ({
                             <BoxAiLogo className="metadata-cascade-ai-logo" width={16} height={16} />
                             <FormattedMessage tagName="strong" {...messages.enableAIAutofill} />
                             <Toggle
+                                aria-label={formatMessage(messages.enableAIAutofill)}
                                 className="metadata-cascade-toggle"
                                 isOn={isAIFolderExtractionEnabled}
                                 isDisabled={isExistingCascadePolicy}
@@ -187,6 +188,7 @@ const CascadePolicy = ({
                         {canUseAIFolderExtractionAgentSelector && isAIFolderExtractionEnabled && (
                             <div className="metadata-cascade-ai-agent-selector">
                                 <BoxAiAgentSelectorWithApiContainer
+                                    disabled={isExistingCascadePolicy}
                                     fetcher={agentFetcher}
                                     onSelectAgent={handleAgentSelect}
                                     recordAction={() => {}}
