@@ -167,9 +167,9 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
 
             // The expected agent object (should match the one in CascadePolicy.js)
             const expectedAgent = {
-                id: '2',
-                name: 'enhancedAgentName',
-                isEnterpriseDefault: false,
+                id: '1',
+                name: 'Standard',
+                isEnterpriseDefault: true,
             };
 
             expect(onAIAgentSelect).toHaveBeenCalledWith(expectedAgent);
