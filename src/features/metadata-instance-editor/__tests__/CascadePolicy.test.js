@@ -121,6 +121,7 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                     canUseAIFolderExtractionAgentSelector
                     shouldShowCascadeOptions
                     isAIFolderExtractionEnabled
+                    onAIFolderExtractionToggle={jest.fn()}
                 />,
             );
 
@@ -147,6 +148,7 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                     shouldShowCascadeOptions
                     isAIFolderExtractionEnabled
                     onAIAgentSelect={onAIAgentSelect}
+                    onAIFolderExtractionToggle={jest.fn()}
                 />,
             );
 
