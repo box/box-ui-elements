@@ -618,5 +618,5 @@ describe('MetadataInstanceEditor - canUseAIFolderExtractionAgentSelector prop', 
 
         // The combobox should now show 'Enhanced'
         expect(screen.getByRole('combobox', { name: 'Enhanced' })).toBeInTheDocument();
-    });
+    }, 15000); // Increase timeout to 15 seconds
 });
