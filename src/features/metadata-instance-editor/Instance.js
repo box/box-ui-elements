@@ -74,7 +74,7 @@ type State = {
     data: Object,
     errors: { [string]: React.Node },
     isAIFolderExtractionEnabled: boolean,
-    cascadePolicyConfiguration: MetadataCascadePolicyConfiguration | null,
+    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration | null,
     isBusy: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,

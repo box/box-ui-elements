@@ -4,10 +4,15 @@ import * as React from 'react';
 import { InlineNotice } from '@box/blueprint-web';
 import { useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+
+// $FlowFixMe
 import { BoxAiAdvancedColor } from '@box/blueprint-web-assets/icons/Medium';
 import { type AgentType } from '@box/box-ai-agent-selector';
 
+// $FlowFixMe
 import { BoxAiAgentSelectorWithApiContainer } from '@box/box-ai-agent-selector';
+
+// $FlowFixMe
 import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 
 import Toggle from '../../components/toggle';
