@@ -6,14 +6,11 @@ import { useCallback } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 // $FlowFixMe
-import { BoxAiAdvancedColor } from '@box/blueprint-web-assets/icons/Medium';
+import { BoxAiAdvancedColor, BoxAiColor } from '@box/blueprint-web-assets/icons/Medium';
 import { type AgentType } from '@box/box-ai-agent-selector';
 
 // $FlowFixMe
 import { BoxAiAgentSelectorWithApiContainer } from '@box/box-ai-agent-selector';
-
-// $FlowFixMe
-import BoxAiLogo from '@box/blueprint-web-assets/icons/Logo/BoxAiLogo';
 
 import Toggle from '../../components/toggle';
 import { RadioButton, RadioGroup } from '../../components/radio';
@@ -172,7 +169,7 @@ const CascadePolicy = ({
                 <div className="metadata-cascade-editor" data-testid="ai-folder-extraction">
                     <div className="metadata-cascade-enable">
                         <div>
-                            <BoxAiLogo className="metadata-cascade-ai-logo" width={16} height={16} />
+                            <BoxAiColor className="metadata-cascade-ai-logo" width={16} height={16} />
                             <FormattedMessage tagName="strong" {...messages.enableAIAutofill} />
                             <Toggle
                                 aria-label={formatMessage(messages.enableAIAutofill)}
