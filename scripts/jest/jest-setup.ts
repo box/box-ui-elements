@@ -1,6 +1,26 @@
-// @ts-nocheck override setImmediate to use setTimeout
 import '@testing-library/jest-dom';
-import util from 'util';
+import { TextEncoder } from 'util';
+
+Object.defineProperties(global, {
+    __VERSION__: {
+        value: 'test',
+    },
+    ResizeObserver: {
+        value: jest.fn().mockImplementation(() => ({
+            observe: jest.fn(),
+            unobserve: jest.fn(),
+            disconnect: jest.fn(),
+        })),
+    },
+    setImmediate: {
+        writable: true,
+        // @ts-ignore Override setImmediate with setTimeout
+        value: (fn, ...args) => global.setTimeout(fn, 0, ...args),
+    },
+    TextEncoder: {
+        value: TextEncoder,
+    },
+});
 
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -8,24 +28,10 @@ Object.defineProperty(window, 'matchMedia', {
         matches: false,
         media: query,
         onchange: null,
-        addListener: jest.fn(), // Deprecated
-        removeListener: jest.fn(), // Deprecated
+        addListener: jest.fn(), // deprecated
+        removeListener: jest.fn(), // deprecated
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
     })),
 });
-
-global.setImmediate = cb => {
-    setTimeout(cb, 0);
-};
-
-Object.defineProperty(global, 'TextEncoder', {
-    value: util.TextEncoder,
-});
-
-global.ResizeObserver = jest.fn().mockImplementation(() => ({
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn(),
-}));
