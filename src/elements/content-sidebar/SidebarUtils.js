@@ -215,7 +215,7 @@ class SidebarUtils {
                 break;
             case SIDEBAR_VIEW_REDACT_WIZARD:
                 importFn = import(
-                    /* webpackMode: "lazy", webpackChunkName: "redact-wizard-sidebar" */ './RedactWizardSidebar'
+                    /* webpackMode: "lazy", webpackChunkName: "redact-wizard-sidebar" */ './RedactWizardSidebar/RedactWizardSidebar'
                 );
                 break;
             case SIDEBAR_VIEW_ACTIVITY:
