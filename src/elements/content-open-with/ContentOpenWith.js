@@ -26,6 +26,7 @@ import {
     BOX_EDIT_INTEGRATION_ID,
     BOX_EDIT_SFC_INTEGRATION_ID,
     CLIENT_NAME_OPEN_WITH,
+    CLIENT_VERSION,
     DEFAULT_HOSTNAME_API,
     ERROR_CODE_EXECUTE_INTEGRATION,
     HTTP_GET,
@@ -138,6 +139,7 @@ class ContentOpenWith extends PureComponent<Props, State> {
             requestInterceptor,
             responseInterceptor,
             token,
+            version: CLIENT_VERSION,
         });
 
         // Clone initial state to allow for state reset on new files

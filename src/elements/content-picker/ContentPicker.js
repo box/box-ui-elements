@@ -27,6 +27,7 @@ import Content from './Content';
 import Footer from './Footer';
 import {
     CLIENT_NAME_CONTENT_PICKER,
+    CLIENT_VERSION,
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_PAGE_NUMBER,
@@ -227,6 +228,7 @@ class ContentPicker extends Component<Props, State> {
             sharedLink,
             sharedLinkPassword,
             token,
+            version: CLIENT_VERSION,
             uploadHost,
         });
 

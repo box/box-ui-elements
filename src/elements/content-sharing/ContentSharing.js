@@ -10,7 +10,7 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import API from '../../api';
 import SharingModal from './SharingModal';
-import { CLIENT_NAME_CONTENT_SHARING, DEFAULT_HOSTNAME_API } from '../../constants';
+import { CLIENT_NAME_CONTENT_SHARING, CLIENT_VERSION, DEFAULT_HOSTNAME_API } from '../../constants';
 import type { ItemType, StringMap } from '../../common/types/core';
 import type { USMConfig } from '../../features/unified-share-modal/flowTypes';
 
@@ -55,6 +55,7 @@ const createAPI = (apiHost, itemID, itemType, token) =>
         clientName: CLIENT_NAME_CONTENT_SHARING,
         id: `${itemType}_${itemID}`,
         token,
+        version: CLIENT_VERSION,
     });
 
 function ContentSharing({

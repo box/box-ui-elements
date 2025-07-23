@@ -32,6 +32,7 @@ import {
 import {
     DEFAULT_ROOT,
     CLIENT_NAME_CONTENT_UPLOADER,
+    CLIENT_VERSION,
     DEFAULT_HOSTNAME_API,
     DEFAULT_HOSTNAME_UPLOAD,
     ERROR_CODE_ITEM_NAME_IN_USE,
@@ -287,6 +288,7 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             sharedLink,
             sharedLinkPassword,
             token,
+            version: CLIENT_VERSION,
             uploadHost,
         };
     };
