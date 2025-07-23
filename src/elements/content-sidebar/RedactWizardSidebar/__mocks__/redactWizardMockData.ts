@@ -1,5 +1,5 @@
 export interface DetectedItem {
-    id: string;
+    id: number,
     title: string;
     term: string;
     confidence: number;
@@ -25,61 +25,109 @@ export const mockFetchDetectedItems = async (fileId: string): Promise<DetectedIt
     
     return [
         {
-            id: '1',
-            title: 'Personal Name',
-            term: 'Jennifer Marie Thompson',
-            confidence: 95.0,
-            category: 'PII',
-            riskLevel: 2, // HIGH
-        },
-        {
-            id: '2',
-            title: 'SSN',
-            term: '555-67-8901',
-            confidence: 99.0,
-            category: 'PII',
-            riskLevel: 3, // CRITICAL
-        },
-        {
-            id: '3',
-            title: 'Date of Birth',
-            term: 'April 22, 1985',
-            confidence: 92.0,
-            category: 'PII',
-            riskLevel: 2, // HIGH
-        },
-        {
-            id: '4',
-            title: 'Bank Account',
-            term: '4567-8901-2345-6789',
-            confidence: 96.0,
-            category: 'Financial',
-            riskLevel: 3, // CRITICAL
-        },
-        {
-            id: '5',
-            title: 'Routing Number',
-            term: '121000358',
-            confidence: 98.0,
-            category: 'Financial',
-            riskLevel: 3, // CRITICAL
-        },
-        {
-            id: '6',
-            title: 'Credit Card',
-            term: '4532-1234-5678-9012',
-            confidence: 99.0,
-            category: 'Financial',
-            riskLevel: 3, // CRITICAL
-        },
-        {
-            id: '7',
-            title: 'Settlement Amount',
-            term: '$750,000',
-            confidence: 91.0,
-            category: 'Financial',
-            riskLevel: 2, // HIGH
-        },
+            "id": 1,
+            "category": "PII",
+            "confidence": 100,
+            "riskLevel": 3,
+            "term": "123-45-6789",
+            "title": "Social Security Number"
+          },
+          {
+            "id": 2,
+            "category": "PII",
+            "confidence": 99,
+            "riskLevel": 2,
+            "term": "06/10/2005",
+            "title": "Date of Birth"
+          },
+          {
+            "id": 3,
+            "category": "PII",
+            "confidence": 96,
+            "riskLevel": 1,
+            "term": "SCR-001",
+            "title": "Employee ID"
+          },
+          {
+            "id": 4,
+            "category": "PII",
+            "confidence": 90,
+            "riskLevel": 1,
+            "term": "TM-404",
+            "title": "Badge Number"
+          },
+          {
+            "id": 5,
+            "category": "PII",
+            "confidence": 89,
+            "riskLevel": 1,
+            "term": "CL-999",
+            "title": "License Number"
+          },
+          {
+            "id": 6,
+            "category": "PII",
+            "confidence": 100,
+            "riskLevel": 2,
+            "term": "555-KANSAS",
+            "title": "Phone Number"
+          },
+          {
+            "id": 7,
+            "category": "PII",
+            "confidence": 99,
+            "riskLevel": 2,
+            "term": "555-RUBY-SHOE",
+            "title": "Phone Number"
+          },
+          {
+            "id": 8,
+            "category": "card",
+            "confidence": 92,
+            "riskLevel": 3,
+            "term": "987654321",
+            "title": "Account Number"
+          },
+          {
+            "id": 9,
+            "category": "PII",
+            "confidence": 97,
+            "riskLevel": 2,
+            "term": "123 Academic Lane, Research City, RC 12345",
+            "title": "Address"
+          },
+          {
+            "id": 10,
+            "category": "PII",
+            "confidence": 85,
+            "riskLevel": 2,
+            "term": "s.researcher@rubyslipper.org",
+            "title": "Email Address"
+          },
+          {
+            "id": 11,
+            "category": "PII",
+            "confidence": 100,
+            "riskLevel": 1,
+            "term": "555-RUBY-FAX",
+            "title": "Fax Number"
+          },
+          {
+            "id": 12,
+            "category": "PII",
+            "confidence": 83,
+            "riskLevel": 1,
+            "term": "Harold Lollipop",
+            "title": "Real Name"
+          },
+          {
+            "id": 13,
+            "category": "PII",
+            "confidence": 100,
+            "riskLevel": 2,
+            "term": "999 Dark Castle Road",
+            "title": "Suspect Address"
+          }
     ];
 };
 

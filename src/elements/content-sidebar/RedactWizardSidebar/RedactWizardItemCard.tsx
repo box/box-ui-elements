@@ -16,7 +16,7 @@ export interface RedactWizardItemCardProps {
 const RedactWizardItemCard = ({ item, isSelected, onApprove, onReject }: RedactWizardItemCardProps) => {
     const getRiskLevelLabel = (riskLevel: number): string => {
         switch (riskLevel) {
-            case 1: return 'LOW';
+            case 1: return 'MEDIUM';
             case 2: return 'HIGH';
             case 3: return 'CRITICAL';
             default: return 'MEDIUM';

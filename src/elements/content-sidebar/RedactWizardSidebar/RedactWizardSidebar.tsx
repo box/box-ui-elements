@@ -6,6 +6,7 @@ import Button, { ButtonType } from '../../../components/button/Button';
 import PrimaryButton from '../../../components/primary-button/PrimaryButton';
 import LoadingIndicator, { LoadingIndicatorSize } from '../../../components/loading-indicator/LoadingIndicator';
 import { Notification } from '../../../components/notification';
+import NotificationsWrapper from '../../../components/notification/NotificationsWrapper';
 import Tooltip from '../../../components/tooltip/Tooltip';
 import IconCheck from '../../../icons/general/IconCheck';
 import IconClose from '../../../icons/general/IconClose';
@@ -37,7 +38,8 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
     const [isPerformingRedaction, setIsPerformingRedaction] = useState(false);
     const [detectedItems, setDetectedItems] = useState<DetectedItem[]>([]);
     const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
-    const [notifications, setNotifications] = useState<Array<{ id: string; type: string; message: string }>>([]);
+    const [notifications, setNotifications] = useState<{ [key: string]: React.ReactElement }>({});
+    const [notificationID, setNotificationID] = useState<number>(0);
     const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
 
     // Fetch detected items on component mount
@@ -53,7 +55,7 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
                 setFileInfo(fileData);
             } catch (error) {
                 console.error('Error fetching detected items:', error);
-                addNotification('error', 'Failed to load detected items');
+                createNotification('error', 'Failed to load detected items');
             } finally {
                 setIsLoading(false);
             }
@@ -62,14 +64,31 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
         fetchData();
     }, [fileId]);
 
-    const addNotification = (type: string, message: string) => {
-        const id = Date.now().toString();
-        setNotifications(prev => [...prev, { id, type, message }]);
-        
-        // Auto-remove notification after 5 seconds
-        setTimeout(() => {
-            setNotifications(prev => prev.filter(n => n.id !== id));
-        }, 5000);
+    // Close a notification
+    const handleNotificationClose = (id: number) => {
+        const updatedNotifications = { ...notifications };
+        delete updatedNotifications[id];
+        setNotifications(updatedNotifications);
+    };
+
+    // Create a notification
+    const createNotification = (type: string, message: string) => {
+        const updatedNotifications = { ...notifications };
+        if (updatedNotifications[notificationID]) {
+            return;
+        }
+        updatedNotifications[notificationID] = (
+            <Notification
+                key={notificationID}
+                duration="short"
+                onClose={() => handleNotificationClose(notificationID)}
+                type={type as any}
+            >
+                <span>{message}</span>
+            </Notification>
+        );
+        setNotifications(updatedNotifications);
+        setNotificationID(notificationID + 1);
     };
 
     const handleItemApprove = (itemId: string) => {
@@ -90,7 +109,7 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
 
     const handlePerformRedaction = async () => {
         if (selectedItems.size === 0) {
-            addNotification('warn', 'Please select at least one item to redact');
+            createNotification('warn', 'Please select at least one item to redact');
             return;
         }
 
@@ -98,14 +117,14 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
             setIsPerformingRedaction(true);
             const result = await mockPerformRedaction(fileId, Array.from(selectedItems));
             
-            addNotification('info', `Redaction completed! New file: ${result.name}`);
+            createNotification('info', `Redaction completed! New file: ${result.name}`);
             
             // Reset selections after successful redaction
             setSelectedItems(new Set());
             
         } catch (error) {
             console.error('Error performing redaction:', error);
-            addNotification('error', 'Failed to perform redaction');
+            createNotification('error', 'Failed to perform redaction');
         } finally {
             setIsPerformingRedaction(false);
         }
@@ -132,12 +151,13 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
     }
 
     return (
-        <SidebarContent
-            className={'bcs-RedactWizardSidebar'}
-            elementId={elementId}
-            sidebarView={SIDEBAR_VIEW_REDACT_WIZARD}
-            title={formatMessage(messages.sidebarRedactWizardTitle)}
-        >
+        <>
+            <SidebarContent
+                className={'bcs-RedactWizardSidebar'}
+                elementId={elementId}
+                sidebarView={SIDEBAR_VIEW_REDACT_WIZARD}
+                title={formatMessage(messages.sidebarRedactWizardTitle)}
+            >
             <div className="bcs-RedactWizardSidebar-content">
 
                 {/* Detected Information Section */}
@@ -204,20 +224,12 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
                     </PrimaryButton>
                 </div>
 
-                {/* Notifications */}
-                {notifications.map(notification => (
-                    <Notification
-                        key={notification.id}
-                        type={notification.type as any}
-                        onClose={() => {
-                            setNotifications(prev => prev.filter(n => n.id !== notification.id));
-                        }}
-                    >
-                        <span>{notification.message}</span>
-                    </Notification>
-                ))}
             </div>
         </SidebarContent>
+        <NotificationsWrapper>
+            <>{[...Object.values(notifications)]}</>
+        </NotificationsWrapper>
+    </>
     );
 };
 
