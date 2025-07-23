@@ -10,6 +10,7 @@ import NotificationsWrapper from '../../../components/notification/Notifications
 import Tooltip from '../../../components/tooltip/Tooltip';
 import IconCheck from '../../../icons/general/IconCheck';
 import IconClose from '../../../icons/general/IconClose';
+import UploadSuccessState from '../../../icons/states/UploadSuccessState';
 
 import { SIDEBAR_VIEW_REDACT_WIZARD } from '../../../constants';
 import SidebarContent from '../SidebarContent';
@@ -41,6 +42,8 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
     const [notifications, setNotifications] = useState<{ [key: string]: React.ReactElement }>({});
     const [notificationID, setNotificationID] = useState<number>(0);
     const [fileInfo, setFileInfo] = useState<FileInfo | null>(null);
+    const [isRedactionComplete, setIsRedactionComplete] = useState<boolean>(false);
+    const [redactedFileId, setRedactedFileId] = useState<string | null>(null);
 
     // Fetch detected items on component mount
     useEffect(() => {
@@ -65,26 +68,28 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
     }, [fileId]);
 
     // Close a notification
-    const handleNotificationClose = (id: number) => {
+    const handleNotificationClose = (id: string) => {
         const updatedNotifications = { ...notifications };
         delete updatedNotifications[id];
         setNotifications(updatedNotifications);
     };
 
     // Create a notification
-    const createNotification = (type: string, message: string) => {
+    const createNotification = (type: string, message: string, actionButton?: React.ReactElement) => {
+        const id = notificationID.toString();
         const updatedNotifications = { ...notifications };
-        if (updatedNotifications[notificationID]) {
+        if (updatedNotifications[id]) {
             return;
         }
-        updatedNotifications[notificationID] = (
+        updatedNotifications[id] = (
             <Notification
-                key={notificationID}
+                key={id}
                 duration="short"
-                onClose={() => handleNotificationClose(notificationID)}
+                onClose={() => handleNotificationClose(id)}
                 type={type as any}
             >
                 <span>{message}</span>
+                {actionButton}
             </Notification>
         );
         setNotifications(updatedNotifications);
@@ -117,10 +122,26 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
             setIsPerformingRedaction(true);
             const result = await mockPerformRedaction(fileId, Array.from(selectedItems));
             
-            createNotification('info', `Redaction completed! New file: ${result.name}`);
+            // Store the redacted file ID for navigation
+            setRedactedFileId(result.id);
             
-            // Reset selections after successful redaction
-            setSelectedItems(new Set());
+            // Create success notification with navigation button
+            const navigateButton = (
+                <Button
+                    onClick={() => {
+                        // Navigate to the redacted file
+                        window.open(`http://localhost:3003/file/${result.id}`, '_blank');
+                    }}
+                    type={ButtonType.BUTTON}
+                >
+                    View File
+                </Button>
+            );
+            
+            createNotification('info', `Redaction completed! New file: ${result.name}`, navigateButton);
+            
+            // Hide the redaction UI and show completion state
+            setIsRedactionComplete(true);
             
         } catch (error) {
             console.error('Error performing redaction:', error);
@@ -158,78 +179,97 @@ const RedactWizardSidebar = ({ elementId, fileId, api }: RedactWizardSidebarProp
                 sidebarView={SIDEBAR_VIEW_REDACT_WIZARD}
                 title={formatMessage(messages.sidebarRedactWizardTitle)}
             >
-            <div className="bcs-RedactWizardSidebar-content">
-
-                {/* Detected Information Section */}
-                <div className="bcs-RedactWizardSidebar-section">
-                    <h3>Detected Sensitive Information</h3>
-                    <p className="bcs-RedactWizardSidebar-instructions">
-                        Review and validate the information Box AI has identified for redaction. 
-                        Click the check or X to confirm or reject each field.
-                    </p>
-                    
-                    <div className="bcs-RedactWizardSidebar-validation-header">
-                        <h4>Validation Required</h4>
-                        <div className="bcs-RedactWizardSidebar-validation-actions">
-                            <Tooltip text="Reject All">
+                <div className="bcs-RedactWizardSidebar-content">
+                    {isRedactionComplete ? (
+                        // Show completion empty state
+                        <div className="bcs-RedactWizardSidebar-completion-state">
+                            <UploadSuccessState width={80} height={80} />
+                            <h3>Redaction Complete!</h3>
+                            <p>Your document has been successfully redacted. The sensitive information has been removed and a new file has been created.</p>
+                            {redactedFileId && (
                                 <Button
-                                    className="bcs-RedactWizardSidebar-reject-all-btn"
-                                    onClick={() => setSelectedItems(new Set())}
+                                    onClick={() => {
+                                        window.open(`http://localhost:3003/file/${redactedFileId}`, '_blank');
+                                    }}
                                     type={ButtonType.BUTTON}
                                 >
-                                    <IconClose color="#ED3757" width={16} height={16} />
+                                    View Redacted File
                                 </Button>
-                            </Tooltip>
-                            <Tooltip text="Approve All">
-                                <Button
-                                    className="bcs-RedactWizardSidebar-approve-all-btn"
-                                    onClick={() => setSelectedItems(new Set(detectedItems.map(item => item.id)))}
-                                    type={ButtonType.BUTTON}
-                                >
-                                    <IconCheck color="#26C281" width={16} height={16} />
-                                </Button>
-                            </Tooltip>
+                            )}
                         </div>
-                    </div>
-                    
-                    <div className="bcs-RedactWizardSidebar-items">
-                        {detectedItems.map(item => (
-                            <RedactWizardItemCard
-                                key={item.id}
-                                item={item}
-                                isSelected={selectedItems.has(item.id)}
-                                onApprove={handleItemApprove}
-                                onReject={handleItemReject}
-                            />
-                        ))}
-                    </div>
-                </div>
+                    ) : (
+                        <>
+                            {/* Detected Information Section */}
+                            <div className="bcs-RedactWizardSidebar-section">
+                                <h3>Detected Sensitive Information</h3>
+                                <p className="bcs-RedactWizardSidebar-instructions">
+                                    Review and validate the information Box AI has identified for redaction. 
+                                    Click the check or X to confirm or reject each field.
+                                </p>
+                                
+                                <div className="bcs-RedactWizardSidebar-validation-header">
+                                    <h4>Validation Required</h4>
+                                    <div className="bcs-RedactWizardSidebar-validation-actions">
+                                        <Tooltip text="Reject All">
+                                            <Button
+                                                className="bcs-RedactWizardSidebar-reject-all-btn"
+                                                onClick={() => setSelectedItems(new Set<string>())}
+                                                type={ButtonType.BUTTON}
+                                            >
+                                                <IconClose color="#ED3757" width={16} height={16} />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip text="Approve All">
+                                            <Button
+                                                className="bcs-RedactWizardSidebar-approve-all-btn"
+                                                onClick={() => setSelectedItems(new Set<string>(detectedItems.map(item => item.id.toString())))}
+                                                type={ButtonType.BUTTON}
+                                            >
+                                                <IconCheck color="#26C281" width={16} height={16} />
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
+                                </div>
+                                
+                                <div className="bcs-RedactWizardSidebar-items">
+                                    {detectedItems.map(item => (
+                                        <RedactWizardItemCard
+                                            key={item.id}
+                                            item={item}
+                                            isSelected={selectedItems.has(item.id.toString())}
+                                            onApprove={() => handleItemApprove(item.id.toString())}
+                                            onReject={() => handleItemReject(item.id.toString())}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
 
-                {/* Footer */}
-                <div className="bcs-RedactWizardSidebar-footer">
-                    <div className="bcs-RedactWizardSidebar-summary">
-                        <span>{selectedItems.size} fields selected for redaction</span>
-                        <span className="bcs-RedactWizardSidebar-pending">
-                            {detectedItems.length - selectedItems.size} fields pending validation
-                        </span>
-                    </div>
-                    
-                    <PrimaryButton
-                        className="bcs-RedactWizardSidebar-perform-btn"
-                        onClick={handlePerformRedaction}
-                        isLoading={isPerformingRedaction}
-                        type={ButtonType.BUTTON}
-                    >
-                        {isPerformingRedaction ? 'Performing Redaction...' : 'Perform Redaction'}
-                    </PrimaryButton>
+                            {/* Footer */}
+                            <div className="bcs-RedactWizardSidebar-footer">
+                                <div className="bcs-RedactWizardSidebar-summary">
+                                    <span>{selectedItems.size} fields selected for redaction</span>
+                                    <span className="bcs-RedactWizardSidebar-pending">
+                                        {detectedItems.length - selectedItems.size} fields pending validation
+                                    </span>
+                                </div>
+                                
+                                <PrimaryButton
+                                    className="bcs-RedactWizardSidebar-perform-btn"
+                                    onClick={handlePerformRedaction}
+                                    isLoading={isPerformingRedaction}
+                                    type={ButtonType.BUTTON}
+                                >
+                                    {isPerformingRedaction ? 'Performing Redaction...' : 'Perform Redaction'}
+                                </PrimaryButton>
+                            </div>
+                        </>
+                    )}
                 </div>
-
-            </div>
-        </SidebarContent>
-        <NotificationsWrapper>
-            <>{[...Object.values(notifications)]}</>
-        </NotificationsWrapper>
-    </>
+            </SidebarContent>
+            <NotificationsWrapper>
+                <>{[...Object.values(notifications)]}</>
+            </NotificationsWrapper>
+        </>
     );
 };
 

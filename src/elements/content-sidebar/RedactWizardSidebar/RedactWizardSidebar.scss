@@ -274,4 +274,33 @@
             font-weight: 600;
         }
     }
+
+    &-completion-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 20px;
+        height: 100%;
+
+        h3 {
+            margin: 20px 0 12px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: $bdl-gray-80;
+        }
+
+        p {
+            margin: 0 0 24px 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: $bdl-gray-50;
+            max-width: 280px;
+        }
+
+        button {
+            margin-top: 16px;
+        }
+    }
 }

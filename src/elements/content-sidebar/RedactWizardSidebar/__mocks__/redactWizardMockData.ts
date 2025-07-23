@@ -136,9 +136,9 @@ export const mockPerformRedaction = async (fileId: string, selectedItemIds: stri
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     return {
-        id: 'redacted_file_123',
-        name: 'Sample Legal Document for Redaction Training_redacted.pdf',
-        download_url: 'https://api.box.com/2.0/files/redacted_file_123/content',
+        id: '17931855154',
+        name: 'REDACTED_FREEDOM OF INFORMATION ACT REQUEST.pdf',
+        download_url: 'https://api.box.com/2.0/files/17931855154/content',
     };
 };
 
