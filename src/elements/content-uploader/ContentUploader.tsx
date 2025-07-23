@@ -288,8 +288,8 @@ class ContentUploader extends Component<ContentUploaderProps, State> {
             sharedLink,
             sharedLinkPassword,
             token,
-            version: CLIENT_VERSION,
             uploadHost,
+            version: CLIENT_VERSION,
         };
     };
 

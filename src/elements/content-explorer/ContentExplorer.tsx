@@ -264,8 +264,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             sharedLink,
             sharedLinkPassword,
             token,
-            version: CLIENT_VERSION,
             uploadHost,
+            version: CLIENT_VERSION,
         });
 
         this.id = uniqueid('bce_');
