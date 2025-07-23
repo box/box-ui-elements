@@ -1,0 +1,15 @@
+.bcs-RedactWizardSidebar {
+    border-left: 1px solid var(--gray-10);
+
+    .bcs-RedactWizardSidebar-content {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        padding: var(--space-4);
+    }
+
+    .bcs-RedactWizardSidebar-inline-error {
+        margin-bottom: var(--space-4);
+    }
+}

@@ -320,6 +320,7 @@ class Sidebar extends React.Component<Props, State> {
         const hasActivity = SidebarUtils.canHaveActivitySidebar(this.props);
         const hasDetails = SidebarUtils.canHaveDetailsSidebar(this.props);
         const hasMetadata = SidebarUtils.shouldRenderMetadataSidebar(this.props, metadataEditors);
+        const hasRedactWizard = SidebarUtils.canHaveRedactWizardSidebar(file);
         const hasSkills = SidebarUtils.shouldRenderSkillsSidebar(this.props, file);
         const onVersionHistoryClick = hasVersions ? this.handleVersionHistoryClick : this.props.onVersionHistoryClick;
         const styleClassName = classNames('be bcs', className, {
@@ -347,6 +348,7 @@ class Sidebar extends React.Component<Props, State> {
                                 hasBoxAI={hasBoxAI}
                                 hasDetails={hasDetails}
                                 hasMetadata={hasMetadata}
+                                hasRedactWizard={hasRedactWizard}
                                 hasSkills={hasSkills}
                                 hasDocGen={docGenSidebarProps.isDocGenTemplate}
                                 isOpen={isOpen}
@@ -372,6 +374,7 @@ class Sidebar extends React.Component<Props, State> {
                             hasDetails={hasDetails}
                             hasDocGen={docGenSidebarProps.isDocGenTemplate}
                             hasMetadata={hasMetadata}
+                            hasRedactWizard={hasRedactWizard}
                             hasSkills={hasSkills}
                             hasVersions={hasVersions}
                             isOpen={isOpen}

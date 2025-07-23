@@ -19,6 +19,7 @@ import {
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA_REDESIGN,
+    SIDEBAR_VIEW_REDACT_WIZARD,
     SIDEBAR_VIEW_BOXAI,
 } from '../../constants';
 import { isFeatureEnabled } from '../common/feature-checking';
@@ -37,6 +38,10 @@ class SidebarUtils {
     static canHaveDetailsSidebar({ detailsSidebarProps = {} }: ContentSidebarProps): boolean {
         const { hasProperties, hasAccessStats, hasClassification, hasVersions, hasNotices } = detailsSidebarProps;
         return !!hasProperties || !!hasAccessStats || !!hasClassification || !!hasVersions || !!hasNotices;
+    }
+
+    static canHaveRedactWizardSidebar(file: BoxItem): boolean {
+        return file.extension.toLocaleLowerCase() === 'pdf';
     }
 
     /**
@@ -167,6 +172,8 @@ class SidebarUtils {
                 return <FormattedMessage {...messages.sidebarDetailsTitle} />;
             case SIDEBAR_VIEW_METADATA:
                 return <FormattedMessage {...messages.sidebarMetadataTitle} />;
+            case SIDEBAR_VIEW_REDACT_WIZARD:
+                return <FormattedMessage {...messages.sidebarRedactWizardTitle} />;
             case SIDEBAR_VIEW_BOXAI:
                 // Box AI Sidebar title is not displayed in the BoxAISidebar component,
                 // and it also should not be visible as fallback before panel is loaded
@@ -204,6 +211,11 @@ class SidebarUtils {
             case SIDEBAR_VIEW_METADATA_REDESIGN:
                 importFn = import(
                     /* webpackMode: "lazy", webpackChunkName: "metadata-sidebar-redesigned" */ './MetadataSidebarRedesign'
+                );
+                break;
+            case SIDEBAR_VIEW_REDACT_WIZARD:
+                importFn = import(
+                    /* webpackMode: "lazy", webpackChunkName: "redact-wizard-sidebar" */ './RedactWizardSidebar'
                 );
                 break;
             case SIDEBAR_VIEW_ACTIVITY:

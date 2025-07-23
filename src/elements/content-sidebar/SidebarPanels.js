@@ -20,6 +20,7 @@ import {
     ORIGIN_DOCGEN_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR,
     ORIGIN_METADATA_SIDEBAR_REDESIGN,
+    ORIGIN_REDACT_WIZARD_SIDEBAR,
     ORIGIN_SKILLS_SIDEBAR,
     ORIGIN_VERSIONS_SIDEBAR,
     SIDEBAR_VIEW_ACTIVITY,
@@ -29,6 +30,7 @@ import {
     SIDEBAR_VIEW_VERSIONS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA_REDESIGN,
+    SIDEBAR_VIEW_REDACT_WIZARD,
     SIDEBAR_VIEW_BOXAI,
     ORIGIN_BOXAI_SIDEBAR,
 } from '../../constants';
@@ -62,6 +64,7 @@ type Props = {
     hasDetails: boolean,
     hasDocGen: boolean,
     hasMetadata: boolean,
+    hasRedactWizard: boolean,
     hasSkills: boolean,
     hasVersions: boolean,
     isOpen: boolean,
@@ -90,6 +93,7 @@ const MARK_NAME_JS_LOADING_BOXAI = `${ORIGIN_BOXAI_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_SKILLS = `${ORIGIN_SKILLS_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA = `${ORIGIN_METADATA_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_METADATA_REDESIGNED = `${ORIGIN_METADATA_SIDEBAR_REDESIGN}${BASE_EVENT_NAME}`;
+const MARK_NAME_JS_LOADING_REDACT_WIZARD = `${ORIGIN_REDACT_WIZARD_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_DOCGEN = `${ORIGIN_DOCGEN_SIDEBAR}${BASE_EVENT_NAME}`;
 const MARK_NAME_JS_LOADING_VERSIONS = `${ORIGIN_VERSIONS_SIDEBAR}${BASE_EVENT_NAME}`;
 
@@ -110,6 +114,10 @@ const LoadableMetadataSidebarRedesigned = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_METADATA_REDESIGN,
     MARK_NAME_JS_LOADING_METADATA,
 );
+const LoadableRedactWizardSidebar = SidebarUtils.getAsyncSidebarContent(
+    SIDEBAR_VIEW_REDACT_WIZARD,
+    MARK_NAME_JS_LOADING_REDACT_WIZARD,
+);
 const LoadableDocGenSidebar = SidebarUtils.getAsyncSidebarContent(SIDEBAR_VIEW_DOCGEN, MARK_NAME_JS_LOADING_DOCGEN);
 const LoadableVersionsSidebar = SidebarUtils.getAsyncSidebarContent(
     SIDEBAR_VIEW_VERSIONS,
@@ -124,6 +132,8 @@ class SidebarPanels extends React.Component<Props, State> {
     activitySidebar: ElementRefType = React.createRef();
 
     detailsSidebar: ElementRefType = React.createRef();
+
+    redactWizardSidebar: ElementRefType = React.createRef();
 
     initialPanel: { current: null | string } = React.createRef();
 
@@ -173,7 +183,10 @@ class SidebarPanels extends React.Component<Props, State> {
         }
     };
 
-    setBoxAiSidebarCacheValue = (key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestedQuestions', value: any) => {
+    setBoxAiSidebarCacheValue = (
+        key: 'agents' | 'encodedSession' | 'questions' | 'shouldShowLandingPage' | 'suggestedQuestions',
+        value: any,
+    ) => {
         this.boxAiSidebarCache[key] = value;
     };
 
@@ -186,6 +199,7 @@ class SidebarPanels extends React.Component<Props, State> {
         const { current: activitySidebar } = this.activitySidebar;
         const { current: detailsSidebar } = this.detailsSidebar;
         const { current: metadataSidebar } = this.metadataSidebar;
+        const { current: redactWizardSidebar } = this.redactWizardSidebar;
         const { current: versionsSidebar } = this.versionsSidebar;
 
         if (boxAISidebar) {
@@ -202,6 +216,10 @@ class SidebarPanels extends React.Component<Props, State> {
 
         if (metadataSidebar) {
             metadataSidebar.refresh();
+        }
+
+        if (redactWizardSidebar) {
+            redactWizardSidebar.refresh();
         }
 
         if (versionsSidebar) {
@@ -229,6 +247,7 @@ class SidebarPanels extends React.Component<Props, State> {
             hasDetails,
             hasDocGen,
             hasMetadata,
+            hasRedactWizard,
             hasSkills,
             hasVersions,
             isOpen,
@@ -255,11 +274,15 @@ class SidebarPanels extends React.Component<Props, State> {
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
             [SIDEBAR_VIEW_DETAILS]: hasDetails,
             [SIDEBAR_VIEW_METADATA]: hasMetadata,
+            [SIDEBAR_VIEW_REDACT_WIZARD]: hasRedactWizard,
         };
 
         const showDefaultPanel: boolean = !!(defaultPanel && panelsEligibility[defaultPanel]);
 
-        if (!isOpen || (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasSkills && !hasVersions)) {
+        if (
+            !isOpen ||
+            (!hasBoxAI && !hasActivity && !hasDetails && !hasMetadata && !hasRedactWizard && !hasSkills && !hasVersions)
+        ) {
             return null;
         }
 
@@ -404,6 +427,24 @@ class SidebarPanels extends React.Component<Props, State> {
                         }}
                     />
                 )}
+                {hasRedactWizard && (
+                    <Route
+                        exact
+                        path={`/${SIDEBAR_VIEW_REDACT_WIZARD}`}
+                        render={() => {
+                            this.handlePanelRender(SIDEBAR_VIEW_REDACT_WIZARD);
+                            return (
+                                <LoadableRedactWizardSidebar
+                                    elementId={elementId}
+                                    fileId={fileId}
+                                    hasSidebarInitialized={isInitialized}
+                                    ref={this.redactWizardSidebar}
+                                    startMarkName={MARK_NAME_JS_LOADING_REDACT_WIZARD}
+                                />
+                            );
+                        }}
+                    />
+                )}
                 {hasDocGen && (
                     <Route
                         exact
@@ -460,6 +501,8 @@ class SidebarPanels extends React.Component<Props, State> {
                             redirect = SIDEBAR_VIEW_DETAILS;
                         } else if (hasMetadata) {
                             redirect = SIDEBAR_VIEW_METADATA;
+                        } else if (hasRedactWizard) {
+                            redirect = SIDEBAR_VIEW_REDACT_WIZARD;
                         } else if (canShowBoxAISidebarPanel && !shouldBoxAIBeDefaultPanel) {
                             redirect = SIDEBAR_VIEW_BOXAI;
                         }

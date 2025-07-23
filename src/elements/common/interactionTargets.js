@@ -6,6 +6,7 @@ export const SIDEBAR_NAV_TARGETS = {
     SIGN: 'sidebarsign',
     SKILLS: 'sidebarskills',
     METADATA: 'sidebarmetadata',
+    REDACT_WIZARD: 'sidebarredactwizard',
     TOGGLE: 'sidebartoggle',
     DOCGEN: 'sidebardocgen',
 };

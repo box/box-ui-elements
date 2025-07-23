@@ -13,6 +13,7 @@ import { BoxAiLogo } from '@box/blueprint-web-assets/icons/Logo';
 // $FlowFixMe
 import { Size6 } from '@box/blueprint-web-assets/tokens/tokens';
 import { usePromptFocus } from '@box/box-ai-content-answers';
+import IconRedactWizard from 'icons/general/IconRedactWizard';
 import AdditionalTabs from './additional-tabs';
 import DocGenIcon from '../../icon/fill/DocGenIcon';
 import IconChatRound from '../../icons/general/IconChatRound';
@@ -31,6 +32,7 @@ import {
     SIDEBAR_VIEW_DETAILS,
     SIDEBAR_VIEW_DOCGEN,
     SIDEBAR_VIEW_METADATA,
+    SIDEBAR_VIEW_REDACT_WIZARD,
     SIDEBAR_VIEW_SKILLS,
 } from '../../constants';
 import { useFeatureConfig } from '../common/feature-checking';
@@ -49,6 +51,7 @@ type Props = {
     hasDetails: boolean,
     hasDocGen?: boolean,
     hasMetadata: boolean,
+    hasRedactWizard: boolean,
     hasSkills: boolean,
     internalSidebarNavigation?: InternalSidebarNavigation,
     internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
@@ -69,6 +72,7 @@ const SidebarNav = ({
     hasBoxAI,
     hasDetails,
     hasMetadata,
+    hasRedactWizard,
     hasSkills,
     hasDocGen = false,
     internalSidebarNavigation,
@@ -169,6 +173,18 @@ const SidebarNav = ({
                             tooltip={intl.formatMessage(messages.sidebarMetadataTitle)}
                         >
                             <IconMetadataThick className="bcs-SidebarNav-icon" />
+                        </SidebarNavButton>
+                    )}
+                    {hasRedactWizard && (
+                        <SidebarNavButton
+                            data-resin-target={SIDEBAR_NAV_TARGETS.REDACT_WIZARD}
+                            data-target-id="SidebarNavButton-redactWizard"
+                            data-testid="sidebarredactwizard"
+                            onClick={handleSidebarNavButtonClick}
+                            sidebarView={SIDEBAR_VIEW_REDACT_WIZARD}
+                            tooltip={intl.formatMessage(messages.sidebarRedactWizardTitle)}
+                        >
+                            <IconRedactWizard className="bcs-SidebarNav-icon" />
                         </SidebarNavButton>
                     )}
                     {hasDocGen && (

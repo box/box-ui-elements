@@ -477,6 +477,11 @@ const messages = defineMessages({
         description: 'Title for the preview metadata.',
         defaultMessage: 'Metadata',
     },
+    sidebarRedactWizardTitle: {
+        id: 'be.sidebarRedactWizardTitle',
+        description: 'Title for the preview redact wizard.',
+        defaultMessage: 'Box AI Redaction Assistant',
+    },
     sidebarMetadataEditingErrorContent: {
         id: 'be.sidebarMetadataEditingErrorContent',
         description: 'Generic error content for metadata editing.',
