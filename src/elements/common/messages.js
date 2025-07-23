@@ -480,7 +480,7 @@ const messages = defineMessages({
     sidebarRedactWizardTitle: {
         id: 'be.sidebarRedactWizardTitle',
         description: 'Title for the preview redact wizard.',
-        defaultMessage: 'Box AI Redaction Assistant',
+        defaultMessage: 'Redaction Wizard',
     },
     sidebarMetadataEditingErrorContent: {
         id: 'be.sidebarMetadataEditingErrorContent',
