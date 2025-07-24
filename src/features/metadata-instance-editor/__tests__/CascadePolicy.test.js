@@ -113,21 +113,68 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
     });
 
     describe('AI Agent Selector', () => {
-        test('should render AI agent selector with default to basic when AI features are enabled', () => {
+        test('should render AI agent selector with default to basic when AI features are enabled', async () => {
             render(
                 <CascadePolicy
                     canEdit
                     canUseAIFolderExtraction
                     canUseAIFolderExtractionAgentSelector
                     shouldShowCascadeOptions
+                    isAIFolderExtractionEnabled
+                    onAIFolderExtractionToggle={jest.fn()}
                 />,
             );
-            expect(screen.getByRole('combobox', { name: 'Basic' })).toBeInTheDocument();
+
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            await userEvent.click(aiToggle); // Enable AI
+
+            expect(aiToggle).toBeChecked();
+
+            expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
         });
 
         test('should not render AI agent selector when canUseAIFolderExtractionAgentSelector is false', () => {
             render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
-            expect(screen.queryByRole('combobox', { name: 'Basic' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('combobox', { name: 'Standard' })).not.toBeInTheDocument();
+        });
+
+        test('should call onAIAgentSelect when an agent is selected', async () => {
+            const onAIAgentSelect = jest.fn();
+            render(
+                <CascadePolicy
+                    canEdit
+                    canUseAIFolderExtraction
+                    canUseAIFolderExtractionAgentSelector
+                    shouldShowCascadeOptions
+                    isAIFolderExtractionEnabled
+                    onAIAgentSelect={onAIAgentSelect}
+                    onAIFolderExtractionToggle={jest.fn()}
+                />,
+            );
+
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            await userEvent.click(aiToggle); // Enable AI
+
+            expect(aiToggle).toBeChecked();
+
+            // Find the combobox by its accessible name
+            const combobox = screen.getByRole('combobox', { name: 'Standard' });
+
+            // Open the combobox (simulate user click)
+            await userEvent.click(combobox);
+
+            // Find the option for "Advanced" and select it
+            const option = await screen.findByRole('option', { name: 'Enhanced' });
+            await userEvent.click(option);
+
+            // The expected agent object (should match the one in CascadePolicy.js)
+            const expectedAgent = {
+                id: '1',
+                name: 'Standard',
+                isEnterpriseDefault: true,
+            };
+
+            expect(onAIAgentSelect).toHaveBeenCalledWith(expectedAgent);
         });
     });
 
