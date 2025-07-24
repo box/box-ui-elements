@@ -113,7 +113,7 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-    const { id: customTabId, path: customTabPath, icon: CustomTabIcon, index: customTabIndex = 0, title: customTabTitle, navButtonProps } = customTab || {};
+    const { id: customTabId, path: customTabPath, icon: CustomTabIcon, index: customTabIndex, title: customTabTitle, navButtonProps } = customTab || {};
     const hasCustomTab = !!customTabId;
     const hasBoxAICustomTab = customTabId === 'boxai';
 
@@ -198,7 +198,10 @@ const SidebarNav = ({
 
         // Insert custom panel at the correct position
         if (hasCustomTab) {
-            const insertPosition = Math.min(customTabIndex, configs.length);
+            // If index doesn't exist, insert at the end
+            const insertPosition = customTabIndex === undefined
+                ? configs.length
+                : Math.min(customTabIndex, configs.length);
 
             const customTabConfig = {
                 key: customTabId,

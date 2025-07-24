@@ -234,7 +234,7 @@ class SidebarPanels extends React.Component<Props, State> {
         const {
             id: customPanelId,
             path: customPanelPath,
-            index: insertIndex = 0,
+            index: insertIndex,
             shouldBeDefaultPanel,
         } = customPanel || {};
         const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
@@ -259,9 +259,10 @@ class SidebarPanels extends React.Component<Props, State> {
 
         // Insert custom panel at specified position
         const basePanels = getBasePanels();
-        // put redirect order to last if index is negative or 0 and shouldBeDefaultPanel is false
-        const clampedIndex =
-            insertIndex <= 0 ? basePanels.length : Math.min(Math.max(0, insertIndex), basePanels.length);
+        // If index doesn't exist, insert at the end
+        const clampedIndex = insertIndex === undefined
+            ? basePanels.length
+            : Math.min(insertIndex, basePanels.length);
         const result = [...basePanels];
         result.splice(clampedIndex, 0, customPanelPath);
         return result;
