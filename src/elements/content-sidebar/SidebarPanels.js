@@ -235,7 +235,7 @@ class SidebarPanels extends React.Component<Props, State> {
             id: customPanelId,
             path: customPanelPath,
             index: insertIndex,
-            shouldBeDefaultPanel,
+            isDefault,
         } = customPanel || {};
 
         // Build base panel list without custom panel
@@ -252,7 +252,7 @@ class SidebarPanels extends React.Component<Props, State> {
         }
 
         // Custom panel should be default - put it first
-        if (shouldBeDefaultPanel) {
+        if (isDefault) {
             return [customPanelPath, ...getBasePanels()];
         }
 
