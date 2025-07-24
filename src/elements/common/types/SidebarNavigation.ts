@@ -22,7 +22,7 @@ export type ActivityAnnotationsSidebarView = {
     sidebar: ViewType.ACTIVITY;
     activeFeedEntryType: FeedEntryType.ANNOTATIONS;
     fileVersionId: string;
-    activeFeedEntryId: string;
+    activeFeedEntryId?: string;
 };
 type ActivityCommentsSidebarView = {
     sidebar: ViewType.ACTIVITY;

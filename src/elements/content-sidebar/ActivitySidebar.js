@@ -28,6 +28,7 @@ import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checkin
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
+import { ViewType, FeedEntryType } from '../common/types/SidebarNavigation';
 import {
     ACTIVITY_FILTER_OPTION_ALL,
     ACTIVITY_FILTER_OPTION_RESOLVED,
@@ -551,7 +552,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     updateReplies = (id: string, replies: Array<Comment>) => {
-        const { activeFeedEntryId, api, file, history } = this.props;
+        const { activeFeedEntryId, api, file, history, internalSidebarNavigationHandler, routerDisabled } = this.props;
         const { feedItems } = this.state;
 
         if (!feedItems) {
@@ -571,7 +572,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     item.id === id && item === this.getCommentFeedItemByReplyId(feedItems, activeFeedEntryId),
             )
         ) {
-            history.replace(this.getActiveCommentPath());
+            if (routerDisabled && internalSidebarNavigationHandler) {
+                internalSidebarNavigationHandler(
+                    {
+                        sidebar: ViewType.ACTIVITY,
+                    },
+                    true,
+                );
+            } else {
+                history.replace(this.getActiveCommentPath());
+            }
         }
 
         feedAPI.updateFeedItem({ replies }, id);
@@ -1113,6 +1123,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getAnnotationsPath,
             history,
             internalSidebarNavigation,
+            internalSidebarNavigationHandler,
             location,
             onAnnotationSelect,
             routerDisabled,
@@ -1133,8 +1144,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
         emitActiveAnnotationChangeEvent(nextActiveAnnotationId);
 
         if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
-            if (routerDisabled) {
-                // TODO: Handle navigation when router is disabled
+            if (routerDisabled && internalSidebarNavigationHandler) {
+                const navigation: InternalSidebarNavigation = {
+                    sidebar: ViewType.ACTIVITY,
+                };
+                if (annotationFileVersionId) {
+                    navigation.activeFeedEntryType = FeedEntryType.ANNOTATIONS;
+                    navigation.activeFeedEntryId = nextActiveAnnotationId;
+                    navigation.fileVersionId = annotationFileVersionId;
+                }
+                internalSidebarNavigationHandler(navigation);
             } else {
                 history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
             }
@@ -1270,13 +1289,10 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             file,
             hasReplies,
             hasVersions,
-            internalSidebarNavigation,
-            internalSidebarNavigationHandler,
             isDisabled = false,
             onVersionHistoryClick,
             getUserProfileUrl,
             onTaskView,
-            routerDisabled,
         } = this.props;
         const { activityFeedError, approverSelectorContacts, contactsLoaded, mentionSelectorContacts } = this.state;
         const isNewThreadedRepliesEnabled = isFeatureEnabled(features, 'activityFeed.newThreadedReplies.enabled');
