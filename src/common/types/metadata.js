@@ -101,7 +101,7 @@ type MetadataCascadingPolicyData = {
     id?: string,
     isEnabled: boolean,
     overwrite: boolean,
-    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration | null,
+    cascadePolicyConfiguration: MetadataCascadePolicyConfiguration | null,
 };
 
 type MetadataInstance = {

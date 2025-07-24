@@ -18,6 +18,7 @@ import Link from '../../components/link/Link';
 import IconAlertDefault from '../../icons/general/IconAlertDefault';
 import messages from './messages';
 import './CascadePolicy.scss';
+import { STANDARD_AGENT_ID, ENHANCED_AGENT_ID } from './constants';
 
 const COMMUNITY_LINK = 'https://support.box.com/hc/en-us/articles/360044195873-Cascading-metadata-in-folders';
 const AI_LINK = 'https://www.box.com/ai';
@@ -64,12 +65,12 @@ const CascadePolicy = ({
     const agents = React.useMemo(
         () => [
             {
-                id: '1',
+                id: STANDARD_AGENT_ID,
                 name: formatMessage(messages.standardAgentName),
                 isEnterpriseDefault: true,
             },
             {
-                id: '2',
+                id: ENHANCED_AGENT_ID,
                 name: formatMessage(messages.enhancedAgentName),
                 isEnterpriseDefault: false,
                 customIcon: BoxAiAdvancedColor,

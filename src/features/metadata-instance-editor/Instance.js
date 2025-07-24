@@ -25,7 +25,12 @@ import MetadataInstanceConfirmDialog from './MetadataInstanceConfirmDialog';
 import Footer from './Footer';
 import messages from './messages';
 import { FIELD_TYPE_FLOAT, FIELD_TYPE_INTEGER } from '../metadata-instance-fields/constants';
-import { CASCADE_POLICY_TYPE_AI_EXTRACT, TEMPLATE_CUSTOM_PROPERTIES, ENHANCED_AGENT_CONFIGURATION } from './constants';
+import {
+    CASCADE_POLICY_TYPE_AI_EXTRACT,
+    TEMPLATE_CUSTOM_PROPERTIES,
+    ENHANCED_AGENT_CONFIGURATION,
+    ENHANCED_AGENT_ID,
+} from './constants';
 import {
     JSON_PATCH_OP_REMOVE,
     JSON_PATCH_OP_ADD,
@@ -71,10 +76,10 @@ type Props = {
 };
 
 type State = {
+    cascadePolicyConfiguration: MetadataCascadePolicyConfiguration | null,
     data: Object,
     errors: { [string]: React.Node },
     isAIFolderExtractionEnabled: boolean,
-    cascadePolicyConfiguration?: MetadataCascadePolicyConfiguration | null,
     isBusy: boolean,
     isCascadingEnabled: boolean,
     isCascadingOverwritten: boolean,
@@ -215,12 +220,12 @@ class Instance extends React.PureComponent<Props, State> {
             onSave,
         }: Props = this.props;
         const {
+            cascadePolicyConfiguration,
             data: currentData,
             errors,
             isAIFolderExtractionEnabled,
             isCascadingEnabled,
             isCascadingOverwritten,
-            cascadePolicyConfiguration,
         }: State = this.state;
 
         if (!this.isEditing() || !isDirty || !onSave || Object.keys(errors).length) {
@@ -354,7 +359,7 @@ class Instance extends React.PureComponent<Props, State> {
      */
     onAIAgentSelect = (agent: AgentType | null): void => {
         // '2' is the id for the enhanced agent
-        if (agent && agent.id === '2') {
+        if (agent && agent.id === ENHANCED_AGENT_ID) {
             this.setState({
                 cascadePolicyConfiguration: {
                     agent: ENHANCED_AGENT_CONFIGURATION,
@@ -374,10 +379,10 @@ class Instance extends React.PureComponent<Props, State> {
         const isCascadingEnabled = this.isCascadingEnabledThroughProps(props);
 
         return {
+            cascadePolicyConfiguration: null,
             data: cloneDeep(props.data),
             errors: {},
             isAIFolderExtractionEnabled: this.isAIFolderExtractionEnabledThroughProps(props),
-            cascadePolicyConfiguration: null,
             isBusy: false,
             isCascadingEnabled,
             isCascadingOverwritten: false,
@@ -705,10 +710,10 @@ class Instance extends React.PureComponent<Props, State> {
                                             isCascadingOverwritten={isCascadingOverwritten}
                                             isCustomMetadata={isProperties}
                                             isExistingCascadePolicy={isExistingCascadePolicy}
+                                            onAIAgentSelect={this.onAIAgentSelect}
                                             onAIFolderExtractionToggle={this.onAIFolderExtractionToggle}
                                             onCascadeModeChange={this.onCascadeModeChange}
                                             onCascadeToggle={this.onCascadeToggle}
-                                            onAIAgentSelect={this.onAIAgentSelect}
                                             shouldShowCascadeOptions={shouldShowCascadeOptions}
                                         />
                                     )}

@@ -4,7 +4,6 @@ import { render, screen } from '../../../test-utils/testing-library';
 
 import MetadataInstanceEditor from '../MetadataInstanceEditor';
 import Instances from '../Instances';
-import { CASCADE_POLICY_TYPE_AI_EXTRACT } from '../constants';
 
 // Templates
 
@@ -541,7 +540,7 @@ describe('MetadataInstanceEditor - canUseAIFolderExtractionAgentSelector prop', 
             canUseAIFolderExtraction: true,
             canUseAIFolderExtractionAgentSelector: true,
         });
-        props.editors[0].instance.cascadePolicy.cascadePolicyType = CASCADE_POLICY_TYPE_AI_EXTRACT;
+        props.editors[0].instance.cascadePolicy.cascadePolicyType = 'ai_extract';
         render(<MetadataInstanceEditor {...props} />);
 
         const editButton = await screen.findByRole('button', { name: 'Edit Metadata' }, { timeout: 3000 });
@@ -587,7 +586,7 @@ describe('MetadataInstanceEditor - canUseAIFolderExtractionAgentSelector prop', 
             canUseAIFolderExtraction: true,
             canUseAIFolderExtractionAgentSelector: true,
         });
-        props.editors[0].instance.cascadePolicy.cascadePolicyType = CASCADE_POLICY_TYPE_AI_EXTRACT;
+        props.editors[0].instance.cascadePolicy.cascadePolicyType = 'ai_extract';
         props.editors[0].instance.cascadePolicy.id = null;
 
         render(<MetadataInstanceEditor {...props} />);
