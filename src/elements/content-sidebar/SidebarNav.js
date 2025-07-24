@@ -79,26 +79,26 @@ const renderNavButton = (config, handleSidebarNavButtonClick) => (
 );
 
 const SidebarNav = ({
-    additionalTabs,
-    customTab,
-    elementId,
-    fileId,
-    hasActivity,
-    hasAdditionalTabs,
-    hasBoxAI,
-    hasDetails,
-    hasMetadata,
-    hasSkills,
-    hasDocGen = false,
-    internalSidebarNavigation,
-    internalSidebarNavigationHandler,
-    intl,
-    isOpen,
-    onNavigate,
-    onPanelChange = noop,
-    routerDisabled,
-    signSidebarProps,
-}: Props) => {
+                        additionalTabs,
+                        customTab,
+                        elementId,
+                        fileId,
+                        hasActivity,
+                        hasAdditionalTabs,
+                        hasBoxAI,
+                        hasDetails,
+                        hasMetadata,
+                        hasSkills,
+                        hasDocGen = false,
+                        internalSidebarNavigation,
+                        internalSidebarNavigationHandler,
+                        intl,
+                        isOpen,
+                        onNavigate,
+                        onPanelChange = noop,
+                        routerDisabled,
+                        signSidebarProps,
+                    }: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
@@ -113,8 +113,7 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-    const { icon: CustomTabIcon, index: customTabIndex = 0, title: customTabTitle, navButtonProps } = customTab || {};
-    const customTabId = customTab && typeof customTab.id === 'string' ? customTab.id.trim() : '';
+    const { id: customTabId, path: customTabPath, icon: CustomTabIcon, index: customTabIndex = 0, title: customTabTitle, navButtonProps } = customTab || {};
     const hasCustomTab = !!customTabId;
     const hasBoxAICustomTab = customTabId === 'boxai';
 
@@ -204,7 +203,7 @@ const SidebarNav = ({
             const customTabConfig = {
                 key: customTabId,
                 id: customTabId,
-                view: customTabId,
+                view: customTabPath,
                 analyticsTarget: `sidebar${customTabId}`,
                 testId: `sidebar${customTabId}`,
                 tooltip: customTabTitle ?? customTabId,
