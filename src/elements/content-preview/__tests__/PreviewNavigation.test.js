@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Router } from 'react-router-dom';
-import noop from 'lodash/noop';
 import { render, screen, userEvent } from '../../../test-utils/testing-library';
 import PreviewNavigation from '../PreviewNavigation';
 import { ViewType, FeedEntryType } from '../../common/types/SidebarNavigation';
@@ -19,12 +18,17 @@ const deeplinkedMetadataHistoryMock = {
     entries: [{}],
 };
 
+const onNavigateLeftMock = jest.fn();
+const onNavigateRightMock = jest.fn();
+const mockNavigationHandler = jest.fn();
+
 const renderComponentWithRouter = (props = {}) => {
     const {
         collection = ['a', 'b', 'c'],
         historyMock = historyMockDefault,
-        onNavigateLeft = noop,
-        onNavigateRight = noop,
+        onNavigateLeft = onNavigateLeftMock,
+        onNavigateRight = onNavigateRightMock,
+        internalSidebarNavigationHandler = mockNavigationHandler,
         ...rest
     } = props;
 
@@ -34,6 +38,7 @@ const renderComponentWithRouter = (props = {}) => {
                 collection={collection}
                 onNavigateLeft={onNavigateLeft}
                 onNavigateRight={onNavigateRight}
+                internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                 {...rest}
             />
         </Router>,
@@ -44,8 +49,9 @@ const renderComponentWithoutRouter = (props = {}) => {
     const defaultProps = {
         collection: ['a', 'b', 'c'],
         currentIndex: 1,
-        onNavigateLeft: noop,
-        onNavigateRight: noop,
+        onNavigateLeft: onNavigateLeftMock,
+        onNavigateRight: onNavigateRightMock,
+        internalSidebarNavigationHandler: mockNavigationHandler,
     };
 
     return render(<PreviewNavigation {...defaultProps} {...props} routerDisabled />);
@@ -90,12 +96,10 @@ describe('elements/content-preview/PreviewNavigation', () => {
         );
 
         test('should render left navigation correctly from tasks deeplinked URL', async () => {
-            const onNavigateLeftMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithRouter({
                 currentIndex: 2,
-                onNavigateLeft: onNavigateLeftMock,
                 historyMock: historyMockDefault,
             });
 
@@ -110,12 +114,10 @@ describe('elements/content-preview/PreviewNavigation', () => {
         });
 
         test('should render right navigation correctly from tasks deeplinked URL', async () => {
-            const onNavigateRightMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithRouter({
                 currentIndex: 0,
-                onNavigateRight: onNavigateRightMock,
                 historyMock: historyMockDefault,
             });
 
@@ -130,13 +132,11 @@ describe('elements/content-preview/PreviewNavigation', () => {
         });
 
         test('should render right navigation correctly from metadata deeplinked URL', async () => {
-            const onNavigateRightMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithRouter({
                 currentIndex: 0,
                 historyMock: deeplinkedMetadataHistoryMock,
-                onNavigateRight: onNavigateRightMock,
             });
 
             const rightButton = screen.getByTestId('preview-navigation-right');
@@ -150,13 +150,11 @@ describe('elements/content-preview/PreviewNavigation', () => {
         });
 
         test('should render left navigation correctly from metadata deeplinked URL', async () => {
-            const onNavigateLeftMock = jest.fn();
             const user = userEvent();
 
             renderComponentWithRouter({
                 currentIndex: 2,
                 historyMock: deeplinkedMetadataHistoryMock,
-                onNavigateLeft: onNavigateLeftMock,
             });
 
             const leftButton = screen.getByTestId('preview-navigation-left');
@@ -171,10 +169,6 @@ describe('elements/content-preview/PreviewNavigation', () => {
     });
 
     describe('when routerDisabled is true', () => {
-        const mockNavigationHandler = jest.fn();
-        const onNavigateLeftMock = jest.fn();
-        const onNavigateRightMock = jest.fn();
-
         test('should render correctly without router', () => {
             renderComponentWithoutRouter({ currentIndex: 1 });
 
@@ -191,9 +185,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
-                onNavigateLeft: onNavigateLeftMock,
             });
 
             const leftButton = screen.getByTestId('preview-navigation-left');
@@ -214,9 +206,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
-                onNavigateRight: onNavigateRightMock,
             });
 
             const rightButton = screen.getByTestId('preview-navigation-right');
@@ -236,9 +226,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
-                onNavigateLeft: onNavigateLeftMock,
             });
 
             const leftButton = screen.getByTestId('preview-navigation-left');
@@ -261,9 +249,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
             const user = userEvent();
 
             renderComponentWithoutRouter({
-                internalSidebarNavigationHandler: mockNavigationHandler,
                 internalSidebarNavigation: mockInternalSidebarNavigation,
-                onNavigateRight: onNavigateRightMock,
             });
 
             const rightButton = screen.getByTestId('preview-navigation-right');
