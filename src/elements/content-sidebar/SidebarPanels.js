@@ -237,14 +237,13 @@ class SidebarPanels extends React.Component<Props, State> {
             index: insertIndex,
             shouldBeDefaultPanel,
         } = customPanel || {};
-        const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
 
         // Build base panel list without custom panel
         const getBasePanels = () => {
-            if (!hasBoxAICustomPanel && shouldBoxAIBeDefaultPanel) {
+            if (shouldBoxAIBeDefaultPanel) {
                 return [SIDEBAR_VIEW_BOXAI, ...DEFAULT_SIDEBAR_VIEWS];
             }
-            return hasBoxAICustomPanel ? DEFAULT_SIDEBAR_VIEWS : [...DEFAULT_SIDEBAR_VIEWS, SIDEBAR_VIEW_BOXAI];
+            return [...DEFAULT_SIDEBAR_VIEWS, SIDEBAR_VIEW_BOXAI];
         };
 
         // No custom panel - return base panels
@@ -260,9 +259,7 @@ class SidebarPanels extends React.Component<Props, State> {
         // Insert custom panel at specified position
         const basePanels = getBasePanels();
         // If index doesn't exist, insert at the end
-        const clampedIndex = insertIndex === undefined
-            ? basePanels.length
-            : Math.min(insertIndex, basePanels.length);
+        const clampedIndex = insertIndex === undefined ? basePanels.length : Math.min(insertIndex, basePanels.length);
         const result = [...basePanels];
         result.splice(clampedIndex, 0, customPanelPath);
         return result;
@@ -310,10 +307,9 @@ class SidebarPanels extends React.Component<Props, State> {
         const { path: customPanelPath, id: customPanelId, component: CustomPanelComponent } = customPanel || {};
         // customPanelId should not be undefined or empty string
         const hasCustomPanel = !!customPanelId;
-        const hasBoxAICustomPanel = customPanelId === SIDEBAR_VIEW_BOXAI;
         const canShowCustomPanel = hasCustomPanel && !customPanel?.navButtonProps?.isDisabled;
         const panelsEligibility = {
-            [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel && !hasBoxAICustomPanel,
+            [SIDEBAR_VIEW_BOXAI]: canShowBoxAISidebarPanel,
             [SIDEBAR_VIEW_DOCGEN]: hasDocGen,
             [SIDEBAR_VIEW_SKILLS]: hasSkills,
             [SIDEBAR_VIEW_ACTIVITY]: hasActivity,
@@ -352,8 +348,7 @@ class SidebarPanels extends React.Component<Props, State> {
                         }}
                     />
                 )}
-                {/* replaced by custom panel */}
-                {canShowBoxAISidebarPanel && !hasBoxAICustomPanel && (
+                {canShowBoxAISidebarPanel && (
                     <Route
                         exact
                         path={`/${SIDEBAR_VIEW_BOXAI}`}

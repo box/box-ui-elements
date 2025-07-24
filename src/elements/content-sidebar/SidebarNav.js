@@ -61,44 +61,27 @@ type Props = {
     signSidebarProps: SignSidebarProps,
 };
 
-const renderNavButton = (config, handleSidebarNavButtonClick) => (
-    // $FlowFixMe[incompatible-type] Allow custom panel string ids for sidebarView
-    <SidebarNavButton
-        key={config.key}
-        data-resin-target={config.analyticsTarget}
-        data-target-id={`SidebarNavButton-${config.id}`}
-        data-testid={config.testId}
-        isDisabled={config.isDisabled || false}
-        onClick={handleSidebarNavButtonClick}
-        sidebarView={config.view}
-        tooltip={config.tooltip}
-        {...(config.additionalProps || {})}
-    >
-        {config.icon}
-    </SidebarNavButton>
-);
-
 const SidebarNav = ({
-                        additionalTabs,
-                        customTab,
-                        elementId,
-                        fileId,
-                        hasActivity,
-                        hasAdditionalTabs,
-                        hasBoxAI,
-                        hasDetails,
-                        hasMetadata,
-                        hasSkills,
-                        hasDocGen = false,
-                        internalSidebarNavigation,
-                        internalSidebarNavigationHandler,
-                        intl,
-                        isOpen,
-                        onNavigate,
-                        onPanelChange = noop,
-                        routerDisabled,
-                        signSidebarProps,
-                    }: Props) => {
+    additionalTabs,
+    customTab,
+    elementId,
+    fileId,
+    hasActivity,
+    hasAdditionalTabs,
+    hasBoxAI,
+    hasDetails,
+    hasMetadata,
+    hasSkills,
+    hasDocGen = false,
+    internalSidebarNavigation,
+    internalSidebarNavigationHandler,
+    intl,
+    isOpen,
+    onNavigate,
+    onPanelChange = noop,
+    routerDisabled,
+    signSidebarProps,
+}: Props) => {
     const { enabled: hasBoxSign } = signSidebarProps || {};
     const { disabledTooltip: boxAIDisabledTooltip, showOnlyNavButton: showOnlyBoxAINavButton } =
         useFeatureConfig('boxai.sidebar');
@@ -113,16 +96,22 @@ const SidebarNav = ({
             focusPrompt();
         }
     };
-    const { id: customTabId, path: customTabPath, icon: CustomTabIcon, index: customTabIndex, title: customTabTitle, navButtonProps } = customTab || {};
+    const {
+        id: customTabId,
+        path: customTabPath,
+        icon: CustomTabIcon,
+        index: customTabIndex,
+        title: customTabTitle,
+        navButtonProps,
+    } = customTab || {};
     const hasCustomTab = !!customTabId;
-    const hasBoxAICustomTab = customTabId === 'boxai';
 
     // Configuration-driven button definitions
     const getButtonConfigs = () => {
         const configs = [];
 
         // BoxAI button (always first)
-        if (hasBoxAI && !hasBoxAICustomTab) {
+        if (hasBoxAI) {
             configs.push({
                 key: 'boxai',
                 id: 'boxAI',
@@ -199,9 +188,8 @@ const SidebarNav = ({
         // Insert custom panel at the correct position
         if (hasCustomTab) {
             // If index doesn't exist, insert at the end
-            const insertPosition = customTabIndex === undefined
-                ? configs.length
-                : Math.min(customTabIndex, configs.length);
+            const insertPosition =
+                customTabIndex === undefined ? configs.length : Math.min(customTabIndex, configs.length);
 
             const customTabConfig = {
                 key: customTabId,
@@ -220,7 +208,22 @@ const SidebarNav = ({
         return configs;
     };
 
-    const navButtons = getButtonConfigs().map(config => renderNavButton(config, handleSidebarNavButtonClick));
+    const navButtons = getButtonConfigs().map(config => (
+        // $FlowFixMe[incompatible-type] Allow custom panel string ids for sidebarView
+        <SidebarNavButton
+            key={config.key}
+            data-resin-target={config.analyticsTarget}
+            data-target-id={`SidebarNavButton-${config.id}`}
+            data-testid={config.testId}
+            isDisabled={config.isDisabled || false}
+            onClick={handleSidebarNavButtonClick}
+            sidebarView={config.view}
+            tooltip={config.tooltip}
+            {...(config.additionalProps || {})}
+        >
+            {config.icon}
+        </SidebarNavButton>
+    ));
 
     return (
         <div className="bcs-SidebarNav" aria-label={intl.formatMessage(messages.sidebarNavLabel)}>
