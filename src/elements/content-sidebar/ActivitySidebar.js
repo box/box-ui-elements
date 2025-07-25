@@ -1133,10 +1133,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         let selectedFileVersionId = currentFileVersionId;
         if (routerDisabled && internalSidebarNavigation) {
-            // Use fileVersionId from internal navigation when router is disabled
             selectedFileVersionId = getProp(internalSidebarNavigation, 'fileVersionId', currentFileVersionId);
         } else {
-            // Use router-based approach when router is enabled
             const match = getAnnotationsMatchPath(location);
             selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
         }
