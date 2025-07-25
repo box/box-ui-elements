@@ -1,8 +1,0 @@
-// @flow
-declare export var EditorState: any
-declare export var ContentState: any
-declare export var Editor: any
-declare export var CompositeDecorator: any
-declare export var Modifier: any
-declare export var SelectionState: any
-declare export default {}
