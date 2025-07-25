@@ -200,11 +200,12 @@ const SidebarNav = ({
                 tooltip={customTabTitle ?? customTabId}
                 {...navButtonProps}
             >
-                {CustomTabIcon && (
-                    typeof CustomTabIcon === 'function'
-                        ? <CustomTabIcon className="bcs-SidebarNav-icon" />
-                        : CustomTabIcon
-                )}
+                {CustomTabIcon &&
+                    (typeof CustomTabIcon === 'function' ? (
+                        <CustomTabIcon className="bcs-SidebarNav-icon" />
+                    ) : (
+                        CustomTabIcon
+                    ))}
             </SidebarNavButton>
         );
 

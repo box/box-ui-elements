@@ -231,12 +231,7 @@ class SidebarPanels extends React.Component<Props, State> {
     }
 
     getPanelOrder = (customPanel?: CustomSidebarPanel, shouldBoxAIBeDefaultPanel: boolean): string[] => {
-        const {
-            id: customPanelId,
-            path: customPanelPath,
-            index: insertIndex,
-            isDefault,
-        } = customPanel || {};
+        const { id: customPanelId, path: customPanelPath, index: insertIndex, isDefault } = customPanel || {};
 
         // Build base panel list without custom panel
         const getBasePanels = () => {
