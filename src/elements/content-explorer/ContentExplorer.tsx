@@ -1718,6 +1718,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                             {!isDefaultViewMetadata && <Header view={view} logoUrl={logoUrl} onSearch={this.search} />}
 
                             <SubHeader
+                                api={this.api}
                                 view={view}
                                 viewMode={viewMode}
                                 rootId={rootFolderId}
