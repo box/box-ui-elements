@@ -238,7 +238,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         },
         contentUploaderProps: {},
         metadataProps: {},
-        metadataViewTitle: '',
     };
 
     /**
@@ -1637,6 +1636,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             messages,
             fieldsToShow,
             metadataProps,
+            metadataQuery,
             metadataViewTitle,
             onDownload,
             onPreview,
@@ -1710,6 +1710,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                             {!isDefaultViewMetadata && <Header view={view} logoUrl={logoUrl} onSearch={this.search} />}
 
                             <SubHeader
+                                api={this.api}
                                 view={view}
                                 viewMode={viewMode}
                                 rootId={rootFolderId}
@@ -1731,6 +1732,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 portalElement={this.rootElement}
                                 selectedKeys={this.state.selectedKeys}
                                 onClearSelectedKeys={this.handleClearSelectedKeys}
+                                metadataQuery={metadataQuery}
                                 metadataViewTitle={metadataViewTitle}
                             />
 

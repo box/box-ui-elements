@@ -7,13 +7,16 @@ import SubHeaderLeft from './SubHeaderLeft';
 import SubheaderLeftMetadataViewV2 from './SubHeaderLeftMetadataViewV2';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
+import type API from '../../../api';
 import type { View, Collection } from '../../../common/types/core';
+import type { MetadataQuery } from '../../../common/types/metadataQueries';
 import { VIEW_MODE_LIST, VIEW_METADATA } from '../../../constants';
 import { useFeatureEnabled } from '../feature-checking';
 
 import './SubHeader.scss';
 
 export interface SubHeaderProps {
+    api?: API;
     canCreateNewFolder: boolean;
     canUpload: boolean;
     currentCollection: Collection;
@@ -22,6 +25,9 @@ export interface SubHeaderProps {
     gridMinColumns?: number;
     isSmall: boolean;
     maxGridColumnCountForWidth?: number;
+    metadataQuery?: MetadataQuery;
+    metadataViewTitle?: string;
+    onClearSelectedKeys: () => void;
     onCreate: () => void;
     onGridViewSliderChange?: (newSliderValue: number) => void;
     onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
@@ -31,14 +37,13 @@ export interface SubHeaderProps {
     portalElement?: HTMLElement;
     rootId: string;
     rootName?: string;
+    selectedKeys: Selection;
     view: View;
     viewMode?: ViewMode;
-    metadataViewTitle?: string;
-    selectedKeys: Selection;
-    onClearSelectedKeys: () => void;
 }
 
 const SubHeader = ({
+    api,
     canCreateNewFolder,
     canUpload,
     currentCollection,
@@ -46,6 +51,7 @@ const SubHeader = ({
     gridMaxColumns = 0,
     gridMinColumns = 0,
     maxGridColumnCountForWidth = 0,
+    metadataQuery,
     metadataViewTitle,
     onGridViewSliderChange = noop,
     isSmall,
@@ -88,10 +94,12 @@ const SubHeader = ({
                 )}
                 {isMetadataViewV2Feature && (
                     <SubheaderLeftMetadataViewV2
-                        metadataViewTitle={metadataViewTitle}
+                        api={api}
                         currentCollection={currentCollection}
-                        selectedKeys={selectedKeys}
+                        metadataQuery={metadataQuery}
+                        metadataViewTitle={metadataViewTitle}
                         onClearSelectedKeys={onClearSelectedKeys}
+                        selectedKeys={selectedKeys}
                     />
                 )}
             </PageHeader.StartElements>

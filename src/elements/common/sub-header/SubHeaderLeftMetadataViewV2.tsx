@@ -1,24 +1,54 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Selection } from 'react-aria-components';
 import { FormattedMessage } from 'react-intl';
 import { Text } from '@box/blueprint-web';
 
+import type API from '../../../api';
+import FolderAPI from '../../../api/Folder';
+import type { Collection } from '../../../common/types/core';
+import type { MetadataQuery } from '../../../common/types/metadataQueries';
 import CloseButton from '../../../components/close-button/CloseButton';
 import messages from '../../../features/content-explorer/messages';
-import type { Collection } from '../../../common/types/core';
 
 import './SubHeaderLeftMetadataViewV2.scss';
 
 interface SubHeaderLeftMetadataViewV2Props {
+    api?: API;
     currentCollection: Collection;
+    metadataQuery?: MetadataQuery;
     metadataViewTitle?: string;
     onClearSelectedKeys?: () => void;
     selectedKeys: Selection;
 }
 
 const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) => {
-    const { currentCollection, metadataViewTitle, selectedKeys, onClearSelectedKeys } = props;
+    const { api, currentCollection, metadataQuery, metadataViewTitle, selectedKeys, onClearSelectedKeys } = props;
+    const [ancestorFolderName, setAncestorFolderName] = useState<string | null>(null);
 
+    // Fetch ancestor folder name with metadataQuery.ancestor_folder_id
+    useEffect(() => {
+        if (api && metadataQuery?.ancestor_folder_id) {
+            if (metadataQuery.ancestor_folder_id === '0') {
+                setAncestorFolderName('All Files');
+            } else {
+                // Create dedicated FolderAPI instance to avoid interfering with main API
+                const dedicatedFolderAPI = new FolderAPI(api.options);
+
+                dedicatedFolderAPI.getFolderFields(
+                    metadataQuery.ancestor_folder_id,
+                    (folderInfo: { name?: string }) => {
+                        setAncestorFolderName(folderInfo.name ?? null);
+                    },
+                    () => {
+                        setAncestorFolderName(null);
+                    },
+                    { fields: ['name'] },
+                );
+            }
+        }
+    }, [api, metadataQuery?.ancestor_folder_id]);
+
+    // Generate selected item text based on selected keys
     const selectedItemText = useMemo(() => {
         const selectedCount = selectedKeys === 'all' ? currentCollection.items.length : selectedKeys.size;
 
@@ -50,10 +80,10 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
         );
     }
 
-    // Case 3: No selected items - show title if provided
+    // Case 3: No selected items - show title if provided, otherwise show ancestor folder name
     return (
         <Text className="be-sub-header-left-title" as="h1" variant="titleXLarge">
-            {metadataViewTitle}
+            {metadataViewTitle ?? ancestorFolderName}
         </Text>
     );
 };
