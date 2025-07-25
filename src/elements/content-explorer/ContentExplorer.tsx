@@ -132,6 +132,7 @@ export interface ContentExplorerProps {
     messages?: StringMap;
     metadataQuery?: MetadataQuery;
     metadataProps?: Omit<MetadataViewContainerProps, 'hasError' | 'currentCollection'>;
+    metadataViewTitle?: string;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
@@ -237,6 +238,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         },
         contentUploaderProps: {},
         metadataProps: {},
+        metadataViewTitle: '',
     };
 
     /**
@@ -1635,6 +1637,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             messages,
             fieldsToShow,
             metadataProps,
+            metadataViewTitle,
             onDownload,
             onPreview,
             onUpload,
@@ -1684,15 +1687,12 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
         const hasPreviousMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
-        console.log({ currentCollection });
-
         const combinedMetadataProps = {
             ...metadataProps,
             tableProps: {
                 ...metadataProps?.tableProps,
                 selectedKeys: this.state.selectedKeys,
                 onSelectionChange: (keys: Selection) => {
-                    console.log('onSelectionChange', { keys });
                     metadataProps?.tableProps?.onSelectionChange?.(keys);
                     this.setState({ selectedKeys: keys });
                 },
@@ -1731,6 +1731,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 portalElement={this.rootElement}
                                 selectedKeys={this.state.selectedKeys}
                                 onClearSelectedKeys={this.handleClearSelectedKeys}
+                                metadataViewTitle={metadataViewTitle}
                             />
 
                             <Content

@@ -33,6 +33,7 @@ export interface SubHeaderProps {
     rootName?: string;
     view: View;
     viewMode?: ViewMode;
+    metadataViewTitle?: string;
     selectedKeys: Selection;
     onClearSelectedKeys: () => void;
 }
@@ -45,8 +46,10 @@ const SubHeader = ({
     gridMaxColumns = 0,
     gridMinColumns = 0,
     maxGridColumnCountForWidth = 0,
+    metadataViewTitle,
     onGridViewSliderChange = noop,
     isSmall,
+    onClearSelectedKeys,
     onCreate,
     onItemClick,
     onSortChange,
@@ -55,10 +58,9 @@ const SubHeader = ({
     portalElement,
     rootId,
     rootName,
+    selectedKeys,
     view,
     viewMode = VIEW_MODE_LIST,
-    selectedKeys,
-    onClearSelectedKeys,
 }: SubHeaderProps) => {
     const isMetadataViewV2Feature = useFeatureEnabled('contentExplorer.metadataViewV2');
 
@@ -86,7 +88,7 @@ const SubHeader = ({
                 )}
                 {isMetadataViewV2Feature && (
                     <SubheaderLeftMetadataViewV2
-                        title="My Custom Title dude"
+                        metadataViewTitle={metadataViewTitle}
                         currentCollection={currentCollection}
                         selectedKeys={selectedKeys}
                         onClearSelectedKeys={onClearSelectedKeys}

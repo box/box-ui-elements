@@ -1,18 +1,9 @@
-.be-sub-header-left-title {
-    font-family: Lato, sans-serif;
-    font-size: 21px;
-    font-weight: 900;
-}
-
-.be-sub-header-left-selected {
-    font-family: Lato, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
+.be-sub-header-left-selected-container {
     display: flex;
     align-items: center;
     gap: 12px;
 
-    .bdl-CloseButton {
+    > .bdl-CloseButton {
         margin: 0;
     }
 }
