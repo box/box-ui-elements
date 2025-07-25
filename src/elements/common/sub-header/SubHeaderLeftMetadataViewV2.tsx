@@ -1,19 +1,23 @@
 import React, { useMemo } from 'react';
 import { Selection } from 'react-aria-components';
+import { FormattedMessage } from 'react-intl';
+import { Text } from '@box/blueprint-web';
+
 import CloseButton from '../../../components/close-button/CloseButton';
+import messages from '../../../features/content-explorer/messages';
 import type { Collection } from '../../../common/types/core';
 
 import './SubHeaderLeftMetadataViewV2.scss';
 
 interface SubHeaderLeftMetadataViewV2Props {
     currentCollection: Collection;
-    title?: string;
-    selectedKeys: Selection;
+    metadataViewTitle?: string;
     onClearSelectedKeys?: () => void;
+    selectedKeys: Selection;
 }
 
 const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) => {
-    const { currentCollection, title, selectedKeys, onClearSelectedKeys } = props;
+    const { currentCollection, metadataViewTitle, selectedKeys, onClearSelectedKeys } = props;
 
     const selectedItemText = useMemo(() => {
         const selectedCount = selectedKeys === 'all' ? currentCollection.items.length : selectedKeys.size;
@@ -31,7 +35,7 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
         }
         // Case 2: Multiple selected items - show count
         if (selectedCount > 1) {
-            return `${selectedCount} files selected`;
+            return <FormattedMessage {...messages.numFilesSelected} values={{ numSelected: selectedCount }} />;
         }
         return '';
     }, [currentCollection.items, selectedKeys]);
@@ -39,18 +43,18 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
     // Case 1 and 2: selected item text with X button
     if (selectedItemText) {
         return (
-            <div className="be-sub-header-left-selected">
+            <div className="be-sub-header-left-selected-container">
                 <CloseButton onClick={onClearSelectedKeys} className="be-sub-header-left-selected-close-button" />
-                <span>{selectedItemText}</span>
+                <Text as="p">{selectedItemText}</Text>
             </div>
         );
     }
 
     // Case 3: No selected items - show title if provided
     return (
-        <div className="be-sub-header-left-title">
-            <span>{title || 'Metadata View'}</span>
-        </div>
+        <Text className="be-sub-header-left-title" as="h1" variant="titleXLarge">
+            {metadataViewTitle}
+        </Text>
     );
 };
 

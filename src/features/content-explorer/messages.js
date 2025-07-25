@@ -104,6 +104,17 @@ const messages = defineMessages({
         description: 'Text shown to indicate the number of folders selected',
         id: 'boxui.contentExplorer.numFoldersSelected',
     },
+    numFilesSelected: {
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 files selected}
+                one {1 file selected}
+                other {# files selected}
+            }
+        `,
+        description: 'Text shown to indicate the number of files selected',
+        id: 'boxui.contentExplorer.numFilesSelected',
+    },
     emptySearch: {
         defaultMessage: "Sorry, we couldn't find what you're looking for.",
         description: 'Text shown in the list when there are no search results',

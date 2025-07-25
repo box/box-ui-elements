@@ -133,6 +133,7 @@ export interface ContentExplorerProps {
     messages?: StringMap;
     metadataQuery?: MetadataQuery;
     metadataViewProps?: Omit<MetadataViewContainerProps, 'hasError' | 'currentCollection'>;
+    metadataViewTitle?: string;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
@@ -239,6 +240,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         },
         contentUploaderProps: {},
         metadataViewProps: {},
+        metadataViewTitle: '',
     };
 
     /**
@@ -1640,6 +1642,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             messages,
             fieldsToShow,
             metadataViewProps,
+            metadataViewTitle,
             onDownload,
             onPreview,
             onUpload,
@@ -1698,7 +1701,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 ...metadataViewProps?.tableProps,
                 selectedKeys: this.state.selectedKeys,
                 onSelectionChange: (keys: Selection) => {
-                    console.log('onSelectionChange', { keys });
                     metadataViewProps?.tableProps?.onSelectionChange?.(keys);
                     this.setState({ selectedKeys: keys });
                 },
@@ -1737,6 +1739,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 portalElement={this.rootElement}
                                 selectedKeys={this.state.selectedKeys}
                                 onClearSelectedKeys={this.handleClearSelectedKeys}
+                                metadataViewTitle={metadataViewTitle}
                             />
 
                             <Content
