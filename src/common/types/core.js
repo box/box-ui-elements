@@ -34,7 +34,7 @@ import {
     PERMISSION_CAN_DOWNLOAD,
     PERMISSION_CAN_PREVIEW,
 } from '../../constants';
-import type { MetadataType } from './metadata';
+import type { MetadataType, MetadataTemplate } from './metadata';
 
 type Token = null | typeof undefined | string | Function;
 type TokenReadWrite = { read: string, write?: string };
@@ -394,6 +394,7 @@ type Collection = {
     breadcrumbs?: Array<Crumb>,
     id?: string,
     items?: Array<BoxItem>,
+    metadataTemplate?: MetadataTemplate,
     name?: string,
     nextMarker?: ?string,
     offset?: number,
