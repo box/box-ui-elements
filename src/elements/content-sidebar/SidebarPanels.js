@@ -256,7 +256,7 @@ class SidebarPanels extends React.Component<Props, State> {
             return [customPanelPath, ...getBasePanels()];
         }
 
-        // Custom panel at index 0 but not default - put it at the end
+        // Custom panel at index 0 but not default - put it at the end based on current ai-sidebar pattern
         if (insertIndex === 0 && !isDefault) {
             return [...getBasePanels(), customPanelPath];
         }
