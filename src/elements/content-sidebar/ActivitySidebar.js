@@ -28,6 +28,7 @@ import { withFeatureConsumer, isFeatureEnabled } from '../common/feature-checkin
 import { withLogger } from '../common/logger';
 import { withRouterAndRef } from '../common/routing';
 import ActivitySidebarFilter from './ActivitySidebarFilter';
+import { ViewType, FeedEntryType } from '../common/types/SidebarNavigation';
 import {
     ACTIVITY_FILTER_OPTION_ALL,
     ACTIVITY_FILTER_OPTION_RESOLVED,
@@ -76,6 +77,7 @@ import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import './ActivitySidebar.scss';
 
 import type { OnAnnotationEdit, OnAnnotationStatusChange } from './activity-feed/comment/types';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
 
 type ExternalProps = {
     activeFeedEntryId?: string,
@@ -86,6 +88,8 @@ type ExternalProps = {
     hasReplies?: boolean,
     hasTasks?: boolean,
     hasVersions?: boolean,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     onCommentCreate: Function,
     onCommentDelete: (comment: Comment) => any,
     onCommentUpdate: () => any,
@@ -94,6 +98,7 @@ type ExternalProps = {
     onTaskDelete: (id: string) => any,
     onTaskUpdate: () => any,
     onTaskView: (id: string, isCreator: boolean) => any,
+    routerDisabled?: boolean,
 } & ErrorContextProps &
     WithAnnotatorContextProps;
 
@@ -547,7 +552,7 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
      * @return {void}
      */
     updateReplies = (id: string, replies: Array<Comment>) => {
-        const { activeFeedEntryId, api, file, history } = this.props;
+        const { activeFeedEntryId, api, file, history, internalSidebarNavigationHandler, routerDisabled } = this.props;
         const { feedItems } = this.state;
 
         if (!feedItems) {
@@ -567,7 +572,16 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
                     item.id === id && item === this.getCommentFeedItemByReplyId(feedItems, activeFeedEntryId),
             )
         ) {
-            history.replace(this.getActiveCommentPath());
+            if (routerDisabled && internalSidebarNavigationHandler) {
+                internalSidebarNavigationHandler(
+                    {
+                        sidebar: ViewType.ACTIVITY,
+                    },
+                    true,
+                );
+            } else {
+                history.replace(this.getActiveCommentPath());
+            }
         }
 
         feedAPI.updateFeedItem({ replies }, id);
@@ -1108,18 +1122,36 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
             getAnnotationsMatchPath,
             getAnnotationsPath,
             history,
+            internalSidebarNavigation,
+            internalSidebarNavigationHandler,
             location,
             onAnnotationSelect,
+            routerDisabled,
         } = this.props;
         const annotationFileVersionId = getProp(file_version, 'id');
         const currentFileVersionId = getProp(file, 'file_version.id');
-        const match = getAnnotationsMatchPath(location);
-        const selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+
+        let selectedFileVersionId = currentFileVersionId;
+        if (routerDisabled && internalSidebarNavigation) {
+            selectedFileVersionId = getProp(internalSidebarNavigation, 'fileVersionId', currentFileVersionId);
+        } else {
+            const match = getAnnotationsMatchPath(location);
+            selectedFileVersionId = getProp(match, 'params.fileVersionId', currentFileVersionId);
+        }
 
         emitActiveAnnotationChangeEvent(nextActiveAnnotationId);
 
         if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
-            history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
+            if (routerDisabled && internalSidebarNavigationHandler) {
+                internalSidebarNavigationHandler({
+                    sidebar: ViewType.ACTIVITY,
+                    activeFeedEntryId: nextActiveAnnotationId,
+                    activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                    fileVersionId: annotationFileVersionId,
+                });
+            } else {
+                history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
+            }
         }
 
         onAnnotationSelect(annotation);
@@ -1161,7 +1193,8 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
     }
 
     renderAddTaskButton = () => {
-        const { isDisabled, hasTasks } = this.props;
+        const { isDisabled, hasTasks, internalSidebarNavigation, internalSidebarNavigationHandler, routerDisabled } =
+            this.props;
         const { approverSelectorContacts } = this.state;
         const { getApprover, getAvatarUrl, createTask, onTaskModalClose } = this;
 
@@ -1171,8 +1204,11 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         return (
             <AddTaskButton
+                internalSidebarNavigation={internalSidebarNavigation}
+                internalSidebarNavigationHandler={internalSidebarNavigationHandler}
                 isDisabled={isDisabled}
                 onTaskModalClose={onTaskModalClose}
+                routerDisabled={routerDisabled}
                 taskFormProps={{
                     approvers: [],
                     approverSelectorContacts,
