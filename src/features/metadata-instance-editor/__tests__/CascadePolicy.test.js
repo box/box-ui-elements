@@ -13,49 +13,66 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
     });
 
     test('should correctly render cascade policy read only mode', () => {
-        const wrapper = shallow(<CascadePolicy id="fakeId" isCascadingEnabled shouldShowCascadeOptions />);
-        expect(wrapper).toMatchSnapshot();
+        render(<CascadePolicy isCascadingEnabled shouldShowCascadeOptions canEdit={false} />);
+        expect(
+            screen.getByText(
+                'This template and its values are being cascaded to all items in this folder and its subfolders.',
+            ),
+        ).toBeInTheDocument();
     });
+
     test('should correctly render cascade policy in edit mode', () => {
-        const wrapper = shallow(
-            <CascadePolicy
-                id="fakeId"
-                isCascadingEnabled
-                isEditable
-                onCascadeModeChange={jest.fn()}
-                onCascadeToggle={jest.fn()}
-                shouldShowCascadeOptions
-            />,
-        );
-        expect(wrapper).toMatchSnapshot();
-    });
-    test('should correctly render cascade policy in edit mode and overwrite is on', () => {
-        const wrapper = shallow(
-            <CascadePolicy
-                id="fakeId"
-                isCascadingEnabled
-                isEditable
-                onCascadeModeChange={jest.fn()}
-                onCascadeToggle={jest.fn()}
-                shouldCascadeOverwrite
-                shouldShowCascadeOptions
-            />,
-        );
-        expect(wrapper).toMatchSnapshot();
-    });
-    test('should correctly render cascade policy when the template is Custom Metadata', () => {
-        const wrapper = shallow(
+        render(
             <CascadePolicy
                 canEdit
-                id="fakeId"
-                isCustomMetadata
-                isEditable
+                isCascadingEnabled
                 onCascadeModeChange={jest.fn()}
                 onCascadeToggle={jest.fn()}
                 shouldShowCascadeOptions
             />,
         );
-        expect(wrapper).toMatchSnapshot();
+        expect(screen.getByTestId('metadata-cascade-enable')).toBeInTheDocument();
+        expect(screen.getByText('Enable Cascade Policy')).toBeInTheDocument();
+    });
+
+    test('should correctly render cascade policy in edit mode and overwrite is on', () => {
+        render(
+            <CascadePolicy
+                canEdit
+                isCascadingEnabled
+                isCascadingOverwritten
+                onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
+                shouldShowCascadeOptions
+            />,
+        );
+        expect(screen.getByTestId('metadata-cascade-enable')).toBeInTheDocument();
+        expect(screen.getByText('Enable Cascade Policy')).toBeInTheDocument();
+        expect(screen.getByLabelText('Overwrite all existing template values')).toBeInTheDocument();
+    });
+
+    test('should correctly render cascade policy when the template is Custom Metadata', () => {
+        render(
+            <CascadePolicy
+                canEdit
+                isCustomMetadata
+                onCascadeModeChange={jest.fn()}
+                onCascadeToggle={jest.fn()}
+                shouldShowCascadeOptions
+            />,
+        );
+        expect(
+            screen.getByText('Cascade policy cannot be applied to custom metadata at this time.'),
+        ).toBeInTheDocument();
+    });
+
+    test('should render InlineNotice when isExistingCascadePolicy is true', () => {
+        render(<CascadePolicy canEdit isExistingCascadePolicy shouldShowCascadeOptions />);
+        expect(
+            screen.getByText(
+                'This cascade policy cannot be edited. To modify it, deactivate the current policy and then re-enable it to set up a new one.',
+            ),
+        ).toBeInTheDocument();
     });
 
     test('should render AI folder extraction toggle when canEdit, canUseAIFolderExtraction, and shouldShowCascadeOptions are true', () => {
@@ -96,60 +113,74 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
     });
 
     describe('AI Agent Selector', () => {
-        test('should render AI agent selector with default to basic when AI features are enabled', () => {
+        test('should render AI agent selector with default to basic when AI features are enabled', async () => {
             render(
                 <CascadePolicy
                     canEdit
                     canUseAIFolderExtraction
                     canUseAIFolderExtractionAgentSelector
                     shouldShowCascadeOptions
+                    isAIFolderExtractionEnabled
+                    onAIFolderExtractionToggle={jest.fn()}
                 />,
             );
-            expect(screen.getByRole('combobox', { name: 'Basic' })).toBeInTheDocument();
+
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            await userEvent.click(aiToggle); // Enable AI
+
+            expect(aiToggle).toBeChecked();
+
+            expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
         });
 
         test('should not render AI agent selector when canUseAIFolderExtractionAgentSelector is false', () => {
             render(<CascadePolicy canEdit canUseAIFolderExtraction shouldShowCascadeOptions />);
-            expect(screen.queryByRole('combobox', { name: 'Basic' })).not.toBeInTheDocument();
+            expect(screen.queryByRole('combobox', { name: 'Standard' })).not.toBeInTheDocument();
+        });
+
+        test('should call onAIAgentSelect when an agent is selected', async () => {
+            const onAIAgentSelect = jest.fn();
+            render(
+                <CascadePolicy
+                    canEdit
+                    canUseAIFolderExtraction
+                    canUseAIFolderExtractionAgentSelector
+                    shouldShowCascadeOptions
+                    isAIFolderExtractionEnabled
+                    onAIAgentSelect={onAIAgentSelect}
+                    onAIFolderExtractionToggle={jest.fn()}
+                />,
+            );
+
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            await userEvent.click(aiToggle); // Enable AI
+
+            expect(aiToggle).toBeChecked();
+
+            // Find the combobox by its accessible name
+            const combobox = screen.getByRole('combobox', { name: 'Standard' });
+
+            // Open the combobox (simulate user click)
+            await userEvent.click(combobox);
+
+            // Find the option for "Advanced" and select it
+            const option = await screen.findByRole('option', { name: 'Enhanced' });
+            await userEvent.click(option);
+
+            // The expected agent object (should match the one in CascadePolicy.js)
+            const expectedAgent = {
+                id: '1',
+                name: 'Standard',
+                isEnterpriseDefault: true,
+            };
+
+            expect(onAIAgentSelect).toHaveBeenCalledWith(expectedAgent);
         });
     });
 
     describe('AI Autofill Toggle', () => {
-        test('should disable toggle when isExistingAIExtractionCascadePolicy is true', () => {
-            render(
-                <CascadePolicy
-                    canEdit
-                    canUseAIFolderExtraction
-                    shouldShowCascadeOptions
-                    isExistingAIExtractionCascadePolicy
-                />,
-            );
-
-            const aiSection = screen.getByTestId('ai-folder-extraction');
-            const toggle = within(aiSection).getByRole('switch');
-
-            expect(toggle).toBeDisabled();
-        });
-
-        test('should enable toggle when isExistingAIExtractionCascadePolicy is false', () => {
-            render(
-                <CascadePolicy
-                    canEdit
-                    canUseAIFolderExtraction
-                    shouldShowCascadeOptions
-                    isExistingAIExtractionCascadePolicy={false}
-                />,
-            );
-
-            const aiSection = screen.getByTestId('ai-folder-extraction');
-            const toggle = within(aiSection).getByRole('switch');
-
-            expect(toggle).not.toBeDisabled();
-        });
-
         test('should call onAIFolderExtractionToggle when toggle is clicked and enabled', async () => {
             const onAIFolderExtractionToggle = jest.fn();
-
             render(
                 <CascadePolicy
                     canEdit
@@ -159,35 +190,11 @@ describe('features/metadata-instance-editor/CascadePolicy', () => {
                     onAIFolderExtractionToggle={onAIFolderExtractionToggle}
                 />,
             );
-
             const aiSection = screen.getByTestId('ai-folder-extraction');
             const toggle = within(aiSection).getByRole('switch');
-
             await userEvent.click(toggle);
-
             expect(onAIFolderExtractionToggle).toHaveBeenCalledTimes(1);
             expect(onAIFolderExtractionToggle).toHaveBeenCalledWith(true);
-        });
-
-        test('should not call onAIFolderExtractionToggle when toggle is clicked but disabled', async () => {
-            const onAIFolderExtractionToggle = jest.fn();
-
-            render(
-                <CascadePolicy
-                    canEdit
-                    canUseAIFolderExtraction
-                    shouldShowCascadeOptions
-                    isExistingAIExtractionCascadePolicy={true}
-                    onAIFolderExtractionToggle={onAIFolderExtractionToggle}
-                />,
-            );
-
-            const aiSection = screen.getByTestId('ai-folder-extraction');
-            const toggle = within(aiSection).getByRole('switch');
-
-            await userEvent.click(toggle);
-
-            expect(onAIFolderExtractionToggle).not.toHaveBeenCalled();
         });
     });
 });

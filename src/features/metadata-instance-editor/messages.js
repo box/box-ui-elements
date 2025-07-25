@@ -207,6 +207,17 @@ const messages = defineMessages({
             'Tooltip text that asks the user what they want to do when applying cascading to their metadata policy',
         id: 'boxui.metadataInstanceEditor.cascadePolicyModeQuestion',
     },
+    cascadePolicyOptionsDisabledNotice: {
+        defaultMessage:
+            'This cascade policy cannot be edited. To modify it, deactivate the current policy and then re-enable it to set up a new one.',
+        description: 'Notice that explains that the cascade policy cannot be edited',
+        id: 'boxui.metadataInstanceEditor.cascadePolicyOptionsDisabledNotice',
+    },
+    cascadePolicyOptionsDisabledNoticeIconAriaLabel: {
+        defaultMessage: 'Disabled cascade options information',
+        description: 'Aria label for the disabled cascade options information icon',
+        id: 'boxui.metadataInstanceEditor.cascadePolicyOptionsDisabledNoticeIconAriaLabel',
+    },
     cascadePolicySkipMode: {
         defaultMessage: 'Skip and keep all existing template values',
         description: 'Label for radio button that selects skip mode for cascading policy',
@@ -234,6 +245,16 @@ const messages = defineMessages({
         description:
             'Informational text below cascade policy description and explains to the user that the policy will take some time to take effect.',
         id: 'boxui.metadataInstanceEditor.operationNotImmediate',
+    },
+    standardAgentName: {
+        defaultMessage: 'Standard',
+        description: 'Name of the standard AI agent',
+        id: 'boxui.metadataInstanceEditor.standardAgentName',
+    },
+    enhancedAgentName: {
+        defaultMessage: 'Enhanced',
+        description: 'Name of the enhanced AI agent',
+        id: 'boxui.metadataInstanceEditor.enhancedAgentName',
     },
 });
 

@@ -834,11 +834,16 @@ describe('Instance Component - React Testing Library', () => {
 
     describe('AI Folder Extraction Toggle Interaction', () => {
         test('should toggle AI folder extraction, disable/enable fields', async () => {
-            render(<Instance {...getBaseProps()} />);
+            render(<Instance {...getBaseProps({ cascadePolicy: { canEdit: true } })} />);
 
             // Click Edit button to enable editing
             const editButton = screen.getByRole('button', { name: 'Edit Metadata' }); // Assuming 'Edit Metadata' is the rendered name
             await userEvent.click(editButton);
+
+            // Click Enable Cascade Policy
+            const metadataCascadeEnable = await screen.findByTestId('metadata-cascade-enable');
+            const enableCascadePolicy = await within(metadataCascadeEnable).findByRole('switch');
+            await userEvent.click(enableCascadePolicy);
 
             // Initially, fields are enabled as default policy is not 'ai_extract'
             expect(screen.getByRole('textbox', { name: 'String Field example of a string field' })).not.toBeDisabled();
@@ -858,52 +863,62 @@ describe('Instance Component - React Testing Library', () => {
 
     describe('Props passed to CascadePolicy', () => {
         test('should pass canUseAIFolderExtractionAgentSelector to CascadePolicy', async () => {
-            render(<Instance {...getBaseProps({ canUseAIFolderExtractionAgentSelector: true })} />);
-
-            const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
-            if (editButton) await userEvent.click(editButton); // Enter edit mode to ensure CascadePolicy options are visible
-
-            expect(screen.getByRole('combobox', { name: 'Basic' })).toBeInTheDocument();
-        });
-
-        test('should pass isExistingAIExtractionCascadePolicy=true to CascadePolicy if policy is ai_extract', async () => {
             render(
                 <Instance
                     {...getBaseProps({
+                        canUseAIFolderExtractionAgentSelector: true,
                         cascadePolicy: {
-                            id: 'policy-ai',
+                            id: 'policy-1',
                             canEdit: true,
                             isEnabled: true,
-                            scope: 'enterprise_123',
                             cascadePolicyType: CASCADE_POLICY_TYPE_AI_EXTRACT,
                         },
                     })}
                 />,
             );
+
+            const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
+            if (editButton) await userEvent.click(editButton); // Enter edit mode to ensure CascadePolicy options are visible
+
+            const cascadeToggle = screen.getByRole('switch', { name: 'Enable Cascade Policy' });
+            expect(cascadeToggle).toBeChecked();
+
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            expect(aiToggle).toBeChecked();
+
+            expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
+        });
+
+        test('should disable CascadePolicy options when a cascade already exists', async () => {
+            render(<Instance {...getBaseProps()} />);
+
+            // Enter edit mode
             const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
             if (editButton) await userEvent.click(editButton);
 
+            // Cascade options should be disabled
+            const skipRadio = screen.getByLabelText(/skip/i);
+            const overwriteRadio = screen.getByLabelText(/overwrite/i);
+            expect(skipRadio).toBeDisabled();
+            expect(overwriteRadio).toBeDisabled();
+
+            // AI toggle should be disabled
             const aiSection = screen.getByTestId('ai-folder-extraction');
             const aiToggle = within(aiSection).getByRole('switch');
             expect(aiToggle).toBeDisabled();
-        });
-
-        test('should pass isExistingAIExtractionCascadePolicy=false to CascadePolicy if policy is not ai_extract', async () => {
-            render(<Instance {...getBaseProps()} />);
-            const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
-            if (editButton) await userEvent.click(editButton);
-
-            const aiSection = screen.getByTestId('ai-folder-extraction');
-            const aiToggle = within(aiSection).getByRole('switch');
-            expect(aiToggle).not.toBeDisabled();
         });
     });
 
     describe('Props passed to TemplatedInstance', () => {
         test('should pass isDisabled=true to TemplatedInstance when AI folder extraction is enabled', async () => {
-            render(<Instance {...getBaseProps()} />);
+            render(<Instance {...getBaseProps({ cascadePolicy: { canEdit: true } })} />);
             const editButton = screen.getByRole('button', { name: 'Edit Metadata' });
             await userEvent.click(editButton);
+
+            // Click Enable Cascade Policy
+            const metadataCascadeEnable = await screen.findByTestId('metadata-cascade-enable');
+            const enableCascadePolicy = await within(metadataCascadeEnable).findByRole('switch');
+            await userEvent.click(enableCascadePolicy);
 
             const aiSection = screen.getByTestId('ai-folder-extraction');
             const aiToggle = within(aiSection).getByRole('switch');
