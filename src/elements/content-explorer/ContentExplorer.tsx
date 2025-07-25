@@ -10,6 +10,7 @@ import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Selection } from 'react-aria-components';
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -175,6 +176,7 @@ type State = {
     rootName: string;
     searchQuery: string;
     selected?: BoxItem;
+    selectedKeys: Selection;
     sortBy: SortBy | string;
     sortDirection: SortDirection;
     view: View;
@@ -297,6 +299,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             markers: [],
             metadataTemplate: {},
             rootName: '',
+            selectedKeys: new Set(),
             searchQuery: '',
             sortBy,
             sortDirection,
@@ -1599,6 +1602,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         });
     };
 
+    handleClearSelectedKeys = () => {
+        this.setState({ selectedKeys: new Set() });
+    };
+
     /**
      * Renders the file picker
      *
@@ -1683,6 +1690,21 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
         const hasPreviousMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
+        console.log({ currentCollection });
+
+        const combinedMetadataViewProps = {
+            ...metadataViewProps,
+            tableProps: {
+                ...metadataViewProps?.tableProps,
+                selectedKeys: this.state.selectedKeys,
+                onSelectionChange: (keys: Selection) => {
+                    console.log('onSelectionChange', { keys });
+                    metadataViewProps?.tableProps?.onSelectionChange?.(keys);
+                    this.setState({ selectedKeys: keys });
+                },
+            },
+        };
+
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
         return (
@@ -1713,6 +1735,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 onSortChange={this.sort}
                                 onViewModeChange={this.changeViewMode}
                                 portalElement={this.rootElement}
+                                selectedKeys={this.state.selectedKeys}
+                                onClearSelectedKeys={this.handleClearSelectedKeys}
                             />
 
                             <Content
@@ -1730,7 +1754,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 itemActions={itemActions}
                                 fieldsToShow={fieldsToShow}
                                 metadataTemplate={metadataTemplate}
-                                metadataViewProps={metadataViewProps}
+                                metadataViewProps={combinedMetadataViewProps}
                                 onItemClick={this.onItemClick}
                                 onItemDelete={this.delete}
                                 onItemDownload={this.download}
