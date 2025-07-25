@@ -118,8 +118,8 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
 
         render(
             <TestWrapper>
-                <StaticVersionSidebar 
-                    {...defaultProps} 
+                <StaticVersionSidebar
+                    {...defaultProps}
                     parentName="details"
                     internalSidebarNavigationHandler={mockNavigationHandler}
                 />
@@ -191,7 +191,7 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
         test('should use internalSidebarNavigationHandler when BackButton is clicked', async () => {
             const mockNavigationHandler = jest.fn();
             const user = userEvent();
-            
+
             renderComponentWithoutRouter({
                 internalSidebarNavigationHandler: mockNavigationHandler,
                 parentName: 'details',
@@ -218,6 +218,4 @@ describe('elements/content-sidebar/versions/StaticVersionSidebar', () => {
             expect(screen.getByTestId('versions-menu')).toBeInTheDocument();
         });
     });
-
-
 });

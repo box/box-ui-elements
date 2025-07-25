@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { render, screen, userEvent } from '../../../test-utils/testing-library';
 import { AddTaskButtonComponent as AddTaskButton } from '../AddTaskButton';
+import { ViewType, FeedEntryType } from '../../common/types/SidebarNavigation';
 
 jest.mock('../AddTaskMenu', () => ({ onMenuItemClick, isDisabled, setAddTaskButtonRef }) => (
     <div data-testid="add-task-menu">
@@ -51,7 +52,7 @@ describe('elements/content-sidebar/AddTaskButton', () => {
     };
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     test('should call history.replace state with force open state when task menu items are clicked', async () => {
@@ -109,8 +110,8 @@ describe('elements/content-sidebar/AddTaskButton', () => {
         test('should preserve internalSidebarNavigation state when using navigation handler', async () => {
             const mockNavigationHandler = jest.fn();
             const mockInternalSidebarNavigation = {
-                sidebar: 'activity',
-                activeFeedEntryType: 'comments',
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryType: FeedEntryType.COMMENTS,
                 activeFeedEntryId: '123',
             };
             const user = userEvent();
@@ -127,8 +128,8 @@ describe('elements/content-sidebar/AddTaskButton', () => {
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
             expect(mockNavigationHandler).toHaveBeenCalledWith(
                 {
-                    sidebar: 'activity',
-                    activeFeedEntryType: 'comments',
+                    sidebar: ViewType.ACTIVITY,
+                    activeFeedEntryType: FeedEntryType.COMMENTS,
                     activeFeedEntryId: '123',
                     open: true,
                 },
