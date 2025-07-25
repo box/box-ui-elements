@@ -1145,15 +1145,12 @@ class ActivitySidebar extends React.PureComponent<Props, State> {
 
         if (annotationFileVersionId && annotationFileVersionId !== selectedFileVersionId) {
             if (routerDisabled && internalSidebarNavigationHandler) {
-                const navigation: InternalSidebarNavigation = {
+                internalSidebarNavigationHandler({
                     sidebar: ViewType.ACTIVITY,
-                };
-                if (annotationFileVersionId) {
-                    navigation.activeFeedEntryType = FeedEntryType.ANNOTATIONS;
-                    navigation.activeFeedEntryId = nextActiveAnnotationId;
-                    navigation.fileVersionId = annotationFileVersionId;
-                }
-                internalSidebarNavigationHandler(navigation);
+                    activeFeedEntryId: nextActiveAnnotationId,
+                    activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                    fileVersionId: annotationFileVersionId,
+                });
             } else {
                 history.push(getAnnotationsPath(annotationFileVersionId, nextActiveAnnotationId));
             }
