@@ -1,7 +1,10 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
+import classNames from 'classnames';
 import { PageHeader } from '@box/blueprint-web';
+import { Selection } from 'react-aria-components';
 import SubHeaderLeft from './SubHeaderLeft';
+import SubheaderLeftMetadataViewV2 from './SubHeaderLeftMetadataViewV2';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
 import type { View, Collection } from '../../../common/types/core';
@@ -30,6 +33,8 @@ export interface SubHeaderProps {
     rootName?: string;
     view: View;
     viewMode?: ViewMode;
+    selectedKeys: Selection;
+    onClearSelectedKeys: () => void;
 }
 
 const SubHeader = ({
@@ -52,6 +57,8 @@ const SubHeader = ({
     rootName,
     view,
     viewMode = VIEW_MODE_LIST,
+    selectedKeys,
+    onClearSelectedKeys,
 }: SubHeaderProps) => {
     const isMetadataViewV2Feature = useFeatureEnabled('contentExplorer.metadataViewV2');
 
@@ -60,7 +67,11 @@ const SubHeader = ({
     }
 
     return (
-        <PageHeader.Root className="be-sub-header" data-testid="be-sub-header" variant="inline">
+        <PageHeader.Root
+            className={classNames('be-sub-header', { 'be-sub-header--metadata-view': isMetadataViewV2Feature })}
+            data-testid="be-sub-header"
+            variant="inline"
+        >
             <PageHeader.StartElements>
                 {view !== VIEW_METADATA && !isMetadataViewV2Feature && (
                     <SubHeaderLeft
@@ -71,6 +82,14 @@ const SubHeader = ({
                         rootId={rootId}
                         rootName={rootName}
                         view={view}
+                    />
+                )}
+                {isMetadataViewV2Feature && (
+                    <SubheaderLeftMetadataViewV2
+                        title="My Custom Title dude"
+                        currentCollection={currentCollection}
+                        selectedKeys={selectedKeys}
+                        onClearSelectedKeys={onClearSelectedKeys}
                     />
                 )}
             </PageHeader.StartElements>
