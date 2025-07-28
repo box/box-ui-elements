@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Selection } from 'react-aria-components';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { Text } from '@box/blueprint-web';
 
 import type API from '../../../api';
@@ -23,6 +23,7 @@ interface SubHeaderLeftMetadataViewV2Props {
 const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) => {
     const { api, currentCollection, metadataQuery, metadataViewTitle, selectedKeys, onClearSelectedKeys } = props;
     const [ancestorFolderName, setAncestorFolderName] = useState<string | null>(null);
+    const { formatMessage } = useIntl();
 
     // Fetch ancestor folder name with metadataQuery.ancestor_folder_id
     useEffect(() => {
@@ -61,14 +62,16 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
             const selectedKey =
                 selectedKeys === 'all' ? currentCollection.items[0].id : selectedKeys.values().next().value;
             const selectedItem = currentCollection.items.find(item => item.id === selectedKey);
-            return selectedItem?.name;
+            if (typeof selectedItem?.name === 'string') {
+                return selectedItem.name as string;
+            }
         }
         // Case 2: Multiple selected items - show count
         if (selectedCount > 1) {
-            return <FormattedMessage {...messages.numFilesSelected} values={{ numSelected: selectedCount }} />;
+            return formatMessage(messages.numFilesSelected, { numSelected: selectedCount });
         }
         return '';
-    }, [currentCollection.items, selectedKeys]);
+    }, [currentCollection.items, formatMessage, selectedKeys]);
 
     // Case 1 and 2: selected item text with X button
     if (selectedItemText) {
