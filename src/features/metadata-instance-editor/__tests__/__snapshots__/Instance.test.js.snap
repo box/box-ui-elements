@@ -422,6 +422,7 @@ exports[`features/metadata-instance-editor/fields/Instance should correctly rend
             isCascadingOverwritten={false}
             isCustomMetadata={false}
             isExistingCascadePolicy={true}
+            onAIAgentSelect={[Function]}
             onAIFolderExtractionToggle={[Function]}
             onCascadeModeChange={[Function]}
             onCascadeToggle={[Function]}

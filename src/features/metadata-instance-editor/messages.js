@@ -246,6 +246,16 @@ const messages = defineMessages({
             'Informational text below cascade policy description and explains to the user that the policy will take some time to take effect.',
         id: 'boxui.metadataInstanceEditor.operationNotImmediate',
     },
+    standardAgentName: {
+        defaultMessage: 'Standard',
+        description: 'Name of the standard AI agent',
+        id: 'boxui.metadataInstanceEditor.standardAgentName',
+    },
+    enhancedAgentName: {
+        defaultMessage: 'Enhanced',
+        description: 'Name of the enhanced AI agent',
+        id: 'boxui.metadataInstanceEditor.enhancedAgentName',
+    },
 });
 
 export default messages;

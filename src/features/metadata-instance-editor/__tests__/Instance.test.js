@@ -863,12 +863,30 @@ describe('Instance Component - React Testing Library', () => {
 
     describe('Props passed to CascadePolicy', () => {
         test('should pass canUseAIFolderExtractionAgentSelector to CascadePolicy', async () => {
-            render(<Instance {...getBaseProps({ canUseAIFolderExtractionAgentSelector: true })} />);
+            render(
+                <Instance
+                    {...getBaseProps({
+                        canUseAIFolderExtractionAgentSelector: true,
+                        cascadePolicy: {
+                            id: 'policy-1',
+                            canEdit: true,
+                            isEnabled: true,
+                            cascadePolicyType: CASCADE_POLICY_TYPE_AI_EXTRACT,
+                        },
+                    })}
+                />,
+            );
 
             const editButton = screen.queryByRole('button', { name: 'Edit Metadata' });
             if (editButton) await userEvent.click(editButton); // Enter edit mode to ensure CascadePolicy options are visible
 
-            expect(screen.getByRole('combobox', { name: 'Basic' })).toBeInTheDocument();
+            const cascadeToggle = screen.getByRole('switch', { name: 'Enable Cascade Policy' });
+            expect(cascadeToggle).toBeChecked();
+
+            const aiToggle = screen.getByRole('switch', { name: 'Box AI Autofill' });
+            expect(aiToggle).toBeChecked();
+
+            expect(screen.getByRole('combobox', { name: 'Standard' })).toBeInTheDocument();
         });
 
         test('should disable CascadePolicy options when a cascade already exists', async () => {
