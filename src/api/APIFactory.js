@@ -470,8 +470,10 @@ class APIFactory {
      *
      * @return {FolderAPI} FolderAPI instance
      */
-    getFolderAPI(): FolderAPI {
-        this.destroy();
+    getFolderAPI(shouldDestroy: boolean = true): FolderAPI {
+        if (shouldDestroy) {
+            this.destroy();
+        }
         this.folderAPI = new FolderAPI(this.options);
         return this.folderAPI;
     }

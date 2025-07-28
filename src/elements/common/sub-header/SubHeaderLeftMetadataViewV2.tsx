@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import { Text } from '@box/blueprint-web';
 
 import type API from '../../../api';
-import FolderAPI from '../../../api/Folder';
 import type { Collection } from '../../../common/types/core';
 import type { MetadataQuery } from '../../../common/types/metadataQueries';
 import CloseButton from '../../../components/close-button/CloseButton';
@@ -31,10 +30,9 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
             if (metadataQuery.ancestor_folder_id === '0') {
                 setAncestorFolderName('All Files');
             } else {
-                // Create dedicated FolderAPI instance to avoid interfering with main API
-                const dedicatedFolderAPI = new FolderAPI(api.options);
+                const folderAPI = api.getFolderAPI(false);
 
-                dedicatedFolderAPI.getFolderFields(
+                folderAPI.getFolderFields(
                     metadataQuery.ancestor_folder_id,
                     (folderInfo: { name?: string }) => {
                         setAncestorFolderName(folderInfo.name ?? null);
@@ -45,6 +43,8 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
                     { fields: ['name'] },
                 );
             }
+        } else {
+            setAncestorFolderName(null);
         }
     }, [api, metadataQuery?.ancestor_folder_id]);
 
@@ -52,7 +52,7 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
     const selectedItemText = useMemo(() => {
         const selectedCount = selectedKeys === 'all' ? currentCollection.items.length : selectedKeys.size;
 
-        if (selectedCount === 0) {
+        if (typeof selectedCount !== 'number' || selectedCount === 0) {
             return '';
         }
 
