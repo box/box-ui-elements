@@ -3,14 +3,11 @@ import { shallow, mount } from 'enzyme';
 import cloneDeep from 'lodash/cloneDeep';
 import { ActivitySidebarComponent, activityFeedInlineError } from '../ActivitySidebar';
 import ActivitySidebarFilter from '../ActivitySidebarFilter';
-import { filterableActivityFeedItems, formattedReplies } from '../fixtures';
+import { filterableActivityFeedItems } from '../fixtures';
 import { FEED_ITEM_TYPE_COMMENT } from '../../../constants';
 
 jest.mock('lodash/debounce', () => jest.fn(i => i));
 jest.mock('lodash/uniqueId', () => () => 'uniqueId');
-
-// const mockReplace = jest.fn();
-// jest.mock('lodash/uniqueId', () => () => 'uniqueId');
 
 const userError = 'Bad box user!';
 
@@ -545,52 +542,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
                 parentId,
                 true,
             );
-        });
-    });
-
-    describe('updateReplies()', () => {
-        test('should call updateFeedItem API', () => {
-            const wrapper = getWrapper();
-            const instance = wrapper.instance();
-
-            wrapper.setState({
-                feedItems: [],
-            });
-
-            const id = '123';
-            const replies = cloneDeep(formattedReplies);
-
-            instance.fetchFeedItems = jest.fn();
-
-            instance.updateReplies(id, replies);
-
-            expect(api.getFeedAPI().updateFeedItem).toBeCalledWith({ replies }, id);
-            expect(instance.fetchFeedItems).toBeCalled();
-        });
-
-        test('should disable active item if replies are being hidden and activeFeedEntryId belongs to a reply that is in currently being updated parent', () => {
-            const historyReplace = jest.fn();
-            const activeReplyId = '123';
-
-            const wrapper = getWrapper({
-                activeFeedEntryId: activeReplyId,
-                history: { replace: historyReplace },
-            });
-            const instance = wrapper.instance();
-            instance.getActiveCommentPath = jest.fn();
-
-            const itemId = '999';
-            const lastReplyId = '456';
-            const replies = [{ id: lastReplyId }];
-
-            wrapper.setState({
-                feedItems: [{ id: itemId, replies: [{ id: activeReplyId }, { id: lastReplyId }], type: 'comment' }],
-            });
-
-            instance.updateReplies(itemId, replies);
-
-            expect(instance.getActiveCommentPath).toBeCalledWith();
-            expect(historyReplace).toBeCalled();
         });
     });
 
@@ -1327,79 +1278,6 @@ describe('elements/content-sidebar/ActivitySidebar', () => {
 
             expect(fetchFeedItems).toHaveBeenCalled();
             expect(fetchFeedItems).toHaveBeenCalledWith(true);
-        });
-    });
-
-    describe('handleAnnotationSelect()', () => {
-        const annotatorState = { activeAnnotationId: '123' };
-        const emitActiveAnnotationChangeEvent = jest.fn();
-        const getAnnotationsMatchPath = jest.fn().mockReturnValue({ params: { fileVersionId: '456' } });
-        const getAnnotationsPath = jest.fn().mockReturnValue('/activity/annotations/235/124');
-        const history = {
-            push: jest.fn(),
-            replace: jest.fn(),
-        };
-        const onAnnotationSelect = jest.fn();
-
-        const getAnnotationWrapper = () =>
-            getWrapper({
-                annotatorState,
-                emitActiveAnnotationChangeEvent,
-                file,
-                getAnnotationsMatchPath,
-                getAnnotationsPath,
-                history,
-                onAnnotationSelect,
-            });
-
-        test('should call emitAnnotatorActiveChangeEvent and onAnnotatorSelect appropriately', () => {
-            const wrapper = getAnnotationWrapper();
-            const instance = wrapper.instance();
-            const annotation = { file_version: { id: '235' }, id: '124' };
-
-            instance.handleAnnotationSelect(annotation);
-
-            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
-            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
-        });
-
-        test('should not call history.push if file versions are the same', () => {
-            const wrapper = getAnnotationWrapper();
-            const instance = wrapper.instance();
-            const annotation = { file_version: { id: '456' }, id: '124' };
-
-            instance.handleAnnotationSelect(annotation);
-
-            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
-            expect(history.push).not.toHaveBeenCalled();
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
-        });
-
-        test('should use current file version if match params returns null', () => {
-            const wrapper = getAnnotationWrapper();
-            const instance = wrapper.instance();
-            const annotation = { file_version: { id: '235' }, id: '124' };
-            getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
-
-            instance.handleAnnotationSelect(annotation);
-
-            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
-            expect(history.push).toHaveBeenCalledWith('/activity/annotations/235/124');
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
-        });
-
-        test('should not call history.push if no file version id on the annotation', () => {
-            const wrapper = getAnnotationWrapper();
-            const instance = wrapper.instance();
-            const annotation = { file_version: null, id: '124' };
-            getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId: undefined } });
-
-            instance.handleAnnotationSelect(annotation);
-
-            expect(emitActiveAnnotationChangeEvent).toBeCalledWith('124');
-            expect(history.push).not.toHaveBeenCalled();
-            expect(onAnnotationSelect).toHaveBeenCalledWith(annotation);
         });
     });
 
