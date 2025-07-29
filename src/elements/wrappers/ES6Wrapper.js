@@ -10,8 +10,6 @@ import i18n from '../common/i18n';
 import { DEFAULT_CONTAINER } from '../../constants';
 import type { Token, StringMap } from '../../common/types/core';
 
-declare var __VERSION__: string;
-
 class ES6Wrapper extends EventEmitter {
     /**
      * @property {Function}
@@ -66,7 +64,6 @@ class ES6Wrapper extends EventEmitter {
         this.id = id;
         this.token = token;
         this.options = options;
-        this.options.version = __VERSION__;
         this.emit = this.emit.bind(this);
         const container = options.container || DEFAULT_CONTAINER;
         this.container =

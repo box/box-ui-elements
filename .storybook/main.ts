@@ -5,9 +5,11 @@ import type { Configuration } from 'webpack';
 
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import TranslationsPlugin from '@box/frontend/webpack/TranslationsPlugin';
+import { DefinePlugin } from 'webpack';
 import { translationDependencies } from '../scripts/i18n.config';
 
 const language = process.env.LANGUAGE;
+const version = process.env.NODE_ENV === 'production' ? 'demo' : 'dev';
 
 const config: StorybookConfig = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -59,6 +61,9 @@ const config: StorybookConfig = {
 
         webpack.plugins = webpack.plugins || [];
         webpack.plugins.push(
+            new DefinePlugin({
+                __VERSION__: JSON.stringify(version),
+            }),
             new TranslationsPlugin({
                 generateBundles: true,
                 additionalMessageData: translationDependencies.map(pkg => `${pkg}/i18n/[language]`),
