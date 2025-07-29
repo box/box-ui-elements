@@ -55,18 +55,21 @@ export default function withSidebarAnnotations(
             if (
                 !('activeFeedEntryType' in navigation) ||
                 navigation.activeFeedEntryType !== FeedEntryType.ANNOTATIONS ||
-                !navigation.fileVersionId ||
-                !navigation.activeFeedEntryId
+                !navigation.fileVersionId
             ) {
                 return null;
             }
 
-            return {
-                params: {
-                    annotationId: navigation.activeFeedEntryId,
-                    fileVersionId: navigation.fileVersionId,
-                },
+            const params = {
+                fileVersionId: navigation.fileVersionId,
             };
+
+            // Only include annotationId if it's defined (mirrors router behavior where missing optional params are omitted)
+            if (navigation.activeFeedEntryId !== undefined) {
+                params.annotationId = navigation.activeFeedEntryId;
+            }
+
+            return { params };
         };
 
         getInternalAnnotationsNavigation = (

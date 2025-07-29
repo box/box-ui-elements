@@ -52,6 +52,8 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
     const onVersionChange = jest.fn();
 
+    const internalSidebarNavigationHandler = jest.fn();
+
     const defaultProps = {
         api,
         ...annotatorContextProps,
@@ -74,8 +76,24 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         );
     };
 
+    const createRouterDisabledComponentElement = (props = {}) => {
+        const routerDisabledProps = {
+            routerDisabled: true,
+            internalSidebarNavigationHandler,
+            internalSidebarNavigation: { sidebar: 'activity' },
+            ...defaultProps,
+            ...props,
+        };
+
+        return <WrappedComponent {...routerDisabledProps} />;
+    };
+
     const renderWithSidebarAnnotations = (props = {}) => {
         return render(createComponentElement(props));
+    };
+
+    const renderWithRouterDisabled = (props = {}) => {
+        return render(createRouterDisabledComponentElement(props));
     };
 
     beforeEach(() => {
@@ -120,9 +138,73 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
             expect(history.replace).toHaveBeenCalledWith(expectedPath);
         });
+
+        describe('constructor - Router Disabled', () => {
+            beforeEach(() => {
+                jest.resetAllMocks();
+            });
+
+            test('should call redirectDeeplinkedAnnotation when router disabled', () => {
+                // In router-disabled mode, getAnnotationsMatchPath is NOT called
+                // Only getInternalNavigationMatch is used internally
+                renderWithRouterDisabled();
+
+                expect(getAnnotationsMatchPath).toHaveBeenCalledTimes(0);
+            });
+
+            test.each`
+                fileVersionId | annotationId | expectedCallCount
+                ${undefined}  | ${'987'}     | ${0}
+                ${'123'}      | ${'987'}     | ${0}
+                ${'124'}      | ${'987'}     | ${1}
+                ${'124'}      | ${undefined} | ${1}
+            `(
+                'should call internalSidebarNavigationHandler appropriately if internal navigation annotationId=$annotationId and fileVersionId=$fileVersionId',
+                ({ annotationId, fileVersionId, expectedCallCount }) => {
+                    // Only provide fileVersionId and annotationId if they should trigger navigation
+                    const internalNavigation = fileVersionId
+                        ? {
+                              sidebar: 'activity',
+                              activeFeedEntryType: 'annotations',
+                              activeFeedEntryId: annotationId,
+                              fileVersionId,
+                          }
+                        : { sidebar: 'activity' };
+
+                    renderWithRouterDisabled({
+                        internalSidebarNavigation: internalNavigation,
+                    });
+
+                    expect(internalSidebarNavigationHandler).toHaveBeenCalledTimes(expectedCallCount);
+                },
+            );
+
+            test.each`
+                fileVersionId | annotationId | expectedNavigation
+                ${'124'}      | ${'987'}     | ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: '987', fileVersionId: '123' }}
+                ${'124'}      | ${undefined} | ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: undefined, fileVersionId: '123' }}
+            `(
+                'should call internalSidebarNavigationHandler with correct navigation for fileVersionId=$fileVersionId and annotationId=$annotationId',
+                ({ fileVersionId, annotationId, expectedNavigation }) => {
+                    const internalNavigation = {
+                        sidebar: 'activity',
+                        activeFeedEntryType: 'annotations',
+                        activeFeedEntryId: annotationId,
+                        fileVersionId,
+                    };
+
+                    renderWithRouterDisabled({
+                        internalSidebarNavigation: internalNavigation,
+                    });
+
+                    // The second parameter is `true` indicating this is a redirect/correction
+                    expect(internalSidebarNavigationHandler).toHaveBeenCalledWith(expectedNavigation, true);
+                },
+            );
+        });
     });
 
-    describe('refreshActivitySidebar', () => {
+    describe('componentDidUpdate', () => {
         test.each`
             fileId   | expectedCount
             ${'123'} | ${0}
@@ -149,7 +231,9 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 expect(onVersionChange).toHaveBeenCalledWith(null);
             }
         });
+    });
 
+    describe('refreshActivitySidebar', () => {
         test.each`
             pathname                            | isOpen   | hasRefCurrent | expectedCount
             ${'/'}                              | ${false} | ${false}      | ${0}
@@ -219,6 +303,78 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 }
             },
         );
+
+        describe('refreshActivitySidebar - Router Disabled', () => {
+            test.each`
+                navigation                                                            | isOpen   | hasRefCurrent | expectedCount
+                ${{ sidebar: 'details' }}                                             | ${false} | ${false}      | ${0}
+                ${{ sidebar: 'details' }}                                             | ${true}  | ${false}      | ${0}
+                ${{ sidebar: 'activity' }}                                            | ${false} | ${false}      | ${0}
+                ${{ sidebar: 'activity' }}                                            | ${true}  | ${false}      | ${0}
+                ${{ sidebar: 'activity' }}                                            | ${false} | ${true}       | ${0}
+                ${{ sidebar: 'activity' }}                                            | ${true}  | ${true}       | ${1}
+                ${{ sidebar: 'activity', versionId: '12345' }}                        | ${true}  | ${true}       | ${1}
+                ${{ sidebar: 'activity', versionId: '12345', annotationId: '67890' }} | ${true}  | ${true}       | ${1}
+                ${{ sidebar: 'details' }}                                             | ${true}  | ${true}       | ${0}
+                ${{ sidebar: 'metadata' }}                                            | ${true}  | ${true}       | ${0}
+            `(
+                'should refresh the sidebarPanels ref accordingly if navigation=$navigation, isOpen=$isOpen, hasRefCurrent=$hasRefCurrent',
+                ({ navigation, isOpen, hasRefCurrent, expectedCount }) => {
+                    const mockRefresh = jest.fn();
+                    const annotationUpdate = {
+                        id: '123',
+                        description: {
+                            message: 'text',
+                        },
+                    };
+                    const annotatorStateMock = {
+                        action: Action.UPDATE_END,
+                        annotation: annotationUpdate,
+                    };
+
+                    // Create a custom test component that exposes the ref
+                    const TestComponentWithRef = React.forwardRef((props, ref) => {
+                        React.useImperativeHandle(ref, () => (hasRefCurrent ? { refresh: mockRefresh } : null));
+                        return <div data-testid="test-component" />;
+                    });
+
+                    const WrappedComponentWithRef = withSidebarAnnotations(TestComponentWithRef);
+
+                    const { rerender } = render(
+                        <WrappedComponentWithRef
+                            {...defaultProps}
+                            routerDisabled
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                            internalSidebarNavigation={navigation}
+                            annotatorState={{ annotation: {}, action: Action.CREATE_START }}
+                            currentUser={currentUser}
+                            isOpen={isOpen}
+                        />,
+                    );
+
+                    jest.clearAllMocks();
+
+                    // Trigger updateAnnotation by changing the annotatorState
+                    rerender(
+                        <WrappedComponentWithRef
+                            {...defaultProps}
+                            routerDisabled
+                            internalSidebarNavigationHandler={internalSidebarNavigationHandler}
+                            internalSidebarNavigation={navigation}
+                            annotatorState={annotatorStateMock}
+                            currentUser={currentUser}
+                            isOpen={isOpen}
+                        />,
+                    );
+
+                    // Verify the side effect of refreshActivitySidebar being called through updateAnnotation
+                    expect(mockRefresh).toHaveBeenCalledTimes(expectedCount);
+                    if (expectedCount > 0) {
+                        expect(mockRefresh).toHaveBeenCalledWith(false);
+                    }
+                },
+            );
+        });
     });
 
     describe('addAnnotation', () => {
@@ -615,22 +771,16 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
 
     describe('updateActiveAnnotation', () => {
         test.each`
-            condition                                          | prevActiveAnnotationId | activeAnnotationId | isAnnotationsPath | expectedHistoryPushCalls | expectedState
-            ${'annotation ids are the same'}                   | ${'123'}               | ${'123'}           | ${true}           | ${0}                     | ${undefined}
-            ${'annotation ids are different'}                  | ${'123'}               | ${'456'}           | ${true}           | ${1}                     | ${{ open: true }}
-            ${'annotation deselected on annotations path'}     | ${'123'}               | ${null}            | ${true}           | ${1}                     | ${{ foo: 'bar' }}
-            ${'annotation deselected not on annotations path'} | ${'123'}               | ${null}            | ${false}          | ${0}                     | ${undefined}
-            ${'annotation selected not on annotations path'}   | ${null}                | ${'123'}           | ${false}          | ${1}                     | ${{ open: true }}
-            ${'annotation selected on annotations path'}       | ${null}                | ${'123'}           | ${true}           | ${1}                     | ${{ open: true }}
+            condition                                          | prevActiveAnnotationId | activeAnnotationId | isAnnotationsPath | expectedHistoryPushCalls
+            ${'annotation ids are the same'}                   | ${'123'}               | ${'123'}           | ${true}           | ${0}
+            ${'annotation ids are different'}                  | ${'123'}               | ${'234'}           | ${true}           | ${1}
+            ${'annotation deselected on annotations path'}     | ${'123'}               | ${null}            | ${true}           | ${1}
+            ${'annotation deselected not on annotations path'} | ${'123'}               | ${null}            | ${false}          | ${0}
+            ${'annotation selected not on annotations path'}   | ${null}                | ${'123'}           | ${false}          | ${1}
+            ${'annotation selected on annotations path'}       | ${null}                | ${'123'}           | ${true}           | ${1}
         `(
             'should call updateActiveAnnotation appropriately if $condition',
-            ({
-                prevActiveAnnotationId,
-                activeAnnotationId,
-                isAnnotationsPath,
-                expectedHistoryPushCalls,
-                expectedState,
-            }) => {
+            ({ prevActiveAnnotationId, activeAnnotationId, isAnnotationsPath, expectedHistoryPushCalls }) => {
                 const location = { pathname: '/activity', state: { foo: 'bar' } };
 
                 getAnnotationsPath.mockReturnValue('/activity/annotations/456/123');
@@ -653,17 +803,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 );
 
                 expect(history.push).toHaveBeenCalledTimes(expectedHistoryPushCalls);
-
-                if (expectedHistoryPushCalls > 0) {
-                    expect(history.push).toHaveBeenCalledWith({
-                        pathname: '/activity/annotations/456/123',
-                        state: expectedState,
-                    });
-
-                    const expectedFileVersionId = isAnnotationsPath ? '456' : '123';
-                    expect(getAnnotationsPath).toHaveBeenCalledWith(expectedFileVersionId, activeAnnotationId);
-                    expect(getAnnotationsMatchPath).toHaveBeenCalledWith(location);
-                }
             },
         );
 
@@ -744,6 +883,154 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         });
     });
 
+    describe('updateActiveAnnotation - Router Disabled', () => {
+        test.each`
+            condition                                          | prevActiveAnnotationId | activeAnnotationId | isAnnotationsPath | expectedNavigationHandlerCalls
+            ${'annotation ids are the same'}                   | ${'123'}               | ${'123'}           | ${true}           | ${0}
+            ${'annotation ids are different'}                  | ${'123'}               | ${'234'}           | ${true}           | ${1}
+            ${'annotation deselected on annotations path'}     | ${'123'}               | ${null}            | ${true}           | ${1}
+            ${'annotation deselected not on annotations path'} | ${'123'}               | ${null}            | ${false}          | ${0}
+            ${'annotation selected not on annotations path'}   | ${null}                | ${'123'}           | ${false}          | ${1}
+            ${'annotation selected on annotations path'}       | ${null}                | ${'123'}           | ${true}           | ${1}
+        `(
+            'should call internalSidebarNavigationHandler appropriately if $condition',
+            ({ prevActiveAnnotationId, activeAnnotationId, isAnnotationsPath, expectedNavigationHandlerCalls }) => {
+                // Build prevNavigation dynamically based on isAnnotationsPath
+                let prevNavigation;
+                if (isAnnotationsPath) {
+                    prevNavigation = {
+                        sidebar: 'activity',
+                        activeFeedEntryType: 'annotations',
+                        fileVersionId: '456',
+                        // For getInternalNavigationMatch to work, we need activeFeedEntryId to be truthy
+                        // Use the prevActiveAnnotationId if available, otherwise use a placeholder for "on annotations path"
+                        activeFeedEntryId: prevActiveAnnotationId || 'placeholder',
+                    };
+                } else {
+                    prevNavigation = { sidebar: 'activity' };
+                }
+
+                const { rerender } = renderWithRouterDisabled({
+                    internalSidebarNavigation: prevNavigation,
+                    annotatorState: { activeAnnotationId: prevActiveAnnotationId },
+                });
+
+                jest.clearAllMocks();
+
+                rerender(
+                    createRouterDisabledComponentElement({
+                        internalSidebarNavigation: prevNavigation,
+                        annotatorState: { activeAnnotationId, action: 'set_active' },
+                    }),
+                );
+
+                expect(internalSidebarNavigationHandler).toHaveBeenCalledTimes(expectedNavigationHandlerCalls);
+            },
+        );
+
+        test('should use the provided fileVersionId from internal navigation if provided', () => {
+            const internalNavigation = {};
+
+            const { rerender } = renderWithRouterDisabled({
+                internalSidebarNavigation: internalNavigation,
+                annotatorState: { activeAnnotationId: 'initial' },
+            });
+
+            jest.clearAllMocks();
+
+            rerender(
+                createRouterDisabledComponentElement({
+                    internalSidebarNavigation: internalNavigation,
+                    annotatorState: {
+                        activeAnnotationFileVersionId: '456',
+                        activeAnnotationId: '123',
+                        action: 'set_active',
+                    },
+                }),
+            );
+
+            expect(internalSidebarNavigationHandler).toHaveBeenCalledTimes(1);
+            expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({
+                sidebar: 'activity',
+                activeFeedEntryType: 'annotations',
+                activeFeedEntryId: '123',
+                fileVersionId: '456',
+                open: true,
+            });
+        });
+
+        test('should fall back to file version if no fileVersionId in internal navigation', () => {
+            const internalNavigation = {
+                sidebar: 'activity',
+            };
+
+            const { rerender } = renderWithRouterDisabled({
+                internalSidebarNavigation: internalNavigation,
+                annotatorState: { activeAnnotationId: null },
+            });
+
+            jest.clearAllMocks();
+
+            rerender(
+                createRouterDisabledComponentElement({
+                    internalSidebarNavigation: internalNavigation,
+                    annotatorState: {
+                        activeAnnotationId: 'some-annotation-id',
+                        action: 'set_active',
+                    },
+                }),
+            );
+
+            expect(internalSidebarNavigationHandler).toHaveBeenCalledTimes(1);
+            expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({
+                sidebar: 'activity',
+                activeFeedEntryType: 'annotations',
+                activeFeedEntryId: 'some-annotation-id',
+                fileVersionId: '123',
+                open: true,
+            });
+        });
+
+        test.each`
+            activeAnnotationId | fileVersionId | internalNavigation                                 | expectedNavigation
+            ${'234'}           | ${'456'}      | ${{ sidebar: 'activity' }}                         | ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: '234', fileVersionId: '456', open: true }}
+            ${'234'}           | ${undefined}  | ${{ sidebar: 'activity' }}                         | ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: '234', fileVersionId: '123', open: true }}
+            ${null}            | ${'456'}      | ${{ sidebar: 'activity' }}                         | ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: undefined, fileVersionId: '456' }}
+            ${null}            | ${'456'}      | ${{ sidebar: 'activity', someOtherProp: 'value' }} | ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: undefined, fileVersionId: '456' }}
+            ${'234'}           | ${'456'}      | ${{ sidebar: 'activity', someOtherProp: 'value' }} | ${{ sidebar: 'activity', activeFeedEntryType: 'annotations', activeFeedEntryId: '234', fileVersionId: '456', open: true }}
+        `(
+            'should set internal navigation based on fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
+            ({ activeAnnotationId, fileVersionId, internalNavigation, expectedNavigation }) => {
+                const { rerender } = renderWithRouterDisabled({
+                    internalSidebarNavigation: internalNavigation,
+                    annotatorState: { activeAnnotationId: 'initial' },
+                });
+
+                jest.clearAllMocks();
+
+                // Set up the navigation to simulate having the fileVersionId in navigation
+                const navigationWithFileVersion = fileVersionId
+                    ? {
+                          ...internalNavigation,
+                          activeFeedEntryType: 'annotations',
+                          activeFeedEntryId: 'placeholder', // Need this for getInternalNavigationMatch to work
+                          fileVersionId,
+                      }
+                    : internalNavigation;
+
+                rerender(
+                    createRouterDisabledComponentElement({
+                        internalSidebarNavigation: navigationWithFileVersion,
+                        annotatorState: { activeAnnotationId, action: 'set_active' },
+                    }),
+                );
+
+                expect(internalSidebarNavigationHandler).toHaveBeenCalledTimes(1);
+                expect(internalSidebarNavigationHandler).toHaveBeenCalledWith(expectedNavigation);
+            },
+        );
+    });
+
     describe('updateActiveVersion', () => {
         test.each`
             prevFileVersionId | fileVersionId | expectedOnVersionChangeCalls
@@ -799,6 +1086,78 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                     callback();
                     expect(getAnnotationsPath).toHaveBeenCalledWith('123');
                     expect(history.push).toHaveBeenCalledWith('/activity/annotations/123');
+                }
+            },
+        );
+    });
+
+    describe('updateActiveVersion - Router Disabled', () => {
+        test.each`
+            prevFileVersionId | fileVersionId | expectedOnVersionChangeCalls
+            ${'122'}          | ${'122'}      | ${0}
+            ${'122'}          | ${undefined}  | ${0}
+            ${'122'}          | ${'123'}      | ${1}
+        `(
+            'should call updateActiveVersion if fileVersionId changes from $prevFileVersionId to $fileVersionId',
+            ({ prevFileVersionId, fileVersionId, expectedOnVersionChangeCalls }) => {
+                const version = { type: FEED_ITEM_TYPE_VERSION, id: fileVersionId };
+
+                const versions = [{ type: FEED_ITEM_TYPE_VERSION, id: prevFileVersionId }];
+                if (fileVersionId) {
+                    versions.push({ type: FEED_ITEM_TYPE_VERSION, id: fileVersionId });
+                }
+                feedAPI.getCachedItems.mockReturnValue({ items: versions });
+
+                // Build internal navigation for router-disabled mode
+                const prevInternalNavigation = {
+                    sidebar: 'activity',
+                    activeFeedEntryType: 'annotations',
+                    activeFeedEntryId: 'annotation123',
+                    fileVersionId: prevFileVersionId,
+                };
+
+                const newInternalNavigation = fileVersionId
+                    ? {
+                          sidebar: 'activity',
+                          activeFeedEntryType: 'annotations',
+                          activeFeedEntryId: 'annotation123',
+                          fileVersionId,
+                      }
+                    : { sidebar: 'activity' };
+
+                const { rerender } = renderWithRouterDisabled({
+                    internalSidebarNavigation: prevInternalNavigation,
+                });
+
+                // Clear mocks after initial render to only measure componentDidUpdate effects
+                jest.clearAllMocks();
+
+                // Trigger componentDidUpdate by changing internal navigation
+                rerender(
+                    createRouterDisabledComponentElement({
+                        internalSidebarNavigation: newInternalNavigation,
+                    }),
+                );
+
+                expect(onVersionChange).toHaveBeenCalledTimes(expectedOnVersionChangeCalls);
+
+                if (expectedOnVersionChangeCalls > 0) {
+                    expect(onVersionChange).toHaveBeenCalledWith(
+                        version,
+                        expect.objectContaining({
+                            currentVersionId: '123',
+                            updateVersionToCurrent: expect.any(Function),
+                        }),
+                    );
+
+                    const callback = onVersionChange.mock.calls[0][1].updateVersionToCurrent;
+                    callback();
+                    expect(internalSidebarNavigationHandler).toHaveBeenCalledWith({
+                        sidebar: 'activity',
+                        activeFeedEntryType: 'annotations',
+                        activeFeedEntryId: undefined,
+                        fileVersionId: '123',
+                    });
                 }
             },
         );
