@@ -1,26 +1,8 @@
 import * as React from 'react';
-import type { Selection } from 'react-aria-components';
-import type API from '../../../../api';
-import type { Collection } from '../../../../common/types/core';
-import type { MetadataQuery } from '../../../../common/types/metadataQueries';
 import { render, screen } from '../../../../test-utils/testing-library';
-import SubHeaderLeftMetadataViewV2 from '../SubHeaderLeftMetadataViewV2';
-
-interface SubHeaderLeftMetadataViewV2Props {
-    api?: API;
-    currentCollection: Collection;
-    metadataQuery?: MetadataQuery;
-    metadataViewTitle?: string;
-    onClearSelectedKeys?: () => void;
-    selectedKeys: Selection;
-}
-
-// Mock the API
-const mockAPI = {
-    getFolderAPI: jest.fn(() => ({
-        getFolderFields: jest.fn(),
-    })),
-} as unknown as API;
+import SubHeaderLeftV2 from '../SubHeaderLeftV2';
+import type { Collection } from '../../../../common/types/core';
+import type { SubHeaderLeftV2Props } from '../SubHeaderLeftV2';
 
 const mockCollection: Collection = {
     items: [
@@ -30,24 +12,19 @@ const mockCollection: Collection = {
     ],
 };
 
-const defaultProps: SubHeaderLeftMetadataViewV2Props = {
-    api: mockAPI,
+const defaultProps: SubHeaderLeftV2Props = {
     currentCollection: mockCollection,
     selectedKeys: new Set(),
 };
 
-const renderComponent = (props: Partial<SubHeaderLeftMetadataViewV2Props> = {}) =>
-    render(<SubHeaderLeftMetadataViewV2 {...defaultProps} {...props} />);
+const renderComponent = (props: Partial<SubHeaderLeftV2Props> = {}) =>
+    render(<SubHeaderLeftV2 {...defaultProps} {...props} />);
 
-describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-
+describe('elements/common/sub-header/SubHeaderLeftV2', () => {
     describe('when no items are selected', () => {
-        test('should render metadata view title when provided', () => {
+        test('should render metadata view title', () => {
             renderComponent({
-                metadataViewTitle: 'Custom Metadata View',
+                title: 'Custom Metadata View',
                 selectedKeys: new Set(),
             });
 
@@ -126,7 +103,7 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
             });
 
             const container = screen.getByText('file1.txt').closest('div');
-            expect(container).toHaveClass('SubHeaderLeftMetadataViewV2-selectedContainer');
+            expect(container).toHaveClass('SubHeaderLeftV2-selectedContainer');
         });
 
         test('should render close button with correct CSS class', () => {
@@ -135,17 +112,7 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
             });
 
             const closeButton = screen.getByRole('button');
-            expect(closeButton).toHaveClass('SubHeaderLeftMetadataViewV2-clearSelectedKeysButton');
-        });
-
-        test('should render title with correct CSS class when no items selected', () => {
-            renderComponent({
-                metadataViewTitle: 'Test Title',
-                selectedKeys: new Set(),
-            });
-
-            const title = screen.getByRole('heading', { level: 1 });
-            expect(title).toBeInTheDocument();
+            expect(closeButton).toHaveClass('SubHeaderLeftV2-clearSelectedKeysButton');
         });
     });
 

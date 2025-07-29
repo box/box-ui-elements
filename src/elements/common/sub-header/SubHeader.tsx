@@ -5,7 +5,7 @@ import { PageHeader } from '@box/blueprint-web';
 import type { Selection } from 'react-aria-components';
 
 import SubHeaderLeft from './SubHeaderLeft';
-import SubheaderLeftMetadataViewV2 from './SubHeaderLeftMetadataViewV2';
+import SubHeaderLeftV2 from './SubHeaderLeftV2';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
 import type API from '../../../api';
@@ -74,7 +74,7 @@ const SubHeader = ({
 
     return (
         <PageHeader.Root
-            className={classNames('be-sub-header', { 'SubHeader--metadataView': isMetadataViewV2Feature })}
+            className={classNames('be-sub-header', { 'SubHeader--noPadding': isMetadataViewV2Feature })}
             data-testid="be-sub-header"
             variant="inline"
         >
@@ -91,10 +91,10 @@ const SubHeader = ({
                     />
                 )}
                 {isMetadataViewV2Feature && (
-                    <SubheaderLeftMetadataViewV2
+                    <SubHeaderLeftV2
                         api={api}
                         currentCollection={currentCollection}
-                        metadataViewTitle={metadataViewTitle}
+                        title={metadataViewTitle}
                         onClearSelectedKeys={onClearSelectedKeys}
                         selectedKeys={selectedKeys}
                     />

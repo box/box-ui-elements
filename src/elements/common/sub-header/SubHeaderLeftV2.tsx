@@ -6,18 +6,19 @@ import type API from '../../../api';
 import type { Collection } from '../../../common/types/core';
 import CloseButton from '../../../components/close-button/CloseButton';
 import messages from '../messages';
-import './SubHeaderLeftMetadataViewV2.scss';
 
-interface SubHeaderLeftMetadataViewV2Props {
+import './SubHeaderLeftV2.scss';
+
+export interface SubHeaderLeftV2Props {
     api?: API;
     currentCollection: Collection;
-    metadataViewTitle?: string;
+    title?: string;
     onClearSelectedKeys?: () => void;
     selectedKeys: Selection;
 }
 
-const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) => {
-    const { currentCollection, metadataViewTitle, onClearSelectedKeys, selectedKeys } = props;
+const SubHeaderLeftV2 = (props: SubHeaderLeftV2Props) => {
+    const { currentCollection, title, onClearSelectedKeys, selectedKeys } = props;
     const { formatMessage } = useIntl();
 
     // Generate selected item text based on selected keys
@@ -47,11 +48,8 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
     // Case 1 and 2: selected item text with X button
     if (selectedItemText) {
         return (
-            <div className="SubHeaderLeftMetadataViewV2-selectedContainer">
-                <CloseButton
-                    onClick={onClearSelectedKeys}
-                    className="SubHeaderLeftMetadataViewV2-clearSelectedKeysButton"
-                />
+            <div className="SubHeaderLeftV2-selectedContainer">
+                <CloseButton onClick={onClearSelectedKeys} className="SubHeaderLeftV2-clearSelectedKeysButton" />
                 <Text as="p">{selectedItemText}</Text>
             </div>
         );
@@ -60,9 +58,9 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
     // Case 3: No selected items - show title
     return (
         <Text as="h1" variant="titleXLarge">
-            {metadataViewTitle}
+            {title}
         </Text>
     );
 };
 
-export default SubHeaderLeftMetadataViewV2;
+export default SubHeaderLeftV2;
