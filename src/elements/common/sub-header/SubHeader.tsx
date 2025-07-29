@@ -2,14 +2,14 @@ import * as React from 'react';
 import noop from 'lodash/noop';
 import classNames from 'classnames';
 import { PageHeader } from '@box/blueprint-web';
-import { Selection } from 'react-aria-components';
+import type { Selection } from 'react-aria-components';
+
 import SubHeaderLeft from './SubHeaderLeft';
 import SubheaderLeftMetadataViewV2 from './SubHeaderLeftMetadataViewV2';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
 import type API from '../../../api';
 import type { View, Collection } from '../../../common/types/core';
-import type { MetadataQuery } from '../../../common/types/metadataQueries';
 import { VIEW_MODE_LIST, VIEW_METADATA } from '../../../constants';
 import { useFeatureEnabled } from '../feature-checking';
 
@@ -25,7 +25,7 @@ export interface SubHeaderProps {
     gridMinColumns?: number;
     isSmall: boolean;
     maxGridColumnCountForWidth?: number;
-    metadataQuery?: MetadataQuery;
+    metadataAncestorFolderName?: string | null;
     metadataViewTitle?: string;
     onClearSelectedKeys: () => void;
     onCreate: () => void;
@@ -51,7 +51,7 @@ const SubHeader = ({
     gridMaxColumns = 0,
     gridMinColumns = 0,
     maxGridColumnCountForWidth = 0,
-    metadataQuery,
+    metadataAncestorFolderName,
     metadataViewTitle,
     onGridViewSliderChange = noop,
     isSmall,
@@ -96,7 +96,7 @@ const SubHeader = ({
                     <SubheaderLeftMetadataViewV2
                         api={api}
                         currentCollection={currentCollection}
-                        metadataQuery={metadataQuery}
+                        metadataAncestorFolderName={metadataAncestorFolderName}
                         metadataViewTitle={metadataViewTitle}
                         onClearSelectedKeys={onClearSelectedKeys}
                         selectedKeys={selectedKeys}

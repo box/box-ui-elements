@@ -3,12 +3,13 @@ import type { Selection } from 'react-aria-components';
 import type API from '../../../../api';
 import type { Collection } from '../../../../common/types/core';
 import type { MetadataQuery } from '../../../../common/types/metadataQueries';
-import { render, screen, waitFor } from '../../../../test-utils/testing-library';
+import { render, screen } from '../../../../test-utils/testing-library';
 import SubHeaderLeftMetadataViewV2 from '../SubHeaderLeftMetadataViewV2';
 
 interface SubHeaderLeftMetadataViewV2Props {
     api?: API;
     currentCollection: Collection;
+    metadataAncestorFolderName?: string | null;
     metadataQuery?: MetadataQuery;
     metadataViewTitle?: string;
     onClearSelectedKeys?: () => void;
@@ -48,76 +49,32 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
         test('should render metadata view title when provided', () => {
             renderComponent({
                 metadataViewTitle: 'Custom Metadata View',
+                metadataAncestorFolderName: 'Test Folder',
                 selectedKeys: new Set(),
             });
 
+            // Custom title should override ancestor folder name
             expect(screen.getByText('Custom Metadata View')).toBeInTheDocument();
-            expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+            expect(screen.queryByText('Test Folder')).not.toBeInTheDocument();
         });
 
-        test('should render ancestor folder name when no metadata view title is provided', async () => {
-            const mockGetFolderFields = jest.fn((folderId, successCallback) => {
-                successCallback({ name: 'Test Folder' });
-            });
-
-            (mockAPI.getFolderAPI as jest.Mock).mockReturnValue({
-                getFolderFields: mockGetFolderFields,
-            });
-
+        test('should render ancestor folder name when no metadata view title is provided', () => {
             renderComponent({
-                metadataQuery: { ancestor_folder_id: '123' },
+                metadataAncestorFolderName: 'Test Folder',
                 selectedKeys: new Set(),
             });
 
-            await waitFor(() => {
-                expect(screen.getByText('Test Folder')).toBeInTheDocument();
-            });
-
-            expect(mockGetFolderFields).toHaveBeenCalledWith('123', expect.any(Function), expect.any(Function), {
-                fields: ['name'],
-            });
+            expect(screen.getByText('Test Folder')).toBeInTheDocument();
         });
 
-        test('should render "All Files" when ancestor folder id is "0"', () => {
+        test('should handle null ancestor folder name gracefully', () => {
             renderComponent({
-                metadataQuery: { ancestor_folder_id: '0' },
+                metadataAncestorFolderName: null,
                 selectedKeys: new Set(),
             });
 
-            expect(screen.getByText('All Files')).toBeInTheDocument();
-        });
-
-        test('should handle API error gracefully', async () => {
-            const mockGetFolderFields = jest.fn((folderId, successCallback, errorCallback) => {
-                errorCallback();
-            });
-
-            (mockAPI.getFolderAPI as jest.Mock).mockReturnValue({
-                getFolderFields: mockGetFolderFields,
-            });
-
-            renderComponent({
-                metadataQuery: { ancestor_folder_id: '123' },
-                selectedKeys: new Set(),
-            });
-
-            await waitFor(() => {
-                expect(screen.queryByText('Test Folder')).not.toBeInTheDocument();
-            });
-        });
-
-        test('should not fetch folder info when no ancestor folder id', () => {
-            const mockGetFolderFields = jest.fn();
-
-            (mockAPI.getFolderAPI as jest.Mock).mockReturnValue({
-                getFolderFields: mockGetFolderFields,
-            });
-
-            renderComponent({
-                selectedKeys: new Set(),
-            });
-
-            expect(mockGetFolderFields).not.toHaveBeenCalled();
+            // Should not crash and should not render any folder name
+            expect(screen.queryByText('Test Folder')).not.toBeInTheDocument();
         });
     });
 
@@ -216,27 +173,6 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
     });
 
     describe('edge cases', () => {
-        test('should handle undefined metadataQuery', () => {
-            renderComponent({
-                metadataQuery: undefined,
-                selectedKeys: new Set(),
-            });
-
-            // Should not crash and should not fetch folder info
-            expect(mockAPI.getFolderAPI).not.toHaveBeenCalled();
-        });
-
-        test('should handle undefined api', () => {
-            renderComponent({
-                api: undefined,
-                metadataQuery: { ancestor_folder_id: '123' },
-                selectedKeys: new Set(),
-            });
-
-            // Should not crash and should not fetch folder info
-            expect(mockAPI.getFolderAPI).not.toHaveBeenCalled();
-        });
-
         test('should handle zero selected items', () => {
             renderComponent({
                 selectedKeys: new Set(),

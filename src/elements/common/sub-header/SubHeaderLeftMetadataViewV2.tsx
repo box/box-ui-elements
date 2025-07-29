@@ -1,53 +1,26 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { Selection } from 'react-aria-components';
+import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Text } from '@box/blueprint-web';
-
+import type { Selection } from 'react-aria-components';
 import type API from '../../../api';
 import type { Collection } from '../../../common/types/core';
-import type { MetadataQuery } from '../../../common/types/metadataQueries';
 import CloseButton from '../../../components/close-button/CloseButton';
 import messages from '../messages';
-
 import './SubHeaderLeftMetadataViewV2.scss';
 
 interface SubHeaderLeftMetadataViewV2Props {
     api?: API;
     currentCollection: Collection;
-    metadataQuery?: MetadataQuery;
+    metadataAncestorFolderName?: string | null;
     metadataViewTitle?: string;
     onClearSelectedKeys?: () => void;
     selectedKeys: Selection;
 }
 
 const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) => {
-    const { api, currentCollection, metadataQuery, metadataViewTitle, selectedKeys, onClearSelectedKeys } = props;
-    const [ancestorFolderName, setAncestorFolderName] = useState<string | null>(null);
+    const { currentCollection, metadataAncestorFolderName, metadataViewTitle, onClearSelectedKeys, selectedKeys } =
+        props;
     const { formatMessage } = useIntl();
-
-    // Fetch ancestor folder name with metadataQuery.ancestor_folder_id
-    useEffect(() => {
-        if (api && metadataQuery?.ancestor_folder_id) {
-            if (metadataQuery.ancestor_folder_id === '0') {
-                setAncestorFolderName('All Files');
-            } else {
-                const folderAPI = api.getFolderAPI(false);
-
-                folderAPI.getFolderFields(
-                    metadataQuery.ancestor_folder_id,
-                    (folderInfo: { name?: string }) => {
-                        setAncestorFolderName(folderInfo.name ?? null);
-                    },
-                    () => {
-                        setAncestorFolderName(null);
-                    },
-                    { fields: ['name'] },
-                );
-            }
-        } else {
-            setAncestorFolderName(null);
-        }
-    }, [api, metadataQuery?.ancestor_folder_id]);
 
     // Generate selected item text based on selected keys
     const selectedItemText = useMemo(() => {
@@ -86,7 +59,7 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
     // Case 3: No selected items - show title if provided, otherwise show ancestor folder name
     return (
         <Text className="be-sub-header-left-title" as="h1" variant="titleXLarge">
-            {metadataViewTitle ?? ancestorFolderName}
+            {metadataViewTitle ?? metadataAncestorFolderName}
         </Text>
     );
 };

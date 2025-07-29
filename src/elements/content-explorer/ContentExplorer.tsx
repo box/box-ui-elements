@@ -10,7 +10,8 @@ import throttle from 'lodash/throttle';
 import uniqueid from 'lodash/uniqueId';
 import { TooltipProvider } from '@box/blueprint-web';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Selection } from 'react-aria-components';
+import type { Selection } from 'react-aria-components';
+
 import CreateFolderDialog from '../common/create-folder-dialog';
 import UploadDialog from '../common/upload-dialog';
 import Header from '../common/header';
@@ -173,6 +174,7 @@ type State = {
     isShareModalOpen: boolean;
     isUploadModalOpen: boolean;
     markers: Array<string | null | undefined>;
+    metadataAncestorFolderName: string | null;
     metadataTemplate: MetadataTemplate;
     rootName: string;
     searchQuery: string;
@@ -299,6 +301,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen: false,
             isUploadModalOpen: false,
             markers: [],
+            metadataAncestorFolderName: null,
             metadataTemplate: {},
             rootName: '',
             selectedKeys: new Set(),
@@ -338,7 +341,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     componentDidMount() {
-        const { currentFolderId, defaultView }: ContentExplorerProps = this.props;
+        const { currentFolderId, defaultView, metadataQuery }: ContentExplorerProps = this.props;
         this.rootElement = document.getElementById(this.id) as HTMLElement;
         this.appElement = this.rootElement.firstElementChild as HTMLElement;
 
@@ -348,6 +351,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 break;
             case DEFAULT_VIEW_METADATA:
                 this.showMetadataQueryResults();
+                this.fetchMetadataAncestorFolderName(metadataQuery?.ancestor_folder_id);
                 break;
             default:
                 this.fetchFolder(currentFolderId);
@@ -362,8 +366,11 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentDidUpdate({ currentFolderId: prevFolderId }: ContentExplorerProps, prevState: State): void {
-        const { currentFolderId }: ContentExplorerProps = this.props;
+    componentDidUpdate(
+        { currentFolderId: prevFolderId, metadataQuery: prevMetadataQuery }: ContentExplorerProps,
+        prevState: State,
+    ): void {
+        const { currentFolderId, metadataQuery }: ContentExplorerProps = this.props;
         const {
             currentCollection: { id },
         }: State = prevState;
@@ -374,6 +381,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
+        }
+
+        if (prevMetadataQuery?.ancestor_folder_id !== metadataQuery?.ancestor_folder_id) {
+            this.fetchMetadataAncestorFolderName(metadataQuery?.ancestor_folder_id);
         }
     }
 
@@ -1609,6 +1620,35 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     };
 
     /**
+     * Fetches the metadata ancestor folder name
+     *
+     * @private
+     * @return {void}
+     */
+    fetchMetadataAncestorFolderName = (ancestorFolderId?: string) => {
+        if (!ancestorFolderId) {
+            this.setState({ metadataAncestorFolderName: null });
+            return;
+        }
+
+        if (ancestorFolderId === '0') {
+            this.setState({ metadataAncestorFolderName: 'All Files' });
+            return;
+        }
+
+        this.api.getFolderAPI(false).getFolderFields(
+            ancestorFolderId,
+            (folderInfo: { name?: string }) => {
+                this.setState({ metadataAncestorFolderName: folderInfo.name ?? null });
+            },
+            () => {
+                this.setState({ metadataAncestorFolderName: null });
+            },
+            { fields: ['name'] },
+        );
+    };
+
+    /**
      * Renders the file picker
      *
      * @private
@@ -1673,6 +1713,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen,
             isUploadModalOpen,
             markers,
+            metadataAncestorFolderName,
             metadataTemplate,
             rootName,
             selected,
@@ -1740,6 +1781,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 portalElement={this.rootElement}
                                 selectedKeys={this.state.selectedKeys}
                                 onClearSelectedKeys={this.handleClearSelectedKeys}
+                                metadataAncestorFolderName={metadataAncestorFolderName}
                                 metadataViewTitle={metadataViewTitle}
                             />
 
