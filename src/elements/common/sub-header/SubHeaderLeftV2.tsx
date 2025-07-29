@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { Text } from '@box/blueprint-web';
 import type { Selection } from 'react-aria-components';
-import type API from '../../../api';
 import type { Collection } from '../../../common/types/core';
 import CloseButton from '../../../components/close-button/CloseButton';
 import messages from '../messages';
@@ -10,7 +9,6 @@ import messages from '../messages';
 import './SubHeaderLeftV2.scss';
 
 export interface SubHeaderLeftV2Props {
-    api?: API;
     currentCollection: Collection;
     title?: string;
     onClearSelectedKeys?: () => void;

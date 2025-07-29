@@ -8,7 +8,6 @@ import SubHeaderLeft from './SubHeaderLeft';
 import SubHeaderLeftV2 from './SubHeaderLeftV2';
 import SubHeaderRight from './SubHeaderRight';
 import type { ViewMode } from '../flowTypes';
-import type API from '../../../api';
 import type { View, Collection } from '../../../common/types/core';
 import { VIEW_MODE_LIST, VIEW_METADATA } from '../../../constants';
 import { useFeatureEnabled } from '../feature-checking';
@@ -16,7 +15,6 @@ import { useFeatureEnabled } from '../feature-checking';
 import './SubHeader.scss';
 
 export interface SubHeaderProps {
-    api?: API;
     canCreateNewFolder: boolean;
     canUpload: boolean;
     currentCollection: Collection;
@@ -42,7 +40,6 @@ export interface SubHeaderProps {
 }
 
 const SubHeader = ({
-    api,
     canCreateNewFolder,
     canUpload,
     currentCollection,
@@ -92,7 +89,6 @@ const SubHeader = ({
                 )}
                 {isMetadataViewV2Feature && (
                     <SubHeaderLeftV2
-                        api={api}
                         currentCollection={currentCollection}
                         title={metadataViewTitle}
                         onClearSelectedKeys={onClearSelectedKeys}
