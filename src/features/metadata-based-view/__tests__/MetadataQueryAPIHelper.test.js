@@ -186,7 +186,6 @@ describe('features/metadata-based-view/MetadataQueryAPIHelper', () => {
     ];
     const flattenedDataWithTypes = {
         items: flattenedResponse,
-        metadataTemplate: template,
         nextMarker: metadataQueryResponse.next_marker,
     };
     const getSchemaByTemplateKeyFunc = jest.fn().mockReturnValueOnce(Promise.resolve(templateSchemaResponse));

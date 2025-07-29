@@ -9,7 +9,6 @@ import SubHeaderLeftMetadataViewV2 from '../SubHeaderLeftMetadataViewV2';
 interface SubHeaderLeftMetadataViewV2Props {
     api?: API;
     currentCollection: Collection;
-    metadataAncestorFolderName?: string | null;
     metadataQuery?: MetadataQuery;
     metadataViewTitle?: string;
     onClearSelectedKeys?: () => void;
@@ -49,32 +48,10 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
         test('should render metadata view title when provided', () => {
             renderComponent({
                 metadataViewTitle: 'Custom Metadata View',
-                metadataAncestorFolderName: 'Test Folder',
                 selectedKeys: new Set(),
             });
 
-            // Custom title should override ancestor folder name
             expect(screen.getByText('Custom Metadata View')).toBeInTheDocument();
-            expect(screen.queryByText('Test Folder')).not.toBeInTheDocument();
-        });
-
-        test('should render ancestor folder name when no metadata view title is provided', () => {
-            renderComponent({
-                metadataAncestorFolderName: 'Test Folder',
-                selectedKeys: new Set(),
-            });
-
-            expect(screen.getByText('Test Folder')).toBeInTheDocument();
-        });
-
-        test('should handle null ancestor folder name gracefully', () => {
-            renderComponent({
-                metadataAncestorFolderName: null,
-                selectedKeys: new Set(),
-            });
-
-            // Should not crash and should not render any folder name
-            expect(screen.queryByText('Test Folder')).not.toBeInTheDocument();
         });
     });
 

@@ -1734,8 +1734,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
         const hasPreviousMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
-        console.log({ currentCollection });
-
         const combinedMetadataViewProps = {
             ...metadataViewProps,
             tableProps: {
@@ -1772,6 +1770,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
                                 gridMinColumns={GRID_VIEW_MIN_COLUMNS}
                                 maxGridColumnCountForWidth={maxGridColumnCount}
+                                metadataViewTitle={metadataViewTitle || metadataAncestorFolderName}
                                 onUpload={this.upload}
                                 onCreate={this.createFolder}
                                 onGridViewSliderChange={this.onGridViewSliderChange}
@@ -1781,8 +1780,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 portalElement={this.rootElement}
                                 selectedKeys={this.state.selectedKeys}
                                 onClearSelectedKeys={this.handleClearSelectedKeys}
-                                metadataAncestorFolderName={metadataAncestorFolderName}
-                                metadataViewTitle={metadataViewTitle}
                             />
 
                             <Content

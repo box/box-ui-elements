@@ -36,12 +36,8 @@ export interface ContentProps extends Required<ItemEventHandlers>, Required<Item
     isSmall: boolean;
     isTouch: boolean;
     itemActions?: ItemAction[];
-<<<<<<< HEAD
     metadataTemplate?: MetadataTemplate;
     metadataViewProps?: Omit<MetadataViewContainerProps, 'currentCollection'>;
-=======
-    metadataProps?: Omit<MetadataViewContainerProps, 'currentCollection'>;
->>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
     onMetadataUpdate: (
         item: BoxItem,
         field: string,
@@ -59,12 +55,8 @@ const Content = ({
     features,
     fieldsToShow = [],
     gridColumnCount,
-<<<<<<< HEAD
     metadataTemplate,
     metadataViewProps,
-=======
-    metadataProps,
->>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
     onMetadataUpdate,
     onSortChange,
     view,
@@ -96,13 +88,8 @@ const Content = ({
                     currentCollection={currentCollection}
                     isLoading={percentLoaded !== 100}
                     hasError={view === VIEW_ERROR}
-<<<<<<< HEAD
                     metadataTemplate={metadataTemplate}
                     {...metadataViewProps}
-=======
-                    onSortChange={onSortChange}
-                    {...metadataProps}
->>>>>>> b49985c8b (feat(metadata-view): Add MetadataView V2)
                 />
             )}
             {!isViewEmpty && isListView && (

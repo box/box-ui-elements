@@ -25,7 +25,6 @@ export interface SubHeaderProps {
     gridMinColumns?: number;
     isSmall: boolean;
     maxGridColumnCountForWidth?: number;
-    metadataAncestorFolderName?: string | null;
     metadataViewTitle?: string;
     onClearSelectedKeys: () => void;
     onCreate: () => void;
@@ -51,7 +50,6 @@ const SubHeader = ({
     gridMaxColumns = 0,
     gridMinColumns = 0,
     maxGridColumnCountForWidth = 0,
-    metadataAncestorFolderName,
     metadataViewTitle,
     onGridViewSliderChange = noop,
     isSmall,
@@ -96,7 +94,6 @@ const SubHeader = ({
                     <SubheaderLeftMetadataViewV2
                         api={api}
                         currentCollection={currentCollection}
-                        metadataAncestorFolderName={metadataAncestorFolderName}
                         metadataViewTitle={metadataViewTitle}
                         onClearSelectedKeys={onClearSelectedKeys}
                         selectedKeys={selectedKeys}

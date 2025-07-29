@@ -11,15 +11,13 @@ import './SubHeaderLeftMetadataViewV2.scss';
 interface SubHeaderLeftMetadataViewV2Props {
     api?: API;
     currentCollection: Collection;
-    metadataAncestorFolderName?: string | null;
     metadataViewTitle?: string;
     onClearSelectedKeys?: () => void;
     selectedKeys: Selection;
 }
 
 const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) => {
-    const { currentCollection, metadataAncestorFolderName, metadataViewTitle, onClearSelectedKeys, selectedKeys } =
-        props;
+    const { currentCollection, metadataViewTitle, onClearSelectedKeys, selectedKeys } = props;
     const { formatMessage } = useIntl();
 
     // Generate selected item text based on selected keys
@@ -59,10 +57,10 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
         );
     }
 
-    // Case 3: No selected items - show title if provided, otherwise show ancestor folder name
+    // Case 3: No selected items - show title
     return (
         <Text as="h1" variant="titleXLarge">
-            {metadataViewTitle ?? metadataAncestorFolderName}
+            {metadataViewTitle}
         </Text>
     );
 };
