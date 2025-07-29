@@ -20,6 +20,7 @@ import openUrlInsideIframe from '../../utils/iframe';
 import Internationalize from '../common/Internationalize';
 import ThemingStyles from '../common/theming';
 import API from '../../api';
+import MetadataQueryAPIHelperV2 from './MetadataQueryAPIHelper';
 import MetadataQueryAPIHelper from '../../features/metadata-based-view/MetadataQueryAPIHelper';
 import Footer from './Footer';
 import PreviewDialog from '../common/preview-dialog/PreviewDialog';
@@ -32,7 +33,12 @@ import { isFocusableElement, isInputElement, focus } from '../../utils/dom';
 import { FILE_SHARED_LINK_FIELDS_TO_FETCH } from '../../utils/fields';
 import CONTENT_EXPLORER_FOLDER_FIELDS_TO_FETCH from './constants';
 import LocalStore from '../../utils/LocalStore';
-import { withFeatureConsumer, withFeatureProvider, type FeatureConfig } from '../common/feature-checking';
+import {
+    withFeatureConsumer,
+    withFeatureProvider,
+    isFeatureEnabled,
+    type FeatureConfig,
+} from '../common/feature-checking';
 import {
     DEFAULT_HOSTNAME_UPLOAD,
     DEFAULT_HOSTNAME_API,
@@ -68,7 +74,7 @@ import type { ViewMode } from '../common/flowTypes';
 import type { ItemAction } from '../common/item';
 import type { Theme } from '../common/theming';
 import type { MetadataQuery, FieldsToShow } from '../../common/types/metadataQueries';
-import type { MetadataFieldValue } from '../../common/types/metadata';
+import type { MetadataFieldValue, MetadataTemplate } from '../../common/types/metadata';
 import type {
     View,
     DefaultView,
@@ -83,6 +89,7 @@ import type {
 } from '../../common/types/core';
 import type { ContentPreviewProps } from '../content-preview';
 import type { ContentUploaderProps } from '../content-uploader';
+import type { MetadataViewContainerProps } from './MetadataViewContainer';
 
 import '../common/fonts.scss';
 import '../common/base.scss';
@@ -124,6 +131,7 @@ export interface ContentExplorerProps {
     measureRef?: (ref: Element | null) => void;
     messages?: StringMap;
     metadataQuery?: MetadataQuery;
+    metadataViewProps?: Omit<MetadataViewContainerProps, 'hasError' | 'currentCollection'>;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
@@ -163,10 +171,11 @@ type State = {
     isShareModalOpen: boolean;
     isUploadModalOpen: boolean;
     markers: Array<string | null | undefined>;
+    metadataTemplate: MetadataTemplate;
     rootName: string;
     searchQuery: string;
     selected?: BoxItem;
-    sortBy: SortBy;
+    sortBy: SortBy | string;
     sortDirection: SortDirection;
     view: View;
 };
@@ -227,6 +236,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             contentSidebarProps: {},
         },
         contentUploaderProps: {},
+        metadataViewProps: {},
     };
 
     /**
@@ -285,6 +295,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen: false,
             isUploadModalOpen: false,
             markers: [],
+            metadataTemplate: {},
             rootName: '',
             searchQuery: '',
             sortBy,
@@ -368,7 +379,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @param {Object} metadataQueryCollection - Metadata query response collection
      * @return {void}
      */
-    showMetadataQueryResultsSuccessCallback = (metadataQueryCollection: Collection): void => {
+    showMetadataQueryResultsSuccessCallback = (
+        metadataQueryCollection: Collection,
+        metadataTemplate: MetadataTemplate,
+    ): void => {
         const { nextMarker } = metadataQueryCollection;
         const { currentCollection, currentPageNumber, markers }: State = this.state;
         const cloneMarkers = [...markers];
@@ -382,6 +396,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 percentLoaded: 100,
             },
             markers: cloneMarkers,
+            metadataTemplate,
         });
     };
 
@@ -392,8 +407,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @return {void}
      */
     showMetadataQueryResults() {
-        const { metadataQuery = {} }: ContentExplorerProps = this.props;
-        const { currentPageNumber, markers }: State = this.state;
+        const { features, metadataQuery = {} }: ContentExplorerProps = this.props;
+        const { currentPageNumber, markers, sortBy, sortDirection }: State = this.state;
         const metadataQueryClone = cloneDeep(metadataQuery);
 
         if (currentPageNumber === 0) {
@@ -410,13 +425,26 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             // Set limit to the query for pagination support
             metadataQueryClone.limit = DEFAULT_PAGE_SIZE;
         }
+
+        metadataQueryClone.order_by = [
+            {
+                field_key: sortBy,
+                direction: sortDirection,
+            },
+        ];
         // Reset search state, the view and show busy indicator
         this.setState({
             searchQuery: '',
             currentCollection: this.currentUnloadedCollection(),
             view: VIEW_METADATA,
         });
-        this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
+
+        if (isFeatureEnabled(features, 'contentExplorer.metadataViewV2')) {
+            this.metadataQueryAPIHelper = new MetadataQueryAPIHelperV2(this.api);
+        } else {
+            this.metadataQueryAPIHelper = new MetadataQueryAPIHelper(this.api);
+        }
+
         this.metadataQueryAPIHelper.fetchMetadataQueryResults(
             metadataQueryClone,
             this.showMetadataQueryResultsSuccessCallback,
@@ -831,8 +859,10 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
     sort = (sortBy: SortBy, sortDirection: SortDirection) => {
         const {
             currentCollection: { id },
+            view,
         }: State = this.state;
-        if (id) {
+
+        if (id || view === VIEW_METADATA) {
             this.setState({ sortBy, sortDirection }, this.refreshCollection);
         }
     };
@@ -1602,6 +1632,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             measureRef,
             messages,
             fieldsToShow,
+            metadataViewProps,
             onDownload,
             onPreview,
             onUpload,
@@ -1632,6 +1663,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen,
             isUploadModalOpen,
             markers,
+            metadataTemplate,
             rootName,
             selected,
             view,
@@ -1697,6 +1729,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 isTouch={isTouch}
                                 itemActions={itemActions}
                                 fieldsToShow={fieldsToShow}
+                                metadataTemplate={metadataTemplate}
+                                metadataViewProps={metadataViewProps}
                                 onItemClick={this.onItemClick}
                                 onItemDelete={this.delete}
                                 onItemDownload={this.download}
