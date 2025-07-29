@@ -7,7 +7,7 @@ import type API from '../../../api';
 import type { Collection } from '../../../common/types/core';
 import type { MetadataQuery } from '../../../common/types/metadataQueries';
 import CloseButton from '../../../components/close-button/CloseButton';
-import messages from '../../../features/content-explorer/messages';
+import messages from '../messages';
 
 import './SubHeaderLeftMetadataViewV2.scss';
 

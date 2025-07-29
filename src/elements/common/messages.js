@@ -1089,6 +1089,17 @@ const messages = defineMessages({
         description: 'Icon title for a Box item of type folder that is private and has no collaborators',
         defaultMessage: 'Personal Folder',
     },
+    numFilesSelected: {
+        id: 'boxui.contentExplorer.numFilesSelected',
+        description: 'Text shown to indicate the number of files selected',
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 files selected}
+                one {1 file selected}
+                other {# files selected}
+            }
+        `,
+    },
 });
 
 export default messages;
