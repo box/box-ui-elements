@@ -7,14 +7,19 @@ import { FEED_ITEM_TYPE_VERSION } from '../../constants';
 import { getBadUserError } from '../../utils/error';
 import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import type { BoxItem, User } from '../../common/types/core';
+import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
+import { ViewType, FeedEntryType } from '../common/types/SidebarNavigation';
 
 type Props = {
     ...ContextRouter,
     currentUser?: User,
     file: BoxItem,
     fileId: string,
+    internalSidebarNavigation?: InternalSidebarNavigation,
+    internalSidebarNavigationHandler?: InternalSidebarNavigationHandler,
     isOpen: boolean,
     onVersionChange: Function,
+    routerDisabled?: boolean,
 } & WithAnnotatorContextProps;
 
 type SidebarPanelsRefType = {
@@ -44,31 +49,128 @@ export default function withSidebarAnnotations(
             this.redirectDeeplinkedAnnotation();
         }
 
-        redirectDeeplinkedAnnotation = () => {
-            const { file, getAnnotationsPath, getAnnotationsMatchPath, history, location } = this.props;
-            const match = getAnnotationsMatchPath(location);
-            const annotationId = getProp(match, 'params.annotationId');
-            const currentFileVersionId = getProp(file, 'file_version.id');
-            const fileVersionId = getProp(match, 'params.fileVersionId');
+        getInternalNavigationMatch = (
+            navigation: InternalSidebarNavigation,
+        ): { params: { annotationId?: string, fileVersionId?: string } } | null => {
+            if (
+                !('activeFeedEntryType' in navigation) ||
+                navigation.activeFeedEntryType !== FeedEntryType.ANNOTATIONS ||
+                !navigation.fileVersionId ||
+                !navigation.activeFeedEntryId
+            ) {
+                return null;
+            }
 
-            if (fileVersionId && fileVersionId !== currentFileVersionId) {
-                history.replace(getAnnotationsPath(currentFileVersionId, annotationId));
+            return {
+                params: {
+                    annotationId: navigation.activeFeedEntryId,
+                    fileVersionId: navigation.fileVersionId,
+                },
+            };
+        };
+
+        getInternalAnnotationsNavigation = (
+            fileVersionId?: string,
+            annotationId?: string | null,
+        ): InternalSidebarNavigation => {
+            if (!fileVersionId) {
+                return { sidebar: ViewType.ACTIVITY };
+            }
+
+            return {
+                sidebar: ViewType.ACTIVITY,
+                activeFeedEntryType: FeedEntryType.ANNOTATIONS,
+                activeFeedEntryId: annotationId || undefined,
+                fileVersionId,
+            };
+        };
+
+        redirectDeeplinkedAnnotation = () => {
+            const {
+                file,
+                getAnnotationsPath,
+                getAnnotationsMatchPath,
+                history,
+                internalSidebarNavigation,
+                internalSidebarNavigationHandler,
+                location,
+                routerDisabled,
+            } = this.props;
+
+            const currentFileVersionId = getProp(file, 'file_version.id');
+
+            if (routerDisabled && internalSidebarNavigation && internalSidebarNavigationHandler) {
+                // Use internal navigation when router is disabled
+                const match = this.getInternalNavigationMatch(internalSidebarNavigation);
+                const annotationId = getProp(match, 'params.annotationId');
+                const fileVersionId = getProp(match, 'params.fileVersionId');
+
+                if (fileVersionId && fileVersionId !== currentFileVersionId) {
+                    const correctedNavigation = this.getInternalAnnotationsNavigation(
+                        currentFileVersionId,
+                        annotationId,
+                    );
+                    internalSidebarNavigationHandler(correctedNavigation, true);
+                }
+            } else {
+                // Use router-based navigation
+                const match = getAnnotationsMatchPath(location);
+                const annotationId = getProp(match, 'params.annotationId');
+                const fileVersionId = getProp(match, 'params.fileVersionId');
+
+                if (fileVersionId && fileVersionId !== currentFileVersionId) {
+                    history.replace(getAnnotationsPath(currentFileVersionId, annotationId));
+                }
             }
         };
 
         componentDidUpdate(prevProps: Props) {
-            const { annotatorState, fileId, getAnnotationsMatchPath, location, onVersionChange }: Props = this.props;
-            const { annotatorState: prevAnnotatorState, fileId: prevFileId, location: prevLocation }: Props = prevProps;
+            const {
+                annotatorState,
+                fileId,
+                getAnnotationsMatchPath,
+                internalSidebarNavigation,
+                location,
+                onVersionChange,
+                routerDisabled,
+            }: Props = this.props;
+            const {
+                annotatorState: prevAnnotatorState,
+                fileId: prevFileId,
+                internalSidebarNavigation: prevInternalSidebarNavigation,
+                location: prevLocation,
+            }: Props = prevProps;
             const { action, activeAnnotationId, annotation } = annotatorState;
             const { activeAnnotationId: prevActiveAnnotationId, annotation: prevAnnotation } = prevAnnotatorState;
 
-            const match = getAnnotationsMatchPath(location);
-            const prevMatch = getAnnotationsMatchPath(prevLocation);
-            const fileVersionId = getProp(match, 'params.fileVersionId');
+            let fileVersionId;
+            let prevFileVersionId;
+            let isAnnotationsPath;
+            let isTransitioningToAnnotationPath;
+
+            if (routerDisabled && internalSidebarNavigation) {
+                // Use internal navigation when router is disabled
+                const match = this.getInternalNavigationMatch(internalSidebarNavigation);
+                const prevMatch = prevInternalSidebarNavigation
+                    ? this.getInternalNavigationMatch(prevInternalSidebarNavigation)
+                    : null;
+
+                fileVersionId = getProp(match, 'params.fileVersionId');
+                prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
+                isAnnotationsPath = !!match;
+                isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
+            } else {
+                // Use router-based navigation
+                const match = getAnnotationsMatchPath(location);
+                const prevMatch = getAnnotationsMatchPath(prevLocation);
+
+                fileVersionId = getProp(match, 'params.fileVersionId');
+                prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
+                isAnnotationsPath = !!match;
+                isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
+            }
+
             const hasActiveAnnotationChanged = prevActiveAnnotationId !== activeAnnotationId;
-            const isAnnotationsPath = !!match;
-            const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
-            const prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
 
             if (action === 'reply_create_start' || action === 'reply_create_end') {
                 this.addAnnotationReply();
@@ -275,19 +377,39 @@ export default function withSidebarAnnotations(
                 getAnnotationsMatchPath,
                 getAnnotationsPath,
                 history,
+                internalSidebarNavigation,
+                internalSidebarNavigationHandler,
                 location,
+                routerDisabled,
             } = this.props;
-            const match = getAnnotationsMatchPath(location);
+
             const currentFileVersionId = getProp(file, 'file_version.id');
             const defaultFileVersionId = activeAnnotationFileVersionId || currentFileVersionId;
-            const fileVersionId = getProp(match, 'params.fileVersionId', defaultFileVersionId);
-            const newLocationState = activeAnnotationId ? { open: true } : location.state;
 
-            // Update the location pathname and open state if transitioning to an active annotation id, force the sidebar open
-            history.push({
-                pathname: getAnnotationsPath(fileVersionId, activeAnnotationId),
-                state: newLocationState,
-            });
+            if (routerDisabled && internalSidebarNavigation && internalSidebarNavigationHandler) {
+                // Use internal navigation when router is disabled
+                const match = this.getInternalNavigationMatch(internalSidebarNavigation);
+                const fileVersionId = getProp(match, 'params.fileVersionId', defaultFileVersionId);
+                const newNavigationState = activeAnnotationId ? { open: true } : {};
+
+                // Update the navigation and open state if transitioning to an active annotation id, force the sidebar open
+                const updatedNavigation = {
+                    ...this.getInternalAnnotationsNavigation(fileVersionId, activeAnnotationId),
+                    ...newNavigationState,
+                };
+                internalSidebarNavigationHandler(updatedNavigation);
+            } else {
+                // Use router-based navigation
+                const match = getAnnotationsMatchPath(location);
+                const fileVersionId = getProp(match, 'params.fileVersionId', defaultFileVersionId);
+                const newLocationState = activeAnnotationId ? { open: true } : location.state;
+
+                // Update the location pathname and open state if transitioning to an active annotation id, force the sidebar open
+                history.push({
+                    pathname: getAnnotationsPath(fileVersionId, activeAnnotationId),
+                    state: newLocationState,
+                });
+            }
         };
 
         updateActiveVersion = () => {
@@ -298,32 +420,66 @@ export default function withSidebarAnnotations(
                 getAnnotationsMatchPath,
                 getAnnotationsPath,
                 history,
+                internalSidebarNavigation,
+                internalSidebarNavigationHandler,
                 location,
                 onVersionChange,
+                routerDisabled,
             } = this.props;
-            const feedAPI = api.getFeedAPI(false);
-            const match = getAnnotationsMatchPath(location);
-            const currentFileVersionId = getProp(file, 'file_version.id');
-            const fileVersionId = getProp(match, 'params.fileVersionId');
-            const { items: feedItems = [] } = feedAPI.getCachedItems(fileId) || {};
-            const version = feedItems
-                .filter(item => item.type === FEED_ITEM_TYPE_VERSION)
-                .find(item => item.id === fileVersionId);
 
-            if (version) {
-                onVersionChange(version, {
-                    currentVersionId: currentFileVersionId,
-                    updateVersionToCurrent: () => history.push(getAnnotationsPath(currentFileVersionId)),
-                });
+            const feedAPI = api.getFeedAPI(false);
+            const currentFileVersionId = getProp(file, 'file_version.id');
+            const { items: feedItems = [] } = feedAPI.getCachedItems(fileId) || {};
+
+            if (routerDisabled && internalSidebarNavigation && internalSidebarNavigationHandler) {
+                // Use internal navigation when router is disabled
+                const match = this.getInternalNavigationMatch(internalSidebarNavigation);
+                const fileVersionId = getProp(match, 'params.fileVersionId');
+                const version = feedItems
+                    .filter(item => item.type === FEED_ITEM_TYPE_VERSION)
+                    .find(item => item.id === fileVersionId);
+
+                if (version) {
+                    onVersionChange(version, {
+                        currentVersionId: currentFileVersionId,
+                        updateVersionToCurrent: () => {
+                            const currentVersionNavigation =
+                                this.getInternalAnnotationsNavigation(currentFileVersionId);
+                            internalSidebarNavigationHandler(currentVersionNavigation);
+                        },
+                    });
+                }
+            } else {
+                // Use router-based navigation
+                const match = getAnnotationsMatchPath(location);
+                const fileVersionId = getProp(match, 'params.fileVersionId');
+                const version = feedItems
+                    .filter(item => item.type === FEED_ITEM_TYPE_VERSION)
+                    .find(item => item.id === fileVersionId);
+
+                if (version) {
+                    onVersionChange(version, {
+                        currentVersionId: currentFileVersionId,
+                        updateVersionToCurrent: () => history.push(getAnnotationsPath(currentFileVersionId)),
+                    });
+                }
             }
         };
 
         refreshActivitySidebar = () => {
-            const { isOpen, location } = this.props;
-
-            const pathname = getProp(location, 'pathname', '');
-            const isActivity = matchPath(pathname, '/activity');
+            const { internalSidebarNavigation, isOpen, location, routerDisabled } = this.props;
             const { current } = this.sidebarPanels;
+
+            let isActivity = false;
+
+            if (routerDisabled && internalSidebarNavigation) {
+                // Check if current navigation is pointing to activity sidebar
+                isActivity = internalSidebarNavigation.sidebar === ViewType.ACTIVITY;
+            } else {
+                // Use router-based check
+                const pathname = getProp(location, 'pathname', '');
+                isActivity = !!matchPath(pathname, '/activity');
+            }
 
             // If the activity sidebar is currently open, then force it to refresh with the updated data
             if (current && isActivity && isOpen) {
