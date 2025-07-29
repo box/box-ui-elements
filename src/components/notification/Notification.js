@@ -3,8 +3,13 @@ import * as React from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import classNames from 'classnames';
 
-// $FlowFixMe
-import { Information, Check, AlertTriangle, AlertBadge, XMark } from '@box/blueprint-web-assets/icons/Medium';
+import {
+    AlertCircle,
+    InformationCircle,
+    CheckmarkCircle,
+    AlertTriangle,
+    XMark,
+} from '@box/blueprint-web-assets/icons/Medium';
 
 import InfoBadge16 from '../../icon/line/InfoBadge16';
 import CircleCheck16 from '../../icon/line/CircleCheck16';
@@ -34,9 +39,9 @@ const DURATION_TIMES = {
 };
 
 const ICON_RENDERER: { [string]: Function } = {
-    [TYPE_DEFAULT]: useV2Icons => (useV2Icons ? <Information /> : <InfoBadge16 />),
-    [TYPE_ERROR]: useV2Icons => (useV2Icons ? <AlertBadge /> : <XBadge16 />),
-    [TYPE_INFO]: useV2Icons => (useV2Icons ? <Check /> : <CircleCheck16 />),
+    [TYPE_DEFAULT]: useV2Icons => (useV2Icons ? <InformationCircle /> : <InfoBadge16 />),
+    [TYPE_ERROR]: useV2Icons => (useV2Icons ? <AlertCircle /> : <XBadge16 />),
+    [TYPE_INFO]: useV2Icons => (useV2Icons ? <CheckmarkCircle /> : <CircleCheck16 />),
     [TYPE_WARN]: useV2Icons => (useV2Icons ? <AlertTriangle /> : <TriangleAlert16 />),
 };
 
