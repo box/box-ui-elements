@@ -76,7 +76,7 @@ const SubHeader = ({
 
     return (
         <PageHeader.Root
-            className={classNames('be-sub-header', { 'be-sub-header--metadata-view': isMetadataViewV2Feature })}
+            className={classNames('be-sub-header', { 'SubHeader--metadataView': isMetadataViewV2Feature })}
             data-testid="be-sub-header"
             variant="inline"
         >

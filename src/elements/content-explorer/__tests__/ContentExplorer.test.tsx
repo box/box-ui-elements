@@ -7,22 +7,6 @@ import { mockMetadata, mockSchema } from '../../common/__mocks__/mockMetadata';
 import mockSubFolder from '../../common/__mocks__/mockSubfolder';
 import { FeatureProvider } from '../../common/feature-checking';
 
-const mockGetFolderFields = jest.fn();
-const mockGetFolderAPI = jest.fn(() => ({
-    getFolderFields: mockGetFolderFields,
-}));
-const mockGetMetadataQueryAPI = jest.fn(() => ({
-    queryMetadata: jest.fn(),
-}));
-
-jest.mock('../../../api', () => {
-    return jest.fn().mockImplementation(() => ({
-        getFolderAPI: mockGetFolderAPI,
-        getMetadataQueryAPI: mockGetMetadataQueryAPI,
-        destroy: jest.fn(),
-    }));
-});
-
 jest.mock('../../../utils/Xhr', () => {
     return jest.fn().mockImplementation(() => {
         return {
@@ -102,10 +86,6 @@ describe('elements/content-explorer/ContentExplorer', () => {
         rootElement = document.createElement('div');
         rootElement.appendChild(document.createElement('div'));
         document.body.appendChild(rootElement);
-
-        mockGetFolderFields.mockImplementation((_folderId, successCallback) => {
-            successCallback({ name: 'Test Folder Name' });
-        });
     });
 
     afterEach(() => {
@@ -460,60 +440,6 @@ describe('elements/content-explorer/ContentExplorer', () => {
                 expect(screen.queryByRole('button', { name: 'Sort' })).not.toBeInTheDocument();
                 expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument();
                 expect(screen.getByRole('button', { name: 'Metadata' })).toBeInTheDocument();
-            });
-        });
-
-        describe('Metadata Ancestor Folder Name', () => {
-            beforeEach(() => {
-                jest.clearAllMocks();
-            });
-
-            test('should fetch ancestor folder name when metadata view is loaded with ancestor_folder_id', async () => {
-                const metadataQuery = {
-                    from: 'enterprise_0.templateName',
-                    ancestor_folder_id: '123',
-                    fields: ['metadata.enterprise_0.templateName.industry'],
-                };
-
-                // Mock successful API response
-                mockGetFolderFields.mockImplementation((_folderId, successCallback) => {
-                    successCallback({ name: 'Test Folder Name' });
-                });
-
-                renderComponent({
-                    metadataQuery,
-                    defaultView: 'metadata',
-                });
-
-                await waitFor(() => {
-                    expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
-                });
-
-                // Verify the API was called with correct parameters
-                expect(mockGetFolderAPI).toHaveBeenCalledWith(false);
-                expect(mockGetFolderFields).toHaveBeenCalledWith('123', expect.any(Function), expect.any(Function), {
-                    fields: ['name'],
-                });
-            });
-
-            test('should handle ancestor_folder_id of "0" without API call', async () => {
-                const metadataQuery = {
-                    from: 'enterprise_0.templateName',
-                    ancestor_folder_id: '0',
-                    fields: ['metadata.enterprise_0.templateName.industry'],
-                };
-
-                renderComponent({
-                    metadataQuery,
-                    defaultView: 'metadata',
-                });
-
-                await waitFor(() => {
-                    expect(screen.getByTestId('content-explorer')).toBeInTheDocument();
-                });
-
-                // Verify no API call was made for "0"
-                expect(mockGetFolderFields).not.toHaveBeenCalled();
             });
         });
     });

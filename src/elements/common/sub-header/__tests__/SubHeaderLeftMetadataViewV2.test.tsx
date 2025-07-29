@@ -149,7 +149,7 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
             });
 
             const container = screen.getByText('file1.txt').closest('div');
-            expect(container).toHaveClass('be-sub-header-left-selected-container');
+            expect(container).toHaveClass('SubHeaderLeftMetadataViewV2-selectedContainer');
         });
 
         test('should render close button with correct CSS class', () => {
@@ -158,7 +158,7 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
             });
 
             const closeButton = screen.getByRole('button');
-            expect(closeButton).toHaveClass('be-sub-header-left-selected-close-button');
+            expect(closeButton).toHaveClass('SubHeaderLeftMetadataViewV2-clearSelectedKeysButton');
         });
 
         test('should render title with correct CSS class when no items selected', () => {
@@ -168,7 +168,7 @@ describe('elements/common/sub-header/SubHeaderLeftMetadataViewV2', () => {
             });
 
             const title = screen.getByRole('heading', { level: 1 });
-            expect(title).toHaveClass('be-sub-header-left-title');
+            expect(title).toBeInTheDocument();
         });
     });
 

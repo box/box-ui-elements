@@ -49,8 +49,11 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
     // Case 1 and 2: selected item text with X button
     if (selectedItemText) {
         return (
-            <div className="be-sub-header-left-selected-container">
-                <CloseButton onClick={onClearSelectedKeys} className="be-sub-header-left-selected-close-button" />
+            <div className="SubHeaderLeftMetadataViewV2-selectedContainer">
+                <CloseButton
+                    onClick={onClearSelectedKeys}
+                    className="SubHeaderLeftMetadataViewV2-clearSelectedKeysButton"
+                />
                 <Text as="p">{selectedItemText}</Text>
             </div>
         );
@@ -58,7 +61,7 @@ const SubHeaderLeftMetadataViewV2 = (props: SubHeaderLeftMetadataViewV2Props) =>
 
     // Case 3: No selected items - show title if provided, otherwise show ancestor folder name
     return (
-        <Text className="be-sub-header-left-title" as="h1" variant="titleXLarge">
+        <Text as="h1" variant="titleXLarge">
             {metadataViewTitle ?? metadataAncestorFolderName}
         </Text>
     );

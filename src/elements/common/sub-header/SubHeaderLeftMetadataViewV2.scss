@@ -1,9 +1,9 @@
-.be-sub-header-left-selected-container {
+.SubHeaderLeftMetadataViewV2-selectedContainer {
     display: flex;
     align-items: center;
     gap: 12px;
+}
 
-    > .bdl-CloseButton {
-        margin: 0;
-    }
+.SubHeaderLeftMetadataViewV2-clearSelectedKeysButton {
+    margin: 0;
 }
