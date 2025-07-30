@@ -60,14 +60,16 @@ export default function withSidebarAnnotations(
                 return null;
             }
 
-            const params = {
-                fileVersionId: navigation.fileVersionId,
-            };
-
             // Only include annotationId if it's defined (mirrors router behavior where missing optional params are omitted)
-            if (navigation.activeFeedEntryId !== undefined) {
-                params.annotationId = navigation.activeFeedEntryId;
-            }
+            const params =
+                navigation.activeFeedEntryId !== undefined
+                    ? {
+                          fileVersionId: navigation.fileVersionId,
+                          annotationId: navigation.activeFeedEntryId,
+                      }
+                    : {
+                          fileVersionId: navigation.fileVersionId,
+                      };
 
             return { params };
         };
