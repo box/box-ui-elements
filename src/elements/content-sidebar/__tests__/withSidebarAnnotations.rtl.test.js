@@ -130,7 +130,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             ${'124'}      | ${'987'}     | ${'/activity/annotations/123/987'}
             ${'124'}      | ${undefined} | ${'/activity/annotations/123'}
         `('should call history.replace with $expectedPath', ({ fileVersionId, annotationId, expectedPath }) => {
-            // Setup mocks before rendering (constructor will run during render)
             getAnnotationsMatchPath.mockReturnValue({ params: { annotationId, fileVersionId } });
             getAnnotationsPath.mockReturnValue(expectedPath);
 
@@ -214,7 +213,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 fileId: '123',
             });
 
-            // Clear mocks after initial render to only measure componentDidUpdate effects
             jest.clearAllMocks();
 
             // Trigger componentDidUpdate by changing the fileId
@@ -224,7 +222,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 }),
             );
 
-            // Verify the side effect of onVersionChange being called
             expect(onVersionChange).toHaveBeenCalledTimes(expectedCount);
 
             if (expectedCount > 0) {
@@ -296,7 +293,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                     </MemoryRouter>,
                 );
 
-                // Verify the side effect of refreshActivitySidebar being called through updateAnnotation
                 expect(mockRefresh).toHaveBeenCalledTimes(expectedCount);
                 if (expectedCount > 0) {
                     expect(mockRefresh).toHaveBeenCalledWith(false);
@@ -367,7 +363,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                         />,
                     );
 
-                    // Verify the side effect of refreshActivitySidebar being called through updateAnnotation
                     expect(mockRefresh).toHaveBeenCalledTimes(expectedCount);
                     if (expectedCount > 0) {
                         expect(mockRefresh).toHaveBeenCalledWith(false);
@@ -1061,10 +1056,8 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 // When updateActiveVersion is called, it should get the NEW fileVersionId from the match
                 getAnnotationsMatchPath.mockReturnValue({ params: { fileVersionId } });
 
-                // Clear mocks after initial render to only measure componentDidUpdate effects
                 jest.clearAllMocks();
 
-                // Trigger componentDidUpdate by changing location
                 rerender(
                     createComponentElement({
                         location: { pathname: '/bar' },
@@ -1132,7 +1125,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 // Clear mocks after initial render to only measure componentDidUpdate effects
                 jest.clearAllMocks();
 
-                // Trigger componentDidUpdate by changing internal navigation
                 rerender(
                     createRouterDisabledComponentElement({
                         internalSidebarNavigation: newInternalNavigation,
