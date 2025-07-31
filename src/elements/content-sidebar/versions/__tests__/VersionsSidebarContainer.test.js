@@ -35,12 +35,12 @@ const versions = [
 
 describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     const mockedAPIMethods = {
-        fetchData: jest.fn().mockResolvedValue([{}, {}]),
-        deleteVersion: jest.fn().mockResolvedValue(),
-        fetchVersion: jest.fn().mockResolvedValue({}),
-        fetchDownloadUrl: jest.fn().mockResolvedValue(),
-        promoteVersion: jest.fn().mockResolvedValue(),
-        restoreVersion: jest.fn().mockResolvedValue(),
+        fetchData: jest.fn(),
+        deleteVersion: jest.fn(),
+        fetchVersion: jest.fn(),
+        fetchDownloadUrl: jest.fn(),
+        promoteVersion: jest.fn(),
+        restoreVersion: jest.fn(),
         addPermissions: jest.fn(),
         sortVersions: jest.fn(),
     };
@@ -55,7 +55,7 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
     VersionsSidebarAPI.mockImplementation(() => mockedAPIMethods);
 
-    const getWrapper = ({ ...props } = {}) =>
+    const getWrapper = (props = {}) =>
         shallow(<VersionsSidebarContainerComponent api={api} fileId="12345" {...props} />);
 
     const history = createBrowserHistory();
@@ -74,7 +74,6 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        // Reset default resolved values
         mockedAPIMethods.fetchData.mockResolvedValue([{}, {}]);
         mockedAPIMethods.deleteVersion.mockResolvedValue();
         mockedAPIMethods.fetchVersion.mockResolvedValue({});
@@ -86,12 +85,10 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
     describe('componentDidMount', () => {
         beforeEach(() => {
             history.push = jest.fn();
-            mockedAPIMethods.fetchData.mockClear();
         });
 
         test('should call onLoad after a successful fetchData() call', async () => {
             const onLoad = jest.fn();
-            mockedAPIMethods.fetchData.mockResolvedValue([{}, {}]);
 
             await act(async () => {
                 renderComponent({ onLoad });
@@ -105,20 +102,20 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
     describe('handleActionDelete', () => {
         test.each`
-            scenario                        | versionIdToDelete | currentVersionId | shouldCallHistoryPush | expectedHistoryPath
-            ${'non-selected version'}       | ${'456'}          | ${'123'}         | ${false}              | ${null}
-            ${'currently selected version'} | ${'456'}          | ${'456'}         | ${true}               | ${'/versions/123'}
+            scenario                        | versionIdToDelete | selectedVersionId | shouldCallHistoryPush | expectedHistoryPath
+            ${'non-selected version'}       | ${'456'}          | ${'123'}          | ${false}              | ${null}
+            ${'currently selected version'} | ${'456'}          | ${'456'}          | ${true}               | ${'/versions/123'}
         `(
             'should handle delete operation correctly when deleting $scenario',
-            async ({ versionIdToDelete, currentVersionId, shouldCallHistoryPush, expectedHistoryPath }) => {
+            async ({ versionIdToDelete, selectedVersionId, shouldCallHistoryPush, expectedHistoryPath }) => {
                 const handleDelete = jest.fn();
                 const newVersion = { id: versionIdToDelete, trash_at: '' };
-                const expectedVersion = {
+                const versionToDelete = {
                     id: versionIdToDelete,
                     name: 'Version 1',
                     created_at: '2023-01-01T00:00:00Z',
                 };
-                const currentVersion = { id: '123', name: 'Current Version', created_at: '2023-01-02T00:00:00Z' };
+                const mostRecentVersion = { id: '123', name: 'Current Version', created_at: '2023-01-02T00:00:00Z' };
 
                 let triggerDelete;
                 VersionsSidebar.mockImplementation(({ onDelete, versions: versionsList }) => {
@@ -133,21 +130,20 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 });
 
                 // Include both versions so verifyVersion can find the current version
-                const mockVersionsResponse = { entries: [currentVersion, expectedVersion], total_count: 2 };
+                const mockVersionsResponse = { entries: [mostRecentVersion, versionToDelete], total_count: 2 };
                 const mockFileResponse = { version_limit: null };
 
                 mockedAPIMethods.addPermissions.mockReturnValue(mockVersionsResponse);
                 mockedAPIMethods.fetchData.mockResolvedValue([mockFileResponse, mockVersionsResponse]);
-                mockedAPIMethods.deleteVersion.mockResolvedValue();
                 mockedAPIMethods.fetchVersion.mockResolvedValue(newVersion);
 
                 const historyPushSpy = jest.fn();
 
                 renderComponent({
                     onVersionDelete: handleDelete,
-                    versionId: currentVersionId,
+                    versionId: selectedVersionId,
                     history: { ...history, push: historyPushSpy },
-                    match: { path: '/versions/:versionId', params: { versionId: currentVersionId } },
+                    match: { path: '/versions/:versionId', params: { versionId: selectedVersionId } },
                 });
 
                 await waitFor(() => {
@@ -162,9 +158,9 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 });
 
                 await waitFor(() => {
-                    expect(mockedAPIMethods.deleteVersion).toHaveBeenCalledWith(expectedVersion);
-                    expect(mockedAPIMethods.fetchVersion).toHaveBeenCalledWith(expectedVersion.id);
-                    expect(handleDelete).toHaveBeenCalledWith(expectedVersion.id);
+                    expect(mockedAPIMethods.deleteVersion).toHaveBeenCalledWith(versionToDelete);
+                    expect(mockedAPIMethods.fetchVersion).toHaveBeenCalledWith(versionToDelete.id);
+                    expect(handleDelete).toHaveBeenCalledWith(versionToDelete.id);
 
                     if (shouldCallHistoryPush) {
                         expect(historyPushSpy).toHaveBeenCalledWith(expect.stringContaining(expectedHistoryPath));
@@ -178,21 +174,21 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
 
     describe('handleActionDelete - Router Disabled', () => {
         test.each`
-            scenario                        | versionIdToDelete | currentVersionId | shouldCallNavigationHandler | expectedNavigationCall
-            ${'non-selected version'}       | ${'456'}          | ${'123'}         | ${false}                    | ${null}
-            ${'currently selected version'} | ${'456'}          | ${'456'}         | ${true}                     | ${{ versionId: '123' }}
+            scenario                        | versionIdToDelete | selectedVersionId | shouldCallNavigationHandler | expectedNavigationCall
+            ${'non-selected version'}       | ${'456'}          | ${'123'}          | ${false}                    | ${null}
+            ${'currently selected version'} | ${'456'}          | ${'456'}          | ${true}                     | ${{ versionId: '123' }}
         `(
             'should handle delete operation correctly when deleting $scenario',
-            async ({ versionIdToDelete, currentVersionId, shouldCallNavigationHandler, expectedNavigationCall }) => {
+            async ({ versionIdToDelete, selectedVersionId, shouldCallNavigationHandler, expectedNavigationCall }) => {
                 const handleDelete = jest.fn();
                 const mockInternalSidebarNavigationHandler = jest.fn();
                 const newVersion = { id: versionIdToDelete, trash_at: '' };
-                const expectedVersion = {
+                const versionToDelete = {
                     id: versionIdToDelete,
                     name: 'Version 1',
                     created_at: '2023-01-01T00:00:00Z',
                 };
-                const currentVersion = { id: '123', name: 'Current Version', created_at: '2023-01-02T00:00:00Z' };
+                const mostRecentVersion = { id: '123', name: 'Current Version', created_at: '2023-01-02T00:00:00Z' };
                 const mockInternalSidebarNavigation = {
                     sidebar: 'activity',
                     activeFeedEntryType: 'comments',
@@ -212,17 +208,16 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 });
 
                 // Include both versions so verifyVersion can find the current version
-                const mockVersionsResponse = { entries: [currentVersion, expectedVersion], total_count: 2 };
+                const mockVersionsResponse = { entries: [mostRecentVersion, versionToDelete], total_count: 2 };
                 const mockFileResponse = { version_limit: null };
 
                 mockedAPIMethods.addPermissions.mockReturnValue(mockVersionsResponse);
                 mockedAPIMethods.fetchData.mockResolvedValue([mockFileResponse, mockVersionsResponse]);
-                mockedAPIMethods.deleteVersion.mockResolvedValue();
                 mockedAPIMethods.fetchVersion.mockResolvedValue(newVersion);
 
                 renderComponentWithoutRouter({
                     onVersionDelete: handleDelete,
-                    versionId: currentVersionId,
+                    versionId: selectedVersionId,
                     internalSidebarNavigation: mockInternalSidebarNavigation,
                     internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
                 });
@@ -239,9 +234,9 @@ describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
                 });
 
                 await waitFor(() => {
-                    expect(mockedAPIMethods.deleteVersion).toHaveBeenCalledWith(expectedVersion);
-                    expect(mockedAPIMethods.fetchVersion).toHaveBeenCalledWith(expectedVersion.id);
-                    expect(handleDelete).toHaveBeenCalledWith(expectedVersion.id);
+                    expect(mockedAPIMethods.deleteVersion).toHaveBeenCalledWith(versionToDelete);
+                    expect(mockedAPIMethods.fetchVersion).toHaveBeenCalledWith(versionToDelete.id);
+                    expect(handleDelete).toHaveBeenCalledWith(versionToDelete.id);
 
                     if (shouldCallNavigationHandler) {
                         expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith({

@@ -275,11 +275,14 @@ class VersionsSidebarContainer extends React.Component<Props, State> {
         const { history, match, routerDisabled, internalSidebarNavigationHandler, internalSidebarNavigation } =
             this.props;
 
-        if (routerDisabled && internalSidebarNavigationHandler && versionId) {
-            internalSidebarNavigationHandler({
-                ...internalSidebarNavigation,
-                versionId,
-            });
+        if (routerDisabled && internalSidebarNavigationHandler) {
+            const navigationUpdate: InternalSidebarNavigation = { ...internalSidebarNavigation };
+            if (versionId) {
+                navigationUpdate.versionId = versionId;
+            } else {
+                delete navigationUpdate.versionId;
+            }
+            internalSidebarNavigationHandler(navigationUpdate);
         } else {
             history.push(generatePath(match.path, { ...match.params, versionId }));
         }
