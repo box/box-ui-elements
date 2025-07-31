@@ -23,8 +23,7 @@ export interface SubHeaderProps {
     gridMinColumns?: number;
     isSmall: boolean;
     maxGridColumnCountForWidth?: number;
-    metadataViewTitle?: string;
-    onClearSelectedKeys: () => void;
+    onClearSelectedItemIds: () => void;
     onCreate: () => void;
     onGridViewSliderChange?: (newSliderValue: number) => void;
     onItemClick: (id: string | null, triggerNavigationEvent: boolean | null) => void;
@@ -34,7 +33,8 @@ export interface SubHeaderProps {
     portalElement?: HTMLElement;
     rootId: string;
     rootName?: string;
-    selectedKeys: Selection;
+    selectedItemIds: Selection;
+    title?: string;
     view: View;
     viewMode?: ViewMode;
 }
@@ -47,10 +47,9 @@ const SubHeader = ({
     gridMaxColumns = 0,
     gridMinColumns = 0,
     maxGridColumnCountForWidth = 0,
-    metadataViewTitle,
     onGridViewSliderChange = noop,
     isSmall,
-    onClearSelectedKeys,
+    onClearSelectedItemIds,
     onCreate,
     onItemClick,
     onSortChange,
@@ -59,7 +58,8 @@ const SubHeader = ({
     portalElement,
     rootId,
     rootName,
-    selectedKeys,
+    selectedItemIds,
+    title,
     view,
     viewMode = VIEW_MODE_LIST,
 }: SubHeaderProps) => {
@@ -71,7 +71,7 @@ const SubHeader = ({
 
     return (
         <PageHeader.Root
-            className={classNames('be-sub-header', { 'SubHeader--noPadding': isMetadataViewV2Feature })}
+            className={classNames({ 'be-sub-header': !isMetadataViewV2Feature })}
             data-testid="be-sub-header"
             variant="inline"
         >
@@ -90,9 +90,10 @@ const SubHeader = ({
                 {isMetadataViewV2Feature && (
                     <SubHeaderLeftV2
                         currentCollection={currentCollection}
-                        title={metadataViewTitle}
-                        onClearSelectedKeys={onClearSelectedKeys}
-                        selectedKeys={selectedKeys}
+                        onClearSelectedItemIds={onClearSelectedItemIds}
+                        rootName={rootName}
+                        selectedItemIds={selectedItemIds}
+                        title={title}
                     />
                 )}
             </PageHeader.StartElements>

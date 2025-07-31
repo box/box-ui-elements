@@ -134,7 +134,6 @@ export interface ContentExplorerProps {
     messages?: StringMap;
     metadataQuery?: MetadataQuery;
     metadataViewProps?: Omit<MetadataViewContainerProps, 'hasError' | 'currentCollection'>;
-    metadataViewTitle?: string;
     onCreate?: (item: BoxItem) => void;
     onDelete?: (item: BoxItem) => void;
     onDownload?: (item: BoxItem) => void;
@@ -154,6 +153,7 @@ export interface ContentExplorerProps {
     staticHost?: string;
     staticPath?: string;
     theme?: Theme;
+    title?: string;
     token: Token;
     uploadHost?: string;
 }
@@ -174,12 +174,11 @@ type State = {
     isShareModalOpen: boolean;
     isUploadModalOpen: boolean;
     markers: Array<string | null | undefined>;
-    metadataAncestorFolderName: string | null;
     metadataTemplate: MetadataTemplate;
     rootName: string;
     searchQuery: string;
     selected?: BoxItem;
-    selectedKeys: Selection;
+    selectedItemIds: Selection;
     sortBy: SortBy | string;
     sortDirection: SortDirection;
     view: View;
@@ -242,7 +241,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         },
         contentUploaderProps: {},
         metadataViewProps: {},
-        metadataViewTitle: '',
+        title: '',
     };
 
     /**
@@ -301,10 +300,9 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen: false,
             isUploadModalOpen: false,
             markers: [],
-            metadataAncestorFolderName: null,
             metadataTemplate: {},
             rootName: '',
-            selectedKeys: new Set(),
+            selectedItemIds: new Set(),
             searchQuery: '',
             sortBy,
             sortDirection,
@@ -351,7 +349,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                 break;
             case DEFAULT_VIEW_METADATA:
                 this.showMetadataQueryResults();
-                this.fetchMetadataAncestorFolderName(metadataQuery?.ancestor_folder_id);
+                this.fetchFolderName(metadataQuery?.ancestor_folder_id);
                 break;
             default:
                 this.fetchFolder(currentFolderId);
@@ -366,11 +364,8 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
      * @inheritdoc
      * @return {void}
      */
-    componentDidUpdate(
-        { currentFolderId: prevFolderId, metadataQuery: prevMetadataQuery }: ContentExplorerProps,
-        prevState: State,
-    ): void {
-        const { currentFolderId, metadataQuery }: ContentExplorerProps = this.props;
+    componentDidUpdate({ currentFolderId: prevFolderId }: ContentExplorerProps, prevState: State): void {
+        const { currentFolderId }: ContentExplorerProps = this.props;
         const {
             currentCollection: { id },
         }: State = prevState;
@@ -381,10 +376,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
 
         if (typeof currentFolderId === 'string' && id !== currentFolderId) {
             this.fetchFolder(currentFolderId);
-        }
-
-        if (prevMetadataQuery?.ancestor_folder_id !== metadataQuery?.ancestor_folder_id) {
-            this.fetchMetadataAncestorFolderName(metadataQuery?.ancestor_folder_id);
         }
     }
 
@@ -1540,6 +1531,25 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         return maxWidthColumns;
     };
 
+    getMetadataViewProps = (): ContentExplorerProps['metadataViewProps'] => {
+        const { metadataViewProps } = this.props;
+        const { tableProps } = metadataViewProps ?? {};
+        const { onSelectionChange } = tableProps ?? {};
+        const { selectedItemIds } = this.state;
+
+        return {
+            ...metadataViewProps,
+            tableProps: {
+                ...tableProps,
+                selectedKeys: selectedItemIds,
+                onSelectionChange: (ids: Selection) => {
+                    onSelectionChange?.(ids);
+                    this.setState({ selectedItemIds: ids });
+                },
+            },
+        };
+    };
+
     /**
      * Change the current view mode
      *
@@ -1615,36 +1625,28 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         });
     };
 
-    handleClearSelectedKeys = () => {
-        this.setState({ selectedKeys: new Set() });
+    clearSelectedItemIds = () => {
+        this.setState({ selectedItemIds: new Set() });
     };
 
     /**
-     * Fetches the metadata ancestor folder name
+     * Fetches the folder name and stores it in state rootName if successful
      *
      * @private
      * @return {void}
      */
-    fetchMetadataAncestorFolderName = (ancestorFolderId?: string) => {
-        if (!ancestorFolderId) {
-            this.setState({ metadataAncestorFolderName: null });
-            return;
-        }
-
-        if (ancestorFolderId === '0') {
-            this.setState({ metadataAncestorFolderName: 'All Files' });
+    fetchFolderName = (folderId?: string) => {
+        if (!folderId) {
             return;
         }
 
         this.api.getFolderAPI(false).getFolderFields(
-            ancestorFolderId,
-            (folderInfo: { name?: string }) => {
-                this.setState({ metadataAncestorFolderName: folderInfo.name ?? null });
+            folderId,
+            ({ name }) => {
+                this.setState({ rootName: name });
             },
-            () => {
-                this.setState({ metadataAncestorFolderName: null });
-            },
-            { fields: ['name'] },
+            this.errorCallback,
+            { fields: [FIELD_NAME] },
         );
     };
 
@@ -1681,8 +1683,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             measureRef,
             messages,
             fieldsToShow,
-            metadataViewProps,
-            metadataViewTitle,
             onDownload,
             onPreview,
             onUpload,
@@ -1695,6 +1695,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             staticPath,
             previewLibraryVersion,
             theme,
+            title,
             token,
             uploadHost,
         }: ContentExplorerProps = this.props;
@@ -1713,7 +1714,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
             isShareModalOpen,
             isUploadModalOpen,
             markers,
-            metadataAncestorFolderName,
             metadataTemplate,
             rootName,
             selected,
@@ -1734,17 +1734,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         const hasNextMarker: boolean = !!markers[currentPageNumber + 1];
         const hasPreviousMarker: boolean = currentPageNumber === 1 || !!markers[currentPageNumber - 1];
 
-        const combinedMetadataViewProps = {
-            ...metadataViewProps,
-            tableProps: {
-                ...metadataViewProps?.tableProps,
-                selectedKeys: this.state.selectedKeys,
-                onSelectionChange: (keys: Selection) => {
-                    metadataViewProps?.tableProps?.onSelectionChange?.(keys);
-                    this.setState({ selectedKeys: keys });
-                },
-            },
-        };
+        const metadataViewProps = this.getMetadataViewProps();
 
         /* eslint-disable jsx-a11y/no-static-element-interactions */
         /* eslint-disable jsx-a11y/no-noninteractive-tabindex */
@@ -1769,16 +1759,16 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 gridMaxColumns={GRID_VIEW_MAX_COLUMNS}
                                 gridMinColumns={GRID_VIEW_MIN_COLUMNS}
                                 maxGridColumnCountForWidth={maxGridColumnCount}
-                                metadataViewTitle={metadataViewTitle || metadataAncestorFolderName}
                                 onUpload={this.upload}
+                                onClearSelectedItemIds={this.clearSelectedItemIds}
                                 onCreate={this.createFolder}
                                 onGridViewSliderChange={this.onGridViewSliderChange}
                                 onItemClick={this.fetchFolder}
                                 onSortChange={this.sort}
                                 onViewModeChange={this.changeViewMode}
                                 portalElement={this.rootElement}
-                                selectedKeys={this.state.selectedKeys}
-                                onClearSelectedKeys={this.handleClearSelectedKeys}
+                                selectedItemIds={this.state.selectedItemIds}
+                                title={title}
                             />
 
                             <Content
@@ -1796,7 +1786,7 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
                                 itemActions={itemActions}
                                 fieldsToShow={fieldsToShow}
                                 metadataTemplate={metadataTemplate}
-                                metadataViewProps={combinedMetadataViewProps}
+                                metadataViewProps={metadataViewProps}
                                 onItemClick={this.onItemClick}
                                 onItemDelete={this.delete}
                                 onItemDownload={this.download}

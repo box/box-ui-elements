@@ -1090,7 +1090,7 @@ const messages = defineMessages({
         defaultMessage: 'Personal Folder',
     },
     numFilesSelected: {
-        id: 'be.contentExplorer.numFilesSelected',
+        id: 'be.numFilesSelected',
         description: 'Text shown to indicate the number of files selected',
         defaultMessage: `
             {numSelected, plural,
