@@ -51,7 +51,7 @@ export default function withSidebarAnnotations(
 
         getInternalNavigationMatch = (
             navigation: InternalSidebarNavigation,
-        ): { params: { annotationId?: string, fileVersionId?: string } } | null => {
+        ): { params: { annotationId?: string, fileVersionId: string } } | null => {
             if (
                 !('activeFeedEntryType' in navigation) ||
                 navigation.activeFeedEntryType !== FeedEntryType.ANNOTATIONS ||
@@ -150,31 +150,28 @@ export default function withSidebarAnnotations(
 
             let fileVersionId;
             let prevFileVersionId;
-            let isAnnotationsPath;
-            let isTransitioningToAnnotationPath;
+            let match;
 
             if (routerDisabled && internalSidebarNavigation) {
                 // Use internal navigation when router is disabled
-                const match = this.getInternalNavigationMatch(internalSidebarNavigation);
+                match = this.getInternalNavigationMatch(internalSidebarNavigation);
                 const prevMatch = prevInternalSidebarNavigation
                     ? this.getInternalNavigationMatch(prevInternalSidebarNavigation)
                     : null;
 
                 fileVersionId = getProp(match, 'params.fileVersionId');
                 prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
-                isAnnotationsPath = !!match;
-                isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
             } else {
                 // Use router-based navigation
-                const match = getAnnotationsMatchPath(location);
+                match = getAnnotationsMatchPath(location);
                 const prevMatch = getAnnotationsMatchPath(prevLocation);
 
                 fileVersionId = getProp(match, 'params.fileVersionId');
                 prevFileVersionId = getProp(prevMatch, 'params.fileVersionId');
-                isAnnotationsPath = !!match;
-                isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
             }
 
+            const isAnnotationsPath = !!match;
+            const isTransitioningToAnnotationPath = activeAnnotationId && !isAnnotationsPath;
             const hasActiveAnnotationChanged = prevActiveAnnotationId !== activeAnnotationId;
 
             if (action === 'reply_create_start' || action === 'reply_create_end') {

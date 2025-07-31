@@ -139,10 +139,6 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         });
 
         describe('constructor - Router Disabled', () => {
-            beforeEach(() => {
-                jest.resetAllMocks();
-            });
-
             test('should call redirectDeeplinkedAnnotation when router disabled', () => {
                 // In router-disabled mode, getAnnotationsMatchPath is NOT called
                 // Only getInternalNavigationMatch is used internally
