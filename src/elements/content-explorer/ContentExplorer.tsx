@@ -241,7 +241,6 @@ class ContentExplorer extends Component<ContentExplorerProps, State> {
         },
         contentUploaderProps: {},
         metadataViewProps: {},
-        title: '',
     };
 
     /**

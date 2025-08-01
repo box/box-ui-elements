@@ -387,6 +387,11 @@ const messages = defineMessages({
         description: 'Aria label for the clear button in the search box.',
         defaultMessage: 'Clear search',
     },
+    clearSelection: {
+        id: 'be.clearSelection',
+        description: 'Aria label for the clear selection button.',
+        defaultMessage: 'Clear selection',
+    },
     searchPlaceholder: {
         id: 'be.searchPlaceholder',
         description: 'Shown as a placeholder in the search box.',

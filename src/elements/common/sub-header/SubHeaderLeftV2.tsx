@@ -21,10 +21,10 @@ const SubHeaderLeftV2 = (props: SubHeaderLeftV2Props) => {
     const { formatMessage } = useIntl();
 
     // Generate selected item text based on selected keys
-    const selectedItemText = useMemo(() => {
+    const selectedItemText: string = useMemo(() => {
         const selectedCount = selectedItemIds === 'all' ? currentCollection.items.length : selectedItemIds.size;
 
-        if (typeof selectedCount !== 'number' || selectedCount === 0) {
+        if (selectedCount === 0) {
             return '';
         }
 
@@ -33,9 +33,7 @@ const SubHeaderLeftV2 = (props: SubHeaderLeftV2Props) => {
             const selectedKey =
                 selectedItemIds === 'all' ? currentCollection.items[0].id : selectedItemIds.values().next().value;
             const selectedItem = currentCollection.items.find(item => item.id === selectedKey);
-            if (typeof selectedItem?.name === 'string') {
-                return selectedItem.name as string;
-            }
+            return selectedItem?.name ?? '';
         }
         // Case 2: Multiple selected items - show count
         if (selectedCount > 1) {
@@ -47,10 +45,10 @@ const SubHeaderLeftV2 = (props: SubHeaderLeftV2Props) => {
     // Case 1 and 2: selected item text with X button
     if (selectedItemText) {
         return (
-            <PageHeader.Root className="be-sub-header-left-v2-selected" variant="default">
+            <PageHeader.Root className="be-SubHeaderLeftV2--selection" variant="default">
                 <PageHeader.Corner>
                     <IconButton
-                        aria-label="Clear selection"
+                        aria-label={formatMessage(messages.clearSelection)}
                         icon={XMark}
                         onClick={onClearSelectedItemIds}
                         variant="small-utility"
@@ -58,7 +56,7 @@ const SubHeaderLeftV2 = (props: SubHeaderLeftV2Props) => {
                 </PageHeader.Corner>
 
                 <PageHeader.StartElements>
-                    <Text as="p">{selectedItemText}</Text>
+                    <Text as="span">{selectedItemText}</Text>
                 </PageHeader.StartElements>
             </PageHeader.Root>
         );
@@ -67,7 +65,7 @@ const SubHeaderLeftV2 = (props: SubHeaderLeftV2Props) => {
     // Case 3: No selected items - show title if provided, otherwise show root name
     return (
         <Text as="h1" variant="titleXLarge">
-            {title || rootName}
+            {title ?? rootName}
         </Text>
     );
 };
