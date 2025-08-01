@@ -123,7 +123,6 @@ const PreviewNavigationWithoutRouter = ({
             {hasLeftNavigation && (
                 <PlainButton
                     className="bcpr-navigate-left"
-                    data-testid="preview-navigation-left"
                     onClick={() => {
                         handleInternalNavigation();
                         onNavigateLeft();
@@ -137,7 +136,6 @@ const PreviewNavigationWithoutRouter = ({
             {hasRightNavigation && (
                 <PlainButton
                     className="bcpr-navigate-right"
-                    data-testid="preview-navigation-right"
                     onClick={() => {
                         handleInternalNavigation();
                         onNavigateRight();
