@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { shallow } from 'enzyme/build';
+import { createBrowserHistory } from 'history';
+import { Router } from 'react-router-dom';
+import { render, waitFor, act, screen } from '../../../../test-utils/testing-library';
 import messages from '../messages';
 import openUrlInsideIframe from '../../../../utils/iframe';
+import VersionsSidebarAPI from '../VersionsSidebarAPI';
+import VersionsSidebar from '../VersionsSidebar';
 import { VersionsSidebarContainerComponent } from '../VersionsSidebarContainer';
 
 jest.mock('react-router-dom', () => ({
@@ -18,6 +23,10 @@ jest.mock('../../../../utils/iframe', () => ({
     default: jest.fn(),
 }));
 
+jest.mock('../VersionsSidebarAPI');
+
+jest.mock('../VersionsSidebar', () => jest.fn(() => <div data-testid="versions-sidebar" />));
+
 const versions = [
     { id: '123', name: 'Version 1' },
     { id: '456', name: 'Version 2' },
@@ -25,73 +34,221 @@ const versions = [
 ];
 
 describe('elements/content-sidebar/versions/VersionsSidebarContainer', () => {
-    const versionsAPI = {
+    const mockedAPIMethods = {
+        fetchData: jest.fn(),
+        deleteVersion: jest.fn(),
+        fetchVersion: jest.fn(),
+        fetchDownloadUrl: jest.fn(),
+        promoteVersion: jest.fn(),
+        restoreVersion: jest.fn(),
         addPermissions: jest.fn(),
         sortVersions: jest.fn(),
     };
+
+    const versionsAPI = {
+        ...mockedAPIMethods,
+    };
+
     const api = {
         getVersionsAPI: () => versionsAPI,
     };
-    const getWrapper = ({ ...props } = {}) =>
+
+    VersionsSidebarAPI.mockImplementation(() => mockedAPIMethods);
+
+    const getWrapper = (props = {}) =>
         shallow(<VersionsSidebarContainerComponent api={api} fileId="12345" {...props} />);
 
-    describe('componentDidUpdate', () => {
-        let onVersionChange;
-        let wrapper;
-        let instance;
+    const history = createBrowserHistory();
 
-        beforeEach(() => {
-            onVersionChange = jest.fn();
-            wrapper = getWrapper({ onVersionChange, refreshIdentity: false });
-            instance = wrapper.instance();
-        });
+    const renderComponent = (props = {}) => {
+        return render(
+            <Router history={history}>
+                <VersionsSidebarContainerComponent api={api} fileId="12345" match={{}} history={history} {...props} />
+            </Router>,
+        );
+    };
 
-        test('should verify the selected version id exists when it changes', () => {
-            const version = { id: '45678' };
-            const currentVersion = { id: '54321' };
+    const renderComponentWithoutRouter = (props = {}) => {
+        return render(<VersionsSidebarContainerComponent api={api} fileId="12345" routerDisabled={true} {...props} />);
+    };
 
-            instance.verifyVersion = jest.fn();
-
-            wrapper.setState({ versions: [currentVersion, version] });
-            wrapper.setProps({ versionId: '45678' });
-
-            expect(instance.verifyVersion).toHaveBeenCalled();
-        });
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockedAPIMethods.fetchData.mockResolvedValue([{}, {}]);
+        mockedAPIMethods.deleteVersion.mockResolvedValue();
+        mockedAPIMethods.fetchVersion.mockResolvedValue({});
+        mockedAPIMethods.fetchDownloadUrl.mockResolvedValue();
+        mockedAPIMethods.promoteVersion.mockResolvedValue();
+        mockedAPIMethods.restoreVersion.mockResolvedValue();
     });
 
     describe('componentDidMount', () => {
+        beforeEach(() => {
+            history.push = jest.fn();
+        });
+
         test('should call onLoad after a successful fetchData() call', async () => {
             const onLoad = jest.fn();
-            const fetchData = jest.fn(() => Promise.resolve());
-            const instance = getWrapper({ onLoad }).instance();
 
-            instance.fetchData = fetchData;
+            await act(async () => {
+                renderComponent({ onLoad });
+            });
 
-            await instance.componentDidMount();
-            expect(onLoad).toHaveBeenCalled();
+            await waitFor(() => {
+                expect(onLoad).toHaveBeenCalledTimes(1);
+            });
         });
     });
 
     describe('handleActionDelete', () => {
-        test('should call api endpoint helpers', () => {
-            const handleDelete = jest.fn();
-            const wrapper = getWrapper({ onVersionDelete: handleDelete, versionId: '123' });
-            const instance = wrapper.instance();
-            const version = { id: '456' };
-            const newVersion = { id: '456', trash_at: '' };
+        test.each`
+            scenario                        | versionIdToDelete | selectedVersionId | shouldCallHistoryPush | expectedHistoryPath
+            ${'non-selected version'}       | ${'456'}          | ${'123'}          | ${false}              | ${null}
+            ${'currently selected version'} | ${'456'}          | ${'456'}          | ${true}               | ${'/versions/123'}
+        `(
+            'should handle delete operation correctly when deleting $scenario',
+            async ({ versionIdToDelete, selectedVersionId, shouldCallHistoryPush, expectedHistoryPath }) => {
+                const handleDelete = jest.fn();
+                const newVersion = { id: versionIdToDelete, trash_at: '' };
+                const versionToDelete = {
+                    id: versionIdToDelete,
+                    name: 'Version 1',
+                    created_at: '2023-01-01T00:00:00Z',
+                };
+                const mostRecentVersion = { id: '123', name: 'Current Version', created_at: '2023-01-02T00:00:00Z' };
 
-            instance.api.deleteVersion = jest.fn().mockResolvedValueOnce();
-            instance.api.fetchVersion = jest.fn().mockResolvedValueOnce(newVersion);
-            instance.findVersion = jest.fn(() => version);
-            instance.handleDeleteSuccess = jest.fn();
+                let triggerDelete;
+                VersionsSidebar.mockImplementation(({ onDelete, versions: versionsList }) => {
+                    triggerDelete = () => onDelete(versionIdToDelete);
+                    return (
+                        <div data-testid="versions-sidebar">
+                            {versionsList && versionsList.length > 0 && (
+                                <div data-testid="versions-loaded">Versions loaded</div>
+                            )}
+                        </div>
+                    );
+                });
 
-            instance.handleActionDelete(version.id).then(() => {
-                expect(instance.api.deleteVersion).toHaveBeenCalledWith(version);
-                expect(instance.api.fetchVersion).toHaveBeenCalled();
-                expect(instance.handleDeleteSuccess).toHaveBeenCalledWith(newVersion);
-                expect(handleDelete).toHaveBeenCalledWith(version.id);
-            });
-        });
+                // Include both versions so verifyVersion can find the current version
+                const mockVersionsResponse = { entries: [mostRecentVersion, versionToDelete], total_count: 2 };
+                const mockFileResponse = { version_limit: null };
+
+                mockedAPIMethods.addPermissions.mockReturnValue(mockVersionsResponse);
+                mockedAPIMethods.fetchData.mockResolvedValue([mockFileResponse, mockVersionsResponse]);
+                mockedAPIMethods.fetchVersion.mockResolvedValue(newVersion);
+
+                const historyPushSpy = jest.fn();
+
+                renderComponent({
+                    onVersionDelete: handleDelete,
+                    versionId: selectedVersionId,
+                    history: { ...history, push: historyPushSpy },
+                    match: { path: '/versions/:versionId', params: { versionId: selectedVersionId } },
+                });
+
+                await waitFor(() => {
+                    expect(screen.getByTestId('versions-sidebar')).toBeInTheDocument();
+                });
+                await waitFor(() => {
+                    expect(screen.queryByTestId('versions-loaded')).toBeInTheDocument();
+                });
+
+                await act(async () => {
+                    triggerDelete();
+                });
+
+                await waitFor(() => {
+                    expect(mockedAPIMethods.deleteVersion).toHaveBeenCalledWith(versionToDelete);
+                    expect(mockedAPIMethods.fetchVersion).toHaveBeenCalledWith(versionToDelete.id);
+                    expect(handleDelete).toHaveBeenCalledWith(versionToDelete.id);
+
+                    if (shouldCallHistoryPush) {
+                        expect(historyPushSpy).toHaveBeenCalledWith(expect.stringContaining(expectedHistoryPath));
+                    } else {
+                        expect(historyPushSpy).not.toHaveBeenCalled();
+                    }
+                });
+            },
+        );
+    });
+
+    describe('handleActionDelete - Router Disabled', () => {
+        test.each`
+            scenario                        | versionIdToDelete | selectedVersionId | shouldCallNavigationHandler | expectedNavigationCall
+            ${'non-selected version'}       | ${'456'}          | ${'123'}          | ${false}                    | ${null}
+            ${'currently selected version'} | ${'456'}          | ${'456'}          | ${true}                     | ${{ versionId: '123' }}
+        `(
+            'should handle delete operation correctly when deleting $scenario',
+            async ({ versionIdToDelete, selectedVersionId, shouldCallNavigationHandler, expectedNavigationCall }) => {
+                const handleDelete = jest.fn();
+                const mockInternalSidebarNavigationHandler = jest.fn();
+                const newVersion = { id: versionIdToDelete, trash_at: '' };
+                const versionToDelete = {
+                    id: versionIdToDelete,
+                    name: 'Version 1',
+                    created_at: '2023-01-01T00:00:00Z',
+                };
+                const mostRecentVersion = { id: '123', name: 'Current Version', created_at: '2023-01-02T00:00:00Z' };
+                const mockInternalSidebarNavigation = {
+                    sidebar: 'activity',
+                    activeFeedEntryType: 'comments',
+                    activeFeedEntryId: '789',
+                };
+
+                let triggerDelete;
+                VersionsSidebar.mockImplementation(({ onDelete, versions: versionsList }) => {
+                    triggerDelete = () => onDelete(versionIdToDelete);
+                    return (
+                        <div data-testid="versions-sidebar">
+                            {versionsList && versionsList.length > 0 && (
+                                <div data-testid="versions-loaded">Versions loaded</div>
+                            )}
+                        </div>
+                    );
+                });
+
+                // Include both versions so verifyVersion can find the current version
+                const mockVersionsResponse = { entries: [mostRecentVersion, versionToDelete], total_count: 2 };
+                const mockFileResponse = { version_limit: null };
+
+                mockedAPIMethods.addPermissions.mockReturnValue(mockVersionsResponse);
+                mockedAPIMethods.fetchData.mockResolvedValue([mockFileResponse, mockVersionsResponse]);
+                mockedAPIMethods.fetchVersion.mockResolvedValue(newVersion);
+
+                renderComponentWithoutRouter({
+                    onVersionDelete: handleDelete,
+                    versionId: selectedVersionId,
+                    internalSidebarNavigation: mockInternalSidebarNavigation,
+                    internalSidebarNavigationHandler: mockInternalSidebarNavigationHandler,
+                });
+
+                await waitFor(() => {
+                    expect(screen.getByTestId('versions-sidebar')).toBeInTheDocument();
+                });
+                await waitFor(() => {
+                    expect(screen.queryByTestId('versions-loaded')).toBeInTheDocument();
+                });
+
+                await act(async () => {
+                    triggerDelete();
+                });
+
+                await waitFor(() => {
+                    expect(mockedAPIMethods.deleteVersion).toHaveBeenCalledWith(versionToDelete);
+                    expect(mockedAPIMethods.fetchVersion).toHaveBeenCalledWith(versionToDelete.id);
+                    expect(handleDelete).toHaveBeenCalledWith(versionToDelete.id);
+
+                    if (shouldCallNavigationHandler) {
+                        expect(mockInternalSidebarNavigationHandler).toHaveBeenCalledWith({
+                            ...mockInternalSidebarNavigation,
+                            ...expectedNavigationCall,
+                        });
+                    } else {
+                        expect(mockInternalSidebarNavigationHandler).not.toHaveBeenCalled();
+                    }
+                });
+            },
+        );
     });
 
     describe('handleActionDownload', () => {

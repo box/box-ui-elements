@@ -20,7 +20,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
 `;
 
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchError should set state to default values with error message 1`] = `
-<VersionsSidebar
+<mockConstructor
   error={
     {
       "defaultMessage": "File versions could not be retrieved.",
@@ -44,7 +44,7 @@ exports[`elements/content-sidebar/versions/VersionsSidebarContainer handleFetchE
 `;
 
 exports[`elements/content-sidebar/versions/VersionsSidebarContainer render should match its snapshot 1`] = `
-<VersionsSidebar
+<mockConstructor
   fileId="12345"
   isArchived={false}
   isLoading={true}
