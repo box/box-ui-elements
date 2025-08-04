@@ -78,8 +78,8 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 const collection = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
                 renderComponentWithRouter({ collection, currentIndex });
 
-                const leftButton = screen.queryByTestId('preview-navigation-left');
-                const rightButton = screen.queryByTestId('preview-navigation-right');
+                const leftButton = screen.queryByRole('button', { name: 'Previous File' });
+                const rightButton = screen.queryByRole('button', { name: 'Next File' });
 
                 if (expectLeft) {
                     expect(leftButton).toBeInTheDocument();
@@ -103,7 +103,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 historyMock: historyMockDefault,
             });
 
-            const leftButton = screen.getByTestId('preview-navigation-left');
+            const leftButton = screen.getByRole('button', { name: 'Previous File' });
             expect(leftButton).toBeInTheDocument();
 
             await user.click(leftButton);
@@ -121,7 +121,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 historyMock: historyMockDefault,
             });
 
-            const rightButton = screen.getByTestId('preview-navigation-right');
+            const rightButton = screen.getByRole('button', { name: 'Next File' });
             expect(rightButton).toBeInTheDocument();
 
             await user.click(rightButton);
@@ -139,7 +139,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 historyMock: deeplinkedMetadataHistoryMock,
             });
 
-            const rightButton = screen.getByTestId('preview-navigation-right');
+            const rightButton = screen.getByRole('button', { name: 'Next File' });
             expect(rightButton).toBeInTheDocument();
 
             await user.click(rightButton);
@@ -157,7 +157,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 historyMock: deeplinkedMetadataHistoryMock,
             });
 
-            const leftButton = screen.getByTestId('preview-navigation-left');
+            const leftButton = screen.getByRole('button', { name: 'Previous File' });
             expect(leftButton).toBeInTheDocument();
 
             await user.click(leftButton);
@@ -172,8 +172,8 @@ describe('elements/content-preview/PreviewNavigation', () => {
         test('should render correctly without router', () => {
             renderComponentWithoutRouter({ currentIndex: 1 });
 
-            expect(screen.getByTestId('preview-navigation-left')).toBeInTheDocument();
-            expect(screen.getByTestId('preview-navigation-right')).toBeInTheDocument();
+            expect(screen.getByRole('button', { name: 'Previous File' })).toBeInTheDocument();
+            expect(screen.getByRole('button', { name: 'Next File' })).toBeInTheDocument();
         });
 
         test('should call internalSidebarNavigationHandler when left navigation button is clicked', async () => {
@@ -188,7 +188,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 internalSidebarNavigation: mockInternalSidebarNavigation,
             });
 
-            const leftButton = screen.getByTestId('preview-navigation-left');
+            const leftButton = screen.getByRole('button', { name: 'Previous File' });
             await user.click(leftButton);
 
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
@@ -209,7 +209,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 internalSidebarNavigation: mockInternalSidebarNavigation,
             });
 
-            const rightButton = screen.getByTestId('preview-navigation-right');
+            const rightButton = screen.getByRole('button', { name: 'Next File' });
             await user.click(rightButton);
 
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
@@ -229,7 +229,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 internalSidebarNavigation: mockInternalSidebarNavigation,
             });
 
-            const leftButton = screen.getByTestId('preview-navigation-left');
+            const leftButton = screen.getByRole('button', { name: 'Previous File' });
             await user.click(leftButton);
 
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
@@ -252,7 +252,7 @@ describe('elements/content-preview/PreviewNavigation', () => {
                 internalSidebarNavigation: mockInternalSidebarNavigation,
             });
 
-            const rightButton = screen.getByTestId('preview-navigation-right');
+            const rightButton = screen.getByRole('button', { name: 'Next File' });
             await user.click(rightButton);
 
             expect(mockNavigationHandler).toHaveBeenCalledTimes(1);
