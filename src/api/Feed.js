@@ -362,8 +362,13 @@ class Feed extends Base {
                 type: FEED_ITEM_TYPE_ANNOTATION,
             };
 
-            this.addPendingItem(this.file.id, currentUser, newAnnotation);
+            // const el = document.getElementsByTagName('video')[0];
+            // const time = el.currentTime;
+            // newAnnotation.target.location.type = 'time';
+            // newAnnotation.target.location.value = Math.round(time * 100) / 100;
 
+            this.addPendingItem(this.file.id, currentUser, newAnnotation);
+            // </Object>this.updateFeedItem({ ...newAnnotation, isPending: false }, id);
             return;
         }
         // Create action has completed, so update the existing pending item
@@ -1689,7 +1694,7 @@ class Feed extends Base {
             created_at: date,
             created_by: currentUser,
             modified_at: date,
-            isPending: true,
+            isPending: false,
             ...itemBase,
         };
         const cachedItems = this.getCachedItems(this.file.id);

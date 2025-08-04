@@ -12,6 +12,17 @@ import type { SelectorItems } from '../../../common/types/core';
 import Toggle from '../../toggle/Toggle';
 import { UNEDITABLE_TIMESTAMP_TEXT } from './utils';
 
+// Custom style map for Draft.js inline styles
+const customStyleMap = {
+    BLACK: {
+        color: 'black',
+    },
+    TIMESTAMP: {
+        color: 'blue',
+        fontWeight: 'bold',
+    },
+};
+
 /**
  * Scans a Draft ContentBlock for entity ranges, so they can be annotated
  * @see docs at {@link https://draftjs.org/docs/advanced-topics-decorators.html#compositedecorator}
@@ -491,6 +502,7 @@ class DraftJSMentionSelector extends React.Component<Props, State> {
                         placeholder={placeholder}
                         selectorRow={selectorRow}
                         startMentionMessage={startMentionMessage}
+                        customStyleMap={customStyleMap} // ✅ Pass the custom style map
                     />
 
                     {isRequired && this.getIsVideoTimestampEnabled() && (
