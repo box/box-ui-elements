@@ -387,6 +387,11 @@ const messages = defineMessages({
         description: 'Aria label for the clear button in the search box.',
         defaultMessage: 'Clear search',
     },
+    clearSelection: {
+        id: 'be.clearSelection',
+        description: 'Aria label for the clear selection button.',
+        defaultMessage: 'Clear selection',
+    },
     searchPlaceholder: {
         id: 'be.searchPlaceholder',
         description: 'Shown as a placeholder in the search box.',
@@ -1088,6 +1093,17 @@ const messages = defineMessages({
         id: 'be.personalFolder',
         description: 'Icon title for a Box item of type folder that is private and has no collaborators',
         defaultMessage: 'Personal Folder',
+    },
+    numFilesSelected: {
+        id: 'be.numFilesSelected',
+        description: 'Text shown to indicate the number of files selected',
+        defaultMessage: `
+            {numSelected, plural,
+                =0 {0 files selected}
+                one {1 file selected}
+                other {# files selected}
+            }
+        `,
     },
 });
 
