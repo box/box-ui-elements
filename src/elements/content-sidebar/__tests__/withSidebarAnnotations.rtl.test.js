@@ -92,7 +92,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         return render(createComponentElement(props));
     };
 
-    const renderWithRouterDisabled = (props = {}) => {
+    const renderWithSidebarAnnotationsRouterDisabled = (props = {}) => {
         return render(createRouterDisabledComponentElement(props));
     };
 
@@ -101,7 +101,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
     });
 
     describe('constructor', () => {
-        test('should call redirectDeeplinkedAnnotation', () => {
+        test('should call redirectDeeplinkedAnnotation (use side effect to test it)', () => {
             renderWithSidebarAnnotations();
 
             expect(getAnnotationsMatchPath).toHaveBeenCalledTimes(1);
@@ -142,7 +142,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             test('should call redirectDeeplinkedAnnotation when router disabled', () => {
                 // In router-disabled mode, getAnnotationsMatchPath is NOT called
                 // Only getInternalNavigationMatch is used internally
-                renderWithRouterDisabled();
+                renderWithSidebarAnnotationsRouterDisabled();
 
                 expect(getAnnotationsMatchPath).toHaveBeenCalledTimes(0);
             });
@@ -166,7 +166,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                           }
                         : { sidebar: 'activity' };
 
-                    renderWithRouterDisabled({
+                    renderWithSidebarAnnotationsRouterDisabled({
                         internalSidebarNavigation: internalNavigation,
                     });
 
@@ -188,7 +188,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                         fileVersionId,
                     };
 
-                    renderWithRouterDisabled({
+                    renderWithSidebarAnnotationsRouterDisabled({
                         internalSidebarNavigation: internalNavigation,
                     });
 
@@ -901,7 +901,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                     prevNavigation = { sidebar: 'activity' };
                 }
 
-                const { rerender } = renderWithRouterDisabled({
+                const { rerender } = renderWithSidebarAnnotationsRouterDisabled({
                     internalSidebarNavigation: prevNavigation,
                     annotatorState: { activeAnnotationId: prevActiveAnnotationId },
                 });
@@ -922,7 +922,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         test('should use the provided fileVersionId from internal navigation if provided', () => {
             const internalNavigation = {};
 
-            const { rerender } = renderWithRouterDisabled({
+            const { rerender } = renderWithSidebarAnnotationsRouterDisabled({
                 internalSidebarNavigation: internalNavigation,
                 annotatorState: { activeAnnotationId: 'initial' },
             });
@@ -955,7 +955,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                 sidebar: 'activity',
             };
 
-            const { rerender } = renderWithRouterDisabled({
+            const { rerender } = renderWithSidebarAnnotationsRouterDisabled({
                 internalSidebarNavigation: internalNavigation,
                 annotatorState: { activeAnnotationId: null },
             });
@@ -992,7 +992,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
         `(
             'should set internal navigation based on fileVersionId=$fileVersionId and activeAnnotationId=$activeAnnotationId',
             ({ activeAnnotationId, fileVersionId, internalNavigation, expectedNavigation }) => {
-                const { rerender } = renderWithRouterDisabled({
+                const { rerender } = renderWithSidebarAnnotationsRouterDisabled({
                     internalSidebarNavigation: internalNavigation,
                     annotatorState: { activeAnnotationId: 'initial' },
                 });
@@ -1032,10 +1032,9 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
             'should call updateActiveVersion if fileVersionId changes from $prevFileVersionId to $fileVersionId',
             ({ prevFileVersionId, fileVersionId, expectedOnVersionChangeCalls }) => {
                 const version = { type: FEED_ITEM_TYPE_VERSION, id: fileVersionId };
-
                 const versions = [{ type: FEED_ITEM_TYPE_VERSION, id: prevFileVersionId }];
                 if (fileVersionId) {
-                    versions.push({ type: FEED_ITEM_TYPE_VERSION, id: fileVersionId });
+                    versions.push(version);
                 }
                 feedAPI.getCachedItems.mockReturnValue({ items: versions });
 
@@ -1114,7 +1113,7 @@ describe('elements/content-sidebar/withSidebarAnnotations', () => {
                       }
                     : { sidebar: 'activity' };
 
-                const { rerender } = renderWithRouterDisabled({
+                const { rerender } = renderWithSidebarAnnotationsRouterDisabled({
                     internalSidebarNavigation: prevInternalNavigation,
                 });
 

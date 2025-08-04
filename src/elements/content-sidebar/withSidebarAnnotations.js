@@ -7,8 +7,12 @@ import { FEED_ITEM_TYPE_VERSION } from '../../constants';
 import { getBadUserError } from '../../utils/error';
 import type { WithAnnotatorContextProps } from '../common/annotator-context';
 import type { BoxItem, User } from '../../common/types/core';
-import type { InternalSidebarNavigation, InternalSidebarNavigationHandler } from '../common/types/SidebarNavigation';
-import { ViewType, FeedEntryType } from '../common/types/SidebarNavigation';
+import {
+    ViewType,
+    FeedEntryType,
+    type InternalSidebarNavigation,
+    type InternalSidebarNavigationHandler,
+} from '../common/types/SidebarNavigation';
 
 type Props = {
     ...ContextRouter,
