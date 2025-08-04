@@ -4,14 +4,14 @@ import ItemGrid from '../common/item-grid';
 import ItemList from '../common/item-list';
 import ProgressBar from '../common/progress-bar';
 import MetadataBasedItemList from '../../features/metadata-based-view';
-import MetadataView from './MetadataView';
+import MetadataViewContainer, { MetadataViewContainerProps } from './MetadataViewContainer';
 import { isFeatureEnabled, type FeatureConfig } from '../common/feature-checking';
 import { VIEW_ERROR, VIEW_METADATA, VIEW_MODE_LIST, VIEW_MODE_GRID, VIEW_SELECTED } from '../../constants';
 import type { ViewMode } from '../common/flowTypes';
 import type { ItemAction, ItemEventHandlers, ItemEventPermissions } from '../common/item';
 import type { FieldsToShow } from '../../common/types/metadataQueries';
 import type { BoxItem, Collection, View } from '../../common/types/core';
-import type { MetadataFieldValue } from '../../common/types/metadata';
+import type { MetadataFieldValue, MetadataTemplate } from '../../common/types/metadata';
 import './Content.scss';
 
 /**
@@ -36,6 +36,8 @@ export interface ContentProps extends Required<ItemEventHandlers>, Required<Item
     isSmall: boolean;
     isTouch: boolean;
     itemActions?: ItemAction[];
+    metadataTemplate?: MetadataTemplate;
+    metadataViewProps?: Omit<MetadataViewContainerProps, 'currentCollection'>;
     onMetadataUpdate: (
         item: BoxItem,
         field: string,
@@ -53,6 +55,8 @@ const Content = ({
     features,
     fieldsToShow = [],
     gridColumnCount,
+    metadataTemplate,
+    metadataViewProps,
     onMetadataUpdate,
     onSortChange,
     view,
@@ -70,7 +74,7 @@ const Content = ({
         <div className="bce-content">
             {view === VIEW_ERROR || view === VIEW_SELECTED ? null : <ProgressBar percent={percentLoaded} />}
 
-            {isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
+            {!isMetadataViewV2Feature && isViewEmpty && <EmptyView view={view} isLoading={percentLoaded !== 100} />}
             {!isMetadataViewV2Feature && !isViewEmpty && isMetadataBasedView && (
                 <MetadataBasedItemList
                     currentCollection={currentCollection}
@@ -79,7 +83,15 @@ const Content = ({
                     {...rest}
                 />
             )}
-            {isMetadataViewV2Feature && !isViewEmpty && isMetadataBasedView && <MetadataView />}
+            {isMetadataViewV2Feature && isMetadataBasedView && (
+                <MetadataViewContainer
+                    currentCollection={currentCollection}
+                    isLoading={percentLoaded !== 100}
+                    hasError={view === VIEW_ERROR}
+                    metadataTemplate={metadataTemplate}
+                    {...metadataViewProps}
+                />
+            )}
             {!isViewEmpty && isListView && (
                 <ItemList
                     items={items}

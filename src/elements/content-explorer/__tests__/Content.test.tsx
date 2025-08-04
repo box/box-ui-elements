@@ -37,6 +37,11 @@ const mockProps: ContentProps = {
     viewMode: VIEW_MODE_LIST,
 };
 
+jest.mock('../MetadataViewContainer', () => ({
+    __esModule: true,
+    default: () => <div>MetadataViewContainer</div>,
+}));
+
 describe('Content Component', () => {
     const renderComponent = (props: Partial<ContentProps> = {}) => {
         return render(<Content {...mockProps} {...props} />);
@@ -88,12 +93,18 @@ describe('Content Component', () => {
         const features = {
             contentExplorer: { metadataViewV2: true },
         };
+        const collection = {
+            percentLoaded: 100,
+            boxItem: {},
+            id: '0',
+            items: [{ id: 1 }],
+            name: 'name',
+        };
 
         test('does not render MetadataBasedItemList when contentExplorer.metadataViewV2 is enabled', () => {
-            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
             renderComponent({
-                features,
                 currentCollection: collection,
+                features,
                 fieldsToShow: ['id'],
                 view: VIEW_METADATA,
             });
@@ -102,15 +113,14 @@ describe('Content Component', () => {
         });
 
         test('renders new metadata view when contentExplorer.metadataViewV2 is enabled', () => {
-            const collection = { boxItem: {}, id: '0', items: [{ id: 1 }], name: 'name' };
             renderComponent({
-                features,
                 currentCollection: collection,
+                features,
                 fieldsToShow: ['id'],
                 view: VIEW_METADATA,
             });
 
-            expect(screen.getByText('new Metadata')).toBeInTheDocument();
+            expect(screen.getByText('MetadataViewContainer')).toBeInTheDocument();
         });
     });
 });
