@@ -26,6 +26,12 @@ const messages = defineMessages({
         defaultMessage: 'Page {number}',
         description: 'Annotation activity item link shown on annotation activity',
     },
+
+    annotationActivityTimeStampItem: {
+        id: 'be.contentSidebar.activityFeed.annotationActivityTimeStampItem',
+        defaultMessage: 'TimeStamp {number}',
+        description: 'Annotation activity item link shown on annotation activity for time stamp',
+    },
     annotationActivityResolveMenuItem: {
         id: 'be.contentSidebar.activityFeed.annotationActivity.annotationActivityResolveMenuItem',
         defaultMessage: 'Resolve',

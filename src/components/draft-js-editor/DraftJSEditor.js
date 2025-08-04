@@ -19,6 +19,7 @@ const OptionalFormattedMessage = () => (
     </span>
 );
 type Props = {
+    customStyleMap?: Object,
     description?: React.Node,
     editorState: EditorState,
     error?: ?Object,
@@ -84,6 +85,7 @@ class DraftJSEditor extends React.Component<Props> {
 
     render() {
         const {
+            customStyleMap,
             editorState,
             error,
             hideLabel,
@@ -111,7 +113,6 @@ class DraftJSEditor extends React.Component<Props> {
                 ariaAutoComplete: inputProps['aria-autocomplete'],
                 ariaExpanded: inputProps['aria-expanded'],
                 ariaOwneeID: inputProps['aria-owns'],
-                ariaMultiline: true,
                 role: 'textbox',
             };
         }
@@ -133,6 +134,7 @@ class DraftJSEditor extends React.Component<Props> {
                             {...a11yProps}
                             ariaLabelledBy={this.labelID}
                             ariaDescribedBy={this.descriptionID}
+                            customStyleMap={customStyleMap}
                             editorState={editorState}
                             handleReturn={this.handleReturn}
                             onBlur={handleBlur}
