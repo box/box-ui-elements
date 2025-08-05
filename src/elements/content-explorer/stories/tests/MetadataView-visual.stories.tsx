@@ -1,6 +1,10 @@
 import React from 'react';
 import { http, HttpResponse } from 'msw';
 import type { Meta, StoryObj } from '@storybook/react';
+import { Download, SignMeOthers } from '@box/blueprint-web-assets/icons/Fill/index';
+import { Sign } from '@box/blueprint-web-assets/icons/Line';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
+import noop from 'lodash/noop';
 import ContentExplorer from '../../ContentExplorer';
 import { DEFAULT_HOSTNAME_API } from '../../../../constants';
 import { mockMetadata, mockSchema } from '../../../common/__mocks__/mockMetadata';
@@ -71,17 +75,58 @@ export const metadataView: Story = {
     },
 };
 
+const metadataViewV2ElementProps = {
+    metadataViewProps: {
+        columns,
+    },
+    metadataQuery,
+    fieldsToShow,
+    defaultView,
+    features: {
+        contentExplorer: {
+            metadataViewV2: true,
+        },
+    },
+};
+
 export const metadataViewV2: Story = {
+    args: metadataViewV2ElementProps,
+    render: args => {
+        return (
+            <div style={{ padding: '50px' }}>
+                <ContentExplorer {...args} />
+            </div>
+        );
+    },
+};
+
+export const metadataViewV2WithCustomActions: Story = {
     args: {
+        ...metadataViewV2ElementProps,
         metadataViewProps: {
             columns,
-        },
-        metadataQuery,
-        fieldsToShow,
-        defaultView,
-        features: {
-            contentExplorer: {
-                metadataViewV2: true,
+            tableProps: {
+                isSelectAllEnabled: true,
+            },
+            itemActionMenuProps: {
+                actions: [
+                    {
+                        label: 'Download',
+                        onClick: noop,
+                        icon: Download,
+                    },
+                ],
+                subMenuTrigger: {
+                    label: 'Sign',
+                    icon: Sign,
+                },
+                subMenuActions: [
+                    {
+                        label: 'Request Signature',
+                        onClick: noop,
+                        icon: SignMeOthers,
+                    },
+                ],
             },
         },
     },
@@ -91,6 +136,15 @@ export const metadataViewV2: Story = {
                 <ContentExplorer {...args} />
             </div>
         );
+    },
+    play: async ({ canvas }) => {
+        await waitFor(() => {
+            expect(canvas.getByRole('row', { name: /Child 2/i })).toBeInTheDocument();
+        });
+
+        const firstRow = canvas.getByRole('row', { name: /Child 2/i });
+        const ellipsesButton = within(firstRow).getByRole('button', { name: 'Action menu' });
+        userEvent.click(ellipsesButton);
     },
 };
 
